@@ -29,6 +29,11 @@ limitations under the License.
 
     contain: content;
 
+    .mx_Waveform,
+    .mx_RecordingPlayback_timelineLayoutMiddle {
+        min-width: 0; /* Prevent a blowout */
+    }
+
     /* Waveforms are present in live recording only */
     .mx_Waveform {
         .mx_Waveform_bar {

@@ -41,8 +41,7 @@ const keyMap = new EnhancedMap<Object, EnhancedMap<string, unknown>>();
  * variables to strings to essentially namespace the field, for most cases.
  */
 export class Singleflight {
-    private constructor() {
-    }
+    private constructor() {}
 
     /**
      * A void marker to help with returning a value in a singleflight context.
@@ -56,7 +55,7 @@ export class Singleflight {
      * @param {string} key A string key relevant to that instance to namespace under.
      * @returns {SingleflightContext} Returns the context to execute the function.
      */
-    public static for(instance: Object, key: string): SingleflightContext {
+    public static for(instance?: Object | null, key?: string | null): SingleflightContext {
         if (!instance || !key) throw new Error("An instance and key must be supplied");
         return new SingleflightContext(instance, key);
     }
@@ -65,14 +64,14 @@ export class Singleflight {
      * Forgets all results for a given instance.
      * @param {Object} instance The instance to forget about.
      */
-    public static forgetAllFor(instance: Object) {
+    public static forgetAllFor(instance: Object): void {
         keyMap.delete(instance);
     }
 
     /**
      * Forgets all cached results for all instances. Intended for use by tests.
      */
-    public static forgetAll() {
+    public static forgetAll(): void {
         for (const k of keyMap.keys()) {
             keyMap.remove(k);
         }
@@ -80,13 +79,15 @@ export class Singleflight {
 }
 
 class SingleflightContext {
-    public constructor(private instance: Object, private key: string) {
-    }
+    public constructor(
+        private instance: Object,
+        private key: string,
+    ) {}
 
     /**
      * Forget this particular instance and key combination, discarding the result.
      */
-    public forget() {
+    public forget(): void {
         const map = keyMap.get(this.instance);
         if (!map) return;
         map.remove(this.key);

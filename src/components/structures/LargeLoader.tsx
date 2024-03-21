@@ -29,9 +29,7 @@ export const LargeLoader: React.FC<LargeLoaderProps> = ({ text }) => {
     return (
         <div className="mx_LargeLoader">
             <Spinner w={45} h={45} />
-            <div className="mx_LargeLoader_text">
-                { text }
-            </div>
+            <div className="mx_LargeLoader_text">{text}</div>
         </div>
     );
 };

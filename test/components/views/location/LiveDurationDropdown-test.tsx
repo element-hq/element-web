@@ -14,61 +14,56 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import LiveDurationDropdown, { DEFAULT_DURATION_MS }
-    from '../../../../src/components/views/location/LiveDurationDropdown';
-import { findById, mockPlatformPeg } from '../../../test-utils';
+import LiveDurationDropdown, {
+    DEFAULT_DURATION_MS,
+} from "../../../../src/components/views/location/LiveDurationDropdown";
+import { mockPlatformPeg } from "../../../test-utils";
 
 mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
 
-describe('<LiveDurationDropdown />', () => {
+describe("<LiveDurationDropdown />", () => {
     const defaultProps = {
         timeout: DEFAULT_DURATION_MS,
         onChange: jest.fn(),
     };
-    const getComponent = (props = {}) =>
-        mount(<LiveDurationDropdown {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => render(<LiveDurationDropdown {...defaultProps} {...props} />);
 
-    const getOption = (wrapper, timeout) => findById(wrapper, `live-duration__${timeout}`).at(0);
-    const getSelectedOption = (wrapper) => findById(wrapper, 'live-duration_value');
-    const openDropdown = (wrapper) => act(() => {
-        wrapper.find('[role="button"]').at(0).simulate('click');
-        wrapper.setProps({});
+    const getOption = (duration: string) => screen.getByRole("option", { name: `Share for ${duration}` });
+    const getSelectedOption = (duration: string) => screen.getByRole("button", { name: `Share for ${duration}` });
+    const openDropdown = async () => {
+        await userEvent.click(screen.getByRole("button"));
+    };
+
+    it("renders timeout as selected option", () => {
+        renderComponent();
+        expect(getSelectedOption("15m")).toBeInTheDocument();
     });
 
-    it('renders timeout as selected option', () => {
-        const wrapper = getComponent();
-        expect(getSelectedOption(wrapper).text()).toEqual('Share for 15m');
-    });
-
-    it('renders non-default timeout as selected option', () => {
+    it("renders non-default timeout as selected option", () => {
         const timeout = 1234567;
-        const wrapper = getComponent({ timeout });
-        expect(getSelectedOption(wrapper).text()).toEqual(`Share for 21m`);
+        renderComponent({ timeout });
+        expect(getSelectedOption("21m")).toBeInTheDocument();
     });
 
-    it('renders a dropdown option for a non-default timeout value', () => {
+    it("renders a dropdown option for a non-default timeout value", async () => {
         const timeout = 1234567;
-        const wrapper = getComponent({ timeout });
-        openDropdown(wrapper);
-        expect(getOption(wrapper, timeout).text()).toEqual(`Share for 21m`);
+        renderComponent({ timeout });
+        await openDropdown();
+        expect(getOption("21m")).toBeInTheDocument();
     });
 
-    it('updates value on option selection', () => {
+    it("updates value on option selection", async () => {
         const onChange = jest.fn();
-        const wrapper = getComponent({ onChange });
+        renderComponent({ onChange });
 
         const ONE_HOUR = 3600000;
 
-        openDropdown(wrapper);
-
-        act(() => {
-            getOption(wrapper, ONE_HOUR).simulate('click');
-        });
+        await openDropdown();
+        await userEvent.click(getOption("1h"));
 
         expect(onChange).toHaveBeenCalledWith(ONE_HOUR);
     });

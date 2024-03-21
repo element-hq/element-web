@@ -54,7 +54,7 @@ limitations under the License.
             margin: 0;
             color: $secondary-content;
             font-size: $font-12px;
-            font-weight: $font-semi-bold;
+            font-weight: var(--cpd-font-weight-semibold);
             line-height: $font-15px;
         }
 
@@ -64,11 +64,6 @@ limitations under the License.
 
             > div {
                 flex-grow: 1;
-            }
-
-            img.mx_RoomAvatar_isSpaceRoom,
-            .mx_RoomAvatar_isSpaceRoom img {
-                border-radius: 4px;
             }
 
             .mx_ManageRestrictedJoinRuleDialog_entry_name {
@@ -98,10 +93,6 @@ limitations under the License.
         .mx_BaseAvatar {
             margin-right: 12px;
         }
-
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
     }
 
     .mx_ManageRestrictedJoinRuleDialog_section_info {
@@ -116,7 +107,7 @@ limitations under the License.
         color: $secondary-content;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 10px;
             top: calc(50% - 8px); /* vertical centering */
@@ -125,7 +116,7 @@ limitations under the License.
             background-color: $secondary-content;
             mask-repeat: no-repeat;
             mask-size: contain;
-            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
             mask-position: center;
         }
     }

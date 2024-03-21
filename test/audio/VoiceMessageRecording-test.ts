@@ -57,10 +57,7 @@ describe("VoiceMessageRecording", () => {
             liveData: jest.fn(),
             amplitudes: testAmplitudes,
         } as unknown as VoiceRecording;
-        voiceMessageRecording = new VoiceMessageRecording(
-            client,
-            voiceRecording,
-        );
+        voiceMessageRecording = new VoiceMessageRecording(client, voiceRecording);
     });
 
     it("hasRecording should return false", () => {
@@ -120,9 +117,7 @@ describe("VoiceMessageRecording", () => {
     });
 
     it("upload should raise an error", async () => {
-        await expect(voiceMessageRecording.upload(roomId))
-            .rejects
-            .toThrow("No recording available to upload");
+        await expect(voiceMessageRecording.upload(roomId)).rejects.toThrow("No recording available to upload");
     });
 
     describe("when the first data has been received", () => {
@@ -130,7 +125,7 @@ describe("VoiceMessageRecording", () => {
         const encryptedFile = {} as unknown as IEncryptedFile;
 
         beforeEach(() => {
-            voiceRecording.onDataAvailable(testBuf);
+            voiceRecording.onDataAvailable!(testBuf);
         });
 
         it("contentLength should return the buffer length", () => {
@@ -148,30 +143,32 @@ describe("VoiceMessageRecording", () => {
         });
 
         describe("upload", () => {
-            let uploadFileClient: MatrixClient;
-            let uploadFileRoomId: string;
-            let uploadBlob: Blob;
+            let uploadFileClient: MatrixClient | null;
+            let uploadFileRoomId: string | null;
+            let uploadBlob: Blob | null;
 
             beforeEach(() => {
                 uploadFileClient = null;
                 uploadFileRoomId = null;
                 uploadBlob = null;
 
-                mocked(uploadFile).mockImplementation((
-                    matrixClient: MatrixClient,
-                    roomId: string,
-                    file: File | Blob,
-                    _progressHandler?: UploadOpts["progressHandler"],
-                ): Promise<{ url?: string, file?: IEncryptedFile }> => {
-                    uploadFileClient = matrixClient;
-                    uploadFileRoomId = roomId;
-                    uploadBlob = file;
-                    // @ts-ignore
-                    return Promise.resolve({
-                        url: uploadUrl,
-                        file: encryptedFile,
-                    });
-                });
+                mocked(uploadFile).mockImplementation(
+                    (
+                        matrixClient: MatrixClient,
+                        roomId: string,
+                        file: File | Blob,
+                        _progressHandler?: UploadOpts["progressHandler"],
+                    ): Promise<{ url?: string; file?: IEncryptedFile }> => {
+                        uploadFileClient = matrixClient;
+                        uploadFileRoomId = roomId;
+                        uploadBlob = file;
+                        // @ts-ignore
+                        return Promise.resolve({
+                            url: uploadUrl,
+                            file: encryptedFile,
+                        });
+                    },
+                );
             });
 
             it("should upload the file and trigger the upload events", async () => {
@@ -185,8 +182,8 @@ describe("VoiceMessageRecording", () => {
                 expect(mocked(uploadFile)).toHaveBeenCalled();
                 expect(uploadFileClient).toBe(client);
                 expect(uploadFileRoomId).toBe(roomId);
-                expect(uploadBlob.type).toBe(contentType);
-                const blobArray = await uploadBlob.arrayBuffer();
+                expect(uploadBlob?.type).toBe(contentType);
+                const blobArray = await uploadBlob!.arrayBuffer();
                 expect(new Uint8Array(blobArray)).toEqual(testBuf);
             });
 
@@ -199,7 +196,7 @@ describe("VoiceMessageRecording", () => {
 
         describe("getPlayback", () => {
             beforeEach(() => {
-                mocked(Playback).mockImplementation((buf: ArrayBuffer, seedWaveform) => {
+                mocked(Playback).mockImplementation((buf: ArrayBuffer, seedWaveform): any => {
                     expect(new Uint8Array(buf)).toEqual(testBuf);
                     expect(seedWaveform).toEqual(testAmplitudes);
                     return {} as Playback;

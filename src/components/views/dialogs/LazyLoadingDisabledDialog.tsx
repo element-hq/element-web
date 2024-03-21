@@ -15,45 +15,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import QuestionDialog from './QuestionDialog';
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-import { IDialogProps } from "./IDialogProps";
+import QuestionDialog from "./QuestionDialog";
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 
-interface IProps extends IDialogProps {
+interface IProps {
     host: string;
+    onFinished(): void;
 }
 
 const LazyLoadingDisabledDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
-    const description1 = _t(
-        "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. " +
-        "In this version lazy loading is disabled. " +
-        "As the local cache is not compatible between these two settings, " +
-        "%(brand)s needs to resync your account.",
-        {
-            brand,
-            host: props.host,
-        },
-    );
-    const description2 = _t(
-        "If the other version of %(brand)s is still open in another tab, " +
-        "please close it as using %(brand)s on the same host with both " +
-        "lazy loading enabled and disabled simultaneously will cause issues.",
-        {
-            brand,
-        },
-    );
+    const description1 = _t("lazy_loading|disabled_description1", {
+        brand,
+        host: props.host,
+    });
+    const description2 = _t("lazy_loading|disabled_description2", {
+        brand,
+    });
 
-    return (<QuestionDialog
-        hasCancelButton={false}
-        title={_t("Incompatible local cache")}
-        description={<div><p>{ description1 }</p><p>{ description2 }</p></div>}
-        button={_t("Clear cache and resync")}
-        onFinished={props.onFinished}
-    />);
+    return (
+        <QuestionDialog
+            hasCancelButton={false}
+            title={_t("lazy_loading|disabled_title")}
+            description={
+                <div>
+                    <p>{description1}</p>
+                    <p>{description2}</p>
+                </div>
+            }
+            button={_t("lazy_loading|disabled_action")}
+            onFinished={props.onFinished}
+        />
+    );
 };
 
 export default LazyLoadingDisabledDialog;

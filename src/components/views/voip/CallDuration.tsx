@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, memo } from "react";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { formatCallTime } from "../../../DateUtils";
+import { formatPreciseDuration } from "../../../DateUtils";
 
 interface CallDurationProps {
     delta: number;
@@ -26,26 +27,31 @@ interface CallDurationProps {
 /**
  * A call duration counter.
  */
-export const CallDuration: FC<CallDurationProps> = ({ delta }) => {
+export const CallDuration: FC<CallDurationProps> = memo(({ delta }) => {
     // Clock desync could lead to a negative duration, so just hide it if that happens
     if (delta <= 0) return null;
-    return <div className="mx_CallDuration">{ formatCallTime(new Date(delta)) }</div>;
-};
+    return <div className="mx_CallDuration">{formatPreciseDuration(delta)}</div>;
+});
 
-interface CallDurationFromEventProps {
-    mxEvent: MatrixEvent;
+interface SessionDurationProps {
+    session: MatrixRTCSession | undefined;
 }
 
 /**
- * A call duration counter that automatically counts up, given the event that
- * started the call.
+ * A call duration counter that automatically counts up, given a matrixRTC session
+ * object.
  */
-export const CallDurationFromEvent: FC<CallDurationFromEventProps> = ({ mxEvent }) => {
+export const SessionDuration: FC<SessionDurationProps> = ({ session }) => {
     const [now, setNow] = useState(() => Date.now());
+
     useEffect(() => {
-        const timer = setInterval(() => setNow(Date.now()), 1000);
+        const timer = window.setInterval(() => setNow(Date.now()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    return <CallDuration delta={now - mxEvent.getTs()} />;
+    // This is a temporal solution.
+    // Using the oldest membership will update when this user leaves.
+    // This implies that the displayed call duration will also update consequently.
+    const createdTs = session?.getOldestMembership()?.createdTs();
+    return createdTs ? <CallDuration delta={now - createdTs} /> : <CallDuration delta={0} />;
 };

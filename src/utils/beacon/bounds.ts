@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Beacon } from "matrix-js-sdk/src/matrix";
 
+import { filterBoolean } from "../arrays";
 import { parseGeoUri } from "../location";
 
 export type Bounds = {
@@ -36,8 +37,11 @@ export type Bounds = {
  * west of Greenwich has a negative longitude, min -180
  */
 export const getBeaconBounds = (beacons: Beacon[]): Bounds | undefined => {
-    const coords = beacons.filter(beacon => !!beacon.latestLocationState)
-        .map(beacon => parseGeoUri(beacon.latestLocationState.uri));
+    const coords = filterBoolean<GeolocationCoordinates>(
+        beacons.map((beacon) =>
+            !!beacon.latestLocationState?.uri ? parseGeoUri(beacon.latestLocationState.uri) : undefined,
+        ),
+    );
 
     if (!coords.length) {
         return;
@@ -47,10 +51,12 @@ export const getBeaconBounds = (beacons: Beacon[]): Bounds | undefined => {
     const sortedByLat = [...coords].sort((left, right) => right.latitude - left.latitude);
     const sortedByLong = [...coords].sort((left, right) => right.longitude - left.longitude);
 
+    if (sortedByLat.length < 1 || sortedByLong.length < 1) return;
+
     return {
-        north: sortedByLat[0].latitude,
-        south: sortedByLat[sortedByLat.length - 1].latitude,
-        east: sortedByLong[0].longitude,
-        west: sortedByLong[sortedByLong.length -1].longitude,
+        north: sortedByLat[0]!.latitude,
+        south: sortedByLat[sortedByLat.length - 1]!.latitude,
+        east: sortedByLong[0]!.longitude,
+        west: sortedByLong[sortedByLong.length - 1]!.longitude,
     };
 };

@@ -33,9 +33,9 @@ export interface IUpload {
  * This class can be used to record a single voice message.
  */
 export class VoiceMessageRecording implements IDestroyable {
-    private lastUpload: IUpload;
+    private lastUpload?: IUpload;
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
-    private playback: Playback;
+    private playback?: Playback;
 
     public constructor(
         private matrixClient: MatrixClient,
@@ -106,12 +106,9 @@ export class VoiceMessageRecording implements IDestroyable {
             const { url: mxc, file: encrypted } = await uploadFile(
                 this.matrixClient,
                 inRoomId,
-                new Blob(
-                    [this.audioBuffer],
-                    {
-                        type: this.contentType,
-                    },
-                ),
+                new Blob([this.audioBuffer], {
+                    type: this.contentType,
+                }),
             );
             this.lastUpload = { mxc, encrypted };
             this.emit(RecordingState.Uploaded);
@@ -142,12 +139,12 @@ export class VoiceMessageRecording implements IDestroyable {
         return this.voiceRecording.isSupported;
     }
 
-    destroy(): void {
+    public destroy(): void {
         this.playback?.destroy();
         this.voiceRecording.destroy();
     }
 
-    private onDataAvailable = (data: ArrayBuffer) => {
+    private onDataAvailable = (data: ArrayBuffer): void => {
         const buf = new Uint8Array(data);
         this.buffer = concat(this.buffer, buf);
     };
@@ -159,6 +156,6 @@ export class VoiceMessageRecording implements IDestroyable {
     }
 }
 
-export const createVoiceMessageRecording = (matrixClient: MatrixClient) => {
+export const createVoiceMessageRecording = (matrixClient: MatrixClient): VoiceMessageRecording => {
     return new VoiceMessageRecording(matrixClient, new VoiceRecording());
 };

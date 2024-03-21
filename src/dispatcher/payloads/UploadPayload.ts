@@ -39,7 +39,7 @@ export interface UploadErrorPayload extends UploadPayload {
     /**
      * An error to describe what went wrong with the upload.
      */
-    error: Error;
+    error: unknown;
 }
 
 export interface UploadFinishedPayload extends UploadPayload {

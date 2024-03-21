@@ -22,6 +22,11 @@ limitations under the License.
 }
 
 .mx_SelectableDeviceTile_checkbox {
-    flex: 0 0;
-    margin-right: $spacing-16;
+    flex: 1 0;
+
+    .mx_Checkbox_background + div {
+        flex: 1 0;
+        /* override more specific selector */
+        margin-left: $spacing-16 !important;
+    }
 }

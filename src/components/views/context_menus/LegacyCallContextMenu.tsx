@@ -14,60 +14,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import React from "react";
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
-import { _t } from '../../../languageHandler';
-import ContextMenu, { IProps as IContextMenuProps, MenuItem } from '../../structures/ContextMenu';
-import LegacyCallHandler from '../../../LegacyCallHandler';
+import { _t } from "../../../languageHandler";
+import ContextMenu, { IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";
+import LegacyCallHandler from "../../../LegacyCallHandler";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
-    static propTypes = {
-        // js-sdk User object. Not required because it might not exist.
-        user: PropTypes.object,
-    };
-
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
     }
 
-    onHoldClick = () => {
+    public onHoldClick = (): void => {
         this.props.call.setRemoteOnHold(true);
         this.props.onFinished();
     };
 
-    onUnholdClick = () => {
+    public onUnholdClick = (): void => {
         LegacyCallHandler.instance.setActiveCallRoomId(this.props.call.roomId);
 
         this.props.onFinished();
     };
 
-    onTransferClick = () => {
+    public onTransferClick = (): void => {
         LegacyCallHandler.instance.showTransferDialog(this.props.call);
         this.props.onFinished();
     };
 
-    render() {
-        const holdUnholdCaption = this.props.call.isRemoteOnHold() ? _t("Resume") : _t("Hold");
+    public render(): React.ReactNode {
+        const holdUnholdCaption = this.props.call.isRemoteOnHold() ? _t("action|resume") : _t("action|hold");
         const handler = this.props.call.isRemoteOnHold() ? this.onUnholdClick : this.onHoldClick;
 
         let transferItem;
         if (this.props.call.opponentCanBeTransferred()) {
-            transferItem = <MenuItem className="mx_LegacyCallContextMenu_item" onClick={this.onTransferClick}>
-                { _t("Transfer") }
-            </MenuItem>;
+            transferItem = (
+                <MenuItem className="mx_LegacyCallContextMenu_item" onClick={this.onTransferClick}>
+                    {_t("action|transfer")}
+                </MenuItem>
+            );
         }
 
-        return <ContextMenu {...this.props}>
-            <MenuItem className="mx_LegacyCallContextMenu_item" onClick={handler}>
-                { holdUnholdCaption }
-            </MenuItem>
-            { transferItem }
-        </ContextMenu>;
+        return (
+            <ContextMenu {...this.props}>
+                <MenuItem className="mx_LegacyCallContextMenu_item" onClick={handler}>
+                    {holdUnholdCaption}
+                </MenuItem>
+                {transferItem}
+            </ContextMenu>
+        );
     }
 }

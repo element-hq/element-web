@@ -20,6 +20,6 @@ export function iterableIntersection<T>(a: Iterable<T>, b: Iterable<T>): Iterabl
     return arrayIntersection(Array.from(a), Array.from(b));
 }
 
-export function iterableDiff<T>(a: Iterable<T>, b: Iterable<T>): { added: Iterable<T>, removed: Iterable<T> } {
+export function iterableDiff<T>(a: Iterable<T>, b: Iterable<T>): { added: Iterable<T>; removed: Iterable<T> } {
     return arrayDiff(Array.from(a), Array.from(b));
 }

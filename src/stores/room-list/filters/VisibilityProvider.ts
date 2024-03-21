@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
@@ -24,8 +24,7 @@ import VoipUserMapper from "../../../VoipUserMapper";
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
 
-    private constructor() {
-    }
+    private constructor() {}
 
     public static get instance(): VisibilityProvider {
         if (!VisibilityProvider.internalInstance) {
@@ -34,7 +33,7 @@ export class VisibilityProvider {
         return VisibilityProvider.internalInstance;
     }
 
-    public async onNewInvitedRoom(room: Room) {
+    public async onNewInvitedRoom(room: Room): Promise<void> {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 

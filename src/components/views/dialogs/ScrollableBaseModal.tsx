@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import React, { FormEvent } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import FocusLock from "react-focus-lock";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IDialogProps } from "./IDialogProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -30,19 +29,26 @@ export interface IScrollableBaseState {
     canSubmit: boolean;
     title: string;
     actionLabel: string;
+    cancelLabel?: string;
 }
 
 /**
  * Scrollable dialog base from Compound (Web Components).
  */
-export default abstract class ScrollableBaseModal<TProps extends IDialogProps, TState extends IScrollableBaseState>
-    extends React.PureComponent<TProps, TState> {
+export default abstract class ScrollableBaseModal<
+    TProps extends { onFinished?: (...args: any[]) => void },
+    TState extends IScrollableBaseState,
+> extends React.PureComponent<TProps, TState> {
     protected constructor(props: TProps) {
         super(props);
     }
 
     protected get matrixClient(): MatrixClient {
-        return MatrixClientPeg.get();
+        // XXX: The contract on MatrixClientContext says it is only available within a LoggedInView subtree,
+        // given that modals function outside the MatrixChat React tree this simulates that. We don't want to
+        // use safeGet as it throwing would mean we cannot use modals whilst the user isn't logged in.
+        // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
+        return MatrixClientPeg.get()!;
     }
 
     private onKeyDown = (e: KeyboardEvent | React.KeyboardEvent): void => {
@@ -56,11 +62,11 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
         }
     };
 
-    private onCancel = () => {
+    private onCancel = (): void => {
         this.cancel();
     };
 
-    private onSubmit = (e: MouseEvent | FormEvent) => {
+    private onSubmit = (e: MouseEvent | FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         if (!this.state.canSubmit) return; // pretend the submit button was disabled
@@ -71,7 +77,7 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
     protected abstract submit(): void;
     protected abstract renderContent(): React.ReactNode;
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <MatrixClientContext.Provider value={this.matrixClient}>
                 <FocusLock
@@ -87,20 +93,18 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
                     className="mx_CompoundDialog mx_ScrollableBaseDialog"
                 >
                     <div className="mx_CompoundDialog_header">
-                        <h1>{ this.state.title }</h1>
-                        <AccessibleButton
-                            onClick={this.onCancel}
-                            className="mx_CompoundDialog_cancelButton"
-                            aria-label={_t("Close dialog")}
-                        />
+                        <h1>{this.state.title}</h1>
                     </div>
-                    <form onSubmit={this.onSubmit}>
-                        <div className="mx_CompoundDialog_content">
-                            { this.renderContent() }
-                        </div>
+                    <AccessibleButton
+                        onClick={this.onCancel}
+                        className="mx_CompoundDialog_cancelButton"
+                        aria-label={_t("dialog_close_label")}
+                    />
+                    <form onSubmit={this.onSubmit} className="mx_CompoundDialog_form">
+                        <div className="mx_CompoundDialog_content">{this.renderContent()}</div>
                         <div className="mx_CompoundDialog_footer">
                             <AccessibleButton onClick={this.onCancel} kind="primary_outline">
-                                { _t("Cancel") }
+                                {this.state.cancelLabel ?? _t("action|cancel")}
                             </AccessibleButton>
                             <AccessibleButton
                                 onClick={this.onSubmit}
@@ -110,7 +114,7 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
                                 element="button"
                                 className="mx_Dialog_nonDialogButton"
                             >
-                                { this.state.actionLabel }
+                                {this.state.actionLabel}
                             </AccessibleButton>
                         </div>
                     </form>

@@ -14,75 +14,75 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { Beacon } from 'matrix-js-sdk/src/matrix';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { Beacon } from "matrix-js-sdk/src/matrix";
 
-import BeaconStatus from '../../../../src/components/views/beacon/BeaconStatus';
-import { BeaconDisplayStatus } from '../../../../src/components/views/beacon/displayStatus';
-import { findByTestId, makeBeaconInfoEvent } from '../../../test-utils';
+import BeaconStatus from "../../../../src/components/views/beacon/BeaconStatus";
+import { BeaconDisplayStatus } from "../../../../src/components/views/beacon/displayStatus";
+import { makeBeaconInfoEvent } from "../../../test-utils";
 
-describe('<BeaconStatus />', () => {
+describe("<BeaconStatus />", () => {
     const defaultProps = {
         displayStatus: BeaconDisplayStatus.Loading,
-        label: 'test label',
+        label: "test label",
         withIcon: true,
     };
-    const getComponent = (props = {}) =>
-        mount(<BeaconStatus {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => render(<BeaconStatus {...defaultProps} {...props} />);
 
-    it('renders loading state', () => {
-        const component = getComponent({ displayStatus: BeaconDisplayStatus.Loading });
-        expect(component).toMatchSnapshot();
+    it("renders loading state", () => {
+        const { asFragment } = renderComponent({ displayStatus: BeaconDisplayStatus.Loading });
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it('renders stopped state', () => {
-        const component = getComponent({ displayStatus: BeaconDisplayStatus.Stopped });
-        expect(component).toMatchSnapshot();
+    it("renders stopped state", () => {
+        const { asFragment } = renderComponent({ displayStatus: BeaconDisplayStatus.Stopped });
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it('renders without icon', () => {
-        const component = getComponent({ withIcon: false, displayStatus: BeaconDisplayStatus.Stopped });
-        expect(component.find('StyledLiveBeaconIcon').length).toBeFalsy();
+    it("renders without icon", () => {
+        const iconClassName = "mx_StyledLiveBeaconIcon";
+        const { container } = renderComponent({ withIcon: false, displayStatus: BeaconDisplayStatus.Stopped });
+        expect(container.getElementsByClassName(iconClassName)).toHaveLength(0);
     });
 
-    describe('active state', () => {
-        it('renders without children', () => {
+    describe("active state", () => {
+        it("renders without children", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
-            const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
-            expect(component).toMatchSnapshot();
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
+            const { asFragment } = renderComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
+            expect(asFragment()).toMatchSnapshot();
         });
 
-        it('renders with children', () => {
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:sever', { isLive: false }));
-            const component = getComponent({
+        it("renders with children", () => {
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:sever", { isLive: false }));
+            renderComponent({
                 beacon,
-                children: <span data-test-id='test'>test</span>,
+                children: <span data-testid="test-child">test</span>,
                 displayStatus: BeaconDisplayStatus.Active,
             });
-            expect(findByTestId(component, 'test-child')).toMatchSnapshot();
+            expect(screen.getByTestId("test-child")).toMatchSnapshot();
         });
 
-        it('renders static remaining time when displayLiveTimeRemaining is falsy', () => {
+        it("renders static remaining time when displayLiveTimeRemaining is falsy", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
-            const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
-            expect(component.text().includes('Live until 11:17')).toBeTruthy();
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
+            renderComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
+            expect(screen.getByText("Live until 11:17")).toBeInTheDocument();
         });
 
-        it('renders live time remaining when displayLiveTimeRemaining is truthy', () => {
+        it("renders live time remaining when displayLiveTimeRemaining is truthy", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
-            const component = getComponent({
-                beacon, displayStatus: BeaconDisplayStatus.Active,
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
+            renderComponent({
+                beacon,
+                displayStatus: BeaconDisplayStatus.Active,
                 displayLiveTimeRemaining: true,
             });
-            expect(component.text().includes('1h left')).toBeTruthy();
+            expect(screen.getByText("1h left")).toBeInTheDocument();
         });
     });
 });

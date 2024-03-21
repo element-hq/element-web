@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent, MatrixError, IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
@@ -32,7 +31,7 @@ interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
     onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
-    onHeightChanged(): void; // called when the preview's contents has loaded
+    onHeightChanged?(): void; // called when the preview's contents has loaded
 }
 
 const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onHeightChanged }) => {
@@ -40,62 +39,81 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
     const [expanded, toggleExpanded] = useStateToggle();
 
     const ts = mxEvent.getTs();
-    const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(async () => {
-        return fetchPreviews(cli, links, ts);
-    }, [links, ts], []);
+    const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(
+        async () => {
+            return fetchPreviews(cli, links, ts);
+        },
+        [links, ts],
+        [],
+    );
 
     useEffect(() => {
-        onHeightChanged();
+        onHeightChanged?.();
     }, [onHeightChanged, expanded, previews]);
 
     const showPreviews = expanded ? previews : previews.slice(0, INITIAL_NUM_PREVIEWS);
 
-    let toggleButton: JSX.Element;
+    let toggleButton: JSX.Element | undefined;
     if (previews.length > INITIAL_NUM_PREVIEWS) {
-        toggleButton = <AccessibleButton onClick={toggleExpanded}>
-            { expanded
-                ? _t("Collapse")
-                : _t("Show %(count)s other previews", { count: previews.length - showPreviews.length }) }
-        </AccessibleButton>;
+        toggleButton = (
+            <AccessibleButton onClick={toggleExpanded}>
+                {expanded
+                    ? _t("action|collapse")
+                    : _t("timeline|url_preview|show_n_more", { count: previews.length - showPreviews.length })}
+            </AccessibleButton>
+        );
     }
 
-    return <div className="mx_LinkPreviewGroup">
-        { showPreviews.map(([link, preview], i) => (
-            <LinkPreviewWidget key={link} link={link} preview={preview} mxEvent={mxEvent}>
-                { i === 0 ? (
-                    <AccessibleButton
-                        className="mx_LinkPreviewGroup_hide"
-                        onClick={onCancelClick}
-                        aria-label={_t("Close preview")}
-                    >
-                        <img
-                            className="mx_filterFlipColor"
-                            alt=""
-                            role="presentation"
-                            src={require("../../../../res/img/cancel.svg").default}
-                            width="18"
-                            height="18"
-                        />
-                    </AccessibleButton>
-                ): undefined }
-            </LinkPreviewWidget>
-        )) }
-        { toggleButton }
-    </div>;
+    return (
+        <div className="mx_LinkPreviewGroup">
+            {showPreviews.map(([link, preview], i) => (
+                <LinkPreviewWidget key={link} link={link} preview={preview} mxEvent={mxEvent}>
+                    {i === 0 ? (
+                        <AccessibleButton
+                            className="mx_LinkPreviewGroup_hide"
+                            onClick={onCancelClick}
+                            aria-label={_t("timeline|url_preview|close")}
+                        >
+                            <img
+                                className="mx_filterFlipColor"
+                                alt=""
+                                role="presentation"
+                                src={require("../../../../res/img/cancel.svg").default}
+                                width="18"
+                                height="18"
+                            />
+                        </AccessibleButton>
+                    ) : undefined}
+                </LinkPreviewWidget>
+            ))}
+            {toggleButton}
+        </div>
+    );
 };
 
-const fetchPreviews = (cli: MatrixClient, links: string[], ts: number):
-        Promise<[string, IPreviewUrlResponse][]> => {
-    return Promise.all<[string, IPreviewUrlResponse] | void>(links.map(async link => {
-        try {
-            const preview = await cli.getUrlPreview(link, ts);
-            if (preview && Object.keys(preview).length > 0) {
-                return [link, preview];
+const fetchPreviews = (cli: MatrixClient, links: string[], ts: number): Promise<[string, IPreviewUrlResponse][]> => {
+    return Promise.all<[string, IPreviewUrlResponse] | void>(
+        links.map(async (link): Promise<[string, IPreviewUrlResponse] | undefined> => {
+            try {
+                const preview = await cli.getUrlPreview(link, ts);
+                // Ensure at least one of the rendered fields is truthy
+                if (
+                    preview?.["og:image"]?.startsWith("mxc://") ||
+                    !!preview?.["og:description"] ||
+                    !!preview?.["og:title"]
+                ) {
+                    return [link, preview];
+                }
+            } catch (error) {
+                if (error instanceof MatrixError && error.httpStatus === 404) {
+                    // Quieten 404 Not found errors, not all URLs can have a preview generated
+                    logger.debug("Failed to get URL preview: ", error);
+                } else {
+                    logger.error("Failed to get URL preview: ", error);
+                }
             }
-        } catch (error) {
-            logger.error("Failed to get URL preview: " + error);
-        }
-    })).then(a => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
+        }),
+    ).then((a) => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
 };
 
 export default LinkPreviewGroup;

@@ -24,72 +24,62 @@ import { UseCase } from "../../../settings/enums/UseCase";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 
-const onClickSendDm = (ev: ButtonEvent) => {
+const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebUserOnboardingHeaderSendDm", ev);
-    defaultDispatcher.dispatch({ action: 'view_create_chat' });
+    defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
 
 interface Props {
-    useCase: UseCase;
+    useCase: UseCase | null;
 }
 
-export function UserOnboardingHeader({ useCase }: Props) {
+export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
     let title: string;
-    let description: string;
-    let image;
+    let description = _t("onboarding|free_e2ee_messaging_unlimited_voip", {
+        brand: SdkConfig.get("brand"),
+    });
+    let image: string;
     let actionLabel: string;
 
     switch (useCase) {
         case UseCase.PersonalMessaging:
-            title = _t("Secure messaging for friends and family");
-            description = _t("With free end-to-end encrypted messaging, and unlimited voice and video calls, " +
-                "%(brand)s is a great way to stay in touch.", {
-                brand: SdkConfig.get("brand"),
-            });
+            title = _t("onboarding|personal_messaging_title");
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
-            actionLabel = _t("Start your first chat");
+            actionLabel = _t("onboarding|personal_messaging_action");
             break;
         case UseCase.WorkMessaging:
-            title = _t("Secure messaging for work");
-            description = _t("With free end-to-end encrypted messaging, and unlimited voice and video calls," +
-                " %(brand)s is a great way to stay in touch.", {
+            title = _t("onboarding|work_messaging_title");
+            description = _t("onboarding|free_e2ee_messaging_unlimited_voip", {
                 brand: SdkConfig.get("brand"),
             });
             image = require("../../../../res/img/user-onboarding/WorkMessaging.png");
-            actionLabel = _t("Find your co-workers");
+            actionLabel = _t("onboarding|work_messaging_action");
             break;
         case UseCase.CommunityMessaging:
-            title = _t("Community ownership");
-            description = _t("Keep ownership and control of community discussion.\n" +
-                "Scale to support millions, with powerful moderation and interoperability.");
+            title = _t("onboarding|community_messaging_title");
+            description = _t("onboarding|community_messaging_description");
             image = require("../../../../res/img/user-onboarding/CommunityMessaging.png");
-            actionLabel = _t("Find your people");
+            actionLabel = _t("onboarding|community_messaging_action");
             break;
         default:
-            title = _t("Welcome to %(brand)s", {
-                brand: SdkConfig.get("brand"),
-            });
-            description = _t("With free end-to-end encrypted messaging, and unlimited voice and video calls," +
-                " %(brand)s is a great way to stay in touch.", {
+            title = _t("onboarding|welcome_to_brand", {
                 brand: SdkConfig.get("brand"),
             });
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
-            actionLabel = _t("Start your first chat");
+            actionLabel = _t("onboarding|personal_messaging_action");
             break;
     }
 
     return (
         <div className="mx_UserOnboardingHeader">
             <div className="mx_UserOnboardingHeader_content">
-                <Heading size="h1">
-                    { title }
+                <Heading size="1">
+                    {title}
                     <span className="mx_UserOnboardingHeader_dot">.</span>
                 </Heading>
-                <p>
-                    { description }
-                </p>
+                <p>{description}</p>
                 <AccessibleButton onClick={onClickSendDm} kind="primary">
-                    { actionLabel }
+                    {actionLabel}
                 </AccessibleButton>
             </div>
             <img className="mx_UserOnboardingHeader_image" src={image} alt="" />

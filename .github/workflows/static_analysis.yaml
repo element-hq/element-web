@@ -1,94 +1,144 @@
 name: Static Analysis
 on:
-  pull_request: { }
-  push:
-    branches: [ develop, master ]
-  repository_dispatch:
-    types: [ upstream-sdk-notify ]
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
 env:
-  # These must be set for fetchdep.sh to get the right branch
-  REPOSITORY: ${{ github.repository }}
-  PR_NUMBER: ${{ github.event.pull_request.number }}
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+
 jobs:
-  ts_lint:
-    name: "Typescript Syntax Check"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+    ts_lint:
+        name: "Typescript Syntax Check"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "./scripts/ci/install-deps.sh --ignore-scripts"
+
+            - name: Typecheck
+              run: "yarn run lint:types"
+
+            - name: Switch js-sdk to release mode
+              working-directory: node_modules/matrix-js-sdk
+              run: |
+                  scripts/switch_package_to_release.js
+                  yarn install
+                  yarn run build:compile
+                  yarn run build:types
+
+            - name: Typecheck (release mode)
+              run: "yarn run lint:types"
+
+            # Temporary while we directly import matrix-js-sdk/src/* which means we need
+            # certain @types/* packages to make sense of matrix-js-sdk types.
+            #- name: Typecheck (release mode; no yarn link)
+            #  if: github.event_name != 'pull_request' && github.ref_name != 'master'
+            #  run: |
+            #      yarn unlink matrix-js-sdk
+            #      yarn add github:matrix-org/matrix-js-sdk#develop
+            #      yarn install --force
+            #      yarn run lint:types
+
+    i18n_lint:
+        name: "i18n Check"
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         with:
-          cache: 'yarn'
+            hardcoded-words: "Element"
+            allowed-hardcoded-keys: |
+                console_dev_note
+                labs|element_call_video_rooms
+                labs|feature_disable_call_per_sender_encryption
+                voip|element_call
 
-      - name: Install Deps
-        run: "./scripts/ci/install-deps.sh --ignore-scripts"
+    rethemendex_lint:
+        name: "Rethemendex Check"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Typecheck
-        run: "yarn run lint:types"
+            - run: ./res/css/rethemendex.sh
 
-      - name: Switch js-sdk to release mode
-        working-directory: node_modules/matrix-js-sdk
-        run: |
-          scripts/switch_package_to_release.js
-          yarn install
-          yarn run build:compile
-          yarn run build:types
+            - run: git diff --exit-code
 
-      - name: Typecheck (release mode)
-        run: "yarn run lint:types"
+    js_lint:
+        name: "ESLint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-  i18n_lint:
-    name: "i18n Check"
-    uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
 
-  js_lint:
-    name: "ESLint"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install"
 
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
+            - name: Run Linter
+              run: "yarn run lint:js"
 
-      # Does not need branch matching as only analyses this layer
-      - name: Install Deps
-        run: "yarn install"
+    style_lint:
+        name: "Style Lint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Run Linter
-        run: "yarn run lint:js"
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
 
-  style_lint:
-    name: "Style Lint"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install"
 
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
+            - name: Run Linter
+              run: "yarn run lint:style"
 
-      # Does not need branch matching as only analyses this layer
-      - name: Install Deps
-        run: "yarn install"
+    workflow_lint:
+        name: "Workflow Lint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Run Linter
-        run: "yarn run lint:style"
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
 
-  analyse_dead_code:
-    name: "Analyse Dead Code"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
 
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
+            - name: Run Linter
+              run: "yarn lint:workflows"
 
-      - name: Install Deps
-        run: "scripts/ci/layered.sh"
+    analyse_dead_code:
+        name: "Analyse Dead Code"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Dead Code Analysis
-        run: |
-          cd element-web
-          yarn run analyse:unused-exports
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "scripts/ci/layered.sh"
+
+            - name: Dead Code Analysis
+              run: |
+                  cd element-web
+                  yarn run analyse:unused-exports

@@ -15,32 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import QuestionDialog from './QuestionDialog';
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-import { IDialogProps } from "./IDialogProps";
+import QuestionDialog from "./QuestionDialog";
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
-    const description =
-        _t(
-            "%(brand)s now uses 3-5x less memory, by only loading information " +
-            "about other users when needed. Please wait whilst we resynchronise " +
-            "with the server!",
-            { brand },
-        );
+    const description = _t("lazy_loading|resync_description", { brand });
 
-    return (<QuestionDialog
-        hasCancelButton={false}
-        title={_t("Updating %(brand)s", { brand })}
-        description={<div>{ description }</div>}
-        button={_t("OK")}
-        onFinished={props.onFinished}
-    />);
+    return (
+        <QuestionDialog
+            hasCancelButton={false}
+            title={_t("lazy_loading|resync_title", { brand })}
+            description={<div>{description}</div>}
+            button={_t("action|ok")}
+            onFinished={props.onFinished}
+        />
+    );
 };
 
 export default LazyLoadingResyncDialog;

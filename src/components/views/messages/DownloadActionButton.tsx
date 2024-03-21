@@ -22,7 +22,7 @@ import { Icon as DownloadIcon } from "../../../../res/img/download.svg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { FileDownloader } from "../../../utils/FileDownloader";
 
 interface IProps {
@@ -31,13 +31,13 @@ interface IProps {
     // XXX: It can take a cycle or two for the MessageActionBar to have all the props/setup
     // required to get us a MediaEventHelper, so we use a getter function instead to prod for
     // one.
-    mediaEventHelperGet: () => MediaEventHelper;
+    mediaEventHelperGet: () => MediaEventHelper | undefined;
 }
 
 interface IState {
     loading: boolean;
     blob?: Blob;
-    tooltip: string;
+    tooltip: TranslationKey;
 }
 
 export default class DownloadActionButton extends React.PureComponent<IProps, IState> {
@@ -48,57 +48,60 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         this.state = {
             loading: false,
-            tooltip: _td("Downloading"),
+            tooltip: _td("timeline|download_action_downloading"),
         };
     }
 
-    private onDownloadClick = async () => {
-        if (this.state.loading) return;
+    private onDownloadClick = async (): Promise<void> => {
+        const mediaEventHelper = this.props.mediaEventHelperGet();
+        if (this.state.loading || !mediaEventHelper) return;
 
-        if (this.props.mediaEventHelperGet().media.isEncrypted) {
-            this.setState({ tooltip: _td("Decrypting") });
+        if (mediaEventHelper.media.isEncrypted) {
+            this.setState({ tooltip: _td("timeline|download_action_decrypting") });
         }
 
         this.setState({ loading: true });
 
         if (this.state.blob) {
             // Cheat and trigger a download, again.
-            return this.doDownload();
+            return this.doDownload(this.state.blob);
         }
 
-        const blob = await this.props.mediaEventHelperGet().sourceBlob.value;
+        const blob = await mediaEventHelper.sourceBlob.value;
         this.setState({ blob });
-        await this.doDownload();
+        await this.doDownload(blob);
     };
 
-    private async doDownload() {
+    private async doDownload(blob: Blob): Promise<void> {
         await this.downloader.download({
-            blob: this.state.blob,
-            name: this.props.mediaEventHelperGet().fileName,
+            blob,
+            name: this.props.mediaEventHelperGet()!.fileName,
         });
         this.setState({ loading: false });
     }
 
-    public render() {
-        let spinner: JSX.Element;
+    public render(): React.ReactNode {
+        let spinner: JSX.Element | undefined;
         if (this.state.loading) {
             spinner = <Spinner w={18} h={18} />;
         }
 
         const classes = classNames({
-            'mx_MessageActionBar_iconButton': true,
-            'mx_MessageActionBar_downloadButton': true,
-            'mx_MessageActionBar_downloadSpinnerButton': !!spinner,
+            mx_MessageActionBar_iconButton: true,
+            mx_MessageActionBar_downloadButton: true,
+            mx_MessageActionBar_downloadSpinnerButton: !!spinner,
         });
 
-        return <RovingAccessibleTooltipButton
-            className={classes}
-            title={spinner ? _t(this.state.tooltip) : _t("Download")}
-            onClick={this.onDownloadClick}
-            disabled={!!spinner}
-        >
-            <DownloadIcon />
-            { spinner }
-        </RovingAccessibleTooltipButton>;
+        return (
+            <RovingAccessibleTooltipButton
+                className={classes}
+                title={spinner ? _t(this.state.tooltip) : _t("action|download")}
+                onClick={this.onDownloadClick}
+                disabled={!!spinner}
+            >
+                <DownloadIcon />
+                {spinner}
+            </RovingAccessibleTooltipButton>
+        );
     }
 }

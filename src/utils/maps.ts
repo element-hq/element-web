@@ -23,12 +23,12 @@ import { arrayDiff, arrayIntersection } from "./arrays";
  * @param b The second Map. Must be defined.
  * @returns The difference between the keys of each Map.
  */
-export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added: K[], removed: K[] } {
+export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[]; added: K[]; removed: K[] } {
     const aKeys = [...a.keys()];
     const bKeys = [...b.keys()];
     const keyDiff = arrayDiff(aKeys, bKeys);
     const possibleChanges = arrayIntersection(aKeys, bKeys);
-    const changes = possibleChanges.filter(k => a.get(k) !== b.get(k));
+    const changes = possibleChanges.filter((k) => a.get(k) !== b.get(k));
 
     return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }
@@ -43,13 +43,13 @@ export class EnhancedMap<K, V> extends Map<K, V> {
 
     public getOrCreate(key: K, def: V): V {
         if (this.has(key)) {
-            return this.get(key);
+            return this.get(key)!;
         }
         this.set(key, def);
         return def;
     }
 
-    public remove(key: K): V {
+    public remove(key: K): V | undefined {
         const v = this.get(key);
         this.delete(key);
         return v;

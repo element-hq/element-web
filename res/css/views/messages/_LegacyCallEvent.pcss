@@ -39,7 +39,7 @@ limitations under the License.
             display: inline-flex;
 
             &::before {
-                content: '';
+                content: "";
 
                 height: 16px;
                 width: 16px;
@@ -51,24 +51,24 @@ limitations under the License.
         }
 
         .mx_LegacyCallEvent_silence::before {
-            mask-image: url('$(res)/img/voip/silence.svg');
+            mask-image: url("$(res)/img/voip/silence.svg");
         }
 
         .mx_LegacyCallEvent_unSilence::before {
-            mask-image: url('$(res)/img/voip/un-silence.svg');
+            mask-image: url("$(res)/img/voip/un-silence.svg");
         }
 
         &.mx_LegacyCallEvent_voice {
             .mx_LegacyCallEvent_type_icon::before,
             .mx_LegacyCallEvent_content_button_callBack span::before,
             .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+                mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
             }
 
             &.mx_LegacyCallEvent_rejected,
             &.mx_LegacyCallEvent_noAnswer {
                 .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url('$(res)/img/voip/declined-voice.svg');
+                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
                 }
             }
         }
@@ -77,13 +77,13 @@ limitations under the License.
             .mx_LegacyCallEvent_type_icon::before,
             .mx_LegacyCallEvent_content_button_callBack span::before,
             .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
             }
 
             &.mx_LegacyCallEvent_rejected,
             &.mx_LegacyCallEvent_noAnswer {
                 .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url('$(res)/img/voip/declined-video.svg');
+                    mask-image: url("$(res)/img/voip/declined-video.svg");
                 }
             }
         }
@@ -91,13 +91,13 @@ limitations under the License.
         &.mx_LegacyCallEvent_missed {
             &.mx_LegacyCallEvent_voice {
                 .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url('$(res)/img/voip/missed-voice.svg');
+                    mask-image: url("$(res)/img/voip/missed-voice.svg");
                 }
             }
 
             &.mx_LegacyCallEvent_video {
                 .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url('$(res)/img/voip/missed-video.svg');
+                    mask-image: url("$(res)/img/voip/missed-video.svg");
                 }
             }
         }
@@ -118,9 +118,7 @@ limitations under the License.
                 min-width: 0;
 
                 .mx_LegacyCallEvent_sender {
-                    font-weight: 600;
-                    font-size: 1.5rem;
-                    line-height: 1.8rem;
+                    font-weight: var(--cpd-font-weight-semibold);
                     margin-bottom: $spacing-4;
 
                     overflow: hidden;
@@ -133,8 +131,6 @@ limitations under the License.
                     align-items: center;
                     font-weight: 400;
                     color: $secondary-content;
-                    font-size: 1.2rem;
-                    line-height: $font-13px;
 
                     .mx_LegacyCallEvent_type_icon {
                         height: 13px;
@@ -142,7 +138,7 @@ limitations under the License.
                         margin-right: 5px;
 
                         &::before {
-                            content: '';
+                            content: "";
                             position: absolute;
                             height: 13px;
                             width: 13px;
@@ -160,6 +156,7 @@ limitations under the License.
             flex-wrap: wrap;
             align-items: center;
             color: $secondary-content;
+            font-size: $font-12px;
             gap: $spacing-12; /* See mx_IncomingLegacyCallToast_buttons */
             margin-inline-start: 42px; /* avatar (32px) + mx_LegacyCallEvent_info_basic margin (10px) */
             word-break: break-word;
@@ -168,6 +165,7 @@ limitations under the License.
             .mx_LegacyCallEvent_content_button {
                 @mixin LegacyCallButton;
                 padding: 0 $spacing-12;
+                font-size: inherit;
 
                 span::before {
                     mask-size: 16px;
@@ -179,7 +177,7 @@ limitations under the License.
 
             .mx_LegacyCallEvent_content_button_reject {
                 span::before {
-                    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
                 }
             }
 

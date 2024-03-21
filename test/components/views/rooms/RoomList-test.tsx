@@ -1,5 +1,6 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2023 Mikhail Aheichyk
+Copyright 2023 Nordeck IT + Consulting GmbH.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,256 +15,196 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import ReactTestUtils from 'react-dom/test-utils';
-import ReactDOM from 'react-dom';
-import {
-    PendingEventOrdering,
-    Room,
-    RoomMember,
-} from 'matrix-js-sdk/src/matrix';
+import React, { ComponentProps } from "react";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import * as TestUtils from '../../../test-utils';
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import dis from '../../../../src/dispatcher/dispatcher';
-import DMRoomMap from '../../../../src/utils/DMRoomMap';
-import { DefaultTagID } from "../../../../src/stores/room-list/models";
-import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
-import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 import RoomList from "../../../../src/components/views/rooms/RoomList";
-import RoomSublist from "../../../../src/components/views/rooms/RoomSublist";
-import RoomTile from "../../../../src/components/views/rooms/RoomTile";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from '../../../test-utils';
-import ResizeNotifier from '../../../../src/utils/ResizeNotifier';
+import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
+import { MetaSpace } from "../../../../src/stores/spaces";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../src/settings/UIFeature";
+import dis from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
+import * as testUtils from "../../../test-utils";
+import { mkSpace, stubClient } from "../../../test-utils";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
-function generateRoomId() {
-    return '!' + Math.random().toString().slice(2, 10) + ':domain';
-}
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
-describe('RoomList', () => {
-    function createRoom(opts) {
-        const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
-            // The room list now uses getPendingEvents(), so we need a detached ordering.
-            pendingEventOrdering: PendingEventOrdering.Detached,
-        });
-        if (opts) {
-            Object.assign(room, opts);
-        }
-        return room;
-    }
+jest.mock("../../../../src/dispatcher/dispatcher");
 
-    let parentDiv = null;
-    let root = null;
-    const myUserId = '@me:domain';
+const getUserIdForRoomId = jest.fn();
+const getDMRoomsForUserId = jest.fn();
+// @ts-ignore
+DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
-    const movingRoomId = '!someroomid';
-    let movingRoom: Room | undefined;
-    let otherRoom: Room | undefined;
+describe("RoomList", () => {
+    stubClient();
+    const client = MatrixClientPeg.safeGet();
+    const store = SpaceStore.instance;
 
-    let myMember: RoomMember | undefined;
-    let myOtherMember: RoomMember | undefined;
-
-    const client = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(myUserId),
-        getRooms: jest.fn(),
-        getVisibleRooms: jest.fn(),
-        getRoom: jest.fn(),
-    });
-
-    const defaultProps = {
-        onKeyDown: jest.fn(),
-        onFocus: jest.fn(),
-        onBlur: jest.fn(),
-        onResize: jest.fn(),
-        resizeNotifier: {} as unknown as ResizeNotifier,
-        isMinimized: false,
-        activeSpace: '',
-    };
-
-    beforeEach(async function(done) {
-        RoomListStoreClass.TEST_MODE = true;
-        jest.clearAllMocks();
-
-        client.credentials = { userId: myUserId };
-
-        DMRoomMap.makeShared();
-
-        parentDiv = document.createElement('div');
-        document.body.appendChild(parentDiv);
-
-        const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
-        root = ReactDOM.render(
-            <WrappedRoomList {...defaultProps} />,
-            parentDiv,
+    function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
+        return (
+            <RoomList
+                onKeyDown={jest.fn()}
+                onFocus={jest.fn()}
+                onBlur={jest.fn()}
+                onResize={jest.fn()}
+                resizeNotifier={new ResizeNotifier()}
+                isMinimized={false}
+                activeSpace={MetaSpace.Home}
+                {...props}
+            />
         );
-        ReactTestUtils.findRenderedComponentWithType(root, RoomList);
+    }
 
-        movingRoom = createRoom({ name: 'Moving room' });
-        expect(movingRoom.roomId).not.toBe(null);
+    describe("Rooms", () => {
+        describe("when meta space is active", () => {
+            beforeEach(() => {
+                store.setActiveSpace(MetaSpace.Home);
+            });
 
-        // Mock joined member
-        myMember = new RoomMember(movingRoomId, myUserId);
-        myMember.membership = 'join';
-        movingRoom.updateMyMembership('join');
-        movingRoom.getMember = (userId) => ({
-            [client.credentials.userId]: myMember,
-        }[userId]);
+            it("does not render add room button when UIComponent customisation disables CreateRooms and ExploreRooms", () => {
+                const disabled: UIComponent[] = [UIComponent.CreateRooms, UIComponent.ExploreRooms];
+                mocked(shouldShowComponent).mockImplementation((feature) => !disabled.includes(feature));
+                render(getComponent());
 
-        otherRoom = createRoom({ name: 'Other room' });
-        myOtherMember = new RoomMember(otherRoom.roomId, myUserId);
-        myOtherMember.membership = 'join';
-        otherRoom.updateMyMembership('join');
-        otherRoom.getMember = (userId) => ({
-            [client.credentials.userId]: myOtherMember,
-        }[userId]);
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                expect(within(roomsList).queryByRole("button", { name: "Add room" })).not.toBeInTheDocument();
+            });
 
-        // Mock the matrix client
-        const mockRooms = [
-            movingRoom,
-            otherRoom,
-            createRoom({ tags: { 'm.favourite': { order: 0.1 } }, name: 'Some other room' }),
-            createRoom({ tags: { 'm.favourite': { order: 0.2 } }, name: 'Some other room 2' }),
-            createRoom({ tags: { 'm.lowpriority': {} }, name: 'Some unimportant room' }),
-            createRoom({ tags: { 'custom.tag': {} }, name: 'Some room customly tagged' }),
-        ];
-        client.getRooms.mockReturnValue(mockRooms);
-        client.getVisibleRooms.mockReturnValue(mockRooms);
+            it("renders add room button with menu when UIComponent customisation allows CreateRooms or ExploreRooms", async () => {
+                let disabled: UIComponent[] = [];
+                mocked(shouldShowComponent).mockImplementation((feature) => !disabled.includes(feature));
+                const { rerender } = render(getComponent());
 
-        const roomMap = {};
-        client.getRooms().forEach((r) => {
-            roomMap[r.roomId] = r;
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                const addRoomButton = within(roomsList).getByRole("button", { name: "Add room" });
+                expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+                await userEvent.click(addRoomButton);
+
+                const menu = screen.getByRole("menu");
+
+                expect(within(menu).getByRole("menuitem", { name: "New room" })).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "Explore public rooms" })).toBeInTheDocument();
+
+                disabled = [UIComponent.CreateRooms];
+                rerender(getComponent());
+
+                expect(addRoomButton).toBeInTheDocument();
+                expect(menu).toBeInTheDocument();
+                expect(within(menu).queryByRole("menuitem", { name: "New room" })).not.toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "Explore public rooms" })).toBeInTheDocument();
+
+                disabled = [UIComponent.ExploreRooms];
+                rerender(getComponent());
+
+                expect(addRoomButton).toBeInTheDocument();
+                expect(menu).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "New room" })).toBeInTheDocument();
+                expect(within(menu).queryByRole("menuitem", { name: "Explore public rooms" })).not.toBeInTheDocument();
+            });
+
+            it("renders add room button and clicks explore public rooms", async () => {
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
+
+                const menu = screen.getByRole("menu");
+                await userEvent.click(within(menu).getByRole("menuitem", { name: "Explore public rooms" }));
+
+                expect(dis.fire).toHaveBeenCalledWith(Action.ViewRoomDirectory);
+            });
         });
 
-        client.getRoom.mockImplementation((roomId) => roomMap[roomId]);
+        describe("when room space is active", () => {
+            let rooms: Room[];
+            const mkSpaceForRooms = (spaceId: string, children: string[] = []) =>
+                mkSpace(client, spaceId, rooms, children);
 
-        // Now that everything has been set up, prepare and update the store
-        await (RoomListStore.instance as RoomListStoreClass).makeReady(client);
+            const space1 = "!space1:server";
 
-        done();
-    });
+            beforeEach(async () => {
+                rooms = [];
+                mkSpaceForRooms(space1);
+                mocked(client).getRoom.mockImplementation(
+                    (roomId) => rooms.find((room) => room.roomId === roomId) || null,
+                );
+                await testUtils.setupAsyncStoreWithClient(store, client);
 
-    afterEach(async (done) => {
-        if (parentDiv) {
-            ReactDOM.unmountComponentAtNode(parentDiv);
-            parentDiv.remove();
-            parentDiv = null;
-        }
-
-        await RoomListLayoutStore.instance.resetLayouts();
-        await (RoomListStore.instance as RoomListStoreClass).resetStore();
-
-        done();
-    });
-
-    function expectRoomInSubList(room, subListTest) {
-        const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSublist);
-        const containingSubList = subLists.find(subListTest);
-
-        let expectedRoomTile;
-        try {
-            const roomTiles = ReactTestUtils.scryRenderedComponentsWithType(containingSubList, RoomTile);
-            console.info({ roomTiles: roomTiles.length });
-            expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
-        } catch (err) {
-            // truncate the error message because it's spammy
-            err.message = 'Error finding RoomTile for ' + room.roomId + ' in ' +
-                subListTest + ': ' +
-                err.message.split('componentType')[0] + '...';
-            throw err;
-        }
-
-        expect(expectedRoomTile).toBeTruthy();
-        expect(expectedRoomTile.props.room).toBe(room);
-    }
-
-    function expectCorrectMove(oldTagId, newTagId) {
-        const getTagSubListTest = (tagId) => {
-            return (s) => s.props.tagId === tagId;
-        };
-
-        // Default to finding the destination sublist with newTag
-        const destSubListTest = getTagSubListTest(newTagId);
-        const srcSubListTest = getTagSubListTest(oldTagId);
-
-        // Set up the room that will be moved such that it has the correct state for a room in
-        // the section for oldTagId
-        if (oldTagId === DefaultTagID.Favourite || oldTagId === DefaultTagID.LowPriority) {
-            movingRoom.tags = { [oldTagId]: {} };
-        } else if (oldTagId === DefaultTagID.DM) {
-            // Mock inverse m.direct
-            // @ts-ignore forcing private property
-            DMRoomMap.shared().roomToUser = {
-                [movingRoom.roomId]: '@someotheruser:domain',
-            };
-        }
-
-        dis.dispatch({ action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client });
-
-        expectRoomInSubList(movingRoom, srcSubListTest);
-
-        dis.dispatch({ action: 'RoomListActions.tagRoom.pending', request: {
-            oldTagId, newTagId, room: movingRoom,
-        } });
-
-        expectRoomInSubList(movingRoom, destSubListTest);
-    }
-
-    function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
-        // TODO: Re-enable dragging tests when we support dragging again.
-        describe.skip('does correct optimistic update when dragging from', () => {
-            it('rooms to people', () => {
-                expectCorrectMove(undefined, DefaultTagID.DM);
+                store.setActiveSpace(space1);
             });
 
-            it('rooms to favourites', () => {
-                expectCorrectMove(undefined, 'm.favourite');
+            it("does not render add room button when UIComponent customisation disables CreateRooms and ExploreRooms", () => {
+                const disabled: UIComponent[] = [UIComponent.CreateRooms, UIComponent.ExploreRooms];
+                mocked(shouldShowComponent).mockImplementation((feature) => !disabled.includes(feature));
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                expect(within(roomsList).queryByRole("button", { name: "Add room" })).not.toBeInTheDocument();
             });
 
-            it('rooms to low priority', () => {
-                expectCorrectMove(undefined, 'm.lowpriority');
+            it("renders add room button with menu when UIComponent customisation allows CreateRooms or ExploreRooms", async () => {
+                let disabled: UIComponent[] = [];
+                mocked(shouldShowComponent).mockImplementation((feature) => !disabled.includes(feature));
+                const { rerender } = render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                const addRoomButton = within(roomsList).getByRole("button", { name: "Add room" });
+                expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+                await userEvent.click(addRoomButton);
+
+                const menu = screen.getByRole("menu");
+
+                expect(within(menu).getByRole("menuitem", { name: "Explore rooms" })).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "New room" })).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "Add existing room" })).toBeInTheDocument();
+
+                disabled = [UIComponent.CreateRooms];
+                rerender(getComponent());
+
+                expect(addRoomButton).toBeInTheDocument();
+                expect(menu).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "Explore rooms" })).toBeInTheDocument();
+                expect(within(menu).queryByRole("menuitem", { name: "New room" })).not.toBeInTheDocument();
+                expect(within(menu).queryByRole("menuitem", { name: "Add existing room" })).not.toBeInTheDocument();
+
+                disabled = [UIComponent.ExploreRooms];
+                rerender(getComponent());
+
+                expect(addRoomButton).toBeInTheDocument();
+                expect(menu).toBeInTheDocument();
+                expect(within(menu).queryByRole("menuitem", { name: "Explore rooms" })).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "New room" })).toBeInTheDocument();
+                expect(within(menu).getByRole("menuitem", { name: "Add existing room" })).toBeInTheDocument();
             });
 
-            // XXX: Known to fail - the view does not update immediately to reflect the change.
-            // Whe running the app live, it updates when some other event occurs (likely the
-            // m.direct arriving) that these tests do not fire.
-            xit('people to rooms', () => {
-                expectCorrectMove(DefaultTagID.DM, undefined);
-            });
+            it("renders add room button and clicks explore rooms", async () => {
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
 
-            it('people to favourites', () => {
-                expectCorrectMove(DefaultTagID.DM, 'm.favourite');
-            });
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
 
-            it('people to lowpriority', () => {
-                expectCorrectMove(DefaultTagID.DM, 'm.lowpriority');
-            });
+                const menu = screen.getByRole("menu");
+                await userEvent.click(within(menu).getByRole("menuitem", { name: "Explore rooms" }));
 
-            it('low priority to rooms', () => {
-                expectCorrectMove('m.lowpriority', undefined);
-            });
-
-            it('low priority to people', () => {
-                expectCorrectMove('m.lowpriority', DefaultTagID.DM);
-            });
-
-            it('low priority to low priority', () => {
-                expectCorrectMove('m.lowpriority', 'm.lowpriority');
-            });
-
-            it('favourites to rooms', () => {
-                expectCorrectMove('m.favourite', undefined);
-            });
-
-            it('favourites to people', () => {
-                expectCorrectMove('m.favourite', DefaultTagID.DM);
-            });
-
-            it('favourites to low priority', () => {
-                expectCorrectMove('m.favourite', 'm.lowpriority');
+                expect(dis.dispatch).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: space1,
+                });
             });
         });
-    }
-
-    itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
+    });
 });
-

@@ -34,8 +34,8 @@ const SETTING_NAME = "recent_emoji";
 const STORAGE_LIMIT = 100;
 
 // TODO remove this after some time
-function migrate() {
-    const data: ILegacyFormat = JSON.parse(window.localStorage.mx_reaction_count || '{}');
+function migrate(): void {
+    const data: ILegacyFormat = JSON.parse(window.localStorage.mx_reaction_count || "{}");
     const sorted = Object.entries(data).sort(([, [count1, date1]], [, [count2, date2]]) => date2 - date1);
     const newFormat = sorted.map(([emoji, [count, date]]) => [emoji, count]);
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, newFormat.slice(0, STORAGE_LIMIT));
@@ -45,7 +45,7 @@ function getRecentEmoji(): Format {
     return SettingsStore.getValue(SETTING_NAME) || [];
 }
 
-export function add(emoji: string) {
+export function add(emoji: string): void {
     const recents = getRecentEmoji();
     const i = recents.findIndex(([e]) => e === emoji);
 
@@ -61,7 +61,7 @@ export function add(emoji: string) {
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, [newEntry, ...recents].slice(0, STORAGE_LIMIT));
 }
 
-export function get(limit = 24) {
+export function get(limit = 24): string[] {
     let recents = getRecentEmoji();
 
     if (recents.length < 1) {

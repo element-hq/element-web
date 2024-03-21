@@ -18,7 +18,7 @@ import React, { CSSProperties } from "react";
 import classNames from "classnames";
 
 interface WaveformCSSProperties extends CSSProperties {
-    '--barHeight': number;
+    "--barHeight": number;
 }
 
 interface IProps {
@@ -26,8 +26,7 @@ interface IProps {
     progress: number; // percent complete, 0-1, default 100%
 }
 
-interface IState {
-}
+interface IState {}
 
 /**
  * A simple waveform component. This renders bars (centered vertically) for each
@@ -42,23 +41,29 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
         progress: 1,
     };
 
-    public render() {
-        return <div className='mx_Waveform'>
-            { this.props.relHeights.map((h, i) => {
-                const progress = this.props.progress;
-                const isCompleteBar = (i / this.props.relHeights.length) <= progress && progress > 0;
-                const classes = classNames({
-                    'mx_Waveform_bar': true,
-                    'mx_Waveform_bar_100pct': isCompleteBar,
-                });
-                return <span
-                    key={i}
-                    style={{
-                        "--barHeight": h,
-                    } as WaveformCSSProperties}
-                    className={classes}
-                />;
-            }) }
-        </div>;
+    public render(): React.ReactNode {
+        return (
+            <div className="mx_Waveform">
+                {this.props.relHeights.map((h, i) => {
+                    const progress = this.props.progress;
+                    const isCompleteBar = i / this.props.relHeights.length <= progress && progress > 0;
+                    const classes = classNames({
+                        mx_Waveform_bar: true,
+                        mx_Waveform_bar_100pct: isCompleteBar,
+                    });
+                    return (
+                        <span
+                            key={i}
+                            style={
+                                {
+                                    "--barHeight": h,
+                                } as WaveformCSSProperties
+                            }
+                            className={classes}
+                        />
+                    );
+                })}
+            </div>
+        );
     }
 }

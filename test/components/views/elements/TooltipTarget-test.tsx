@@ -15,92 +15,68 @@ limitations under the License.
 */
 
 import React from "react";
-import {
-    renderIntoDocument,
-    Simulate,
-} from 'react-dom/test-utils';
-import { act } from "react-dom/test-utils";
+import { fireEvent, render } from "@testing-library/react";
 
-import { Alignment } from '../../../../src/components/views/elements/Tooltip';
+import { Alignment } from "../../../../src/components/views/elements/Tooltip";
 import TooltipTarget from "../../../../src/components/views/elements/TooltipTarget";
 
-describe('<TooltipTarget />', () => {
+describe("<TooltipTarget />", () => {
     const defaultProps = {
-        "tooltipTargetClassName": 'test tooltipTargetClassName',
-        "className": 'test className',
-        "tooltipClassName": 'test tooltipClassName',
-        "label": 'test label',
+        "tooltipTargetClassName": "test tooltipTargetClassName",
+        "className": "test className",
+        "tooltipClassName": "test tooltipClassName",
+        "label": "test label",
         "alignment": Alignment.Left,
-        "id": 'test id',
-        'data-test-id': 'test',
+        "id": "test id",
+        "data-testid": "test",
     };
 
-    afterEach(() => {
-        // clean up renderer tooltips
-        const wrapper = document.querySelector('.mx_Tooltip_wrapper');
-        while (wrapper?.firstChild) {
-            wrapper.removeChild(wrapper.lastChild);
-        }
-    });
-
     const getComponent = (props = {}) => {
-        const wrapper = renderIntoDocument<HTMLSpanElement>(
-        // wrap in element so renderIntoDocument can render functional component
+        const wrapper = render(
+            // wrap in element so renderIntoDocument can render functional component
             <span>
                 <TooltipTarget {...defaultProps} {...props}>
                     <span>child</span>
                 </TooltipTarget>
             </span>,
-        ) as HTMLSpanElement;
-        return wrapper.querySelector('[data-test-id=test]');
+        );
+        return wrapper.getByTestId("test");
     };
 
-    const getVisibleTooltip = () => document.querySelector('.mx_Tooltip.mx_Tooltip_visible');
+    const getVisibleTooltip = () => document.querySelector(".mx_Tooltip.mx_Tooltip_visible");
 
-    it('renders container', () => {
+    it("renders container", () => {
         const component = getComponent();
         expect(component).toMatchSnapshot();
         expect(getVisibleTooltip()).toBeFalsy();
     });
 
     const alignmentKeys = Object.keys(Alignment).filter((o: any) => isNaN(o));
-    it.each(alignmentKeys)("displays %s aligned tooltip on mouseover", async (alignment) => {
-        const wrapper = getComponent({ alignment: Alignment[alignment] });
-        act(() => {
-            Simulate.mouseOver(wrapper);
-        });
+    it.each(alignmentKeys)("displays %s aligned tooltip on mouseover", async (alignment: any) => {
+        const wrapper = getComponent({ alignment: Alignment[alignment] })!;
+        fireEvent.mouseOver(wrapper);
         expect(getVisibleTooltip()).toMatchSnapshot();
     });
 
-    it('hides tooltip on mouseleave', () => {
-        const wrapper = getComponent();
-        act(() => {
-            Simulate.mouseOver(wrapper);
-        });
+    it("hides tooltip on mouseleave", () => {
+        const wrapper = getComponent()!;
+        fireEvent.mouseOver(wrapper);
         expect(getVisibleTooltip()).toBeTruthy();
-        act(() => {
-            Simulate.mouseLeave(wrapper);
-        });
+        fireEvent.mouseLeave(wrapper);
         expect(getVisibleTooltip()).toBeFalsy();
     });
 
-    it('displays tooltip on focus', () => {
-        const wrapper = getComponent();
-        act(() => {
-            Simulate.focus(wrapper);
-        });
+    it("displays tooltip on focus", () => {
+        const wrapper = getComponent()!;
+        fireEvent.focus(wrapper);
         expect(getVisibleTooltip()).toBeTruthy();
     });
 
-    it('hides tooltip on blur', async () => {
-        const wrapper = getComponent();
-        act(() => {
-            Simulate.focus(wrapper);
-        });
+    it("hides tooltip on blur", async () => {
+        const wrapper = getComponent()!;
+        fireEvent.focus(wrapper);
         expect(getVisibleTooltip()).toBeTruthy();
-        act(() => {
-            Simulate.blur(wrapper);
-        });
+        fireEvent.blur(wrapper);
         expect(getVisibleTooltip()).toBeFalsy();
     });
 });

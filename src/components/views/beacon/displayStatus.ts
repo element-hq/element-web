@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { BeaconLocationState } from "matrix-js-sdk/src/content-helpers";
+import { ContentHelpers } from "matrix-js-sdk/src/matrix";
 
 export enum BeaconDisplayStatus {
-    Loading = 'Loading',
-    Error = 'Error',
-    Stopped = 'Stopped',
-    Active = 'Active',
+    Loading = "Loading",
+    Error = "Error",
+    Stopped = "Stopped",
+    Active = "Active",
 }
 export const getBeaconDisplayStatus = (
     isLive: boolean,
-    latestLocationState?: BeaconLocationState,
+    latestLocationState?: ContentHelpers.BeaconLocationState,
     error?: Error,
     waitingToStart?: boolean,
 ): BeaconDisplayStatus => {
@@ -40,7 +40,5 @@ export const getBeaconDisplayStatus = (
     if (!latestLocationState) {
         return BeaconDisplayStatus.Loading;
     }
-    if (latestLocationState) {
-        return BeaconDisplayStatus.Active;
-    }
+    return BeaconDisplayStatus.Active;
 };

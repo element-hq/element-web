@@ -27,41 +27,49 @@ import { RoomNotificationContextMenu } from "../../context_menus/RoomNotificatio
 import SpaceContextMenu from "../../context_menus/SpaceContextMenu";
 import { ButtonEvent } from "../../elements/AccessibleButton";
 import { contextMenuBelow } from "../../rooms/RoomTile";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 
 interface Props {
     room: Room;
 }
 
-export function RoomResultContextMenus({ room }: Props) {
+export function RoomResultContextMenus({ room }: Props): JSX.Element {
     const [notificationState] = useNotificationState(room);
 
     const [generalMenuPosition, setGeneralMenuPosition] = useState<DOMRect | null>(null);
     const [notificationMenuPosition, setNotificationMenuPosition] = useState<DOMRect | null>(null);
 
-    let generalMenu: JSX.Element;
+    let generalMenu: JSX.Element | undefined;
     if (generalMenuPosition !== null) {
         if (room.isSpaceRoom()) {
-            generalMenu = <SpaceContextMenu
-                {...contextMenuBelow(generalMenuPosition)}
-                space={room}
-                onFinished={() => setGeneralMenuPosition(null)}
-            />;
+            generalMenu = (
+                <SpaceContextMenu
+                    {...contextMenuBelow(generalMenuPosition)}
+                    space={room}
+                    onFinished={() => setGeneralMenuPosition(null)}
+                />
+            );
         } else {
-            generalMenu = <RoomGeneralContextMenu
-                {...contextMenuBelow(generalMenuPosition)}
-                room={room}
-                onFinished={() => setGeneralMenuPosition(null)}
-            />;
+            generalMenu = (
+                <RoomGeneralContextMenu
+                    {...contextMenuBelow(generalMenuPosition)}
+                    room={room}
+                    onFinished={() => setGeneralMenuPosition(null)}
+                />
+            );
         }
     }
 
-    let notificationMenu: JSX.Element;
+    let notificationMenu: JSX.Element | undefined;
     if (notificationMenuPosition !== null) {
-        notificationMenu = <RoomNotificationContextMenu
-            {...contextMenuBelow(notificationMenuPosition)}
-            room={room}
-            onFinished={() => setNotificationMenuPosition(null)}
-        />;
+        notificationMenu = (
+            <RoomNotificationContextMenu
+                {...contextMenuBelow(notificationMenuPosition)}
+                room={room}
+                onFinished={() => setNotificationMenuPosition(null)}
+            />
+        );
     }
 
     const notificationMenuClasses = classNames("mx_SpotlightDialog_option--notifications", {
@@ -74,19 +82,21 @@ export function RoomResultContextMenus({ room }: Props) {
 
     return (
         <Fragment>
-            <ContextMenuTooltipButton
-                className="mx_SpotlightDialog_option--menu"
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
+            {shouldShowComponent(UIComponent.RoomOptionsMenu) && (
+                <ContextMenuTooltipButton
+                    className="mx_SpotlightDialog_option--menu"
+                    onClick={(ev: ButtonEvent) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
 
-                    const target = ev.target as HTMLElement;
-                    setGeneralMenuPosition(target.getBoundingClientRect());
-                }}
-                title={room.isSpaceRoom() ? _t("Space options") : _t("Room options")}
-                isExpanded={generalMenuPosition !== null}
-            />
-            { !room.isSpaceRoom() && (
+                        const target = ev.target as HTMLElement;
+                        setGeneralMenuPosition(target.getBoundingClientRect());
+                    }}
+                    title={room.isSpaceRoom() ? _t("space|context_menu|options") : _t("room|context_menu|title")}
+                    isExpanded={generalMenuPosition !== null}
+                />
+            )}
+            {!room.isSpaceRoom() && (
                 <ContextMenuTooltipButton
                     className={notificationMenuClasses}
                     onClick={(ev: ButtonEvent) => {
@@ -96,12 +106,12 @@ export function RoomResultContextMenus({ room }: Props) {
                         const target = ev.target as HTMLElement;
                         setNotificationMenuPosition(target.getBoundingClientRect());
                     }}
-                    title={_t("Notification options")}
+                    title={_t("room_list|notification_options")}
                     isExpanded={notificationMenuPosition !== null}
                 />
-            ) }
-            { generalMenu }
-            { notificationMenu }
+            )}
+            {generalMenu}
+            {notificationMenu}
         </Fragment>
     );
 }

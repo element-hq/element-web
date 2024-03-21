@@ -14,38 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SpotlightDialog_wrapper .mx_Dialog {
-    border-radius: 8px;
-    overflow-y: initial;
-    position: relative;
-    height: 60%;
-    padding: 0;
-    contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
+.mx_SpotlightDialog_wrapper {
+    .mx_Dialog_border {
+        /* Disable the glass border as this dialog wasn't designed with it in mind */
+        display: contents;
+    }
 
-    #mx_SpotlightDialog_keyboardPrompt {
-        position: absolute;
-        padding: $spacing-8;
+    .mx_Dialog {
+        width: fit-content;
         border-radius: 8px;
-        background-color: $background;
-        top: -60px; /* relative to the top of the modal */
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: $font-12px;
-        line-height: $font-15px;
-        color: $secondary-content;
+        overflow-y: initial;
+        position: relative;
+        height: 60%;
+        padding: 0;
+        contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
-        kbd {
-            display: inline-block;
-            padding: 2px $spacing-4; /* TODO: Use a spacing variable */
-            margin: 0 $spacing-4;
-            border-radius: 6px;
-            background-color: $quinary-content;
-            vertical-align: middle;
-            color: $tertiary-content;
-            /* To avoid any styling inherent with <kbd> elements */
-            font-family: inherit;
-            font-weight: inherit;
-            font-size: inherit;
+        #mx_SpotlightDialog_keyboardPrompt {
+            position: absolute;
+            padding: $spacing-8;
+            border-radius: 8px;
+            background-color: $background;
+            top: -60px; /* relative to the top of the modal */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-content;
+
+            kbd {
+                display: inline-block;
+                padding: 2px $spacing-4;
+                margin: 0 $spacing-4;
+                border-radius: 6px;
+                background-color: $quinary-content;
+                vertical-align: middle;
+                color: $tertiary-content;
+                /* To avoid any styling inherent with <kbd> elements */
+                font-family: inherit;
+                font-weight: inherit;
+                font-size: inherit;
+            }
         }
     }
 }
@@ -76,7 +84,7 @@ limitations under the License.
             vertical-align: middle;
             color: $primary-content;
             position: relative;
-            padding: $spacing-4 $spacing-8 $spacing-4 37px; /* TODO: Use a spacing variable */
+            padding: $spacing-4 $spacing-8 $spacing-4 37px;
 
             &::before {
                 background-color: $secondary-content;
@@ -93,11 +101,15 @@ limitations under the License.
             }
 
             &.mx_SpotlightDialog_filterPeople::before {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+
+            &.mx_SpotlightDialog_filterPublicSpaces::before {
+                mask-image: url("$(res)/img/element-icons/spaces.svg");
             }
 
             .mx_SpotlightDialog_filter--close {
@@ -155,9 +167,15 @@ limitations under the License.
         overflow-y: auto;
         padding: $spacing-16;
 
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
         .mx_SpotlightDialog_section {
-            > h4, > .mx_SpotlightDialog_sectionHeader > h4 {
-                font-weight: $font-semi-bold;
+            > h4,
+            > .mx_SpotlightDialog_sectionHeader > h4 {
+                font-weight: var(--cpd-font-weight-semibold);
                 font-size: $font-12px;
                 line-height: $font-15px;
                 color: $secondary-content;
@@ -216,7 +234,8 @@ limitations under the License.
                     margin-left: $spacing-16;
                 }
 
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     background-color: $quinary-content;
                 }
             }
@@ -227,7 +246,7 @@ limitations under the License.
         .mx_SpotlightDialog_otherSearches,
         .mx_SpotlightDialog_hiddenResults {
             .mx_SpotlightDialog_option {
-                padding: 6px $spacing-4; /* TODO: Use a spacing variable */
+                padding: 6px $spacing-4;
                 border-radius: 8px;
                 font-size: $font-15px;
                 line-height: $font-24px;
@@ -251,11 +270,11 @@ limitations under the License.
 
                     .mx_AccessibleButton {
                         padding: $spacing-4 $spacing-20;
-                        margin: 2px $spacing-4; /* TODO: Use a spacing variable */
+                        margin: 2px $spacing-4;
                     }
 
                     .mx_SpotlightDialog_enterPrompt {
-                        margin-top: 9px; /* TODO: Use a spacing variable */
+                        margin-top: 9px;
                         margin-right: $spacing-8;
                     }
                 }
@@ -266,6 +285,7 @@ limitations under the License.
                     margin-right: $spacing-8;
                     width: 24px;
                     height: 24px;
+                    flex-shrink: 0;
 
                     .mx_BaseAvatar {
                         width: inherit;
@@ -329,7 +349,7 @@ limitations under the License.
                     &::before {
                         top: 2px;
                         left: 2px;
-                        content: '';
+                        content: "";
                         width: 16px;
                         height: 16px;
                         position: absolute;
@@ -339,16 +359,18 @@ limitations under the License.
                         background: $tertiary-content;
                     }
 
-                    &:hover::before, &[aria-selected="true"]::before {
+                    &:hover::before,
+                    &[aria-selected="true"]::before {
                         background-color: $secondary-content;
                     }
                 }
 
                 .mx_SpotlightDialog_option--menu::before {
-                    mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                    mask-image: url("$(res)/img/element-icons/context-menu.svg");
                 }
 
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     background-color: $system;
 
                     .mx_SpotlightDialog_option--menu,
@@ -370,7 +392,7 @@ limitations under the License.
             .mx_AccessibleButton {
                 position: relative;
                 margin: 0;
-                padding: 3px $spacing-8 3px $spacing-28; /* TODO: Use a spacing variable */
+                padding: 3px $spacing-8 3px $spacing-28;
 
                 &::before {
                     content: "";
@@ -382,7 +404,7 @@ limitations under the License.
                     left: $spacing-8;
                     width: 16px;
                     height: 16px;
-                    background: $accent;
+                    background: var(--cpd-color-icon-primary);
                 }
             }
         }
@@ -399,6 +421,7 @@ limitations under the License.
             .mx_SpotlightDialog_startChat,
             .mx_SpotlightDialog_joinRoomAlias,
             .mx_SpotlightDialog_explorePublicRooms,
+            .mx_SpotlightDialog_explorePublicSpaces,
             .mx_SpotlightDialog_startGroupChat {
                 padding-left: $spacing-32;
                 position: relative;
@@ -419,19 +442,23 @@ limitations under the License.
             }
 
             .mx_SpotlightDialog_startChat::before {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             .mx_SpotlightDialog_joinRoomAlias::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
             }
 
             .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+
+            .mx_SpotlightDialog_explorePublicSpaces::before {
+                mask-image: url("$(res)/img/element-icons/spaces.svg");
             }
 
             .mx_SpotlightDialog_startGroupChat::before {
-                mask-image: url('$(res)/img/element-icons/group-members.svg');
+                mask-image: url("$(res)/img/element-icons/group-members.svg");
             }
 
             .mx_SpotlightDialog_otherSearches_messageSearchText {
@@ -448,7 +475,7 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
-                mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
+                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
             }
         }
 
@@ -471,7 +498,7 @@ limitations under the License.
         }
 
         .mx_SpotlightDialog_enterPrompt {
-            padding: 2px $spacing-4; /* TODO: Use a spacing variable */
+            padding: 2px $spacing-4;
             /* To avoid any styling inherent with <kbd> elements */
             font-family: inherit;
             font-weight: inherit;
@@ -491,40 +518,20 @@ limitations under the License.
             mask-size: contain;
 
             &.mx_SpotlightDialog_metaspaceResult_home-space {
-                mask-image: url('$(res)/img/element-icons/home.svg');
+                mask-image: url("$(res)/img/element-icons/home.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_favourites-space {
-                mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_people-space {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_orphans-space {
-                mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
             }
-        }
-    }
-
-    .mx_SpotlightDialog_footer {
-        font-size: $font-12px;
-        line-height: $font-15px;
-        color: $secondary-content;
-        padding: $spacing-12 $spacing-16 $spacing-16;
-        display: flex;
-        border-top: 1px solid $quinary-content;
-
-        > span {
-            align-self: center;
-        }
-
-        .mx_AccessibleButton_kind_primary_outline {
-            padding: $spacing-4 $spacing-8;
-            border-color: $secondary-content;
-            color: $secondary-content;
-            margin-left: auto;
         }
     }
 }

@@ -14,157 +14,139 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
-import { ClientEvent, RoomMember } from 'matrix-js-sdk/src/matrix';
-import maplibregl from 'maplibre-gl';
-import { logger } from 'matrix-js-sdk/src/logger';
-import { act } from 'react-dom/test-utils';
-import { SyncState } from 'matrix-js-sdk/src/sync';
+import React, { ComponentProps } from "react";
+import { fireEvent, render } from "@testing-library/react";
+import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
+import * as maplibregl from "maplibre-gl";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
-import Modal from '../../../../src/Modal';
+import Modal from "../../../../src/Modal";
 import SdkConfig from "../../../../src/SdkConfig";
-import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
+import { TILE_SERVER_WK_KEY } from "../../../../src/utils/WellKnownUtils";
 import { makeLocationEvent } from "../../../test-utils/location";
-import { getMockClientWithEventEmitter } from '../../../test-utils';
+import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 describe("MLocationBody", () => {
-    describe('<MLocationBody>', () => {
-        const roomId = '!room:server';
-        const userId = '@user:server';
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    describe("<MLocationBody>", () => {
+        const roomId = "!room:server";
+        const userId = "@user:server";
         const mockClient = getMockClientWithEventEmitter({
             getClientWellKnown: jest.fn().mockReturnValue({
-                [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+                [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
             }),
             isGuest: jest.fn().mockReturnValue(false),
         });
         const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
-        const defaultProps = {
+        const defaultProps: ComponentProps<typeof MLocationBody> = {
             mxEvent: defaultEvent,
             highlights: [],
-            highlightLink: '',
+            highlightLink: "",
             onHeightChanged: jest.fn(),
             onMessageAllowed: jest.fn(),
             permalinkCreator: {} as RoomPermalinkCreator,
             mediaEventHelper: {} as MediaEventHelper,
         };
-        const getComponent = (props = {}) => mount(<MLocationBody {...defaultProps} {...props} />, {
-            wrappingComponent: MatrixClientContext.Provider,
-            wrappingComponentProps: { value: mockClient },
-        });
+        const getComponent = (props = {}) =>
+            render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <MLocationBody {...defaultProps} {...props} />
+                </MatrixClientContext.Provider>,
+            );
         const getMapErrorComponent = () => {
-            const mockMap = new maplibregl.Map();
+            const mockMap = new maplibregl.Map(mapOptions);
             mockClient.getClientWellKnown.mockReturnValue({
-                [TILE_SERVER_WK_KEY.name]: { map_style_url: 'bad-tile-server.com' },
+                [TILE_SERVER_WK_KEY.name]: { map_style_url: "bad-tile-server.com" },
             });
             const component = getComponent();
 
             // simulate error initialising map in maplibregl
             // @ts-ignore
-            mockMap.emit('error', { status: 404 });
+            mockMap.emit("error", { status: 404 });
 
             return component;
         };
-
-        beforeAll(() => {
-            maplibregl.AttributionControl = jest.fn();
-        });
 
         beforeEach(() => {
             jest.clearAllMocks();
         });
 
-        describe('with error', () => {
-            let sdkConfigSpy;
+        describe("with error", () => {
+            let sdkConfigSpy: jest.SpyInstance<any>;
 
             beforeEach(() => {
                 // eat expected errors to keep console clean
-                jest.spyOn(logger, 'error').mockImplementation(() => { });
+                jest.spyOn(logger, "error").mockImplementation(() => {});
                 mockClient.getClientWellKnown.mockReturnValue({});
-                sdkConfigSpy = jest.spyOn(SdkConfig, 'get').mockReturnValue({});
+                sdkConfigSpy = jest.spyOn(SdkConfig, "get").mockReturnValue({});
             });
 
             afterAll(() => {
                 sdkConfigSpy.mockRestore();
-                jest.spyOn(logger, 'error').mockRestore();
+                jest.spyOn(logger, "error").mockRestore();
             });
 
-            it('displays correct fallback content without error style when map_style_url is not configured', () => {
+            it("displays correct fallback content without error style when map_style_url is not configured", () => {
                 const component = getComponent();
-                expect(component.find(".mx_EventTile_body")).toMatchSnapshot();
+                expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 
-            it('displays correct fallback content when map_style_url is misconfigured', () => {
+            it("displays correct fallback content when map_style_url is misconfigured", () => {
                 const component = getMapErrorComponent();
-                component.setProps({});
-                expect(component.find(".mx_EventTile_body")).toMatchSnapshot();
+                expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 
-            it('should clear the error on reconnect', () => {
+            it("should clear the error on reconnect", () => {
                 const component = getMapErrorComponent();
-                expect((component.state() as React.ComponentState).error).toBeDefined();
+                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeDefined();
                 mockClient.emit(ClientEvent.Sync, SyncState.Reconnecting, SyncState.Error);
-                expect((component.state() as React.ComponentState).error).toBeUndefined();
+                expect(component.container.querySelector(".mx_EventTile_tileError")).toBeFalsy();
             });
         });
 
-        describe('without error', () => {
+        describe("without error", () => {
             beforeEach(() => {
                 mockClient.getClientWellKnown.mockReturnValue({
-                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
                 });
 
                 // MLocationBody uses random number for map id
                 // stabilise for test
-                jest.spyOn(global.Math, 'random').mockReturnValue(0.123456);
+                jest.spyOn(global.Math, "random").mockReturnValue(0.123456);
             });
 
             afterAll(() => {
-                jest.spyOn(global.Math, 'random').mockRestore();
+                jest.spyOn(global.Math, "random").mockRestore();
             });
 
-            it('renders map correctly', () => {
-                const mockMap = new maplibregl.Map();
+            it("renders map correctly", () => {
+                const mockMap = new maplibregl.Map(mapOptions);
                 const component = getComponent();
 
-                expect(component).toMatchSnapshot();
+                expect(component.asFragment()).toMatchSnapshot();
                 // map was centered
                 expect(mockMap.setCenter).toHaveBeenCalledWith({
-                    lat: 51.5076, lon: -0.1276,
+                    lat: 51.5076,
+                    lon: -0.1276,
                 });
             });
 
-            it('opens map dialog on click', () => {
-                const modalSpy = jest.spyOn(Modal, 'createDialog').mockReturnValue(undefined);
+            it("opens map dialog on click", async () => {
+                const modalSpy = jest
+                    .spyOn(Modal, "createDialog")
+                    .mockReturnValue({ finished: new Promise(() => {}), close: jest.fn() });
                 const component = getComponent();
 
-                act(() => {
-                    component.find('Map').at(0).simulate('click');
-                });
+                await fireEvent.click(component.container.querySelector(".mx_Map")!);
 
                 expect(modalSpy).toHaveBeenCalled();
             });
 
-            it('renders marker correctly for a non-self share', () => {
-                const mockMap = new maplibregl.Map();
-                const component = getComponent();
-
-                expect(component.find('SmartMarker').at(0).props()).toEqual(
-                    expect.objectContaining({
-                        map: mockMap,
-                        geoUri: 'geo:51.5076,-0.1276',
-                        roomMember: undefined,
-                    }),
-                );
-            });
-
-            it('renders marker correctly for a self share', () => {
+            it("renders marker correctly for a self share", () => {
                 const selfShareEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Self);
                 const member = new RoomMember(roomId, userId);
                 // @ts-ignore cheat assignment to property
@@ -172,9 +154,7 @@ describe("MLocationBody", () => {
                 const component = getComponent({ mxEvent: selfShareEvent });
 
                 // render self locations with user avatars
-                expect(component.find('SmartMarker').at(0).props()['roomMember']).toEqual(
-                    member,
-                );
+                expect(component.asFragment()).toMatchSnapshot();
             });
         });
     });

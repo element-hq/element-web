@@ -20,16 +20,20 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
+import { filterBoolean } from "../../utils/arrays";
 
 export const useRecentSearches = (): [Room[], () => void] => {
     const [rooms, setRooms] = useState(() => {
-        const cli = MatrixClientPeg.get();
-        const recents = SettingsStore.getValue("SpotlightSearch.recentSearches", null);
-        return recents.map(r => cli.getRoom(r)).filter(Boolean);
+        const cli = MatrixClientPeg.safeGet();
+        const recents = SettingsStore.getValue<string[]>("SpotlightSearch.recentSearches", null);
+        return filterBoolean(recents.map((r) => cli.getRoom(r)));
     });
 
-    return [rooms, () => {
-        SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
-        setRooms([]);
-    }];
+    return [
+        rooms,
+        () => {
+            SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
+            setRooms([]);
+        },
+    ];
 };

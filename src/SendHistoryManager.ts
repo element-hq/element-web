@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { clamp } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { SerializedPart } from "./editor/parts";
@@ -27,19 +27,19 @@ interface IHistoryItem {
 }
 
 export default class SendHistoryManager {
-    history: Array<IHistoryItem> = [];
-    prefix: string;
-    lastIndex = 0; // used for indexing the storage
-    currentIndex = 0; // used for indexing the loaded validated history Array
+    public history: Array<IHistoryItem> = [];
+    public prefix: string;
+    public lastIndex = 0; // used for indexing the storage
+    public currentIndex = 0; // used for indexing the loaded validated history Array
 
-    constructor(roomId: string, prefix: string) {
+    public constructor(roomId: string, prefix: string) {
         this.prefix = prefix + roomId;
 
         // TODO: Performance issues?
         let index = 0;
         let itemJSON;
 
-        while (itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`)) {
+        while ((itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`))) {
             try {
                 this.history.push(JSON.parse(itemJSON));
             } catch (e) {
@@ -53,14 +53,14 @@ export default class SendHistoryManager {
         this.currentIndex = this.lastIndex + 1;
     }
 
-    static createItem(model: EditorModel, replyEvent?: MatrixEvent): IHistoryItem {
+    public static createItem(model: EditorModel, replyEvent?: MatrixEvent): IHistoryItem {
         return {
             parts: model.serializeParts(),
             replyEventId: replyEvent ? replyEvent.getId() : undefined,
         };
     }
 
-    save(editorModel: EditorModel, replyEvent?: MatrixEvent) {
+    public save(editorModel: EditorModel, replyEvent?: MatrixEvent): void {
         const item = SendHistoryManager.createItem(editorModel, replyEvent);
         this.history.push(item);
         this.currentIndex = this.history.length;
@@ -68,7 +68,7 @@ export default class SendHistoryManager {
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex}]`, JSON.stringify(item));
     }
 
-    getItem(offset: number): IHistoryItem {
+    public getItem(offset: number): IHistoryItem {
         this.currentIndex = clamp(this.currentIndex + offset, 0, this.history.length - 1);
         return this.history[this.currentIndex];
     }

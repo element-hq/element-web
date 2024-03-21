@@ -15,33 +15,35 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { EventTimeline } from "matrix-js-sdk/src/matrix";
 
 import EventTileBubble from "../messages/EventTileBubble";
 import RoomContext from "../../../contexts/RoomContext";
 import { _t } from "../../../languageHandler";
 
-const HistoryTile = () => {
+const HistoryTile: React.FC = () => {
     const { room } = useContext(RoomContext);
 
-    const oldState = room.getLiveTimeline().getState(EventTimeline.BACKWARDS);
-    const encryptionState = oldState.getStateEvents("m.room.encryption")[0];
-    const historyState = oldState.getStateEvents("m.room.history_visibility")[0]?.getContent().history_visibility;
+    const oldState = room?.getLiveTimeline().getState(EventTimeline.BACKWARDS);
+    const encryptionState = oldState?.getStateEvents("m.room.encryption")[0];
+    const historyState = oldState?.getStateEvents("m.room.history_visibility")[0]?.getContent().history_visibility;
 
-    let subtitle;
+    let subtitle: string | undefined;
     if (historyState == "invited") {
-        subtitle = _t("You don't have permission to view messages from before you were invited.");
+        subtitle = _t("timeline|no_permission_messages_before_invite");
     } else if (historyState == "joined") {
-        subtitle = _t("You don't have permission to view messages from before you joined.");
+        subtitle = _t("timeline|no_permission_messages_before_join");
     } else if (encryptionState) {
-        subtitle = _t("Encrypted messages before this point are unavailable.");
+        subtitle = _t("timeline|encrypted_historical_messages_unavailable");
     }
 
-    return <EventTileBubble
-        className="mx_HistoryTile"
-        title={_t("You can't see earlier messages")}
-        subtitle={subtitle}
-    />;
+    return (
+        <EventTileBubble
+            className="mx_HistoryTile"
+            title={_t("timeline|historical_messages_unavailable")}
+            subtitle={subtitle}
+        />
+    );
 };
 
 export default HistoryTile;

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 import { UpdateCheckStatus } from "../../../BasePlatform";
 import PlatformPeg from "../../../PlatformPeg";
@@ -26,39 +26,43 @@ import InlineSpinner from "../../../components/views/elements/InlineSpinner";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { CheckUpdatesPayload } from "../../../dispatcher/payloads/CheckUpdatesPayload";
 
-function installUpdate() {
-    PlatformPeg.get().installUpdate();
+function installUpdate(): void {
+    PlatformPeg.get()?.installUpdate();
 }
 
-function getStatusText(status: UpdateCheckStatus, errorDetail?: string) {
+function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNode {
     switch (status) {
         case UpdateCheckStatus.Error:
-            return _t('Error encountered (%(errorDetail)s).', { errorDetail });
+            return _t("update|error_encountered", { errorDetail });
         case UpdateCheckStatus.Checking:
-            return _t('Checking for an update...');
+            return _t("update|checking");
         case UpdateCheckStatus.NotAvailable:
-            return _t('No update available.');
+            return _t("update|no_update");
         case UpdateCheckStatus.Downloading:
-            return _t('Downloading update...');
+            return _t("update|downloading");
         case UpdateCheckStatus.Ready:
-            return _t("New version available. <a>Update now.</a>", {}, {
-                a: sub => <AccessibleButton kind="link_inline" onClick={installUpdate}>{ sub }</AccessibleButton>,
-            });
+            return _t(
+                "update|new_version_available",
+                {},
+                {
+                    a: (sub) => (
+                        <AccessibleButton kind="link_inline" onClick={installUpdate}>
+                            {sub}
+                        </AccessibleButton>
+                    ),
+                },
+            );
     }
 }
 
-const doneStatuses = [
-    UpdateCheckStatus.Ready,
-    UpdateCheckStatus.Error,
-    UpdateCheckStatus.NotAvailable,
-];
+const doneStatuses = [UpdateCheckStatus.Ready, UpdateCheckStatus.Error, UpdateCheckStatus.NotAvailable];
 
-const UpdateCheckButton = () => {
-    const [state, setState] = useState<CheckUpdatesPayload>(null);
+const UpdateCheckButton: React.FC = () => {
+    const [state, setState] = useState<CheckUpdatesPayload | null>(null);
 
-    const onCheckForUpdateClick = () => {
+    const onCheckForUpdateClick = (): void => {
         setState(null);
-        PlatformPeg.get().startUpdateCheck();
+        PlatformPeg.get()?.startUpdateCheck();
     };
 
     useDispatcher(dis, ({ action, ...params }) => {
@@ -67,22 +71,26 @@ const UpdateCheckButton = () => {
         }
     });
 
-    const busy = state && !doneStatuses.includes(state.status);
+    const busy = !!state && !doneStatuses.includes(state.status);
 
-    let suffix;
+    let suffix: JSX.Element | undefined;
     if (state) {
-        suffix = <span className="mx_UpdateCheckButton_summary">
-            { getStatusText(state.status, state.detail) }
-            { busy && <InlineSpinner /> }
-        </span>;
+        suffix = (
+            <span className="mx_UpdateCheckButton_summary">
+                {getStatusText(state.status, state.detail)}
+                {busy && <InlineSpinner />}
+            </span>
+        );
     }
 
-    return <React.Fragment>
-        <AccessibleButton onClick={onCheckForUpdateClick} kind="primary" disabled={busy}>
-            { _t("Check for update") }
-        </AccessibleButton>
-        { suffix }
-    </React.Fragment>;
+    return (
+        <React.Fragment>
+            <AccessibleButton onClick={onCheckForUpdateClick} kind="primary_outline" disabled={busy}>
+                {_t("update|check_action")}
+            </AccessibleButton>
+            {suffix}
+        </React.Fragment>
+    );
 };
 
 export default UpdateCheckButton;

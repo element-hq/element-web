@@ -19,72 +19,26 @@ limitations under the License.
 }
 
 .mx_RoomList_iconPlus::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/plus-circle.svg");
 }
 .mx_RoomList_iconNewRoom::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/hash-plus.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-plus.svg");
 }
 .mx_RoomList_iconNewVideoRoom::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/hash-video.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-video.svg");
 }
 .mx_RoomList_iconAddExistingRoom::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/hash.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/hash.svg");
 }
 .mx_RoomList_iconExplore::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/hash-search.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
 }
 .mx_RoomList_iconDialpad::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/dialpad.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/dialpad.svg");
 }
 .mx_RoomList_iconStartChat::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/member-plus.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/member-plus.svg");
 }
 .mx_RoomList_iconInvite::before {
-    mask-image: url('$(res)/img/element-icons/room/share.svg');
-}
-
-.mx_RoomList_explorePrompt {
-    margin: 4px 12px 4px;
-    padding-top: 12px;
-    border-top: 1px solid $input-border-color;
-    font-size: $font-14px;
-
-    div:first-child {
-        font-weight: $font-semi-bold;
-        line-height: $font-18px;
-        color: $primary-content;
-    }
-
-    .mx_AccessibleButton {
-        color: $primary-content;
-        position: relative;
-        padding: 8px 8px 8px 32px;
-        font-size: inherit;
-        margin-top: 12px;
-        display: block;
-        text-align: start;
-        background-color: $panel-actions;
-        border-radius: 4px;
-
-        &::before {
-            content: '';
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: $secondary-content;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-        }
-
-        &.mx_RoomList_explorePrompt_startChat::before {
-            mask-image: url('$(res)/img/element-icons/feedback.svg');
-        }
-
-        &.mx_RoomList_explorePrompt_explore::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
-        }
-    }
+    mask-image: url("$(res)/img/element-icons/room/share.svg");
 }

@@ -22,19 +22,25 @@ import Modal from "../../../Modal";
 import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
 
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
-    private openDialog = () => {
+    private openDialog = (): void => {
         Modal.createDialog(ServerOfflineDialog, {});
     };
 
-    public render() {
+    public render(): React.ReactNode {
         return (
             <div className="mx_NonUrgentEchoFailureToast">
                 <span className="mx_NonUrgentEchoFailureToast_icon" />
-                { _t("Your server isn't responding to some <a>requests</a>.", {}, {
-                    'a': (sub) => (
-                        <AccessibleButton kind="link_inline" onClick={this.openDialog}>{ sub }</AccessibleButton>
-                    ),
-                }) }
+                {_t(
+                    "error|non_urgent_echo_failure_toast",
+                    {},
+                    {
+                        a: (sub) => (
+                            <AccessibleButton kind="link_inline" onClick={this.openDialog}>
+                                {sub}
+                            </AccessibleButton>
+                        ),
+                    },
+                )}
             </div>
         );
     }

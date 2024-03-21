@@ -15,29 +15,23 @@ limitations under the License.
 */
 
 import { MockedObject } from "jest-mock";
-import {
-    MatrixClient,
-    MatrixEvent,
-    EventType,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, EventType, Room, EventTimeline } from "matrix-js-sdk/src/matrix";
 
 import { IRoomState } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
 
-export const makeMembershipEvent = (
-    roomId: string, userId: string, membership = 'join',
-) => mkEvent({
-    event: true,
-    type: EventType.RoomMember,
-    room: roomId,
-    user: userId,
-    skey: userId,
-    content: { membership },
-    ts: Date.now(),
-});
+export const makeMembershipEvent = (roomId: string, userId: string, membership = "join") =>
+    mkEvent({
+        event: true,
+        type: EventType.RoomMember,
+        room: roomId,
+        user: userId,
+        skey: userId,
+        content: { membership },
+        ts: Date.now(),
+    });
 
 /**
  * Creates a room
@@ -47,8 +41,9 @@ export const makeMembershipEvent = (
  */
 export const makeRoomWithStateEvents = (
     stateEvents: MatrixEvent[] = [],
-    { roomId, mockClient }: { roomId: string, mockClient: MockedObject<MatrixClient>}): Room => {
-    const room1 = new Room(roomId, mockClient, '@user:server.org');
+    { roomId, mockClient }: { roomId: string; mockClient: MockedObject<MatrixClient> },
+): Room => {
+    const room1 = new Room(roomId, mockClient, "@user:server.org");
     room1.currentState.setStateEvents(stateEvents);
     mockClient.getRoom.mockReturnValue(room1);
     return room1;
@@ -66,6 +61,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         showApps: false,
         isPeeking: false,
         showRightPanel: true,
+        threadRightPanel: false,
         joining: false,
         atEndOfLiveTimeline: true,
         showTopUnreadMessagesBar: false,
@@ -91,7 +87,20 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         resizing: false,
         narrow: false,
         activeCall: null,
+        msc3946ProcessDynamicPredecessor: false,
+        canAskToJoin: false,
+        promptAskToJoin: false,
+        viewRoomOpts: { buttons: [] },
 
         ...override,
     };
 }
+
+export const setupRoomWithEventsTimeline = (room: Room, events: MatrixEvent[] = []): void => {
+    const timelineSet = room.getUnfilteredTimelineSet();
+    const getTimelineForEventSpy = jest.spyOn(timelineSet, "getTimelineForEvent");
+    const eventTimeline = {
+        getEvents: jest.fn().mockReturnValue(events),
+    } as unknown as EventTimeline;
+    getTimelineForEventSpy.mockReturnValue(eventTimeline);
+};

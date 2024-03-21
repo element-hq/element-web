@@ -15,55 +15,61 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { useMemo } from "react";
 
-import { UserOnboardingTask as Task } from "../../../hooks/useUserOnboardingTasks";
+import { UserOnboardingTaskWithResolvedCompletion } from "../../../hooks/useUserOnboardingTasks";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import ProgressBar from "../../views/elements/ProgressBar";
 import Heading from "../../views/typography/Heading";
-import { UserOnboardingFeedback } from "./UserOnboardingFeedback";
 import { UserOnboardingTask } from "./UserOnboardingTask";
 
+export const getUserOnboardingCounters = (
+    tasks: UserOnboardingTaskWithResolvedCompletion[],
+): {
+    completed: number;
+    waiting: number;
+    total: number;
+} => {
+    const completed = tasks.filter((task) => task.completed === true).length;
+    const waiting = tasks.filter((task) => task.completed === false).length;
+
+    return {
+        completed: completed,
+        waiting: waiting,
+        total: completed + waiting,
+    };
+};
+
 interface Props {
-    completedTasks: Task[];
-    waitingTasks: Task[];
+    tasks: UserOnboardingTaskWithResolvedCompletion[];
 }
 
-export function UserOnboardingList({ completedTasks, waitingTasks }: Props) {
-    const completed = completedTasks.length;
-    const waiting = waitingTasks.length;
-    const total = completed + waiting;
-
-    const tasks = useMemo(() => [
-        ...completedTasks.map((it): [Task, boolean] => [it, true]),
-        ...waitingTasks.map((it): [Task, boolean] => [it, false]),
-    ], [completedTasks, waitingTasks]);
+export function UserOnboardingList({ tasks }: Props): JSX.Element {
+    const { completed, waiting, total } = getUserOnboardingCounters(tasks);
 
     return (
-        <div className="mx_UserOnboardingList">
+        <div className="mx_UserOnboardingList" data-testid="user-onboarding-list">
             <div className="mx_UserOnboardingList_header">
-                <Heading size="h3" className="mx_UserOnboardingList_title">
-                    { waiting > 0 ? _t("Only %(count)s steps to go", {
-                        count: waiting,
-                    }) : _t("You did it!") }
+                <Heading size="3" className="mx_UserOnboardingList_title">
+                    {waiting > 0
+                        ? _t("onboarding|only_n_steps_to_go", {
+                              count: waiting,
+                          })
+                        : _t("onboarding|you_did_it")}
                 </Heading>
                 <div className="mx_UserOnboardingList_hint">
-                    { _t("Complete these to get the most out of %(brand)s", {
+                    {_t("onboarding|complete_these", {
                         brand: SdkConfig.get("brand"),
-                    }) }
+                    })}
                 </div>
             </div>
             <div className="mx_UserOnboardingList_progress">
                 <ProgressBar value={completed} max={total} animated />
-                { waiting === 0 && (
-                    <UserOnboardingFeedback />
-                ) }
             </div>
             <ol className="mx_UserOnboardingList_list">
-                { tasks.map(([task, completed]) => (
-                    <UserOnboardingTask key={task.id} completed={completed} task={task} />
-                )) }
+                {tasks.map((task) => (
+                    <UserOnboardingTask key={task.id} completed={task.completed} task={task} />
+                ))}
             </ol>
         </div>
     );

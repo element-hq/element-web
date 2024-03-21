@@ -20,16 +20,15 @@ import { ComponentClass } from "../../@types/common";
 import NonUrgentToastStore from "../../stores/NonUrgentToastStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
     toasts: ComponentClass[];
 }
 
 export default class NonUrgentToastContainer extends React.PureComponent<IProps, IState> {
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             toasts: NonUrgentToastStore.instance.components,
@@ -38,26 +37,26 @@ export default class NonUrgentToastContainer extends React.PureComponent<IProps,
         NonUrgentToastStore.instance.on(UPDATE_EVENT, this.onUpdateToasts);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         NonUrgentToastStore.instance.off(UPDATE_EVENT, this.onUpdateToasts);
     }
 
-    private onUpdateToasts = () => {
+    private onUpdateToasts = (): void => {
         this.setState({ toasts: NonUrgentToastStore.instance.components });
     };
 
-    public render() {
+    public render(): React.ReactNode {
         const toasts = this.state.toasts.map((t, i) => {
             return (
                 <div className="mx_NonUrgentToastContainer_toast" key={`toast-${i}`}>
-                    { React.createElement(t, {}) }
+                    {React.createElement(t, {})}
                 </div>
             );
         });
 
         return (
             <div className="mx_NonUrgentToastContainer" role="alert">
-                { toasts }
+                {toasts}
             </div>
         );
     }

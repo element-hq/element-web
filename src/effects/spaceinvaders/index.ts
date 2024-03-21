@@ -1,5 +1,5 @@
 /*
- Copyright 2021 The Matrix.org Foundation C.I.C.
+ Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type SpaceInvadersOptions = {
@@ -45,21 +45,21 @@ const GLYPH = "👾";
 export default class SpaceInvaders implements ICanvasEffect {
     private readonly options: SpaceInvadersOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Invader> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -72,7 +72,7 @@ export default class SpaceInvaders implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -80,7 +80,7 @@ export default class SpaceInvaders implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * -height;
         particle.xCol = particle.x;
-        particle.gravity = this.options.gravity + (Math.random() * 6) + 4;
+        particle.gravity = this.options.gravity + Math.random() * 6 + 4;
         return particle;
     };
 
@@ -103,7 +103,7 @@ export default class SpaceInvaders implements ICanvasEffect {
         }
     };
 
-    private animateAndRenderInvaders() {
+    private animateAndRenderInvaders(): void {
         if (!this.context || !this.context.canvas) {
             return;
         }

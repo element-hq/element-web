@@ -17,12 +17,11 @@ limitations under the License.
 import React from "react";
 import { render, screen, act, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room, RoomStateEvent, MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import { TooltipProvider } from "@vector-im/compound-web";
 
-import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import {
     useMockedCalls,
     MockedCall,
@@ -31,6 +30,7 @@ import {
     setupAsyncStoreWithClient,
     resetAsyncStoreWithClient,
     wrapInMatrixClientContext,
+    useMockMediaDevices,
 } from "../../../test-utils";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -43,10 +43,6 @@ import { ConnectionState } from "../../../../src/models/Call";
 const CallEvent = wrapInMatrixClientContext(UnwrappedCallEvent);
 
 describe("CallEvent", () => {
-    useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
-    jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
-
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
@@ -58,8 +54,12 @@ describe("CallEvent", () => {
         jest.useFakeTimers();
         jest.setSystemTime(0);
 
+        useMockMediaDevices();
+        useMockedCalls();
+        jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
+
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
@@ -69,16 +69,18 @@ describe("CallEvent", () => {
         alice = mkRoomMember(room.roomId, "@alice:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
         jest.spyOn(room, "getMember").mockImplementation(
-            userId => [alice, bob].find(member => member.userId === userId) ?? null,
+            (userId) => [alice, bob].find((member) => member.userId === userId) ?? null,
         );
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
-            store => setupAsyncStoreWithClient(store, client),
-        ));
+        await Promise.all(
+            [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
+                setupAsyncStoreWithClient(store, client),
+            ),
+        );
 
         MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);
@@ -100,7 +102,9 @@ describe("CallEvent", () => {
         jest.restoreAllMocks();
     });
 
-    const renderEvent = () => { render(<CallEvent mxEvent={call.event} />); };
+    const renderEvent = () => {
+        render(<CallEvent mxEvent={call.event} />, { wrapper: TooltipProvider });
+    };
 
     it("shows a message and duration if the call was ended", () => {
         jest.advanceTimersByTime(90000);
@@ -109,6 +113,14 @@ describe("CallEvent", () => {
 
         screen.getByText("Video call ended");
         screen.getByText("1m 30s");
+    });
+
+    it("shows a message if the call was redacted", () => {
+        const event = room.currentState.getStateEvents(MockedCall.EVENT_TYPE, "1")!;
+        jest.spyOn(event, "isRedacted").mockReturnValue(true);
+        renderEvent();
+
+        screen.getByText("Video call ended");
     });
 
     it("shows placeholder info if the call isn't loaded yet", () => {
@@ -122,24 +134,28 @@ describe("CallEvent", () => {
 
     it("shows call details and connection controls if the call is loaded", async () => {
         jest.advanceTimersByTime(90000);
-        call.participants = new Set([alice, bob]);
+        call.participants = new Map([
+            [alice, new Set(["a"])],
+            [bob, new Set(["b"])],
+        ]);
         renderEvent();
 
         screen.getByText("@alice:example.org started a video call");
-        screen.getByLabelText("2 participants");
-        screen.getByText("1m 30s");
+        screen.getByLabelText("2 people joined");
 
         // Test that the join button works
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
         fireEvent.click(screen.getByRole("button", { name: "Join" }));
-        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: true,
-        }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+            }),
+        );
         defaultDispatcher.unregister(dispatcherRef);
-        await act(() => call.connect());
+        await act(() => call.start());
 
         // Test that the leave button works
         fireEvent.click(screen.getByRole("button", { name: "Leave" }));

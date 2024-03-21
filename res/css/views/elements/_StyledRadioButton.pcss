@@ -20,8 +20,8 @@ limitations under the License.
 */
 
 .mx_StyledRadioButton {
-    $radio-circle-color: $quaternary-content;
-    $active-radio-circle-color: $accent;
+    $radio-circle-color: var(--cpd-color-border-interactive-primary);
+    $active-radio-circle-color: var(--cpd-color-bg-accent-rest);
     position: relative;
 
     display: flex;
@@ -65,7 +65,7 @@ limitations under the License.
             width: $font-16px;
             margin-left: 2px; /* For the highlight on focus */
 
-            border: $font-1-5px solid $radio-circle-color;
+            border: 1px solid $radio-circle-color;
             border-radius: $font-16px;
 
             > div {
@@ -78,7 +78,7 @@ limitations under the License.
             }
         }
 
-        &.focus-visible {
+        &:focus-visible {
             & + div {
                 @mixin unreal-focus;
             }
@@ -126,5 +126,5 @@ limitations under the License.
 }
 
 .mx_StyledRadioButton_checked {
-    border-color: $accent;
+    border-color: var(--cpd-color-bg-accent-rest);
 }

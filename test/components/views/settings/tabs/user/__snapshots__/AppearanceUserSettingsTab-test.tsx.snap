@@ -1,0 +1,471 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppearanceUserSettingsTab should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+    data-testid="mx_AppearanceUserSettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Customise your appearance
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection_text"
+          >
+            Appearance Settings only affect this Element session.
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+            data-testid="mx_ThemeChoicePanel"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Theme
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_ThemeChoicePanel_themeSelectors"
+                data-testid="theme-choice-panel-selectors"
+              >
+                <label
+                  class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+                >
+                  <input
+                    disabled=""
+                    id="theme-light"
+                    name="theme"
+                    type="radio"
+                    value="light"
+                  />
+                  <div>
+                    <div />
+                  </div>
+                  <div
+                    class="mx_StyledRadioButton_content"
+                  >
+                    Light
+                  </div>
+                  <div
+                    class="mx_StyledRadioButton_spacer"
+                  />
+                </label>
+                <label
+                  class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+                >
+                  <input
+                    disabled=""
+                    id="theme-dark"
+                    name="theme"
+                    type="radio"
+                    value="dark"
+                  />
+                  <div>
+                    <div />
+                  </div>
+                  <div
+                    class="mx_StyledRadioButton_content"
+                  >
+                    Dark
+                  </div>
+                  <div
+                    class="mx_StyledRadioButton_spacer"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Message layout
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_LayoutSwitcher_RadioButtons"
+              >
+                <label
+                  class="mx_LayoutSwitcher_RadioButton"
+                >
+                  <div
+                    class="mx_LayoutSwitcher_RadioButton_preview mx_IRCLayout mx_EventTilePreview_loader"
+                  >
+                    <div
+                      class="mx_Spinner"
+                    >
+                      <div
+                        aria-label="Loading…"
+                        class="mx_Spinner_icon"
+                        data-testid="spinner"
+                        role="progressbar"
+                        style="width: 32px; height: 32px;"
+                      />
+                    </div>
+                  </div>
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                  >
+                    <input
+                      name="layout"
+                      type="radio"
+                      value="irc"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      IRC (Experimental)
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+                <label
+                  class="mx_LayoutSwitcher_RadioButton mx_LayoutSwitcher_RadioButton_selected"
+                >
+                  <div
+                    class="mx_LayoutSwitcher_RadioButton_preview mx_EventTilePreview_loader"
+                  >
+                    <div
+                      class="mx_Spinner"
+                    >
+                      <div
+                        aria-label="Loading…"
+                        class="mx_Spinner_icon"
+                        data-testid="spinner"
+                        role="progressbar"
+                        style="width: 32px; height: 32px;"
+                      />
+                    </div>
+                  </div>
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+                  >
+                    <input
+                      checked=""
+                      name="layout"
+                      type="radio"
+                      value="group"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Modern
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+                <label
+                  class="mx_LayoutSwitcher_RadioButton"
+                >
+                  <div
+                    class="mx_LayoutSwitcher_RadioButton_preview mx_EventTilePreview_loader"
+                  >
+                    <div
+                      class="mx_Spinner"
+                    >
+                      <div
+                        aria-label="Loading…"
+                        class="mx_Spinner_icon"
+                        data-testid="spinner"
+                        role="progressbar"
+                        style="width: 32px; height: 32px;"
+                      />
+                    </div>
+                  </div>
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                  >
+                    <input
+                      name="layout"
+                      type="radio"
+                      value="bubble"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Message bubbles
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+            data-testid="mx_FontScalingPanel"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Font size
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+            >
+              <div
+                class="mx_Field mx_Field_select mx_FontScalingPanel_Dropdown"
+              >
+                <select
+                  id="mx_Field_1"
+                  label="Font size"
+                  placeholder="Font size"
+                  type="text"
+                >
+                  <option
+                    value="-7"
+                  >
+                    9
+                  </option>
+                  <option
+                    value="-6"
+                  >
+                    10
+                  </option>
+                  <option
+                    value="-5"
+                  >
+                    11
+                  </option>
+                  <option
+                    value="-4"
+                  >
+                    12
+                  </option>
+                  <option
+                    value="-3"
+                  >
+                    13
+                  </option>
+                  <option
+                    value="-2"
+                  >
+                    14
+                  </option>
+                  <option
+                    value="-1"
+                  >
+                    15
+                  </option>
+                  <option
+                    value="0"
+                  >
+                    16 (default)
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    17
+                  </option>
+                  <option
+                    value="2"
+                  >
+                    18
+                  </option>
+                  <option
+                    value="4"
+                  >
+                    20
+                  </option>
+                  <option
+                    value="6"
+                  >
+                    22
+                  </option>
+                  <option
+                    value="8"
+                  >
+                    24
+                  </option>
+                  <option
+                    value="10"
+                  >
+                    26
+                  </option>
+                  <option
+                    value="12"
+                  >
+                    28
+                  </option>
+                  <option
+                    value="14"
+                  >
+                    30
+                  </option>
+                  <option
+                    value="16"
+                  >
+                    32
+                  </option>
+                  <option
+                    value="18"
+                  >
+                    34
+                  </option>
+                  <option
+                    value="20"
+                  >
+                    36
+                  </option>
+                </select>
+                <label
+                  for="mx_Field_1"
+                >
+                  Font size
+                </label>
+              </div>
+              <div
+                class="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
+              >
+                <div
+                  class="mx_Spinner"
+                >
+                  <div
+                    aria-label="Loading…"
+                    class="mx_Spinner_icon"
+                    data-testid="spinner"
+                    role="progressbar"
+                    style="width: 32px; height: 32px;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_noHeading"
+            >
+              <div
+                aria-expanded="false"
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+                role="button"
+                tabindex="0"
+              >
+                Show advanced
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Image size in the timeline
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_ImageSizePanel_radios"
+              >
+                <label>
+                  <div
+                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeDefault"
+                  />
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+                  >
+                    <input
+                      checked=""
+                      name="image_size"
+                      type="radio"
+                      value="normal"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Default
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+                <label>
+                  <div
+                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeLarge"
+                  />
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                  >
+                    <input
+                      name="image_size"
+                      type="radio"
+                      value="large"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Large
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

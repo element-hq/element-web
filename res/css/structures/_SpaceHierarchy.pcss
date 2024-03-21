@@ -46,7 +46,7 @@ limitations under the License.
 
         .mx_SpaceHierarchy_listHeader_header {
             grid-column-start: 1;
-            font-weight: $font-semi-bold;
+            font-weight: var(--cpd-font-weight-semibold);
             margin: 0;
         }
 
@@ -71,7 +71,7 @@ limitations under the License.
 
     .mx_SpaceHierarchy_error {
         position: relative;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         color: $alert;
         font-size: $font-15px;
         line-height: $font-18px;
@@ -94,7 +94,7 @@ limitations under the License.
     .mx_SpaceHierarchy_roomCount {
         > h3 {
             display: inline;
-            font-weight: $font-semi-bold;
+            font-weight: var(--cpd-font-weight-semibold);
             font-size: $font-18px;
             line-height: $font-22px;
             color: $primary-content;
@@ -108,12 +108,6 @@ limitations under the License.
         }
     }
 
-    .mx_SpaceHierarchy_subspace {
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
-    }
-
     .mx_SpaceHierarchy_subspace_toggle {
         position: absolute;
         left: -1px;
@@ -124,7 +118,7 @@ limitations under the License.
         background-color: $background;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -135,7 +129,7 @@ limitations under the License.
             background-color: $tertiary-content;
             mask-size: 16px;
             transform: rotate(270deg);
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         &.mx_SpaceHierarchy_subspace_toggle_shown::before {
@@ -167,7 +161,7 @@ limitations under the License.
                 gap: 6px 12px;
 
                 .mx_SpaceHierarchy_roomTile_item {
-                    font-weight: $font-semi-bold;
+                    font-weight: var(--cpd-font-weight-semibold);
                     font-size: $font-15px;
                     line-height: $font-18px;
                     display: grid;
@@ -215,7 +209,7 @@ limitations under the License.
                             padding-left: 16px;
 
                             &::before {
-                                content: '';
+                                content: "";
                                 width: 20px;
                                 height: 20px;
                                 top: -2px;
@@ -225,7 +219,7 @@ limitations under the License.
                                 mask-size: contain;
                                 mask-repeat: no-repeat;
                                 background-color: $accent;
-                                mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+                                mask-image: url("$(res)/img/element-icons/roomlist/checkmark.svg");
                             }
                         }
                     }
@@ -233,7 +227,7 @@ limitations under the License.
                     .mx_SpaceHierarchy_roomTile_info {
                         grid-row: 2;
                         grid-column: 2;
-                        font-size: $font-14px;
+                        font: var(--cpd-font-body-md-regular);
                         font-weight: initial;
                         line-height: $font-18px;
                         color: $secondary-content;
@@ -272,7 +266,8 @@ limitations under the License.
                     }
                 }
 
-                &:hover, &:focus-within {
+                &:hover,
+                &:focus-within {
                     background-color: $spacePanel-bg-color;
 
                     .mx_AccessibleButton {

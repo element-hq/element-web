@@ -35,7 +35,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
     let recording: VoiceBroadcastRecording;
     let otherRecording: VoiceBroadcastRecording;
     let recordings: VoiceBroadcastRecordingsStore;
-    let onCurrentChanged: (recording: VoiceBroadcastRecording) => void;
+    let onCurrentChanged: (recording: VoiceBroadcastRecording | null) => void;
 
     beforeEach(() => {
         client = stubClient();
@@ -44,18 +44,19 @@ describe("VoiceBroadcastRecordingsStore", () => {
             if (roomId === room.roomId) {
                 return room;
             }
+            return null;
         });
         infoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Started,
-            client.getUserId(),
-            client.getDeviceId(),
+            client.getUserId()!,
+            client.getDeviceId()!,
         );
         otherInfoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Started,
-            client.getUserId(),
-            client.getDeviceId(),
+            client.getUserId()!,
+            client.getDeviceId()!,
         );
         recording = new VoiceBroadcastRecording(infoEvent, client);
         otherRecording = new VoiceBroadcastRecording(otherInfoEvent, client);
@@ -69,12 +70,20 @@ describe("VoiceBroadcastRecordingsStore", () => {
         recordings.off(VoiceBroadcastRecordingsStoreEvent.CurrentChanged, onCurrentChanged);
     });
 
+    it("when setting a recording without info event Id, it should raise an error", () => {
+        infoEvent.event.event_id = undefined;
+        expect(() => {
+            recordings.setCurrent(recording);
+        }).toThrow("Got broadcast info event without Id");
+    });
+
     describe("when setting a current Voice Broadcast recording", () => {
         beforeEach(() => {
             recordings.setCurrent(recording);
         });
 
         it("should return it as current", () => {
+            expect(recordings.hasCurrent()).toBe(true);
             expect(recordings.getCurrent()).toBe(recording);
         });
 
@@ -103,6 +112,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
             });
 
             it("should clear the current recording", () => {
+                expect(recordings.hasCurrent()).toBe(false);
                 expect(recordings.getCurrent()).toBeNull();
             });
 

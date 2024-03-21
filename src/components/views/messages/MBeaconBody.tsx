@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
 import {
     Beacon,
     BeaconEvent,
@@ -22,47 +22,47 @@ import {
     MatrixEventEvent,
     MatrixClient,
     RelationType,
-} from 'matrix-js-sdk/src/matrix';
-import { BeaconLocationState } from 'matrix-js-sdk/src/content-helpers';
-import { randomString } from 'matrix-js-sdk/src/randomstring';
-import { M_BEACON } from 'matrix-js-sdk/src/@types/beacon';
-import classNames from 'classnames';
+    IRedactOpts,
+    ContentHelpers,
+    M_BEACON,
+} from "matrix-js-sdk/src/matrix";
+import { randomString } from "matrix-js-sdk/src/randomstring";
+import classNames from "classnames";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
-import { isBeaconWaitingToStart, useBeacon } from '../../../utils/beacon';
-import { isSelfLocation, LocationShareError } from '../../../utils/location';
-import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displayStatus';
-import BeaconStatus from '../beacon/BeaconStatus';
-import OwnBeaconStatus from '../beacon/OwnBeaconStatus';
-import Map from '../location/Map';
-import { MapError } from '../location/MapError';
-import MapFallback from '../location/MapFallback';
-import SmartMarker from '../location/SmartMarker';
-import { GetRelationsForEvent } from '../rooms/EventTile';
-import BeaconViewDialog from '../beacon/BeaconViewDialog';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
+import { isBeaconWaitingToStart, useBeacon } from "../../../utils/beacon";
+import { isSelfLocation, LocationShareError } from "../../../utils/location";
+import { BeaconDisplayStatus, getBeaconDisplayStatus } from "../beacon/displayStatus";
+import BeaconStatus from "../beacon/BeaconStatus";
+import OwnBeaconStatus from "../beacon/OwnBeaconStatus";
+import { Map, SmartMarker } from "../location";
+import { MapError } from "../location/MapError";
+import MapFallback from "../location/MapFallback";
+import { GetRelationsForEvent } from "../rooms/EventTile";
+import { BeaconViewDialog } from "../beacon";
 import { IBodyProps } from "./IBodyProps";
 
-const useBeaconState = (beaconInfoEvent: MatrixEvent): {
+const useBeaconState = (
+    beaconInfoEvent: MatrixEvent,
+): {
     beacon?: Beacon;
     description?: string;
-    latestLocationState?: BeaconLocationState;
+    latestLocationState?: ContentHelpers.BeaconLocationState;
     isLive?: boolean;
     waitingToStart?: boolean;
 } => {
     const beacon = useBeacon(beaconInfoEvent);
 
-    const isLive = useEventEmitterState(
-        beacon,
-        BeaconEvent.LivenessChange,
-        () => beacon?.isLive);
+    const isLive = useEventEmitterState(beacon, BeaconEvent.LivenessChange, () => beacon?.isLive);
 
     const latestLocationState = useEventEmitterState(
         beacon,
         BeaconEvent.LocationUpdate,
-        () => beacon?.latestLocationState);
+        () => beacon?.latestLocationState,
+    );
 
     if (!beacon) {
         return {};
@@ -101,23 +101,26 @@ const useUniqueId = (eventId: string): string => {
 // remove related beacon locations on beacon redaction
 const useHandleBeaconRedaction = (
     event: MatrixEvent,
-    getRelationsForEvent: GetRelationsForEvent,
-    cli: MatrixClient,
+    matrixClient: MatrixClient,
+    getRelationsForEvent?: GetRelationsForEvent,
 ): void => {
-    const onBeforeBeaconInfoRedaction = useCallback((_event: MatrixEvent, redactionEvent: MatrixEvent) => {
-        const relations = getRelationsForEvent ?
-            getRelationsForEvent(event.getId(), RelationType.Reference, M_BEACON.name) :
-            undefined;
+    const onBeforeBeaconInfoRedaction = useCallback(
+        (_event: MatrixEvent, redactionEvent: MatrixEvent) => {
+            const relations = getRelationsForEvent
+                ? getRelationsForEvent(event.getId()!, RelationType.Reference, M_BEACON.name)
+                : undefined;
 
-        relations?.getRelations()?.forEach(locationEvent => {
-            cli.redactEvent(
-                locationEvent.getRoomId(),
-                locationEvent.getId(),
-                undefined,
-                redactionEvent.getContent(),
-            );
-        });
-    }, [event, getRelationsForEvent, cli]);
+            relations?.getRelations()?.forEach((locationEvent) => {
+                matrixClient.redactEvent(
+                    locationEvent.getRoomId()!,
+                    locationEvent.getId()!,
+                    undefined,
+                    redactionEvent.getContent<IRedactOpts>(),
+                );
+            });
+        },
+        [event, matrixClient, getRelationsForEvent],
+    );
 
     useEffect(() => {
         event.addListener(MatrixEventEvent.BeforeRedaction, onBeforeBeaconInfoRedaction);
@@ -127,21 +130,17 @@ const useHandleBeaconRedaction = (
     }, [event, onBeforeBeaconInfoRedaction]);
 };
 
-const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelationsForEvent }, ref) => {
-    const {
-        beacon,
-        isLive,
-        latestLocationState,
-        waitingToStart,
-    } = useBeaconState(mxEvent);
-    const mapId = useUniqueId(mxEvent.getId());
+const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, getRelationsForEvent }, ref) => {
+    const { beacon, isLive, latestLocationState, waitingToStart } = useBeaconState(mxEvent);
+    const mapId = useUniqueId(mxEvent.getId()!);
 
     const matrixClient = useContext(MatrixClientContext);
     const [error, setError] = useState<Error>();
-    const isMapDisplayError = error?.message === LocationShareError.MapStyleUrlNotConfigured ||
+    const isMapDisplayError =
+        error?.message === LocationShareError.MapStyleUrlNotConfigured ||
         error?.message === LocationShareError.MapStyleUrlNotReachable;
     const displayStatus = getBeaconDisplayStatus(
-        isLive,
+        !!isLive,
         latestLocationState,
         // if we are unable to display maps because it is not configured for the server
         // don't display an error
@@ -151,19 +150,18 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const isOwnBeacon = beacon?.beaconInfoOwner === matrixClient.getUserId();
 
-    useHandleBeaconRedaction(mxEvent, getRelationsForEvent, matrixClient);
+    useHandleBeaconRedaction(mxEvent, matrixClient, getRelationsForEvent);
 
-    const onClick = () => {
+    const onClick = (): void => {
         if (displayStatus !== BeaconDisplayStatus.Active) {
             return;
         }
         Modal.createDialog(
             BeaconViewDialog,
             {
-                roomId: mxEvent.getRoomId(),
+                roomId: mxEvent.getRoomId()!,
                 matrixClient,
                 initialFocusedBeacon: beacon,
-                isMapDisplayError,
             },
             "mx_BeaconViewDialog_wrapper",
             false, // isPriority
@@ -171,66 +169,70 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
         );
     };
 
-    return (
-        <div
-            className='mx_MBeaconBody'
-            ref={ref}
-        >
-            { (displayStatus === BeaconDisplayStatus.Active && !isMapDisplayError) ?
-                <Map
-                    id={mapId}
-                    centerGeoUri={latestLocationState.uri}
-                    onError={setError}
-                    onClick={onClick}
-                    className="mx_MBeaconBody_map"
-                >
-                    {
-                        ({ map }) =>
-                            <SmartMarker
-                                map={map}
-                                id={`${mapId}-marker`}
-                                geoUri={latestLocationState.uri}
-                                roomMember={markerRoomMember}
-                                useMemberColor
-                            />
-                    }
-                </Map>
-                : isMapDisplayError ?
-                    <MapError
-                        error={error.message as LocationShareError}
-                        onClick={onClick}
-                        className={classNames(
-                            'mx_MBeaconBody_mapError',
-                            // set interactive class when maximised map can be opened
-                            { 'mx_MBeaconBody_mapErrorInteractive':
-                                displayStatus === BeaconDisplayStatus.Active,
-                            },
-                        )}
-                        isMinimised
-                    /> :
-                    <MapFallback
-                        isLoading={displayStatus === BeaconDisplayStatus.Loading}
-                        className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'
+    let map: JSX.Element;
+    if (displayStatus === BeaconDisplayStatus.Active && !isMapDisplayError && latestLocationState?.uri) {
+        map = (
+            <Map
+                id={mapId}
+                centerGeoUri={latestLocationState.uri}
+                onError={setError}
+                onClick={onClick}
+                className="mx_MBeaconBody_map"
+            >
+                {({ map }) => (
+                    <SmartMarker
+                        map={map}
+                        id={`${mapId}-marker`}
+                        geoUri={latestLocationState.uri!}
+                        roomMember={markerRoomMember ?? undefined}
+                        useMemberColor
                     />
-            }
-            { isOwnBeacon ?
+                )}
+            </Map>
+        );
+    } else if (isMapDisplayError) {
+        map = (
+            <MapError
+                error={error.message as LocationShareError}
+                onClick={onClick}
+                className={classNames(
+                    "mx_MBeaconBody_mapError",
+                    // set interactive class when maximised map can be opened
+                    { mx_MBeaconBody_mapErrorInteractive: displayStatus === BeaconDisplayStatus.Active },
+                )}
+                isMinimised
+            />
+        );
+    } else {
+        map = (
+            <MapFallback
+                isLoading={displayStatus === BeaconDisplayStatus.Loading}
+                className="mx_MBeaconBody_map mx_MBeaconBody_mapFallback"
+            />
+        );
+    }
+
+    return (
+        <div className="mx_MBeaconBody" ref={ref}>
+            {map}
+            {isOwnBeacon ? (
                 <OwnBeaconStatus
-                    className='mx_MBeaconBody_chin'
+                    className="mx_MBeaconBody_chin"
                     beacon={beacon}
                     displayStatus={displayStatus}
-                    withIcon
-                /> :
-                <BeaconStatus
-                    className='mx_MBeaconBody_chin'
-                    beacon={beacon}
-                    displayStatus={displayStatus}
-                    label={_t('View live location')}
                     withIcon
                 />
-            }
+            ) : (
+                <BeaconStatus
+                    className="mx_MBeaconBody_chin"
+                    beacon={beacon}
+                    displayStatus={displayStatus}
+                    label={_t("timeline|m.beacon_info|view_live_location")}
+                    withIcon
+                />
+            )}
         </div>
     );
-});
+}) as ForwardRefExoticComponent<IBodyProps>;
 
 export default MBeaconBody;
-

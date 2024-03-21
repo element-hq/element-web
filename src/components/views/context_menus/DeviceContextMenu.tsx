@@ -19,12 +19,12 @@ import React, { useEffect, useState } from "react";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 import IconizedContextMenu, { IconizedContextMenuOptionList, IconizedContextMenuRadio } from "./IconizedContextMenu";
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 
-const SECTION_NAMES: Record<MediaDeviceKindEnum, string> = {
-    [MediaDeviceKindEnum.AudioInput]: _td("Input devices"),
-    [MediaDeviceKindEnum.AudioOutput]: _td("Output devices"),
-    [MediaDeviceKindEnum.VideoInput]: _td("Cameras"),
+const SECTION_NAMES: Record<MediaDeviceKindEnum, TranslationKey> = {
+    [MediaDeviceKindEnum.AudioInput]: _td("voip|input_devices"),
+    [MediaDeviceKindEnum.AudioOutput]: _td("voip|output_devices"),
+    [MediaDeviceKindEnum.VideoInput]: _td("common|cameras"),
 };
 
 interface IDeviceContextMenuDeviceProps {
@@ -34,12 +34,14 @@ interface IDeviceContextMenuDeviceProps {
 }
 
 const DeviceContextMenuDevice: React.FC<IDeviceContextMenuDeviceProps> = ({ label, selected, onClick }) => {
-    return <IconizedContextMenuRadio
-        iconClassName="mx_DeviceContextMenu_device_icon"
-        label={label}
-        active={selected}
-        onClick={onClick}
-    />;
+    return (
+        <IconizedContextMenuRadio
+            iconClassName="mx_DeviceContextMenu_device_icon"
+            label={label}
+            active={selected}
+            onClick={onClick}
+        />
+    );
 };
 
 interface IDeviceContextMenuSectionProps {
@@ -51,8 +53,8 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
     const [selectedDevice, setSelectedDevice] = useState(MediaDeviceHandler.getDevice(deviceKind));
 
     useEffect(() => {
-        const getDevices = async () => {
-            return setDevices((await MediaDeviceHandler.getDevices())[deviceKind]);
+        const getDevices = async (): Promise<void> => {
+            return setDevices((await MediaDeviceHandler.getDevices())?.[deviceKind] ?? []);
         };
         getDevices();
     }, [deviceKind]);
@@ -62,16 +64,20 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
         setSelectedDevice(deviceId);
     };
 
-    return <IconizedContextMenuOptionList label={_t(SECTION_NAMES[deviceKind])}>
-        { devices.map(({ label, deviceId }) => {
-            return <DeviceContextMenuDevice
-                key={deviceId}
-                label={label}
-                selected={selectedDevice === deviceId}
-                onClick={() => onDeviceClick(deviceId)}
-            />;
-        }) }
-    </IconizedContextMenuOptionList>;
+    return (
+        <IconizedContextMenuOptionList label={_t(SECTION_NAMES[deviceKind])}>
+            {devices.map(({ label, deviceId }) => {
+                return (
+                    <DeviceContextMenuDevice
+                        key={deviceId}
+                        label={label}
+                        selected={selectedDevice === deviceId}
+                        onClick={() => onDeviceClick(deviceId)}
+                    />
+                );
+            })}
+        </IconizedContextMenuOptionList>
+    );
 };
 
 interface IProps extends IContextMenuProps {
@@ -79,11 +85,13 @@ interface IProps extends IContextMenuProps {
 }
 
 const DeviceContextMenu: React.FC<IProps> = ({ deviceKinds, ...props }) => {
-    return <IconizedContextMenu compact className="mx_DeviceContextMenu" {...props}>
-        { deviceKinds.map((kind) => {
-            return <DeviceContextMenuSection key={kind} deviceKind={kind as MediaDeviceKindEnum} />;
-        }) }
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu compact className="mx_DeviceContextMenu" {...props}>
+            {deviceKinds.map((kind) => {
+                return <DeviceContextMenuSection key={kind} deviceKind={kind as MediaDeviceKindEnum} />;
+            })}
+        </IconizedContextMenu>
+    );
 };
 
 export default DeviceContextMenu;

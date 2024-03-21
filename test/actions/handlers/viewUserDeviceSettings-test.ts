@@ -19,30 +19,19 @@ import { UserTab } from "../../../src/components/views/dialogs/UserTab";
 import { Action } from "../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 
-describe('viewUserDeviceSettings()', () => {
-    const dispatchSpy = jest.spyOn(defaultDispatcher, 'dispatch');
+describe("viewUserDeviceSettings()", () => {
+    const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
 
     beforeEach(() => {
         dispatchSpy.mockClear();
     });
 
-    it('dispatches action to view new session manager when enabled', () => {
-        const isNewDeviceManagerEnabled = true;
-        viewUserDeviceSettings(isNewDeviceManagerEnabled);
+    it("dispatches action to view session manager", () => {
+        viewUserDeviceSettings();
 
         expect(dispatchSpy).toHaveBeenCalledWith({
             action: Action.ViewUserSettings,
             initialTabId: UserTab.SessionManager,
-        });
-    });
-
-    it('dispatches action to view old session manager when disabled', () => {
-        const isNewDeviceManagerEnabled = false;
-        viewUserDeviceSettings(isNewDeviceManagerEnabled);
-
-        expect(dispatchSpy).toHaveBeenCalledWith({
-            action: Action.ViewUserSettings,
-            initialTabId: UserTab.Security,
         });
     });
 });

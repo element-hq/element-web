@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import { TranslationStringsObject, PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { Optional } from "matrix-events-sdk";
-import { DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import React from "react";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
-import { PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import * as Matrix from "matrix-js-sdk/src/matrix";
+import { IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
+import { ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
 import Modal from "../Modal";
-import { _t } from "../languageHandler";
+import { _t, TranslationKey } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
@@ -35,6 +36,10 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getCachedRoomIDForAlias } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
 import { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
+import { ActionPayload } from "../dispatcher/payloads";
+import SettingsStore from "../settings/SettingsStore";
+import WidgetStore, { IApp } from "../stores/WidgetStore";
+import { Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance
@@ -42,6 +47,18 @@ import { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayl
  */
 export class ProxiedModuleApi implements ModuleApi {
     private cachedTranslations: Optional<TranslationStringsObject>;
+
+    private overrideLoginResolve?: () => void;
+
+    public constructor() {
+        dispatcher.register(this.onAction);
+    }
+
+    private onAction = (payload: ActionPayload): void => {
+        if (payload.action === Action.OnLoggedIn) {
+            this.overrideLoginResolve?.();
+        }
+    };
 
     /**
      * All custom translations used by the associated module.
@@ -60,30 +77,33 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * @override
      */
-    public translateString(s: string, variables?: Record<string, PlainSubstitution>): string {
+    public translateString(s: TranslationKey, variables?: Record<string, PlainSubstitution>): string {
         return _t(s, variables);
     }
 
     /**
      * @override
      */
-    public openDialog<
-        M extends object,
-        P extends DialogProps = DialogProps,
-        C extends React.Component = React.Component,
-    >(
-        title: string,
+    public openDialog<M extends object, P extends DialogProps, C extends DialogContent<P>>(
+        initialTitleOrOptions: string | ModuleUiDialogOptions,
         body: (props: P, ref: React.RefObject<C>) => React.ReactNode,
-    ): Promise<{ didOkOrSubmit: boolean, model: M }> {
-        return new Promise<{ didOkOrSubmit: boolean, model: M }>((resolve) => {
-            Modal.createDialog(ModuleUiDialog, {
-                title: title,
-                contentFactory: body,
-                contentProps: <DialogProps>{
+        props?: Omit<P, keyof DialogProps>,
+    ): Promise<{ didOkOrSubmit: boolean; model: M }> {
+        const initialOptions: ModuleUiDialogOptions =
+            typeof initialTitleOrOptions === "string" ? { title: initialTitleOrOptions } : initialTitleOrOptions;
+
+        return new Promise<{ didOkOrSubmit: boolean; model: M }>((resolve) => {
+            Modal.createDialog(
+                ModuleUiDialog<P, C>,
+                {
+                    initialOptions,
+                    contentFactory: body,
                     moduleApi: this,
+                    additionalContentProps: props,
                 },
-            }, "mx_CompoundDialog").finished.then(([didOkOrSubmit, model]) => {
-                resolve({ didOkOrSubmit, model });
+                "mx_CompoundDialog",
+            ).finished.then(([didOkOrSubmit, model]) => {
+                resolve({ didOkOrSubmit: !!didOkOrSubmit, model: model as M });
             });
         });
     }
@@ -96,24 +116,27 @@ export class ProxiedModuleApi implements ModuleApi {
         password: string,
         displayName?: string,
     ): Promise<AccountAuthInfo> {
-        const hsUrl = SdkConfig.get("validated_server_config").hsUrl;
+        const hsUrl = SdkConfig.get("validated_server_config")?.hsUrl;
+        if (!hsUrl) throw new Error("Could not get homeserver url");
         const client = Matrix.createClient({ baseUrl: hsUrl });
-        const deviceName = SdkConfig.get("default_device_display_name")
-            || PlatformPeg.get().getDefaultDeviceDisplayName();
-        const req = {
+        const deviceName =
+            SdkConfig.get("default_device_display_name") || PlatformPeg.get()?.getDefaultDeviceDisplayName();
+        const req: IRegisterRequestParams = {
             username,
             password,
             initial_device_display_name: deviceName,
             auth: undefined,
             inhibit_login: false,
         };
-        const creds = await (client.registerRequest(req).catch(resp => client.registerRequest({
-            ...req,
-            auth: {
-                session: resp.data.session,
-                type: "m.login.dummy",
-            },
-        })));
+        const creds = await client.registerRequest(req).catch((resp) =>
+            client.registerRequest({
+                ...req,
+                auth: {
+                    session: resp.data.session,
+                    type: "m.login.dummy",
+                },
+            }),
+        );
 
         if (displayName) {
             const profileClient = Matrix.createClient({
@@ -127,9 +150,9 @@ export class ProxiedModuleApi implements ModuleApi {
 
         return {
             homeserverUrl: hsUrl,
-            userId: creds.user_id,
-            deviceId: creds.device_id,
-            accessToken: creds.access_token,
+            userId: creds.user_id!,
+            deviceId: creds.device_id!,
+            accessToken: creds.access_token!,
         };
     }
 
@@ -137,13 +160,25 @@ export class ProxiedModuleApi implements ModuleApi {
      * @override
      */
     public async overwriteAccountAuth(accountInfo: AccountAuthInfo): Promise<void> {
-        dispatcher.dispatch<OverwriteLoginPayload>({
-            action: Action.OverwriteLogin,
-            credentials: {
-                ...accountInfo,
-                guest: false,
+        // We want to wait for the new login to complete before returning.
+        // See `Action.OnLoggedIn` in dispatcher.
+        const awaitNewLogin = new Promise<void>((resolve) => {
+            this.overrideLoginResolve = resolve;
+        });
+
+        dispatcher.dispatch<OverwriteLoginPayload>(
+            {
+                action: Action.OverwriteLogin,
+                credentials: {
+                    ...accountInfo,
+                    guest: false,
+                },
             },
-        }, true); // require to be sync to match inherited interface behaviour
+            true,
+        ); // require to be sync to match inherited interface behaviour
+
+        // wait for login to complete
+        await awaitNewLogin;
     }
 
     /**
@@ -153,14 +188,14 @@ export class ProxiedModuleApi implements ModuleApi {
         navigateToPermalink(uri);
 
         const parts = parsePermalink(uri);
-        if (parts.roomIdOrAlias && andJoin) {
-            let roomId = parts.roomIdOrAlias;
+        if (parts?.roomIdOrAlias && andJoin) {
+            let roomId: string | undefined = parts.roomIdOrAlias;
             let servers = parts.viaServers;
             if (roomId.startsWith("#")) {
                 roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);
                 if (!roomId) {
                     // alias resolution failed
-                    const result = await MatrixClientPeg.get().getRoomIdForAlias(parts.roomIdOrAlias);
+                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(parts.roomIdOrAlias);
                     roomId = result.room_id;
                     if (!servers) servers = result.servers; // use provided servers first, if available
                 }
@@ -174,6 +209,7 @@ export class ProxiedModuleApi implements ModuleApi {
             if (andJoin) {
                 dispatcher.dispatch({
                     action: Action.JoinRoom,
+                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
                 });
             }
         }
@@ -182,10 +218,44 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * @override
      */
-    public getConfigValue<T>(namespace: string, key: string): T {
+    public getConfigValue<T>(namespace: string, key: string): T | undefined {
         // Force cast to `any` because the namespace won't be known to the SdkConfig types
         const maybeObj = SdkConfig.get(namespace as any);
         if (!maybeObj || !(typeof maybeObj === "object")) return undefined;
         return maybeObj[key];
+    }
+
+    /**
+     * @override
+     */
+    public getApps(roomId: string): IApp[] {
+        return WidgetStore.instance.getApps(roomId);
+    }
+
+    /**
+     * @override
+     */
+    public getAppAvatarUrl(app: IApp, width?: number, height?: number, resizeMethod?: string): string | null {
+        if (!app.avatar_url) return null;
+        // eslint-disable-next-line no-restricted-properties
+        return MatrixClientPeg.safeGet().mxcUrlToHttp(app.avatar_url, width, height, resizeMethod);
+    }
+
+    /**
+     * @override
+     */
+    public isAppInContainer(app: IApp, container: Container, roomId: string): boolean {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) return false;
+        return WidgetLayoutStore.instance.isInContainer(room, app, container);
+    }
+
+    /**
+     * @override
+     */
+    public moveAppToContainer(app: IApp, container: Container, roomId: string): void {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) return;
+        WidgetLayoutStore.instance.moveToContainer(room, app, container);
     }
 }

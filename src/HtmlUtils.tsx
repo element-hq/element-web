@@ -17,29 +17,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
-import sanitizeHtml from 'sanitize-html';
-import cheerio from 'cheerio';
-import classNames from 'classnames';
-import EMOJIBASE_REGEX from 'emojibase-regex';
-import { split } from 'lodash';
-import katex from 'katex';
-import { AllHtmlEntities } from 'html-entities';
-import { IContent } from 'matrix-js-sdk/src/models/event';
-import { Optional } from 'matrix-events-sdk';
+import React, { LegacyRef, ReactElement, ReactNode } from "react";
+import sanitizeHtml from "sanitize-html";
+import classNames from "classnames";
+import EMOJIBASE_REGEX from "emojibase-regex";
+import { merge } from "lodash";
+import katex from "katex";
+import { decode } from "html-entities";
+import { IContent } from "matrix-js-sdk/src/matrix";
+import { Optional } from "matrix-events-sdk";
+import _Linkify from "linkify-react";
+import escapeHtml from "escape-html";
+import GraphemeSplitter from "graphemer";
+import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import {
     _linkifyElement,
     _linkifyString,
     ELEMENT_URL_PATTERN,
     options as linkifyMatrixOptions,
-} from './linkify-matrix';
-import { IExtendedSanitizeOptions } from './@types/sanitize-html';
-import SettingsStore from './settings/SettingsStore';
+} from "./linkify-matrix";
+import { IExtendedSanitizeOptions } from "./@types/sanitize-html";
+import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
-import { getEmojiFromUnicode } from "./emoji";
 import { mediaFromMxc } from "./customisations/Media";
-import { stripHTMLReply, stripPlainReply } from './utils/Reply';
+import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
+import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -49,43 +52,13 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 // (with plenty of false positives, but that's OK)
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
-// Regex pattern for Zero-Width joiner unicode characters
-const ZWJ_REGEX = /[\u200D\u2003]/g;
+// Regex pattern for non-emoji characters that can appear in an "all-emoji" message
+// (Zero-Width Joiner, Zero-Width Space, Emoji presentation character, other whitespace)
+const EMOJI_SEPARATOR_REGEX = /[\u200D\u200B\s]|\uFE0F/g;
 
-// Regex pattern for whitespace characters
-const WHITESPACE_REGEX = /\s/g;
-
-const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
+const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, "i");
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
-
-export const PERMITTED_URL_SCHEMES = [
-    "bitcoin",
-    "ftp",
-    "geo",
-    "http",
-    "https",
-    "im",
-    "irc",
-    "ircs",
-    "magnet",
-    "mailto",
-    "matrix",
-    "mms",
-    "news",
-    "nntp",
-    "openpgp4fpr",
-    "sip",
-    "sftp",
-    "sms",
-    "smsto",
-    "ssh",
-    "tel",
-    "urn",
-    "webcal",
-    "wtai",
-    "xmpp",
-];
 
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
@@ -95,8 +68,8 @@ const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)
  * positives, but useful for fast-path testing strings to see if they
  * need emojification.
  */
-function mightContainEmoji(str: string): boolean {
-    return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
+function mightContainEmoji(str?: string): boolean {
+    return !!str && (SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str));
 }
 
 /**
@@ -107,7 +80,7 @@ function mightContainEmoji(str: string): boolean {
  */
 export function unicodeToShortcode(char: string): string {
     const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
-    return shortcodes?.length ? `:${shortcodes[0]}:` : '';
+    return shortcodes?.length ? `:${shortcodes[0]}:` : "";
 }
 
 /*
@@ -126,7 +99,7 @@ export function getHtmlText(insaneHtml: string): string {
         allowedAttributes: {},
         selfClosing: [],
         allowedSchemes: [],
-        disallowedTagsMode: 'discard',
+        disallowedTagsMode: "discard",
     });
 }
 
@@ -147,11 +120,12 @@ export function isUrlPermitted(inputUrl: string): boolean {
     }
 }
 
-const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to matrix
+const transformTags: IExtendedSanitizeOptions["transformTags"] = {
+    // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
-    'a': function(tagName: string, attribs: sanitizeHtml.Attributes) {
+    "a": function (tagName: string, attribs: sanitizeHtml.Attributes) {
         if (attribs.href) {
-            attribs.target = '_blank'; // by default
+            attribs.target = "_blank"; // by default
 
             const transformed = tryTransformPermalinkToLocalHref(attribs.href); // only used to check if it is a link that can be handled locally
             if (
@@ -165,10 +139,10 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             delete attribs.href;
         }
 
-        attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
+        attribs.rel = "noreferrer noopener"; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
-    'img': function(tagName: string, attribs: sanitizeHtml.Attributes) {
+    "img": function (tagName: string, attribs: sanitizeHtml.Attributes) {
         let src = attribs.src;
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
@@ -205,21 +179,21 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             attribs.style += "height: 100%;";
         }
 
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height);
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };
     },
-    'code': function(tagName: string, attribs: sanitizeHtml.Attributes) {
-        if (typeof attribs.class !== 'undefined') {
+    "code": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+        if (typeof attribs.class !== "undefined") {
             // Filter out all classes other than ones starting with language- for syntax highlighting.
-            const classes = attribs.class.split(/\s/).filter(function(cl) {
-                return cl.startsWith('language-') && !cl.startsWith('language-_');
+            const classes = attribs.class.split(/\s/).filter(function (cl) {
+                return cl.startsWith("language-") && !cl.startsWith("language-_");
             });
-            attribs.class = classes.join(' ');
+            attribs.class = classes.join(" ");
         }
         return { tagName, attribs };
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    '*': function(tagName: string, attribs: sanitizeHtml.Attributes) {
+    "*": function (tagName: string, attribs: sanitizeHtml.Attributes) {
         // Delete any style previously assigned, style is an allowedTag for font, span & img,
         // because attributes are stripped after transforming.
         // For img this is trusted as it is generated wholly within the img transformation method.
@@ -229,9 +203,9 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
 
         // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
         // equivalents
-        const customCSSMapper = {
-            'data-mx-color': 'color',
-            'data-mx-bg-color': 'background-color',
+        const customCSSMapper: Record<string, string> = {
+            "data-mx-color": "color",
+            "data-mx-bg-color": "background-color",
             // $customAttributeKey: $cssAttributeKey
         };
 
@@ -239,8 +213,9 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         Object.keys(customCSSMapper).forEach((customAttributeKey) => {
             const cssAttributeKey = customCSSMapper[customAttributeKey];
             const customAttributeValue = attribs[customAttributeKey];
-            if (customAttributeValue &&
-                typeof customAttributeValue === 'string' &&
+            if (
+                customAttributeValue &&
+                typeof customAttributeValue === "string" &&
                 COLOR_REGEX.test(customAttributeValue)
             ) {
                 style += cssAttributeKey + ":" + customAttributeValue + ";";
@@ -258,28 +233,61 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
 
 const sanitizeHtmlParams: IExtendedSanitizeOptions = {
     allowedTags: [
-        'font', // custom to matrix for IRC-style font coloring
-        'del', // for markdown
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'sup', 'sub',
-        'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span', 'img',
-        'details', 'summary',
+        "font", // custom to matrix for IRC-style font coloring
+        "del", // for markdown
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "blockquote",
+        "p",
+        "a",
+        "ul",
+        "ol",
+        "sup",
+        "sub",
+        "nl",
+        "li",
+        "b",
+        "i",
+        "u",
+        "strong",
+        "em",
+        "strike",
+        "code",
+        "hr",
+        "br",
+        "div",
+        "table",
+        "thead",
+        "caption",
+        "tbody",
+        "tr",
+        "th",
+        "td",
+        "pre",
+        "span",
+        "img",
+        "details",
+        "summary",
     ],
     allowedAttributes: {
         // attribute sanitization happens after transformations, so we have to accept `style` for font, span & img
         // but strip during the transformation.
         // custom ones first:
-        font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
-        span: ['data-mx-maths', 'data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
-        div: ['data-mx-maths'],
-        a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
+        font: ["color", "data-mx-bg-color", "data-mx-color", "style"], // custom to matrix
+        span: ["data-mx-maths", "data-mx-bg-color", "data-mx-color", "data-mx-spoiler", "style"], // custom to matrix
+        div: ["data-mx-maths"],
+        a: ["href", "name", "target", "rel"], // remote target: custom to matrix
         // img tags also accept width/height, we just map those to max-width & max-height during transformation
-        img: ['src', 'alt', 'title', 'style'],
-        ol: ['start'],
-        code: ['class'], // We don't actually allow all classes, we filter them in transformTags
+        img: ["src", "alt", "title", "style"],
+        ol: ["start"],
+        code: ["class"], // We don't actually allow all classes, we filter them in transformTags
     },
     // Lots of these won't come up by default because we don't allow them
-    selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+    selfClosing: ["img", "br", "hr", "area", "base", "basefont", "input", "link", "meta"],
     // URL schemes we permit
     allowedSchemes: PERMITTED_URL_SCHEMES,
     allowProtocolRelative: false,
@@ -292,8 +300,8 @@ const sanitizeHtmlParams: IExtendedSanitizeOptions = {
 const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
-        'code': transformTags['code'],
-        '*': transformTags['*'],
+        "code": transformTags["code"],
+        "*": transformTags["*"],
     },
 };
 
@@ -301,23 +309,34 @@ const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
 const topicSanitizeHtmlParams: IExtendedSanitizeOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
-        'font', // custom to matrix for IRC-style font coloring
-        'del', // for markdown
-        'a', 'sup', 'sub',
-        'b', 'i', 'u', 'strong', 'em', 'strike', 'br', 'div',
-        'span',
+        "font", // custom to matrix for IRC-style font coloring
+        "del", // for markdown
+        "a",
+        "sup",
+        "sub",
+        "b",
+        "i",
+        "u",
+        "strong",
+        "em",
+        "strike",
+        "br",
+        "div",
+        "span",
     ],
 };
 
 abstract class BaseHighlighter<T extends React.ReactNode> {
-    constructor(public highlightClass: string, public highlightLink: string) {
-    }
+    public constructor(
+        public highlightClass: string,
+        public highlightLink?: string,
+    ) {}
 
     /**
-     * apply the highlights to a section of text
+     * Apply the highlights to a section of text
      *
      * @param {string} safeSnippet The snippet of text to apply the highlights
-     *     to.
+     *     to. This input must be sanitised as it will be treated as HTML.
      * @param {string[]} safeHighlights A list of substrings to highlight,
      *     sorted by descending length.
      *
@@ -326,7 +345,7 @@ abstract class BaseHighlighter<T extends React.ReactNode> {
      */
     public applyHighlights(safeSnippet: string, safeHighlights: string[]): T[] {
         let lastOffset = 0;
-        let offset;
+        let offset: number;
         let nodes: T[] = [];
 
         const safeHighlight = safeHighlights[0];
@@ -399,17 +418,20 @@ interface IOpts {
 }
 
 export interface IOptsReturnNode extends IOpts {
-    returnString: false | undefined;
+    returnString?: false | undefined;
 }
 
 export interface IOptsReturnString extends IOpts {
     returnString: true;
 }
 
-const emojiToHtmlSpan = (emoji: string) =>
+const emojiToHtmlSpan = (emoji: string): string =>
     `<span class='mx_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
-const emojiToJsxSpan = (emoji: string, key: number) =>
-    <span key={key} className='mx_Emoji' title={unicodeToShortcode(emoji)}>{ emoji }</span>;
+const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
+    <span key={key} className="mx_Emoji" title={unicodeToShortcode(emoji)}>
+        {emoji}
+    </span>
+);
 
 /**
  * Wraps emojis in <span> to style them separately from the rest of message. Consecutive emojis (and modifiers) are wrapped
@@ -419,18 +441,22 @@ const emojiToJsxSpan = (emoji: string, key: number) =>
  * @returns if isHtmlMessage is true, returns an array of strings, otherwise return an array of React Elements for emojis
  * and plain text for everything else
  */
-function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | string)[] {
+export function formatEmojis(message: string | undefined, isHtmlMessage?: false): JSX.Element[];
+export function formatEmojis(message: string | undefined, isHtmlMessage: true): string[];
+export function formatEmojis(message: string | undefined, isHtmlMessage?: boolean): (JSX.Element | string)[] {
     const emojiToSpan = isHtmlMessage ? emojiToHtmlSpan : emojiToJsxSpan;
     const result: (JSX.Element | string)[] = [];
-    let text = '';
+    if (!message) return result;
+
+    let text = "";
     let key = 0;
 
-    // We use lodash's grapheme splitter to avoid breaking apart compound emojis
-    for (const char of split(message, '')) {
+    const splitter = new GraphemeSplitter();
+    for (const char of splitter.iterateGraphemes(message)) {
         if (EMOJIBASE_REGEX.test(char)) {
             if (text) {
                 result.push(text);
-                text = '';
+                text = "";
             }
             result.push(emojiToSpan(char, key));
             key++;
@@ -459,8 +485,8 @@ function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | s
  */
 export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnString): string;
 export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnNode): ReactNode;
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}) {
-    const isFormattedBody = content.format === "org.matrix.custom.html" && content.formatted_body;
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}): ReactNode | string {
+    const isFormattedBody = content.format === "org.matrix.custom.html" && typeof content.formatted_body === "string";
     let bodyHasEmoji = false;
     let isHtmlMessage = false;
 
@@ -470,7 +496,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
     }
 
     let strippedBody: string;
-    let safeBody: string; // safe, sanitised HTML, preferred over `strippedBody` which is fully plaintext
+    let safeBody: string | undefined; // safe, sanitised HTML, preferred over `strippedBody` which is fully plaintext
 
     try {
         // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
@@ -480,12 +506,12 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
             ?.filter((highlight: string): boolean => !highlight.includes("<"))
             .map((highlight: string): string => sanitizeHtml(highlight, sanitizeParams));
 
-        let formattedBody = typeof content.formatted_body === 'string' ? content.formatted_body : null;
-        const plainBody = typeof content.body === 'string' ? content.body : "";
+        let formattedBody = typeof content.formatted_body === "string" ? content.formatted_body : null;
+        const plainBody = typeof content.body === "string" ? content.body : "";
 
         if (opts.stripReplyFallback && formattedBody) formattedBody = stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? stripPlainReply(plainBody) : plainBody;
-        bodyHasEmoji = mightContainEmoji(isFormattedBody ? formattedBody : plainBody);
+        bodyHasEmoji = mightContainEmoji(isFormattedBody ? formattedBody! : plainBody);
 
         const highlighter = safeHighlights?.length
             ? new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink)
@@ -498,98 +524,88 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
                 // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
                 // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
                 // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeParams structure.
-                sanitizeParams.textFilter = function(safeText) {
-                    return highlighter.applyHighlights(safeText, safeHighlights).join('');
+                sanitizeParams.textFilter = function (safeText) {
+                    return highlighter.applyHighlights(safeText, safeHighlights!).join("");
                 };
             }
 
-            safeBody = sanitizeHtml(formattedBody, sanitizeParams);
-            const phtml = cheerio.load(safeBody, {
-                // @ts-ignore: The `_useHtmlParser2` internal option is the
-                // simplest way to both parse and render using `htmlparser2`.
-                _useHtmlParser2: true,
-                decodeEntities: false,
-            });
-            const isPlainText = phtml.html() === phtml.root().text();
-            isHtmlMessage = isFormattedBody && !isPlainText;
+            safeBody = sanitizeHtml(formattedBody!, sanitizeParams);
+            const phtml = new DOMParser().parseFromString(safeBody, "text/html");
+            const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
+            isHtmlMessage = !isPlainText;
 
             if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
-                // @ts-ignore - The types for `replaceWith` wrongly expect
-                // Cheerio instance to be returned.
-                phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
-                    return katex.renderToString(
-                        AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
-                        {
-                            throwOnError: false,
-                            // @ts-ignore - `e` can be an Element, not just a Node
-                            displayMode: e.name == 'div',
-                            output: "htmlAndMathml",
-                        });
+                [...phtml.querySelectorAll<HTMLElement>("div, span[data-mx-maths]")].forEach((e) => {
+                    e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
+                        throwOnError: false,
+                        displayMode: e.tagName == "DIV",
+                        output: "htmlAndMathml",
+                    });
                 });
-                safeBody = phtml.html();
-            }
-            if (bodyHasEmoji) {
-                safeBody = formatEmojis(safeBody, true).join('');
+                safeBody = phtml.body.innerHTML;
             }
         } else if (highlighter) {
-            safeBody = highlighter.applyHighlights(plainBody, safeHighlights).join('');
+            safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
     } finally {
         delete sanitizeParams.textFilter;
     }
 
-    const contentBody = safeBody ?? strippedBody;
-    if (opts.returnString) {
-        return contentBody;
-    }
-
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
-        let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : '';
+        const contentBody = safeBody ?? strippedBody;
+        let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : "";
 
-        // Ignore spaces in body text. Emojis with spaces in between should
-        // still be counted as purely emoji messages.
-        contentBodyTrimmed = contentBodyTrimmed.replace(WHITESPACE_REGEX, '');
-
-        // Remove zero width joiner characters from emoji messages. This ensures
-        // that emojis that are made up of multiple unicode characters are still
-        // presented as large.
-        contentBodyTrimmed = contentBodyTrimmed.replace(ZWJ_REGEX, '');
+        // Remove zero width joiner, zero width spaces and other spaces in body
+        // text. This ensures that emojis with spaces in between or that are made
+        // up of multiple unicode characters are still counted as purely emoji
+        // messages.
+        contentBodyTrimmed = contentBodyTrimmed.replace(EMOJI_SEPARATOR_REGEX, "");
 
         const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
-        emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length &&
-                    // Prevent user pills expanding for users with only emoji in
-                    // their username. Permalinks (links in pills) can be any URL
-                    // now, so we just check for an HTTP-looking thing.
-                    (
-                        strippedBody === safeBody || // replies have the html fallbacks, account for that here
-                        content.formatted_body === undefined ||
-                        (!content.formatted_body.includes("http:") &&
-                        !content.formatted_body.includes("https:"))
-                    );
+        emojiBody =
+            match?.[0]?.length === contentBodyTrimmed.length &&
+            // Prevent user pills expanding for users with only emoji in
+            // their username. Permalinks (links in pills) can be any URL
+            // now, so we just check for an HTTP-looking thing.
+            (strippedBody === safeBody || // replies have the html fallbacks, account for that here
+                content.formatted_body === undefined ||
+                (!content.formatted_body.includes("http:") && !content.formatted_body.includes("https:")));
+    }
+
+    if (isFormattedBody && bodyHasEmoji && safeBody) {
+        // This has to be done after the emojiBody check above as to not break big emoji on replies
+        safeBody = formatEmojis(safeBody, true).join("");
+    }
+
+    if (opts.returnString) {
+        return safeBody ?? strippedBody;
     }
 
     const className = classNames({
-        'mx_EventTile_body': true,
-        'mx_EventTile_bigEmoji': emojiBody,
-        'markdown-body': isHtmlMessage && !emojiBody,
+        "mx_EventTile_body": true,
+        "mx_EventTile_bigEmoji": emojiBody,
+        "markdown-body": isHtmlMessage && !emojiBody,
     });
 
-    let emojiBodyElements: JSX.Element[];
+    let emojiBodyElements: JSX.Element[] | undefined;
     if (!safeBody && bodyHasEmoji) {
         emojiBodyElements = formatEmojis(strippedBody, false) as JSX.Element[];
     }
 
-    return safeBody ?
+    return safeBody ? (
         <span
             key="body"
             ref={opts.ref}
             className={className}
             dangerouslySetInnerHTML={{ __html: safeBody }}
             dir="auto"
-        /> : <span key="body" ref={opts.ref} className={className} dir="auto">
-            { emojiBodyElements || strippedBody }
-        </span>;
+        />
+    ) : (
+        <span key="body" ref={opts.ref} className={className} dir="auto">
+            {emojiBodyElements || strippedBody}
+        </span>
+    );
 }
 
 /**
@@ -601,13 +617,13 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
  * @return The HTML-ified node.
  */
 export function topicToHtml(
-    topic: string,
+    topic?: string,
     htmlTopic?: string,
-    ref?: React.Ref<HTMLSpanElement>,
+    ref?: LegacyRef<HTMLSpanElement>,
     allowExtendedHtml = false,
 ): ReactNode {
     if (!SettingsStore.getValue("feature_html_topic")) {
-        htmlTopic = null;
+        htmlTopic = undefined;
     }
 
     let isFormattedTopic = !!htmlTopic;
@@ -615,32 +631,39 @@ export function topicToHtml(
     let safeTopic = "";
 
     try {
-        topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic : topic);
+        topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic! : topic);
 
         if (isFormattedTopic) {
-            safeTopic = sanitizeHtml(htmlTopic, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
+            safeTopic = sanitizeHtml(htmlTopic!, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
             if (topicHasEmoji) {
-                safeTopic = formatEmojis(safeTopic, true).join('');
+                safeTopic = formatEmojis(safeTopic, true).join("");
             }
         }
     } catch {
         isFormattedTopic = false; // Fall back to plain-text topic
     }
 
-    let emojiBodyElements: ReturnType<typeof formatEmojis>;
+    let emojiBodyElements: JSX.Element[] | undefined;
     if (!isFormattedTopic && topicHasEmoji) {
         emojiBodyElements = formatEmojis(topic, false);
     }
 
-    return isFormattedTopic
-        ? <span
-            ref={ref}
-            dangerouslySetInnerHTML={{ __html: safeTopic }}
-            dir="auto"
-        />
-        : <span ref={ref} dir="auto">
-            { emojiBodyElements || topic }
-        </span>;
+    return isFormattedTopic ? (
+        <span ref={ref} dangerouslySetInnerHTML={{ __html: safeTopic }} dir="auto" />
+    ) : (
+        <span ref={ref} dir="auto">
+            {emojiBodyElements || topic}
+        </span>
+    );
+}
+
+/* Wrapper around linkify-react merging in our default linkify options */
+export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+    return (
+        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
+            {children}
+        </_Linkify>
+    );
 }
 
 /**

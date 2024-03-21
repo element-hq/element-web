@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import SettingsStore from "../settings/SettingsStore";
 import { useAnimation } from "./useAnimation";
 
-const debuglog = (...args: any[]) => {
+const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_animation")) {
         logger.log.call(console, "Animation debuglog:", ...args);
     }
@@ -32,12 +32,8 @@ const debuglog = (...args: any[]) => {
  * @param targetValue Desired value to animate to (can be changed repeatedly to whatever is current at that time)
  * @param duration Duration that each animation should take, specify 0 to skip animating
  */
-export function useSmoothAnimation(
-    initialValue: number,
-    targetValue: number,
-    duration: number,
-): number {
-    const state = useRef<{ timestamp: DOMHighResTimeStamp | null, value: number }>({
+export function useSmoothAnimation(initialValue: number, targetValue: number, duration: number): number {
+    const state = useRef<{ timestamp: DOMHighResTimeStamp | null; value: number }>({
         timestamp: null,
         value: initialValue,
     });

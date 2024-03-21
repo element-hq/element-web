@@ -14,28 +14,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, memo } from 'react';
+import classNames from "classnames";
+import React, { CSSProperties, forwardRef, memo, MutableRefObject, ReactNode } from "react";
+
+import { useIsExpanded } from "../hooks/useIsExpanded";
+import { useSelection } from "../hooks/useSelection";
+
+const HEIGHT_BREAKING_POINT = 24;
 
 interface EditorProps {
     disabled: boolean;
+    placeholder?: string;
+    leftComponent?: ReactNode;
+    rightComponent?: ReactNode;
 }
 
 export const Editor = memo(
-    forwardRef<HTMLDivElement, EditorProps>(
-        function Editor({ disabled }: EditorProps, ref,
-        ) {
-            return <div className="mx_WysiwygComposer_container">
-                <div className="mx_WysiwygComposer_content"
-                    ref={ref!}
-                    contentEditable={!disabled}
-                    role="textbox"
-                    aria-multiline="true"
-                    aria-autocomplete="list"
-                    aria-haspopup="listbox"
-                    dir="auto"
-                    aria-disabled={disabled}
-                />
-            </div>;
-        },
-    ),
+    forwardRef<HTMLDivElement, EditorProps>(function Editor(
+        { disabled, placeholder, leftComponent, rightComponent }: EditorProps,
+        ref,
+    ) {
+        const isExpanded = useIsExpanded(ref as MutableRefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
+        const { onFocus, onBlur, onInput } = useSelection();
+
+        return (
+            <div
+                data-testid="WysiwygComposerEditor"
+                className="mx_WysiwygComposer_Editor"
+                data-is-expanded={isExpanded}
+            >
+                {leftComponent}
+                <div className="mx_WysiwygComposer_Editor_container">
+                    <div
+                        className={classNames("mx_WysiwygComposer_Editor_content", {
+                            mx_WysiwygComposer_Editor_content_placeholder: Boolean(placeholder),
+                        })}
+                        style={{ "--placeholder": `"${placeholder}"` } as CSSProperties}
+                        ref={ref}
+                        contentEditable={!disabled}
+                        role="textbox"
+                        aria-multiline="true"
+                        aria-autocomplete="list"
+                        aria-haspopup="listbox"
+                        dir="auto"
+                        aria-disabled={disabled}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        onInput={onInput}
+                    />
+                </div>
+                {rightComponent}
+            </div>
+        );
+    }),
 );

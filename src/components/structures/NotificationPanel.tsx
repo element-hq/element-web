@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../languageHandler';
+import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseCard from "../views/right_panel/BaseCard";
 import TimelinePanel from "./TimelinePanel";
@@ -25,6 +25,7 @@ import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
+import Heading from "../views/typography/Heading";
 
 interface IProps {
     onClose(): void;
@@ -38,11 +39,11 @@ interface IState {
  * Component which shows the global notification list using a TimelinePanel
  */
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
 
     private card = React.createRef<HTMLDivElement>();
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -54,14 +55,16 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         this.setState({ narrow });
     };
 
-    render() {
-        const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
-            <h2>{ _t("You're all caught up") }</h2>
-            <p>{ _t('You have no visible notifications.') }</p>
-        </div>);
+    public render(): React.ReactNode {
+        const emptyState = (
+            <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
+                <h2>{_t("notif_panel|empty_heading")}</h2>
+                <p>{_t("notif_panel|empty_description")}</p>
+            </div>
+        );
 
-        let content;
-        const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
+        let content: JSX.Element;
+        const timelineSet = MatrixClientPeg.safeGet().getNotifTimelineSet();
         if (timelineSet) {
             // wrap a TimelinePanel with the jump-to-event bits turned off.
             content = (
@@ -80,18 +83,34 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
             content = <Spinner />;
         }
 
-        return <RoomContext.Provider value={{
-            ...this.context,
-            timelineRenderingType: TimelineRenderingType.Notification,
-            narrow: this.state.narrow,
-        }}>
-            <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
-                <Measured
-                    sensor={this.card.current}
-                    onMeasurement={this.onMeasurement}
-                />
-                { content }
-            </BaseCard>
-        </RoomContext.Provider>;
+        return (
+            <RoomContext.Provider
+                value={{
+                    ...this.context,
+                    timelineRenderingType: TimelineRenderingType.Notification,
+                    narrow: this.state.narrow,
+                }}
+            >
+                <BaseCard
+                    header={
+                        <div className="mx_BaseCard_header_title">
+                            <Heading size="4" className="mx_BaseCard_header_title_heading">
+                                {_t("notifications|enable_prompt_toast_title")}
+                            </Heading>
+                        </div>
+                    }
+                    /**
+                     * Need to rename this CSS class to something more generic
+                     * Will be done once all the panels are using a similar layout
+                     */
+                    className="mx_ThreadPanel"
+                    onClose={this.props.onClose}
+                    withoutScrollContainer={true}
+                >
+                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    {content}
+                </BaseCard>
+            </RoomContext.Provider>
+        );
     }
 }

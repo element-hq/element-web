@@ -27,7 +27,7 @@ export default class ReducedMotionController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (this.prefersReducedMotion()) {
             return false;

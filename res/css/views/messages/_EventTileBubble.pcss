@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 .mx_EventTileBubble {
-    --EventTileBubble_margin-block: 10px; /* TODO: Use a spacing variable */
+    --EventTileBubble_margin-block: 10px;
 
     background-color: $dark-panel-bg-color;
-    padding: 10px; /* TODO: Use a spacing variable */
+    padding: 10px;
     border-radius: 8px;
     /* Reserve space for external timestamps, but also cap the width */
-    max-width: min(calc(100% - 2 * $MessageTimestamp_width), 600px);
+    max-width: min(calc(100% - 2 * var(--MessageTimestamp-width)), 600px);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;
@@ -45,10 +45,11 @@ limitations under the License.
     .mx_EventTileBubble_subtitle {
         grid-column: 2;
         overflow-wrap: break-word;
+        min-inline-size: 50px;
     }
 
     .mx_EventTileBubble_title {
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         grid-row: 1;
     }

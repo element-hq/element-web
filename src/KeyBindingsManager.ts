@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import { KeyBindingAction } from "./accessibility/KeyboardShortcuts";
-import { defaultBindingsProvider } from './KeyBindingsDefaults';
-import { IS_MAC } from './Keyboard';
+import { defaultBindingsProvider } from "./KeyBindingsDefaults";
+import { IS_MAC } from "./Keyboard";
 
 /**
  * Represent a key combination.
@@ -25,7 +25,7 @@ import { IS_MAC } from './Keyboard';
  * The combo is evaluated strictly, i.e. the KeyboardEvent must match exactly what is specified in the KeyCombo.
  */
 export type KeyCombo = {
-    key?: string;
+    key: string;
 
     /** On PC: ctrl is pressed; on Mac: meta is pressed */
     ctrlOrCmdKey?: boolean;
@@ -72,27 +72,18 @@ export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: 
     // When ctrlOrCmd is set, the keys need do evaluated differently on PC and Mac
     if (combo.ctrlOrCmdKey) {
         if (onMac) {
-            if (!evMeta
-                || evCtrl !== comboCtrl
-                || evAlt !== comboAlt
-                || evShift !== comboShift) {
+            if (!evMeta || evCtrl !== comboCtrl || evAlt !== comboAlt || evShift !== comboShift) {
                 return false;
             }
         } else {
-            if (!evCtrl
-                || evMeta !== comboMeta
-                || evAlt !== comboAlt
-                || evShift !== comboShift) {
+            if (!evCtrl || evMeta !== comboMeta || evAlt !== comboAlt || evShift !== comboShift) {
                 return false;
             }
         }
         return true;
     }
 
-    if (evMeta !== comboMeta
-        || evCtrl !== comboCtrl
-        || evAlt !== comboAlt
-        || evShift !== comboShift) {
+    if (evMeta !== comboMeta || evCtrl !== comboCtrl || evAlt !== comboAlt || evShift !== comboShift) {
         return false;
     }
 
@@ -114,9 +105,7 @@ export class KeyBindingsManager {
      * To overwrite the default key bindings add a new providers before the default provider, e.g. a provider for
      * customized key bindings.
      */
-    bindingsProviders: IKeyBindingsProvider[] = [
-        defaultBindingsProvider,
-    ];
+    public bindingsProviders: IKeyBindingsProvider[] = [defaultBindingsProvider];
 
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
@@ -127,7 +116,7 @@ export class KeyBindingsManager {
     ): KeyBindingAction | undefined {
         for (const getter of getters) {
             const bindings = getter();
-            const binding = bindings.find(it => isKeyComboMatch(ev, it.keyCombo, IS_MAC));
+            const binding = bindings.find((it) => isKeyComboMatch(ev, it.keyCombo, IS_MAC));
             if (binding) {
                 return binding.action;
             }
@@ -135,36 +124,60 @@ export class KeyBindingsManager {
         return undefined;
     }
 
-    getMessageComposerAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getMessageComposerBindings), ev);
+    public getMessageComposerAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getMessageComposerBindings),
+            ev,
+        );
     }
 
-    getAutocompleteAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getAutocompleteBindings), ev);
+    public getAutocompleteAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getAutocompleteBindings),
+            ev,
+        );
     }
 
-    getRoomListAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getRoomListBindings), ev);
+    public getRoomListAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getRoomListBindings),
+            ev,
+        );
     }
 
-    getRoomAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getRoomBindings), ev);
+    public getRoomAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getRoomBindings),
+            ev,
+        );
     }
 
-    getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getNavigationBindings), ev);
+    public getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getNavigationBindings),
+            ev,
+        );
     }
 
-    getAccessibilityAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getAccessibilityBindings), ev);
+    public getAccessibilityAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getAccessibilityBindings),
+            ev,
+        );
     }
 
-    getCallAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getCallBindings), ev);
+    public getCallAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getCallBindings),
+            ev,
+        );
     }
 
-    getLabsAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
-        return this.getAction(this.bindingsProviders.map(it => it.getLabsBindings), ev);
+    public getLabsAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(
+            this.bindingsProviders.map((it) => it.getLabsBindings),
+            ev,
+        );
     }
 }
 

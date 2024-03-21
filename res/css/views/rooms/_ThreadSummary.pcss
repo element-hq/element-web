@@ -15,12 +15,6 @@ limitations under the License.
 */
 
 .mx_ThreadSummary,
-.mx_ThreadSummary_content,
-.mx_ThreadSummary_icon {
-    font-size: $font-12px;
-}
-
-.mx_ThreadSummary,
 .mx_ThreadSummary_content {
     color: $secondary-content;
 }
@@ -37,7 +31,7 @@ limitations under the License.
     width: fit-content;
     height: 40px;
     position: relative;
-    background-color: $system;
+    background-color: $panels;
     padding-inline: $spacing-12 $spacing-16;
     display: flex;
     align-items: center;
@@ -46,7 +40,8 @@ limitations under the License.
     box-sizing: border-box;
     clear: both;
     overflow: hidden;
-    border: 1px solid $system; /* always render a border so the hover effect doesn't require a re-layout */
+    border: 1px solid $panels; /* always render a border so the hover effect doesn't require a re-layout */
+    font: var(--cpd-font-body-sm-regular);
 
     .mx_ThreadSummary_chevron {
         position: absolute;
@@ -55,22 +50,22 @@ limitations under the License.
         bottom: 0;
         width: 60px;
         box-sizing: border-box;
-        /* XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug */
+        /* XXX: We use an HEXA `transparent` to work around a Safari <15.4 bug */
         background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
 
         opacity: 0;
         transform: translateX(60px);
-        transition: all .1s ease-in-out;
+        transition: all 0.1s ease-in-out;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 50%;
             right: $spacing-12;
             transform: translateY(-50%);
             width: 12px;
             height: 12px;
-            mask-image: url('$(res)/img/compound/chevron-right-12px.svg');
+            mask-image: url("$(res)/img/compound/chevron-right-12px.svg");
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
@@ -88,11 +83,6 @@ limitations under the License.
         }
     }
 
-    &::before {
-        @mixin ThreadSummaryIcon;
-        align-self: center; /* v-align the threads icon */
-    }
-
     .mx_ThreadSummary_sender,
     .mx_ThreadSummary_content,
     .mx_ThreadSummary_replies_amount {
@@ -107,7 +97,7 @@ limitations under the License.
     }
 
     .mx_ThreadSummary_sender {
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 
     .mx_ThreadSummary_content {
@@ -128,6 +118,7 @@ limitations under the License.
 
 .mx_ThreadSummary_avatar {
     margin-inline-end: $spacing-8;
+    flex-shrink: 0;
 }
 
 .mx_ThreadSummary_icon {

@@ -2,116 +2,57 @@
 
 exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
 <div
-  className="mx_EnableLiveShare"
-  data-test-id="location-picker-enable-live-share"
+  class="mx_EnableLiveShare"
+  data-testid="location-picker-enable-live-share"
 >
-  <StyledLiveBeaconIcon
-    className="mx_EnableLiveShare_icon"
+  <div
+    class="mx_StyledLiveBeaconIcon mx_EnableLiveShare_icon"
+  />
+  <h3
+    class="mx_Heading_h3 mx_EnableLiveShare_heading"
   >
-    <div
-      className="mx_StyledLiveBeaconIcon mx_EnableLiveShare_icon"
-    />
-  </StyledLiveBeaconIcon>
-  <Heading
-    className="mx_EnableLiveShare_heading"
-    size="h3"
-  >
-    <h3
-      className="mx_Heading_h3 mx_EnableLiveShare_heading"
-    >
-      Live location sharing
-    </h3>
-  </Heading>
+    Live location sharing
+  </h3>
   <p
-    className="mx_EnableLiveShare_description"
+    class="mx_EnableLiveShare_description"
   >
     Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
   </p>
-  <LabelledToggleSwitch
-    data-test-id="enable-live-share-toggle"
-    label="Enable live location sharing"
-    onChange={[Function]}
-    value={false}
+  <div
+    class="mx_SettingsFlag"
+    data-testid="enable-live-share-toggle"
   >
-    <div
-      className="mx_SettingsFlag"
+    <span
+      class="mx_SettingsFlag_label"
     >
-      <span
-        className="mx_SettingsFlag_label"
+      <div
+        id="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
       >
         Enable live location sharing
-      </span>
-      <_default
-        checked={false}
-        onChange={[Function]}
-        title="Enable live location sharing"
-      >
-        <AccessibleTooltipButton
-          aria-checked={false}
-          aria-disabled={false}
-          className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-          onClick={[Function]}
-          role="switch"
-          title="Enable live location sharing"
-        >
-          <AccessibleButton
-            aria-checked={false}
-            aria-disabled={false}
-            aria-label="Enable live location sharing"
-            className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            element="div"
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onMouseLeave={[Function]}
-            onMouseOver={[Function]}
-            role="switch"
-            tabIndex={0}
-          >
-            <div
-              aria-checked={false}
-              aria-disabled={false}
-              aria-label="Enable live location sharing"
-              className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseLeave={[Function]}
-              onMouseOver={[Function]}
-              role="switch"
-              tabIndex={0}
-            >
-              <div
-                className="mx_ToggleSwitch_ball"
-              />
-            </div>
-          </AccessibleButton>
-        </AccessibleTooltipButton>
-      </_default>
-    </div>
-  </LabelledToggleSwitch>
-  <AccessibleButton
-    className="mx_EnableLiveShare_button"
-    data-test-id="enable-live-share-submit"
-    disabled={true}
-    element="button"
-    kind="primary"
-    onClick={[Function]}
-    role="button"
-    tabIndex={0}
-  >
-    <button
-      aria-disabled={true}
-      className="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
-      data-test-id="enable-live-share-submit"
-      disabled={true}
-      role="button"
-      tabIndex={0}
+      </div>
+    </span>
+    <div
+      aria-checked="false"
+      aria-disabled="false"
+      aria-labelledby="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+      role="switch"
+      tabindex="0"
     >
-      OK
-    </button>
-  </AccessibleButton>
+      <div
+        class="mx_ToggleSwitch_ball"
+      />
+    </div>
+  </div>
+  <button
+    aria-disabled="true"
+    class="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+    data-testid="enable-live-share-submit"
+    disabled=""
+    role="button"
+    tabindex="0"
+  >
+    OK
+  </button>
 </div>
 `;

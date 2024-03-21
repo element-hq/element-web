@@ -10,7 +10,7 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
       </h3>
@@ -18,7 +18,11 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -93,7 +97,7 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Consider signing out from old sessions (90 days or older) you don't use anymore
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -131,7 +135,7 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
       </h3>
@@ -139,7 +143,11 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -214,7 +222,7 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Consider signing out from old sessions (90 days or older) you don't use anymore
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -252,7 +260,7 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
       </h3>
@@ -260,7 +268,11 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -335,7 +347,7 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Consider signing out from old sessions (90 days or older) you don't use anymore
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"

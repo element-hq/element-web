@@ -14,14 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DEFAULT_WAVEFORM, Playback } from "./Playback";
+import { Playback } from "./Playback";
 import { PlaybackManager } from "./PlaybackManager";
+import { DEFAULT_WAVEFORM } from "./consts";
 
 /**
  * A managed playback is a Playback instance that is guided by a PlaybackManager.
  */
 export class ManagedPlayback extends Playback {
-    public constructor(private manager: PlaybackManager, buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
+    public constructor(
+        private manager: PlaybackManager,
+        buf: ArrayBuffer,
+        seedWaveform = DEFAULT_WAVEFORM,
+    ) {
         super(buf, seedWaveform);
     }
 
@@ -30,7 +35,7 @@ export class ManagedPlayback extends Playback {
         return super.play();
     }
 
-    public destroy() {
+    public destroy(): void {
         this.manager.destroyPlaybackInstance(this);
         super.destroy();
     }

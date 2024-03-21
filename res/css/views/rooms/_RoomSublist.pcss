@@ -48,7 +48,7 @@ limitations under the License.
         /* to work correctly. */
         padding-bottom: 8px;
         height: 24px;
-        color: $tertiary-content;
+        color: $secondary-content;
 
         .mx_RoomSublist_stickableContainer {
             width: 100%;
@@ -109,7 +109,7 @@ limitations under the License.
             border-radius: 8px;
 
             &::before {
-                content: '';
+                content: "";
                 width: 16px;
                 height: 16px;
                 position: absolute;
@@ -118,7 +118,7 @@ limitations under the License.
                 mask-position: center;
                 mask-size: contain;
                 mask-repeat: no-repeat;
-                background: $muted-fg-color;
+                background: var(--cpd-color-icon-secondary);
             }
         }
 
@@ -135,19 +135,17 @@ limitations under the License.
         }
 
         .mx_RoomSublist_auxButton::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/plus.svg");
         }
 
         .mx_RoomSublist_menuButton::before {
-            mask-image: url('$(res)/img/element-icons/context-menu.svg');
+            mask-image: url("$(res)/img/element-icons/context-menu.svg");
         }
 
         .mx_RoomSublist_headerText {
             flex: 1;
             max-width: calc(100% - 16px); /* 16px is the badge width */
-            line-height: $font-16px;
-            font-size: $font-13px;
-            font-weight: 600;
+            font: var(--cpd-font-body-sm-semibold);
 
             /* Ellipsize any text overflow */
             text-overflow: ellipsis;
@@ -162,15 +160,15 @@ limitations under the License.
                 margin-right: 6px;
 
                 &::before {
-                    content: '';
+                    content: "";
                     width: 18px;
                     height: 18px;
                     position: absolute;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $tertiary-content;
-                    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+                    background-color: var(--cpd-color-icon-secondary);
+                    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
                 }
 
                 &.mx_RoomSublist_collapseBtn_collapsed::before {
@@ -247,7 +245,8 @@ limitations under the License.
             bottom: 0 !important; /* override from library */
         }
 
-        &:hover, &.mx_RoomSublist_hasMenuOpen {
+        &:hover,
+        &.mx_RoomSublist_hasMenuOpen {
             .mx_RoomSublist_resizerHandle {
                 opacity: 0.8;
                 background-color: $primary-content;
@@ -285,7 +284,7 @@ limitations under the License.
 
         .mx_RoomSublist_showMoreButtonChevron,
         .mx_RoomSublist_showLessButtonChevron {
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         .mx_RoomSublist_showLessButtonChevron {
@@ -398,11 +397,12 @@ limitations under the License.
     .mx_RoomSublist_contextMenu_title {
         font-size: $font-15px;
         line-height: $font-20px;
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
         margin-bottom: 4px;
     }
 
-    .mx_StyledRadioButton, .mx_Checkbox {
+    .mx_StyledRadioButton,
+    .mx_Checkbox {
         margin-top: 8px;
     }
 }
@@ -418,11 +418,11 @@ limitations under the License.
         width: 100%;
         height: 100%;
 
-        content: '';
+        content: "";
         position: absolute;
         mask-repeat: repeat-y;
         mask-size: auto 48px;
-        mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/skeleton-ui.svg");
     }
 }
 

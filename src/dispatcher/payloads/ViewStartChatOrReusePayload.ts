@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { User } from "matrix-js-sdk/src/models/user";
+import { User } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";

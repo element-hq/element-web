@@ -23,13 +23,11 @@ export enum DefaultTagID {
     DM = "im.vector.fake.direct",
     ServerNotice = "m.server_notice",
     Suggested = "im.vector.fake.suggested",
-    SavedItems = "im.vector.fake.saved_items",
 }
 
 export const OrderedDefaultTagIDs = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
-    DefaultTagID.SavedItems,
     DefaultTagID.DM,
     DefaultTagID.Untagged,
     DefaultTagID.LowPriority,
@@ -43,6 +41,7 @@ export type TagID = string | DefaultTagID;
 export enum RoomUpdateCause {
     Timeline = "TIMELINE",
     PossibleTagChange = "POSSIBLE_TAG_CHANGE",
+    PossibleMuteChange = "POSSIBLE_MUTE_CHANGE",
     ReadReceipt = "READ_RECEIPT",
     NewRoom = "NEW_ROOM",
     RoomRemoved = "ROOM_REMOVED",

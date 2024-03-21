@@ -17,8 +17,8 @@ limitations under the License.
 import { useState } from "react";
 
 export default function useHover(
-    ignoreHover?: (ev: React.MouseEvent) => boolean,
-): [boolean, { onMouseOver: () => void, onMouseLeave: () => void, onMouseMove: (ev: React.MouseEvent) => void }] {
+    ignoreHover: (ev: React.MouseEvent) => boolean,
+): [boolean, { onMouseOver: () => void; onMouseLeave: () => void; onMouseMove: (ev: React.MouseEvent) => void }] {
     const [hovered, setHoverState] = useState(false);
 
     const props = {

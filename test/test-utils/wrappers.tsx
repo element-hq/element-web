@@ -14,28 +14,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { RefCallback, ComponentType } from "react";
+import React, { ComponentType, Ref } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { RenderOptions } from "@testing-library/react";
 
-import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
+import { SDKContext, SdkContextClass } from "../../src/contexts/SDKContext";
 
-type WrapperProps<T> = { wrappedRef?: RefCallback<ComponentType<T>> } & T;
+type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
 
 export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>): ComponentType<WrapperProps<T>> {
     class Wrapper extends React.Component<WrapperProps<T>> {
         _matrixClient: MatrixClient;
-        constructor(props) {
+        constructor(props: WrapperProps<T>) {
             super(props);
 
-            this._matrixClient = peg.get();
+            this._matrixClient = peg.safeGet();
         }
 
         render() {
-            return <MatrixClientContext.Provider value={this._matrixClient}>
-                <WrappedComponent ref={this.props.wrappedRef} {...this.props} />
-            </MatrixClientContext.Provider>;
+            return (
+                <MatrixClientContext.Provider value={this._matrixClient}>
+                    <WrappedComponent ref={this.props.wrappedRef} {...this.props} />
+                </MatrixClientContext.Provider>
+            );
         }
     }
     return Wrapper;
+}
+
+export function wrapInSdkContext<T>(
+    WrappedComponent: ComponentType<T>,
+    sdkContext: SdkContextClass,
+): ComponentType<WrapperProps<T>> {
+    return class extends React.Component<WrapperProps<T>> {
+        render() {
+            return (
+                <SDKContext.Provider value={sdkContext}>
+                    <WrappedComponent {...this.props} />
+                </SDKContext.Provider>
+            );
+        }
+    };
+}
+
+/**
+ * Test helper to generate React testing library render options for wrapping with a MatrixClientContext.Provider
+ * @param client the MatrixClient instance to expose via the provider
+ */
+export function withClientContextRenderOptions(client: MatrixClient): RenderOptions {
+    return {
+        wrapper: ({ children }) => (
+            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+        ),
+    };
 }

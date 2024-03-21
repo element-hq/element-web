@@ -15,36 +15,63 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
+import {
+    MatrixClient,
+    ClientEvent,
+    ITurnServer as IClientTurnServer,
+    Direction,
+    EventType,
+    MatrixEvent,
+    MsgType,
+    RelationType,
+} from "matrix-js-sdk/src/matrix";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { Direction, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { Widget, MatrixWidgetType, WidgetKind, WidgetDriver, ITurnServer } from "matrix-widget-api";
+import {
+    Widget,
+    MatrixWidgetType,
+    WidgetKind,
+    WidgetDriver,
+    ITurnServer,
+    SimpleObservable,
+    OpenIDRequestState,
+    IOpenIDUpdate,
+} from "matrix-widget-api";
+import {
+    ApprovalOpts,
+    CapabilitiesOpts,
+    WidgetLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDriver";
 import { stubClient } from "../../test-utils";
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
+import dis from "../../../src/dispatcher/dispatcher";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
 
-    const mkDefaultDriver = (): WidgetDriver => new StopGapWidgetDriver(
-        [],
-        new Widget({
-            id: "test",
-            creatorUserId: "@alice:example.org",
-            type: "example",
-            url: "https://example.org",
-        }),
-        WidgetKind.Room,
-        false,
-        "!1:example.org",
-    );
+    const mkDefaultDriver = (): WidgetDriver =>
+        new StopGapWidgetDriver(
+            [],
+            new Widget({
+                id: "test",
+                creatorUserId: "@alice:example.org",
+                type: "example",
+                url: "https://example.org",
+            }),
+            WidgetKind.Room,
+            false,
+            "!1:example.org",
+        );
 
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
+        client.getSafeUserId.mockReturnValue("@alice:example.org");
     });
 
     it("auto-approves capabilities of virtual Element Call widgets", async () => {
@@ -69,7 +96,6 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.send.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.state_event:m.room.member",
-            "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
@@ -100,6 +126,44 @@ describe("StopGapWidgetDriver", () => {
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
 
+    it("approves capabilities via module api", async () => {
+        const driver = mkDefaultDriver();
+
+        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
+
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation(
+            (lifecycleEvent, opts, widgetInfo, requested) => {
+                if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
+                    (opts as CapabilitiesOpts).approvedCapabilities = requested;
+                }
+            },
+        );
+
+        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
+        expect(approvedCapabilities).toEqual(requestedCapabilities);
+    });
+
+    it("approves identity via module api", async () => {
+        const driver = mkDefaultDriver();
+
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
+            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
+                (opts as ApprovalOpts).approved = true;
+            }
+        });
+
+        const listener = jest.fn();
+        const observer = new SimpleObservable<IOpenIDUpdate>();
+        observer.onUpdate(listener);
+        await driver.askOpenID(observer);
+
+        const openIdUpdate: IOpenIDUpdate = {
+            state: OpenIDRequestState.Allowed,
+            token: await client.getOpenIdToken(),
+        };
+        expect(listener).toHaveBeenCalledWith(openIdUpdate);
+    });
+
     describe("sendToDevice", () => {
         const contentMap = {
             "@alice:example.org": {
@@ -108,7 +172,7 @@ describe("StopGapWidgetDriver", () => {
                 },
             },
             "@bob:example.org": {
-                "bobDesktop": {
+                bobDesktop: {
                     hello: "bob",
                 },
             },
@@ -116,7 +180,9 @@ describe("StopGapWidgetDriver", () => {
 
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
         it("sends unencrypted messages", async () => {
             await driver.sendToDevice("org.example.foo", false, contentMap);
@@ -128,10 +194,18 @@ describe("StopGapWidgetDriver", () => {
             const aliceMobile = new DeviceInfo("aliceMobile");
             const bobDesktop = new DeviceInfo("bobDesktop");
 
-            mocked(client.crypto.deviceList).downloadKeys.mockResolvedValue({
-                "@alice:example.org": { aliceWeb, aliceMobile },
-                "@bob:example.org": { bobDesktop },
-            });
+            mocked(client.crypto!.deviceList).downloadKeys.mockResolvedValue(
+                new Map([
+                    [
+                        "@alice:example.org",
+                        new Map([
+                            ["aliceWeb", aliceWeb],
+                            ["aliceMobile", aliceMobile],
+                        ]),
+                    ],
+                    ["@bob:example.org", new Map([["bobDesktop", bobDesktop]])],
+                ]),
+            );
 
             await driver.sendToDevice("org.example.foo", true, contentMap);
             expect(client.encryptAndSendToDevices.mock.calls).toMatchSnapshot();
@@ -141,7 +215,9 @@ describe("StopGapWidgetDriver", () => {
     describe("getTurnServers", () => {
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
         it("stops if VoIP isn't supported", async () => {
             jest.spyOn(client, "pollingTurnServers", "get").mockReturnValue(false);
@@ -200,77 +276,215 @@ describe("StopGapWidgetDriver", () => {
     describe("readEventRelations", () => {
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
-        it('reads related events from the current room', async () => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, 'getRoomId').mockReturnValue('!this-room-id');
+        it("reads related events from the current room", async () => {
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!this-room-id");
 
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [],
             });
 
-            await expect(driver.readEventRelations('$event')).resolves.toEqual({
+            await expect(driver.readEventRelations("$event")).resolves.toEqual({
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith('!this-room-id', '$event', null, null, {});
+            expect(client.relations).toHaveBeenCalledWith("!this-room-id", "$event", null, null, {});
         });
 
-        it('reads related events from a selected room', async () => {
+        it("reads related events from a selected room", async () => {
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [new MatrixEvent(), new MatrixEvent()],
-                nextBatch: 'next-batch-token',
+                nextBatch: "next-batch-token",
             });
 
-            await expect(driver.readEventRelations('$event', '!room-id')).resolves.toEqual({
-                chunk: [
-                    expect.objectContaining({ content: {} }),
-                    expect.objectContaining({ content: {} }),
-                ],
-                nextBatch: 'next-batch-token',
+            await expect(driver.readEventRelations("$event", "!room-id")).resolves.toEqual({
+                chunk: [expect.objectContaining({ content: {} }), expect.objectContaining({ content: {} })],
+                nextBatch: "next-batch-token",
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith('!room-id', '$event', null, null, {});
+            expect(client.relations).toHaveBeenCalledWith("!room-id", "$event", null, null, {});
         });
 
-        it('reads related events with custom parameters', async () => {
+        it("reads related events with custom parameters", async () => {
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [],
             });
 
-            await expect(driver.readEventRelations(
-                '$event',
-                '!room-id',
-                'm.reference',
-                'm.room.message',
-                'from-token',
-                'to-token',
-                25,
-                'f',
-            )).resolves.toEqual({
+            await expect(
+                driver.readEventRelations(
+                    "$event",
+                    "!room-id",
+                    "m.reference",
+                    "m.room.message",
+                    "from-token",
+                    "to-token",
+                    25,
+                    "f",
+                ),
+            ).resolves.toEqual({
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith(
-                '!room-id',
-                '$event',
-                'm.reference',
-                'm.room.message',
+            expect(client.relations).toHaveBeenCalledWith("!room-id", "$event", "m.reference", "m.room.message", {
+                limit: 25,
+                from: "from-token",
+                to: "to-token",
+                dir: Direction.Forward,
+            });
+        });
+    });
+
+    describe("chat effects", () => {
+        let driver: WidgetDriver;
+        // let client: MatrixClient;
+
+        beforeEach(() => {
+            stubClient();
+            driver = mkDefaultDriver();
+            jest.spyOn(dis, "dispatch").mockReset();
+        });
+
+        it("sends chat effects", async () => {
+            await driver.sendEvent(
+                EventType.RoomMessage,
                 {
-                    limit: 25,
-                    from: 'from-token',
-                    to: 'to-token',
-                    dir: Direction.Forward,
+                    msgtype: MsgType.Text,
+                    body: "🎉",
                 },
+                null,
             );
+
+            expect(dis.dispatch).toHaveBeenCalled();
+        });
+
+        it("does not send chat effects in threads", async () => {
+            await driver.sendEvent(
+                EventType.RoomMessage,
+                {
+                    "body": "🎉",
+                    "m.relates_to": {
+                        rel_type: RelationType.Thread,
+                        event_id: "$123",
+                    },
+                },
+                null,
+            );
+
+            expect(dis.dispatch).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors feature is not enabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        });
+
+        it("passes the flag through to getVisibleRooms", () => {
+            const driver = mkDefaultDriver();
+            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is enabled", () => {
+        beforeEach(() => {
+            // Turn on feature_dynamic_room_predecessors setting
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_dynamic_room_predecessors",
+            );
+        });
+
+        it("passes the flag through to getVisibleRooms", () => {
+            const driver = mkDefaultDriver();
+            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
+        });
+    });
+
+    describe("searchUserDirectory", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("searches for users in the user directory", async () => {
+            client.searchUserDirectory.mockResolvedValue({
+                limited: false,
+                results: [{ user_id: "@user", display_name: "Name", avatar_url: "mxc://" }],
+            });
+
+            await expect(driver.searchUserDirectory("foo")).resolves.toEqual({
+                limited: false,
+                results: [{ userId: "@user", displayName: "Name", avatarUrl: "mxc://" }],
+            });
+
+            expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "foo", limit: undefined });
+        });
+
+        it("searches for users with a custom limit", async () => {
+            client.searchUserDirectory.mockResolvedValue({
+                limited: true,
+                results: [],
+            });
+
+            await expect(driver.searchUserDirectory("foo", 25)).resolves.toEqual({
+                limited: true,
+                results: [],
+            });
+
+            expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "foo", limit: 25 });
+        });
+    });
+
+    describe("getMediaConfig", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("gets the media configuration", async () => {
+            client.getMediaConfig.mockResolvedValue({
+                "m.upload.size": 1000,
+            });
+
+            await expect(driver.getMediaConfig()).resolves.toEqual({
+                "m.upload.size": 1000,
+            });
+
+            expect(client.getMediaConfig).toHaveBeenCalledWith();
+        });
+    });
+
+    describe("uploadFile", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("uploads a file", async () => {
+            client.uploadContent.mockResolvedValue({
+                content_uri: "mxc://...",
+            });
+
+            await expect(driver.uploadFile("data")).resolves.toEqual({
+                contentUri: "mxc://...",
+            });
+
+            expect(client.uploadContent).toHaveBeenCalledWith("data");
         });
     });
 });

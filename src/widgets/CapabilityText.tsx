@@ -21,14 +21,15 @@ import {
     getTimelineRoomIDFromCapability,
     isTimelineCapability,
     isTimelineCapabilityFor,
-    MatrixCapabilities, Symbols,
+    MatrixCapabilities,
+    Symbols,
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { _t, _td, TranslatedString } from "../languageHandler";
+import { _t, _td, TranslatedString, TranslationKey } from "../languageHandler";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";
@@ -36,24 +37,12 @@ import TextWithTooltip from "../components/views/elements/TextWithTooltip";
 type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/naming-convention
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";
 
-interface ISendRecvStaticCapText {
-    // @ts-ignore - TS wants the key to be a string, but we know better
-    [eventType: EventType]: {
-        // @ts-ignore - TS wants the key to be a string, but we know better
-        [widgetKind: WidgetKind | GENERIC_WIDGET_KIND]: {
-            // @ts-ignore - TS wants the key to be a string, but we know better
-            [direction: EventDirection]: string;
-        };
-    };
-}
-
-interface IStaticCapText {
-    // @ts-ignore - TS wants the key to be a string, but we know better
-    [capability: Capability]: {
-        // @ts-ignore - TS wants the key to be a string, but we know better
-        [widgetKind: WidgetKind | GENERIC_WIDGET_KIND]: string;
-    };
-}
+type SendRecvStaticCapText = Partial<
+    Record<
+        EventType | string,
+        Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, Record<EventDirection, TranslationKey>>>
+    >
+>;
 
 export interface TranslatedCapabilityText {
     primary: TranslatedString;
@@ -61,75 +50,75 @@ export interface TranslatedCapabilityText {
 }
 
 export class CapabilityText {
-    private static simpleCaps: IStaticCapText = {
+    private static simpleCaps: Record<Capability, Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, TranslationKey>>> = {
         [MatrixCapabilities.AlwaysOnScreen]: {
-            [WidgetKind.Room]: _td("Remain on your screen when viewing another room, when running"),
-            [GENERIC_WIDGET_KIND]: _td("Remain on your screen while running"),
+            [WidgetKind.Room]: _td("widget|capability|always_on_screen_viewing_another_room"),
+            [GENERIC_WIDGET_KIND]: _td("widget|capability|always_on_screen_generic"),
         },
         [MatrixCapabilities.StickerSending]: {
-            [WidgetKind.Room]: _td("Send stickers into this room"),
-            [GENERIC_WIDGET_KIND]: _td("Send stickers into your active room"),
+            [WidgetKind.Room]: _td("widget|capability|send_stickers_this_room"),
+            [GENERIC_WIDGET_KIND]: _td("widget|capability|send_stickers_active_room"),
         },
         [ElementWidgetCapabilities.CanChangeViewedRoom]: {
-            [GENERIC_WIDGET_KIND]: _td("Change which room you're viewing"),
+            [GENERIC_WIDGET_KIND]: _td("widget|capability|switch_room"),
         },
         [MatrixCapabilities.MSC2931Navigate]: {
-            [GENERIC_WIDGET_KIND]: _td("Change which room, message, or user you're viewing"),
+            [GENERIC_WIDGET_KIND]: _td("widget|capability|switch_room_message_user"),
         },
     };
 
-    private static stateSendRecvCaps: ISendRecvStaticCapText = {
+    private static stateSendRecvCaps: SendRecvStaticCapText = {
         [EventType.RoomTopic]: {
             [WidgetKind.Room]: {
-                [EventDirection.Send]: _td("Change the topic of this room"),
-                [EventDirection.Receive]: _td("See when the topic changes in this room"),
+                [EventDirection.Send]: _td("widget|capability|change_topic_this_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_topic_change_this_room"),
             },
             [GENERIC_WIDGET_KIND]: {
-                [EventDirection.Send]: _td("Change the topic of your active room"),
-                [EventDirection.Receive]: _td("See when the topic changes in your active room"),
+                [EventDirection.Send]: _td("widget|capability|change_topic_active_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_topic_change_active_room"),
             },
         },
         [EventType.RoomName]: {
             [WidgetKind.Room]: {
-                [EventDirection.Send]: _td("Change the name of this room"),
-                [EventDirection.Receive]: _td("See when the name changes in this room"),
+                [EventDirection.Send]: _td("widget|capability|change_name_this_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_name_change_this_room"),
             },
             [GENERIC_WIDGET_KIND]: {
-                [EventDirection.Send]: _td("Change the name of your active room"),
-                [EventDirection.Receive]: _td("See when the name changes in your active room"),
+                [EventDirection.Send]: _td("widget|capability|change_name_active_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_name_change_active_room"),
             },
         },
         [EventType.RoomAvatar]: {
             [WidgetKind.Room]: {
-                [EventDirection.Send]: _td("Change the avatar of this room"),
-                [EventDirection.Receive]: _td("See when the avatar changes in this room"),
+                [EventDirection.Send]: _td("widget|capability|change_avatar_this_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_avatar_change_this_room"),
             },
             [GENERIC_WIDGET_KIND]: {
-                [EventDirection.Send]: _td("Change the avatar of your active room"),
-                [EventDirection.Receive]: _td("See when the avatar changes in your active room"),
+                [EventDirection.Send]: _td("widget|capability|change_avatar_active_room"),
+                [EventDirection.Receive]: _td("widget|capability|see_avatar_change_active_room"),
             },
         },
         [EventType.RoomMember]: {
             [WidgetKind.Room]: {
-                [EventDirection.Send]: _td("Remove, ban, or invite people to this room, and make you leave"),
-                [EventDirection.Receive]: _td("See when people join, leave, or are invited to this room"),
+                [EventDirection.Send]: _td("widget|capability|remove_ban_invite_leave_this_room"),
+                [EventDirection.Receive]: _td("widget|capability|receive_membership_this_room"),
             },
             [GENERIC_WIDGET_KIND]: {
-                [EventDirection.Send]: _td("Remove, ban, or invite people to your active room, and make you leave"),
-                [EventDirection.Receive]: _td("See when people join, leave, or are invited to your active room"),
+                [EventDirection.Send]: _td("widget|capability|remove_ban_invite_leave_active_room"),
+                [EventDirection.Receive]: _td("widget|capability|receive_membership_active_room"),
             },
         },
     };
 
-    private static nonStateSendRecvCaps: ISendRecvStaticCapText = {
+    private static nonStateSendRecvCaps: SendRecvStaticCapText = {
         [EventType.Sticker]: {
             [WidgetKind.Room]: {
-                [EventDirection.Send]: _td("Send stickers to this room as you"),
-                [EventDirection.Receive]: _td("See when a sticker is posted in this room"),
+                [EventDirection.Send]: _td("widget|capability|send_stickers_this_room_as_you"),
+                [EventDirection.Receive]: _td("widget|capability|see_sticker_posted_this_room"),
             },
             [GENERIC_WIDGET_KIND]: {
-                [EventDirection.Send]: _td("Send stickers to your active room as you"),
-                [EventDirection.Receive]: _td("See when anyone posts a sticker to your active room"),
+                [EventDirection.Send]: _td("widget|capability|send_stickers_active_room_as_you"),
+                [EventDirection.Receive]: _td("widget|capability|see_sticker_posted_active_room"),
             },
         },
     };
@@ -137,8 +126,8 @@ export class CapabilityText {
     private static bylineFor(eventCap: WidgetEventCapability): TranslatedString {
         if (eventCap.kind === EventKind.State) {
             return !eventCap.keyStr
-                ? _t("with an empty state key")
-                : _t("with state key %(stateKey)s", { stateKey: eventCap.keyStr });
+                ? _t("widget|capability|byline_empty_state_key")
+                : _t("widget|capability|byline_state_key", { stateKey: eventCap.keyStr });
         }
         return null; // room messages are handled specially
     }
@@ -149,7 +138,7 @@ export class CapabilityText {
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
-            if (textForKind[kind]) return { primary: _t(textForKind[kind]) };
+            if (textForKind[kind]) return { primary: _t(textForKind[kind]!) };
             if (textForKind[GENERIC_WIDGET_KIND]) return { primary: _t(textForKind[GENERIC_WIDGET_KIND]) };
 
             // ... we'll fall through to the generic capability processing at the end of this
@@ -160,22 +149,32 @@ export class CapabilityText {
         // the timeline caps to the end for UI purposes.
         if (isTimelineCapability(capability)) {
             if (isTimelineCapabilityFor(capability, Symbols.AnyRoom)) {
-                return { primary: _t("The above, but in any room you are joined or invited to as well") };
+                return { primary: _t("widget|capability|any_room") };
             } else {
                 const roomId = getTimelineRoomIDFromCapability(capability);
-                const room = MatrixClientPeg.get().getRoom(roomId);
+                const room = MatrixClientPeg.safeGet().getRoom(roomId);
                 return {
-                    primary: _t("The above, but in <Room /> as well", {}, {
-                        Room: () => {
-                            if (room) {
-                                return <TextWithTooltip tooltip={room.getCanonicalAlias() ?? roomId}>
-                                    <b>{ room.name }</b>
-                                </TextWithTooltip>;
-                            } else {
-                                return <b><code>{ roomId }</code></b>;
-                            }
+                    primary: _t(
+                        "widget|capability|specific_room",
+                        {},
+                        {
+                            Room: () => {
+                                if (room) {
+                                    return (
+                                        <TextWithTooltip tooltip={room.getCanonicalAlias() ?? roomId}>
+                                            <b>{room.name}</b>
+                                        </TextWithTooltip>
+                                    );
+                                } else {
+                                    return (
+                                        <b>
+                                            <code>{roomId}</code>
+                                        </b>
+                                    );
+                                }
+                            },
                         },
-                    }),
+                    ),
                 };
             }
         }
@@ -193,13 +192,14 @@ export class CapabilityText {
 
             // See if we have a static line of text to provide for the given event type and
             // direction. The hope is that we do for common event types for friendlier copy.
-            const evSendRecv = eventCap.kind === EventKind.State
-                ? CapabilityText.stateSendRecvCaps
-                : CapabilityText.nonStateSendRecvCaps;
+            const evSendRecv =
+                eventCap.kind === EventKind.State
+                    ? CapabilityText.stateSendRecvCaps
+                    : CapabilityText.nonStateSendRecvCaps;
             if (evSendRecv[eventCap.eventType]) {
                 const textForKind = evSendRecv[eventCap.eventType];
-                const textForDirection = textForKind[kind] || textForKind[GENERIC_WIDGET_KIND];
-                if (textForDirection && textForDirection[eventCap.direction]) {
+                const textForDirection = textForKind?.[kind] || textForKind?.[GENERIC_WIDGET_KIND];
+                if (textForDirection?.[eventCap.direction]) {
                     return {
                         primary: _t(textForDirection[eventCap.direction]),
                         // no byline because we would have already represented the event properly
@@ -211,40 +211,57 @@ export class CapabilityText {
             if (kind === WidgetKind.Room) {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: _t("Send <b>%(eventType)s</b> events as you in this room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "widget|capability|send_event_type_this_room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 } else {
                     return {
-                        primary: _t("See <b>%(eventType)s</b> events posted to this room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "widget|capability|see_event_type_sent_this_room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 }
-            } else { // assume generic
+            } else {
+                // assume generic
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: _t("Send <b>%(eventType)s</b> events as you in your active room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "widget|capability|send_event_type_active_room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 } else {
                     return {
-                        primary: _t("See <b>%(eventType)s</b> events posted to your active room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "widget|capability|see_event_type_sent_active_room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 }
@@ -253,9 +270,13 @@ export class CapabilityText {
 
         // We don't have enough context to render this capability specially, so we'll present it as-is
         return {
-            primary: _t("The <b>%(capability)s</b> capability", { capability }, {
-                b: sub => <b>{ sub }</b>,
-            }),
+            primary: _t(
+                "widget|capability|capability",
+                { capability },
+                {
+                    b: (sub) => <b>{sub}</b>,
+                },
+            ),
         };
     }
 
@@ -264,15 +285,17 @@ export class CapabilityText {
         if (!eventCap.keyStr) {
             if (eventCap.direction === EventDirection.Send) {
                 return {
-                    primary: kind === WidgetKind.Room
-                        ? _t("Send messages as you in this room")
-                        : _t("Send messages as you in your active room"),
+                    primary:
+                        kind === WidgetKind.Room
+                            ? _t("widget|capability|send_messages_this_room")
+                            : _t("widget|capability|send_messages_active_room"),
                 };
             } else {
                 return {
-                    primary: kind === WidgetKind.Room
-                        ? _t("See messages posted to this room")
-                        : _t("See messages posted to your active room"),
+                    primary:
+                        kind === WidgetKind.Room
+                            ? _t("widget|capability|see_messages_sent_this_room")
+                            : _t("widget|capability|see_messages_sent_active_room"),
                 };
             }
         }
@@ -283,75 +306,85 @@ export class CapabilityText {
             case MsgType.Text: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send text messages as you in this room")
-                            : _t("Send text messages as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|send_text_messages_this_room")
+                                : _t("widget|capability|send_text_messages_active_room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See text messages posted to this room")
-                            : _t("See text messages posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|see_text_messages_sent_this_room")
+                                : _t("widget|capability|see_text_messages_sent_active_room"),
                     };
                 }
             }
             case MsgType.Emote: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send emotes as you in this room")
-                            : _t("Send emotes as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|send_emotes_this_room")
+                                : _t("widget|capability|send_emotes_active_room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See emotes posted to this room")
-                            : _t("See emotes posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|see_sent_emotes_this_room")
+                                : _t("widget|capability|see_sent_emotes_active_room"),
                     };
                 }
             }
             case MsgType.Image: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send images as you in this room")
-                            : _t("Send images as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|send_images_this_room")
+                                : _t("widget|capability|send_images_active_room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See images posted to this room")
-                            : _t("See images posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|see_images_sent_this_room")
+                                : _t("widget|capability|see_images_sent_active_room"),
                     };
                 }
             }
             case MsgType.Video: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send videos as you in this room")
-                            : _t("Send videos as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|send_videos_this_room")
+                                : _t("widget|capability|send_videos_active_room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See videos posted to this room")
-                            : _t("See videos posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|see_videos_sent_this_room")
+                                : _t("widget|capability|see_videos_sent_active_room"),
                     };
                 }
             }
             case MsgType.File: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send general files as you in this room")
-                            : _t("Send general files as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|send_files_this_room")
+                                : _t("widget|capability|send_files_active_room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See general files posted to this room")
-                            : _t("See general files posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("widget|capability|see_sent_files_this_room")
+                                : _t("widget|capability|see_sent_files_active_room"),
                     };
                 }
             }
@@ -359,31 +392,47 @@ export class CapabilityText {
                 let primary: TranslatedString;
                 if (eventCap.direction === EventDirection.Send) {
                     if (kind === WidgetKind.Room) {
-                        primary = _t("Send <b>%(msgtype)s</b> messages as you in this room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "widget|capability|send_msgtype_this_room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     } else {
-                        primary = _t("Send <b>%(msgtype)s</b> messages as you in your active room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "widget|capability|send_msgtype_active_room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     }
                 } else {
                     if (kind === WidgetKind.Room) {
-                        primary = _t("See <b>%(msgtype)s</b> messages posted to this room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "widget|capability|see_msgtype_sent_this_room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     } else {
-                        primary = _t("See <b>%(msgtype)s</b> messages posted to your active room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "widget|capability|see_msgtype_sent_active_room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     }
                 }
                 return { primary };

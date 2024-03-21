@@ -27,6 +27,7 @@ export type InteractionName = InteractionEvent["name"];
 
 const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.LOADING]: "Loading",
+    [Views.CONFIRM_LOCK_THEFT]: "ConfirmStartup",
     [Views.WELCOME]: "Welcome",
     [Views.LOGIN]: "Login",
     [Views.REGISTER]: "Register",
@@ -35,6 +36,7 @@ const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.COMPLETE_SECURITY]: "CompleteSecurity",
     [Views.E2E_SETUP]: "E2ESetup",
     [Views.SOFT_LOGOUT]: "SoftLogout",
+    [Views.LOCK_STOLEN]: "SessionLockStolen",
 };
 
 const loggedInPageTypeMap: Record<PageType, ScreenName> = {
@@ -54,8 +56,8 @@ export default class PosthogTrackers {
     }
 
     private view: Views = Views.LOADING;
-    private pageType?: PageType = null;
-    private override?: ScreenName = null;
+    private pageType?: PageType;
+    private override?: ScreenName;
 
     public trackPageChange(view: Views, pageType: PageType | undefined, durationMs: number): void {
         this.view = view;
@@ -65,9 +67,8 @@ export default class PosthogTrackers {
     }
 
     private trackPage(durationMs?: number): void {
-        const screenName = this.view === Views.LOGGED_IN
-            ? loggedInPageTypeMap[this.pageType]
-            : notLoggedInMap[this.view];
+        const screenName =
+            this.view === Views.LOGGED_IN ? loggedInPageTypeMap[this.pageType!] : notLoggedInMap[this.view];
         PosthogAnalytics.instance.trackEvent<ScreenEvent>({
             eventName: "$pageview",
             $current_url: screenName,
@@ -86,11 +87,11 @@ export default class PosthogTrackers {
 
     public clearOverride(screenName: ScreenName): void {
         if (screenName !== this.override) return;
-        this.override = null;
+        this.override = undefined;
         this.trackPage();
     }
 
-    public static trackInteraction(name: InteractionName, ev?: SyntheticEvent, index?: number): void {
+    public static trackInteraction(name: InteractionName, ev?: SyntheticEvent | Event, index?: number): void {
         let interactionType: InteractionEvent["interactionType"];
         if (ev?.type === "click") {
             interactionType = "Pointer";
@@ -108,20 +109,20 @@ export default class PosthogTrackers {
 }
 
 export class PosthogScreenTracker extends PureComponent<{ screenName: ScreenName }> {
-    componentDidMount() {
+    public componentDidMount(): void {
         PosthogTrackers.instance.trackOverride(this.props.screenName);
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate(): void {
         // We do not clear the old override here so that we do not send the non-override screen as a transition
         PosthogTrackers.instance.trackOverride(this.props.screenName);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         PosthogTrackers.instance.clearOverride(this.props.screenName);
     }
 
-    render() {
+    public render(): React.ReactNode {
         return null; // no need to render anything, we just need to hook into the React lifecycle
     }
 }

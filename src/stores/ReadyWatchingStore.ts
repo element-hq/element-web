@@ -14,70 +14,70 @@
  * limitations under the License.
  */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { SyncState } from "matrix-js-sdk/src/sync";
-import { Dispatcher } from "flux";
+import { MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ActionPayload } from "../dispatcher/payloads";
 import { IDestroyable } from "../utils/IDestroyable";
 import { Action } from "../dispatcher/actions";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
-    protected matrixClient: MatrixClient;
+    protected matrixClient: MatrixClient | null = null;
     private dispatcherRef: string | null = null;
 
-    constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
+    public constructor(protected readonly dispatcher: MatrixDispatcher) {
         super();
     }
 
     public async start(): Promise<void> {
         this.dispatcherRef = this.dispatcher.register(this.onAction);
 
-        const matrixClient = MatrixClientPeg.get();
+        // MatrixClientPeg can be undefined in tests because of circular dependencies with other stores
+        const matrixClient = MatrixClientPeg?.get();
         if (matrixClient) {
             this.matrixClient = matrixClient;
             await this.onReady();
         }
     }
 
-    public get mxClient(): MatrixClient {
+    public get mxClient(): MatrixClient | null {
         return this.matrixClient; // for external readonly access
     }
 
-    public useUnitTestClient(cli: MatrixClient) {
+    public useUnitTestClient(cli: MatrixClient): void {
         this.matrixClient = cli;
     }
 
-    public destroy() {
+    public destroy(): void {
         if (this.dispatcherRef !== null) this.dispatcher.unregister(this.dispatcherRef);
     }
 
-    protected async onReady() {
+    protected async onReady(): Promise<void> {
         // Default implementation is to do nothing.
     }
 
-    protected async onNotReady() {
+    protected async onNotReady(): Promise<void> {
         // Default implementation is to do nothing.
     }
 
-    protected onDispatcherAction(payload: ActionPayload) {
+    protected onDispatcherAction(payload: ActionPayload): void {
         // Default implementation is to do nothing.
     }
 
-    private onAction = async (payload: ActionPayload) => {
+    private onAction = async (payload: ActionPayload): Promise<void> => {
         this.onDispatcherAction(payload);
 
-        if (payload.action === 'MatrixActions.sync') {
+        if (payload.action === "MatrixActions.sync") {
             // Only set the client on the transition into the PREPARED state.
             // Everything after this is unnecessary (we only need to know once we have a client)
             // and we intentionally don't set the client before this point to avoid stores
             // updating for every event emitted during the cached sync.
             if (
-                payload.prevState !== SyncState.Prepared
-                && payload.state === SyncState.Prepared
-                && this.matrixClient !== payload.matrixClient
+                payload.prevState !== SyncState.Prepared &&
+                payload.state === SyncState.Prepared &&
+                this.matrixClient !== payload.matrixClient
             ) {
                 if (this.matrixClient) {
                     await this.onNotReady();
@@ -85,7 +85,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
                 this.matrixClient = payload.matrixClient;
                 await this.onReady();
             }
-        } else if (payload.action === 'on_client_not_viable' || payload.action === Action.OnLoggedOut) {
+        } else if (payload.action === "on_client_not_viable" || payload.action === Action.OnLoggedOut) {
             if (this.matrixClient) {
                 await this.onNotReady();
                 this.matrixClient = null;

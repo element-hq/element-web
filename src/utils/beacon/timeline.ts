@@ -14,18 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
+import { MatrixEvent, M_BEACON_INFO } from "matrix-js-sdk/src/matrix";
 
 /**
  * beacon_info events without live property set to true
  * should be displayed in the timeline
  */
-export const shouldDisplayAsBeaconTile = (event: MatrixEvent): boolean => (
+export const shouldDisplayAsBeaconTile = (event: MatrixEvent): boolean =>
     M_BEACON_INFO.matches(event.getType()) &&
-    (
-        event.getContent()?.live ||
+    (event.getContent()?.live ||
         // redacted beacons should show 'message deleted' tile
-        event.isRedacted()
-    )
-);
+        event.isRedacted());

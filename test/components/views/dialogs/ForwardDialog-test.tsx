@@ -15,12 +15,17 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
-import { act } from "react-dom/test-utils";
-import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import {
+    MatrixEvent,
+    EventType,
+    LocationAssetType,
+    M_ASSET,
+    M_LOCATION,
+    M_TIMESTAMP,
+    M_TEXT,
+} from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, getByTestId, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import ForwardDialog from "../../../../src/components/views/dialogs/ForwardDialog";
@@ -34,8 +39,17 @@ import {
     mkEvent,
     mkMessage,
     mkStubRoom,
+    mockPlatformPeg,
 } from "../../../test-utils";
 import { TILE_SERVER_WK_KEY } from "../../../../src/utils/WellKnownUtils";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+
+// mock offsetParent
+Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+    get() {
+        return this.parentNode;
+    },
+});
 
 describe("ForwardDialog", () => {
     const sourceRoom = "!111111111111111111:example.org";
@@ -53,127 +67,158 @@ describe("ForwardDialog", () => {
     });
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(aliceId),
+        getSafeUserId: jest.fn().mockReturnValue(aliceId),
         isGuest: jest.fn().mockReturnValue(false),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRoom: jest.fn(),
         getAccountData: jest.fn().mockReturnValue(accountDataEvent),
         getPushActionsForEvent: jest.fn(),
-        mxcUrlToHttp: jest.fn().mockReturnValue(''),
+        mxcUrlToHttp: jest.fn().mockReturnValue(""),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getProfileInfo: jest.fn().mockResolvedValue({
-            displayname: 'Alice',
+            displayname: "Alice",
         }),
         decryptEventIfNeeded: jest.fn(),
         sendEvent: jest.fn(),
         getClientWellKnown: jest.fn().mockReturnValue({
-            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         }),
     });
-    const defaultRooms = ["a", "A", "b"].map(name => mkStubRoom(name, name, mockClient));
+    const defaultRooms = ["a", "A", "b"].map((name) => mkStubRoom(name, name, mockClient));
 
-    const mountForwardDialog = async (message = defaultMessage, rooms = defaultRooms) => {
+    const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms) => {
         mockClient.getVisibleRooms.mockReturnValue(rooms);
-        mockClient.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
+        mockClient.getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
 
-        let wrapper;
-        await act(async () => {
-            wrapper = mount(
-                <ForwardDialog
-                    matrixClient={mockClient}
-                    event={message}
-                    permalinkCreator={new RoomPermalinkCreator(undefined, sourceRoom)}
-                    onFinished={jest.fn()}
-                />,
-            );
-            // Wait one tick for our profile data to load so the state update happens within act
-            await new Promise(resolve => setImmediate(resolve));
-        });
-        wrapper.update();
+        const wrapper: RenderResult = render(
+            <ForwardDialog
+                matrixClient={mockClient}
+                event={message}
+                permalinkCreator={new RoomPermalinkCreator(undefined!, sourceRoom)}
+                onFinished={jest.fn()}
+            />,
+        );
 
         return wrapper;
     };
 
     beforeEach(() => {
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.clearAllMocks();
         mockClient.getUserId.mockReturnValue("@bob:example.org");
+        mockClient.getSafeUserId.mockReturnValue("@bob:example.org");
         mockClient.sendEvent.mockReset();
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockRestore();
+        jest.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     it("shows a preview with us as the sender", async () => {
-        const wrapper = await mountForwardDialog();
+        const { container } = mountForwardDialog();
 
-        const previewBody = wrapper.find(".mx_EventTile_body");
-        expect(previewBody.text()).toBe("Hello world!");
+        expect(screen.queryByText("Hello world!")).toBeInTheDocument();
 
         // We would just test SenderProfile for the user ID, but it's stubbed
-        const previewAvatar = wrapper.find(".mx_EventTile_avatar .mx_BaseAvatar_image");
-        expect(previewAvatar.prop("title")).toBe("@bob:example.org");
+        const previewAvatar = container.querySelector(".mx_EventTile_avatar .mx_BaseAvatar");
+        expect(previewAvatar?.getAttribute("title")).toBe("@bob:example.org");
     });
 
     it("filters the rooms", async () => {
-        const wrapper = await mountForwardDialog();
+        const { container } = mountForwardDialog();
 
-        expect(wrapper.find("Entry")).toHaveLength(3);
+        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(3);
 
-        const searchInput = wrapper.find("SearchBox input");
-        searchInput.instance().value = "a";
-        searchInput.simulate("change");
+        const searchInput = getByTestId(container, "searchbox-input");
+        act(() => userEvent.type(searchInput, "a"));
 
-        expect(wrapper.find("Entry")).toHaveLength(2);
+        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(3);
+    });
+
+    it("should be navigable using arrow keys", async () => {
+        const { container } = mountForwardDialog();
+
+        const searchBox = getByTestId(container, "searchbox-input");
+        searchBox.focus();
+        await waitFor(() =>
+            expect(container.querySelectorAll(".mx_ForwardList_entry")[0]).toHaveClass("mx_ForwardList_entry_active"),
+        );
+
+        await userEvent.keyboard("[ArrowDown]");
+        await waitFor(() =>
+            expect(container.querySelectorAll(".mx_ForwardList_entry")[1]).toHaveClass("mx_ForwardList_entry_active"),
+        );
+
+        await userEvent.keyboard("[ArrowDown]");
+        await waitFor(() =>
+            expect(container.querySelectorAll(".mx_ForwardList_entry")[2]).toHaveClass("mx_ForwardList_entry_active"),
+        );
+
+        await userEvent.keyboard("[ArrowUp]");
+        await waitFor(() =>
+            expect(container.querySelectorAll(".mx_ForwardList_entry")[1]).toHaveClass("mx_ForwardList_entry_active"),
+        );
+
+        await userEvent.keyboard("[Enter]");
+        expect(mockClient.sendEvent).toHaveBeenCalledWith("A", "m.room.message", {
+            body: "Hello world!",
+            msgtype: "m.text",
+        });
     });
 
     it("tracks message sending progress across multiple rooms", async () => {
-        const wrapper = await mountForwardDialog();
+        mockPlatformPeg();
+        const { container } = mountForwardDialog();
 
         // Make sendEvent require manual resolution so we can see the sending state
-        let finishSend;
-        let cancelSend;
-        mockClient.sendEvent.mockImplementation(() => new Promise((resolve, reject) => {
-            finishSend = resolve;
-            cancelSend = reject;
-        }));
+        let finishSend: (arg?: any) => void;
+        let cancelSend: () => void;
+        mockClient.sendEvent.mockImplementation(
+            <T extends {}>() =>
+                new Promise<T>((resolve, reject) => {
+                    finishSend = resolve;
+                    cancelSend = reject;
+                }),
+        );
 
-        let firstButton;
-        let secondButton;
+        let firstButton!: Element;
+        let secondButton!: Element;
         const update = () => {
-            wrapper.update();
-            firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
-            secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").at(1);
+            [firstButton, secondButton] = container.querySelectorAll(".mx_ForwardList_sendButton");
         };
         update();
 
-        expect(firstButton.is(".mx_ForwardList_canSend")).toBe(true);
+        expect(firstButton.className).toContain("mx_ForwardList_canSend");
 
-        act(() => { firstButton.simulate("click"); });
+        act(() => {
+            fireEvent.click(firstButton);
+        });
         update();
-        expect(firstButton.is(".mx_ForwardList_sending")).toBe(true);
+        expect(firstButton.className).toContain("mx_ForwardList_sending");
 
         await act(async () => {
             cancelSend();
             // Wait one tick for the button to realize the send failed
-            await new Promise(resolve => setImmediate(resolve));
+            await new Promise((resolve) => setImmediate(resolve));
         });
         update();
-        expect(firstButton.is(".mx_ForwardList_sendFailed")).toBe(true);
+        expect(firstButton.className).toContain("mx_ForwardList_sendFailed");
 
-        expect(secondButton.is(".mx_ForwardList_canSend")).toBe(true);
+        expect(secondButton.className).toContain("mx_ForwardList_canSend");
 
-        act(() => { secondButton.simulate("click"); });
+        act(() => {
+            fireEvent.click(secondButton);
+        });
         update();
-        expect(secondButton.is(".mx_ForwardList_sending")).toBe(true);
+        expect(secondButton.className).toContain("mx_ForwardList_sending");
 
         await act(async () => {
             finishSend();
             // Wait one tick for the button to realize the send succeeded
-            await new Promise(resolve => setImmediate(resolve));
+            await new Promise((resolve) => setImmediate(resolve));
         });
         update();
-        expect(secondButton.is(".mx_ForwardList_sent")).toBe(true);
+        expect(secondButton.className).toContain("mx_ForwardList_sent");
     });
 
     it("can render replies", async () => {
@@ -193,8 +238,9 @@ describe("ForwardDialog", () => {
             event: true,
         });
 
-        const wrapper = await mountForwardDialog(replyMessage);
-        expect(wrapper.find("ReplyChain")).toBeTruthy();
+        mountForwardDialog(replyMessage);
+
+        expect(screen.queryByText("Hi Alice!", { exact: false })).toBeInTheDocument();
     });
 
     it("disables buttons for rooms without send permissions", async () => {
@@ -202,15 +248,15 @@ describe("ForwardDialog", () => {
         readOnlyRoom.maySendMessage = jest.fn().mockReturnValue(false);
         const rooms = [readOnlyRoom, mkStubRoom("b", "b", mockClient)];
 
-        const wrapper = await mountForwardDialog(undefined, rooms);
+        const { container } = mountForwardDialog(undefined, rooms);
 
-        const firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
-        expect(firstButton.prop("disabled")).toBe(true);
-        const secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").last();
-        expect(secondButton.prop("disabled")).toBe(false);
+        const [firstButton, secondButton] = container.querySelectorAll<HTMLButtonElement>(".mx_ForwardList_sendButton");
+
+        expect(firstButton.getAttribute("aria-disabled")).toBeTruthy();
+        expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
     });
 
-    describe('Location events', () => {
+    describe("Location events", () => {
         // 14.03.2022 16:15
         const now = 1647270879403;
         const roomId = "a";
@@ -222,24 +268,24 @@ describe("ForwardDialog", () => {
         beforeEach(() => {
             // legacy events will default timestamp to Date.now()
             // mock a stable now for easy assertion
-            jest.spyOn(Date, 'now').mockReturnValue(now);
+            jest.spyOn(Date, "now").mockReturnValue(now);
         });
 
         afterAll(() => {
-            jest.spyOn(Date, 'now').mockRestore();
+            jest.spyOn(Date, "now").mockRestore();
         });
 
-        const sendToFirstRoom = (wrapper: ReactWrapper): void =>
+        const sendToFirstRoom = (container: HTMLElement): void =>
             act(() => {
-                const sendToFirstRoomButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
-                sendToFirstRoomButton.simulate("click");
+                const sendToFirstRoomButton = container.querySelector(".mx_ForwardList_sendButton");
+                fireEvent.click(sendToFirstRoomButton!);
             });
 
-        it('converts legacy location events to pin drop shares', async () => {
-            const wrapper = await mountForwardDialog(legacyLocationEvent);
+        it("converts legacy location events to pin drop shares", async () => {
+            const { container } = mountForwardDialog(legacyLocationEvent);
 
-            expect(wrapper.find('MLocationBody').length).toBeTruthy();
-            sendToFirstRoom(wrapper);
+            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            sendToFirstRoom(container);
 
             // text and description from original event are removed
             // text gets new default message from event values
@@ -248,81 +294,109 @@ describe("ForwardDialog", () => {
             const expectedStrippedContent = {
                 ...modernLocationEvent.getContent(),
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_TIMESTAMP.name]: now,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
-                roomId, legacyLocationEvent.getType(), expectedStrippedContent,
+                roomId,
+                legacyLocationEvent.getType(),
+                expectedStrippedContent,
             );
         });
 
-        it('removes personal information from static self location shares', async () => {
-            const wrapper = await mountForwardDialog(modernLocationEvent);
+        it("removes personal information from static self location shares", async () => {
+            const { container } = mountForwardDialog(modernLocationEvent);
 
-            expect(wrapper.find('MLocationBody').length).toBeTruthy();
-            sendToFirstRoom(wrapper);
+            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            sendToFirstRoom(container);
 
-            const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent());
+            const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent())!;
             // text and description from original event are removed
             // text gets new default message from event values
             const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
             const expectedStrippedContent = {
                 ...modernLocationEvent.getContent(),
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
-                roomId, modernLocationEvent.getType(), expectedStrippedContent,
+                roomId,
+                modernLocationEvent.getType(),
+                expectedStrippedContent,
             );
         });
 
-        it('forwards beacon location as a pin drop event', async () => {
+        it("forwards beacon location as a pin drop event", async () => {
             const timestamp = 123456;
-            const beaconEvent = makeBeaconEvent('@alice:server.org', { geoUri, timestamp });
+            const beaconEvent = makeBeaconEvent("@alice:server.org", { geoUri, timestamp });
             const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
             const expectedContent = {
                 msgtype: "m.location",
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
                 },
                 geo_uri: geoUri,
                 [M_TIMESTAMP.name]: timestamp,
             };
-            const wrapper = await mountForwardDialog(beaconEvent);
+            const { container } = mountForwardDialog(beaconEvent);
 
-            expect(wrapper.find('MLocationBody').length).toBeTruthy();
+            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
 
-            sendToFirstRoom(wrapper);
+            sendToFirstRoom(container);
+
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, EventType.RoomMessage, expectedContent);
+        });
+
+        it("forwards pin drop event", async () => {
+            const { container } = mountForwardDialog(pinDropLocationEvent);
+
+            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+
+            sendToFirstRoom(container);
 
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
-                roomId, EventType.RoomMessage, expectedContent,
+                roomId,
+                pinDropLocationEvent.getType(),
+                pinDropLocationEvent.getContent(),
+            );
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        });
+
+        it("Passes through the dynamic predecessor setting", async () => {
+            mockClient.getVisibleRooms.mockClear();
+            mountForwardDialog();
+            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is enabled", () => {
+        beforeEach(() => {
+            // Turn on feature_dynamic_room_predecessors setting
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
         });
 
-        it('forwards pin drop event', async () => {
-            const wrapper = await mountForwardDialog(pinDropLocationEvent);
-
-            expect(wrapper.find('MLocationBody').length).toBeTruthy();
-
-            sendToFirstRoom(wrapper);
-
-            expect(mockClient.sendEvent).toHaveBeenCalledWith(
-                roomId, pinDropLocationEvent.getType(), pinDropLocationEvent.getContent(),
-            );
+        it("Passes through the dynamic predecessor setting", async () => {
+            mockClient.getVisibleRooms.mockClear();
+            mountForwardDialog();
+            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 });

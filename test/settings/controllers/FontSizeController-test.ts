@@ -19,17 +19,14 @@ import dis from "../../../src/dispatcher/dispatcher";
 import FontSizeController from "../../../src/settings/controllers/FontSizeController";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
-const dispatchSpy = jest.spyOn(dis, 'dispatch');
+const dispatchSpy = jest.spyOn(dis, "fire");
 
-describe('FontSizeController', () => {
-    it('dispatches a font size action on change', () => {
+describe("FontSizeController", () => {
+    it("dispatches a font size action on change", () => {
         const controller = new FontSizeController();
 
-        controller.onChange(SettingLevel.ACCOUNT, '$room:server', 12);
+        controller.onChange(SettingLevel.ACCOUNT, "$room:server", 12);
 
-        expect(dispatchSpy).toHaveBeenCalledWith({
-            action: Action.UpdateFontSize,
-            size: 12,
-        });
+        expect(dispatchSpy).toHaveBeenCalledWith(Action.MigrateBaseFontSize);
     });
 });

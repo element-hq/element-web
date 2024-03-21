@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import {
     hasRoomLiveVoiceBroadcast,
@@ -26,57 +27,62 @@ import { mkVoiceBroadcastInfoStateEvent } from "./test-utils";
 
 describe("hasRoomLiveVoiceBroadcast", () => {
     const otherUserId = "@other:example.com";
+    const otherDeviceId = "ASD123";
     const roomId = "!room:example.com";
     let client: MatrixClient;
     let room: Room;
+    let expectedEvent: MatrixEvent | null = null;
 
     const addVoiceBroadcastInfoEvent = (
         state: VoiceBroadcastInfoState,
-        sender: string,
-    ) => {
-        room.currentState.setStateEvents([
-            mkVoiceBroadcastInfoStateEvent(
-                room.roomId,
-                state,
-                sender,
-                "ASD123",
-            ),
-        ]);
+        userId: string,
+        deviceId: string,
+        startedEvent?: MatrixEvent,
+    ): MatrixEvent => {
+        const infoEvent = mkVoiceBroadcastInfoStateEvent(room.roomId, state, userId, deviceId, startedEvent);
+        room.addLiveEvents([infoEvent]);
+        room.currentState.setStateEvents([infoEvent]);
+        room.relations.aggregateChildEvent(infoEvent);
+        return infoEvent;
     };
 
     const itShouldReturnTrueTrue = () => {
-        it("should return true/true", () => {
-            expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
+        it("should return true/true", async () => {
+            expect(await hasRoomLiveVoiceBroadcast(client, room, client.getSafeUserId())).toEqual({
                 hasBroadcast: true,
+                infoEvent: expectedEvent,
                 startedByUser: true,
             });
         });
     };
 
     const itShouldReturnTrueFalse = () => {
-        it("should return true/false", () => {
-            expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
+        it("should return true/false", async () => {
+            expect(await hasRoomLiveVoiceBroadcast(client, room, client.getSafeUserId())).toEqual({
                 hasBroadcast: true,
+                infoEvent: expectedEvent,
                 startedByUser: false,
             });
         });
     };
 
     const itShouldReturnFalseFalse = () => {
-        it("should return false/false", () => {
-            expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
+        it("should return false/false", async () => {
+            expect(await hasRoomLiveVoiceBroadcast(client, room, client.getSafeUserId())).toEqual({
                 hasBroadcast: false,
+                infoEvent: null,
                 startedByUser: false,
             });
         });
     };
 
-    beforeAll(() => {
-        client = stubClient();
-    });
-
     beforeEach(() => {
-        room = new Room(roomId, client, client.getUserId());
+        client = stubClient();
+        room = new Room(roomId, client, client.getSafeUserId());
+        mocked(client.getRoom).mockImplementation((roomId: string): Room | null => {
+            return roomId === room.roomId ? room : null;
+        });
+        expectedEvent = null;
     });
 
     describe("when there is no voice broadcast info at all", () => {
@@ -89,9 +95,9 @@ describe("hasRoomLiveVoiceBroadcast", () => {
                 mkEvent({
                     event: true,
                     room: room.roomId,
-                    user: client.getUserId(),
+                    user: client.getSafeUserId(),
                     type: VoiceBroadcastInfoEventType,
-                    skey: client.getUserId(),
+                    skey: client.getSafeUserId(),
                     content: {},
                 }),
             ]);
@@ -101,8 +107,12 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there is a live broadcast from the current and another user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, client.getUserId());
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, otherUserId);
+            expectedEvent = addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Started,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+            );
+            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, otherUserId, otherDeviceId);
         });
 
         itShouldReturnTrueTrue();
@@ -110,21 +120,56 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there are only stopped info events", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, client.getUserId());
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, otherUserId);
+            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, client.getSafeUserId(), client.getDeviceId()!);
+            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, otherUserId, otherDeviceId);
         });
 
         itShouldReturnFalseFalse();
     });
 
-    describe.each([
-        // all there are kind of live states
-        VoiceBroadcastInfoState.Started,
-        VoiceBroadcastInfoState.Paused,
-        VoiceBroadcastInfoState.Resumed,
-    ])("when there is a live broadcast (%s) from the current user", (state: VoiceBroadcastInfoState) => {
+    describe("when there is a live, started broadcast from the current user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(state, client.getUserId());
+            expectedEvent = addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Started,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+            );
+        });
+
+        itShouldReturnTrueTrue();
+    });
+
+    describe("when there is a live, paused broadcast from the current user", () => {
+        beforeEach(() => {
+            expectedEvent = addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Started,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+            );
+            addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Paused,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+                expectedEvent,
+            );
+        });
+
+        itShouldReturnTrueTrue();
+    });
+
+    describe("when there is a live, resumed broadcast from the current user", () => {
+        beforeEach(() => {
+            expectedEvent = addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Started,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+            );
+            addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Resumed,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+                expectedEvent,
+            );
         });
 
         itShouldReturnTrueTrue();
@@ -132,8 +177,17 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there was a live broadcast, that has been stopped", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, client.getUserId());
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, client.getUserId());
+            const startedEvent = addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Started,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+            );
+            addVoiceBroadcastInfoEvent(
+                VoiceBroadcastInfoState.Stopped,
+                client.getSafeUserId(),
+                client.getDeviceId()!,
+                startedEvent,
+            );
         });
 
         itShouldReturnFalseFalse();
@@ -141,7 +195,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there is a live broadcast from another user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, otherUserId);
+            expectedEvent = addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, otherUserId, otherDeviceId);
         });
 
         itShouldReturnTrueFalse();

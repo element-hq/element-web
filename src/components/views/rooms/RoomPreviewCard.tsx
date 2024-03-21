@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, useContext, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -54,7 +53,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const isVideoRoom = room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom());
     const myMembership = useMyRoomMembership(room);
-    useDispatcher(defaultDispatcher, payload => {
+    useDispatcher(defaultDispatcher, (payload) => {
         if (payload.action === Action.JoinRoomError && payload.roomId === room.roomId) {
             setBusy(false); // stop the spinner, join failed
         }
@@ -62,14 +61,15 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
     const [busy, setBusy] = useState(false);
 
-    const joinRule = useRoomState(room, state => state.getJoinRule());
-    const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
-        && joinRule !== JoinRule.Public;
+    const joinRule = useRoomState(room, (state) => state.getJoinRule());
+    const cannotJoin =
+        getEffectiveMembership(myMembership) === EffectiveMembership.Leave && joinRule !== JoinRule.Public;
 
-    const viewLabs = () => defaultDispatcher.dispatch({
-        action: Action.ViewUserSettings,
-        initialTabId: UserTab.Labs,
-    });
+    const viewLabs = (): void =>
+        defaultDispatcher.dispatch({
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Labs,
+        });
 
     let inviterSection: JSX.Element | null = null;
     let joinButtons: JSX.Element;
@@ -84,7 +84,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                     });
                 }}
             >
-                { _t("Leave") }
+                {_t("action|leave")}
             </AccessibleButton>
         );
     } else if (myMembership === "invite") {
@@ -93,41 +93,47 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         if (inviteSender) {
             const inviter = room.getMember(inviteSender);
 
-            inviterSection = <div className="mx_RoomPreviewCard_inviter">
-                <MemberAvatar member={inviter} fallbackUserId={inviteSender} width={32} height={32} />
-                <div>
-                    <div className="mx_RoomPreviewCard_inviter_name">
-                        { _t("<inviter/> invites you", {}, {
-                            inviter: () => <b>{ inviter?.name || inviteSender }</b>,
-                        }) }
+            inviterSection = (
+                <div className="mx_RoomPreviewCard_inviter">
+                    <MemberAvatar member={inviter} fallbackUserId={inviteSender} size="32px" />
+                    <div>
+                        <div className="mx_RoomPreviewCard_inviter_name">
+                            {_t(
+                                "room|invites_you_text",
+                                {},
+                                {
+                                    inviter: () => <b>{inviter?.name || inviteSender}</b>,
+                                },
+                            )}
+                        </div>
+                        {inviter ? <div className="mx_RoomPreviewCard_inviter_mxid">{inviteSender}</div> : null}
                     </div>
-                    { inviter ? <div className="mx_RoomPreviewCard_inviter_mxid">
-                        { inviteSender }
-                    </div> : null }
                 </div>
-            </div>;
+            );
         }
 
-        joinButtons = <>
-            <AccessibleButton
-                kind="secondary"
-                onClick={() => {
-                    setBusy(true);
-                    onRejectButtonClicked();
-                }}
-            >
-                { _t("Reject") }
-            </AccessibleButton>
-            <AccessibleButton
-                kind="primary"
-                onClick={() => {
-                    setBusy(true);
-                    onJoinButtonClicked();
-                }}
-            >
-                { _t("Accept") }
-            </AccessibleButton>
-        </>;
+        joinButtons = (
+            <>
+                <AccessibleButton
+                    kind="primary_outline"
+                    onClick={() => {
+                        setBusy(true);
+                        onRejectButtonClicked();
+                    }}
+                >
+                    {_t("action|reject")}
+                </AccessibleButton>
+                <AccessibleButton
+                    kind="primary"
+                    onClick={() => {
+                        setBusy(true);
+                        onJoinButtonClicked();
+                    }}
+                >
+                    {_t("action|accept")}
+                </AccessibleButton>
+            </>
+        );
     } else {
         joinButtons = (
             <AccessibleButton
@@ -141,7 +147,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                 }}
                 disabled={cannotJoin}
             >
-                { _t("Join") }
+                {_t("action|join")}
             </AccessibleButton>
         );
     }
@@ -152,50 +158,51 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
     let avatarRow: JSX.Element;
     if (isVideoRoom) {
-        avatarRow = <>
-            <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />
-            <div className="mx_RoomPreviewCard_video" />
-            <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
-        </>;
+        avatarRow = (
+            <>
+                <RoomAvatar room={room} size="50px" viewAvatarOnClick />
+                <div className="mx_RoomPreviewCard_video" />
+                <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
+            </>
+        );
     } else if (room.isSpaceRoom()) {
-        avatarRow = <RoomAvatar room={room} height={80} width={80} viewAvatarOnClick />;
+        avatarRow = <RoomAvatar room={room} size="80px" viewAvatarOnClick />;
     } else {
-        avatarRow = <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />;
+        avatarRow = <RoomAvatar room={room} size="50px" viewAvatarOnClick />;
     }
 
     let notice: string | null = null;
     if (cannotJoin) {
-        notice = _t("To view %(roomName)s, you need an invite", {
+        notice = _t("room|join_failed_needs_invite", {
             roomName: room.name,
         });
     } else if (isVideoRoom && !videoRoomsEnabled) {
-        notice = myMembership === "join"
-            ? _t("To view, please enable video rooms in Labs first")
-            : _t("To join, please enable video rooms in Labs first");
+        notice =
+            myMembership === "join"
+                ? _t("room|view_failed_enable_video_rooms")
+                : _t("room|join_failed_enable_video_rooms");
 
-        joinButtons = <AccessibleButton kind="primary" onClick={viewLabs}>
-            { _t("Show Labs settings") }
-        </AccessibleButton>;
+        joinButtons = (
+            <AccessibleButton kind="primary" onClick={viewLabs}>
+                {_t("room|show_labs_settings")}
+            </AccessibleButton>
+        );
     }
 
-    return <div className="mx_RoomPreviewCard">
-        { inviterSection }
-        <div className="mx_RoomPreviewCard_avatar">
-            { avatarRow }
+    return (
+        <div className="mx_RoomPreviewCard">
+            {inviterSection}
+            <div className="mx_RoomPreviewCard_avatar">{avatarRow}</div>
+            <h1 className="mx_RoomPreviewCard_name">
+                <RoomName room={room} />
+            </h1>
+            <RoomInfoLine room={room} />
+            <RoomTopic room={room} className="mx_RoomPreviewCard_topic" />
+            {room.getJoinRule() === "public" && <RoomFacePile room={room} />}
+            {notice ? <div className="mx_RoomPreviewCard_notice">{notice}</div> : null}
+            <div className="mx_RoomPreviewCard_joinButtons">{joinButtons}</div>
         </div>
-        <h1 className="mx_RoomPreviewCard_name">
-            <RoomName room={room} />
-        </h1>
-        <RoomInfoLine room={room} />
-        <RoomTopic room={room} className="mx_RoomPreviewCard_topic" />
-        { room.getJoinRule() === "public" && <RoomFacePile room={room} /> }
-        { notice ? <div className="mx_RoomPreviewCard_notice">
-            { notice }
-        </div> : null }
-        <div className="mx_RoomPreviewCard_joinButtons">
-            { joinButtons }
-        </div>
-    </div>;
+    );
 };
 
 export default RoomPreviewCard;

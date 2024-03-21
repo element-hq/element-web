@@ -28,7 +28,7 @@ export class SpaceWatcher {
     private activeSpace: SpaceKey = SpaceStore.instance.activeSpace;
     private allRoomsInHome: boolean = SpaceStore.instance.allRoomsInHome;
 
-    constructor(private store: Interface) {
+    public constructor(private store: Interface) {
         if (SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome)) {
             this.updateFilter();
             store.addFilter(this.filter);
@@ -41,7 +41,7 @@ export class SpaceWatcher {
         return !(spaceKey === MetaSpace.Home && allRoomsInHome);
     }
 
-    private onSelectedSpaceUpdated = (activeSpace: SpaceKey, allRoomsInHome = this.allRoomsInHome) => {
+    private onSelectedSpaceUpdated = (activeSpace: SpaceKey, allRoomsInHome = this.allRoomsInHome): void => {
         if (activeSpace === this.activeSpace && allRoomsInHome === this.allRoomsInHome) return; // nop
 
         const neededFilter = SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome);
@@ -61,11 +61,11 @@ export class SpaceWatcher {
         }
     };
 
-    private onHomeBehaviourUpdated = (allRoomsInHome: boolean) => {
+    private onHomeBehaviourUpdated = (allRoomsInHome: boolean): void => {
         this.onSelectedSpaceUpdated(this.activeSpace, allRoomsInHome);
     };
 
-    private updateFilter = () => {
+    private updateFilter = (): void => {
         this.filter.updateSpace(this.activeSpace);
     };
 }

@@ -39,18 +39,18 @@ limitations under the License.
     position: absolute;
     top: calc(50% - 8px); /* center */
     right: -8px;
-    mask: url('$(res)/img/member_chevron.png');
+    mask: url("$(res)/img/member_chevron.png");
     mask-repeat: no-repeat;
     width: 16px;
     height: 16px;
     background-color: $header-panel-text-primary-color;
 }
 
-.mx_EntityTile .mx_PresenceLabel {
+.mx_EntityTile:not(.mx_EntityTile_unreachable) .mx_PresenceLabel {
     display: none;
 }
 
-.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_PresenceLabel {
+.mx_EntityTile:hover .mx_PresenceLabel {
     display: block;
 }
 
@@ -67,12 +67,13 @@ limitations under the License.
     padding-top: 4px;
     padding-bottom: 4px;
     position: relative;
+    line-height: 0;
 }
 
 .mx_EntityTile_name {
     flex: 1 1 0;
     overflow: hidden;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -105,7 +106,9 @@ limitations under the License.
 }
 
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
-.mx_EntityTile_unknown .mx_EntityTile_name {
+.mx_EntityTile_unknown .mx_EntityTile_name,
+.mx_EntityTile_unreachable .mx_EntityTile_avatar,
+.mx_EntityTile_unreachable .mx_EntityTile_name {
     opacity: 0.25;
 }
 
@@ -120,7 +123,7 @@ limitations under the License.
 .mx_EntityTile_power {
     padding-inline-start: 6px;
     font-size: $font-10px;
-    color: $tertiary-content;
+    color: $secondary-content;
     max-width: 6em;
     overflow: hidden;
     text-overflow: ellipsis;

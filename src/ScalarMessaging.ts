@@ -264,20 +264,45 @@ Get an openID token for the current user session.
 Request: No parameters
 Response:
  - The openId token object as described in https://spec.matrix.org/v1.2/client-server-api/#post_matrixclientv3useruseridopenidrequest_token
+
+send_event
+----------
+Sends an event in a room.
+
+Request:
+ - type is the event type to send.
+ - state_key is the state key to send. Omitted if not a state event.
+ - content is the event content to send.
+
+Response:
+ - room_id is the room ID where the event was sent.
+ - event_id is the event ID of the event which was sent.
+
+read_events
+-----------
+Read events from a room.
+
+Request:
+ - type is the event type to read.
+ - state_key is the state key to read, or `true` to read all events of the type. Omitted if not a state event.
+
+Response:
+ - events: Array of events. If none found, this will be an empty array.
+
 */
 
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import dis from './dispatcher/dispatcher';
-import WidgetUtils from './utils/WidgetUtils';
-import { _t } from './languageHandler';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import dis from "./dispatcher/dispatcher";
+import WidgetUtils from "./utils/WidgetUtils";
+import { _t } from "./languageHandler";
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
 import { objectClone } from "./utils/objects";
-import { EffectiveMembership, getEffectiveMembership } from './utils/membership';
-import { SdkContextClass } from './contexts/SDKContext';
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
+import { SdkContextClass } from "./contexts/SDKContext";
 
 enum Action {
     CloseScalar = "close_scalar",
@@ -294,7 +319,9 @@ enum Action {
     BotOptions = "bot_options",
     SetBotOptions = "set_bot_options",
     SetBotPower = "set_bot_power",
-    GetOpenIdToken = "get_open_id_token"
+    GetOpenIdToken = "get_open_id_token",
+    SendEvent = "send_event",
+    ReadEvents = "read_events",
 }
 
 function sendResponse(event: MessageEvent<any>, res: any): void {
@@ -323,14 +350,14 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     logger.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (room) {
         // if they are already invited or joined we can resolve immediately.
         const member = room.getMember(userId);
-        if (member && ["join", "invite"].includes(member.membership)) {
+        if (member && ["join", "invite"].includes(member.membership!)) {
             sendResponse(event, {
                 success: true,
             });
@@ -338,27 +365,30 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
         }
     }
 
-    client.invite(roomId, userId).then(function() {
-        sendResponse(event, {
-            success: true,
-        });
-    }, function(err) {
-        sendError(event, _t('You need to be able to invite users to do that.'), err);
-    });
+    client.invite(roomId, userId).then(
+        function () {
+            sendResponse(event, {
+                success: true,
+            });
+        },
+        function (err) {
+            sendError(event, _t("widget|error_need_invite_permission"), err);
+        },
+    );
 }
 
 function kickUser(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`Received request to kick ${userId} from room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t("You need to be logged in."));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (room) {
         // if they are already not in the room we can resolve immediately.
         const member = room.getMember(userId);
-        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+        if (!member || getEffectiveMembership(member.membership!) === EffectiveMembership.Leave) {
             sendResponse(event, {
                 success: true,
             });
@@ -367,16 +397,20 @@ function kickUser(event: MessageEvent<any>, roomId: string, userId: string): voi
     }
 
     const reason = event.data.reason;
-    client.kick(roomId, userId, reason).then(() => {
-        sendResponse(event, {
-            success: true,
+    client
+        .kick(roomId, userId, reason)
+        .then(() => {
+            sendResponse(event, {
+                success: true,
+            });
+        })
+        .catch((err) => {
+            sendError(event, _t("widget|error_need_kick_permission"), err);
         });
-    }).catch((err) => {
-        sendError(event, _t("You need to be able to kick users to do that."), err);
-    });
 }
 
-function setWidget(event: MessageEvent<any>, roomId: string): void {
+function setWidget(event: MessageEvent<any>, roomId: string | null): void {
+    const client = MatrixClientPeg.safeGet();
     const widgetId = event.data.widget_id;
     let widgetType = event.data.type;
     const widgetUrl = event.data.url;
@@ -387,34 +421,31 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
 
     // both adding/removing widgets need these checks
     if (!widgetId || widgetUrl === undefined) {
-        sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
+        sendError(event, _t("scalar|error_create"), new Error("Missing required widget fields."));
         return;
     }
 
-    if (widgetUrl !== null) { // if url is null it is being deleted, don't need to check name/type/etc
+    if (widgetUrl !== null) {
+        // if url is null it is being deleted, don't need to check name/type/etc
         // check types of fields
-        if (widgetName !== undefined && typeof widgetName !== 'string') {
-            sendError(event, _t("Unable to create widget."), new Error("Optional field 'name' must be a string."));
+        if (widgetName !== undefined && typeof widgetName !== "string") {
+            sendError(event, _t("scalar|error_create"), new Error("Optional field 'name' must be a string."));
             return;
         }
         if (widgetData !== undefined && !(widgetData instanceof Object)) {
-            sendError(event, _t("Unable to create widget."), new Error("Optional field 'data' must be an Object."));
+            sendError(event, _t("scalar|error_create"), new Error("Optional field 'data' must be an Object."));
             return;
         }
-        if (widgetAvatarUrl !== undefined && typeof widgetAvatarUrl !== 'string') {
-            sendError(
-                event,
-                _t("Unable to create widget."),
-                new Error("Optional field 'avatar_url' must be a string."),
-            );
+        if (widgetAvatarUrl !== undefined && typeof widgetAvatarUrl !== "string") {
+            sendError(event, _t("scalar|error_create"), new Error("Optional field 'avatar_url' must be a string."));
             return;
         }
-        if (typeof widgetType !== 'string') {
-            sendError(event, _t("Unable to create widget."), new Error("Field 'type' must be a string."));
+        if (typeof widgetType !== "string") {
+            sendError(event, _t("scalar|error_create"), new Error("Field 'type' must be a string."));
             return;
         }
-        if (typeof widgetUrl !== 'string') {
-            sendError(event, _t("Unable to create widget."), new Error("Field 'url' must be a string or null."));
+        if (typeof widgetUrl !== "string") {
+            sendError(event, _t("scalar|error_create"), new Error("Field 'url' must be a string or null."));
             return;
         }
     }
@@ -423,42 +454,57 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
     widgetType = WidgetType.fromString(widgetType);
 
     if (userWidget) {
-        WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
-            sendResponse(event, {
-                success: true,
-            });
-
-            dis.dispatch({ action: "user_widget_updated" });
-        }).catch((e) => {
-            sendError(event, _t('Unable to create widget.'), e);
-        });
-    } else { // Room widget
-        if (!roomId) {
-            sendError(event, _t('Missing roomId.'), null);
-        }
-        WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData, widgetAvatarUrl)
+        WidgetUtils.setUserWidget(client, widgetId, widgetType, widgetUrl, widgetName, widgetData)
             .then(() => {
                 sendResponse(event, {
                     success: true,
                 });
-            }, (err) => {
-                sendError(event, _t('Failed to send request.'), err);
+
+                dis.dispatch({ action: "user_widget_updated" });
+            })
+            .catch((e) => {
+                sendError(event, _t("scalar|error_create"), e);
             });
+    } else {
+        // Room widget
+        if (!roomId) {
+            sendError(event, _t("scalar|error_missing_room_id"));
+            return;
+        }
+        WidgetUtils.setRoomWidget(
+            client,
+            roomId,
+            widgetId,
+            widgetType,
+            widgetUrl,
+            widgetName,
+            widgetData,
+            widgetAvatarUrl,
+        ).then(
+            () => {
+                sendResponse(event, {
+                    success: true,
+                });
+            },
+            (err) => {
+                sendError(event, _t("scalar|error_send_request"), err);
+            },
+        );
     }
 }
 
-function getWidgets(event: MessageEvent<any>, roomId: string): void {
+function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
-    let widgetStateEvents = [];
+    let widgetStateEvents: Partial<IEvent>[] = [];
 
     if (roomId) {
         const room = client.getRoom(roomId);
         if (!room) {
-            sendError(event, _t('This room is not recognised.'));
+            sendError(event, _t("scalar|error_room_unknown"));
             return;
         }
         // XXX: This gets the raw event object (I think because we can't
@@ -467,7 +513,7 @@ function getWidgets(event: MessageEvent<any>, roomId: string): void {
     }
 
     // Add user widgets (not linked to a specific room)
-    const userWidgets = WidgetUtils.getUserWidgetsArray();
+    const userWidgets = WidgetUtils.getUserWidgetsArray(client);
     widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
@@ -476,66 +522,76 @@ function getWidgets(event: MessageEvent<any>, roomId: string): void {
 function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, _t('This room is not recognised.'));
+        sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
+    const roomIsEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
 
     sendResponse(event, roomIsEncrypted);
 }
 
 function setPlumbingState(event: MessageEvent<any>, roomId: string, status: string): void {
-    if (typeof status !== 'string') {
-        throw new Error('Plumbing state status should be a string');
+    if (typeof status !== "string") {
+        throw new Error("Plumbing state status should be a string");
     }
     logger.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).then(() => {
-        sendResponse(event, {
-            success: true,
-        });
-    }, (err) => {
-        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
-    });
+    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).then(
+        () => {
+            sendResponse(event, {
+                success: true,
+            });
+        },
+        (err) => {
+            sendError(event, err.message ? err.message : _t("scalar|error_send_request"), err);
+        },
+    );
 }
 
 function setBotOptions(event: MessageEvent<any>, roomId: string, userId: string): void {
     logger.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).then(() => {
-        sendResponse(event, {
-            success: true,
-        });
-    }, (err) => {
-        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
-    });
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).then(
+        () => {
+            sendResponse(event, {
+                success: true,
+            });
+        },
+        (err) => {
+            sendError(event, err.message ? err.message : _t("scalar|error_send_request"), err);
+        },
+    );
 }
 
 async function setBotPower(
-    event: MessageEvent<any>, roomId: string, userId: string, level: number, ignoreIfGreater?: boolean,
+    event: MessageEvent<any>,
+    roomId: string,
+    userId: string,
+    level: number,
+    ignoreIfGreater?: boolean,
 ): Promise<void> {
     if (!(Number.isInteger(level) && level >= 0)) {
-        sendError(event, _t('Power level must be positive integer.'));
+        sendError(event, _t("scalar|error_power_level_invalid"));
         return;
     }
 
     logger.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
 
@@ -552,17 +608,21 @@ async function setBotPower(
                 });
             }
         }
-        await client.setPowerLevel(roomId, userId, level, new MatrixEvent(
-            {
+        await client.setPowerLevel(
+            roomId,
+            userId,
+            level,
+            new MatrixEvent({
                 type: "m.room.power_levels",
                 content: powerLevels,
-            },
-        ));
+            }),
+        );
         return sendResponse(event, {
             success: true,
         });
     } catch (err) {
-        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
+        const error = err instanceof Error ? err : undefined;
+        sendError(event, error?.message ?? _t("scalar|error_send_request"), error);
     }
 }
 
@@ -584,12 +644,12 @@ function botOptions(event: MessageEvent<any>, roomId: string, userId: string): v
 function getMembershipCount(event: MessageEvent<any>, roomId: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, _t('This room is not recognised.'));
+        sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
     const count = room.getJoinedMemberCount();
@@ -601,21 +661,21 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
     const isState = Boolean(event.data.is_state);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, _t('This room is not recognised.'));
+        sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
     if (room.getMyMembership() !== "join") {
-        sendError(event, _t('You are not in this room.'));
+        sendError(event, _t("scalar|error_membership"));
         return;
     }
-    const me = client.credentials.userId;
+    const me = client.credentials.userId!;
 
-    let canSend = false;
+    let canSend: boolean;
     if (isState) {
         canSend = room.currentState.maySendStateEvent(evType, me);
     } else {
@@ -623,7 +683,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
     }
 
     if (!canSend) {
-        sendError(event, _t('You do not have permission to do that in this room.'));
+        sendError(event, _t("scalar|error_permission"));
         return;
     }
 
@@ -633,12 +693,12 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
 function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: string, stateKey: string): void {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in.'));
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, _t('This room is not recognised.'));
+        sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
     const stateEvent = room.currentState.getStateEvents(eventType, stateKey);
@@ -649,19 +709,154 @@ function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: s
     sendResponse(event, stateEvent.getContent());
 }
 
-async function getOpenIdToken(event: MessageEvent<any>) {
+async function getOpenIdToken(event: MessageEvent<any>): Promise<void> {
     try {
-        const tokenObject = MatrixClientPeg.get().getOpenIdToken();
+        const tokenObject = await MatrixClientPeg.safeGet().getOpenIdToken();
         sendResponse(event, tokenObject);
     } catch (ex) {
         logger.warn("Unable to fetch openId token.", ex);
-        sendError(event, 'Unable to fetch openId token.');
+        sendError(event, "Unable to fetch openId token.");
     }
 }
 
-const onMessage = function(event: MessageEvent<any>): void {
-    if (!event.origin) { // stupid chrome
-        // @ts-ignore
+async function sendEvent(
+    event: MessageEvent<{
+        type: keyof StateEvents;
+        state_key?: string;
+        content?: IContent;
+    }>,
+    roomId: string,
+): Promise<void> {
+    const eventType = event.data.type;
+    const stateKey = event.data.state_key;
+    const content = event.data.content;
+
+    if (typeof eventType !== "string") {
+        sendError(event, _t("scalar|failed_send_event"), new Error("Invalid 'type' in request"));
+        return;
+    }
+    const allowedEventTypes = ["m.widgets", "im.vector.modular.widgets", "io.element.integrations.installations"];
+    if (!allowedEventTypes.includes(eventType)) {
+        sendError(event, _t("scalar|failed_send_event"), new Error("Disallowed 'type' in request"));
+        return;
+    }
+
+    if (!content || typeof content !== "object") {
+        sendError(event, _t("scalar|failed_send_event"), new Error("Invalid 'content' in request"));
+        return;
+    }
+
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
+        return;
+    }
+
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t("scalar|error_room_unknown"));
+        return;
+    }
+
+    if (stateKey !== undefined) {
+        // state event
+        try {
+            const res = await client.sendStateEvent(roomId, eventType, content, stateKey);
+            sendResponse(event, {
+                room_id: roomId,
+                event_id: res.event_id,
+            });
+        } catch (e) {
+            sendError(event, _t("scalar|failed_send_event"), e as Error);
+            return;
+        }
+    } else {
+        // message event
+        sendError(event, _t("scalar|failed_send_event"), new Error("Sending message events is not implemented"));
+        return;
+    }
+}
+
+async function readEvents(
+    event: MessageEvent<{
+        type: string;
+        state_key?: string | boolean;
+        limit?: number;
+    }>,
+    roomId: string,
+): Promise<void> {
+    const eventType = event.data.type;
+    const stateKey = event.data.state_key;
+    const limit = event.data.limit;
+
+    if (typeof eventType !== "string") {
+        sendError(event, _t("scalar|failed_read_event"), new Error("Invalid 'type' in request"));
+        return;
+    }
+    const allowedEventTypes = [
+        "m.room.power_levels",
+        "m.room.encryption",
+        "m.room.member",
+        "m.room.name",
+        "m.widgets",
+        "im.vector.modular.widgets",
+        "io.element.integrations.installations",
+    ];
+    if (!allowedEventTypes.includes(eventType)) {
+        sendError(event, _t("scalar|failed_read_event"), new Error("Disallowed 'type' in request"));
+        return;
+    }
+
+    let effectiveLimit: number;
+    if (limit !== undefined) {
+        if (typeof limit !== "number" || limit < 0) {
+            sendError(event, _t("scalar|failed_read_event"), new Error("Invalid 'limit' in request"));
+            return;
+        }
+        effectiveLimit = Math.min(limit, Number.MAX_SAFE_INTEGER);
+    } else {
+        effectiveLimit = Number.MAX_SAFE_INTEGER;
+    }
+
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t("widget|error_need_to_be_logged_in"));
+        return;
+    }
+
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t("scalar|error_room_unknown"));
+        return;
+    }
+
+    if (stateKey !== undefined) {
+        // state events
+        if (typeof stateKey !== "string" && stateKey !== true) {
+            sendError(event, _t("scalar|failed_read_event"), new Error("Invalid 'state_key' in request"));
+            return;
+        }
+        // When `true` is passed for state key, get events with any state key.
+        const effectiveStateKey = stateKey === true ? undefined : stateKey;
+
+        let events: MatrixEvent[] = [];
+        events = events.concat(room.currentState.getStateEvents(eventType, effectiveStateKey as string) || []);
+        events = events.slice(0, effectiveLimit);
+
+        sendResponse(event, {
+            events: events.map((e) => e.getEffectiveEvent()),
+        });
+        return;
+    } else {
+        // message events
+        sendError(event, _t("scalar|failed_read_event"), new Error("Reading message events is not implemented"));
+        return;
+    }
+}
+
+const onMessage = function (event: MessageEvent<any>): void {
+    if (!event.origin) {
+        // @ts-ignore - stupid chrome
         event.origin = event.originalEvent.origin;
     }
 
@@ -669,15 +864,15 @@ const onMessage = function(event: MessageEvent<any>): void {
     // This means the URL could contain a path (like /develop) and still be used
     // to validate event origins, which do not specify paths.
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-    let configUrl;
+    let configUrl: URL | undefined;
     try {
-        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl;
-        configUrl = new URL(openManagerUrl);
+        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager()?.uiUrl;
+        configUrl = new URL(openManagerUrl!);
     } catch (e) {
         // No integrations UI URL, ignore silently.
         return;
     }
-    let eventOriginUrl;
+    let eventOriginUrl: URL;
     try {
         eventOriginUrl = new URL(event.origin);
     } catch (e) {
@@ -706,23 +901,23 @@ const onMessage = function(event: MessageEvent<any>): void {
 
     if (!roomId) {
         // These APIs don't require roomId
-        // Get and set user widgets (not associated with a specific room)
-        // If roomId is specified, it must be validated, so room-based widgets agreed
-        // handled further down.
         if (event.data.action === Action.GetWidgets) {
             getWidgets(event, null);
             return;
         } else if (event.data.action === Action.SetWidget) {
             setWidget(event, null);
             return;
+        } else if (event.data.action === Action.GetOpenIdToken) {
+            getOpenIdToken(event);
+            return;
         } else {
-            sendError(event, _t('Missing room_id in request'));
+            sendError(event, _t("scalar|error_missing_room_id_request"));
             return;
         }
     }
 
     if (roomId !== SdkContextClass.instance.roomViewStore.getRoomId()) {
-        sendError(event, _t('Room %(roomId)s not visible', { roomId: roomId }));
+        sendError(event, _t("scalar|error_room_not_visible", { roomId: roomId }));
         return;
     }
 
@@ -751,10 +946,16 @@ const onMessage = function(event: MessageEvent<any>): void {
     } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
         return;
+    } else if (event.data.action === Action.SendEvent) {
+        sendEvent(event, roomId);
+        return;
+    } else if (event.data.action === Action.ReadEvents) {
+        readEvents(event, roomId);
+        return;
     }
 
     if (!userId) {
-        sendError(event, _t('Missing user_id in request'));
+        sendError(event, _t("scalar|error_missing_user_id_request"));
         return;
     }
     switch (event.data.action) {
@@ -776,17 +977,14 @@ const onMessage = function(event: MessageEvent<any>): void {
         case Action.SetBotPower:
             setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
             break;
-        case Action.GetOpenIdToken:
-            getOpenIdToken(event);
-            break;
         default:
-            logger.warn("Unhandled postMessage event with action '" + event.data.action +"'");
+            logger.warn("Unhandled postMessage event with action '" + event.data.action + "'");
             break;
     }
 };
 
 let listenerCount = 0;
-let openManagerUrl: string | null = null;
+let openManagerUrl: string | undefined;
 
 export function startListening(): void {
     if (listenerCount === 0) {
@@ -802,10 +1000,7 @@ export function stopListening(): void {
     }
     if (listenerCount < 0) {
         // Make an error so we get a stack trace
-        const e = new Error(
-            "ScalarMessaging: mismatched startListening / stopListening detected." +
-            " Negative count",
-        );
+        const e = new Error("ScalarMessaging: mismatched startListening / stopListening detected." + " Negative count");
         logger.error(e);
     }
 }

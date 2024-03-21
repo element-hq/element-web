@@ -16,13 +16,13 @@ limitations under the License.
 
 import { useState } from "react";
 
-export const useLocalEcho = <T>(
+export const useLocalEcho = <T, V extends T = T>(
     currentFactory: () => T,
-    setterFn: (value: T) => Promise<unknown>,
-    errorFn: (error: Error) => void,
-): [value: T, handler: (value: T) => void] => {
+    setterFn: (value: V) => Promise<unknown>,
+    errorFn: (error: unknown) => void,
+): [value: T, handler: (value: V) => void] => {
     const [value, setValue] = useState(currentFactory);
-    const handler = async (value: T) => {
+    const handler = async (value: V): Promise<void> => {
         setValue(value);
         try {
             await setterFn(value);

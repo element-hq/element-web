@@ -16,10 +16,10 @@ limitations under the License.
 
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useEventEmitterState } from "./useEventEmitter";
+import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 
 export function useInitialSyncComplete(): boolean {
-    const cli = MatrixClientPeg.get();
+    const cli = useMatrixClientContext();
     return useEventEmitterState(cli, ClientEvent.Sync, () => cli.isInitialSyncComplete());
 }

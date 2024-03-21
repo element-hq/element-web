@@ -21,10 +21,7 @@ import { LocalRoom } from "../../models/LocalRoom";
 /**
  * Tests whether a room created based on a local room is ready.
  */
-export function isRoomReady(
-    client: MatrixClient,
-    localRoom: LocalRoom,
-): boolean {
+export function isRoomReady(client: MatrixClient, localRoom: LocalRoom): boolean {
     // not ready if no actual room id exists
     if (!localRoom.actualRoomId) return false;
 

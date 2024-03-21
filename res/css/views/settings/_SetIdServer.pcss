@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SetIdServer .mx_Field_input {
-    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
+.mx_SetIdServer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-8;
+
+    .mx_Field {
+        width: 100%;
+        margin: 0;
+    }
 }
 
 .mx_SetIdServer_tooltip {

@@ -17,7 +17,7 @@ limitations under the License.
 import Range from "./range";
 import { Part, Type } from "./parts";
 import { Formatting } from "../components/views/rooms/MessageComposerFormatBar";
-import { longestBacktickSequence } from './deserialize';
+import { longestBacktickSequence } from "./deserialize";
 
 /**
  * Some common queries and transformations on the editor model
@@ -109,11 +109,13 @@ export function replaceRangeAndAutoAdjustCaret(
     const distanceFromEnd = range.length - relativeOffset;
     // Handle edge case where the caret is located within the suffix or prefix
     if (rangeHasFormatting) {
-        if (relativeOffset < prefixLength) { // Was the caret at the left format string?
+        if (relativeOffset < prefixLength) {
+            // Was the caret at the left format string?
             replaceRangeAndMoveCaret(range, newParts, -(range.length - 2 * suffixLength));
             return;
         }
-        if (distanceFromEnd < suffixLength) { // Was the caret at the right format string?
+        if (distanceFromEnd < suffixLength) {
+            // Was the caret at the right format string?
             replaceRangeAndMoveCaret(range, newParts, 0, true);
             return;
         }
@@ -122,11 +124,14 @@ export function replaceRangeAndAutoAdjustCaret(
     model.transform(() => {
         const offsetDirection = Math.sign(range.replace(newParts)); // Compensates for shrinkage or expansion
         const atEnd = distanceFromEnd === suffixLength;
-        return lastStartingPosition.asOffset(model).add(offsetDirection * prefixLength, atEnd).asPosition(model);
+        return lastStartingPosition
+            .asOffset(model)
+            .add(offsetDirection * prefixLength, atEnd)
+            .asPosition(model);
     });
 }
 
-const isFormattable = (_index: number, offset: number, part: Part) => {
+const isFormattable = (_index: number, offset: number, part: Part): boolean => {
     return part.text[offset] !== " " && part.type === Type.Plain;
 };
 
@@ -180,12 +185,10 @@ export function formatRangeAsCode(range: Range): void {
     const { model, parts } = range;
     const { partCreator } = model;
 
-    const hasBlockFormatting = (range.length > 0)
-        && range.text.startsWith("```")
-        && range.text.endsWith("```")
-        && range.text.includes('\n');
+    const hasBlockFormatting =
+        range.length > 0 && range.text.startsWith("```") && range.text.endsWith("```") && range.text.includes("\n");
 
-    const needsBlockFormatting = parts.some(p => p.type === Type.Newline);
+    const needsBlockFormatting = parts.some((p) => p.type === Type.Newline);
 
     if (hasBlockFormatting) {
         parts.shift();
@@ -199,9 +202,7 @@ export function formatRangeAsCode(range: Range): void {
         if (!rangeStartsAtBeginningOfLine(range)) {
             parts.unshift(partCreator.newline());
         }
-        parts.push(
-            partCreator.newline(),
-            partCreator.plain("```"));
+        parts.push(partCreator.newline(), partCreator.plain("```"));
         if (!rangeEndsAtEndOfLine(range)) {
             parts.push(partCreator.newline());
         }
@@ -216,7 +217,7 @@ export function formatRangeAsCode(range: Range): void {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatRangeAsLink(range: Range, text?: string) {
+export function formatRangeAsLink(range: Range, text?: string): void {
     const { model } = range;
     const { partCreator } = model;
     const linkRegex = /\[(.*?)]\(.*?\)/g;
@@ -232,15 +233,15 @@ export function formatRangeAsLink(range: Range, text?: string) {
 }
 
 // parts helper methods
-const isBlank = part => !part.text || !/\S/.test(part.text);
-const isNL = part => part.type === Type.Newline;
+const isBlank = (part: Part): boolean => !part.text || !/\S/.test(part.text);
+const isNL = (part: Part): boolean => part.type === Type.Newline;
 
 export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix): void {
     const { model, parts } = range;
     const { partCreator } = model;
 
     // compute paragraph [start, end] indexes
-    const paragraphIndexes = [];
+    const paragraphIndexes: [number, number][] = [];
     let startIndex = 0;
 
     // start at i=2 because we look at i and up to two parts behind to detect paragraph breaks at their end
@@ -277,20 +278,25 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
         const base = startIdx + offset;
         const index = endIdx + offset;
 
-        const isFormatted = (index - base > 0) &&
-            parts[base].text.startsWith(prefix) &&
-            parts[index - 1].text.endsWith(suffix);
+        const isFormatted =
+            index - base > 0 && parts[base].text.startsWith(prefix) && parts[index - 1].text.endsWith(suffix);
 
         if (isFormatted) {
             // remove prefix and suffix formatting string
             const partWithoutPrefix = parts[base].serialize();
             partWithoutPrefix.text = partWithoutPrefix.text.slice(prefix.length);
-            parts[base] = partCreator.deserializePart(partWithoutPrefix);
+            let deserializedPart = partCreator.deserializePart(partWithoutPrefix);
+            if (deserializedPart) {
+                parts[base] = deserializedPart;
+            }
 
             const partWithoutSuffix = parts[index - 1].serialize();
             const suffixPartText = partWithoutSuffix.text;
             partWithoutSuffix.text = suffixPartText.substring(0, suffixPartText.length - suffix.length);
-            parts[index - 1] = partCreator.deserializePart(partWithoutSuffix);
+            deserializedPart = partCreator.deserializePart(partWithoutSuffix);
+            if (deserializedPart) {
+                parts[index - 1] = deserializedPart;
+            }
         } else {
             parts.splice(index, 0, partCreator.plain(suffix)); // splice in the later one first to not change offset
             parts.splice(base, 0, partCreator.plain(prefix));

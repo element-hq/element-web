@@ -1,5 +1,6 @@
 /*
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,25 +16,23 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect, useState } from "react";
-import {
-    Phase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationPhase as Phase, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
-import { _t, _td } from "../../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../../languageHandler";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import { Tool } from "../DevtoolsDialog";
 
-const PHASE_MAP: Record<Phase, string> = {
-    [Phase.Unsent]: _td("Unsent"),
-    [Phase.Requested]: _td("Requested"),
-    [Phase.Ready]: _td("Ready"),
-    [Phase.Done]: _td("Done"),
-    [Phase.Started]: _td("Started"),
-    [Phase.Cancelled]: _td("Cancelled"),
+const PHASE_MAP: Record<Phase, TranslationKey> = {
+    [Phase.Unsent]: _td("common|unsent"),
+    [Phase.Requested]: _td("devtools|phase_requested"),
+    [Phase.Ready]: _td("devtools|phase_ready"),
+    [Phase.Done]: _td("action|done"),
+    [Phase.Started]: _td("devtools|phase_started"),
+    [Phase.Cancelled]: _td("devtools|phase_cancelled"),
 };
 
 const VerificationRequestExplorer: React.FC<{
@@ -51,46 +50,56 @@ const VerificationRequestExplorer: React.FC<{
         if (request.timeout == 0) return;
 
         /* Note that request.timeout is a getter, so its value changes */
-        const id = setInterval(() => {
+        const id = window.setInterval(() => {
             setRequestTimeout(request.timeout);
         }, 500);
 
-        return () => { clearInterval(id); };
+        return () => {
+            clearInterval(id);
+        };
     }, [request]);
 
-    return (<div className="mx_DevTools_VerificationRequest">
-        <dl>
-            <dt>{ _t("Transaction") }</dt>
-            <dd>{ txnId }</dd>
-            <dt>{ _t("Phase") }</dt>
-            <dd>{ PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase }</dd>
-            <dt>{ _t("Timeout") }</dt>
-            <dd>{ Math.floor(timeout / 1000) }</dd>
-            <dt>{ _t("Methods") }</dt>
-            <dd>{ request.methods && request.methods.join(", ") }</dd>
-            <dt>{ _t("Requester") }</dt>
-            <dd>{ request.requestingUserId }</dd>
-            <dt>{ _t("Observe only") }</dt>
-            <dd>{ JSON.stringify(request.observeOnly) }</dd>
-        </dl>
-    </div>);
+    return (
+        <div className="mx_DevTools_VerificationRequest">
+            <dl>
+                <dt>{_t("devtools|phase_transaction")}</dt>
+                <dd>{txnId}</dd>
+                <dt>{_t("devtools|phase")}</dt>
+                <dd>{PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase}</dd>
+                <dt>{_t("devtools|timeout")}</dt>
+                <dd>{Math.floor(timeout / 1000)}</dd>
+                <dt>{_t("devtools|methods")}</dt>
+                <dd>{request.methods && request.methods.join(", ")}</dd>
+                <dt>{_t("devtools|requester")}</dt>
+                <dd>{request.requestingUserId}</dd>
+                <dt>{_t("devtools|observe_only")}</dt>
+                <dd>{JSON.stringify(request.observeOnly)}</dd>
+            </dl>
+        </div>
+    );
 };
 
-const VerificationExplorer = ({ onBack }: IDevtoolsProps) => {
+const VerificationExplorer: Tool = ({ onBack }: IDevtoolsProps) => {
     const cli = useContext(MatrixClientContext);
     const context = useContext(DevtoolsContext);
 
-    const requests = useTypedEventEmitterState(cli, CryptoEvent.VerificationRequest, () => {
-        return cli.crypto.inRoomVerificationRequests["requestsByRoomId"]?.get(context.room.roomId)
-            ?? new Map<string, VerificationRequest>();
+    const requests = useTypedEventEmitterState(cli, CryptoEvent.VerificationRequestReceived, () => {
+        return (
+            cli.crypto?.inRoomVerificationRequests["requestsByRoomId"]?.get(context.room.roomId) ??
+            new Map<string, VerificationRequest>()
+        );
     });
 
-    return <BaseTool onBack={onBack}>
-        { Array.from(requests.entries()).reverse().map(([txnId, request]) =>
-            <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
-        ) }
-        { requests.size < 1 && _t("No verification requests found") }
-    </BaseTool>;
+    return (
+        <BaseTool onBack={onBack}>
+            {Array.from(requests.entries())
+                .reverse()
+                .map(([txnId, request]) => (
+                    <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />
+                ))}
+            {requests.size < 1 && _t("devtools|no_verification_requests_found")}
+        </BaseTool>
+    );
 };
 
 export default VerificationExplorer;

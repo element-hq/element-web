@@ -29,7 +29,7 @@ export class ListLayout {
     private _previews = false;
     private _collapsed = false;
 
-    constructor(public readonly tagId: TagID) {
+    public constructor(public readonly tagId: TagID) {
         const serialized = localStorage.getItem(this.key);
         if (serialized) {
             // We don't use the setters as they cause writes.
@@ -101,11 +101,11 @@ export class ListLayout {
         return px / this.tileHeight;
     }
 
-    public reset() {
+    public reset(): void {
         localStorage.removeItem(this.key);
     }
 
-    private save() {
+    private save(): void {
         localStorage.setItem(this.key, JSON.stringify(this.serialize()));
     }
 

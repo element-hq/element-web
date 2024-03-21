@@ -1,5 +1,5 @@
 /*
- Copyright 2020 The Matrix.org Foundation C.I.C.
+ Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
  Copyright 2021 Josias Allestad
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type RainfallOptions = {
@@ -46,21 +46,21 @@ const KEY_FRAME_INTERVAL = 15;
 export default class Rainfall implements ICanvasEffect {
     private readonly options: RainfallOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Raindrop> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -73,7 +73,7 @@ export default class Rainfall implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -81,8 +81,8 @@ export default class Rainfall implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * -height;
         particle.width = Math.random() * 1.5;
-        particle.height = (particle.width * 15) + 4;
-        particle.speed = (Math.random() * this.options.speed * 4/5) + this.options.speed;
+        particle.height = particle.width * 15 + 4;
+        particle.speed = (Math.random() * this.options.speed * 4) / 5 + this.options.speed;
         return particle;
     };
 
@@ -115,14 +115,14 @@ export default class Rainfall implements ICanvasEffect {
             this.context.save();
             this.context.beginPath();
             this.context.rect(particle.x, particle.y, particle.width, particle.height);
-            this.context.fillStyle = '#5dadec'; // light blue
+            this.context.fillStyle = "#5dadec"; // light blue
             this.context.fill();
             this.context.closePath();
             this.context.restore();
 
             // Remove dead raindrops
             const maxBounds = height * 2;
-            if (particle.y > (height + maxBounds)) {
+            if (particle.y > height + maxBounds) {
                 const idx = this.particles.indexOf(particle);
                 this.particles.splice(idx, 1);
             }

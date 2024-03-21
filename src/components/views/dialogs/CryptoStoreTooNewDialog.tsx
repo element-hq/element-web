@@ -15,68 +15,60 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import dis from '../../../dispatcher/dispatcher';
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-import Modal from '../../../Modal';
+import dis from "../../../dispatcher/dispatcher";
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import QuestionDialog from "./QuestionDialog";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(logout?: boolean): void;
+}
 
 const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
-    const _onLogoutClicked = () => {
+    const _onLogoutClicked = (): void => {
         Modal.createDialog(QuestionDialog, {
-            title: _t("Sign out"),
-            description: _t(
-                "To avoid losing your chat history, you must export your room keys " +
-                "before logging out. You will need to go back to the newer version of " +
-                "%(brand)s to do this",
-                { brand },
-            ),
-            button: _t("Sign out"),
+            title: _t("action|sign_out"),
+            description: _t("encryption|incompatible_database_sign_out_description", { brand }),
+            button: _t("action|sign_out"),
             focus: false,
             onFinished: (doLogout) => {
                 if (doLogout) {
-                    dis.dispatch({ action: 'logout' });
+                    dis.dispatch({ action: "logout" });
                     props.onFinished(true);
                 }
             },
         });
     };
 
-    const description =
-        _t(
-            "You've previously used a newer version of %(brand)s with this session. " +
-            "To use this version again with end to end encryption, you will " +
-            "need to sign out and back in again.",
-            { brand },
-        );
+    const description = _t("encryption|incompatible_database_description", { brand });
 
-    return (<BaseDialog className="mx_CryptoStoreTooNewDialog"
-        contentId='mx_Dialog_content'
-        title={_t("Incompatible Database")}
-        hasCancel={false}
-        onFinished={props.onFinished}
-    >
-        <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            { description }
-        </div>
-        <DialogButtons primaryButton={_t('Continue With Encryption Disabled')}
+    return (
+        <BaseDialog
+            className="mx_CryptoStoreTooNewDialog"
+            contentId="mx_Dialog_content"
+            title={_t("encryption|incompatible_database_title")}
             hasCancel={false}
-            onPrimaryButtonClick={props.onFinished}
+            onFinished={props.onFinished}
         >
-            <button onClick={_onLogoutClicked}>
-                { _t('Sign out') }
-            </button>
-        </DialogButtons>
-    </BaseDialog>);
+            <div className="mx_Dialog_content" id="mx_Dialog_content">
+                {description}
+            </div>
+            <DialogButtons
+                primaryButton={_t("encryption|incompatible_database_disable")}
+                hasCancel={false}
+                onPrimaryButtonClick={() => props.onFinished(false)}
+            >
+                <button onClick={_onLogoutClicked}>{_t("action|sign_out")}</button>
+            </DialogButtons>
+        </BaseDialog>
+    );
 };
 
 export default CryptoStoreTooNewDialog;

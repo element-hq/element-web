@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent } from "react";
+import React, { ReactNode } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { XOR } from "../../../@types/common";
 import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import Tooltip from "../elements/Tooltip";
 import { _t } from "../../../languageHandler";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { StatelessNotificationBadge } from "./NotificationBadge/StatelessNotificationBadge";
 
 interface IProps {
     notification: NotificationState;
 
     /**
-     * If true, the badge will show a count if at all possible. This is typically
-     * used to override the user's preference for things like room sublists.
+     * If true, show nothing if the notification would only cause a dot to be shown rather than
+     * a badge. That is: only display badges and not dots. Default: false.
      */
-    forceCount?: boolean;
+    hideIfDot?: boolean;
 
     /**
      * The room ID, if any, the badge represents.
@@ -44,43 +44,42 @@ interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
     /**
      * If specified will return an AccessibleButton instead of a div.
      */
-    onClick?(ev: React.MouseEvent);
+    onClick(ev: React.MouseEvent): void;
 }
 
 interface IState {
-    showCounts: boolean; // whether or not to show counts. Independent of props.forceCount
-    showTooltip: boolean;
+    showCounts: boolean; // whether to show counts.
 }
 
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.state = {
             showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId),
-            showTooltip: false,
         };
 
         this.countWatcherRef = SettingsStore.watchSetting(
-            "Notifications.alwaysShowBadgeCounts", this.roomId,
+            "Notifications.alwaysShowBadgeCounts",
+            this.roomId,
             this.countPreferenceChanged,
         );
     }
 
-    private get roomId(): string {
+    private get roomId(): string | null {
         // We should convert this to null for safety with the SettingsStore
         return this.props.roomId || null;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         SettingsStore.unwatchSetting(this.countWatcherRef);
         this.props.notification.off(NotificationStateEvents.Update, this.onNotificationUpdate);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (prevProps.notification) {
             prevProps.notification.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         }
@@ -88,53 +87,46 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
     }
 
-    private countPreferenceChanged = () => {
+    private countPreferenceChanged = (): void => {
         this.setState({ showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId) });
     };
 
-    private onNotificationUpdate = () => {
+    private onNotificationUpdate = (): void => {
         this.forceUpdate(); // notification state changed - update
     };
 
-    private onMouseOver = (e: MouseEvent) => {
-        e.stopPropagation();
-        this.setState({
-            showTooltip: true,
-        });
-    };
-
-    private onMouseLeave = () => {
-        this.setState({
-            showTooltip: false,
-        });
-    };
-
-    public render(): React.ReactElement {
+    public render(): ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { notification, showUnsentTooltip, forceCount, onClick } = this.props;
+        const { notification, showUnsentTooltip, hideIfDot, onClick, tabIndex } = this.props;
 
-        if (notification.isIdle) return null;
-        if (forceCount) {
-            if (!notification.hasUnreadCount) return null; // Can't render a badge
+        if (notification.isIdle && !notification.knocked) return null;
+        if (hideIfDot && notification.level < NotificationLevel.Notification) {
+            // This would just be a dot and we've been told not to show dots, so don't show it
+            return null;
         }
 
-        let label: string;
-        let tooltip: JSX.Element;
-        if (showUnsentTooltip && this.state.showTooltip && notification.color === NotificationColor.Unsent) {
-            label = _t("Message didn't send. Click for info.");
-            tooltip = <Tooltip className="mx_RoleButton_tooltip" label={label} />;
+        const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {
+            symbol: notification.symbol,
+            count: notification.count,
+            level: notification.level,
+            knocked: notification.knocked,
+        };
+
+        let badge: JSX.Element;
+        if (onClick) {
+            badge = <StatelessNotificationBadge {...commonProps} onClick={onClick} tabIndex={tabIndex} />;
+        } else {
+            badge = <StatelessNotificationBadge {...commonProps} />;
         }
 
-        return <StatelessNotificationBadge
-            label={label}
-            symbol={notification.symbol}
-            count={notification.count}
-            color={notification.color}
-            onClick={onClick}
-            onMouseOver={this.onMouseOver}
-            onMouseLeave={this.onMouseLeave}
-        >
-            { tooltip }
-        </StatelessNotificationBadge>;
+        if (showUnsentTooltip && notification.level === NotificationLevel.Unsent) {
+            return (
+                <Tooltip label={_t("notifications|message_didnt_send")} side="right">
+                    {badge}
+                </Tooltip>
+            );
+        }
+
+        return badge;
     }
 }

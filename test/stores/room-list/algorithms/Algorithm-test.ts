@@ -15,14 +15,18 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 
-import type { MatrixClient } from "matrix-js-sdk/src/client";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
-import { stubClient, setupAsyncStoreWithClient, useMockedCalls, MockedCall } from "../../../test-utils";
+import {
+    stubClient,
+    setupAsyncStoreWithClient,
+    useMockedCalls,
+    MockedCall,
+    useMockMediaDevices,
+} from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
@@ -39,9 +43,10 @@ describe("Algorithm", () => {
     let algorithm: Algorithm;
 
     beforeEach(() => {
+        useMockMediaDevices();
         stubClient();
-        client = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        client = mocked(MatrixClientPeg.safeGet());
+        DMRoomMap.makeShared(client);
 
         algorithm = new Algorithm();
         algorithm.start();
@@ -63,11 +68,14 @@ describe("Algorithm", () => {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
 
-        client.getRoom.mockImplementation(roomId => {
+        client.getRoom.mockImplementation((roomId) => {
             switch (roomId) {
-                case room.roomId: return room;
-                case roomWithCall.roomId: return roomWithCall;
-                default: return null;
+                case room.roomId:
+                    return room;
+                case roomWithCall.roomId:
+                    return roomWithCall;
+                default:
+                    return null;
             }
         });
         client.getRooms.mockReturnValue([room, roomWithCall]);
@@ -89,14 +97,10 @@ describe("Algorithm", () => {
             stop: () => {},
         } as unknown as ClientWidgetApi);
 
-        Object.defineProperty(navigator, "mediaDevices", {
-            value: { enumerateDevices: async () => [] },
-        });
-
         // End of setup
 
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);
-        await call.connect();
+        await call.start();
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([roomWithCall, room]);
         await call.disconnect();
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);

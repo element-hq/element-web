@@ -15,9 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { MatrixClient, MatrixEvent, RoomState, RoomStateEvent, StateEvents } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
@@ -26,16 +24,19 @@ import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
+const PREVIEW_URLS_EVENT_TYPE = "org.matrix.room.preview_urls";
+
+type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | typeof PREVIEW_URLS_EVENT_TYPE;
 
 /**
  * Gets and sets settings at the "room" level.
  */
 export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(public readonly watchers: WatchManager) {
+    public constructor(public readonly watchers: WatchManager) {
         super();
     }
 
-    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
+    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void {
         if (oldClient) {
             oldClient.removeListener(RoomStateEvent.Events, this.onEvent);
         }
@@ -43,8 +44,8 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         newClient.on(RoomStateEvent.Events, this.onEvent);
     }
 
-    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent) => {
-        const roomId = event.getRoomId();
+    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent | null): void => {
+        const roomId = event.getRoomId()!;
         const room = this.client.getRoom(roomId);
 
         // Note: in tests and during the encryption setup on initial load we might not have
@@ -57,8 +58,8 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         if (room && state !== room.currentState) return;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
-            let val = event.getContent()['disable'];
-            if (typeof (val) !== "boolean") {
+            let val = event.getContent()["disable"];
+            if (typeof val !== "boolean") {
                 val = null;
             } else {
                 val = !val;
@@ -67,7 +68,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
             this.watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
         } else if (event.getType() === DEFAULT_SETTINGS_EVENT_TYPE) {
             // Figure out what changed and fire those updates
-            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const prevContent = prevEvent?.getContent() ?? {};
             const changedSettings = objectKeyChanges<Record<string, any>>(prevContent, event.getContent());
             for (const settingName of changedSettings) {
                 this.watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
@@ -81,8 +82,8 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
-            if (typeof (content['disable']) !== "boolean") return null;
-            return !content['disable'];
+            if (typeof content["disable"] !== "boolean") return null;
+            return !content["disable"];
         }
 
         const settings = this.getSettings(roomId) || {};
@@ -90,11 +91,11 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     }
 
     // helper function to send state event then await it being echoed back
-    private async sendStateEvent(
+    private async sendStateEvent<K extends RoomSettingsEventType, F extends keyof StateEvents[K]>(
         roomId: string,
-        eventType: string,
-        field: string,
-        value: any,
+        eventType: K,
+        field: F,
+        value: StateEvents[K][F],
     ): Promise<void> {
         const content = this.getSettings(roomId, eventType) || {};
         content[field] = value;
@@ -102,7 +103,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         const { event_id: eventId } = await this.client.sendStateEvent(roomId, eventType, content);
 
         const deferred = defer<void>();
-        const handler = (event: MatrixEvent) => {
+        const handler = (event: MatrixEvent): void => {
             if (event.getId() !== eventId) return;
             this.client.off(RoomStateEvent.Events, handler);
             deferred.resolve();
@@ -129,7 +130,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         let eventType = DEFAULT_SETTINGS_EVENT_TYPE;
         if (settingName === "urlPreviewsEnabled") eventType = "org.matrix.room.preview_urls";
 
-        return room?.currentState.maySendStateEvent(eventType, this.client.getUserId()) ?? false;
+        return room?.currentState.maySendStateEvent(eventType, this.client.getUserId()!) ?? false;
     }
 
     public isSupported(): boolean {

@@ -14,21 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
-import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
-import { ClientEvent } from "matrix-js-sdk/src/client";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
+import { Room, ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import defaultDispatcher from "../../dispatcher/dispatcher";
+import defaultDispatcher, { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
-import { ThreadsRoomNotificationState } from "./ThreadsRoomNotificationState";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface IState {}
 
@@ -42,12 +39,27 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     })();
     private roomMap = new Map<Room, RoomNotificationState>();
 
-    private roomThreadsMap: Map<Room, ThreadsRoomNotificationState> = new Map<Room, ThreadsRoomNotificationState>();
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
 
-    private constructor() {
-        super(defaultDispatcher, {});
+    private tacEnabled = SettingsStore.getValue("threadsActivityCentre");
+
+    private constructor(dispatcher = defaultDispatcher) {
+        super(dispatcher, {});
+        SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
+            // We pass SyncState.Syncing here to "simulate" a sync happening.
+            // The code that receives these events actually doesn't care
+            // what state we pass, except that it behaves differently if we
+            // pass SyncState.Error.
+            this.emitUpdateIfStateChanged(SyncState.Syncing, false);
+        });
+    }
+
+    /**
+     * @internal Public for test only
+     */
+    public static testInstance(dispatcher: MatrixDispatcher): RoomNotificationStateStore {
+        return new RoomNotificationStateStore();
     }
 
     /**
@@ -65,7 +77,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      */
     public getListState(tagId: TagID): ListNotificationState {
         if (this.listMap.has(tagId)) {
-            return this.listMap.get(tagId);
+            return this.listMap.get(tagId)!;
         }
 
         // TODO: Update if/when invites move out of the room list.
@@ -87,40 +99,32 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      */
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            let threadState;
-            if (room.client.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
-                // Not very elegant, but that way we ensure that we start tracking
-                // threads notification at the same time at rooms.
-                // There are multiple entry points, and it's unclear which one gets
-                // called first
-                const threadState = new ThreadsRoomNotificationState(room);
-                this.roomThreadsMap.set(room, threadState);
-            }
-            this.roomMap.set(room, new RoomNotificationState(room, threadState));
+            this.roomMap.set(room, new RoomNotificationState(room, !this.tacEnabled));
         }
-        return this.roomMap.get(room);
-    }
-
-    public getThreadsRoomState(room: Room): ThreadsRoomNotificationState | null {
-        if (room.client.canSupport.get(Feature.ThreadUnreadNotifications) !== ServerSupport.Unsupported) {
-            return null;
-        }
-
-        if (!this.roomThreadsMap.has(room)) {
-            this.roomThreadsMap.set(room, new ThreadsRoomNotificationState(room));
-        }
-        return this.roomThreadsMap.get(room);
+        return this.roomMap.get(room)!;
     }
 
     public static get instance(): RoomNotificationStateStore {
         return RoomNotificationStateStore.internalInstance;
     }
 
-    private onSync = (state: SyncState, prevState?: SyncState, data?: ISyncStateData) => {
+    private onSync = (state: SyncState, prevState: SyncState | null): void => {
+        this.emitUpdateIfStateChanged(state, state !== prevState);
+    };
+
+    /**
+     * If the SummarizedNotificationState of this room has changed, or forceEmit
+     * is true, emit an UPDATE_STATUS_INDICATOR event.
+     *
+     * @internal public for test
+     */
+    public emitUpdateIfStateChanged = (state: SyncState, forceEmit: boolean): void => {
+        if (!this.matrixClient) return;
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         const globalState = new SummarizedNotificationState();
-        const visibleRooms = this.matrixClient.getVisibleRooms();
+        const visibleRooms = this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
 
         let numFavourites = 0;
         for (const room of visibleRooms) {
@@ -133,19 +137,20 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
 
         PosthogAnalytics.instance.setProperty("numFavouriteRooms", numFavourites);
 
-        if (this.globalState.symbol !== globalState.symbol ||
+        if (
+            this.globalState.symbol !== globalState.symbol ||
             this.globalState.count !== globalState.count ||
-            this.globalState.color !== globalState.color ||
+            this.globalState.level !== globalState.level ||
             this.globalState.numUnreadStates !== globalState.numUnreadStates ||
-            state !== prevState
+            forceEmit
         ) {
             this._globalState = globalState;
-            this.emit(UPDATE_STATUS_INDICATOR, globalState, state, prevState, data);
+            this.emit(UPDATE_STATUS_INDICATOR, globalState, state);
         }
     };
 
-    protected async onReady() {
-        this.matrixClient.on(ClientEvent.Sync, this.onSync);
+    protected async onReady(): Promise<void> {
+        this.matrixClient?.on(ClientEvent.Sync, this.onSync);
     }
 
     protected async onNotReady(): Promise<any> {
@@ -156,6 +161,5 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this, but our contract says we do.
-    protected async onAction(payload: ActionPayload): Promise<void> {
-    }
+    protected async onAction(payload: ActionPayload): Promise<void> {}
 }

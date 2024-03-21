@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
@@ -22,7 +21,7 @@ import { Key } from "../../../../src/Keyboard";
 import { mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils/platform";
 import { KeyboardKey, KeyboardShortcut } from "../../../../src/components/views/settings/KeyboardShortcut";
 
-const renderKeyboardShortcut = (Component, props?) => {
+const renderKeyboardShortcut = (Component: React.FunctionComponent<any>, props: Record<string, any>) => {
     return render(<Component {...props} />).container;
 };
 

@@ -17,15 +17,13 @@ limitations under the License.
 
 .mx_Login_submit {
     @mixin mx_DialogButton;
+    font-size: 15px;
+    font-weight: var(--cpd-font-weight-semibold);
     width: 100%;
     margin-top: 24px;
     margin-bottom: 24px;
     box-sizing: border-box;
     text-align: center;
-}
-
-.mx_Login_submit:hover {
-    @mixin mx_DialogButton_hover;
 }
 
 .mx_Login_submit:disabled {
@@ -87,7 +85,7 @@ limitations under the License.
 
 div.mx_AccessibleButton_kind_link.mx_Login_forgot {
     display: block;
-    margin: 0 auto;
+    margin-top: 24px;
 
     &.mx_AccessibleButton_disabled {
         cursor: not-allowed;
@@ -100,4 +98,9 @@ div.mx_AccessibleButton_kind_link.mx_Login_forgot {
     align-items: center;
     align-content: center;
     padding: 14px;
+}
+
+.mx_Login_fullWidthButton {
+    width: 100%;
+    margin-bottom: 16px;
 }

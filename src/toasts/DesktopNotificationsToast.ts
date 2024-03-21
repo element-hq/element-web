@@ -21,30 +21,32 @@ import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
 
-const onAccept = () => {
+const onAccept = (): void => {
     Notifier.setEnabled(true);
-    const cli = MatrixClientPeg.get();
-    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+    const cli = MatrixClientPeg.safeGet();
+    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
     cli.setAccountData(eventType, {
         is_silenced: false,
     });
 };
 
-const onReject = () => {
+const onReject = (): void => {
     Notifier.setPromptHidden(true);
 };
 
 const TOAST_KEY = "desktopnotifications";
 
-export const showToast = (fromMessageSend: boolean) => {
+export const showToast = (fromMessageSend: boolean): void => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: fromMessageSend ? _t("Don't miss a reply") : _t("Notifications"),
+        title: fromMessageSend
+            ? _t("notifications|enable_prompt_toast_title_from_message_send")
+            : _t("notifications|enable_prompt_toast_title"),
         props: {
-            description: _t("Enable desktop notifications"),
-            acceptLabel: _t("Enable"),
+            description: _t("notifications|enable_prompt_toast_description"),
+            acceptLabel: _t("action|enable"),
             onAccept,
-            rejectLabel: _t("Dismiss"),
+            rejectLabel: _t("action|dismiss"),
             onReject,
         },
         component: GenericToast,
@@ -52,6 +54,6 @@ export const showToast = (fromMessageSend: boolean) => {
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

@@ -26,9 +26,14 @@ limitations under the License.
     padding: 0 $spacing-16;
     margin-bottom: $spacing-32;
 
-    background-color: $system;
+    background-color: $panels;
     border-radius: 8px;
     color: $secondary-content;
+
+    /* Higher specificity selector to override the flex-start value */
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        align-self: center;
+    }
 }
 
 .mx_FilteredDeviceListHeader_label {

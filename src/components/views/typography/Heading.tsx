@@ -14,18 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes } from 'react';
-import classNames from 'classnames';
+import React, { HTMLAttributes } from "react";
+import classNames from "classnames";
 
-type Size = 'h1' | 'h2' | 'h3' | 'h4';
+type Size = "1" | "2" | "3" | "4";
+
+type HTMLHeadingTags = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
+    /**
+     * Defines the type of heading used
+     */
+    as?: HTMLHeadingTags;
+    /**
+     * Defines the appearance of the heading
+     * Falls back to the type of heading used if `as` is not provided
+     */
     size: Size;
 }
 
-const Heading: React.FC<HeadingProps> = ({ size, className, children, ...rest }) => React.createElement(size || 'h1', {
-    ...rest,
-    className: classNames(`mx_Heading_${size}`, className),
-    children,
-});
+const Heading: React.FC<HeadingProps> = ({ as, size = "1", className, children, ...rest }) =>
+    React.createElement(as || `h${size}`, {
+        ...rest,
+        className: classNames(`mx_Heading_h${size}`, className),
+        children,
+    });
 
 export default Heading;

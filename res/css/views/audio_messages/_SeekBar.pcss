@@ -61,8 +61,9 @@ limitations under the License.
     /* browsers. Firefox responds to webkit-prefixed values now, which means we can't use media */
     /* or support queries to selectively apply the rule. An upside is that this CSS doesn't work */
     /* in firefox, so it's just wasted CPU/GPU time. */
-    &::before { /* ::before to ensure it ends up under the thumb */
-        content: '';
+    &::before {
+        /* ::before to ensure it ends up under the thumb */
+        content: "";
         background-color: $tertiary-content;
 
         /* Absolute positioning to ensure it overlaps with the existing bar */
@@ -93,7 +94,7 @@ limitations under the License.
     /* We do it this way to keep the same padding and margins of the element, avoiding margin math. */
     /* Source: https://front-back.com/expand-clickable-areas-for-a-better-touch-experience/ */
     &::after {
-        content: '';
+        content: "";
         position: absolute;
         top: -6px;
         bottom: -6px;

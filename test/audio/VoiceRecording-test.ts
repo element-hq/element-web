@@ -14,7 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VoiceRecording } from "../../src/audio/VoiceRecording";
+import { mocked } from "jest-mock";
+// @ts-ignore
+import Recorder from "opus-recorder/dist/recorder.min.js";
+
+import { VoiceRecording, voiceRecorderOptions, highQualityRecorderOptions } from "../../src/audio/VoiceRecording";
+import { createAudioContext } from "../..//src/audio/compat";
+import MediaDeviceHandler from "../../src/MediaDeviceHandler";
+import { useMockMediaDevices } from "../test-utils";
+
+jest.mock("opus-recorder/dist/recorder.min.js");
+const RecorderMock = mocked(Recorder);
+
+jest.mock("../../src/audio/compat", () => ({
+    createAudioContext: jest.fn(),
+}));
+const createAudioContextMock = mocked(createAudioContext);
+
+jest.mock("../../src/MediaDeviceHandler");
+const MediaDeviceHandlerMock = mocked(MediaDeviceHandler);
 
 /**
  * The tests here are heavily using access to private props.
@@ -39,10 +57,12 @@ describe("VoiceRecording", () => {
     };
 
     beforeEach(() => {
+        useMockMediaDevices();
         recording = new VoiceRecording();
         // @ts-ignore
         recording.observable = {
             update: jest.fn(),
+            close: jest.fn(),
         };
         jest.spyOn(recording, "stop").mockImplementation();
         recorderSecondsSpy = jest.spyOn(recording, "recorderSeconds", "get");
@@ -50,6 +70,64 @@ describe("VoiceRecording", () => {
 
     afterEach(() => {
         jest.resetAllMocks();
+    });
+
+    describe("when starting a recording", () => {
+        beforeEach(() => {
+            const mockAudioContext = {
+                createMediaStreamSource: jest.fn().mockReturnValue({
+                    connect: jest.fn(),
+                    disconnect: jest.fn(),
+                }),
+                createScriptProcessor: jest.fn().mockReturnValue({
+                    connect: jest.fn(),
+                    disconnect: jest.fn(),
+                    addEventListener: jest.fn(),
+                    removeEventListener: jest.fn(),
+                }),
+                destination: {},
+                close: jest.fn(),
+            };
+            createAudioContextMock.mockReturnValue(mockAudioContext as unknown as AudioContext);
+        });
+
+        afterEach(async () => {
+            await recording.stop();
+        });
+
+        it("should record high-quality audio if voice processing is disabled", async () => {
+            MediaDeviceHandlerMock.getAudioNoiseSuppression.mockReturnValue(false);
+            await recording.start();
+
+            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    audio: expect.objectContaining({ noiseSuppression: { ideal: false } }),
+                }),
+            );
+            expect(RecorderMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    encoderBitRate: highQualityRecorderOptions.bitrate,
+                    encoderApplication: highQualityRecorderOptions.encoderApplication,
+                }),
+            );
+        });
+
+        it("should record normal-quality voice if voice processing is enabled", async () => {
+            MediaDeviceHandlerMock.getAudioNoiseSuppression.mockReturnValue(true);
+            await recording.start();
+
+            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    audio: expect.objectContaining({ noiseSuppression: { ideal: true } }),
+                }),
+            );
+            expect(RecorderMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    encoderBitRate: voiceRecorderOptions.bitrate,
+                    encoderApplication: voiceRecorderOptions.encoderApplication,
+                }),
+            );
+        });
     });
 
     describe("when recording", () => {

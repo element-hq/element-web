@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const getSpaceCollapsedKey = (roomId: string, parents: Set<string>): string => {
+const getSpaceCollapsedKey = (roomId: string, parents?: Set<string>): string => {
     const separator = "/";
     let path = "";
     if (parents) {
@@ -35,12 +35,12 @@ export default class SpaceTreeLevelLayoutStore {
         return SpaceTreeLevelLayoutStore.internalInstance;
     }
 
-    public setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean) {
+    public setSpaceCollapsedState(roomId: string, parents: Set<string> | undefined, collapsed: boolean): void {
         // XXX: localStorage doesn't allow booleans
         localStorage.setItem(getSpaceCollapsedKey(roomId, parents), collapsed.toString());
     }
 
-    public getSpaceCollapsedState(roomId: string, parents: Set<string>, fallback: boolean): boolean {
+    public getSpaceCollapsedState(roomId: string, parents: Set<string> | undefined, fallback: boolean): boolean {
         const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(roomId, parents));
         // XXX: localStorage doesn't allow booleans
         return collapsedLocalStorage ? collapsedLocalStorage === "true" : fallback;

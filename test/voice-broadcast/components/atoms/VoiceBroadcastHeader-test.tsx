@@ -12,18 +12,17 @@ limitations under the License.
 */
 
 import React from "react";
-import { Container } from "react-dom";
 import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 
-import { VoiceBroadcastHeader } from "../../../../src/voice-broadcast";
+import { VoiceBroadcastHeader, VoiceBroadcastLiveness } from "../../../../src/voice-broadcast";
 import { mkRoom, stubClient } from "../../../test-utils";
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     __esModule: true,
     default: jest.fn().mockImplementation(({ room }) => {
-        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+        return <div data-testid="room-avatar">room avatar: {room.name}</div>;
     }),
 }));
 
@@ -33,15 +32,18 @@ describe("VoiceBroadcastHeader", () => {
     let client: MatrixClient;
     let room: Room;
     const sender = new RoomMember(roomId, userId);
-    let container: Container;
+    let container: RenderResult["container"];
 
-    const renderHeader = (live: boolean, showBroadcast: boolean = undefined): RenderResult => {
-        return render(<VoiceBroadcastHeader
-            live={live}
-            sender={sender}
-            room={room}
-            showBroadcast={showBroadcast}
-        />);
+    const renderHeader = (live: VoiceBroadcastLiveness, showBroadcast?: boolean, buffering?: boolean): RenderResult => {
+        return render(
+            <VoiceBroadcastHeader
+                live={live}
+                microphoneLabel={sender.name}
+                room={room}
+                showBroadcast={showBroadcast}
+                showBuffering={buffering}
+            />,
+        );
     };
 
     beforeAll(() => {
@@ -52,17 +54,37 @@ describe("VoiceBroadcastHeader", () => {
 
     describe("when rendering a live broadcast header with broadcast info", () => {
         beforeEach(() => {
-            container = renderHeader(true, true).container;
+            container = renderHeader("live", true, true).container;
         });
 
-        it("should render the header with a live badge", () => {
+        it("should render the header with a red live badge", () => {
+            expect(container).toMatchSnapshot();
+        });
+    });
+
+    describe("when rendering a buffering live broadcast header with broadcast info", () => {
+        beforeEach(() => {
+            container = renderHeader("live", true).container;
+        });
+
+        it("should render the header with a red live badge", () => {
+            expect(container).toMatchSnapshot();
+        });
+    });
+
+    describe("when rendering a live (grey) broadcast header with broadcast info", () => {
+        beforeEach(() => {
+            container = renderHeader("grey", true).container;
+        });
+
+        it("should render the header with a grey live badge", () => {
             expect(container).toMatchSnapshot();
         });
     });
 
     describe("when rendering a non-live broadcast header", () => {
         beforeEach(() => {
-            container = renderHeader(false).container;
+            container = renderHeader("not-live").container;
         });
 
         it("should render the header without a live badge", () => {

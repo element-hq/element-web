@@ -15,30 +15,42 @@ limitations under the License.
 */
 
 .mx_SearchBar {
-    height: 56px;
+    /* use `min-height` rather than height, to allow room for the text to wrap if the window is narrow */
+    min-height: 56px;
     display: flex;
     align-items: center;
     border-bottom: 1px solid $primary-hairline-color;
 
     .mx_SearchBar_input {
+        --size-button-search: 37px; /* size of the search button inside `input` element */
+
         /* border: 1px solid $input-border-color; */
         /* font-size: $font-15px; */
         flex: 1 1 0;
         margin-left: 22px;
+
+        /* do not allow the input element to shrink below the width needed for the placeholder 'Search…'
+           and the search button */
+        min-width: calc(7em + var(--size-button-search));
+
+        input {
+            box-sizing: border-box; /* include padding value into width calculation */
+        }
     }
 
     .mx_SearchBar_searchButton {
         cursor: pointer;
-        width: 37px;
-        height: 37px;
+        width: var(--size-button-search);
+        height: var(--size-button-search);
         background-color: $accent;
-        mask: url('$(res)/img/feather-customised/search-input.svg');
+        mask: url("$(res)/img/feather-customised/search-input.svg");
         mask-repeat: no-repeat;
         mask-position: center;
     }
 
     .mx_SearchBar_buttons {
-        display: inherit;
+        display: inherit; /* flex */
+        min-width: 0; /* have the close button displayed even on a very narrow timeline */
     }
 
     .mx_SearchBar_button {
@@ -49,7 +61,8 @@ limitations under the License.
         cursor: pointer;
         color: $primary-content;
         border-bottom: 2px solid $accent;
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
+        word-break: break-all; /* prevent the input area and cancel button from being overlapped by BaseCard */
     }
 
     .mx_SearchBar_unselected {
@@ -59,7 +72,7 @@ limitations under the License.
 
     .mx_SearchBar_cancel {
         background-color: $alert;
-        mask: url('$(res)/img/cancel.svg');
+        mask: url("$(res)/img/cancel.svg");
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 14px;

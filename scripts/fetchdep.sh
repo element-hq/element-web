@@ -6,12 +6,17 @@ deforg="$1"
 defrepo="$2"
 defbranch="$3"
 
-[ -z "$defbranch" ] && defbranch="develop"
-
 rm -r "$defrepo" || true
 
-PR_ORG=${PR_ORG:-"matrix-org"}
-PR_REPO=${PR_REPO:-"matrix-react-sdk"}
+# figure out where to look for pull requests:
+#   - We may have been told an explicit repo via the PR_ORG/PR_REPO/PR_NUMBER env vars
+#   - otherwise, check the $GITHUB_ env vars which are set by Github Actions
+#   - failing that, fall back to the matrix-org/matrix-react-sdk repo.
+#
+# in ether case, the PR_NUMBER variable must be set explicitly.
+default_org_repo=${GITHUB_REPOSITORY:-"matrix-org/matrix-react-sdk"}
+PR_ORG=${PR_ORG:-${default_org_repo%%/*}}
+PR_REPO=${PR_REPO:-${default_org_repo##*/}}
 
 # A function that clones a branch of a repo based on the org, repo and branch
 clone() {

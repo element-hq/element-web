@@ -14,57 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_FacePile {
-    display: flex;
-    align-items: center;
+.mx_FacePile_more {
+    /* Needed to calculate the offset on the face pile */
+    --cpd-avatar-size: 28px;
+    position: relative;
+    border-radius: 100%;
+    width: 28px;
+    height: 28px;
+    background-color: $panels;
+    display: inline-block;
 
-    .mx_FacePile_faces {
-        display: inline-flex;
-        flex-direction: row-reverse;
-        vertical-align: middle;
-        margin: 0 -1px; /* to cancel out the border on the edges */
-
-        /* Overlap the children */
-        > * + * {
-            margin-right: -8px;
-        }
-
-        .mx_BaseAvatar_image {
-            border: 1px solid $background;
-        }
-
-        .mx_BaseAvatar_initial {
-            margin: 1px; /* to offset the border on the image */
-        }
-
-        .mx_FacePile_more {
-            position: relative;
-            border-radius: 100%;
-            width: 30px;
-            height: 30px;
-            background-color: $spacePanel-bg-color;
-
-            &::before {
-                content: "";
-                z-index: 1;
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: inherit;
-                width: inherit;
-                background: $tertiary-content;
-                mask-position: center;
-                mask-size: 20px;
-                mask-repeat: no-repeat;
-                mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-            }
-        }
+    &::before {
+        content: "";
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: inherit;
+        width: inherit;
+        background: $tertiary-content;
+        mask-position: center;
+        mask-size: 20px;
+        mask-repeat: no-repeat;
+        mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
     }
+}
 
-    .mx_FacePile_summary {
-        margin-left: 12px;
-        font-size: $font-14px;
-        line-height: $font-24px;
-        color: $tertiary-content;
-    }
+.mx_FacePile_summary {
+    margin-left: 12px;
+    font: var(--cpd-font-body-md-regular);
+    line-height: $font-24px;
+    color: $tertiary-content;
 }

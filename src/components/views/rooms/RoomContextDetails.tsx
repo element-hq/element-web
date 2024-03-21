@@ -24,14 +24,18 @@ type Props<T extends keyof ReactHTML> = HTMLAttributes<T> & {
     room: Room;
 };
 
-export function RoomContextDetails<T extends keyof ReactHTML>({ room, component, ...other }: Props<T>) {
+export function RoomContextDetails<T extends keyof ReactHTML>({ room, component, ...other }: Props<T>): JSX.Element {
     const contextDetails = roomContextDetails(room);
     if (contextDetails) {
-        return React.createElement(component ?? "div", {
-            ...other,
-            "aria-label": contextDetails.ariaLabel,
-        }, [contextDetails.details]);
+        return React.createElement(
+            component ?? "div",
+            {
+                ...other,
+                "aria-label": contextDetails.ariaLabel,
+            },
+            [contextDetails.details],
+        );
     }
 
-    return null;
+    return <></>;
 }

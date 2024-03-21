@@ -1,0 +1,191 @@
+# Triggers after the layered build has finished, taking the artifact and running Playwright on it
+name: End to End Tests
+on:
+    workflow_run:
+        workflows: ["Element Web - Build"]
+        types:
+            - completed
+
+    # support calls from other workflows for downstream testing
+    workflow_call:
+        inputs:
+            react-sdk-repository:
+                type: string
+                required: true
+                description: "The name of the github repository to check out and build."
+        secrets:
+            ELEMENT_BOT_TOKEN:
+                required: true
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+jobs:
+    prepare:
+        name: Prepare
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        permissions:
+            statuses: write
+        steps:
+            # We create the status here and then update it to success/failure in the `report` stage
+            # This provides an easy link to this workflow_run from the PR before the tests are done.
+            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: pending
+                  context: ${{ github.workflow }} / end-to-end-tests
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    tests:
+        name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
+        needs: prepare
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            issues: read
+            pull-requests: read
+        environment: EndToEndTests
+        strategy:
+            fail-fast: false
+            matrix:
+                # Run multiple instances in parallel to speed up the tests
+                runner: [1, 2, 3, 4, 5, 6, 7, 8]
+        steps:
+            - name: 📥 Download artifact
+              uses: actions/download-artifact@v4
+              with:
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+                  name: previewbuild
+                  path: webapp
+
+            # The workflow_run.head_sha is the sha of the head commit but the element-web was built using a simulated
+            # merge commit - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+            # so use the sha from the tarball for the checkout of the tests
+            # to make sure we get a matching set of code and tests.
+            - name: Grab sha from webapp
+              id: sha
+              run: |
+                  echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
+
+            - uses: actions/checkout@v4
+              with:
+                  # XXX: We're checking out untrusted code in a secure context
+                  # We need to be careful to not trust anything this code outputs/may do
+                  #
+                  # Note that (in the absence of a `react-sdk-repository` input),
+                  # we check out from the default repository, which is (for this workflow) the
+                  # *target* repository for the pull request.
+                  #
+                  ref: ${{ steps.sha.outputs.sha }}
+                  persist-credentials: false
+                  path: matrix-react-sdk
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  cache-dependency-path: matrix-react-sdk/yarn.lock
+
+            - name: Install dependencies
+              working-directory: matrix-react-sdk
+              run: yarn install --frozen-lockfile
+
+            - name: Get installed Playwright version
+              id: playwright
+              working-directory: matrix-react-sdk
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+
+            - name: Cache playwright binaries
+              uses: actions/cache@v4
+              id: playwright-cache
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+
+            - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              working-directory: matrix-react-sdk
+              run: yarn playwright install --with-deps
+
+            - name: Run Playwright tests
+              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+              with:
+                  run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
+                  working-directory: matrix-react-sdk
+
+            - name: Upload blob report to GitHub Actions Artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: all-blob-reports-${{ matrix.runner }}
+                  path: matrix-react-sdk/blob-report
+                  retention-days: 1
+
+    report:
+        name: Report results
+        needs: tests
+        runs-on: ubuntu-latest
+        environment: Netlify
+        if: always()
+        permissions:
+            statuses: write
+            deployments: write
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  persist-credentials: false
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Download blob reports from GitHub Actions Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  pattern: all-blob-reports-*
+                  path: all-blob-reports
+                  merge-multiple: true
+
+            - name: Merge into HTML Report
+              run: yarn playwright merge-reports --reporter=html,github,./playwright/flaky-reporter.ts ./all-blob-reports
+              env:
+                  # Only pass creds to the flaky-reporter on main branch runs
+                  GITHUB_TOKEN: ${{ github.event.workflow_run.head_branch == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
+
+            - name: Upload HTML report
+              uses: actions/upload-artifact@v4
+              with:
+                  name: html-report--attempt-${{ github.run_attempt }}
+                  path: playwright-report
+                  retention-days: 14
+
+            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+              if: always()
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
+                  context: ${{ github.workflow }} / end-to-end-tests
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v3
+              with:
+                  path: playwright-report
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ secrets.NETLIFY_SITE_ID }}
+                  desc: Playwright Report
+                  deployment_env: EndToEndTests
+                  prefix: "e2e-"

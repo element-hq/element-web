@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ContextType } from 'react';
+import React, { ContextType } from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
@@ -26,9 +27,12 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
+import SettingsSubsection from "../../shared/SettingsSubsection";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 interface IProps {
-    roomId: string;
+    room: Room;
 }
 
 interface IState {
@@ -37,9 +41,9 @@ interface IState {
 
 export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    context: ContextType<typeof MatrixClientContext>;
+    public context!: ContextType<typeof MatrixClientContext>;
 
-    constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {
@@ -49,55 +53,56 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
     private onLeaveClick = (ev: ButtonEvent): void => {
         dis.dispatch({
-            action: 'leave_room',
-            room_id: this.props.roomId,
+            action: "leave_room",
+            room_id: this.props.room.roomId,
         });
 
         PosthogTrackers.trackInteraction("WebRoomSettingsLeaveButton", ev);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = this.context;
-        const room = client.getRoom(this.props.roomId);
+        const room = this.props.room;
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
-        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", '');
+        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", "") ?? undefined;
 
-        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ?
-            <UrlPreviewSettings room={room} /> :
-            null;
+        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ? (
+            <UrlPreviewSettings room={room} />
+        ) : null;
 
         let leaveSection;
         if (room.getMyMembership() === "join") {
-            leaveSection = <>
-                <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
-                <div className='mx_SettingsTab_section'>
-                    <AccessibleButton kind='danger' onClick={this.onLeaveClick}>
-                        { _t('Leave room') }
+            leaveSection = (
+                <SettingsSubsection heading={_t("action|leave_room")}>
+                    <AccessibleButton kind="danger" onClick={this.onLeaveClick}>
+                        {_t("action|leave_room")}
                     </AccessibleButton>
-                </div>
-            </>;
+                </SettingsSubsection>
+            );
         }
 
         return (
-            <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{ _t("General") }</div>
-                <div className='mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection'>
-                    <RoomProfileSettings roomId={this.props.roomId} />
-                </div>
+            <SettingsTab data-testid="General">
+                <SettingsSection heading={_t("common|general")}>
+                    <RoomProfileSettings roomId={room.roomId} />
+                </SettingsSection>
 
-                <div className="mx_SettingsTab_heading">{ _t("Room Addresses") }</div>
-                <AliasSettings
-                    roomId={this.props.roomId}
-                    canSetCanonicalAlias={canSetCanonical}
-                    canSetAliases={canSetAliases}
-                    canonicalAliasEvent={canonicalAliasEv}
-                />
-                <div className="mx_SettingsTab_heading">{ _t("Other") }</div>
-                { urlPreviewSettings }
-                { leaveSection }
-            </div>
+                <SettingsSection heading={_t("room_settings|general|aliases_section")}>
+                    <AliasSettings
+                        roomId={room.roomId}
+                        canSetCanonicalAlias={canSetCanonical}
+                        canSetAliases={canSetAliases}
+                        canonicalAliasEvent={canonicalAliasEv}
+                    />
+                </SettingsSection>
+
+                <SettingsSection heading={_t("room_settings|general|other_section")}>
+                    {urlPreviewSettings}
+                    {leaveSection}
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

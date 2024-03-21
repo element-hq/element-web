@@ -15,36 +15,38 @@ limitations under the License.
 */
 
 import { determineAvatarPosition, readReceiptTooltip } from "../../../../src/components/views/rooms/ReadReceiptGroup";
+import * as languageHandler from "../../../../src/languageHandler";
 
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
         it("returns '...and more' with hasMore", () => {
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], true))
-                .toEqual("Alice, Bob, Charlie, Dan, Eve and more");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], true))
-                .toEqual("Alice, Bob, Charlie, Dan and more");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], true))
-                .toEqual("Alice, Bob, Charlie and more");
-            expect(readReceiptTooltip(["Alice", "Bob"], true))
-                .toEqual("Alice, Bob and more");
-            expect(readReceiptTooltip(["Alice"], true))
-                .toEqual("Alice and more");
-            expect(readReceiptTooltip([], false))
-                .toEqual(null);
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 5)).toEqual(
+                "Alice, Bob, Charlie, Dan, Eve and one other",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 4)).toEqual(
+                "Alice, Bob, Charlie, Dan and 2 others",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 3)).toEqual(
+                "Alice, Bob, Charlie and one other",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 2)).toEqual(
+                "Alice, Bob and 4 others",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 1)).toEqual(
+                "Alice and 5 others",
+            );
+            expect(readReceiptTooltip([], 1)).toBe("");
         });
         it("returns a pretty list without hasMore", () => {
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], false))
-                .toEqual("Alice, Bob, Charlie, Dan and Eve");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], false))
-                .toEqual("Alice, Bob, Charlie and Dan");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], false))
-                .toEqual("Alice, Bob and Charlie");
-            expect(readReceiptTooltip(["Alice", "Bob"], false))
-                .toEqual("Alice and Bob");
-            expect(readReceiptTooltip(["Alice"], false))
-                .toEqual("Alice");
-            expect(readReceiptTooltip([], false))
-                .toEqual(null);
+            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
+                "Alice, Bob, Charlie, Dan and Eve",
+            );
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 4)).toEqual("Alice, Bob, Charlie and Dan");
+            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], 5)).toEqual("Alice, Bob and Charlie");
+            expect(readReceiptTooltip(["Alice", "Bob"], 5)).toEqual("Alice and Bob");
+            expect(readReceiptTooltip(["Alice"], 5)).toEqual("Alice");
+            expect(readReceiptTooltip([], 5)).toBe("");
         });
     });
     describe("AvatarPosition", () => {
@@ -53,44 +55,28 @@ describe("ReadReceiptGroup", () => {
         // We want to fill slots so the first avatar is in the right-most slot without leaving any slots at the left
         // unoccupied.
         it("to handle the non-overflowing case correctly", () => {
-            expect(determineAvatarPosition(0, 4))
-                .toEqual({ hidden: false, position: 0 });
+            expect(determineAvatarPosition(0, 4)).toEqual({ hidden: false, position: 0 });
 
-            expect(determineAvatarPosition(0, 4))
-                .toEqual({ hidden: false, position: 0 });
-            expect(determineAvatarPosition(1, 4))
-                .toEqual({ hidden: false, position: 1 });
+            expect(determineAvatarPosition(0, 4)).toEqual({ hidden: false, position: 0 });
+            expect(determineAvatarPosition(1, 4)).toEqual({ hidden: false, position: 1 });
 
-            expect(determineAvatarPosition(0, 4))
-                .toEqual({ hidden: false, position: 0 });
-            expect(determineAvatarPosition(1, 4))
-                .toEqual({ hidden: false, position: 1 });
-            expect(determineAvatarPosition(2, 4))
-                .toEqual({ hidden: false, position: 2 });
+            expect(determineAvatarPosition(0, 4)).toEqual({ hidden: false, position: 0 });
+            expect(determineAvatarPosition(1, 4)).toEqual({ hidden: false, position: 1 });
+            expect(determineAvatarPosition(2, 4)).toEqual({ hidden: false, position: 2 });
 
-            expect(determineAvatarPosition(0, 4))
-                .toEqual({ hidden: false, position: 0 });
-            expect(determineAvatarPosition(1, 4))
-                .toEqual({ hidden: false, position: 1 });
-            expect(determineAvatarPosition(2, 4))
-                .toEqual({ hidden: false, position: 2 });
-            expect(determineAvatarPosition(3, 4))
-                .toEqual({ hidden: false, position: 3 });
+            expect(determineAvatarPosition(0, 4)).toEqual({ hidden: false, position: 0 });
+            expect(determineAvatarPosition(1, 4)).toEqual({ hidden: false, position: 1 });
+            expect(determineAvatarPosition(2, 4)).toEqual({ hidden: false, position: 2 });
+            expect(determineAvatarPosition(3, 4)).toEqual({ hidden: false, position: 3 });
         });
 
         it("to handle the overflowing case correctly", () => {
-            expect(determineAvatarPosition(0, 4))
-                .toEqual({ hidden: false, position: 0 });
-            expect(determineAvatarPosition(1, 4))
-                .toEqual({ hidden: false, position: 1 });
-            expect(determineAvatarPosition(2, 4))
-                .toEqual({ hidden: false, position: 2 });
-            expect(determineAvatarPosition(3, 4))
-                .toEqual({ hidden: false, position: 3 });
-            expect(determineAvatarPosition(4, 4))
-                .toEqual({ hidden: true, position: 0 });
-            expect(determineAvatarPosition(5, 4))
-                .toEqual({ hidden: true, position: 0 });
+            expect(determineAvatarPosition(0, 4)).toEqual({ hidden: false, position: 0 });
+            expect(determineAvatarPosition(1, 4)).toEqual({ hidden: false, position: 1 });
+            expect(determineAvatarPosition(2, 4)).toEqual({ hidden: false, position: 2 });
+            expect(determineAvatarPosition(3, 4)).toEqual({ hidden: false, position: 3 });
+            expect(determineAvatarPosition(4, 4)).toEqual({ hidden: true, position: 0 });
+            expect(determineAvatarPosition(5, 4)).toEqual({ hidden: true, position: 0 });
         });
     });
 });

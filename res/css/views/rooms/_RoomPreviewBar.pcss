@@ -24,12 +24,13 @@ limitations under the License.
 
     h3 {
         font-size: $font-18px;
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
 
         &.mx_RoomPreviewBar_spinnerTitle {
             display: flex;
             flex-direction: row;
             align-items: center;
+            margin: 0;
         }
     }
 
@@ -100,8 +101,8 @@ limitations under the License.
 
 /* With maximised widgets, the panel fits in better when rounded */
 .mx_MainSplit_maximisedWidget .mx_RoomPreviewBar_panel {
-    margin: $container-gap-width;
-    margin-right: calc($container-gap-width / 2); /* Shared with right panel */
+    margin: var(--container-gap-width);
+    margin-right: calc(var(--container-gap-width) / 2); /* Shared with right panel */
     margin-top: 0; /* Already covered by apps drawer */
     border-radius: 8px;
 }
@@ -139,12 +140,34 @@ limitations under the License.
         }
     }
 }
+.mx_RoomPreviewBar_Invite {
+    max-height: 100vh;
+    overflow-y: auto;
+    justify-content: flex-start;
+}
+
+.mx_RoomPreviewBar_Invite h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: pre-wrap;
+    overflow: hidden;
+}
 
 .mx_RoomPreviewBar_inviter {
-    font-weight: 600;
+    font-weight: var(--cpd-font-weight-semibold);
 }
 
 a.mx_RoomPreviewBar_inviter {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.mx_RoomPreviewBar_icon {
+    margin-right: 8px;
+    vertical-align: text-top;
+}
+
+.mx_RoomPreviewBar_fullWidth {
+    width: 100%;
 }

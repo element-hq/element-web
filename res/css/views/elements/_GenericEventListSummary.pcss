@@ -21,6 +21,21 @@ limitations under the License.
         margin-right: $spacing-8;
     }
 
+    .mx_GenericEventListSummary_spacer {
+        border-bottom: 1px solid $primary-hairline-color;
+        margin-left: 63px;
+        line-height: $font-30px; /* TODO: Use a variable */
+
+        .mx_IRCLayout & {
+            line-height: var(--line-height);
+        }
+    }
+
+    .mx_GenericEventListSummary_toggle {
+        /* We reuse a title cased translation */
+        text-transform: lowercase;
+    }
+
     &[data-layout="irc"],
     &[data-layout="group"] {
         .mx_GenericEventListSummary_toggle {
@@ -51,7 +66,7 @@ limitations under the License.
             }
         }
 
-        .mx_GenericEventListSummary_line {
+        .mx_GenericEventListSummary_spacer {
             display: none;
         }
 
@@ -85,16 +100,22 @@ limitations under the License.
         margin-top: $spacing-4;
 
         .mx_EventTile_line {
-            line-height: $font-20px;
+            line-height: 1.25;
         }
 
-        .mx_GenericEventListSummary_line {
-            line-height: $font-22px;
+        .mx_GenericEventListSummary_spacer {
+            line-height: 1.375;
         }
 
         .mx_TextualEvent.mx_GenericEventListSummary_summary {
-            font-size: $font-13px;
+            font: var(--cpd-font-body-sm-regular);
         }
+    }
+
+    /* Make all state events one order smaller than the other events */
+    .mx_EventTile {
+        font: var(--cpd-font-body-sm-regular);
+        color: $secondary-content;
     }
 }
 
@@ -104,8 +125,9 @@ limitations under the License.
 }
 
 .mx_TextualEvent.mx_GenericEventListSummary_summary {
-    font-size: $font-14px;
+    font: var(--cpd-font-body-sm-regular);
     display: inline-flex;
+    color: $secondary-content;
 }
 
 .mx_GenericEventListSummary_avatars {
@@ -116,10 +138,4 @@ limitations under the License.
         margin-right: -4px;
         cursor: pointer;
     }
-}
-
-.mx_GenericEventListSummary_line {
-    border-bottom: 1px solid $primary-hairline-color;
-    margin-left: 63px;
-    line-height: $font-30px;
 }

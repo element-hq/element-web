@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$topLevelHeight: 32px;
-$nestedHeight: 24px;
-$gutterSize: 16px;
-$activeBorderTransparentGap: 1px;
-
-$activeBackgroundColor: $panel-actions;
-$activeBorderColor: $primary-content;
-
 .mx_SpacePanel {
+    --activeBackground-color: $panel-actions;
+    --activeBorder-color: $primary-content;
+    --activeBorder-transparent-gap: 1px;
+    --gutterSize: 14px;
+    --height-nested: 24px;
+    --height-topLevel: 32px;
+
     background-color: $spacePanel-bg-color;
     flex: 0 0 auto;
     padding: 0;
@@ -34,6 +33,10 @@ $activeBorderColor: $primary-content;
     /* Create another flexbox so the Panel fills the container */
     display: flex;
     flex-direction: column;
+
+    &.collapsed {
+        width: 68px;
+    }
 
     .mx_SpacePanel_toggleCollapse {
         position: absolute;
@@ -53,7 +56,7 @@ $activeBorderColor: $primary-content;
             mask-size: contain;
             mask-repeat: no-repeat;
             background-color: $background;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
             transform: rotate(270deg);
         }
 
@@ -101,6 +104,8 @@ $activeBorderColor: $primary-content;
 
     .mx_SpaceItem.collapsed {
         & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
+            padding: 0 10px;
+            margin: 0 -10px;
             transform: rotate(-90deg);
         }
 
@@ -111,16 +116,10 @@ $activeBorderColor: $primary-content;
 
     .mx_SpaceItem_new {
         position: relative;
-
-        .mx_BetaDot {
-            position: absolute;
-            left: 33px;
-            top: -5px;
-        }
     }
 
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
-        margin-left: $gutterSize;
+        margin-left: var(--gutterSize);
         min-width: 40px;
     }
 
@@ -134,12 +133,12 @@ $activeBorderColor: $primary-content;
 
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
-                background-color: $activeBackgroundColor;
+                background-color: var(--activeBackground-color);
             }
 
             &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
-                padding: $activeBorderTransparentGap;
-                border: 3px $activeBorderColor solid;
+                padding: var(--activeBorder-transparent-gap);
+                border: 3px var(--activeBorder-color) solid;
             }
         }
 
@@ -154,6 +153,11 @@ $activeBorderColor: $primary-content;
             min-width: 0;
         }
 
+        &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+            flex: initial;
+            width: 32px;
+        }
+
         .mx_SpaceButton_name {
             flex: 1;
             margin-left: 8px;
@@ -161,33 +165,33 @@ $activeBorderColor: $primary-content;
             display: block;
             text-overflow: ellipsis;
             overflow: hidden;
-            font-size: $font-14px;
-            line-height: $font-18px;
+            font: var(--cpd-font-body-md-regular);
         }
 
         .mx_SpaceButton_toggleCollapse {
-            width: $gutterSize;
-            min-width: $gutterSize;
+            width: var(--gutterSize);
+            padding: 10px 0;
+            min-width: var(--gutterSize);
             height: 20px;
             mask-position: center;
             mask-size: 20px;
             mask-repeat: no-repeat;
             background-color: $tertiary-content;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         .mx_SpaceButton_icon {
-            width: $topLevelHeight;
-            min-width: $topLevelHeight;
-            height: $topLevelHeight;
+            width: var(--height-topLevel);
+            min-width: var(--height-topLevel);
+            height: var(--height-topLevel);
             border-radius: 8px;
             position: relative;
 
             &::before {
                 position: absolute;
-                content: '';
-                width: $topLevelHeight;
-                height: $topLevelHeight;
+                content: "";
+                width: var(--height-topLevel);
+                height: var(--height-topLevel);
                 top: 0;
                 left: 0;
                 mask-position: center;
@@ -210,35 +214,31 @@ $activeBorderColor: $primary-content;
         }
 
         &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/home.svg');
+            mask-image: url("$(res)/img/element-icons/home.svg");
         }
 
         &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
         }
 
         &.mx_SpaceButton_people .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/room/members.svg');
+            mask-image: url("$(res)/img/element-icons/room/members.svg");
         }
 
         &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
             &::before {
                 background-color: $primary-content;
-                mask-image: url('$(res)/img/element-icons/plus.svg');
-                transition: all .2s ease-in-out; /* TODO transition */
+                mask-image: url("$(res)/img/element-icons/plus.svg");
+                transition: all 0.2s ease-in-out; /* TODO transition */
             }
         }
 
         &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
             transform: rotate(45deg);
-        }
-
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
         }
 
         .mx_SpaceButton_menuButton {
@@ -254,14 +254,14 @@ $activeBorderColor: $primary-content;
             &::before {
                 top: 3px;
                 left: 2px;
-                content: '';
+                content: "";
                 width: 16px;
                 height: 16px;
                 position: absolute;
                 mask-position: center;
                 mask-size: contain;
                 mask-repeat: no-repeat;
-                mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                mask-image: url("$(res)/img/element-icons/context-menu.svg");
                 background: $primary-content;
             }
         }
@@ -274,27 +274,15 @@ $activeBorderColor: $primary-content;
         min-width: 0;
         flex-grow: 1;
 
-        .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
-            color: $secondary-content;
-            border-radius: 8px;
-            background-color: $panel-actions;
-            font-size: $font-15px !important; /* override inline style */
-            font-weight: $font-semi-bold;
-            line-height: $font-18px;
-
-            & + .mx_BaseAvatar_image {
-                visibility: hidden;
-            }
-        }
-
         .mx_SpaceTreeLevel {
-            // Indent subspaces
+            /* Indent subspaces */
             padding-left: 16px;
         }
     }
 
     .mx_SpaceButton_avatarWrapper {
         position: relative;
+        line-height: 0;
     }
 
     .mx_SpacePanel_badgeContainer {
@@ -344,13 +332,14 @@ $activeBorderColor: $primary-content;
     /* root space buttons are bigger and not indented */
     & > .mx_AutoHideScrollbar {
         flex: 1;
-        padding: 0 8px 16px 0;
+        padding: 0 0 16px 0;
+        scrollbar-gutter: stable;
 
         & > .mx_SpaceButton {
-            height: $topLevelHeight;
+            height: var(--height-topLevel);
 
             &.mx_SpaceButton_active::before {
-                height: $topLevelHeight;
+                height: var(--height-topLevel);
             }
         }
 
@@ -359,22 +348,58 @@ $activeBorderColor: $primary-content;
         }
 
         &.mx_IndicatorScrollbar_topOverflow {
-            mask-image: linear-gradient(180deg, transparent, black 5%);
+            mask-image: linear-gradient(to bottom, transparent, black 16px);
         }
 
         &.mx_IndicatorScrollbar_bottomOverflow {
-            mask-image: linear-gradient(180deg, black, black 95%, transparent);
+            mask-image: linear-gradient(
+                to top,
+                transparent,
+                rgba(255, 255, 255, 30%) 4px,
+                rgba(255, 255, 255, 55%) 8px,
+                rgba(255, 255, 255, 75%) 12px,
+                black 16px
+            );
         }
 
         &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
-            mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
+            /* This stacks two gradients on top of one another, which lets us
+               have a fixed pixel offset from both top and bottom for the colour stops.
+               Note the top fade is much smaller because the spaces start close to the top,
+               so otherwise a large gradient suddenly appears when you scroll down.
+             */
+            mask-image: linear-gradient(to bottom, transparent, black 16px),
+                linear-gradient(
+                    to top,
+                    transparent,
+                    rgba(255, 255, 255, 30%) 4px,
+                    rgba(255, 255, 255, 55%) 8px,
+                    rgba(255, 255, 255, 75%) 12px,
+                    black 16px
+                );
+            mask-position:
+                0% 0%,
+                0% 100%;
+            mask-size:
+                calc(100% - 10px) 50%,
+                calc(100% - 10px) 50%;
+            mask-repeat: no-repeat;
         }
     }
 
     .mx_UserMenu {
-        padding: 0 2px 8px;
-        border-bottom: 1px solid $quinary-content;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $separator;
         margin: 12px 14px 4px 18px;
+        width: min-content;
+        max-width: 226px;
+
+        /* Display the container and img here as block elements so they don't take
+         * up extra vertical space.
+         */
+        .mx_UserMenu_userAvatar_BaseAvatar {
+            display: block;
+        }
     }
 }
 
@@ -383,7 +408,7 @@ $activeBorderColor: $primary-content;
 
     .mx_SpacePanel_contextMenu_header {
         margin: 12px 16px 12px;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-18px;
         overflow: hidden;
@@ -392,35 +417,35 @@ $activeBorderColor: $primary-content;
     }
 
     .mx_SpacePanel_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/home.svg');
+        mask-image: url("$(res)/img/element-icons/home.svg");
     }
 
     .mx_SpacePanel_iconInvite::before {
-        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        mask-image: url("$(res)/img/element-icons/room/invite.svg");
     }
 
     .mx_SpacePanel_iconSettings::before {
-        mask-image: url('$(res)/img/element-icons/settings.svg');
+        mask-image: url("$(res)/img/element-icons/settings.svg");
     }
 
     .mx_SpacePanel_iconLeave::before {
-        mask-image: url('$(res)/img/element-icons/leave.svg');
+        mask-image: url("$(res)/img/element-icons/leave.svg");
     }
 
     .mx_SpacePanel_iconMembers::before {
-        mask-image: url('$(res)/img/element-icons/room/members.svg');
+        mask-image: url("$(res)/img/element-icons/room/members.svg");
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/plus.svg');
+        mask-image: url("$(res)/img/element-icons/plus.svg");
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/hash-search.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
     }
 
     .mx_SpacePanel_iconPreferences::before {
-        mask-image: url('$(res)/img/element-icons/settings/preference.svg');
+        mask-image: url("$(res)/img/element-icons/settings/preference.svg");
     }
 
     .mx_SpacePanel_noIcon {
@@ -435,8 +460,7 @@ $activeBorderColor: $primary-content;
         color: $tertiary-content;
         font-size: $font-10px;
         line-height: $font-12px;
-        font-weight: $font-semi-bold;
-        //margin-left: 8px;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 }
 

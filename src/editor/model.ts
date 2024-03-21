@@ -44,20 +44,24 @@ import { Caret } from "./caret";
  * @return the caret position
  */
 
-type TransformCallback = (caretPosition: DocumentPosition, inputType: string, diff: IDiff) => number | void;
-type UpdateCallback = (caret: Caret, inputType?: string, diff?: IDiff) => void;
+type TransformCallback = (caretPosition: DocumentPosition, inputType: string | undefined, diff: IDiff) => number | void;
+type UpdateCallback = (caret?: Caret, inputType?: string, diff?: IDiff) => void;
 type ManualTransformCallback = () => Caret;
 
 export default class EditorModel {
     private _parts: Part[];
     private readonly _partCreator: PartCreator;
-    private activePartIdx: number = null;
-    private _autoComplete: AutocompleteWrapperModel = null;
-    private autoCompletePartIdx: number = null;
+    private activePartIdx: number | null = null;
+    private _autoComplete: AutocompleteWrapperModel | null = null;
+    private autoCompletePartIdx: number | null = null;
     private autoCompletePartCount = 0;
-    private transformCallback: TransformCallback = null;
+    private transformCallback: TransformCallback | null = null;
 
-    constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
+    public constructor(
+        parts: Part[],
+        partCreator: PartCreator,
+        private updateCallback: UpdateCallback | null = null,
+    ) {
         this._parts = parts;
         this._partCreator = partCreator;
         this.transformCallback = null;
@@ -91,16 +95,18 @@ export default class EditorModel {
     }
 
     public clone(): EditorModel {
-        const clonedParts = this.parts.map(p => this.partCreator.deserializePart(p.serialize()));
+        const clonedParts = this.parts
+            .map((p) => this.partCreator.deserializePart(p.serialize()))
+            .filter((p): p is Part => Boolean(p));
         return new EditorModel(clonedParts, this._partCreator, this.updateCallback);
     }
 
     private insertPart(index: number, part: Part): void {
         this._parts.splice(index, 0, part);
-        if (this.activePartIdx >= index) {
+        if (this.activePartIdx !== null && this.activePartIdx >= index) {
             ++this.activePartIdx;
         }
-        if (this.autoCompletePartIdx >= index) {
+        if (this.autoCompletePartIdx !== null && this.autoCompletePartIdx >= index) {
             ++this.autoCompletePartIdx;
         }
     }
@@ -109,12 +115,12 @@ export default class EditorModel {
         this._parts.splice(index, 1);
         if (index === this.activePartIdx) {
             this.activePartIdx = null;
-        } else if (this.activePartIdx > index) {
+        } else if (this.activePartIdx !== null && this.activePartIdx > index) {
             --this.activePartIdx;
         }
         if (index === this.autoCompletePartIdx) {
             this.autoCompletePartIdx = null;
-        } else if (this.autoCompletePartIdx > index) {
+        } else if (this.autoCompletePartIdx !== null && this.autoCompletePartIdx > index) {
             --this.autoCompletePartIdx;
         }
     }
@@ -127,7 +133,7 @@ export default class EditorModel {
         return this._parts;
     }
 
-    public get autoComplete(): AutocompleteWrapperModel {
+    public get autoComplete(): AutocompleteWrapperModel | null {
         if (this.activePartIdx === this.autoCompletePartIdx) {
             return this._autoComplete;
         }
@@ -146,10 +152,10 @@ export default class EditorModel {
     }
 
     public serializeParts(): SerializedPart[] {
-        return this._parts.map(p => p.serialize());
+        return this._parts.map((p) => p.serialize());
     }
 
-    private diff(newValue: string, inputType: string, caret: DocumentOffset): IDiff {
+    private diff(newValue: string, inputType: string | undefined, caret: DocumentOffset): IDiff {
         const previousValue = this.parts.reduce((text, p) => text + p.text, "");
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
@@ -160,7 +166,9 @@ export default class EditorModel {
     }
 
     public reset(serializedParts: SerializedPart[], caret?: Caret, inputType?: string): void {
-        this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
+        this._parts = serializedParts
+            .map((p) => this._partCreator.deserializePart(p))
+            .filter((p): p is Part => Boolean(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
         }
@@ -171,7 +179,7 @@ export default class EditorModel {
             this._autoComplete = null;
             this.autoCompletePartIdx = null;
         }
-        this.updateCallback(caret, inputType);
+        this.updateCallback?.(caret, inputType);
     }
 
     /**
@@ -192,9 +200,9 @@ export default class EditorModel {
         return newTextLength;
     }
 
-    public update(newValue: string, inputType: string, caret: DocumentOffset): Promise<void> {
+    public update(newValue: string, inputType: string | undefined, caret: DocumentOffset): Promise<void> {
         const diff = this.diff(newValue, inputType, caret);
-        const position = this.positionForOffset(diff.at, caret.atNodeEnd);
+        const position = this.positionForOffset(diff.at || 0, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
         if (diff.removed) {
             removedOffsetDecrease = this.removeText(position, diff.removed.length);
@@ -204,7 +212,7 @@ export default class EditorModel {
             addedLen = this.addText(position, diff.added, inputType);
         }
         this.mergeAdjacentParts();
-        const caretOffset = diff.at - removedOffsetDecrease + addedLen;
+        const caretOffset = (diff.at || 0) - removedOffsetDecrease + addedLen;
         let newPosition = this.positionForOffset(caretOffset, true);
         const canOpenAutoComplete = inputType !== "insertFromPaste" && inputType !== "insertFromDrop";
         const acPromise = this.setActivePart(newPosition, canOpenAutoComplete);
@@ -212,13 +220,13 @@ export default class EditorModel {
             const transformAddedLen = this.getTransformAddedLen(newPosition, inputType, diff);
             newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
-        this.updateCallback(newPosition, inputType, diff);
+        this.updateCallback?.(newPosition, inputType, diff);
         return acPromise;
     }
 
-    private getTransformAddedLen(newPosition: DocumentPosition, inputType: string, diff: IDiff): number {
-        const result = this.transformCallback(newPosition, inputType, diff);
-        return Number.isFinite(result) ? result as number : 0;
+    private getTransformAddedLen(newPosition: DocumentPosition, inputType: string | undefined, diff: IDiff): number {
+        const result = this.transformCallback?.(newPosition, inputType, diff);
+        return Number.isFinite(result) ? (result as number) : 0;
     }
 
     private setActivePart(pos: DocumentPosition, canOpenAutoComplete: boolean): Promise<void> {
@@ -252,12 +260,13 @@ export default class EditorModel {
     }
 
     private onAutoComplete = ({ replaceParts, close }: ICallback): void => {
-        let pos;
+        let pos: DocumentPosition | undefined;
         if (replaceParts) {
-            this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
+            const autoCompletePartIdx = this.autoCompletePartIdx || 0;
+            this._parts.splice(autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
             this.autoCompletePartCount = replaceParts.length;
             const lastPart = replaceParts[replaceParts.length - 1];
-            const lastPartIndex = this.autoCompletePartIdx + replaceParts.length - 1;
+            const lastPartIndex = autoCompletePartIdx + replaceParts.length - 1;
             pos = new DocumentPosition(lastPartIndex, lastPart.text.length);
         }
         if (close) {
@@ -268,15 +277,15 @@ export default class EditorModel {
         // rerender even if editor contents didn't change
         // to make sure the MessageEditor checks
         // model.autoComplete being empty and closes it
-        this.updateCallback(pos);
+        this.updateCallback?.(pos);
     };
 
     private mergeAdjacentParts(): void {
-        let prevPart;
+        let prevPart: Part | undefined;
         for (let i = 0; i < this._parts.length; ++i) {
-            let part = this._parts[i];
+            let part: Part | undefined = this._parts[i];
             const isEmpty = !part.text.length;
-            const isMerged = !isEmpty && prevPart && prevPart.merge(part);
+            const isMerged = !isEmpty && prevPart && prevPart.merge?.(part);
             if (isEmpty || isMerged) {
                 // remove empty or merged part
                 part = prevPart;
@@ -355,15 +364,18 @@ export default class EditorModel {
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    private addText(pos: IPosition, str: string, inputType: string): number {
+    private addText(pos: IPosition, str: string, inputType: string | undefined): number {
         let { index } = pos;
         const { offset } = pos;
         let addLen = str.length;
         const part = this._parts[index];
+
+        let it: string | undefined = str;
+
         if (part) {
             if (part.canEdit) {
                 if (part.validateAndInsert(offset, str, inputType)) {
-                    str = null;
+                    it = undefined;
                 } else {
                     const splitPart = part.split(offset);
                     index += 1;
@@ -380,13 +392,14 @@ export default class EditorModel {
             // reset it to insert as first part
             index = 0;
         }
-        while (str) {
-            const newPart = this._partCreator.createPartForInput(str, index, inputType);
-            const oldStr = str;
-            str = newPart.appendUntilRejected(str, inputType);
-            if (str === oldStr) {
+
+        while (it) {
+            const newPart = this._partCreator.createPartForInput(it, index, inputType);
+            const oldStr = it;
+            it = newPart.appendUntilRejected(it, inputType);
+            if (it === oldStr) {
                 // nothing changed, break out of this infinite loop and log an error
-                console.error(`Failed to update model for input (str ${str}) (type ${inputType})`);
+                console.error(`Failed to update model for input (str ${it}) (type ${inputType})`);
                 break;
             }
             this.insertPart(index, newPart);
@@ -397,11 +410,11 @@ export default class EditorModel {
 
     public positionForOffset(totalOffset: number, atPartEnd = false): DocumentPosition {
         let currentOffset = 0;
-        const index = this._parts.findIndex(part => {
+        const index = this._parts.findIndex((part) => {
             const partLen = part.text.length;
             if (
-                (atPartEnd && (currentOffset + partLen) >= totalOffset) ||
-                (!atPartEnd && (currentOffset + partLen) > totalOffset)
+                (atPartEnd && currentOffset + partLen >= totalOffset) ||
+                (!atPartEnd && currentOffset + partLen > totalOffset)
             ) {
                 return true;
             }
@@ -452,13 +465,13 @@ export default class EditorModel {
      */
     public transform(callback: ManualTransformCallback): Promise<void> {
         const pos = callback();
-        let acPromise: Promise<void> = null;
+        let acPromise: Promise<void> | null;
         if (!(pos instanceof Range)) {
             acPromise = this.setActivePart(pos, true);
         } else {
             acPromise = Promise.resolve();
         }
-        this.updateCallback(pos);
+        this.updateCallback?.(pos);
         return acPromise;
     }
 }

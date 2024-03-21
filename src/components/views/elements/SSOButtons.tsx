@@ -17,9 +17,15 @@ limitations under the License.
 import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import {
+    MatrixClient,
+    IdentityProviderBrand,
+    SSOFlow,
+    SSOAction,
+    IIdentityProvider,
+    DELEGATED_OIDC_COMPATIBILITY,
+} from "matrix-js-sdk/src/matrix";
 import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
-import { IdentityProviderBrand, IIdentityProvider, ISSOFlow } from "matrix-js-sdk/src/@types/auth";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
@@ -28,12 +34,13 @@ import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
-interface ISSOButtonProps extends Omit<IProps, "flow"> {
+interface ISSOButtonProps extends IProps {
     idp?: IIdentityProvider;
     mini?: boolean;
+    action?: SSOAction;
 }
 
-const getIcon = (brand: IdentityProviderBrand | string) => {
+const getIcon = (brand: IdentityProviderBrand | string): string | null => {
     switch (brand) {
         case IdentityProviderBrand.Apple:
             return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
@@ -79,96 +86,118 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     idp,
     primary,
     mini,
+    action,
+    flow,
     ...props
 }) => {
-    const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
+    let label: string;
+    if (idp) {
+        label = _t("auth|continue_with_idp", { provider: idp.name });
+    } else if (DELEGATED_OIDC_COMPATIBILITY.findIn<boolean>(flow)) {
+        label = _t("action|continue");
+    } else {
+        label = _t("auth|sign_in_with_sso");
+    }
 
-    const onClick = () => {
+    const onClick = (): void => {
         const authenticationType = getAuthenticationType(idp?.brand ?? "");
         PosthogAnalytics.instance.setAuthenticationType(authenticationType);
-        PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id);
+        PlatformPeg.get()?.startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id, action);
     };
 
-    let icon;
-    let brandClass;
-    const brandIcon = idp ? getIcon(idp.brand) : null;
-    if (brandIcon) {
+    let icon: JSX.Element | undefined;
+    let brandClass: string | undefined;
+    const brandIcon = idp?.brand ? getIcon(idp.brand) : null;
+    if (idp?.brand && brandIcon) {
         const brandName = idp.brand.split(".").pop();
         brandClass = `mx_SSOButton_brand_${brandName}`;
         icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
-        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24);
+        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
-    const classes = classNames("mx_SSOButton", {
-        [brandClass]: brandClass,
-        mx_SSOButton_mini: mini,
-        mx_SSOButton_default: !idp,
-        mx_SSOButton_primary: primary,
-    });
+    const brandPart = brandClass ? { [brandClass]: brandClass } : undefined;
+    const classes = classNames(
+        "mx_SSOButton",
+        {
+            mx_SSOButton_mini: mini,
+            mx_SSOButton_default: !idp,
+            mx_SSOButton_primary: primary,
+        },
+        brandPart,
+    );
 
     if (mini) {
         // TODO fallback icon
         return (
             <AccessibleTooltipButton {...props} title={label} className={classes} onClick={onClick}>
-                { icon }
+                {icon}
             </AccessibleTooltipButton>
         );
     }
 
     return (
         <AccessibleButton {...props} className={classes} onClick={onClick}>
-            { icon }
-            { label }
+            {icon}
+            {label}
         </AccessibleButton>
     );
 };
 
 interface IProps {
     matrixClient: MatrixClient;
-    flow: ISSOFlow;
-    loginType?: "sso" | "cas";
+    flow: SSOFlow;
+    loginType: "sso" | "cas";
     fragmentAfterLogin?: string;
     primary?: boolean;
+    action?: SSOAction;
 }
 
 const MAX_PER_ROW = 6;
 
-const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentAfterLogin, primary }) => {
+const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentAfterLogin, primary, action }) => {
     const providers = flow.identity_providers || [];
     if (providers.length < 2) {
-        return <div className="mx_SSOButtons">
-            <SSOButton
-                matrixClient={matrixClient}
-                loginType={loginType}
-                fragmentAfterLogin={fragmentAfterLogin}
-                idp={providers[0]}
-                primary={primary}
-            />
-        </div>;
+        return (
+            <div className="mx_SSOButtons">
+                <SSOButton
+                    matrixClient={matrixClient}
+                    loginType={loginType}
+                    fragmentAfterLogin={fragmentAfterLogin}
+                    idp={providers[0]}
+                    primary={primary}
+                    action={action}
+                    flow={flow}
+                />
+            </div>
+        );
     }
 
     const rows = Math.ceil(providers.length / MAX_PER_ROW);
     const size = Math.ceil(providers.length / rows);
 
-    return <div className="mx_SSOButtons">
-        { chunk(providers, size).map(chunk => (
-            <div key={chunk[0].id} className="mx_SSOButtons_row">
-                { chunk.map(idp => (
-                    <SSOButton
-                        key={idp.id}
-                        matrixClient={matrixClient}
-                        loginType={loginType}
-                        fragmentAfterLogin={fragmentAfterLogin}
-                        idp={idp}
-                        mini={true}
-                        primary={primary}
-                    />
-                )) }
-            </div>
-        )) }
-    </div>;
+    return (
+        <div className="mx_SSOButtons">
+            {chunk(providers, size).map((chunk) => (
+                <div key={chunk[0].id} className="mx_SSOButtons_row">
+                    {chunk.map((idp) => (
+                        <SSOButton
+                            key={idp.id}
+                            matrixClient={matrixClient}
+                            loginType={loginType}
+                            fragmentAfterLogin={fragmentAfterLogin}
+                            idp={idp}
+                            mini={true}
+                            primary={primary}
+                            action={action}
+                            flow={flow}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default SSOButtons;

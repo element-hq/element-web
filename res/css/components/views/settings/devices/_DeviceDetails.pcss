@@ -19,21 +19,19 @@ limitations under the License.
     flex-direction: column;
     box-sizing: border-box;
 
-    width: 100%;
-
     margin-top: $spacing-16;
-    padding: $spacing-16;
+    padding: $spacing-24;
     border-radius: 8px;
     border: 1px solid $quinary-content;
 }
 
 .mx_DeviceDetails_section {
-    padding-bottom: $spacing-16;
-    margin-bottom: $spacing-16;
+    padding-bottom: $spacing-20;
+    margin-bottom: $spacing-20;
     border-bottom: 1px solid $quinary-content;
 
     display: grid;
-    grid-gap: $spacing-16;
+    grid-gap: $spacing-24;
     justify-content: left;
     grid-template-columns: 100%;
 
@@ -52,11 +50,12 @@ limitations under the License.
         font-size: $font-12px;
         color: $secondary-content;
         line-height: $font-14px;
+        margin-top: $spacing-4;
     }
 }
 
 .mx_DeviceDetails_metadataTable {
-    font-size: $font-12px;
+    font: var(--cpd-font-body-sm-regular);
     color: $secondary-content;
 
     width: 100%;

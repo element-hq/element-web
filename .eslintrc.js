@@ -1,12 +1,9 @@
 module.exports = {
-    plugins: [
-        "matrix-org",
-    ],
-    extends: [
-        "plugin:matrix-org/babel",
-        "plugin:matrix-org/react",
-        "plugin:matrix-org/a11y",
-    ],
+    plugins: ["matrix-org"],
+    extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
+    parserOptions: {
+        project: ["./tsconfig.json"],
+    },
     env: {
         browser: true,
         node: true,
@@ -19,7 +16,6 @@ module.exports = {
         "no-constant-condition": "off",
         "prefer-promise-reject-errors": "off",
         "no-async-promise-executor": "off",
-        "quotes": "off",
         "no-extra-boolean-cast": "off",
 
         // Bind or arrow functions in props causes performance issues (but we
@@ -40,43 +36,125 @@ module.exports = {
             ),
         ],
 
+        "import/no-duplicates": ["error"],
         // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
-        "no-restricted-imports": ["error", {
-            "paths": [{
-                "name": "matrix-js-sdk",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/index",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-react-sdk",
-                "message": "Please use matrix-react-sdk/src/index instead",
-            }, {
-                "name": "matrix-react-sdk/",
-                "message": "Please use matrix-react-sdk/src/index instead",
-            }],
-            "patterns": [{
-                "group": ["matrix-js-sdk/lib", "matrix-js-sdk/lib/", "matrix-js-sdk/lib/**"],
-                "message": "Please use matrix-js-sdk/src/* instead",
-            }],
-        }],
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "matrix-js-sdk",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/index",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-react-sdk",
+                        message: "Please use matrix-react-sdk/src/index instead",
+                    },
+                    {
+                        name: "matrix-react-sdk/",
+                        message: "Please use matrix-react-sdk/src/index instead",
+                    },
+                ],
+                patterns: [
+                    {
+                        group: [
+                            "matrix-js-sdk/src/**",
+                            "!matrix-js-sdk/src/matrix",
+                            "!matrix-js-sdk/src/types",
+                            "matrix-js-sdk/lib",
+                            "matrix-js-sdk/lib/",
+                            "matrix-js-sdk/lib/**",
+                            // XXX: Temporarily allow these as they are not available via the main export
+                            "!matrix-js-sdk/src/logger",
+                            "!matrix-js-sdk/src/errors",
+                            "!matrix-js-sdk/src/utils",
+                            "!matrix-js-sdk/src/version-support",
+                            "!matrix-js-sdk/src/randomstring",
+                            "!matrix-js-sdk/src/sliding-sync",
+                            "!matrix-js-sdk/src/browser-index",
+                            "!matrix-js-sdk/src/feature",
+                            "!matrix-js-sdk/src/NamespacedValue",
+                            "!matrix-js-sdk/src/ReEmitter",
+                            "!matrix-js-sdk/src/event-mapper",
+                            "!matrix-js-sdk/src/interactive-auth",
+                            "!matrix-js-sdk/src/secret-storage",
+                            "!matrix-js-sdk/src/room-hierarchy",
+                            "!matrix-js-sdk/src/rendezvous",
+                            "!matrix-js-sdk/src/rendezvous/transports",
+                            "!matrix-js-sdk/src/rendezvous/channels",
+                            "!matrix-js-sdk/src/indexeddb-worker",
+                            "!matrix-js-sdk/src/pushprocessor",
+                            "!matrix-js-sdk/src/extensible_events_v1",
+                            "!matrix-js-sdk/src/extensible_events_v1/PollStartEvent",
+                            "!matrix-js-sdk/src/extensible_events_v1/PollResponseEvent",
+                            "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
+                            "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
+                            "!matrix-js-sdk/src/crypto-api",
+                            "!matrix-js-sdk/src/crypto-api/verification",
+                            "!matrix-js-sdk/src/crypto",
+                            "!matrix-js-sdk/src/crypto/algorithms",
+                            "!matrix-js-sdk/src/crypto/api",
+                            "!matrix-js-sdk/src/crypto/aes",
+                            "!matrix-js-sdk/src/crypto/backup",
+                            "!matrix-js-sdk/src/crypto/olmlib",
+                            "!matrix-js-sdk/src/crypto/crypto",
+                            "!matrix-js-sdk/src/crypto/keybackup",
+                            "!matrix-js-sdk/src/crypto/RoomList",
+                            "!matrix-js-sdk/src/crypto/deviceinfo",
+                            "!matrix-js-sdk/src/crypto/key_passphrase",
+                            "!matrix-js-sdk/src/crypto/CrossSigning",
+                            "!matrix-js-sdk/src/crypto/recoverykey",
+                            "!matrix-js-sdk/src/crypto/dehydration",
+                            "!matrix-js-sdk/src/crypto/verification",
+                            "!matrix-js-sdk/src/crypto/verification/SAS",
+                            "!matrix-js-sdk/src/crypto/verification/QRCode",
+                            "!matrix-js-sdk/src/crypto/verification/request",
+                            "!matrix-js-sdk/src/crypto/verification/request/VerificationRequest",
+                            "!matrix-js-sdk/src/oidc",
+                            "!matrix-js-sdk/src/oidc/discovery",
+                            "!matrix-js-sdk/src/oidc/authorize",
+                            "!matrix-js-sdk/src/oidc/validate",
+                            "!matrix-js-sdk/src/oidc/error",
+                            "!matrix-js-sdk/src/oidc/register",
+                            "!matrix-js-sdk/src/webrtc",
+                            "!matrix-js-sdk/src/webrtc/call",
+                            "!matrix-js-sdk/src/webrtc/callFeed",
+                            "!matrix-js-sdk/src/webrtc/mediaHandler",
+                            "!matrix-js-sdk/src/webrtc/callEventTypes",
+                            "!matrix-js-sdk/src/webrtc/callEventHandler",
+                            "!matrix-js-sdk/src/webrtc/groupCallEventHandler",
+                            "!matrix-js-sdk/src/models",
+                            "!matrix-js-sdk/src/models/read-receipt",
+                            "!matrix-js-sdk/src/models/relations-container",
+                            "!matrix-js-sdk/src/models/related-relations",
+                        ],
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                ],
+            },
+        ],
 
         // There are too many a11y violations to fix at once
         // Turn violated rules off until they are fixed
-        "jsx-a11y/alt-text": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
         "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/interactive-supports-focus": "off",
-        "jsx-a11y/label-has-associated-control": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/mouse-events-have-key-events": "off",
         "jsx-a11y/no-autofocus": "off",
@@ -85,25 +163,23 @@ module.exports = {
         "jsx-a11y/no-noninteractive-tabindex": "off",
         "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/role-supports-aria-props": "off",
-        "jsx-a11y/tabindex-no-positive": "off",
 
         "matrix-org/require-copyright-header": "error",
     },
     overrides: [
         {
-            files: [
-                "src/**/*.{ts,tsx}",
-                "test/**/*.{ts,tsx}",
-                "cypress/**/*.ts",
-            ],
-            extends: [
-                "plugin:matrix-org/typescript",
-                "plugin:matrix-org/react",
-            ],
+            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
+                "@typescript-eslint/explicit-function-return-type": [
+                    "error",
+                    {
+                        allowExpressions: true,
+                    },
+                ],
+
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
-                "quotes": "off",
                 "no-extra-boolean-cast": "off",
 
                 // Remove Babel things manually due to override limitations
@@ -117,10 +193,6 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
-
-                // The non-TypeScript rule produces false positives
-                "func-call-spacing": "off",
-                "@typescript-eslint/func-call-spacing": ["error"],
             },
         },
         // temporary override for offending icon require files
@@ -153,12 +225,41 @@ module.exports = {
                 "src/components/views/rooms/MessageComposer.tsx",
                 "src/components/views/rooms/ReplyPreview.tsx",
                 "src/components/views/settings/tabs/room/SecurityRoomSettingsTab.tsx",
-                "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx"
+                "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx",
             ],
             rules: {
                 "@typescript-eslint/no-var-requires": "off",
             },
-        }
+        },
+        {
+            files: ["test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            extends: ["plugin:matrix-org/jest"],
+            rules: {
+                // We don't need super strict typing in test utilities
+                "@typescript-eslint/explicit-function-return-type": "off",
+                "@typescript-eslint/explicit-member-accessibility": "off",
+
+                // Jest/Playwright specific
+
+                // Disabled tests are a reality for now but as soon as all of the xits are
+                // eliminated, we should enforce this.
+                "jest/no-disabled-tests": "off",
+                // Also treat "oldBackendOnly" as a test function.
+                // Used in some crypto tests.
+                "jest/no-standalone-expect": [
+                    "error",
+                    {
+                        additionalTestBlockFunctions: ["beforeAll", "beforeEach", "oldBackendOnly"],
+                    },
+                ],
+            },
+        },
+        {
+            files: ["playwright/**/*.ts"],
+            parserOptions: {
+                project: ["./playwright/tsconfig.json"],
+            },
+        },
     ],
     settings: {
         react: {
@@ -168,7 +269,7 @@ module.exports = {
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {
-    return properties.map(prop => {
+    return properties.map((prop) => {
         let [object, property] = prop.split(".");
         if (object === "*") {
             object = undefined;

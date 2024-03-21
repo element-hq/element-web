@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent, ClientEventHandlerMap, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { createReconnectedListener } from "../../src/utils/connection";
 
@@ -35,7 +34,7 @@ describe("createReconnectedListener", () => {
     ].forEach(([from, to]) => {
         it(`should invoke the callback on a transition from ${from} to ${to}`, () => {
             reconnectedListener(to, from);
-            expect(onReconnect).toBeCalled();
+            expect(onReconnect).toHaveBeenCalled();
         });
     });
 
@@ -46,7 +45,7 @@ describe("createReconnectedListener", () => {
     ].forEach(([from, to]) => {
         it(`should not invoke the callback on a transition from ${from} to ${to}`, () => {
             reconnectedListener(to, from);
-            expect(onReconnect).not.toBeCalled();
+            expect(onReconnect).not.toHaveBeenCalled();
         });
     });
 });

@@ -29,7 +29,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
 
     private readonly layoutMap = new Map<TagID, ListLayout>();
 
-    constructor() {
+    public constructor() {
         super(defaultDispatcher);
     }
 
@@ -41,7 +41,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
         return RoomListLayoutStore.internalInstance;
     }
 
-    public ensureLayoutExists(tagId: TagID) {
+    public ensureLayoutExists(tagId: TagID): void {
         if (!this.layoutMap.has(tagId)) {
             this.layoutMap.set(tagId, new ListLayout(tagId));
         }
@@ -51,11 +51,11 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
         if (!this.layoutMap.has(tagId)) {
             this.layoutMap.set(tagId, new ListLayout(tagId));
         }
-        return this.layoutMap.get(tagId);
+        return this.layoutMap.get(tagId)!;
     }
 
     // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
-    public async resetLayouts() {
+    public async resetLayouts(): Promise<void> {
         logger.warn("Resetting layouts for room list");
         for (const layout of this.layoutMap.values()) {
             layout.reset();
@@ -68,8 +68,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this function, but our contract says we do
-    protected async onAction(payload: ActionPayload): Promise<void> {
-    }
+    protected async onAction(payload: ActionPayload): Promise<void> {}
 }
 
 window.mxRoomListLayoutStore = RoomListLayoutStore.instance;

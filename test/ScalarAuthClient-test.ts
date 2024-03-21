@@ -16,15 +16,16 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import ScalarAuthClient from '../src/ScalarAuthClient';
-import { stubClient } from './test-utils';
+import ScalarAuthClient from "../src/ScalarAuthClient";
+import { stubClient } from "./test-utils";
 import SdkConfig from "../src/SdkConfig";
 import { WidgetType } from "../src/widgets/WidgetType";
 
-describe('ScalarAuthClient', function() {
-    const apiUrl = 'https://test.com/api';
-    const uiUrl = 'https:/test.com/app';
+describe("ScalarAuthClient", function () {
+    const apiUrl = "https://test.com/api";
+    const uiUrl = "https:/test.com/app";
     const tokenObject = {
         access_token: "token",
         token_type: "Bearer",
@@ -32,13 +33,13 @@ describe('ScalarAuthClient', function() {
         expires_in: 999,
     };
 
-    let client;
-    beforeEach(function() {
+    let client: MatrixClient;
+    beforeEach(function () {
         jest.clearAllMocks();
         client = stubClient();
     });
 
-    it('should request a new token if the old one fails', async function() {
+    it("should request a new token if the old one fails", async function () {
         const sac = new ScalarAuthClient(apiUrl + 0, uiUrl);
 
         fetchMock.get("https://test.com/api0/account?scalar_token=brokentoken&v=1.1", {
@@ -52,15 +53,15 @@ describe('ScalarAuthClient', function() {
         client.getOpenIdToken = jest.fn().mockResolvedValue(tokenObject);
 
         sac.exchangeForScalarToken = jest.fn((arg) => {
-            if (arg === tokenObject) return Promise.resolve("wokentoken");
+            return Promise.resolve(arg === tokenObject ? "wokentoken" : "othertoken");
         });
 
         await sac.connect();
 
-        expect(sac.exchangeForScalarToken).toBeCalledWith(tokenObject);
+        expect(sac.exchangeForScalarToken).toHaveBeenCalledWith(tokenObject);
         expect(sac.hasCredentials).toBeTruthy();
         // @ts-ignore private property
-        expect(sac.scalarToken).toEqual('wokentoken');
+        expect(sac.scalarToken).toEqual("wokentoken");
     });
 
     describe("exchangeForScalarToken", () => {
@@ -191,22 +192,29 @@ describe('ScalarAuthClient', function() {
         });
 
         it("should send state=disable to API /widgets/set_assets_state", async () => {
-            fetchMock.get("https://test.com/api8/widgets/set_assets_state?scalar_token=wokentoken1" +
-                "&widget_type=m.custom&widget_id=id1&state=disable", {
-                body: "OK",
-            });
+            fetchMock.get(
+                "https://test.com/api8/widgets/set_assets_state?scalar_token=wokentoken1" +
+                    "&widget_type=m.custom&widget_id=id1&state=disable",
+                {
+                    body: "OK",
+                },
+            );
 
             await expect(sac.disableWidgetAssets(WidgetType.CUSTOM, "id1")).resolves.toBeUndefined();
         });
 
         it("should throw upon non-20x code", async () => {
-            fetchMock.get("https://test.com/api8/widgets/set_assets_state?scalar_token=wokentoken1" +
-                "&widget_type=m.custom&widget_id=id2&state=disable", {
-                status: 500,
-            });
+            fetchMock.get(
+                "https://test.com/api8/widgets/set_assets_state?scalar_token=wokentoken1" +
+                    "&widget_type=m.custom&widget_id=id2&state=disable",
+                {
+                    status: 500,
+                },
+            );
 
-            await expect(sac.disableWidgetAssets(WidgetType.CUSTOM, "id2"))
-                .rejects.toThrow("Scalar request failed: 500");
+            await expect(sac.disableWidgetAssets(WidgetType.CUSTOM, "id2")).rejects.toThrow(
+                "Scalar request failed: 500",
+            );
         });
     });
 });

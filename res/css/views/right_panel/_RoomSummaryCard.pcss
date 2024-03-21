@@ -15,78 +15,22 @@ limitations under the License.
 */
 
 .mx_RoomSummaryCard {
-    .mx_BaseCard_header {
+    .mx_RoomSummaryCard_container {
         text-align: center;
-        margin-top: $spacing-20;
+        margin: $spacing-20 var(--cpd-space-4x) 0;
+    }
 
-        h2 {
-            margin: $spacing-12 0 $spacing-4;
-        }
+    .mx_RoomSummaryCard_roomName,
+    .mx_RoomSummaryCard_alias {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
 
-        .mx_RoomSummaryCard_alias {
-            font-size: $font-13px;
-            color: $secondary-content;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        h2, .mx_RoomSummaryCard_alias {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            white-space: pre-wrap;
-        }
-
-        .mx_RoomSummaryCard_avatar {
-            display: inline-flex;
-
-            .mx_RoomSummaryCard_e2ee {
-                display: inline-block;
-                position: relative;
-                width: 54px;
-                height: 54px;
-                border-radius: 50%;
-                background-color: #737d8c;
-                margin-top: -3px; /* alignment */
-                margin-left: -10px; /* overlap */
-                border: 3px solid $dark-panel-bg-color;
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 13px;
-                    left: 13px;
-                    height: 28px;
-                    width: 28px;
-                    mask-size: cover;
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-image: url('$(res)/img/e2e/disabled.svg');
-                    background-color: #ffffff;
-                }
-            }
-
-            .mx_RoomSummaryCard_e2ee_normal {
-                background-color: #424446;
-                &::before {
-                    mask-image: url('$(res)/img/e2e/normal.svg');
-                }
-            }
-
-            .mx_RoomSummaryCard_e2ee_verified {
-                background-color: #0dbd8b;
-                &::before {
-                    mask-image: url('$(res)/img/e2e/verified.svg');
-                }
-            }
-
-            .mx_RoomSummaryCard_e2ee_warning {
-                background-color: #ff5b55;
-                &::before {
-                    mask-image: url('$(res)/img/e2e/warning.svg');
-                }
-            }
-        }
+    .mx_RoomSummaryCard_alias {
+        text-overflow: ellipsis;
     }
 
     .mx_RoomSummaryCard_aboutGroup {
@@ -94,7 +38,7 @@ limitations under the License.
             padding-left: 44px;
 
             &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 top: 8px;
                 left: 10px;
@@ -119,13 +63,14 @@ limitations under the License.
                 padding: 10px 48px 10px 12px; /* based on typical mx_RoomSummaryCard_Button padding */
                 text-overflow: ellipsis;
                 overflow: hidden;
-
-                .mx_BaseAvatar_image {
-                    vertical-align: top;
-                    margin-right: 12px;
-                }
-
+                display: flex;
+                justify-content: center;
                 span {
+                    /* Center aligned and Spacing matched with the About section above the Widgets section */
+                    margin-right: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     color: $primary-content;
                 }
             }
@@ -143,7 +88,7 @@ limitations under the License.
 
                 &:hover {
                     &::after {
-                        content: '';
+                        content: "";
                         position: absolute;
                         height: 24px;
                         width: 24px;
@@ -155,7 +100,7 @@ limitations under the License.
                 }
 
                 &::before {
-                    content: '';
+                    content: "";
                     position: absolute;
                     height: 16px;
                     width: 16px;
@@ -170,7 +115,7 @@ limitations under the License.
                 right: 8px;
 
                 &::before {
-                    mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+                    mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
                 }
             }
             .mx_RoomSummaryCard_app_maximiseToggle {
@@ -186,7 +131,7 @@ limitations under the License.
                 right: 56px; /* 2*24 + 8 */
                 display: none;
                 &::before {
-                    mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+                    mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
                 }
             }
 
@@ -235,34 +180,40 @@ limitations under the License.
         margin-top: 12px;
         margin-bottom: 12px;
         font-size: $font-13px;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 }
 
-.mx_RoomSummaryCard_icon_people::before {
-    mask-image: url("$(res)/img/element-icons/room/members.svg");
+.mx_RoomSummaryCard_badges {
+    margin: var(--cpd-space-4x) 0;
 }
 
-.mx_RoomSummaryCard_icon_files::before {
-    mask-image: url('$(res)/img/element-icons/room/files.svg');
+.mx_RoomSummaryCard_header {
+    padding: 15px 12px;
 }
 
-.mx_RoomSummaryCard_icon_pins::before {
-    mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+.mx_RoomSummaryCard_search input {
+    /* Overriding very broad CSS rules */
+    border: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
 }
 
-.mx_RoomSummaryCard_icon_threads::before {
-    mask-image: url('$(res)/img/element-icons/message/thread.svg');
+.mx_RoomSummaryCard_searchBtn {
+    background: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-icon-primary);
+    border: 1px solid var(--cpd-color-gray-400);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: var(--cpd-space-2x);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--cpd-color-bg-subtle-primary);
+    }
 }
 
-.mx_RoomSummaryCard_icon_share::before {
-    mask-image: url('$(res)/img/element-icons/room/share.svg');
-}
-
-.mx_RoomSummaryCard_icon_settings::before {
-    mask-image: url('$(res)/img/element-icons/settings.svg');
-}
-
-.mx_RoomSummaryCard_icon_export::before {
-    mask-image: url('$(res)/img/element-icons/export.svg');
+.mx_RoomSummaryCard_roomName {
+    margin: $spacing-12 0 $spacing-4;
 }

@@ -14,33 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AliasSettings_editable {
-    border: 0px;
-    border-bottom: 1px solid $strong-input-border-color;
-    padding: 0px;
-    min-width: 240px;
-}
+.mx_AliasSettings_localAddresses {
+    cursor: pointer;
+    color: var(--cpd-color-text-primary);
+    font-weight: var(--cpd-font-weight-semibold);
+    text-decoration: underline;
+    list-style: none;
+    width: fit-content;
 
-.mx_AliasSettings_editable:focus {
-    border-bottom: 1px solid $accent;
-    outline: none;
-    box-shadow: none;
-}
-
-.mx_AliasSettings {
-    summary {
-        cursor: pointer;
-        color: $accent;
-        font-weight: 600;
-        list-style: none;
-
-        /* list-style doesn't do it for webkit */
-        &::-webkit-details-marker {
-            display: none;
-        }
-    }
-
-    .mx_AliasSettings_localAliasHeader {
-        margin-top: 35px;
+    /* list-style doesn't do it for webkit */
+    &::-webkit-details-marker {
+        display: none;
     }
 }

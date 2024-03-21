@@ -1,4 +1,5 @@
 /*
+ Copyright 2023 The Matrix.org Foundation C.I.C.
  Copyright 2015, 2016 OpenMarket Ltd
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,55 +15,34 @@
  limitations under the License.
  */
 
-import React from 'react';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
+import React from "react";
+import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DisambiguatedProfile from "./DisambiguatedProfile";
-import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
-import SettingsStore from "../../../settings/SettingsStore";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
     mxEvent: MatrixEvent;
     onClick?(): void;
+    withTooltip?: boolean;
 }
 
-export default class SenderProfile extends React.PureComponent<IProps> {
-    public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps): JSX.Element {
+    const member = useRoomMemberProfile({
+        userId: mxEvent.getSender(),
+        member: mxEvent.sender,
+    });
 
-    render() {
-        const { mxEvent, onClick } = this.props;
-        const msgtype = mxEvent.getContent().msgtype;
-
-        let member = mxEvent.sender;
-        if (SettingsStore.getValue("useOnlyCurrentProfiles")) {
-            const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
-            if (room) {
-                member = room.getMember(mxEvent.getSender());
-            }
-        }
-
-        return <RoomContext.Consumer>
-            { roomContext => {
-                if (msgtype === MsgType.Emote &&
-                    roomContext.timelineRenderingType !== TimelineRenderingType.ThreadsList
-                ) {
-                    return null; // emote message must include the name so don't duplicate it
-                }
-
-                return (
-                    <DisambiguatedProfile
-                        fallbackName={mxEvent.getSender() || ""}
-                        onClick={onClick}
-                        member={member}
-                        colored={true}
-                        emphasizeDisplayName={true}
-                    />
-                );
-            } }
-        </RoomContext.Consumer>;
-    }
+    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
+        <DisambiguatedProfile
+            fallbackName={mxEvent.getSender() ?? ""}
+            onClick={onClick}
+            member={member}
+            colored={true}
+            emphasizeDisplayName={true}
+            withTooltip={withTooltip}
+        />
+    ) : (
+        <></>
+    );
 }

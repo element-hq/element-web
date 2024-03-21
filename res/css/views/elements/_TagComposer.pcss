@@ -17,16 +17,12 @@ limitations under the License.
 .mx_TagComposer {
     .mx_TagComposer_input {
         display: flex;
-
-        .mx_Field {
-            flex: 1;
-            margin: 0; /* override from field styles */
-        }
+        flex-direction: row;
 
         .mx_AccessibleButton {
             min-width: 70px;
             padding: 0 8px; /* override from button styles */
-            margin-left: 16px; /* distance from <Field> */
+            align-self: stretch; /* override default settingstab style */
         }
 
         .mx_Field,
@@ -50,7 +46,6 @@ limitations under the License.
 }
 
 .mx_Tag {
-
     font-size: $font-15px;
 
     display: inline-flex;
@@ -63,7 +58,7 @@ limitations under the License.
     color: $primary-content;
     background: $quinary-content;
 
-    >svg:first-child {
+    > svg:first-child {
         width: 1em;
         color: $secondary-content;
         transform: scale(1.25);
@@ -81,7 +76,7 @@ limitations under the License.
         position: relative;
 
         svg {
-            width: .5em;
+            width: 0.5em;
             vertical-align: middle;
         }
     }

@@ -26,12 +26,8 @@ describe("isLocalRoom", () => {
 
     beforeEach(() => {
         const client = createTestClient();
-        room = new Room("!room:example.com", client, client.getUserId());
-        localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, client.getUserId());
-    });
-
-    it("should return false for null", () => {
-        expect(isLocalRoom(null)).toBe(false);
+        room = new Room("!room:example.com", client, client.getUserId()!);
+        localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, client.getUserId()!);
     });
 
     it("should return false for a Room", () => {

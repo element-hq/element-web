@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { CSSTransition } from "react-transition-group";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
@@ -30,8 +30,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
     // Both of these control the animation for the breadcrumbs. For details on the
@@ -44,25 +43,25 @@ interface IState {
     skipFirst: boolean;
 }
 
-const RoomBreadcrumbTile = ({ room, onClick }: { room: Room, onClick: (ev: ButtonEvent) => void }) => {
+const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => void }> = ({ room, onClick }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex();
 
     return (
         <AccessibleTooltipButton
             className="mx_RoomBreadcrumbs_crumb"
             onClick={onClick}
-            aria-label={_t("Room %(name)s", { name: room.name })}
+            aria-label={_t("a11y|room_name", { name: room.name })}
             title={room.name}
             tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
             onFocus={onFocus}
-            inputRef={ref}
+            ref={ref}
             tabIndex={isActive ? 0 : -1}
         >
             <DecoratedRoomAvatar
                 room={room}
-                avatarSize={32}
+                size="32px"
                 displayBadge={true}
-                forceCount={true}
+                hideIfDot={true}
                 tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
             />
         </AccessibleTooltipButton>
@@ -72,7 +71,7 @@ const RoomBreadcrumbTile = ({ room, onClick }: { room: Room, onClick: (ev: Butto
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
     private isMounted = true;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -83,12 +82,12 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.isMounted = false;
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
-    private onBreadcrumbsUpdate = () => {
+    private onBreadcrumbsUpdate = (): void => {
         if (!this.isMounted) return;
 
         // We need to trick the CSSTransition component into updating, which means we need to
@@ -99,10 +98,10 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         // again and this time we want to show the newest breadcrumb because it'll be hidden
         // off screen for the animation.
         this.setState({ doAnimation: false, skipFirst: true });
-        setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
+        window.setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
     };
 
-    private viewRoom = (room: Room, index: number, viaKeyboard = false) => {
+    private viewRoom = (room: Room, index: number, viaKeyboard = false): void => {
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
@@ -123,23 +122,16 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         if (tiles.length > 0) {
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
-                <CSSTransition
-                    appear={true}
-                    in={this.state.doAnimation}
-                    timeout={640}
-                    classNames='mx_RoomBreadcrumbs'
-                >
-                    <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
-                        { tiles.slice(this.state.skipFirst ? 1 : 0) }
+                <CSSTransition appear={true} in={this.state.doAnimation} timeout={640} classNames="mx_RoomBreadcrumbs">
+                    <Toolbar className="mx_RoomBreadcrumbs" aria-label={_t("room_list|breadcrumbs_label")}>
+                        {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
             );
         } else {
             return (
-                <div className='mx_RoomBreadcrumbs'>
-                    <div className="mx_RoomBreadcrumbs_placeholder">
-                        { _t("No recently visited rooms") }
-                    </div>
+                <div className="mx_RoomBreadcrumbs">
+                    <div className="mx_RoomBreadcrumbs_placeholder">{_t("room_list|breadcrumbs_empty")}</div>
                 </div>
             );
         }

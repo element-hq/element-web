@@ -14,27 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { render } from '@testing-library/react';
-import React from 'react';
+import { render } from "@testing-library/react";
+import React from "react";
 
-import {
-    SettingsSubsectionHeading,
-} from '../../../../../src/components/views/settings/shared/SettingsSubsectionHeading';
+import { SettingsSubsectionHeading } from "../../../../../src/components/views/settings/shared/SettingsSubsectionHeading";
 
-describe('<SettingsSubsectionHeading />', () => {
+describe("<SettingsSubsectionHeading />", () => {
     const defaultProps = {
-        heading: 'test',
+        heading: "test",
     };
-    const getComponent = (props = {}) =>
-        render(<SettingsSubsectionHeading {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => render(<SettingsSubsectionHeading {...defaultProps} {...props} />);
 
-    it('renders without children', () => {
+    it("renders without children", () => {
         const { container } = getComponent();
         expect({ container }).toMatchSnapshot();
     });
 
-    it('renders with children', () => {
-        const children = <a href='/#'>test</a>;
+    it("renders with children", () => {
+        const children = <a href="/#">test</a>;
         const { container } = getComponent({ children });
         expect({ container }).toMatchSnapshot();
     });

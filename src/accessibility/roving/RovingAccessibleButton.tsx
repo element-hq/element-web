@@ -14,27 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import { useRovingTabIndex } from "../RovingTabIndex";
 import { Ref } from "./types";
 
-interface IProps extends Omit<React.ComponentProps<typeof AccessibleButton>, "inputRef" | "tabIndex"> {
+type Props<T extends keyof JSX.IntrinsicElements> = Omit<
+    ComponentProps<typeof AccessibleButton<T>>,
+    "inputRef" | "tabIndex"
+> & {
     inputRef?: Ref;
-}
-
-// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
-export const RovingAccessibleButton: React.FC<IProps> = ({ inputRef, onFocus, ...props }) => {
-    const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleButton
-        {...props}
-        onFocus={event => {
-            onFocusInternal();
-            onFocus?.(event);
-        }}
-        inputRef={ref}
-        tabIndex={isActive ? 0 : -1}
-    />;
+    focusOnMouseOver?: boolean;
 };
 
+// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
+export const RovingAccessibleButton = <T extends keyof JSX.IntrinsicElements>({
+    inputRef,
+    onFocus,
+    onMouseOver,
+    focusOnMouseOver,
+    ...props
+}: Props<T>): JSX.Element => {
+    const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
+    return (
+        <AccessibleButton
+            {...props}
+            onFocus={(event: React.FocusEvent) => {
+                onFocusInternal();
+                onFocus?.(event);
+            }}
+            onMouseOver={(event: React.MouseEvent) => {
+                if (focusOnMouseOver) onFocusInternal();
+                onMouseOver?.(event);
+            }}
+            ref={ref}
+            tabIndex={isActive ? 0 : -1}
+        />
+    );
+};

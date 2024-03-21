@@ -19,15 +19,15 @@ import FixedDistributor from "./fixed";
 import { IConfig } from "../resizer";
 
 class PercentageSizer extends Sizer {
-    public start(item: HTMLElement) {
+    public start(item: HTMLElement): void {
         if (this.vertical) {
-            item.style.minHeight = null;
+            item.style.minHeight = "";
         } else {
-            item.style.minWidth = null;
+            item.style.minWidth = "";
         }
     }
 
-    public finish(item: HTMLElement) {
+    public finish(item: HTMLElement): void {
         const parent = item.offsetParent as HTMLElement;
         if (!parent) return;
         if (this.vertical) {
@@ -43,7 +43,7 @@ class PercentageSizer extends Sizer {
 }
 
 export default class PercentageDistributor extends FixedDistributor<IConfig> {
-    static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean) {
+    public static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): PercentageSizer {
         return new PercentageSizer(containerElement, vertical, reverse);
     }
 }

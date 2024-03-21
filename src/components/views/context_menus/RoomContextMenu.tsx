@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { logger } from "matrix-js-sdk/src/logger";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
@@ -30,15 +29,14 @@ import { ButtonEvent } from "../elements/AccessibleButton";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import dis from "../../../dispatcher/dispatcher";
-import RoomListActions from "../../../actions/RoomListActions";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { RoomNotifState } from "../../../RoomNotifs";
 import Modal from "../../../Modal";
 import ExportDialog from "../dialogs/ExportDialog";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "../right_panel/PinnedMessagesCard";
-import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
-import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -48,24 +46,29 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SettingsStore from "../../../settings/SettingsStore";
-import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
+import { DeveloperToolsOption } from "./DeveloperToolsOption";
+import { tagRoom } from "../../../utils/room/tagRoom";
 
 interface IProps extends IContextMenuProps {
     room: Room;
 }
 
-const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
+/**
+ * Room context menu accessible via the room header.
+ * @deprecated will be removed as part of `feature_new_room_decoration_ui`
+ */
+const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const cli = useContext(MatrixClientContext);
-    const roomTags = useEventEmitterState(
-        RoomListStore.instance,
-        LISTS_UPDATE_EVENT,
-        () => RoomListStore.instance.getTagsForRoom(room),
+    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
+        RoomListStore.instance.getTagsForRoom(room),
     );
 
-    let leaveOption: JSX.Element;
+    let leaveOption: JSX.Element | undefined;
     if (roomTags.includes(DefaultTagID.Archived)) {
-        const onForgetRoomClick = (ev: ButtonEvent) => {
+        const onForgetRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -76,14 +79,16 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             onFinished();
         };
 
-        leaveOption = <IconizedContextMenuOption
-            iconClassName="mx_RoomTile_iconSignOut"
-            label={_t("Forget")}
-            className="mx_IconizedContextMenu_option_red"
-            onClick={onForgetRoomClick}
-        />;
+        leaveOption = (
+            <IconizedContextMenuOption
+                iconClassName="mx_RoomTile_iconSignOut"
+                label={_t("room|context_menu|forget")}
+                className="mx_IconizedContextMenu_option_red"
+                onClick={onForgetRoomClick}
+            />
+        );
     } else {
-        const onLeaveRoomClick = (ev: ButtonEvent) => {
+        const onLeaveRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -96,24 +101,25 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuLeaveItem", ev);
         };
 
-        leaveOption = <IconizedContextMenuOption
-            onClick={onLeaveRoomClick}
-            label={_t("Leave")}
-            className="mx_IconizedContextMenu_option_red"
-            iconClassName="mx_RoomTile_iconSignOut"
-        />;
+        leaveOption = (
+            <IconizedContextMenuOption
+                onClick={onLeaveRoomClick}
+                label={_t("action|leave")}
+                className="mx_IconizedContextMenu_option_red"
+                iconClassName="mx_RoomTile_iconSignOut"
+            />
+        );
     }
 
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const isVideoRoom = videoRoomsEnabled && (
-        room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom())
-    );
+    const isVideoRoom =
+        videoRoomsEnabled && (room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom()));
 
-    let inviteOption: JSX.Element;
-    if (room.canInvite(cli.getUserId()!) && !isDm) {
-        const onInviteClick = (ev: ButtonEvent) => {
+    let inviteOption: JSX.Element | undefined;
+    if (room.canInvite(cli.getUserId()!) && !isDm && shouldShowComponent(UIComponent.InviteUsers)) {
+        const onInviteClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -126,201 +132,207 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuInviteItem", ev);
         };
 
-        inviteOption = <IconizedContextMenuOption
-            onClick={onInviteClick}
-            label={_t("Invite")}
-            iconClassName="mx_RoomTile_iconInvite"
-        />;
+        inviteOption = (
+            <IconizedContextMenuOption
+                onClick={onInviteClick}
+                label={_t("action|invite")}
+                iconClassName="mx_RoomTile_iconInvite"
+            />
+        );
     }
 
-    let favouriteOption: JSX.Element;
-    let lowPriorityOption: JSX.Element;
-    let notificationOption: JSX.Element;
+    let favouriteOption: JSX.Element | undefined;
+    let lowPriorityOption: JSX.Element | undefined;
+    let notificationOption: JSX.Element | undefined;
     if (room.getMyMembership() === "join") {
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
-        favouriteOption = <IconizedContextMenuCheckbox
-            onClick={(e) => {
-                onTagRoom(e, DefaultTagID.Favourite);
-                PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuFavouriteToggle", e);
-            }}
-            active={isFavorite}
-            label={isFavorite ? _t("Favourited") : _t("Favourite")}
-            iconClassName="mx_RoomTile_iconStar"
-        />;
+        favouriteOption = (
+            <IconizedContextMenuCheckbox
+                onClick={(e) => {
+                    onTagRoom(e, DefaultTagID.Favourite);
+                    PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuFavouriteToggle", e);
+                }}
+                active={isFavorite}
+                label={isFavorite ? _t("room|context_menu|unfavourite") : _t("room|context_menu|favourite")}
+                iconClassName="mx_RoomTile_iconStar"
+            />
+        );
 
         const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
-        lowPriorityOption = <IconizedContextMenuCheckbox
-            onClick={(e) => onTagRoom(e, DefaultTagID.LowPriority)}
-            active={isLowPriority}
-            label={_t("Low priority")}
-            iconClassName="mx_RoomTile_iconArrowDown"
-        />;
+        lowPriorityOption = (
+            <IconizedContextMenuCheckbox
+                onClick={(e) => onTagRoom(e, DefaultTagID.LowPriority)}
+                active={isLowPriority}
+                label={_t("common|low_priority")}
+                iconClassName="mx_RoomTile_iconArrowDown"
+            />
+        );
 
         const echoChamber = EchoChamber.forRoom(room);
-        let notificationLabel: string;
-        let iconClassName: string;
+        let notificationLabel: string | undefined;
+        let iconClassName: string | undefined;
         switch (echoChamber.notificationVolume) {
             case RoomNotifState.AllMessages:
-                notificationLabel = _t("Default");
+                notificationLabel = _t("notifications|default");
                 iconClassName = "mx_RoomTile_iconNotificationsDefault";
                 break;
             case RoomNotifState.AllMessagesLoud:
-                notificationLabel = _t("All messages");
+                notificationLabel = _t("notifications|all_messages");
                 iconClassName = "mx_RoomTile_iconNotificationsAllMessages";
                 break;
             case RoomNotifState.MentionsOnly:
-                notificationLabel = _t("Mentions only");
+                notificationLabel = _t("room|context_menu|mentions_only");
                 iconClassName = "mx_RoomTile_iconNotificationsMentionsKeywords";
                 break;
             case RoomNotifState.Mute:
-                notificationLabel = _t("Mute");
+                notificationLabel = _t("common|mute");
                 iconClassName = "mx_RoomTile_iconNotificationsNone";
                 break;
         }
 
-        notificationOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        notificationOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                dis.dispatch({
-                    action: "open_room_settings",
-                    room_id: room.roomId,
-                    initial_tab_id: ROOM_NOTIFICATIONS_TAB,
-                });
-                onFinished();
+                    dis.dispatch({
+                        action: "open_room_settings",
+                        room_id: room.roomId,
+                        initial_tab_id: RoomSettingsTab.Notifications,
+                    });
+                    onFinished();
 
-                PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuNotificationsItem", ev);
-            }}
-            label={_t("Notifications")}
-            iconClassName={iconClassName}
-        >
-            <span className="mx_IconizedContextMenu_sublabel">
-                { notificationLabel }
-            </span>
-        </IconizedContextMenuOption>;
+                    PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuNotificationsItem", ev);
+                }}
+                label={_t("notifications|enable_prompt_toast_title")}
+                iconClassName={iconClassName}
+            >
+                <span className="mx_IconizedContextMenu_sublabel">{notificationLabel}</span>
+            </IconizedContextMenuOption>
+        );
     }
 
-    let peopleOption: JSX.Element;
-    let copyLinkOption: JSX.Element;
+    let peopleOption: JSX.Element | undefined;
+    let copyLinkOption: JSX.Element | undefined;
     if (!isDm) {
-        peopleOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        peopleOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                ensureViewingRoom(ev);
-                RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, false);
-                onFinished();
-                PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuPeopleItem", ev);
-            }}
-            label={_t("People")}
-            iconClassName="mx_RoomTile_iconPeople"
-        >
-            <span className="mx_IconizedContextMenu_sublabel">
-                { room.getJoinedMemberCount() }
-            </span>
-        </IconizedContextMenuOption>;
+                    ensureViewingRoom(ev);
+                    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, false);
+                    onFinished();
+                    PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuPeopleItem", ev);
+                }}
+                label={_t("common|people")}
+                iconClassName="mx_RoomTile_iconPeople"
+            >
+                <span className="mx_IconizedContextMenu_sublabel">{room.getJoinedMemberCount()}</span>
+            </IconizedContextMenuOption>
+        );
 
-        copyLinkOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        copyLinkOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                dis.dispatch({
-                    action: "copy_room",
-                    room_id: room.roomId,
-                });
-                onFinished();
-            }}
-            label={_t("Copy room link")}
-            iconClassName="mx_RoomTile_iconCopyLink"
-        />;
+                    dis.dispatch({
+                        action: "copy_room",
+                        room_id: room.roomId,
+                    });
+                    onFinished();
+                }}
+                label={_t("room|context_menu|copy_link")}
+                iconClassName="mx_RoomTile_iconCopyLink"
+            />
+        );
     }
 
-    let filesOption: JSX.Element;
+    let filesOption: JSX.Element | undefined;
     if (!isVideoRoom) {
-        filesOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        filesOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                ensureViewingRoom(ev);
-                RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, false);
-                onFinished();
-            }}
-            label={_t("Files")}
-            iconClassName="mx_RoomTile_iconFiles"
-        />;
+                    ensureViewingRoom(ev);
+                    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, false);
+                    onFinished();
+                }}
+                label={_t("right_panel|files_button")}
+                iconClassName="mx_RoomTile_iconFiles"
+            />
+        );
     }
 
     const pinningEnabled = useFeatureEnabled("feature_pinning");
-    const pinCount = usePinnedEvents(pinningEnabled && room)?.length;
+    const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
 
-    let pinsOption: JSX.Element;
+    let pinsOption: JSX.Element | undefined;
     if (pinningEnabled && !isVideoRoom) {
-        pinsOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        pinsOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                ensureViewingRoom(ev);
-                RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, false);
-                onFinished();
-            }}
-            label={_t("Pinned")}
-            iconClassName="mx_RoomTile_iconPins"
-        >
-            { pinCount > 0 && <span className="mx_IconizedContextMenu_sublabel">
-                { pinCount }
-            </span> }
-        </IconizedContextMenuOption>;
+                    ensureViewingRoom(ev);
+                    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, false);
+                    onFinished();
+                }}
+                label={_t("right_panel|pinned_messages_button")}
+                iconClassName="mx_RoomTile_iconPins"
+            >
+                {pinCount > 0 && <span className="mx_IconizedContextMenu_sublabel">{pinCount}</span>}
+            </IconizedContextMenuOption>
+        );
     }
 
-    let widgetsOption: JSX.Element;
+    let widgetsOption: JSX.Element | undefined;
     if (!isVideoRoom) {
-        widgetsOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        widgetsOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                ensureViewingRoom(ev);
-                RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary }, false);
-                onFinished();
-            }}
-            label={_t("Widgets")}
-            iconClassName="mx_RoomTile_iconWidgets"
-        />;
+                    ensureViewingRoom(ev);
+                    RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary }, false);
+                    onFinished();
+                }}
+                label={_t("right_panel|widgets_section")}
+                iconClassName="mx_RoomTile_iconWidgets"
+            />
+        );
     }
 
-    let exportChatOption: JSX.Element;
+    let exportChatOption: JSX.Element | undefined;
     if (!isVideoRoom) {
-        exportChatOption = <IconizedContextMenuOption
-            onClick={(ev: ButtonEvent) => {
-                ev.preventDefault();
-                ev.stopPropagation();
+        exportChatOption = (
+            <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
 
-                Modal.createDialog(ExportDialog, { room });
-                onFinished();
-            }}
-            label={_t("Export chat")}
-            iconClassName="mx_RoomTile_iconExport"
-        />;
+                    Modal.createDialog(ExportDialog, { room });
+                    onFinished();
+                }}
+                label={_t("right_panel|export_chat_button")}
+                iconClassName="mx_RoomTile_iconExport"
+            />
+        );
     }
 
-    const onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
+    const onTagRoom = (ev: ButtonEvent, tagId: TagID): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
-            const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
-            const isApplied = RoomListStore.instance.getTagsForRoom(room).includes(tagId);
-            const removeTag = isApplied ? tagId : inverseTag;
-            const addTag = isApplied ? null : tagId;
-            dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag, undefined, 0));
-        } else {
-            logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
-        }
+        tagRoom(room, tagId);
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev as React.KeyboardEvent);
         switch (action) {
@@ -331,64 +343,58 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         }
     };
 
-    const ensureViewingRoom = (ev: ButtonEvent) => {
+    const ensureViewingRoom = (ev: ButtonEvent): void => {
         if (SdkContextClass.instance.roomViewStore.getRoomId() === room.roomId) return;
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            metricsTrigger: "RoomList",
-            metricsViaKeyboard: ev.type !== "click",
-        }, true);
+        dis.dispatch<ViewRoomPayload>(
+            {
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: "RoomList",
+                metricsViaKeyboard: ev.type !== "click",
+            },
+            true,
+        );
     };
 
-    return <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomTile_contextMenu" compact>
-        <IconizedContextMenuOptionList>
-            { inviteOption }
-            { notificationOption }
-            { favouriteOption }
-            { peopleOption }
-            { filesOption }
-            { pinsOption }
-            { widgetsOption }
-            { lowPriorityOption }
-            { copyLinkOption }
+    return (
+        <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomTile_contextMenu" compact>
+            <IconizedContextMenuOptionList>
+                {inviteOption}
+                {notificationOption}
+                {favouriteOption}
+                {peopleOption}
+                {filesOption}
+                {pinsOption}
+                {widgetsOption}
+                {lowPriorityOption}
+                {copyLinkOption}
 
-            <IconizedContextMenuOption
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
+                <IconizedContextMenuOption
+                    onClick={(ev: ButtonEvent) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
 
-                    dis.dispatch({
-                        action: "open_room_settings",
-                        room_id: room.roomId,
-                    });
-                    onFinished();
-                    PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuSettingsItem", ev);
-                }}
-                label={_t("Settings")}
-                iconClassName="mx_RoomTile_iconSettings"
-            />
+                        dis.dispatch({
+                            action: "open_room_settings",
+                            room_id: room.roomId,
+                        });
+                        onFinished();
+                        PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuSettingsItem", ev);
+                    }}
+                    label={_t("common|settings")}
+                    iconClassName="mx_RoomTile_iconSettings"
+                />
 
-            { exportChatOption }
+                {exportChatOption}
 
-            { SettingsStore.getValue("developerMode") && <IconizedContextMenuOption
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
+                {SettingsStore.getValue("developerMode") && (
+                    <DeveloperToolsOption onFinished={onFinished} roomId={room.roomId} />
+                )}
 
-                    Modal.createDialog(DevtoolsDialog, {
-                        roomId: SdkContextClass.instance.roomViewStore.getRoomId(),
-                    }, "mx_DevtoolsDialog_wrapper");
-                    onFinished();
-                }}
-                label={_t("Developer tools")}
-                iconClassName="mx_RoomTile_iconDeveloperTools"
-            /> }
-
-            { leaveOption }
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
+                {leaveOption}
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>
+    );
 };
 
 export default RoomContextMenu;
-

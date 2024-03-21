@@ -27,18 +27,17 @@ export enum OIDCState {
 }
 
 export class WidgetPermissionStore {
-    public constructor(private readonly context: SdkContextClass) {
-    }
+    public constructor(private readonly context: SdkContextClass) {}
 
     // TODO (all functions here): Merge widgetKind with the widget definition
 
     private packSettingKey(widget: Widget, kind: WidgetKind, roomId?: string): string {
-        let location = roomId;
+        let location: string | null | undefined = roomId;
         if (kind !== WidgetKind.Room) {
             location = this.context.client?.getUserId();
         }
         if (kind === WidgetKind.Modal) {
-            location = '*MODAL*-' + location; // to guarantee differentiation from whatever spawned it
+            location = "*MODAL*-" + location; // to guarantee differentiation from whatever spawned it
         }
         if (!location) {
             throw new Error("Failed to determine a location to check the widget's OIDC state with");
@@ -59,10 +58,13 @@ export class WidgetPermissionStore {
         return OIDCState.Unknown;
     }
 
-    public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string, newState: OIDCState) {
+    public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string | undefined, newState: OIDCState): void {
         const settingsKey = this.packSettingKey(widget, kind, roomId);
 
-        let currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
+        let currentValues = SettingsStore.getValue<{
+            allow?: string[];
+            deny?: string[];
+        }>("widgetOpenIDPermissions");
         if (!currentValues) {
             currentValues = {};
         }
@@ -74,8 +76,8 @@ export class WidgetPermissionStore {
         } else if (newState === OIDCState.Denied) {
             currentValues.deny.push(settingsKey);
         } else {
-            currentValues.allow = currentValues.allow.filter(c => c !== settingsKey);
-            currentValues.deny = currentValues.deny.filter(c => c !== settingsKey);
+            currentValues.allow = currentValues.allow.filter((c) => c !== settingsKey);
+            currentValues.deny = currentValues.deny.filter((c) => c !== settingsKey);
         }
 
         SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);

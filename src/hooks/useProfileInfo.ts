@@ -29,37 +29,45 @@ export interface IProfileInfo {
     display_name?: string;
 }
 
-export const useProfileInfo = () => {
+export const useProfileInfo = (): {
+    ready: boolean;
+    loading: boolean;
+    profile: IProfileInfo | null;
+    search(opts: IProfileInfoOpts): Promise<boolean>;
+} => {
     const [profile, setProfile] = useState<IProfileInfo | null>(null);
 
     const [loading, setLoading] = useState(false);
 
-    const [updateQuery, updateResult] = useLatestResult<string, IProfileInfo | null>(setProfile);
+    const [updateQuery, updateResult] = useLatestResult<string | undefined, IProfileInfo | null>(setProfile);
 
-    const search = useCallback(async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {
-        updateQuery(term);
-        if (!term?.length || !term.startsWith('@') || !term.includes(':')) {
-            setProfile(null);
-            return true;
-        }
+    const search = useCallback(
+        async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {
+            updateQuery(term);
+            if (!term?.length || !term.startsWith("@") || !term.includes(":")) {
+                setProfile(null);
+                return true;
+            }
 
-        setLoading(true);
-        try {
-            const result = await MatrixClientPeg.get().getProfileInfo(term);
-            updateResult(term, {
-                user_id: term,
-                avatar_url: result.avatar_url,
-                display_name: result.displayname,
-            });
-            return true;
-        } catch (e) {
-            console.error("Could not fetch profile info for params", { term }, e);
-            updateResult(term, null);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    }, [updateQuery, updateResult]);
+            setLoading(true);
+            try {
+                const result = await MatrixClientPeg.safeGet().getProfileInfo(term);
+                updateResult(term, {
+                    user_id: term,
+                    avatar_url: result.avatar_url,
+                    display_name: result.displayname,
+                });
+                return true;
+            } catch (e) {
+                console.error("Could not fetch profile info for params", { term }, e);
+                updateResult(term, null);
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [updateQuery, updateResult],
+    );
 
     return {
         ready: true,

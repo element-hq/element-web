@@ -14,21 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, SyntheticEvent, useContext } from 'react';
-import classNames from 'classnames';
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { IEventRelation } from 'matrix-js-sdk/src/models/event';
+import React, { ReactNode, SyntheticEvent, useContext } from "react";
+import classNames from "classnames";
+import { RoomMember, IEventRelation } from "matrix-js-sdk/src/matrix";
 
-import { _t } from '../../../languageHandler';
-import { CollapsibleButton } from '../rooms/CollapsibleButton';
-import { aboveLeftOf, useContextMenu, AboveLeftOf } from "../../structures/ContextMenu";
+import { _t } from "../../../languageHandler";
+import { CollapsibleButton } from "../rooms/CollapsibleButton";
+import { aboveLeftOf, useContextMenu, MenuProps } from "../../structures/ContextMenu";
 import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
-import LocationShareMenu from './LocationShareMenu';
+import LocationShareMenu from "./LocationShareMenu";
 
-interface IProps {
+export interface IProps {
     roomId: string;
     sender: RoomMember;
-    menuPosition?: AboveLeftOf;
+    menuPosition?: MenuProps;
     relation?: IEventRelation;
 }
 
@@ -36,44 +35,44 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition,
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
-    const _onFinished = (ev?: SyntheticEvent) => {
+    const _onFinished = (ev?: SyntheticEvent): void => {
         closeMenu(ev);
         overflowMenuCloser?.();
     };
 
-    let contextMenu: ReactElement;
+    let contextMenu: ReactNode = null;
     if (menuDisplayed) {
-        const position = menuPosition ?? aboveLeftOf(
-            button.current.getBoundingClientRect());
+        const position = menuPosition ?? (button.current && aboveLeftOf(button.current.getBoundingClientRect())) ?? {};
 
-        contextMenu = <LocationShareMenu
-            menuPosition={position}
-            onFinished={_onFinished}
-            sender={sender}
-            roomId={roomId}
-            openMenu={openMenu}
-            relation={relation}
-        />;
+        contextMenu = (
+            <LocationShareMenu
+                menuPosition={position}
+                onFinished={_onFinished}
+                sender={sender}
+                roomId={roomId}
+                openMenu={openMenu}
+                relation={relation}
+            />
+        );
     }
 
-    const className = classNames(
-        "mx_MessageComposer_button",
-        {
-            "mx_MessageComposer_button_highlight": menuDisplayed,
-        },
+    const className = classNames("mx_MessageComposer_button", {
+        mx_MessageComposer_button_highlight: menuDisplayed,
+    });
+
+    return (
+        <React.Fragment>
+            <CollapsibleButton
+                className={className}
+                iconClassName="mx_MessageComposer_location"
+                onClick={openMenu}
+                title={_t("common|location")}
+                inputRef={button}
+            />
+
+            {contextMenu}
+        </React.Fragment>
     );
-
-    return <React.Fragment>
-        <CollapsibleButton
-            className={className}
-            iconClassName="mx_MessageComposer_location"
-            onClick={openMenu}
-            title={_t("Location")}
-            inputRef={button}
-        />
-
-        { contextMenu }
-    </React.Fragment>;
 };
 
 export default LocationButton;

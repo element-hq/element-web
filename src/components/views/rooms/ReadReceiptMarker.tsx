@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, RefObject } from 'react';
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import React, { createRef } from "react";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
-import MemberAvatar from '../avatars/MemberAvatar';
+import MemberAvatar from "../avatars/MemberAvatar";
 import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
 export interface IReadReceiptInfo {
@@ -48,7 +48,7 @@ interface IProps {
     suppressAnimation?: boolean;
 
     // an opaque object for storing information about this user's RR in this room
-    readReceiptInfo: IReadReceiptInfo;
+    readReceiptInfo?: IReadReceiptInfo;
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
@@ -73,9 +73,9 @@ interface IReadReceiptMarkerStyle {
 }
 
 export default class ReadReceiptMarker extends React.PureComponent<IProps, IState> {
-    private avatar: React.RefObject<HTMLDivElement | HTMLImageElement | HTMLSpanElement> = createRef();
+    private avatar = createRef<HTMLDivElement>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -124,7 +124,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
     private buildReadReceiptInfo(target: IReadReceiptInfo = {}): IReadReceiptInfo {
         const element = this.avatar.current;
         // this is the mx_ReadReceiptsGroup_container
-        const horizontalContainer = element.offsetParent;
+        const horizontalContainer = element?.offsetParent;
         if (!horizontalContainer || !(horizontalContainer instanceof HTMLElement)) {
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
@@ -133,7 +133,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
             target.top = 0;
             target.right = 0;
-            target.parent = null;
+            target.parent = undefined;
             return target;
         }
         // this is the mx_ReadReceiptsGroup
@@ -146,7 +146,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
             target.top = 0;
             target.right = 0;
-            target.parent = null;
+            target.parent = undefined;
             return target;
         }
 
@@ -165,7 +165,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             return 0;
         }
 
-        return info.top + info.parent.getBoundingClientRect().top;
+        return (info.top ?? 0) + info.parent.getBoundingClientRect().top;
     }
 
     private animateMarker(): void {
@@ -174,12 +174,12 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
         const newPosition = this.readReceiptPosition(newInfo);
         const oldPosition = oldInfo
-            // start at the old height and in the old h pos
-            ? this.readReceiptPosition(oldInfo)
-            // treat new RRs as though they were off the top of the screen
-            : -READ_AVATAR_SIZE;
+            ? // start at the old height and in the old h pos
+              this.readReceiptPosition(oldInfo)
+            : // treat new RRs as though they were off the top of the screen
+              -READ_AVATAR_SIZE;
 
-        const startStyles = [];
+        const startStyles: IReadReceiptMarkerStyle[] = [];
         if (oldInfo?.right) {
             startStyles.push({
                 top: oldPosition - newPosition,
@@ -197,28 +197,25 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.suppressDisplay) {
-            return <div ref={this.avatar as RefObject<HTMLDivElement>} />;
+            return <div ref={this.avatar} />;
         }
 
         const style = {
             right: toPx(this.props.offset),
-            top: '0px',
+            top: "0px",
         };
 
         return (
-            <NodeAnimator startStyles={this.state.startStyles}>
+            <NodeAnimator startStyles={this.state.startStyles} innerRef={this.avatar}>
                 <MemberAvatar
-                    member={this.props.member}
+                    member={this.props.member ?? null}
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     aria-live="off"
-                    width={14}
-                    height={14}
-                    resizeMethod="crop"
+                    size="14px"
                     style={style}
-                    inputRef={this.avatar as RefObject<HTMLImageElement>}
                     hideTitle
                     tabIndex={-1}
                 />

@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher/dispatcher';
-import { ActionPayload } from '../../../dispatcher/payloads';
+import { _t } from "../../../languageHandler";
+import dis from "../../../dispatcher/dispatcher";
+import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import Heading from '../typography/Heading';
+import Heading from "../typography/Heading";
 
 interface IProps {
     // false to display an error saying that we couldn't connect to the integration manager
-    connected: boolean;
+    connected?: boolean;
 
     // true to display a loading spinner
-    loading: boolean;
+    loading?: boolean;
 
     // The source URL to load
     url?: string;
@@ -43,9 +43,9 @@ interface IState {
 }
 
 export default class IntegrationManager extends React.Component<IProps, IState> {
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
 
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         connected: true,
         loading: false,
     };
@@ -60,7 +60,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
     }
 
@@ -76,7 +76,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
     };
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === 'close_scalar') {
+        if (payload.action === "close_scalar") {
             this.props.onFinished();
         }
     };
@@ -85,11 +85,11 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         this.setState({ errored: true });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.props.loading) {
             return (
-                <div className='mx_IntegrationManager_loading'>
-                    <Heading size="h3">{ _t("Connecting to integration manager...") }</Heading>
+                <div className="mx_IntegrationManager_loading">
+                    <Heading size="3">{_t("integration_manager|connecting")}</Heading>
                     <Spinner />
                 </div>
             );
@@ -97,13 +97,13 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
 
         if (!this.props.connected || this.state.errored) {
             return (
-                <div className='mx_IntegrationManager_error'>
-                    <Heading size="h3">{ _t("Cannot connect to integration manager") }</Heading>
-                    <p>{ _t("The integration manager is offline or it cannot reach your homeserver.") }</p>
+                <div className="mx_IntegrationManager_error">
+                    <Heading size="3">{_t("integration_manager|error_connecting_heading")}</Heading>
+                    <p>{_t("integration_manager|error_connecting")}</p>
                 </div>
             );
         }
 
-        return <iframe title={_t("Integration manager")} src={this.props.url} onError={this.onError} />;
+        return <iframe title={_t("common|integration_manager")} src={this.props.url} onError={this.onError} />;
     }
 }

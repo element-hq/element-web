@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { IGeneratedSas, ISasEvent, SasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import { VerificationBase, VerificationEvent } from "matrix-js-sdk/src/crypto/verification/Base";
+import React, { ReactNode } from "react";
+import { GeneratedSas, ShowSasCallbacks, Verifier, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import VerificationComplete from "../verification/VerificationComplete";
 import VerificationCancelled from "../verification/VerificationCancelled";
@@ -29,7 +28,6 @@ import Spinner from "../elements/Spinner";
 import VerificationShowSas from "../verification/VerificationShowSas";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -37,8 +35,9 @@ const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
 const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
-interface IProps extends IDialogProps {
-    verifier: VerificationBase<SasEvent, any>;
+interface IProps {
+    verifier: Verifier;
+    onFinished(verified?: boolean): void;
 }
 
 interface IState {
@@ -48,15 +47,15 @@ interface IState {
         // eslint-disable-next-line camelcase
         avatar_url?: string;
         displayname?: string;
-    };
-    opponentProfileError: Error;
-    sas: IGeneratedSas;
+    } | null;
+    opponentProfileError: Error | null;
+    sas: GeneratedSas | null;
 }
 
 export default class IncomingSasDialog extends React.Component<IProps, IState> {
-    private showSasEvent: ISasEvent;
+    private showSasEvent: ShowSasCallbacks | null;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         let phase = PHASE_START;
@@ -73,29 +72,27 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             opponentProfileError: null,
             sas: null,
         };
-        this.props.verifier.on(SasEvent.ShowSas, this.onVerifierShowSas);
-        this.props.verifier.on(VerificationEvent.Cancel, this.onVerifierCancel);
+        this.props.verifier.on(VerifierEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.on(VerifierEvent.Cancel, this.onVerifierCancel);
         this.fetchOpponentProfile();
     }
 
     public componentWillUnmount(): void {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
-            this.props.verifier.cancel(new Error('User cancel'));
+            this.props.verifier.cancel(new Error("User cancel"));
         }
-        this.props.verifier.removeListener(SasEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.removeListener(VerifierEvent.ShowSas, this.onVerifierShowSas);
     }
 
     private async fetchOpponentProfile(): Promise<void> {
         try {
-            const prof = await MatrixClientPeg.get().getProfileInfo(
-                this.props.verifier.userId,
-            );
+            const prof = await MatrixClientPeg.safeGet().getProfileInfo(this.props.verifier.userId);
             this.setState({
                 opponentProfile: prof,
             });
         } catch (e) {
             this.setState({
-                opponentProfileError: e,
+                opponentProfileError: e as Error,
             });
         }
     }
@@ -110,14 +107,17 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
 
     private onContinueClick = (): void => {
         this.setState({ phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM });
-        this.props.verifier.verify().then(() => {
-            this.setState({ phase: PHASE_VERIFIED });
-        }).catch((e) => {
-            logger.log("Verification failed", e);
-        });
+        this.props.verifier
+            .verify()
+            .then(() => {
+                this.setState({ phase: PHASE_VERIFIED });
+            })
+            .catch((e) => {
+                logger.log("Verification failed", e);
+            });
     };
 
-    private onVerifierShowSas = (e: ISasEvent): void => {
+    private onVerifierShowSas = (e: ShowSasCallbacks): void => {
         this.showSasEvent = e;
         this.setState({
             phase: PHASE_SHOW_SAS,
@@ -132,7 +132,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
     };
 
     private onSasMatchesClick = (): void => {
-        this.showSasEvent.confirm();
+        this.showSasEvent?.confirm();
         this.setState({
             phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM,
         });
@@ -142,72 +142,61 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         this.props.onFinished(true);
     };
 
-    private renderPhaseStart(): JSX.Element {
-        const isSelf = this.props.verifier.userId === MatrixClientPeg.get().getUserId();
+    private renderPhaseStart(): ReactNode {
+        const isSelf = this.props.verifier.userId === MatrixClientPeg.safeGet().getUserId();
 
         let profile;
         const oppProfile = this.state.opponentProfile;
         if (oppProfile) {
-            const url = oppProfile.avatar_url
-                ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(48)
-                : null;
-            profile = <div className="mx_IncomingSasDialog_opponentProfile">
-                <BaseAvatar
-                    name={oppProfile.displayname}
-                    idName={this.props.verifier.userId}
-                    url={url}
-                    width={48}
-                    height={48}
-                    resizeMethod='crop'
-                />
-                <h2>{ oppProfile.displayname }</h2>
-            </div>;
+            const url = oppProfile.avatar_url ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(48) : null;
+            profile = (
+                <div className="mx_IncomingSasDialog_opponentProfile">
+                    <BaseAvatar
+                        name={oppProfile.displayname}
+                        idName={this.props.verifier.userId}
+                        url={url}
+                        size="48px"
+                    />
+                    <h2>{oppProfile.displayname}</h2>
+                </div>
+            );
         } else if (this.state.opponentProfileError) {
-            profile = <div>
-                <BaseAvatar
-                    name={this.props.verifier.userId.slice(1)}
-                    idName={this.props.verifier.userId}
-                    width={48}
-                    height={48}
-                />
-                <h2>{ this.props.verifier.userId }</h2>
-            </div>;
+            profile = (
+                <div>
+                    <BaseAvatar
+                        name={this.props.verifier.userId.slice(1)}
+                        idName={this.props.verifier.userId}
+                        size="48px"
+                    />
+                    <h2>{this.props.verifier.userId}</h2>
+                </div>
+            );
         } else {
             profile = <Spinner />;
         }
 
         const userDetailText = [
-            <p key="p1">{ _t(
-                "Verify this user to mark them as trusted. " +
-                "Trusting users gives you extra peace of mind when using " +
-                "end-to-end encrypted messages.",
-            ) }</p>,
-            <p key="p2">{ _t(
-                // NB. Below wording adjusted to singular 'session' until we have
-                // cross-signing
-                "Verifying this user will mark their session as trusted, and " +
-                "also mark your session as trusted to them.",
-            ) }</p>,
+            <p key="p1">{_t("encryption|verification|incoming_sas_user_dialog_text_1")}</p>,
+            <p key="p2">
+                {_t(
+                    // NB. Below wording adjusted to singular 'session' until we have
+                    // cross-signing
+                    "encryption|verification|incoming_sas_user_dialog_text_2",
+                )}
+            </p>,
         ];
 
         const selfDetailText = [
-            <p key="p1">{ _t(
-                "Verify this device to mark it as trusted. " +
-                "Trusting this device gives you and other users extra peace of mind when using " +
-                "end-to-end encrypted messages.",
-            ) }</p>,
-            <p key="p2">{ _t(
-                "Verifying this device will mark it as trusted, and users who have verified with " +
-                "you will trust this device.",
-            ) }</p>,
+            <p key="p1">{_t("encryption|verification|incoming_sas_device_dialog_text_1")}</p>,
+            <p key="p2">{_t("encryption|verification|incoming_sas_device_dialog_text_2")}</p>,
         ];
 
         return (
             <div>
-                { profile }
-                { isSelf ? selfDetailText : userDetailText }
+                {profile}
+                {isSelf ? selfDetailText : userDetailText}
                 <DialogButtons
-                    primaryButton={_t('Continue')}
+                    primaryButton={_t("action|continue")}
                     hasCancel={true}
                     onPrimaryButtonClick={this.onContinueClick}
                     onCancel={this.onCancelClick}
@@ -216,34 +205,37 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         );
     }
 
-    private renderPhaseShowSas(): JSX.Element {
-        return <VerificationShowSas
-            sas={this.showSasEvent.sas}
-            onCancel={this.onCancelClick}
-            onDone={this.onSasMatchesClick}
-            isSelf={this.props.verifier.userId === MatrixClientPeg.get().getUserId()}
-            inDialog={true}
-        />;
+    private renderPhaseShowSas(): ReactNode {
+        if (!this.showSasEvent) return null;
+        return (
+            <VerificationShowSas
+                sas={this.showSasEvent.sas}
+                onCancel={this.onCancelClick}
+                onDone={this.onSasMatchesClick}
+                isSelf={this.props.verifier.userId === MatrixClientPeg.safeGet().getUserId()}
+                inDialog={true}
+            />
+        );
     }
 
-    private renderPhaseWaitForPartnerToConfirm(): JSX.Element {
+    private renderPhaseWaitForPartnerToConfirm(): ReactNode {
         return (
             <div>
                 <Spinner />
-                <p>{ _t("Waiting for partner to confirm...") }</p>
+                <p>{_t("encryption|verification|incoming_sas_dialog_waiting")}</p>
             </div>
         );
     }
 
-    private renderPhaseVerified(): JSX.Element {
+    private renderPhaseVerified(): ReactNode {
         return <VerificationComplete onDone={this.onVerifiedDoneClick} />;
     }
 
-    private renderPhaseCancelled(): JSX.Element {
+    private renderPhaseCancelled(): ReactNode {
         return <VerificationCancelled onDone={this.onCancelClick} />;
     }
 
-    public render(): JSX.Element {
+    public render(): ReactNode {
         let body;
         switch (this.state.phase) {
             case PHASE_START:
@@ -265,13 +257,12 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
 
         return (
             <BaseDialog
-                title={_t("Incoming Verification Request")}
+                title={_t("encryption|verification|incoming_sas_dialog_title")}
                 onFinished={this.onFinished}
                 fixedWidth={false}
             >
-                { body }
+                {body}
             </BaseDialog>
         );
     }
 }
-

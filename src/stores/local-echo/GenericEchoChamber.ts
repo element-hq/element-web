@@ -14,33 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
 import { EchoContext } from "./EchoContext";
 import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
 
-export async function implicitlyReverted() {
+export async function implicitlyReverted(): Promise<void> {
     // do nothing :D
 }
 
 export const PROPERTY_UPDATED = "property_updated";
 
 export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends EventEmitter {
-    private cache = new Map<K, {txn: EchoTransaction, val: V}>();
-    protected matrixClient: MatrixClient;
+    private cache = new Map<K, { txn: EchoTransaction; val: V }>();
+    protected matrixClient: MatrixClient | null = null;
 
-    protected constructor(public readonly context: C, private lookupFn: (key: K) => V) {
+    protected constructor(
+        public readonly context: C,
+        private lookupFn: (key: K) => V,
+    ) {
         super();
     }
 
-    public setClient(client: MatrixClient) {
+    public setClient(client: MatrixClient | null): void {
         const oldClient = this.matrixClient;
         this.matrixClient = client;
         this.onClientChanged(oldClient, client);
     }
 
-    protected abstract onClientChanged(oldClient: MatrixClient, newClient: MatrixClient);
+    protected abstract onClientChanged(oldClient: MatrixClient | null, newClient: MatrixClient | null): void;
 
     /**
      * Gets a value. If the key is in flight, the cached value will be returned. If
@@ -50,42 +53,44 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
      * @returns The value for the key.
      */
     public getValue(key: K): V {
-        return this.cache.has(key) ? this.cache.get(key).val : this.lookupFn(key);
+        return this.cache.has(key) ? this.cache.get(key)!.val : this.lookupFn(key);
     }
 
-    private cacheVal(key: K, val: V, txn: EchoTransaction) {
+    private cacheVal(key: K, val: V, txn: EchoTransaction): void {
         this.cache.set(key, { txn, val });
         this.emit(PROPERTY_UPDATED, key);
     }
 
-    private decacheKey(key: K) {
+    private decacheKey(key: K): void {
         if (this.cache.has(key)) {
-            this.context.disownTransaction(this.cache.get(key).txn);
+            this.context.disownTransaction(this.cache.get(key)!.txn);
             this.cache.delete(key);
             this.emit(PROPERTY_UPDATED, key);
         }
     }
 
-    protected markEchoReceived(key: K) {
+    protected markEchoReceived(key: K): void {
         if (this.cache.has(key)) {
-            const txn = this.cache.get(key).txn;
+            const txn = this.cache.get(key)!.txn;
             this.context.disownTransaction(txn);
             txn.cancel();
         }
         this.decacheKey(key);
     }
 
-    public setValue(auditName: string, key: K, targetVal: V, runFn: RunFn, revertFn: RunFn) {
+    public setValue(auditName: string, key: K, targetVal: V, runFn: RunFn, revertFn: RunFn): void {
         // Cancel any pending transactions for the same key
         if (this.cache.has(key)) {
-            this.cache.get(key).txn.cancel();
+            this.cache.get(key)!.txn.cancel();
         }
 
         const ctxn = this.context.beginTransaction(auditName, runFn);
         this.cacheVal(key, targetVal, ctxn); // set the cache now as it won't be updated by the .when() ladder below.
 
-        ctxn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, ctxn))
-            .when(TransactionStatus.Error, () => revertFn());
+        ctxn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, ctxn)).when(
+            TransactionStatus.Error,
+            () => revertFn(),
+        );
 
         ctxn.run();
     }

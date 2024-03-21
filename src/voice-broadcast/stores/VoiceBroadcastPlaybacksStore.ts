@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
+import { MatrixClient, MatrixEvent, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
-import { VoiceBroadcastPlayback, VoiceBroadcastPlaybackEvent, VoiceBroadcastPlaybackState } from "..";
+import {
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackEvent,
+    VoiceBroadcastPlaybackState,
+    VoiceBroadcastRecordingsStore,
+} from "..";
 import { IDestroyable } from "../../utils/IDestroyable";
 
 export enum VoiceBroadcastPlaybacksStoreEvent {
@@ -25,7 +29,7 @@ export enum VoiceBroadcastPlaybacksStoreEvent {
 }
 
 interface EventMap {
-    [VoiceBroadcastPlaybacksStoreEvent.CurrentChanged]: (recording: VoiceBroadcastPlayback) => void;
+    [VoiceBroadcastPlaybacksStoreEvent.CurrentChanged]: (recording: VoiceBroadcastPlayback | null) => void;
 }
 
 /**
@@ -35,13 +39,14 @@ interface EventMap {
  */
 export class VoiceBroadcastPlaybacksStore
     extends TypedEventEmitter<VoiceBroadcastPlaybacksStoreEvent, EventMap>
-    implements IDestroyable {
-    private current: VoiceBroadcastPlayback | null;
+    implements IDestroyable
+{
+    private current: VoiceBroadcastPlayback | null = null;
 
     /** Playbacks indexed by their info event id. */
     private playbacks = new Map<string, VoiceBroadcastPlayback>();
 
-    public constructor() {
+    public constructor(private recordings: VoiceBroadcastRecordingsStore) {
         super();
     }
 
@@ -53,22 +58,29 @@ export class VoiceBroadcastPlaybacksStore
         this.emit(VoiceBroadcastPlaybacksStoreEvent.CurrentChanged, current);
     }
 
-    public getCurrent(): VoiceBroadcastPlayback {
+    public clearCurrent(): void {
+        if (this.current === null) return;
+
+        this.current = null;
+        this.emit(VoiceBroadcastPlaybacksStoreEvent.CurrentChanged, null);
+    }
+
+    public getCurrent(): VoiceBroadcastPlayback | null {
         return this.current;
     }
 
     public getByInfoEvent(infoEvent: MatrixEvent, client: MatrixClient): VoiceBroadcastPlayback {
-        const infoEventId = infoEvent.getId();
+        const infoEventId = infoEvent.getId()!;
 
         if (!this.playbacks.has(infoEventId)) {
-            this.addPlayback(new VoiceBroadcastPlayback(infoEvent, client));
+            this.addPlayback(new VoiceBroadcastPlayback(infoEvent, client, this.recordings));
         }
 
-        return this.playbacks.get(infoEventId);
+        return this.playbacks.get(infoEventId)!;
     }
 
     private addPlayback(playback: VoiceBroadcastPlayback): void {
-        const infoEventId = playback.infoEvent.getId();
+        const infoEventId = playback.infoEvent.getId()!;
 
         if (this.playbacks.has(infoEventId)) return;
 
@@ -76,15 +88,16 @@ export class VoiceBroadcastPlaybacksStore
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, this.onPlaybackStateChanged);
     }
 
-    private onPlaybackStateChanged = (
-        state: VoiceBroadcastPlaybackState,
-        playback: VoiceBroadcastPlayback,
-    ): void => {
-        if ([
-            VoiceBroadcastPlaybackState.Buffering,
-            VoiceBroadcastPlaybackState.Playing,
-        ].includes(state)) {
-            this.pauseExcept(playback);
+    private onPlaybackStateChanged = (state: VoiceBroadcastPlaybackState, playback: VoiceBroadcastPlayback): void => {
+        switch (state) {
+            case VoiceBroadcastPlaybackState.Buffering:
+            case VoiceBroadcastPlaybackState.Playing:
+                this.pauseExcept(playback);
+                this.setCurrent(playback);
+                break;
+            case VoiceBroadcastPlaybackState.Stopped:
+                this.clearCurrent();
+                break;
         }
     };
 
@@ -104,14 +117,5 @@ export class VoiceBroadcastPlaybacksStore
         }
 
         this.playbacks = new Map();
-    }
-
-    public static readonly _instance = new VoiceBroadcastPlaybacksStore();
-
-    /**
-     * TODO Michael W: replace when https://github.com/matrix-org/matrix-react-sdk/pull/9293 has been merged
-     */
-    public static instance() {
-        return VoiceBroadcastPlaybacksStore._instance;
     }
 }

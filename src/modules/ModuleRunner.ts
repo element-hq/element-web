@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { safeSet } from "matrix-js-sdk/src/utils";
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { AnyLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/types";
 
 import { AppModule } from "./AppModule";
 import { ModuleFactory } from "./ModuleFactory";
+
 import "./ModuleComponents";
 
 /**
@@ -38,7 +40,7 @@ export class ModuleRunner {
      *
      * Intended for test usage only.
      */
-    public reset() {
+    public reset(): void {
         this.modules = [];
     }
 
@@ -53,9 +55,10 @@ export class ModuleRunner {
             if (!i18n) continue;
 
             for (const [lang, strings] of Object.entries(i18n)) {
-                if (!merged[lang]) merged[lang] = {};
+                safeSet(merged, lang, merged[lang] || {});
+
                 for (const [str, val] of Object.entries(strings)) {
-                    merged[lang][str] = val;
+                    safeSet(merged[lang], str, val);
                 }
             }
         }
@@ -68,7 +71,7 @@ export class ModuleRunner {
      * will be called immediately.
      * @param factory The module factory.
      */
-    public registerModule(factory: ModuleFactory) {
+    public registerModule(factory: ModuleFactory): void {
         this.modules.push(new AppModule(factory));
     }
 

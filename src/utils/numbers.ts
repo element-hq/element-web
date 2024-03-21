@@ -34,9 +34,10 @@ export function sum(...i: number[]): number {
 }
 
 export function percentageWithin(pct: number, min: number, max: number): number {
-    return (pct * (max - min)) + min;
+    return pct * (max - min) + min;
 }
 
 export function percentageOf(val: number, min: number, max: number): number {
-    return (val - min) / (max - min);
+    const percentage = (val - min) / (max - min);
+    return Number.isNaN(percentage) ? 0 : percentage;
 }

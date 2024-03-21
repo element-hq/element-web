@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent, ClientEventHandlerMap, SyncState } from "matrix-js-sdk/src/matrix";
 
 /**
  * Creates a MatrixClient event listener function that can be used to get notified about reconnects.
  * @param callback The callback to be called on reconnect
  */
 export const createReconnectedListener = (callback: () => void): ClientEventHandlerMap[ClientEvent.Sync] => {
-    return (syncState: SyncState, prevState: SyncState) => {
+    return (syncState: SyncState, prevState: SyncState | null) => {
         if (syncState !== SyncState.Error && prevState !== syncState) {
             // Consider the client reconnected if there is no error with syncing.
             // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.

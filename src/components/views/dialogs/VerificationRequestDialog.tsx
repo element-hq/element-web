@@ -14,62 +14,64 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { User } from 'matrix-js-sdk/src/models/user';
+import React from "react";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { User } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import EncryptionPanel from "../right_panel/EncryptionPanel";
 
 interface IProps {
-    verificationRequest: VerificationRequest;
-    verificationRequestPromise: Promise<VerificationRequest>;
+    verificationRequest?: VerificationRequest;
+    verificationRequestPromise?: Promise<VerificationRequest>;
     onFinished: () => void;
-    member: User;
+    member?: User;
 }
 
 interface IState {
-    verificationRequest: VerificationRequest;
+    verificationRequest?: VerificationRequest;
 }
 
 export default class VerificationRequestDialog extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             verificationRequest: this.props.verificationRequest,
         };
-        if (this.props.verificationRequestPromise) {
-            this.props.verificationRequestPromise.then(r => {
-                this.setState({ verificationRequest: r });
-            });
-        }
+        this.props.verificationRequestPromise?.then((r) => {
+            this.setState({ verificationRequest: r });
+        });
     }
 
-    render() {
+    public render(): React.ReactNode {
         const request = this.state.verificationRequest;
-        const otherUserId = request && request.otherUserId;
-        const member = this.props.member ||
-            otherUserId && MatrixClientPeg.get().getUser(otherUserId);
-        const title = request && request.isSelfVerification ?
-            _t("Verify other device") : _t("Verification Request");
+        const otherUserId = request?.otherUserId;
+        const member = this.props.member || (otherUserId ? MatrixClientPeg.safeGet().getUser(otherUserId) : null);
+        const title = request?.isSelfVerification
+            ? _t("encryption|verification|verification_dialog_title_device")
+            : _t("encryption|verification|verification_dialog_title_user");
 
-        return <BaseDialog
-            className="mx_InfoDialog"
-            onFinished={this.props.onFinished}
-            contentId="mx_Dialog_content"
-            title={title}
-            hasCancel={true}
-        >
-            <EncryptionPanel
-                layout="dialog"
-                verificationRequest={this.props.verificationRequest}
-                verificationRequestPromise={this.props.verificationRequestPromise}
-                onClose={this.props.onFinished}
-                member={member}
-                isRoomEncrypted={false}
-            />
-        </BaseDialog>;
+        if (!member) return null;
+
+        return (
+            <BaseDialog
+                className="mx_InfoDialog"
+                onFinished={this.props.onFinished}
+                contentId="mx_Dialog_content"
+                title={title}
+                hasCancel={true}
+            >
+                <EncryptionPanel
+                    layout="dialog"
+                    verificationRequest={this.props.verificationRequest}
+                    verificationRequestPromise={this.props.verificationRequestPromise}
+                    onClose={this.props.onFinished}
+                    member={member}
+                    isRoomEncrypted={false}
+                />
+            </BaseDialog>
+        );
     }
 }

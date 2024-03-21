@@ -15,12 +15,7 @@ limitations under the License.
 */
 
 import { useContext, useEffect, useState } from "react";
-import {
-    Beacon,
-    BeaconEvent,
-    MatrixEvent,
-    getBeaconInfoIdentifier,
-} from "matrix-js-sdk/src/matrix";
+import { Beacon, BeaconEvent, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
@@ -33,8 +28,8 @@ export const useBeacon = (beaconInfoEvent: MatrixEvent): Beacon | undefined => {
         const roomId = beaconInfoEvent.getRoomId();
         const beaconIdentifier = getBeaconInfoIdentifier(beaconInfoEvent);
 
-        const room = matrixClient.getRoom(roomId);
-        const beaconInstance = room.currentState.beacons.get(beaconIdentifier);
+        const room = matrixClient?.getRoom(roomId);
+        const beaconInstance = room?.currentState.beacons.get(beaconIdentifier);
 
         // TODO could this be less stupid?
 
@@ -56,11 +51,7 @@ export const useBeacon = (beaconInfoEvent: MatrixEvent): Beacon | undefined => {
 
     // beacon update will fire when this beacon is superseded
     // check the updated event id for equality to the matrix event
-    const beaconInstanceEventId = useEventEmitterState(
-        beacon,
-        BeaconEvent.Update,
-        () => beacon?.beaconInfoId,
-    );
+    const beaconInstanceEventId = useEventEmitterState(beacon, BeaconEvent.Update, () => beacon?.beaconInfoId);
 
     useEffect(() => {
         if (beaconInstanceEventId && beaconInstanceEventId !== beaconInfoEvent.getId()) {

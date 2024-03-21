@@ -14,42 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 export default class IntegrationsImpossibleDialog extends React.Component<IProps> {
     private onAcknowledgeClick = (): void => {
         this.props.onFinished();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         return (
             <BaseDialog
-                className='mx_IntegrationsImpossibleDialog'
+                className="mx_IntegrationsImpossibleDialog"
                 hasCancel={false}
                 onFinished={this.props.onFinished}
-                title={_t("Integrations not allowed")}
+                title={_t("integrations|impossible_dialog_title")}
             >
-                <div className='mx_IntegrationsImpossibleDialog_content'>
-                    <p>
-                        { _t(
-                            "Your %(brand)s doesn't allow you to use an integration manager to do this. " +
-                            "Please contact an admin.",
-                            { brand },
-                        ) }
-                    </p>
+                <div className="mx_IntegrationsImpossibleDialog_content">
+                    <p>{_t("integrations|impossible_dialog_description", { brand })}</p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("OK")}
+                    primaryButton={_t("action|ok")}
                     onPrimaryButtonClick={this.onAcknowledgeClick}
                     hasCancel={false}
                 />

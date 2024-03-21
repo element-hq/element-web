@@ -21,6 +21,7 @@ limitations under the License.
  * @param text the plaintext to put in the user's clipboard
  */
 import { logger } from "matrix-js-sdk/src/logger";
+import GraphemeSplitter from "graphemer";
 
 export async function copyPlaintext(text: string): Promise<boolean> {
     try {
@@ -37,7 +38,7 @@ export async function copyPlaintext(text: string): Promise<boolean> {
             textArea.style.position = "fixed";
 
             document.body.appendChild(textArea);
-            const selection = document.getSelection();
+            const selection = document.getSelection()!;
             const range = document.createRange();
             // range.selectNodeContents(textArea);
             range.selectNode(textArea);
@@ -55,11 +56,11 @@ export async function copyPlaintext(text: string): Promise<boolean> {
     return false;
 }
 
-export function selectText(target: Element) {
+export function selectText(target: Element): void {
     const range = document.createRange();
     range.selectNodeContents(target);
 
-    const selection = window.getSelection();
+    const selection = window.getSelection()!;
     selection.removeAllRanges();
     selection.addRange(range);
 }
@@ -70,19 +71,10 @@ export function selectText(target: Element) {
  * In certain browsers it may only work if triggered by a user action or may ask user for permissions
  * @param ref pointer to the node to copy
  */
-export function copyNode(ref: Element): boolean {
+export function copyNode(ref?: Element | null): boolean {
+    if (!ref) return false;
     selectText(ref);
-    return document.execCommand('copy');
-}
-
-const collator = new Intl.Collator();
-/**
- * Performant language-sensitive string comparison
- * @param a the first string to compare
- * @param b the second string to compare
- */
-export function compare(a: string, b: string): number {
-    return collator.compare(a, b);
+    return document.execCommand("copy");
 }
 
 /**
@@ -90,5 +82,17 @@ export function compare(a: string, b: string): number {
  * @returns the selected text
  */
 export function getSelectedText(): string {
-    return window.getSelection().toString();
+    return window.getSelection()!.toString();
+}
+
+/**
+ * Returns the first grapheme in the given string,
+ * especially useful for strings containing emoji, will not break compound emoji up.
+ * @param str string to parse
+ * @returns the first grapheme or an empty string if given an empty string
+ */
+export function getFirstGrapheme(str: string): string {
+    const splitter = new GraphemeSplitter();
+    const result = splitter.iterateGraphemes(str).next();
+    return result.done ? "" : result.value;
 }

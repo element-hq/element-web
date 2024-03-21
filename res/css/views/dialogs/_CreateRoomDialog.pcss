@@ -18,15 +18,20 @@ limitations under the License.
     margin-top: 15px;
 
     .mx_CreateRoomDialog_details_summary {
-        outline: none;
         list-style: none;
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
         cursor: pointer;
-        color: $accent;
+        color: var(--cpd-color-text-primary);
+        text-decoration: underline;
+        width: fit-content;
 
         /* list-style doesn't do it for webkit */
         &::-webkit-details-marker {
             display: none;
+        }
+
+        &:not(:focus-visible) {
+            outline: none;
         }
     }
 
@@ -93,7 +98,7 @@ limitations under the License.
     .mx_SettingsFlag_label {
         flex: 1 1 0;
         min-width: 0;
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 
     .mx_ToggleSwitch {
@@ -109,4 +114,9 @@ limitations under the License.
         margin: 0 85px 0 0;
         font-size: $font-12px;
     }
+}
+
+.mx_CreateRoomDialog_labelledCheckbox {
+    color: $muted-fg-color;
+    margin-top: var(--cpd-space-6x);
 }

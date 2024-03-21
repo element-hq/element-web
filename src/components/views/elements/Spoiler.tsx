@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React from 'react';
+import React from "react";
 
 interface IProps {
     reason?: string;
@@ -26,7 +26,7 @@ interface IState {
 }
 
 export default class Spoiler extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             visible: false,
@@ -42,19 +42,25 @@ export default class Spoiler extends React.Component<IProps, IState> {
         this.setState({ visible: !this.state.visible });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const reason = this.props.reason ? (
-            <span className="mx_EventTile_spoiler_reason">{ "(" + this.props.reason + ")" }</span>
+            <span className="mx_EventTile_spoiler_reason">{"(" + this.props.reason + ")"}</span>
         ) : null;
         // react doesn't allow appending a DOM node as child.
         // as such, we pass the this.props.contentHtml instead and then set the raw
         // HTML content. This is secure as the contents have already been parsed previously
         return (
-            <span className={"mx_EventTile_spoiler" + (this.state.visible ? " visible" : "")} onClick={this.toggleVisible}>
-                { reason }
+            <button
+                className={"mx_EventTile_spoiler" + (this.state.visible ? " visible" : "")}
+                onClick={this.toggleVisible}
+            >
+                {reason}
                 &nbsp;
-                <span className="mx_EventTile_spoiler_content" dangerouslySetInnerHTML={{ __html: this.props.contentHtml }} />
-            </span>
+                <span
+                    className="mx_EventTile_spoiler_content"
+                    dangerouslySetInnerHTML={{ __html: this.props.contentHtml }}
+                />
+            </button>
         );
     }
 }

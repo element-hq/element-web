@@ -20,7 +20,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 // Returns value, method to toggle boolean value and method to set the boolean value
 export const useStateToggle = (initialValue = false): [boolean, () => void, Dispatch<SetStateAction<boolean>>] => {
     const [value, setValue] = useState(initialValue);
-    const toggleValue = () => {
+    const toggleValue = (): void => {
         setValue(!value);
     };
     return [value, toggleValue, setValue];

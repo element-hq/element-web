@@ -19,7 +19,7 @@ import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { Call } from "../../../models/Call";
-import { useParticipants } from "../../../hooks/useCall";
+import { useParticipantCount } from "../../../hooks/useCall";
 
 export enum LiveContentType {
     Video,
@@ -40,21 +40,23 @@ export const LiveContentSummary: FC<Props> = ({ type, text, active, participantC
     <span className="mx_LiveContentSummary">
         <span
             className={classNames("mx_LiveContentSummary_text", {
-                "mx_LiveContentSummary_text_video": type === LiveContentType.Video,
-                "mx_LiveContentSummary_text_active": active,
+                mx_LiveContentSummary_text_video: type === LiveContentType.Video,
+                mx_LiveContentSummary_text_active: active,
             })}
         >
-            { text }
+            {text}
         </span>
-        { participantCount > 0 && <>
-            { " • " }
-            <span
-                className="mx_LiveContentSummary_participants"
-                aria-label={_t("%(count)s participants", { count: participantCount })}
-            >
-                { participantCount }
-            </span>
-        </> }
+        {participantCount > 0 && (
+            <>
+                {" • "}
+                <span
+                    className="mx_LiveContentSummary_participants"
+                    aria-label={_t("voip|n_people_joined", { count: participantCount })}
+                >
+                    {participantCount}
+                </span>
+            </>
+        )}
     </span>
 );
 
@@ -62,13 +64,11 @@ interface LiveContentSummaryWithCallProps {
     call: Call;
 }
 
-export function LiveContentSummaryWithCall({ call }: LiveContentSummaryWithCallProps) {
-    const participants = useParticipants(call);
-
-    return <LiveContentSummary
+export const LiveContentSummaryWithCall: FC<LiveContentSummaryWithCallProps> = ({ call }) => (
+    <LiveContentSummary
         type={LiveContentType.Video}
-        text={_t("Video")}
+        text={_t("common|video")}
         active={false}
-        participantCount={participants.size}
-    />;
-}
+        participantCount={useParticipantCount(call)}
+    />
+);

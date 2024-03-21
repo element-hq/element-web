@@ -18,7 +18,8 @@ import React from "react";
 
 // Wrap DOM event handlers with stopPropagation and preventDefault
 export const preventDefaultWrapper =
-    <T extends React.BaseSyntheticEvent = React.BaseSyntheticEvent>(callback: () => void) => (e?: T) => {
+    <T extends React.BaseSyntheticEvent = React.BaseSyntheticEvent>(callback: () => void) =>
+    (e?: T) => {
         e?.stopPropagation();
         e?.preventDefault();
         callback();

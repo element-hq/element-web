@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DEFAULT_WAVEFORM, Playback, PlaybackState } from "./Playback";
+import { Playback, PlaybackState } from "./Playback";
 import { ManagedPlayback } from "./ManagedPlayback";
+import { DEFAULT_WAVEFORM } from "./consts";
 
 /**
  * Handles management of playback instances to ensure certain functionality, like
@@ -38,14 +39,14 @@ export class PlaybackManager {
      * instances are paused.
      * @param playback Optional. The playback to leave untouched.
      */
-    public pauseAllExcept(playback?: Playback) {
+    public pauseAllExcept(playback?: Playback): void {
         this.instances
-            .filter(p => p !== playback && p.currentState === PlaybackState.Playing)
-            .forEach(p => p.pause());
+            .filter((p) => p !== playback && p.currentState === PlaybackState.Playing)
+            .forEach((p) => p.pause());
     }
 
-    public destroyPlaybackInstance(playback: ManagedPlayback) {
-        this.instances = this.instances.filter(p => p !== playback);
+    public destroyPlaybackInstance(playback: ManagedPlayback): void {
+        this.instances = this.instances.filter((p) => p !== playback);
     }
 
     public createPlaybackInstance(buf: ArrayBuffer, waveform = DEFAULT_WAVEFORM): Playback {

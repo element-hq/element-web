@@ -17,16 +17,13 @@ limitations under the License.
 .mx_PollCreateDialog {
     .mx_PollCreateDialog_busy {
         position: absolute;
-        left: 0px;
-        right: 0px;
-        top: 0px;
-        bottom: 0px;
-        background-color: rgba($background, 0.6);
+        inset: 0;
+        background-color: $overlay-background;
         z-index: 1;
     }
 
     h2 {
-        font-weight: 600;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
         margin-top: 0;
@@ -63,7 +60,7 @@ limitations under the License.
 
             &::before {
                 content: "";
-                mask: url('$(res)/img/element-icons/x-8px.svg');
+                mask: url("$(res)/img/element-icons/x-8px.svg");
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: cover;

@@ -1,54 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`StopGapWidgetDriver sendToDevice sends encrypted messages 1`] = `
-Array [
-  Array [
-    Array [
-      Object {
+[
+  [
+    [
+      {
         "deviceInfo": DeviceInfo {
-          "algorithms": Array [],
+          "algorithms": [],
           "deviceId": "aliceWeb",
-          "keys": Object {},
+          "keys": {},
           "known": false,
-          "signatures": Object {},
-          "unsigned": Object {},
+          "signatures": {},
+          "unsigned": {},
           "verified": 0,
         },
         "userId": "@alice:example.org",
       },
-      Object {
+      {
         "deviceInfo": DeviceInfo {
-          "algorithms": Array [],
+          "algorithms": [],
           "deviceId": "aliceMobile",
-          "keys": Object {},
+          "keys": {},
           "known": false,
-          "signatures": Object {},
-          "unsigned": Object {},
+          "signatures": {},
+          "unsigned": {},
           "verified": 0,
         },
         "userId": "@alice:example.org",
       },
     ],
-    Object {
+    {
       "hello": "alice",
     },
   ],
-  Array [
-    Array [
-      Object {
+  [
+    [
+      {
         "deviceInfo": DeviceInfo {
-          "algorithms": Array [],
+          "algorithms": [],
           "deviceId": "bobDesktop",
-          "keys": Object {},
+          "keys": {},
           "known": false,
-          "signatures": Object {},
-          "unsigned": Object {},
+          "signatures": {},
+          "unsigned": {},
           "verified": 0,
         },
         "userId": "@bob:example.org",
       },
     ],
-    Object {
+    {
       "hello": "bob",
     },
   ],
@@ -56,20 +56,20 @@ Array [
 `;
 
 exports[`StopGapWidgetDriver sendToDevice sends unencrypted messages 1`] = `
-Array [
-  Array [
-    Object {
-      "batch": Array [
-        Object {
+[
+  [
+    {
+      "batch": [
+        {
           "deviceId": "*",
-          "payload": Object {
+          "payload": {
             "hello": "alice",
           },
           "userId": "@alice:example.org",
         },
-        Object {
+        {
           "deviceId": "bobDesktop",
-          "payload": Object {
+          "payload": {
             "hello": "bob",
           },
           "userId": "@bob:example.org",

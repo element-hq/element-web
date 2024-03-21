@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { IAuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
@@ -23,24 +23,26 @@ import { InteractiveAuthCallback } from "../../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
 import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 
-const makeDeleteRequest = (
-    matrixClient: MatrixClient, deviceIds: string[],
-) => async (auth?: IAuthData): Promise<void> => {
-    await matrixClient.deleteMultipleDevices(deviceIds, auth);
-};
+const makeDeleteRequest =
+    (matrixClient: MatrixClient, deviceIds: string[]) =>
+    async (auth: IAuthDict | null): Promise<IAuthData> => {
+        return matrixClient.deleteMultipleDevices(deviceIds, auth ?? undefined);
+    };
 
 export const deleteDevicesWithInteractiveAuth = async (
-    matrixClient: MatrixClient, deviceIds: string[], onFinished?: InteractiveAuthCallback,
-) => {
+    matrixClient: MatrixClient,
+    deviceIds: string[],
+    onFinished: InteractiveAuthCallback<void>,
+): Promise<void> => {
     if (!deviceIds.length) {
         return;
     }
     try {
-        await makeDeleteRequest(matrixClient, deviceIds)();
+        await makeDeleteRequest(matrixClient, deviceIds)(null);
         // no interactive auth needed
-        onFinished(true, undefined);
+        await onFinished(true, undefined);
     } catch (error) {
-        if (error.httpStatus !== 401 || !error.data?.flows) {
+        if (!(error instanceof MatrixError) || error.httpStatus !== 401 || !error.data?.flows) {
             // doesn't look like an interactive-auth failure
             throw error;
         }
@@ -50,28 +52,28 @@ export const deleteDevicesWithInteractiveAuth = async (
         const numDevices = deviceIds.length;
         const dialogAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
-                title: _t("Use Single Sign On to continue"),
-                body: _t("Confirm logging out these devices by using Single Sign On to prove your identity.", {
+                title: _t("auth|uia|sso_title"),
+                body: _t("settings|sessions|confirm_sign_out_sso", {
                     count: numDevices,
                 }),
-                continueText: _t("Single Sign On"),
+                continueText: _t("auth|sso"),
                 continueKind: "primary",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {
-                title: _t("Confirm signing out these devices", {
+                title: _t("settings|sessions|confirm_sign_out", {
                     count: numDevices,
                 }),
-                body: _t("Click the button below to confirm signing out these devices.", {
+                body: _t("settings|sessions|confirm_sign_out_body", {
                     count: numDevices,
                 }),
-                continueText: _t("Sign out devices", { count: numDevices }),
+                continueText: _t("settings|sessions|confirm_sign_out_continue", { count: numDevices }),
                 continueKind: "danger",
             },
         };
         Modal.createDialog(InteractiveAuthDialog, {
-            title: _t("Authentication"),
+            title: _t("common|authentication"),
             matrixClient: matrixClient,
-            authData: error.data,
+            authData: error.data as IAuthData,
             onFinished,
             makeRequest: makeDeleteRequest(matrixClient, deviceIds),
             aestheticsForStagePhases: {

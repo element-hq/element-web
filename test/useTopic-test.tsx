@@ -15,10 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { act } from "react-dom/test-utils";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { act, render, screen } from "@testing-library/react";
 
 import { useTopic } from "../src/hooks/room/useTopic";
 import { mkEvent, stubClient } from "./test-utils";
@@ -27,13 +25,13 @@ import { MatrixClientPeg } from "../src/MatrixClientPeg";
 describe("useTopic", () => {
     it("should display the room topic", () => {
         stubClient();
-        const room = new Room("!TESTROOM", MatrixClientPeg.get(), "@alice:example.org");
+        const room = new Room("!TESTROOM", MatrixClientPeg.safeGet(), "@alice:example.org");
         const topic = mkEvent({
-            type: 'm.room.topic',
-            room: '!TESTROOM',
-            user: '@alice:example.org',
+            type: "m.room.topic",
+            room: "!TESTROOM",
+            user: "@alice:example.org",
             content: {
-                topic: 'Test topic',
+                topic: "Test topic",
             },
             ts: 123,
             event: true,
@@ -43,19 +41,19 @@ describe("useTopic", () => {
 
         function RoomTopic() {
             const topic = useTopic(room);
-            return <p>{ topic.text }</p>;
+            return <p>{topic!.text}</p>;
         }
 
-        const wrapper = mount(<RoomTopic />);
+        render(<RoomTopic />);
 
-        expect(wrapper.text()).toBe("Test topic");
+        expect(screen.queryByText("Test topic")).toBeInTheDocument();
 
         const updatedTopic = mkEvent({
-            type: 'm.room.topic',
-            room: '!TESTROOM',
-            user: '@alice:example.org',
+            type: "m.room.topic",
+            room: "!TESTROOM",
+            user: "@alice:example.org",
             content: {
-                topic: 'New topic',
+                topic: "New topic",
             },
             ts: 666,
             event: true,
@@ -65,6 +63,6 @@ describe("useTopic", () => {
             room.addLiveEvents([updatedTopic]);
         });
 
-        expect(wrapper.text()).toBe("New topic");
+        expect(screen.queryByText("New topic")).toBeInTheDocument();
     });
 });

@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import PowerSelector from "../../../../src/components/views/elements/PowerSelector";
 
-describe('<PowerSelector />', () => {
+describe("<PowerSelector />", () => {
     it("should reset back to custom value when custom input is blurred blank", async () => {
         const fn = jest.fn();
         render(<PowerSelector value={25} maxValue={100} usersDefault={0} onChange={fn} />);
@@ -58,5 +59,42 @@ describe('<PowerSelector />', () => {
 
         await screen.findByDisplayValue(40);
         expect(fn).toHaveBeenCalledWith(40, "key");
+    });
+
+    it("should reset when props get changed", async () => {
+        const fn = jest.fn();
+        const { rerender } = render(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
+
+        const select = screen.getByLabelText("Power level");
+        fireEvent.change(select, { target: { value: "SELECT_VALUE_CUSTOM" } });
+
+        rerender(<PowerSelector value={51} maxValue={100} usersDefault={0} onChange={fn} />);
+        await screen.findByDisplayValue(51);
+
+        rerender(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
+        const option = await screen.findByText<HTMLOptionElement>("Moderator");
+        expect(option.selected).toBeTruthy();
+        expect(fn).not.toHaveBeenCalled();
+    });
+
+    it("should reset when onChange promise rejects", async () => {
+        const deferred = defer<void>();
+        render(
+            <PowerSelector
+                value={25}
+                maxValue={100}
+                usersDefault={0}
+                onChange={() => deferred.promise}
+                powerLevelKey="key"
+            />,
+        );
+
+        const input = screen.getByLabelText("Power level");
+        fireEvent.change(input, { target: { value: 40 } });
+        fireEvent.blur(input);
+
+        await screen.findByDisplayValue(40);
+        deferred.reject("Some error");
+        await screen.findByDisplayValue(25);
     });
 });

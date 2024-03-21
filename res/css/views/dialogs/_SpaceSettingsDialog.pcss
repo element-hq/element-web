@@ -18,7 +18,7 @@ limitations under the License.
     color: $primary-content;
 
     .mx_SpaceSettings_errorText {
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-12px;
         line-height: $font-15px;
         color: $alert;
@@ -37,18 +37,12 @@ limitations under the License.
             margin-bottom: 20px;
         }
 
-        & + .mx_SettingsTab_subheading {
-            border-top: 1px solid $menu-border-color;
-            margin-top: 0;
-            padding-top: 24px;
-        }
-
         .mx_StyledRadioButton {
             margin-top: 8px;
             margin-bottom: 4px;
 
             .mx_StyledRadioButton_content {
-                font-weight: $font-semi-bold;
+                font-weight: var(--cpd-font-weight-semibold);
                 line-height: $font-18px;
                 color: $primary-content;
             }
@@ -77,7 +71,7 @@ limitations under the License.
 
     .mx_AccessibleButton_hasKind {
         &.mx_AccessibleButton_kind_link {
-            font-size: $font-14px;
+            font: var(--cpd-font-body-md-semibold);
             margin: 7px 18px;
 
             &.mx_SettingsTab_showAdvanced {
@@ -88,11 +82,11 @@ limitations under the License.
 
     .mx_TabbedView_tabLabel {
         .mx_SpaceSettingsDialog_generalIcon::before {
-            mask-image: url('$(res)/img/element-icons/settings.svg');
+            mask-image: url("$(res)/img/element-icons/settings.svg");
         }
 
         .mx_SpaceSettingsDialog_visibilityIcon::before {
-            mask-image: url('$(res)/img/element-icons/eye.svg');
+            mask-image: url("$(res)/img/element-icons/eye.svg");
         }
     }
 }

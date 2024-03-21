@@ -13,11 +13,11 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           my-device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -49,7 +49,7 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            This session is ready for secure messaging.
+            Your current session is ready for secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -122,11 +122,11 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           My Device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -158,7 +158,7 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -331,11 +331,11 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           my-device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -367,7 +367,7 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"

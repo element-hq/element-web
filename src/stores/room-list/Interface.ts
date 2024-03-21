@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
 import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { RoomUpdateCause, TagID } from "./models";
@@ -57,7 +57,7 @@ export interface RoomListStore extends EventEmitter {
      * @param tagId tag to get the sort algorithm for
      * @returns the sort algorithm
      */
-    getTagSorting(tagId: TagID): SortAlgorithm;
+    getTagSorting(tagId: TagID): SortAlgorithm | null;
 
     /**
      * Set the list algorithm for the specified tag.
@@ -71,7 +71,7 @@ export interface RoomListStore extends EventEmitter {
      * @param tagId tag to get the list algorithm for
      * @returns the list algorithm
      */
-    getListOrder(tagId: TagID): ListAlgorithm;
+    getListOrder(tagId: TagID): ListAlgorithm | null;
 
     /**
      * Regenerates the room whole room list, discarding any previous results.

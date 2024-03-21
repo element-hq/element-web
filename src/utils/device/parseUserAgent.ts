@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import UAParser from 'ua-parser-js';
+import UAParser from "ua-parser-js";
 
 export enum DeviceType {
-    Desktop = 'Desktop',
-    Mobile = 'Mobile',
-    Web = 'Web',
-    Unknown = 'Unknown',
+    Desktop = "Desktop",
+    Mobile = "Mobile",
+    Web = "Web",
+    Unknown = "Unknown",
 }
 export type ExtendedDeviceInformation = {
     deviceType: DeviceType;
@@ -42,17 +42,13 @@ const getDeviceType = (
     browser: UAParser.IBrowser,
     operatingSystem: UAParser.IOS,
 ): DeviceType => {
-    if (browser.name === 'Electron') {
+    if (browser.name === "Electron") {
         return DeviceType.Desktop;
     }
     if (!!browser.name) {
         return DeviceType.Web;
     }
-    if (
-        device.type === 'mobile' ||
-        operatingSystem.name?.includes('Android') ||
-        userAgent.indexOf(IOS_KEYWORD) > -1
-    ) {
+    if (device.type === "mobile" || operatingSystem.name?.includes("Android") || userAgent.indexOf(IOS_KEYWORD) > -1) {
         return DeviceType.Mobile;
     }
     return DeviceType.Unknown;
@@ -72,18 +68,18 @@ const checkForCustomValues = (userAgent: string): CustomValues => {
         return {};
     }
 
-    const mightHaveDevice = userAgent.includes('(');
+    const mightHaveDevice = userAgent.includes("(");
     if (!mightHaveDevice) {
         return {};
     }
-    const deviceInfoSegments = userAgent.substring(userAgent.indexOf('(') + 1).split('; ');
+    const deviceInfoSegments = userAgent.substring(userAgent.indexOf("(") + 1).split("; ");
     const customDeviceModel = deviceInfoSegments[0] || undefined;
     const customDeviceOS = deviceInfoSegments[1] || undefined;
     return { customDeviceModel, customDeviceOS };
 };
 
 const concatenateNameAndVersion = (name?: string, version?: string): string | undefined =>
-    name && [name, version].filter(Boolean).join(' ');
+    name && [name, version].filter(Boolean).join(" ");
 
 export const parseUserAgent = (userAgent?: string): ExtendedDeviceInformation => {
     if (!userAgent) {
@@ -111,9 +107,8 @@ export const parseUserAgent = (userAgent?: string): ExtendedDeviceInformation =>
     const client = concatenateNameAndVersion(browser.name, browser.version);
 
     // only try to parse custom model and OS when device type is known
-    const { customDeviceModel, customDeviceOS } = deviceType !== DeviceType.Unknown
-        ? checkForCustomValues(userAgent)
-        : {} as CustomValues;
+    const { customDeviceModel, customDeviceOS } =
+        deviceType !== DeviceType.Unknown ? checkForCustomValues(userAgent) : ({} as CustomValues);
 
     return {
         deviceType,

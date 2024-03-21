@@ -14,154 +14,128 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from 'enzyme';
-import { act } from 'react-dom/test-utils';
-import { IPassphraseInfo } from 'matrix-js-sdk/src/crypto/api';
+import React, { ComponentProps } from "react";
+import { IPassphraseInfo } from "matrix-js-sdk/src/crypto/api";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Mocked } from "jest-mock";
 
-import { findByAttr, getMockClientWithEventEmitter, unmockClientPeg } from '../../../test-utils';
-import { findById, flushPromises } from '../../../test-utils';
+import { getMockClientWithEventEmitter, mockPlatformPeg } from "../../../test-utils";
 import AccessSecretStorageDialog from "../../../../src/components/views/dialogs/security/AccessSecretStorageDialog";
 
+const securityKey = "EsTc WKmb ivvk jLS7 Y1NH 5CcQ mP1E JJwj B3Fd pFWm t4Dp dbyu";
+
 describe("AccessSecretStorageDialog", () => {
-    const mockClient = getMockClientWithEventEmitter({
-        keyBackupKeyFromRecoveryKey: jest.fn(),
-        checkSecretStorageKey: jest.fn(),
-        isValidRecoveryKey: jest.fn(),
-    });
-    const defaultProps = {
+    let mockClient: Mocked<MatrixClient>;
+
+    const defaultProps: ComponentProps<typeof AccessSecretStorageDialog> = {
+        keyInfo: {} as any,
         onFinished: jest.fn(),
         checkPrivateKey: jest.fn(),
-        keyInfo: undefined,
     };
-    const getComponent = (props ={}): ReactWrapper =>
-        mount(<AccessSecretStorageDialog {...defaultProps} {...props} />);
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        mockClient.keyBackupKeyFromRecoveryKey.mockReturnValue('a raw key' as unknown as Uint8Array);
-        mockClient.isValidRecoveryKey.mockReturnValue(false);
+    const renderComponent = (props = {}): void => {
+        render(<AccessSecretStorageDialog {...defaultProps} {...props} />);
+    };
+
+    const enterSecurityKey = (placeholder = "Security Key"): void => {
+        act(() => {
+            fireEvent.change(screen.getByPlaceholderText(placeholder), {
+                target: {
+                    value: securityKey,
+                },
+            });
+            // wait for debounce
+            jest.advanceTimersByTime(250);
+        });
+    };
+
+    const submitDialog = async (): Promise<void> => {
+        await userEvent.click(screen.getByText("Continue"), { delay: null });
+    };
+
+    beforeAll(() => {
+        jest.useFakeTimers();
+        mockPlatformPeg();
     });
 
     afterAll(() => {
-        unmockClientPeg();
+        jest.useRealTimers();
+        jest.restoreAllMocks();
+    });
+
+    beforeEach(() => {
+        mockClient = getMockClientWithEventEmitter({
+            keyBackupKeyFromRecoveryKey: jest.fn(),
+            checkSecretStorageKey: jest.fn(),
+            isValidRecoveryKey: jest.fn(),
+        });
     });
 
     it("Closes the dialog when the form is submitted with a valid key", async () => {
+        mockClient.checkSecretStorageKey.mockResolvedValue(true);
+        mockClient.isValidRecoveryKey.mockReturnValue(true);
+
         const onFinished = jest.fn();
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
-        const wrapper = getComponent({ onFinished, checkPrivateKey });
+        renderComponent({ onFinished, checkPrivateKey });
 
-        // force into valid state
-        act(() => {
-            wrapper.setState({
-                recoveryKeyValid: true,
-                recoveryKey: "a",
-            });
-        });
-        const e = { preventDefault: () => {} };
+        // check that the input field is focused
+        expect(screen.getByPlaceholderText("Security Key")).toHaveFocus();
 
-        act(() => {
-            wrapper.find('form').simulate('submit', e);
-        });
+        await enterSecurityKey();
+        await submitDialog();
 
-        await flushPromises();
-
-        expect(checkPrivateKey).toHaveBeenCalledWith({ recoveryKey: "a" });
-        expect(onFinished).toHaveBeenCalledWith({ recoveryKey: "a" });
-    });
-
-    it("Considers a valid key to be valid", async () => {
-        const checkPrivateKey = jest.fn().mockResolvedValue(true);
-        const wrapper = getComponent({ checkPrivateKey });
-        mockClient.keyBackupKeyFromRecoveryKey.mockReturnValue('a raw key' as unknown as Uint8Array);
-        mockClient.checkSecretStorageKey.mockResolvedValue(true);
-
-        const v = "asdf";
-        const e = { target: { value: v } };
-        act(() => {
-            findById(wrapper, 'mx_securityKey').find('input').simulate('change', e);
-            wrapper.setProps({});
-        });
-        await act(async () => {
-            // force a validation now because it debounces
-            // @ts-ignore
-            await wrapper.instance().validateRecoveryKey();
-            wrapper.setProps({});
-        });
-
-        const submitButton = findByAttr('data-testid')(wrapper, 'dialog-primary-button').at(0);
-        // submit button is enabled when key is valid
-        expect(submitButton.props().disabled).toBeFalsy();
-        expect(wrapper.find('.mx_AccessSecretStorageDialog_recoveryKeyFeedback').text()).toEqual('Looks good!');
+        expect(screen.getByText("Looks good!")).toBeInTheDocument();
+        expect(checkPrivateKey).toHaveBeenCalledWith({ recoveryKey: securityKey });
+        expect(onFinished).toHaveBeenCalledWith({ recoveryKey: securityKey });
     });
 
     it("Notifies the user if they input an invalid Security Key", async () => {
-        const checkPrivateKey = jest.fn().mockResolvedValue(false);
-        const wrapper = getComponent({ checkPrivateKey });
-        const e = { target: { value: "a" } };
+        const onFinished = jest.fn();
+        const checkPrivateKey = jest.fn().mockResolvedValue(true);
+        renderComponent({ onFinished, checkPrivateKey });
+
         mockClient.keyBackupKeyFromRecoveryKey.mockImplementation(() => {
             throw new Error("that's no key");
         });
 
-        act(() => {
-            findById(wrapper, 'mx_securityKey').find('input').simulate('change', e);
-        });
-        // force a validation now because it debounces
-        // @ts-ignore private
-        await wrapper.instance().validateRecoveryKey();
+        await enterSecurityKey();
+        await submitDialog();
 
-        const submitButton = findByAttr('data-testid')(wrapper, 'dialog-primary-button').at(0);
-        // submit button is disabled when recovery key is invalid
-        expect(submitButton.props().disabled).toBeTruthy();
-        expect(
-            wrapper.find('.mx_AccessSecretStorageDialog_recoveryKeyFeedback').text(),
-        ).toEqual('Invalid Security Key');
-
-        wrapper.setProps({});
-        const notification = wrapper.find(".mx_AccessSecretStorageDialog_recoveryKeyFeedback");
-        expect(notification.props().children).toEqual("Invalid Security Key");
+        expect(screen.getByText("Continue")).toBeDisabled();
+        expect(screen.getByText("Invalid Security Key")).toBeInTheDocument();
     });
 
-    it("Notifies the user if they input an invalid passphrase", async function() {
+    it("Notifies the user if they input an invalid passphrase", async function () {
         const keyInfo = {
-            name: 'test',
-            algorithm: 'test',
-            iv: 'test',
-            mac: '1:2:3:4',
+            name: "test",
+            algorithm: "test",
+            iv: "test",
+            mac: "1:2:3:4",
             passphrase: {
                 // this type is weird in js-sdk
                 // cast 'm.pbkdf2' to itself
-                algorithm: 'm.pbkdf2' as IPassphraseInfo['algorithm'],
+                algorithm: "m.pbkdf2" as IPassphraseInfo["algorithm"],
                 iterations: 2,
-                salt: 'nonempty',
+                salt: "nonempty",
             },
         };
         const checkPrivateKey = jest.fn().mockResolvedValue(false);
-        const wrapper = getComponent({ checkPrivateKey, keyInfo });
+        renderComponent({ checkPrivateKey, keyInfo });
         mockClient.isValidRecoveryKey.mockReturnValue(false);
 
-        // update passphrase
-        act(() => {
-            const e = { target: { value: "a" } };
-            findById(wrapper, 'mx_passPhraseInput').at(1).simulate('change', e);
-        });
-        wrapper.setProps({});
+        await enterSecurityKey("Security Phrase");
+        expect(screen.getByPlaceholderText("Security Phrase")).toHaveValue(securityKey);
+        await submitDialog();
 
-        // input updated
-        expect(findById(wrapper, 'mx_passPhraseInput').at(0).props().value).toEqual('a');
+        expect(
+            screen.getByText(
+                "👎 Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
+            ),
+        ).toBeInTheDocument();
 
-        // submit the form
-        act(() => {
-            wrapper.find('form').at(0).simulate('submit');
-        });
-        await flushPromises();
-
-        wrapper.setProps({});
-        const notification = wrapper.find(".mx_AccessSecretStorageDialog_keyStatus");
-        expect(notification.props().children).toEqual(
-            ["\uD83D\uDC4E ", "Unable to access secret storage. Please verify that you " +
-                "entered the correct Security Phrase."]);
+        expect(screen.getByPlaceholderText("Security Phrase")).toHaveFocus();
     });
 });

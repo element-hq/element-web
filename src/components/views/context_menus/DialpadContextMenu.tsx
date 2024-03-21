@@ -16,12 +16,12 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef } from "react";
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import ContextMenu, { IProps as IContextMenuProps } from '../../structures/ContextMenu';
+import ContextMenu, { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import Field from "../elements/Field";
-import DialPad from '../voip/DialPad';
+import DialPad from "../voip/DialPad";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -34,15 +34,15 @@ interface IState {
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
-            value: '',
+            value: "",
         };
     }
 
-    onDigitPress = (digit: string, ev: ButtonEvent) => {
+    public onDigitPress = (digit: string, ev: ButtonEvent): void => {
         this.props.call.sendDtmfDigit(digit);
         this.setState({ value: this.state.value + digit });
 
@@ -54,41 +54,43 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         }
     };
 
-    onCancelClick = () => {
+    public onCancelClick = (): void => {
         this.props.onFinished();
     };
 
-    onKeyDown = (ev) => {
+    public onKeyDown = (ev: React.KeyboardEvent): void => {
         // Prevent Backspace and Delete keys from functioning in the entry field
         if (ev.code === "Backspace" || ev.code === "Delete") {
             ev.preventDefault();
         }
     };
 
-    onChange = (ev) => {
+    public onChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ value: ev.target.value });
     };
 
-    render() {
-        return <ContextMenu {...this.props}>
-            <div className="mx_DialPadContextMenuWrapper">
-                <div>
-                    <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
+    public render(): React.ReactNode {
+        return (
+            <ContextMenu {...this.props}>
+                <div className="mx_DialPadContextMenuWrapper">
+                    <div>
+                        <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
+                    </div>
+                    <div className="mx_DialPadContextMenu_header">
+                        <Field
+                            ref={this.numberEntryFieldRef}
+                            className="mx_DialPadContextMenu_dialled"
+                            value={this.state.value}
+                            autoFocus={true}
+                            onKeyDown={this.onKeyDown}
+                            onChange={this.onChange}
+                        />
+                    </div>
+                    <div className="mx_DialPadContextMenu_dialPad">
+                        <DialPad onDigitPress={this.onDigitPress} hasDial={false} />
+                    </div>
                 </div>
-                <div className="mx_DialPadContextMenu_header">
-                    <Field
-                        ref={this.numberEntryFieldRef}
-                        className="mx_DialPadContextMenu_dialled"
-                        value={this.state.value}
-                        autoFocus={true}
-                        onKeyDown={this.onKeyDown}
-                        onChange={this.onChange}
-                    />
-                </div>
-                <div className="mx_DialPadContextMenu_dialPad">
-                    <DialPad onDigitPress={this.onDigitPress} hasDial={false} />
-                </div>
-            </div>
-        </ContextMenu>;
+            </ContextMenu>
+        );
     }
 }

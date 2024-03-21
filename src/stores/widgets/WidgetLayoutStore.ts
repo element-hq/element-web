@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
+import { compare, MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
+import { IWidget } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { IApp } from "../WidgetStore";
@@ -28,56 +28,10 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { compare } from "../../utils/strings";
+import { Container, IStoredLayout, ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, IWidgetLayouts } from "./types";
 
-export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
-
-export enum Container {
-    // "Top" is the app drawer, and currently the only sensible value.
-    Top = "top",
-
-    // "Right" is the right panel, and the default for widgets. Setting
-    // this as a container on a widget is essentially like saying "no
-    // changes needed", though this may change in the future.
-    Right = "right",
-
-    Center = "center"
-}
-
-export interface IStoredLayout {
-    // Where to store the widget. Required.
-    container: Container;
-
-    // The index (order) to position the widgets in. Only applies for
-    // ordered containers (like the top container). Smaller numbers first,
-    // and conflicts resolved by comparing widget IDs.
-    index?: number;
-
-    // Percentage (integer) for relative width of the container to consume.
-    // Clamped to 0-100 and may have minimums imposed upon it. Only applies
-    // to containers which support inner resizing (currently only the top
-    // container).
-    width?: number;
-
-    // Percentage (integer) for relative height of the container. Note that
-    // this only applies to the top container currently, and that container
-    // will take the highest value among widgets in the container. Clamped
-    // to 0-100 and may have minimums imposed on it.
-    height?: number;
-
-    // TODO: [Deferred] Maximizing (fullscreen) widgets by default.
-}
-
-interface IWidgetLayouts {
-    [widgetId: string]: IStoredLayout;
-}
-
-interface ILayoutStateEvent {
-    // TODO: [Deferred] Forced layout (fixed with no changes)
-
-    // The widget layouts.
-    widgets: IWidgetLayouts;
-}
+export type { IStoredLayout, ILayoutStateEvent };
+export { Container, WIDGET_LAYOUT_EVENT_TYPE };
 
 interface ILayoutSettings extends ILayoutStateEvent {
     overrides?: string; // event ID for layout state event, if present
@@ -92,22 +46,20 @@ export const MAX_PINNED = 3;
 const MIN_WIDGET_WIDTH_PCT = 10; // 10%
 const MIN_WIDGET_HEIGHT_PCT = 2; // 2%
 
+interface ContainerValue {
+    ordered: IApp[];
+    height?: number;
+    distributions?: number[];
+}
+
 export class WidgetLayoutStore extends ReadyWatchingStore {
     private static internalInstance: WidgetLayoutStore;
 
-    private byRoom: {
-        [roomId: string]: {
-            // @ts-ignore - TS wants a string key, but we know better
-            [container: Container]: {
-                ordered: IApp[];
-                height?: number;
-                distributions?: number[];
-            };
-        };
-    } = {};
-
-    private pinnedRef: string;
-    private layoutRef: string;
+    // Map: room Id → container → ContainerValue
+    private byRoom: MapWithDefault<string, Map<Container, ContainerValue>> = new MapWithDefault(() => new Map());
+    private pinnedRef: string | undefined;
+    private layoutRef: string | undefined;
+    private dynamicRef: string | undefined;
 
     private constructor() {
         super(defaultDispatcher);
@@ -125,72 +77,87 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return `update_${room.roomId}`;
     }
 
-    private emitFor(room: Room) {
+    private emitFor(room: Room): void {
         this.emit(WidgetLayoutStore.emissionForRoom(room));
     }
 
-    protected async onReady(): Promise<any> {
+    protected async onReady(): Promise<void> {
         this.updateAllRooms();
 
-        this.matrixClient.on(RoomStateEvent.Events, this.updateRoomFromState);
+        this.matrixClient?.on(RoomStateEvent.Events, this.updateRoomFromState);
         this.pinnedRef = SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
         this.layoutRef = SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
+        this.dynamicRef = SettingsStore.watchSetting(
+            "feature_dynamic_room_predecessors",
+            null,
+            this.updateFromSettings,
+        );
         WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
-    protected async onNotReady(): Promise<any> {
-        this.byRoom = {};
+    protected async onNotReady(): Promise<void> {
+        this.byRoom = new MapWithDefault(() => new Map());
 
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
-        SettingsStore.unwatchSetting(this.pinnedRef);
-        SettingsStore.unwatchSetting(this.layoutRef);
+        if (this.pinnedRef) SettingsStore.unwatchSetting(this.pinnedRef);
+        if (this.layoutRef) SettingsStore.unwatchSetting(this.layoutRef);
+        if (this.dynamicRef) SettingsStore.unwatchSetting(this.dynamicRef);
         WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
-    private updateAllRooms = () => {
-        this.byRoom = {};
-        for (const room of this.matrixClient.getVisibleRooms()) {
+    private updateAllRooms = (): void => {
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        if (!this.matrixClient) return;
+        this.byRoom = new MapWithDefault(() => new Map());
+        for (const room of this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor)) {
             this.recalculateRoom(room);
         }
     };
 
-    private updateFromWidgetStore = (roomId?: string) => {
+    private updateFromWidgetStore = (roomId?: string): void => {
         if (roomId) {
-            const room = this.matrixClient.getRoom(roomId);
+            const room = this.matrixClient?.getRoom(roomId);
             if (room) this.recalculateRoom(room);
         } else {
             this.updateAllRooms();
         }
     };
 
-    private updateRoomFromState = (ev: MatrixEvent) => {
+    private updateRoomFromState = (ev: MatrixEvent): void => {
         if (ev.getType() !== WIDGET_LAYOUT_EVENT_TYPE) return;
-        const room = this.matrixClient.getRoom(ev.getRoomId());
+        const room = this.matrixClient?.getRoom(ev.getRoomId());
         if (room) this.recalculateRoom(room);
     };
 
-    private updateFromSettings = (settingName: string, roomId: string /* and other stuff */) => {
+    private updateFromSettings = (
+        _settingName: string,
+        roomId: string | null,
+        _atLevel: SettingLevel,
+        _newValAtLevel: any,
+        _newVal: any,
+    ): void => {
         if (roomId) {
-            const room = this.matrixClient.getRoom(roomId);
+            const room = this.matrixClient?.getRoom(roomId);
             if (room) this.recalculateRoom(room);
         } else {
             this.updateAllRooms();
         }
     };
 
-    public recalculateRoom(room: Room) {
+    public recalculateRoom(room: Room): void {
         const widgets = WidgetStore.instance.getApps(room.roomId);
         if (!widgets?.length) {
-            this.byRoom[room.roomId] = {};
+            this.byRoom.set(room.roomId, new Map());
             this.emitFor(room);
             return;
         }
 
-        const beforeChanges = JSON.stringify(this.byRoom[room.roomId]);
+        const roomContainers = this.byRoom.getOrCreate(room.roomId);
+        const beforeChanges = JSON.stringify(recursiveMapToObject(roomContainers));
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         const legacyPinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
-        let userLayout = SettingsStore.getValue<ILayoutSettings>("Widgets.layout", room.roomId);
+        let userLayout = SettingsStore.getValue<ILayoutSettings | null>("Widgets.layout", room.roomId);
 
         if (layoutEv && userLayout && userLayout.overrides !== layoutEv.getId()) {
             // For some other layout that we don't really care about. The user can reset this
@@ -198,7 +165,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             userLayout = null;
         }
 
-        const roomLayout: ILayoutStateEvent = layoutEv ? layoutEv.getContent() : null;
+        const roomLayout = layoutEv?.getContent<ILayoutStateEvent>() ?? null;
         // We filter for the center container first.
         // (An error is raised, if there are multiple widgets marked for the center container)
         // For the right and top container multiple widgets are allowed.
@@ -210,7 +177,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             const manualContainer = userLayout?.widgets?.[widget.id]?.container;
             const isLegacyPinned = !!legacyPinned?.[widget.id];
             const defaultContainer = WidgetType.JITSI.matches(widget.type) ? Container.Top : Container.Right;
-            if ((manualContainer) ? manualContainer === Container.Center : stateContainer === Container.Center) {
+            if (manualContainer ? manualContainer === Container.Center : stateContainer === Container.Center) {
                 if (centerWidgets.length) {
                     console.error("Tried to push a second widget into the center container");
                 } else {
@@ -219,9 +186,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 // The widget won't need to be put in any other container.
                 continue;
             }
-            let targetContainer = defaultContainer;
+            let targetContainer: Container = defaultContainer;
             if (!!manualContainer || !!stateContainer) {
-                targetContainer = (manualContainer) ? manualContainer : stateContainer;
+                targetContainer = manualContainer ?? stateContainer!;
             } else if (isLegacyPinned && !stateContainer) {
                 // Special legacy case
                 targetContainer = Container.Top;
@@ -260,7 +227,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         // Determine width distribution and height of the top container now (the only relevant one)
         const widths: number[] = [];
-        let maxHeight = null; // null == default
+        let maxHeight: number | null = null; // null == default
         let doAutobalance = true;
         for (let i = 0; i < topWidgets.length; i++) {
             const widget = topWidgets[i];
@@ -268,7 +235,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             const userWidgetLayout = userLayout?.widgets?.[widget.id];
 
             if (Number.isFinite(userWidgetLayout?.width) || Number.isFinite(widgetLayout?.width)) {
-                const val = userWidgetLayout?.width || widgetLayout?.width;
+                const val = (userWidgetLayout?.width || widgetLayout?.width)!;
                 const normalized = clamp(val, MIN_WIDGET_WIDTH_PCT, 100);
                 widths.push(normalized);
                 doAutobalance = false; // a manual width was specified
@@ -279,7 +246,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             if (widgetLayout?.height || userWidgetLayout?.height) {
                 const defRoomHeight = defaultNumber(widgetLayout?.height, MIN_WIDGET_HEIGHT_PCT);
                 const h = defaultNumber(userWidgetLayout?.height, defRoomHeight);
-                maxHeight = Math.max(maxHeight, clamp(h, MIN_WIDGET_HEIGHT_PCT, 100));
+                maxHeight = Math.max(maxHeight ?? 0, clamp(h, MIN_WIDGET_HEIGHT_PCT, 100));
             }
         }
         if (doAutobalance) {
@@ -299,7 +266,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 // When we're over, we try to scale all the widgets within range first.
                 // We clamp values to try and keep ourselves sane and within range.
                 for (let i = 0; i < widths.length; i++) {
-                    widths[i] = clamp(widths[i] - (difference / widths.length), MIN_WIDGET_WIDTH_PCT, 100);
+                    widths[i] = clamp(widths[i] - difference / widths.length, MIN_WIDGET_WIDTH_PCT, 100);
                 }
 
                 // If we're still over, find the widgets which have more width than the minimum
@@ -311,9 +278,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 const toReclaim = sum(...widths) - 100;
                 if (toReclaim > 0) {
                     const largeIndices = widths
-                        .map((v, i) => ([i, v]))
-                        .filter(p => p[1] > MIN_WIDGET_WIDTH_PCT)
-                        .map(p => p[0]);
+                        .map((v, i) => [i, v])
+                        .filter((p) => p[1] > MIN_WIDGET_WIDTH_PCT)
+                        .map((p) => p[0]);
                     for (const idx of largeIndices) {
                         widths[idx] -= toReclaim / largeIndices.length;
                     }
@@ -322,49 +289,55 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
 
         // Finally, fill in our cache and update
-        this.byRoom[room.roomId] = {};
+        const newRoomContainers = new Map();
+        this.byRoom.set(room.roomId, newRoomContainers);
         if (topWidgets.length) {
-            this.byRoom[room.roomId][Container.Top] = {
+            newRoomContainers.set(Container.Top, {
                 ordered: topWidgets,
                 distributions: widths,
                 height: maxHeight,
-            };
+            });
         }
         if (rightWidgets.length) {
-            this.byRoom[room.roomId][Container.Right] = {
+            newRoomContainers.set(Container.Right, {
                 ordered: rightWidgets,
-            };
+            });
         }
         if (centerWidgets.length) {
-            this.byRoom[room.roomId][Container.Center] = {
+            newRoomContainers.set(Container.Center, {
                 ordered: centerWidgets,
-            };
+            });
         }
 
-        const afterChanges = JSON.stringify(this.byRoom[room.roomId]);
+        const afterChanges = JSON.stringify(recursiveMapToObject(newRoomContainers));
+
         if (afterChanges !== beforeChanges) {
             this.emitFor(room);
         }
     }
 
-    public getContainerWidgets(room: Optional<Room>, container: Container): IApp[] {
-        return this.byRoom[room?.roomId]?.[container]?.ordered || [];
+    public getContainerWidgets(room: Optional<Room>, container: Container): IWidget[] {
+        return (room && this.byRoom.get(room.roomId)?.get(container)?.ordered) || [];
     }
 
-    public isInContainer(room: Optional<Room>, widget: IApp, container: Container): boolean {
-        return this.getContainerWidgets(room, container).some(w => w.id === widget.id);
+    public isInContainer(room: Room, widget: IWidget, container: Container): boolean {
+        return this.getContainerWidgets(room, container).some((w) => w.id === widget.id);
     }
 
     public canAddToContainer(room: Room, container: Container): boolean {
         switch (container) {
-            case Container.Top: return this.getContainerWidgets(room, container).length < MAX_PINNED;
-            case Container.Right: return this.getContainerWidgets(room, container).length < MAX_PINNED;
-            case Container.Center: return this.getContainerWidgets(room, container).length < 1;
+            case Container.Top:
+                return this.getContainerWidgets(room, container).length < MAX_PINNED;
+            case Container.Right:
+                return this.getContainerWidgets(room, container).length < MAX_PINNED;
+            case Container.Center:
+                return this.getContainerWidgets(room, container).length < 1;
         }
     }
 
-    public getResizerDistributions(room: Room, container: Container): string[] { // yes, string.
-        let distributions = this.byRoom[room.roomId]?.[container]?.distributions;
+    public getResizerDistributions(room: Room, container: Container): string[] {
+        // yes, string.
+        let distributions = this.byRoom.get(room.roomId)?.get(container)?.distributions;
         if (!distributions || distributions.length < 2) return [];
 
         // The distributor actually expects to be fed N-1 sizes and expands the middle section
@@ -373,13 +346,13 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         if (distributions.length === 2) distributions = [distributions[0]];
         if (distributions.length === 3) distributions = [distributions[0], distributions[2]];
-        return distributions.map(d => `${d.toFixed(1)}%`); // actual percents - these are decoded later
+        return distributions.map((d) => `${d.toFixed(1)}%`); // actual percents - these are decoded later
     }
 
-    public setResizerDistributions(room: Room, container: Container, distributions: string[]) {
+    public setResizerDistributions(room: Room, container: Container, distributions: string[]): void {
         if (container !== Container.Top) return; // ignore - not relevant
 
-        const numbers = distributions.map(d => Number(Number(d.substring(0, d.length - 1)).toFixed(1)));
+        const numbers = distributions.map((d) => Number(Number(d.substring(0, d.length - 1)).toFixed(1)));
         const widgets = this.getContainerWidgets(room, container);
 
         // From getResizerDistributions, we need to fill in the middle size if applicable.
@@ -387,30 +360,30 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         if (numbers.length === 2) numbers.splice(1, 0, remaining);
         if (numbers.length === 1) numbers.push(remaining);
 
-        const localLayout = {};
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
                 width: numbers[i],
                 index: i,
-                height: this.byRoom[room.roomId]?.[container]?.height || MIN_WIDGET_HEIGHT_PCT,
+                height: this.byRoom.get(room.roomId)?.get(container)?.height || MIN_WIDGET_HEIGHT_PCT,
             };
         });
         this.updateUserLayout(room, localLayout);
     }
 
-    public getContainerHeight(room: Room, container: Container): number {
-        return this.byRoom[room.roomId]?.[container]?.height; // let the default get returned if needed
+    public getContainerHeight(room: Room, container: Container): number | null {
+        return this.byRoom.get(room.roomId)?.get(container)?.height ?? null; // let the default get returned if needed
     }
 
-    public setContainerHeight(room: Room, container: Container, height: number) {
+    public setContainerHeight(room: Room, container: Container, height?: number | null): void {
         const widgets = this.getContainerWidgets(room, container);
-        const widths = this.byRoom[room.roomId]?.[container]?.distributions;
-        const localLayout = {};
+        const widths = this.byRoom.get(room.roomId)?.get(container)?.distributions;
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
                 height: height,
             };
@@ -418,34 +391,34 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveWithinContainer(room: Room, container: Container, widget: IApp, delta: number) {
+    public moveWithinContainer(room: Room, container: Container, widget: IWidget, delta: number): void {
         const widgets = arrayFastClone(this.getContainerWidgets(room, container));
-        const currentIdx = widgets.findIndex(w => w.id === widget.id);
+        const currentIdx = widgets.findIndex((w) => w.id === widget.id);
         if (currentIdx < 0) return; // no change needed
 
         widgets.splice(currentIdx, 1); // remove existing widget
         const newIdx = clamp(currentIdx + delta, 0, widgets.length);
         widgets.splice(newIdx, 0, widget);
 
-        const widths = this.byRoom[room.roomId]?.[container]?.distributions;
-        const height = this.byRoom[room.roomId]?.[container]?.height;
-        const localLayout = {};
+        const widths = this.byRoom.get(room.roomId)?.get(container)?.distributions;
+        const height = this.byRoom.get(room.roomId)?.get(container)?.height;
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
-                height: height,
+                height,
             };
         });
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveToContainer(room: Room, widget: IApp, toContainer: Container) {
+    public moveToContainer(room: Room, widget: IWidget, toContainer: Container): void {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w]) => w.id === widget.id)) return; // invalid
         // Prepare other containers (potentially move widgets to obey the following rules)
-        const newLayout = {};
+        const newLayout: Record<string, IStoredLayout> = {};
         switch (toContainer) {
             case Container.Right:
                 // new "right" widget
@@ -474,66 +447,66 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, newLayout);
     }
 
-    public hasMaximisedWidget(room: Room) {
+    public hasMaximisedWidget(room: Room): boolean {
         return this.getContainerWidgets(room, Container.Center).length > 0;
     }
 
-    public hasPinnedWidgets(room: Room) {
+    public hasPinnedWidgets(room: Room): boolean {
         return this.getContainerWidgets(room, Container.Top).length > 0;
     }
 
     public canCopyLayoutToRoom(room: Room): boolean {
         if (!this.matrixClient) return false; // not ready yet
-        return room.currentState.maySendStateEvent(WIDGET_LAYOUT_EVENT_TYPE, this.matrixClient.getUserId());
+        return room.currentState.maySendStateEvent(WIDGET_LAYOUT_EVENT_TYPE, this.matrixClient.getUserId()!);
     }
 
-    public copyLayoutToRoom(room: Room) {
+    public copyLayoutToRoom(room: Room): void {
         const allWidgets = this.getAllWidgets(room);
         const evContent: ILayoutStateEvent = { widgets: {} };
         for (const [widget, container] of allWidgets) {
             evContent.widgets[widget.id] = { container };
             if (container === Container.Top) {
                 const containerWidgets = this.getContainerWidgets(room, container);
-                const idx = containerWidgets.findIndex(w => w.id === widget.id);
-                const widths = this.byRoom[room.roomId]?.[container]?.distributions;
-                const height = this.byRoom[room.roomId]?.[container]?.height;
+                const idx = containerWidgets.findIndex((w) => w.id === widget.id);
+                const widths = this.byRoom.get(room.roomId)?.get(container)?.distributions;
+                const height = this.byRoom.get(room.roomId)?.get(container)?.height;
                 evContent.widgets[widget.id] = {
                     ...evContent.widgets[widget.id],
-                    height: height ? Math.round(height) : null,
-                    width: widths[idx] ? Math.round(widths[idx]) : null,
+                    height: height ? Math.round(height) : undefined,
+                    width: widths?.[idx] ? Math.round(widths[idx]) : undefined,
                     index: idx,
                 };
             }
         }
-        this.matrixClient.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
+        this.matrixClient?.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
     }
 
     private getAllWidgets(room: Room): [IApp, Container][] {
-        const containers = this.byRoom[room.roomId];
+        const containers = this.byRoom.get(room.roomId);
         if (!containers) return [];
 
-        const ret = [];
-        for (const container of Object.keys(containers)) {
-            const widgets = containers[container].ordered;
+        const ret: [IApp, Container][] = [];
+        for (const [container, containerValue] of containers) {
+            const widgets = containerValue.ordered;
             for (const widget of widgets) {
-                ret.push([widget, container]);
+                ret.push([widget, container as Container]);
             }
         }
         return ret;
     }
 
-    private updateUserLayout(room: Room, newLayout: IWidgetLayouts) {
+    private updateUserLayout(room: Room, newLayout: IWidgetLayouts): void {
         // Polyfill any missing widgets
         const allWidgets = this.getAllWidgets(room);
         for (const [widget, container] of allWidgets) {
             const containerWidgets = this.getContainerWidgets(room, container);
-            const idx = containerWidgets.findIndex(w => w.id === widget.id);
-            const widths = this.byRoom[room.roomId]?.[container]?.distributions;
+            const idx = containerWidgets.findIndex((w) => w.id === widget.id);
+            const widths = this.byRoom.get(room.roomId)?.get(container)?.distributions;
             if (!newLayout[widget.id]) {
                 newLayout[widget.id] = {
                     container: container,
                     index: idx,
-                    height: this.byRoom[room.roomId]?.[container]?.height,
+                    height: this.byRoom.get(room.roomId)?.get(container)?.height,
                     width: widths?.[idx],
                 };
             }

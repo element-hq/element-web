@@ -14,25 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IClientWellKnown } from 'matrix-js-sdk/src/client';
-import { UnstableValue } from 'matrix-js-sdk/src/NamespacedValue';
-
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
-export const TILE_SERVER_WK_KEY = new UnstableValue(
-    "m.tile_server", "org.matrix.msc3488.tile_server");
+export const TILE_SERVER_WK_KEY = new UnstableValue("m.tile_server", "org.matrix.msc3488.tile_server");
 const EMBEDDED_PAGES_WK_PROPERTY = "io.element.embedded_pages";
 
 /* eslint-disable camelcase */
 export interface ICallBehaviourWellKnown {
     widget_build_url?: string;
+    ignore_dm?: boolean;
 }
 
 export interface IE2EEWellKnown {
     default?: boolean;
+    /**
+     * Forces the encryption to disabled for all new rooms
+     * When true, overrides configured 'default' behaviour
+     * Hides the option to enable encryption on room creation
+     * Disables the option to enable encryption in room settings for all new and existing rooms
+     */
+    force_disable?: boolean;
     secure_backup_required?: boolean;
     secure_backup_setup_methods?: SecureBackupSetupMethod[];
 }
@@ -46,48 +51,40 @@ export interface IEmbeddedPagesWellKnown {
 }
 /* eslint-enable camelcase */
 
-export function getCallBehaviourWellKnown(): ICallBehaviourWellKnown {
-    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+export function getCallBehaviourWellKnown(matrixClient: MatrixClient): ICallBehaviourWellKnown {
+    const clientWellKnown = matrixClient.getClientWellKnown();
     return clientWellKnown?.[CALL_BEHAVIOUR_WK_KEY];
 }
 
-export function getE2EEWellKnown(): IE2EEWellKnown {
-    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
-    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
+export function getE2EEWellKnown(matrixClient: MatrixClient): IE2EEWellKnown | null {
+    const clientWellKnown = matrixClient.getClientWellKnown();
+    if (clientWellKnown?.[E2EE_WK_KEY]) {
         return clientWellKnown[E2EE_WK_KEY];
     }
-    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY_DEPRECATED]) {
+    if (clientWellKnown?.[E2EE_WK_KEY_DEPRECATED]) {
         return clientWellKnown[E2EE_WK_KEY_DEPRECATED];
     }
     return null;
 }
 
-export function getTileServerWellKnown(): ITileServerWellKnown | undefined {
-    return tileServerFromWellKnown(MatrixClientPeg.get().getClientWellKnown());
+export function getTileServerWellKnown(matrixClient: MatrixClient): ITileServerWellKnown | undefined {
+    return tileServerFromWellKnown(matrixClient.getClientWellKnown());
 }
 
-export function tileServerFromWellKnown(
-    clientWellKnown?: IClientWellKnown | undefined,
-): ITileServerWellKnown {
-    return (
-        clientWellKnown?.[TILE_SERVER_WK_KEY.name] ??
-        clientWellKnown?.[TILE_SERVER_WK_KEY.altName]
-    );
+export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown | undefined): ITileServerWellKnown {
+    return clientWellKnown?.[TILE_SERVER_WK_KEY.name] ?? clientWellKnown?.[TILE_SERVER_WK_KEY.altName];
 }
 
-export function getEmbeddedPagesWellKnown(): IEmbeddedPagesWellKnown | undefined {
-    return embeddedPagesFromWellKnown(MatrixClientPeg.get()?.getClientWellKnown());
+export function getEmbeddedPagesWellKnown(matrixClient: MatrixClient | undefined): IEmbeddedPagesWellKnown | undefined {
+    return embeddedPagesFromWellKnown(matrixClient?.getClientWellKnown());
 }
 
-export function embeddedPagesFromWellKnown(
-    clientWellKnown?: IClientWellKnown,
-): IEmbeddedPagesWellKnown {
-    return (clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY]);
+export function embeddedPagesFromWellKnown(clientWellKnown?: IClientWellKnown): IEmbeddedPagesWellKnown {
+    return clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY];
 }
 
-export function isSecureBackupRequired(): boolean {
-    const wellKnown = getE2EEWellKnown();
-    return wellKnown && wellKnown["secure_backup_required"] === true;
+export function isSecureBackupRequired(matrixClient: MatrixClient): boolean {
+    return getE2EEWellKnown(matrixClient)?.["secure_backup_required"] === true;
 }
 
 export enum SecureBackupSetupMethod {
@@ -95,8 +92,8 @@ export enum SecureBackupSetupMethod {
     Passphrase = "passphrase",
 }
 
-export function getSecureBackupSetupMethods(): SecureBackupSetupMethod[] {
-    const wellKnown = getE2EEWellKnown();
+export function getSecureBackupSetupMethods(matrixClient: MatrixClient): SecureBackupSetupMethod[] {
+    const wellKnown = getE2EEWellKnown(matrixClient);
     if (
         !wellKnown ||
         !wellKnown["secure_backup_setup_methods"] ||
@@ -106,10 +103,7 @@ export function getSecureBackupSetupMethods(): SecureBackupSetupMethod[] {
             wellKnown["secure_backup_setup_methods"].includes(SecureBackupSetupMethod.Passphrase)
         )
     ) {
-        return [
-            SecureBackupSetupMethod.Key,
-            SecureBackupSetupMethod.Passphrase,
-        ];
+        return [SecureBackupSetupMethod.Key, SecureBackupSetupMethod.Passphrase];
     }
     return wellKnown["secure_backup_setup_methods"];
 }

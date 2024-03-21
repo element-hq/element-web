@@ -1,74 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ZoomButtons /> renders buttons 1`] = `
-<ZoomButtons
-  map={
-    MockMap {
-      "_events": Object {},
-      "_eventsCount": 0,
-      "_maxListeners": undefined,
-      "addControl": [MockFunction],
-      "fitBounds": [MockFunction],
-      "removeControl": [MockFunction],
-      "setCenter": [MockFunction],
-      "setStyle": [MockFunction],
-      "zoomIn": [MockFunction],
-      "zoomOut": [MockFunction],
-      Symbol(kCapture): false,
-    }
-  }
->
+<DocumentFragment>
   <div
-    className="mx_ZoomButtons"
+    class="mx_ZoomButtons"
   >
-    <AccessibleButton
-      className="mx_ZoomButtons_button"
-      data-test-id="map-zoom-in-button"
-      element="div"
-      onClick={[Function]}
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-in-button"
       role="button"
-      tabIndex={0}
+      tabindex="0"
       title="Zoom in"
     >
       <div
-        className="mx_AccessibleButton mx_ZoomButtons_button"
-        data-test-id="map-zoom-in-button"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        onKeyUp={[Function]}
-        role="button"
-        tabIndex={0}
-        title="Zoom in"
-      >
-        <div
-          className="mx_ZoomButtons_icon"
-        />
-      </div>
-    </AccessibleButton>
-    <AccessibleButton
-      className="mx_ZoomButtons_button"
-      data-test-id="map-zoom-out-button"
-      element="div"
-      onClick={[Function]}
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-out-button"
       role="button"
-      tabIndex={0}
+      tabindex="0"
       title="Zoom out"
     >
       <div
-        className="mx_AccessibleButton mx_ZoomButtons_button"
-        data-test-id="map-zoom-out-button"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        onKeyUp={[Function]}
-        role="button"
-        tabIndex={0}
-        title="Zoom out"
-      >
-        <div
-          className="mx_ZoomButtons_icon"
-        />
-      </div>
-    </AccessibleButton>
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
   </div>
-</ZoomButtons>
+</DocumentFragment>
 `;

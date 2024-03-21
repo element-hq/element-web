@@ -16,29 +16,25 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { MatrixClient, Room, MatrixEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { VoipRoomSettingsTab } from "../../../../../../src/components/views/settings/tabs/room/VoipRoomSettingsTab";
 import { ElementCall } from "../../../../../../src/models/Call";
 
-describe("RolesRoomSettingsTab", () => {
+describe("VoipRoomSettingsTab", () => {
     const roomId = "!room:example.com";
     let cli: MatrixClient;
     let room: Room;
 
     const renderTab = (): RenderResult => {
-        return render(<VoipRoomSettingsTab roomId={roomId} />);
+        return render(<VoipRoomSettingsTab room={room} />);
     };
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         room = mkStubRoom(roomId, "test room", cli);
 
         jest.spyOn(cli, "sendStateEvent");
@@ -46,7 +42,7 @@ describe("RolesRoomSettingsTab", () => {
     });
 
     describe("Element Call", () => {
-        const mockPowerLevels = (events): void => {
+        const mockPowerLevels = (events: Record<string, number>): void => {
             jest.spyOn(room.currentState, "getStateEvents").mockReturnValue({
                 getContent: () => ({
                     events,
@@ -55,7 +51,7 @@ describe("RolesRoomSettingsTab", () => {
         };
 
         const getElementCallSwitch = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("[data-testid='element-call-switch']");
+            return tab.container.querySelector("[data-testid='element-call-switch']")!;
         };
 
         describe("correct state", () => {
@@ -87,17 +83,19 @@ describe("RolesRoomSettingsTab", () => {
 
                     const tab = renderTab();
 
-                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                    await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        room.roomId,
-                        EventType.RoomPowerLevels,
-                        expect.objectContaining({
-                            events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 50,
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
-                            },
-                        }),
-                    ));
+                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCall.CALL_EVENT_TYPE.name]: 50,
+                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
                 });
 
                 it("enables Element calls in private room", async () => {
@@ -105,17 +103,19 @@ describe("RolesRoomSettingsTab", () => {
 
                     const tab = renderTab();
 
-                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                    await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        room.roomId,
-                        EventType.RoomPowerLevels,
-                        expect.objectContaining({
-                            events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 0,
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
-                            },
-                        }),
-                    ));
+                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCall.CALL_EVENT_TYPE.name]: 0,
+                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
                 });
             });
 
@@ -124,17 +124,19 @@ describe("RolesRoomSettingsTab", () => {
 
                 const tab = renderTab();
 
-                fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                    room.roomId,
-                    EventType.RoomPowerLevels,
-                    expect.objectContaining({
-                        events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: 100,
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: 100,
-                        },
-                    }),
-                ));
+                fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                await waitFor(() =>
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        room.roomId,
+                        EventType.RoomPowerLevels,
+                        expect.objectContaining({
+                            events: {
+                                [ElementCall.CALL_EVENT_TYPE.name]: 100,
+                                [ElementCall.MEMBER_EVENT_TYPE.name]: 100,
+                            },
+                        }),
+                    ),
+                );
             });
         });
     });

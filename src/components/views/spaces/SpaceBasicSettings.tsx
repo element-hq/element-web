@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -24,21 +24,21 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string;
+    name: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;
-    setAvatar(avatar: File): void;
+    setAvatar(avatar?: File): void;
     setName(name: string): void;
     setTopic(topic: string): void;
 }
 
-export const SpaceAvatar = ({
+export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">> = ({
     avatarUrl,
     avatarDisabled = false,
     setAvatar,
-}: Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">) => {
-    const avatarUploadRef = useRef<HTMLInputElement>();
+}) => {
+    const avatarUploadRef = useRef<HTMLInputElement>(null);
     const [avatar, setAvatarDataUrl] = useState(avatarUrl); // avatar data url cache
 
     let avatarSection;
@@ -50,63 +50,73 @@ export const SpaceAvatar = ({
         }
     } else {
         if (avatar) {
-            avatarSection = <React.Fragment>
-                <AccessibleButton
-                    className="mx_SpaceBasicSettings_avatar"
-                    onClick={() => avatarUploadRef.current?.click()}
-                    element="img"
-                    src={avatar}
-                    alt=""
-                />
-                <AccessibleButton
-                    onClick={() => {
-                        avatarUploadRef.current.value = "";
-                        setAvatarDataUrl(undefined);
-                        setAvatar(undefined);
-                    }}
-                    kind="link"
-                    className="mx_SpaceBasicSettings_avatar_remove"
-                    aria-label={_t("Delete avatar")}
-                >
-                    { _t("Delete") }
-                </AccessibleButton>
-            </React.Fragment>;
+            avatarSection = (
+                <React.Fragment>
+                    <AccessibleButton
+                        className="mx_SpaceBasicSettings_avatar"
+                        onClick={() => avatarUploadRef.current?.click()}
+                        element="img"
+                        src={avatar}
+                        alt=""
+                    />
+                    <AccessibleButton
+                        onClick={() => {
+                            if (avatarUploadRef.current) avatarUploadRef.current.value = "";
+                            setAvatarDataUrl(undefined);
+                            setAvatar(undefined);
+                        }}
+                        kind="link"
+                        className="mx_SpaceBasicSettings_avatar_remove"
+                        aria-label={_t("room_settings|delete_avatar_label")}
+                    >
+                        {_t("action|delete")}
+                    </AccessibleButton>
+                </React.Fragment>
+            );
         } else {
-            avatarSection = <React.Fragment>
-                <div className="mx_SpaceBasicSettings_avatar" onClick={() => avatarUploadRef.current?.click()} />
-                <AccessibleButton
-                    onClick={() => avatarUploadRef.current?.click()}
-                    kind="link"
-                    aria-label={_t("Upload avatar")}
-                >
-                    { _t("Upload") }
-                </AccessibleButton>
-            </React.Fragment>;
+            avatarSection = (
+                <React.Fragment>
+                    <AccessibleButton
+                        className="mx_SpaceBasicSettings_avatar"
+                        onClick={() => avatarUploadRef.current?.click()}
+                        alt=""
+                    />
+                    <AccessibleButton
+                        onClick={() => avatarUploadRef.current?.click()}
+                        kind="link"
+                        aria-label={_t("room_settings|upload_avatar_label")}
+                    >
+                        {_t("action|upload")}
+                    </AccessibleButton>
+                </React.Fragment>
+            );
         }
     }
 
-    return <div className="mx_SpaceBasicSettings_avatarContainer">
-        { avatarSection }
-        <input
-            type="file"
-            ref={avatarUploadRef}
-            onClick={chromeFileInputFix}
-            onChange={(e) => {
-                if (!e.target.files?.length) return;
-                const file = e.target.files[0];
-                setAvatar(file);
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    setAvatarDataUrl(ev.target.result as string);
-                };
-                reader.readAsDataURL(file);
-            }}
-            accept="image/*"
-        />
-    </div>;
+    return (
+        <div className="mx_SpaceBasicSettings_avatarContainer">
+            {avatarSection}
+            <input
+                type="file"
+                ref={avatarUploadRef}
+                onClick={chromeFileInputFix}
+                onChange={(e) => {
+                    if (!e.target.files?.length) return;
+                    const file = e.target.files[0];
+                    setAvatar(file);
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        setAvatarDataUrl(ev.target?.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                }}
+                accept="image/*"
+            />
+        </div>
+    );
 };
 
-const SpaceBasicSettings = ({
+const SpaceBasicSettings: React.FC<IProps> = ({
     avatarUrl,
     avatarDisabled = false,
     setAvatar,
@@ -116,29 +126,31 @@ const SpaceBasicSettings = ({
     topic = "",
     topicDisabled = false,
     setTopic,
-}: IProps) => {
-    return <div className="mx_SpaceBasicSettings">
-        <SpaceAvatar avatarUrl={avatarUrl} avatarDisabled={avatarDisabled} setAvatar={setAvatar} />
+}) => {
+    return (
+        <div className="mx_SpaceBasicSettings">
+            <SpaceAvatar avatarUrl={avatarUrl} avatarDisabled={avatarDisabled} setAvatar={setAvatar} />
 
-        <Field
-            name="spaceName"
-            label={_t("Name")}
-            autoFocus={true}
-            value={name}
-            onChange={ev => setName(ev.target.value)}
-            disabled={nameDisabled}
-        />
+            <Field
+                name="spaceName"
+                label={_t("common|name")}
+                autoFocus={true}
+                value={name}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => setName(ev.target.value)}
+                disabled={nameDisabled}
+            />
 
-        <Field
-            name="spaceTopic"
-            element="textarea"
-            label={_t("Description")}
-            value={topic}
-            onChange={ev => setTopic(ev.target.value)}
-            rows={3}
-            disabled={topicDisabled}
-        />
-    </div>;
+            <Field
+                name="spaceTopic"
+                element="textarea"
+                label={_t("common|description")}
+                value={topic}
+                onChange={(ev: ChangeEvent<HTMLTextAreaElement>) => setTopic(ev.target.value)}
+                rows={3}
+                disabled={topicDisabled}
+            />
+        </div>
+    );
 };
 
 export default SpaceBasicSettings;

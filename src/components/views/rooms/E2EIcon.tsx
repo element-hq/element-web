@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
-import classNames from 'classnames';
+import React, { ComponentProps, CSSProperties } from "react";
+import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import Tooltip, { Alignment } from "../elements/Tooltip";
 import { E2EStatus } from "../../../utils/ShieldUtils";
+import { XOR } from "../../../@types/common";
 
 export enum E2EState {
     Verified = "verified",
@@ -31,85 +32,87 @@ export enum E2EState {
     Unauthenticated = "unauthenticated",
 }
 
-const crossSigningUserTitles: { [key in E2EState]?: string } = {
-    [E2EState.Warning]: _td("This user has not verified all of their sessions."),
-    [E2EState.Normal]: _td("You have not verified this user."),
-    [E2EState.Verified]: _td("You have verified this user. This user has verified all of their sessions."),
+const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
+    [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
+    [E2EState.Normal]: _td("encryption|cross_signing_user_normal"),
+    [E2EState.Verified]: _td("encryption|cross_signing_user_verified"),
 };
-const crossSigningRoomTitles: { [key in E2EState]?: string } = {
-    [E2EState.Warning]: _td("Someone is using an unknown session"),
-    [E2EState.Normal]: _td("This room is end-to-end encrypted"),
-    [E2EState.Verified]: _td("Everyone in this room is verified"),
+const crossSigningRoomTitles: { [key in E2EState]?: TranslationKey } = {
+    [E2EState.Warning]: _td("encryption|cross_signing_room_warning"),
+    [E2EState.Normal]: _td("encryption|cross_signing_room_normal"),
+    [E2EState.Verified]: _td("encryption|cross_signing_room_verified"),
 };
 
-interface IProps {
-    isUser?: boolean;
-    status?: E2EState | E2EStatus;
+interface Props {
     className?: string;
     size?: number;
     onClick?: () => void;
     hideTooltip?: boolean;
-    tooltipAlignment?: Alignment;
+    tooltipSide?: ComponentProps<typeof Tooltip>["side"];
     bordered?: boolean;
 }
 
-const E2EIcon: React.FC<IProps> = ({
+interface UserProps extends Props {
+    isUser: true;
+    status: E2EState | E2EStatus;
+}
+
+interface RoomProps extends Props {
+    isUser?: false;
+    status: E2EStatus;
+}
+
+const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
     isUser,
     status,
     className,
     size,
     onClick,
     hideTooltip,
-    tooltipAlignment,
+    tooltipSide,
     bordered,
 }) => {
-    const [hover, setHover] = useState(false);
+    const classes = classNames(
+        {
+            mx_E2EIcon: true,
+            mx_E2EIcon_bordered: bordered,
+            mx_E2EIcon_warning: status === E2EState.Warning,
+            mx_E2EIcon_normal: status === E2EState.Normal,
+            mx_E2EIcon_verified: status === E2EState.Verified,
+        },
+        className,
+    );
 
-    const classes = classNames({
-        mx_E2EIcon: true,
-        mx_E2EIcon_bordered: bordered,
-        mx_E2EIcon_warning: status === E2EState.Warning,
-        mx_E2EIcon_normal: status === E2EState.Normal,
-        mx_E2EIcon_verified: status === E2EState.Verified,
-    }, className);
-
-    let e2eTitle;
+    let e2eTitle: TranslationKey | undefined;
     if (isUser) {
         e2eTitle = crossSigningUserTitles[status];
     } else {
         e2eTitle = crossSigningRoomTitles[status];
     }
 
-    let style;
+    let style: CSSProperties | undefined;
     if (size) {
         style = { width: `${size}px`, height: `${size}px` };
     }
 
-    const onMouseOver = () => setHover(true);
-    const onMouseLeave = () => setHover(false);
+    const label = e2eTitle ? _t(e2eTitle) : "";
 
-    let tip;
-    if (hover && !hideTooltip) {
-        tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} alignment={tooltipAlignment} />;
-    }
-
+    let content: JSX.Element;
     if (onClick) {
-        return (
-            <AccessibleButton
-                onClick={onClick}
-                onMouseOver={onMouseOver}
-                onMouseLeave={onMouseLeave}
-                className={classes}
-                style={style}
-            >
-                { tip }
-            </AccessibleButton>
-        );
+        content = <AccessibleButton onClick={onClick} className={classes} style={style} />;
+    } else {
+        content = <div className={classes} style={style} />;
     }
 
-    return <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
-        { tip }
-    </div>;
+    if (!e2eTitle || hideTooltip) {
+        return content;
+    }
+
+    return (
+        <Tooltip label={label} side={tooltipSide} isTriggerInteractive={!!onClick}>
+            {content}
+        </Tooltip>
+    );
 };
 
 export default E2EIcon;

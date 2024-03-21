@@ -15,34 +15,36 @@ limitations under the License.
 */
 
 import React from "react";
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
+import { _t } from "../../../languageHandler";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     numUnreadMessages?: number;
     highlight: boolean;
-    onScrollToBottomClick: (e: React.MouseEvent) => void;
+    onScrollToBottomClick: (e: ButtonEvent) => void;
 }
 
 const JumpToBottomButton: React.FC<IProps> = (props) => {
     const className = classNames({
-        'mx_JumpToBottomButton': true,
-        'mx_JumpToBottomButton_highlight': props.highlight,
+        mx_JumpToBottomButton: true,
+        mx_JumpToBottomButton_highlight: props.highlight,
     });
     let badge;
     if (props.numUnreadMessages) {
-        badge = (<div className="mx_JumpToBottomButton_badge">{ props.numUnreadMessages }</div>);
+        badge = <div className="mx_JumpToBottomButton_badge">{props.numUnreadMessages}</div>;
     }
-    return (<div className={className}>
-        <AccessibleButton
-            className="mx_JumpToBottomButton_scrollDown"
-            title={_t("Scroll to most recent messages")}
-            onClick={props.onScrollToBottomClick}
-        />
-        { badge }
-    </div>);
+    return (
+        <div className={className}>
+            <AccessibleButton
+                className="mx_JumpToBottomButton_scrollDown"
+                title={_t("room|jump_to_bottom_button")}
+                onClick={props.onScrollToBottomClick}
+            />
+            {badge}
+        </div>
+    );
 };
 
 export default JumpToBottomButton;

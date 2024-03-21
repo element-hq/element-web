@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import classnames from "classnames";
 
 import StyledCheckbox from "./StyledCheckbox";
 
@@ -29,16 +30,20 @@ interface IProps {
     disabled?: boolean;
     // The function to call when the value changes
     onChange(checked: boolean): void;
+    // Optional additional CSS class to apply to the label
+    className?: string;
 }
 
-const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange }) => {
-    return <label className="mx_LabelledCheckbox">
-        <StyledCheckbox disabled={disabled} checked={value} onChange={e => onChange(e.target.checked)} />
-        <div className="mx_LabelledCheckbox_labels">
-            <span className="mx_LabelledCheckbox_label">{ label }</span>
-            { byline ? <span className="mx_LabelledCheckbox_byline">{ byline }</span> : null }
-        </div>
-    </label>;
+const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange, className }) => {
+    return (
+        <label className={classnames("mx_LabelledCheckbox", className)}>
+            <StyledCheckbox disabled={disabled} checked={value} onChange={(e) => onChange(e.target.checked)} />
+            <div className="mx_LabelledCheckbox_labels">
+                <span className="mx_LabelledCheckbox_label">{label}</span>
+                {byline ? <span className="mx_LabelledCheckbox_byline">{byline}</span> : null}
+            </div>
+        </label>
+    );
 };
 
 export default LabelledCheckbox;

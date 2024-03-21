@@ -33,13 +33,11 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
 import { IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 import RoomListHeader from "../views/rooms/RoomListHeader";
-import RecentlyViewedButton from "../views/rooms/RecentlyViewedButton";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
-import SettingsStore from "../../settings/SettingsStore";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
@@ -57,7 +55,6 @@ interface IProps {
 enum BreadcrumbsMode {
     Disabled,
     Legacy,
-    Labs,
 }
 
 interface IState {
@@ -68,10 +65,10 @@ interface IState {
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
     private roomListRef = createRef<RoomList>();
-    private focusedElement = null;
+    private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -85,19 +82,20 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     private static get breadcrumbsMode(): BreadcrumbsMode {
-        if (!BreadcrumbsStore.instance.visible) return BreadcrumbsMode.Disabled;
-        return SettingsStore.getValue("feature_breadcrumbs_v2") ? BreadcrumbsMode.Labs : BreadcrumbsMode.Legacy;
+        return !BreadcrumbsStore.instance.visible ? BreadcrumbsMode.Disabled : BreadcrumbsMode.Legacy;
     }
 
-    public componentDidMount() {
-        UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+    public componentDidMount(): void {
+        if (this.listContainerRef.current) {
+            UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+            // Using the passive option to not block the main thread
+            // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+            this.listContainerRef.current.addEventListener("scroll", this.onScroll, { passive: true });
+        }
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
-        // Using the passive option to not block the main thread
-        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-        this.listContainerRef.current?.addEventListener("scroll", this.onScroll, { passive: true });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
@@ -112,25 +110,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private updateActiveSpace = (activeSpace: SpaceKey) => {
+    private updateActiveSpace = (activeSpace: SpaceKey): void => {
         this.setState({ activeSpace });
     };
 
-    private onDialPad = () => {
+    private onDialPad = (): void => {
         dis.fire(Action.OpenDialPad);
     };
 
-    private onExplore = (ev: ButtonEvent) => {
+    private onExplore = (ev: ButtonEvent): void => {
         dis.fire(Action.ViewRoomDirectory);
         PosthogTrackers.trackInteraction("WebLeftPanelExploreRoomsButton", ev);
     };
 
-    private refreshStickyHeaders = () => {
+    private refreshStickyHeaders = (): void => {
         if (!this.listContainerRef.current) return; // ignore: no headers to sticky
         this.handleStickyHeaders(this.listContainerRef.current);
     };
 
-    private onBreadcrumbsUpdate = () => {
+    private onBreadcrumbsUpdate = (): void => {
         const newVal = LeftPanel.breadcrumbsMode;
         if (newVal !== this.state.showBreadcrumbs) {
             this.setState({ showBreadcrumbs: newVal });
@@ -141,7 +139,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private handleStickyHeaders(list: HTMLDivElement) {
+    private handleStickyHeaders(list: HTMLDivElement): void {
         if (this.isDoingStickyHeaders) return;
         this.isDoingStickyHeaders = true;
         window.requestAnimationFrame(() => {
@@ -150,29 +148,34 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         });
     }
 
-    private doStickyHeaders(list: HTMLDivElement) {
+    private doStickyHeaders(list: HTMLDivElement): void {
+        if (!list.parentElement) return;
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist:not(.mx_RoomSublist_hidden)");
 
         // We track which styles we want on a target before making the changes to avoid
         // excessive layout updates.
-        const targetStyles = new Map<HTMLDivElement, {
-            stickyTop?: boolean;
-            stickyBottom?: boolean;
-            makeInvisible?: boolean;
-        }>();
+        const targetStyles = new Map<
+            HTMLDivElement,
+            {
+                stickyTop?: boolean;
+                stickyBottom?: boolean;
+                makeInvisible?: boolean;
+            }
+        >();
 
-        let lastTopHeader;
-        let firstBottomHeader;
+        let lastTopHeader: HTMLDivElement | undefined;
+        let firstBottomHeader: HTMLDivElement | undefined;
         for (const sublist of sublists) {
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist_stickable");
+            if (!header) continue; // this should never occur
             header.style.removeProperty("display"); // always clear display:none first
 
             // When an element is <=40% off screen, make it take over
             const offScreenFactor = 0.4;
-            const isOffTop = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) <= topEdge;
-            const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
+            const isOffTop = sublist.offsetTop + offScreenFactor * HEADER_HEIGHT <= topEdge;
+            const isOffBottom = sublist.offsetTop + offScreenFactor * HEADER_HEIGHT >= bottomEdge;
 
             if (isOffTop || sublist === sublists[0]) {
                 targetStyles.set(header, { stickyTop: true });
@@ -193,7 +196,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         // cause a no-op update, as adding/removing properties that are/aren't there cause
         // layout updates.
         for (const header of targetStyles.keys()) {
-            const style = targetStyles.get(header);
+            const style = targetStyles.get(header)!;
 
             if (style.makeInvisible) {
                 // we will have already removed the 'display: none', so add it back.
@@ -215,7 +218,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyTop");
                 }
                 if (header.style.top) {
-                    header.style.removeProperty('top');
+                    header.style.removeProperty("top");
                 }
             }
 
@@ -224,8 +227,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
 
-                const offset = UIStore.instance.windowHeight -
-                    (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const offset =
+                    UIStore.instance.windowHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
                 const newBottom = `${offset}px`;
                 if (header.style.bottom !== newBottom) {
                     header.style.bottom = newBottom;
@@ -235,7 +238,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
                 }
                 if (header.style.bottom) {
-                    header.style.removeProperty('bottom');
+                    header.style.removeProperty("bottom");
                 }
             }
 
@@ -259,7 +262,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 }
 
                 if (header.style.width) {
-                    header.style.removeProperty('width');
+                    header.style.removeProperty("width");
                 }
             }
         }
@@ -267,6 +270,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         // add appropriate sticky classes to wrapper so it has
         // the necessary top/bottom padding to put the sticky header in
         const listWrapper = list.parentElement; // .mx_LeftPanel_roomListWrapper
+        if (!listWrapper) return;
         if (lastTopHeader) {
             listWrapper.classList.add("mx_LeftPanel_roomListWrapper_stickyTop");
         } else {
@@ -279,20 +283,20 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private onScroll = (ev: Event) => {
+    private onScroll = (ev: Event): void => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
     };
 
-    private onFocus = (ev: React.FocusEvent) => {
+    private onFocus = (ev: React.FocusEvent): void => {
         this.focusedElement = ev.target;
     };
 
-    private onBlur = () => {
+    private onBlur = (): void => {
         this.focusedElement = null;
     };
 
-    private onKeyDown = (ev: React.KeyboardEvent, state?: IRovingTabIndexState) => {
+    private onKeyDown = (ev: React.KeyboardEvent, state?: IRovingTabIndexState): void => {
         if (!this.focusedElement) return;
 
         const action = getKeyBindingsManager().getRoomListAction(ev);
@@ -311,6 +315,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         if (this.state.showBreadcrumbs === BreadcrumbsMode.Legacy && !this.props.isMinimized) {
             return (
                 <IndicatorScrollbar
+                    role="navigation"
+                    aria-label={_t("a11y|recent_rooms")}
                     className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
                 >
@@ -321,28 +327,29 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     private renderSearchDialExplore(): React.ReactNode {
-        let dialPadButton = null;
+        let dialPadButton: JSX.Element | undefined;
 
         // If we have dialer support, show a button to bring up the dial pad
         // to start a new call
         if (LegacyCallHandler.instance.getSupportsPstnProtocol()) {
-            dialPadButton =
+            dialPadButton = (
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_dialPadButton", {})}
                     onClick={this.onDialPad}
-                    title={_t("Open dial pad")}
-                />;
+                    title={_t("left_panel|open_dial_pad")}
+                />
+            );
         }
 
-        let rightButton: JSX.Element;
-        if (this.state.showBreadcrumbs === BreadcrumbsMode.Labs) {
-            rightButton = <RecentlyViewedButton />;
-        } else if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
-            rightButton = <AccessibleTooltipButton
-                className="mx_LeftPanel_exploreButton"
-                onClick={this.onExplore}
-                title={_t("Explore rooms")}
-            />;
+        let rightButton: JSX.Element | undefined;
+        if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
+            rightButton = (
+                <AccessibleTooltipButton
+                    className="mx_LeftPanel_exploreButton"
+                    onClick={this.onExplore}
+                    title={_t("action|explore_rooms")}
+                />
+            );
         }
 
         return (
@@ -351,53 +358,49 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
                 onKeyDown={this.onKeyDown}
+                role="search"
             >
                 <RoomSearch isMinimized={this.props.isMinimized} />
 
-                { dialPadButton }
-                { rightButton }
+                {dialPadButton}
+                {rightButton}
             </div>
         );
     }
 
     public render(): React.ReactNode {
-        const roomList = <RoomList
-            onKeyDown={this.onKeyDown}
-            resizeNotifier={this.props.resizeNotifier}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            isMinimized={this.props.isMinimized}
-            activeSpace={this.state.activeSpace}
-            onResize={this.refreshStickyHeaders}
-            onListCollapse={this.refreshStickyHeaders}
-            ref={this.roomListRef}
-        />;
+        const roomList = (
+            <RoomList
+                onKeyDown={this.onKeyDown}
+                resizeNotifier={this.props.resizeNotifier}
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                isMinimized={this.props.isMinimized}
+                activeSpace={this.state.activeSpace}
+                onResize={this.refreshStickyHeaders}
+                onListCollapse={this.refreshStickyHeaders}
+                ref={this.roomListRef}
+            />
+        );
 
         const containerClasses = classNames({
-            "mx_LeftPanel": true,
-            "mx_LeftPanel_minimized": this.props.isMinimized,
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
         });
 
-        const roomListClasses = classNames(
-            "mx_LeftPanel_actualRoomListContainer",
-            "mx_AutoHideScrollbar",
-        );
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
 
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
-                    { this.renderSearchDialExplore() }
-                    { this.renderBreadcrumbs() }
-                    { !this.props.isMinimized && (
-                        <RoomListHeader
-                            onVisibilityChange={this.refreshStickyHeaders}
-                        />
-                    ) }
+                    {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
+                    {this.renderBreadcrumbs()}
+                    {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
                     <UserOnboardingButton
                         selected={this.props.pageType === PageType.HomePage}
                         minimized={this.props.isMinimized}
                     />
-                    <div className="mx_LeftPanel_roomListWrapper">
+                    <nav className="mx_LeftPanel_roomListWrapper" aria-label={_t("common|rooms")}>
                         <div
                             className={roomListClasses}
                             ref={this.listContainerRef}
@@ -405,9 +408,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             // overflow:scroll;, so force it out of tab order.
                             tabIndex={-1}
                         >
-                            { roomList }
+                            {roomList}
                         </div>
-                    </div>
+                    </nav>
                 </div>
             </div>
         );

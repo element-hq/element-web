@@ -21,33 +21,37 @@ import { createTestClient, mkEvent } from "../../test-utils";
 
 describe("getRoomFunctionalMembers", () => {
     const client = createTestClient();
-    const room = new Room("!room:example.com", client, client.getUserId());
+    const room = new Room("!room:example.com", client, client.getUserId()!);
 
     it("should return an empty array if no functional members state event exists", () => {
         expect(getFunctionalMembers(room)).toHaveLength(0);
     });
 
     it("should return an empty array if functional members state event does not have a service_members field", () => {
-        room.currentState.setStateEvents([mkEvent({
-            event: true,
-            type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
-            user: "@user:example.com)",
-            room: room.roomId,
-            skey: "",
-            content: {},
-        })]);
+        room.currentState.setStateEvents([
+            mkEvent({
+                event: true,
+                type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
+                user: "@user:example.com)",
+                room: room.roomId,
+                skey: "",
+                content: {},
+            }),
+        ]);
         expect(getFunctionalMembers(room)).toHaveLength(0);
     });
 
     it("should return service_members field of the functional users state event", () => {
-        room.currentState.setStateEvents([mkEvent({
-            event: true,
-            type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
-            user: "@user:example.com)",
-            room: room.roomId,
-            skey: "",
-            content: { service_members: ["@user:example.com"] },
-        })]);
+        room.currentState.setStateEvents([
+            mkEvent({
+                event: true,
+                type: UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name,
+                user: "@user:example.com)",
+                room: room.roomId,
+                skey: "",
+                content: { service_members: ["@user:example.com"] },
+            }),
+        ]);
         expect(getFunctionalMembers(room)).toEqual(["@user:example.com"]);
     });
 });

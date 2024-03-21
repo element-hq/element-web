@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import classNames from "classnames";
 import React, { ChangeEvent, FormEvent } from "react";
 
 import Field from "./Field";
@@ -22,6 +23,7 @@ import AccessibleButton from "./AccessibleButton";
 import { Tag } from "./Tag";
 
 interface IProps {
+    id?: string;
     tags: string[];
     onAdd: (tag: string) => void;
     onRemove: (tag: string) => void;
@@ -47,11 +49,11 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         };
     }
 
-    private onInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ newTag: ev.target.value });
     };
 
-    private onAdd = (ev: FormEvent) => {
+    private onAdd = (ev: FormEvent): void => {
         ev.preventDefault();
         if (!this.state.newTag) return;
 
@@ -59,36 +61,45 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         this.setState({ newTag: "" });
     };
 
-    private onRemove(tag: string) {
+    private onRemove(tag: string): void {
         // We probably don't need to proxy this, but for
         // sanity of `this` we'll do so anyways.
         this.props.onRemove(tag);
     }
 
-    public render() {
-        return <div className='mx_TagComposer'>
-            <form className='mx_TagComposer_input' onSubmit={this.onAdd}>
-                <Field
-                    value={this.state.newTag}
-                    onChange={this.onInputChange}
-                    label={this.props.label || _t("Keyword")}
-                    placeholder={this.props.placeholder || _t("New keyword")}
-                    disabled={this.props.disabled}
-                    autoComplete="off"
-                />
-                <AccessibleButton onClick={this.onAdd} kind='primary' disabled={this.props.disabled}>
-                    { _t("Add") }
-                </AccessibleButton>
-            </form>
-            <div className='mx_TagComposer_tags'>
-                { this.props.tags.map((t, i) => (
-                    <Tag
-                        label={t}
-                        key={t}
-                        onDeleteClick={this.onRemove.bind(this, t)}
-                        disabled={this.props.disabled} />
-                )) }
+    public render(): React.ReactNode {
+        return (
+            <div
+                className={classNames("mx_TagComposer", {
+                    mx_TagComposer_disabled: this.props.disabled,
+                })}
+            >
+                <form className="mx_TagComposer_input" onSubmit={this.onAdd}>
+                    <Field
+                        id={this.props.id ? this.props.id + "_field" : undefined}
+                        value={this.state.newTag}
+                        onChange={this.onInputChange}
+                        label={this.props.label || _t("notifications|keyword")}
+                        placeholder={this.props.placeholder || _t("notifications|keyword_new")}
+                        disabled={this.props.disabled}
+                        autoComplete="off"
+                    />
+                    <AccessibleButton onClick={this.onAdd} kind="primary" disabled={this.props.disabled}>
+                        {_t("action|add")}
+                    </AccessibleButton>
+                </form>
+                <div className="mx_TagComposer_tags" role="list">
+                    {this.props.tags.map((t, i) => (
+                        <Tag
+                            label={t}
+                            key={t}
+                            onDeleteClick={this.onRemove.bind(this, t)}
+                            disabled={this.props.disabled}
+                            role="listitem"
+                        />
+                    ))}
+                </div>
             </div>
-        </div>;
+        );
     }
 }

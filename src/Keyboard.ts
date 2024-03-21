@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+
 export const Key = {
     HOME: "Home",
     END: "End",
@@ -74,9 +76,9 @@ export const Key = {
     Z: "z",
 };
 
-export const IS_MAC = navigator.platform.toUpperCase().includes('MAC');
+export const IS_MAC = navigator.platform.toUpperCase().includes("MAC");
 
-export function isOnlyCtrlOrCmdKeyEvent(ev) {
+export function isOnlyCtrlOrCmdKeyEvent(ev: React.KeyboardEvent | KeyboardEvent): boolean {
     if (IS_MAC) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
     } else {

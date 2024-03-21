@@ -14,34 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ImageSizePanel {
-    color: $primary-content;
+.mx_ImageSizePanel_radios {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-16;
 
-    .mx_ImageSizePanel_radios {
-        display: flex;
-        margin-top: 16px; /* move away from header a bit */
+    > label {
+        margin-right: 68px; /* keep the boxes separate */
+        cursor: pointer;
+    }
 
-        > label {
-            margin-right: 68px; /* keep the boxes separate */
-            cursor: pointer;
+    .mx_ImageSizePanel_size {
+        background-color: $quinary-content;
+        mask-repeat: no-repeat;
+        mask-size: 221px;
+        mask-position: center;
+        width: 221px;
+        height: 148px;
+        margin-bottom: 14px; /* move radio button away from bottom edge a bit */
+
+        &.mx_ImageSizePanel_sizeDefault {
+            mask: url("$(res)/img/element-icons/settings/img-size-normal.svg");
         }
 
-        .mx_ImageSizePanel_size {
-            background-color: $quinary-content;
-            mask-repeat: no-repeat;
-            mask-size: 221px;
-            mask-position: center;
-            width: 221px;
-            height: 148px;
-            margin-bottom: 14px; /* move radio button away from bottom edge a bit */
-
-            &.mx_ImageSizePanel_sizeDefault {
-                mask: url("$(res)/img/element-icons/settings/img-size-normal.svg");
-            }
-
-            &.mx_ImageSizePanel_sizeLarge {
-                mask: url("$(res)/img/element-icons/settings/img-size-large.svg");
-            }
+        &.mx_ImageSizePanel_sizeLarge {
+            mask: url("$(res)/img/element-icons/settings/img-size-large.svg");
         }
     }
 }

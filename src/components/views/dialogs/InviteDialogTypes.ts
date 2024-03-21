@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const KIND_DM = "dm";
-export const KIND_INVITE = "invite";
-// NB. This dialog needs the 'mx_InviteDialog_transferWrapper' wrapper class to have the correct
-// padding on the bottom (because all modals have 24px padding on all sides), so this needs to
-// be passed when creating the modal
-export const KIND_CALL_TRANSFER = "call_transfer";
-
-export type AnyInviteKind = typeof KIND_INVITE | typeof KIND_DM | typeof KIND_CALL_TRANSFER;
+export enum InviteKind {
+    Dm = "dm",
+    Invite = "invite",
+    // NB. This dialog needs the 'mx_InviteDialog_transferWrapper' wrapper class to have the correct
+    // padding on the bottom (because all modals have 24px padding on all sides), so this needs to
+    // be passed when creating the modal
+    CallTransfer = "call_transfer",
+}

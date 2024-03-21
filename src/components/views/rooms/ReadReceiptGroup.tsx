@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { PropsWithChildren, useRef } from "react";
+import React, { PropsWithChildren } from "react";
 import { User } from "matrix-js-sdk/src/matrix";
 
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
@@ -30,6 +30,7 @@ import ContextMenu, { aboveLeftOf, MenuItem, useContextMenu } from "../../struct
 import { useTooltip } from "../../../utils/useTooltip";
 import { _t } from "../../../languageHandler";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
+import { formatList } from "../../../utils/FormattingUtils";
 
 // #20547 Design specified that we should show the three latest read receipts
 const MAX_READ_AVATARS_PLUS_N = 3;
@@ -42,9 +43,9 @@ export const READ_AVATAR_SIZE = 16;
 interface Props {
     readReceipts: IReadReceiptProps[];
     readReceiptMap: { [userId: string]: IReadReceiptInfo };
-    checkUnmounting: () => boolean;
+    checkUnmounting?: () => boolean;
     suppressAnimation: boolean;
-    isTwelveHour: boolean;
+    isTwelveHour?: boolean;
 }
 
 interface IAvatarPosition {
@@ -66,47 +67,33 @@ export function determineAvatarPosition(index: number, max: number): IAvatarPosi
     }
 }
 
-export function readReceiptTooltip(members: string[], hasMore: boolean): string | null {
-    if (hasMore) {
-        return _t("%(members)s and more", {
-            members: members.join(", "),
-        });
-    } else if (members.length > 1) {
-        return _t("%(members)s and %(last)s", {
-            last: members.pop(),
-            members: members.join(", "),
-        });
-    } else if (members.length) {
-        return members[0];
-    } else {
-        return null;
-    }
+export function readReceiptTooltip(members: string[], maxAvatars: number): string | undefined {
+    return formatList(members, maxAvatars);
 }
 
-export function ReadReceiptGroup(
-    { readReceipts, readReceiptMap, checkUnmounting, suppressAnimation, isTwelveHour }: Props,
-) {
+export function ReadReceiptGroup({
+    readReceipts,
+    readReceiptMap,
+    checkUnmounting,
+    suppressAnimation,
+    isTwelveHour,
+}: Props): JSX.Element {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     // If we are above MAX_READ_AVATARS, we’ll have to remove a few to have space for the +n count.
     const hasMore = readReceipts.length > MAX_READ_AVATARS;
-    const maxAvatars = hasMore
-        ? MAX_READ_AVATARS_PLUS_N
-        : MAX_READ_AVATARS;
+    const maxAvatars = hasMore ? MAX_READ_AVATARS_PLUS_N : MAX_READ_AVATARS;
 
-    const tooltipMembers: string[] = readReceipts.slice(0, maxAvatars)
-        .map(it => it.roomMember?.name ?? it.userId);
-    const tooltipText = readReceiptTooltip(tooltipMembers, hasMore);
+    const tooltipMembers: string[] = readReceipts.map((it) => it.roomMember?.name ?? it.userId);
+    const tooltipText = readReceiptTooltip(tooltipMembers, maxAvatars);
 
     const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
         label: (
             <>
                 <div className="mx_Tooltip_title">
-                    { _t("Seen by %(count)s people", { count: readReceipts.length }) }
+                    {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                 </div>
-                <div className="mx_Tooltip_sub">
-                    { tooltipText }
-                </div>
+                <div className="mx_Tooltip_sub">{tooltipText}</div>
             </>
         ),
         alignment: Alignment.TopRight,
@@ -132,66 +119,65 @@ export function ReadReceiptGroup(
         );
     }
 
-    const avatars = readReceipts.map((receipt, index) => {
-        const { hidden, position } = determineAvatarPosition(index, maxAvatars);
+    const avatars = readReceipts
+        .map((receipt, index) => {
+            const { hidden, position } = determineAvatarPosition(index, maxAvatars);
 
-        const userId = receipt.userId;
-        let readReceiptInfo: IReadReceiptInfo;
+            const userId = receipt.userId;
+            let readReceiptInfo: IReadReceiptInfo | undefined;
 
-        if (readReceiptMap) {
-            readReceiptInfo = readReceiptMap[userId];
-            if (!readReceiptInfo) {
-                readReceiptInfo = {};
-                readReceiptMap[userId] = readReceiptInfo;
+            if (readReceiptMap) {
+                readReceiptInfo = readReceiptMap[userId];
+                if (!readReceiptInfo) {
+                    readReceiptInfo = {};
+                    readReceiptMap[userId] = readReceiptInfo;
+                }
             }
-        }
 
-        return (
-            <ReadReceiptMarker
-                key={userId}
-                member={receipt.roomMember}
-                fallbackUserId={userId}
-                offset={position * READ_AVATAR_OFFSET}
-                hidden={hidden}
-                readReceiptInfo={readReceiptInfo}
-                checkUnmounting={checkUnmounting}
-                suppressAnimation={suppressAnimation}
-                timestamp={receipt.ts}
-                showTwelveHour={isTwelveHour}
-            />
-        );
-    }).reverse();
+            return (
+                <ReadReceiptMarker
+                    key={userId}
+                    member={receipt.roomMember}
+                    fallbackUserId={userId}
+                    offset={position * READ_AVATAR_OFFSET}
+                    hidden={hidden}
+                    readReceiptInfo={readReceiptInfo}
+                    checkUnmounting={checkUnmounting}
+                    suppressAnimation={suppressAnimation}
+                    timestamp={receipt.ts}
+                    showTwelveHour={isTwelveHour}
+                />
+            );
+        })
+        .reverse();
 
-    let remText: JSX.Element;
+    let remText: JSX.Element | undefined;
     const remainder = readReceipts.length - maxAvatars;
     if (remainder > 0) {
         remText = (
             <span className="mx_ReadReceiptGroup_remainder" aria-live="off">
-                +{ remainder }
+                +{remainder}
             </span>
         );
     }
 
-    let contextMenu;
-    if (menuDisplayed) {
+    let contextMenu: JSX.Element | undefined;
+    if (menuDisplayed && button.current) {
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
-            <ContextMenu
-                menuClassName="mx_ReadReceiptGroup_popup"
-                onFinished={closeMenu}
-                {...aboveLeftOf(buttonRect)}>
+            <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
                 <AutoHideScrollbar>
                     <SectionHeader className="mx_ReadReceiptGroup_title">
-                        { _t("Seen by %(count)s people", { count: readReceipts.length }) }
+                        {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>
-                    { readReceipts.map(receipt => (
+                    {readReceipts.map((receipt) => (
                         <ReadReceiptPerson
                             key={receipt.userId}
                             {...receipt}
                             isTwelveHour={isTwelveHour}
                             onAfterClick={closeMenu}
                         />
-                    )) }
+                    ))}
                 </AutoHideScrollbar>
             </ContextMenu>
         );
@@ -199,10 +185,10 @@ export function ReadReceiptGroup(
 
     return (
         <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("Read receipts")}>
+            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
                 <AccessibleButton
                     className="mx_ReadReceiptGroup_button"
-                    inputRef={button}
+                    ref={button}
                     aria-label={tooltipText}
                     aria-haspopup="true"
                     onClick={openMenu}
@@ -211,41 +197,45 @@ export function ReadReceiptGroup(
                     onFocus={showTooltip}
                     onBlur={hideTooltip}
                 >
-                    { remText }
+                    {remText}
                     <span
                         className="mx_ReadReceiptGroup_container"
                         style={{
-                            width: Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
-                                READ_AVATAR_SIZE - READ_AVATAR_OFFSET,
+                            width:
+                                Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
+                                READ_AVATAR_SIZE -
+                                READ_AVATAR_OFFSET,
                         }}
                     >
-                        { avatars }
+                        {avatars}
                     </span>
                 </AccessibleButton>
-                { tooltip }
-                { contextMenu }
+                {tooltip}
+                {contextMenu}
             </div>
         </div>
     );
 }
 
 interface ReadReceiptPersonProps extends IReadReceiptProps {
-    isTwelveHour: boolean;
+    isTwelveHour?: boolean;
     onAfterClick?: () => void;
 }
 
-function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick }: ReadReceiptPersonProps) {
+function ReadReceiptPerson({
+    userId,
+    roomMember,
+    ts,
+    isTwelveHour,
+    onAfterClick,
+}: ReadReceiptPersonProps): JSX.Element {
     const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
         alignment: Alignment.Top,
         tooltipClassName: "mx_ReadReceiptGroup_person--tooltip",
         label: (
             <>
-                <div className="mx_Tooltip_title">
-                    { roomMember?.rawDisplayName ?? userId }
-                </div>
-                <div className="mx_Tooltip_sub">
-                    { userId }
-                </div>
+                <div className="mx_Tooltip_title">{roomMember?.rawDisplayName ?? userId}</div>
+                <div className="mx_Tooltip_sub">{userId}</div>
             </>
         ),
     });
@@ -260,7 +250,7 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
                     // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
                     // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
                     // should definitely clean this up later
-                    member: roomMember ?? { userId } as User,
+                    member: roomMember ?? ({ userId } as User),
                     push: false,
                 });
                 onAfterClick?.();
@@ -274,20 +264,17 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
             <MemberAvatar
                 member={roomMember}
                 fallbackUserId={userId}
-                width={24}
-                height={24}
+                size="24px"
                 aria-hidden="true"
                 aria-live="off"
                 resizeMethod="crop"
                 hideTitle
             />
             <div className="mx_ReadReceiptGroup_name">
-                <p>{ roomMember?.name ?? userId }</p>
-                <p className="mx_ReadReceiptGroup_secondary">
-                    { formatDate(new Date(ts), isTwelveHour) }
-                </p>
+                <p>{roomMember?.name ?? userId}</p>
+                <p className="mx_ReadReceiptGroup_secondary">{formatDate(new Date(ts), isTwelveHour)}</p>
             </div>
-            { tooltip }
+            {tooltip}
         </MenuItem>
     );
 }
@@ -296,19 +283,12 @@ interface ISectionHeaderProps {
     className?: string;
 }
 
-function SectionHeader({ className, children }: PropsWithChildren<ISectionHeaderProps>) {
-    const ref = useRef<HTMLHeadingElement>();
-    const [onFocus] = useRovingTabIndex(ref);
+function SectionHeader({ className, children }: PropsWithChildren<ISectionHeaderProps>): JSX.Element {
+    const [onFocus, , ref] = useRovingTabIndex<HTMLHeadingElement>();
 
     return (
-        <h3
-            className={className}
-            role="menuitem"
-            onFocus={onFocus}
-            tabIndex={-1}
-            ref={ref}
-        >
-            { children }
+        <h3 className={className} role="menuitem" onFocus={onFocus} tabIndex={-1} ref={ref}>
+            {children}
         </h3>
     );
 }

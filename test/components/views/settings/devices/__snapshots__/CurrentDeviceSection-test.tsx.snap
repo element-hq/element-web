@@ -3,7 +3,7 @@
 exports[`<CurrentDeviceSection /> displays device details on toggle click 1`] = `
 HTMLCollection [
   <div
-    class="mx_DeviceDetails"
+    class="mx_DeviceDetails mx_CurrentDeviceSection_deviceDetails"
     data-testid="device-detail-alices_device"
   >
     <section
@@ -13,11 +13,11 @@ HTMLCollection [
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           alices_device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -49,7 +49,7 @@ HTMLCollection [
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -131,7 +131,7 @@ exports[`<CurrentDeviceSection /> handles when device is falsy 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
       </h3>
@@ -167,7 +167,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
       </h3>
@@ -237,7 +237,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           class="mx_DeviceTile_actions"
         >
           <div
-            aria-label="Toggle device details"
+            aria-label="Show details"
             class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
             data-testid="current-session-toggle-details"
             role="button"
@@ -272,7 +272,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -310,7 +310,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
       </h3>
@@ -380,7 +380,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           class="mx_DeviceTile_actions"
         >
           <div
-            aria-label="Toggle device details"
+            aria-label="Show details"
             class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
             data-testid="current-session-toggle-details"
             role="button"
@@ -415,7 +415,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"

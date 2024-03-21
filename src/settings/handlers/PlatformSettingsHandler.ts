@@ -29,19 +29,19 @@ import { Action } from "../../dispatcher/actions";
 export default class PlatformSettingsHandler extends SettingsHandler {
     private store: { [settingName: string]: any } = {};
 
-    constructor() {
+    public constructor() {
         super();
 
         defaultDispatcher.register(this.onAction);
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.PlatformSet) {
             this.store = {};
             // Load setting values as they are async and `getValue` must be synchronous
             Object.entries(SETTINGS).forEach(([key, setting]) => {
-                if (setting.supportedLevels.includes(SettingLevel.PLATFORM) && payload.platform.supportsSetting(key)) {
-                    payload.platform.getSettingValue(key).then(value => {
+                if (setting.supportedLevels?.includes(SettingLevel.PLATFORM) && payload.platform.supportsSetting(key)) {
+                    payload.platform.getSettingValue(key).then((value: any) => {
                         this.store[key] = value;
                     });
                 }
@@ -50,19 +50,19 @@ export default class PlatformSettingsHandler extends SettingsHandler {
     };
 
     public canSetValue(settingName: string, roomId: string): boolean {
-        return PlatformPeg.get().supportsSetting(settingName);
+        return PlatformPeg.get()?.supportsSetting(settingName) ?? false;
     }
 
     public getValue(settingName: string, roomId: string): any {
         return this.store[settingName];
     }
 
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         this.store[settingName] = newValue; // keep cache up to date for synchronous access
-        return PlatformPeg.get().setSettingValue(settingName, newValue);
+        await PlatformPeg.get()?.setSettingValue(settingName, newValue);
     }
 
     public isSupported(): boolean {
-        return PlatformPeg.get().supportsSetting();
+        return PlatformPeg.get()?.supportsSetting() ?? false;
     }
 }

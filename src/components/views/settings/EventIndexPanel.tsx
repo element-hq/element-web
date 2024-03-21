@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import Modal from '../../../Modal';
+import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { formatBytes, formatCountLong } from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SeshatResetDialog from '../dialogs/SeshatResetDialog';
-import InlineSpinner from '../elements/InlineSpinner';
+import SeshatResetDialog from "../dialogs/SeshatResetDialog";
+import InlineSpinner from "../elements/InlineSpinner";
+import ExternalLink from "../elements/ExternalLink";
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IState {
     enabling: boolean;
@@ -35,29 +37,22 @@ interface IState {
 }
 
 export default class EventIndexPanel extends React.Component<{}, IState> {
-    constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {
             enabling: false,
             eventIndexSize: 0,
             roomCount: 0,
-            eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
+            eventIndexingEnabled: SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing"),
         };
     }
 
-    updateCurrentRoom = async (room) => {
+    public updateCurrentRoom = async (): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
-        let stats;
-
-        try {
-            stats = await eventIndex.getStats();
-        } catch {
-            // This call may fail if sporadically, not a huge issue as we will
-            // try later again and probably succeed.
-            return;
-        }
+        const stats = await eventIndex?.getStats().catch(() => {});
+        // This call may fail if sporadically, not a huge issue as we will try later again and probably succeed.
+        if (!stats) return;
 
         this.setState({
             eventIndexSize: stats.size,
@@ -65,7 +60,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     };
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
@@ -73,13 +68,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         }
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.updateState();
     }
 
-    async updateState() {
+    public async updateState(): Promise<void> {
         const eventIndex = EventIndexPeg.get();
-        const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing');
+        const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing");
         const enabling = false;
 
         let eventIndexSize = 0;
@@ -88,14 +83,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            try {
-                const stats = await eventIndex.getStats();
+            const stats = await eventIndex.getStats().catch(() => {});
+            // This call may fail if sporadically, not a huge issue as we
+            // will try later again in the updateCurrentRoom call and
+            // probably succeed.
+            if (stats) {
                 eventIndexSize = stats.size;
                 roomCount = stats.roomCount;
-            } catch {
-                // This call may fail if sporadically, not a huge issue as we
-                // will try later again in the updateCurrentRoom call and
-                // probably succeed.
             }
         }
 
@@ -107,34 +101,37 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     }
 
-    private onManage = async () => {
+    private onManage = async (): Promise<void> => {
         Modal.createDialogAsync(
             // @ts-ignore: TS doesn't seem to like the type of this now that it
             // has also been converted to TS as well, but I can't figure out why...
-            import('../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog'),
+            import("../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog"),
             {
                 onFinished: () => {},
-            }, null, /* priority = */ false, /* static = */ true,
+            },
+            null,
+            /* priority = */ false,
+            /* static = */ true,
         );
     };
 
-    private onEnable = async () => {
+    private onEnable = async (): Promise<void> => {
         this.setState({
             enabling: true,
         });
 
         await EventIndexPeg.initEventIndex();
-        await EventIndexPeg.get().addInitialCheckpoints();
-        EventIndexPeg.get().startCrawler();
-        await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
+        await EventIndexPeg.get()?.addInitialCheckpoints();
+        EventIndexPeg.get()?.startCrawler();
+        await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, true);
         await this.updateState();
     };
 
-    private confirmEventStoreReset = () => {
+    private confirmEventStoreReset = (): void => {
         const { close } = Modal.createDialog(SeshatResetDialog, {
-            onFinished: async (success) => {
+            onFinished: async (success): Promise<void> => {
                 if (success) {
-                    await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
+                    await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, false);
                     await EventIndexPeg.deleteEventIndex();
                     await this.onEnable();
                     close();
@@ -143,116 +140,108 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     };
 
-    render() {
-        let eventIndexingSettings = null;
+    public render(): React.ReactNode {
+        let eventIndexingSettings: JSX.Element | undefined;
         const brand = SdkConfig.get().brand;
 
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
-                <div>
-                    <div className='mx_SettingsTab_subsectionText'>{ _t(
-                        "Securely cache encrypted messages locally for them " +
-                        "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
-                        {
+                <>
+                    <SettingsSubsectionText>
+                        {_t("settings|security|message_search_enabled", {
                             size: formatBytes(this.state.eventIndexSize, 0),
                             // This drives the singular / plural string
                             // selection for "room" / "rooms" only.
                             count: this.state.roomCount,
                             rooms: formatCountLong(this.state.roomCount),
-                        },
-                    ) }</div>
-                    <div>
-                        <AccessibleButton kind="primary" onClick={this.onManage}>
-                            { _t("Manage") }
-                        </AccessibleButton>
-                    </div>
-                </div>
+                        })}
+                    </SettingsSubsectionText>
+                    <AccessibleButton kind="primary" onClick={this.onManage}>
+                        {_t("action|manage")}
+                    </AccessibleButton>
+                </>
             );
         } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
             eventIndexingSettings = (
-                <div>
-                    <div className='mx_SettingsTab_subsectionText'>{ _t(
-                        "Securely cache encrypted messages locally for them to " +
-                        "appear in search results.",
-                    ) }</div>
+                <>
+                    <SettingsSubsectionText>{_t("settings|security|message_search_disabled")}</SettingsSubsectionText>
                     <div>
-                        <AccessibleButton
-                            kind="primary"
-                            disabled={this.state.enabling}
-                            onClick={this.onEnable}
-                        >
-                            { _t("Enable") }
+                        <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>
+                            {_t("action|enable")}
                         </AccessibleButton>
-                        { this.state.enabling ? <InlineSpinner /> : <div /> }
+                        {this.state.enabling ? <InlineSpinner /> : <div />}
                     </div>
-                </div>
+                </>
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
-            const nativeLink = (
+            const nativeLink =
                 "https://github.com/vector-im/element-desktop/blob/develop/" +
                 "docs/native-node-modules.md#" +
-                "adding-seshat-for-search-in-e2e-encrypted-rooms"
-            );
+                "adding-seshat-for-search-in-e2e-encrypted-rooms";
 
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{ _t(
-                    "%(brand)s is missing some components required for securely " +
-                    "caching encrypted messages locally. If you'd like to " +
-                    "experiment with this feature, build a custom %(brand)s Desktop " +
-                    "with <nativeLink>search components added</nativeLink>.",
-                    {
-                        brand,
-                    },
-                    {
-                        nativeLink: sub => <a
-                            href={nativeLink}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                        >{ sub }</a>,
-                    },
-                ) }</div>
+                <SettingsSubsectionText>
+                    {_t(
+                        "settings|security|message_search_unsupported",
+                        {
+                            brand,
+                        },
+                        {
+                            nativeLink: (sub) => (
+                                <ExternalLink href={nativeLink} target="_blank" rel="noreferrer noopener">
+                                    {sub}
+                                </ExternalLink>
+                            ),
+                        },
+                    )}
+                </SettingsSubsectionText>
             );
         } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{ _t(
-                    "%(brand)s can't securely cache encrypted messages locally " +
-                    "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
-                    "for encrypted messages to appear in search results.",
-                    {
-                        brand,
-                    },
-                    {
-                        desktopLink: sub => <a
-                            href="https://element.io/get-started"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                        >{ sub }</a>,
-                    },
-                ) }</div>
+                <SettingsSubsectionText>
+                    {_t(
+                        "settings|security|message_search_unsupported_web",
+                        {
+                            brand,
+                        },
+                        {
+                            desktopLink: (sub) => (
+                                <ExternalLink
+                                    href="https://element.io/get-started"
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                >
+                                    {sub}
+                                </ExternalLink>
+                            ),
+                        },
+                    )}
+                </SettingsSubsectionText>
             );
         } else {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>
-                    <p>
-                        { this.state.enabling
-                            ? <InlineSpinner />
-                            : _t("Message search initialisation failed")
-                        }
-                    </p>
-                    { EventIndexPeg.error && (
-                        <details>
-                            <summary>{ _t("Advanced") }</summary>
-                            <code>
-                                { EventIndexPeg.error.message }
-                            </code>
-                            <p>
-                                <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
-                                    { _t("Reset") }
-                                </AccessibleButton>
-                            </p>
-                        </details>
-                    ) }
-                </div>
+                <>
+                    <SettingsSubsectionText>
+                        {this.state.enabling ? <InlineSpinner /> : _t("settings|security|message_search_failed")}
+                    </SettingsSubsectionText>
+                    {EventIndexPeg.error && (
+                        <SettingsSubsectionText>
+                            <details>
+                                <summary>{_t("common|advanced")}</summary>
+                                <code>
+                                    {EventIndexPeg.error instanceof Error
+                                        ? EventIndexPeg.error.message
+                                        : _t("error|unknown")}
+                                </code>
+                                <p>
+                                    <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
+                                        {_t("action|reset")}
+                                    </AccessibleButton>
+                                </p>
+                            </details>
+                        </SettingsSubsectionText>
+                    )}
+                </>
             );
         }
 

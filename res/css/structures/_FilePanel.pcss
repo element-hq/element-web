@@ -42,26 +42,14 @@ limitations under the License.
         display: none;
     }
 
+    /* Overrides for the attachment body tiles */
     .mx_EventTile {
-        /* Overrides for the attachment body tiles */
-        &:not([data-layout="bubble"]) {
-            word-break: break-word;
-            margin-top: 10px;
-            padding-top: 0;
+        word-break: break-word;
+        margin-top: 10px;
+        padding-top: 0;
 
-            .mx_EventTile_line {
-                padding-inline-start: 0;
-            }
-
-            &:hover {
-                &.mx_EventTile_verified,
-                &.mx_EventTile_unverified,
-                &.mx_EventTile_unknown {
-                    .mx_EventTile_line {
-                        box-shadow: none;
-                    }
-                }
-            }
+        .mx_EventTile_line {
+            padding-inline-start: 0;
         }
 
         .mx_MFileBody {
@@ -72,11 +60,11 @@ limitations under the License.
             padding-top: $spacing-8;
             display: flex;
             justify-content: space-between;
-            font-size: $font-14px;
+            font: var(--cpd-font-body-md-regular);
             color: $event-timestamp-color;
 
             .mx_MImageBody_size {
-                font-size: $font-14px;
+                font: var(--cpd-font-body-md-regular);
                 text-align: right;
                 white-space: nowrap;
             }
@@ -102,7 +90,8 @@ limitations under the License.
 
                 .mx_MessageTimestamp {
                     text-align: right;
-                    font-size: $font-14px;
+                    color: $secondary-content;
+                    font: var(--cpd-font-body-sm-regular);
                 }
             }
         }
@@ -111,13 +100,9 @@ limitations under the License.
     .mx_EventTile_line {
         margin-inline-end: 0;
         padding-inline-start: 0;
-
-        .mx_EventTile_selected & {
-            padding-inline-start: 0;
-        }
     }
 }
 
 .mx_FilePanel_empty::before {
-    mask-image: url('$(res)/img/element-icons/room/files.svg');
+    --maskImage: url("$(res)/img/element-icons/room/files.svg"); /* See: _RightPanel.pcss */
 }

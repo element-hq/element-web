@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from 'react';
-import { BeaconLocationState } from 'matrix-js-sdk/src/content-helpers';
+import React, { useEffect, useState } from "react";
+import { ContentHelpers } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
-import { Icon as ExternalLinkIcon } from '../../../../res/img/external-link.svg';
-import { _t } from '../../../languageHandler';
-import { makeMapSiteLink, parseGeoUri } from '../../../utils/location';
-import CopyableText from '../elements/CopyableText';
-import TooltipTarget from '../elements/TooltipTarget';
+import { Icon as ExternalLinkIcon } from "../../../../res/img/external-link.svg";
+import { _t } from "../../../languageHandler";
+import { makeMapSiteLink, parseGeoUri } from "../../../utils/location";
+import CopyableText from "../elements/CopyableText";
 
 interface Props {
-    latestLocationState?: BeaconLocationState;
+    latestLocationState?: ContentHelpers.BeaconLocationState;
 }
 
 const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
-    const [coords, setCoords] = useState(null);
+    const [coords, setCoords] = useState<GeolocationCoordinates | undefined>();
     useEffect(() => {
-        if (!latestLocationState) {
+        if (!latestLocationState?.uri) {
             return;
         }
         const coords = parseGeoUri(latestLocationState.uri);
@@ -44,23 +44,16 @@ const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
     const latLonString = `${coords.latitude},${coords.longitude}`;
     const mapLink = makeMapSiteLink(coords);
 
-    return <>
-        <TooltipTarget label={_t('Open in OpenStreetMap')}>
-            <a
-                data-testid='open-location-in-osm'
-                href={mapLink}
-                target='_blank'
-                rel='noreferrer noopener'
-            >
-                <ExternalLinkIcon className='mx_ShareLatestLocation_icon' />
-            </a>
-        </TooltipTarget>
-        <CopyableText
-            className='mx_ShareLatestLocation_copy'
-            border={false}
-            getTextToCopy={() => latLonString}
-        />
-    </>;
+    return (
+        <>
+            <Tooltip label={_t("timeline|context_menu|open_in_osm")}>
+                <a data-testid="open-location-in-osm" href={mapLink} target="_blank" rel="noreferrer noopener">
+                    <ExternalLinkIcon className="mx_ShareLatestLocation_icon" />
+                </a>
+            </Tooltip>
+            <CopyableText className="mx_ShareLatestLocation_copy" border={false} getTextToCopy={() => latLonString} />
+        </>
+    );
 };
 
 export default ShareLatestLocation;

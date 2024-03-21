@@ -14,55 +14,66 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
-import { CommandCategories, Commands } from "../../../SlashCommands";
-import { IDialogProps } from "./IDialogProps";
+import { Command, CommandCategories, Commands } from "../../../SlashCommands";
 import InfoDialog from "./InfoDialog";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
-    const categories = {};
-    Commands.forEach(cmd => {
-        if (!cmd.isEnabled()) return;
+    const categories: Record<string, Command[]> = {};
+    Commands.forEach((cmd) => {
+        if (!cmd.isEnabled(MatrixClientPeg.get())) return;
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
         }
         categories[cmd.category].push(cmd);
     });
 
-    const body = Object.values(CommandCategories).filter(c => categories[c]).map((category) => {
-        const rows = [
-            <tr key={"_category_" + category} className="mx_SlashCommandHelpDialog_headerRow">
-                <td colSpan={3}>
-                    <h2>{ _t(category) }</h2>
-                </td>
-            </tr>,
-        ];
+    const body = Object.values(CommandCategories)
+        .filter((c) => categories[c])
+        .map((category) => {
+            const rows = [
+                <tr key={"_category_" + category} className="mx_SlashCommandHelpDialog_headerRow">
+                    <td colSpan={3}>
+                        <h2>{_t(category)}</h2>
+                    </td>
+                </tr>,
+            ];
 
-        categories[category].forEach(cmd => {
-            rows.push(<tr key={cmd.command}>
-                <td><strong>{ cmd.getCommand() }</strong></td>
-                <td>{ cmd.args }</td>
-                <td>{ cmd.description }</td>
-            </tr>);
+            categories[category].forEach((cmd) => {
+                rows.push(
+                    <tr key={cmd.command}>
+                        <td>
+                            <strong>{cmd.getCommand()}</strong>
+                        </td>
+                        <td>{cmd.args}</td>
+                        <td>{cmd.description}</td>
+                    </tr>,
+                );
+            });
+
+            return rows;
         });
 
-        return rows;
-    });
-
-    return <InfoDialog
-        className="mx_SlashCommandHelpDialog"
-        title={_t("Command Help")}
-        description={<table>
-            <tbody>
-                { body }
-            </tbody>
-        </table>}
-        hasCloseButton={true}
-        onFinished={onFinished} />;
+    return (
+        <InfoDialog
+            className="mx_SlashCommandHelpDialog"
+            title={_t("slash_command|help_dialog_title")}
+            description={
+                <table>
+                    <tbody>{body}</tbody>
+                </table>
+            }
+            hasCloseButton={true}
+            onFinished={onFinished}
+        />
+    );
 };
 
 export default SlashCommandHelpDialog;

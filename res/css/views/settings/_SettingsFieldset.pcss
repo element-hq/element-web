@@ -15,22 +15,19 @@ limitations under the License.
 */
 
 .mx_SettingsFieldset {
-    margin: 10px 80px 10px 0;
     box-sizing: content-box;
 }
 
 .mx_SettingsFieldset_legend {
-    font-size: $font-16px;
+    font: var(--cpd-font-heading-md-semibold);
+    font-weight: var(--cpd-font-weight-semibold);
     display: block;
-    font-weight: $font-semi-bold;
     color: $primary-content;
     margin-bottom: 10px;
     margin-top: 12px;
 }
 
 .mx_SettingsFieldset_description {
-    color: $settings-subsection-fg-color;
-    font-size: $font-14px;
     display: block;
     margin-top: 0;
     margin-bottom: 10px;
@@ -43,4 +40,10 @@ limitations under the License.
             margin: 0;
         }
     }
+}
+
+.mx_SettingsFieldset_content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
 }

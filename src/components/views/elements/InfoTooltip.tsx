@@ -15,49 +15,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React, { ReactNode } from "react";
+import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
-import { Alignment } from './Tooltip';
 import { _t } from "../../../languageHandler";
-import TooltipTarget from './TooltipTarget';
 
 export enum InfoTooltipKind {
     Info = "info",
     Warning = "warning",
 }
 
-interface ITooltipProps {
-    tooltip?: React.ReactNode;
+interface TooltipProps {
+    tooltip?: string;
     className?: string;
-    tooltipClassName?: string;
     kind?: InfoTooltipKind;
+    children?: ReactNode;
+    tabIndex?: number;
 }
 
-export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
-    constructor(props: ITooltipProps) {
-        super(props);
-    }
-
-    render() {
-        const { tooltip, children, tooltipClassName, className, kind } = this.props;
-        const title = _t("Information");
-        const iconClassName = (
-            (kind !== InfoTooltipKind.Warning) ?
-                "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning"
-        );
+export default class InfoTooltip extends React.PureComponent<TooltipProps> {
+    public render(): React.ReactNode {
+        const { tooltip, children, className, kind } = this.props;
+        const title = _t("info_tooltip_title");
+        const iconClassName =
+            kind !== InfoTooltipKind.Warning ? "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning";
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
         return (
-            <TooltipTarget tooltipTargetClassName={classNames("mx_InfoTooltip", className)}
-                className="mx_InfoTooltip_container"
-                tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
-                label={tooltip || title}
-                alignment={Alignment.Right}
-            >
-                <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
-                { children }
-            </TooltipTarget>
+            <Tooltip label={tooltip || title} side="right">
+                <div className={classNames("mx_InfoTooltip", className)} tabIndex={this.props.tabIndex ?? 0}>
+                    <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
+                    {children}
+                </div>
+            </Tooltip>
         );
     }
 }

@@ -15,11 +15,7 @@ limitations under the License.
 */
 
 import { useCallback, useState } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient, MatrixEvent, Room, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 
@@ -27,11 +23,14 @@ import { useTypedEventEmitter } from "./useEventEmitter";
 export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined {
     const [isEncrypted, setIsEncrypted] = useState(room ? cli.isRoomEncrypted(room.roomId) : undefined);
 
-    const update = useCallback((event: MatrixEvent) => {
-        if (room && event.getType() === EventType.RoomEncryption) {
-            setIsEncrypted(cli.isRoomEncrypted(room.roomId));
-        }
-    }, [cli, room]);
+    const update = useCallback(
+        (event: MatrixEvent) => {
+            if (room && event.getType() === EventType.RoomEncryption) {
+                setIsEncrypted(cli.isRoomEncrypted(room.roomId));
+            }
+        },
+        [cli, room],
+    );
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, update);
 
     return isEncrypted;

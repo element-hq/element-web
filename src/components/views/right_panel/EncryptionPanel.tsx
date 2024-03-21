@@ -15,25 +15,19 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    PHASE_REQUESTED,
-    PHASE_UNSENT,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { User } from "matrix-js-sdk/src/models/user";
+import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
+import { RoomMember, User } from "matrix-js-sdk/src/matrix";
 
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { ensureDMExists } from "../../../createRoom";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
-import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
@@ -41,21 +35,15 @@ const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 interface IProps {
     member: RoomMember | User;
     onClose: () => void;
-    verificationRequest: VerificationRequest;
+    verificationRequest?: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
     layout: string;
     isRoomEncrypted: boolean;
 }
 
 const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
-    const {
-        verificationRequest,
-        verificationRequestPromise,
-        member,
-        onClose,
-        layout,
-        isRoomEncrypted,
-    } = props;
+    const cli = useMatrixClientContext();
+    const { verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted } = props;
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
@@ -70,12 +58,12 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     }, [verificationRequest]);
 
     useEffect(() => {
-        async function awaitPromise() {
+        async function awaitPromise(): Promise<void> {
             setRequesting(true);
             const requestFromPromise = await verificationRequestPromise;
             setRequesting(false);
             setRequest(requestFromPromise);
-            setPhase(requestFromPromise.phase);
+            setPhase(requestFromPromise?.phase);
         }
         if (verificationRequestPromise) {
             awaitPromise();
@@ -83,19 +71,25 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     }, [verificationRequestPromise]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
-        if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
+        if (
+            request &&
+            request.phase === VerificationPhase.Cancelled &&
+            MISMATCHES.includes(request.cancellationCode ?? "")
+        ) {
             Modal.createDialog(ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning-deprecated.svg").default,
-                title: _t("Your messages are not secure"),
-                description: <div>
-                    { _t("One of the following may be compromised:") }
-                    <ul>
-                        <li>{ _t("Your homeserver") }</li>
-                        <li>{ _t("The homeserver the user you're verifying is connected to") }</li>
-                        <li>{ _t("Yours, or the other users' internet connection") }</li>
-                        <li>{ _t("Yours, or the other users' session") }</li>
-                    </ul>
-                </div>,
+                title: _t("encryption|messages_not_secure|title"),
+                description: (
+                    <div>
+                        {_t("encryption|messages_not_secure|heading")}
+                        <ul>
+                            <li>{_t("encryption|messages_not_secure|cause_1")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_2")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_3")}</li>
+                            <li>{_t("encryption|messages_not_secure|cause_4")}</li>
+                        </ul>
+                    </div>
+                ),
                 onFinished: onClose,
             });
             return; // don't update phase here as we will be transitioning away from this view shortly
@@ -108,11 +102,26 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
 
     useTypedEventEmitter(request, VerificationRequestEvent.Change, changeHandler);
 
-    const onStartVerification = useCallback(async () => {
+    const onStartVerification = useCallback(async (): Promise<void> => {
         setRequesting(true);
-        const cli = MatrixClientPeg.get();
-        const roomId = await ensureDMExists(cli, member.userId);
-        const verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+        let verificationRequest_: VerificationRequest;
+        try {
+            const roomId = await ensureDMExists(cli, member.userId);
+            if (!roomId) {
+                throw new Error("Unable to create Room for verification");
+            }
+            verificationRequest_ = await cli.getCrypto()!.requestVerificationDM(member.userId, roomId);
+        } catch (e) {
+            console.error("Error starting verification", e);
+            setRequesting(false);
+
+            Modal.createDialog(ErrorDialog, {
+                headerImage: require("../../../../res/img/e2e/warning.svg").default,
+                title: _t("encryption|verification|error_starting_title"),
+                description: _t("encryption|verification|error_starting_description"),
+            });
+            return;
+        }
         setRequest(verificationRequest_);
         setPhase(verificationRequest_.phase);
         // Notify the RightPanelStore about this
@@ -123,17 +132,16 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             });
         }
         if (!RightPanelStore.instance.isOpen) RightPanelStore.instance.togglePanel(null);
-    }, [member]);
+    }, [cli, member]);
 
-    const requested =
+    const requested: boolean =
         (!request && isRequesting) ||
-        (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
-    const isSelfVerification = request ?
-        request.isSelfVerification :
-        member.userId === MatrixClientPeg.get().getUserId();
+        (!!request &&
+            (phase === VerificationPhase.Requested || phase === VerificationPhase.Unsent || phase === undefined));
+    const isSelfVerification = request ? request.isSelfVerification : member.userId === cli.getUserId();
 
     if (!request || requested) {
-        const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
+        const initiatedByMe = (!request && isRequesting) || (!!request && request.initiatedByMe);
         return (
             <EncryptionInfo
                 isRoomEncrypted={isRoomEncrypted}
@@ -142,7 +150,8 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
                 isSelfVerification={isSelfVerification}
                 waitingForOtherParty={requested && initiatedByMe}
                 waitingForNetwork={requested && !initiatedByMe}
-                inDialog={layout === "dialog"} />
+                inDialog={layout === "dialog"}
+            />
         );
     } else {
         return (
@@ -152,7 +161,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
                 onClose={onClose}
                 member={member}
                 request={request}
-                key={request.channel.transactionId}
+                key={request.transactionId}
                 inDialog={layout === "dialog"}
                 phase={phase}
             />

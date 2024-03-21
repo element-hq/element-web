@@ -44,7 +44,7 @@ export default class NonUrgentToastStore extends EventEmitter {
         return ref;
     }
 
-    public removeToast(ref: ToastReference) {
+    public removeToast(ref: ToastReference): void {
         this.toasts.delete(ref);
         this.emit(UPDATE_EVENT);
     }

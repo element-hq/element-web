@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-declare module '!!raw-loader!*' {
+declare module "!!raw-loader!*" {
     const contents: string;
     export default contents;
 }

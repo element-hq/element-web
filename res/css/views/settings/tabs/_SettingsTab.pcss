@@ -15,9 +15,6 @@ limitations under the License.
 */
 
 .mx_SettingsTab {
-    --SettingsTab_section-margin-bottom-preferences-labs: 30px;
-    --SettingsTab_heading_nth_child-margin-top: 30px; /* TODO: Use a spacing variable */
-    --SettingsTab_fullWidthField-margin-inline-end: 100px;
     --SettingsTab_tooltip-max-width: 120px; /* So it fits in the space provided by the page */
 
     color: $primary-content;
@@ -25,42 +22,37 @@ limitations under the License.
     a {
         color: $links;
     }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-8;
+        flex-grow: 1;
+    }
+    // never want full width buttons
+    // event when other content is 100% width
+    .mx_AccessibleButton {
+        align-self: flex-start;
+        justify-self: flex-start;
+    }
+
+    .mx_Field {
+        margin: 0;
+        flex: 1;
+    }
 }
 
 .mx_SettingsTab_warningText {
     color: $alert;
 }
 
-.mx_SettingsTab_heading {
-    font-size: $font-20px;
-    font-weight: 600;
-    color: $primary-content;
-    margin-top: 10px; /* TODO: Use a spacing variable */
-    margin-bottom: 10px; /* TODO: Use a spacing variable */
-    margin-right: 100px; /* TODO: Use a spacing variable */
-
-    &:nth-child(n + 2) {
-        margin-top: var(--SettingsTab_heading_nth_child-margin-top);
-    }
-}
-
-.mx_SettingsTab_subheading {
-    font-size: $font-16px;
-    display: block;
-    font-weight: 600;
-    color: $primary-content;
-    margin-top: $spacing-12;
-    margin-bottom: 10px; /* TODO: Use a spacing variable */
-    margin-right: 100px; /* TODO: Use a spacing variable */
-}
-
 .mx_SettingsTab_subsectionText {
     color: $secondary-content;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     display: block;
-    margin-top: 10px; /* TODO: Use a spacing variable */
+    margin-top: 10px;
     margin-inline-end: 80px; /* Align with the rest of the view */
-    margin-bottom: 10px; /* TODO: Use a spacing variable */
+    margin-bottom: 10px;
     margin-inline-start: 0;
 }
 
@@ -71,7 +63,7 @@ limitations under the License.
 
     .mx_SettingsFlag {
         margin-inline-end: $end-gutter;
-        margin-bottom: 10px; /* TODO: Use a spacing variable */
+        margin-bottom: 10px;
 
         .mx_SettingsFlag_label {
             vertical-align: middle;
@@ -103,5 +95,5 @@ limitations under the License.
     grid-template-columns: 1fr;
     grid-gap: $spacing-32;
 
-    padding: $spacing-16 0;
+    padding-bottom: $spacing-16;
 }

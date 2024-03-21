@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
+import { MatrixEvent, M_LOCATION } from "matrix-js-sdk/src/matrix";
 
 /**
  * Find the geo-URI contained within a location event.
@@ -27,5 +26,5 @@ export const locationEventGeoUri = (mxEvent: MatrixEvent): string => {
     // https://github.com/matrix-org/matrix-doc/issues/3516
     const content = mxEvent.getContent();
     const loc = M_LOCATION.findIn(content) as { uri?: string };
-    return loc ? loc.uri : content['geo_uri'];
+    return loc ? loc.uri : content["geo_uri"];
 };

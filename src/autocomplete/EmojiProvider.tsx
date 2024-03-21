@@ -18,44 +18,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { uniq, sortBy } from 'lodash';
-import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import { Room } from 'matrix-js-sdk/src/models/room';
+import React from "react";
+import { uniq, sortBy, uniqBy, ListIteratee } from "lodash";
+import EMOTICON_REGEX from "emojibase-regex/emoticon";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { EMOJI, Emoji, getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
-import { _t } from '../languageHandler';
-import AutocompleteProvider from './AutocompleteProvider';
-import QueryMatcher from './QueryMatcher';
-import { PillCompletion } from './Components';
-import { ICompletion, ISelectionRange } from './Autocompleter';
+import { _t } from "../languageHandler";
+import AutocompleteProvider from "./AutocompleteProvider";
+import QueryMatcher from "./QueryMatcher";
+import { PillCompletion } from "./Components";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 import SettingsStore from "../settings/SettingsStore";
-import { EMOJI, IEmoji, getEmojiFromUnicode } from '../emoji';
-import { TimelineRenderingType } from '../contexts/RoomContext';
-import * as recent from '../emojipicker/recent';
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import * as recent from "../emojipicker/recent";
+import { filterBoolean } from "../utils/arrays";
 
 const LIMIT = 20;
 
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
 // anchored to only match from the start of parts otherwise it'll show emoji suggestions whilst typing matrix IDs
-const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|(?:^|\\s):[+-\\w]*:?)$', 'g');
+const EMOJI_REGEX = new RegExp("(" + EMOTICON_REGEX.source + "|(?:^|\\s):[+-\\w]*:?)$", "g");
 
 interface ISortedEmoji {
-    emoji: IEmoji;
+    emoji: Emoji;
     _orderBy: number;
 }
 
 const SORTED_EMOJI: ISortedEmoji[] = EMOJI.sort((a, b) => {
     if (a.group === b.group) {
-        return a.order - b.order;
+        return a.order! - b.order!;
     }
-    return a.group - b.group;
+    return a.group! - b.group!;
 }).map((emoji, index) => ({
     emoji,
     // Include the index so that we can preserve the original order
     _orderBy: index,
 }));
 
-function score(query, space) {
+function score(query: string, space: string[] | string): number {
+    if (Array.isArray(space)) {
+        return Math.min(...space.map((s) => score(query, s)));
+    }
+
     const index = space.indexOf(query);
     if (index === -1) {
         return Infinity;
@@ -72,28 +77,28 @@ function colonsTrimmed(str: string): string {
 }
 
 export default class EmojiProvider extends AutocompleteProvider {
-    matcher: QueryMatcher<ISortedEmoji>;
-    nameMatcher: QueryMatcher<ISortedEmoji>;
-    private readonly recentlyUsed: IEmoji[];
+    public matcher: QueryMatcher<ISortedEmoji>;
+    public nameMatcher: QueryMatcher<ISortedEmoji>;
+    private readonly recentlyUsed: Emoji[];
 
-    constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: EMOJI_REGEX, renderingType });
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
             keys: [],
-            funcs: [o => o.emoji.shortcodes.map(s => `:${s}:`)],
+            funcs: [(o) => o.emoji.shortcodes.map((s) => `:${s}:`)],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
         });
         this.nameMatcher = new QueryMatcher(SORTED_EMOJI, {
-            keys: ['emoji.label'],
+            keys: ["emoji.label"],
             // For removing punctuation
             shouldMatchWordsOnly: true,
         });
 
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
+        this.recentlyUsed = Array.from(new Set(filterBoolean(recent.get().map(getEmojiFromUnicode))));
     }
 
-    async getCompletions(
+    public async getCompletions(
         query: string,
         selection: ISelectionRange,
         force?: boolean,
@@ -103,7 +108,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             return []; // don't give any suggestions if the user doesn't want them
         }
 
-        let completions = [];
+        let completions: ISortedEmoji[] = [];
         const { command, range } = this.getCurrentCommand(query, selection);
 
         if (command && command[0].length > 2) {
@@ -113,61 +118,75 @@ export default class EmojiProvider extends AutocompleteProvider {
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
-            let sorters = [];
+            const sorters: ListIteratee<ISortedEmoji>[] = [];
             // make sure that emoticons come first
-            sorters.push(c => score(matchedString, c.emoji.emoticon || ""));
+            sorters.push((c) => score(matchedString, c.emoji.emoticon || ""));
 
             // then sort by score (Infinity if matchedString not in shortcode)
-            sorters.push(c => score(matchedString, c.emoji.shortcodes[0]));
+            sorters.push((c) => score(matchedString, c.emoji.shortcodes[0]));
             // then sort by max score of all shortcodes, trim off the `:`
             const trimmedMatch = colonsTrimmed(matchedString);
-            sorters.push(c => Math.min(
-                ...c.emoji.shortcodes.map(s => score(trimmedMatch, s)),
-            ));
+            sorters.push((c) => Math.min(...c.emoji.shortcodes.map((s) => score(trimmedMatch, s))));
             // If the matchedString is not empty, sort by length of shortcode. Example:
             //  matchedString = ":bookmark"
             //  completions = [":bookmark:", ":bookmark_tabs:", ...]
             if (matchedString.length > 1) {
-                sorters.push(c => c.emoji.shortcodes[0].length);
+                sorters.push((c) => c.emoji.shortcodes[0].length);
             }
             // Finally, sort by original ordering
-            sorters.push(c => c._orderBy);
-            completions = sortBy(uniq(completions), sorters);
+            sorters.push((c) => c._orderBy);
+            completions = sortBy<ISortedEmoji>(uniq(completions), sorters);
 
             completions = completions.slice(0, LIMIT);
 
             // Do a second sort to place emoji matching with frequently used one on top
-            sorters = [];
-            this.recentlyUsed.forEach(emoji => {
-                sorters.push(c => score(emoji.shortcodes[0], c.emoji.shortcodes[0]));
+            const recentlyUsedAutocomplete: ISortedEmoji[] = [];
+            this.recentlyUsed.forEach((emoji) => {
+                if (emoji.shortcodes[0].indexOf(trimmedMatch) === 0) {
+                    recentlyUsedAutocomplete.push({ emoji: emoji, _orderBy: 0 });
+                }
             });
-            completions = sortBy(uniq(completions), sorters);
 
-            completions = completions.map(c => ({
+            //if there is an exact shortcode match in the frequently used emojis, it goes before everything
+            for (let i = 0; i < recentlyUsedAutocomplete.length; i++) {
+                if (recentlyUsedAutocomplete[i].emoji.shortcodes[0] === trimmedMatch) {
+                    const exactMatchEmoji = recentlyUsedAutocomplete[i];
+                    for (let j = i; j > 0; j--) {
+                        recentlyUsedAutocomplete[j] = recentlyUsedAutocomplete[j - 1];
+                    }
+                    recentlyUsedAutocomplete[0] = exactMatchEmoji;
+                    break;
+                }
+            }
+
+            completions = recentlyUsedAutocomplete.concat(completions);
+            completions = uniqBy(completions, "emoji");
+
+            return completions.map((c) => ({
                 completion: c.emoji.unicode,
                 component: (
                     <PillCompletion title={`:${c.emoji.shortcodes[0]}:`} aria-label={c.emoji.unicode}>
-                        <span>{ c.emoji.unicode }</span>
+                        <span>{c.emoji.unicode}</span>
                     </PillCompletion>
                 ),
-                range,
+                range: range!,
             }));
         }
-        return completions;
+        return [];
     }
 
-    getName() {
-        return '😃 ' + _t('Emoji');
+    public getName(): string {
+        return "😃 " + _t("common|emoji");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
                 role="presentation"
-                aria-label={_t("Emoji Autocomplete")}
+                aria-label={_t("composer|autocomplete|emoji_a11y")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

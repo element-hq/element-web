@@ -14,63 +14,63 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ComponentProps } from "react";
 
 import { _t } from "../../../../languageHandler";
-import LearnMore, { LearnMoreProps } from "../../elements/LearnMore";
+import LearnMore from "../../elements/LearnMore";
 import { DeviceSecurityVariation } from "./types";
 
-interface Props extends Omit<LearnMoreProps, 'title' | 'description'> {
+type Props = Omit<ComponentProps<typeof LearnMore>, "title" | "description"> & {
     variation: DeviceSecurityVariation;
-}
+};
 
-const securityCardContent: Record<DeviceSecurityVariation, {
-    title: string;
-    description: React.ReactNode | string;
- }> = {
-     [DeviceSecurityVariation.Verified]: {
-         title: _t('Verified sessions'),
-         description: <>
-             <p>{ _t('Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.') }
-             </p>
-             <p>
-                 { _t(
-                     `This means they hold encryption keys for your previous messages, ` +
-                        `and confirm to other users you are communicating with that these sessions are really you.`,
-                 )
-                 }
-             </p>
-         </>,
-     },
-     [DeviceSecurityVariation.Unverified]: {
-         title: _t('Unverified sessions'),
-         description: <>
-             <p>{ _t('Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.') }
-             </p>
-             <p>
-                 { _t(
-                     `You should make especially certain that you recognise these sessions ` +
-                    `as they could represent an unauthorised use of your account.`,
-                 )
-                 }
-             </p>
-         </>,
-     },
-     [DeviceSecurityVariation.Inactive]: {
-         title: _t('Inactive sessions'),
-         description: <>
-             <p>{ _t('Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.') }
-             </p>
-             <p>
-                 { _t(
-                     `Removing inactive sessions improves security and performance, ` +
-                    `and makes it easier for you to identify if a new session is suspicious.`,
-                 )
-                 }
-             </p>
-         </>,
-     },
- };
+const securityCardContent: Record<
+    DeviceSecurityVariation,
+    {
+        title: string;
+        description: React.ReactNode | string;
+    }
+> = {
+    [DeviceSecurityVariation.Verified]: {
+        title: _t("settings|sessions|verified_sessions"),
+        description: (
+            <>
+                <p>{_t("settings|sessions|verified_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|verified_sessions_explainer_2")}</p>
+            </>
+        ),
+    },
+    [DeviceSecurityVariation.Unverified]: {
+        title: _t("settings|sessions|unverified_sessions"),
+        description: (
+            <>
+                <p>{_t("settings|sessions|unverified_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|unverified_sessions_explainer_2")}</p>
+            </>
+        ),
+    },
+    // unverifiable uses single-session case
+    // because it is only ever displayed on a single session detail
+    [DeviceSecurityVariation.Unverifiable]: {
+        title: _t("settings|sessions|unverified_session"),
+        description: (
+            <>
+                <p>{_t("settings|sessions|unverified_session_explainer_1")}</p>
+                <p>{_t("settings|sessions|unverified_session_explainer_2")}</p>
+                <p>{_t("settings|sessions|unverified_session_explainer_3")}</p>
+            </>
+        ),
+    },
+    [DeviceSecurityVariation.Inactive]: {
+        title: _t("settings|sessions|inactive_sessions"),
+        description: (
+            <>
+                <p>{_t("settings|sessions|inactive_sessions_explainer_1")}</p>
+                <p>{_t("settings|sessions|inactive_sessions_explainer_2")}</p>
+            </>
+        ),
+    },
+};
 
 /**
  * LearnMore with content for device security warnings

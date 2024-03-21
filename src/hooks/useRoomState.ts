@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useCallback, useEffect, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Room, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 
@@ -29,19 +28,27 @@ export const useRoomState = <T extends any = RoomState>(
     room?: Room,
     mapper: Mapper<T> = defaultMapper as Mapper<T>,
 ): T => {
-    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
+    // Create a ref that stores mapper
+    const savedMapper = useRef(mapper);
+
+    // Update ref.current value if mapper changes.
+    useEffect(() => {
+        savedMapper.current = mapper;
+    }, [mapper]);
+
+    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : (undefined as T));
 
     const update = useCallback(() => {
         if (!room) return;
-        setValue(mapper(room.currentState));
-    }, [room, mapper]);
+        setValue(savedMapper.current(room.currentState));
+    }, [room]);
 
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Update, update);
     useEffect(() => {
         update();
         return () => {
-            setValue(undefined);
+            setValue(room ? savedMapper.current(room.currentState) : (undefined as T));
         };
-    }, [update]);
+    }, [room, update]);
     return value;
 };

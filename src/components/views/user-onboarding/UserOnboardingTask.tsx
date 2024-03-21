@@ -17,23 +17,26 @@ limitations under the License.
 import classNames from "classnames";
 import * as React from "react";
 
-import { UserOnboardingTask as Task } from "../../../hooks/useUserOnboardingTasks";
+import { UserOnboardingTaskWithResolvedCompletion } from "../../../hooks/useUserOnboardingTasks";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 
 interface Props {
-    task: Task;
+    task: UserOnboardingTaskWithResolvedCompletion;
     completed?: boolean;
 }
 
-export function UserOnboardingTask({ task, completed = false }: Props) {
+export function UserOnboardingTask({ task, completed = false }: Props): JSX.Element {
     const title = typeof task.title === "function" ? task.title() : task.title;
     const description = typeof task.description === "function" ? task.description() : task.description;
 
     return (
-        <li className={classNames("mx_UserOnboardingTask", {
-            "mx_UserOnboardingTask_completed": completed,
-        })}>
+        <li
+            data-testid="user-onboarding-task"
+            className={classNames("mx_UserOnboardingTask", {
+                mx_UserOnboardingTask_completed: completed,
+            })}
+        >
             <div
                 className="mx_UserOnboardingTask_number"
                 role="checkbox"
@@ -41,27 +44,24 @@ export function UserOnboardingTask({ task, completed = false }: Props) {
                 aria-checked={completed}
                 aria-labelledby={`mx_UserOnboardingTask_${task.id}`}
             />
-            <div
-                id={`mx_UserOnboardingTask_${task.id}`}
-                className="mx_UserOnboardingTask_content">
-                <Heading size="h4" className="mx_UserOnboardingTask_title">
-                    { title }
+            <div id={`mx_UserOnboardingTask_${task.id}`} className="mx_UserOnboardingTask_content">
+                <Heading size="4" className="mx_UserOnboardingTask_title">
+                    {title}
                 </Heading>
-                <div className="mx_UserOnboardingTask_description">
-                    { description }
-                </div>
+                <div className="mx_UserOnboardingTask_description">{description}</div>
             </div>
-            { task.action && (!task.action.hideOnComplete || !completed) && (
+            {task.action && (!task.action.hideOnComplete || !completed) && (
                 <AccessibleButton
                     element="a"
                     className="mx_UserOnboardingTask_action"
                     kind="primary_outline"
                     href={task.action.href}
                     target="_blank"
-                    onClick={task.action.onClick}>
-                    { task.action.label }
+                    onClick={task.action.onClick ?? null}
+                >
+                    {task.action.label}
                 </AccessibleButton>
-            ) }
+            )}
         </li>
     );
 }

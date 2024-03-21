@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { IBodyProps } from "./IBodyProps";
@@ -38,16 +38,16 @@ const HiddenBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref)
             throw new Error("HiddenBody should only be applied to hidden messages");
         case false:
             if (visibility.reason) {
-                text = _t("Message pending moderation: %(reason)s", { reason: visibility.reason });
+                text = _t("timeline|pending_moderation_reason", { reason: visibility.reason });
             } else {
-                text = _t("Message pending moderation");
+                text = _t("timeline|pending_moderation");
             }
             break;
     }
 
     return (
         <span className="mx_HiddenBody" ref={ref}>
-            { text }
+            {text}
         </span>
     );
 });

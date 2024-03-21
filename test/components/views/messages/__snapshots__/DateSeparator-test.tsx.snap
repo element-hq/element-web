@@ -3,19 +3,23 @@
 exports[`DateSeparator renders the date separator correctly 1`] = `
 <DocumentFragment>
   <div
-    aria-label="Today"
-    class="mx_DateSeparator"
+    aria-label="today"
+    class="mx_TimelineSeparator"
     role="separator"
-    tabindex="-1"
   >
     <hr
       role="none"
     />
-    <h2
-      aria-hidden="true"
+    <div
+      class="mx_DateSeparator_dateContent"
     >
-      Today
-    </h2>
+      <h2
+        aria-hidden="true"
+        class="mx_DateSeparator_dateHeading"
+      >
+        today
+      </h2>
+    </div>
     <hr
       role="none"
     />
@@ -26,10 +30,9 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
 exports[`DateSeparator when feature_jump_to_date is enabled renders the date separator correctly 1`] = `
 <DocumentFragment>
   <div
-    aria-label="Fri, Dec 17 2021"
-    class="mx_DateSeparator"
+    aria-label="Fri, Dec 17, 2021"
+    class="mx_TimelineSeparator"
     role="separator"
-    tabindex="-1"
   >
     <hr
       role="none"
@@ -38,14 +41,16 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="Jump to date"
-      class="mx_AccessibleButton mx_DateSeparator_jumpToDateMenu"
+      class="mx_AccessibleButton mx_DateSeparator_jumpToDateMenu mx_DateSeparator_dateContent"
+      data-testid="jump-to-date-separator-button"
       role="button"
       tabindex="0"
     >
       <h2
         aria-hidden="true"
+        class="mx_DateSeparator_dateHeading"
       >
-        Fri, Dec 17 2021
+        Fri, Dec 17, 2021
       </h2>
       <div
         class="mx_DateSeparator_chevron"

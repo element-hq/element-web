@@ -15,14 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$MiniAppTileHeight: 200px;
-/* TODO this should be 300px but that's too large */
-$MinWidth: 240px;
+:root {
+    --AppTile_mini-height: 220px;
+}
 
 .mx_AppsDrawer {
-    margin: $container-gap-width;
+    --minWidth: 240px; /* TODO this should be 300px but that's too large */
+
+    margin: var(--container-gap-width);
     /* The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser. */
-    margin-right: calc($container-gap-width / 2);
+    margin-right: calc(var(--container-gap-width) / 2);
     margin-bottom: 0; /* No bottom margin for the correct gap to the CallView below. */
     position: relative;
     display: flex;
@@ -30,52 +32,52 @@ $MinWidth: 240px;
     overflow: hidden;
     flex-grow: 1;
 
-    &.mx_AppsDrawer_maximise {
-        margin-bottom: $container-gap-width;
+    .mx_AppsDrawer_resizer {
+        margin-bottom: var(--container-gap-width);
     }
 
-    .mx_AppsContainer_resizerHandleContainer {
+    .mx_AppsDrawer_resizer_container {
         width: 100%;
         height: 10px;
         display: block;
         position: relative;
-    }
 
-    .mx_AppsContainer_resizerHandle {
-        cursor: ns-resize;
+        .mx_AppsDrawer_resizer_container_handle {
+            cursor: ns-resize;
 
-        /* Override styles from library, making the whole area the target area */
-        width: 100% !important;
-        height: 100% !important;
+            /* Override styles from library, making the whole area the target area */
+            width: 100% !important;
+            height: 100% !important;
 
-        /* This is positioned directly below frame */
-        position: absolute;
-        bottom: 50% !important; /* override from library */
-
-        /* We then render the pill handle in an ::after to keep it in the handle's */
-        /* area without being a massive line across the screen */
-        &::after {
-            content: '';
+            /* This is positioned directly below frame */
             position: absolute;
-            border-radius: 3px;
+            bottom: 50% !important; /* override from library */
 
-            height: 4px;
-            bottom: 0;
+            /* We then render the pill handle in an ::after to keep it in the handle's */
+            /* area without being a massive line across the screen */
+            &::after {
+                content: "";
+                position: absolute;
+                border-radius: 3px;
 
-            /* Together, these make the bar 64px wide */
-            /* These are also overridden from the library */
-            left: calc(50% - 32px);
-            right: calc(50% - 32px);
+                height: 4px;
+                bottom: 0;
+
+                /* Together, these make the bar 64px wide */
+                /* These are also overridden from the library */
+                left: calc(50% - 32px);
+                right: calc(50% - 32px);
+            }
         }
     }
 
     &:hover {
-        .mx_AppsContainer_resizerHandle::after {
+        .mx_AppsDrawer_resizer_container_handle::after {
             opacity: 0.8;
             background: $primary-content;
         }
 
-        .mx_ResizeHandle_horizontal::before {
+        .mx_ResizeHandle--horizontal::before {
             position: absolute;
             left: 3px;
             top: 50%;
@@ -85,7 +87,7 @@ $MinWidth: 240px;
             width: 4px;
             border-radius: 4px;
 
-            content: '';
+            content: "";
 
             background-color: $primary-content;
             opacity: 0.8;
@@ -94,31 +96,35 @@ $MinWidth: 240px;
 
     .mx_AppTile {
         width: 50%;
-        min-width: $MinWidth;
+        min-width: var(--minWidth);
     }
 
-    &.mx_AppsDrawer_2apps .mx_AppTile {
+    &.mx_AppsDrawer--maximised {
+        margin-bottom: var(--container-gap-width);
+    }
+
+    &.mx_AppsDrawer--resizing .mx_AppTile_persistedWrapper {
+        z-index: 1;
+    }
+
+    &.mx_AppsDrawer--2apps .mx_AppTile {
         width: 50%;
 
         &:nth-child(3) {
             flex-grow: 1;
             width: 0 !important;
-            min-width: $MinWidth !important;
+            min-width: var(--minWidth) !important;
         }
     }
-    &.mx_AppsDrawer_3apps .mx_AppTile {
+    &.mx_AppsDrawer--3apps .mx_AppTile {
         width: 33%;
 
         &:nth-child(3) {
             flex-grow: 1;
             width: 0 !important;
-            min-width: $MinWidth !important;
+            min-width: var(--minWidth) !important;
         }
     }
-}
-
-.mx_AppsContainer_resizer {
-    margin-bottom: $container-gap-width;
 }
 
 .mx_AppsContainer {
@@ -132,15 +138,15 @@ $MinWidth: 240px;
     min-height: 0;
 
     .mx_AppTile:first-of-type {
-        border-left-width: $container-border-width;
+        border-left-width: var(--container-border-width);
         border-radius: 10px 0 0 10px;
     }
     .mx_AppTile:last-of-type {
-        border-right-width: $container-border-width;
+        border-right-width: var(--container-border-width);
         border-radius: 0 10px 10px 0;
     }
 
-    .mx_ResizeHandle_horizontal {
+    .mx_ResizeHandle--horizontal {
         position: relative;
 
         > div {
@@ -150,7 +156,7 @@ $MinWidth: 240px;
 }
 
 .mx_AppTile {
-    border: $container-border-width solid $widget-menu-bar-bg-color;
+    border: var(--container-border-width) solid $widget-menu-bar-bg-color;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -161,7 +167,7 @@ $MinWidth: 240px;
     width: 100% !important; /* to override the inline style set by the resizer */
     margin: 0;
     padding: 0;
-    border: $container-border-width solid $widget-menu-bar-bg-color;
+    border: var(--container-border-width) solid $widget-menu-bar-bg-color;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -174,7 +180,7 @@ $MinWidth: 240px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: $MiniAppTileHeight;
+    height: var(--AppTile_mini-height);
 }
 
 .mx_AppTile .mx_AppTile_persistedWrapper,
@@ -199,213 +205,145 @@ $MinWidth: 240px;
     width: 100%;
     padding-top: 3px;
     padding-bottom: 6px;
-}
 
-.mx_AppTileMenuBarTitle {
-    line-height: 20px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    .mx_AppTileMenuBar_title {
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
-    .mx_WidgetAvatar {
-        margin-right: 12px;
+        .mx_WidgetAvatar {
+            margin-right: 12px;
+        }
+
+        > :last-child {
+            margin-left: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .mx_AppTileMenuBar_widgets {
+        display: flex;
+        align-items: center;
+
+        .mx_AppTileMenuBar_widgets_button {
+            --size: 24px; /* Size of the button. Its height and width values should be same */
+
+            margin: 0 4px;
+            position: relative;
+            height: var(--size);
+            width: var(--size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover::after {
+                content: "";
+                position: absolute;
+                height: var(--size);
+                width: var(--size);
+                background-color: $panel-actions;
+                border-radius: 50%;
+                left: 0;
+                top: 0;
+            }
+
+            .mx_Icon {
+                color: $muted-fg-color;
+            }
+        }
     }
 }
 
-.mx_AppTileMenuBarTitle > :last-child {
-    margin-left: 9px;
-}
-
-.mx_AppTileMenuBarWidgets {
-    float: right;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.mx_AppTileMenuBar_iconButton {
-    height: 24px;
-    margin: 0 4px;
-    position: relative;
-    width: 24px;
-
-    &::before {
-        background-color: $muted-fg-color;
-        content: '';
-        height: 24px;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: 12px;
-        position: absolute;
-        width: 24px;
-    }
-
-    &:hover::after {
-        background-color: $panel-actions;
-        border-radius: 50%;
-        content: '';
-        height: 24px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 24px;
-    }
-
-    &.mx_AppTileMenuBar_iconButton_collapse::before {
-        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-    }
-
-    &.mx_AppTileMenuBar_iconButton_maximise::before {
-        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
-    }
-
-    &.mx_AppTileMenuBar_iconButton_minimise::before {
-        mask-image: url("$(res)/img/element-icons/minus-button.svg");
-    }
-
-    &.mx_AppTileMenuBar_iconButton_popout::before {
-        mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
-    }
-
-    &.mx_AppTileMenuBar_iconButton_menu::before {
-        mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-    }
-}
-
+/* Rules added to this selector style appTileBody generally */
 .mx_AppTileBody {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+    /* Apply to every variant of appTileBody */
     border-radius: 8px;
-    background-color: $widget-body-bg-color;
+
+    /* const loadingElement */
+    /* Note the loading spinner and the message next to it are not always included in mx_AppTileBody--loading */
+    .mx_AppTileBody_fadeInSpinner {
+        /* place spinner and the message at the center of mx_AppTileBody */
+        height: 100%;
+        width: 100%;
+
+        font-weight: bold; /* message next to the spinner */
+        animation-fill-mode: backwards;
+        animation-duration: 200ms;
+        animation-delay: 500ms;
+        animation-name: mx_AppTileBody_fadeInSpinnerAnimation;
+    }
+
+    &.mx_AppTileBody--large,
+    &.mx_AppTileBody--mini {
+        width: 100%;
+        overflow: hidden;
+        height: var(--AppTileBody-height);
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &.mx_AppTileBody--large {
+        --AppTileBody-height: 100%;
+
+        background-color: $widget-body-bg-color;
+
+        iframe {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            display: block;
+        }
+    }
+
+    &.mx_AppTileBody--mini {
+        --AppTileBody-height: var(--AppTile_mini-height);
+    }
+
+    &.mx_AppTileBody--loading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 100%;
+
+        /* match bg of border so that the cut corners have the right fill */
+        background-color: $widget-body-bg-color !important;
+
+        iframe {
+            display: none;
+        }
+    }
+
+    &.mx_AppTileBody--call {
+        border-radius: 0px;
+    }
+    &.mx_AppTileBody--call.mx_AppTileBody--mini {
+        border-radius: 8px;
+    }
 }
 
-.mx_AppTileBody_mini {
-    height: $MiniAppTileHeight;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-}
-
-.mx_AppTile .mx_AppTileBody,
-.mx_AppTileFullWidth .mx_AppTileBody,
-.mx_AppTile_mini .mx_AppTileBody_mini {
+/* appTileBody is embedded to PersistedElement outside of mx_AppTile,
+   so rules to style appTileBody generally should not be included here. */
+.mx_AppTile .mx_AppTileBody--large,
+.mx_AppTileFullWidth .mx_AppTileBody--large,
+.mx_AppTile_mini .mx_AppTileBody--mini {
     height: inherit;
     flex: 1;
 }
 
-.mx_AppTileBody_mini iframe {
-    border: none;
-    width: 100%;
-    height: 100%;
-}
-
-.mx_AppTileBody iframe {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: block;
-}
-
-.mx_AppPermissionWarning {
-    text-align: center;
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: $font-16px;
-}
-
-.mx_AppPermissionWarning_row {
-    margin-bottom: 12px;
-}
-
-.mx_AppPermissionWarning_smallText {
-    font-size: $font-12px;
-}
-
-.mx_AppPermissionWarning_bolder {
-    font-weight: 600;
-}
-
-.mx_AppPermissionWarning h4 {
-    margin: 0;
-    padding: 0;
-}
-
-.mx_AppPermissionWarning_helpIcon {
-    margin-top: 1px;
-    margin-right: 2px;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-}
-
-.mx_AppPermissionWarning_helpIcon::before {
-    display: inline-block;
-    background-color: $accent;
-    mask-repeat: no-repeat;
-    mask-size: 12px;
-    width: 12px;
-    height: 12px;
-    mask-position: center;
-    content: '';
-    vertical-align: middle;
-    mask-image: url('$(res)/img/feather-customised/help-circle.svg');
-}
-
-.mx_AppPermissionWarning_tooltip {
-    @mixin mx_Tooltip_dark;
-
-    ul {
-        list-style-position: inside;
-        padding-left: 2px;
-        margin-left: 0;
+@keyframes mx_AppTileBody_fadeInSpinnerAnimation {
+    from {
+        opacity: 0;
     }
-}
-
-.mx_AppLoading {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    position: relative;
-    height: 100%;
-
-    /* match bg of border so that the cut corners have the right fill */
-    background-color: $widget-body-bg-color !important;
-    border-radius: 8px;
-}
-
-.mx_AppLoading .mx_Spinner {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-.mx_AppLoading_spinner_fadeIn {
-    animation-fill-mode: backwards;
-    animation-duration: 200ms;
-    animation-delay: 500ms;
-    animation-name: mx_AppLoading_spinner_fadeIn_animation;
-}
-
-@keyframes mx_AppLoading_spinner_fadeIn_animation {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.mx_AppLoading iframe {
-    display: none;
-}
-
-.mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {
-    z-index: 1;
+    to {
+        opacity: 1;
+    }
 }

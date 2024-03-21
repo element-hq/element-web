@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
+import { IPushRule, PushRuleAction } from "matrix-js-sdk/src/matrix";
 
 import { StandardActions } from "./StandardActions";
 import { NotificationUtils } from "./NotificationUtils";
@@ -31,28 +31,29 @@ export enum VectorState {
 
 export class PushRuleVectorState {
     // Backwards compatibility (things should probably be using the enum above instead)
-    static OFF = VectorState.Off;
-    static ON = VectorState.On;
-    static LOUD = VectorState.Loud;
+    public static OFF = VectorState.Off;
+    public static ON = VectorState.On;
+    public static LOUD = VectorState.Loud;
 
     /**
      * Enum for state of a push rule as defined by the Vector UI.
      * @readonly
      * @enum {string}
      */
-    static states = VectorState;
+    public static states = VectorState;
 
     /**
      * Convert a PushRuleVectorState to a list of actions
      *
      * @return [object] list of push-rule actions
      */
-    static actionsFor(pushRuleVectorState: VectorState) {
+    public static actionsFor(pushRuleVectorState?: VectorState): PushRuleAction[] {
         if (pushRuleVectorState === VectorState.On) {
             return StandardActions.ACTION_NOTIFY;
         } else if (pushRuleVectorState === VectorState.Loud) {
             return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
+        return [];
     }
 
     /**
@@ -62,7 +63,7 @@ export class PushRuleVectorState {
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
      * state. Returns null if it does not match these categories.
      */
-    static contentRuleVectorStateKind(rule: IPushRule): VectorState {
+    public static contentRuleVectorStateKind(rule: IPushRule): VectorState | null {
         const decoded = NotificationUtils.decodeActions(rule.actions);
 
         if (!decoded) {
@@ -77,7 +78,7 @@ export class PushRuleVectorState {
         if (decoded.highlight) {
             tweaks++;
         }
-        let stateKind = null;
+        let stateKind: VectorState | null = null;
         switch (tweaks) {
             case 0:
                 stateKind = VectorState.On;

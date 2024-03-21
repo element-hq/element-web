@@ -64,8 +64,8 @@ the content string, caret nodes need to be ignored, as they would confuse the mo
 
 As part of the reconciliation, the caret position is also adjusted to any changes
 the model made to the input. The caret is passed around in two formats.
-The model receives the caret *offset* within the content string (which includes
+The model receives the caret _offset_ within the content string (which includes
 an atNodeEnd flag to make it unambiguous if it is at a part and or the next part start).
-The model converts this to a caret *position* internally, which has a partIndex
+The model converts this to a caret _position_ internally, which has a partIndex
 and an offset within the part text, which is more natural to work with.
-From there on, the caret *position* is used, also during reconciliation.
+From there on, the caret _position_ is used, also during reconciliation.

@@ -26,12 +26,16 @@ limitations under the License.
     overflow: hidden;
     cursor: pointer;
 
-    color: $accent-fg-color !important; /* To override .markdown-body */
+    color: var(--cpd-color-text-on-solid-primary) !important; /* To override .markdown-body */
     background-color: $pill-bg-color !important; /* To override .markdown-body */
+
+    > * {
+        pointer-events: none;
+    }
 
     &.mx_UserPill_me,
     &.mx_AtRoomPill {
-        background-color: $alert !important; /* To override .markdown-body */
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
     }
 
     &:hover {
@@ -39,12 +43,14 @@ limitations under the License.
     }
 
     &.mx_UserPill_me:hover {
-        background-color: #ff6b75 !important; /* To override .markdown-body | same on both themes */
+        background-color: var(
+            --cpd-color-bg-critical-hovered
+        ) !important; /* To override .markdown-body | same on both themes */
     }
 
     /* We don't want to indicate clickability */
     &.mx_AtRoomPill:hover {
-        background-color: $alert !important; /* To override .markdown-body */
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
         cursor: unset;
     }
 
@@ -55,12 +61,11 @@ limitations under the License.
         min-width: $font-16px; /* ensure the avatar is not compressed */
     }
 
-    .mx_Pill_linkText {
-        white-space: nowrap; /* enforce the pill text to be a single line */
+    .mx_Pill_text {
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
-
-        pointer-events: none; /* ensure clicks on the pills go through the anchor */
+        white-space: nowrap;
     }
 
     a& {
@@ -68,5 +73,28 @@ limitations under the License.
         white-space: nowrap;
         overflow: hidden;
         text-decoration: none !important; /* To override .markdown-body */
+    }
+
+    .mx_Pill_LinkIcon {
+        background-color: $link-external;
+        box-sizing: border-box;
+        color: $background;
+        height: 16px;
+        padding: 1px;
+        width: 16px;
+        border-radius: 50%;
+    }
+
+    .mx_Pill_UserIcon {
+        box-sizing: border-box;
+        color: $secondary-content;
+        height: 16px;
+        width: 16px;
+    }
+
+    &.mx_SpacePill {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        padding-left: 4px;
     }
 }

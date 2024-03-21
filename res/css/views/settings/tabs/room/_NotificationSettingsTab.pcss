@@ -22,7 +22,7 @@ limitations under the License.
         color: $primary-content;
         font-size: $font-15px;
         line-height: $font-18px;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         margin-top: 16px;
         position: relative;
         padding-left: 8px;
@@ -54,18 +54,22 @@ limitations under the License.
     }
 
     .mx_NotificationSettingsTab_defaultEntry::before {
-        mask-image: url('$(res)/img/element-icons/notifications.svg');
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
     }
 
     .mx_NotificationSettingsTab_allMessagesEntry::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-default.svg");
     }
 
     .mx_NotificationSettingsTab_mentionsKeywordsEntry::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-dm.svg");
     }
 
     .mx_NotificationSettingsTab_noneEntry::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-off.svg");
     }
+}
+
+input[type="file"].mx_NotificationSound_soundUpload {
+    display: none;
 }

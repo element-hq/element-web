@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { Icon as LocationMarkerIcon } from '../../../../res/img/element-icons/location.svg';
-import { Icon as MapFallbackImage } from '../../../../res/img/location/map.svg';
-import Spinner from '../elements/Spinner';
+import { Icon as LocationMarkerIcon } from "../../../../res/img/element-icons/location.svg";
+import { Icon as MapFallbackImage } from "../../../../res/img/location/map.svg";
+import Spinner from "../elements/Spinner";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
@@ -28,11 +28,13 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const MapFallback: React.FC<Props> = ({ className, isLoading, children, ...rest }) => {
-    return <div className={classNames('mx_MapFallback', className)} {...rest}>
-        <MapFallbackImage className='mx_MapFallback_bg' />
-        { isLoading ? <Spinner h={32} w={32} /> : <LocationMarkerIcon className='mx_MapFallback_icon' /> }
-        { children }
-    </div>;
+    return (
+        <div className={classNames("mx_MapFallback", className)} {...rest}>
+            <MapFallbackImage className="mx_MapFallback_bg" />
+            {isLoading ? <Spinner h={32} w={32} /> : <LocationMarkerIcon className="mx_MapFallback_icon" />}
+            {children}
+        </div>
+    );
 };
 
 export default MapFallback;

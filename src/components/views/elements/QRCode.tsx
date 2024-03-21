@@ -22,19 +22,24 @@ import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 
 interface IProps extends QRCodeRenderersOptions {
-    data: string | QRCodeSegment[];
+    /** The data for the QR code. If `null`, a spinner is shown. */
+    data: null | string | QRCodeSegment[];
     className?: string;
 }
 
 const defaultOptions: QRCodeToDataURLOptions = {
-    errorCorrectionLevel: 'L', // we want it as trivial-looking as possible
+    errorCorrectionLevel: "L", // we want it as trivial-looking as possible
 };
 
 const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
-    const [dataUri, setUri] = React.useState<string>(null);
+    const [dataUri, setUri] = React.useState<string | null>(null);
     React.useEffect(() => {
+        if (data === null) {
+            setUri(null);
+            return;
+        }
         let cancelled = false;
-        toDataURL(data, { ...defaultOptions, ...options }).then(uri => {
+        toDataURL(data, { ...defaultOptions, ...options }).then((uri) => {
             if (cancelled) return;
             setUri(uri);
         });
@@ -43,9 +48,11 @@ const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
         };
     }, [JSON.stringify(data), options]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return <div className={classNames("mx_QRCode", className)}>
-        { dataUri ? <img src={dataUri} className="mx_VerificationQRCode" alt={_t("QR Code")} /> : <Spinner /> }
-    </div>;
+    return (
+        <div className={classNames("mx_QRCode", className)}>
+            {dataUri ? <img src={dataUri} className="mx_VerificationQRCode" alt={_t("common|qr_code")} /> : <Spinner />}
+        </div>
+    );
 };
 
 export default QRCode;

@@ -23,7 +23,7 @@ export interface SettingUpdatedPayload extends ActionPayload {
     action: Action.SettingUpdated;
 
     settingName: string;
-    roomId: string;
+    roomId: string | null;
     level: SettingLevel;
     newValueAtLevel: SettingLevel;
     newValue: SettingValueType;

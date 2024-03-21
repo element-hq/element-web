@@ -1,5 +1,6 @@
 /*
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,26 +16,29 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { _t } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, stateKeyField, IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
+import Spinner from "../../elements/Spinner";
+import SyntaxHighlight from "../../elements/SyntaxHighlight";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
-export const StateEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
+export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const fields = useMemo(() => [
-        eventTypeField(mxEvent?.getType()),
-        stateKeyField(mxEvent?.getStateKey()),
-    ], [mxEvent]);
+    const fields = useMemo(
+        () => [eventTypeField(mxEvent?.getType()), stateKeyField(mxEvent?.getStateKey())],
+        [mxEvent],
+    );
 
-    const onSend = ([eventType, stateKey]: string[], content?: IContent) => {
-        return cli.sendStateEvent(context.room.roomId, eventType, content, stateKey);
+    const onSend = async ([eventType, stateKey]: string[], content: IContent): Promise<void> => {
+        await cli.sendStateEvent(context.room.roomId, eventType as any, content, stateKey);
     };
 
     const defaultContent = mxEvent ? stringify(mxEvent.getContent()) : undefined;
@@ -46,28 +50,78 @@ interface StateEventButtonProps {
     onClick(): void;
 }
 
-const StateEventButton = ({ label, onClick }: StateEventButtonProps) => {
+const RoomStateHistory: React.FC<{
+    mxEvent: MatrixEvent;
+    onBack(): void;
+}> = ({ mxEvent, onBack }) => {
+    const cli = useContext(MatrixClientContext);
+    const events = useAsyncMemo(
+        async () => {
+            const events = [mxEvent.event];
+            while (!!events[0].unsigned?.replaces_state) {
+                try {
+                    events.unshift(await cli.fetchRoomEvent(mxEvent.getRoomId()!, events[0].unsigned.replaces_state));
+                } catch (e) {
+                    events.unshift({
+                        event_id: events[0].unsigned.replaces_state,
+                        unsigned: {
+                            error: e instanceof Error ? e.message : String(e),
+                        },
+                    });
+                }
+            }
+            return events;
+        },
+        [cli, mxEvent],
+        null,
+    );
+
+    let body = <Spinner />;
+    if (events !== null) {
+        body = (
+            <>
+                {events.map((ev) => (
+                    <SyntaxHighlight language="json" key={ev.event_id}>
+                        {stringify(ev)}
+                    </SyntaxHighlight>
+                ))}
+            </>
+        );
+    }
+
+    return <BaseTool onBack={onBack}>{body}</BaseTool>;
+};
+
+const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) => {
     const trimmed = label.trim();
 
-    return <button
-        className={classNames("mx_DevTools_button", {
-            mx_DevTools_RoomStateExplorer_button_hasSpaces: trimmed.length !== label.length,
-            mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
-        })}
-        onClick={onClick}
-    >
-        { trimmed ? label : _t("<%(count)s spaces>", { count: label.length }) }
-    </button>;
+    let content = label;
+    if (!trimmed) {
+        content = label.length > 0 ? _t("devtools|spaces", { count: label.length }) : _t("devtools|empty_string");
+    }
+
+    return (
+        <button
+            className={classNames("mx_DevTools_button", {
+                mx_DevTools_RoomStateExplorer_button_hasSpaces: trimmed.length !== label.length,
+                mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
+            })}
+            onClick={onClick}
+        >
+            {content}
+        </button>
+    );
 };
 
 interface IEventTypeProps extends Pick<IDevtoolsProps, "onBack"> {
     eventType: string;
 }
 
-const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
+const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBack }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
+    const [history, setHistory] = useState(false);
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -79,29 +133,39 @@ const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
         }
     }, [events]);
 
+    if (event && history) {
+        const _onBack = (): void => {
+            setHistory(false);
+        };
+        return <RoomStateHistory mxEvent={event} onBack={_onBack} />;
+    }
     if (event) {
-        const _onBack = () => {
+        const _onBack = (): void => {
             if (events?.size === 1 && events.has("")) {
                 onBack();
             } else {
                 setEvent(null);
             }
         };
-        return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} />;
+        const onHistoryClick = (): void => {
+            setHistory(true);
+        };
+        const extraButton = <button onClick={onHistoryClick}>{_t("devtools|see_history")}</button>;
+        return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} extraButton={extraButton} />;
     }
 
-    return <BaseTool onBack={onBack}>
-        <FilteredList query={query} onChange={setQuery}>
-            {
-                Array.from(events.entries()).map(([stateKey, ev]) => (
+    return (
+        <BaseTool onBack={onBack}>
+            <FilteredList query={query} onChange={setQuery}>
+                {Array.from(events.entries()).map(([stateKey, ev]) => (
                     <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
-                ))
-            }
-        </FilteredList>
-    </BaseTool>;
+                ))}
+            </FilteredList>
+        </BaseTool>
+    );
 };
 
-export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
+export const RoomStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [eventType, setEventType] = useState<string | null>(null);
@@ -109,23 +173,23 @@ export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
     const events = context.room.currentState.events;
 
     if (eventType !== null) {
-        const onBack = () => {
+        const onBack = (): void => {
             setEventType(null);
         };
         return <RoomStateExplorerEventType eventType={eventType} onBack={onBack} />;
     }
 
-    const onAction = async () => {
-        setTool(_t("Send custom state event"), StateEventEditor);
+    const onAction = async (): Promise<void> => {
+        setTool(_td("devtools|send_custom_state_event"), StateEventEditor);
     };
 
-    return <BaseTool onBack={onBack} actionLabel={_t("Send custom state event")} onAction={onAction}>
-        <FilteredList query={query} onChange={setQuery}>
-            {
-                Array.from(events.keys()).map((eventType) => (
+    return (
+        <BaseTool onBack={onBack} actionLabel={_td("devtools|send_custom_state_event")} onAction={onAction}>
+            <FilteredList query={query} onChange={setQuery}>
+                {Array.from(events.keys()).map((eventType) => (
                     <StateEventButton key={eventType} label={eventType} onClick={() => setEventType(eventType)} />
-                ))
-            }
-        </FilteredList>
-    </BaseTool>;
+                ))}
+            </FilteredList>
+        </BaseTool>
+    );
 };

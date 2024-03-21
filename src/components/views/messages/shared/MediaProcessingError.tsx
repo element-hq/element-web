@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { Icon as WarningIcon } from '../../../../../res/img/warning.svg';
+import { Icon as WarningIcon } from "../../../../../res/img/warning.svg";
 
 interface Props {
     className?: string;
@@ -25,8 +25,8 @@ interface Props {
 
 const MediaProcessingError: React.FC<Props> = ({ className, children }) => (
     <span className={className}>
-        <WarningIcon className='mx_MediaProcessingError_Icon' width="16" height="16" />
-        { children }
+        <WarningIcon className="mx_MediaProcessingError_Icon" width="16" height="16" />
+        {children}
     </span>
 );
 

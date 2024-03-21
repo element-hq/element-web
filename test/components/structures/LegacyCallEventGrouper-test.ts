@@ -14,23 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent } from 'matrix-js-sdk/src/matrix';
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { CallState } from "matrix-js-sdk/src/webrtc/call";
 
-import { stubClient } from '../../test-utils';
-import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
-import LegacyCallEventGrouper, { CustomCallState } from "../../../src/components/structures/LegacyCallEventGrouper";
+import { stubClient } from "../../test-utils";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import LegacyCallEventGrouper from "../../../src/components/structures/LegacyCallEventGrouper";
 
 const MY_USER_ID = "@me:here";
 const THEIR_USER_ID = "@they:here";
 
 let client: MatrixClient;
 
-describe('LegacyCallEventGrouper', () => {
+describe("LegacyCallEventGrouper", () => {
     beforeEach(() => {
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         client.getUserId = () => {
             return MY_USER_ID;
         };
@@ -39,6 +38,9 @@ describe('LegacyCallEventGrouper', () => {
     it("detects a missed call", () => {
         const grouper = new LegacyCallEventGrouper();
 
+        // This assumes that the other party aborted the call by sending a hangup,
+        // which is the usual case. Another possible test would be for the edge
+        // case where there is only an expired invite event.
         grouper.add({
             getContent: () => {
                 return {
@@ -52,8 +54,22 @@ describe('LegacyCallEventGrouper', () => {
                 userId: THEIR_USER_ID,
             },
         } as unknown as MatrixEvent);
+        grouper.add({
+            getContent: () => {
+                return {
+                    call_id: "callId",
+                };
+            },
+            getType: () => {
+                return EventType.CallHangup;
+            },
+            sender: {
+                userId: THEIR_USER_ID,
+            },
+        } as unknown as MatrixEvent);
 
-        expect(grouper.state).toBe(CustomCallState.Missed);
+        expect(grouper.state).toBe(CallState.Ended);
+        expect(grouper.callWasMissed).toBe(true);
     });
 
     it("detects an ended call", () => {

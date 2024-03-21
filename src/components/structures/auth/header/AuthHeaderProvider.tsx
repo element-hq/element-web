@@ -22,7 +22,7 @@ import { AuthHeaderModifier } from "./AuthHeaderModifier";
 
 export enum AuthHeaderActionType {
     Add,
-    Remove
+    Remove,
 }
 
 interface AuthHeaderAction {
@@ -32,21 +32,17 @@ interface AuthHeaderAction {
 
 export type AuthHeaderReducer = Reducer<ComponentProps<typeof AuthHeaderModifier>[], AuthHeaderAction>;
 
-export function AuthHeaderProvider({ children }: PropsWithChildren<{}>) {
+export function AuthHeaderProvider({ children }: PropsWithChildren<{}>): JSX.Element {
     const [state, dispatch] = useReducer<AuthHeaderReducer>(
         (state: ComponentProps<typeof AuthHeaderModifier>[], action: AuthHeaderAction) => {
             switch (action.type) {
                 case AuthHeaderActionType.Add:
                     return [action.value, ...state];
                 case AuthHeaderActionType.Remove:
-                    return (state.length && isEqual(state[0], action.value)) ? state.slice(1) : state;
+                    return state.length && isEqual(state[0], action.value) ? state.slice(1) : state;
             }
         },
         [] as ComponentProps<typeof AuthHeaderModifier>[],
     );
-    return (
-        <AuthHeaderContext.Provider value={{ state, dispatch }}>
-            { children }
-        </AuthHeaderContext.Provider>
-    );
+    return <AuthHeaderContext.Provider value={{ state, dispatch }}>{children}</AuthHeaderContext.Provider>;
 }

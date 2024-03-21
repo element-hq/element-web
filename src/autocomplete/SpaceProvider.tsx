@@ -14,29 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { _t } from '../languageHandler';
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { _t } from "../languageHandler";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import SettingsStore from "../settings/SettingsStore";
 import RoomProvider from "./RoomProvider";
 
 export default class SpaceProvider extends RoomProvider {
-    protected getRooms() {
-        return MatrixClientPeg.get().getVisibleRooms().filter(r => r.isSpaceRoom());
+    protected getRooms(): Room[] {
+        return MatrixClientPeg.safeGet()
+            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .filter((r) => r.isSpaceRoom());
     }
 
-    getName() {
-        return _t("Spaces");
+    public getName(): string {
+        return _t("common|spaces");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
                 role="listbox"
-                aria-label={_t("Space Autocomplete")}
+                aria-label={_t("composer|autocomplete|space_a11y")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

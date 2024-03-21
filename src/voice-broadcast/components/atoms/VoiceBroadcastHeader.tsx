@@ -12,46 +12,134 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
 
-import { LiveBadge } from "../..";
-import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/voip/call-view/mic-on.svg";
+import { LiveBadge, VoiceBroadcastLiveness } from "../..";
+import { Icon as LiveIcon } from "../../../../res/img/compound/live-16px.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
+import { Icon as TimerIcon } from "../../../../res/img/compound/timer-16px.svg";
+import { Icon as XIcon } from "../../../../res/img/compound/close-16px.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
+import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
+import Clock from "../../../components/views/audio_messages/Clock";
+import { formatTimeLeft } from "../../../DateUtils";
+import Spinner from "../../../components/views/elements/Spinner";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { Action } from "../../../dispatcher/actions";
+import dis from "../../../dispatcher/dispatcher";
+import AccessibleTooltipButton from "../../../components/views/elements/AccessibleTooltipButton";
 
 interface VoiceBroadcastHeaderProps {
-    live: boolean;
-    sender: RoomMember;
+    linkToRoom?: boolean;
+    live?: VoiceBroadcastLiveness;
+    liveBadgePosition?: "middle" | "right";
+    onCloseClick?: () => void;
+    onMicrophoneLineClick?: ((e: ButtonEvent) => void | Promise<void>) | null;
     room: Room;
+    microphoneLabel?: string;
     showBroadcast?: boolean;
+    showBuffering?: boolean;
+    bufferingPosition?: "line" | "title";
+    timeLeft?: number;
+    showClose?: boolean;
 }
 
 export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
-    live,
-    sender,
+    linkToRoom = false,
+    live = "not-live",
+    liveBadgePosition = "right",
+    onCloseClick = (): void => {},
+    onMicrophoneLineClick = null,
     room,
+    microphoneLabel,
     showBroadcast = false,
+    showBuffering = false,
+    bufferingPosition = "line",
+    showClose = false,
+    timeLeft,
 }) => {
-    const broadcast = showBroadcast
-        ? <div className="mx_VoiceBroadcastHeader_line">
+    const broadcast = showBroadcast && (
+        <div className="mx_VoiceBroadcastHeader_line">
             <LiveIcon className="mx_Icon mx_Icon_16" />
-            { _t("Voice broadcast") }
+            {_t("voice_broadcast|action")}
         </div>
-        : null;
-    const liveBadge = live ? <LiveBadge /> : null;
-    return <div className="mx_VoiceBroadcastHeader">
-        <RoomAvatar room={room} width={32} height={32} />
-        <div className="mx_VoiceBroadcastHeader_content">
-            <div className="mx_VoiceBroadcastHeader_room">
-                { room.name }
-            </div>
-            <div className="mx_VoiceBroadcastHeader_line">
-                <MicrophoneIcon className="mx_Icon mx_Icon_16" />
-                <span>{ sender.name }</span>
-            </div>
-            { broadcast }
+    );
+
+    const liveBadge = live !== "not-live" && <LiveBadge grey={live === "grey"} />;
+
+    const closeButton = showClose && (
+        <AccessibleButton onClick={onCloseClick}>
+            <XIcon className="mx_Icon mx_Icon_16" />
+        </AccessibleButton>
+    );
+
+    const timeLeftLine = timeLeft && (
+        <div className="mx_VoiceBroadcastHeader_line">
+            <TimerIcon className="mx_Icon mx_Icon_16" />
+            <Clock formatFn={formatTimeLeft} seconds={timeLeft} />
         </div>
-        { liveBadge }
-    </div>;
+    );
+
+    const bufferingLine = showBuffering && bufferingPosition === "line" && (
+        <div className="mx_VoiceBroadcastHeader_line">
+            <Spinner w={14} h={14} />
+            {_t("voice_broadcast|buffering")}
+        </div>
+    );
+
+    const microphoneLineClasses = classNames({
+        mx_VoiceBroadcastHeader_line: true,
+        ["mx_VoiceBroadcastHeader_mic--clickable"]: onMicrophoneLineClick,
+    });
+
+    const microphoneLine = microphoneLabel && (
+        <AccessibleTooltipButton
+            className={microphoneLineClasses}
+            onClick={onMicrophoneLineClick}
+            title={_t("voip|change_input_device")}
+        >
+            <MicrophoneIcon className="mx_Icon mx_Icon_16" />
+            <span>{microphoneLabel}</span>
+        </AccessibleTooltipButton>
+    );
+
+    const onRoomAvatarOrNameClick = (): void => {
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            metricsTrigger: undefined, // other
+        });
+    };
+
+    let roomAvatar = <RoomAvatar room={room} size="32px" />;
+    let roomName = (
+        <div className="mx_VoiceBroadcastHeader_room_wrapper">
+            <div className="mx_VoiceBroadcastHeader_room">{room.name}</div>
+            {showBuffering && bufferingPosition === "title" && <Spinner w={12} h={12} />}
+        </div>
+    );
+
+    if (linkToRoom) {
+        roomAvatar = <AccessibleButton onClick={onRoomAvatarOrNameClick}>{roomAvatar}</AccessibleButton>;
+
+        roomName = <AccessibleButton onClick={onRoomAvatarOrNameClick}>{roomName}</AccessibleButton>;
+    }
+
+    return (
+        <div className="mx_VoiceBroadcastHeader">
+            {roomAvatar}
+            <div className="mx_VoiceBroadcastHeader_content">
+                {roomName}
+                {microphoneLine}
+                {timeLeftLine}
+                {broadcast}
+                {bufferingLine}
+                {liveBadgePosition === "middle" && liveBadge}
+            </div>
+            {liveBadgePosition === "right" && liveBadge}
+            {closeButton}
+        </div>
+    );
 };

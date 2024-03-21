@@ -12,8 +12,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, HTMLAttributes } from 'react';
-import classNames from 'classnames';
+import React, { ReactNode, HTMLAttributes } from "react";
+import classNames from "classnames";
+
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface Props extends HTMLAttributes<HTMLFieldSetElement> {
     // section title
@@ -21,11 +23,16 @@ interface Props extends HTMLAttributes<HTMLFieldSetElement> {
     description?: string | ReactNode;
 }
 
-const SettingsFieldset: React.FC<Props> = ({ legend, className, children, description, ...rest }) =>
-    <fieldset {...rest} className={classNames('mx_SettingsFieldset', className)}>
-        <legend className='mx_SettingsFieldset_legend'>{ legend }</legend>
-        { description && <div className='mx_SettingsFieldset_description'>{ description }</div> }
-        { children }
-    </fieldset>;
+const SettingsFieldset: React.FC<Props> = ({ legend, className, children, description, ...rest }) => (
+    <fieldset {...rest} className={classNames("mx_SettingsFieldset", className)}>
+        <legend className="mx_SettingsFieldset_legend">{legend}</legend>
+        {description && (
+            <div className="mx_SettingsFieldset_description">
+                <SettingsSubsectionText>{description}</SettingsSubsectionText>
+            </div>
+        )}
+        <div className="mx_SettingsFieldset_content">{children}</div>
+    </fieldset>
+);
 
 export default SettingsFieldset;

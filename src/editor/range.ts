@@ -28,7 +28,11 @@ export default class Range {
     private _lastStart: DocumentPosition;
     private _initializedEmpty: boolean;
 
-    constructor(public readonly model: EditorModel, positionA: DocumentPosition, positionB = positionA) {
+    public constructor(
+        public readonly model: EditorModel,
+        positionA: DocumentPosition,
+        positionB = positionA,
+    ) {
         const bIsLarger = positionA.compare(positionB) < 0;
         this._start = bIsLarger ? positionA : positionB;
         this._end = bIsLarger ? positionB : positionA;
@@ -47,7 +51,7 @@ export default class Range {
         return this._initializedEmpty;
     }
 
-    public setWasEmpty(value: boolean) {
+    public setWasEmpty(value: boolean): void {
         this._initializedEmpty = value;
     }
 
@@ -118,7 +122,7 @@ export default class Range {
             const serializedPart = part.serialize();
             serializedPart.text = part.text.substring(startIdx, endIdx);
             const newPart = this.model.partCreator.deserializePart(serializedPart);
-            parts.push(newPart);
+            if (newPart) parts.push(newPart);
         });
         return parts;
     }

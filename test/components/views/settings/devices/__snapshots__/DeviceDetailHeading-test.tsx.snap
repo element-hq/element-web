@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<DeviceDetailHeading /> displays name edit form on rename button click 1`] = `
-Object {
+{
   "container": <div>
     <form
       aria-disabled="false"
@@ -72,17 +72,17 @@ Object {
 `;
 
 exports[`<DeviceDetailHeading /> renders device name 1`] = `
-Object {
+{
   "container": <div>
     <div
       class="mx_DeviceDetailHeading"
       data-testid="device-detail-heading"
     >
-      <h3
-        class="mx_Heading_h3"
+      <h4
+        class="mx_Heading_h4"
       >
         My device
-      </h3>
+      </h4>
       <div
         class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
         data-testid="device-heading-rename-cta"

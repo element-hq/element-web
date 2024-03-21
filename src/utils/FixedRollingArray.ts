@@ -28,7 +28,10 @@ export class FixedRollingArray<T> {
      * @param width The width of the array.
      * @param padValue The value to seed the array with.
      */
-    constructor(private width: number, padValue: T) {
+    public constructor(
+        private width: number,
+        padValue: T,
+    ) {
         this.samples = arraySeed(padValue, this.width);
     }
 
@@ -43,7 +46,7 @@ export class FixedRollingArray<T> {
      * Pushes a value to the array.
      * @param value The value to push.
      */
-    public pushValue(value: T) {
+    public pushValue(value: T): void {
         let swap = arrayFastClone(this.samples);
         swap.splice(0, 0, value);
         if (swap.length > this.width) {

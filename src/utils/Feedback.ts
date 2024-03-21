@@ -19,5 +19,5 @@ import SettingsStore from "../settings/SettingsStore";
 import { UIFeature } from "../settings/UIFeature";
 
 export function shouldShowFeedback(): boolean {
-    return SdkConfig.get().bug_report_endpoint_url && SettingsStore.getValue(UIFeature.Feedback);
+    return !!SdkConfig.get().bug_report_endpoint_url && SettingsStore.getValue(UIFeature.Feedback);
 }

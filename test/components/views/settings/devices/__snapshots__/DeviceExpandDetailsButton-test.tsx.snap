@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<DeviceExpandDetailsButton /> renders when expanded 1`] = `
-Object {
+{
   "container": <div>
     <div
-      aria-label="Toggle device details"
+      aria-label="Hide details"
       class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_DeviceExpandDetailsButton_expanded mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
       role="button"
       tabindex="0"
@@ -18,10 +18,10 @@ Object {
 `;
 
 exports[`<DeviceExpandDetailsButton /> renders when not expanded 1`] = `
-Object {
+{
   "container": <div>
     <div
-      aria-label="Toggle device details"
+      aria-label="Show details"
       class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
       role="button"
       tabindex="0"

@@ -13,21 +13,33 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
-import Heading from "../../typography/Heading";
-
-export interface SettingsTabProps {
-    heading: string;
+export interface SettingsTabProps extends Omit<HTMLAttributes<HTMLDivElement>, "className"> {
     children?: React.ReactNode;
 }
 
-const SettingsTab: React.FC<SettingsTabProps> = ({ heading, children }) => (
-    <div className="mx_SettingsTab">
-        <Heading size='h2'>{ heading }</Heading>
-        <div className="mx_SettingsTab_sections">
-            { children }
-        </div>
+/**
+ * Container for a tab of settings panel content
+ * Should contain one or more SettingsSection
+ * Settings width, padding and spacing between sections
+ * Eg:
+ * ```
+ * <SettingsTab>
+ *      <SettingsSection heading="General">
+ *           <SettingsSubsection heading="Profile">
+ *              // profile settings form
+ *          <SettingsSubsection>
+ *          <SettingsSubsection heading="Account">
+ *              // account settings
+ *          <SettingsSubsection>
+ *      </SettingsSection>
+ * </SettingsTab>
+ * ```
+ */
+const SettingsTab: React.FC<SettingsTabProps> = ({ children, ...rest }) => (
+    <div {...rest} className="mx_SettingsTab">
+        <div className="mx_SettingsTab_sections">{children}</div>
     </div>
 );
 

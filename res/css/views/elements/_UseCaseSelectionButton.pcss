@@ -29,7 +29,7 @@ limitations under the License.
 
     .mx_UseCaseSelectionButton_icon {
         /* workaround: design expects a layering of two colors */
-        background: linear-gradient(0deg, rgba(172, 59, 168, 0.15), rgba(172, 59, 168, 0.15)), #FFFFFF;
+        background: linear-gradient(0deg, rgba(172, 59, 168, 0.15), rgba(172, 59, 168, 0.15)), #ffffff;
         border-radius: 14px;
         padding: $spacing-8;
         margin-bottom: $spacing-16;
@@ -39,7 +39,7 @@ limitations under the License.
             display: block;
             /* this has to remain the same color across all themes,
                as its background has a fixed color as well */
-            background: #1E1E1E;
+            background: #1e1e1e;
             mask-position: center;
             mask-repeat: no-repeat;
             mask-size: contain;
@@ -48,19 +48,20 @@ limitations under the License.
         }
 
         &.mx_UseCaseSelectionButton_messaging::before {
-            mask-image: url('$(res)/img/element-icons/chat-bubble.svg');
+            mask-image: url("$(res)/img/element-icons/chat-bubble.svg");
         }
 
         &.mx_UseCaseSelectionButton_work::before {
-            mask-image: url('$(res)/img/element-icons/view-community.svg');
+            mask-image: url("$(res)/img/element-icons/view-community.svg");
         }
 
         &.mx_UseCaseSelectionButton_community::before {
-            mask-image: url('$(res)/img/globe.svg');
+            mask-image: url("$(res)/img/globe.svg");
         }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         box-shadow: 0 $spacing-4 $spacing-8 rgba(0, 0, 0, 0.08);
         transform: translate(0, -$spacing-8);
     }
@@ -87,7 +88,7 @@ limitations under the License.
             width: 12px;
             height: 12px;
 
-            mask-image: url('$(res)/img/element-icons/check-white.svg');
+            mask-image: url("$(res)/img/element-icons/check-white.svg");
         }
     }
 

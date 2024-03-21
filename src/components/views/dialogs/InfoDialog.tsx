@@ -15,53 +15,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, KeyboardEvent } from 'react';
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
-import { IDialogProps } from "./IDialogProps";
+import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
-interface IProps extends IDialogProps {
+interface IProps {
+    top?: ReactNode;
     title?: string;
     description?: ReactNode;
     className?: string;
     button?: boolean | string;
     hasCloseButton?: boolean;
     fixedWidth?: boolean;
-    onKeyDown?(event: KeyboardEvent): void;
+    onKeyDown?(event: KeyboardEvent | React.KeyboardEvent): void;
+    onFinished(): void;
 }
 
 export default class InfoDialog extends React.Component<IProps> {
-    static defaultProps = {
-        title: '',
-        description: '',
+    public static defaultProps: Partial<IProps> = {
+        title: "",
+        description: "",
         hasCloseButton: false,
     };
 
-    private onFinished = () => {
+    private onFinished = (): void => {
         this.props.onFinished();
     };
 
-    render() {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_InfoDialog"
                 onFinished={this.props.onFinished}
+                top={this.props.top}
                 title={this.props.title}
-                contentId='mx_Dialog_content'
+                contentId="mx_Dialog_content"
                 hasCancel={this.props.hasCloseButton}
                 onKeyDown={this.props.onKeyDown}
                 fixedWidth={this.props.fixedWidth}
             >
                 <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
-                    { this.props.description }
+                    {this.props.description}
                 </div>
-                { this.props.button !== false && <DialogButtons primaryButton={this.props.button || _t('OK')}
-                    onPrimaryButtonClick={this.onFinished}
-                    hasCancel={false}
-                /> }
+                {this.props.button !== false && (
+                    <DialogButtons
+                        primaryButton={this.props.button || _t("action|ok")}
+                        onPrimaryButtonClick={this.onFinished}
+                        hasCancel={false}
+                    />
+                )}
             </BaseDialog>
         );
     }

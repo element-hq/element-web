@@ -16,5 +16,6 @@ limitations under the License.
 
 import { TimelineRenderingType } from "./contexts/RoomContext";
 
-export const editorRoomKey = (roomId: string, context: TimelineRenderingType) => `mx_edit_room_${roomId}_${context}`;
-export const editorStateKey = (eventId: string) => `mx_edit_state_${eventId}`;
+export const editorRoomKey = (roomId: string, context: TimelineRenderingType): string =>
+    `mx_edit_room_${roomId}_${context}`;
+export const editorStateKey = (eventId: string): string => `mx_edit_state_${eventId}`;

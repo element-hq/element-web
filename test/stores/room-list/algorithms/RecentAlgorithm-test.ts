@@ -14,21 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { stubClient, mkRoom, mkMessage } from "../../../test-utils";
+import { mkMessage, mkRoom, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import "../../../../src/stores/room-list/RoomListStore";
 import { RecentAlgorithm } from "../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { EffectiveMembership } from "../../../../src/utils/membership";
 import { makeThreadEvent, mkThread } from "../../../test-utils/threads";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
 
 describe("RecentAlgorithm", () => {
-    let algorithm;
-    let cli;
+    let algorithm: RecentAlgorithm;
+    let cli: MatrixClient;
+
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         algorithm = new RecentAlgorithm();
     });
 
@@ -65,6 +67,7 @@ describe("RecentAlgorithm", () => {
 
         it("returns a fake ts for rooms without a timeline", () => {
             const room = mkRoom(cli, "!new:example.org");
+            // @ts-ignore
             room.timeline = undefined;
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
         });
@@ -102,7 +105,7 @@ describe("RecentAlgorithm", () => {
             room1.addLiveEvents([evt]);
             room2.addLiveEvents([evt2]);
 
-            expect(algorithm.sortRooms([room2, room1])).toEqual([room1, room2]);
+            expect(algorithm.sortRooms([room2, room1], DefaultTagID.Untagged)).toEqual([room1, room2]);
         });
 
         it("orders rooms without messages first", () => {
@@ -122,7 +125,7 @@ describe("RecentAlgorithm", () => {
 
             room1.addLiveEvents([evt]);
 
-            expect(algorithm.sortRooms([room2, room1])).toEqual([room2, room1]);
+            expect(algorithm.sortRooms([room2, room1], DefaultTagID.Untagged)).toEqual([room2, room1]);
 
             const { events } = mkThread({
                 room: room1,
@@ -162,21 +165,21 @@ describe("RecentAlgorithm", () => {
             });
             room2.addLiveEvents(events2);
 
-            expect(algorithm.sortRooms([room1, room2])).toEqual([room2, room1]);
+            expect(algorithm.sortRooms([room1, room2], DefaultTagID.Untagged)).toEqual([room2, room1]);
 
             const threadReply = makeThreadEvent({
                 user: "@bob:matrix.org",
                 room: room1.roomId,
                 event: true,
                 msg: `hello world`,
-                rootEventId: rootEvent.getId(),
-                replyToEventId: rootEvent.getId(),
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: rootEvent.getId()!,
                 // replies are 1ms after each other
                 ts: 50,
             });
             room1.addLiveEvents([threadReply]);
 
-            expect(algorithm.sortRooms([room1, room2])).toEqual([room1, room2]);
+            expect(algorithm.sortRooms([room1, room2], DefaultTagID.Untagged)).toEqual([room1, room2]);
         });
     });
 });

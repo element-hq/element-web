@@ -23,7 +23,8 @@ import { tryTransformPermalinkToLocalHref } from "./Permalinks";
  */
 export function navigateToPermalink(uri: string): void {
     const localUri = tryTransformPermalinkToLocalHref(uri);
-    if (!localUri || localUri === uri) { // parse failure can lead to an unmodified URL
+    if (!localUri || localUri === uri) {
+        // parse failure can lead to an unmodified URL
         throw new Error("Failed to transform URI");
     }
     window.location.hash = localUri; // it'll just be a fragment

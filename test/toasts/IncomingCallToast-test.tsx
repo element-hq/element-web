@@ -17,12 +17,16 @@ limitations under the License.
 import React from "react";
 import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room, RoomStateEvent, MatrixEvent, MatrixEventEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+// eslint-disable-next-line no-restricted-imports
+import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
 
-import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import {
     useMockedCalls,
     MockedCall,
@@ -39,14 +43,15 @@ import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingSt
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import ToastStore from "../../src/stores/ToastStore";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
+import { AudioID } from "../../src/LegacyCallHandler";
 
 describe("IncomingCallEvent", () => {
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
-    jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => { });
+    jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
     let client: Mocked<MatrixClient>;
     let room: Room;
+    let notifyContent: ICallNotifyContent;
     let alice: RoomMember;
     let bob: RoomMember;
     let call: MockedCall;
@@ -60,20 +65,29 @@ describe("IncomingCallEvent", () => {
 
     beforeEach(async () => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
+
+        const audio = document.createElement("audio");
+        audio.id = AudioID.Ring;
+        document.body.appendChild(audio);
 
         room = new Room("!1:example.org", client, "@alice:example.org");
-
+        notifyContent = {
+            call_id: "",
+            getRoomId: () => room.roomId,
+        } as unknown as ICallNotifyContent;
         alice = mkRoomMember(room.roomId, "@alice:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
-            store => setupAsyncStoreWithClient(store, client),
-        ));
+        await Promise.all(
+            [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
+                setupAsyncStoreWithClient(store, client),
+            ),
+        );
 
         MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);
@@ -82,7 +96,7 @@ describe("IncomingCallEvent", () => {
 
         widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
-            stop: () => { },
+            stop: () => {},
         } as unknown as ClientWidgetApi);
 
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
@@ -97,18 +111,38 @@ describe("IncomingCallEvent", () => {
         jest.restoreAllMocks();
     });
 
-    const renderToast = () => { render(<IncomingCallToast callEvent={call.event} />); };
+    const renderToast = () => {
+        call.event.getContent = () => notifyContent as any;
+        render(<IncomingCallToast notifyEvent={call.event} />);
+    };
 
     it("correctly shows all the information", () => {
-        call.participants = new Set([alice, bob]);
+        call.participants = new Map([
+            [alice, new Set("a")],
+            [bob, new Set(["b1", "b2"])],
+        ]);
         renderToast();
 
         screen.getByText("Video call started");
         screen.getByText("Video");
-        screen.getByLabelText("2 participants");
+        screen.getByLabelText("3 people joined");
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Close" });
+    });
+
+    it("start ringing on ring notify event", () => {
+        call.event.getContent = () =>
+            ({
+                ...notifyContent,
+                notify_type: "ring",
+            }) as any;
+        const playMock = jest.fn();
+        const audio = { play: playMock, paused: true };
+
+        jest.spyOn(document, "getElementById").mockReturnValue(audio as any);
+        render(<IncomingCallToast notifyEvent={call.event} />);
+        expect(playMock).toHaveBeenCalled();
     });
 
     it("correctly renders toast without a call", () => {
@@ -129,14 +163,42 @@ describe("IncomingCallEvent", () => {
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
         fireEvent.click(screen.getByRole("button", { name: "Join" }));
-        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: true,
-        }));
-        await waitFor(() => expect(toastStore.dismissToast).toHaveBeenCalledWith(
-            getIncomingCallToastKey(call.event.getStateKey()!),
-        ));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                skipLobby: false,
+                view_call: true,
+            }),
+        );
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
+
+        defaultDispatcher.unregister(dispatcherRef);
+    });
+    it("skips lobby when using shift key click", async () => {
+        renderToast();
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+
+        fireEvent.click(screen.getByRole("button", { name: "Join" }), { shiftKey: true });
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                skipLobby: true,
+                view_call: true,
+            }),
+        );
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
 
         defaultDispatcher.unregister(dispatcherRef);
     });
@@ -148,9 +210,11 @@ describe("IncomingCallEvent", () => {
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
         fireEvent.click(screen.getByRole("button", { name: "Close" }));
-        await waitFor(() => expect(toastStore.dismissToast).toHaveBeenCalledWith(
-            getIncomingCallToastKey(call.event.getStateKey()!),
-        ));
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
 
         defaultDispatcher.unregister(dispatcherRef);
     });
@@ -164,8 +228,38 @@ describe("IncomingCallEvent", () => {
             view_call: true,
         });
 
-        await waitFor(() => expect(toastStore.dismissToast).toHaveBeenCalledWith(
-            getIncomingCallToastKey(call.event.getStateKey()!),
-        ));
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
+    });
+
+    it("closes toast when the call event is redacted", async () => {
+        renderToast();
+
+        const event = room.currentState.getStateEvents(MockedCall.EVENT_TYPE, "1")!;
+        event.emit(MatrixEventEvent.BeforeRedaction, event, {} as unknown as MatrixEvent);
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
+    });
+
+    it("closes toast when the matrixRTC session has ended", async () => {
+        renderToast();
+
+        client.matrixRTC.emit(MatrixRTCSessionManagerEvents.SessionEnded, room.roomId, {
+            callId: notifyContent.call_id,
+            room: room,
+        } as unknown as MatrixRTCSession);
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(
+                getIncomingCallToastKey(notifyContent.call_id, room.roomId),
+            ),
+        );
     });
 });

@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { InvalidEventError, M_POLL_START_EVENT_CONTENT, PollStartEvent } from "matrix-events-sdk";
+import { MatrixEvent, PollStartEventContent } from "matrix-js-sdk/src/matrix";
+import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
+import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -27,12 +28,12 @@ export class PollStartEventPreview implements IPreview {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();
 
         if (event.isRelation("m.replace")) {
             // It's an edit, generate the preview on the new text
-            eventContent = event.getContent()['m.new_content'];
+            eventContent = event.getContent()["m.new_content"];
         }
 
         // Check we have the information we need, and bail out if not
@@ -43,18 +44,16 @@ export class PollStartEventPreview implements IPreview {
         try {
             const poll = new PollStartEvent({
                 type: event.getType(),
-                content: eventContent as M_POLL_START_EVENT_CONTENT,
+                content: eventContent as PollStartEventContent,
             });
 
             let question = poll.question.text.trim();
             question = sanitizeForTranslation(question);
 
-            if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+            if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
                 return question;
             } else {
-                return _t("%(senderName)s: %(message)s",
-                    { senderName: getSenderName(event), message: question },
-                );
+                return _t("event_preview|m.text", { senderName: getSenderName(event), message: question });
             }
         } catch (e) {
             if (e instanceof InvalidEventError) {

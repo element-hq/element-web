@@ -23,5 +23,5 @@ export function isLoggedIn(): boolean {
     // store to hold this state.
     // See also https://github.com/vector-im/element-web/issues/15034.
     const app = window.matrixChat;
-    return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
+    return (app as MatrixChat)?.state.view === Views.LOGGED_IN;
 }

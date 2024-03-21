@@ -15,9 +15,12 @@ limitations under the License.
 */
 
 import React, { ComponentClass, createContext, forwardRef, useContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-const MatrixClientContext = createContext<MatrixClient>(undefined);
+// This context is available to components under LoggedInView,
+// the context must not be used by components outside a MatrixClientContext tree.
+// This assertion allows us to make the type not nullable.
+const MatrixClientContext = createContext<MatrixClient>(null as any);
 MatrixClientContext.displayName = "MatrixClientContext";
 export default MatrixClientContext;
 
@@ -25,26 +28,26 @@ export interface MatrixClientProps {
     mxClient: MatrixClient;
 }
 
-export function useMatrixClientContext() {
+export function useMatrixClientContext(): MatrixClient {
     return useContext(MatrixClientContext);
 }
 
 const matrixHOC = <ComposedComponentProps extends {}>(
     ComposedComponent: ComponentClass<ComposedComponentProps>,
-) => {
+): ((
+    props: Omit<ComposedComponentProps, "mxClient"> & React.RefAttributes<InstanceType<typeof ComposedComponent>>,
+) => React.ReactElement | null) => {
     type ComposedComponentInstance = InstanceType<typeof ComposedComponent>;
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
 
     const TypedComponent = ComposedComponent;
 
-    return forwardRef<ComposedComponentInstance, Omit<ComposedComponentProps, 'mxClient'>>(
-        (props, ref) => {
-            const client = useContext(MatrixClientContext);
+    return forwardRef<ComposedComponentInstance, Omit<ComposedComponentProps, "mxClient">>((props, ref) => {
+        const client = useContext(MatrixClientContext);
 
-            // @ts-ignore
-            return <TypedComponent ref={ref} {...props} mxClient={client} />;
-        },
-    );
+        // @ts-ignore
+        return <TypedComponent ref={ref} {...props} mxClient={client} />;
+    });
 };
 export const withMatrixClientHOC = matrixHOC;

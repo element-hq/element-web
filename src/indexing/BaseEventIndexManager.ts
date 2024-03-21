@@ -14,14 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
-import { Direction } from "matrix-js-sdk/src/matrix";
+import {
+    IMatrixProfile,
+    IEventWithRoomId as IMatrixEvent,
+    IResultRoomEvents,
+    Direction,
+} from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
 export interface ICrawlerCheckpoint {
     roomId: string;
-    token: string;
+    token: string | null;
     fullCrawl?: boolean;
     direction: Direction;
 }
@@ -70,7 +74,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve to true if event indexing
      * is supported, false otherwise.
      */
-    async supportsEventIndexing(): Promise<boolean> {
+    public async supportsEventIndexing(): Promise<boolean> {
         return true;
     }
     /**
@@ -82,7 +86,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(userId: string, deviceId: string): Promise<void> {
+    public async initEventIndex(userId: string, deviceId: string): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -96,22 +100,15 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve when the was queued up for
      * addition.
      */
-    async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
+    public async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
         throw new Error("Unimplemented");
     }
 
-    async deleteEvent(eventId: string): Promise<boolean> {
+    public async deleteEvent(eventId: string): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 
-    async isEventIndexEmpty(): Promise<boolean> {
-        throw new Error("Unimplemented");
-    }
-
-    /**
-     * Check if our event index is empty.
-     */
-    indexIsEmpty(): Promise<boolean> {
+    public async isEventIndexEmpty(): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 
@@ -124,7 +121,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<boolean>} Returns true if the index contains events for
      * the given room, false otherwise.
      */
-    isRoomIndexed(roomId: string): Promise<boolean> {
+    public isRoomIndexed(roomId: string): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 
@@ -134,7 +131,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
-    async getStats(): Promise<IIndexStats> {
+    public async getStats(): Promise<IIndexStats> {
         throw new Error("Unimplemented");
     }
 
@@ -143,7 +140,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<number>} A promise that will resolve to the user stored
      * version number.
      */
-    async getUserVersion(): Promise<number> {
+    public async getUserVersion(): Promise<number> {
         throw new Error("Unimplemented");
     }
 
@@ -156,7 +153,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<void>} A promise that will resolve once the new version
      * is stored.
      */
-    async setUserVersion(version: number): Promise<void> {
+    public async setUserVersion(version: number): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -166,7 +163,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the queued up events
      * were added to the index.
      */
-    async commitLiveEvents(): Promise<void> {
+    public async commitLiveEvents(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -179,7 +176,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    async searchEventIndex(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
+    public async searchEventIndex(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
         throw new Error("Unimplemented");
     }
 
@@ -200,7 +197,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve to true if all the events
      * were already added to the index, false otherwise.
      */
-    async addHistoricEvents(
+    public async addHistoricEvents(
         events: IEventAndProfile[],
         checkpoint: ICrawlerCheckpoint | null,
         oldCheckpoint: ICrawlerCheckpoint | null,
@@ -217,7 +214,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been stored.
      */
-    async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
+    public async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -230,7 +227,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been removed.
      */
-    async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
+    public async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -240,7 +237,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<[ICrawlerCheckpoint]>} A promise that will resolve to an
      * array of crawler checkpoints once they have been loaded from the index.
      */
-    async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
+    public async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
         throw new Error("Unimplemented");
     }
 
@@ -260,7 +257,7 @@ export default abstract class BaseEventIndexManager {
      * array of Matrix events that contain mxc URLs accompanied with the
      * historic profile of the sender.
      */
-    async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
+    public async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
         throw new Error("Unimplemented");
     }
 
@@ -270,7 +267,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the event index has
      * been closed.
      */
-    async closeEventIndex(): Promise<void> {
+    public async closeEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -280,7 +277,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the event index has
      * been deleted.
      */
-    async deleteEventIndex(): Promise<void> {
+    public async deleteEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 }

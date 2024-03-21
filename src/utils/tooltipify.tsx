@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
@@ -31,7 +32,7 @@ import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
  *   React components that have been mounted by this function. The initial caller
  *   should pass in an empty array to seed the accumulator.
  */
-export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Element[], containers: Element[]) {
+export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Element[], containers: Element[]): void {
     if (!PlatformPeg.get()?.needsUrlTooltips()) {
         return;
     }
@@ -44,10 +45,12 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
             continue;
         }
 
-        if (node.tagName === "A" && node.getAttribute("href")
-            && node.getAttribute("href") !== node.textContent.trim()
+        if (
+            node.tagName === "A" &&
+            node.getAttribute("href") &&
+            node.getAttribute("href") !== node.textContent?.trim()
         ) {
-            let href = node.getAttribute("href");
+            let href = node.getAttribute("href")!;
             try {
                 href = new URL(href, window.location.href).toString();
             } catch (e) {
@@ -57,9 +60,13 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
             // The node's innerHTML was already sanitized before being rendered in the first place, here we are just
             // wrapping the link with the LinkWithTooltip component, keeping the same children. Ideally we'd do this
             // without the superfluous span but this is not something React trivially supports at this time.
-            const tooltip = <LinkWithTooltip tooltip={href}>
-                <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
-            </LinkWithTooltip>;
+            const tooltip = (
+                <TooltipProvider>
+                    <LinkWithTooltip tooltip={href}>
+                        <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
+                    </LinkWithTooltip>
+                </TooltipProvider>
+            );
 
             ReactDOM.render(tooltip, node);
             containers.push(node);
@@ -79,7 +86,7 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
  *
  * @param {Element[]} containers - array of tooltip containers to unmount
  */
-export function unmountTooltips(containers: Element[]) {
+export function unmountTooltips(containers: Element[]): void {
     for (const container of containers) {
         ReactDOM.unmountComponentAtNode(container);
     }

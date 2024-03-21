@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
@@ -28,15 +28,15 @@ export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
-    constructor(private getRoomFn: FetchRoomFn) {
+    public constructor(private getRoomFn: FetchRoomFn) {
         super();
     }
 
-    public get symbol(): string {
-        return this._color === NotificationColor.Unsent ? "!" : null;
+    public get symbol(): string | null {
+        return this._level === NotificationLevel.Unsent ? "!" : null;
     }
 
-    public setRooms(rooms: Room[]) {
+    public setRooms(rooms: Room[]): void {
         const oldRooms = this.rooms;
         const diff = arrayDiff(oldRooms, rooms);
         this.rooms = rooms;
@@ -55,11 +55,11 @@ export class SpaceNotificationState extends NotificationState {
         this.calculateTotalState();
     }
 
-    public getFirstRoomWithNotifications() {
-        return Object.values(this.states).find(state => state.color >= this.color)?.room.roomId;
+    public getFirstRoomWithNotifications(): string | undefined {
+        return Object.values(this.states).find((state) => state.level >= this.level)?.room.roomId;
     }
 
-    public destroy() {
+    public destroy(): void {
         super.destroy();
         for (const state of Object.values(this.states)) {
             state.off(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
@@ -67,26 +67,24 @@ export class SpaceNotificationState extends NotificationState {
         this.states = {};
     }
 
-    private onRoomNotificationStateUpdate = () => {
+    private onRoomNotificationStateUpdate = (): void => {
         this.calculateTotalState();
     };
 
-    private calculateTotalState() {
+    private calculateTotalState(): void {
         const snapshot = this.snapshot();
 
         this._count = 0;
-        this._color = NotificationColor.None;
+        this._level = NotificationLevel.None;
         for (const [roomId, state] of Object.entries(this.states)) {
-            const roomTags = RoomListStore.instance.getTagsForRoom(this.rooms.find(r => r.roomId === roomId));
+            const room = this.rooms.find((r) => r.roomId === roomId);
+            const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
 
             // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
-            if (
-                roomTags.includes(DefaultTagID.LowPriority) &&
-                state.color === NotificationColor.Bold
-            ) continue;
+            if (roomTags.includes(DefaultTagID.LowPriority) && state.level === NotificationLevel.Activity) continue;
 
             this._count += state.count;
-            this._color = Math.max(this.color, state.color);
+            this._level = Math.max(this.level, state.level);
         }
 
         // finally, publish an update if needed

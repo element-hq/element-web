@@ -25,16 +25,6 @@ limitations under the License.
     text-align: left;
 }
 
-.mx_RoomStatusBar_typingIndicatorAvatars .mx_BaseAvatar_image {
-    margin-right: -12px;
-    border: 1px solid $background;
-}
-
-.mx_RoomStatusBar_typingIndicatorAvatars .mx_BaseAvatar_initial {
-    padding-left: 1px;
-    padding-top: 1px;
-}
-
 .mx_RoomStatusBar_typingIndicatorRemaining {
     display: inline-block;
     color: #acacac;
@@ -115,13 +105,14 @@ limitations under the License.
             padding-left: 30px; /* 18px for the icon, 2px margin to text, 10px regular padding */
             display: inline-block;
             position: relative;
+            user-select: none;
 
             &:nth-child(2) {
                 border-left: 1px solid $resend-button-divider-color;
             }
 
             &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 left: 10px; /* inset for regular button padding */
                 background-color: $muted-fg-color;
@@ -135,14 +126,14 @@ limitations under the License.
             }
 
             &.mx_RoomStatusBar_unsentCancelAllBtn::before {
-                mask-image: url('$(res)/img/element-icons/trashcan.svg');
+                mask-image: url("$(res)/img/element-icons/trashcan.svg");
             }
 
             &.mx_RoomStatusBar_unsentRetry {
                 padding-left: 34px; /* 28px from above, but +6px to account for the wider icon */
 
                 &::before {
-                    mask-image: url('$(res)/img/element-icons/retry.svg');
+                    mask-image: url("$(res)/img/element-icons/retry.svg");
                 }
             }
         }
@@ -159,7 +150,7 @@ limitations under the License.
     }
 }
 
-.mx_RoomStatusBar_connectionLostBar img {
+.mx_RoomStatusBar_connectionLostBar svg {
     padding-left: 10px;
     padding-right: 10px;
     vertical-align: middle;
@@ -185,7 +176,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_typingBar {
     height: 50px;
-    line-height: $font-50px;
+    line-height: 50px;
 
     color: $primary-content;
     opacity: 0.5;
@@ -204,6 +195,6 @@ limitations under the License.
 
     .mx_RoomStatusBar_typingBar {
         height: 40px;
-        line-height: $font-40px;
+        line-height: 40px;
     }
 }

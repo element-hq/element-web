@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -36,8 +35,8 @@ describe("RightPanelStore", () => {
     let cli: MockedObject<MatrixClient>;
     beforeEach(() => {
         stubClient();
-        cli = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        cli = mocked(MatrixClientPeg.safeGet());
+        DMRoomMap.makeShared(cli);
 
         // Make sure we start with a clean store
         store.reset();
@@ -45,8 +44,8 @@ describe("RightPanelStore", () => {
     });
 
     const viewRoom = async (roomId: string) => {
-        const roomChanged = new Promise<void>(resolve => {
-            const ref = defaultDispatcher.register(payload => {
+        const roomChanged = new Promise<void>((resolve) => {
+            const ref = defaultDispatcher.register((payload) => {
                 if (payload.action === Action.ActiveRoomChanged && payload.newRoomId === roomId) {
                     defaultDispatcher.unregister(ref);
                     resolve();
@@ -113,9 +112,7 @@ describe("RightPanelStore", () => {
             await viewRoom("!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([
-                { phase: RightPanelPhases.RoomSummary, state: {} },
-            ]);
+            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.RoomSummary, state: {} }]);
         });
         it("opens the panel in the given room with the correct phase", () => {
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
@@ -126,9 +123,7 @@ describe("RightPanelStore", () => {
             await viewRoom("!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([
-                { phase: RightPanelPhases.RoomMemberList, state: {} },
-            ]);
+            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.RoomMemberList, state: {} }]);
         });
     });
 
@@ -136,10 +131,11 @@ describe("RightPanelStore", () => {
         it("overwrites history", async () => {
             await viewRoom("!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
-            store.setCards([
-                { phase: RightPanelPhases.RoomSummary },
-                { phase: RightPanelPhases.PinnedMessages },
-            ], true, "!1:example.org");
+            store.setCards(
+                [{ phase: RightPanelPhases.RoomSummary }, { phase: RightPanelPhases.PinnedMessages }],
+                true,
+                "!1:example.org",
+            );
             expect(store.roomPhaseHistory).toEqual([
                 { phase: RightPanelPhases.RoomSummary, state: {} },
                 { phase: RightPanelPhases.PinnedMessages, state: {} },
@@ -171,10 +167,11 @@ describe("RightPanelStore", () => {
 
     describe("popCard", () => {
         it("removes the most recent card", () => {
-            store.setCards([
-                { phase: RightPanelPhases.RoomSummary },
-                { phase: RightPanelPhases.PinnedMessages },
-            ], true, "!1:example.org");
+            store.setCards(
+                [{ phase: RightPanelPhases.RoomSummary }, { phase: RightPanelPhases.PinnedMessages }],
+                true,
+                "!1:example.org",
+            );
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PinnedMessages);
             store.popCard("!1:example.org");
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
@@ -208,15 +205,19 @@ describe("RightPanelStore", () => {
 
     it("doesn't restore member info cards when switching back to a room", async () => {
         await viewRoom("!1:example.org");
-        store.setCards([
-            {
-                phase: RightPanelPhases.RoomMemberList,
-            },
-            {
-                phase: RightPanelPhases.RoomMemberInfo,
-                state: { member: new RoomMember("!1:example.org", "@alice:example.org") },
-            },
-        ], true, "!1:example.org");
+        store.setCards(
+            [
+                {
+                    phase: RightPanelPhases.RoomMemberList,
+                },
+                {
+                    phase: RightPanelPhases.RoomMemberInfo,
+                    state: { member: new RoomMember("!1:example.org", "@alice:example.org") },
+                },
+            ],
+            true,
+            "!1:example.org",
+        );
         expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberInfo);
 
         // Switch away and back

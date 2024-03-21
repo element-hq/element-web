@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type getIframeFn = () => HTMLIFrameElement; // eslint-disable-line @typescript-eslint/naming-convention
+export type GetIframeFn = () => HTMLIFrameElement | null;
 
 export const DEFAULT_STYLES = {
     imgSrc: "",
-    imgStyle: null, // css props
+    imgStyle: null as string | null, // css props
     style: "",
     textContent: "",
 };
@@ -33,7 +33,7 @@ type DownloadOptions = {
 // set up the iframe as a singleton so we don't have to figure out destruction of it down the line.
 let managedIframe: HTMLIFrameElement;
 let onLoadPromise: Promise<void>;
-function getManagedIframe(): { iframe: HTMLIFrameElement, onLoadPromise: Promise<void> } {
+function getManagedIframe(): { iframe: HTMLIFrameElement; onLoadPromise: Promise<void> } {
     if (managedIframe) return { iframe: managedIframe, onLoadPromise };
 
     managedIframe = document.createElement("iframe");
@@ -49,7 +49,7 @@ function getManagedIframe(): { iframe: HTMLIFrameElement, onLoadPromise: Promise
     // noinspection JSConstantReassignment
     managedIframe.sandbox = "allow-scripts allow-downloads allow-downloads-without-user-activation";
 
-    onLoadPromise = new Promise(resolve => {
+    onLoadPromise = new Promise((resolve) => {
         managedIframe.onload = () => {
             resolve();
         };
@@ -68,15 +68,14 @@ function getManagedIframe(): { iframe: HTMLIFrameElement, onLoadPromise: Promise
  * additional control over the styling/position of the iframe itself.
  */
 export class FileDownloader {
-    private onLoadPromise: Promise<void>;
+    private onLoadPromise?: Promise<void>;
 
     /**
      * Creates a new file downloader
      * @param iframeFn Function to get a pre-configured iframe. Set to null to have the downloader
      * use a generic, hidden, iframe.
      */
-    constructor(private iframeFn: getIframeFn = null) {
-    }
+    public constructor(private iframeFn?: GetIframeFn) {}
 
     private get iframe(): HTMLIFrameElement {
         const iframe = this.iframeFn?.();
@@ -85,18 +84,21 @@ export class FileDownloader {
             this.onLoadPromise = managed.onLoadPromise;
             return managed.iframe;
         }
-        this.onLoadPromise = null;
+        this.onLoadPromise = undefined;
         return iframe;
     }
 
-    public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions) {
+    public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions): Promise<void> {
         const iframe = this.iframe; // get the iframe first just in case we need to await onload
         if (this.onLoadPromise) await this.onLoadPromise;
-        iframe.contentWindow.postMessage({
-            ...opts,
-            blob: blob,
-            download: name,
-            auto: autoDownload,
-        }, '*');
+        iframe.contentWindow?.postMessage(
+            {
+                ...opts,
+                blob: blob,
+                download: name,
+                auto: autoDownload,
+            },
+            "*",
+        );
     }
 }

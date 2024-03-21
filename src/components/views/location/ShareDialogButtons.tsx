@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import AccessibleButton from '../elements/AccessibleButton';
-import { Icon as BackIcon } from '../../../../res/img/element-icons/caret-left.svg';
-import { Icon as CloseIcon } from '../../../../res/img/element-icons/cancel-rounded.svg';
+import AccessibleButton from "../elements/AccessibleButton";
+import { Icon as BackIcon } from "../../../../res/img/element-icons/caret-left.svg";
+import { Icon as CloseIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
+import { _t } from "../../../languageHandler";
 
 interface Props {
     onCancel: () => void;
@@ -27,26 +28,30 @@ interface Props {
 }
 
 const ShareDialogButtons: React.FC<Props> = ({ onBack, onCancel, displayBack }) => {
-    return <div className='mx_ShareDialogButtons'>
-        { displayBack &&
+    return (
+        <div className="mx_ShareDialogButtons">
+            {displayBack && (
+                <AccessibleButton
+                    className="mx_ShareDialogButtons_button left"
+                    data-testid="share-dialog-buttons-back"
+                    aria-label={_t("action|back")}
+                    onClick={onBack}
+                    element="button"
+                >
+                    <BackIcon className="mx_ShareDialogButtons_button-icon" />
+                </AccessibleButton>
+            )}
             <AccessibleButton
-                className='mx_ShareDialogButtons_button left'
-                data-test-id='share-dialog-buttons-back'
-                onClick={onBack}
-                element='button'
+                className="mx_ShareDialogButtons_button right"
+                data-testid="share-dialog-buttons-cancel"
+                aria-label={_t("action|close")}
+                onClick={onCancel}
+                element="button"
             >
-                <BackIcon className='mx_ShareDialogButtons_button-icon' />
+                <CloseIcon className="mx_ShareDialogButtons_button-icon" />
             </AccessibleButton>
-        }
-        <AccessibleButton
-            className='mx_ShareDialogButtons_button right'
-            data-test-id='share-dialog-buttons-cancel'
-            onClick={onCancel}
-            element='button'
-        >
-            <CloseIcon className='mx_ShareDialogButtons_button-icon' />
-        </AccessibleButton>
-    </div>;
+        </div>
+    );
 };
 
 export default ShareDialogButtons;

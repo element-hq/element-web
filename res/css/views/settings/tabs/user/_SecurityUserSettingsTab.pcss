@@ -14,43 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SecurityUserSettingsTab_bulkOptions .mx_AccessibleButton {
-    margin-right: 10px;
+.mx_SecurityUserSettingsTab_bulkOptions {
+    display: flex;
+    flex-direction: row;
+    column-gap: $spacing-8;
 }
 
 .mx_SecurityUserSettingsTab_ignoredUser {
-    margin-bottom: 5px;
+    margin-bottom: $spacing-4;
 }
 
 .mx_SecurityUserSettingsTab_ignoredUser .mx_AccessibleButton {
-    margin-right: 10px;
+    margin-right: $spacing-8;
 }
 
-.mx_SecurityUserSettingsTab {
-    .mx_SettingsTab_section {
-        .mx_AccessibleButton_kind_link {
-            font-size: inherit;
-        }
-    }
+.mx_SecurityUserSettingsTab_warning {
+    color: $alert;
+    position: relative;
+    padding-left: 40px;
 
-    .mx_SecurityUserSettingsTab_warning {
-        color: $alert;
-        position: relative;
-        padding-left: 40px;
-        margin-top: 30px;
-
-        &::before {
-            mask-repeat: no-repeat;
-            mask-position: 0 center;
-            mask-size: $font-24px;
-            position: absolute;
-            width: $font-24px;
-            height: $font-24px;
-            content: "";
-            top: 0;
-            left: 0;
-            background-color: $alert;
-            mask-image: url('$(res)/img/feather-customised/alert-triangle.svg');
-        }
+    &::before {
+        mask-repeat: no-repeat;
+        mask-position: 0 center;
+        mask-size: $font-24px;
+        position: absolute;
+        width: $font-24px;
+        height: $font-24px;
+        content: "";
+        top: 0;
+        left: 0;
+        background-color: $alert;
+        mask-image: url("$(res)/img/feather-customised/alert-triangle.svg");
     }
 }

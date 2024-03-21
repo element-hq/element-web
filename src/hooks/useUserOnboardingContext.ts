@@ -18,9 +18,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Notifier } from "../Notifier";
 import DMRoomMap from "../utils/DMRoomMap";
+import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 
 export interface UserOnboardingContext {
     hasAvatar: boolean;
@@ -42,15 +42,12 @@ const USER_ONBOARDING_CONTEXT_INTERVAL = 5000;
 function useRefOf<T extends any[], R>(value: (...values: T) => R): (...values: T) => R {
     const ref = useRef(value);
     ref.current = value;
-    return useCallback(
-        (...values: T) => ref.current(...values),
-        [],
-    );
+    return useCallback((...values: T) => ref.current(...values), []);
 }
 
 function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: MatrixClient) => Promise<T>): T {
     const [value, setValue] = useState<T>(defaultValue);
-    const cli = MatrixClientPeg.get();
+    const cli = useMatrixClientContext();
 
     const handler = useRefOf(callback);
 
@@ -61,17 +58,17 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
 
         let handle: number | null = null;
         let enabled = true;
-        const repeater = async () => {
+        const repeater = async (): Promise<void> => {
             if (handle !== null) {
                 clearTimeout(handle);
                 handle = null;
             }
             setValue(await handler(cli));
             if (enabled) {
-                handle = setTimeout(repeater, USER_ONBOARDING_CONTEXT_INTERVAL);
+                handle = window.setTimeout(repeater, USER_ONBOARDING_CONTEXT_INTERVAL);
             }
         };
-        repeater().catch(err => logger.warn("could not update user onboarding context", err));
+        repeater().catch((err) => logger.warn("could not update user onboarding context", err));
         cli.on(ClientEvent.AccountData, repeater);
         return () => {
             enabled = false;
@@ -85,15 +82,15 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
     return value;
 }
 
-export function useUserOnboardingContext(): UserOnboardingContext | null {
+export function useUserOnboardingContext(): UserOnboardingContext {
     const hasAvatar = useUserOnboardingContextValue(false, async (cli) => {
-        const profile = await cli.getProfileInfo(cli.getUserId());
+        const profile = await cli.getProfileInfo(cli.getUserId()!);
         return Boolean(profile?.avatar_url);
     });
     const hasDevices = useUserOnboardingContextValue(false, async (cli) => {
         const myDevice = cli.getDeviceId();
         const devices = await cli.getDevices();
-        return Boolean(devices.devices.find(device => device.device_id !== myDevice));
+        return Boolean(devices.devices.find((device) => device.device_id !== myDevice));
     });
     const hasDmRooms = useUserOnboardingContextValue(false, async () => {
         const dmRooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals() ?? {};

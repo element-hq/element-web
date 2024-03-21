@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { SimpleObservable } from "matrix-widget-api";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { IDestroyable } from "../utils/IDestroyable";
 
@@ -60,12 +60,11 @@ export class PlaybackClock implements IDestroyable {
     private stopped = true;
     private lastCheck = 0;
     private observable = new SimpleObservable<number[]>();
-    private timerId: number;
+    private timerId?: number;
     private clipDuration = 0;
     private placeholderDuration = 0;
 
-    public constructor(private context: AudioContext) {
-    }
+    public constructor(private context: AudioContext) {}
 
     public get durationSeconds(): number {
         return this.clipDuration || this.placeholderDuration;
@@ -90,7 +89,7 @@ export class PlaybackClock implements IDestroyable {
         return this.observable;
     }
 
-    private checkTime = (force = false) => {
+    private checkTime = (force = false): void => {
         const now = this.timeSeconds; // calculated dynamically
         if (this.lastCheck !== now || force) {
             this.observable.update([now, this.durationSeconds]);
@@ -103,8 +102,8 @@ export class PlaybackClock implements IDestroyable {
      * The placeholders will be overridden once known.
      * @param {MatrixEvent} event The event to use for placeholders.
      */
-    public populatePlaceholdersFrom(event: MatrixEvent) {
-        const durationMs = Number(event.getContent()['info']?.['duration']);
+    public populatePlaceholdersFrom(event: MatrixEvent): void {
+        const durationMs = Number(event.getContent()["info"]?.["duration"]);
         if (Number.isFinite(durationMs)) this.placeholderDuration = durationMs / 1000;
     }
 
@@ -113,25 +112,23 @@ export class PlaybackClock implements IDestroyable {
      * This is to ensure the clock isn't skewed into thinking it is ~0.5s into
      * a clip when the duration is set.
      */
-    public flagLoadTime() {
+    public flagLoadTime(): void {
         this.clipStart = this.context.currentTime;
     }
 
-    public flagStart() {
+    public flagStart(): void {
         if (this.stopped) {
             this.clipStart = this.context.currentTime;
             this.stopped = false;
         }
 
         if (!this.timerId) {
-            // cast to number because the types are wrong
-            // 100ms interval to make sure the time is as accurate as possible without
-            // being overly insane
-            this.timerId = <number><any>setInterval(this.checkTime, 100);
+            // 100ms interval to make sure the time is as accurate as possible without being overly insane
+            this.timerId = window.setInterval(this.checkTime, 100);
         }
     }
 
-    public flagStop() {
+    public flagStop(): void {
         this.stopped = true;
 
         // Reset the clock time now so that the update going out will trigger components
@@ -139,13 +136,13 @@ export class PlaybackClock implements IDestroyable {
         this.clipStart = this.context.currentTime;
     }
 
-    public syncTo(contextTime: number, clipTime: number) {
+    public syncTo(contextTime: number, clipTime: number): void {
         this.clipStart = contextTime - clipTime;
         this.stopped = false; // count as a mid-stream pause (if we were stopped)
         this.checkTime(true);
     }
 
-    public destroy() {
+    public destroy(): void {
         this.observable.close();
         if (this.timerId) clearInterval(this.timerId);
     }

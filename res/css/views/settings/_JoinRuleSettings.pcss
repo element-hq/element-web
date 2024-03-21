@@ -27,23 +27,17 @@ limitations under the License.
 .mx_JoinRuleSettings_spacesWithAccess {
     > h4 {
         color: $secondary-content;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-12px;
         line-height: $font-15px;
         text-transform: uppercase;
     }
 
     > span {
-        font-weight: 500;
-        font-size: $font-14px;
+        font: var(--cpd-font-body-md-medium);
         line-height: 32px; /* matches height of avatar for v-align */
         color: $secondary-content;
         display: inline-block;
-
-        img.mx_RoomAvatar_isSpaceRoom,
-        .mx_RoomAvatar_isSpaceRoom img {
-            border-radius: 8px;
-        }
 
         .mx_BaseAvatar {
             margin-right: 8px;
@@ -57,11 +51,10 @@ limitations under the License.
 
 .mx_JoinRuleSettings_radioButton {
     padding-top: 16px;
-    margin-bottom: 8px;
 
     .mx_StyledRadioButton_content {
         margin-left: 14px;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
         color: $primary-content;
@@ -80,4 +73,9 @@ limitations under the License.
             border-top: 1px solid $quinary-content;
         }
     }
+}
+
+.mx_JoinRuleSettings_labelledCheckbox {
+    font: var(--cpd-font-body-md-regular);
+    margin-top: var(--cpd-space-2x);
 }

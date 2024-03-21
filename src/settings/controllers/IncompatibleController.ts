@@ -36,7 +36,7 @@ export default class IncompatibleController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (this.incompatibleSetting) {
             return this.forcedValue;

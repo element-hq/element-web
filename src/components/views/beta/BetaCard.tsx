@@ -43,126 +43,115 @@ interface IBetaPillProps {
     tooltipCaption?: string;
 }
 
-export const BetaPill = ({
+export const BetaPill: React.FC<IBetaPillProps> = ({
     onClick,
-    tooltipTitle = _t("This is a beta feature"),
-    tooltipCaption = _t("Click for more info"),
-}: IBetaPillProps) => {
+    tooltipTitle = _t("labs|beta_feature"),
+    tooltipCaption = _t("labs|click_for_info"),
+}) => {
     if (onClick) {
-        return <AccessibleTooltipButton
-            className="mx_BetaCard_betaPill"
-            title={`${tooltipTitle} ${tooltipCaption}`}
-            tooltip={<div>
-                <div className="mx_Tooltip_title">
-                    { tooltipTitle }
-                </div>
-                <div className="mx_Tooltip_sub">
-                    { tooltipCaption }
-                </div>
-            </div>}
-            onClick={onClick}
-        >
-            { _t("Beta") }
-        </AccessibleTooltipButton>;
+        return (
+            <AccessibleTooltipButton
+                className="mx_BetaCard_betaPill"
+                title={`${tooltipTitle} ${tooltipCaption}`}
+                tooltip={
+                    <div>
+                        <div className="mx_Tooltip_title">{tooltipTitle}</div>
+                        <div className="mx_Tooltip_sub">{tooltipCaption}</div>
+                    </div>
+                }
+                onClick={onClick}
+            >
+                {_t("common|beta")}
+            </AccessibleTooltipButton>
+        );
     }
 
-    return <span className="mx_BetaCard_betaPill">
-        { _t("Beta") }
-    </span>;
+    return <span className="mx_BetaCard_betaPill">{_t("common|beta")}</span>;
 };
 
-const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
+const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
     const info = SettingsStore.getBetaInfo(featureId);
     const value = useFeatureEnabled(featureId);
     const [busy, setBusy] = useState(false);
     if (!info) return null; // Beta is invalid/disabled
 
-    const {
-        title,
-        caption,
-        faq,
-        image,
-        feedbackLabel,
-        feedbackSubheading,
-        extraSettings,
-        requiresRefresh,
-    } = info;
+    const { title, caption, faq, image, feedbackLabel, feedbackSubheading, extraSettings, requiresRefresh } = info;
 
     let feedbackButton;
     if (value && feedbackLabel && feedbackSubheading && shouldShowFeedback()) {
-        feedbackButton = <AccessibleButton
-            onClick={() => {
-                Modal.createDialog(BetaFeedbackDialog, { featureId });
-            }}
-            kind="primary"
-        >
-            { _t("Feedback") }
-        </AccessibleButton>;
+        feedbackButton = (
+            <AccessibleButton
+                onClick={() => {
+                    Modal.createDialog(BetaFeedbackDialog, { featureId });
+                }}
+                kind="primary"
+            >
+                {_t("common|feedback")}
+            </AccessibleButton>
+        );
     }
 
-    let refreshWarning: string;
+    let refreshWarning: string | undefined;
     if (requiresRefresh) {
         const brand = SdkConfig.get().brand;
-        refreshWarning = value
-            ? _t("Leaving the beta will reload %(brand)s.", { brand })
-            : _t("Joining the beta will reload %(brand)s.", { brand });
+        refreshWarning = value ? _t("labs|leave_beta_reload", { brand }) : _t("labs|join_beta_reload", { brand });
     }
 
     let content: ReactNode;
     if (busy) {
         content = <InlineSpinner />;
     } else if (value) {
-        content = _t("Leave the beta");
+        content = _t("labs|leave_beta");
     } else {
-        content = _t("Join the beta");
+        content = _t("labs|join_beta");
     }
 
-    return <div className="mx_BetaCard">
-        <div className="mx_BetaCard_columns">
-            <div className="mx_BetaCard_columns_description">
-                <h3 className="mx_BetaCard_title">
-                    <span>{ titleOverride || _t(title) }</span>
-                    <BetaPill />
-                </h3>
-                <div className="mx_BetaCard_caption">{ caption() }</div>
-                <div className="mx_BetaCard_buttons">
-                    { feedbackButton }
-                    <AccessibleButton
-                        onClick={async () => {
-                            setBusy(true);
-                            // make it look like we're doing something for two seconds,
-                            // otherwise users think clicking did nothing
-                            if (!requiresRefresh) {
-                                await sleep(2000);
-                            }
-                            await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
-                            if (!requiresRefresh) {
-                                setBusy(false);
-                            }
-                        }}
-                        kind={feedbackButton ? "primary_outline" : "primary"}
-                        disabled={busy}
-                    >
-                        { content }
-                    </AccessibleButton>
+    return (
+        <div className="mx_BetaCard">
+            <div className="mx_BetaCard_columns">
+                <div className="mx_BetaCard_columns_description">
+                    <h3 className="mx_BetaCard_title">
+                        <span>{titleOverride || _t(title)}</span>
+                        <BetaPill />
+                    </h3>
+                    <div className="mx_BetaCard_caption">{caption()}</div>
+                    <div className="mx_BetaCard_buttons">
+                        {feedbackButton}
+                        <AccessibleButton
+                            onClick={async (): Promise<void> => {
+                                setBusy(true);
+                                // make it look like we're doing something for two seconds,
+                                // otherwise users think clicking did nothing
+                                if (!requiresRefresh) {
+                                    await sleep(2000);
+                                }
+                                await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
+                                if (!requiresRefresh) {
+                                    setBusy(false);
+                                }
+                            }}
+                            kind={feedbackButton ? "primary_outline" : "primary"}
+                            disabled={busy}
+                        >
+                            {content}
+                        </AccessibleButton>
+                    </div>
+                    {refreshWarning && <div className="mx_BetaCard_refreshWarning">{refreshWarning}</div>}
+                    {faq && <div className="mx_BetaCard_faq">{faq(value)}</div>}
                 </div>
-                { refreshWarning && <div className="mx_BetaCard_refreshWarning">
-                    { refreshWarning }
-                </div> }
-                { faq && <div className="mx_BetaCard_faq">
-                    { faq(value) }
-                </div> }
+                <div className="mx_BetaCard_columns_image_wrapper">
+                    <img className="mx_BetaCard_columns_image" src={image} alt="" />
+                </div>
             </div>
-            <div className="mx_BetaCard_columns_image_wrapper">
-                <img className="mx_BetaCard_columns_image" src={image} alt="" />
-            </div>
+            {extraSettings && value && (
+                <div className="mx_BetaCard_relatedSettings">
+                    {extraSettings.map((key) => (
+                        <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
+                    ))}
+                </div>
+            )}
         </div>
-        { extraSettings && value && <div className="mx_BetaCard_relatedSettings">
-            { extraSettings.map(key => (
-                <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
-            )) }
-        </div> }
-    </div>;
+    );
 };
 
 export default BetaCard;

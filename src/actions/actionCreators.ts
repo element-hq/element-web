@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AsyncActionPayload } from "../dispatcher/payloads";
+import { AsyncActionFn, AsyncActionPayload } from "../dispatcher/payloads";
 
 /**
  * Create an action thunk that will dispatch actions indicating the current
@@ -45,16 +45,18 @@ import { AsyncActionPayload } from "../dispatcher/payloads";
  *                     `fn`.
  */
 export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () => any | null): AsyncActionPayload {
-    const helper = (dispatch) => {
+    const helper: AsyncActionFn = (dispatch) => {
         dispatch({
-            action: id + '.pending',
-            request: typeof pendingFn === 'function' ? pendingFn() : undefined,
+            action: id + ".pending",
+            request: typeof pendingFn === "function" ? pendingFn() : undefined,
         });
-        fn().then((result) => {
-            dispatch({ action: id + '.success', result });
-        }).catch((err) => {
-            dispatch({ action: id + '.failure', err });
-        });
+        fn()
+            .then((result) => {
+                dispatch({ action: id + ".success", result });
+            })
+            .catch((err) => {
+                dispatch({ action: id + ".failure", err });
+            });
     };
     return new AsyncActionPayload(helper);
 }

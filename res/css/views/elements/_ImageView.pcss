@@ -67,6 +67,8 @@ $button-gap: 24px;
     flex-direction: row;
     align-items: center;
     color: $lightbox-fg-color;
+    flex-grow: 1;
+    flex-basis: 0;
 }
 
 .mx_ImageView_info {
@@ -82,6 +84,9 @@ $button-gap: 24px;
 .mx_ImageView_title {
     color: $lightbox-fg-color;
     font-size: $font-12px;
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
 }
 
 .mx_ImageView_toolbar {
@@ -89,6 +94,9 @@ $button-gap: 24px;
     pointer-events: initial;
     display: flex;
     align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: flex-end;
     gap: calc($button-gap - ($button-size - $icon-size));
 }
 
@@ -97,7 +105,7 @@ $button-gap: 24px;
     display: block;
 
     &::before {
-        content: '';
+        content: "";
         height: $icon-size;
         width: $icon-size;
         mask-repeat: no-repeat;
@@ -109,27 +117,27 @@ $button-gap: 24px;
 }
 
 .mx_ImageView_button_rotateCW::before {
-    mask-image: url('$(res)/img/image-view/rotate-cw.svg');
+    mask-image: url("$(res)/img/image-view/rotate-cw.svg");
 }
 
 .mx_ImageView_button_rotateCCW::before {
-    mask-image: url('$(res)/img/image-view/rotate-ccw.svg');
+    mask-image: url("$(res)/img/image-view/rotate-ccw.svg");
 }
 
 .mx_ImageView_button_zoomOut::before {
-    mask-image: url('$(res)/img/image-view/zoom-out.svg');
+    mask-image: url("$(res)/img/image-view/zoom-out.svg");
 }
 
 .mx_ImageView_button_zoomIn::before {
-    mask-image: url('$(res)/img/image-view/zoom-in.svg');
+    mask-image: url("$(res)/img/image-view/zoom-in.svg");
 }
 
 .mx_ImageView_button_download::before {
-    mask-image: url('$(res)/img/image-view/download.svg');
+    mask-image: url("$(res)/img/image-view/download.svg");
 }
 
 .mx_ImageView_button_more::before {
-    mask-image: url('$(res)/img/image-view/more.svg');
+    mask-image: url("$(res)/img/image-view/more.svg");
 }
 
 .mx_ImageView_button_close {
@@ -139,7 +147,7 @@ $button-gap: 24px;
     &::before {
         width: $button-size;
         height: $button-size;
-        mask-image: url('$(res)/img/image-view/close.svg');
+        mask-image: url("$(res)/img/image-view/close.svg");
         mask-size: 40%;
     }
 }

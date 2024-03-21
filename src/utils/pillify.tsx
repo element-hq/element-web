@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +15,43 @@ limitations under the License.
 */
 
 import React from "react";
-import ReactDOM from 'react-dom';
-import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import ReactDOM from "react-dom";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { MatrixClient, MatrixEvent, RuleId } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import Pill, { PillType } from "../components/views/elements/Pill";
+import { Pill, pillRoomNotifLen, pillRoomNotifPos, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
+import { PermalinkParts } from "./permalinks/PermalinkConstructor";
+
+/**
+ * A node here is an A element with a href attribute tag.
+ *
+ * It should be pillified if the permalink parser returns a result and one of the following conditions match:
+ * - Text content equals href. This is the case when sending a plain permalink inside a message.
+ * - The link does not have the "linkified" class.
+ *   Composer completions already create an A tag.
+ *   Linkify will not linkify things again. → There won't be a "linkified" class.
+ */
+const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
+    // permalink parser didn't return any parts
+    if (!parts) return false;
+
+    const textContent = node.textContent;
+
+    // event permalink with custom label
+    if (parts.eventId && href !== textContent) return false;
+
+    return href === textContent || !node.classList.contains("linkified");
+};
 
 /**
  * Recurses depth-first through a DOM tree, converting matrix.to links
  * into pills based on the context of a given room.  Returns a list of
  * the resulting React nodes so they can be unmounted rather than leaking.
  *
+ * @param matrixClient the client of the logged-in user
  * @param {Element[]} nodes - a list of sibling DOM nodes to traverse to try
  *   to turn into pills.
  * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
@@ -37,8 +60,13 @@ import { parsePermalink } from "./permalinks/Permalinks";
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]) {
-    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+export function pillifyLinks(
+    matrixClient: MatrixClient,
+    nodes: ArrayLike<Element>,
+    mxEvent: MatrixEvent,
+    pills: Element[],
+): void {
+    const room = matrixClient.getRoom(mxEvent.getRoomId()) ?? undefined;
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
     while (node) {
@@ -49,22 +77,20 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             node = node.nextSibling as Element;
             continue;
         } else if (node.tagName === "A" && node.getAttribute("href")) {
-            const href = node.getAttribute("href");
+            const href = node.getAttribute("href")!;
             const parts = parsePermalink(href);
-            // If the link is a (localised) matrix.to link, replace it with a pill
-            // We don't want to pill event permalinks, so those are ignored.
-            if (parts && !parts.eventId) {
-                const pillContainer = document.createElement('span');
 
-                const pill = <Pill
-                    url={href}
-                    inMessage={true}
-                    room={room}
-                    shouldShowPillAvatar={shouldShowPillAvatar}
-                />;
+            if (shouldBePillified(node, href, parts)) {
+                const pillContainer = document.createElement("span");
+
+                const pill = (
+                    <TooltipProvider>
+                        <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
+                    </TooltipProvider>
+                );
 
                 ReactDOM.render(pill, pillContainer);
-                node.parentNode.replaceChild(pillContainer, node);
+                node.parentNode?.replaceChild(pillContainer, node);
                 pills.push(pillContainer);
                 // Pills within pills aren't going to go well, so move on
                 pillified = true;
@@ -77,22 +103,22 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             // as applying pills happens outside of react, make sure we're not doubly
             // applying @room pills here, as a rerender with the same content won't touch the DOM
             // to clear the pills from the last run of pillifyLinks
-            !node.parentElement.classList.contains("mx_AtRoomPill")
+            !node.parentElement?.classList.contains("mx_AtRoomPill")
         ) {
-            let currentTextNode = node as Node as Text;
-            const roomNotifTextNodes = [];
+            let currentTextNode = node as Node as Text | null;
+            const roomNotifTextNodes: Text[] = [];
 
             // Take a textNode and break it up to make all the instances of @room their
             // own textNode, adding those nodes to roomNotifTextNodes
             while (currentTextNode !== null) {
-                const roomNotifPos = Pill.roomNotifPos(currentTextNode.textContent);
-                let nextTextNode = null;
+                const roomNotifPos = pillRoomNotifPos(currentTextNode.textContent);
+                let nextTextNode: Text | null = null;
                 if (roomNotifPos > -1) {
                     let roomTextNode = currentTextNode;
 
                     if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
-                    if (roomTextNode.textContent.length > Pill.roomNotifLen()) {
-                        nextTextNode = roomTextNode.splitText(Pill.roomNotifLen());
+                    if (roomTextNode.textContent && roomTextNode.textContent.length > pillRoomNotifLen()) {
+                        nextTextNode = roomTextNode.splitText(pillRoomNotifLen());
                     }
                     roomNotifTextNodes.push(roomTextNode);
                 }
@@ -100,8 +126,10 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             }
 
             if (roomNotifTextNodes.length > 0) {
-                const pushProcessor = new PushProcessor(MatrixClientPeg.get());
-                const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
+                const pushProcessor = new PushProcessor(matrixClient);
+                const atRoomRule = pushProcessor.getPushRuleById(
+                    mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
+                );
                 if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
                     // Now replace all those nodes with Pills
                     for (const roomNotifTextNode of roomNotifTextNodes) {
@@ -109,18 +137,22 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
                         // we're adding now, since we've just inserted nodes into the structure
                         // we're iterating over.
                         // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
-                        node = roomNotifTextNode.nextSibling;
+                        node = roomNotifTextNode.nextSibling as Element;
 
-                        const pillContainer = document.createElement('span');
-                        const pill = <Pill
-                            type={PillType.AtRoomMention}
-                            inMessage={true}
-                            room={room}
-                            shouldShowPillAvatar={shouldShowPillAvatar}
-                        />;
+                        const pillContainer = document.createElement("span");
+                        const pill = (
+                            <TooltipProvider>
+                                <Pill
+                                    type={PillType.AtRoomMention}
+                                    inMessage={true}
+                                    room={room}
+                                    shouldShowPillAvatar={shouldShowPillAvatar}
+                                />
+                            </TooltipProvider>
+                        );
 
                         ReactDOM.render(pill, pillContainer);
-                        roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
+                        roomNotifTextNode.parentNode?.replaceChild(pillContainer, roomNotifTextNode);
                         pills.push(pillContainer);
                     }
                     // Nothing else to do for a text node (and we don't need to advance
@@ -131,7 +163,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes as NodeListOf<Element>, mxEvent, pills);
+            pillifyLinks(matrixClient, node.childNodes as NodeListOf<Element>, mxEvent, pills);
         }
 
         node = node.nextSibling as Element;
@@ -149,7 +181,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
  * @param {Element[]} pills - array of pill containers whose React
  *   components should be unmounted.
  */
-export function unmountPills(pills: Element[]) {
+export function unmountPills(pills: Element[]): void {
     for (const pillContainer of pills) {
         ReactDOM.unmountComponentAtNode(pillContainer);
     }

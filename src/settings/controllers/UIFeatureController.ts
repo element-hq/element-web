@@ -26,7 +26,10 @@ import SettingsStore from "../SettingsStore";
  * Settings using this controller are assumed to return `false` when disabled.
  */
 export default class UIFeatureController extends SettingController {
-    public constructor(private uiFeatureName: string, private forcedValue = false) {
+    public constructor(
+        private uiFeatureName: string,
+        private forcedValue = false,
+    ) {
         super();
     }
 
@@ -34,7 +37,7 @@ export default class UIFeatureController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (this.settingDisabled) {
             // per the docs: we force a disabled state when the feature isn't active

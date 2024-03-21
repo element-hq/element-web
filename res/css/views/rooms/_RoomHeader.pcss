@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,283 +15,104 @@ limitations under the License.
 */
 
 .mx_RoomHeader {
-    flex: 0 0 50px;
-    border-bottom: 1px solid $primary-hairline-color;
+    height: 64px;
+    box-sizing: border-box;
+    padding: 0 var(--cpd-space-3x);
+    border-bottom: 1px solid $separator;
     background-color: $background;
-
-    .mx_RoomHeader_icon {
-        height: 12px;
-        width: 12px;
-
-        &.mx_RoomHeader_icon_video {
-            height: 14px;
-            width: 14px;
-            background-color: $secondary-content;
-            mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-            mask-size: 100%;
-        }
-
-        &.mx_E2EIcon {
-            margin: 0;
-            height: 100%; /* To give the tooltip room to breathe */
-        }
-    }
-
-    .mx_CallDuration {
-        margin-top: calc(($font-15px - $font-13px) / 2); /* To align with the name */
-        font-size: $font-13px;
-    }
+    transition: all 0.3s ease;
 }
 
-.mx_RoomHeader_wrapper {
-    height: 44px;
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    margin: 0 20px 0 16px;
-    padding-top: 6px;
-    border-bottom: 1px solid $system;
-
-    .mx_InviteOnlyIcon_large {
-        margin: 0;
-    }
-
-    .mx_BetaCard_betaPill {
-        margin-right: $spacing-8;
-    }
+.mx_RoomHeader:hover {
+    background-color: $header-panel-bg-hover;
 }
 
-.mx_RoomHeader_spinner {
+.mx_RoomHeader_infoWrapper {
+    /* unset button styles */
+    background: unset;
+    border: unset;
     flex: 1;
-    height: 36px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
-.mx_RoomHeader_textButton {
-    @mixin mx_DialogButton;
-    margin-right: 8px;
-    margin-top: -5px;
-}
-
-.mx_RoomHeader_textButton:hover {
-    @mixin mx_DialogButton_hover;
-}
-
-.mx_RoomHeader_textButton_danger {
-    background-color: $alert;
-}
-
-.mx_RoomHeader_cancelButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
-    padding-left: 12px;
-    padding-right: 12px;
+    gap: var(--cpd-space-3x);
+    text-align: left;
 }
 
 .mx_RoomHeader_info {
-    display: flex;
-    flex: 1;
-    align-items: center;
+    /* We want the spacing to be 64px, 13x = 52px but we have a flex gap of
+       12px set on the flex container, which sums up to 64 */
+    padding-right: var(--cpd-space-13x);
 }
 
-.mx_RoomHeader_name {
-    flex: 0 1 auto;
+.mx_RoomHeader_truncated {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+
     overflow: hidden;
-    color: $primary-content;
-    font-weight: $font-semi-bold;
-    font-size: $font-15px;
-    min-height: 24px;
-    align-items: center;
-    border-radius: 6px;
-    margin: 0 3px;
-    padding: 1px 4px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
+.mx_RoomHeader_heading {
     display: flex;
-    user-select: none;
-
-    &:not(.mx_RoomHeader_name--textonly):hover {
-        background-color: $quinary-content;
-    }
-
-    .mx_RoomHeader_nametext {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .mx_RoomHeader_chevron {
-        align-self: center;
-        width: 20px;
-        height: 20px;
-        mask-position: center;
-        mask-size: 20px;
-        mask-repeat: no-repeat;
-        mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
-        background-color: $tertiary-content;
-    }
-
-    &[aria-expanded="true"] {
-        background-color: $quinary-content;
-
-        .mx_RoomHeader_chevron {
-            transform: rotate(180deg);
-        }
-    }
-}
-
-.mx_RoomHeader_settingsHint {
-    color: $settings-grey-fg-color !important;
-}
-
-.mx_RoomHeader_searchStatus {
-    font-weight: normal;
-    opacity: 0.6;
-}
-
-.mx_RoomHeader_name:not(.mx_RoomHeader_name--textonly),
-.mx_RoomHeader_avatar {
-    cursor: pointer;
-}
-
-.mx_RoomTopic {
-    position: relative;
-    cursor: pointer;
+    gap: var(--cpd-space-1x);
+    align-items: center;
 }
 
 .mx_RoomHeader_topic {
-    $lineHeight: $font-16px;
-    $lines: 2;
-
-    flex: 1;
-    color: $roomtopic-color;
-    font-weight: 400;
-    font-size: $font-13px;
-    line-height: $lineHeight;
-    max-height: calc($lineHeight * $lines);
-
-    overflow: hidden;
-    -webkit-line-clamp: $lines; /* See: https://drafts.csswg.org/css-overflow-3/#webkit-line-clamp */
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
+    height: 0;
+    opacity: 0;
+    transition: all var(--transition-standard) ease 0.1s;
+    /* Emojis are rendered a bit bigger than text in the timeline
+        Make them compact/the same size as text here */
+    .mx_Emoji {
+        font-size: inherit;
+    }
 }
 
-.mx_RoomHeader_topic .mx_Emoji {
-    /* Undo font size increase to prevent vertical cropping and ensure the same size */
-    /* as in plain text emojis */
-    font-size: inherit;
+.mx_RoomHeader:hover .mx_RoomHeader_topic {
+    /* height needed to compute the transition, it equals to the `line-height`
+        value in pixels */
+    height: calc($font-13px * 1.5);
+    opacity: 1;
+
+    a:hover {
+        text-decoration: underline;
+    }
 }
 
-.mx_RoomHeader_avatar {
-    flex: 0;
-    margin: 0 7px;
-    position: relative;
+.mx_RoomHeader_icon {
+    flex-shrink: 0;
 }
 
-.mx_RoomHeader_avatar .mx_BaseAvatar_image {
-    object-fit: cover;
-}
-
-.mx_RoomHeader_button {
-    position: relative;
-    margin-left: 1px;
-    margin-right: 1px;
+.mx_RoomHeader .mx_FacePile {
+    color: $secondary-content;
+    background: $background;
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    border-radius: 9999px;
+    padding: var(--cpd-space-1-5x);
     cursor: pointer;
-    height: 32px;
-    width: 32px;
-    border-radius: 100%;
+    user-select: none;
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: 4px; /* center with parent of 32px */
-        left: 4px; /* center with parent of 32px */
-        height: 24px;
-        width: 24px;
-        background-color: $icon-button-color;
-        mask-repeat: no-repeat;
-        mask-size: contain;
+    /* RoomAvatar doesn't pass classes down to avatar
+    So set style here
+    using div because compound classes are not stable */
+    > div {
+        flex-shrink: 0;
     }
 
-    &:not(.mx_RoomHeader_closeButton):hover {
-        background: rgba($accent, 0.1);
-
-        &::before {
-            background-color: $accent;
-        }
+    &:hover {
+        color: $primary-content;
+        background: var(--cpd-color-bg-subtle-primary);
     }
 }
 
-.mx_RoomHeader_forgetButton::before {
-    mask-image: url('$(res)/img/element-icons/leave.svg');
-    width: 26px;
-}
-
-.mx_RoomHeader_appsButton::before {
-    mask-image: url('$(res)/img/element-icons/room/apps.svg');
-}
-
-.mx_RoomHeader_appsButton_highlight::before {
-    background-color: $accent;
-}
-
-.mx_RoomHeader_searchButton::before {
-    mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
-}
-
-.mx_RoomHeader_inviteButton::before {
-    mask-image: url('$(res)/img/element-icons/room/invite.svg');
-}
-
-.mx_RoomHeader_voiceCallButton::before {
-    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-
-    /* The call button SVG is padded slightly differently, so match it up to the size */
-    /* of the other icons */
-    mask-size: 20px;
-    mask-position: center;
-}
-
-.mx_RoomHeader_videoCallButton::before {
-    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-}
-
-.mx_RoomHeader_layoutButton--freedom::before,
-.mx_RoomHeader_freedomIcon::before {
-    mask-image: url('$(res)/img/element-icons/call/freedom.svg');
-}
-
-.mx_RoomHeader_layoutButton--spotlight::before,
-.mx_RoomHeader_spotlightIcon::before {
-    mask-image: url('$(res)/img/element-icons/call/spotlight.svg');
-}
-
-.mx_RoomHeader_closeButton::before {
-    mask-image: url('$(res)/img/cancel.svg');
-    mask-size: 20px;
-    mask-position: center;
-}
-
-.mx_RoomHeader_minimiseButton::before {
-    mask-image: url('$(res)/img/element-icons/reduce.svg');
-}
-
-.mx_RoomHeader_layoutMenu .mx_IconizedContextMenu_icon::before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    display: block;
-    mask-position: center;
-    mask-size: 20px;
-    mask-repeat: no-repeat;
-    background: $primary-content;
-}
-
-@media only screen and (max-width: 480px) {
-    .mx_RoomHeader_wrapper {
-        padding: 0;
-        margin: 0;
-    }
-
-    .mx_RoomHeader {
-        overflow: hidden;
-    }
+.mx_RoomHeader .mx_BaseAvatar {
+    flex-shrink: 0;
 }

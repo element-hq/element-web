@@ -19,7 +19,7 @@ limitations under the License.
     /* UserInfo has a circular image at the top so it fits between the back & close buttons */
     padding-top: 0;
     overflow-y: auto;
-    font-size: $font-12px;
+    font-size: var(--cpd-font-size-body-sm);
 
     .mx_UserInfo_cancel {
         cursor: pointer;
@@ -27,14 +27,14 @@ limitations under the License.
         top: 0;
         border-radius: 4px;
         background-color: $dark-panel-bg-color;
-        margin: 9px; /* TODO: Use a variable */
+        margin: 9px;
         z-index: 1; /* render on top of the right panel */
 
         div {
             height: 16px;
             width: 16px;
             padding: 4px;
-            mask-image: url('$(res)/img/minimise.svg');
+            mask-image: url("$(res)/img/minimise.svg");
             mask-repeat: no-repeat;
             mask-position: 7px center;
             background-color: $header-panel-text-primary-color;
@@ -43,8 +43,8 @@ limitations under the License.
 
     h2 {
         font-size: $font-18px;
-        font-weight: 600;
-        margin: 18px 0 0 0; /* TODO: Use a variable */
+        font-weight: var(--cpd-font-weight-semibold);
+        margin: 18px 0 0 0;
     }
 
     .mx_UserInfo_container {
@@ -69,7 +69,7 @@ limitations under the License.
     }
 
     .mx_UserInfo_separator {
-        border-bottom: 1px solid rgba($primary-content, .1);
+        border-bottom: 1px solid $separator;
     }
 
     .mx_UserInfo_memberDetailsContainer {
@@ -95,49 +95,19 @@ limitations under the License.
 
         .mx_UserInfo_avatar_transition {
             max-width: 30vh;
+            aspect-ratio: 1 / 1;
             margin: 0 auto;
             transition: 0.5s;
 
-            .mx_UserInfo_avatar_transition_child {
-                /* use padding-top instead of height to make this element square,
-                as the % in padding is a % of the width (including margin,
-                that's why we had to put the margin to center on a parent div),
-                and not a % of the parent height. */
-                padding-top: 100%;
-                position: relative;
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 4rem;
+            }
 
-                .mx_BaseAvatar,
-                .mx_BaseAvatar_initial,
-                .mx_BaseAvatar_image {
-                    border-radius: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100% !important;
-                    height: 100% !important;
-                }
-
-                .mx_BaseAvatar {
-                    &.mx_BaseAvatar_image {
-                        cursor: zoom-in;
-                    }
-
-                    .mx_BaseAvatar_initial {
-                        z-index: 1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        /* override the calculated sizes so that the letter isn't HUGE */
-                        font-size: 6rem !important;
-                        width: 100% !important;
-                        transition: font-size 0.5s;
-
-                        & + .mx_BaseAvatar_image {
-                            cursor: default;
-                        }
-                    }
-                }
+            .mx_BaseAvatar,
+            .mx_BaseAvatar img {
+                width: 100%;
+                height: 100%;
             }
         }
     }
@@ -145,13 +115,13 @@ limitations under the License.
     h3 {
         text-transform: uppercase;
         color: $tertiary-content;
-        font-weight: 600;
-        font-size: $font-12px;
+        font: var(--cpd-font-heading-sm-semibold);
+        font-weight: var(--cpd-font-weight-semibold);
         margin: $spacing-4 0;
     }
 
     p {
-        margin: 5px 0; /* TODO: Use a variable */
+        margin: 5px 0;
     }
 
     .mx_UserInfo_profile {
@@ -159,10 +129,12 @@ limitations under the License.
 
         h2 {
             display: flex;
-            font-size: $font-18px;
+            font-size: $font-17px;
             line-height: $font-25px;
             flex: 1;
             justify-content: center;
+            /* We reverse things here so for accessible technologies the name comes before the e2e shield */
+            flex-direction: row-reverse;
 
             span {
                 /* limit to 2 lines, show an ellipsis if it overflows */
@@ -177,7 +149,7 @@ limitations under the License.
             }
 
             .mx_E2EIcon {
-                margin-top: 3px; /* visual vertical centering to the top line of text. TODO: Use a variable */
+                margin-top: 3px; /* visual vertical centering to the top line of text. */
                 margin-inline-end: $spacing-4; /* margin from displayName */
                 min-width: 18px; /* convince flexbox to not collapse it */
             }
@@ -194,7 +166,7 @@ limitations under the License.
             justify-content: center;
             align-items: center;
 
-            margin: 6px 0; /* TODO: Use a variable */
+            margin: 6px 0;
 
             .mx_UserInfo_roleDescription {
                 display: flex;
@@ -219,17 +191,17 @@ limitations under the License.
     }
 
     .mx_UserInfo_statusMessage {
-        $statusLineHeight: 16px;
         $statusNumberOfLines: 3;
 
+        font: var(--cpd-font-body-sm-regular);
         font-size: $font-11px;
-        line-height: $statusLineHeight;
+        line-height: 1rem;
         opacity: 0.5;
         overflow: hidden;
         word-break: break-word;
         text-overflow: ellipsis;
         display: -webkit-box;
-        max-height: calc($statusLineHeight * $statusNumberOfLines);
+        max-height: calc(1rem * $statusNumberOfLines);
         -webkit-line-clamp: $statusNumberOfLines;
         -webkit-box-orient: vertical;
     }
@@ -284,12 +256,9 @@ limitations under the License.
                 margin: 0 auto;
             }
 
-            .mx_UserInfo_avatar_transition_child {
-                .mx_BaseAvatar {
-                    .mx_BaseAvatar_initial {
-                        font-size: 40px !important; /* override the other override because here the avatar is smaller */
-                    }
-                }
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 2rem;
             }
         }
     }

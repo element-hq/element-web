@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { useMemo, useState } from "react";
+import { Room, RoomEvent, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
@@ -25,18 +23,60 @@ import { useTypedEventEmitter } from "./useEventEmitter";
 // Hook to simplify watching Matrix Room joined members
 export const useRoomMembers = (room: Room, throttleWait = 250): RoomMember[] => {
     const [members, setMembers] = useState<RoomMember[]>(room.getJoinedMembers());
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
-        setMembers(room.getJoinedMembers());
-    }, throttleWait, { leading: true, trailing: true }));
+
+    const throttledUpdate = useMemo(
+        () =>
+            throttle(
+                () => {
+                    setMembers(room.getJoinedMembers());
+                },
+                throttleWait,
+                { leading: true, trailing: true },
+            ),
+        [room, throttleWait],
+    );
+
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Members, throttledUpdate);
     return members;
 };
 
-// Hook to simplify watching Matrix Room joined member count
-export const useRoomMemberCount = (room: Room, throttleWait = 250): number => {
+type RoomMemberCountOpts = {
+    /**
+     * Wait time between room member count update
+     */
+    throttleWait?: number;
+};
+
+/**
+ * Returns a count of members in a given room
+ * @param room the room to track.
+ * @param opts The options.
+ * @returns the room member count.
+ */
+export const useRoomMemberCount = (
+    room: Room,
+    { throttleWait }: RoomMemberCountOpts = { throttleWait: 250 },
+): number => {
     const [count, setCount] = useState<number>(room.getJoinedMemberCount());
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
-        setCount(room.getJoinedMemberCount());
-    }, throttleWait, { leading: true, trailing: true }));
+    const throttledUpdate = useMemo(
+        () =>
+            throttle(
+                () => {
+                    setCount(room.getJoinedMemberCount());
+                },
+                throttleWait,
+                { leading: true, trailing: true },
+            ),
+        [room, throttleWait],
+    );
+
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Members, throttledUpdate);
+
+    /**
+     * `room.getJoinedMemberCount()` caches the member count behind the room summary
+     * So we need to re-compute the member count when the summary gets updated
+     */
+    useTypedEventEmitter(room, RoomEvent.Summary, throttledUpdate);
     return count;
 };
 

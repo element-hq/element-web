@@ -85,7 +85,7 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
                 user: senderId,
                 content: {},
             });
-            event.getContent = () => undefined;
+            event.getContent = () => ({}) as any;
         });
 
         itShouldReturnFalse();
@@ -119,31 +119,28 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
                     redacted_because: {} as unknown as IEvent,
                 },
             });
-            event.getContent = () => undefined;
+            event.getContent = () => ({}) as any;
         });
 
         itShouldReturnTrue();
     });
 
-    describe.each(
-        [
-            VoiceBroadcastInfoState.Paused,
-            VoiceBroadcastInfoState.Resumed,
-            VoiceBroadcastInfoState.Stopped,
-        ],
-    )("when a voice broadcast info event in state %s occurs", (state: VoiceBroadcastInfoState) => {
-        beforeEach(() => {
-            event = mkEvent({
-                event: true,
-                type: VoiceBroadcastInfoEventType,
-                room: roomId,
-                user: senderId,
-                content: {
-                    state,
-                },
+    describe.each([VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Resumed, VoiceBroadcastInfoState.Stopped])(
+        "when a voice broadcast info event in state %s occurs",
+        (state: VoiceBroadcastInfoState) => {
+            beforeEach(() => {
+                event = mkEvent({
+                    event: true,
+                    type: VoiceBroadcastInfoEventType,
+                    room: roomId,
+                    user: senderId,
+                    content: {
+                        state,
+                    },
+                });
             });
-        });
 
-        itShouldReturnFalse();
-    });
+            itShouldReturnFalse();
+        },
+    );
 });

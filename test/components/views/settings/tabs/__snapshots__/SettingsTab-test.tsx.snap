@@ -5,11 +5,6 @@ exports[`<SettingsTab /> renders tab 1`] = `
   <div
     class="mx_SettingsTab"
   >
-    <h2
-      class="mx_Heading_h2"
-    >
-      Test Tab
-    </h2>
     <div
       class="mx_SettingsTab_sections"
     >

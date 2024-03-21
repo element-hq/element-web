@@ -20,10 +20,7 @@ import { TweakName, PushRuleActionName, TweakHighlight, TweakSound } from "matri
 import { ContentRules, PushRuleVectorState } from "../../src/notifications";
 
 const NORMAL_RULE = {
-    actions: [
-        PushRuleActionName.Notify,
-        { set_tweak: TweakName.Highlight, value: false } as TweakHighlight,
-    ],
+    actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: false } as TweakHighlight],
     default: false,
     enabled: true,
     pattern: "vdh2",
@@ -54,23 +51,18 @@ const USERNAME_RULE = {
     rule_id: ".m.rule.contains_user_name",
 };
 
-describe("ContentRules", function() {
-    describe("parseContentRules", function() {
-        it("should handle there being no keyword rules", function() {
-            const rules = { 'global': { 'content': [
-                USERNAME_RULE,
-            ] } };
+describe("ContentRules", function () {
+    describe("parseContentRules", function () {
+        it("should handle there being no keyword rules", function () {
+            const rules = { global: { content: [USERNAME_RULE] } };
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules).toEqual([]);
             expect(parsed.vectorState).toEqual(PushRuleVectorState.ON);
             expect(parsed.externalRules).toEqual([]);
         });
 
-        it("should parse regular keyword notifications", function() {
-            const rules = { 'global': { 'content': [
-                NORMAL_RULE,
-                USERNAME_RULE,
-            ] } };
+        it("should parse regular keyword notifications", function () {
+            const rules = { global: { content: [NORMAL_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);
@@ -79,11 +71,8 @@ describe("ContentRules", function() {
             expect(parsed.externalRules).toEqual([]);
         });
 
-        it("should parse loud keyword notifications", function() {
-            const rules = { 'global': { 'content': [
-                LOUD_RULE,
-                USERNAME_RULE,
-            ] } };
+        it("should parse loud keyword notifications", function () {
+            const rules = { global: { content: [LOUD_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);
@@ -92,12 +81,8 @@ describe("ContentRules", function() {
             expect(parsed.externalRules).toEqual([]);
         });
 
-        it("should parse mixed keyword notifications", function() {
-            const rules = { 'global': { 'content': [
-                LOUD_RULE,
-                NORMAL_RULE,
-                USERNAME_RULE,
-            ] } };
+        it("should parse mixed keyword notifications", function () {
+            const rules = { global: { content: [LOUD_RULE, NORMAL_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
             expect(parsed.rules.length).toEqual(1);

@@ -16,14 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import sanitizeHtml from 'sanitize-html';
-import classnames from 'classnames';
+import React from "react";
+import sanitizeHtml from "sanitize-html";
+import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../languageHandler';
-import dis from '../../dispatcher/dispatcher';
-import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { _t, TranslationKey } from "../../languageHandler";
+import dis from "../../dispatcher/dispatcher";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -46,29 +46,29 @@ interface IState {
 export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
     private unmounted = false;
-    private dispatcherRef: string = null;
+    private dispatcherRef: string | null = null;
 
-    constructor(props: IProps, context: typeof MatrixClientContext) {
+    public constructor(props: IProps, context: typeof MatrixClientContext) {
         super(props, context);
 
         this.state = {
-            page: '',
+            page: "",
         };
     }
 
-    private translate(s: string): string {
+    private translate(s: TranslationKey): string {
         return sanitizeHtml(_t(s));
     }
 
-    private async fetchEmbed() {
+    private async fetchEmbed(): Promise<void> {
         let res: Response;
 
         try {
-            res = await fetch(this.props.url, { method: "GET" });
+            res = await fetch(this.props.url!, { method: "GET" });
         } catch (err) {
             if (this.unmounted) return;
             logger.warn(`Error loading page: ${err}`);
-            this.setState({ page: _t("Couldn't load page") });
+            this.setState({ page: _t("cant_load_page") });
             return;
         }
 
@@ -76,15 +76,15 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
 
         if (!res.ok) {
             logger.warn(`Error loading page: ${res.status}`);
-            this.setState({ page: _t("Couldn't load page") });
+            this.setState({ page: _t("cant_load_page") });
             return;
         }
 
-        let body = (await res.text()).replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1) => this.translate(g1));
+        let body = (await res.text()).replace(/_t\(['"]([\s\S]*?)['"]\)/gm, (match, g1) => this.translate(g1));
 
         if (this.props.replaceMap) {
-            Object.keys(this.props.replaceMap).forEach(key => {
-                body = body.split(key).join(this.props.replaceMap[key]);
+            Object.keys(this.props.replaceMap).forEach((key) => {
+                body = body.split(key).join(this.props.replaceMap![key]);
             });
         }
 
@@ -113,34 +113,27 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
 
     private onAction = (payload: ActionPayload): void => {
         // HACK: Workaround for the context's MatrixClient not being set up at render time.
-        if (payload.action === 'client_started') {
+        if (payload.action === "client_started") {
             this.forceUpdate();
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // HACK: Workaround for the context's MatrixClient not updating.
         const client = this.context || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
-        const classes = classnames({
-            [className]: true,
+        const classes = classnames(className, {
             [`${className}_guest`]: isGuest,
             [`${className}_loggedIn`]: !!client,
         });
 
-        const content = <div className={`${className}_body`}
-            dangerouslySetInnerHTML={{ __html: this.state.page }}
-        />;
+        const content = <div className={`${className}_body`} dangerouslySetInnerHTML={{ __html: this.state.page }} />;
 
         if (this.props.scrollbar) {
-            return <AutoHideScrollbar className={classes}>
-                { content }
-            </AutoHideScrollbar>;
+            return <AutoHideScrollbar className={classes}>{content}</AutoHideScrollbar>;
         } else {
-            return <div className={classes}>
-                { content }
-            </div>;
+            return <div className={classes}>{content}</div>;
         }
     }
 }

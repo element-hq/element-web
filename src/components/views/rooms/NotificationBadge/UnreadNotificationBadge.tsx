@@ -14,23 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { useUnreadNotifications } from "../../../../hooks/useUnreadNotifications";
 import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
 
 interface Props {
-    room: Room;
+    room?: Room;
     threadId?: string;
+    /**
+     * If true, where we would normally show a badge, we instead show a dot. No numeric count will
+     * be displayed.
+     */
+    forceDot?: boolean;
 }
 
-export function UnreadNotificationBadge({ room, threadId }: Props) {
-    const { symbol, count, color } = useUnreadNotifications(room, threadId);
+export function UnreadNotificationBadge({ room, threadId, forceDot }: Props): JSX.Element {
+    const { symbol, count, level } = useUnreadNotifications(room, threadId);
 
-    return <StatelessNotificationBadge
-        symbol={symbol}
-        count={count}
-        color={color}
-    />;
+    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} forceDot={forceDot} />;
 }

@@ -43,7 +43,7 @@ jest.mock("../../../../src/customisations/RoomList", () => ({
 const createRoom = (isSpaceRoom = false): Room => {
     return {
         isSpaceRoom: () => isSpaceRoom,
-        getType: () => isSpaceRoom ? RoomType.Space : undefined,
+        getType: () => (isSpaceRoom ? RoomType.Space : undefined),
     } as unknown as Room;
 };
 
@@ -109,14 +109,14 @@ describe("VisibilityProvider", () => {
         });
 
         it("should return false if visibility customisation returns false", () => {
-            mocked(RoomListCustomisations.isRoomVisible).mockReturnValue(false);
+            mocked(RoomListCustomisations.isRoomVisible!).mockReturnValue(false);
             const room = createRoom();
             expect(VisibilityProvider.instance.isRoomVisible(room)).toBe(false);
             expect(RoomListCustomisations.isRoomVisible).toHaveBeenCalledWith(room);
         });
 
         it("should return true if visibility customisation returns true", () => {
-            mocked(RoomListCustomisations.isRoomVisible).mockReturnValue(true);
+            mocked(RoomListCustomisations.isRoomVisible!).mockReturnValue(true);
             const room = createRoom();
             expect(VisibilityProvider.instance.isRoomVisible(room)).toBe(true);
             expect(RoomListCustomisations.isRoomVisible).toHaveBeenCalledWith(room);

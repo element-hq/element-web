@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 export interface ScrollState {
-    focussedEvent: string;
-    pixelOffset: number;
+    focussedEvent?: string;
+    pixelOffset?: number;
 }
 
 /**
@@ -38,16 +38,20 @@ export class RoomScrollStateStore {
     //        from the focussedEvent.
     private scrollStateMap = new Map<string, ScrollState>();
 
-    public getScrollState(roomId: string): ScrollState {
+    public getScrollState(roomId: string): ScrollState | undefined {
         return this.scrollStateMap.get(roomId);
     }
 
-    setScrollState(roomId: string, scrollState: ScrollState): void {
-        this.scrollStateMap.set(roomId, scrollState);
+    public setScrollState(roomId: string, scrollState: ScrollState | null): void {
+        if (scrollState === null) {
+            this.scrollStateMap.delete(roomId);
+        } else {
+            this.scrollStateMap.set(roomId, scrollState);
+        }
     }
 }
 
 if (window.mxRoomScrollStateStore === undefined) {
     window.mxRoomScrollStateStore = new RoomScrollStateStore();
 }
-export default window.mxRoomScrollStateStore;
+export default window.mxRoomScrollStateStore!;

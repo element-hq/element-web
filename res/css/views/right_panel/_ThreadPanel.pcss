@@ -26,7 +26,7 @@ limitations under the License.
             }
 
             .mx_ThreadPanel_dropdown {
-                padding: 3px $spacing-4 3px $spacing-8; /* TODO: Use a spacing variable */
+                padding: 3px $spacing-4 3px $spacing-8;
                 border-radius: 4px;
                 line-height: 1.5;
                 user-select: none;
@@ -94,7 +94,8 @@ limitations under the License.
         }
     }
 
-    .mx_RoomView_messagePanel { /* To avoid the rule from being applied to .mx_ThreadPanel_empty */
+    .mx_RoomView_messagePanel {
+        /* To avoid the rule from being applied to .mx_ThreadPanel_empty */
         .mx_RoomView_messageListWrapper {
             width: calc(100% + 6px); /* 8px - 2px */
         }
@@ -111,7 +112,7 @@ limitations under the License.
         /* Account for scrollbar when hovering */
         padding-top: 0;
 
-        .mx_DateSeparator {
+        .mx_TimelineSeparator {
             display: none;
         }
 
@@ -149,11 +150,11 @@ limitations under the License.
 }
 
 .mx_ThreadPanel_viewInRoom::before {
-    mask-image: url('$(res)/img/element-icons/view-in-room.svg');
+    mask-image: url("$(res)/img/element-icons/view-in-room.svg");
 }
 
 .mx_ThreadPanel_copyLinkToThread::before {
-    mask-image: url('$(res)/img/element-icons/link.svg');
+    mask-image: url("$(res)/img/element-icons/link.svg");
 }
 
 .mx_ThreadPanel_empty {
@@ -173,7 +174,7 @@ limitations under the License.
 
     h2 {
         color: $primary-content;
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-18px;
         margin-top: 24px;
         margin-bottom: 10px;
@@ -202,8 +203,8 @@ limitations under the License.
         font-size: $font-12px;
         line-height: $font-15px;
 
-        >b {
-            font-weight: $font-semi-bold;
+        > b {
+            font-weight: var(--cpd-font-weight-semibold);
         }
     }
 }

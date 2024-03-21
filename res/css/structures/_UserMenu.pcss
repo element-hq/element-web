@@ -30,10 +30,31 @@ limitations under the License.
                 pointer-events: none; /* makes the avatar non-draggable */
             }
         }
+
+        .mx_UserMenu_userAvatarLive {
+            align-items: center;
+            background-color: $alert;
+            border-radius: 6px;
+            color: $live-badge-color;
+            display: flex;
+            height: 12px;
+            justify-content: center;
+            left: 25px;
+            position: absolute;
+            top: 20px;
+            width: 12px;
+        }
+    }
+
+    .mx_UserMenu_contextMenuButton {
+        width: 100%;
     }
 
     .mx_UserMenu_name {
-        font-weight: $font-semi-bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
         margin-left: 10px;
@@ -48,7 +69,7 @@ limitations under the License.
         border-radius: 50%;
 
         &::before {
-            content: '';
+            content: "";
             width: 16px;
             height: 16px;
             position: absolute;
@@ -56,7 +77,7 @@ limitations under the License.
             mask-size: contain;
             mask-repeat: no-repeat;
             background-color: $alert;
-            mask-image: url('$(res)/img/element-icons/roomlist/dnd.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
         }
     }
 }
@@ -90,7 +111,7 @@ limitations under the License.
 
             .mx_UserMenu_contextMenu_displayName,
             .mx_UserMenu_contextMenu_userId {
-                font-size: $font-15px;
+                font: var(--cpd-font-heading-sm-regular);
 
                 /* Automatically grow subelements to fit the container */
                 flex: 1;
@@ -103,12 +124,7 @@ limitations under the License.
             }
 
             .mx_UserMenu_contextMenu_displayName {
-                font-weight: bold;
-                line-height: $font-20px;
-            }
-
-            .mx_UserMenu_contextMenu_userId {
-                line-height: $font-24px;
+                font-weight: var(--cpd-font-weight-semibold);
             }
         }
 
@@ -128,16 +144,12 @@ limitations under the License.
             justify-content: center;
         }
 
-        &.mx_UserMenu_contextMenu_guestPrompts,
-        &.mx_UserMenu_contextMenu_hostingLink {
-            padding-top: 0;
-        }
-
         &.mx_UserMenu_contextMenu_guestPrompts {
+            padding-top: 0;
             display: inline-block;
 
             > span {
-                font-weight: 600;
+                font-weight: var(--cpd-font-weight-semibold);
                 display: block;
 
                 & + span {
@@ -153,51 +165,47 @@ limitations under the License.
         display: block;
 
         &::before {
-            content: '';
+            content: "";
             width: 16px;
             height: 16px;
             display: block;
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $primary-content;
+            background: $icon-button-color;
         }
     }
 
     .mx_UserMenu_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/home.svg');
+        mask-image: url("$(res)/img/element-icons/home.svg");
     }
 
     .mx_UserMenu_iconDnd::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/dnd.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
     }
 
     .mx_UserMenu_iconDndOff::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/dnd-cross.svg');
-    }
-
-    .mx_UserMenu_iconHosting::before {
-        mask-image: url('$(res)/img/element-icons/brands/element.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd-cross.svg");
     }
 
     .mx_UserMenu_iconBell::before {
-        mask-image: url('$(res)/img/element-icons/notifications.svg');
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
     }
 
     .mx_UserMenu_iconLock::before {
-        mask-image: url('$(res)/img/element-icons/security.svg');
+        mask-image: url("$(res)/img/element-icons/security.svg");
     }
 
     .mx_UserMenu_iconSettings::before {
-        mask-image: url('$(res)/img/element-icons/settings.svg');
+        mask-image: url("$(res)/img/element-icons/settings.svg");
     }
 
     .mx_UserMenu_iconMessage::before {
-        mask-image: url('$(res)/img/element-icons/feedback.svg');
+        mask-image: url("$(res)/img/element-icons/feedback.svg");
     }
 
     .mx_UserMenu_iconSignOut::before {
-        mask-image: url('$(res)/img/element-icons/leave.svg');
+        mask-image: url("$(res)/img/element-icons/leave.svg");
     }
 }
 
@@ -243,7 +251,7 @@ limitations under the License.
                 position: absolute;
                 width: inherit;
                 height: inherit;
-                mask-image: url('$(res)/img/feather-customised/x.svg');
+                mask-image: url("$(res)/img/feather-customised/x.svg");
                 mask-position: center;
                 mask-size: 12px;
                 mask-repeat: no-repeat;

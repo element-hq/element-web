@@ -1,5 +1,6 @@
 /*
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,42 +16,44 @@ limitations under the License.
 */
 
 import React, { useContext, useMemo } from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/matrix";
 
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";
 
-const ServersInRoom = ({ onBack }: IDevtoolsProps) => {
+const ServersInRoom: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const context = useContext(DevtoolsContext);
 
     const servers = useMemo<Record<string, number>>(() => {
         const servers: Record<string, number> = {};
-        context.room.currentState.getStateEvents(EventType.RoomMember).forEach(ev => {
+        context.room.currentState.getStateEvents(EventType.RoomMember).forEach((ev) => {
             if (ev.getContent().membership !== "join") return; // only count joined users
-            const server = ev.getSender().split(":")[1];
+            const server = ev.getSender()!.split(":")[1];
             servers[server] = (servers[server] ?? 0) + 1;
         });
         return servers;
     }, [context.room]);
 
-    return <BaseTool onBack={onBack}>
-        <table>
-            <thead>
-                <tr>
-                    <th>{ _t("Server") }</th>
-                    <th>{ _t("Number of users") }</th>
-                </tr>
-            </thead>
-            <tbody>
-                { Object.entries(servers).map(([server, numUsers]) => (
-                    <tr key={server}>
-                        <td>{ server }</td>
-                        <td>{ numUsers }</td>
+    return (
+        <BaseTool onBack={onBack}>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{_t("common|server")}</th>
+                        <th>{_t("devtools|number_of_users")}</th>
                     </tr>
-                )) }
-            </tbody>
-        </table>
-    </BaseTool>;
+                </thead>
+                <tbody>
+                    {Object.entries(servers).map(([server, numUsers]) => (
+                        <tr key={server}>
+                            <td>{server}</td>
+                            <td>{numUsers}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </BaseTool>
+    );
 };
 
 export default ServersInRoom;

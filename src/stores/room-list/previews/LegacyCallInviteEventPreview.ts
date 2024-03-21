@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -23,17 +23,17 @@ import { _t } from "../../../languageHandler";
 
 export class LegacyCallInviteEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
-        if (shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
             if (isSelf(event)) {
-                return _t("You started a call");
+                return _t("event_preview|m.call.invite|you");
             } else {
-                return _t("%(senderName)s started a call", { senderName: getSenderName(event) });
+                return _t("event_preview|m.call.invite|user", { senderName: getSenderName(event) });
             }
         } else {
             if (isSelf(event)) {
-                return _t("Waiting for answer");
+                return _t("event_preview|m.call.invite|dm_send");
             } else {
-                return _t("%(senderName)s is calling", { senderName: getSenderName(event) });
+                return _t("event_preview|m.call.invite|dm_receive", { senderName: getSenderName(event) });
             }
         }
     }

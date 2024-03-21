@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastPreRecordingPip when rendered should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          !room@example.com
+        </div>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room_wrapper"
+          >
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              !room@example.com
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line mx_VoiceBroadcastHeader_mic--clickable"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            Default Device
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_VoiceBroadcastBody_blockButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Go live
+    </div>
+  </div>
+</div>
+`;

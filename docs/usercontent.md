@@ -13,12 +13,12 @@ It exposes a function over a postMessage API, when sent an object with the match
 
 ```json5
 {
-    "imgSrc": "", // the src of the image to display in the download link
-    "imgStyle": "", // the style to apply to the image
-    "style":  "", // the style to apply to the download link
-    "download": "", // download attribute to pass to the <a/> tag
-    "textContent": "", // the text to put inside the download link
-    "blob": "", // the data blob to wrap in an object url and allow the user to download
+    imgSrc: "", // the src of the image to display in the download link
+    imgStyle: "", // the style to apply to the image
+    style: "", // the style to apply to the download link
+    download: "", // download attribute to pass to the <a/> tag
+    textContent: "", // the text to put inside the download link
+    blob: "", // the data blob to wrap in an object url and allow the user to download
 }
 ```
 

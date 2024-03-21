@@ -14,46 +14,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
 import { RovingAccessibleButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
+import { formatDateForInput } from "../../../DateUtils";
 
 interface IProps {
     ts: number;
-    onDatePicked?: (dateString: string) => void;
+    onDatePicked: (dateString: string) => void;
 }
 
 const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     const date = new Date(ts);
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, "0");
-    const day = `${date.getDate()}`.padStart(2, "0");
-    const dateDefaultValue = `${year}-${month}-${day}`;
+    const dateInputDefaultValue = formatDateForInput(date);
 
-    const [dateValue, setDateValue] = useState(dateDefaultValue);
+    const [dateValue, setDateValue] = useState(dateInputDefaultValue);
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
-    const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>) => setDateValue(ev.target.value);
+    const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>): void => setDateValue(ev.target.value);
     const onJumpToDateSubmit = (ev: FormEvent): void => {
         ev.preventDefault();
         onDatePicked(dateValue);
     };
 
     return (
-        <form
-            className="mx_JumpToDatePicker_form"
-            onSubmit={onJumpToDateSubmit}
-        >
-            <span className="mx_JumpToDatePicker_label">{ _t("Jump to date") }</span>
+        <form className="mx_JumpToDatePicker_form" onSubmit={onJumpToDateSubmit}>
+            <span className="mx_JumpToDatePicker_label">{_t("room|jump_to_date")}</span>
             <Field
                 element="input"
                 type="date"
                 onInput={onDateValueInput}
                 value={dateValue}
+                // Prevent people from selecting a day in the future (there won't be any
+                // events there anyway).
+                max={formatDateForInput(new Date())}
                 className="mx_JumpToDatePicker_datePicker"
-                label={_t("Pick a date to jump to")}
+                label={_t("room|jump_to_date_prompt")}
                 onFocus={onFocus}
                 inputRef={ref}
                 tabIndex={isActive ? 0 : -1}
@@ -65,7 +63,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_submitButton"
                 onClick={onJumpToDateSubmit}
             >
-                { _t("Go") }
+                {_t("action|go")}
             </RovingAccessibleButton>
         </form>
     );

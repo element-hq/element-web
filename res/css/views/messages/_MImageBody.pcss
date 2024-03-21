@@ -15,14 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$timeline-image-border-radius: 8px;
-
 .mx_MImageBody_banner {
     position: absolute;
     bottom: $spacing-4;
     left: $spacing-4;
     padding: $spacing-4;
-    border-radius: $timeline-image-border-radius;
+    border-radius: var(--MBody-border-radius);
     font-size: $font-15px;
     user-select: none; /* prevent banner text from being selected */
     pointer-events: none; /* let the cursor go through to the media underneath */
@@ -50,12 +48,12 @@ $timeline-image-border-radius: 8px;
     background-color: $background;
 
     .mx_Blurhash > canvas {
-        animation: mx--anim-pulse 1.75s infinite cubic-bezier(.4, 0, .6, 1);
+        animation: mx--anim-pulse 1.75s infinite cubic-bezier(0.4, 0, 0.6, 1);
     }
 }
 
 .mx_MImageBody_thumbnail_container {
-    border-radius: $timeline-image-border-radius;
+    border-radius: var(--MBody-border-radius);
 
     /* Necessary for the border radius to apply correctly to the placeholder */
     overflow: hidden;
@@ -92,10 +90,7 @@ $timeline-image-border-radius: 8px;
 
 .mx_HiddenImagePlaceholder {
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
+    inset: 0;
 
     /* To center the text in the middle of the frame */
     display: flex;
@@ -113,7 +108,7 @@ $timeline-image-border-radius: 8px;
             margin-right: 8px;
 
             background-color: $accent;
-            mask-image: url('$(res)/img/feather-customised/eye.svg');
+            mask-image: url("$(res)/img/feather-customised/eye.svg");
             display: inline-block;
             width: 18px;
             height: 14px;

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,41 +14,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import React from "react";
 
 import {
     VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingEvent,
+    VoiceBroadcastRecordingState,
 } from "..";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
-import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
 
 const showStopBroadcastingDialog = async (): Promise<boolean> => {
-    const { finished } = Modal.createDialog(
-        QuestionDialog,
-        {
-            title: _t("Stop live broadcasting?"),
-            description: (
-                <p>
-                    { _t("Are you sure you want to stop your live broadcast?"
-                        + "This will end the broadcast and the full recording will be available in the room.") }
-                </p>
-            ),
-            button: _t("Yes, stop broadcast"),
-        },
-    );
+    const { finished } = Modal.createDialog(QuestionDialog, {
+        title: _t("voice_broadcast|confirm_stop_title"),
+        description: <p>{_t("voice_broadcast|confirm_stop_description")}</p>,
+        button: _t("voice_broadcast|confirm_stop_affirm"),
+    });
     const [confirmed] = await finished;
-    return confirmed;
+    return !!confirmed;
 };
 
-export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) => {
-    const client = MatrixClientPeg.get();
-    const room = client.getRoom(recording.infoEvent.getRoomId());
-    const stopRecording = async () => {
+export const useVoiceBroadcastRecording = (
+    recording: VoiceBroadcastRecording,
+): {
+    live: boolean;
+    timeLeft: number;
+    recordingState: VoiceBroadcastRecordingState;
+    room: Room;
+    sender: RoomMember | null;
+    stopRecording(): void;
+    toggleRecording(): void;
+} => {
+    const client = MatrixClientPeg.safeGet();
+    const roomId = recording.infoEvent.getRoomId();
+    const room = client.getRoom(roomId);
+
+    if (!room) {
+        throw new Error("Unable to find voice broadcast room with Id: " + roomId);
+    }
+
+    const sender = recording.infoEvent.sender;
+
+    if (!sender) {
+        throw new Error(`Voice Broadcast sender not found (event ${recording.infoEvent.getId()})`);
+    }
+
+    const stopRecording = async (): Promise<void> => {
         const confirmed = await showStopBroadcastingDialog();
 
         if (confirmed) {
@@ -56,26 +72,32 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
         }
     };
 
-    const [recordingState, setRecordingState] = useState(recording.getState());
-    useTypedEventEmitter(
+    const recordingState = useTypedEventEmitterState(
         recording,
         VoiceBroadcastRecordingEvent.StateChanged,
-        (state: VoiceBroadcastInfoState, _recording: VoiceBroadcastRecording) => {
-            setRecordingState(state);
+        (state?: VoiceBroadcastRecordingState) => {
+            return state ?? recording.getState();
         },
     );
 
-    const live = [
-        VoiceBroadcastInfoState.Started,
-        VoiceBroadcastInfoState.Paused,
-        VoiceBroadcastInfoState.Resumed,
-    ].includes(recordingState);
+    const timeLeft = useTypedEventEmitterState(
+        recording,
+        VoiceBroadcastRecordingEvent.TimeLeftChanged,
+        (t?: number) => {
+            return t ?? recording.getTimeLeft();
+        },
+    );
+
+    const live = (
+        [VoiceBroadcastInfoState.Started, VoiceBroadcastInfoState.Resumed] as VoiceBroadcastRecordingState[]
+    ).includes(recordingState);
 
     return {
         live,
+        timeLeft,
         recordingState,
         room,
-        sender: recording.infoEvent.sender,
+        sender,
         stopRecording,
         toggleRecording: recording.toggle,
     };

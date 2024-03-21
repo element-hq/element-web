@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
+import { DeepReadonly } from "../../@types/common";
 
 export type DeviceClientInformation = {
     name?: string;
@@ -40,8 +41,8 @@ const formatUrl = (): string | undefined => {
     ].join("");
 };
 
-export const getClientInformationEventType = (deviceId: string): string =>
-    `io.element.matrix_client_information.${deviceId}`;
+const clientInformationEventPrefix = "io.element.matrix_client_information.";
+export const getClientInformationEventType = (deviceId: string): string => `${clientInformationEventPrefix}${deviceId}`;
 
 /**
  * Record extra client information for the current device
@@ -49,12 +50,12 @@ export const getClientInformationEventType = (deviceId: string): string =>
  */
 export const recordClientInformation = async (
     matrixClient: MatrixClient,
-    sdkConfig: IConfigOptions,
-    platform: BasePlatform,
+    sdkConfig: DeepReadonly<IConfigOptions>,
+    platform?: BasePlatform,
 ): Promise<void> => {
-    const deviceId = matrixClient.getDeviceId();
+    const deviceId = matrixClient.getDeviceId()!;
     const { brand } = sdkConfig;
-    const version = await platform.getAppVersion();
+    const version = await platform?.getAppVersion();
     const type = getClientInformationEventType(deviceId);
     const url = formatUrl();
 
@@ -66,25 +67,38 @@ export const recordClientInformation = async (
 };
 
 /**
- * Remove extra client information
- * @todo(kerrya) revisit after MSC3391: account data deletion is done
- * (PSBE-12)
+ * Remove client information events for devices that no longer exist
+ * @param validDeviceIds - ids of current devices,
+ *                      client information for devices NOT in this list will be removed
  */
-export const removeClientInformation = async (
-    matrixClient: MatrixClient,
-): Promise<void> => {
-    const deviceId = matrixClient.getDeviceId();
+export const pruneClientInformation = (validDeviceIds: string[], matrixClient: MatrixClient): void => {
+    Array.from(matrixClient.store.accountData.values()).forEach((event) => {
+        if (!event.getType().startsWith(clientInformationEventPrefix)) {
+            return;
+        }
+        const [, deviceId] = event.getType().split(clientInformationEventPrefix);
+        if (deviceId && !validDeviceIds.includes(deviceId)) {
+            matrixClient.deleteAccountData(event.getType());
+        }
+    });
+};
+
+/**
+ * Remove extra client information for current device
+ */
+export const removeClientInformation = async (matrixClient: MatrixClient): Promise<void> => {
+    const deviceId = matrixClient.getDeviceId()!;
     const type = getClientInformationEventType(deviceId);
     const clientInformation = getDeviceClientInformation(matrixClient, deviceId);
 
-    // if a non-empty client info event exists, overwrite to remove the content
+    // if a non-empty client info event exists, remove it
     if (clientInformation.name || clientInformation.version || clientInformation.url) {
-        await matrixClient.setAccountData(type, {});
+        await matrixClient.deleteAccountData(type);
     }
 };
 
 const sanitizeContentString = (value: unknown): string | undefined =>
-    value && typeof value === 'string' ? value : undefined;
+    value && typeof value === "string" ? value : undefined;
 
 export const getDeviceClientInformation = (matrixClient: MatrixClient, deviceId: string): DeviceClientInformation => {
     const event = matrixClient.getAccountData(getClientInformationEventType(deviceId));
@@ -101,4 +115,3 @@ export const getDeviceClientInformation = (matrixClient: MatrixClient, deviceId:
         url: sanitizeContentString(url),
     };
 };
-

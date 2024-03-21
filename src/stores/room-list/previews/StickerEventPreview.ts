@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -22,14 +22,14 @@ import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { _t } from "../../../languageHandler";
 
 export class StickerEventPreview implements IPreview {
-    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
-        const stickerName = event.getContent()['body'];
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
+        const stickerName = event.getContent()["body"];
         if (!stickerName) return null;
 
-        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
             return stickerName;
         } else {
-            return _t("%(senderName)s: %(stickerName)s", { senderName: getSenderName(event), stickerName });
+            return _t("event_preview|m.sticker", { senderName: getSenderName(event), stickerName });
         }
     }
 }

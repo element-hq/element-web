@@ -14,69 +14,77 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from 'react';
-import { LocalNotificationSettings } from 'matrix-js-sdk/src/@types/local_notifications';
+import React, { useState } from "react";
+import { LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
-import { _t } from '../../../../languageHandler';
-import Spinner from '../../elements/Spinner';
-import SettingsSubsection from '../shared/SettingsSubsection';
-import { SettingsSubsectionHeading } from '../shared/SettingsSubsectionHeading';
-import DeviceDetails from './DeviceDetails';
-import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
-import DeviceTile from './DeviceTile';
-import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
-import { ExtendedDevice } from './types';
-import { KebabContextMenu } from '../../context_menus/KebabContextMenu';
-import { IconizedContextMenuOption } from '../../context_menus/IconizedContextMenu';
+import { _t } from "../../../../languageHandler";
+import Spinner from "../../elements/Spinner";
+import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
+import DeviceDetails from "./DeviceDetails";
+import { DeviceExpandDetailsButton } from "./DeviceExpandDetailsButton";
+import DeviceTile from "./DeviceTile";
+import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
+import { ExtendedDevice } from "./types";
+import { KebabContextMenu } from "../../context_menus/KebabContextMenu";
+import { IconizedContextMenuOption } from "../../context_menus/IconizedContextMenu";
 
 interface Props {
     device?: ExtendedDevice;
     isLoading: boolean;
     isSigningOut: boolean;
-    localNotificationSettings?: LocalNotificationSettings | undefined;
-    setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
+    localNotificationSettings?: LocalNotificationSettings;
+    // number of other sessions the user has
+    // excludes current session
+    otherSessionsCount: number;
+    setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
     signOutAllOtherSessions?: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
 }
 
-type CurrentDeviceSectionHeadingProps =
-    Pick<Props, 'onSignOutCurrentDevice' | 'signOutAllOtherSessions'>
-    & { disabled?: boolean };
+type CurrentDeviceSectionHeadingProps = Pick<
+    Props,
+    "onSignOutCurrentDevice" | "signOutAllOtherSessions" | "otherSessionsCount"
+> & {
+    disabled?: boolean;
+};
 
 const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = ({
     onSignOutCurrentDevice,
     signOutAllOtherSessions,
+    otherSessionsCount,
     disabled,
 }) => {
     const menuOptions = [
         <IconizedContextMenuOption
             key="sign-out"
-            label={_t('Sign out')}
+            label={_t("action|sign_out")}
             onClick={onSignOutCurrentDevice}
             isDestructive
         />,
         ...(signOutAllOtherSessions
             ? [
-                <IconizedContextMenuOption
-                    key="sign-out-all-others"
-                    label={_t('Sign out all other sessions')}
-                    onClick={signOutAllOtherSessions}
-                    isDestructive
-                />,
-            ]
-            : []
-        ),
+                  <IconizedContextMenuOption
+                      key="sign-out-all-others"
+                      label={_t("settings|sessions|sign_out_all_other_sessions", { otherSessionsCount })}
+                      onClick={signOutAllOtherSessions}
+                      isDestructive
+                  />,
+              ]
+            : []),
     ];
-    return <SettingsSubsectionHeading heading={_t('Current session')}>
-        <KebabContextMenu
-            disabled={disabled}
-            title={_t('Options')}
-            options={menuOptions}
-            data-testid='current-session-menu'
-        />
-    </SettingsSubsectionHeading>;
+    return (
+        <SettingsSubsectionHeading heading={_t("settings|sessions|current_session")}>
+            <KebabContextMenu
+                disabled={disabled}
+                title={_t("common|options")}
+                options={menuOptions}
+                data-testid="current-session-menu"
+            />
+        </SettingsSubsectionHeading>
+    );
 };
 
 const CurrentDeviceSection: React.FC<Props> = ({
@@ -84,6 +92,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     isLoading,
     isSigningOut,
     localNotificationSettings,
+    otherSessionsCount,
     setPushNotifications,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
@@ -92,43 +101,54 @@ const CurrentDeviceSection: React.FC<Props> = ({
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    return <SettingsSubsection
-        data-testid='current-session-section'
-        heading={<CurrentDeviceSectionHeading
-            onSignOutCurrentDevice={onSignOutCurrentDevice}
-            signOutAllOtherSessions={signOutAllOtherSessions}
-            disabled={isLoading || !device || isSigningOut}
-        />}
-    >
-        { /* only show big spinner on first load */ }
-        { isLoading && !device && <Spinner /> }
-        { !!device && <>
-            <DeviceTile
-                device={device}
-                onClick={() => setIsExpanded(!isExpanded)}
-            >
-                <DeviceExpandDetailsButton
-                    data-testid='current-session-toggle-details'
-                    isExpanded={isExpanded}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                />
-            </DeviceTile>
-            { isExpanded &&
-                <DeviceDetails
-                    device={device}
-                    localNotificationSettings={localNotificationSettings}
-                    setPushNotifications={setPushNotifications}
-                    isSigningOut={isSigningOut}
-                    onVerifyDevice={onVerifyCurrentDevice}
-                    onSignOutDevice={onSignOutCurrentDevice}
-                    saveDeviceName={saveDeviceName}
+    return (
+        <SettingsSubsection
+            data-testid="current-session-section"
+            heading={
+                <CurrentDeviceSectionHeading
+                    onSignOutCurrentDevice={onSignOutCurrentDevice}
+                    signOutAllOtherSessions={signOutAllOtherSessions}
+                    otherSessionsCount={otherSessionsCount}
+                    disabled={isLoading || !device || isSigningOut}
                 />
             }
-            <br />
-            <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyCurrentDevice} />
-        </>
-        }
-    </SettingsSubsection>;
+        >
+            {/* only show big spinner on first load */}
+            {isLoading && !device && <Spinner />}
+            {!!device && (
+                <>
+                    <DeviceTile device={device} onClick={() => setIsExpanded(!isExpanded)}>
+                        <DeviceExpandDetailsButton
+                            data-testid="current-session-toggle-details"
+                            isExpanded={isExpanded}
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        />
+                    </DeviceTile>
+                    {isExpanded ? (
+                        <DeviceDetails
+                            device={device}
+                            localNotificationSettings={localNotificationSettings}
+                            setPushNotifications={setPushNotifications}
+                            isSigningOut={isSigningOut}
+                            onVerifyDevice={onVerifyCurrentDevice}
+                            onSignOutDevice={onSignOutCurrentDevice}
+                            saveDeviceName={saveDeviceName}
+                            className="mx_CurrentDeviceSection_deviceDetails"
+                        />
+                    ) : (
+                        <>
+                            <br />
+                            <DeviceVerificationStatusCard
+                                device={device}
+                                onVerifyDevice={onVerifyCurrentDevice}
+                                isCurrentDevice
+                            />
+                        </>
+                    )}
+                </>
+            )}
+        </SettingsSubsection>
+    );
 };
 
 export default CurrentDeviceSection;

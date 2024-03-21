@@ -27,9 +27,9 @@ limitations under the License.
     display: flex;
     align-items: center;
     position: relative;
-    border-radius: 4px;
-    border: 1px solid $strong-input-border-color;
-    font-size: $font-12px;
+    border-radius: 8px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    font: var(--cpd-font-body-sm-regular);
     user-select: none;
 }
 
@@ -50,7 +50,7 @@ limitations under the License.
     width: 10px;
     height: 6px;
     padding-right: 9px;
-    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
+    mask: url("$(res)/img/feather-customised/dropdown-arrow.svg");
     mask-repeat: no-repeat;
     background: $primary-content;
 }
@@ -58,8 +58,8 @@ limitations under the License.
 .mx_Dropdown_option {
     height: 35px;
     line-height: $font-35px;
-    padding-left: 8px;
-    padding-right: 8px;
+    /* Overwrites the default padding for any li elements */
+    padding: 0 8px;
 }
 
 .mx_Dropdown_input > .mx_Dropdown_option {
@@ -119,6 +119,10 @@ input.mx_Dropdown_option:focus {
 .mx_Dropdown_menu .mx_Dropdown_option {
     height: auto;
     min-height: 35px;
+}
+
+ul.mx_Dropdown_menu li.mx_Dropdown_option {
+    list-style: none;
 }
 
 .mx_Dropdown_menu .mx_Dropdown_option_highlight {

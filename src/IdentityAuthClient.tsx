@@ -15,27 +15,26 @@ limitations under the License.
 */
 
 import React from "react";
-import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
-import { createClient, MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { SERVICE_TYPES, createClient, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import Modal from './Modal';
-import { _t } from './languageHandler';
-import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import Modal from "./Modal";
+import { _t } from "./languageHandler";
+import { Service, startTermsFlow, TermsNotSignedError } from "./Terms";
 import {
     doesAccountDataHaveIdentityServer,
     doesIdentityServerHaveTerms,
     setToDefaultIdentityServer,
-} from './utils/IdentityServerUtils';
+} from "./utils/IdentityServerUtils";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import { abbreviateUrl } from "./utils/UrlUtils";
 
 export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
-    private accessToken: string;
-    private tempClient: MatrixClient;
+    private accessToken: string | null = null;
+    private tempClient?: MatrixClient;
     private authEnabled = true;
 
     /**
@@ -44,7 +43,7 @@ export default class IdentityAuthClient {
      * When provided, this class will operate solely within memory, refusing to
      * persist any information such as tokens. Default null (not provided).
      */
-    constructor(identityUrl?: string) {
+    public constructor(identityUrl?: string) {
         if (identityUrl) {
             // XXX: We shouldn't have to create a whole new MatrixClient just to
             // do identity server auth. The functions don't take an identity URL
@@ -58,32 +57,37 @@ export default class IdentityAuthClient {
         }
     }
 
+    // This client must not be used for general operations as it may not have a baseUrl or be running (tempClient).
+    private get identityClient(): MatrixClient {
+        return this.tempClient ?? this.matrixClient;
+    }
+
     private get matrixClient(): MatrixClient {
-        return this.tempClient ? this.tempClient : MatrixClientPeg.get();
+        return MatrixClientPeg.safeGet();
     }
 
     private writeToken(): void {
         if (this.tempClient) return; // temporary client: ignore
-        window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        if (this.accessToken) {
+            window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        } else {
+            window.localStorage.removeItem("mx_is_access_token");
+        }
     }
 
-    private readToken(): string {
+    private readToken(): string | null {
         if (this.tempClient) return null; // temporary client: ignore
         return window.localStorage.getItem("mx_is_access_token");
     }
 
-    public hasCredentials(): boolean {
-        return Boolean(this.accessToken);
-    }
-
     // Returns a promise that resolves to the access_token string from the IS
-    public async getAccessToken({ check = true } = {}): Promise<string> {
+    public async getAccessToken({ check = true } = {}): Promise<string | null> {
         if (!this.authEnabled) {
             // The current IS doesn't support authentication
             return null;
         }
 
-        let token = this.accessToken;
+        let token: string | null = this.accessToken;
         if (!token) {
             token = this.readToken();
         }
@@ -101,10 +105,7 @@ export default class IdentityAuthClient {
             try {
                 await this.checkToken(token);
             } catch (e) {
-                if (
-                    e instanceof TermsNotSignedError ||
-                    e instanceof AbortedIdentityActionError
-                ) {
+                if (e instanceof TermsNotSignedError || e instanceof AbortedIdentityActionError) {
                     // Retrying won't help this
                     throw e;
                 }
@@ -121,18 +122,14 @@ export default class IdentityAuthClient {
     }
 
     private async checkToken(token: string): Promise<void> {
-        const identityServerUrl = this.matrixClient.getIdentityServerUrl();
+        const identityServerUrl = this.identityClient.getIdentityServerUrl()!;
 
         try {
-            await this.matrixClient.getIdentityAccount(token);
+            await this.identityClient.getIdentityAccount(token);
         } catch (e) {
-            if (e.errcode === "M_TERMS_NOT_SIGNED") {
+            if (e instanceof MatrixError && e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
-                await startTermsFlow([new Service(
-                    SERVICE_TYPES.IS,
-                    identityServerUrl,
-                    token,
-                )]);
+                await startTermsFlow(this.matrixClient, [new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
                 return;
             }
             throw e;
@@ -140,35 +137,32 @@ export default class IdentityAuthClient {
 
         if (
             !this.tempClient &&
-            !doesAccountDataHaveIdentityServer() &&
-            !(await doesIdentityServerHaveTerms(identityServerUrl))
+            !doesAccountDataHaveIdentityServer(this.matrixClient) &&
+            !(await doesIdentityServerHaveTerms(this.matrixClient, identityServerUrl))
         ) {
             const { finished } = Modal.createDialog(QuestionDialog, {
-                title: _t("Identity server has no terms of service"),
+                title: _t("terms|identity_server_no_terms_title"),
                 description: (
                     <div>
-                        <p>{ _t(
-                            "This action requires accessing the default identity server " +
-                        "<server /> to validate an email address or phone number, " +
-                        "but the server does not have any terms of service.", {},
-                            {
-                                server: () => <b>{ abbreviateUrl(identityServerUrl) }</b>,
-                            },
-                        ) }</p>
-                        <p>{ _t(
-                            "Only continue if you trust the owner of the server.",
-                        ) }</p>
+                        <p>
+                            {_t(
+                                "terms|identity_server_no_terms_description_1",
+                                {},
+                                {
+                                    server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
+                                },
+                            )}
+                        </p>
+                        <p>{_t("terms|identity_server_no_terms_description_2")}</p>
                     </div>
                 ),
-                button: _t("Trust"),
+                button: _t("action|trust"),
             });
             const [confirmed] = await finished;
             if (confirmed) {
-                setToDefaultIdentityServer();
+                setToDefaultIdentityServer(this.matrixClient);
             } else {
-                throw new AbortedIdentityActionError(
-                    "User aborted identity server action without terms",
-                );
+                throw new AbortedIdentityActionError("User aborted identity server action without terms");
             }
         }
 
@@ -180,10 +174,10 @@ export default class IdentityAuthClient {
     }
 
     public async registerForToken(check = true): Promise<string> {
-        const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
+        const hsOpenIdToken = await MatrixClientPeg.safeGet().getOpenIdToken();
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
         const { access_token: accessToken, token } =
-            await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
+            await this.identityClient.registerWithIdentityServer(hsOpenIdToken);
         const identityAccessToken = token ? token : accessToken;
         if (check) await this.checkToken(identityAccessToken);
         return identityAccessToken;

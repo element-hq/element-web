@@ -25,9 +25,9 @@ interface Props {
     hideServerPicker?: boolean;
 }
 
-export function AuthHeaderModifier(props: Props) {
+export function AuthHeaderModifier(props: Props): null {
     const context = useContext(AuthHeaderContext);
-    const dispatch = context ? context.dispatch : null;
+    const dispatch = context?.dispatch ?? null;
     useEffect(() => {
         if (!dispatch) {
             return;

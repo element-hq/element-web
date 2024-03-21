@@ -19,18 +19,18 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import SdkConfig from "../SdkConfig";
 
-const onAccept = () => {
+const onAccept = (): void => {
     window.location.href = "mobile_guide/";
 };
 
-const onReject = () => {
+const onReject = (): void => {
     document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
     hideToast();
 };
 
 const TOAST_KEY = "mobileguide";
 
-export const showToast = () => {
+export const showToast = (): void => {
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isAndroid = /Android/.test(navigator.userAgent);
     const brand = SdkConfig.get().brand;
@@ -42,15 +42,12 @@ export const showToast = () => {
     }
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Use app for a better experience"),
+        title: _t("mobile_guide|toast_title"),
         props: {
-            description: _t(
-                "%(brand)s is experimental on a mobile web browser. " +
-                "For a better experience and the latest features, use our free native app.", { brand },
-            ),
-            acceptLabel: _t("Use app"),
+            description: _t("mobile_guide|toast_description", { brand }),
+            acceptLabel: _t("mobile_guide|toast_accept"),
             onAccept,
-            rejectLabel: _t("Dismiss"),
+            rejectLabel: _t("action|dismiss"),
             onReject,
         },
         component: GenericToast,
@@ -58,6 +55,6 @@ export const showToast = () => {
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

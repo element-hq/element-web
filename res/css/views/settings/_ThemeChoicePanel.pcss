@@ -14,53 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ThemeChoicePanel {
+.mx_ThemeChoicePanel_themeSelectors {
     color: $primary-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-    > .mx_ThemeSelectors {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+    > .mx_StyledRadioButton {
+        align-items: center;
+        padding: $font-16px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        width: 180px;
 
-        margin-top: 4px;
-        margin-bottom: 30px;
+        background: $accent-200;
+        opacity: 0.4;
 
-        > .mx_StyledRadioButton {
-            padding: $font-16px;
-            box-sizing: border-box;
-            border-radius: 10px;
-            width: 180px;
+        flex-shrink: 1;
+        flex-grow: 0;
 
-            background: $quinary-content;
-            opacity: 0.4;
+        margin-right: 15px;
+        margin-top: 10px;
 
-            flex-shrink: 1;
-            flex-grow: 0;
+        font-weight: var(--cpd-font-weight-semibold);
 
-            margin-right: 15px;
-            margin-top: 10px;
+        > span {
+            justify-content: center;
+        }
+    }
 
-            font-weight: 600;
+    > .mx_StyledRadioButton_enabled {
+        opacity: 1;
 
-            > span {
-                justify-content: center;
-            }
+        /* These colors need to be hardcoded because they don't change with the theme */
+        &.mx_ThemeSelector_light {
+            background-color: #f3f8fd;
+            color: #2e2f32;
         }
 
-        > .mx_StyledRadioButton_enabled {
-            opacity: 1;
-
-            /* These colors need to be hardcoded because they don't change with the theme */
-            &.mx_ThemeSelector_light {
-                background-color: #f3f8fd;
-                color: #2e2f32;
-            }
-
-            &.mx_ThemeSelector_dark {
-                /* 5% lightened version of 181b21 */
-                background-color: #25282e;
-                color: #f3f8fd;
-            }
+        &.mx_ThemeSelector_dark {
+            /* 5% lightened version of 181b21 */
+            background-color: #25282e;
+            color: #f3f8fd;
         }
     }
 }

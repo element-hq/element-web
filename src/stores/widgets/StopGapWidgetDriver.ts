@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,26 @@ import {
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
+    ISearchUserDirectoryResult,
+    IGetMediaConfigResult,
 } from "matrix-widget-api";
-import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import {
+    ClientEvent,
+    ITurnServer as IClientTurnServer,
+    EventType,
+    IContent,
+    MatrixEvent,
+    Room,
+    Direction,
+    THREAD_RELATION_TYPE,
+    StateEvents,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
-import { Direction } from "matrix-js-sdk/src/matrix";
+import {
+    ApprovalOpts,
+    CapabilitiesOpts,
+    WidgetLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
@@ -52,10 +64,11 @@ import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
-import SettingsStore from "../../settings/SettingsStore";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { ModuleRunner } from "../../modules/ModuleRunner";
+import SettingsStore from "../../settings/SettingsStore";
 
 // TODO: Purge this from the universe
 
@@ -63,7 +76,7 @@ function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
 }
 
-function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
+function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]): void {
     localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
 }
 
@@ -77,7 +90,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
 
     // TODO: Refactor widgetKind into the Widget class
-    constructor(
+    public constructor(
         allowedCapabilities: Capability[],
         private forWidget: Widget,
         private forWidgetKind: WidgetKind,
@@ -89,9 +102,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
-        this.allowedCapabilities = new Set([...allowedCapabilities,
+        this.allowedCapabilities = new Set([
+            ...allowedCapabilities,
             MatrixCapabilities.Screenshots,
-            ElementWidgetCapabilities.RequiresClient]);
+            ElementWidgetCapabilities.RequiresClient,
+        ]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {
@@ -105,8 +120,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
             // Widgets don't technically need to request this capability, but Scalar still does.
             this.allowedCapabilities.add("visibility");
         } else if (
-            virtual
-            && new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url).origin === this.forWidget.origin
+            virtual &&
+            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!).origin === this.forWidget.origin
         ) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
@@ -123,19 +138,24 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
-                WidgetEventCapability.forStateEvent(EventDirection.Send, "org.matrix.msc3401.call").raw,
-            );
-            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call").raw,
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(
-                    EventDirection.Send, "org.matrix.msc3401.call.member", MatrixClientPeg.get().getUserId()!,
+                    EventDirection.Send,
+                    "org.matrix.msc3401.call.member",
+                    MatrixClientPeg.safeGet().getSafeUserId(),
                 ).raw,
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call.member").raw,
             );
+
+            const sendRecvRoomEvents = ["io.element.call.encryption_keys"];
+            for (const eventType of sendRecvRoomEvents) {
+                this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
+                this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
+            }
 
             const sendRecvToDevice = [
                 EventType.CallInvite,
@@ -157,6 +177,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     WidgetEventCapability.forToDeviceEvent(EventDirection.Receive, eventType).raw,
                 );
             }
+
+            // To always allow OIDC requests for element call, the widgetPermissionStore is used:
+            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
+                forWidget,
+                forWidgetKind,
+                inRoomId,
+                OIDCState.Allowed,
+            );
         }
     }
 
@@ -167,32 +195,37 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const diff = iterableDiff(requested, this.allowedCapabilities);
         const missing = new Set(diff.removed); // "removed" is "in A (requested) but not in B (allowed)"
         const allowedSoFar = new Set(this.allowedCapabilities);
-        getRememberedCapabilitiesForWidget(this.forWidget).forEach(cap => {
+        getRememberedCapabilitiesForWidget(this.forWidget).forEach((cap) => {
             allowedSoFar.add(cap);
             missing.delete(cap);
         });
+
+        let approved: Set<string> | undefined;
         if (WidgetPermissionCustomisations.preapproveCapabilities) {
-            const approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
-            if (approved) {
-                approved.forEach(cap => {
-                    allowedSoFar.add(cap);
-                    missing.delete(cap);
-                });
-            }
+            approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
+        } else {
+            const opts: CapabilitiesOpts = { approvedCapabilities: undefined };
+            ModuleRunner.instance.invoke(WidgetLifecycle.CapabilitiesRequest, opts, this.forWidget, requested);
+            approved = opts.approvedCapabilities;
         }
+        if (approved) {
+            approved.forEach((cap) => {
+                allowedSoFar.add(cap);
+                missing.delete(cap);
+            });
+        }
+
         // TODO: Do something when the widget requests new capabilities not yet asked for
         let rememberApproved = false;
         if (missing.size > 0) {
             try {
-                const [result] = await Modal.createDialog(
-                    WidgetCapabilitiesPromptDialog,
-                    {
-                        requestedCapabilities: missing,
-                        widget: this.forWidget,
-                        widgetKind: this.forWidgetKind,
-                    }).finished;
-                (result.approved || []).forEach(cap => allowedSoFar.add(cap));
-                rememberApproved = result.remember;
+                const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
+                    requestedCapabilities: missing,
+                    widget: this.forWidget,
+                    widgetKind: this.forWidgetKind,
+                }).finished;
+                result?.approved?.forEach((cap) => allowedSoFar.add(cap));
+                rememberApproved = !!result?.remember;
             } catch (e) {
                 logger.error("Non-fatal error getting capabilities: ", e);
             }
@@ -209,24 +242,36 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return allAllowed;
     }
 
+    public async sendEvent<K extends keyof StateEvents>(
+        eventType: K,
+        content: StateEvents[K],
+        stateKey?: string,
+        targetRoomId?: string,
+    ): Promise<ISendEventDetails>;
     public async sendEvent(
+        eventType: Exclude<EventType, keyof StateEvents>,
+        content: IContent,
+        stateKey: null,
+        targetRoomId?: string,
+    ): Promise<ISendEventDetails>;
+    public async sendEvent<K extends keyof StateEvents>(
         eventType: string,
         content: IContent,
-        stateKey: string = null,
-        targetRoomId: string = null,
+        stateKey?: string | null,
+        targetRoomId?: string,
     ): Promise<ISendEventDetails> {
         const client = MatrixClientPeg.get();
         const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
 
         if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
 
-        let r: { event_id: string } = null; // eslint-disable-line camelcase
+        let r: { event_id: string } | null;
         if (stateKey !== null) {
             // state event
-            r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+            r = await client.sendStateEvent(roomId, eventType as K, content as StateEvents[K], stateKey);
         } else if (eventType === EventType.RoomRedaction) {
             // special case: extract the `redacts` property and call redact
-            r = await client.redactEvent(roomId, content['redacts']);
+            r = await client.redactEvent(roomId, content["redacts"]);
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
@@ -236,8 +281,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     if (containsEmoji(content, effect.emojis)) {
                         // For initial threads launch, chat effects are disabled
                         // see #19731
-                        const isNotThread = content["m.relates_to"].rel_type !== THREAD_RELATION_TYPE.name;
-                        if (!SettingsStore.getValue("feature_thread") || isNotThread) {
+                        const isNotThread = content["m.relates_to"]?.rel_type !== THREAD_RELATION_TYPE.name;
+                        if (isNotThread) {
                             dis.dispatch({ action: `effects.${effect.command}` });
                         }
                     }
@@ -253,26 +298,30 @@ export class StopGapWidgetDriver extends WidgetDriver {
         encrypted: boolean,
         contentMap: { [userId: string]: { [deviceId: string]: object } },
     ): Promise<void> {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         if (encrypted) {
-            const deviceInfoMap = await client.crypto.deviceList.downloadKeys(Object.keys(contentMap), false);
+            const deviceInfoMap = await client.crypto!.deviceList.downloadKeys(Object.keys(contentMap), false);
 
             await Promise.all(
                 Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(async ([deviceId, content]) => {
+                    Object.entries(userContentMap).map(async ([deviceId, content]): Promise<void> => {
+                        const devices = deviceInfoMap.get(userId);
+                        if (!devices) return;
+
                         if (deviceId === "*") {
                             // Send the message to all devices we have keys for
                             await client.encryptAndSendToDevices(
-                                Object.values(deviceInfoMap[userId]).map(deviceInfo => ({
-                                    userId, deviceInfo,
+                                Array.from(devices.values()).map((deviceInfo) => ({
+                                    userId,
+                                    deviceInfo,
                                 })),
                                 content,
                             );
-                        } else {
+                        } else if (devices.has(deviceId)) {
                             // Send the message to a specific device
                             await client.encryptAndSendToDevices(
-                                [{ userId, deviceInfo: deviceInfoMap[userId][deviceId] }],
+                                [{ userId, deviceInfo: devices.get(deviceId)! }],
                                 content,
                             );
                         }
@@ -283,29 +332,33 @@ export class StopGapWidgetDriver extends WidgetDriver {
             await client.queueToDevice({
                 eventType,
                 batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(([deviceId, content]) =>
-                        ({ userId, deviceId, payload: content }),
-                    ),
+                    Object.entries(userContentMap).map(([deviceId, content]) => ({
+                        userId,
+                        deviceId,
+                        payload: content,
+                    })),
                 ),
             });
         }
     }
 
-    private pickRooms(roomIds: (string | Symbols.AnyRoom)[] = null): Room[] {
+    private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
         const client = MatrixClientPeg.get();
         if (!client) throw new Error("Not attached to a client");
 
         const targetRooms = roomIds
-            ? (roomIds.includes(Symbols.AnyRoom) ? client.getVisibleRooms() : roomIds.map(r => client.getRoom(r)))
-            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId())];
-        return targetRooms.filter(r => !!r);
+            ? roomIds.includes(Symbols.AnyRoom)
+                ? client.getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+                : roomIds.map((r) => client.getRoom(r))
+            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
+        return targetRooms.filter((r) => !!r) as Room[];
     }
 
     public async readRoomEvents(
         eventType: string,
         msgtype: string | undefined,
         limitPerRoom: number,
-        roomIds: (string | Symbols.AnyRoom)[] = null,
+        roomIds?: (string | Symbols.AnyRoom)[],
     ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
@@ -319,11 +372,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
                 const ev = events[i];
                 if (ev.getType() !== eventType || ev.isState()) continue;
-                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()['msgtype']) continue;
+                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
                 results.push(ev);
             }
 
-            results.forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            results.forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
@@ -332,7 +385,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         eventType: string,
         stateKey: string | undefined,
         limitPerRoom: number,
-        roomIds: (string | Symbols.AnyRoom)[] = null,
+        roomIds?: (string | Symbols.AnyRoom)[],
     ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
@@ -340,7 +393,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const allResults: IRoomEvent[] = [];
         for (const room of rooms) {
             const results: MatrixEvent[] = [];
-            const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
+            const state = room.currentState.events.get(eventType);
             if (state) {
                 if (stateKey === "" || !!stateKey) {
                     const forKey = state.get(stateKey);
@@ -350,18 +403,29 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 }
             }
 
-            results.slice(0, limitPerRoom).forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            results.slice(0, limitPerRoom).forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
 
-    public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
+    public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
+        const opts: ApprovalOpts = { approved: undefined };
+        ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, opts, this.forWidget);
+        if (opts.approved) {
+            return observer.update({
+                state: OpenIDRequestState.Allowed,
+                token: await MatrixClientPeg.safeGet().getOpenIdToken(),
+            });
+        }
+
         const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
-            this.forWidget, this.forWidgetKind, this.inRoomId,
+            this.forWidget,
+            this.forWidgetKind,
+            this.inRoomId,
         );
 
         const getToken = (): Promise<IOpenIDCredentials> => {
-            return MatrixClientPeg.get().getOpenIdToken();
+            return MatrixClientPeg.safeGet().getOpenIdToken();
         };
 
         if (oidcState === OIDCState.Denied) {
@@ -378,7 +442,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
 
-            onFinished: async (confirm) => {
+            onFinished: async (confirm): Promise<void> => {
                 if (!confirm) {
                     return observer.update({ state: OpenIDRequestState.Blocked });
                 }
@@ -392,15 +456,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
         navigateToPermalink(uri);
     }
 
-    public async* getTurnServers(): AsyncGenerator<ITurnServer> {
-        const client = MatrixClientPeg.get();
+    public async *getTurnServers(): AsyncGenerator<ITurnServer> {
+        const client = MatrixClientPeg.safeGet();
         if (!client.pollingTurnServers || !client.getTurnServers().length) return;
 
         let setTurnServer: (server: ITurnServer) => void;
         let setError: (error: Error) => void;
 
-        const onTurnServers = ([server]: IClientTurnServer[]) => setTurnServer(normalizeTurnServer(server));
-        const onTurnServersError = (error: Error, fatal: boolean) => { if (fatal) setError(error); };
+        const onTurnServers = ([server]: IClientTurnServer[]): void => setTurnServer(normalizeTurnServer(server));
+        const onTurnServersError = (error: Error, fatal: boolean): void => {
+            if (fatal) setError(error);
+        };
 
         client.on(ClientEvent.TurnServers, onTurnServers);
         client.on(ClientEvent.TurnServersError, onTurnServersError);
@@ -432,21 +498,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
         from?: string,
         to?: string,
         limit?: number,
-        direction?: 'f' | 'b',
+        direction?: "f" | "b",
     ): Promise<IReadEventRelationsResult> {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const dir = direction as Direction;
         roomId = roomId ?? SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined;
 
         if (typeof roomId !== "string") {
-            throw new Error('Error while reading the current room');
+            throw new Error("Error while reading the current room");
         }
 
-        const {
-            events,
-            nextBatch,
-            prevBatch,
-        } = await client.relations(
+        const { events, nextBatch, prevBatch } = await client.relations(
             roomId,
             eventId,
             relationType ?? null,
@@ -455,9 +517,38 @@ export class StopGapWidgetDriver extends WidgetDriver {
         );
 
         return {
-            chunk: events.map(e => e.getEffectiveEvent() as IRoomEvent),
-            nextBatch,
-            prevBatch,
+            chunk: events.map((e) => e.getEffectiveEvent() as IRoomEvent),
+            nextBatch: nextBatch ?? undefined,
+            prevBatch: prevBatch ?? undefined,
         };
+    }
+
+    public async searchUserDirectory(searchTerm: string, limit?: number): Promise<ISearchUserDirectoryResult> {
+        const client = MatrixClientPeg.safeGet();
+
+        const { limited, results } = await client.searchUserDirectory({ term: searchTerm, limit });
+
+        return {
+            limited,
+            results: results.map((r) => ({
+                userId: r.user_id,
+                displayName: r.display_name,
+                avatarUrl: r.avatar_url,
+            })),
+        };
+    }
+
+    public async getMediaConfig(): Promise<IGetMediaConfigResult> {
+        const client = MatrixClientPeg.safeGet();
+
+        return await client.getMediaConfig();
+    }
+
+    public async uploadFile(file: XMLHttpRequestBodyInit): Promise<{ contentUri: string }> {
+        const client = MatrixClientPeg.safeGet();
+
+        const uploadResult = await client.uploadContent(file);
+
+        return { contentUri: uploadResult.content_uri };
     }
 }

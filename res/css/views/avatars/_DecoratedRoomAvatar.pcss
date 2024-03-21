@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_DecoratedRoomAvatar, .mx_ExtraTile {
+.mx_DecoratedRoomAvatar,
+.mx_ExtraTile {
     position: relative;
     contain: content;
+    line-height: 0;
 
     &.mx_DecoratedRoomAvatar_cutout .mx_BaseAvatar {
-        mask-image: url('$(res)/img/element-icons/roomlist/decorated-avatar-mask.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/decorated-avatar-mask.svg");
         mask-position: center;
         mask-size: contain;
         mask-repeat: no-repeat;
@@ -28,16 +30,15 @@ limitations under the License.
     .mx_DecoratedRoomAvatar_icon {
         position: absolute;
         /* the following percentage based sizings are to match the scalable svg mask for the cutout */
-        bottom: -6.25%;
-        right: -6.25%;
-        margin: 12.5%;
-        width: 25%;
+        bottom: 6.25%; /* 2px for a 32x32 avatar */
+        right: 6.25%;
+        width: 25%; /* 8px for a 32x32 avatar */
         height: 25%;
         border-radius: 50%;
     }
 
     .mx_DecoratedRoomAvatar_icon::before {
-        content: '';
+        content: "";
         width: 100%;
         height: 100%;
         right: 0;
@@ -50,7 +51,7 @@ limitations under the License.
         mask-size: contain;
         mask-repeat: no-repeat;
         background: $secondary-content;
-        mask-image: url('$(res)/img/globe.svg');
+        mask-image: url("$(res)/img/globe.svg");
     }
 
     .mx_DecoratedRoomAvatar_icon_offline::before {
@@ -69,7 +70,8 @@ limitations under the License.
         background-color: $presence-busy;
     }
 
-    .mx_NotificationBadge, .mx_RoomTile_badgeContainer {
+    .mx_NotificationBadge,
+    .mx_RoomTile_badgeContainer {
         position: absolute;
         top: 0;
         right: 0;

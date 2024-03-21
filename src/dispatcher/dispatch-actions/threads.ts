@@ -17,7 +17,6 @@ limitations under the License.
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
-export const showThreadPanel = () => {
+export const showThreadPanel = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.ThreadPanel });
 };
-

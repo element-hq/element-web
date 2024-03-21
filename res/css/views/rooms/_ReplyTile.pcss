@@ -17,7 +17,7 @@ limitations under the License.
 .mx_ReplyTile {
     position: relative;
     padding: 2px 0;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
 
     &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
         mask-image: url("$(res)/img/element-icons/speaker.svg");
@@ -27,38 +27,45 @@ limitations under the License.
         mask-image: url("$(res)/img/element-icons/call/video-call.svg");
     }
 
-    .mx_MFileBody {
-        .mx_MFileBody_info {
-            margin: 5px 0;
-        }
+    > a {
+        display: grid;
+        grid-template:
+            "sender" auto
+            "message" auto
+            / 100%;
+        text-decoration: none;
+        color: $secondary-content;
+        transition: color ease 0.15s;
+        gap: 2px;
+        max-width: 100%;
 
-        .mx_MFileBody_download {
-            display: none;
+        // avoid overflow with wide content
+
+        &:hover {
+            color: $primary-content;
         }
     }
 
-    > a {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: $primary-content;
+    .mx_RedactedBody {
+        line-height: $font-18px;
     }
 
     .mx_RedactedBody,
     .mx_HiddenBody {
-
         padding: 4px 0 2px 20px;
 
         &::before {
             height: 13px;
             width: 13px;
-            top: 5px;
+            top: 3px;
         }
     }
 
     /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
     .mx_EventTile_content {
+        grid-area: message;
         $reply-lines: 2;
+        $line-height: $font-18px;
 
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -70,8 +77,9 @@ limitations under the License.
             font-size: $font-14px !important; /* Override the big emoji override */
         }
 
-        /* Hide line numbers */
-        .mx_EventTile_lineNumbers {
+        // Hide line numbers and edited indicator
+        .mx_EventTile_lineNumbers,
+        .mx_EventTile_edited {
             display: none;
         }
 
@@ -101,7 +109,35 @@ limitations under the License.
         padding-top: 0;
     }
 
-    .mx_DisambiguatedProfile {
-        line-height: $font-17px;
+    &.mx_ReplyTile_inline > a {
+        /* Render replies to emotes inline with the sender avatar */
+        grid-template:
+            "sender        message" auto
+            / max-content auto;
+        gap: 4px; /* increase spacing */
+    }
+
+    .mx_ReplyTile_sender {
+        grid-area: sender;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .mx_DisambiguatedProfile {
+            font: var(--cpd-font-body-md-regular);
+
+            display: inline-block; /* anti-zalgo, with overflow hidden */
+            padding: 0;
+            margin: 0;
+
+            /* truncate long display names */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .mx_BaseAvatar {
+            line-height: 14px; /* To match size */
+        }
     }
 }

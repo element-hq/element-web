@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PhoneNumbers /> should allow a phone number to be added 1`] = `
+<DocumentFragment>
+  <form
+    autocomplete="off"
+    class="mx_PhoneNumbers_new"
+    novalidate=""
+  >
+    <div
+      class="mx_PhoneNumbers_input"
+    >
+      <div
+        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft"
+      >
+        <span
+          class="mx_Field_prefix"
+        >
+          <div
+            class="mx_Dropdown mx_PhoneNumbers_country mx_CountryDropdown mx_Dropdown_disabled"
+          >
+            <div
+              aria-describedby="mx_CountryDropdown_value"
+              aria-disabled="true"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Country Dropdown"
+              aria-owns="mx_CountryDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput mx_AccessibleButton_disabled"
+              disabled=""
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_CountryDropdown_value"
+              >
+                <span
+                  class="mx_CountryDropdown_shortOption"
+                >
+                  <div
+                    class="mx_Dropdown_option_emoji"
+                  >
+                    🇬🇧
+                  </div>
+                  +44
+                </span>
+              </div>
+              <span
+                class="mx_Dropdown_arrow"
+              />
+            </div>
+          </div>
+        </span>
+        <input
+          autocomplete="tel-national"
+          disabled=""
+          id="mx_Field_1"
+          label="Phone Number"
+          placeholder="Phone Number"
+          type="text"
+          value="7900111222"
+        />
+        <label
+          for="mx_Field_1"
+        >
+          Phone Number
+        </label>
+      </div>
+    </div>
+  </form>
+  <div>
+    <div>
+      A text message has been sent to +447900111222. Please enter the verification code it contains.
+      <br />
+    </div>
+    <form
+      autocomplete="off"
+      novalidate=""
+    >
+      <div
+        class="mx_Field mx_Field_input"
+      >
+        <input
+          autocomplete="off"
+          id="mx_Field_2"
+          label="Verification code"
+          placeholder="Verification code"
+          type="text"
+          value=""
+        />
+        <label
+          for="mx_Field_2"
+        >
+          Verification code
+        </label>
+      </div>
+      <div
+        aria-disabled="true"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+        disabled=""
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;

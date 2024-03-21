@@ -78,7 +78,7 @@ export enum Action {
     /**
      * Clear the  to the send message composer. Should be used with a FocusComposerPayload.
      */
-     ClearAndFocusSendMessageComposer = "clear_focus_send_message_composer",
+    ClearAndFocusSendMessageComposer = "clear_focus_send_message_composer",
 
     /**
      * Focuses the user's cursor to the edit message composer. Should be used with a FocusComposerPayload.
@@ -104,7 +104,14 @@ export enum Action {
     /**
      * Sets the apps root font size. Should be used with UpdateFontSizePayload
      */
-    UpdateFontSize = "update_font_size",
+    MigrateBaseFontSize = "migrate_base_font_size",
+
+    /**
+     * Sets the apps root font size delta. Should be used with UpdateFontSizeDeltaPayload
+     * It will add the delta to the current font size.
+     * The delta should be between {@link FontWatcher.MIN_DELTA} and {@link FontWatcher.MAX_DELTA}.
+     */
+    UpdateFontSizeDelta = "update_font_size_delta",
 
     /**
      * Sets a system font. Should be used with UpdateSystemFontPayload
@@ -346,4 +353,34 @@ export enum Action {
      * Fired when we want to view a thread, either a new one or an existing one
      */
     ShowThread = "show_thread",
+
+    /**
+     * Fired when requesting to prompt for ask to join a room.
+     */
+    PromptAskToJoin = "prompt_ask_to_join",
+
+    /**
+     * Fired when requesting to submit an ask to join a room. Use with a SubmitAskToJoinPayload.
+     */
+    SubmitAskToJoin = "submit_ask_to_join",
+
+    /**
+     * Fired when requesting to cancel an ask to join a room. Use with a CancelAskToJoinPayload.
+     */
+    CancelAskToJoin = "cancel_ask_to_join",
+
+    /**
+     * Fired when we want to open spotlight search. Use with a OpenSpotlightPayload.
+     */
+    OpenSpotlight = "open_spotlight",
+
+    /**
+     * Fired when the room loaded.
+     */
+    RoomLoaded = "room_loaded",
+
+    /**
+     * Opens right panel with 3pid invite information
+     */
+    View3pidInvite = "view_3pid_invite",
 }

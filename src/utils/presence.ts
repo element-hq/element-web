@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+
 import SdkConfig from "../SdkConfig";
 
-export function isPresenceEnabled() {
-    const hsUrl = MatrixClientPeg.get().baseUrl;
+export function isPresenceEnabled(matrixClient: MatrixClient): boolean {
+    const hsUrl = matrixClient.baseUrl;
     const urls = SdkConfig.get("enable_presence_by_hs_url");
     if (!urls) return true;
     if (urls[hsUrl] || urls[hsUrl] === undefined) return true;

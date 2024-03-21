@@ -25,7 +25,7 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
     label?: string;
-    onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
+    onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on KeyBindingAction.Enter
 }
 
@@ -33,7 +33,7 @@ interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
 export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChange, onClose, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
-    const onKeyDown = (e: React.KeyboardEvent) => {
+    const onKeyDown = (e: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
@@ -55,7 +55,7 @@ export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChang
             e.preventDefault();
         }
     };
-    const onKeyUp = (e: React.KeyboardEvent) => {
+    const onKeyUp = (e: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(e);
         switch (action) {
             case KeyBindingAction.Enter:
@@ -79,7 +79,7 @@ export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChang
             inputRef={ref}
             tabIndex={isActive ? 0 : -1}
         >
-            { children }
+            {children}
         </StyledRadioButton>
     );
 };

@@ -25,20 +25,20 @@ interface IProps {
 }
 
 export default class InlineSpinner extends React.PureComponent<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         w: 16,
         h: 16,
     };
 
-    render() {
+    public render(): React.ReactNode {
         return (
             <div className="mx_InlineSpinner">
                 <div
                     className="mx_InlineSpinner_icon mx_Spinner_icon"
                     style={{ width: this.props.w, height: this.props.h }}
-                    aria-label={_t("Loading...")}
+                    aria-label={_t("common|loading")}
                 >
-                    { this.props.children }
+                    {this.props.children}
                 </div>
             </div>
         );

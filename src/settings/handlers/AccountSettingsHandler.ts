@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
@@ -37,7 +36,7 @@ const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
  * This handler does not make use of the roomId parameter.
  */
 export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(public readonly watchers: WatchManager) {
+    public constructor(public readonly watchers: WatchManager) {
         super();
     }
 
@@ -45,15 +44,15 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return SettingLevel.ACCOUNT;
     }
 
-    public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
+    public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void {
         oldClient?.removeListener(ClientEvent.AccountData, this.onAccountData);
         newClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
-    private onAccountData = (event: MatrixEvent, prevEvent: MatrixEvent) => {
+    private onAccountData = (event: MatrixEvent, prevEvent?: MatrixEvent): void => {
         if (event.getType() === "org.matrix.preview_urls") {
-            let val = event.getContent()['disable'];
-            if (typeof(val) !== "boolean") {
+            let val = event.getContent()["disable"];
+            if (typeof val !== "boolean") {
                 val = null;
             } else {
                 val = !val;
@@ -71,10 +70,10 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (BREADCRUMBS_EVENT_TYPES.includes(event.getType())) {
             this.notifyBreadcrumbsUpdate(event);
         } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
-            const val = event.getContent()['enabled'];
+            const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("integrationProvisioning", null, SettingLevel.ACCOUNT, val);
         } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE) {
-            const val = event.getContent()['enabled'];
+            const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         }
     };
@@ -85,21 +84,21 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             const content = this.getSettings("org.matrix.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
-            if (typeof(content['disable']) !== "boolean") return null;
-            return !content['disable'];
+            if (typeof content["disable"] !== "boolean") return null;
+            return !content["disable"];
         }
 
         // Special case for breadcrumbs
         if (settingName === "breadcrumb_rooms") {
             let content = this.getSettings(BREADCRUMBS_EVENT_TYPE);
-            if (!content || !content['recent_rooms']) {
+            if (!content || !content["recent_rooms"]) {
                 content = this.getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
 
                 // This is a bit of a hack, but it makes things slightly easier
-                if (content) content['recent_rooms'] = content['rooms'];
+                if (content) content["recent_rooms"] = content["rooms"];
             }
 
-            return content && content['recent_rooms'] ? content['recent_rooms'] : [];
+            return content && content["recent_rooms"] ? content["recent_rooms"] : [];
         }
 
         // Special case recent emoji
@@ -111,13 +110,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         // Special case integration manager provisioning
         if (settingName === "integrationProvisioning") {
             const content = this.getSettings(INTEG_PROVISIONING_EVENT_TYPE);
-            return content ? content['enabled'] : null;
+            return content ? content["enabled"] : null;
         }
 
         if (settingName === "pseudonymousAnalyticsOptIn") {
             const content = this.getSettings(ANALYTICS_EVENT_TYPE) || {};
             // Check to make sure that we actually got a boolean
-            if (typeof(content[settingName]) !== "boolean") return null;
+            if (typeof content[settingName] !== "boolean") return null;
             return content[settingName];
         }
 
@@ -168,7 +167,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         // Attach a deferred *before* setting the account data to ensure we catch any requests
         // which race between different lines.
         const deferred = defer<void>();
-        const handler = (event: MatrixEvent) => {
+        const handler = (event: MatrixEvent): void => {
             if (event.getType() !== eventType || event.getContent()[field] !== value) return;
             this.client.off(ClientEvent.AccountData, handler);
             deferred.resolve();
@@ -220,7 +219,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(eventType = "im.vector.web.settings"): any { // TODO: [TS] Types on return
+    private getSettings(eventType = "im.vector.web.settings"): any {
+        // TODO: [TS] Types on return
         if (!this.client) return null;
 
         const event = this.client.getAccountData(eventType);
@@ -228,15 +228,15 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return objectClone(event.getContent()); // clone to prevent mutation
     }
 
-    private notifyBreadcrumbsUpdate(event: MatrixEvent) {
+    private notifyBreadcrumbsUpdate(event: MatrixEvent): void {
         let val = [];
         if (event.getType() === BREADCRUMBS_LEGACY_EVENT_TYPE) {
             // This seems fishy - try and get the event for the new rooms
             const newType = this.getSettings(BREADCRUMBS_EVENT_TYPE);
-            if (newType) val = newType['recent_rooms'];
-            else val = event.getContent()['rooms'];
+            if (newType) val = newType["recent_rooms"];
+            else val = event.getContent()["rooms"];
         } else if (event.getType() === BREADCRUMBS_EVENT_TYPE) {
-            val = event.getContent()['recent_rooms'];
+            val = event.getContent()["recent_rooms"];
         } else {
             return; // for sanity, not because we expect to be here.
         }

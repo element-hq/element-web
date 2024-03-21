@@ -14,26 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, createRef } from 'react';
+import React, { ChangeEvent, createRef } from "react";
 
 import Field from "../elements/Field";
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { IFieldState, IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
-    title?: string;
-    description?: React.ReactNode;
-    value?: string;
+interface IProps {
+    title: string;
+    description: React.ReactNode;
+    value: string;
     placeholder?: string;
     button?: string;
-    busyMessage?: string; // pass _td string
-    focus?: boolean;
-    hasCancel?: boolean;
+    busyMessage: TranslationKey;
+    focus: boolean;
+    hasCancel: boolean;
     validator?: (fieldState: IFieldState) => Promise<IValidationResult>; // result of withValidation
     fixedWidth?: boolean;
+    onFinished(ok?: false, text?: void): void;
+    onFinished(ok: true, text: string): void;
 }
 
 interface IState {
@@ -45,16 +46,16 @@ interface IState {
 export default class TextInputDialog extends React.Component<IProps, IState> {
     private field = createRef<Field>();
 
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         title: "",
         value: "",
         description: "",
-        busyMessage: _td("Loading..."),
+        busyMessage: _td("common|loading"),
         focus: true,
         hasCancel: true,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -68,12 +69,13 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             // this._field.current.value = this.props.value;
-            this.field.current.focus();
+            this.field.current?.focus();
         }
     }
 
     private onOk = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
+        if (!this.field.current) return;
         if (this.props.validator) {
             this.setState({ busy: true });
             await this.field.current.validate({ allowEmpty: false });
@@ -99,14 +101,14 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
     };
 
     private onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
-        const result = await this.props.validator(fieldState);
+        const result = await this.props.validator!(fieldState);
         this.setState({
-            valid: result.valid,
+            valid: !!result.valid,
         });
         return result;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_TextInputDialog"
@@ -117,7 +119,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
                 <form onSubmit={this.onOk}>
                     <div className="mx_Dialog_content">
                         <div className="mx_TextInputDialog_label">
-                            <label htmlFor="textinput"> { this.props.description } </label>
+                            <label htmlFor="textinput"> {this.props.description} </label>
                         </div>
                         <div>
                             <Field

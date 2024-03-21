@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import React from "react";
+import { EventType, MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { Button, Text } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
 import { isValid3pidInvite } from "../../../RoomInvite";
-import RoomAvatar from "../avatars/RoomAvatar";
-import RoomName from "../elements/RoomName";
-import ErrorDialog from '../dialogs/ErrorDialog';
-import AccessibleButton from '../elements/AccessibleButton';
+import { Action } from "../../../dispatcher/actions";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import BaseCard from "../right_panel/BaseCard";
+import { Flex } from "../../utils/Flex";
+import { SpaceScopeHeader } from "./SpaceScopeHeader";
 
 interface IProps {
     event: MatrixEvent;
+    onClose?: () => void;
 }
 
 interface IState {
@@ -45,61 +45,63 @@ interface IState {
 }
 
 export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
-    private room: Room;
+    private readonly room: Room | null;
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
-        this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
-        const me = this.room.getMember(MatrixClientPeg.get().getUserId());
-        const powerLevels = this.room.currentState.getStateEvents("m.room.power_levels", "");
+        this.room = MatrixClientPeg.safeGet().getRoom(this.props.event.getRoomId());
+        const me = this.room?.getMember(MatrixClientPeg.safeGet().getSafeUserId());
+        const powerLevels = this.room?.currentState.getStateEvents("m.room.power_levels", "");
+        const senderId = this.props.event.getSender()!;
 
         let kickLevel = powerLevels ? powerLevels.getContent().kick : 50;
-        if (typeof(kickLevel) !== 'number') kickLevel = 50;
+        if (typeof kickLevel !== "number") kickLevel = 50;
 
-        const sender = this.room.getMember(this.props.event.getSender());
+        const sender = this.room?.getMember(senderId);
 
         this.state = {
-            stateKey: this.props.event.getStateKey(),
-            roomId: this.props.event.getRoomId(),
+            stateKey: this.props.event.getStateKey()!,
+            roomId: this.props.event.getRoomId()!,
             displayName: this.props.event.getContent().display_name,
             invited: true,
             canKick: me ? me.powerLevel > kickLevel : false,
-            senderName: sender ? sender.name : this.props.event.getSender(),
+            senderName: sender?.name ?? senderId,
         };
     }
 
-    componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+    public componentDidMount(): void {
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
     }
 
-    onRoomStateEvents = (ev: MatrixEvent) => {
+    public onRoomStateEvents = (ev: MatrixEvent): void => {
         if (ev.getType() === EventType.RoomThirdPartyInvite && ev.getStateKey() === this.state.stateKey) {
             const newDisplayName = ev.getContent().display_name;
             const isInvited = isValid3pidInvite(ev);
 
-            const newState = { invited: isInvited };
-            if (newDisplayName) newState['displayName'] = newDisplayName;
+            const newState = { invited: isInvited } as IState;
+            if (newDisplayName) newState["displayName"] = newDisplayName;
             this.setState(newState);
         }
     };
 
-    onCancel = () => {
+    public onCancel = (): void => {
         dis.dispatch({
-            action: "view_3pid_invite",
+            action: Action.View3pidInvite,
             event: null,
         });
     };
 
-    onKickClick = () => {
-        MatrixClientPeg.get().sendStateEvent(this.state.roomId, "m.room.third_party_invite", {}, this.state.stateKey)
+    public onKickClick = (): void => {
+        MatrixClientPeg.safeGet()
+            .sendStateEvent(this.state.roomId, EventType.RoomThirdPartyInvite, {}, this.state.stateKey)
             .catch((err) => {
                 logger.error(err);
 
@@ -107,11 +109,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 this.setState({ invited: true });
 
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to revoke invite"),
-                    description: _t(
-                        "Could not revoke the invite. The server may be experiencing a temporary problem or " +
-                        "you do not have sufficient permissions to revoke the invite.",
-                    ),
+                    title: _t("user_info|error_revoke_3pid_invite_title"),
+                    description: _t("user_info|error_revoke_3pid_invite_description"),
                 });
             });
 
@@ -119,49 +118,36 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         this.setState({ invited: false });
     };
 
-    render() {
-        let adminTools = null;
+    public render(): React.ReactNode {
+        let adminTools: JSX.Element | undefined;
         if (this.state.canKick && this.state.invited) {
             adminTools = (
-                <div className="mx_MemberInfo_container">
-                    <h3>{ _t("Admin Tools") }</h3>
-                    <div className="mx_MemberInfo_buttons">
-                        <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
-                            { _t("Revoke invite") }
-                        </AccessibleButton>
-                    </div>
-                </div>
+                <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
+                    <Text as="span" role="heading" size="lg" weight="semibold">
+                        {_t("user_info|admin_tools_section")}
+                    </Text>
+                    <Button size="sm" kind="destructive" className="mx_MemberInfo_field" onClick={this.onKickClick}>
+                        {_t("user_info|revoke_invite")}
+                    </Button>
+                </Flex>
             );
         }
 
-        let scopeHeader;
-        if (this.room.isSpaceRoom()) {
-            scopeHeader = <div className="mx_RightPanel_scopeHeader">
-                <RoomAvatar room={this.room} height={32} width={32} />
-                <RoomName room={this.room} />
-            </div>;
-        }
+        const scopeHeader: JSX.Element | undefined = this.room ? <SpaceScopeHeader room={this.room} /> : undefined;
 
-        // We shamelessly rip off the MemberInfo styles here.
         return (
-            <div className="mx_MemberInfo" role="tabpanel">
-                { scopeHeader }
-                <div className="mx_MemberInfo_name">
-                    <AccessibleButton className="mx_MemberInfo_cancel"
-                        onClick={this.onCancel}
-                        title={_t('Close')}
-                    />
-                    <h2>{ this.state.displayName }</h2>
-                </div>
-                <div className="mx_MemberInfo_container">
-                    <div className="mx_MemberInfo_profile">
-                        <div className="mx_MemberInfo_profileField">
-                            { _t("Invited by %(sender)s", { sender: this.state.senderName }) }
-                        </div>
-                    </div>
-                </div>
-                { adminTools }
-            </div>
+            <BaseCard header={scopeHeader} onClose={this.props.onClose}>
+                <Flex className="mx_ThirdPartyMemberInfo" direction="column" gap="var(--cpd-space-4x)">
+                    <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
+                        {/* same as userinfo name style */}
+                        <Text as="span" role="heading" size="lg" weight="semibold">
+                            {this.state.displayName}
+                        </Text>
+                        <Text as="span">{_t("user_info|invited_by", { sender: this.state.senderName })}</Text>
+                    </Flex>
+                    {adminTools}
+                </Flex>
+            </BaseCard>
         );
     }
 }

@@ -14,9 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
-import { LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
+import {
+    IContent,
+    MatrixEvent,
+    MsgType,
+    M_BEACON_INFO,
+    LocationAssetType,
+    M_ASSET,
+    M_POLL_END,
+} from "matrix-js-sdk/src/matrix";
 
 import {
     getNestedReplyText,
@@ -25,7 +31,7 @@ import {
     stripHTMLReply,
     stripPlainReply,
 } from "../src/utils/Reply";
-import { mkEvent } from "./test-utils";
+import { makePollStartEvent, mkEvent } from "./test-utils";
 import { RoomPermalinkCreator } from "../src/utils/permalinks/Permalinks";
 
 function makeTestEvent(type: string, content: IContent): MatrixEvent {
@@ -84,7 +90,7 @@ describe("Reply", () => {
                 content: {
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$event1",
+                            event_id: "$event1",
                         },
                     },
                 },
@@ -96,24 +102,30 @@ describe("Reply", () => {
 
     describe("stripPlainReply", () => {
         it("Removes leading quotes until the first blank line", () => {
-            expect(stripPlainReply(`
+            expect(
+                stripPlainReply(
+                    `
 > This is part
 > of the quote
 
 But this is not
-            `.trim())).toBe("But this is not");
+            `.trim(),
+                ),
+            ).toBe("But this is not");
         });
     });
 
     describe("stripHTMLReply", () => {
         it("Removes <mx-reply> from the input", () => {
-            expect(stripHTMLReply(`
+            expect(
+                stripHTMLReply(`
                 <mx-reply>
                     This is part
                     of the quote
                 </mx-reply>
                 But this is not
-            `).trim()).toBe("But this is not");
+            `).trim(),
+            ).toBe("But this is not");
         });
     });
 
@@ -127,12 +139,14 @@ But this is not
             expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });
 
-        [
-            ["m.room.message", MsgType.Location, LocationAssetType.Pin],
-            ["m.room.message", MsgType.Location, LocationAssetType.Self],
-            [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
-            [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
-        ].forEach(([type, msgType, assetType]) => {
+        (
+            [
+                ["m.room.message", MsgType.Location, LocationAssetType.Pin],
+                ["m.room.message", MsgType.Location, LocationAssetType.Self],
+                [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
+                [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
+            ] as const
+        ).forEach(([type, msgType, assetType]) => {
             it(`should create the expected fallback text for ${assetType} ${type}/${msgType}`, () => {
                 const event = makeTestEvent(type, {
                     body: "body",
@@ -142,6 +156,20 @@ But this is not
 
                 expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
             });
+        });
+
+        it("should create the expected fallback text for poll end events", () => {
+            const event = makeTestEvent(M_POLL_END.name, {
+                body: "body",
+            });
+
+            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
+        });
+
+        it("should create the expected fallback text for poll start events", () => {
+            const event = makePollStartEvent("Will this test pass?", "@user:server.org");
+
+            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });
     });
 

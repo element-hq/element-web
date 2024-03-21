@@ -15,21 +15,22 @@ limitations under the License.
 */
 
 import React from "react";
-import { QRCodeData } from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 import QRCode from "../QRCode";
 
 interface IProps {
-    qrCodeData: QRCodeData;
+    /** The data for the QR code. If `undefined`, a spinner is shown. */
+    qrCodeBytes: undefined | Buffer;
 }
 
 export default class VerificationQRCode extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <QRCode
-                data={[{ data: this.props.qrCodeData.getBuffer(), mode: 'byte' }]}
+                data={this.props.qrCodeBytes === undefined ? null : [{ data: this.props.qrCodeBytes, mode: "byte" }]}
                 className="mx_VerificationQRCode"
-                width={196} />
+                width={196}
+            />
         );
     }
 }

@@ -28,7 +28,7 @@ interface IProps {
 }
 
 export default class LegacyCallViewSidebar extends React.Component<IProps> {
-    render() {
+    public render(): React.ReactNode {
         const feeds = this.props.feeds.map((feed) => {
             return (
                 <VideoFeed
@@ -45,10 +45,6 @@ export default class LegacyCallViewSidebar extends React.Component<IProps> {
             mx_LegacyCallViewSidebar_pipMode: this.props.pipMode,
         });
 
-        return (
-            <div className={className}>
-                { feeds }
-            </div>
-        );
+        return <div className={className}>{feeds}</div>;
     }
 }

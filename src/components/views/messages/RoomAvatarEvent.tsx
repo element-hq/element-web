@@ -16,17 +16,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
-import AccessibleButton from '../elements/AccessibleButton';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
+import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromMxc } from "../../../customisations/Media";
 import RoomAvatar from "../avatars/RoomAvatar";
 import ImageView from "../elements/ImageView";
-
 interface IProps {
     /* the MatrixEvent to show */
     mxEvent: MatrixEvent;
@@ -34,36 +33,33 @@ interface IProps {
 
 export default class RoomAvatarEvent extends React.Component<IProps> {
     private onAvatarClick = (): void => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const ev = this.props.mxEvent;
         const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
+        if (!httpUrl) return;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
+        const text = _t("timeline|m.room.avatar|lightbox_title", {
             senderDisplayName: ev.sender && ev.sender.name ? ev.sender.name : ev.getSender(),
-            roomName: room ? room.name : '',
+            roomName: room ? room.name : "",
         });
 
         const params = {
             src: httpUrl,
             name: text,
         };
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const ev = this.props.mxEvent;
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
         if (!ev.getContent().url || ev.getContent().url.trim().length === 0) {
-            return (
-                <div className="mx_TextualEvent">
-                    { _t('%(senderDisplayName)s removed the room avatar.', { senderDisplayName }) }
-                </div>
-            );
+            return <div className="mx_TextualEvent">{_t("timeline|m.room.avatar|removed", { senderDisplayName })}</div>;
         }
 
-        const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        const room = MatrixClientPeg.safeGet().getRoom(ev.getRoomId());
         // Provide all arguments to RoomAvatar via oobData because the avatar is historic
         const oobData = {
             avatarUrl: ev.getContent().url,
@@ -71,21 +67,23 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         };
 
         return (
-            <div className="mx_RoomAvatarEvent">
-                { _t('%(senderDisplayName)s changed the room avatar to <img/>',
+            <>
+                {_t(
+                    "timeline|m.room.avatar|changed_img",
                     { senderDisplayName: senderDisplayName },
                     {
-                        'img': () =>
+                        img: () => (
                             <AccessibleButton
                                 key="avatar"
                                 className="mx_RoomAvatarEvent_avatar"
                                 onClick={this.onAvatarClick}
                             >
-                                <RoomAvatar width={14} height={14} oobData={oobData} />
-                            </AccessibleButton>,
-                    })
-                }
-            </div>
+                                <RoomAvatar size="14px" oobData={oobData} />
+                            </AccessibleButton>
+                        ),
+                    },
+                )}
+            </>
         );
     }
 }

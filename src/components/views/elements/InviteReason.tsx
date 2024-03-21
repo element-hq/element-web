@@ -19,6 +19,7 @@ import React from "react";
 
 import { sanitizedHtmlNode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
+import AccessibleButton from "./AccessibleButton";
 
 interface IProps {
     reason: string;
@@ -30,7 +31,7 @@ interface IState {
 }
 
 export default class InviteReason extends React.PureComponent<IProps, IState> {
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             // We hide the reason for invitation by default, since it can be a
@@ -39,25 +40,27 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         };
     }
 
-    onViewClick = () => {
+    public onViewClick = (): void => {
         this.setState({
             hidden: false,
         });
     };
 
-    render() {
+    public render(): React.ReactNode {
         const classes = classNames({
-            "mx_InviteReason": true,
-            "mx_InviteReason_hidden": this.state.hidden,
+            mx_InviteReason: true,
+            mx_InviteReason_hidden: this.state.hidden,
         });
 
-        return <div className={classes}>
-            <div className="mx_InviteReason_reason">{ this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason }</div>
-            <div className="mx_InviteReason_view"
-                onClick={this.onViewClick}
-            >
-                { _t("View message") }
+        return (
+            <div className={classes}>
+                <div className="mx_InviteReason_reason">
+                    {this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason}
+                </div>
+                <AccessibleButton kind="link_inline" className="mx_InviteReason_view" onClick={this.onViewClick}>
+                    {_t("common|view_message")}
+                </AccessibleButton>
             </div>
-        </div>;
+        );
     }
 }

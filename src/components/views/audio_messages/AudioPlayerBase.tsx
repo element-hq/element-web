@@ -42,7 +42,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
     protected seekRef: RefObject<SeekBar> = createRef();
     protected playPauseRef: RefObject<PlayPauseButton> = createRef();
 
-    constructor(props: T) {
+    public constructor(props: T) {
         super(props);
 
         // Playback instances can be reused in the composer
@@ -55,13 +55,13 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
 
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
-        this.props.playback.prepare().catch(e => {
+        this.props.playback.prepare().catch((e) => {
             logger.error("Error processing audio file:", e);
             this.setState({ error: true });
         });
     }
 
-    protected onKeyDown = (ev: React.KeyboardEvent) => {
+    protected onKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
 
@@ -88,16 +88,20 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
         }
     };
 
-    private onPlaybackUpdate = (ev: PlaybackState) => {
+    private onPlaybackUpdate = (ev: PlaybackState): void => {
         this.setState({ playbackPhase: ev });
     };
 
     protected abstract renderComponent(): ReactNode;
 
     public render(): ReactNode {
-        return <>
-            { this.renderComponent() }
-            { this.state.error && <div className="text-warning">{ _t("Error downloading audio") }</div> }
-        </>;
+        return (
+            <>
+                {this.renderComponent()}
+                {this.state.error && (
+                    <div className="text-warning">{_t("timeline|m.audio|error_downloading_audio")}</div>
+                )}
+            </>
+        );
     }
 }

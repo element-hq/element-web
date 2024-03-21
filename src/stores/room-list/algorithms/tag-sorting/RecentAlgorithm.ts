@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
@@ -54,9 +52,9 @@ export const sortRooms = (rooms: Room[]): Room[] => {
 
     // TODO: Don't assume we're using the same client as the peg
     // See https://github.com/vector-im/element-web/issues/14458
-    let myUserId = '';
+    let myUserId = "";
     if (MatrixClientPeg.get()) {
-        myUserId = MatrixClientPeg.get().getUserId();
+        myUserId = MatrixClientPeg.get()!.getSafeUserId();
     }
 
     const tsCache: { [roomId: string]: number } = {};
@@ -72,8 +70,8 @@ export const sortRooms = (rooms: Room[]): Room[] => {
     });
 };
 
-const getLastTs = (r: Room, userId: string) => {
-    const mainTimelineLastTs = (() => {
+const getLastTs = (r: Room, userId: string): number => {
+    const mainTimelineLastTs = ((): number => {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
         if (!r?.timeline) {
@@ -97,7 +95,7 @@ const getLastTs = (r: Room, userId: string) => {
 
             if (
                 (ev.getSender() === userId && shouldCauseReorder(ev)) ||
-                Unread.eventTriggersUnreadCount(ev)
+                Unread.eventTriggersUnreadCount(r.client, ev)
             ) {
                 return ev.getTs();
             }
@@ -109,7 +107,7 @@ const getLastTs = (r: Room, userId: string) => {
         return r.timeline[0]?.getTs() ?? Number.MAX_SAFE_INTEGER;
     })();
 
-    const threadLastEventTimestamps = r.getThreads().map(thread => {
+    const threadLastEventTimestamps = r.getThreads().map((thread) => {
         const event = thread.replyToEvent ?? thread.rootEvent;
         return event?.getTs() ?? 0;
     });

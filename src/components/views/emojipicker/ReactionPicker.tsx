@@ -15,21 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Relations, RelationsEvent } from 'matrix-js-sdk/src/models/relations';
-import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import React from "react";
+import { MatrixEvent, EventType, RelationType, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 
 import EmojiPicker from "./EmojiPicker";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { Action } from '../../../dispatcher/actions';
+import { Action } from "../../../dispatcher/actions";
 import RoomContext from "../../../contexts/RoomContext";
-import { FocusComposerPayload } from '../../../dispatcher/payloads/FocusComposerPayload';
+import { FocusComposerPayload } from "../../../dispatcher/payloads/FocusComposerPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    reactions?: Relations;
+    reactions?: Relations | null | undefined;
     onFinished(): void;
 }
 
@@ -38,10 +36,10 @@ interface IState {
 }
 
 class ReactionPicker extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         this.state = {
@@ -50,14 +48,14 @@ class ReactionPicker extends React.Component<IProps, IState> {
         this.addListeners();
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.reactions !== this.props.reactions) {
             this.addListeners();
             this.onReactionsChange();
         }
     }
 
-    private addListeners() {
+    private addListeners(): void {
         if (this.props.reactions) {
             this.props.reactions.on(RelationsEvent.Add, this.onReactionsChange);
             this.props.reactions.on(RelationsEvent.Remove, this.onReactionsChange);
@@ -65,7 +63,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.props.reactions) {
             this.props.reactions.removeListener(RelationsEvent.Add, this.onReactionsChange);
             this.props.reactions.removeListener(RelationsEvent.Remove, this.onReactionsChange);
@@ -77,27 +75,29 @@ class ReactionPicker extends React.Component<IProps, IState> {
         if (!this.props.reactions) {
             return {};
         }
-        const userId = MatrixClientPeg.get().getUserId();
-        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || [];
-        return Object.fromEntries([...myAnnotations]
-            .filter(event => !event.isRedacted())
-            .map(event => [event.getRelation().key, event.getId()]));
+        const userId = MatrixClientPeg.safeGet().getSafeUserId();
+        const myAnnotations = this.props.reactions.getAnnotationsBySender()?.[userId] ?? new Set<MatrixEvent>();
+        return Object.fromEntries(
+            [...myAnnotations]
+                .filter((event) => !event.isRedacted())
+                .map((event) => [event.getRelation()?.key, event.getId()]),
+        );
     }
 
-    private onReactionsChange = () => {
+    private onReactionsChange = (): void => {
         this.setState({
             selectedEmojis: new Set(Object.keys(this.getReactions())),
         });
     };
 
-    private onChoose = (reaction: string) => {
+    private onChoose = (reaction: string): boolean => {
         this.componentWillUnmount();
         this.props.onFinished();
         const myReactions = this.getReactions();
         if (myReactions.hasOwnProperty(reaction)) {
-            if (this.props.mxEvent.isRedacted() || !this.context.canSelfRedact) return;
+            if (this.props.mxEvent.isRedacted() || !this.context.canSelfRedact) return false;
 
-            MatrixClientPeg.get().redactEvent(this.props.mxEvent.getRoomId(), myReactions[reaction]);
+            MatrixClientPeg.safeGet().redactEvent(this.props.mxEvent.getRoomId()!, myReactions[reaction]);
             dis.dispatch<FocusComposerPayload>({
                 action: Action.FocusAComposer,
                 context: this.context.timelineRenderingType,
@@ -105,11 +105,11 @@ class ReactionPicker extends React.Component<IProps, IState> {
             // Tell the emoji picker not to bump this in the more frequently used list.
             return false;
         } else {
-            MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), EventType.Reaction, {
+            MatrixClientPeg.safeGet().sendEvent(this.props.mxEvent.getRoomId()!, EventType.Reaction, {
                 "m.relates_to": {
-                    "rel_type": RelationType.Annotation,
-                    "event_id": this.props.mxEvent.getId(),
-                    "key": reaction,
+                    rel_type: RelationType.Annotation,
+                    event_id: this.props.mxEvent.getId(),
+                    key: reaction,
                 },
             });
             dis.dispatch({ action: "message_sent" });
@@ -128,13 +128,15 @@ class ReactionPicker extends React.Component<IProps, IState> {
         return true;
     };
 
-    render() {
-        return <EmojiPicker
-            onChoose={this.onChoose}
-            isEmojiDisabled={this.isEmojiDisabled}
-            selectedEmojis={this.state.selectedEmojis}
-            showQuickReactions={true}
-        />;
+    public render(): React.ReactNode {
+        return (
+            <EmojiPicker
+                onChoose={this.onChoose}
+                isEmojiDisabled={this.isEmojiDisabled}
+                onFinished={this.props.onFinished}
+                selectedEmojis={this.state.selectedEmojis}
+            />
+        );
     }
 }
 

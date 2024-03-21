@@ -1,0 +1,456 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_RightPanel"
+    id="mx_RightPanel"
+  >
+    <div
+      class="mx_BaseCard mx_WidgetCard"
+    >
+      <div
+        class="mx_BaseCard_header"
+      >
+        <div
+          class="mx_AccessibleButton mx_BaseCard_close"
+          data-testid="base-card-close-button"
+          role="button"
+          tabindex="0"
+          title="Close"
+        />
+        <div
+          class="mx_BaseCard_headerProp"
+        >
+          <div
+            class="mx_BaseCard_header_title"
+          >
+            <h4
+              class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+            >
+              Example 1
+            </h4>
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Options"
+              class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+              role="button"
+              tabindex="0"
+              title="Options"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_AppTileFullWidth"
+        id="1"
+      >
+        <div
+          class="mx_AppTileBody mx_AppTileBody--large"
+        >
+          <div
+            class="mx_AppTileBody_fadeInSpinner"
+          >
+            <div
+              class="mx_Spinner"
+            >
+              <div
+                class="mx_Spinner_Msg"
+              >
+                Loading…
+              </div>
+               
+              <div
+                aria-label="Loading…"
+                class="mx_Spinner_icon"
+                data-testid="spinner"
+                role="progressbar"
+                style="width: 32px; height: 32px;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a persistent app should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile_mini"
+    id="1"
+  >
+    <div
+      class="mx_AppTile_persistedWrapper"
+      data-test-widget-url="https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F"
+      data-testid="widget-app-tile"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a pinned widget should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              crossorigin="anonymous"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="20px"
+            />
+          </span>
+          <b>
+            Example 1
+          </b>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Un-maximise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Minimise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTile_persistedWrapper"
+      data-test-widget-url="https://example.com/?widgetId=1&parentUrl=http%3A%2F%2Flocalhost%2F"
+      data-testid="widget-app-tile"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a pinned widget should render permission request 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              crossorigin="anonymous"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="20px"
+            />
+          </span>
+          <b>
+            Example 1
+          </b>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Un-maximise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Minimise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTileBody mx_AppTileBody--large"
+    >
+      <div
+        class="mx_AppPermission"
+      >
+        <div
+          class="mx_AppPermission_content"
+        >
+          <div
+            class="mx_AppPermission_content_bolder"
+          >
+            Widget added by
+          </div>
+          <div>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="1"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 38px;"
+            >
+              u
+            </span>
+            <h4
+              class="mx_Heading_h4"
+            >
+              @userAnother
+            </h4>
+            <div />
+          </div>
+          <div>
+            <span>
+              Using this widget may share data 
+              <div
+                aria-describedby="mx_TooltipTarget_vY7Q4uEh"
+                class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
+                tabindex="0"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+               with example.com.
+            </span>
+          </div>
+          <div>
+            This widget may use cookies. 
+          </div>
+          <div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+              role="button"
+              tabindex="0"
+            >
+              Continue
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile preserves non-persisted widget on container move 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppsDrawer"
+  >
+    <div
+      class="mx_AppsDrawer_resizer"
+      style="position: relative; user-select: auto; width: auto; height: 280px; max-height: 576px; min-height: 100px; box-sizing: border-box; flex-shrink: 0;"
+    >
+      <div
+        class="mx_AppsContainer"
+      >
+        <div
+          class="mx_AppTileFullWidth"
+          id="1"
+        >
+          <div
+            class="mx_AppTileMenuBar"
+          >
+            <span
+              class="mx_AppTileMenuBar_title"
+              style="pointer-events: none;"
+            >
+              <span>
+                <span
+                  aria-label="Avatar"
+                  class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+                  data-color="1"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  style="--cpd-avatar-size: 20px;"
+                >
+                  <img
+                    alt=""
+                    class="_image_mcap2_50"
+                    crossorigin="anonymous"
+                    data-type="round"
+                    height="20px"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    src="image-file-stub"
+                    width="20px"
+                  />
+                </span>
+                <b>
+                  Example 1
+                </b>
+                <span />
+              </span>
+            </span>
+            <span
+              class="mx_AppTileMenuBar_widgets"
+            >
+              <div
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Maximise"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Minimise"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Options"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Options"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+            </span>
+          </div>
+          <div
+            class="mx_AppTileBody mx_AppTileBody--large"
+          >
+            <div
+              class="mx_AppTileBody_fadeInSpinner"
+            >
+              <div
+                class="mx_Spinner"
+              >
+                <div
+                  class="mx_Spinner_Msg"
+                >
+                  Loading…
+                </div>
+                 
+                <div
+                  aria-label="Loading…"
+                  class="mx_Spinner_icon"
+                  data-testid="spinner"
+                  role="progressbar"
+                  style="width: 32px; height: 32px;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_AppsDrawer_resizer_container"
+      >
+        <div
+          class="mx_AppsDrawer_resizer_container_handle"
+          style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -18,7 +18,7 @@ import { MatrixClient, Room, PendingEventOrdering } from "matrix-js-sdk/src/matr
 
 import { Member } from "../utils/direct-messages";
 
-export const LOCAL_ROOM_ID_PREFIX = 'local+';
+export const LOCAL_ROOM_ID_PREFIX = "local+";
 
 export enum LocalRoomState {
     NEW, // new local room; only known to the client
@@ -33,16 +33,16 @@ export enum LocalRoomState {
  */
 export class LocalRoom extends Room {
     /** Whether the actual room should be encrypted. */
-    encrypted = false;
+    public encrypted = false;
     /** If the actual room has been created, this holds its ID. */
-    actualRoomId: string;
+    public actualRoomId?: string;
     /** DM chat partner */
-    targets: Member[] = [];
+    public targets: Member[] = [];
     /** Callbacks that should be invoked after the actual room has been created. */
-    afterCreateCallbacks: Function[] = [];
-    state: LocalRoomState = LocalRoomState.NEW;
+    public afterCreateCallbacks: Function[] = [];
+    public state: LocalRoomState = LocalRoomState.NEW;
 
-    constructor(roomId: string, client: MatrixClient, myUserId: string) {
+    public constructor(roomId: string, client: MatrixClient, myUserId: string) {
         super(roomId, client, myUserId, { pendingEventOrdering: PendingEventOrdering.Detached });
         this.name = this.getDefaultRoomName(myUserId);
     }

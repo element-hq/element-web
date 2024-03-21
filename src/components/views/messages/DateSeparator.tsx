@@ -15,39 +15,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { Direction } from 'matrix-js-sdk/src/models/event-timeline';
+import React from "react";
+import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { capitalize } from "lodash";
 
-import { _t } from '../../../languageHandler';
-import { formatFullDateNoTime } from '../../../DateUtils';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher/dispatcher';
-import { Action } from '../../../dispatcher/actions';
-import SettingsStore from '../../../settings/SettingsStore';
-import { UIFeature } from '../../../settings/UIFeature';
-import Modal from '../../../Modal';
-import ErrorDialog from '../dialogs/ErrorDialog';
-import { contextMenuBelow } from '../rooms/RoomTile';
+import { _t, getUserLanguage } from "../../../languageHandler";
+import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import dispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import BugReportDialog from "../dialogs/BugReportDialog";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { contextMenuBelow } from "../rooms/RoomTile";
 import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import JumpToDatePicker from './JumpToDatePicker';
+import JumpToDatePicker from "./JumpToDatePicker";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-
-function getDaysArray(): string[] {
-    return [
-        _t('Sunday'),
-        _t('Monday'),
-        _t('Tuesday'),
-        _t('Wednesday'),
-        _t('Thursday'),
-        _t('Friday'),
-        _t('Saturday'),
-    ];
-}
+import { SdkContextClass } from "../../../contexts/SDKContext";
+import TimelineSeparator from "./TimelineSeparator";
 
 interface IProps {
     roomId: string;
@@ -60,11 +53,16 @@ interface IState {
     jumpToDateEnabled: boolean;
 }
 
+/**
+ * Timeline separator component to render within a MessagePanel bearing the date of the ts given
+ *
+ * Has additional jump to date functionality when labs flag is enabled
+ */
 export default class DateSeparator extends React.Component<IProps, IState> {
-    private settingWatcherRef = null;
+    private settingWatcherRef?: string;
 
-    constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
         this.state = {
             jumpToDateEnabled: SettingsStore.getValue("feature_jump_to_date"),
         };
@@ -80,11 +78,11 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         );
     }
 
-    componentWillUnmount() {
-        SettingsStore.unwatchSetting(this.settingWatcherRef);
+    public componentWillUnmount(): void {
+        if (this.settingWatcherRef) SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
-    private onContextMenuOpenClick = (e: React.MouseEvent): void => {
+    private onContextMenuOpenClick = (e: ButtonEvent): void => {
         e.preventDefault();
         e.stopPropagation();
         const target = e.target as HTMLButtonElement;
@@ -97,9 +95,13 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
     private closeMenu = (): void => {
         this.setState({
-            contextMenuPosition: null,
+            contextMenuPosition: undefined,
         });
     };
+
+    private get relativeTimeFormat(): Intl.RelativeTimeFormat {
+        return new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
+    }
 
     private getLabel(): string {
         const date = new Date(this.props.ts);
@@ -110,56 +112,133 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
         const today = new Date();
         const yesterday = new Date();
-        const days = getDaysArray();
+        const days = getDaysArray("long");
         yesterday.setDate(today.getDate() - 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return _t('Today');
+            return this.relativeTimeFormat.format(0, "day"); // Today
         } else if (date.toDateString() === yesterday.toDateString()) {
-            return _t('Yesterday');
+            return this.relativeTimeFormat.format(-1, "day"); // Yesterday
         } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()];
+            return days[date.getDay()]; // Sunday-Saturday
         } else {
             return formatFullDateNoTime(date);
         }
     }
 
-    private pickDate = async (inputTimestamp): Promise<void> => {
+    private pickDate = async (inputTimestamp: number | string | Date): Promise<void> => {
         const unixTimestamp = new Date(inputTimestamp).getTime();
+        const roomIdForJumpRequest = this.props.roomId;
 
-        const cli = MatrixClientPeg.get();
         try {
-            const roomId = this.props.roomId;
+            const cli = MatrixClientPeg.safeGet();
             const { event_id: eventId, origin_server_ts: originServerTs } = await cli.timestampToEvent(
-                roomId,
+                roomIdForJumpRequest,
                 unixTimestamp,
                 Direction.Forward,
             );
             logger.log(
                 `/timestamp_to_event: ` +
-                `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
+                    `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
             );
 
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                event_id: eventId,
-                highlighted: true,
-                room_id: roomId,
-                metricsTrigger: undefined, // room doesn't change
-            });
-        } catch (e) {
-            const code = e.errcode || e.statusCode;
-            // only show the dialog if failing for something other than a network error
-            // (e.g. no errcode or statusCode) as in that case the redactions end up in the
-            // detached queue and we show the room status bar to allow retry
-            if (typeof code !== "undefined") {
-                // display error message stating you couldn't delete this.
+            // Only try to navigate to the room if the user is still viewing the same
+            // room. We don't want to jump someone back to a room after a slow request
+            // if they've already navigated away to another room.
+            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            if (currentRoomId === roomIdForJumpRequest) {
+                dispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    event_id: eventId,
+                    highlighted: true,
+                    room_id: roomIdForJumpRequest,
+                    metricsTrigger: undefined, // room doesn't change
+                });
+            } else {
+                logger.debug(
+                    `No longer navigating to date in room (jump to date) because the user already switched ` +
+                        `to another room: currentRoomId=${currentRoomId}, roomIdForJumpRequest=${roomIdForJumpRequest}`,
+                );
+            }
+        } catch (err) {
+            logger.error(
+                `Error occured while trying to find event in ${roomIdForJumpRequest} ` +
+                    `at timestamp=${unixTimestamp}:`,
+                err,
+            );
+
+            // Only display an error if the user is still viewing the same room. We
+            // don't want to worry someone about an error in a room they no longer care
+            // about after a slow request if they've already navigated away to another
+            // room.
+            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            if (currentRoomId === roomIdForJumpRequest) {
+                let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
+                let submitDebugLogsContent: JSX.Element = <></>;
+                if (err instanceof ConnectionError) {
+                    friendlyErrorMessage = _t("room|error_jump_to_date_connection");
+                } else if (err instanceof MatrixError) {
+                    if (err?.errcode === "M_NOT_FOUND") {
+                        friendlyErrorMessage = _t("room|error_jump_to_date_not_found", {
+                            dateString: formatFullDateNoDay(new Date(unixTimestamp)),
+                        });
+                    } else {
+                        friendlyErrorMessage = _t("room|error_jump_to_date", {
+                            statusCode: err?.httpStatus || _t("room|unknown_status_code_for_timeline_jump"),
+                            errorCode: err?.errcode || _t("common|unavailable"),
+                        });
+                    }
+                } else if (err instanceof HTTPError) {
+                    friendlyErrorMessage = err.message;
+                } else {
+                    // We only give the option to submit logs for actual errors, not network problems.
+                    submitDebugLogsContent = (
+                        <p>
+                            {_t(
+                                "room|error_jump_to_date_send_logs_prompt",
+                                {},
+                                {
+                                    debugLogsLink: (sub) => (
+                                        <AccessibleButton
+                                            // This is by default a `<div>` which we
+                                            // can't nest within a `<p>` here so update
+                                            // this to a be a inline anchor element.
+                                            element="a"
+                                            kind="link"
+                                            onClick={() => this.onBugReport(err instanceof Error ? err : undefined)}
+                                            data-testid="jump-to-date-error-submit-debug-logs-button"
+                                        >
+                                            {sub}
+                                        </AccessibleButton>
+                                    ),
+                                },
+                            )}
+                        </p>
+                    );
+                }
+
                 Modal.createDialog(ErrorDialog, {
-                    title: _t('Error'),
-                    description: _t('Unable to find event at that date. (%(code)s)', { code }),
+                    title: _t("room|error_jump_to_date_title"),
+                    description: (
+                        <div data-testid="jump-to-date-error-content">
+                            <p>{friendlyErrorMessage}</p>
+                            {submitDebugLogsContent}
+                            <details>
+                                <summary>{_t("room|error_jump_to_date_details")}</summary>
+                                <p>{String(err)}</p>
+                            </details>
+                        </div>
+                    ),
                 });
             }
         }
+    };
+
+    private onBugReport = (err?: Error): void => {
+        Modal.createDialog(BugReportDialog, {
+            error: err,
+            initialText: "Error occured while using jump to date #jump-to-date",
+        });
     };
 
     private onLastWeekClicked = (): void => {
@@ -183,69 +262,78 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         this.closeMenu();
     };
 
-    private onDatePicked = (dateString): void => {
+    private onDatePicked = (dateString: string): void => {
         this.pickDate(dateString);
         this.closeMenu();
     };
 
     private renderJumpToDateMenu(): React.ReactElement {
-        let contextMenu: JSX.Element;
+        let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
-            contextMenu = <IconizedContextMenu
-                {...contextMenuBelow(this.state.contextMenuPosition)}
-                onFinished={this.onContextMenuCloseClick}
-            >
-                <IconizedContextMenuOptionList first>
-                    <IconizedContextMenuOption
-                        label={_t("Last week")}
-                        onClick={this.onLastWeekClicked}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("Last month")}
-                        onClick={this.onLastMonthClicked}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("The beginning of the room")}
-                        onClick={this.onTheBeginningClicked}
-                    />
-                </IconizedContextMenuOptionList>
+            const relativeTimeFormat = this.relativeTimeFormat;
+            contextMenu = (
+                <IconizedContextMenu
+                    {...contextMenuBelow(this.state.contextMenuPosition)}
+                    onFinished={this.onContextMenuCloseClick}
+                >
+                    <IconizedContextMenuOptionList first>
+                        <IconizedContextMenuOption
+                            label={capitalize(relativeTimeFormat.format(-1, "week"))}
+                            onClick={this.onLastWeekClicked}
+                            data-testid="jump-to-date-last-week"
+                        />
+                        <IconizedContextMenuOption
+                            label={capitalize(relativeTimeFormat.format(-1, "month"))}
+                            onClick={this.onLastMonthClicked}
+                            data-testid="jump-to-date-last-month"
+                        />
+                        <IconizedContextMenuOption
+                            label={_t("room|jump_to_date_beginning")}
+                            onClick={this.onTheBeginningClicked}
+                            data-testid="jump-to-date-beginning"
+                        />
+                    </IconizedContextMenuOptionList>
 
-                <IconizedContextMenuOptionList>
-                    <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
-                </IconizedContextMenuOptionList>
-            </IconizedContextMenu>;
+                    <IconizedContextMenuOptionList>
+                        <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
+                    </IconizedContextMenuOptionList>
+                </IconizedContextMenu>
+            );
         }
 
         return (
             <ContextMenuTooltipButton
-                className="mx_DateSeparator_jumpToDateMenu"
+                className="mx_DateSeparator_jumpToDateMenu mx_DateSeparator_dateContent"
+                data-testid="jump-to-date-separator-button"
                 onClick={this.onContextMenuOpenClick}
                 isExpanded={!!this.state.contextMenuPosition}
-                title={_t("Jump to date")}
+                title={_t("room|jump_to_date")}
             >
-                <h2 aria-hidden="true">{ this.getLabel() }</h2>
+                <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
+                    {this.getLabel()}
+                </h2>
                 <div className="mx_DateSeparator_chevron" />
-                { contextMenu }
+                {contextMenu}
             </ContextMenuTooltipButton>
         );
     }
 
-    render() {
+    public render(): React.ReactNode {
         const label = this.getLabel();
 
-        let dateHeaderContent;
+        let dateHeaderContent: JSX.Element;
         if (this.state.jumpToDateEnabled) {
             dateHeaderContent = this.renderJumpToDateMenu();
         } else {
-            dateHeaderContent = <h2 aria-hidden="true">{ label }</h2>;
+            dateHeaderContent = (
+                <div className="mx_DateSeparator_dateContent">
+                    <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
+                        {label}
+                    </h2>
+                </div>
+            );
         }
 
-        // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
-        // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
-        return <div className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={label}>
-            <hr role="none" />
-            { dateHeaderContent }
-            <hr role="none" />
-        </div>;
+        return <TimelineSeparator label={label}>{dateHeaderContent}</TimelineSeparator>;
     }
 }

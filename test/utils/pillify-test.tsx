@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
 
 import { pillifyLinks } from "../../src/utils/pillify";
 import { stubClient } from "../test-utils";
@@ -36,19 +36,23 @@ describe("pillify", () => {
 
     beforeEach(() => {
         stubClient();
-        const cli = MatrixClientPeg.get();
-        (cli.getRoom as jest.Mock).mockReturnValue(new Room(roomId, cli, cli.getUserId()));
-        cli.pushRules.global = {
+        const cli = MatrixClientPeg.safeGet();
+        const room = new Room(roomId, cli, cli.getUserId()!);
+        room.currentState.mayTriggerNotifOfType = jest.fn().mockReturnValue(true);
+        (cli.getRoom as jest.Mock).mockReturnValue(room);
+        cli.pushRules!.global = {
             override: [
                 {
                     rule_id: ".m.rule.roomnotif",
                     default: true,
                     enabled: true,
-                    conditions: [{
-                        kind: ConditionKind.EventMatch,
-                        key: "content.body",
-                        pattern: "@room",
-                    }],
+                    conditions: [
+                        {
+                            kind: ConditionKind.EventMatch,
+                            key: "content.body",
+                            pattern: "@room",
+                        },
+                    ],
                     actions: [
                         PushRuleActionName.Notify,
                         {
@@ -57,17 +61,39 @@ describe("pillify", () => {
                         },
                     ],
                 },
+                {
+                    rule_id: ".m.rule.is_room_mention",
+                    default: true,
+                    enabled: true,
+                    conditions: [
+                        {
+                            kind: ConditionKind.EventPropertyIs,
+                            key: "content.m\\.mentions.room",
+                            value: true,
+                        },
+                        {
+                            kind: ConditionKind.SenderNotificationPermission,
+                            key: "room",
+                        },
+                    ],
+                    actions: [
+                        PushRuleActionName.Notify,
+                        {
+                            set_tweak: TweakName.Highlight,
+                        },
+                    ],
+                },
             ],
         };
 
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(cli);
     });
 
     it("should do nothing for empty element", () => {
         const { container } = render(<div />);
         const originalHtml = container.outerHTML;
         const containers: Element[] = [];
-        pillifyLinks([container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
         expect(containers).toHaveLength(0);
         expect(container.outerHTML).toEqual(originalHtml);
     });
@@ -75,19 +101,42 @@ describe("pillify", () => {
     it("should pillify @room", () => {
         const { container } = render(<div>@room</div>);
         const containers: Element[] = [];
-        pillifyLinks([container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
         expect(containers).toHaveLength(1);
-        expect(container.querySelector(".mx_Pill.mx_AtRoomPill").textContent).toBe("!@room");
+        expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
+    });
+
+    it("should pillify @room in an intentional mentions world", () => {
+        mocked(MatrixClientPeg.safeGet().supportsIntentionalMentions).mockReturnValue(true);
+        const { container } = render(<div>@room</div>);
+        const containers: Element[] = [];
+        pillifyLinks(
+            MatrixClientPeg.safeGet(),
+            [container],
+            new MatrixEvent({
+                room_id: roomId,
+                type: EventType.RoomMessage,
+                content: {
+                    "body": "@room",
+                    "m.mentions": {
+                        room: true,
+                    },
+                },
+            }),
+            containers,
+        );
+        expect(containers).toHaveLength(1);
+        expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });
 
     it("should not double up pillification on repeated calls", () => {
         const { container } = render(<div>@room</div>);
         const containers: Element[] = [];
-        pillifyLinks([container], event, containers);
-        pillifyLinks([container], event, containers);
-        pillifyLinks([container], event, containers);
-        pillifyLinks([container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
         expect(containers).toHaveLength(1);
-        expect(container.querySelector(".mx_Pill.mx_AtRoomPill").textContent).toBe("!@room");
+        expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });
 });

@@ -17,12 +17,12 @@ limitations under the License.
 import { locationEventGeoUri } from "../../../src/utils/location";
 import { makeLegacyLocationEvent, makeLocationEvent } from "../../test-utils/location";
 
-describe('locationEventGeoUri()', () => {
-    it('returns m.location uri when available', () => {
+describe("locationEventGeoUri()", () => {
+    it("returns m.location uri when available", () => {
         expect(locationEventGeoUri(makeLocationEvent("geo:51.5076,-0.1276"))).toEqual("geo:51.5076,-0.1276");
     });
 
-    it('returns legacy uri when m.location content not found', () => {
+    it("returns legacy uri when m.location content not found", () => {
         expect(locationEventGeoUri(makeLegacyLocationEvent("geo:51.5076,-0.1276"))).toEqual("geo:51.5076,-0.1276");
     });
 });

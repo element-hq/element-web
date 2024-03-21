@@ -14,104 +14,79 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks/dom";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useUserDirectory } from "../../src/hooks/useUserDirectory";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils";
 
-function UserDirectoryComponent({ onClick }) {
-    const userDirectory = useUserDirectory();
-
-    const {
-        ready,
-        loading,
-        users,
-    } = userDirectory;
-
-    return <div onClick={() => onClick(userDirectory)}>
-        { users[0]
-            ? (
-                `Name: ${users[0].name}`
-            )
-            : `ready: ${ready}, loading: ${loading}` }
-    </div>;
+function render() {
+    return renderHook(() => useUserDirectory());
 }
 
 describe("useUserDirectory", () => {
-    let cli;
+    let cli: MatrixClient;
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
 
         MatrixClientPeg.getHomeserverName = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
-        cli.searchUserDirectory = (({ term: query }) => Promise.resolve({
-            results: [{
-                user_id: "@bob:matrix.org",
-                display_name: query,
-            }] },
-        ));
+        cli.searchUserDirectory = ({ term: query }) =>
+            Promise.resolve({
+                results: [
+                    {
+                        user_id: "@bob:matrix.org",
+                        display_name: query,
+                    },
+                ],
+                limited: false,
+            });
     });
 
     it("search for users in the identity server", async () => {
         const query = "Bob";
+        const { result } = render();
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
-
-        expect(wrapper.text()).toBe("ready: true, loading: false");
-
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search({ limit: 1, query });
         });
+        await waitFor(() => expect(result.current.ready).toBe(true));
 
-        expect(wrapper.text()).toContain(query);
+        expect(result.current.loading).toBe(false);
+        expect(result.current.users[0].name).toBe(query);
     });
 
     it("should work with empty queries", async () => {
         const query = "";
+        const { result } = render();
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search({ limit: 1, query });
         });
-        expect(wrapper.text()).toBe("ready: true, loading: false");
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.loading).toBe(false);
+        expect(result.current.users).toEqual([]);
     });
 
     it("should recover from a server exception", async () => {
-        cli.searchUserDirectory = () => { throw new Error("Oops"); };
+        cli.searchUserDirectory = () => {
+            throw new Error("Oops");
+        };
         const query = "Bob";
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        const { result } = render();
+
+        act(() => {
+            result.current.search({ limit: 1, query });
         });
-        expect(wrapper.text()).toBe("ready: true, loading: false");
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.loading).toBe(false);
+        expect(result.current.users).toEqual([]);
     });
 });

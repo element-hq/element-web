@@ -14,20 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext, useEffect } from 'react';
-import classNames from 'classnames';
-import maplibregl from 'maplibre-gl';
-import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/matrix';
-import { logger } from 'matrix-js-sdk/src/logger';
+import React, { ReactNode, useContext, useEffect, useState } from "react";
+import classNames from "classnames";
+import * as maplibregl from "maplibre-gl";
+import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { parseGeoUri } from '../../../utils/location';
-import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import { useMap } from '../../../utils/location/useMap';
-import { Bounds } from '../../../utils/beacon/bounds';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { parseGeoUri, positionFailureMessage } from "../../../utils/location";
+import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
+import { useMap } from "../../../utils/location/useMap";
+import { Bounds } from "../../../utils/beacon/bounds";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { _t } from "../../../languageHandler";
 
-const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => {
+const useMapWithStyle = ({
+    id,
+    centerGeoUri,
+    onError,
+    interactive,
+    bounds,
+    allowGeolocate,
+}: {
+    id: string;
+    centerGeoUri?: string;
+    onError?(error: Error): void;
+    interactive?: boolean;
+    bounds?: Bounds;
+    allowGeolocate?: boolean;
+}): {
+    map: maplibregl.Map | undefined;
+    bodyId: string;
+} => {
     const bodyId = `mx_Map_${id}`;
 
     // style config
@@ -50,9 +70,12 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
         if (map && centerGeoUri) {
             try {
                 const coords = parseGeoUri(centerGeoUri);
+                if (!coords) {
+                    throw new Error("Invalid geo URI");
+                }
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
             } catch (_error) {
-                logger.error('Could not set map center');
+                logger.error("Could not set map center");
             }
         }
     }, [map, centerGeoUri]);
@@ -66,10 +89,41 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
                 );
                 map.fitBounds(lngLatBounds, { padding: 100, maxZoom: 15 });
             } catch (_error) {
-                logger.error('Invalid map bounds');
+                logger.error("Invalid map bounds");
             }
         }
     }, [map, bounds]);
+
+    const [geolocate, setGeolocate] = useState<maplibregl.GeolocateControl | null>(null);
+
+    useEffect(() => {
+        if (!map) {
+            return;
+        }
+        if (allowGeolocate && !geolocate) {
+            const geolocate = new maplibregl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: false,
+            });
+            setGeolocate(geolocate);
+            map.addControl(geolocate);
+        }
+        if (!allowGeolocate && geolocate) {
+            map.removeControl(geolocate);
+            setGeolocate(null);
+        }
+    }, [map, geolocate, allowGeolocate]);
+
+    useEffect(() => {
+        if (geolocate) {
+            geolocate.on("error", onGeolocateError);
+            return () => {
+                geolocate.off("error", onGeolocateError);
+            };
+        }
+    }, [geolocate]);
 
     return {
         map,
@@ -77,7 +131,15 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
     };
 };
 
-interface MapProps {
+const onGeolocateError = (e: GeolocationPositionError): void => {
+    logger.error("Could not fetch location", e);
+    Modal.createDialog(ErrorDialog, {
+        title: _t("location_sharing|error_fetch_location"),
+        description: positionFailureMessage(e.code) ?? "",
+    });
+};
+
+export interface MapProps {
     id: string;
     interactive?: boolean;
     /**
@@ -90,27 +152,26 @@ interface MapProps {
     centerGeoUri?: string;
     bounds?: Bounds;
     className?: string;
+    allowGeolocate?: boolean;
     onClick?: () => void;
     onError?: (error: Error) => void;
-    children?: (renderProps: {
-        map: maplibregl.Map;
-    }) => ReactNode;
+    children?: (renderProps: { map: maplibregl.Map }) => ReactNode;
 }
 
-const Map: React.FC<MapProps> = ({
+const MapComponent: React.FC<MapProps> = ({
     bounds,
     centerGeoUri,
     children,
     className,
+    allowGeolocate,
     id,
     interactive,
-    onError, onClick,
+    onError,
+    onClick,
 }) => {
-    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds });
+    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds, allowGeolocate });
 
-    const onMapClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => {
+    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         // Eat click events when clicking the attribution button
         const target = event.target as Element;
         if (target.classList.contains("maplibregl-ctrl-attrib-button")) {
@@ -120,12 +181,11 @@ const Map: React.FC<MapProps> = ({
         onClick && onClick();
     };
 
-    return <div className={classNames('mx_Map', className)}
-        id={bodyId}
-        onClick={onMapClick}
-    >
-        { !!children && !!map && children({ map }) }
-    </div>;
+    return (
+        <div className={classNames("mx_Map", className)} id={bodyId} onClick={onMapClick}>
+            {!!children && !!map && children({ map })}
+        </div>
+    );
 };
 
-export default Map;
+export default MapComponent;

@@ -19,25 +19,30 @@ import { ExtendedDevice, DeviceSecurityVariation } from "./types";
 type DeviceFilterCondition = (device: ExtendedDevice) => boolean;
 
 const MS_DAY = 24 * 60 * 60 * 1000;
-export const INACTIVE_DEVICE_AGE_MS = 7.776e+9; // 90 days
+export const INACTIVE_DEVICE_AGE_MS = 7.776e9; // 90 days
 export const INACTIVE_DEVICE_AGE_DAYS = INACTIVE_DEVICE_AGE_MS / MS_DAY;
 
-export const isDeviceInactive: DeviceFilterCondition = device =>
+export type FilterVariation =
+    | DeviceSecurityVariation.Verified
+    | DeviceSecurityVariation.Inactive
+    | DeviceSecurityVariation.Unverified;
+
+export const isDeviceInactive: DeviceFilterCondition = (device) =>
     !!device.last_seen_ts && device.last_seen_ts < Date.now() - INACTIVE_DEVICE_AGE_MS;
 
-const filters: Record<DeviceSecurityVariation, DeviceFilterCondition> = {
-    [DeviceSecurityVariation.Verified]: device => !!device.isVerified,
-    [DeviceSecurityVariation.Unverified]: device => !device.isVerified,
+const filters: Record<FilterVariation, DeviceFilterCondition> = {
+    [DeviceSecurityVariation.Verified]: (device) => !!device.isVerified,
+    [DeviceSecurityVariation.Unverified]: (device) => !device.isVerified,
     [DeviceSecurityVariation.Inactive]: isDeviceInactive,
 };
 
 export const filterDevicesBySecurityRecommendation = (
     devices: ExtendedDevice[],
-    securityVariations: DeviceSecurityVariation[],
-) => {
-    const activeFilters = securityVariations.map(variation => filters[variation]);
+    securityVariations: FilterVariation[],
+): ExtendedDevice[] => {
+    const activeFilters = securityVariations.map((variation) => filters[variation]);
     if (!activeFilters.length) {
         return devices;
     }
-    return devices.filter(device => activeFilters.every(filter => filter(device)));
+    return devices.filter((device) => activeFilters.every((filter) => filter(device)));
 };

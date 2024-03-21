@@ -14,17 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
+import {
+    IGetLoginTokenCapability,
+    IServerVersions,
+    GET_LOGIN_TOKEN_CAPABILITY,
+    Capabilities,
+    IClientWellKnown,
+} from "matrix-js-sdk/src/matrix";
 
-import type { IServerVersions } from 'matrix-js-sdk/src/matrix';
-import { _t } from '../../../../languageHandler';
-import AccessibleButton from '../../elements/AccessibleButton';
-import SettingsSubsection from '../shared/SettingsSubsection';
-import SettingsStore from '../../../../settings/SettingsStore';
+import { _t } from "../../../../languageHandler";
+import AccessibleButton from "../../elements/AccessibleButton";
+import SettingsSubsection from "../shared/SettingsSubsection";
 
 interface IProps {
     onShowQr: () => void;
-    versions: IServerVersions;
+    versions?: IServerVersions;
+    capabilities?: Capabilities;
+    wellKnown?: IClientWellKnown;
 }
 
 export default class LoginWithQRSection extends React.Component<IProps> {
@@ -32,32 +39,33 @@ export default class LoginWithQRSection extends React.Component<IProps> {
         super(props);
     }
 
-    public render(): JSX.Element {
-        const msc3882Supported = !!this.props.versions?.unstable_features?.['org.matrix.msc3882'];
-        const msc3886Supported = !!this.props.versions?.unstable_features?.['org.matrix.msc3886'];
-
-        // Needs to be enabled as a feature + server support MSC3886 or have a default rendezvous server configured:
-        const offerShowQr = SettingsStore.getValue("feature_qr_signin_reciprocate_show") &&
-            msc3882Supported && msc3886Supported;  // We don't support configuration of a fallback at the moment so we just check the MSCs
+    public render(): JSX.Element | null {
+        // Needs server support for get_login_token and MSC3886:
+        // in r0 of MSC3882 it is exposed as a feature flag, but in stable and unstable r1 it is a capability
+        const capability = GET_LOGIN_TOKEN_CAPABILITY.findIn<IGetLoginTokenCapability>(this.props.capabilities);
+        const getLoginTokenSupported =
+            !!this.props.versions?.unstable_features?.["org.matrix.msc3882"] || !!capability?.enabled;
+        const msc3886Supported =
+            !!this.props.versions?.unstable_features?.["org.matrix.msc3886"] ||
+            this.props.wellKnown?.["io.element.rendezvous"]?.server;
+        const offerShowQr = getLoginTokenSupported && msc3886Supported;
 
         // don't show anything if no method is available
         if (!offerShowQr) {
             return null;
         }
 
-        return <SettingsSubsection
-            heading={_t('Sign in with QR code')}
-        >
-            <div className="mx_LoginWithQRSection">
-                <p className="mx_SettingsTab_subsectionText">{
-                    _t("You can use this device to sign in a new device with a QR code. You will need to " +
-                    "scan the QR code shown on this device with your device that's signed out.")
-                }</p>
-                <AccessibleButton
-                    onClick={this.props.onShowQr}
-                    kind="primary"
-                >{ _t("Show QR code") }</AccessibleButton>
-            </div>
-        </SettingsSubsection>;
+        return (
+            <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>
+                <div className="mx_LoginWithQRSection">
+                    <p className="mx_SettingsTab_subsectionText">
+                        {_t("settings|sessions|sign_in_with_qr_description")}
+                    </p>
+                    <AccessibleButton onClick={this.props.onShowQr} kind="primary">
+                        {_t("settings|sessions|sign_in_with_qr_button")}
+                    </AccessibleButton>
+                </div>
+            </SettingsSubsection>
+        );
     }
 }

@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../SettingLevel";
 import { CallbackFn, WatchManager } from "../WatchManager";
 import AbstractLocalStorageSettingsHandler from "./AbstractLocalStorageSettingsHandler";
@@ -32,7 +31,10 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
      * @param {string[]} featureNames The names of known features.
      * @param {WatchManager} watchers The watch manager to notify updates to
      */
-    constructor(private featureNames: string[], public readonly watchers: WatchManager) {
+    public constructor(
+        private featureNames: string[],
+        public readonly watchers: WatchManager,
+    ) {
         super();
     }
 
@@ -99,15 +101,16 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
         return true; // It's their device, so they should be able to
     }
 
-    public watchSetting(settingName: string, roomId: string, cb: CallbackFn) {
+    public watchSetting(settingName: string, roomId: string, cb: CallbackFn): void {
         this.watchers.watchSetting(settingName, roomId, cb);
     }
 
-    public unwatchSetting(cb: CallbackFn) {
+    public unwatchSetting(cb: CallbackFn): void {
         this.watchers.unwatchSetting(cb);
     }
 
-    private getSettings(): any { // TODO: [TS] Type return
+    private getSettings(): any {
+        // TODO: [TS] Type return
         return this.getObject("mx_local_settings");
     }
 
@@ -116,10 +119,12 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
 
     // public for access to migrations - not exposed from the SettingsHandler interface
     public readFeature(featureName: string): boolean | null {
-        if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
-            // Guests should not have any labs features enabled.
-            return false;
-        }
+        // Previously, we disabled all features for guests, but since different
+        // installations can have site-specific config files which might set up
+        // different behaviour that is relevant to guests, we removed that
+        // special behaviour. See
+        // https://github.com/vector-im/element-web/issues/24513 for the
+        // discussion.
 
         // XXX: This turns they key names into `mx_labs_feature_feature_x` (double feature).
         // This is because all feature names start with `feature_` as a matter of policy.
@@ -127,7 +132,7 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
         return this.getBoolean("mx_labs_feature_" + featureName);
     }
 
-    private writeFeature(featureName: string, enabled: boolean | null) {
+    private writeFeature(featureName: string, enabled: boolean | null): void {
         this.setBoolean("mx_labs_feature_" + featureName, enabled);
         this.watchers.notifyUpdate(featureName, null, SettingLevel.DEVICE, enabled);
     }

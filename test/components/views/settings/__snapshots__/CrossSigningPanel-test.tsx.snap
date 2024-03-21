@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CrossSigningPanel /> when cross signing is not ready should render when keys are backed up 1`] = `
+<tr>
+  <th
+    scope="row"
+  >
+    Cross-signing private keys:
+  </th>
+  <td>
+    in secret storage
+  </td>
+</tr>
+`;
+
+exports[`<CrossSigningPanel /> when cross signing is ready should render when keys are backed up 1`] = `
+<tr>
+  <th
+    scope="row"
+  >
+    Cross-signing private keys:
+  </th>
+  <td>
+    in secret storage
+  </td>
+</tr>
+`;
+
+exports[`<CrossSigningPanel /> when cross signing is ready should render when keys are not backed up 1`] = `
+<tr>
+  <th
+    scope="row"
+  >
+    Cross-signing private keys:
+  </th>
+  <td>
+    not found in storage
+  </td>
+</tr>
+`;

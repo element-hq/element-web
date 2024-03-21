@@ -15,6 +15,8 @@
  limitations under the License.
  */
 
+import { TranslationKey } from "../languageHandler";
+
 export type Effect<TOptions extends { [key: string]: any }> = {
     /**
      * one or more emojis that will trigger this effect
@@ -29,9 +31,9 @@ export type Effect<TOptions extends { [key: string]: any }> = {
      */
     command: string;
     /**
-     * a function that returns the translated description of the effect
+     * a function that returns the translatable description of the effect
      */
-    description: () => string;
+    description: () => TranslationKey;
     /**
      * a function that returns the translated fallback message. this message will be shown if the user did not provide a custom message
      */

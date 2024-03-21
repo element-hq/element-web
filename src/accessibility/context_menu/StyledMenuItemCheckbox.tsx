@@ -25,7 +25,7 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
     label?: string;
-    onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
+    onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on KeyBindingAction.ActivateSelectedButton
 }
 
@@ -33,7 +33,7 @@ interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
 export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onChange, onClose, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
-    const onKeyDown = (e: React.KeyboardEvent) => {
+    const onKeyDown = (e: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
@@ -55,7 +55,7 @@ export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onCh
             e.preventDefault();
         }
     };
-    const onKeyUp = (e: React.KeyboardEvent) => {
+    const onKeyUp = (e: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(e);
         switch (action) {
             case KeyBindingAction.Space:
@@ -79,7 +79,7 @@ export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onCh
             inputRef={ref}
             tabIndex={isActive ? 0 : -1}
         >
-            { children }
+            {children}
         </StyledCheckbox>
     );
 };

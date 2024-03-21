@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
@@ -18,15 +17,14 @@ limitations under the License.
 import { render } from "@testing-library/react";
 import React from "react";
 
-import KeyboardUserSettingsTab from
-    "../../../../../../src/components/views/settings/tabs/user/KeyboardUserSettingsTab";
+import KeyboardUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/KeyboardUserSettingsTab";
 import { Key } from "../../../../../../src/Keyboard";
 import { mockPlatformPeg } from "../../../../../test-utils/platform";
 
 const PATH_TO_KEYBOARD_SHORTCUTS = "../../../../../../src/accessibility/KeyboardShortcuts";
 const PATH_TO_KEYBOARD_SHORTCUT_UTILS = "../../../../../../src/accessibility/KeyboardShortcutUtils";
 
-const mockKeyboardShortcuts = (override) => {
+const mockKeyboardShortcuts = (override: Record<string, any>) => {
     jest.doMock(PATH_TO_KEYBOARD_SHORTCUTS, () => {
         const original = jest.requireActual(PATH_TO_KEYBOARD_SHORTCUTS);
         return {
@@ -36,7 +34,7 @@ const mockKeyboardShortcuts = (override) => {
     });
 };
 
-const mockKeyboardShortcutUtils = (override) => {
+const mockKeyboardShortcutUtils = (override: Record<string, any>) => {
     jest.doMock(PATH_TO_KEYBOARD_SHORTCUT_UTILS, () => {
         const original = jest.requireActual(PATH_TO_KEYBOARD_SHORTCUT_UTILS);
         return {
@@ -58,19 +56,19 @@ describe("KeyboardUserSettingsTab", () => {
 
     it("renders list of keyboard shortcuts", () => {
         mockKeyboardShortcuts({
-            "CATEGORIES": {
-                "Composer": {
+            CATEGORIES: {
+                Composer: {
                     settingNames: ["keybind1", "keybind2"],
                     categoryLabel: "Composer",
                 },
-                "Navigation": {
+                Navigation: {
                     settingNames: ["keybind3"],
                     categoryLabel: "Navigation",
                 },
             },
         });
         mockKeyboardShortcutUtils({
-            "getKeyboardShortcutValue": (name) => {
+            getKeyboardShortcutValue: (name: string) => {
                 switch (name) {
                     case "keybind1":
                         return {
@@ -80,7 +78,8 @@ describe("KeyboardUserSettingsTab", () => {
                     case "keybind2": {
                         return {
                             key: Key.B,
-                            ctrlKey: true };
+                            ctrlKey: true,
+                        };
                     }
                     case "keybind3": {
                         return {
@@ -89,7 +88,7 @@ describe("KeyboardUserSettingsTab", () => {
                     }
                 }
             },
-            "getKeyboardShortcutDisplayName": (name) => {
+            getKeyboardShortcutDisplayName: (name: string) => {
                 switch (name) {
                     case "keybind1":
                         return "Cancel replying to a message";

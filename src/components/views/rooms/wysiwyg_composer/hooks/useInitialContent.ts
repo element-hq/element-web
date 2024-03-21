@@ -24,25 +24,37 @@ import { CommandPartCreator, Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
-function parseEditorStateTransfer(
+function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
+    return (
+        editorStateTransfer
+            .getEvent()
+            .getContent()
+            .formatted_body?.replace(/<mx-reply>.*<\/mx-reply>/, "") || ""
+    );
+}
+
+export function parseEditorStateTransfer(
     editorStateTransfer: EditorStateTransfer,
     room: Room,
     mxClient: MatrixClient,
 ): string {
     const partCreator = new CommandPartCreator(room, mxClient);
 
-    let parts: Part[];
+    let parts: (Part | undefined)[] = [];
     if (editorStateTransfer.hasEditorState()) {
         // if restoring state from a previous editor,
         // restore serialized parts from the state
-        parts = editorStateTransfer.getSerializedParts().map(p => partCreator.deserializePart(p));
+        const serializedParts = editorStateTransfer.getSerializedParts();
+        if (serializedParts !== null) {
+            parts = serializedParts.map((p) => partCreator.deserializePart(p));
+        }
     } else {
         // otherwise, either restore serialized parts from localStorage or parse the body of the event
         // TODO local storage
         // const restoredParts = this.restoreStoredEditorState(partCreator);
 
-        if (editorStateTransfer.getEvent().getContent().format === 'org.matrix.custom.html') {
-            return editorStateTransfer.getEvent().getContent().formatted_body || "";
+        if (editorStateTransfer.getEvent().getContent().format === "org.matrix.custom.html") {
+            return getFormattedContent(editorStateTransfer);
         }
 
         parts = parseEvent(editorStateTransfer.getEvent(), partCreator, {
@@ -50,17 +62,17 @@ function parseEditorStateTransfer(
         });
     }
 
-    return parts.reduce((content, part) => content + part.text, '');
+    return parts.reduce((content, part) => content + part?.text, "");
     // Todo local storage
     // this.saveStoredEditorState();
 }
 
-export function useInitialContent(editorStateTransfer: EditorStateTransfer) {
+export function useInitialContent(editorStateTransfer: EditorStateTransfer): string | undefined {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 
-    return useMemo<string>(() => {
-        if (editorStateTransfer && roomContext.room) {
+    return useMemo<string | undefined>(() => {
+        if (editorStateTransfer && roomContext.room && mxClient) {
             return parseEditorStateTransfer(editorStateTransfer, roomContext.room, mxClient);
         }
     }, [editorStateTransfer, roomContext, mxClient]);

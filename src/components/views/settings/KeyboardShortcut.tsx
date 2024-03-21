@@ -30,10 +30,12 @@ export const KeyboardKey: React.FC<IKeyboardKeyProps> = ({ name, last }) => {
     const icon = KEY_ICON[name];
     const alternateName = ALTERNATE_KEY_NAME[name];
 
-    return <React.Fragment>
-        <kbd> { icon || (alternateName && _t(alternateName)) || name } </kbd>
-        { !last && "+" }
-    </React.Fragment>;
+    return (
+        <React.Fragment>
+            <kbd> {icon || (alternateName && _t(alternateName)) || name} </kbd>
+            {!last && "+"}
+        </React.Fragment>
+    );
 };
 
 interface IKeyboardShortcutProps {
@@ -41,10 +43,10 @@ interface IKeyboardShortcutProps {
     className?: string;
 }
 
-export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value, className = 'mx_KeyboardShortcut' }) => {
+export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value, className = "mx_KeyboardShortcut" }) => {
     if (!value) return null;
 
-    const modifiersElement = [];
+    const modifiersElement: JSX.Element[] = [];
     if (value.ctrlOrCmdKey) {
         modifiersElement.push(<KeyboardKey key="ctrlOrCmdKey" name={IS_MAC ? Key.META : Key.CONTROL} />);
     } else if (value.ctrlKey) {
@@ -59,8 +61,10 @@ export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value, clas
         modifiersElement.push(<KeyboardKey key="shiftKey" name={Key.SHIFT} />);
     }
 
-    return <div className={className}>
-        { modifiersElement }
-        <KeyboardKey name={value.key} last />
-    </div>;
+    return (
+        <div className={className}>
+            {modifiersElement}
+            <KeyboardKey name={value.key} last />
+        </div>
+    );
 };

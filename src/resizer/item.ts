@@ -17,14 +17,14 @@ limitations under the License.
 import Resizer, { IConfig } from "./resizer";
 import Sizer from "./sizer";
 
-export default class ResizeItem<C extends IConfig = IConfig> {
+export default class ResizeItem<C extends IConfig> {
     public readonly domNode: HTMLElement;
-    protected readonly id: string;
+    protected readonly id: string | null;
     protected reverse: boolean;
 
-    constructor(
+    public constructor(
         handle: HTMLElement,
-        public readonly resizer: Resizer<C>,
+        public readonly resizer: Resizer<C, any>,
         public readonly sizer: Sizer,
         public readonly container?: HTMLElement,
     ) {
@@ -37,21 +37,28 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         this.id = handle.getAttribute("data-id");
     }
 
-    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer, container?: HTMLElement) {
+    private copyWith(
+        handle: HTMLElement,
+        resizer: Resizer<C, any>,
+        sizer: Sizer,
+        container?: HTMLElement,
+    ): ResizeItem<C> {
         const Ctor = this.constructor as typeof ResizeItem;
         return new Ctor(handle, resizer, sizer, container);
     }
 
-    private advance(forwards: boolean) {
+    private advance(forwards: boolean): ResizeItem<C> | undefined {
         // opposite direction from fromResizeHandle to get back to handle
-        let handle = this.reverse ? this.domNode.previousElementSibling : this.domNode.nextElementSibling;
+        let handle: Element | null | undefined = this.reverse
+            ? this.domNode.previousElementSibling
+            : this.domNode.nextElementSibling;
         const moveNext = forwards !== this.reverse; // xor
         // iterate at least once to avoid infinite loop
         do {
             if (moveNext) {
-                handle = handle.nextElementSibling;
+                handle = handle?.nextElementSibling;
             } else {
-                handle = handle.previousElementSibling;
+                handle = handle?.previousElementSibling;
             }
         } while (handle && !this.resizer.isResizeHandle(<HTMLElement>handle));
 
@@ -62,56 +69,53 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public next() {
+    public next(): ResizeItem<C> | undefined {
         return this.advance(true);
     }
 
-    public previous() {
+    public previous(): ResizeItem<C> | undefined {
         return this.advance(false);
     }
 
-    public size() {
+    public size(): number {
         return this.sizer.getItemSize(this.domNode);
     }
 
-    public offset() {
+    public offset(): number {
         return this.sizer.getItemOffset(this.domNode);
     }
 
-    public start() {
+    public start(): void {
         this.sizer.start(this.domNode);
     }
 
-    public finish() {
+    public finish(): void {
         this.sizer.finish(this.domNode);
     }
 
-    public getSize() {
+    public getSize(): string {
         return this.sizer.getDesiredItemSize(this.domNode);
     }
 
-    public setRawSize(size: string) {
+    public setRawSize(size: string): void {
         this.sizer.setItemSize(this.domNode, size);
     }
 
-    public setSize(size: number) {
+    public setSize(size: number): void {
         this.setRawSize(`${Math.round(size)}px`);
-        const callback = this.resizer.config.onResized;
-        if (callback) {
-            callback(size, this.id, this.domNode);
-        }
+        this.resizer.config?.onResized?.(size, this.id, this.domNode);
     }
 
-    public clearSize() {
+    public clearSize(): void {
         this.sizer.clearItemSize(this.domNode);
-        const callback = this.resizer.config.onResized;
-        if (callback) {
-            callback(null, this.id, this.domNode);
-        }
+        this.resizer.config?.onResized?.(null, this.id, this.domNode);
     }
 
-    public first() {
-        const firstHandle = Array.from(this.domNode.parentElement.children).find(el => {
+    public first(): ResizeItem<C> | undefined {
+        if (!this.domNode.parentElement?.children) {
+            return;
+        }
+        const firstHandle = Array.from(this.domNode.parentElement.children).find((el) => {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (firstHandle) {
@@ -119,10 +123,15 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public last() {
-        const lastHandle = Array.from(this.domNode.parentElement.children).reverse().find(el => {
-            return this.resizer.isResizeHandle(<HTMLElement>el);
-        });
+    public last(): ResizeItem<C> | undefined {
+        if (!this.domNode.parentElement?.children) {
+            return;
+        }
+        const lastHandle = Array.from(this.domNode.parentElement.children)
+            .reverse()
+            .find((el) => {
+                return this.resizer.isResizeHandle(<HTMLElement>el);
+            });
         if (lastHandle) {
             return this.copyWith(<HTMLElement>lastHandle, this.resizer, this.sizer);
         }

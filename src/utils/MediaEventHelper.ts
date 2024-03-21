@@ -14,26 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { FileContent, ImageContent, MediaEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { LazyValue } from "./LazyValue";
 import { Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
-import { IMediaEventContent } from "../customisations/models/IMediaEventContent";
 import { IDestroyable } from "./IDestroyable";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
 export class MediaEventHelper implements IDestroyable {
     // Either an HTTP or Object URL (when encrypted) to the media.
-    public readonly sourceUrl: LazyValue<string>;
-    public readonly thumbnailUrl: LazyValue<string>;
+    public readonly sourceUrl: LazyValue<string | null>;
+    public readonly thumbnailUrl: LazyValue<string | null>;
 
     // Either the raw or decrypted (when encrypted) contents of the file.
     public readonly sourceBlob: LazyValue<Blob>;
-    public readonly thumbnailBlob: LazyValue<Blob>;
+    public readonly thumbnailBlob: LazyValue<Blob | null>;
 
     public readonly media: Media;
 
@@ -47,19 +46,21 @@ export class MediaEventHelper implements IDestroyable {
     }
 
     public get fileName(): string {
-        return this.event.getContent<IMediaEventContent>().filename
-            || this.event.getContent<IMediaEventContent>().body
-            || "download";
+        return (
+            this.event.getContent<FileContent>().filename ||
+            this.event.getContent<MediaEventContent>().body ||
+            "download"
+        );
     }
 
-    public destroy() {
+    public destroy(): void {
         if (this.media.isEncrypted) {
-            if (this.sourceUrl.present) URL.revokeObjectURL(this.sourceUrl.cachedValue);
-            if (this.thumbnailUrl.present) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
+            if (this.sourceUrl.cachedValue) URL.revokeObjectURL(this.sourceUrl.cachedValue);
+            if (this.thumbnailUrl.cachedValue) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
         }
     }
 
-    private prepareSourceUrl = async () => {
+    private prepareSourceUrl = async (): Promise<string | null> => {
         if (this.media.isEncrypted) {
             const blob = await this.sourceBlob.value;
             return URL.createObjectURL(blob);
@@ -68,7 +69,7 @@ export class MediaEventHelper implements IDestroyable {
         }
     };
 
-    private prepareThumbnailUrl = async () => {
+    private prepareThumbnailUrl = async (): Promise<string | null> => {
         if (this.media.isEncrypted) {
             const blob = await this.thumbnailBlob.value;
             if (blob === null) return null;
@@ -78,19 +79,19 @@ export class MediaEventHelper implements IDestroyable {
         }
     };
 
-    private fetchSource = () => {
+    private fetchSource = (): Promise<Blob> => {
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<IMediaEventContent>();
-            return decryptFile(content.file, content.info);
+            const content = this.event.getContent<MediaEventContent>();
+            return decryptFile(content.file!, content.info);
         }
-        return this.media.downloadSource().then(r => r.blob());
+        return this.media.downloadSource().then((r) => r.blob());
     };
 
-    private fetchThumbnail = () => {
+    private fetchThumbnail = (): Promise<Blob | null> => {
         if (!this.media.hasThumbnail) return Promise.resolve(null);
 
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<IMediaEventContent>();
+            const content = this.event.getContent<ImageContent>();
             if (content.info?.thumbnail_file) {
                 return decryptFile(content.info.thumbnail_file, content.info.thumbnail_info);
             } else {
@@ -100,7 +101,10 @@ export class MediaEventHelper implements IDestroyable {
             }
         }
 
-        return fetch(this.media.thumbnailHttp).then(r => r.blob());
+        const thumbnailHttp = this.media.thumbnailHttp;
+        if (!thumbnailHttp) return Promise.resolve(null);
+
+        return fetch(thumbnailHttp).then((r) => r.blob());
     };
 
     public static isEligible(event: MatrixEvent): boolean {
@@ -110,14 +114,9 @@ export class MediaEventHelper implements IDestroyable {
         if (event.getType() !== EventType.RoomMessage) return false;
 
         const content = event.getContent();
-        const mediaMsgTypes: string[] = [
-            MsgType.Video,
-            MsgType.Audio,
-            MsgType.Image,
-            MsgType.File,
-        ];
-        if (mediaMsgTypes.includes(content.msgtype)) return true;
-        if (typeof(content.url) === 'string') return true;
+        const mediaMsgTypes: string[] = [MsgType.Video, MsgType.Audio, MsgType.Image, MsgType.File];
+        if (mediaMsgTypes.includes(content.msgtype!)) return true;
+        if (typeof content.url === "string") return true;
 
         // Finally, it's probably not media
         return false;

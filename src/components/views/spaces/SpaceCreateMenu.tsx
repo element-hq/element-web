@@ -14,32 +14,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, RefObject, SyntheticEvent, KeyboardEvent, useContext, useRef, useState } from "react";
+import React, {
+    ComponentProps,
+    RefObject,
+    SyntheticEvent,
+    KeyboardEvent,
+    useContext,
+    useRef,
+    useState,
+    ChangeEvent,
+    ReactNode,
+    useEffect,
+} from "react";
 import classNames from "classnames";
-import { RoomType } from "matrix-js-sdk/src/@types/event";
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { HistoryVisibility, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
+import {
+    RoomType,
+    HistoryVisibility,
+    Preset,
+    Visibility,
+    MatrixClient,
+    ICreateRoomOpts,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import createRoom, { IOpts as ICreateOpts } from "../../../createRoom";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import MatrixClientContext, { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings, { SpaceAvatar } from "./SpaceBasicSettings";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
-import Modal from "../../../Modal";
-import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
-import SettingsStore from "../../../settings/SettingsStore";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { shouldShowFeedback } from "../../../utils/Feedback";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { Filter } from "../dialogs/spotlight/Filter";
 
 export const createSpace = async (
+    client: MatrixClient,
     name: string,
     isPublic: boolean,
     alias?: string,
@@ -47,14 +62,15 @@ export const createSpace = async (
     avatar?: string | File,
     createOpts: Partial<ICreateRoomOpts> = {},
     otherOpts: Partial<Omit<ICreateOpts, "createOpts">> = {},
-) => {
-    return createRoom({
+): Promise<string | null> => {
+    return createRoom(client, {
         createOpts: {
             name,
             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
-            visibility: (
-                isPublic && await MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc3827.stable")
-            ) ? Visibility.Public : Visibility.Private,
+            visibility:
+                isPublic && (await client.doesServerSupportUnstableFeature("org.matrix.msc3827.stable"))
+                    ? Visibility.Public
+                    : Visibility.Private,
             power_level_content_override: {
                 // Only allow Admins to write to the timeline to prevent hidden sync spam
                 events_default: 100,
@@ -75,11 +91,16 @@ export const createSpace = async (
     });
 };
 
-const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
+const SpaceCreateMenuType: React.FC<{
+    title: string;
+    description: string;
+    className: string;
+    onClick(): void;
+}> = ({ title, description, className, onClick }) => {
     return (
         <AccessibleButton className={classNames("mx_SpaceCreateMenuType", className)} onClick={onClick}>
-            <h3>{ title }</h3>
-            <span>{ description }</span>
+            {title}
+            <div>{description}</div>
         </AccessibleButton>
     );
 };
@@ -89,40 +110,17 @@ const spaceNameValidator = withValidation({
         {
             key: "required",
             test: async ({ value }) => !!value,
-            invalid: () => _t("Please enter a name for the space"),
+            invalid: () => _t("create_space|name_required"),
         },
     ],
 });
 
 const nameToLocalpart = (name: string): string => {
-    return name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
-};
-
-// XXX: Temporary for the Spaces release only
-export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
-    if (!shouldShowFeedback()) return null;
-
-    return <div className="mx_SpaceFeedbackPrompt">
-        <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
-        <AccessibleButton
-            kind="link_inline"
-            onClick={() => {
-                if (onClick) onClick();
-                Modal.createDialog(GenericFeatureFeedbackDialog, {
-                    title: _t("Spaces feedback"),
-                    subheading: _t("Thank you for trying Spaces. " +
-                        "Your feedback will help inform the next versions."),
-                    rageshakeLabel: "spaces-feedback",
-                    rageshakeData: Object.fromEntries([
-                        "Spaces.allRoomsInHome",
-                        "Spaces.enabledMetaSpaces",
-                    ].map(k => [k, SettingsStore.getValue(k)])),
-                });
-            }}
-        >
-            { _t("Give feedback.") }
-        </AccessibleButton>
-    </div>;
+    return name
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9_-]+/gi, "");
 };
 
 type BProps = Omit<ComponentProps<typeof SpaceBasicSettings>, "nameDisabled" | "topicDisabled" | "avatarDisabled">;
@@ -132,6 +130,7 @@ interface ISpaceCreateFormProps extends BProps {
     nameFieldRef: RefObject<Field>;
     aliasFieldRef: RefObject<RoomAliasField>;
     showAliasField?: boolean;
+    children?: ReactNode;
     onSubmit(e: SyntheticEvent): void;
     setAlias(alias: string): void;
 }
@@ -153,9 +152,9 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     children,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const domain = cli.getDomain();
+    const domain = cli.getDomain() ?? undefined;
 
-    const onKeyDown = (ev: KeyboardEvent) => {
+    const onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Enter:
@@ -164,82 +163,101 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
         }
     };
 
-    return <form className="mx_SpaceBasicSettings" onSubmit={onSubmit}>
-        <SpaceAvatar avatarUrl={avatarUrl} setAvatar={setAvatar} avatarDisabled={busy} />
+    return (
+        <form className="mx_SpaceBasicSettings" onSubmit={onSubmit}>
+            <SpaceAvatar avatarUrl={avatarUrl} setAvatar={setAvatar} avatarDisabled={busy} />
 
-        <Field
-            name="spaceName"
-            label={_t("Name")}
-            autoFocus={true}
-            value={name}
-            onChange={ev => {
-                const newName = ev.target.value;
-                if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
-                    setAlias(`#${nameToLocalpart(newName)}:${domain}`);
-                    aliasFieldRef.current?.validate({ allowEmpty: true });
-                }
-                setName(newName);
-            }}
-            onKeyDown={onKeyDown}
-            ref={nameFieldRef}
-            onValidate={spaceNameValidator}
-            disabled={busy}
-            autoComplete="off"
-        />
-
-        { showAliasField
-            ? <RoomAliasField
-                ref={aliasFieldRef}
-                onChange={setAlias}
-                domain={domain}
-                value={alias}
-                placeholder={name ? nameToLocalpart(name) : _t("e.g. my-space")}
-                label={_t("Address")}
-                disabled={busy}
+            <Field
+                name="spaceName"
+                label={_t("common|name")}
+                autoFocus={true}
+                value={name}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => {
+                    const newName = ev.target.value;
+                    if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
+                        setAlias(`#${nameToLocalpart(newName)}:${domain}`);
+                        aliasFieldRef.current?.validate({ allowEmpty: true });
+                    }
+                    setName(newName);
+                }}
                 onKeyDown={onKeyDown}
+                ref={nameFieldRef}
+                onValidate={spaceNameValidator}
+                disabled={busy}
+                autoComplete="off"
             />
-            : null
-        }
 
-        <Field
-            name="spaceTopic"
-            element="textarea"
-            label={_t("Description")}
-            value={topic}
-            onChange={ev => setTopic(ev.target.value)}
-            rows={3}
-            disabled={busy}
-        />
+            {showAliasField ? (
+                <RoomAliasField
+                    ref={aliasFieldRef}
+                    onChange={setAlias}
+                    domain={domain}
+                    value={alias}
+                    placeholder={name ? nameToLocalpart(name) : _t("create_space|address_placeholder")}
+                    label={_t("create_space|address_label")}
+                    disabled={busy}
+                    onKeyDown={onKeyDown}
+                />
+            ) : null}
 
-        { children }
-    </form>;
+            <Field
+                name="spaceTopic"
+                element="textarea"
+                label={_t("common|description")}
+                value={topic ?? ""}
+                onChange={(ev) => setTopic(ev.target.value)}
+                rows={3}
+                disabled={busy}
+            />
+
+            {children}
+        </form>
+    );
 };
 
-const SpaceCreateMenu = ({ onFinished }) => {
-    const [visibility, setVisibility] = useState<Visibility>(null);
+const SpaceCreateMenu: React.FC<{
+    onFinished(): void;
+}> = ({ onFinished }) => {
+    const cli = useMatrixClientContext();
+    const [visibility, setVisibility] = useState<Visibility | null>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
     const [name, setName] = useState("");
-    const spaceNameField = useRef<Field>();
+    const spaceNameField = useRef<Field>(null);
     const [alias, setAlias] = useState("");
-    const spaceAliasField = useRef<RoomAliasField>();
-    const [avatar, setAvatar] = useState<File>(null);
+    const spaceAliasField = useRef<RoomAliasField>(null);
+    const [avatar, setAvatar] = useState<File | undefined>(undefined);
     const [topic, setTopic] = useState<string>("");
 
-    const onSpaceCreateClick = async (e) => {
+    const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
+    useEffect(() => {
+        cli.isVersionSupported("v1.4")
+            .then((supported) => {
+                return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
+            })
+            .then((supported) => {
+                setSupportsSpaceFiltering(supported);
+            });
+    }, [cli]);
+
+    const onSpaceCreateClick = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
         if (busy) return;
 
         setBusy(true);
         // require & validate the space name field
-        if (!(await spaceNameField.current.validate({ allowEmpty: false }))) {
+        if (spaceNameField.current && !(await spaceNameField.current.validate({ allowEmpty: false }))) {
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
 
-        if (visibility === Visibility.Public && !(await spaceAliasField.current.validate({ allowEmpty: false }))) {
+        if (
+            spaceAliasField.current &&
+            visibility === Visibility.Public &&
+            !(await spaceAliasField.current.validate({ allowEmpty: false }))
+        ) {
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
@@ -247,13 +265,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
         }
 
         try {
-            await createSpace(
-                name,
-                visibility === Visibility.Public,
-                alias,
-                topic,
-                avatar,
-            );
+            await createSpace(cli, name, visibility === Visibility.Public, alias, topic, avatar);
 
             onFinished();
         } catch (e) {
@@ -261,88 +273,94 @@ const SpaceCreateMenu = ({ onFinished }) => {
         }
     };
 
+    const onSearchClick = (): void => {
+        defaultDispatcher.dispatch({
+            action: Action.OpenSpotlight,
+            initialFilter: Filter.PublicSpaces,
+        });
+    };
+
     let body;
     if (visibility === null) {
-        body = <React.Fragment>
-            <h2>{ _t("Create a space") }</h2>
-            <p>
-                { _t("Spaces are a new way to group rooms and people. What kind of Space do you want to create? " +
-                  "You can change this later.") }
-            </p>
+        body = (
+            <React.Fragment>
+                <h2>{_t("create_space|label")}</h2>
+                <p>{_t("create_space|explainer")}</p>
 
-            <SpaceCreateMenuType
-                title={_t("Public")}
-                description={_t("Open space for anyone, best for communities")}
-                className="mx_SpaceCreateMenuType_public"
-                onClick={() => setVisibility(Visibility.Public)}
-            />
-            <SpaceCreateMenuType
-                title={_t("Private")}
-                description={_t("Invite only, best for yourself or teams")}
-                className="mx_SpaceCreateMenuType_private"
-                onClick={() => setVisibility(Visibility.Private)}
-            />
+                <SpaceCreateMenuType
+                    title={_t("common|public")}
+                    description={_t("create_space|public_description")}
+                    className="mx_SpaceCreateMenuType_public"
+                    onClick={() => setVisibility(Visibility.Public)}
+                />
+                <SpaceCreateMenuType
+                    title={_t("common|private")}
+                    description={_t("create_space|private_description")}
+                    className="mx_SpaceCreateMenuType_private"
+                    onClick={() => setVisibility(Visibility.Private)}
+                />
 
-            <p>
-                { _t("To join a space you'll need an invite.") }
-            </p>
-
-            <SpaceFeedbackPrompt onClick={onFinished} />
-        </React.Fragment>;
+                {supportsSpaceFiltering && (
+                    <AccessibleButton kind="primary_outline" onClick={onSearchClick}>
+                        {_t("create_space|search_public_button")}
+                    </AccessibleButton>
+                )}
+            </React.Fragment>
+        );
     } else {
-        body = <React.Fragment>
-            <AccessibleTooltipButton
-                className="mx_SpaceCreateMenu_back"
-                onClick={() => setVisibility(null)}
-                title={_t("Go back")}
-            />
+        body = (
+            <React.Fragment>
+                <AccessibleTooltipButton
+                    className="mx_SpaceCreateMenu_back"
+                    onClick={() => setVisibility(null)}
+                    title={_t("action|go_back")}
+                />
 
-            <h2>
-                {
-                    visibility === Visibility.Public ? _t("Your public space") : _t("Your private space")
-                }
-            </h2>
-            <p>
-                {
-                    _t("Add some details to help people recognise it.")
-                } {
-                    _t("You can change these anytime.")
-                }
-            </p>
+                <h2>
+                    {visibility === Visibility.Public
+                        ? _t("create_space|public_heading")
+                        : _t("create_space|private_heading")}
+                </h2>
+                <p>
+                    {_t("create_space|add_details_prompt")} {_t("create_space|add_details_prompt_2")}
+                </p>
 
-            <SpaceCreateForm
-                busy={busy}
-                onSubmit={onSpaceCreateClick}
-                setAvatar={setAvatar}
-                name={name}
-                setName={setName}
-                nameFieldRef={spaceNameField}
-                topic={topic}
-                setTopic={setTopic}
-                alias={alias}
-                setAlias={setAlias}
-                showAliasField={visibility === Visibility.Public}
-                aliasFieldRef={spaceAliasField}
-            />
+                <SpaceCreateForm
+                    busy={busy}
+                    onSubmit={onSpaceCreateClick}
+                    setAvatar={setAvatar}
+                    name={name}
+                    setName={setName}
+                    nameFieldRef={spaceNameField}
+                    topic={topic}
+                    setTopic={setTopic}
+                    alias={alias}
+                    setAlias={setAlias}
+                    showAliasField={visibility === Visibility.Public}
+                    aliasFieldRef={spaceAliasField}
+                />
 
-            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
-                { busy ? _t("Creating...") : _t("Create") }
-            </AccessibleButton>
-        </React.Fragment>;
+                <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
+                    {busy ? _t("create_space|creating") : _t("action|create")}
+                </AccessibleButton>
+            </React.Fragment>
+        );
     }
 
-    return <ContextMenu
-        left={72}
-        top={62}
-        chevronOffset={0}
-        chevronFace={ChevronFace.None}
-        onFinished={onFinished}
-        wrapperClassName="mx_SpaceCreateMenu_wrapper"
-        managed={false}
-        focusLock={true}
-    >
-        { body }
-    </ContextMenu>;
+    return (
+        <ContextMenu
+            left={72}
+            top={62}
+            chevronOffset={0}
+            chevronFace={ChevronFace.None}
+            onFinished={onFinished}
+            wrapperClassName="mx_SpaceCreateMenu_wrapper"
+            managed={false}
+            focusLock={true}
+        >
+            {body}
+        </ContextMenu>
+    );
 };
 
 export default SpaceCreateMenu;

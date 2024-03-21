@@ -23,11 +23,12 @@ limitations under the License.
     max-width: 100%;
 
     &.mx_CopyableText_border {
+        overflow: auto;
         border-radius: 5px;
         border: solid 1px $light-fg-color;
         margin-bottom: 10px;
         margin-top: 10px;
-        padding: 10px;
+        padding: 10px 0 10px 10px;
     }
 
     .mx_CopyableText_copyButton {
@@ -36,11 +37,15 @@ limitations under the License.
         width: 1em;
         height: 1em;
         cursor: pointer;
-        margin-left: 20px;
+        padding-left: 12px;
+        padding-right: 10px;
         display: block;
+        /* If the copy button is used within a scrollable div, make it stick to the right while scrolling */
+        position: sticky;
+        right: 0;
         /* center to first line */
-        position: relative;
-        top: .15em;
+        top: 0.15em;
+        background-color: $background;
 
         &::before {
             content: "";

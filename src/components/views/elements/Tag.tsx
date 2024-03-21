@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,31 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { DetailedHTMLProps, HTMLAttributes } from "react";
 
 import AccessibleButton from "./AccessibleButton";
 import { Icon as CancelRounded } from "../../../../res/img/element-icons/cancel-rounded.svg";
 
-interface IProps {
+interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     icon?: () => JSX.Element;
     label: string;
     onDeleteClick?: () => void;
     disabled?: boolean;
 }
 
-export const Tag = ({
-    icon,
-    label,
-    onDeleteClick,
-    disabled = false,
-}: IProps) => {
-    return <div className='mx_Tag'>
-        { icon?.() }
-        { label }
-        { onDeleteClick && (
-            <AccessibleButton className="mx_Tag_delete" onClick={onDeleteClick} disabled={disabled}>
-                <CancelRounded />
-            </AccessibleButton>
-        ) }
-    </div>;
+export const Tag: React.FC<IProps> = ({ icon, label, onDeleteClick, disabled = false, ...other }) => {
+    return (
+        <div className="mx_Tag" {...other}>
+            {icon?.()}
+            {label}
+            {onDeleteClick && (
+                <AccessibleButton
+                    aria-label="Remove"
+                    className="mx_Tag_delete"
+                    onClick={onDeleteClick}
+                    disabled={disabled}
+                >
+                    <CancelRounded />
+                </AccessibleButton>
+            )}
+        </div>
+    );
 };

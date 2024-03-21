@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, useState } from "react";
 
 // Hook to simplify interactions with a store-backed state values
 // Returns value and method to change the state value
-export const useStateCallback = <T>(initialValue: T, callback: (v: T) => void): [T, Dispatch<SetStateAction<T>>] => {
+export const useStateCallback = <T>(initialValue: T, callback: (v: T) => void): [T, Dispatch<T>] => {
     const [value, setValue] = useState(initialValue);
-    const interceptSetValue = (newVal: T) => {
+    const interceptSetValue = (newVal: T): void => {
         setValue(newVal);
         callback(newVal);
     };

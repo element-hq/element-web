@@ -15,22 +15,32 @@ limitations under the License.
 */
 
 export function snakeToCamel(s: string): string {
-    return s.replace(/._./g, v => `${v[0]}${v[2].toUpperCase()}`);
+    return s.replace(/._./g, (v) => `${v[0]}${v[2].toUpperCase()}`);
 }
 
 export class SnakedObject<T = Record<string, any>> {
-    public constructor(private obj: T) {
-    }
+    private fallbackWarnings = new Set<string>();
+
+    public constructor(private obj: T) {}
 
     public get<K extends string & keyof T>(key: K, altCaseName?: string): T[K] {
         const val = this.obj[key];
         if (val !== undefined) return val;
 
-        return this.obj[altCaseName ?? snakeToCamel(key)];
+        const fallbackKey = altCaseName ?? snakeToCamel(key);
+        const fallback = this.obj[<K>fallbackKey];
+        if (!!fallback && !this.fallbackWarnings.has(fallbackKey)) {
+            this.fallbackWarnings.add(fallbackKey);
+            console.warn(`Using deprecated camelCase config ${fallbackKey}`);
+            console.warn(
+                "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
+            );
+        }
+        return fallback;
     }
 
     // Make JSON.stringify() pretend that everything is fine
-    public toJSON() {
+    public toJSON(): T {
         return this.obj;
     }
 }

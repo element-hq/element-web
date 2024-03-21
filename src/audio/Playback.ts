@@ -17,13 +17,19 @@ limitations under the License.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer } from "matrix-js-sdk/src/utils";
 
+// @ts-ignore - `.ts` is needed here to make TS happy
+import { Request, Response } from "../workers/playback.worker.ts";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
-import { arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample } from "../utils/arrays";
+import { arrayFastResample } from "../utils/arrays";
 import { IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
+import { WorkerManager } from "../WorkerManager";
+import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
+import playbackWorkerFactory from "../workers/playbackWorkerFactory";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -32,20 +38,17 @@ export enum PlaybackState {
     Playing = "playing", // active progress through timeline
 }
 
-export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
-export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
-function makePlaybackWaveform(input: number[]): number[] {
-    // First, convert negative amplitudes to positive so we don't detect zero as "noisy".
-    const noiseWaveform = input.map(v => Math.abs(v));
-
-    // Then, we'll resample the waveform using a smoothing approach so we can keep the same rough shape.
-    // We also rescale the waveform to be 0-1 so we end up with a clamped waveform to rely upon.
-    return arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
+export interface PlaybackInterface {
+    readonly currentState: PlaybackState;
+    readonly liveData: SimpleObservable<number[]>;
+    readonly timeSeconds: number;
+    readonly durationSeconds: number;
+    skipTo(timeSeconds: number): Promise<void>;
 }
 
-export class Playback extends EventEmitter implements IDestroyable {
+export class Playback extends EventEmitter implements IDestroyable, PlaybackInterface {
     /**
      * Stable waveform for representing a thumbnail of the media. Values are
      * guaranteed to be between zero and one, inclusive.
@@ -53,14 +56,15 @@ export class Playback extends EventEmitter implements IDestroyable {
     public readonly thumbnailWaveform: number[];
 
     private readonly context: AudioContext;
-    private source: AudioBufferSourceNode | MediaElementAudioSourceNode;
+    private source?: AudioBufferSourceNode | MediaElementAudioSourceNode;
     private state = PlaybackState.Decoding;
-    private audioBuf: AudioBuffer;
-    private element: HTMLAudioElement;
+    private audioBuf?: AudioBuffer;
+    private element?: HTMLAudioElement;
     private resampledWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
+    private readonly worker = new WorkerManager<Request, Response>(playbackWorkerFactory());
 
     /**
      * Creates a new playback instance from a buffer.
@@ -68,7 +72,10 @@ export class Playback extends EventEmitter implements IDestroyable {
      * @param {number[]} seedWaveform Optional seed waveform to present until the proper waveform
      * can be calculated. Contains values between zero and one, inclusive.
      */
-    constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
+    public constructor(
+        private buf: ArrayBuffer,
+        seedWaveform = DEFAULT_WAVEFORM,
+    ) {
         super();
         // Capture the file size early as reading the buffer will result in a 0-length buffer left behind
         this.fileSize = this.buf.byteLength;
@@ -103,6 +110,18 @@ export class Playback extends EventEmitter implements IDestroyable {
         return this.clock;
     }
 
+    public get liveData(): SimpleObservable<number[]> {
+        return this.clock.liveData;
+    }
+
+    public get timeSeconds(): number {
+        return this.clock.timeSeconds;
+    }
+
+    public get durationSeconds(): number {
+        return this.clock.durationSeconds;
+    }
+
     public get currentState(): PlaybackState {
         return this.state;
     }
@@ -118,7 +137,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         return true; // we don't ever care if the event had listeners, so just return "yes"
     }
 
-    public destroy() {
+    public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
         // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
@@ -132,7 +151,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         }
     }
 
-    public async prepare() {
+    public async prepare(): Promise<void> {
         // don't attempt to decode the media again
         // AudioContext.decodeAudioData detaches the array buffer `this.buf`
         // meaning it cannot be re-read
@@ -147,61 +166,72 @@ export class Playback extends EventEmitter implements IDestroyable {
         // Overall, the point of this is to avoid memory-related issues due to storing a massive
         // audio buffer in memory, as that can balloon to far greater than the input buffer's
         // byte length.
-        if (this.buf.byteLength > 5 * 1024 * 1024) { // 5mb
+        if (this.buf.byteLength > 5 * 1024 * 1024) {
+            // 5mb
             logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
-            const prom = new Promise((resolve, reject) => {
-                this.element.onloadeddata = () => resolve(null);
-                this.element.onerror = (e) => reject(e);
-            });
+            const deferred = defer<unknown>();
+            this.element.onloadeddata = deferred.resolve;
+            this.element.onerror = deferred.reject;
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
-            await prom; // make sure the audio element is ready for us
+            await deferred.promise; // make sure the audio element is ready for us
         } else {
             // Safari compat: promise API not supported on this function
             this.audioBuf = await new Promise((resolve, reject) => {
-                this.context.decodeAudioData(this.buf, b => resolve(b), async e => {
-                    try {
-                        // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
-                        // very well.
-                        logger.error("Error decoding recording: ", e);
-                        logger.warn("Trying to re-encode to WAV instead...");
+                this.context.decodeAudioData(
+                    this.buf,
+                    (b) => resolve(b),
+                    async (e): Promise<void> => {
+                        try {
+                            // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
+                            // very well.
+                            logger.error("Error decoding recording: ", e);
+                            logger.warn("Trying to re-encode to WAV instead...");
 
-                        const wav = await decodeOgg(this.buf);
+                            const wav = await decodeOgg(this.buf);
 
-                        // noinspection ES6MissingAwait - not needed when using callbacks
-                        this.context.decodeAudioData(wav, b => resolve(b), e => {
-                            logger.error("Still failed to decode recording: ", e);
+                            // noinspection ES6MissingAwait - not needed when using callbacks
+                            this.context.decodeAudioData(
+                                wav,
+                                (b) => resolve(b),
+                                (e) => {
+                                    logger.error("Still failed to decode recording: ", e);
+                                    reject(e);
+                                },
+                            );
+                        } catch (e) {
+                            logger.error("Caught decoding error:", e);
                             reject(e);
-                        });
-                    } catch (e) {
-                        logger.error("Caught decoding error:", e);
-                        reject(e);
-                    }
-                });
+                        }
+                    },
+                );
             });
 
             // Update the waveform to the real waveform once we have channel data to use. We don't
             // exactly trust the user-provided waveform to be accurate...
-            const waveform = Array.from(this.audioBuf.getChannelData(0));
-            this.resampledWaveform = makePlaybackWaveform(waveform);
+            this.resampledWaveform = await this.makePlaybackWaveform(this.audioBuf.getChannelData(0));
         }
 
         this.waveformObservable.update(this.resampledWaveform);
 
         this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
-        this.clock.durationSeconds = this.element ? this.element.duration : this.audioBuf.duration;
+        this.clock.durationSeconds = this.element?.duration ?? this.audioBuf!.duration;
 
         // Signal that we're not decoding anymore. This is done last to ensure the clock is updated for
         // when the downstream callers try to use it.
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
     }
 
-    private onPlaybackEnd = async () => {
+    private makePlaybackWaveform(input: Float32Array): Promise<number[]> {
+        return this.worker.call({ data: Array.from(input) }).then((resp) => resp.waveform);
+    }
+
+    private onPlaybackEnd = async (): Promise<void> => {
         await this.context.suspend();
         this.emit(PlaybackState.Stopped);
     };
 
-    public async play() {
+    public async play(): Promise<void> {
         // We can't restart a buffer source, so we need to create a new one if we hit the end
         if (this.state === PlaybackState.Stopped) {
             this.disconnectSource();
@@ -220,42 +250,42 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.emit(PlaybackState.Playing);
     }
 
-    private disconnectSource() {
+    private disconnectSource(): void {
         if (this.element) return; // leave connected, we can (and must) re-use it
         this.source?.disconnect();
         this.source?.removeEventListener("ended", this.onPlaybackEnd);
     }
 
-    private makeNewSourceBuffer() {
+    private makeNewSourceBuffer(): void {
         if (this.element && this.source) return; // leave connected, we can (and must) re-use it
 
         if (this.element) {
             this.source = this.context.createMediaElementSource(this.element);
         } else {
             this.source = this.context.createBufferSource();
-            this.source.buffer = this.audioBuf;
+            this.source.buffer = this.audioBuf ?? null;
         }
 
         this.source.addEventListener("ended", this.onPlaybackEnd);
         this.source.connect(this.context.destination);
     }
 
-    public async pause() {
+    public async pause(): Promise<void> {
         await this.context.suspend();
         this.emit(PlaybackState.Paused);
     }
 
-    public async stop() {
+    public async stop(): Promise<void> {
         await this.onPlaybackEnd();
         this.clock.flagStop();
     }
 
-    public async toggle() {
+    public async toggle(): Promise<void> {
         if (this.isPlaying) await this.pause();
         else await this.play();
     }
 
-    public async skipTo(timeSeconds: number) {
+    public async skipTo(timeSeconds: number): Promise<void> {
         // Dev note: this function talks a lot about clock desyncs. There is a clock running
         // independently to the audio context and buffer so that accurate human-perceptible
         // time can be exposed. The PlaybackClock class has more information, but the short

@@ -14,28 +14,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import classNames from "classnames";
 import React, { HTMLAttributes } from "react";
 
 import { SettingsSubsectionHeading } from "./SettingsSubsectionHeading";
 
 export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> {
-    heading: string | React.ReactNode;
+    heading?: string | React.ReactNode;
     description?: string | React.ReactNode;
     children?: React.ReactNode;
+    // when true content will be justify-items: stretch, which will make items within the section stretch to full width.
+    stretchContent?: boolean;
 }
 
-const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children, ...rest }) => (
+export const SettingsSubsectionText: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
+    <div {...rest} className="mx_SettingsSubsection_text">
+        {children}
+    </div>
+);
+
+export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
+    heading,
+    description,
+    children,
+    stretchContent,
+    ...rest
+}) => (
     <div {...rest} className="mx_SettingsSubsection">
-        { typeof heading === 'string'
-            ? <SettingsSubsectionHeading heading={heading} />
-            : <>
-                { heading }
-            </>
-        }
-        { !!description && <div className="mx_SettingsSubsection_description">{ description }</div> }
-        <div className="mx_SettingsSubsection_content">
-            { children }
-        </div>
+        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
+        {!!description && (
+            <div className="mx_SettingsSubsection_description">
+                <SettingsSubsectionText>{description}</SettingsSubsectionText>
+            </div>
+        )}
+        {!!children && (
+            <div
+                className={classNames("mx_SettingsSubsection_content", {
+                    mx_SettingsSubsection_contentStretch: !!stretchContent,
+                    mx_SettingsSubsection_noHeading: !heading && !description,
+                })}
+            >
+                {children}
+            </div>
+        )}
     </div>
 );
 

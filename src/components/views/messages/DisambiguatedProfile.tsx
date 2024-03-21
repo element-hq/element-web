@@ -1,6 +1,6 @@
 /*
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,54 +15,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import classNames from 'classnames';
+import React from "react";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
 
-import { getUserNameColorClass } from '../../../utils/FormattingUtils';
+import { _t } from "../../../languageHandler";
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import UserIdentifier from "../../../customisations/UserIdentifier";
 
 interface IProps {
-    member?: RoomMember;
+    member?: RoomMember | null;
     fallbackName: string;
     onClick?(): void;
     colored?: boolean;
     emphasizeDisplayName?: boolean;
+    withTooltip?: boolean;
 }
 
 export default class DisambiguatedProfile extends React.Component<IProps> {
-    render() {
-        const { fallbackName, member, colored, emphasizeDisplayName, onClick } = this.props;
+    public render(): React.ReactNode {
+        const { fallbackName, member, colored, emphasizeDisplayName, withTooltip, onClick } = this.props;
         const rawDisplayName = member?.rawDisplayName || fallbackName;
         const mxid = member?.userId;
 
-        let colorClass;
+        let colorClass: string | undefined;
         if (colored) {
-            colorClass = getUserNameColorClass(fallbackName);
+            colorClass = getUserNameColorClass(mxid ?? "");
         }
 
         let mxidElement;
-        if (member?.disambiguate && mxid) {
-            mxidElement = (
-                <span className="mx_DisambiguatedProfile_mxid">
-                    { UserIdentifier.getDisplayUserIdentifier(
-                        mxid, { withDisplayName: true, roomId: member.roomId },
-                    ) }
-                </span>
-            );
+        let title: string | undefined;
+
+        if (mxid) {
+            const identifier =
+                UserIdentifier.getDisplayUserIdentifier?.(mxid, {
+                    withDisplayName: true,
+                    roomId: member.roomId,
+                }) ?? mxid;
+            if (member?.disambiguate) {
+                mxidElement = <span className="mx_DisambiguatedProfile_mxid">{identifier}</span>;
+            }
+            title = _t("timeline|disambiguated_profile", {
+                displayName: rawDisplayName,
+                matrixId: identifier,
+            });
         }
 
-        const displayNameClasses = classNames({
-            "mx_DisambiguatedProfile_displayName": emphasizeDisplayName,
-            [colorClass]: true,
+        const displayNameClasses = classNames(colorClass, {
+            mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
         });
 
         return (
-            <div className="mx_DisambiguatedProfile" onClick={onClick}>
+            <div className="mx_DisambiguatedProfile" title={withTooltip ? title : undefined} onClick={onClick}>
                 <span className={displayNameClasses} dir="auto">
-                    { rawDisplayName }
+                    {rawDisplayName}
                 </span>
-                { mxidElement }
+                {mxidElement}
             </div>
         );
     }

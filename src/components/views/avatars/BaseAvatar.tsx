@@ -17,42 +17,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
-import { ClientEvent } from "matrix-js-sdk/src/client";
+import React, { forwardRef, useCallback, useContext, useEffect, useState } from "react";
+import classNames from "classnames";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { Avatar } from "@vector-im/compound-web";
 
-import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
-import AccessibleButton from '../elements/AccessibleButton';
+import { ButtonEvent } from "../elements/AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
-import { toPx } from "../../../utils/units";
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 
 interface IProps {
-    name: string; // The name (first initial used as default)
-    idName?: string; // ID for generating hash colours
+    name?: React.ComponentProps<typeof Avatar>["name"]; // The name (first initial used as default)
+    idName?: React.ComponentProps<typeof Avatar>["id"]; // ID for generating hash colours
     title?: string; // onHover title text
-    url?: string; // highest priority of them all, shortcut to set in urls[0]
+    url?: string | null; // highest priority of them all, shortcut to set in urls[0]
     urls?: string[]; // [highest_priority, ... , lowest_priority]
-    width?: number;
-    height?: number;
-    // XXX: resizeMethod not actually used.
-    resizeMethod?: ResizeMethod;
-    defaultToInitialLetter?: boolean; // true to add default url
-    onClick?: React.MouseEventHandler;
-    inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
+    type?: React.ComponentProps<typeof Avatar>["type"];
+    size: string;
+    onClick?: (ev: ButtonEvent) => void;
     className?: string;
     tabIndex?: number;
+    altText?: string;
 }
 
-const calculateUrls = (url, urls, lowBandwidth) => {
+const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
-    let _urls = [];
+    let _urls: string[] = [];
     if (!lowBandwidth) {
         _urls = urls || [];
 
@@ -66,18 +61,17 @@ const calculateUrls = (url, urls, lowBandwidth) => {
     return Array.from(new Set(_urls));
 };
 
-const useImageUrl = ({ url, urls }): [string, () => void] => {
+const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);
-    const lowBandwidth = roomContext ?
-        roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
+    const lowBandwidth = roomContext ? roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
 
     const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls, lowBandwidth));
     const [urlsIndex, setIndex] = useState<number>(0);
 
     const onError = useCallback(() => {
-        setIndex(i => i + 1); // try the next one
+        setIndex((i) => i + 1); // try the next one
     }, []);
 
     useEffect(() => {
@@ -100,118 +94,54 @@ const useImageUrl = ({ url, urls }): [string, () => void] => {
     return [imageUrl, onError];
 };
 
-const BaseAvatar = (props: IProps) => {
+const BaseAvatar = forwardRef<HTMLElement, IProps>((props, ref) => {
     const {
         name,
         idName,
         title,
         url,
         urls,
-        width = 40,
-        height = 40,
-        resizeMethod = "crop", // eslint-disable-line @typescript-eslint/no-unused-vars
-        defaultToInitialLetter = true,
+        size = "40px",
         onClick,
-        inputRef,
         className,
+        type = "round",
+        altText = _t("common|avatar"),
         ...otherProps
     } = props;
 
     const [imageUrl, onError] = useImageUrl({ url, urls });
 
-    if (!imageUrl && defaultToInitialLetter) {
-        const initialLetter = AvatarLogic.getInitialLetter(name);
-        const textNode = (
-            <span
-                className="mx_BaseAvatar_initial"
-                aria-hidden="true"
-                style={{
-                    fontSize: toPx(width * 0.65),
-                    width: toPx(width),
-                    lineHeight: toPx(height),
-                }}
-            >
-                { initialLetter }
-            </span>
-        );
-        const imgNode = (
-            <img
-                className="mx_BaseAvatar_image"
-                src={AvatarLogic.defaultAvatarUrlForString(idName || name)}
-                alt=""
-                title={title}
-                onError={onError}
-                style={{
-                    width: toPx(width),
-                    height: toPx(height),
-                }}
-                aria-hidden="true" />
-        );
-
-        if (onClick) {
-            return (
-                <AccessibleButton
-                    aria-label={_t("Avatar")}
-                    aria-live="off"
-                    {...otherProps}
-                    element="span"
-                    className={classNames("mx_BaseAvatar", className)}
-                    onClick={onClick}
-                    inputRef={inputRef}
-                >
-                    { textNode }
-                    { imgNode }
-                </AccessibleButton>
-            );
-        } else {
-            return (
-                <span
-                    className={classNames("mx_BaseAvatar", className)}
-                    ref={inputRef}
-                    {...otherProps}
-                    role="presentation"
-                >
-                    { textNode }
-                    { imgNode }
-                </span>
-            );
-        }
-    }
+    const extraProps: Partial<React.ComponentProps<typeof Avatar>> = {};
 
     if (onClick) {
-        return (
-            <AccessibleButton
-                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
-                element='img'
-                src={imageUrl}
-                onClick={onClick}
-                onError={onError}
-                style={{
-                    width: toPx(width),
-                    height: toPx(height),
-                }}
-                title={title}
-                alt={_t("Avatar")}
-                inputRef={inputRef}
-                {...otherProps} />
-        );
+        extraProps["aria-live"] = "off";
+        extraProps["role"] = "button";
+    } else if (!imageUrl) {
+        extraProps["role"] = "presentation";
+        extraProps["aria-label"] = undefined;
     } else {
-        return (
-            <img
-                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
-                src={imageUrl}
-                onError={onError}
-                style={{
-                    width: toPx(width),
-                    height: toPx(height),
-                }}
-                title={title}
-                alt=""
-                ref={inputRef}
-                {...otherProps} />
-        );
+        extraProps["role"] = undefined;
     }
-};
+
+    return (
+        <Avatar
+            ref={ref}
+            src={imageUrl}
+            id={idName ?? ""}
+            name={name ?? ""}
+            type={type}
+            size={size}
+            className={classNames("mx_BaseAvatar", className)}
+            aria-label={altText}
+            onError={onError}
+            title={title}
+            onClick={onClick}
+            {...extraProps}
+            {...otherProps}
+            data-testid="avatar-img"
+        />
+    );
+});
 
 export default BaseAvatar;
 export type BaseAvatarType = React.FC<IProps>;

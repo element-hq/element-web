@@ -17,11 +17,11 @@ limitations under the License.
 import EventEmitter from "events";
 
 export enum UI_EVENTS {
-    Resize = "resize"
+    Resize = "resize",
 }
 
 export default class UIStore extends EventEmitter {
-    private static _instance: UIStore = null;
+    private static _instance: UIStore | null = null;
 
     private resizeObserver: ResizeObserver;
 
@@ -31,7 +31,7 @@ export default class UIStore extends EventEmitter {
     public windowWidth: number;
     public windowHeight: number;
 
-    constructor() {
+    public constructor() {
         super();
 
         // eslint-disable-next-line no-restricted-properties
@@ -58,7 +58,7 @@ export default class UIStore extends EventEmitter {
         }
     }
 
-    public getElementDimensions(name: string): DOMRectReadOnly {
+    public getElementDimensions(name: string): DOMRectReadOnly | undefined {
         return this.uiElementDimensions.get(name);
     }
 
@@ -68,7 +68,7 @@ export default class UIStore extends EventEmitter {
     }
 
     public stopTrackingElementDimensions(name: string): void {
-        let trackedElement: Element;
+        let trackedElement: Element | undefined;
         this.trackedUiElements.forEach((trackedElementName, element) => {
             if (trackedElementName === name) {
                 trackedElement = element;
@@ -85,15 +85,15 @@ export default class UIStore extends EventEmitter {
         return this.uiElementDimensions.has(name);
     }
 
-    private resizeObserverCallback = (entries: ResizeObserverEntry[]) => {
-        const windowEntry = entries.find(entry => entry.target === document.body);
+    private resizeObserverCallback = (entries: ResizeObserverEntry[]): void => {
+        const windowEntry = entries.find((entry) => entry.target === document.body);
 
         if (windowEntry) {
             this.windowWidth = windowEntry.contentRect.width;
             this.windowHeight = windowEntry.contentRect.height;
         }
 
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             const trackedElementName = this.trackedUiElements.get(entry.target);
             if (trackedElementName) {
                 this.uiElementDimensions.set(trackedElementName, entry.contentRect);

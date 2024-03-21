@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../../languageHandler";
 import BaseDialog from "../BaseDialog";
 import DialogButtons from "../../elements/DialogButtons";
 
 interface IProps {
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
 }
 
 export default class ConfirmDestroyCrossSigningDialog extends React.Component<IProps> {
@@ -33,29 +33,22 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
         this.props.onFinished(false);
     };
 
-    render() {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
-                className='mx_ConfirmDestroyCrossSigningDialog'
+                className="mx_ConfirmDestroyCrossSigningDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Destroy cross-signing keys?")}
+                title={_t("encryption|destroy_cross_signing_dialog|title")}
             >
-                <div className='mx_ConfirmDestroyCrossSigningDialog_content'>
-                    <p>
-                        { _t(
-                            "Deleting cross-signing keys is permanent. " +
-                            "Anyone you have verified with will see security alerts. " +
-                            "You almost certainly don't want to do this, unless " +
-                            "you've lost every device you can cross-sign from.",
-                        ) }
-                    </p>
+                <div className="mx_ConfirmDestroyCrossSigningDialog_content">
+                    <p>{_t("encryption|destroy_cross_signing_dialog|warning")}</p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Clear cross-signing keys")}
+                    primaryButton={_t("encryption|destroy_cross_signing_dialog|primary_button_text")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.onDecline}
                 />
             </BaseDialog>

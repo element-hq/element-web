@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
-import dis from '../../../dispatcher/dispatcher';
+import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 export default class IntegrationsDisabledDialog extends React.Component<IProps> {
     private onAcknowledgeClick = (): void => {
@@ -35,21 +36,25 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
         dis.fire(Action.ViewUserSettings);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
-                className='mx_IntegrationsDisabledDialog'
+                className="mx_IntegrationsDisabledDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Integrations are disabled")}
+                title={_t("integrations|disabled_dialog_title")}
             >
-                <div className='mx_IntegrationsDisabledDialog_content'>
-                    <p>{ _t("Enable 'Manage Integrations' in Settings to do this.") }</p>
+                <div className="mx_IntegrationsDisabledDialog_content">
+                    <p>
+                        {_t("integrations|disabled_dialog_description", {
+                            manageIntegrations: _t("integration_manager|manage_title"),
+                        })}
+                    </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Settings")}
+                    primaryButton={_t("common|settings")}
                     onPrimaryButtonClick={this.onOpenSettingsClick}
-                    cancelButton={_t("OK")}
+                    cancelButton={_t("action|ok")}
                     onCancel={this.onAcknowledgeClick}
                 />
             </BaseDialog>

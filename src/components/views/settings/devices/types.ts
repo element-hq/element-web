@@ -18,7 +18,13 @@ import { IMyDevice } from "matrix-js-sdk/src/matrix";
 
 import { ExtendedDeviceInformation } from "../../../../utils/device/parseUserAgent";
 
-export type DeviceWithVerification = IMyDevice & { isVerified: boolean | null };
+export type DeviceWithVerification = IMyDevice & {
+    /**
+     * `null` if the device is unknown or has not published encryption keys; otherwise a boolean
+     * indicating whether the device has been cross-signed by a cross-signing key we trust.
+     */
+    isVerified: boolean | null;
+};
 export type ExtendedDeviceAppInfo = {
     // eg Element Web
     appName?: string;
@@ -26,10 +32,13 @@ export type ExtendedDeviceAppInfo = {
     url?: string;
 };
 export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceAppInfo & ExtendedDeviceInformation;
-export type DevicesDictionary = Record<ExtendedDevice['device_id'], ExtendedDevice>;
+export type DevicesDictionary = Record<ExtendedDevice["device_id"], ExtendedDevice>;
 
 export enum DeviceSecurityVariation {
-    Verified = 'Verified',
-    Unverified = 'Unverified',
-    Inactive = 'Inactive',
+    Verified = "Verified",
+    Unverified = "Unverified",
+    Inactive = "Inactive",
+    // sessions that do not support encryption
+    // eg a session that logged in via api to get an access token
+    Unverifiable = "Unverifiable",
 }

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
+<DocumentFragment>
+  <div
+    aria-current="false"
+    aria-label="Chat"
+    class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_timelineCardButton"
+    role="button"
+    tabindex="0"
+  />
+  <div
+    aria-current="false"
+    aria-label="Threads"
+    class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_threadsButton"
+    data-testid="threadsButton"
+    role="button"
+    tabindex="0"
+  />
+  <div
+    aria-current="false"
+    aria-label="Room info"
+    class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_roomSummaryButton"
+    role="button"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

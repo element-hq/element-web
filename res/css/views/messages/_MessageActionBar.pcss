@@ -18,10 +18,9 @@ limitations under the License.
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
     --MessageActionBar-size-box: 32px; /* 28px + 2px (margin) * 2 */
-    --MessageActionBar-item-hover-background: $panel-actions;
+    --MessageActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
     --MessageActionBar-item-hover-borderRadius: 6px;
     --MessageActionBar-item-hover-zIndex: 1;
-    --MessageActionBar-star-button-color: #ffa534;
 
     position: absolute;
     visibility: hidden;
@@ -31,7 +30,7 @@ limitations under the License.
     line-height: $font-24px;
     border-radius: 8px;
     background: $background;
-    border: 1px solid $input-border-color;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
     top: -32px;
     right: 8px;
     user-select: none;
@@ -43,7 +42,7 @@ limitations under the License.
     /* previous event while trying to mouse into the action bar or from the */
     /* react button to its tooltip. */
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         /* tooltip safe mousing area + tooltip overhang + */
         /* action bar + action bar offset from event */
@@ -56,7 +55,11 @@ limitations under the License.
         cursor: initial;
 
         /* stylelint-disable-next-line max-line-length */
-        .mx_GenericEventListSummary[data-layout="bubble"] .mx_GenericEventListSummary_toggle ~ .mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type & {
+        .mx_GenericEventListSummary[data-layout="bubble"]
+            .mx_GenericEventListSummary_toggle
+            ~ .mx_GenericEventListSummary_unstyledList
+            .mx_EventTile_info:first-of-type
+            & {
             /* improve clickability of "collapse" link button on bubble layout by reducing width and height values */
             /* mx_GenericEventListSummary_toggle ~: to apply rules to action bar when "collapse" button is available */
             /* mx_EventTile_info:first-of-type: to apply rules to the info event tile just under "collapse" button */
@@ -76,7 +79,7 @@ limitations under the License.
         }
     }
 
-    >* {
+    > * {
         white-space: nowrap;
         display: inline-block;
         position: relative;
@@ -93,7 +96,7 @@ limitations under the License.
         --MessageActionBar-icon-size: 18px;
         width: var(--MessageActionBar-size-button);
         height: var(--MessageActionBar-size-button);
-        color: $secondary-content;
+        color: var(--cpd-color-icon-secondary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -107,23 +110,11 @@ limitations under the License.
         &:disabled,
         &[disabled] {
             cursor: not-allowed;
-            opacity: .75;
+            opacity: 0.75;
         }
 
         &:hover {
-            color: $primary-content;
-        }
-
-        &.mx_MessageActionBar_threadButton {
-
-            .mx_Indicator {
-                background: $links;
-                animation-iteration-count: infinite;
-            }
-        }
-
-        &.mx_MessageActionBar_favouriteButton_fillstar {
-            color: var(--MessageActionBar-star-button-color);
+            color: var(--cpd-color-icon-primary);
         }
 
         &.mx_MessageActionBar_downloadButton {

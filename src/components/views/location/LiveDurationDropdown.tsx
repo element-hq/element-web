@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactElement } from "react";
 
-import { formatDuration } from '../../../DateUtils';
-import { _t } from '../../../languageHandler';
-import Dropdown from '../elements/Dropdown';
+import { formatDuration } from "../../../DateUtils";
+import { _t } from "../../../languageHandler";
+import Dropdown from "../elements/Dropdown";
+import { NonEmptyArray } from "../../../@types/common";
 
 const DURATION_MS = {
     fifteenMins: 900000,
@@ -33,40 +34,50 @@ interface Props {
     onChange: (timeout: number) => void;
 }
 
-const getLabel = (durationMs: number) => {
-    return _t('Share for %(duration)s', { duration: formatDuration(durationMs) });
+const getLabel = (durationMs: number): string => {
+    return _t("location_sharing|live_share_button", { duration: formatDuration(durationMs) });
 };
 
 const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
-    const options = Object.values(DURATION_MS).map((duration) =>
-        ({ key: duration.toString(), duration, label: getLabel(duration) }),
-    );
+    const options = Object.values(DURATION_MS).map((duration) => ({
+        key: duration.toString(),
+        duration,
+        label: getLabel(duration),
+    }));
 
     // timeout is not one of our default values
     // eg it was set by another client
     if (!Object.values(DURATION_MS).includes(timeout)) {
         options.push({
-            key: timeout.toString(), duration: timeout, label: getLabel(timeout),
+            key: timeout.toString(),
+            duration: timeout,
+            label: getLabel(timeout),
         });
     }
 
-    const onOptionChange = (key: string) => {
+    const onOptionChange = (key: string): void => {
         // stringified value back to number
         onChange(+key);
     };
 
-    return <Dropdown
-        id='live-duration'
-        data-test-id='live-duration-dropdown'
-        label={getLabel(timeout)}
-        value={timeout.toString()}
-        onOptionChange={onOptionChange}
-        className='mx_LiveDurationDropdown'
-    >
-        { options.map(({ key, label }) =>
-            <div data-test-id={`live-duration-option-${key}`} key={key}>{ label }</div>,
-        ) }
-    </Dropdown>;
+    return (
+        <Dropdown
+            id="live-duration"
+            data-testid="live-duration-dropdown"
+            label={getLabel(timeout)}
+            value={timeout.toString()}
+            onOptionChange={onOptionChange}
+            className="mx_LiveDurationDropdown"
+        >
+            {
+                options.map(({ key, label }) => (
+                    <div data-testid={`live-duration-option-${key}`} key={key}>
+                        {label}
+                    </div>
+                )) as NonEmptyArray<ReactElement & { key: string }>
+            }
+        </Dropdown>
+    );
 };
 
 export default LiveDurationDropdown;

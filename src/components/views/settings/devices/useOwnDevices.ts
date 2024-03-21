@@ -25,46 +25,20 @@ import {
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
     UNSTABLE_MSC3852_LAST_SEEN_UA,
+    MatrixError,
+    LocalNotificationSettings,
 } from "matrix-js-sdk/src/matrix";
-import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
-import { getDeviceClientInformation } from "../../../../utils/device/clientInformation";
+import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";
 import { DevicesDictionary, ExtendedDevice, ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { parseUserAgent } from "../../../../utils/device/parseUserAgent";
-
-const isDeviceVerified = (
-    matrixClient: MatrixClient,
-    crossSigningInfo: CrossSigningInfo,
-    device: IMyDevice,
-): boolean | null => {
-    try {
-        const userId = matrixClient.getUserId();
-        if (!userId) {
-            throw new Error('No user id');
-        }
-        const deviceInfo = matrixClient.getStoredDevice(userId, device.device_id);
-        if (!deviceInfo) {
-            throw new Error('No device info available');
-        }
-        return crossSigningInfo.checkDeviceTrust(
-            crossSigningInfo,
-            deviceInfo,
-            false,
-            true,
-        ).isCrossSigningVerified();
-    } catch (error) {
-        logger.error("Error getting device cross-signing info", error);
-        return null;
-    }
-};
+import { isDeviceVerified } from "../../../../utils/device/isDeviceVerified";
+import { SDKContext } from "../../../../contexts/SDKContext";
 
 const parseDeviceExtendedInformation = (matrixClient: MatrixClient, device: IMyDevice): ExtendedDeviceAppInfo => {
     const { name, version, url } = getDeviceClientInformation(matrixClient, device.device_id);
@@ -76,30 +50,30 @@ const parseDeviceExtendedInformation = (matrixClient: MatrixClient, device: IMyD
     };
 };
 
-const fetchDevicesWithVerification = async (
-    matrixClient: MatrixClient,
-    userId: string,
-): Promise<DevicesState['devices']> => {
+/**
+ * Fetch extended details of the user's own devices
+ *
+ * @param matrixClient - Matrix Client
+ * @returns A dictionary mapping from device ID to ExtendedDevice
+ */
+export async function fetchExtendedDeviceInformation(matrixClient: MatrixClient): Promise<DevicesDictionary> {
     const { devices } = await matrixClient.getDevices();
 
-    const crossSigningInfo = matrixClient.getStoredCrossSigningForUser(userId);
-
-    const devicesDict = devices.reduce((acc, device: IMyDevice) => ({
-        ...acc,
-        [device.device_id]: {
+    const devicesDict: DevicesDictionary = {};
+    for (const device of devices) {
+        devicesDict[device.device_id] = {
             ...device,
-            isVerified: isDeviceVerified(matrixClient, crossSigningInfo, device),
+            isVerified: await isDeviceVerified(matrixClient, device.device_id),
             ...parseDeviceExtendedInformation(matrixClient, device),
             ...parseUserAgent(device[UNSTABLE_MSC3852_LAST_SEEN_UA.name]),
-        },
-    }), {});
-
+        };
+    }
     return devicesDict;
-};
+}
 
 export enum OwnDevicesError {
-    Unsupported = 'Unsupported',
-    Default = 'Default',
+    Unsupported = "Unsupported",
+    Default = "Default",
 }
 export type DevicesState = {
     devices: DevicesDictionary;
@@ -108,43 +82,40 @@ export type DevicesState = {
     currentDeviceId: string;
     isLoadingDeviceList: boolean;
     // not provided when current session cannot request verification
-    requestDeviceVerification?: (deviceId: ExtendedDevice['device_id']) => Promise<VerificationRequest>;
+    requestDeviceVerification?: (deviceId: ExtendedDevice["device_id"]) => Promise<VerificationRequest>;
     refreshDevices: () => Promise<void>;
-    saveDeviceName: (deviceId: ExtendedDevice['device_id'], deviceName: string) => Promise<void>;
-    setPushNotifications: (deviceId: ExtendedDevice['device_id'], enabled: boolean) => Promise<void>;
+    saveDeviceName: (deviceId: ExtendedDevice["device_id"], deviceName: string) => Promise<void>;
+    setPushNotifications: (deviceId: ExtendedDevice["device_id"], enabled: boolean) => Promise<void>;
     error?: OwnDevicesError;
     supportsMSC3881?: boolean | undefined;
 };
 export const useOwnDevices = (): DevicesState => {
-    const matrixClient = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const matrixClient = sdkContext.client!;
 
-    const currentDeviceId = matrixClient.getDeviceId();
-    const userId = matrixClient.getUserId();
+    const currentDeviceId = matrixClient.getDeviceId()!;
+    const userId = matrixClient.getSafeUserId();
 
-    const [devices, setDevices] = useState<DevicesState['devices']>({});
-    const [pushers, setPushers] = useState<DevicesState['pushers']>([]);
-    const [localNotificationSettings, setLocalNotificationSettings]
-        = useState<DevicesState['localNotificationSettings']>(new Map<string, LocalNotificationSettings>());
+    const [devices, setDevices] = useState<DevicesState["devices"]>({});
+    const [pushers, setPushers] = useState<DevicesState["pushers"]>([]);
+    const [localNotificationSettings, setLocalNotificationSettings] = useState<
+        DevicesState["localNotificationSettings"]
+    >(new Map<string, LocalNotificationSettings>());
     const [isLoadingDeviceList, setIsLoadingDeviceList] = useState(true);
     const [supportsMSC3881, setSupportsMSC3881] = useState(true); // optimisticly saying yes!
 
     const [error, setError] = useState<OwnDevicesError>();
 
     useEffect(() => {
-        matrixClient.doesServerSupportUnstableFeature("org.matrix.msc3881").then(hasSupport => {
+        matrixClient.doesServerSupportUnstableFeature("org.matrix.msc3881").then((hasSupport) => {
             setSupportsMSC3881(hasSupport);
         });
     }, [matrixClient]);
 
-    const refreshDevices = useCallback(async () => {
+    const refreshDevices = useCallback(async (): Promise<void> => {
         setIsLoadingDeviceList(true);
         try {
-            // realistically we should never hit this
-            // but it satisfies types
-            if (!userId) {
-                throw new Error('Cannot fetch devices without user id');
-            }
-            const devices = await fetchDevicesWithVerification(matrixClient, userId);
+            const devices = await fetchExtendedDeviceInformation(matrixClient);
             setDevices(devices);
 
             const { pushers } = await matrixClient.getPushers();
@@ -155,10 +126,7 @@ export const useOwnDevices = (): DevicesState => {
                 const eventType = `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
                 const event = matrixClient.getAccountData(eventType);
                 if (event) {
-                    notificationSettings.set(
-                        deviceId,
-                        event.getContent(),
-                    );
+                    notificationSettings.set(deviceId, event.getContent());
                 }
             });
             setLocalNotificationSettings(notificationSettings);
@@ -174,11 +142,20 @@ export const useOwnDevices = (): DevicesState => {
             }
             setIsLoadingDeviceList(false);
         }
-    }, [matrixClient, userId]);
+    }, [matrixClient]);
 
     useEffect(() => {
         refreshDevices();
     }, [refreshDevices]);
+
+    useEffect(() => {
+        const deviceIds = Object.keys(devices);
+        // empty devices means devices have not been fetched yet
+        // as there is always at least the current device
+        if (deviceIds.length) {
+            pruneClientInformation(deviceIds, matrixClient);
+        }
+    }, [devices, matrixClient]);
 
     useEventEmitter(matrixClient, CryptoEvent.DevicesUpdated, (users: string[]): void => {
         if (users.includes(userId)) {
@@ -198,17 +175,15 @@ export const useOwnDevices = (): DevicesState => {
 
     const isCurrentDeviceVerified = !!devices[currentDeviceId]?.isVerified;
 
-    const requestDeviceVerification = isCurrentDeviceVerified && userId
-        ? async (deviceId: ExtendedDevice['device_id']) => {
-            return await matrixClient.requestVerification(
-                userId,
-                [deviceId],
-            );
-        }
-        : undefined;
+    const requestDeviceVerification =
+        isCurrentDeviceVerified && userId
+            ? async (deviceId: ExtendedDevice["device_id"]): Promise<VerificationRequest> => {
+                  return await matrixClient.getCrypto()!.requestDeviceVerification(userId, deviceId);
+              }
+            : undefined;
 
     const saveDeviceName = useCallback(
-        async (deviceId: ExtendedDevice['device_id'], deviceName: string): Promise<void> => {
+        async (deviceId: ExtendedDevice["device_id"], deviceName: string): Promise<void> => {
             const device = devices[deviceId];
 
             // no change
@@ -217,21 +192,20 @@ export const useOwnDevices = (): DevicesState => {
             }
 
             try {
-                await matrixClient.setDeviceDetails(
-                    deviceId,
-                    { display_name: deviceName },
-                );
+                await matrixClient.setDeviceDetails(deviceId, { display_name: deviceName });
                 await refreshDevices();
             } catch (error) {
-                logger.error("Error setting session display name", error);
-                throw new Error(_t("Failed to set display name"));
+                logger.error("Error setting device name", error);
+                throw new Error(_t("settings|sessions|error_set_name"));
             }
-        }, [matrixClient, devices, refreshDevices]);
+        },
+        [matrixClient, devices, refreshDevices],
+    );
 
     const setPushNotifications = useCallback(
-        async (deviceId: ExtendedDevice['device_id'], enabled: boolean): Promise<void> => {
+        async (deviceId: ExtendedDevice["device_id"], enabled: boolean): Promise<void> => {
             try {
-                const pusher = pushers.find(pusher => pusher[PUSHER_DEVICE_ID.name] === deviceId);
+                const pusher = pushers.find((pusher) => pusher[PUSHER_DEVICE_ID.name] === deviceId);
                 if (pusher) {
                     await matrixClient.setPusher({
                         ...pusher,
@@ -244,11 +218,12 @@ export const useOwnDevices = (): DevicesState => {
                 }
             } catch (error) {
                 logger.error("Error setting pusher state", error);
-                throw new Error(_t("Failed to set pusher state"));
+                throw new Error(_t("settings|sessions|error_pusher_state"));
             } finally {
                 await refreshDevices();
             }
-        }, [matrixClient, pushers, localNotificationSettings, refreshDevices],
+        },
+        [matrixClient, pushers, localNotificationSettings, refreshDevices],
     );
 
     return {

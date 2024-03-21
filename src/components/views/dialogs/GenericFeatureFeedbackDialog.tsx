@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
-import QuestionDialog from './QuestionDialog';
-import { _t } from '../../../languageHandler';
+import QuestionDialog from "./QuestionDialog";
+import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
-import SdkConfig from "../../../SdkConfig";
-import { IDialogProps } from "./IDialogProps";
 import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import Modal from "../../../Modal";
 import InfoDialog from "./InfoDialog";
 
-interface IProps extends IDialogProps {
+interface IProps {
     title: string;
-    subheading: string;
-    rageshakeLabel: string;
-    rageshakeData?: Record<string, string>;
+    subheading?: string;
+    rageshakeLabel?: string;
+    rageshakeData?: Record<string, any>;
+    children?: ReactNode;
+    onFinished(sendFeedback?: boolean): void;
 }
 
 const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
@@ -44,58 +44,62 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
     const [comment, setComment] = useState("");
     const [canContact, setCanContact] = useState(false);
 
-    const sendFeedback = async (ok: boolean) => {
+    const sendFeedback = async (ok: boolean): Promise<void> => {
         if (!ok) return onFinished(false);
 
-        submitFeedback(SdkConfig.get().bug_report_endpoint_url, rageshakeLabel, comment, canContact, rageshakeData);
+        submitFeedback(rageshakeLabel, comment, canContact, rageshakeData);
         onFinished(true);
 
         Modal.createDialog(InfoDialog, {
             title,
-            description: _t("Feedback sent! Thanks, we appreciate it!"),
-            button: _t("Close"),
+            description: _t("feedback|sent"),
+            button: _t("action|close"),
             hasCloseButton: false,
             fixedWidth: false,
         });
     };
 
-    return (<QuestionDialog
-        className="mx_GenericFeatureFeedbackDialog"
-        hasCancelButton={true}
-        title={title}
-        description={<React.Fragment>
-            <div className="mx_GenericFeatureFeedbackDialog_subheading">
-                { subheading }
-                &nbsp;
-                { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
-                &nbsp;
-                { children }
-            </div>
+    return (
+        <QuestionDialog
+            className="mx_GenericFeatureFeedbackDialog"
+            hasCancelButton={true}
+            title={title}
+            description={
+                <React.Fragment>
+                    <div className="mx_GenericFeatureFeedbackDialog_subheading">
+                        {subheading}
+                        &nbsp;
+                        {_t("feedback|platform_username")}
+                        &nbsp;
+                        {children}
+                    </div>
 
-            <Field
-                id="feedbackComment"
-                label={_t("Feedback")}
-                type="text"
-                autoComplete="off"
-                value={comment}
-                element="textarea"
-                onChange={(ev) => {
-                    setComment(ev.target.value);
-                }}
-                autoFocus={true}
-            />
+                    <Field
+                        id="feedbackComment"
+                        label={_t("common|feedback")}
+                        type="text"
+                        autoComplete="off"
+                        value={comment}
+                        element="textarea"
+                        onChange={(ev) => {
+                            setComment(ev.target.value);
+                        }}
+                        autoFocus={true}
+                    />
 
-            <StyledCheckbox
-                checked={canContact}
-                onChange={e => setCanContact((e.target as HTMLInputElement).checked)}
-            >
-                { _t("You may contact me if you have any follow up questions") }
-            </StyledCheckbox>
-        </React.Fragment>}
-        button={_t("Send feedback")}
-        buttonDisabled={!comment}
-        onFinished={sendFeedback}
-    />);
+                    <StyledCheckbox
+                        checked={canContact}
+                        onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}
+                    >
+                        {_t("feedback|can_contact_label")}
+                    </StyledCheckbox>
+                </React.Fragment>
+            }
+            button={_t("feedback|send_feedback_action")}
+            buttonDisabled={!comment}
+            onFinished={sendFeedback}
+        />
+    );
 };
 
 export default GenericFeatureFeedbackDialog;

@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
@@ -29,7 +28,7 @@ const LIST_TYPES = ["UL", "OL", "LI"];
 
 // Escapes all markup in the given text
 function escape(text: string): string {
-    return text.replace(/[\\*_[\]`<]|^>/g, match => `\\${match}`);
+    return text.replace(/[\\*_[\]`<]|^>/g, (match) => `\\${match}`);
 }
 
 // Finds the length of the longest backtick sequence in the given text, used for
@@ -51,7 +50,7 @@ export function longestBacktickSequence(text: string): number {
 }
 
 function isListChild(n: Node): boolean {
-    return LIST_TYPES.includes(n.parentNode?.nodeName);
+    return LIST_TYPES.includes(n.parentNode?.nodeName || "");
 }
 
 function parseAtRoomMentions(text: string, pc: PartCreator, opts: IParseOptions): Part[] {
@@ -77,12 +76,14 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {
-        case "@": return [pc.userPill(n.textContent, resourceId)];
-        case "#": return [pc.roomPill(resourceId)];
+        case "@":
+            return [pc.userPill(n.textContent || "", resourceId)];
+        case "#":
+            return [pc.roomPill(resourceId)];
     }
 
     const children = Array.from(n.childNodes);
-    if (href === n.textContent && children.every(c => c.nodeType === Node.TEXT_NODE)) {
+    if (href === n.textContent && children.every((c) => c.nodeType === Node.TEXT_NODE)) {
         return parseAtRoomMentions(n.textContent, pc, opts);
     } else {
         return [pc.plain("["), ...parseChildren(n, pc, opts), pc.plain(`](${href})`)];
@@ -95,6 +96,8 @@ function parseImage(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
 }
 
 function parseCodeBlock(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
+    if (!n.textContent) return [];
+
     let language = "";
     if (n.firstChild?.nodeName === "CODE") {
         for (const className of (n.firstChild as HTMLElement).classList) {
@@ -110,7 +113,7 @@ function parseCodeBlock(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     const fence = "`".repeat(Math.max(3, longestBacktickSequence(text) + 1));
     const parts: Part[] = [...pc.plainWithEmoji(fence + language), pc.newline()];
 
-    text.split("\n").forEach(line => {
+    text.split("\n").forEach((line) => {
         parts.push(...pc.plainWithEmoji(line));
         parts.push(pc.newline());
     });
@@ -125,7 +128,7 @@ function parseHeader(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     return [prefix, ...parseChildren(n, pc, opts)];
 }
 
-function checkIgnored(n) {
+function checkIgnored(n: Node): boolean {
     if (n.nodeType === Node.TEXT_NODE) {
         // Element adds \n text nodes in a lot of places,
         // which should be ignored
@@ -136,7 +139,7 @@ function checkIgnored(n) {
     return true;
 }
 
-function prefixLines(parts: Part[], prefix: string, pc: PartCreator) {
+function prefixLines(parts: Part[], prefix: string, pc: PartCreator): void {
     parts.unshift(pc.plain(prefix));
     for (let i = 0; i < parts.length; i++) {
         if (parts[i].type === Type.Newline) {
@@ -147,8 +150,8 @@ function prefixLines(parts: Part[], prefix: string, pc: PartCreator) {
 }
 
 function parseChildren(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (li: Node) => Part[]): Part[] {
-    let prev;
-    return Array.from(n.childNodes).flatMap(c => {
+    let prev: ChildNode | undefined;
+    return Array.from(n.childNodes).flatMap((c) => {
         const parsed = parseNode(c, pc, opts, mkListItem);
         if (parsed.length && prev && (checkBlockNode(prev) || checkBlockNode(c))) {
             if (isListChild(c)) {
@@ -168,7 +171,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
 
     switch (n.nodeType) {
         case Node.TEXT_NODE:
-            return parseAtRoomMentions(n.nodeValue, pc, opts);
+            return parseAtRoomMentions(n.nodeValue || "", pc, opts);
         case Node.ELEMENT_NODE:
             switch (n.nodeName) {
                 case "H1":
@@ -202,7 +205,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     return parseCodeBlock(n, pc, opts);
                 case "CODE": {
                     // Escape backticks by using multiple backticks for the fence if necessary
-                    const fence = "`".repeat(longestBacktickSequence(n.textContent) + 1);
+                    const fence = "`".repeat(longestBacktickSequence(n.textContent || "") + 1);
                     return pc.plainWithEmoji(`${fence}${n.textContent}${fence}`);
                 }
                 case "BLOCKQUOTE": {
@@ -213,7 +216,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                 case "LI":
                     return mkListItem?.(n) ?? parseChildren(n, pc, opts);
                 case "UL": {
-                    const parts = parseChildren(n, pc, opts, li => [pc.plain("- "), ...parseChildren(li, pc, opts)]);
+                    const parts = parseChildren(n, pc, opts, (li) => [pc.plain("- "), ...parseChildren(li, pc, opts)]);
                     if (isListChild(n)) {
                         prefixLines(parts, "    ", pc);
                     }
@@ -221,7 +224,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                 }
                 case "OL": {
                     let counter = (n as HTMLOListElement).start ?? 1;
-                    const parts = parseChildren(n, pc, opts, li => {
+                    const parts = parseChildren(n, pc, opts, (li) => {
                         const parts = [pc.plain(`${counter}. `), ...parseChildren(li, pc, opts)];
                         counter++;
                         return parts;
@@ -236,15 +239,17 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     // Math nodes are translated back into delimited latex strings
                     if ((n as Element).hasAttribute("data-mx-maths")) {
                         const delims = SdkConfig.get().latex_maths_delims;
-                        const delimLeft = (n.nodeName === "SPAN") ?
-                            delims?.inline?.left ?? "\\(" :
-                            delims?.display?.left ?? "\\[";
-                        const delimRight = (n.nodeName === "SPAN") ?
-                            delims?.inline?.right ?? "\\)" :
-                            delims?.display?.right ?? "\\]";
+                        const delimLeft =
+                            n.nodeName === "SPAN" ? delims?.inline?.left ?? "\\(" : delims?.display?.left ?? "\\[";
+                        const delimRight =
+                            n.nodeName === "SPAN" ? delims?.inline?.right ?? "\\)" : delims?.display?.right ?? "\\]";
                         const tex = (n as Element).getAttribute("data-mx-maths");
 
                         return pc.plainWithEmoji(`${delimLeft}${tex}${delimRight}`);
+                    }
+                    // Spoilers are translated back into their slash command form
+                    else if ((n as Element).hasAttribute("data-mx-spoiler")) {
+                        return [pc.plain("/spoiler "), ...parseChildren(n, pc, opts)];
                     }
             }
     }
@@ -268,11 +273,7 @@ function parseHtmlMessage(html: string, pc: PartCreator, opts: IParseOptions): P
     return parts;
 }
 
-export function parsePlainTextMessage(
-    body: string,
-    pc: PartCreator,
-    opts: IParseOptions,
-): Part[] {
+export function parsePlainTextMessage(body: string, pc: PartCreator, opts: IParseOptions): Part[] {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (opts.isQuotedMessage) {
@@ -287,7 +288,7 @@ export function parsePlainTextMessage(
     }, [] as Part[]);
 }
 
-export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOptions = { shouldEscape: true }) {
+export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOptions = { shouldEscape: true }): Part[] {
     const content = event.getContent();
     let parts: Part[];
     const isEmote = content.msgtype === MsgType.Emote;

@@ -14,44 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LocationAssetType, M_LOCATION } from "matrix-js-sdk/src/@types/location";
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
-import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType, M_LOCATION, MatrixEvent, EventType, ContentHelpers } from "matrix-js-sdk/src/matrix";
 
 let id = 1;
 export const makeLegacyLocationEvent = (geoUri: string): MatrixEvent => {
-    return new MatrixEvent(
-        {
-            "event_id": `$${++id}`,
-            "type": EventType.RoomMessage,
-            "content": {
-                "body": "Something about where I am",
-                "msgtype": "m.location",
-                "geo_uri": geoUri,
-            },
+    return new MatrixEvent({
+        event_id: `$${++id}`,
+        type: EventType.RoomMessage,
+        content: {
+            body: "Something about where I am",
+            msgtype: "m.location",
+            geo_uri: geoUri,
         },
-    );
+        origin_server_ts: 0,
+    });
 };
 
 export const makeLocationEvent = (geoUri: string, assetType?: LocationAssetType): MatrixEvent => {
-    return new MatrixEvent(
-        {
-            "event_id": `$${++id}`,
-            "type": M_LOCATION.name,
-            "content": makeLocationContent(
-                `Found at ${geoUri} at 2021-12-21T12:22+0000`,
-                geoUri,
-                252523,
-                "Human-readable label",
-                assetType,
-            ),
-        },
-    );
+    return new MatrixEvent({
+        event_id: `$${++id}`,
+        type: M_LOCATION.name,
+        content: ContentHelpers.makeLocationContent(
+            `Found at ${geoUri} at 2021-12-21T12:22+0000`,
+            geoUri,
+            252523,
+            "Human-readable label",
+            assetType,
+        ),
+        origin_server_ts: 0,
+    });
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
 export const getMockGeolocationPositionError = (code: number, message: string): GeolocationPositionError => ({
-    code, message,
+    code,
+    message,
     PERMISSION_DENIED: 1,
     POSITION_UNAVAILABLE: 2,
     TIMEOUT: 3,

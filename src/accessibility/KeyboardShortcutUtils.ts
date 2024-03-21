@@ -25,6 +25,7 @@ import {
     IKeyboardShortcuts,
     KeyBindingAction,
     KEYBOARD_SHORTCUTS,
+    KeyboardShortcutSetting,
     MAC_ONLY_SHORTCUTS,
 } from "./KeyboardShortcuts";
 
@@ -34,7 +35,7 @@ import {
  * have to be manually mirrored in KeyBindingDefaults.
  */
 const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
-    const ctrlEnterToSend = SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+    const ctrlEnterToSend = SettingsStore.getValue("MessageComposerInput.ctrlEnterToSend");
 
     const keyboardShortcuts: IKeyboardShortcuts = {
         [KeyBindingAction.SendMessage]: {
@@ -42,37 +43,37 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
                 key: Key.ENTER,
                 ctrlOrCmdKey: ctrlEnterToSend,
             },
-            displayName: _td("Send message"),
+            displayName: _td("composer|send_button_title"),
         },
         [KeyBindingAction.NewLine]: {
             default: {
                 key: Key.ENTER,
                 shiftKey: !ctrlEnterToSend,
             },
-            displayName: _td("New line"),
+            displayName: _td("keyboard|composer_new_line"),
         },
         [KeyBindingAction.CompleteAutocomplete]: {
             default: {
                 key: Key.ENTER,
             },
-            displayName: _td("Complete"),
+            displayName: _td("action|complete"),
         },
         [KeyBindingAction.ForceCompleteAutocomplete]: {
             default: {
                 key: Key.TAB,
             },
-            displayName: _td("Force complete"),
+            displayName: _td("keyboard|autocomplete_force"),
         },
         [KeyBindingAction.SearchInRoom]: {
             default: {
                 ctrlOrCmdKey: true,
                 key: Key.F,
             },
-            displayName: _td("Search (must be enabled)"),
+            displayName: _td("keyboard|search"),
         },
     };
 
-    if (PlatformPeg.get().overrideBrowserShortcuts()) {
+    if (PlatformPeg.get()?.overrideBrowserShortcuts()) {
         // XXX: This keyboard shortcut isn't manually added to
         // KeyBindingDefaults as it can't be easily handled by the
         // KeyBindingManager
@@ -81,7 +82,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
                 ctrlOrCmdKey: true,
                 key: DIGITS,
             },
-            displayName: _td("Switch to space by number"),
+            displayName: _td("keyboard|switch_to_space"),
         };
     }
 
@@ -92,28 +93,30 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
  * This function gets keyboard shortcuts that can be consumed by the KeyBindingDefaults.
  */
 export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
-    const overrideBrowserShortcuts = PlatformPeg.get().overrideBrowserShortcuts();
+    const overrideBrowserShortcuts = PlatformPeg.get()?.overrideBrowserShortcuts();
 
-    return Object.keys(KEYBOARD_SHORTCUTS).filter((k: KeyBindingAction) => {
-        if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
-        if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
-        if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
+    return (Object.keys(KEYBOARD_SHORTCUTS) as KeyBindingAction[])
+        .filter((k) => {
+            if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
+            if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
+            if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
 
-        return true;
-    }).reduce((o, key) => {
-        o[key] = KEYBOARD_SHORTCUTS[key];
-        return o;
-    }, {} as IKeyboardShortcuts);
+            return true;
+        })
+        .reduce((o, key) => {
+            o[key as KeyBindingAction] = KEYBOARD_SHORTCUTS[key as KeyBindingAction];
+            return o;
+        }, {} as IKeyboardShortcuts);
 };
 
 /**
  * Gets keyboard shortcuts that should be presented to the user in the UI.
  */
 export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
-    const entries = [
-        ...Object.entries(getUIOnlyShortcuts()),
-        ...Object.entries(getKeyboardShortcuts()),
-    ];
+    const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())] as [
+        KeyBindingAction,
+        KeyboardShortcutSetting,
+    ][];
 
     return entries.reduce((acc, [key, value]) => {
         acc[key] = value;
@@ -121,11 +124,11 @@ export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
     }, {} as IKeyboardShortcuts);
 };
 
-export const getKeyboardShortcutValue = (name: string): KeyCombo => {
+export const getKeyboardShortcutValue = (name: KeyBindingAction): KeyCombo | undefined => {
     return getKeyboardShortcutsForUI()[name]?.default;
 };
 
-export const getKeyboardShortcutDisplayName = (name: string): string | null => {
+export const getKeyboardShortcutDisplayName = (name: KeyBindingAction): string | undefined => {
     const keyboardShortcutDisplayName = getKeyboardShortcutsForUI()[name]?.displayName;
     return keyboardShortcutDisplayName && _t(keyboardShortcutDisplayName);
 };

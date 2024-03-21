@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import React, { ReactNode } from "react";
+import { SERVICE_TYPES, HTTPError, IThreepid, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../../../../languageHandler";
+import { Icon as WarningIcon } from "../../../../../../res/img/feather-customised/warning-triangle.svg";
+import { UserFriendlyError, _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -30,18 +30,16 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PlatformPeg from "../../../../../PlatformPeg";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import { Policies, Service, startTermsFlow } from "../../../../../Terms";
+import { Service, ServicePolicyPair, startTermsFlow } from "../../../../../Terms";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import { abbreviateUrl } from "../../../../../utils/UrlUtils";
-import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
-import Spinner from "../../../elements/Spinner";
+import { getThreepidsWithBindStatus } from "../../../../../boundThreepids";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
-import ErrorDialog from "../../../dialogs/ErrorDialog";
+import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/ErrorDialog";
 import AccountPhoneNumbers from "../../account/PhoneNumbers";
 import AccountEmailAddresses from "../../account/EmailAddresses";
 import DiscoveryEmailAddresses from "../../discovery/EmailAddresses";
@@ -52,6 +50,14 @@ import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
 import ToggleSwitch from "../../../elements/ToggleSwitch";
 import { IS_MAC } from "../../../../../Keyboard";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
+import Heading from "../../../typography/Heading";
+import InlineSpinner from "../../../elements/InlineSpinner";
+import { ThirdPartyIdentifier } from "../../../../../AddThreepid";
+import { SDKContext } from "../../../../../contexts/SDKContext";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -59,81 +65,76 @@ interface IProps {
 
 interface IState {
     language: string;
-    spellCheckEnabled: boolean;
+    spellCheckEnabled?: boolean;
     spellCheckLanguages: string[];
     haveIdServer: boolean;
-    serverSupportsSeparateAddAndBind: boolean;
     idServerHasUnsignedTerms: boolean;
-    requiredPolicyInfo: {       // This object is passed along to a component for handling
-        hasTerms: boolean;
-        policiesAndServices: {
-            service: Service;
-            policies: Policies;
-        }[]; // From the startTermsFlow callback
-        agreedUrls: string[]; // From the startTermsFlow callback
-        resolve: (values: string[]) => void; // Promise resolve function for startTermsFlow callback
-    };
-    emails: IThreepid[];
-    msisdns: IThreepid[];
+    requiredPolicyInfo:
+        | {
+              // This object is passed along to a component for handling
+              hasTerms: false;
+              policiesAndServices: null; // From the startTermsFlow callback
+              agreedUrls: null; // From the startTermsFlow callback
+              resolve: null; // Promise resolve function for startTermsFlow callback
+          }
+        | {
+              hasTerms: boolean;
+              policiesAndServices: ServicePolicyPair[];
+              agreedUrls: string[];
+              resolve: (values: string[]) => void;
+          };
+    emails: ThirdPartyIdentifier[];
+    msisdns: ThirdPartyIdentifier[];
     loading3pids: boolean; // whether or not the emails and msisdns have been loaded
     canChangePassword: boolean;
-    idServerName: string;
+    idServerName?: string;
+    externalAccountManagementUrl?: string;
+    canMake3pidChanges: boolean;
 }
 
 export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    public context!: React.ContextType<typeof SDKContext>;
+
     private readonly dispatcherRef: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
+        this.context = context;
+
+        const cli = this.context.client!;
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             spellCheckEnabled: false,
             spellCheckLanguages: [],
-            haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
-            serverSupportsSeparateAddAndBind: null,
+            haveIdServer: Boolean(cli.getIdentityServerUrl()),
             idServerHasUnsignedTerms: false,
-            requiredPolicyInfo: {       // This object is passed along to a component for handling
+            requiredPolicyInfo: {
+                // This object is passed along to a component for handling
                 hasTerms: false,
                 policiesAndServices: null, // From the startTermsFlow callback
-                agreedUrls: null,          // From the startTermsFlow callback
-                resolve: null,             // Promise resolve function for startTermsFlow callback
+                agreedUrls: null, // From the startTermsFlow callback
+                resolve: null, // Promise resolve function for startTermsFlow callback
             },
             emails: [],
             msisdns: [],
             loading3pids: true, // whether or not the emails and msisdns have been loaded
             canChangePassword: false,
-            idServerName: null,
+            canMake3pidChanges: false,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
-    }
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public async UNSAFE_componentWillMount(): Promise<void> {
-        const cli = MatrixClientPeg.get();
-
-        const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
-
-        const capabilities = await cli.getCapabilities(); // this is cached
-        const changePasswordCap = capabilities['m.change_password'];
-
-        // You can change your password so long as the capability isn't explicitly disabled. The implicit
-        // behaviour is you can change your password when the capability is missing or has not-false as
-        // the enabled flag value.
-        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
-
-        this.setState({ serverSupportsSeparateAddAndBind, canChangePassword });
-
+        this.getCapabilities();
         this.getThreepidState();
     }
 
     public async componentDidMount(): Promise<void> {
         const plat = PlatformPeg.get();
         const [spellCheckEnabled, spellCheckLanguages] = await Promise.all([
-            plat.getSpellCheckEnabled(),
-            plat.getSpellCheckLanguages(),
+            plat?.getSpellCheckEnabled(),
+            plat?.getSpellCheckLanguages(),
         ]);
 
         if (spellCheckLanguages) {
@@ -149,75 +150,95 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === 'id_server_changed') {
-            this.setState({ haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()) });
+        if (payload.action === "id_server_changed") {
+            this.setState({ haveIdServer: Boolean(this.context.client!.getIdentityServerUrl()) });
             this.getThreepidState();
         }
     };
 
-    private onEmailsChange = (emails: IThreepid[]): void => {
+    private onEmailsChange = (emails: ThirdPartyIdentifier[]): void => {
         this.setState({ emails });
     };
 
-    private onMsisdnsChange = (msisdns: IThreepid[]): void => {
+    private onMsisdnsChange = (msisdns: ThirdPartyIdentifier[]): void => {
         this.setState({ msisdns });
     };
 
+    private async getCapabilities(): Promise<void> {
+        const cli = this.context.client!;
+
+        const capabilities = await cli.getCapabilities(); // this is cached
+        const changePasswordCap = capabilities["m.change_password"];
+
+        // You can change your password so long as the capability isn't explicitly disabled. The implicit
+        // behaviour is you can change your password when the capability is missing or has not-false as
+        // the enabled flag value.
+        const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
+
+        await this.context.oidcClientStore.readyPromise; // wait for the store to be ready
+        const externalAccountManagementUrl = this.context.oidcClientStore.accountManagementEndpoint;
+        // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
+        // We support as far back as v1.1 which doesn't have m.3pid_changes
+        // so the behaviour for when it is missing has to be assume true
+        const canMake3pidChanges = !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
+
+        this.setState({ canChangePassword, externalAccountManagementUrl, canMake3pidChanges });
+    }
+
     private async getThreepidState(): Promise<void> {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context.client!;
 
         // Check to see if terms need accepting
         this.checkTerms();
 
         // Need to get 3PIDs generally for Account section and possibly also for
         // Discovery (assuming we have an IS and terms are agreed).
-        let threepids = [];
+        let threepids: IThreepid[] = [];
         try {
             threepids = await getThreepidsWithBindStatus(cli);
         } catch (e) {
-            const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
+            const idServerUrl = cli.getIdentityServerUrl();
             logger.warn(
-                `Unable to reach identity server at ${idServerUrl} to check ` +
-                `for 3PIDs bindings in Settings`,
+                `Unable to reach identity server at ${idServerUrl} to check ` + `for 3PIDs bindings in Settings`,
             );
             logger.warn(e);
         }
         this.setState({
-            emails: threepids.filter((a) => a.medium === 'email'),
-            msisdns: threepids.filter((a) => a.medium === 'msisdn'),
+            emails: threepids.filter((a) => a.medium === ThreepidMedium.Email),
+            msisdns: threepids.filter((a) => a.medium === ThreepidMedium.Phone),
             loading3pids: false,
         });
     }
 
     private async checkTerms(): Promise<void> {
-        if (!this.state.haveIdServer) {
+        // By starting the terms flow we get the logic for checking which terms the user has signed
+        // for free. So we might as well use that for our own purposes.
+        const idServerUrl = this.context.client!.getIdentityServerUrl();
+        if (!this.state.haveIdServer || !idServerUrl) {
             this.setState({ idServerHasUnsignedTerms: false });
             return;
         }
 
-        // By starting the terms flow we get the logic for checking which terms the user has signed
-        // for free. So we might as well use that for our own purposes.
-        const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
         const authClient = new IdentityAuthClient();
         try {
             const idAccessToken = await authClient.getAccessToken({ check: false });
-            await startTermsFlow([new Service(
-                SERVICE_TYPES.IS,
-                idServerUrl,
-                idAccessToken,
-            )], (policiesAndServices, agreedUrls, extraClassNames) => {
-                return new Promise((resolve, reject) => {
-                    this.setState({
-                        idServerName: abbreviateUrl(idServerUrl),
-                        requiredPolicyInfo: {
-                            hasTerms: true,
-                            policiesAndServices,
-                            agreedUrls,
-                            resolve,
-                        },
+            await startTermsFlow(
+                this.context.client!,
+                [new Service(SERVICE_TYPES.IS, idServerUrl, idAccessToken!)],
+                (policiesAndServices, agreedUrls, extraClassNames) => {
+                    return new Promise((resolve, reject) => {
+                        this.setState({
+                            idServerName: abbreviateUrl(idServerUrl),
+                            requiredPolicyInfo: {
+                                hasTerms: true,
+                                policiesAndServices,
+                                agreedUrls,
+                                resolve,
+                            },
+                        });
                     });
-                });
-            });
+                },
+            );
             // User accepted all terms
             this.setState({
                 requiredPolicyInfo: {
@@ -226,10 +247,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                 },
             });
         } catch (e) {
-            logger.warn(
-                `Unable to reach identity server at ${idServerUrl} to check ` +
-                `for terms in Settings`,
-            );
+            logger.warn(`Unable to reach identity server at ${idServerUrl} to check ` + `for terms in Settings`);
             logger.warn(e);
         }
     }
@@ -256,31 +274,43 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         PlatformPeg.get()?.setSpellCheckEnabled(spellCheckEnabled);
     };
 
-    private onPasswordChangeError = (err): void => {
-        // TODO: Figure out a design that doesn't involve replacing the current dialog
-        let errMsg = err.error || err.message || "";
-        if (err.httpStatus === 403) {
-            errMsg = _t("Failed to change password. Is your password correct?");
-        } else if (!errMsg) {
-            errMsg += ` (HTTP status ${err.httpStatus})`;
+    private onPasswordChangeError = (err: Error): void => {
+        logger.error("Failed to change password: " + err);
+
+        let underlyingError = err;
+        if (err instanceof UserFriendlyError && err.cause instanceof Error) {
+            underlyingError = err.cause;
         }
-        logger.error("Failed to change password: " + errMsg);
+
+        const errorMessage = extractErrorMessageFromError(
+            err,
+            _t("settings|general|error_password_change_unknown", {
+                stringifiedError: String(err),
+            }),
+        );
+
+        let errorMessageToDisplay = errorMessage;
+        if (underlyingError instanceof HTTPError && underlyingError.httpStatus === 403) {
+            errorMessageToDisplay = _t("settings|general|error_password_change_403");
+        } else if (underlyingError instanceof HTTPError) {
+            errorMessageToDisplay = _t("settings|general|error_password_change_http", {
+                errorMessage,
+                httpStatus: underlyingError.httpStatus,
+            });
+        }
+
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
-            title: _t("Error"),
-            description: errMsg,
+            title: _t("settings|general|error_password_change_title"),
+            description: errorMessageToDisplay,
         });
     };
 
-    private onPasswordChanged = ({ didLogoutOutOtherDevices }: { didLogoutOutOtherDevices: boolean }): void => {
-        let description = _t("Your password was successfully changed.");
-        if (didLogoutOutOtherDevices) {
-            description += " " + _t(
-                "You will not receive push notifications on other devices until you sign back in to them.",
-            );
-        }
+    private onPasswordChanged = (): void => {
+        const description = _t("settings|general|password_change_success");
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
-            title: _t("Success"),
+            title: _t("common|success"),
             description,
         });
     };
@@ -293,218 +323,253 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         });
     };
 
-    private renderProfileSection(): JSX.Element {
-        return (
-            <div className="mx_SettingsTab_section">
-                <ProfileSettings />
-            </div>
-        );
-    }
-
     private renderAccountSection(): JSX.Element {
-        let passwordChangeForm = (
-            <ChangePassword
-                className="mx_GeneralUserSettingsTab_changePassword"
-                rowClassName=""
-                buttonKind="primary"
-                onError={this.onPasswordChangeError}
-                onFinished={this.onPasswordChanged} />
-        );
+        let threepidSection: ReactNode = null;
 
-        let threepidSection = null;
-
-        // For older homeservers without separate 3PID add and bind methods (MSC2290),
-        // we use a combo add with bind option API which requires an identity server to
-        // validate 3PID ownership even if we're just adding to the homeserver only.
-        // For newer homeservers with separate 3PID add and bind methods (MSC2290),
-        // there is no such concern, so we can always show the HS account 3PIDs.
-        if (SettingsStore.getValue(UIFeature.ThirdPartyID) &&
-            (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true)
-        ) {
-            const emails = this.state.loading3pids
-                ? <Spinner />
-                : <AccountEmailAddresses
+        if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            const emails = this.state.loading3pids ? (
+                <InlineSpinner />
+            ) : (
+                <AccountEmailAddresses
                     emails={this.state.emails}
                     onEmailsChange={this.onEmailsChange}
-                />;
-            const msisdns = this.state.loading3pids
-                ? <Spinner />
-                : <AccountPhoneNumbers
+                    disabled={!this.state.canMake3pidChanges}
+                />
+            );
+            const msisdns = this.state.loading3pids ? (
+                <InlineSpinner />
+            ) : (
+                <AccountPhoneNumbers
                     msisdns={this.state.msisdns}
                     onMsisdnsChange={this.onMsisdnsChange}
-                />;
-            threepidSection = <div>
-                <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
-                { emails }
+                    disabled={!this.state.canMake3pidChanges}
+                />
+            );
+            threepidSection = (
+                <>
+                    <SettingsSubsection
+                        heading={_t("settings|general|emails_heading")}
+                        stretchContent
+                        data-testid="mx_AccountEmailAddresses"
+                    >
+                        {emails}
+                    </SettingsSubsection>
 
-                <span className="mx_SettingsTab_subheading">{ _t("Phone numbers") }</span>
-                { msisdns }
-            </div>;
-        } else if (this.state.serverSupportsSeparateAddAndBind === null) {
-            threepidSection = <Spinner />;
+                    <SettingsSubsection
+                        heading={_t("settings|general|msisdns_heading")}
+                        stretchContent
+                        data-testid="mx_AccountPhoneNumbers"
+                    >
+                        {msisdns}
+                    </SettingsSubsection>
+                </>
+            );
         }
 
-        let passwordChangeText = _t("Set a new account password...");
-        if (!this.state.canChangePassword) {
-            // Just don't show anything if you can't do anything.
-            passwordChangeText = null;
-            passwordChangeForm = null;
+        let passwordChangeSection: ReactNode = null;
+        if (this.state.canChangePassword) {
+            passwordChangeSection = (
+                <>
+                    <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
+                    <ChangePassword
+                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
+                        rowClassName=""
+                        buttonKind="primary"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged}
+                    />
+                </>
+            );
         }
 
+        let externalAccountManagement: JSX.Element | undefined;
+        if (this.state.externalAccountManagementUrl) {
+            const { hostname } = new URL(this.state.externalAccountManagementUrl);
+
+            externalAccountManagement = (
+                <>
+                    <SettingsSubsectionText data-testid="external-account-management-outer">
+                        {_t(
+                            "settings|general|external_account_management",
+                            { hostname },
+                            { code: (sub) => <code>{sub}</code> },
+                        )}
+                    </SettingsSubsectionText>
+                    <AccessibleButton
+                        onClick={null}
+                        element="a"
+                        kind="primary"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        href={this.state.externalAccountManagementUrl}
+                        data-testid="external-account-management-link"
+                    >
+                        {_t("settings|general|oidc_manage_button")}
+                    </AccessibleButton>
+                </>
+            );
+        }
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
-                <span className="mx_SettingsTab_subheading">{ _t("Account") }</span>
-                <p className="mx_SettingsTab_subsectionText">
-                    { passwordChangeText }
-                </p>
-                { passwordChangeForm }
-                { threepidSection }
-            </div>
+            <>
+                <SettingsSubsection
+                    heading={_t("settings|general|account_section")}
+                    stretchContent
+                    data-testid="accountSection"
+                >
+                    {externalAccountManagement}
+                    {passwordChangeSection}
+                </SettingsSubsection>
+                {threepidSection}
+            </>
         );
     }
 
     private renderLanguageSection(): JSX.Element {
         // TODO: Convert to new-styled Field
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{ _t("Language and region") }</span>
+            <SettingsSubsection heading={_t("settings|general|language_section")} stretchContent>
                 <LanguageDropdown
-                    className="mx_GeneralUserSettingsTab_languageInput"
+                    className="mx_GeneralUserSettingsTab_section_languageInput"
                     onOptionChange={this.onLanguageChange}
                     value={this.state.language}
                 />
-            </div>
+            </SettingsSubsection>
         );
     }
 
     private renderSpellCheckSection(): JSX.Element {
+        const heading = (
+            <SettingsSubsectionHeading heading={_t("settings|general|spell_check_section")}>
+                <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
+            </SettingsSubsectionHeading>
+        );
         return (
-            <div className="mx_SettingsTab_section mx_SettingsTab_section_spellcheck">
-                <span className="mx_SettingsTab_subheading">
-                    { _t("Spell check") }
-                    <ToggleSwitch
-                        checked={this.state.spellCheckEnabled}
-                        onChange={this.onSpellCheckEnabledChange}
+            <SettingsSubsection heading={heading} stretchContent>
+                {this.state.spellCheckEnabled && !IS_MAC && (
+                    <SpellCheckSettings
+                        languages={this.state.spellCheckLanguages}
+                        onLanguagesChange={this.onSpellCheckLanguagesChange}
                     />
-                </span>
-                { (this.state.spellCheckEnabled && !IS_MAC) && <SpellCheckSettings
-                    languages={this.state.spellCheckLanguages}
-                    onLanguagesChange={this.onSpellCheckLanguagesChange}
-                /> }
-            </div>
+                )}
+            </SettingsSubsection>
         );
     }
 
     private renderDiscoverySection(): JSX.Element {
         if (this.state.requiredPolicyInfo.hasTerms) {
-            const intro = <span className="mx_SettingsTab_subsectionText">
-                { _t(
-                    "Agree to the identity server (%(serverName)s) Terms of Service to " +
-                    "allow yourself to be discoverable by email address or phone number.",
-                    { serverName: this.state.idServerName },
-                ) }
-            </span>;
+            const intro = (
+                <SettingsSubsectionText>
+                    {_t("settings|general|discovery_needs_terms", { serverName: this.state.idServerName })}
+                </SettingsSubsectionText>
+            );
             return (
-                <div>
+                <>
                     <InlineTermsAgreement
                         policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
                         agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
                         onFinished={this.state.requiredPolicyInfo.resolve}
                         introElement={intro}
                     />
-                    { /* has its own heading as it includes the current identity server */ }
+                    {/* has its own heading as it includes the current identity server */}
                     <SetIdServer missingTerms={true} />
-                </div>
+                </>
             );
         }
 
-        const emails = this.state.loading3pids ? <Spinner /> : <DiscoveryEmailAddresses emails={this.state.emails} />;
-        const msisdns = this.state.loading3pids ? <Spinner /> : <DiscoveryPhoneNumbers msisdns={this.state.msisdns} />;
-
-        const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
-            <span className="mx_SettingsTab_subheading">{ _t("Email addresses") }</span>
-            { emails }
-
-            <span className="mx_SettingsTab_subheading">{ _t("Phone numbers") }</span>
-            { msisdns }
-        </div> : null;
+        const threepidSection = this.state.haveIdServer ? (
+            <>
+                <DiscoveryEmailAddresses
+                    emails={this.state.emails}
+                    isLoading={this.state.loading3pids}
+                    disabled={!this.state.canMake3pidChanges}
+                />
+                <DiscoveryPhoneNumbers
+                    msisdns={this.state.msisdns}
+                    isLoading={this.state.loading3pids}
+                    disabled={!this.state.canMake3pidChanges}
+                />
+            </>
+        ) : null;
 
         return (
-            <div className="mx_SettingsTab_section">
-                { threepidSection }
-                { /* has its own heading as it includes the current identity server */ }
+            <>
+                {threepidSection}
+                {/* has its own heading as it includes the current identity server */}
                 <SetIdServer missingTerms={false} />
-            </div>
+            </>
         );
     }
 
     private renderManagementSection(): JSX.Element {
         // TODO: Improve warning text for account deactivation
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{ _t("Account management") }</span>
-                <span className="mx_SettingsTab_subsectionText">
-                    { _t("Deactivating your account is a permanent action — be careful!") }
-                </span>
-                <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
-                    { _t("Deactivate Account") }
-                </AccessibleButton>
-            </div>
+            <SettingsSection heading={_t("settings|general|deactivate_section")}>
+                <SettingsSubsection
+                    heading={_t("settings|general|account_management_section")}
+                    data-testid="account-management-section"
+                    description={_t("settings|general|deactivate_warning")}
+                >
+                    <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
+                        {_t("settings|general|deactivate_section")}
+                    </AccessibleButton>
+                </SettingsSubsection>
+            </SettingsSection>
         );
     }
 
-    private renderIntegrationManagerSection(): JSX.Element {
+    private renderIntegrationManagerSection(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
-        return (
-            <div className="mx_SettingsTab_section">
-                { /* has its own heading as it includes the current integration manager */ }
-                <SetIntegrationManager />
-            </div>
-        );
+        return <SetIntegrationManager />;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const plaf = PlatformPeg.get();
-        const supportsMultiLanguageSpellCheck = plaf.supportsSpellCheckSettings();
+        const supportsMultiLanguageSpellCheck = plaf?.supportsSpellCheckSettings();
 
-        const discoWarning = this.state.requiredPolicyInfo.hasTerms
-            ? <img
-                className='mx_GeneralUserSettingsTab_warningIcon'
-                src={require("../../../../../../res/img/feather-customised/warning-triangle.svg").default}
-                width="18"
-                height="18"
-                alt={_t("Warning")}
-            />
-            : null;
-
-        let accountManagementSection;
-        if (SettingsStore.getValue(UIFeature.Deactivate)) {
-            accountManagementSection = <>
-                <div className="mx_SettingsTab_heading">{ _t("Deactivate account") }</div>
-                { this.renderManagementSection() }
-            </>;
+        let accountManagementSection: JSX.Element | undefined;
+        const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
+        if (SettingsStore.getValue(UIFeature.Deactivate) && !isAccountManagedExternally) {
+            accountManagementSection = this.renderManagementSection();
         }
 
         let discoverySection;
         if (SettingsStore.getValue(UIFeature.IdentityServer)) {
-            discoverySection = <>
-                <div className="mx_SettingsTab_heading">{ discoWarning } { _t("Discovery") }</div>
-                { this.renderDiscoverySection() }
-            </>;
+            const discoWarning = this.state.requiredPolicyInfo.hasTerms ? (
+                <WarningIcon
+                    className="mx_GeneralUserSettingsTab_warningIcon"
+                    width="18"
+                    height="18"
+                    // override icon default values
+                    aria-hidden={false}
+                    aria-label={_t("common|warning")}
+                />
+            ) : null;
+            const heading = (
+                <Heading size="2">
+                    {discoWarning}
+                    {_t("settings|general|discovery_section")}
+                </Heading>
+            );
+            discoverySection = (
+                <SettingsSection heading={heading} data-testid="discoverySection">
+                    {this.renderDiscoverySection()}
+                </SettingsSection>
+            );
         }
 
         return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{ _t("General") }</div>
-                { this.renderProfileSection() }
-                { this.renderAccountSection() }
-                { this.renderLanguageSection() }
-                { supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null }
-                { discoverySection }
-                { this.renderIntegrationManagerSection() /* Has its own title */ }
-                { accountManagementSection }
-            </div>
+            <SettingsTab data-testid="mx_GeneralUserSettingsTab">
+                <SettingsSection heading={_t("common|general")}>
+                    <ProfileSettings />
+                    {this.renderAccountSection()}
+                    {this.renderLanguageSection()}
+                    {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
+                </SettingsSection>
+                {discoverySection}
+                {this.renderIntegrationManagerSection()}
+                {accountManagementSection}
+            </SettingsTab>
         );
     }
 }

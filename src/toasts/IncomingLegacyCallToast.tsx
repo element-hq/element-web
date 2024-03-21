@@ -17,18 +17,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import classNames from 'classnames';
+import React from "react";
+import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import classNames from "classnames";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from '../LegacyCallHandler';
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import { _t } from '../languageHandler';
-import RoomAvatar from '../components/views/avatars/RoomAvatar';
-import AccessibleTooltipButton from '../components/views/elements/AccessibleTooltipButton';
-import AccessibleButton from '../components/views/elements/AccessibleButton';
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { _t } from "../languageHandler";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
+import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
+import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 
-export const getIncomingLegacyCallToastKey = (callId: string) => `call_${callId}`;
+export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
 interface IProps {
     call: MatrixCall;
@@ -39,8 +39,16 @@ interface IState {
 }
 
 export default class IncomingLegacyCallToast extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    private readonly roomId: string;
+
+    public constructor(props: IProps) {
         super(props);
+
+        const roomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
+        if (!roomId) {
+            throw new Error("Unable to find room for incoming call");
+        }
+        this.roomId = roomId;
 
         this.state = {
             silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId),
@@ -49,13 +57,15 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
 
     public componentDidMount = (): void => {
         LegacyCallHandler.instance.addListener(
-            LegacyCallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged,
+            LegacyCallHandlerEvent.SilencedCallsChanged,
+            this.onSilencedCallsChanged,
         );
     };
 
     public componentWillUnmount(): void {
         LegacyCallHandler.instance.removeListener(
-            LegacyCallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged,
+            LegacyCallHandlerEvent.SilencedCallsChanged,
+            this.onSilencedCallsChanged,
         );
     }
 
@@ -63,81 +73,76 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
         this.setState({ silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId) });
     };
 
-    private onAnswerClick = (e: React.MouseEvent): void => {
+    private onAnswerClick = (e: ButtonEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.answerCall(LegacyCallHandler.instance.roomIdForCall(this.props.call));
+        LegacyCallHandler.instance.answerCall(this.roomId);
     };
 
-    private onRejectClick= (e: React.MouseEvent): void => {
+    private onRejectClick = (e: ButtonEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.hangupOrReject(LegacyCallHandler.instance.roomIdForCall(this.props.call), true);
+        LegacyCallHandler.instance.hangupOrReject(this.roomId, true);
     };
 
-    private onSilenceClick = (e: React.MouseEvent): void => {
+    private onSilenceClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         const callId = this.props.call.callId;
-        this.state.silenced ?
-            LegacyCallHandler.instance.unSilenceCall(callId) :
-            LegacyCallHandler.instance.silenceCall(callId);
+        this.state.silenced
+            ? LegacyCallHandler.instance.unSilenceCall(callId)
+            : LegacyCallHandler.instance.silenceCall(callId);
     };
 
-    public render() {
-        const call = this.props.call;
-        const room = MatrixClientPeg.get().getRoom(LegacyCallHandler.instance.roomIdForCall(call));
-        const isVoice = call.type === CallType.Voice;
+    public render(): React.ReactNode {
+        const room = MatrixClientPeg.safeGet().getRoom(this.roomId);
+        const isVoice = this.props.call.type === CallType.Voice;
         const callForcedSilent = LegacyCallHandler.instance.isForcedSilent();
 
-        let silenceButtonTooltip = this.state.silenced ? _t("Sound on") : _t("Silence call");
+        let silenceButtonTooltip = this.state.silenced ? _t("voip|unsilence") : _t("voip|silence");
         if (callForcedSilent) {
-            silenceButtonTooltip = _t("Notifications silenced");
+            silenceButtonTooltip = _t("voip|silenced");
         }
 
         const contentClass = classNames("mx_IncomingLegacyCallToast_content", {
-            "mx_IncomingLegacyCallToast_content_voice": isVoice,
-            "mx_IncomingLegacyCallToast_content_video": !isVoice,
+            mx_IncomingLegacyCallToast_content_voice: isVoice,
+            mx_IncomingLegacyCallToast_content_video: !isVoice,
         });
         const silenceClass = classNames("mx_IncomingLegacyCallToast_iconButton", {
-            "mx_IncomingLegacyCallToast_unSilence": this.state.silenced,
-            "mx_IncomingLegacyCallToast_silence": !this.state.silenced,
+            mx_IncomingLegacyCallToast_unSilence: this.state.silenced,
+            mx_IncomingLegacyCallToast_silence: !this.state.silenced,
         });
 
-        return <React.Fragment>
-            <RoomAvatar
-                room={room ?? undefined}
-                height={32}
-                width={32}
-            />
-            <div className={contentClass}>
-                <span className="mx_LegacyCallEvent_caller">
-                    { room ? room.name : _t("Unknown caller") }
-                </span>
-                <div className="mx_LegacyCallEvent_type">
-                    <div className="mx_LegacyCallEvent_type_icon" />
-                    { isVoice ? _t("Voice call") : _t("Video call") }
+        return (
+            <React.Fragment>
+                <RoomAvatar room={room ?? undefined} size="32px" />
+                <div className={contentClass}>
+                    <span className="mx_LegacyCallEvent_caller">{room ? room.name : _t("voip|unknown_caller")}</span>
+                    <div className="mx_LegacyCallEvent_type">
+                        <div className="mx_LegacyCallEvent_type_icon" />
+                        {isVoice ? _t("voip|voice_call") : _t("voip|video_call")}
+                    </div>
+                    <div className="mx_IncomingLegacyCallToast_buttons">
+                        <AccessibleButton
+                            className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_decline"
+                            onClick={this.onRejectClick}
+                            kind="danger"
+                        >
+                            <span> {_t("action|decline")} </span>
+                        </AccessibleButton>
+                        <AccessibleButton
+                            className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_accept"
+                            onClick={this.onAnswerClick}
+                            kind="primary"
+                        >
+                            <span> {_t("action|accept")} </span>
+                        </AccessibleButton>
+                    </div>
                 </div>
-                <div className="mx_IncomingLegacyCallToast_buttons">
-                    <AccessibleButton
-                        className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_decline"
-                        onClick={this.onRejectClick}
-                        kind="danger"
-                    >
-                        <span> { _t("Decline") } </span>
-                    </AccessibleButton>
-                    <AccessibleButton
-                        className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_accept"
-                        onClick={this.onAnswerClick}
-                        kind="primary"
-                    >
-                        <span> { _t("Accept") } </span>
-                    </AccessibleButton>
-                </div>
-            </div>
-            <AccessibleTooltipButton
-                className={silenceClass}
-                disabled={callForcedSilent}
-                onClick={this.onSilenceClick}
-                title={silenceButtonTooltip}
-            />
-        </React.Fragment>;
+                <AccessibleTooltipButton
+                    className={silenceClass}
+                    disabled={callForcedSilent}
+                    onClick={this.onSilenceClick}
+                    title={silenceButtonTooltip}
+                />
+            </React.Fragment>
+        );
     }
 }

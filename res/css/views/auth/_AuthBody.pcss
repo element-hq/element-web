@@ -24,6 +24,10 @@ limitations under the License.
     padding: 25px 60px;
     box-sizing: border-box;
 
+    b {
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+
     &.mx_AuthBody_flex {
         display: flex;
         flex-direction: column;
@@ -31,14 +35,13 @@ limitations under the License.
 
     h1 {
         font-size: $font-24px;
-        font-weight: $font-semi-bold;
-        margin-top: 8px;
+        font-weight: var(--cpd-font-weight-semibold);
+        margin-top: $spacing-8;
         color: $authpage-primary-color;
     }
 
     h2 {
-        font-size: $font-14px;
-        font-weight: $font-semi-bold;
+        font: var(--cpd-font-body-md-semibold);
         color: $authpage-secondary-color;
     }
 
@@ -49,12 +52,36 @@ limitations under the License.
     a:link,
     a:hover,
     a:visited {
-        @mixin mx_Dialog_link;
+        color: $accent;
+        text-decoration: none;
+    }
+
+    fieldset {
+        display: block;
+    }
+
+    .mx_AuthBody_icon {
+        width: 40px;
+    }
+
+    .mx_AuthBody_lockIcon {
+        color: $secondary-content;
+        height: 32px;
+        margin-bottom: -3px; /* tweak to align all icons on different forgot password steps */
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-48;
+        margin-top: 0;
     }
 
     input[type="text"],
     input[type="password"] {
         color: $authpage-primary-color;
+    }
+
+    .mx_Field label {
+        color: $authpage-secondary-color;
     }
 
     .mx_Field input,
@@ -74,6 +101,16 @@ limitations under the License.
 
     input.error {
         color: $alert;
+    }
+
+    .mx_Login_submit {
+        height: 32px;
+        margin-top: $spacing-16;
+    }
+
+    .mx_ErrorMessage {
+        margin-bottom: 12px;
+        margin-top: 2px;
     }
 
     .mx_Field input {
@@ -101,6 +138,85 @@ limitations under the License.
     }
 }
 
+/* specialisation for password reset views */
+.mx_AuthBody.mx_AuthBody_forgot-password {
+    font: var(--cpd-font-body-md-regular);
+    color: $primary-content;
+    padding: 50px 32px;
+    min-height: 600px;
+
+    h1 {
+        margin: $spacing-24 0;
+    }
+
+    .mx_AuthBody_button-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_Login_submit {
+        font-weight: var(--cpd-font-weight-semibold);
+        margin: 0 0 $spacing-16;
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-32;
+
+        p {
+            margin: 0 0 $spacing-8;
+        }
+    }
+
+    .mx_AuthBody_sign-in-instead-button {
+        font-weight: var(--cpd-font-weight-semibold);
+        padding: $spacing-4;
+    }
+
+    .mx_AuthBody_fieldRow {
+        margin-bottom: $spacing-24;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        background: none;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.4;
+        }
+    }
+}
+
+.mx_AuthBody_did-not-receive {
+    align-items: center;
+    color: $secondary-content;
+    display: flex;
+    gap: $spacing-8;
+}
+
+.mx_AuthBody_resend-button {
+    align-items: center;
+    border-radius: 8px;
+    color: $accent;
+    display: flex;
+    gap: $spacing-4;
+    padding: $spacing-4;
+
+    &:hover {
+        background-color: $system;
+    }
+}
+
+.mx_AuthBody_emailPromptIcon {
+    width: 57px;
+}
+
+.mx_AuthBody_emailPromptIcon--shifted {
+    margin-bottom: -17px; /* Prevent layout jump by relative positioning. */
+    position: relative;
+    top: -17px; /* This icon is higher than the other icons. Shift up to prevent icon jumping. */
+    width: 57px;
+}
+
 .mx_AuthBody_fieldRow {
     display: flex;
     margin-bottom: 10px;
@@ -124,7 +240,7 @@ limitations under the License.
     text-align: center;
 
     .mx_AuthBody_paddedFooter_title {
-        margin-top: 16px;
+        margin-top: $spacing-16;
         font-size: $font-15px;
         line-height: $font-24px;
 
@@ -135,7 +251,7 @@ limitations under the License.
     }
 
     .mx_AuthBody_paddedFooter_subtitle {
-        margin-top: 8px;
+        margin-top: $spacing-8;
         font-size: $font-10px;
         line-height: $font-14px;
     }
@@ -146,12 +262,12 @@ limitations under the License.
     text-align: center;
 
     > a {
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 }
 
 .mx_SSOButtons + .mx_AuthBody_changeFlow {
-    margin-top: 24px;
+    margin-top: $spacing-24;
 }
 
 .mx_AuthBody_spinner {

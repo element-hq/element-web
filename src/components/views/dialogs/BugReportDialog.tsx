@@ -17,45 +17,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import SdkConfig from '../../../SdkConfig';
-import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
-import sendBugReport, { downloadBugReport } from '../../../rageshake/submit-rageshake';
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
+import { _t } from "../../../languageHandler";
+import sendBugReport, { downloadBugReport } from "../../../rageshake/submit-rageshake";
 import AccessibleButton from "../elements/AccessibleButton";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
-import Field from '../elements/Field';
+import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import DialogButtons from "../elements/DialogButtons";
 import { sendSentryReport } from "../../../sentry";
-import defaultDispatcher from '../../../dispatcher/dispatcher';
-import { Action } from '../../../dispatcher/actions';
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
-    error?: Error;
+    error?: unknown;
 }
 
 interface IState {
     sendLogs: boolean;
     busy: boolean;
-    err: string;
+    err: string | null;
     issueUrl: string;
     text: string;
-    progress: string;
+    progress: string | null;
     downloadBusy: boolean;
-    downloadProgress: string;
+    downloadProgress: string | null;
 }
 
 export default class BugReportDialog extends React.Component<IProps, IState> {
     private unmounted: boolean;
+    private issueRef: React.RefObject<Field>;
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
+
         this.state = {
             sendLogs: true,
             busy: false,
@@ -66,7 +68,9 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             downloadBusy: false,
             downloadProgress: null,
         };
+
         this.unmounted = false;
+        this.issueRef = React.createRef();
 
         // Get all of the extra info dumped to the console when someone is about
         // to send debug logs. Since this is a fire and forget action, we do
@@ -79,7 +83,11 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         });
     }
 
-    public componentWillUnmount() {
+    public componentDidMount(): void {
+        this.issueRef.current?.focus();
+    }
+
+    public componentWillUnmount(): void {
         this.unmounted = true;
     }
 
@@ -90,48 +98,52 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
             this.setState({
-                err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
+                err: _t("bug_reporting|error_empty"),
             });
             return;
         }
 
         const userText =
-            (this.state.text.length > 0 ? this.state.text + '\n\n': '') + 'Issue: ' +
-            (this.state.issueUrl.length > 0 ? this.state.issueUrl : 'No issue link given');
+            (this.state.text.length > 0 ? this.state.text + "\n\n" : "") +
+            "Issue: " +
+            (this.state.issueUrl.length > 0 ? this.state.issueUrl : "No issue link given");
 
         this.setState({ busy: true, progress: null, err: null });
-        this.sendProgressCallback(_t("Preparing to send logs"));
+        this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
 
         sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
             userText,
             sendLogs: true,
             progressCallback: this.sendProgressCallback,
             labels: this.props.label ? [this.props.label] : [],
-        }).then(() => {
-            if (!this.unmounted) {
-                this.props.onFinished(false);
-                Modal.createDialog(QuestionDialog, {
-                    title: _t('Logs sent'),
-                    description: _t('Thank you!'),
-                    hasCancelButton: false,
-                });
-            }
-        }, (err) => {
-            if (!this.unmounted) {
-                this.setState({
-                    busy: false,
-                    progress: null,
-                    err: _t("Failed to send logs: ") + `${err.message}`,
-                });
-            }
-        });
+        }).then(
+            () => {
+                if (!this.unmounted) {
+                    this.props.onFinished(false);
+                    Modal.createDialog(QuestionDialog, {
+                        title: _t("bug_reporting|logs_sent"),
+                        description: _t("bug_reporting|thank_you"),
+                        hasCancelButton: false,
+                    });
+                }
+            },
+            (err) => {
+                if (!this.unmounted) {
+                    this.setState({
+                        busy: false,
+                        progress: null,
+                        err: _t("bug_reporting|failed_send_logs") + `${err.message}`,
+                    });
+                }
+            },
+        );
 
         sendSentryReport(this.state.text, this.state.issueUrl, this.props.error);
     };
 
     private onDownload = async (): Promise<void> => {
         this.setState({ downloadBusy: true });
-        this.downloadProgressCallback(_t("Preparing to download logs"));
+        this.downloadProgressCallback(_t("bug_reporting|preparing_download"));
 
         try {
             await downloadBugReport({
@@ -148,7 +160,8 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             if (!this.unmounted) {
                 this.setState({
                     downloadBusy: false,
-                    downloadProgress: _t("Failed to send logs: ") + `${err.message}`,
+                    downloadProgress:
+                        _t("bug_reporting|failed_send_logs") + `${err instanceof Error ? err.message : ""}`,
                 });
             }
         }
@@ -176,96 +189,91 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         this.setState({ downloadProgress });
     };
 
-    public render() {
-        let error = null;
+    public render(): React.ReactNode {
+        let error: JSX.Element | undefined;
         if (this.state.err) {
-            error = <div className="error">
-                { this.state.err }
-            </div>;
+            error = <div className="error">{this.state.err}</div>;
         }
 
-        let progress = null;
+        let progress: JSX.Element | undefined;
         if (this.state.busy) {
             progress = (
                 <div className="progress">
                     <Spinner />
-                    { this.state.progress } ...
+                    {this.state.progress} ...
                 </div>
             );
         }
 
-        let warning;
-        if (window.Modernizr && Object.values(window.Modernizr).some(support => support === false)) {
-            warning = <p><b>
-                { _t("Reminder: Your browser is unsupported, so your experience may be unpredictable.") }
-            </b></p>;
+        let warning: JSX.Element | undefined;
+        if (window.Modernizr && Object.values(window.Modernizr).some((support) => support === false)) {
+            warning = (
+                <p>
+                    <b>{_t("bug_reporting|unsupported_browser")}</b>
+                </p>
+            );
         }
 
         return (
             <BaseDialog
                 className="mx_BugReportDialog"
                 onFinished={this.onCancel}
-                title={_t('Submit debug logs')}
-                contentId='mx_Dialog_content'
+                title={_t("bug_reporting|submit_debug_logs")}
+                contentId="mx_Dialog_content"
             >
-                <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                    { warning }
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                    {warning}
+                    <p>{_t("bug_reporting|description")}</p>
                     <p>
-                        { _t(
-                            "Debug logs contain application usage data including your " +
-                            "username, the IDs or aliases of the rooms you " +
-                            "have visited, which UI elements you last interacted with, " +
-                            "and the usernames of other users. They do not contain messages.",
-                        ) }
+                        <b>
+                            {_t(
+                                "bug_reporting|before_submitting",
+                                {},
+                                {
+                                    a: (sub) => (
+                                        <a
+                                            target="_blank"
+                                            href={SdkConfig.get().feedback.new_issue_url}
+                                            rel="noreferrer noopener"
+                                        >
+                                            {sub}
+                                        </a>
+                                    ),
+                                },
+                            )}
+                        </b>
                     </p>
-                    <p><b>
-                        { _t(
-                            "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
-                            {},
-                            {
-                                a: (sub) => <a
-                                    target="_blank"
-                                    href="https://github.com/vector-im/element-web/issues/new/choose"
-                                >
-                                    { sub }
-                                </a>,
-                            },
-                        ) }
-                    </b></p>
 
                     <div className="mx_BugReportDialog_download">
                         <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
-                            { _t("Download logs") }
+                            {_t("bug_reporting|download_logs")}
                         </AccessibleButton>
-                        { this.state.downloadProgress && <span>{ this.state.downloadProgress } ...</span> }
+                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
                     </div>
 
                     <Field
                         type="text"
                         className="mx_BugReportDialog_field_input"
-                        label={_t("GitHub issue")}
+                        label={_t("bug_reporting|github_issue")}
                         onChange={this.onIssueUrlChange}
                         value={this.state.issueUrl}
                         placeholder="https://github.com/vector-im/element-web/issues/..."
+                        ref={this.issueRef}
                     />
                     <Field
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
-                        label={_t("Notes")}
+                        label={_t("bug_reporting|textarea_label")}
                         rows={5}
                         onChange={this.onTextChange}
                         value={this.state.text}
-                        placeholder={_t(
-                            "If there is additional context that would help in " +
-                            "analysing the issue, such as what you were doing at " +
-                            "the time, room IDs, user IDs, etc., " +
-                            "please include those things here.",
-                        )}
+                        placeholder={_t("bug_reporting|additional_context")}
                     />
-                    { progress }
-                    { error }
+                    {progress}
+                    {error}
                 </div>
-                <DialogButtons primaryButton={_t("Send logs")}
+                <DialogButtons
+                    primaryButton={_t("bug_reporting|send_logs")}
                     onPrimaryButtonClick={this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}

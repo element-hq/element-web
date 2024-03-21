@@ -14,21 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from "jest-mock";
-
-import SdkConfig, { DEFAULTS } from "../../../src/SdkConfig";
+import SdkConfig from "../../../src/SdkConfig";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Features } from "../../../src/settings/Settings";
+import SettingsStore from "../../../src/settings/SettingsStore";
 import { getChunkLength } from "../../../src/voice-broadcast/utils/getChunkLength";
-
-jest.mock("../../../src/SdkConfig");
 
 describe("getChunkLength", () => {
     afterEach(() => {
-        jest.resetAllMocks();
+        SdkConfig.reset();
     });
 
     describe("when there is a value provided by Sdk config", () => {
         beforeEach(() => {
-            mocked(SdkConfig.get).mockReturnValue({ chunk_length: 42 });
+            SdkConfig.add({
+                voice_broadcast: {
+                    chunk_length: 42,
+                },
+            });
         });
 
         it("should return this value", () => {
@@ -38,9 +41,11 @@ describe("getChunkLength", () => {
 
     describe("when Sdk config does not provide a value", () => {
         beforeEach(() => {
-            DEFAULTS.voice_broadcast = {
-                chunk_length: 23,
-            };
+            SdkConfig.add({
+                voice_broadcast: {
+                    chunk_length: 23,
+                },
+            });
         });
 
         it("should return this value", () => {
@@ -48,13 +53,19 @@ describe("getChunkLength", () => {
         });
     });
 
-    describe("if there are no defaults", () => {
-        beforeEach(() => {
-            DEFAULTS.voice_broadcast = undefined;
-        });
-
+    describe("when there are no defaults", () => {
         it("should return the fallback value", () => {
             expect(getChunkLength()).toBe(120);
+        });
+    });
+
+    describe("when the Features.VoiceBroadcastForceSmallChunks is enabled", () => {
+        beforeEach(async () => {
+            await SettingsStore.setValue(Features.VoiceBroadcastForceSmallChunks, null, SettingLevel.DEVICE, true);
+        });
+
+        it("should return a chunk length of 15 seconds", () => {
+            expect(getChunkLength()).toBe(15);
         });
     });
 });

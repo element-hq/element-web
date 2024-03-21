@@ -23,4 +23,4 @@ interface AuthHeaderContextType {
     dispatch: Dispatch<ReducerAction<AuthHeaderReducer>>;
 }
 
-export const AuthHeaderContext = createContext<AuthHeaderContextType>(undefined);
+export const AuthHeaderContext = createContext<AuthHeaderContextType | undefined>(undefined);

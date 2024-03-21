@@ -10,7 +10,7 @@ implementation, such as the `RoomEchoChamber` (which handles echoable details of
 
 Anything that can be locally echoed will be provided by the `GenericEchoChamber` implementation.
 The echo chamber will also need to deal with external changes, and has full control over whether
-or not something has successfully been echoed. 
+or not something has successfully been echoed.
 
 An `EchoContext` is provided to echo chambers (usually with a matching type: `RoomEchoContext`
 gets provided to a `RoomEchoChamber` for example) with details about their intended area of
@@ -21,7 +21,7 @@ The `EchoStore` manages echo chamber instances, builds contexts, and is generall
 accessible than the `EchoChamber` class. For separation of concerns, and to try and keep things
 tidy, this is an intentional design decision.
 
-**Note**: The local echo stack uses a "whenable" pattern, which is similar to thenables and 
+**Note**: The local echo stack uses a "whenable" pattern, which is similar to thenables and
 `EventEmitter`. Whenables are ways of actioning a changing condition without having to deal
 with listeners being torn down. Once the reference count of the Whenable causes garbage collection,
 the Whenable's listeners will also be torn down. This is accelerated by the `IDestroyable` interface
@@ -36,4 +36,3 @@ mechanisms.
 
 The `EchoStore` is responsible for ensuring that the appropriate non-urgent toast (lower left)
 is set up, where the dialog then drives through the contexts and transactions.
-

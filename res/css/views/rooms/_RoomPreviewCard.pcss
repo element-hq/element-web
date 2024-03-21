@@ -23,10 +23,10 @@ limitations under the License.
     background-color: $system;
     border-radius: 8px;
     position: relative;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
 
     .mx_RoomPreviewCard_notice {
-        font-weight: $font-semi-bold;
+        font-weight: var(--cpd-font-weight-semibold);
         line-height: $font-24px;
         color: $primary-content;
         margin-top: $spacing-24;
@@ -42,7 +42,7 @@ limitations under the License.
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: contain;
-            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
             background-color: $secondary-content;
         }
     }
@@ -70,12 +70,6 @@ limitations under the License.
         display: flex;
         align-items: center;
 
-        .mx_RoomAvatar_isSpaceRoom {
-            &.mx_BaseAvatar_image, .mx_BaseAvatar_image {
-                border-radius: 12px;
-            }
-        }
-
         .mx_RoomPreviewCard_video {
             width: 50px;
             height: 50px;
@@ -95,7 +89,7 @@ limitations under the License.
                 mask-size: 22px;
                 mask-position: center;
                 mask-repeat: no-repeat;
-                mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
             }
         }
 

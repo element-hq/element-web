@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ export default class TypingStore {
             userTimer: Timer;
             serverTimer: Timer;
         };
-    };
+    } = {};
 
-    constructor(private readonly context: SdkContextClass) {
+    public constructor(private readonly context: SdkContextClass) {
         this.reset();
     }
 
@@ -42,7 +42,7 @@ export default class TypingStore {
      * Clears all cached typing states. Intended to be called when the
      * MatrixClientPeg client changes.
      */
-    public reset() {
+    public reset(): void {
         this.typingStates = {
             // "roomId": {
             //     isTyping: bool,     // Whether the user is typing or not
@@ -61,14 +61,14 @@ export default class TypingStore {
         // No typing notifications for local rooms
         if (isLocalRoom(roomId)) return;
 
-        if (!SettingsStore.getValue('sendTypingNotifications')) return;
-        if (SettingsStore.getValue('lowBandwidth')) return;
+        if (!SettingsStore.getValue("sendTypingNotifications")) return;
+        if (SettingsStore.getValue("lowBandwidth")) return;
         // Disable typing notification for threads for the initial launch
         // before we figure out a better user experience for them
-        if (SettingsStore.getValue("feature_thread") && threadId) return;
+        if (threadId) return;
 
         let currentTyping = this.typingStates[roomId];
-        if ((!isTyping && !currentTyping) || (currentTyping && currentTyping.isTyping === isTyping)) {
+        if ((!isTyping && !currentTyping) || currentTyping?.isTyping === isTyping) {
             // No change in state, so don't do anything. We'll let the timer run its course.
             return;
         }
@@ -85,19 +85,25 @@ export default class TypingStore {
 
         if (isTyping) {
             if (!currentTyping.serverTimer.isRunning()) {
-                currentTyping.serverTimer.restart().finished().then(() => {
-                    const currentTyping = this.typingStates[roomId];
-                    if (currentTyping) currentTyping.isTyping = false;
+                currentTyping.serverTimer
+                    .restart()
+                    .finished()
+                    .then(() => {
+                        const currentTyping = this.typingStates[roomId];
+                        if (currentTyping) currentTyping.isTyping = false;
 
-                    // The server will (should) time us out on typing, so we don't
-                    // need to advertise a stop of typing.
-                });
+                        // The server will (should) time us out on typing, so we don't
+                        // need to advertise a stop of typing.
+                    });
             } else currentTyping.serverTimer.restart();
 
             if (!currentTyping.userTimer.isRunning()) {
-                currentTyping.userTimer.restart().finished().then(() => {
-                    this.setSelfTyping(roomId, threadId, false);
-                });
+                currentTyping.userTimer
+                    .restart()
+                    .finished()
+                    .then(() => {
+                        this.setSelfTyping(roomId, threadId, false);
+                    });
             } else currentTyping.userTimer.restart();
         }
 

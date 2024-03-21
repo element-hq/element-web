@@ -28,15 +28,12 @@ import { findDMForUser } from "./findDMForUser";
  * @returns {Room | null} Resolved so the room if found, else null
  */
 export function findDMRoom(client: MatrixClient, targets: Member[]): Room | null {
-    const targetIds = targets.map(t => t.userId);
-    let existingRoom: Room;
+    const targetIds = targets.map((t) => t.userId);
+    let existingRoom: Room | null;
     if (targetIds.length === 1) {
-        existingRoom = findDMForUser(client, targetIds[0]);
+        existingRoom = findDMForUser(client, targetIds[0]) ?? null;
     } else {
         existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
     }
-    if (existingRoom) {
-        return existingRoom;
-    }
-    return null;
+    return existingRoom;
 }

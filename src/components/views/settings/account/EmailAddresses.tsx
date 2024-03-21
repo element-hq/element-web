@@ -15,18 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import React from "react";
+import { ThreepidMedium, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
-import AddThreepid from "../../../../AddThreepid";
-import Modal from '../../../../Modal';
-import ErrorDialog from "../../dialogs/ErrorDialog";
+import AddThreepid, { ThirdPartyIdentifier } from "../../../../AddThreepid";
+import Modal from "../../../../Modal";
+import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -41,8 +41,12 @@ that is available.
  */
 
 interface IExistingEmailAddressProps {
-    email: IThreepid;
-    onRemoved: (emails: IThreepid) => void;
+    email: ThirdPartyIdentifier;
+    onRemoved: (emails: ThirdPartyIdentifier) => void;
+    /**
+     * Disallow removal of this email address when truthy
+     */
+    disabled?: boolean;
 }
 
 interface IExistingEmailAddressState {
@@ -50,7 +54,7 @@ interface IExistingEmailAddressState {
 }
 
 export class ExistingEmailAddress extends React.Component<IExistingEmailAddressProps, IExistingEmailAddressState> {
-    constructor(props: IExistingEmailAddressProps) {
+    public constructor(props: IExistingEmailAddressProps) {
         super(props);
 
         this.state = {
@@ -58,65 +62,70 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         };
     }
 
-    private onRemove = (e: React.MouseEvent): void => {
+    private onRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: true });
     };
 
-    private onDontRemove = (e: React.MouseEvent): void => {
+    private onDontRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: false });
     };
 
-    private onActuallyRemove = (e: React.MouseEvent): void => {
+    private onActuallyRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
-        MatrixClientPeg.get().deleteThreePid(this.props.email.medium, this.props.email.address).then(() => {
-            return this.props.onRemoved(this.props.email);
-        }).catch((err) => {
-            logger.error("Unable to remove contact information: " + err);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Unable to remove contact information"),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+        MatrixClientPeg.safeGet()
+            .deleteThreePid(this.props.email.medium, this.props.email.address)
+            .then(() => {
+                return this.props.onRemoved(this.props.email);
+            })
+            .catch((err) => {
+                logger.error("Unable to remove contact information: " + err);
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("settings|general|error_remove_3pid"),
+                    description: err && err.message ? err.message : _t("invite|failed_generic"),
+                });
             });
-        });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.verifyRemove) {
             return (
-                <div className="mx_ExistingEmailAddress">
-                    <span className="mx_ExistingEmailAddress_promptText">
-                        { _t("Remove %(email)s?", { email: this.props.email.address }) }
+                <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
+                    <span className="mx_GeneralUserSettingsTab_section--discovery_existing_promptText">
+                        {_t("settings|general|remove_email_prompt", { email: this.props.email.address })}
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="danger_sm"
-                        className="mx_ExistingEmailAddress_confirmBtn"
+                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     >
-                        { _t("Remove") }
+                        {_t("action|remove")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="link_sm"
-                        className="mx_ExistingEmailAddress_confirmBtn"
+                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     >
-                        { _t("Cancel") }
+                        {_t("action|cancel")}
                     </AccessibleButton>
                 </div>
             );
         }
 
         return (
-            <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{ this.props.email.address }</span>
-                <AccessibleButton onClick={this.onRemove} kind="danger_sm">
-                    { _t("Remove") }
+            <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
+                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">
+                    {this.props.email.address}
+                </span>
+                <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
+                    {_t("action|remove")}
                 </AccessibleButton>
             </div>
         );
@@ -124,19 +133,23 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
 }
 
 interface IProps {
-    emails: IThreepid[];
-    onEmailsChange: (emails: Partial<IThreepid>[]) => void;
+    emails: ThirdPartyIdentifier[];
+    onEmailsChange: (emails: ThirdPartyIdentifier[]) => void;
+    /**
+     * Adding or removing emails is disabled when truthy
+     */
+    disabled?: boolean;
 }
 
 interface IState {
     verifying: boolean;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
     newEmailAddress: string;
 }
 
 export default class EmailAddresses extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -147,7 +160,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         };
     }
 
-    private onRemoved = (address): void => {
+    private onRemoved = (address: ThirdPartyIdentifier): void => {
         const emails = this.props.emails.filter((e) => e !== address);
         this.props.onEmailsChange(emails);
     };
@@ -169,112 +182,122 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         // TODO: Inline field validation
         if (!Email.looksValid(email)) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Invalid Email Address"),
-                description: _t("This doesn't appear to be a valid email address"),
+                title: _t("settings|general|error_invalid_email"),
+                description: _t("settings|general|error_invalid_email_detail"),
             });
             return;
         }
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.safeGet());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
-        task.addEmailAddress(email).then(() => {
-            this.setState({ continueDisabled: false });
-        }).catch((err) => {
-            logger.error("Unable to add email address " + email + " " + err);
-            this.setState({ verifying: false, continueDisabled: false, addTask: null });
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Unable to add email address"),
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+        task.addEmailAddress(email)
+            .then(() => {
+                this.setState({ continueDisabled: false });
+            })
+            .catch((err) => {
+                logger.error("Unable to add email address " + email + " " + err);
+                this.setState({ verifying: false, continueDisabled: false, addTask: null });
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("settings|general|error_add_email"),
+                    description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
+                });
             });
-        });
     };
 
-    private onContinueClick = (e: React.MouseEvent): void => {
+    private onContinueClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ continueDisabled: true });
-        this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
-            let newEmailAddress = this.state.newEmailAddress;
-            if (finished) {
-                const email = this.state.newEmailAddress;
-                const emails = [
-                    ...this.props.emails,
-                    { address: email, medium: ThreepidMedium.Email },
-                ];
-                this.props.onEmailsChange(emails);
-                newEmailAddress = "";
-            }
-            this.setState({
-                addTask: null,
-                continueDisabled: false,
-                verifying: false,
-                newEmailAddress,
-            });
-        }).catch((err) => {
-            this.setState({ continueDisabled: false });
-            if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("Your email address hasn't been verified yet"),
-                    description: _t("Click the link in the email you received to verify " +
-                        "and then click continue again."),
+        this.state.addTask
+            ?.checkEmailLinkClicked()
+            .then(([finished]) => {
+                let newEmailAddress = this.state.newEmailAddress;
+                if (finished) {
+                    const email = this.state.newEmailAddress;
+                    const emails = [...this.props.emails, { address: email, medium: ThreepidMedium.Email }];
+                    this.props.onEmailsChange(emails);
+                    newEmailAddress = "";
+                }
+                this.setState({
+                    addTask: null,
+                    continueDisabled: false,
+                    verifying: false,
+                    newEmailAddress,
                 });
-            } else {
+            })
+            .catch((err) => {
                 logger.error("Unable to verify email address: ", err);
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("Unable to verify email address."),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
-                });
-            }
-        });
+
+                this.setState({ continueDisabled: false });
+
+                let underlyingError = err;
+                if (err instanceof UserFriendlyError) {
+                    underlyingError = err.cause;
+                }
+
+                if (underlyingError instanceof MatrixError && underlyingError.errcode === "M_THREEPID_AUTH_FAILED") {
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t("settings|general|email_not_verified"),
+                        description: _t("settings|general|email_verification_instructions"),
+                    });
+                } else {
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t("settings|general|error_email_verification"),
+                        description: extractErrorMessageFromError(err, _t("invite|failed_generic")),
+                    });
+                }
+            });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const existingEmailElements = this.props.emails.map((e) => {
-            return <ExistingEmailAddress email={e} onRemoved={this.onRemoved} key={e.address} />;
+            return (
+                <ExistingEmailAddress
+                    email={e}
+                    onRemoved={this.onRemoved}
+                    key={e.address}
+                    disabled={this.props.disabled}
+                />
+            );
         });
 
         let addButton = (
-            <AccessibleButton onClick={this.onAddClick} kind="primary">
-                { _t("Add") }
+            <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
+                {_t("action|add")}
             </AccessibleButton>
         );
         if (this.state.verifying) {
             addButton = (
                 <div>
-                    <div>{ _t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.") }</div>
+                    <div>{_t("settings|general|add_email_instructions")}</div>
                     <AccessibleButton
                         onClick={this.onContinueClick}
                         kind="primary"
                         disabled={this.state.continueDisabled}
                     >
-                        { _t("Continue") }
+                        {_t("action|continue")}
                     </AccessibleButton>
                 </div>
             );
         }
 
         return (
-            <div className="mx_EmailAddresses">
-                { existingEmailElements }
-                <form
-                    onSubmit={this.onAddClick}
-                    autoComplete="off"
-                    noValidate={true}
-                    className="mx_EmailAddresses_new"
-                >
+            <>
+                {existingEmailElements}
+                <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true}>
                     <Field
                         type="text"
-                        label={_t("Email Address")}
-                        autoComplete="off"
-                        disabled={this.state.verifying}
+                        label={_t("settings|general|email_address_label")}
+                        autoComplete="email"
+                        disabled={this.props.disabled || this.state.verifying}
                         value={this.state.newEmailAddress}
                         onChange={this.onChangeNewEmailAddress}
                     />
-                    { addButton }
+                    {addButton}
                 </form>
-            </div>
+            </>
         );
     }
 }

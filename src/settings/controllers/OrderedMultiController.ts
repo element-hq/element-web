@@ -27,7 +27,7 @@ import { SettingLevel } from "../SettingLevel";
  * will be used - other controllers will not be considered.
  */
 export class OrderedMultiController extends SettingController {
-    constructor(public readonly controllers: SettingController[]) {
+    public constructor(public readonly controllers: SettingController[]) {
         super();
     }
 
@@ -35,7 +35,7 @@ export class OrderedMultiController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         for (const controller of this.controllers) {
             const override = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
@@ -44,7 +44,7 @@ export class OrderedMultiController extends SettingController {
         return null; // no override
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         for (const controller of this.controllers) {
             controller.onChange(level, roomId, newValue);
         }

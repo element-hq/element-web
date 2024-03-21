@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DefaultTagID, TagID } from "../models";
 
 export function isSelf(event: MatrixEvent): boolean {
-    const selfUserId = MatrixClientPeg.get().getUserId();
-    if (event.getType() === 'm.room.member') {
+    const selfUserId = MatrixClientPeg.safeGet().getSafeUserId();
+    if (event.getType() === "m.room.member") {
         return event.getStateKey() === selfUserId;
     }
     return event.getSender() === selfUserId;
 }
 
-export function shouldPrefixMessagesIn(roomId: string, tagId: TagID): boolean {
+export function shouldPrefixMessagesIn(roomId: string, tagId?: TagID): boolean {
     if (tagId !== DefaultTagID.DM) return true;
 
     // We don't prefix anything in 1:1s
-    const room = MatrixClientPeg.get().getRoom(roomId);
+    const room = MatrixClientPeg.safeGet().getRoom(roomId);
     if (!room) return true;
     return room.currentState.getJoinedMemberCount() !== 2;
 }
 
 export function getSenderName(event: MatrixEvent): string {
-    return event.sender ? event.sender.name : event.getSender();
+    return event.sender?.name ?? event.getSender() ?? "";
 }

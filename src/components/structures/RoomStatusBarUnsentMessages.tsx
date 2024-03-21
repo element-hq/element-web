@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../views/rooms/NotificationBadge";
 
 interface RoomStatusBarUnsentMessagesProps {
-    title: string;
+    title: ReactNode;
     description?: string;
     notificationState: StaticNotificationState;
     buttons: ReactElement;
@@ -31,24 +31,13 @@ export const RoomStatusBarUnsentMessages = (props: RoomStatusBarUnsentMessagesPr
         <div className="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages">
             <div role="alert">
                 <div className="mx_RoomStatusBar_unsentBadge">
-                    <NotificationBadge
-                        notification={props.notificationState}
-                    />
+                    <NotificationBadge notification={props.notificationState} />
                 </div>
                 <div>
-                    <div className="mx_RoomStatusBar_unsentTitle">
-                        { props.title }
-                    </div>
-                    {
-                        props.description &&
-                        <div className="mx_RoomStatusBar_unsentDescription">
-                            { props.description }
-                        </div>
-                    }
+                    <div className="mx_RoomStatusBar_unsentTitle">{props.title}</div>
+                    {props.description && <div className="mx_RoomStatusBar_unsentDescription">{props.description}</div>}
                 </div>
-                <div className="mx_RoomStatusBar_unsentButtonBar">
-                    { props.buttons }
-                </div>
+                <div className="mx_RoomStatusBar_unsentButtonBar">{props.buttons}</div>
             </div>
         </div>
     );

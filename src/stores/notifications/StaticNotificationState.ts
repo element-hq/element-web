@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { NotificationColor } from "./NotificationColor";
+import { NotificationLevel } from "./NotificationLevel";
 import { NotificationState } from "./NotificationState";
 
 export class StaticNotificationState extends NotificationState {
-    public static readonly RED_EXCLAMATION = StaticNotificationState.forSymbol("!", NotificationColor.Red);
+    public static readonly RED_EXCLAMATION = StaticNotificationState.forSymbol("!", NotificationLevel.Highlight);
 
-    constructor(symbol: string, count: number, color: NotificationColor) {
+    public constructor(symbol: string | null, count: number, level: NotificationLevel) {
         super();
         this._symbol = symbol;
         this._count = count;
-        this._color = color;
+        this._level = level;
     }
 
-    public static forCount(count: number, color: NotificationColor): StaticNotificationState {
-        return new StaticNotificationState(null, count, color);
+    public static forCount(count: number, level: NotificationLevel): StaticNotificationState {
+        return new StaticNotificationState(null, count, level);
     }
 
-    public static forSymbol(symbol: string, color: NotificationColor): StaticNotificationState {
-        return new StaticNotificationState(symbol, 0, color);
+    public static forSymbol(symbol: string, level: NotificationLevel): StaticNotificationState {
+        return new StaticNotificationState(symbol, 0, level);
     }
 }

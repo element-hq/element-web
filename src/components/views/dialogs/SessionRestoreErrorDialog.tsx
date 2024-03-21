@@ -16,19 +16,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import SdkConfig from '../../../SdkConfig';
-import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
+import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
 import BugReportDialog from "./BugReportDialog";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
-    error: Error;
+interface IProps {
+    error: unknown;
+    onFinished(clear?: boolean): void;
 }
 
 export default class SessionRestoreErrorDialog extends React.Component<IProps> {
@@ -40,10 +40,9 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
 
     private onClearStorageClick = (): void => {
         Modal.createDialog(QuestionDialog, {
-            title: _t("Sign out"),
-            description:
-                <div>{ _t("Sign out and remove encryption keys?") }</div>,
-            button: _t("Sign out"),
+            title: _t("action|sign_out"),
+            description: <div>{_t("error|session_restore|clear_storage_description")}</div>,
+            button: _t("action|sign_out"),
             danger: true,
             onFinished: this.props.onFinished,
         });
@@ -55,58 +54,56 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
         window.location.reload();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         const clearStorageButton = (
             <button onClick={this.onClearStorageClick} className="danger">
-                { _t("Clear Storage and Sign Out") }
+                {_t("error|session_restore|clear_storage_button")}
             </button>
         );
 
         let dialogButtons;
         if (SdkConfig.get().bug_report_endpoint_url) {
-            dialogButtons = <DialogButtons primaryButton={_t("Send Logs")}
-                onPrimaryButtonClick={this.sendBugReport}
-                focus={true}
-                hasCancel={false}
-            >
-                { clearStorageButton }
-            </DialogButtons>;
+            dialogButtons = (
+                <DialogButtons
+                    primaryButton={_t("bug_reporting|send_logs")}
+                    onPrimaryButtonClick={this.sendBugReport}
+                    focus={true}
+                    hasCancel={false}
+                >
+                    {clearStorageButton}
+                </DialogButtons>
+            );
         } else {
-            dialogButtons = <DialogButtons primaryButton={_t("Refresh")}
-                onPrimaryButtonClick={this.onRefreshClick}
-                focus={true}
-                hasCancel={false}
-            >
-                { clearStorageButton }
-            </DialogButtons>;
+            dialogButtons = (
+                <DialogButtons
+                    primaryButton={_t("action|refresh")}
+                    onPrimaryButtonClick={this.onRefreshClick}
+                    focus={true}
+                    hasCancel={false}
+                >
+                    {clearStorageButton}
+                </DialogButtons>
+            );
         }
 
         return (
             <BaseDialog
                 className="mx_ErrorDialog"
                 onFinished={this.props.onFinished}
-                title={_t('Unable to restore session')}
-                contentId='mx_Dialog_content'
+                title={_t("error|session_restore|title")}
+                contentId="mx_Dialog_content"
                 hasCancel={false}
             >
-                <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                    <p>{ _t("We encountered an error trying to restore your previous session.") }</p>
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                    <p>{_t("error|session_restore|description_1")}</p>
 
-                    <p>{ _t(
-                        "If you have previously used a more recent version of %(brand)s, your session " +
-                        "may be incompatible with this version. Close this window and return " +
-                        "to the more recent version.",
-                        { brand },
-                    ) }</p>
+                    <p>{_t("error|session_restore|description_2", { brand })}</p>
 
-                    <p>{ _t(
-                        "Clearing your browser's storage may fix the problem, but will sign you " +
-                        "out and cause any encrypted chat history to become unreadable.",
-                    ) }</p>
+                    <p>{_t("error|session_restore|description_3")}</p>
                 </div>
-                { dialogButtons }
+                {dialogButtons}
             </BaseDialog>
         );
     }

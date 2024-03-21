@@ -14,17 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { render } from '@testing-library/react';
-import { mocked } from 'jest-mock';
-import { IServerVersions, MatrixClient } from 'matrix-js-sdk/src/matrix';
-import React from 'react';
+import { render } from "@testing-library/react";
+import { mocked } from "jest-mock";
+import { IClientWellKnown, IServerVersions, MatrixClient, GET_LOGIN_TOKEN_CAPABILITY } from "matrix-js-sdk/src/matrix";
+import React from "react";
 
-import LoginWithQRSection from '../../../../../src/components/views/settings/devices/LoginWithQRSection';
-import { MatrixClientPeg } from '../../../../../src/MatrixClientPeg';
-import { SettingLevel } from '../../../../../src/settings/SettingLevel';
-import SettingsStore from '../../../../../src/settings/SettingsStore';
+import LoginWithQRSection from "../../../../../src/components/views/settings/devices/LoginWithQRSection";
+import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
-function makeClient() {
+function makeClient(wellKnown: IClientWellKnown) {
     return mocked({
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
@@ -34,11 +32,12 @@ function makeClient() {
         on: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
-        mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
+        mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
             on: jest.fn(),
         },
+        getClientWellKnown: jest.fn().mockReturnValue(wellKnown),
     } as unknown as MatrixClient);
 }
 
@@ -49,45 +48,72 @@ function makeVersions(unstableFeatures: Record<string, boolean>): IServerVersion
     };
 }
 
-describe('<LoginWithQRSection />', () => {
+describe("<LoginWithQRSection />", () => {
     beforeAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(makeClient());
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient({}));
     });
 
     const defaultProps = {
         onShowQr: () => {},
-        versions: undefined,
+        versions: makeVersions({}),
+        wellKnown: {},
     };
 
-    const getComponent = (props = {}) =>
-        (<LoginWithQRSection {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;
 
-    describe('should not render', () => {
-        it('no support at all', () => {
+    describe("should not render", () => {
+        it("no support at all", () => {
             const { container } = render(getComponent());
             expect(container).toMatchSnapshot();
         });
 
-        it('feature enabled', async () => {
-            await SettingsStore.setValue('feature_qr_signin_reciprocate_show', null, SettingLevel.DEVICE, true);
-            const { container } = render(getComponent());
+        it("only get_login_token enabled", async () => {
+            const { container } = render(
+                getComponent({ capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } } }),
+            );
             expect(container).toMatchSnapshot();
         });
 
-        it('only feature + MSC3882 enabled', async () => {
-            await SettingsStore.setValue('feature_qr_signin_reciprocate_show', null, SettingLevel.DEVICE, true);
-            const { container } = render(getComponent({ versions: makeVersions({ 'org.matrix.msc3882': true }) }));
+        it("MSC3886 + get_login_token disabled", async () => {
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({ "org.matrix.msc3886": true }),
+                    capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: false } },
+                }),
+            );
             expect(container).toMatchSnapshot();
         });
     });
 
-    describe('should render panel', () => {
-        it('enabled by feature + MSC3882 + MSC3886', async () => {
-            await SettingsStore.setValue('feature_qr_signin_reciprocate_show', null, SettingLevel.DEVICE, true);
-            const { container } = render(getComponent({ versions: makeVersions({
-                'org.matrix.msc3882': true,
-                'org.matrix.msc3886': true,
-            }) }));
+    describe("should render panel", () => {
+        it("get_login_token + MSC3886", async () => {
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({
+                        "org.matrix.msc3886": true,
+                    }),
+                    capabilities: {
+                        [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true },
+                    },
+                }),
+            );
+            expect(container).toMatchSnapshot();
+        });
+
+        it("get_login_token + .well-known", async () => {
+            const wellKnown = {
+                "io.element.rendezvous": {
+                    server: "https://rz.local",
+                },
+            };
+            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient(wellKnown));
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({}),
+                    capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } },
+                    wellKnown,
+                }),
+            );
             expect(container).toMatchSnapshot();
         });
     });

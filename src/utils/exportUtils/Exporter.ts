@@ -14,21 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Direction } from "matrix-js-sdk/src/models/event-timeline";
+import { Direction, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { ExportType, IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
 import { isVoiceMessage } from "../EventUtils";
-import { IMediaEventContent } from "../../customisations/models/IMediaEventContent";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
@@ -39,7 +35,6 @@ type BlobFile = {
 
 export default abstract class Exporter {
     protected files: BlobFile[] = [];
-    protected client: MatrixClient;
     protected cancelled = false;
 
     protected constructor(
@@ -48,13 +43,14 @@ export default abstract class Exporter {
         protected exportOptions: IExportOptions,
         protected setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
-        if (exportOptions.maxSize < 1 * 1024 * 1024|| // Less than 1 MB
+        if (
+            exportOptions.maxSize < 1 * 1024 * 1024 || // Less than 1 MB
             exportOptions.maxSize > 8000 * 1024 * 1024 || // More than 8 GB
-            exportOptions.numberOfMessages > 10**8
+            (!!exportOptions.numberOfMessages && exportOptions.numberOfMessages > 10 ** 8) ||
+            (exportType === ExportType.LastNMessages && !exportOptions.numberOfMessages)
         ) {
             throw new Error("Invalid export options");
         }
-        this.client = MatrixClientPeg.get();
         window.addEventListener("beforeunload", this.onBeforeUnload);
     }
 
@@ -64,7 +60,7 @@ export default abstract class Exporter {
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
-        return e.returnValue = _t("Are you sure you want to exit during this export?");
+        return (e.returnValue = _t("export_chat|unload_confirm"));
     }
 
     protected updateProgress(progress: string, log = true, show = true): void {
@@ -83,28 +79,26 @@ export default abstract class Exporter {
     protected makeFileNameNoExtension(brand = "matrix"): string {
         // First try to use the real name of the room, then a translated copy of a generic name,
         // then finally hardcoded default to guarantee we'll have a name.
-        const safeRoomName = sanitizeFilename(this.room.name ?? _t("Unnamed Room")).trim() || "Unnamed Room";
-        const safeDate = formatFullDateNoDayISO(new Date())
-            .replace(/:/g, '-'); // ISO format automatically removes a lot of stuff for us
+        const safeRoomName = sanitizeFilename(this.room.name ?? _t("common|unnamed_room")).trim() || "Unnamed Room";
+        const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
         const safeBrand = sanitizeFilename(brand);
         return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
     }
 
     protected async downloadZIP(): Promise<string | void> {
         const filename = this.destinationFileName;
-        const filenameWithoutExt = filename.substring(0, filename.length - 4); // take off the .zip
-        const { default: JSZip } = await import('jszip');
+        const filenameWithoutExt = filename.substring(0, filename.lastIndexOf(".")); // take off the extension
+        const { default: JSZip } = await import("jszip");
 
         const zip = new JSZip();
         // Create a writable stream to the directory
-        if (!this.cancelled) this.updateProgress(_t("Generating a ZIP"));
+        if (!this.cancelled) this.updateProgress(_t("export_chat|generating_zip"));
         else return this.cleanUp();
 
         for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
 
         const content = await zip.generateAsync({ type: "blob" });
-
-        saveAs(content, filename);
+        saveAs(content, filenameWithoutExt + ".zip");
     }
 
     protected cleanUp(): string {
@@ -118,20 +112,17 @@ export default abstract class Exporter {
         this.cancelled = true;
     }
 
-    protected downloadPlainText(fileName: string, text: string) {
+    protected downloadPlainText(fileName: string, text: string): void {
         const content = new Blob([text], { type: "text/plain" });
         saveAs(content, fileName);
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
-        const roomState = this.client.getRoom(this.room.roomId).currentState;
-        event.sender = roomState.getSentinelMember(
-            event.getSender(),
-        );
+        const roomState = this.room.currentState;
+        const sender = event.getSender();
+        event.sender = (!!sender && roomState?.getSentinelMember(sender)) || null;
         if (event.getType() === "m.room.member") {
-            event.target = roomState.getSentinelMember(
-                event.getStateKey(),
-            );
+            event.target = roomState?.getSentinelMember(event.getStateKey()!) ?? null;
         }
         return event;
     }
@@ -140,78 +131,80 @@ export default abstract class Exporter {
         let limit: number;
         switch (this.exportType) {
             case ExportType.LastNMessages:
-                limit = this.exportOptions.numberOfMessages;
-                break;
-            case ExportType.Timeline:
-                limit = 40;
+                // validated in constructor that numberOfMessages is defined
+                // when export type is LastNMessages
+                limit = this.exportOptions.numberOfMessages!;
                 break;
             default:
-                limit = 10**8;
+                limit = 10 ** 8;
         }
         return limit;
     }
 
     protected async getRequiredEvents(): Promise<MatrixEvent[]> {
-        const eventMapper = this.client.getEventMapper();
+        const eventMapper = this.room.client.getEventMapper();
 
-        let prevToken: string|null = null;
-        let limit = this.getLimit();
-        const events: MatrixEvent[] = [];
+        let prevToken: string | null = null;
 
-        while (limit) {
-            const eventsPerCrawl = Math.min(limit, 1000);
-            const res = await this.client.createMessagesRequest(
-                this.room.roomId,
-                prevToken,
-                eventsPerCrawl,
-                Direction.Backward,
-            );
+        let events: MatrixEvent[] = [];
+        if (this.exportType === ExportType.Timeline) {
+            events = this.room.getLiveTimeline().getEvents();
+        } else {
+            let limit = this.getLimit();
+            while (limit) {
+                const eventsPerCrawl = Math.min(limit, 1000);
+                const res = await this.room.client.createMessagesRequest(
+                    this.room.roomId,
+                    prevToken,
+                    eventsPerCrawl,
+                    Direction.Backward,
+                );
 
-            if (this.cancelled) {
-                this.cleanUp();
-                return [];
+                if (this.cancelled) {
+                    this.cleanUp();
+                    return [];
+                }
+
+                if (res.chunk.length === 0) break;
+
+                limit -= res.chunk.length;
+
+                const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
+
+                for (const mxEv of matrixEvents) {
+                    // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
+                    //     // Once the last message received is older than the start date, we break out of both the loops
+                    //     limit = 0;
+                    //     break;
+                    // }
+                    events.push(mxEv);
+                }
+
+                if (this.exportType === ExportType.LastNMessages) {
+                    this.updateProgress(
+                        _t("export_chat|fetched_n_events_with_total", {
+                            count: events.length,
+                            total: this.exportOptions.numberOfMessages,
+                        }),
+                    );
+                } else {
+                    this.updateProgress(
+                        _t("export_chat|fetched_n_events", {
+                            count: events.length,
+                        }),
+                    );
+                }
+
+                prevToken = res.end ?? null;
             }
-
-            if (res.chunk.length === 0) break;
-
-            limit -= res.chunk.length;
-
-            const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
-
-            for (const mxEv of matrixEvents) {
-                // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
-                //     // Once the last message received is older than the start date, we break out of both the loops
-                //     limit = 0;
-                //     break;
-                // }
-                events.push(mxEv);
-            }
-
-            if (this.exportType === ExportType.LastNMessages) {
-                this.updateProgress(_t("Fetched %(count)s events out of %(total)s", {
-                    count: events.length,
-                    total: this.exportOptions.numberOfMessages,
-                }));
-            } else {
-                this.updateProgress(_t("Fetched %(count)s events so far", {
-                    count: events.length,
-                }));
-            }
-
-            prevToken = res.end;
-        }
-        // Reverse the events so that we preserve the order
-        for (let i = 0; i < Math.floor(events.length/2); i++) {
-            [events[i], events[events.length - i - 1]] = [events[events.length - i - 1], events[i]];
+            // Reverse the events so that we preserve the order
+            events.reverse();
         }
 
         const decryptionPromises = events
-            .filter(event => event.isEncrypted())
-            .map(event => {
-                return this.client.decryptEventIfNeeded(event, {
-                    isRetry: true,
-                    emit: false,
-                });
+            .filter((event) => event.isEncrypted())
+            .map((event) => {
+                return this.room.client.decryptEventIfNeeded(event, { emit: false });
             });
 
         // Wait for all the events to get decrypted.
@@ -222,31 +215,43 @@ export default abstract class Exporter {
         return events;
     }
 
+    /**
+     * Decrypts if necessary, and fetches media from a matrix event
+     * @param event - matrix event with media event content
+     * @resolves when media has been fetched
+     * @throws if media was unable to be fetched
+     */
     protected async getMediaBlob(event: MatrixEvent): Promise<Blob> {
-        let blob: Blob;
+        let blob: Blob | undefined = undefined;
         try {
             const isEncrypted = event.isEncrypted();
-            const content: IMediaEventContent = event.getContent();
+            const content = event.getContent<MediaEventContent>();
             const shouldDecrypt = isEncrypted && content.hasOwnProperty("file") && event.getType() !== "m.sticker";
             if (shouldDecrypt) {
                 blob = await decryptFile(content.file);
             } else {
                 const media = mediaFromContent(content);
+                if (!media.srcHttp) {
+                    throw new Error("Cannot fetch without srcHttp");
+                }
                 const image = await fetch(media.srcHttp);
                 blob = await image.blob();
             }
         } catch (err) {
             logger.log("Error decrypting media");
         }
+        if (!blob) {
+            throw new Error("Unable to fetch file");
+        }
         return blob;
     }
 
     public splitFileName(file: string): string[] {
-        const lastDot = file.lastIndexOf('.');
+        const lastDot = file.lastIndexOf(".");
         if (lastDot === -1) return [file, ""];
         const fileName = file.slice(0, lastDot);
         const ext = file.slice(lastDot + 1);
-        return [fileName, '.' + ext];
+        return [fileName, "." + ext];
     }
 
     public getFilePath(event: MatrixEvent): string {
@@ -271,21 +276,21 @@ export default abstract class Exporter {
         if (event.getType() === "m.sticker") fileExt = ".png";
         if (isVoiceMessage(event)) fileExt = ".ogg";
 
-        return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
+        return fileDirectory + "/" + fileName + "-" + fileDate + fileExt;
     }
 
     protected isReply(event: MatrixEvent): boolean {
         const isEncrypted = event.isEncrypted();
         // If encrypted, in_reply_to lies in event.event.content
-        const content = isEncrypted ? event.event.content : event.getContent();
+        const content = isEncrypted ? event.event.content! : event.getContent();
         const relatesTo = content["m.relates_to"];
         return !!(relatesTo && relatesTo["m.in_reply_to"]);
     }
 
     protected isAttachment(mxEv: MatrixEvent): boolean {
         const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
-        return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
+        return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype!);
     }
 
-    abstract export(): Promise<void>;
+    public abstract export(): Promise<void>;
 }

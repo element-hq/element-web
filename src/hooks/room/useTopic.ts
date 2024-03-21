@@ -15,24 +15,31 @@ limitations under the License.
 */
 
 import { useEffect, useState } from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { parseTopicContent, TopicState } from "matrix-js-sdk/src/content-helpers";
-import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
+import {
+    EventType,
+    MatrixEvent,
+    Room,
+    RoomStateEvent,
+    ContentHelpers,
+    MRoomTopicEventContent,
+} from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
-export const getTopic = (room: Room): Optional<TopicState> => {
-    const content: MRoomTopicEventContent = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent();
-    return !!content ? parseTopicContent(content) : null;
+export const getTopic = (room?: Room): Optional<ContentHelpers.TopicState> => {
+    const content = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent<MRoomTopicEventContent>();
+    return !!content ? ContentHelpers.parseTopicContent(content) : null;
 };
 
-export function useTopic(room: Room): TopicState {
+/**
+ * Helper to retrieve the room topic for given room
+ * @param room
+ * @returns the raw text and an html parsion version of the room topic
+ */
+export function useTopic(room?: Room): Optional<ContentHelpers.TopicState> {
     const [topic, setTopic] = useState(getTopic(room));
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
+    useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomTopic) return;
         setTopic(getTopic(room));
     });

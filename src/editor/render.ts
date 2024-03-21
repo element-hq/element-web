@@ -18,7 +18,7 @@ limitations under the License.
 import { Part, Type } from "./parts";
 import EditorModel from "./model";
 
-export function needsCaretNodeBefore(part: Part, prevPart: Part): boolean {
+export function needsCaretNodeBefore(part: Part, prevPart?: Part): boolean {
     const isFirst = !prevPart || prevPart.type === Type.Newline;
     return !part.acceptsCaret && (isFirst || !prevPart.acceptsCaret);
 }
@@ -27,12 +27,12 @@ export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean): boolean 
     return !part.acceptsCaret && isLastOfLine;
 }
 
-function insertAfter(node: HTMLElement, nodeToInsert: HTMLElement): void {
+function insertAfter(node: ChildNode, nodeToInsert: ChildNode): void {
     const next = node.nextSibling;
     if (next) {
-        node.parentElement.insertBefore(nodeToInsert, next);
+        node.parentElement!.insertBefore(nodeToInsert, next);
     } else {
-        node.parentElement.appendChild(nodeToInsert);
+        node.parentElement!.appendChild(nodeToInsert);
     }
 }
 
@@ -51,18 +51,18 @@ function createCaretNode(): HTMLElement {
     return span;
 }
 
-function updateCaretNode(node: HTMLElement): void {
+function updateCaretNode(node: ChildNode): void {
     // ensure the caret node contains only a zero-width space
     if (node.textContent !== CARET_NODE_CHAR) {
         node.textContent = CARET_NODE_CHAR;
     }
 }
 
-export function isCaretNode(node: HTMLElement): boolean {
-    return node && node.tagName === "SPAN" && node.className === "caretNode";
+export function isCaretNode(node?: Node | null): node is HTMLElement {
+    return !!node && node instanceof HTMLElement && node.tagName === "SPAN" && node.className === "caretNode";
 }
 
-function removeNextSiblings(node: ChildNode): void {
+function removeNextSiblings(node: ChildNode | null): void {
     if (!node) {
         return;
     }
@@ -83,18 +83,18 @@ function removeChildren(parent: HTMLElement): void {
 }
 
 function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
-    let currentNode;
-    let prevPart;
+    let currentNode: ChildNode | null = null;
+    let prevPart: Part | undefined;
     const lastPart = parts[parts.length - 1];
 
     for (const part of parts) {
         const isFirst = !prevPart;
-        currentNode = isFirst ? lineContainer.firstChild : currentNode.nextSibling;
+        currentNode = isFirst ? lineContainer.firstChild : currentNode!.nextSibling;
 
         if (needsCaretNodeBefore(part, prevPart)) {
-            if (isCaretNode(currentNode)) {
-                updateCaretNode(currentNode);
-                currentNode = currentNode.nextSibling;
+            if (isCaretNode(currentNode as Element)) {
+                updateCaretNode(currentNode!);
+                currentNode = currentNode!.nextSibling;
             } else {
                 lineContainer.insertBefore(createCaretNode(), currentNode);
             }
@@ -109,18 +109,18 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
         if (currentNode && part) {
             part.updateDOMNode(currentNode);
         } else if (part) {
-            currentNode = part.toDOMNode();
+            currentNode = part.toDOMNode() as ChildNode;
             // hooks up nextSibling for next iteration
             lineContainer.appendChild(currentNode);
         }
 
         if (needsCaretNodeAfter(part, part === lastPart)) {
-            if (isCaretNode(currentNode.nextSibling)) {
-                currentNode = currentNode.nextSibling;
-                updateCaretNode(currentNode);
+            if (isCaretNode(currentNode?.nextSibling as Element)) {
+                currentNode = currentNode!.nextSibling;
+                updateCaretNode(currentNode as HTMLElement);
             } else {
                 const caretNode = createCaretNode();
-                insertAfter(currentNode, caretNode);
+                insertAfter(currentNode as HTMLElement, caretNode);
                 currentNode = caretNode;
             }
         }
@@ -150,15 +150,18 @@ function reconcileEmptyLine(lineContainer: HTMLElement): void {
 }
 
 export function renderModel(editor: HTMLDivElement, model: EditorModel): void {
-    const lines = model.parts.reduce((linesArr, part) => {
-        if (part.type === Type.Newline) {
-            linesArr.push([]);
-        } else {
-            const lastLine = linesArr[linesArr.length - 1];
-            lastLine.push(part);
-        }
-        return linesArr;
-    }, [[]]);
+    const lines = model.parts.reduce<Part[][]>(
+        (linesArr, part) => {
+            if (part.type === Type.Newline) {
+                linesArr.push([]);
+            } else {
+                const lastLine = linesArr[linesArr.length - 1];
+                lastLine.push(part);
+            }
+            return linesArr;
+        },
+        [[]],
+    );
     lines.forEach((parts, i) => {
         // find first (and remove anything else) div without className
         // (as browsers insert these in contenteditable) line container

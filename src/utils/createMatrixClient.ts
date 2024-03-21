@@ -19,19 +19,18 @@ import {
     ICreateClientOpts,
     MemoryCryptoStore,
     MemoryStore,
+    IndexedDBCryptoStore,
+    IndexedDBStore,
+    LocalStorageCryptoStore,
 } from "matrix-js-sdk/src/matrix";
-import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
-import { LocalStorageCryptoStore } from "matrix-js-sdk/src/crypto/store/localStorage-crypto-store";
 
-// @ts-ignore - `.ts` is needed here to make TS happy
-import IndexedDBWorker from "../workers/indexeddb.worker.ts";
+import indexeddbWorkerFactory from "../workers/indexeddbWorkerFactory";
 
 const localStorage = window.localStorage;
 
 // just *accessing* indexedDB throws an exception in firefox with
 // indexeddb disabled.
-let indexedDB;
+let indexedDB: IDBFactory;
 try {
     indexedDB = window.indexedDB;
 } catch (e) {}
@@ -55,16 +54,14 @@ export default function createMatrixClient(opts: ICreateClientOpts): MatrixClien
             indexedDB: indexedDB,
             dbName: "riot-web-sync",
             localStorage,
-            workerFactory: () => new IndexedDBWorker(),
+            workerFactory: indexeddbWorkerFactory,
         });
     } else if (localStorage) {
         storeOpts.store = new MemoryStore({ localStorage });
     }
 
     if (indexedDB) {
-        storeOpts.cryptoStore = new IndexedDBCryptoStore(
-            indexedDB, "matrix-js-sdk:crypto",
-        );
+        storeOpts.cryptoStore = new IndexedDBCryptoStore(indexedDB, "matrix-js-sdk:crypto");
     } else if (localStorage) {
         storeOpts.cryptoStore = new LocalStorageCryptoStore(localStorage);
     } else {

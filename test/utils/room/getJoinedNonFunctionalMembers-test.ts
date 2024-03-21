@@ -50,10 +50,7 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are only regular room members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([
-                roomMember1,
-                roomMember2,
-            ]);
+            mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
             mocked(getFunctionalMembers).mockReturnValue([]);
         });
 
@@ -67,9 +64,7 @@ describe("getJoinedNonFunctionalMembers", () => {
     describe("if there are only functional room members", () => {
         beforeEach(() => {
             mocked(room.getJoinedMembers).mockReturnValue([]);
-            mocked(getFunctionalMembers).mockReturnValue([
-                "@functional:example.com",
-            ]);
+            mocked(getFunctionalMembers).mockReturnValue(["@functional:example.com"]);
         });
 
         it("should return an empty list", () => {
@@ -79,13 +74,8 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are some functional room members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([
-                roomMember1,
-                roomMember2,
-            ]);
-            mocked(getFunctionalMembers).mockReturnValue([
-                roomMember1.userId,
-            ]);
+            mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
+            mocked(getFunctionalMembers).mockReturnValue([roomMember1.userId]);
         });
 
         it("should only return the non-functional members", () => {

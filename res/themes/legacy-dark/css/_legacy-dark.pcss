@@ -1,6 +1,6 @@
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
-$system: #21262C;
-$system-transparent: rgba($system, 0.0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$system: #21262c;
+$system-transparent: #e1e6ec00;
 
 /* unified palette */
 /* try to use these colors when possible */
@@ -8,6 +8,7 @@ $bg-color: #181b21;
 $base-color: #15171b;
 $base-text-color: #edf3ff;
 $header-panel-bg-color: #22262e;
+$header-panel-bg-hover: var(--cpd-color-gray-200);
 $header-panel-text-primary-color: #a1b2d1;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-primary-color: #edf3ff;
@@ -27,8 +28,8 @@ $light-fg-color: $header-panel-text-secondary-color;
 /* used for focusing form controls */
 $focus-bg-color: $room-highlight-color;
 
-$pill-bg-color: $room-highlight-color;
-$pill-hover-bg-color: #545a66;
+$pill-bg-color: var(--cpd-color-gray-1000);
+$pill-hover-bg-color: var(--cpd-color-gray-1100);
 
 /* informational plinth */
 $info-plinth-bg-color: $header-panel-bg-color;
@@ -45,12 +46,14 @@ $event-selected-color: $header-panel-bg-color;
 
 /* used for the hairline dividers in RoomView */
 $primary-hairline-color: #000000;
+$secondary-hairline-color: var(--cpd-color-gray-300);
 
 /* used for the border of input text fields */
 $input-border-color: #e7e7e7;
 $input-darker-bg-color: #181b21;
 $input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
+$input-placeholder: var(--cpd-color-text-placeholder);
 
 $resend-button-divider-color: $muted-fg-color;
 
@@ -66,11 +69,11 @@ $menu-selected-color: $room-highlight-color;
 $avatar-initial-color: #ffffff;
 
 $h3-color: $primary-fg-color;
+$icon-button-color: var(--cpd-color-icon-tertiary);
 
 $dialog-title-fg-color: $base-text-color;
-$dialog-backdrop-color: #000;
-$dialog-shadow-color: rgba(0, 0, 0, 0.48);
-$dialog-close-fg-color: #9fa9ba;
+$dialog-backdrop-color: #00000080;
+$dialog-close-fg-color: $icon-button-color;
 $dialog-close-external-color: $text-primary-color;
 
 $lightbox-background-bg-color: #000;
@@ -82,31 +85,51 @@ $settings-subsection-fg-color: $text-secondary-color;
 $topleftmenu-color: $text-primary-color;
 $roomheader-addroom-bg-color: #3c4556;
 $roomheader-addroom-fg-color: $text-primary-color;
-$icon-button-color: $header-panel-text-primary-color;
 $roomtopic-color: $text-secondary-color;
-$room-icon-unread-color: #fff;
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
 
 /* Legacy theme backports */
-$accent: #0DBD8B;
-$alert: #FF5B55;
+$accent: #0dbd8b;
+$alert: #ff5b55;
 $links: #0086e6;
+$link-external: #0467dd;
 $primary-content: $primary-fg-color;
 $secondary-content: $secondary-fg-color;
 $tertiary-content: $tertiary-fg-color;
-$quaternary-content: #6F7882;
+$quaternary-content: #6f7882;
 $quinary-content: $quaternary-content;
-$system: #21262C;
-$system-transparent: rgba($system, 0.0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
 $background: $primary-bg-color;
 $overlay-background: rgba($background, 0.85);
 
 $panels: rgba($system, 0.9);
-$panel-base: #8D97A5; /* This color is not intended for use in the app */
-$panel-selected: rgba($panel-base, 0.3);
-$panel-hover: rgba($panel-base, 0.1);
 $panel-actions: $roomtile-selected-bg-color;
-$space-nav: rgba($panel-base, 0.1);
 
+$separator: var(--cpd-color-alpha-gray-400);
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
 /* Legacy theme backports */
 
 /* ******************** */
@@ -119,26 +142,27 @@ $call-view-content-background: $quinary-content;
 
 $video-feed-secondary-background: $system;
 
-$call-lobby-system: $system;
-$call-lobby-background: $background;
-$call-lobby-primary-content: $primary-content;
+$call-system: $system;
+$call-background: $background;
+$call-primary-content: $primary-content;
+$call-light-quaternary-content: #c1c6cd;
 
 $roomlist-filter-active-bg-color: $panel-actions;
-$roomlist-bg-color: $header-panel-bg-color;
+$roomlist-bg-color: rgba(38, 40, 45, 0.9);
 
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $spacePanel-divider-color: $tertiary-content;
 
 $roomtile-default-badge-bg-color: #61708b;
-$roomtile-selected-bg-color: #1A1D23;
+$roomtile-selected-bg-color: #1a1d23;
 
 /* ******************** */
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
-$widget-body-bg-color: #1A1D23;
+$widget-body-bg-color: #1a1d23;
 
-$event-highlight-bg-color: #25271F;
+$event-highlight-bg-color: #25271f;
 
 /* event timestamp */
 $event-timestamp-color: $text-secondary-color;
@@ -161,7 +185,7 @@ $progressbar-bg-color: #21262c;
 
 $visual-bell-bg-color: #800;
 
-$dark-panel-bg-color: $header-panel-bg-color;
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
 
 $message-action-bar-bg-color: $header-panel-bg-color;
@@ -172,7 +196,7 @@ $message-action-bar-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 
-$kbd-border-color: #000000;
+$kbd-border-color: $strong-input-border-color;
 
 $tooltip-timeline-bg-color: $spacePanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
@@ -180,21 +204,19 @@ $tooltip-timeline-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 /* See non-legacy dark for variable information */
-$voice-record-stop-border-color: #6F7882;
-$voice-record-icon-color: #6F7882;
-
-/* Appearance tab colors */
-$appearance-tab-border-color: $room-highlight-color;
+$voice-record-stop-border-color: #6f7882;
+$voice-record-icon-color: #6f7882;
 
 $composer-shadow-color: tranparent;
 
 $codeblock-background-color: #2a3039;
+$inlinecode-border-color: #2a3039;
+$inlinecode-background-color: #2a3039;
 
 /* Bubble tiles */
-$eventbubble-self-bg: #14322E;
+$eventbubble-self-bg: #14322e;
 $eventbubble-others-bg: $event-selected-color;
-$eventbubble-bg-hover: #1C2026;
-$eventbubble-reply-color: #C1C6CD;
+$eventbubble-bg-hover: #1c2026;
 
 /* Location sharing */
 /* ******************** */
@@ -207,43 +229,6 @@ $location-live-secondary-color: #deddfd;
 /* ******************** */
 $live-badge-color: #ffffff;
 /* ******************** */
-
-/* ***** Mixins! ***** */
-
-@define-mixin mx_DialogButton {
-    /* align images in buttons (eg spinners) */
-    vertical-align: middle;
-    border: 0px;
-    border-radius: 8px;
-    font-family: $font-family;
-    font-size: $font-14px;
-    color: $button-fg-color;
-    background-color: $accent;
-    width: auto;
-    padding: 7px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
-    display: inline-block;
-    outline: none;
-}
-
-@define-mixin mx_DialogButton_danger {
-    background-color: $accent;
-}
-
-@define-mixin mx_DialogButton_secondary {
-    /* flip colours for the secondary ones */
-    font-weight: 600;
-    border: 1px solid $accent !important;
-    color: $accent;
-    background-color: $button-secondary-bg-color;
-}
-
-@define-mixin mx_Dialog_link {
-    color: $accent;
-    text-decoration: none;
-}
 
 body {
     color-scheme: dark;

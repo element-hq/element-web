@@ -16,12 +16,40 @@ limitations under the License.
 
 import { RefObject, useMemo } from "react";
 
-export function useComposerFunctions(ref: RefObject<HTMLDivElement>) {
-    return useMemo(() => ({
-        clear: () => {
-            if (ref.current) {
-                ref.current.innerHTML = '';
-            }
-        },
-    }), [ref]);
+import { setSelection } from "../utils/selection";
+
+export function useComposerFunctions(
+    ref: RefObject<HTMLDivElement>,
+    setContent: (content: string) => void,
+): {
+    clear(): void;
+    insertText(text: string): void;
+} {
+    return useMemo(
+        () => ({
+            clear: () => {
+                if (ref.current) {
+                    ref.current.innerHTML = "";
+                }
+            },
+            insertText: (text: string) => {
+                const selection = document.getSelection();
+
+                if (ref.current && selection) {
+                    const content = ref.current.innerHTML;
+                    const { anchorOffset, focusOffset } = selection;
+                    ref.current.innerHTML = `${content.slice(0, anchorOffset)}${text}${content.slice(focusOffset)}`;
+                    setSelection({
+                        anchorNode: ref.current.firstChild,
+                        anchorOffset: anchorOffset + text.length,
+                        focusNode: ref.current.firstChild,
+                        focusOffset: focusOffset + text.length,
+                        isForward: true,
+                    });
+                    setContent(ref.current.innerHTML);
+                }
+            },
+        }),
+        [ref, setContent],
+    );
 }

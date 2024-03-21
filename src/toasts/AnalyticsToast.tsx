@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { Optional } from "matrix-events-sdk";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
@@ -30,19 +29,19 @@ import {
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
 
-const onAccept = () => {
+const onAccept = (): void => {
     dis.dispatch({
         action: Action.PseudonymousAnalyticsAccept,
     });
 };
 
-const onReject = () => {
+const onReject = (): void => {
     dis.dispatch({
         action: Action.PseudonymousAnalyticsReject,
     });
 };
 
-const onLearnMoreNoOptIn = () => {
+const onLearnMoreNoOptIn = (): void => {
     showAnalyticsLearnMoreDialog({
         onFinished: (buttonClicked?: ButtonClicked) => {
             if (buttonClicked === ButtonClicked.Primary) {
@@ -52,11 +51,11 @@ const onLearnMoreNoOptIn = () => {
             // otherwise, the user either clicked "Cancel", or closed the dialog without making a choice,
             // leave the toast open
         },
-        primaryButton: _t("Enable"),
+        primaryButton: _t("action|enable"),
     });
 };
 
-const onLearnMorePreviouslyOptedIn = () => {
+const onLearnMorePreviouslyOptedIn = (): void => {
     showAnalyticsLearnMoreDialog({
         onFinished: (buttonClicked?: ButtonClicked) => {
             if (buttonClicked === ButtonClicked.Primary) {
@@ -68,14 +67,14 @@ const onLearnMorePreviouslyOptedIn = () => {
             }
             // otherwise, the user closed the dialog without making a choice, leave the toast open
         },
-        primaryButton: _t("That's fine"),
-        cancelButton: _t("Stop"),
+        primaryButton: _t("analytics|accept_button"),
+        cancelButton: _t("action|stop"),
     });
 };
 
 const TOAST_KEY = "analytics";
 
-export function getPolicyUrl(): Optional<string> {
+export function getPolicyUrl(): string | undefined {
     return SdkConfig.get("privacy_policy_url");
 }
 
@@ -87,29 +86,29 @@ export const showToast = (): void => {
         // The user previously opted into our old analytics system - let them know things have changed and ask
         // them to opt in again.
         props = {
-            description: _t(
-                "You previously consented to share anonymous usage data with us. We're updating how that works."),
-            acceptLabel: _t("That's fine"),
+            description: _t("analytics|consent_migration"),
+            acceptLabel: _t("analytics|accept_button"),
             onAccept,
-            rejectLabel: _t("Learn more"),
+            rejectLabel: _t("action|learn_more"),
             onReject: onLearnMorePreviouslyOptedIn,
         };
     } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
         // explaining any change.
-        const learnMoreLink = (sub: string) => (
-            <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>{ sub }</AccessibleButton>
+        const learnMoreLink = (sub: string): JSX.Element => (
+            <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>
+                {sub}
+            </AccessibleButton>
         );
         props = {
-            description: _t(
-                "Share anonymous data to help us identify issues. Nothing personal. No third parties. " +
-                "<LearnMoreLink>Learn More</LearnMoreLink>", {}, { "LearnMoreLink": learnMoreLink }),
-            acceptLabel: _t("Yes"),
+            description: _t("analytics|learn_more", {}, { LearnMoreLink: learnMoreLink }),
+            acceptLabel: _t("action|yes"),
             onAccept,
-            rejectLabel: _t("No"),
+            rejectLabel: _t("action|no"),
             onReject,
         };
-    } else { // false
+    } else {
+        // false
         // The user previously opted out of analytics, don't ask again
         return;
     }
@@ -117,7 +116,7 @@ export const showToast = (): void => {
     const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Help improve %(analyticsOwner)s", { analyticsOwner }),
+        title: _t("analytics|enable_prompt", { analyticsOwner }),
         props,
         component: GenericToast,
         className: "mx_AnalyticsToast",
@@ -125,6 +124,6 @@ export const showToast = (): void => {
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

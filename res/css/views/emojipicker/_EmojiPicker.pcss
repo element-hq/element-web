@@ -58,7 +58,7 @@ limitations under the License.
 
 .mx_EmojiPicker_anchor::before {
     background-color: $primary-content;
-    content: '';
+    content: "";
     display: inline-block;
     mask-size: 100%;
     mask-repeat: no-repeat;
@@ -70,16 +70,36 @@ limitations under the License.
     background-color: $focus-bg-color;
 }
 
-.mx_EmojiPicker_anchor_activity::before { mask-image: url('$(res)/img/emojipicker/activity.svg'); }
-.mx_EmojiPicker_anchor_custom::before { mask-image: url('$(res)/img/emojipicker/custom.svg'); }
-.mx_EmojiPicker_anchor_flags::before { mask-image: url('$(res)/img/emojipicker/flags.svg'); }
-.mx_EmojiPicker_anchor_foods::before { mask-image: url('$(res)/img/emojipicker/foods.svg'); }
-.mx_EmojiPicker_anchor_nature::before { mask-image: url('$(res)/img/emojipicker/nature.svg'); }
-.mx_EmojiPicker_anchor_objects::before { mask-image: url('$(res)/img/emojipicker/objects.svg'); }
-.mx_EmojiPicker_anchor_people::before { mask-image: url('$(res)/img/emojipicker/people.svg'); }
-.mx_EmojiPicker_anchor_places::before { mask-image: url('$(res)/img/emojipicker/places.svg'); }
-.mx_EmojiPicker_anchor_recent::before { mask-image: url('$(res)/img/emojipicker/recent.svg'); }
-.mx_EmojiPicker_anchor_symbols::before { mask-image: url('$(res)/img/emojipicker/symbols.svg'); }
+.mx_EmojiPicker_anchor_activity::before {
+    mask-image: url("$(res)/img/emojipicker/activity.svg");
+}
+.mx_EmojiPicker_anchor_custom::before {
+    mask-image: url("$(res)/img/emojipicker/custom.svg");
+}
+.mx_EmojiPicker_anchor_flags::before {
+    mask-image: url("$(res)/img/emojipicker/flags.svg");
+}
+.mx_EmojiPicker_anchor_foods::before {
+    mask-image: url("$(res)/img/emojipicker/foods.svg");
+}
+.mx_EmojiPicker_anchor_nature::before {
+    mask-image: url("$(res)/img/emojipicker/nature.svg");
+}
+.mx_EmojiPicker_anchor_objects::before {
+    mask-image: url("$(res)/img/emojipicker/objects.svg");
+}
+.mx_EmojiPicker_anchor_people::before {
+    mask-image: url("$(res)/img/emojipicker/people.svg");
+}
+.mx_EmojiPicker_anchor_places::before {
+    mask-image: url("$(res)/img/emojipicker/places.svg");
+}
+.mx_EmojiPicker_anchor_recent::before {
+    mask-image: url("$(res)/img/emojipicker/recent.svg");
+}
+.mx_EmojiPicker_anchor_symbols::before {
+    mask-image: url("$(res)/img/emojipicker/symbols.svg");
+}
 
 .mx_EmojiPicker_anchor_visible {
     border-bottom: 2px solid $accent;
@@ -124,17 +144,17 @@ limitations under the License.
 }
 
 .mx_EmojiPicker_search_icon::after {
-    mask: url('$(res)/img/emojipicker/search.svg') no-repeat;
+    mask: url("$(res)/img/emojipicker/search.svg") no-repeat;
     mask-size: 100%;
     background-color: $primary-content;
-    content: '';
+    content: "";
     display: inline-block;
     width: 100%;
     height: 100%;
 }
 
 .mx_EmojiPicker_search_clear::after {
-    mask-image: url('$(res)/img/emojipicker/delete.svg');
+    mask-image: url("$(res)/img/emojipicker/delete.svg");
 }
 
 .mx_EmojiPicker_category {
@@ -159,6 +179,14 @@ limitations under the License.
     list-style: none;
     width: 38px;
     cursor: pointer;
+
+    &:focus-within {
+        background-color: $focus-bg-color;
+    }
+}
+
+.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper[tabindex="0"] .mx_EmojiPicker_item {
+    background-color: $focus-bg-color;
 }
 
 .mx_EmojiPicker_item {
@@ -177,14 +205,15 @@ limitations under the License.
 }
 
 .mx_EmojiPicker_item_selected {
-    color: rgba(0, 0, 0, .5);
+    color: rgba(0, 0, 0, 0.5);
     border: 1px solid $accent;
     padding: 4px;
 }
 
-.mx_EmojiPicker_category_label, .mx_EmojiPicker_preview_name {
+.mx_EmojiPicker_category_label,
+.mx_EmojiPicker_preview_name {
     font-size: $font-16px;
-    font-weight: 600;
+    font-weight: var(--cpd-font-weight-semibold);
     margin: 0;
 }
 
@@ -203,6 +232,10 @@ limitations under the License.
 
 .mx_EmojiPicker_preview_text {
     display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     flex-direction: column;
 }
 
@@ -212,9 +245,11 @@ limitations under the License.
 
 .mx_EmojiPicker_shortcode {
     color: $light-fg-color;
-    font-size: $font-14px;
+    overflow-wrap: break-word;
+    font: var(--cpd-font-body-md-regular);
 
-    &::before, &::after {
+    &::before,
+    &::after {
         content: ":";
     }
 }

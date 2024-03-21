@@ -14,30 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from "react";
 
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Spinner from "../elements/Spinner";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
-    failures: Record<string, Record<string, {
-        errcode: string;
-        error: string;
-    }>>;
+interface IProps {
+    failures: Record<
+        string,
+        Record<
+            string,
+            {
+                errcode: string;
+                error: string;
+            }
+        >
+    >;
     source: string;
-    continuation: () => Promise<void>;
+    continuation: (opts: { shouldEmit: boolean }) => Promise<void>;
+    onFinished(): void;
 }
 
-const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
-    failures,
-    source,
-    continuation,
-    onFinished,
-}) => {
+const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, continuation, onFinished }) => {
     const RETRIES = 2;
     const [retry, setRetry] = useState(RETRIES);
     const [cancelled, setCancelled] = useState(false);
@@ -46,13 +47,13 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
     const onCancel = useRef(onFinished);
 
     const causes = new Map([
-        ["_afterCrossSigningLocalKeyChange", _t("a new master key signature")],
-        ["checkOwnCrossSigningTrust", _t("a new cross-signing key signature")],
-        ["setDeviceVerification", _t("a device cross-signing signature")],
+        ["_afterCrossSigningLocalKeyChange", _t("encryption|key_signature_upload_failed_master_key_signature")],
+        ["checkOwnCrossSigningTrust", _t("encryption|key_signature_upload_failed_cross_signing_key_signature")],
+        ["setDeviceVerification", _t("encryption|key_signature_upload_failed_device_cross_signing_key_signature")],
     ]);
-    const defaultCause = _t("a key signature");
+    const defaultCause = _t("encryption|key_signature_upload_failed_key_signature");
 
-    const onRetry = useCallback(async () => {
+    const onRetry = useCallback(async (): Promise<void> => {
         try {
             setRetrying(true);
             const cancel = new Promise((resolve, reject) => {
@@ -60,13 +61,10 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
             }).finally(() => {
                 setCancelled(true);
             });
-            await Promise.race([
-                continuation(),
-                cancel,
-            ]);
+            await Promise.race([continuation({ shouldEmit: false }), cancel]);
             setSuccess(true);
         } catch (e) {
-            setRetry(r => r-1);
+            setRetry((r) => r - 1);
         } finally {
             onCancel.current = onFinished;
             setRetrying(false);
@@ -74,47 +72,52 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
     }, [continuation, onFinished]);
 
     let body;
-    if (!success && !cancelled && continuation && retry > 0) {
+    if (!success && !cancelled && retry > 0) {
         const reason = causes.get(source) || defaultCause;
         const brand = SdkConfig.get().brand;
 
-        body = (<div>
-            <p>{ _t("%(brand)s encountered an error during upload of:", { brand }) }</p>
-            <p>{ reason }</p>
-            { retrying && <Spinner /> }
-            <pre>{ JSON.stringify(failures, null, 2) }</pre>
-            <DialogButtons
-                primaryButton='Retry'
-                hasCancel={true}
-                onPrimaryButtonClick={onRetry}
-                onCancel={onCancel.current}
-                primaryDisabled={retrying}
-            />
-        </div>);
+        body = (
+            <div>
+                <p>{_t("encryption|key_signature_upload_failed_body", { brand })}</p>
+                <p>{reason}</p>
+                {retrying && <Spinner />}
+                <pre>{JSON.stringify(failures, null, 2)}</pre>
+                <DialogButtons
+                    primaryButton="Retry"
+                    hasCancel={true}
+                    onPrimaryButtonClick={onRetry}
+                    onCancel={onCancel.current}
+                    primaryDisabled={retrying}
+                />
+            </div>
+        );
     } else {
-        body = (<div>
-            { success ?
-                <span>{ _t("Upload completed") }</span> :
-                cancelled ?
-                    <span>{ _t("Cancelled signature upload") }</span> :
-                    <span>{ _t("Unable to upload") }</span> }
-            <DialogButtons
-                primaryButton={_t("OK")}
-                hasCancel={false}
-                onPrimaryButtonClick={onFinished}
-            />
-        </div>);
+        let text = _t("encryption|key_signature_upload_completed");
+        if (!success) {
+            text = cancelled
+                ? _t("encryption|key_signature_upload_cancelled")
+                : _t("encryption|key_signature_upload_failed");
+        }
+
+        body = (
+            <div>
+                <span>{text}</span>
+                <DialogButtons primaryButton={_t("action|ok")} hasCancel={false} onPrimaryButtonClick={onFinished} />
+            </div>
+        );
     }
 
     return (
         <BaseDialog
-            title={success ?
-                _t("Signature upload success") :
-                _t("Signature upload failed")}
+            title={
+                success
+                    ? _t("encryption|key_signature_upload_success_title")
+                    : _t("encryption|key_signature_upload_failed_title")
+            }
             fixedWidth={false}
             onFinished={() => {}}
         >
-            { body }
+            {body}
         </BaseDialog>
     );
 };

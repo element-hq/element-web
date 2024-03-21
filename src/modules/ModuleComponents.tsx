@@ -16,7 +16,7 @@ limitations under the License.
 
 import { TextInputField } from "@matrix-org/react-sdk-module-api/lib/components/TextInputField";
 import { Spinner as ModuleSpinner } from "@matrix-org/react-sdk-module-api/lib/components/Spinner";
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import Field from "../components/views/elements/Field";
 import Spinner from "../components/views/elements/Spinner";
@@ -32,7 +32,7 @@ TextInputField.renderFactory = (props) => (
     <Field
         type="text"
         value={props.value}
-        onChange={e => props.onChange(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => props.onChange(e.target.value)}
         label={props.label}
         autoComplete="off"
     />

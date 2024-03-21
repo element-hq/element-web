@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import SpaceStore from "../stores/spaces/SpaceStore";
 import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
+import { formatList } from "./FormattingUtils";
 
 export interface RoomContextDetails {
-    details: string;
+    details: string | null;
     ariaLabel?: string;
 }
 
@@ -39,15 +40,21 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
         const space1Name = room.client.getRoom(parent)?.name;
         const space2Name = room.client.getRoom(secondParent)?.name;
         return {
-            details: _t("%(space1Name)s and %(space2Name)s", { space1Name, space2Name }),
-            ariaLabel: _t("In spaces %(space1Name)s and %(space2Name)s.", { space1Name, space2Name }),
+            details: formatList([space1Name ?? "", space2Name ?? ""]),
+            ariaLabel: _t("in_space1_and_space2", { space1Name, space2Name }),
         };
     } else if (parent) {
-        const spaceName = room.client.getRoom(parent)?.name;
+        const spaceName = room.client.getRoom(parent)?.name ?? "";
         const count = otherParents.length;
+        if (count > 0) {
+            return {
+                details: formatList([spaceName, ...otherParents], 1),
+                ariaLabel: _t("in_space_and_n_other_spaces", { spaceName, count }),
+            };
+        }
         return {
-            details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
-            ariaLabel: _t("In %(spaceName)s and %(count)s other spaces.", { spaceName, count }),
+            details: spaceName,
+            ariaLabel: _t("in_space", { spaceName }),
         };
     }
 

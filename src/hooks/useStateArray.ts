@@ -21,9 +21,13 @@ export const useStateArray = <T>(initialSize: number, initialState: T | T[]): [T
     const [data, setData] = useState<T[]>(() => {
         return Array.isArray(initialState) ? initialState : new Array(initialSize).fill(initialState);
     });
-    return [data, (index: number, value: T) => setData(data => {
-        const copy = [...data];
-        copy[index] = value;
-        return copy;
-    })];
+    return [
+        data,
+        (index: number, value: T) =>
+            setData((data) => {
+                const copy = [...data];
+                copy[index] = value;
+                return copy;
+            }),
+    ];
 };

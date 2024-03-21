@@ -1,6 +1,7 @@
 /*
  Copyright 2020 Nurjin Jafar
  Copyright 2020 Nordeck IT + Consulting GmbH.
+ Copyright 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
  limitations under the License.
  */
 
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 
 export type FireworksOptions = {
     /**
@@ -62,40 +63,40 @@ export const DefaultOptions: FireworksOptions = {
 export default class Fireworks implements ICanvasEffect {
     private readonly options: FireworksOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private supportsAnimationFrame = window.requestAnimationFrame;
     private particles: Array<FireworksParticle> = [];
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
         this.isRunning = true;
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.supportsAnimationFrame.call(window, this.updateWorld);
         if (timeout) {
             window.setTimeout(this.stop, timeout);
         }
     };
 
-    private updateWorld = () => {
+    private updateWorld = (): void => {
         if (!this.isRunning && this.particles.length === 0) return;
         this.update();
         this.paint();
         this.supportsAnimationFrame.call(window, this.updateWorld);
     };
 
-    private update = () => {
+    private update = (): void => {
         if (this.particles.length < this.options.maxCount && this.isRunning) {
             this.createFirework();
         }
-        const alive = [];
-        for (let i=0; i<this.particles.length; i++) {
+        const alive: FireworksParticle[] = [];
+        for (let i = 0; i < this.particles.length; i++) {
             if (this.move(this.particles[i])) {
                 alive.push(this.particles[i]);
             }
@@ -103,44 +104,50 @@ export default class Fireworks implements ICanvasEffect {
         this.particles = alive;
     };
 
-    private paint = () => {
+    private paint = (): void => {
         if (!this.context || !this.context.canvas) return;
-        this.context.globalCompositeOperation = 'destination-out';
+        this.context.globalCompositeOperation = "destination-out";
         this.context.fillStyle = "rgba(0,0,0,0.5)";
         this.context.fillRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-        this.context.globalCompositeOperation = 'lighter';
-        for (let i=0; i<this.particles.length; i++) {
+        this.context.globalCompositeOperation = "lighter";
+        for (let i = 0; i < this.particles.length; i++) {
             this.drawParticle(this.particles[i]);
         }
     };
 
-    private createFirework = () => {
+    private createFirework = (): void => {
         if (!this.context || !this.context.canvas) return;
         const width = this.context.canvas.width;
         const height = this.context.canvas.height;
         const xPoint = Math.random() * (width - 200) + 100;
         const yPoint = Math.random() * (height - 200) + 100;
         const nFire = Math.random() * 50 + 100;
-        const color = "rgb("+(~~(Math.random()*200+55))+","
-            +(~~(Math.random()*200+55))+","+(~~(Math.random()*200+55))+")";
-        for (let i=0; i<nFire; i++) {
+        const color =
+            "rgb(" +
+            ~~(Math.random() * 200 + 55) +
+            "," +
+            ~~(Math.random() * 200 + 55) +
+            "," +
+            ~~(Math.random() * 200 + 55) +
+            ")";
+        for (let i = 0; i < nFire; i++) {
             const particle = <FireworksParticle>{};
             particle.color = color;
             particle.w = particle.h = Math.random() * 4 + 1;
             particle.x = xPoint - particle.w / 2;
             particle.y = yPoint - particle.h / 2;
-            particle.vx = (Math.random()-0.5)*10;
-            particle.vy = (Math.random()-0.5)*10;
-            particle.alpha = Math.random()*.5+.5;
+            particle.vx = (Math.random() - 0.5) * 10;
+            particle.vy = (Math.random() - 0.5) * 10;
+            particle.alpha = Math.random() * 0.5 + 0.5;
             const vy = Math.sqrt(25 - particle.vx * particle.vx);
             if (Math.abs(particle.vy) > vy) {
-                particle.vy = particle.vy > 0 ? vy: -vy;
+                particle.vy = particle.vy > 0 ? vy : -vy;
             }
             this.particles.push(particle);
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -161,13 +168,16 @@ export default class Fireworks implements ICanvasEffect {
         this.context.restore();
     };
 
-    private move = (particle: FireworksParticle) => {
+    private move = (particle: FireworksParticle): boolean => {
         particle.x += particle.vx;
         particle.vy += this.options.gravity;
         particle.y += particle.vy;
         particle.alpha -= 0.01;
-        return !(particle.x <= -particle.w || particle.x >= screen.width ||
+        return !(
+            particle.x <= -particle.w ||
+            particle.x >= screen.width ||
             particle.y >= screen.height ||
-            particle.alpha <= 0);
+            particle.alpha <= 0
+        );
     };
 }

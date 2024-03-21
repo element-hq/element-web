@@ -16,18 +16,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src/matrix";
+import {
+    IAddThreePidOnlyBody,
+    IAuthData,
+    IRequestMsisdnTokenResponse,
+    IRequestTokenResponse,
+    MatrixClient,
+    MatrixError,
+    HTTPError,
+    IThreepid,
+} from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import Modal from './Modal';
-import { _t } from './languageHandler';
-import IdentityAuthClient from './IdentityAuthClient';
+import Modal from "./Modal";
+import { _t, UserFriendlyError } from "./languageHandler";
+import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
 
-function getIdServerDomain(): string {
-    return MatrixClientPeg.get().idBaseUrl.split("://")[1];
+function getIdServerDomain(matrixClient: MatrixClient): string {
+    const idBaseUrl = matrixClient.getIdentityServerUrl(true);
+    if (!idBaseUrl) {
+        throw new UserFriendlyError("settings|general|identity_server_not_set");
+    }
+    return idBaseUrl;
 }
+
+export type Binding = {
+    bind: boolean;
+    label: string;
+    errorTitle: string;
+};
+
+// IThreepid modified stripping validated_at and added_at as they aren't necessary for our UI
+export type ThirdPartyIdentifier = Omit<IThreepid, "validated_at" | "added_at">;
 
 /**
  * Allows a user to add a third party identifier to their homeserver and,
@@ -42,13 +63,13 @@ function getIdServerDomain(): string {
  * https://gist.github.com/jryans/839a09bf0c5a70e2f36ed990d50ed928
  */
 export default class AddThreepid {
-    private sessionId: string;
-    private submitUrl: string;
-    private clientSecret: string;
-    private bind: boolean;
+    private sessionId?: string;
+    private submitUrl?: string;
+    private bind = false;
+    private readonly clientSecret: string;
 
-    constructor() {
-        this.clientSecret = MatrixClientPeg.get().generateClientSecret();
+    public constructor(private readonly matrixClient: MatrixClient) {
+        this.clientSecret = matrixClient.generateClientSecret();
     }
 
     /**
@@ -57,18 +78,18 @@ export default class AddThreepid {
      * @param {string} emailAddress The email address to add
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    public addEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
-        return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
+    public async addEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
+        try {
+            const res = await this.matrixClient.requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1);
             this.sessionId = res.sid;
             return res;
-        }, function(err) {
-            if (err.errcode === 'M_THREEPID_IN_USE') {
-                err.message = _t('This email address is already in use');
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
             }
+            // Otherwise, just blurt out the same error
             throw err;
-        });
+        }
     }
 
     /**
@@ -79,27 +100,25 @@ export default class AddThreepid {
      */
     public async bindEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         this.bind = true;
-        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
-            // For separate bind, request a token directly from the IS.
-            const authClient = new IdentityAuthClient();
-            const identityAccessToken = await authClient.getAccessToken();
-            return MatrixClientPeg.get().requestEmailToken(
-                emailAddress, this.clientSecret, 1,
-                undefined, identityAccessToken,
-            ).then((res) => {
-                this.sessionId = res.sid;
-                return res;
-            }, function(err) {
-                if (err.errcode === 'M_THREEPID_IN_USE') {
-                    err.message = _t('This email address is already in use');
-                } else if (err.httpStatus) {
-                    err.message = err.message + ` (Status ${err.httpStatus})`;
-                }
-                throw err;
-            });
-        } else {
-            // For tangled bind, request a token via the HS.
-            return this.addEmailAddress(emailAddress);
+        // For separate bind, request a token directly from the IS.
+        const authClient = new IdentityAuthClient();
+        const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
+        try {
+            const res = await this.matrixClient.requestEmailToken(
+                emailAddress,
+                this.clientSecret,
+                1,
+                undefined,
+                identityAccessToken,
+            );
+            this.sessionId = res.sid;
+            return res;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("settings|general|email_address_in_use", { cause: err });
+            }
+            // Otherwise, just blurt out the same error
+            throw err;
         }
     }
 
@@ -110,21 +129,24 @@ export default class AddThreepid {
      * @param {string} phoneNumber The national or international formatted phone number to add
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
-    public addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
-        return MatrixClientPeg.get().requestAdd3pidMsisdnToken(
-            phoneCountry, phoneNumber, this.clientSecret, 1,
-        ).then((res) => {
+    public async addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
+        try {
+            const res = await this.matrixClient.requestAdd3pidMsisdnToken(
+                phoneCountry,
+                phoneNumber,
+                this.clientSecret,
+                1,
+            );
             this.sessionId = res.sid;
             this.submitUrl = res.submit_url;
             return res;
-        }, function(err) {
-            if (err.errcode === 'M_THREEPID_IN_USE') {
-                err.message = _t('This phone number is already in use');
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
             }
+            // Otherwise, just blurt out the same error
             throw err;
-        });
+        }
     }
 
     /**
@@ -136,27 +158,26 @@ export default class AddThreepid {
      */
     public async bindMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         this.bind = true;
-        if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
-            // For separate bind, request a token directly from the IS.
-            const authClient = new IdentityAuthClient();
-            const identityAccessToken = await authClient.getAccessToken();
-            return MatrixClientPeg.get().requestMsisdnToken(
-                phoneCountry, phoneNumber, this.clientSecret, 1,
-                undefined, identityAccessToken,
-            ).then((res) => {
-                this.sessionId = res.sid;
-                return res;
-            }, function(err) {
-                if (err.errcode === 'M_THREEPID_IN_USE') {
-                    err.message = _t('This phone number is already in use');
-                } else if (err.httpStatus) {
-                    err.message = err.message + ` (Status ${err.httpStatus})`;
-                }
-                throw err;
-            });
-        } else {
-            // For tangled bind, request a token via the HS.
-            return this.addMsisdn(phoneCountry, phoneNumber);
+        // For separate bind, request a token directly from the IS.
+        const authClient = new IdentityAuthClient();
+        const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
+        try {
+            const res = await this.matrixClient.requestMsisdnToken(
+                phoneCountry,
+                phoneNumber,
+                this.clientSecret,
+                1,
+                undefined,
+                identityAccessToken,
+            );
+            this.sessionId = res.sid;
+            return res;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("settings|general|msisdn_in_use", { cause: err });
+            }
+            // Otherwise, just blurt out the same error
+            throw err;
         }
     }
 
@@ -166,85 +187,79 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<any[]> {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
         try {
-            if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
-                if (this.bind) {
-                    const authClient = new IdentityAuthClient();
-                    const identityAccessToken = await authClient.getAccessToken();
-                    await MatrixClientPeg.get().bindThreePid({
-                        sid: this.sessionId,
-                        client_secret: this.clientSecret,
-                        id_server: getIdServerDomain(),
-                        id_access_token: identityAccessToken,
-                    });
-                } else {
-                    try {
-                        await this.makeAddThreepidOnlyRequest();
-
-                        // The spec has always required this to use UI auth but synapse briefly
-                        // implemented it without, so this may just succeed and that's OK.
-                        return;
-                    } catch (e) {
-                        if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
-                            // doesn't look like an interactive-auth failure
-                            throw e;
-                        }
-
-                        const dialogAesthetics = {
-                            [SSOAuthEntry.PHASE_PREAUTH]: {
-                                title: _t("Use Single Sign On to continue"),
-                                body: _t("Confirm adding this email address by using " +
-                                    "Single Sign On to prove your identity."),
-                                continueText: _t("Single Sign On"),
-                                continueKind: "primary",
-                            },
-                            [SSOAuthEntry.PHASE_POSTAUTH]: {
-                                title: _t("Confirm adding email"),
-                                body: _t("Click the button below to confirm adding this email address."),
-                                continueText: _t("Confirm"),
-                                continueKind: "primary",
-                            },
-                        };
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                            title: _t("Add Email Address"),
-                            matrixClient: MatrixClientPeg.get(),
-                            authData: e.data,
-                            makeRequest: this.makeAddThreepidOnlyRequest,
-                            aestheticsForStagePhases: {
-                                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                            },
-                        });
-                        return finished;
-                    }
+            if (this.bind) {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                if (!identityAccessToken) {
+                    throw new UserFriendlyError("settings|general|identity_server_no_token");
                 }
-            } else {
-                await MatrixClientPeg.get().addThreePid({
-                    sid: this.sessionId,
+                await this.matrixClient.bindThreePid({
+                    sid: this.sessionId!,
                     client_secret: this.clientSecret,
-                    id_server: getIdServerDomain(),
-                }, this.bind);
+                    id_server: getIdServerDomain(this.matrixClient),
+                    id_access_token: identityAccessToken,
+                });
+            } else {
+                try {
+                    await this.makeAddThreepidOnlyRequest();
+
+                    // The spec has always required this to use UI auth but synapse briefly
+                    // implemented it without, so this may just succeed and that's OK.
+                    return [true];
+                } catch (err) {
+                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                        // doesn't look like an interactive-auth failure
+                        throw err;
+                    }
+
+                    const dialogAesthetics = {
+                        [SSOAuthEntry.PHASE_PREAUTH]: {
+                            title: _t("auth|uia|sso_title"),
+                            body: _t("auth|uia|sso_body"),
+                            continueText: _t("auth|sso"),
+                            continueKind: "primary",
+                        },
+                        [SSOAuthEntry.PHASE_POSTAUTH]: {
+                            title: _t("settings|general|confirm_adding_email_title"),
+                            body: _t("settings|general|confirm_adding_email_body"),
+                            continueText: _t("action|confirm"),
+                            continueKind: "primary",
+                        },
+                    };
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                        title: _t("settings|general|add_email_dialog_title"),
+                        matrixClient: this.matrixClient,
+                        authData: err.data,
+                        makeRequest: this.makeAddThreepidOnlyRequest,
+                        aestheticsForStagePhases: {
+                            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                        },
+                    } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
+                    return finished;
+                }
             }
         } catch (err) {
-            if (err.httpStatus === 401) {
-                err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
-            } else if (err.httpStatus) {
-                err.message += ` (Status ${err.httpStatus})`;
+            if (err instanceof HTTPError && err.httpStatus === 401) {
+                throw new UserFriendlyError("settings|general|add_email_failed_verification", { cause: err });
             }
+            // Otherwise, just blurt out the same error
             throw err;
         }
+        return [];
     }
 
     /**
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
-    private makeAddThreepidOnlyRequest = (auth?: {type: string, session?: string}): Promise<{}> => {
-        return MatrixClientPeg.get().addThreePidOnly({
-            sid: this.sessionId,
+    private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
+        return this.matrixClient.addThreePidOnly({
+            sid: this.sessionId!,
             client_secret: this.clientSecret,
-            auth,
+            auth: auth ?? undefined,
         });
     };
 
@@ -256,88 +271,75 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(msisdnToken: string): Promise<any[]> {
+    public async haveMsisdnToken(
+        msisdnToken: string,
+    ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
         const authClient = new IdentityAuthClient();
-        const supportsSeparateAddAndBind =
-            await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 
-        let result;
         if (this.submitUrl) {
-            result = await MatrixClientPeg.get().submitMsisdnTokenOtherUrl(
+            await this.matrixClient.submitMsisdnTokenOtherUrl(
                 this.submitUrl,
-                this.sessionId,
+                this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
             );
-        } else if (this.bind || !supportsSeparateAddAndBind) {
-            result = await MatrixClientPeg.get().submitMsisdnToken(
-                this.sessionId,
+        } else if (this.bind) {
+            await this.matrixClient.submitMsisdnToken(
+                this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
                 await authClient.getAccessToken(),
             );
         } else {
-            throw new Error("The add / bind with MSISDN flow is misconfigured");
-        }
-        if (result.errcode) {
-            throw result;
+            throw new UserFriendlyError("settings|general|add_msisdn_misconfigured");
         }
 
-        if (supportsSeparateAddAndBind) {
-            if (this.bind) {
-                await MatrixClientPeg.get().bindThreePid({
-                    sid: this.sessionId,
-                    client_secret: this.clientSecret,
-                    id_server: getIdServerDomain(),
-                    id_access_token: await authClient.getAccessToken(),
-                });
-            } else {
-                try {
-                    await this.makeAddThreepidOnlyRequest();
-
-                    // The spec has always required this to use UI auth but synapse briefly
-                    // implemented it without, so this may just succeed and that's OK.
-                    return;
-                } catch (e) {
-                    if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
-                        // doesn't look like an interactive-auth failure
-                        throw e;
-                    }
-
-                    const dialogAesthetics = {
-                        [SSOAuthEntry.PHASE_PREAUTH]: {
-                            title: _t("Use Single Sign On to continue"),
-                            body: _t("Confirm adding this phone number by using " +
-                                "Single Sign On to prove your identity."),
-                            continueText: _t("Single Sign On"),
-                            continueKind: "primary",
-                        },
-                        [SSOAuthEntry.PHASE_POSTAUTH]: {
-                            title: _t("Confirm adding phone number"),
-                            body: _t("Click the button below to confirm adding this phone number."),
-                            continueText: _t("Confirm"),
-                            continueKind: "primary",
-                        },
-                    };
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                        title: _t("Add Phone Number"),
-                        matrixClient: MatrixClientPeg.get(),
-                        authData: e.data,
-                        makeRequest: this.makeAddThreepidOnlyRequest,
-                        aestheticsForStagePhases: {
-                            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                        },
-                    });
-                    return finished;
-                }
-            }
-        } else {
-            await MatrixClientPeg.get().addThreePid({
-                sid: this.sessionId,
+        if (this.bind) {
+            await this.matrixClient.bindThreePid({
+                sid: this.sessionId!,
                 client_secret: this.clientSecret,
-                id_server: getIdServerDomain(),
-            }, this.bind);
+                id_server: getIdServerDomain(this.matrixClient),
+                id_access_token: await authClient.getAccessToken(),
+            });
+        } else {
+            try {
+                await this.makeAddThreepidOnlyRequest();
+
+                // The spec has always required this to use UI auth but synapse briefly
+                // implemented it without, so this may just succeed and that's OK.
+                return;
+            } catch (err) {
+                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                    // doesn't look like an interactive-auth failure
+                    throw err;
+                }
+
+                const dialogAesthetics = {
+                    [SSOAuthEntry.PHASE_PREAUTH]: {
+                        title: _t("auth|uia|sso_title"),
+                        body: _t("settings|general|add_msisdn_confirm_sso_button"),
+                        continueText: _t("auth|sso"),
+                        continueKind: "primary",
+                    },
+                    [SSOAuthEntry.PHASE_POSTAUTH]: {
+                        title: _t("settings|general|add_msisdn_confirm_button"),
+                        body: _t("settings|general|add_msisdn_confirm_body"),
+                        continueText: _t("action|confirm"),
+                        continueKind: "primary",
+                    },
+                };
+                const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                    title: _t("settings|general|add_msisdn_dialog_title"),
+                    matrixClient: this.matrixClient,
+                    authData: err.data,
+                    makeRequest: this.makeAddThreepidOnlyRequest,
+                    aestheticsForStagePhases: {
+                        [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                        [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                    },
+                } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
+                return finished;
+            }
         }
     }
 }

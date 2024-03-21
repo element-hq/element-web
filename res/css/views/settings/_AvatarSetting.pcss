@@ -22,14 +22,11 @@ limitations under the License.
     position: relative;
 
     .mx_AvatarSetting_hover {
-        transition: opacity $hover-transition;
+        transition: opacity var(--hover-transition);
 
         /* position to place the hover bg over the entire thing */
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset: 0;
 
         pointer-events: none; /* let the pointer fall through the underlying thing */
 
@@ -45,10 +42,7 @@ limitations under the License.
         .mx_AvatarSetting_hoverBg {
             /* absolute position to lazily fill the entire container */
             position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            inset: 0;
 
             opacity: 0.5;
             background-color: $quinary-content;
@@ -96,12 +90,9 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: 36px;
         mask-position: center;
-        content: '';
+        content: "";
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset: 0;
     }
 
     .mx_AvatarSetting_uploadButton {
@@ -124,7 +115,7 @@ limitations under the License.
         mask-position: center;
         mask-size: 55%;
         background-color: $quinary-content;
-        mask-image: url('$(res)/img/feather-customised/edit.svg');
+        mask-image: url("$(res)/img/feather-customised/edit.svg");
     }
 }
 

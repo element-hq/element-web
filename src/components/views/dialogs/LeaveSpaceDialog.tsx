@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React, { useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
+import { filterBoolean } from "../../../utils/arrays";
 
 interface IProps {
     space: Room;
@@ -30,11 +30,11 @@ interface IProps {
 }
 
 const isOnlyAdmin = (room: Room): boolean => {
-    const userId = room.client.getUserId();
-    if (room.getMember(userId).powerLevelNorm !== 100) {
+    const userId = room.client.getSafeUserId();
+    if (room.getMember(userId)?.powerLevelNorm !== 100) {
         return false; // user is not an admin
     }
-    return room.getJoinedMembers().every(member => {
+    return room.getJoinedMembers().every((member) => {
         // return true if every other member has a lower power level (we are highest)
         return member.userId === userId || member.powerLevelNorm < 100;
     });
@@ -43,74 +43,80 @@ const isOnlyAdmin = (room: Room): boolean => {
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     const spaceChildren = useMemo(() => {
         const roomSet = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(space.roomId));
-        SpaceStore.instance.traverseSpace(space.roomId, spaceId => {
-            if (space.roomId === spaceId) return; // skip the root node
-            roomSet.add(spaceId);
-        }, false);
-        return Array.from(roomSet).map(roomId => space.client.getRoom(roomId)).filter(Boolean);
+        SpaceStore.instance.traverseSpace(
+            space.roomId,
+            (spaceId) => {
+                if (space.roomId === spaceId) return; // skip the root node
+                roomSet.add(spaceId);
+            },
+            false,
+        );
+        return filterBoolean(Array.from(roomSet).map((roomId) => space.client.getRoom(roomId)));
     }, [space]);
     const [roomsToLeave, setRoomsToLeave] = useState<Room[]>([]);
     const selectedRooms = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
 
     let rejoinWarning;
     if (space.getJoinRule() !== JoinRule.Public) {
-        rejoinWarning = _t("You won't be able to rejoin unless you are re-invited.");
+        rejoinWarning = _t("space|leave_dialog_public_rejoin_warning");
     }
 
     let onlyAdminWarning;
     if (isOnlyAdmin(space)) {
-        onlyAdminWarning = _t("You're the only admin of this space. " +
-            "Leaving it will mean no one has control over it.");
+        onlyAdminWarning = _t("space|leave_dialog_only_admin_warning");
     } else {
         const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
-            onlyAdminWarning = _t("You're the only admin of some of the rooms or spaces you wish to leave. " +
-                "Leaving them will leave them without any admins.");
+            onlyAdminWarning = _t("space|leave_dialog_only_admin_room_warning");
         }
     }
 
-    return <BaseDialog
-        title={_t("Leave %(spaceName)s", { spaceName: space.name })}
-        className="mx_LeaveSpaceDialog"
-        contentId="mx_LeaveSpaceDialog"
-        onFinished={() => onFinished(false)}
-        fixedWidth={false}
-    >
-        <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
-            <p>
-                { _t("You are about to leave <spaceName/>.", {}, {
-                    spaceName: () => <b>{ space.name }</b>,
-                }) }
-                &nbsp;
-                { rejoinWarning }
-                { rejoinWarning && (<>&nbsp;</>) }
-                { spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?") }
-            </p>
+    return (
+        <BaseDialog
+            title={_t("space|leave_dialog_title", { spaceName: space.name })}
+            className="mx_LeaveSpaceDialog"
+            contentId="mx_LeaveSpaceDialog"
+            onFinished={() => onFinished(false)}
+            fixedWidth={false}
+        >
+            <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
+                <p>
+                    {_t(
+                        "space|leave_dialog_description",
+                        {},
+                        {
+                            spaceName: () => <b>{space.name}</b>,
+                        },
+                    )}
+                    &nbsp;
+                    {rejoinWarning}
+                    {rejoinWarning && <>&nbsp;</>}
+                    {spaceChildren.length > 0 && _t("space|leave_dialog_option_intro")}
+                </p>
 
-            { spaceChildren.length > 0 && (
-                <SpaceChildrenPicker
-                    space={space}
-                    spaceChildren={spaceChildren}
-                    selected={selectedRooms}
-                    onChange={setRoomsToLeave}
-                    noneLabel={_t("Don't leave any rooms")}
-                    allLabel={_t("Leave all rooms")}
-                    specificLabel={_t("Leave some rooms")}
-                />
-            ) }
+                {spaceChildren.length > 0 && (
+                    <SpaceChildrenPicker
+                        space={space}
+                        spaceChildren={spaceChildren}
+                        selected={selectedRooms}
+                        onChange={setRoomsToLeave}
+                        noneLabel={_t("space|leave_dialog_option_none")}
+                        allLabel={_t("space|leave_dialog_option_all")}
+                        specificLabel={_t("space|leave_dialog_option_specific")}
+                    />
+                )}
 
-            { onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">
-                { onlyAdminWarning }
-            </div> }
-        </div>
-        <DialogButtons
-            primaryButton={_t("Leave space")}
-            primaryButtonClass="danger"
-            onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
-            hasCancel={true}
-            onCancel={() => onFinished(false)}
-        />
-    </BaseDialog>;
+                {onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">{onlyAdminWarning}</div>}
+            </div>
+            <DialogButtons
+                primaryButton={_t("space|leave_dialog_action")}
+                primaryButtonClass="danger"
+                onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
+                hasCancel={true}
+                onCancel={() => onFinished(false)}
+            />
+        </BaseDialog>
+    );
 };
 
 export default LeaveSpaceDialog;

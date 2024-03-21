@@ -16,9 +16,9 @@ limitations under the License.
 
 import { iterableDiff, iterableIntersection } from "../../src/utils/iterables";
 
-describe('iterables', () => {
-    describe('iterableIntersection', () => {
-        it('should return the intersection', () => {
+describe("iterables", () => {
+    describe("iterableIntersection", () => {
+        it("should return the intersection", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
             const result = iterableIntersection(a, b);
@@ -27,7 +27,7 @@ describe('iterables', () => {
             expect(result).toEqual([1, 2]);
         });
 
-        it('should return an empty array on no matches', () => {
+        it("should return an empty array on no matches", () => {
             const a = [1, 2, 3];
             const b = [4, 5, 6];
             const result = iterableIntersection(a, b);
@@ -36,8 +36,8 @@ describe('iterables', () => {
         });
     });
 
-    describe('iterableDiff', () => {
-        it('should see added from A->B', () => {
+    describe("iterableDiff", () => {
+        it("should see added from A->B", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3, 4];
             const result = iterableDiff(a, b);
@@ -49,7 +49,7 @@ describe('iterables', () => {
             expect(result.added).toEqual([4]);
         });
 
-        it('should see removed from A->B', () => {
+        it("should see removed from A->B", () => {
             const a = [1, 2, 3];
             const b = [1, 2];
             const result = iterableDiff(a, b);
@@ -61,7 +61,7 @@ describe('iterables', () => {
             expect(result.removed).toEqual([3]);
         });
 
-        it('should see added and removed in the same set', () => {
+        it("should see added and removed in the same set", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
             const result = iterableDiff(a, b);

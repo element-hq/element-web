@@ -16,7 +16,7 @@ limitations under the License.
 
 import { useMemo } from "react";
 
-import { AppDownloadDialog } from "../components/views/dialogs/AppDownloadDialog";
+import { AppDownloadDialog, showAppDownloadDialogPrompt } from "../components/views/dialogs/AppDownloadDialog";
 import { UserTab } from "../components/views/dialogs/UserTab";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { Action } from "../dispatcher/actions";
@@ -30,92 +30,99 @@ import { UseCase } from "../settings/enums/UseCase";
 import { useSettingValue } from "./useSettings";
 import { UserOnboardingContext } from "./useUserOnboardingContext";
 
-export interface UserOnboardingTask {
+interface UserOnboardingTask {
     id: string;
     title: string | (() => string);
     description: string | (() => string);
     relevant?: UseCase[];
     action?: {
         label: string;
-        onClick?: (ev?: ButtonEvent) => void;
+        onClick?: (ev: ButtonEvent) => void;
         href?: string;
         hideOnComplete?: boolean;
     };
-}
-
-interface InternalUserOnboardingTask extends UserOnboardingTask {
     completed: (ctx: UserOnboardingContext) => boolean;
+    disabled?(): boolean;
 }
 
-const onClickStartDm = (ev: ButtonEvent) => {
+export interface UserOnboardingTaskWithResolvedCompletion extends Omit<UserOnboardingTask, "completed"> {
+    completed: boolean;
+}
+
+const onClickStartDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebUserOnboardingTaskSendDm", ev);
-    defaultDispatcher.dispatch({ action: 'view_create_chat' });
+    defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
 
-const tasks: InternalUserOnboardingTask[] = [
+const tasks: UserOnboardingTask[] = [
     {
         id: "create-account",
-        title: _t("Create account"),
-        description: _t("You made it!"),
+        title: _t("auth|create_account_title"),
+        description: _t("onboarding|you_made_it"),
         completed: () => true,
     },
     {
         id: "find-friends",
-        title: _t("Find and invite your friends"),
-        description: _t("It’s what you’re here for, so lets get to it"),
+        title: _t("onboarding|find_friends"),
+        description: _t("onboarding|find_friends_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.PersonalMessaging, UseCase.Skip],
         action: {
-            label: _t("Find friends"),
+            label: _t("onboarding|find_friends_action"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "find-coworkers",
-        title: _t("Find and invite your co-workers"),
-        description: _t("Get stuff done by finding your teammates"),
+        title: _t("onboarding|find_coworkers"),
+        description: _t("onboarding|get_stuff_done"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.WorkMessaging],
         action: {
-            label: _t("Find people"),
+            label: _t("onboarding|find_people"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "find-community-members",
-        title: _t("Find and invite your community members"),
-        description: _t("Get stuff done by finding your teammates"),
+        title: _t("onboarding|find_community_members"),
+        description: _t("onboarding|get_stuff_done"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.CommunityMessaging],
         action: {
-            label: _t("Find people"),
+            label: _t("onboarding|find_people"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "download-apps",
-        title: () => _t("Download %(brand)s", {
-            brand: SdkConfig.get("brand"),
-        }),
-        description: () => _t("Don’t miss a thing by taking %(brand)s with you", {
-            brand: SdkConfig.get("brand"),
-        }),
+        title: () =>
+            _t("onboarding|download_app", {
+                brand: SdkConfig.get("brand"),
+            }),
+        description: () =>
+            _t("onboarding|download_app_description", {
+                brand: SdkConfig.get("brand"),
+            }),
         completed: (ctx: UserOnboardingContext) => ctx.hasDevices,
         action: {
-            label: _t("Download apps"),
+            label: _t("onboarding|download_app_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskDownloadApps", ev);
                 Modal.createDialog(AppDownloadDialog, {}, "mx_AppDownloadDialog_wrapper", false, true);
             },
         },
+        disabled(): boolean {
+            return !showAppDownloadDialogPrompt();
+        },
     },
     {
         id: "setup-profile",
-        title: _t("Set up your profile"),
-        description: _t("Make sure people know it’s really you"),
+        title: _t("onboarding|set_up_profile"),
+        description: _t("onboarding|set_up_profile_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasAvatar,
         action: {
-            label: _t("Your profile"),
+            label: _t("onboarding|set_up_profile_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskSetupProfile", ev);
                 defaultDispatcher.dispatch({
@@ -127,11 +134,11 @@ const tasks: InternalUserOnboardingTask[] = [
     },
     {
         id: "permission-notifications",
-        title: _t("Turn on notifications"),
-        description: _t("Don’t miss a reply or important message"),
+        title: _t("onboarding|enable_notifications"),
+        description: _t("onboarding|enable_notifications_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasNotificationsEnabled,
         action: {
-            label: _t("Enable notifications"),
+            label: _t("onboarding|enable_notifications_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskEnableNotifications", ev);
                 Notifier.setEnabled(true);
@@ -141,12 +148,18 @@ const tasks: InternalUserOnboardingTask[] = [
     },
 ];
 
-export function useUserOnboardingTasks(context: UserOnboardingContext): [UserOnboardingTask[], UserOnboardingTask[]] {
+export function useUserOnboardingTasks(context: UserOnboardingContext): UserOnboardingTaskWithResolvedCompletion[] {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
-    const relevantTasks = useMemo(
-        () => tasks.filter(it => !it.relevant || it.relevant.includes(useCase)),
-        [useCase],
-    );
-    const completedTasks = relevantTasks.filter(it => context && it.completed(context));
-    return [completedTasks, relevantTasks.filter(it => !completedTasks.includes(it))];
+
+    return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {
+        return tasks
+            .filter((task) => {
+                if (task.disabled?.()) return false;
+                return !task.relevant || task.relevant.includes(useCase);
+            })
+            .map((task) => ({
+                ...task,
+                completed: task.completed(context),
+            }));
+    }, [context, useCase]);
 }

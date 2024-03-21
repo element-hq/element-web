@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
-import { MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import EventEmitter from "events";
+import { MatrixEvent, RoomStateEvent, RoomState } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
@@ -39,8 +38,8 @@ export enum ActiveWidgetStoreEvent {
  */
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
-    private persistentWidgetId: string;
-    private persistentRoomId: string;
+    private persistentWidgetId: string | null = null;
+    private persistentRoomId: string | null = null;
     private dockedWidgetsByUid = new Map<string, number>();
 
     public static get instance(): ActiveWidgetStore {
@@ -51,7 +50,7 @@ export default class ActiveWidgetStore extends EventEmitter {
     }
 
     public start(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public stop(): void {
@@ -65,17 +64,17 @@ export default class ActiveWidgetStore extends EventEmitter {
         // and keep itself up to date.
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
         if (ev.getType() === "im.vector.modular.widgets") {
-            this.destroyPersistentWidget(ev.getStateKey(), roomId);
+            this.destroyPersistentWidget(ev.getStateKey()!, roomId);
         }
     };
 
-    public destroyPersistentWidget(widgetId: string, roomId: string): void {
+    public destroyPersistentWidget(widgetId: string, roomId: string | null): void {
         if (!this.getWidgetPersistence(widgetId, roomId)) return;
-        WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId));
+        WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
         this.setWidgetPersistence(widgetId, roomId, false);
     }
 
-    public setWidgetPersistence(widgetId: string, roomId: string, val: boolean): void {
+    public setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void {
         const isPersisted = this.getWidgetPersistence(widgetId, roomId);
 
         if (isPersisted && !val) {
@@ -88,43 +87,43 @@ export default class ActiveWidgetStore extends EventEmitter {
         this.emit(ActiveWidgetStoreEvent.Persistence);
     }
 
-    public getWidgetPersistence(widgetId: string, roomId: string): boolean {
+    public getWidgetPersistence(widgetId: string, roomId: string | null): boolean {
         return this.persistentWidgetId === widgetId && this.persistentRoomId === roomId;
     }
 
-    public getPersistentWidgetId(): string {
+    public getPersistentWidgetId(): string | null {
         return this.persistentWidgetId;
     }
 
-    public getPersistentRoomId(): string {
+    public getPersistentRoomId(): string | null {
         return this.persistentRoomId;
     }
 
     // Registers the given widget as being docked somewhere in the UI (not a PiP),
     // to allow its lifecycle to be tracked.
-    public dockWidget(widgetId: string, roomId: string): void {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+    public dockWidget(widgetId: string, roomId: string | null): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined);
         const refs = this.dockedWidgetsByUid.get(uid) ?? 0;
         this.dockedWidgetsByUid.set(uid, refs + 1);
         if (refs === 0) this.emit(ActiveWidgetStoreEvent.Dock);
     }
 
-    public undockWidget(widgetId: string, roomId: string): void {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+    public undockWidget(widgetId: string, roomId: string | null): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined);
         const refs = this.dockedWidgetsByUid.get(uid);
         if (refs) this.dockedWidgetsByUid.set(uid, refs - 1);
         if (refs === 1) this.emit(ActiveWidgetStoreEvent.Undock);
     }
 
     // Determines whether the given widget is docked anywhere in the UI (not a PiP)
-    public isDocked(widgetId: string, roomId: string): boolean {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+    public isDocked(widgetId: string, roomId: string | null): boolean {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined);
         const refs = this.dockedWidgetsByUid.get(uid) ?? 0;
         return refs > 0;
     }
 
     // Determines whether the given widget is being kept alive in the UI, including PiPs
-    public isLive(widgetId: string, roomId: string): boolean {
+    public isLive(widgetId: string, roomId: string | null): boolean {
         return this.isDocked(widgetId, roomId) || this.getWidgetPersistence(widgetId, roomId);
     }
 }

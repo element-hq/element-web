@@ -18,8 +18,10 @@ import EditorModel from "./model";
 import DocumentPosition from "./position";
 
 export default class DocumentOffset {
-    constructor(public offset: number, public readonly atNodeEnd: boolean) {
-    }
+    public constructor(
+        public offset: number,
+        public readonly atNodeEnd: boolean,
+    ) {}
 
     public asPosition(model: EditorModel): DocumentPosition {
         return model.positionForOffset(this.offset, this.atNodeEnd);

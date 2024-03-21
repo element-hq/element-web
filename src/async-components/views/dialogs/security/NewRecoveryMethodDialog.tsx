@@ -18,18 +18,18 @@ limitations under the License.
 import React from "react";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
-import { MatrixClientPeg } from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { Action } from "../../../../dispatcher/actions";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 
-interface IProps extends IDialogProps {
+interface IProps {
     newVersionInfo: IKeyBackupInfo;
+    onFinished(): void;
 }
 
 export default class NewRecoveryMethodDialog extends React.PureComponent<IProps> {
@@ -43,61 +43,63 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
     };
 
     private onSetupClick = async (): Promise<void> => {
-        Modal.createDialog(RestoreKeyBackupDialog, {
-            onFinished: this.props.onFinished,
-        }, null, /* priority = */ false, /* static = */ true);
+        Modal.createDialog(
+            RestoreKeyBackupDialog,
+            {
+                onFinished: this.props.onFinished,
+            },
+            undefined,
+            /* priority = */ false,
+            /* static = */ true,
+        );
     };
 
-    public render(): JSX.Element {
-        const title = <span className="mx_KeyBackupFailedDialog_title">
-            { _t("New Recovery Method") }
-        </span>;
+    public render(): React.ReactNode {
+        const title = (
+            <span className="mx_KeyBackupFailedDialog_title">
+                {_t("encryption|new_recovery_method_detected|title")}
+            </span>
+        );
 
-        const newMethodDetected = <p>{ _t(
-            "A new Security Phrase and key for Secure Messages have been detected.",
-        ) }</p>;
+        const newMethodDetected = <p>{_t("encryption|new_recovery_method_detected|description_1")}</p>;
 
-        const hackWarning = <p className="warning">{ _t(
-            "If you didn't set the new recovery method, an " +
-            "attacker may be trying to access your account. " +
-            "Change your account password and set a new recovery " +
-            "method immediately in Settings.",
-        ) }</p>;
+        const hackWarning = (
+            <strong className="warning">{_t("encryption|new_recovery_method_detected|warning")}</strong>
+        );
 
-        let content;
-        if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-            content = <div>
-                { newMethodDetected }
-                <p>{ _t(
-                    "This session is encrypting history using the new recovery method.",
-                ) }</p>
-                { hackWarning }
-                <DialogButtons
-                    primaryButton={_t("OK")}
-                    onPrimaryButtonClick={this.onOkClick}
-                    cancelButton={_t("Go to Settings")}
-                    onCancel={this.onGoToSettingsClick}
-                />
-            </div>;
+        let content: JSX.Element | undefined;
+        if (MatrixClientPeg.safeGet().getKeyBackupEnabled()) {
+            content = (
+                <div>
+                    {newMethodDetected}
+                    <p>{_t("encryption|new_recovery_method_detected|description_2")}</p>
+                    {hackWarning}
+                    <DialogButtons
+                        primaryButton={_t("action|ok")}
+                        onPrimaryButtonClick={this.onOkClick}
+                        cancelButton={_t("common|go_to_settings")}
+                        onCancel={this.onGoToSettingsClick}
+                    />
+                </div>
+            );
         } else {
-            content = <div>
-                { newMethodDetected }
-                { hackWarning }
-                <DialogButtons
-                    primaryButton={_t("Set up Secure Messages")}
-                    onPrimaryButtonClick={this.onSetupClick}
-                    cancelButton={_t("Go to Settings")}
-                    onCancel={this.onGoToSettingsClick}
-                />
-            </div>;
+            content = (
+                <div>
+                    {newMethodDetected}
+                    {hackWarning}
+                    <DialogButtons
+                        primaryButton={_t("common|setup_secure_messages")}
+                        onPrimaryButtonClick={this.onSetupClick}
+                        cancelButton={_t("common|go_to_settings")}
+                        onCancel={this.onGoToSettingsClick}
+                    />
+                </div>
+            );
         }
 
         return (
-            <BaseDialog className="mx_KeyBackupFailedDialog"
-                onFinished={this.props.onFinished}
-                title={title}
-            >
-                { content }
+            <BaseDialog className="mx_KeyBackupFailedDialog" onFinished={this.props.onFinished} title={title}>
+                {content}
             </BaseDialog>
         );
     }

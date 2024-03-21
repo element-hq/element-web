@@ -14,37 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import EditableTextContainer from "../elements/EditableTextContainer";
 
 export default class ChangeDisplayName extends React.Component {
     private getDisplayName = async (): Promise<string> => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         try {
-            const res = await cli.getProfileInfo(cli.getUserId());
-            return res.displayname;
+            const res = await cli.getProfileInfo(cli.getUserId()!);
+            return res.displayname ?? "";
         } catch (e) {
             throw new Error("Failed to fetch display name");
         }
     };
 
     private changeDisplayName = (newDisplayname: string): Promise<{}> => {
-        const cli = MatrixClientPeg.get();
-        return cli.setDisplayName(newDisplayname).catch(function() {
+        const cli = MatrixClientPeg.safeGet();
+        return cli.setDisplayName(newDisplayname).catch(function () {
             throw new Error("Failed to set display name");
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <EditableTextContainer
                 getInitialValue={this.getDisplayName}
-                placeholder={_t("No display name")}
+                placeholder={_t("settings|general|name_placeholder")}
                 blurToSubmit={true}
-                onSubmit={this.changeDisplayName} />
+                onSubmit={this.changeDisplayName}
+            />
         );
     }
 }

@@ -15,18 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, KeyboardEvent } from 'react';
-import classNames from 'classnames';
+import React, { createRef, KeyboardEvent } from "react";
+import classNames from "classnames";
 import { flatMap } from "lodash";
-import { Room } from 'matrix-js-sdk/src/models/room';
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from '../../../autocomplete/Autocompleter';
+import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
-import RoomContext from '../../../contexts/RoomContext';
+import RoomContext from "../../../contexts/RoomContext";
 
 const MAX_PROVIDER_MATCHES = 20;
 
-export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
+export const generateCompletionDomId = (n: number): string => `mx_Autocomplete_Completion_${n}`;
 
 interface IProps {
     // the query string for which to show autocomplete suggestions
@@ -50,14 +50,14 @@ interface IState {
 }
 
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
-    autocompleter: Autocompleter;
-    queryRequested: string;
-    debounceCompletionsRequest: number;
+    public autocompleter?: Autocompleter;
+    public queryRequested?: string;
+    public debounceCompletionsRequest?: number;
     private containerRef = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -79,14 +79,14 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.autocompleter = new Autocompleter(this.props.room, this.context.timelineRenderingType);
         this.applyNewProps();
     }
 
     private applyNewProps(oldQuery?: string, oldRoom?: Room): void {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
-            this.autocompleter.destroy();
+            this.autocompleter?.destroy();
             this.autocompleter = new Autocompleter(this.props.room);
         }
 
@@ -98,8 +98,8 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.complete(this.props.query, this.props.selection);
     }
 
-    componentWillUnmount() {
-        this.autocompleter.destroy();
+    public componentWillUnmount(): void {
+        this.autocompleter?.destroy();
     }
 
     private complete(query: string, selection: ISelectionRange): Promise<void> {
@@ -117,7 +117,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 // Hide the autocomplete box
                 hide: true,
             });
-            return Promise.resolve(null);
+            return Promise.resolve();
         }
         let autocompleteDelay = SettingsStore.getValue("autocompleteDelay");
 
@@ -127,22 +127,22 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
 
         return new Promise((resolve) => {
-            this.debounceCompletionsRequest = setTimeout(() => {
+            this.debounceCompletionsRequest = window.setTimeout(() => {
                 resolve(this.processQuery(query, selection));
             }, autocompleteDelay);
         });
     }
 
-    private processQuery(query: string, selection: ISelectionRange): Promise<void> {
-        return this.autocompleter.getCompletions(
-            query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES,
-        ).then((completions) => {
-            // Only ever process the completions for the most recent query being processed
-            if (query !== this.queryRequested) {
-                return;
-            }
-            this.processCompletions(completions);
-        });
+    private async processQuery(query: string, selection: ISelectionRange): Promise<void> {
+        return this.autocompleter
+            ?.getCompletions(query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES)
+            .then((completions) => {
+                // Only ever process the completions for the most recent query being processed
+                if (query !== this.queryRequested) {
+                    return;
+                }
+                this.processCompletions(completions);
+            });
     }
 
     private processCompletions(completions: IProviderCompletions[]): void {
@@ -154,10 +154,11 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             /* If the currently selected completion is still in the completion list,
              try to find it and jump to it. If not, select composer.
              */
-            const currentSelection = this.state.selectionOffset <= 1 ? null :
-                this.state.completionList[this.state.selectionOffset - 1].completion;
-            selectionOffset = completionList.findIndex(
-                (completion) => completion.completion === currentSelection);
+            const currentSelection =
+                this.state.selectionOffset <= 1
+                    ? null
+                    : this.state.completionList[this.state.selectionOffset - 1].completion;
+            selectionOffset = completionList.findIndex((completion) => completion.completion === currentSelection);
             if (selectionOffset === -1) {
                 selectionOffset = 1;
             } else {
@@ -203,7 +204,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent): boolean {
+    public onEscape(e: KeyboardEvent): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
@@ -227,14 +228,17 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
     public forceComplete(): Promise<number> {
         return new Promise((resolve) => {
-            this.setState({
-                forceComplete: true,
-                hide: false,
-            }, () => {
-                this.complete(this.props.query, this.props.selection).then(() => {
-                    resolve(this.countCompletions());
-                });
-            });
+            this.setState(
+                {
+                    forceComplete: true,
+                    hide: false,
+                },
+                () => {
+                    this.complete(this.props.query, this.props.selection).then(() => {
+                        resolve(this.countCompletions());
+                    });
+                },
+            );
         });
     }
 
@@ -261,7 +265,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    public componentDidUpdate(prevProps: IProps): void {
         this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as HTMLElement;
@@ -276,40 +280,42 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    render() {
+    public render(): React.ReactNode {
         let position = 1;
-        const renderedCompletions = this.state.completions.map((completionResult, i) => {
-            const completions = completionResult.completions.map((completion, j) => {
-                const selected = position === this.state.selectionOffset;
-                const className = classNames('mx_Autocomplete_Completion', { selected });
-                const componentPosition = position;
-                position++;
+        const renderedCompletions = this.state.completions
+            .map((completionResult, i) => {
+                const completions = completionResult.completions.map((completion, j) => {
+                    const selected = position === this.state.selectionOffset;
+                    const className = classNames("mx_Autocomplete_Completion", { selected });
+                    const componentPosition = position;
+                    position++;
 
-                const onClick = () => {
-                    this.onCompletionClicked(componentPosition);
-                };
+                    const onClick = (): void => {
+                        this.onCompletionClicked(componentPosition);
+                    };
 
-                return React.cloneElement(completion.component, {
-                    "key": j,
-                    "ref": `completion${componentPosition}`,
-                    "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
-                    className,
-                    onClick,
-                    "aria-selected": selected,
+                    return React.cloneElement(completion.component, {
+                        "key": j,
+                        "ref": `completion${componentPosition}`,
+                        "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
+                        className,
+                        onClick,
+                        "aria-selected": selected,
+                    });
                 });
-            });
 
-            return completions.length > 0 ? (
-                <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
-                    <div className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</div>
-                    { completionResult.provider.renderCompletions(completions) }
-                </div>
-            ) : null;
-        }).filter((completion) => !!completion);
+                return completions.length > 0 ? (
+                    <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
+                        <div className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</div>
+                        {completionResult.provider.renderCompletions(completions)}
+                    </div>
+                ) : null;
+            })
+            .filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
             <div id="mx_Autocomplete" className="mx_Autocomplete" ref={this.containerRef} role="listbox">
-                { renderedCompletions }
+                {renderedCompletions}
             </div>
         ) : null;
     }

@@ -15,18 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ReactElement } from 'react';
-import { Room } from 'matrix-js-sdk/src/models/room';
+import { ReactElement } from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import CommandProvider from './CommandProvider';
-import RoomProvider from './RoomProvider';
-import UserProvider from './UserProvider';
-import EmojiProvider from './EmojiProvider';
-import NotifProvider from './NotifProvider';
+import CommandProvider from "./CommandProvider";
+import RoomProvider from "./RoomProvider";
+import UserProvider from "./UserProvider";
+import EmojiProvider from "./EmojiProvider";
+import NotifProvider from "./NotifProvider";
 import { timeout } from "../utils/promise";
 import AutocompleteProvider, { ICommand } from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
-import { TimelineRenderingType } from '../contexts/RoomContext';
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import { filterBoolean } from "../utils/arrays";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -35,10 +36,10 @@ export interface ISelectionRange {
 }
 
 export interface ICompletion {
-    type: "at-room" | "command" | "community" | "room" | "user";
+    type?: "at-room" | "command" | "community" | "room" | "user";
     completion: string;
     completionId?: string;
-    component?: ReactElement;
+    component: ReactElement;
     range: ISelectionRange;
     command?: string;
     suffix?: string;
@@ -47,14 +48,7 @@ export interface ICompletion {
     href?: string;
 }
 
-const PROVIDERS = [
-    UserProvider,
-    RoomProvider,
-    EmojiProvider,
-    NotifProvider,
-    CommandProvider,
-    SpaceProvider,
-];
+const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, CommandProvider, SpaceProvider];
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;
@@ -62,27 +56,27 @@ const PROVIDER_COMPLETION_TIMEOUT = 3000;
 export interface IProviderCompletions {
     completions: ICompletion[];
     provider: AutocompleteProvider;
-    command: ICommand;
+    command: Partial<ICommand>;
 }
 
 export default class Autocompleter {
-    room: Room;
-    providers: AutocompleteProvider[];
+    public room: Room;
+    public providers: AutocompleteProvider[];
 
-    constructor(room: Room, renderingType: TimelineRenderingType = TimelineRenderingType.Room) {
+    public constructor(room: Room, renderingType: TimelineRenderingType = TimelineRenderingType.Room) {
         this.room = room;
         this.providers = PROVIDERS.map((Prov) => {
             return new Prov(room, renderingType);
         });
     }
 
-    destroy() {
+    public destroy(): void {
         this.providers.forEach((p) => {
             p.destroy();
         });
     }
 
-    async getCompletions(
+    public async getCompletions(
         query: string,
         selection: ISelectionRange,
         force = false,
@@ -94,28 +88,32 @@ export default class Autocompleter {
          to predict whether an action will actually do what is intended
         */
         // list of results from each provider, each being a list of completions or null if it times out
-        const completionsList: ICompletion[][] = await Promise.all(this.providers.map(async provider => {
-            return timeout(
-                provider.getCompletions(query, selection, force, limit),
-                null,
-                PROVIDER_COMPLETION_TIMEOUT,
-            );
-        }));
+        const completionsList: Array<ICompletion[] | null> = await Promise.all(
+            this.providers.map(async (provider): Promise<ICompletion[] | null> => {
+                return timeout(
+                    provider.getCompletions(query, selection, force, limit),
+                    null,
+                    PROVIDER_COMPLETION_TIMEOUT,
+                );
+            }),
+        );
 
         // map then filter to maintain the index for the map-operation, for this.providers to line up
-        return completionsList.map((completions, i) => {
-            if (!completions || !completions.length) return;
+        return filterBoolean(
+            completionsList.map((completions, i) => {
+                if (!completions || !completions.length) return;
 
-            return {
-                completions,
-                provider: this.providers[i],
+                return {
+                    completions,
+                    provider: this.providers[i],
 
-                /* the currently matched "command" the completer tried to complete
-                 * we pass this through so that Autocomplete can figure out when to
-                 * re-show itself once hidden.
-                 */
-                command: this.providers[i].getCurrentCommand(query, selection, force),
-            };
-        }).filter(Boolean);
+                    /* the currently matched "command" the completer tried to complete
+                     * we pass this through so that Autocomplete can figure out when to
+                     * re-show itself once hidden.
+                     */
+                    command: this.providers[i].getCurrentCommand(query, selection, force),
+                };
+            }),
+        );
     }
 }

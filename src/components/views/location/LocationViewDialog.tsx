@@ -14,31 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import React from "react";
+import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import BaseDialog from "../dialogs/BaseDialog";
-import { IDialogProps } from "../dialogs/IDialogProps";
-import { locationEventGeoUri, isSelfLocation } from '../../../utils/location';
-import Map from './Map';
-import SmartMarker from './SmartMarker';
-import ZoomButtons from './ZoomButtons';
+import { locationEventGeoUri, isSelfLocation } from "../../../utils/location";
+import Map from "./Map";
+import SmartMarker from "./SmartMarker";
+import ZoomButtons from "./ZoomButtons";
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
     mxEvent: MatrixEvent;
+    onFinished(): void;
 }
 
 interface IState {
-    error: Error;
+    error?: Error;
 }
 
 /**
  * Dialog to view m.location events maximised
  */
 export default class LocationViewDialog extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -46,45 +45,41 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
         };
     }
 
-    private getBodyId = () => {
+    private getBodyId = (): string => {
         return `mx_LocationViewDialog_${this.props.mxEvent.getId()}`;
     };
 
-    private onError = (error) => {
+    private onError = (error: Error): void => {
         this.setState({ error });
     };
 
-    render() {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
 
         // only pass member to marker when should render avatar marker
-        const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
+        const markerRoomMember = (isSelfLocation(mxEvent.getContent()) && mxEvent.sender) || undefined;
         const geoUri = locationEventGeoUri(mxEvent);
         return (
-            <BaseDialog
-                className='mx_LocationViewDialog'
-                onFinished={this.props.onFinished}
-                fixedWidth={false}
-            >
+            <BaseDialog className="mx_LocationViewDialog" onFinished={this.props.onFinished} fixedWidth={false}>
                 <Map
                     id={this.getBodyId()}
                     centerGeoUri={geoUri}
                     onError={this.onError}
                     interactive
                     className="mx_LocationViewDialog_map"
+                    allowGeolocate
                 >
-                    {
-                        ({ map }) =>
-                            <>
-                                <SmartMarker
-                                    map={map}
-                                    id={`${this.getBodyId()}-marker`}
-                                    geoUri={geoUri}
-                                    roomMember={markerRoomMember}
-                                />
-                                <ZoomButtons map={map} />
-                            </>
-                    }
+                    {({ map }) => (
+                        <>
+                            <SmartMarker
+                                map={map}
+                                id={`${this.getBodyId()}-marker`}
+                                geoUri={geoUri}
+                                roomMember={markerRoomMember}
+                            />
+                            <ZoomButtons map={map} />
+                        </>
+                    )}
                 </Map>
             </BaseDialog>
         );

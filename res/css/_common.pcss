@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 - 2019 New Vector Ltd
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C
+Copyright 2019 - 2023 The Matrix.org Foundation C.I.C
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,31 +17,65 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
+@import url("@vector-im/compound-web/dist/style.css");
 @import "./_font-sizes.pcss";
-@import "./_font-weights.pcss";
 @import "./_animations.pcss";
 @import "./_spacing.pcss";
 @import url("maplibre-gl/dist/maplibre-gl.css");
 
-$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); /* quadratic */
-
-$selected-message-border-width: 4px;
-
-$MessageTimestamp_width: 46px; /* 8 + 30 (avatar) + 8 */
-$MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $selected-message-border-width);
-
-$slider-dot-size: 1em;
-$slider-selection-dot-size: 2.4em;
-
-$container-border-width: 8px;
-$container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
-
-$timeline-image-border-radius: 8px;
 :root {
     font-size: 10px;
 
-    --transition-short: .1s;
-    --transition-standard: .3s;
+    --container-border-width: 8px;
+    --container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
+    --transition-short: 0.1s;
+    --transition-standard: 0.3s;
+    --buttons-dialog-gap-row: $spacing-8;
+    --buttons-dialog-gap-column: $spacing-8;
+    --MBody-border-radius: 8px;
+
+    /* Expected z-indexes for dialogs:
+        4000 - Default wrapper index
+        4009 - Static dialog background
+        4010 - Static dialog itself
+        4011 - Standard dialog background
+        4012 - Standard dialog itself
+
+       These are set up such that the static dialog always appears
+       underneath the standard dialogs.
+     */
+    --dialog-zIndex-wrapper-default: 4000;
+    --dialog-zIndex-static-background: 4009;
+    --dialog-zIndex-static: calc(var(--dialog-zIndex-static-background) + 1); /* 4010 */
+    --dialog-zIndex-standard-background: calc(var(--dialog-zIndex-static) + 1); /* 4011 */
+    --dialog-zIndex-standard: calc(var(--dialog-zIndex-standard-background) + 1); /* 4012 */
+}
+
+#matrixchat {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    contain: strict;
+}
+#mx_ContextualMenu_Container,
+#mx_PersistedElement_container,
+#mx_Dialog_Container,
+#mx_Dialog_StaticContainer {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    isolation: isolate;
+}
+
+/**
+ * We need to increase the specificity of the selector to override the
+ * custom property set by the design tokens package
+ */
+[class^="cpd-theme"][class^="cpd-theme"] {
+    /**
+     * The design tokens package currently does not expose the fallback fonts
+     * We want to keep on re-using `$font-family` to not break custom themes
+     * and because we can to use `Twemoji` to display emoji rather than using
+     * system ones
+     */
+    --cpd-font-family-sans: $font-family;
 }
 
 @media (prefers-reduced-motion) {
@@ -61,8 +95,20 @@ html {
 }
 
 body {
-    font-family: $font-family;
-    font-size: $font-15px;
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    /**
+     * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
+     * We need to tweak the `letter-spacing` property and doing so, disables by
+     * default the optional ligatures
+     * `font-feature-settings` allows us to override this behaviour and have the
+     * correct ligatures and the proper dynamic metric spacing.
+     */
+    font-feature-settings:
+        "kern" 1,
+        "liga" 1,
+        "calt" 1;
+
     background-color: $background;
     color: $primary-content;
     border: 0px;
@@ -74,13 +120,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-pre, code {
+pre,
+code {
     font-family: $monospace-font-family;
     font-size: 100% !important;
 }
 
-.error, .warning,
-.text-error, .text-warning {
+.error,
+.warning,
+.text-error,
+.text-warning {
     color: $alert;
 }
 
@@ -92,6 +141,22 @@ pre, code {
     color: $muted-fg-color;
 }
 
+.text-primary {
+    color: $primary-content;
+}
+
+.text-secondary {
+    color: $secondary-content;
+}
+
+.mx_Verified {
+    color: $e2e-verified-color;
+}
+
+.mx_Untrusted {
+    color: $e2e-warning-color;
+}
+
 b {
     /* On Firefox, the default weight for `<b>` is `bolder` which results in no bold */
     /* effect since we only have specific weights of our fonts available. */
@@ -100,8 +165,8 @@ b {
 
 h2 {
     color: $primary-content;
-    font-weight: 400;
-    font-size: $font-18px;
+    font: var(--cpd-font-heading-lg-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
     margin-top: 16px;
     margin-bottom: 16px;
 }
@@ -115,10 +180,9 @@ a:visited {
 input[type="text"],
 input[type="search"],
 input[type="password"] {
-    font-family: inherit;
     padding: 9px;
-    font-size: $font-14px;
-    font-weight: 600;
+    font: var(--cpd-font-body-md-semibold);
+    font-weight: var(--cpd-font-weight-semibold);
     min-width: 0;
 }
 
@@ -132,7 +196,7 @@ input[type="search"].mx_textinput_icon {
 /* FIXME THEME - Tint by CSS rather than referencing a duplicate asset */
 input[type="text"].mx_textinput_icon.mx_textinput_search,
 input[type="search"].mx_textinput_icon.mx_textinput_search {
-    background-image: url('$(res)/img/feather-customised/search-input.svg');
+    background-image: url("$(res)/img/feather-customised/search-input.svg");
 }
 
 /* dont search UI as not all browsers support it, */
@@ -150,7 +214,9 @@ textarea::placeholder {
     opacity: initial;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type="text"],
+input[type="password"],
+textarea {
     background-color: transparent;
     color: $primary-content;
 }
@@ -160,7 +226,9 @@ textarea {
     color: $primary-content;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
     outline: none;
     box-shadow: none;
 }
@@ -169,7 +237,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /* accessible (focusable) components. Not intended for buttons, but */
 /* should be used on things like focusable containers where the outline */
 /* is usually not helping anyone. */
-*:focus:not(.focus-visible) {
+*:focus:not(:focus-visible) {
     outline: none;
 }
 
@@ -183,6 +251,10 @@ fieldset {
     border: none;
 }
 
+summary {
+    cursor: pointer;
+}
+
 legend {
     padding-inline: unset;
     border: none;
@@ -193,7 +265,8 @@ legend {
 /* it has the appearance of a text box so the controls */
 /* appear to be part of the input */
 
-.mx_Dialog, .mx_MatrixChat_wrapper {
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
     .mx_textinput > input[type="text"],
     .mx_textinput > input[type="search"] {
         border: none;
@@ -209,7 +282,7 @@ legend {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid rgba($primary-content, .1);
+        border: 1px solid $secondary-hairline-color;
         /* these things should probably not be defined globally */
         margin: 9px;
     }
@@ -222,30 +295,7 @@ legend {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
     .mx_textinput input::placeholder {
-        color: rgba($input-darker-fg-color, .75);
-    }
-}
-
-/*** panels ***/
-.dark-panel {
-    background-color: $dark-panel-bg-color;
-
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"],
-    .mx_textinput {
-        color: $input-darker-fg-color;
-        background-color: $background;
-        border: none;
-    }
-}
-
-.light-panel {
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"],
-    .mx_textinput {
-        color: $input-darker-fg-color;
-        background-color: $input-lighter-bg-color;
-        border: none;
+        color: $input-placeholder;
     }
 }
 
@@ -266,20 +316,9 @@ legend {
     color: $secondary-accent-color;
 }
 
-/* Expected z-indexes for dialogs:
-    4000 - Default wrapper index
-    4009 - Static dialog background
-    4010 - Static dialog itself
-    4011 - Standard dialog background
-    4012 - Standard dialog itself
-
-   These are set up such that the static dialog always appears
-   underneath the standard dialogs.
- */
-
 .mx_Dialog_wrapper {
     position: fixed;
-    z-index: 4000;
+    z-index: var(--dialog-zIndex-wrapper-default);
     top: 0;
     left: 0;
     width: 100%;
@@ -290,94 +329,118 @@ legend {
     justify-content: center;
 }
 
+.mx_Dialog_border {
+    z-index: var(--dialog-zIndex-standard);
+    position: relative;
+    max-height: calc(100% - var(--cpd-space-12x));
+    display: flex;
+    flex-direction: column;
+
+    .mx_Dialog_lightbox & {
+        /* The lightbox isn't so much of a dialog as a fullscreen overlay. We
+        don't want the glass border. */
+        display: contents;
+    }
+}
+
 .mx_Dialog {
     background-color: $background;
     color: $light-fg-color;
-    z-index: 4012;
     font-size: $font-15px;
     position: relative;
-    padding: 24px;
-    max-height: 80%;
-    box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
-    border-radius: 8px;
+    padding: var(--cpd-space-8x) var(--cpd-space-10x);
+    box-sizing: border-box;
     overflow-y: auto;
-}
 
-/* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
-.mx_Dialog .markdown-body {
-    font-family: inherit !important;
-    white-space: normal !important;
-    line-height: inherit !important;
-    color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
-    font-size: $font-14px;
-
-    pre,
-    code {
-        font-family: $monospace-font-family !important;
-        background-color: $codeblock-background-color;
+    .mx_Dialog_staticWrapper & {
+        z-index: var(--dialog-zIndex-static);
+        contain: content;
     }
 
-    /* this selector wrongly applies to code blocks too but we will unset it in the next one */
-    code {
-        white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+    .mx_Dialog_lightbox & {
+        border-radius: 0px;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        pointer-events: none;
+        padding: 0;
     }
 
-    pre code {
-        white-space: pre; /* we want code blocks to be scrollable and not wrap */
+    /* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
+    .markdown-body {
+        font: var(--cpd-font-body-md-regular) !important;
+        letter-spacing: var(--cpd-font-letter-spacing-body-md);
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
+        color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
 
-        >* {
-            display: inline;
+        pre,
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $codeblock-background-color;
+        }
+
+        /* this selector wrongly applies to code blocks too but we will unset it in the next one */
+        code {
+            white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+        }
+
+        pre {
+            /* have to use overlay rather than auto otherwise Linux and Windows */
+            /* Chrome gets very confused about vertical spacing: */
+            /* https://github.com/vector-im/vector-web/issues/754 */
+            overflow-x: overlay;
+            overflow-y: visible;
+
+            &::-webkit-scrollbar-corner {
+                background: transparent;
+            }
+
+            code {
+                white-space: pre; /* we want code blocks to be scrollable and not wrap */
+
+                > * {
+                    display: inline;
+                }
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: inherit !important;
+            color: inherit;
+        }
+
+        /* Make h1 and h2 the same size as h3. */
+        h1,
+        h2 {
+            font-size: 1.5em;
+            border-bottom: none !important; /* override GFM */
+        }
+
+        a {
+            color: $accent-alt;
+        }
+
+        blockquote {
+            border-left: 2px solid $blockquote-bar-color;
+            color: $secondary-content;
+            border-radius: 2px;
+            padding: 0 10px;
         }
     }
-
-    pre {
-        /* have to use overlay rather than auto otherwise Linux and Windows */
-        /* Chrome gets very confused about vertical spacing: */
-        /* https://github.com/vector-im/vector-web/issues/754 */
-        overflow-x: overlay;
-        overflow-y: visible;
-
-        &::-webkit-scrollbar-corner {
-            background: transparent;
-        }
-    }
-}
-
-.mx_Dialog .markdown-body h1,
-.mx_Dialog .markdown-body h2,
-.mx_Dialog .markdown-body h3,
-.mx_Dialog .markdown-body h4,
-.mx_Dialog .markdown-body h5,
-.mx_Dialog .markdown-body h6 {
-    font-family: inherit !important;
-    color: inherit;
-}
-
-/* Make h1 and h2 the same size as h3. */
-.mx_Dialog .markdown-body h1,
-.mx_Dialog .markdown-body h2 {
-    font-size: 1.5em;
-    border-bottom: none !important; /* override GFM */
-}
-
-.mx_Dialog .markdown-body a {
-    color: $accent-alt;
-}
-
-.mx_Dialog .markdown-body blockquote {
-    border-left: 2px solid $blockquote-bar-color;
-    border-radius: 2px;
-    padding: 0 10px;
 }
 
 .mx_Dialog_fixedWidth {
     width: 60vw;
     max-width: 704px;
-}
-
-.mx_Dialog_staticWrapper .mx_Dialog {
-    z-index: 4010;
-    contain: content;
 }
 
 .mx_Dialog_background {
@@ -387,42 +450,24 @@ legend {
     width: 100%;
     height: 100%;
     background-color: $dialog-backdrop-color;
-    opacity: 0.8;
-    z-index: 4011;
-}
+    z-index: var(--dialog-zIndex-standard-background);
 
-.mx_Dialog_background.mx_Dialog_staticBackground {
-    z-index: 4009;
-}
+    &.mx_Dialog_staticBackground {
+        z-index: var(--dialog-zIndex-static-background);
+    }
 
-.mx_Dialog_wrapperWithStaticUnder .mx_Dialog_background {
-    /* Roughly half of what it would normally be - we don't want to black out */
-    /* the app, just make it clear that the dialogs are stacked. */
-    opacity: 0.4;
-}
+    .mx_Dialog_wrapperWithStaticUnder & {
+        /* Roughly half of what it would normally be - we don't want to black out */
+        /* the app, just make it clear that the dialogs are stacked. */
+        opacity: 0.4;
+    }
 
-.mx_Dialog_lightbox .mx_Dialog_background {
-    opacity: $lightbox-background-bg-opacity;
-    background-color: $lightbox-background-bg-color;
-    animation-name: mx_Dialog_lightbox_background_keyframes;
-    animation-duration: 300ms;
-}
-
-.mx_Dialog_lightbox .mx_Dialog {
-    border-radius: 0px;
-    background-color: transparent;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    pointer-events: none;
-    padding: 0;
-}
-
-.mx_Dialog_header {
-    position: relative;
-    padding: 3px 0;
-    margin-bottom: 10px;
+    .mx_Dialog_lightbox & {
+        opacity: $lightbox-background-bg-opacity;
+        background-color: $lightbox-background-bg-color;
+        animation-name: mx_Dialog_lightbox_background_keyframes;
+        animation-duration: 300ms;
+    }
 }
 
 .mx_Dialog_titleImage {
@@ -439,43 +484,59 @@ legend {
     display: inline-block;
     width: 100%;
     box-sizing: border-box;
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
+
+    &.danger {
+        color: $alert;
+    }
 }
 
-.mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
-    text-align: center;
-}
-.mx_Dialog_header.mx_Dialog_headerWithCancel {
-    padding-right: 20px; /* leave space for the 'X' cancel button */
-}
+.mx_Dialog_header {
+    position: relative;
+    padding: 0;
+    padding-inline-end: 20px; /* Reserve room for the close button */
+    margin-bottom: var(--cpd-space-2x);
 
-.mx_Dialog_title.danger {
-    color: $alert;
+    &.mx_Dialog_headerWithButton > .mx_Dialog_title {
+        text-align: center;
+    }
 }
 
 @define-mixin customisedCancelButton {
-    mask: url('$(res)/img/cancel.svg');
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: cover;
-    background-color: $dialog-close-fg-color;
     cursor: pointer;
-    position: unset;
-    width: unset;
-    height: unset;
+    position: relative;
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+
+    &::before {
+        content: "";
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 20px;
+        background-color: var(--cpd-color-icon-secondary);
+    }
 }
 
 .mx_Dialog_cancelButton {
     @mixin customisedCancelButton;
-    width: 18px;
-    height: 18px;
     position: absolute;
-    top: 10px;
-    right: 0;
+    top: var(--cpd-space-4x);
+    right: var(--cpd-space-4x);
 }
 
 .mx_Dialog_content {
     margin: 24px 0 68px;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     color: $primary-content;
     word-wrap: break-word;
 }
@@ -489,21 +550,41 @@ legend {
         /* The consumer is responsible for positioning their elements. */
         float: left;
     }
+
+    .mx_Dialog_buttons_row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        text-align: initial;
+        margin-inline-start: auto;
+
+        /* default gap among elements */
+        column-gap: var(--buttons-dialog-gap-column);
+        row-gap: var(--buttons-dialog-gap-row);
+
+        button {
+            margin: 0 !important; /* override the margin settings */
+        }
+    }
 }
 
-.mx_Dialog_buttons_row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    text-align: initial;
-    margin-inline-start: auto;
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 24px;
+    font: var(--cpd-font-body-md-regular);
+    color: $button-fg-color;
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
 
-    /* default gap among elements */
-    column-gap: $spacing-8; /* See margin-right below inside the button style */
-    row-gap: 5px; /* See margin-bottom below inside the button style */
-
-    button {
-        margin: 0 !important; /* override the margin settings */
+    &:not(:focus-visible) {
+        outline: none;
     }
 }
 
@@ -522,26 +603,19 @@ legend {
 .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
-    margin-right: 8px;
+    margin-right: var(--buttons-dialog-gap-column);
     margin-bottom: 5px;
 
     /* flip colours for the secondary ones */
-    font-weight: 600;
-    border: 1px solid $accent;
-    color: $accent;
-    background-color: $button-secondary-bg-color;
+    font-weight: var(--cpd-font-weight-semibold);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    color: var(--cpd-color-text-primary);
+    background-color: transparent;
     font-family: inherit;
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):last-child {
     margin-right: 0px;
-}
-
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):hover,
-.mx_Dialog input[type="submit"]:hover,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
-.mx_Dialog_buttons input[type="submit"]:hover {
-    @mixin mx_DialogButton_hover;
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):focus,
@@ -555,8 +629,9 @@ legend {
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
-    color: $accent-fg-color;
-    background-color: $accent;
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    border-color: var(--cpd-color-bg-action-primary-rest);
     min-width: 156px;
 }
 
@@ -564,15 +639,15 @@ legend {
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"].danger {
-    background-color: $alert;
-    border: solid 1px $alert;
-    color: $accent-fg-color;
+    background-color: var(--cpd-color-bg-critical-primary);
+    border: solid 1px var(--cpd-color-bg-critical-primary);
+    color: var(--cpd-color-text-on-solid-primary);
 }
 
 .mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
 .mx_Dialog input[type="submit"].warning {
-    border: solid 1px $alert;
-    color: $alert;
+    border: solid 1px var(--cpd-color-border-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):disabled,
@@ -596,15 +671,6 @@ legend {
     overflow-y: hidden;
 }
 
-.mx_DialogDesignChanges_wrapper .mx_Dialog_fixedWidth {
-    max-width: 636px; /* match splash image width */
-
-    .mx_AccessibleButton_kind_link {
-        font-size: inherit;
-        padding: 0;
-    }
-}
-
 /* TODO: Review mx_GeneralButton usage to see if it can use a different class */
 /* These classes were brought in from the old UserSettings and are included here to avoid */
 /* breaking the app. */
@@ -613,15 +679,6 @@ legend {
     @mixin mx_DialogButton;
     display: inline;
     margin: auto;
-}
-
-.mx_GeneralButton:hover {
-    @mixin mx_DialogButton_hover;
-}
-
-.mx_linkButton {
-    cursor: pointer;
-    color: $accent;
 }
 
 .mx_TextInputDialog_label {
@@ -636,14 +693,6 @@ legend {
     padding: 9px;
     color: $primary-content;
     background-color: $background;
-}
-
-.mx_textButton {
-    @mixin mx_DialogButton_small;
-}
-
-.mx_textButton:hover {
-    @mixin mx_DialogButton_hover;
 }
 
 .mx_button_row {
@@ -676,28 +725,13 @@ legend {
     color: $username-variant6-color;
 }
 
-.mx_Username_color7 {
-    color: $username-variant7-color;
-}
-
-.mx_Username_color8 {
-    color: $username-variant8-color;
-}
-
-@define-mixin mx_Tooltip_dark {
-    box-shadow: none;
-    background-color: $tooltip-timeline-bg-color;
-    color: $tooltip-timeline-fg-color;
-    border: none;
-    border-radius: 3px;
-    padding: 6px 8px;
-}
-
-/* This is a workaround for our mixins not supporting child selectors */
-.mx_Tooltip_dark {
-    .mx_Tooltip_chevron::after {
-        border-right-color: $tooltip-timeline-bg-color;
-    }
+.mx_AppWarning,
+.mx_AppPermission {
+    text-align: center;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
 }
 
 @define-mixin ProgressBarColour $colour {
@@ -754,7 +788,7 @@ legend {
 
 @define-mixin LegacyCallButton {
     box-sizing: border-box;
-    font-weight: 600;
+    font-weight: var(--cpd-font-weight-semibold);
     height: $font-24px;
     line-height: $font-24px;
     margin-right: 0;
@@ -764,7 +798,7 @@ legend {
         align-items: center;
 
         &::before {
-            content: '';
+            content: "";
             display: inline-block;
             background-color: $button-fg-color;
             mask-position: center;
@@ -776,7 +810,7 @@ legend {
 
 @define-mixin ThreadRepliesAmount {
     color: $secondary-content;
-    font-weight: $font-semi-bold;
+    font-weight: var(--cpd-font-weight-semibold);
     white-space: nowrap;
     position: relative;
     padding: 0 $spacing-12 0 $spacing-8;
@@ -785,11 +819,71 @@ legend {
 @define-mixin ThreadSummaryIcon {
     content: "";
     display: inline-block;
-    mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+    mask-image: url("$(res)/img/element-icons/thread-summary.svg");
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
     height: 18px;
     min-width: 18px;
-    background-color: $secondary-content !important;
+    background-color: $icon-button-color !important;
+}
+
+@define-mixin composerButtonHighLight {
+    background: var(--cpd-color-bg-subtle-primary);
+    &::before {
+        background-color: var(--cpd-color-icon-primary) !important;
+    }
+}
+
+@define-mixin composerButton $border-radius, $hover-color, $hover-bg {
+    --size: 26px;
+    position: relative;
+    cursor: pointer;
+    height: var(--size);
+    line-height: var(--size);
+    width: auto;
+    padding-left: var(--size);
+    border-radius: $border-radius;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        height: 20px;
+        width: 20px;
+        background-color: $icon-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        z-index: 2;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        width: var(--size);
+        height: var(--size);
+        border-radius: $border-radius;
+    }
+
+    &:hover {
+        &::after {
+            background: $hover-bg;
+        }
+
+        &::before {
+            background-color: $hover-color;
+        }
+    }
+}
+
+.mx_lineClamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--mx-line-clamp, 1);
+    overflow: hidden;
 }

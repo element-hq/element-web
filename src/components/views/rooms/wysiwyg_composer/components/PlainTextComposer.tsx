@@ -14,43 +14,93 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject, ReactNode } from 'react';
+import classNames from "classnames";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import React, { MutableRefObject, ReactNode } from "react";
 
-import { useComposerFunctions } from '../hooks/useComposerFunctions';
-import { usePlainTextInitialization } from '../hooks/usePlainTextInitialization';
-import { usePlainTextListeners } from '../hooks/usePlainTextListeners';
-import { useSetCursorPosition } from '../hooks/useSetCursorPosition';
-import { ComposerFunctions } from '../types';
+import { useComposerFunctions } from "../hooks/useComposerFunctions";
+import { useIsFocused } from "../hooks/useIsFocused";
+import { usePlainTextInitialization } from "../hooks/usePlainTextInitialization";
+import { usePlainTextListeners } from "../hooks/usePlainTextListeners";
+import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
+import { ComposerFunctions } from "../types";
 import { Editor } from "./Editor";
+import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
 
 interface PlainTextComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
-    onSend: () => void;
+    onSend?: () => void;
+    placeholder?: string;
     initialContent?: string;
     className?: string;
-    children?: (
-        ref: MutableRefObject<HTMLDivElement | null>,
-        composerFunctions: ComposerFunctions,
-    ) => ReactNode;
+    leftComponent?: ReactNode;
+    rightComponent?: ReactNode;
+    children?: (ref: MutableRefObject<HTMLDivElement | null>, composerFunctions: ComposerFunctions) => ReactNode;
+    eventRelation?: IEventRelation;
 }
 
 export function PlainTextComposer({
-    className, disabled, onSend, onChange, children, initialContent }: PlainTextComposerProps,
-) {
-    const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
-    const composerFunctions = useComposerFunctions(ref);
-    usePlainTextInitialization(initialContent, ref);
-    useSetCursorPosition(disabled, ref);
+    className,
+    disabled = false,
+    onSend,
+    onChange,
+    children,
+    placeholder,
+    initialContent,
+    leftComponent,
+    rightComponent,
+    eventRelation,
+}: PlainTextComposerProps): JSX.Element {
+    const {
+        ref: editorRef,
+        autocompleteRef,
+        onBeforeInput,
+        onInput,
+        onPaste,
+        onKeyDown,
+        content,
+        setContent,
+        suggestion,
+        onSelect,
+        handleCommand,
+        handleMention,
+        handleAtRoomMention,
+    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation);
 
-    return <div
-        data-testid="PlainTextComposer"
-        className={className}
-        onInput={onInput}
-        onPaste={onPaste}
-        onKeyDown={onKeyDown}
-    >
-        <Editor ref={ref} disabled={disabled} />
-        { children?.(ref, composerFunctions) }
-    </div>;
+    const composerFunctions = useComposerFunctions(editorRef, setContent);
+    usePlainTextInitialization(initialContent, editorRef);
+    useSetCursorPosition(disabled, editorRef);
+    const { isFocused, onFocus } = useIsFocused();
+    const computedPlaceholder = (!content && placeholder) || undefined;
+
+    return (
+        <div
+            data-testid="PlainTextComposer"
+            className={classNames(className, { [`${className}-focused`]: isFocused })}
+            onFocus={onFocus}
+            onBlur={onFocus}
+            onBeforeInput={onBeforeInput}
+            onInput={onInput}
+            onPaste={onPaste}
+            onKeyDown={onKeyDown}
+            onSelect={onSelect}
+        >
+            <WysiwygAutocomplete
+                ref={autocompleteRef}
+                suggestion={suggestion}
+                handleMention={handleMention}
+                handleCommand={handleCommand}
+                handleAtRoomMention={handleAtRoomMention}
+            />
+            <Editor
+                ref={editorRef}
+                disabled={disabled}
+                leftComponent={leftComponent}
+                rightComponent={rightComponent}
+                placeholder={computedPlaceholder}
+            />
+            {children?.(editorRef, composerFunctions)}
+        </div>
+    );
 }

@@ -24,13 +24,13 @@ import globToRegexp from "glob-to-regexp";
  * for server ACLs and similar functions.
  */
 export class MatrixGlob {
-    _regex: RegExp;
+    private regex: RegExp;
 
     /**
      * Creates a new Matrix Glob
      * @param {string} glob The glob to convert. Eg: "*.example.org"
      */
-    constructor(glob: string) {
+    public constructor(glob: string) {
         const globRegex = globToRegexp(glob, {
             extended: false,
             globstar: false,
@@ -39,7 +39,7 @@ export class MatrixGlob {
         // We need to convert `?` manually because globToRegexp's extended mode
         // does more than we want it to.
         const replaced = globRegex.toString().replace(/\\\?/g, ".");
-        this._regex = new RegExp(replaced.substring(1, replaced.length - 1));
+        this.regex = new RegExp(replaced.substring(1, replaced.length - 1));
     }
 
     /**
@@ -47,7 +47,7 @@ export class MatrixGlob {
      * @param {string} val The value to test.
      * @returns {boolean} True if the value matches the glob, false otherwise.
      */
-    test(val: string): boolean {
-        return this._regex.test(val);
+    public test(val: string): boolean {
+        return this.regex.test(val);
     }
 }

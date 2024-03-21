@@ -27,20 +27,17 @@ export const BackdropPanel: React.FC<IProps> = ({ backgroundImage, blurMultiplie
     const styles: CSSProperties = {};
     if (blurMultiplier) {
         const rootStyle = getComputedStyle(document.documentElement);
-        const blurValue = rootStyle.getPropertyValue('--lp-background-blur');
-        const pixelsValue = blurValue.replace('px', '');
+        const blurValue = rootStyle.getPropertyValue("--lp-background-blur");
+        const pixelsValue = blurValue.replace("px", "");
         const parsed = parseInt(pixelsValue, 10);
         if (!isNaN(parsed)) {
             styles.filter = `blur(${parsed * blurMultiplier}px)`;
         }
     }
-    return <div className="mx_BackdropPanel">
-        <img
-            role="presentation"
-            alt=""
-            style={styles}
-            className="mx_BackdropPanel--image"
-            src={backgroundImage} />
-    </div>;
+    return (
+        <div className="mx_BackdropPanel">
+            <img role="presentation" alt="" style={styles} className="mx_BackdropPanel--image" src={backgroundImage} />
+        </div>
+    );
 };
 export default BackdropPanel;

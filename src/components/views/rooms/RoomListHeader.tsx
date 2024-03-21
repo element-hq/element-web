@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { ClientEvent } from "matrix-js-sdk/src/client";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { EventType, RoomType, Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useEffect, useState } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
@@ -45,7 +44,13 @@ import {
     showCreateNewSubspace,
     showSpaceInvite,
 } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
+import {
+    ChevronFace,
+    ContextMenuTooltipButton,
+    useContextMenu,
+    MenuProps,
+    ContextMenuButton,
+} from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -53,10 +58,9 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
-import TooltipTarget from "../elements/TooltipTarget";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
 
-const contextMenuBelow = (elementRect: DOMRect) => {
+const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.scrollX;
     const top = elementRect.bottom + window.scrollY + 12;
@@ -74,19 +78,19 @@ const usePendingActions = (): Map<PendingActionType, Set<string>> => {
     const cli = useContext(MatrixClientContext);
     const [actions, setActions] = useState(new Map<PendingActionType, Set<string>>());
 
-    const addAction = (type: PendingActionType, key: string) => {
+    const addAction = (type: PendingActionType, key: string): void => {
         const keys = new Set(actions.get(type));
         keys.add(key);
         setActions(new Map(actions).set(type, keys));
     };
-    const removeAction = (type: PendingActionType, key: string) => {
+    const removeAction = (type: PendingActionType, key: string): void => {
         const keys = new Set(actions.get(type));
         if (keys.delete(key)) {
             setActions(new Map(actions).set(type, keys));
         }
     };
 
-    useDispatcher(defaultDispatcher, payload => {
+    useDispatcher(defaultDispatcher, (payload) => {
         switch (payload.action) {
             case Action.JoinRoom:
                 addAction(PendingActionType.JoinRoom, payload.roomId);
@@ -103,9 +107,7 @@ const usePendingActions = (): Map<PendingActionType, Set<string>> => {
                 break;
         }
     });
-    useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) =>
-        removeAction(PendingActionType.JoinRoom, room.roomId),
-    );
+    useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) => removeAction(PendingActionType.JoinRoom, room.roomId));
 
     return actions;
 };
@@ -114,7 +116,7 @@ interface IProps {
     onVisibilityChange?(): void;
 }
 
-const RoomListHeader = ({ onVisibilityChange }: IProps) => {
+const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const cli = useContext(MatrixClientContext);
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();
@@ -139,20 +141,20 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         }
     }, [closeMainMenu, canShowMainMenu, mainMenuDisplayed]);
 
-    const spaceName = useTypedEventEmitterState(activeSpace, RoomEvent.Name, () => activeSpace?.name);
+    const spaceName = useTypedEventEmitterState(activeSpace ?? undefined, RoomEvent.Name, () => activeSpace?.name);
 
     useEffect(() => {
-        if (onVisibilityChange) {
-            onVisibilityChange();
-        }
+        onVisibilityChange?.();
     }, [onVisibilityChange]);
 
     const canExploreRooms = shouldShowComponent(UIComponent.ExploreRooms);
     const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
     const canCreateSpaces = shouldShowComponent(UIComponent.CreateSpaces);
 
-    const hasPermissionToAddSpaceChild =
-        activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
+    const hasPermissionToAddSpaceChild = activeSpace?.currentState?.maySendStateEvent(
+        EventType.SpaceChild,
+        cli.getUserId()!,
+    );
     const canAddSubRooms = hasPermissionToAddSpaceChild && canCreateRooms;
     const canAddSubSpaces = hasPermissionToAddSpaceChild && canCreateSpaces;
 
@@ -161,7 +163,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
     // communities and spaces, but is at risk of no options on the Home tab.
     const canShowPlusMenu = canCreateRooms || canExploreRooms || canCreateSpaces || activeSpace;
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Element | undefined;
     if (mainMenuDisplayed && mainMenuHandle.current) {
         let ContextMenuComponent;
         if (activeSpace) {
@@ -170,164 +172,175 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
             ContextMenuComponent = HomeButtonContextMenu;
         }
 
-        contextMenu = <ContextMenuComponent
-            {...contextMenuBelow(mainMenuHandle.current.getBoundingClientRect())}
-            space={activeSpace}
-            onFinished={closeMainMenu}
-            hideHeader={true}
-        />;
+        contextMenu = (
+            <ContextMenuComponent
+                {...contextMenuBelow(mainMenuHandle.current.getBoundingClientRect())}
+                space={activeSpace!}
+                onFinished={closeMainMenu}
+                hideHeader={true}
+            />
+        );
     } else if (plusMenuDisplayed && activeSpace) {
-        let inviteOption: JSX.Element;
+        let inviteOption: JSX.Element | undefined;
         if (shouldShowSpaceInvite(activeSpace)) {
-            inviteOption = <IconizedContextMenuOption
-                label={_t("Invite")}
-                iconClassName="mx_RoomListHeader_iconInvite"
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    showSpaceInvite(activeSpace);
-                    closePlusMenu();
-                }}
-            />;
-        }
-
-        let newRoomOptions: JSX.Element;
-        if (activeSpace?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId())) {
-            newRoomOptions = <>
+            inviteOption = (
                 <IconizedContextMenuOption
-                    iconClassName="mx_RoomListHeader_iconNewRoom"
-                    label={_t("New room")}
+                    label={_t("action|invite")}
+                    iconClassName="mx_RoomListHeader_iconInvite"
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        showCreateNewRoom(activeSpace);
-                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
+                        showSpaceInvite(activeSpace);
                         closePlusMenu();
                     }}
                 />
-                { videoRoomsEnabled && (
+            );
+        }
+
+        let newRoomOptions: JSX.Element | undefined;
+        if (activeSpace?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId()!)) {
+            newRoomOptions = (
+                <>
                     <IconizedContextMenuOption
-                        iconClassName="mx_RoomListHeader_iconNewVideoRoom"
-                        label={_t("New video room")}
+                        iconClassName="mx_RoomListHeader_iconNewRoom"
+                        label={_t("action|new_room")}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            showCreateNewRoom(
-                                activeSpace,
-                                elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-                            );
+                            showCreateNewRoom(activeSpace);
+                            PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
                             closePlusMenu();
                         }}
-                    >
-                        <BetaPill />
-                    </IconizedContextMenuOption>
-                ) }
-            </>;
+                    />
+                    {videoRoomsEnabled && (
+                        <IconizedContextMenuOption
+                            iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                            label={_t("action|new_video_room")}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                showCreateNewRoom(
+                                    activeSpace,
+                                    elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                );
+                                closePlusMenu();
+                            }}
+                        >
+                            <BetaPill />
+                        </IconizedContextMenuOption>
+                    )}
+                </>
+            );
         }
 
-        contextMenu = <IconizedContextMenu
-            {...contextMenuBelow(plusMenuHandle.current.getBoundingClientRect())}
-            onFinished={closePlusMenu}
-            compact
-        >
-            <IconizedContextMenuOptionList first>
-                { inviteOption }
-                { newRoomOptions }
-                <IconizedContextMenuOption
-                    label={_t("Explore rooms")}
-                    iconClassName="mx_RoomListHeader_iconExplore"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        defaultDispatcher.dispatch<ViewRoomPayload>({
-                            action: Action.ViewRoom,
-                            room_id: activeSpace.roomId,
-                            metricsTrigger: undefined, // other
-                        });
-                        closePlusMenu();
-                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
-                    }}
-                />
-                <IconizedContextMenuOption
-                    label={_t("Add existing room")}
-                    iconClassName="mx_RoomListHeader_iconPlus"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        showAddExistingRooms(activeSpace);
-                        closePlusMenu();
-                    }}
-                    disabled={!canAddSubRooms}
-                    tooltip={!canAddSubRooms && _t("You do not have permissions to add rooms to this space")}
-                />
-                { canCreateSpaces && <IconizedContextMenuOption
-                    label={_t("Add space")}
-                    iconClassName="mx_RoomListHeader_iconPlus"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        showCreateNewSubspace(activeSpace);
-                        closePlusMenu();
-                    }}
-                    disabled={!canAddSubSpaces}
-                    tooltip={!canAddSubSpaces && _t("You do not have permissions to add spaces to this space")}
-                >
-                    <BetaPill />
-                </IconizedContextMenuOption>
-                }
-            </IconizedContextMenuOptionList>
-        </IconizedContextMenu>;
-    } else if (plusMenuDisplayed) {
-        let newRoomOpts: JSX.Element;
-        let joinRoomOpt: JSX.Element;
-
-        if (canCreateRooms) {
-            newRoomOpts = <>
-                <IconizedContextMenuOption
-                    label={_t("Start new chat")}
-                    iconClassName="mx_RoomListHeader_iconStartChat"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        defaultDispatcher.dispatch({ action: "view_create_chat" });
-                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
-                        closePlusMenu();
-                    }}
-                />
-                <IconizedContextMenuOption
-                    label={_t("New room")}
-                    iconClassName="mx_RoomListHeader_iconNewRoom"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        defaultDispatcher.dispatch({ action: "view_create_room" });
-                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
-                        closePlusMenu();
-                    }}
-                />
-                { videoRoomsEnabled && (
+        contextMenu = (
+            <IconizedContextMenu
+                {...contextMenuBelow(plusMenuHandle.current!.getBoundingClientRect())}
+                onFinished={closePlusMenu}
+                compact
+            >
+                <IconizedContextMenuOptionList first>
+                    {inviteOption}
+                    {newRoomOptions}
                     <IconizedContextMenuOption
-                        label={_t("New video room")}
-                        iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                        label={_t("action|explore_rooms")}
+                        iconClassName="mx_RoomListHeader_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            defaultDispatcher.dispatch({
-                                action: "view_create_room",
-                                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                            defaultDispatcher.dispatch<ViewRoomPayload>({
+                                action: Action.ViewRoom,
+                                room_id: activeSpace.roomId,
+                                metricsTrigger: undefined, // other
                             });
                             closePlusMenu();
+                            PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
                         }}
-                    >
-                        <BetaPill />
-                    </IconizedContextMenuOption>
-                ) }
-            </>;
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("action|add_existing_room")}
+                        iconClassName="mx_RoomListHeader_iconPlus"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            showAddExistingRooms(activeSpace);
+                            closePlusMenu();
+                        }}
+                        disabled={!canAddSubRooms}
+                        tooltip={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
+                    />
+                    {canCreateSpaces && (
+                        <IconizedContextMenuOption
+                            label={_t("room_list|add_space_label")}
+                            iconClassName="mx_RoomListHeader_iconPlus"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                showCreateNewSubspace(activeSpace);
+                                closePlusMenu();
+                            }}
+                            disabled={!canAddSubSpaces}
+                            tooltip={!canAddSubSpaces ? _t("spaces|error_no_permission_add_space") : undefined}
+                        >
+                            <BetaPill />
+                        </IconizedContextMenuOption>
+                    )}
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>
+        );
+    } else if (plusMenuDisplayed) {
+        let newRoomOpts: JSX.Element | undefined;
+        let joinRoomOpt: JSX.Element | undefined;
+
+        if (canCreateRooms) {
+            newRoomOpts = (
+                <>
+                    <IconizedContextMenuOption
+                        label={_t("action|start_new_chat")}
+                        iconClassName="mx_RoomListHeader_iconStartChat"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            defaultDispatcher.dispatch({ action: "view_create_chat" });
+                            PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
+                            closePlusMenu();
+                        }}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("action|new_room")}
+                        iconClassName="mx_RoomListHeader_iconNewRoom"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            defaultDispatcher.dispatch({ action: "view_create_room" });
+                            PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
+                            closePlusMenu();
+                        }}
+                    />
+                    {videoRoomsEnabled && (
+                        <IconizedContextMenuOption
+                            label={_t("action|new_video_room")}
+                            iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                defaultDispatcher.dispatch({
+                                    action: "view_create_room",
+                                    type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                });
+                                closePlusMenu();
+                            }}
+                        >
+                            <BetaPill />
+                        </IconizedContextMenuOption>
+                    )}
+                </>
+            );
         }
         if (canExploreRooms) {
             joinRoomOpt = (
                 <IconizedContextMenuOption
-                    label={_t("Join public room")}
+                    label={_t("room_list|join_public_room_label")}
                     iconClassName="mx_RoomListHeader_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
@@ -340,20 +353,22 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
             );
         }
 
-        contextMenu = <IconizedContextMenu
-            {...contextMenuBelow(plusMenuHandle.current.getBoundingClientRect())}
-            onFinished={closePlusMenu}
-            compact
-        >
-            <IconizedContextMenuOptionList first>
-                { newRoomOpts }
-                { joinRoomOpt }
-            </IconizedContextMenuOptionList>
-        </IconizedContextMenu>;
+        contextMenu = (
+            <IconizedContextMenu
+                {...contextMenuBelow(plusMenuHandle.current!.getBoundingClientRect())}
+                onFinished={closePlusMenu}
+                compact
+            >
+                <IconizedContextMenuOptionList first>
+                    {newRoomOpts}
+                    {joinRoomOpt}
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>
+        );
     }
 
     let title: string;
-    if (activeSpace) {
+    if (activeSpace && spaceName) {
         title = spaceName;
     } else {
         title = getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
@@ -364,43 +379,56 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         .map(([type, keys]) => {
             switch (type) {
                 case PendingActionType.JoinRoom:
-                    return _t("Currently joining %(count)s rooms", { count: keys.size });
+                    return _t("room_list|joining_rooms_status", { count: keys.size });
                 case PendingActionType.BulkRedact:
-                    return _t("Currently removing messages in %(count)s rooms", { count: keys.size });
+                    return _t("room_list|redacting_messages_status", { count: keys.size });
             }
         })
         .join("\n");
 
-    let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{ title }</div>;
+    let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{title}</div>;
     if (canShowMainMenu) {
-        contextMenuButton = <ContextMenuTooltipButton
-            inputRef={mainMenuHandle}
-            onClick={openMainMenu}
-            isExpanded={mainMenuDisplayed}
-            className="mx_RoomListHeader_contextMenuButton"
-            title={activeSpace
-                ? _t("%(spaceName)s menu", { spaceName: spaceName ?? activeSpace.name })
-                : _t("Home options")}
-        >
-            { title }
-        </ContextMenuTooltipButton>;
+        const commonProps = {
+            ref: mainMenuHandle,
+            onClick: openMainMenu,
+            isExpanded: mainMenuDisplayed,
+            className: "mx_RoomListHeader_contextMenuButton",
+            children: title,
+        };
+
+        if (!!activeSpace) {
+            contextMenuButton = (
+                <ContextMenuButton
+                    {...commonProps}
+                    label={_t("room_list|space_menu_label", { spaceName: spaceName ?? activeSpace.name })}
+                />
+            );
+        } else {
+            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")} />;
+        }
     }
 
-    return <div className="mx_RoomListHeader">
-        { contextMenuButton }
-        { pendingActionSummary ?
-            <TooltipTarget label={pendingActionSummary}><InlineSpinner /></TooltipTarget> :
-            null }
-        { canShowPlusMenu && <ContextMenuTooltipButton
-            inputRef={plusMenuHandle}
-            onClick={openPlusMenu}
-            isExpanded={plusMenuDisplayed}
-            className="mx_RoomListHeader_plusButton"
-            title={_t("Add")}
-        /> }
+    return (
+        <aside className="mx_RoomListHeader" aria-label={_t("room|context_menu|title")}>
+            {contextMenuButton}
+            {pendingActionSummary ? (
+                <Tooltip label={pendingActionSummary} isTriggerInteractive={false}>
+                    <InlineSpinner />
+                </Tooltip>
+            ) : null}
+            {canShowPlusMenu && (
+                <ContextMenuTooltipButton
+                    ref={plusMenuHandle}
+                    onClick={openPlusMenu}
+                    isExpanded={plusMenuDisplayed}
+                    className="mx_RoomListHeader_plusButton"
+                    title={_t("action|add")}
+                />
+            )}
 
-        { contextMenu }
-    </div>;
+            {contextMenu}
+        </aside>
+    );
 };
 
 export default RoomListHeader;

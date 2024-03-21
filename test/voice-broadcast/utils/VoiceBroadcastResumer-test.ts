@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { ClientEvent, MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent, MatrixClient, MatrixEvent, RelationType, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastInfoEventContent,
@@ -54,7 +53,7 @@ describe("VoiceBroadcastResumer", () => {
                         event_id: startedInfoEvent.getId(),
                     },
                 } as VoiceBroadcastInfoEventContent,
-                client.getUserId(),
+                client.getUserId()!,
             );
         });
     };

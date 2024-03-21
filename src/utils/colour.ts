@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { split } from 'lodash';
+import { split } from "lodash";
 
 export function textToHtmlRainbow(str: string): string {
     const frequency = (2 * Math.PI) / str.length;
 
-    return split(str, '')
+    return split(str, "")
         .map((c, i) => {
             if (c === " ") {
                 return c;
@@ -27,13 +27,13 @@ export function textToHtmlRainbow(str: string): string {
             const [a, b] = generateAB(i * frequency, 1);
             const [red, green, blue] = labToRGB(75, a, b);
             return (
-                '<font color="#' +
+                '<span data-mx-color="#' +
                 red.toString(16).padStart(2, "0") +
                 green.toString(16).padStart(2, "0") +
                 blue.toString(16).padStart(2, "0") +
                 '">' +
                 c +
-                "</font>"
+                "</span>"
             );
         })
         .join("");

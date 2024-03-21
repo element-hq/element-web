@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
 }
 
 export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
@@ -33,27 +33,22 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    render() {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
-                className='mx_ConfirmWipeDeviceDialog'
+                className="mx_ConfirmWipeDeviceDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Clear all data in this session?")}
+                title={_t("auth|soft_logout|clear_data_title")}
             >
-                <div className='mx_ConfirmWipeDeviceDialog_content'>
-                    <p>
-                        { _t(
-                            "Clearing all data from this session is permanent. Encrypted messages will be lost " +
-                            "unless their keys have been backed up.",
-                        ) }
-                    </p>
+                <div className="mx_ConfirmWipeDeviceDialog_content">
+                    <p>{_t("auth|soft_logout|clear_data_description")}</p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Clear all data")}
+                    primaryButton={_t("auth|soft_logout|clear_data_button")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.onDecline}
                 />
             </BaseDialog>

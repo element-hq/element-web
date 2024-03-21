@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -33,13 +33,10 @@ interface IProps extends IContextMenuProps {
     room: Room;
 }
 
-export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IProps) => {
+export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const [notificationState, setNotificationState] = useNotificationState(room);
 
-    const wrapHandler = (
-        handler: (ev: ButtonEvent) => void,
-        persistent = false,
-    ): (ev: ButtonEvent) => void => {
+    const wrapHandler = (handler: (ev: ButtonEvent) => void, persistent = false): ((ev: ButtonEvent) => void) => {
         return (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -53,45 +50,50 @@ export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IPro
         };
     };
 
-    const defaultOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("Use default")}
-        active={notificationState === RoomNotifState.AllMessages}
-        iconClassName="mx_RoomNotificationContextMenu_iconBell"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
-    />;
+    const defaultOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("room|context_menu|notifications_default")}
+            active={notificationState === RoomNotifState.AllMessages}
+            iconClassName="mx_RoomNotificationContextMenu_iconBell"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
+        />
+    );
 
-    const allMessagesOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("All messages")}
-        active={notificationState === RoomNotifState.AllMessagesLoud}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
-    />;
+    const allMessagesOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("notifications|all_messages")}
+            active={notificationState === RoomNotifState.AllMessagesLoud}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
+        />
+    );
 
-    const mentionsOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("Mentions & Keywords")}
-        active={notificationState === RoomNotifState.MentionsOnly}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
-    />;
+    const mentionsOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("notifications|mentions_keywords")}
+            active={notificationState === RoomNotifState.MentionsOnly}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
+        />
+    );
 
-    const muteOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("None")}
-        active={notificationState === RoomNotifState.Mute}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
-    />;
+    const muteOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("room|context_menu|notifications_mute")}
+            active={notificationState === RoomNotifState.Mute}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
+        />
+    );
 
-    return <IconizedContextMenu
-        {...props}
-        onFinished={onFinished}
-        className="mx_RoomNotificationContextMenu"
-        compact
-    >
-        <IconizedContextMenuOptionList first>
-            { defaultOption }
-            { allMessagesOption }
-            { mentionsOption }
-            { muteOption }
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomNotificationContextMenu" compact>
+            <IconizedContextMenuOptionList first>
+                {defaultOption}
+                {allMessagesOption}
+                {mentionsOption}
+                {muteOption}
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>
+    );
 };

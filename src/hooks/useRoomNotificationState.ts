@@ -23,19 +23,16 @@ import { PROPERTY_UPDATED } from "../stores/local-echo/GenericEchoChamber";
 import { CachedRoomKey } from "../stores/local-echo/RoomEchoChamber";
 import { useEventEmitter } from "./useEventEmitter";
 
-export const useNotificationState = (room: Room): [RoomNotifState, (state: RoomNotifState) => void] => {
+export const useNotificationState = (room: Room): [RoomNotifState | undefined, (state: RoomNotifState) => void] => {
     const echoChamber = useMemo(() => EchoChamber.forRoom(room), [room]);
-    const [notificationState, setNotificationState] = useState<RoomNotifState>(
+    const [notificationState, setNotificationState] = useState<RoomNotifState | undefined>(
         echoChamber.notificationVolume,
     );
     useEventEmitter(echoChamber, PROPERTY_UPDATED, (key: CachedRoomKey) => {
-        if (key === CachedRoomKey.NotificationVolume) {
+        if (key === CachedRoomKey.NotificationVolume && echoChamber.notificationVolume !== undefined) {
             setNotificationState(echoChamber.notificationVolume);
         }
     });
-    const setter = useCallback(
-        (state: RoomNotifState) => echoChamber.notificationVolume = state,
-        [echoChamber],
-    );
+    const setter = useCallback((state: RoomNotifState) => (echoChamber.notificationVolume = state), [echoChamber]);
     return [notificationState, setter];
 };

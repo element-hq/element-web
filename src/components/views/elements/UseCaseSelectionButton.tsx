@@ -27,32 +27,35 @@ interface Props {
     onClick: (useCase: UseCase) => void;
 }
 
-export function UseCaseSelectionButton({ useCase, onClick, selected }: Props) {
-    let label: string;
+export function UseCaseSelectionButton({ useCase, onClick, selected }: Props): JSX.Element {
+    let label: string | undefined;
     switch (useCase) {
         case UseCase.PersonalMessaging:
-            label = _t("Friends and family");
+            label = _t("onboarding|use_case_personal_messaging");
             break;
         case UseCase.WorkMessaging:
-            label = _t("Coworkers and teams");
+            label = _t("onboarding|use_case_work_messaging");
             break;
         case UseCase.CommunityMessaging:
-            label = _t("Online community members");
+            label = _t("onboarding|use_case_community_messaging");
             break;
     }
 
     return (
         <AccessibleButton
             className={classNames("mx_UseCaseSelectionButton", {
-                "mx_UseCaseSelectionButton_selected": selected,
+                mx_UseCaseSelectionButton_selected: selected,
             })}
-            onClick={async () => onClick(useCase)}>
-            <div className={classNames("mx_UseCaseSelectionButton_icon", {
-                "mx_UseCaseSelectionButton_messaging": useCase === UseCase.PersonalMessaging,
-                "mx_UseCaseSelectionButton_work": useCase === UseCase.WorkMessaging,
-                "mx_UseCaseSelectionButton_community": useCase === UseCase.CommunityMessaging,
-            })} />
-            <span>{ label }</span>
+            onClick={async () => onClick(useCase)}
+        >
+            <div
+                className={classNames("mx_UseCaseSelectionButton_icon", {
+                    mx_UseCaseSelectionButton_messaging: useCase === UseCase.PersonalMessaging,
+                    mx_UseCaseSelectionButton_work: useCase === UseCase.WorkMessaging,
+                    mx_UseCaseSelectionButton_community: useCase === UseCase.CommunityMessaging,
+                })}
+            />
+            <span>{label}</span>
             <div className="mx_UseCaseSelectionButton_selectedIcon" />
         </AccessibleButton>
     );

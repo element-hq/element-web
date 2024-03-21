@@ -21,20 +21,21 @@ import { render, screen } from "@testing-library/react";
 import { shouldShowFeedback } from "../../../../src/utils/Feedback";
 import BetaCard from "../../../../src/components/views/beta/BetaCard";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { TranslationKey } from "../../../../src/languageHandler";
 
 jest.mock("../../../../src/utils/Feedback");
 jest.mock("../../../../src/settings/SettingsStore");
 
-describe('<BetaCard />', () => {
+describe("<BetaCard />", () => {
     describe("Feedback prompt", () => {
         const featureId = "featureId";
 
         beforeEach(() => {
             mocked(SettingsStore).getBetaInfo.mockReturnValue({
-                title: "title",
+                title: "title" as TranslationKey,
                 caption: () => "caption",
                 feedbackLabel: "feedbackLabel",
-                feedbackSubheading: "feedbackSubheading",
+                feedbackSubheading: "feedbackSubheading" as TranslationKey,
             });
             mocked(SettingsStore).getValue.mockReturnValue(true);
             mocked(shouldShowFeedback).mockReturnValue(true);
@@ -53,9 +54,9 @@ describe('<BetaCard />', () => {
 
         it("should not show feedback prompt if label is unset", () => {
             mocked(SettingsStore).getBetaInfo.mockReturnValue({
-                title: "title",
+                title: "title" as TranslationKey,
                 caption: () => "caption",
-                feedbackSubheading: "feedbackSubheading",
+                feedbackSubheading: "feedbackSubheading" as TranslationKey,
             });
             render(<BetaCard featureId={featureId} />);
             expect(screen.queryByText("Feedback")).toBeFalsy();
@@ -63,7 +64,7 @@ describe('<BetaCard />', () => {
 
         it("should not show feedback prompt if subheading is unset", () => {
             mocked(SettingsStore).getBetaInfo.mockReturnValue({
-                title: "title",
+                title: "title" as TranslationKey,
                 caption: () => "caption",
                 feedbackLabel: "feedbackLabel",
             });

@@ -15,26 +15,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import React, { BaseSyntheticEvent, ReactNode } from "react";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixError } from 'matrix-js-sdk/src/matrix';
 
-import * as Email from '../../../email';
-import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
-import Modal from '../../../Modal';
-import { _t, _td } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-import { SAFE_LOCALPART_REGEX } from '../../../Registration';
-import withValidation, { IValidationResult } from '../elements/Validation';
-import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
+import * as Email from "../../../email";
+import { looksValid as phoneNumberLooksValid, PhoneNumberCountryDefinition } from "../../../phonenumber";
+import Modal from "../../../Modal";
+import { _t, _td } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
+import { SAFE_LOCALPART_REGEX } from "../../../Registration";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
-import Field from '../elements/Field';
-import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
+import Field from "../elements/Field";
+import RegistrationEmailPromptDialog from "../dialogs/RegistrationEmailPromptDialog";
 import CountryDropdown from "./CountryDropdown";
 import PassphraseConfirmField from "./PassphraseConfirmField";
-import { PosthogAnalytics } from '../../../PosthogAnalytics';
+import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
 enum RegistrationField {
     Email = "field_email",
@@ -82,7 +81,7 @@ interface IState {
     // Field error codes by field ID
     fieldValid: Partial<Record<RegistrationField, boolean>>;
     // The ISO2 country code selected in the phone number entry
-    phoneCountry: string;
+    phoneCountry?: string;
     username: string;
     email: string;
     phoneNumber: string;
@@ -95,12 +94,18 @@ interface IState {
  * A pure UI component which displays a registration form.
  */
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
-    static defaultProps = {
+    private [RegistrationField.Email]: Field | null = null;
+    private [RegistrationField.Password]: Field | null = null;
+    private [RegistrationField.PasswordConfirm]: Field | null = null;
+    private [RegistrationField.Username]: Field | null = null;
+    private [RegistrationField.PhoneNumber]: Field | null = null;
+
+    public static defaultProps = {
         onValidationChange: logger.error,
         canSubmit: true,
     };
 
-    constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -111,11 +116,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             phoneNumber: this.props.defaultPhoneNumber || "",
             password: this.props.defaultPassword || "",
             passwordConfirm: this.props.defaultPassword || "",
-            passwordComplexity: null,
         };
     }
 
-    private onSubmit = async ev => {
+    private onSubmit = async (
+        ev: BaseSyntheticEvent<Event, EventTarget & HTMLFormElement, EventTarget & HTMLFormElement>,
+    ): Promise<void> => {
         ev.preventDefault();
         ev.persist();
 
@@ -126,16 +132,19 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             return;
         }
 
-        if (this.state.email === '') {
+        if (this.state.email === "") {
             if (this.showEmail()) {
                 Modal.createDialog(RegistrationEmailPromptDialog, {
-                    onFinished: async (confirmed: boolean, email?: string) => {
-                        if (confirmed) {
-                            this.setState({
-                                email,
-                            }, () => {
-                                this.doSubmit(ev);
-                            });
+                    onFinished: async (confirmed: boolean, email?: string): Promise<void> => {
+                        if (confirmed && email !== undefined) {
+                            this.setState(
+                                {
+                                    email,
+                                },
+                                () => {
+                                    this.doSubmit(ev);
+                                },
+                            );
                         }
                     },
                 });
@@ -149,7 +158,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
     };
 
-    private doSubmit(ev) {
+    private doSubmit(
+        ev: BaseSyntheticEvent<Event, EventTarget & HTMLFormElement, EventTarget & HTMLFormElement>,
+    ): void {
         PosthogAnalytics.instance.setAuthenticationType("Password");
 
         const email = this.state.email.trim();
@@ -164,13 +175,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         if (promise) {
             ev.target.disabled = true;
-            promise.finally(function() {
+            promise.finally(function () {
                 ev.target.disabled = false;
             });
         }
     }
 
-    private async verifyFieldsBeforeSubmit() {
+    private async verifyFieldsBeforeSubmit(): Promise<boolean> {
         // Blur the active element if any, so we first run its blur validation,
         // which is less strict than the pass we're about to do below for all fields.
         const activeElement = document.activeElement as HTMLElement;
@@ -202,7 +213,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
-        await new Promise<void>(resolve => this.setState({}, resolve));
+        await new Promise<void>((resolve) => this.setState({}, resolve));
 
         if (this.allFieldsValid()) {
             return true;
@@ -224,17 +235,11 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     /**
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
-    private allFieldsValid() {
-        const keys = Object.keys(this.state.fieldValid);
-        for (let i = 0; i < keys.length; ++i) {
-            if (!this.state.fieldValid[keys[i]]) {
-                return false;
-            }
-        }
-        return true;
+    private allFieldsValid(): boolean {
+        return Object.values(this.state.fieldValid).every(Boolean);
     }
 
-    private findFirstInvalidField(fieldIDs: RegistrationField[]) {
+    private findFirstInvalidField(fieldIDs: RegistrationField[]): Field | null {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];
@@ -243,7 +248,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return null;
     }
 
-    private markFieldValid(fieldID: RegistrationField, valid: boolean) {
+    private markFieldValid(fieldID: RegistrationField, valid: boolean): void {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -251,109 +256,109 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     }
 
-    private onEmailChange = ev => {
+    private onEmailChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             email: ev.target.value.trim(),
         });
     };
 
-    private onEmailValidate = (result: IValidationResult) => {
-        this.markFieldValid(RegistrationField.Email, result.valid);
+    private onEmailValidate = (result: IValidationResult): void => {
+        this.markFieldValid(RegistrationField.Email, !!result.valid);
     };
 
     private validateEmailRules = withValidation({
-        description: () => _t("Use an email address to recover your account"),
+        description: () => _t("auth|reset_password_email_field_description"),
         hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
                 test(this: RegistrationForm, { value, allowEmpty }) {
-                    return allowEmpty || !this.authStepIsRequired('m.login.email.identity') || !!value;
+                    return allowEmpty || !this.authStepIsRequired("m.login.email.identity") || !!value;
                 },
-                invalid: () => _t("Enter email address (required on this homeserver)"),
+                invalid: () => _t("auth|reset_password_email_field_required_invalid"),
             },
             {
                 key: "email",
                 test: ({ value }) => !value || Email.looksValid(value),
-                invalid: () => _t("Doesn't look like a valid email address"),
+                invalid: () => _t("auth|email_field_label_invalid"),
             },
         ],
     });
 
-    private onPasswordChange = ev => {
+    private onPasswordChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             password: ev.target.value,
         });
     };
 
-    private onPasswordValidate = result => {
-        this.markFieldValid(RegistrationField.Password, result.valid);
+    private onPasswordValidate = (result: IValidationResult): void => {
+        this.markFieldValid(RegistrationField.Password, !!result.valid);
     };
 
-    private onPasswordConfirmChange = ev => {
+    private onPasswordConfirmChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             passwordConfirm: ev.target.value,
         });
     };
 
-    private onPasswordConfirmValidate = (result: IValidationResult) => {
-        this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
+    private onPasswordConfirmValidate = (result: IValidationResult): void => {
+        this.markFieldValid(RegistrationField.PasswordConfirm, !!result.valid);
     };
 
-    private onPhoneCountryChange = newVal => {
+    private onPhoneCountryChange = (newVal: PhoneNumberCountryDefinition): void => {
         this.setState({
             phoneCountry: newVal.iso2,
         });
     };
 
-    private onPhoneNumberChange = ev => {
+    private onPhoneNumberChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             phoneNumber: ev.target.value,
         });
     };
 
-    private onPhoneNumberValidate = async fieldState => {
+    private onPhoneNumberValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validatePhoneNumberRules(fieldState);
-        this.markFieldValid(RegistrationField.PhoneNumber, result.valid);
+        this.markFieldValid(RegistrationField.PhoneNumber, !!result.valid);
         return result;
     };
 
     private validatePhoneNumberRules = withValidation({
-        description: () => _t("Other users can invite you to rooms using your contact details"),
+        description: () => _t("auth|msisdn_field_description"),
         hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
                 test(this: RegistrationForm, { value, allowEmpty }) {
-                    return allowEmpty || !this.authStepIsRequired('m.login.msisdn') || !!value;
+                    return allowEmpty || !this.authStepIsRequired("m.login.msisdn") || !!value;
                 },
-                invalid: () => _t("Enter phone number (required on this homeserver)"),
+                invalid: () => _t("auth|registration_msisdn_field_required_invalid"),
             },
             {
                 key: "email",
                 test: ({ value }) => !value || phoneNumberLooksValid(value),
-                invalid: () => _t("That phone number doesn't look quite right, please check and try again"),
+                invalid: () => _t("auth|msisdn_field_number_invalid"),
             },
         ],
     });
 
-    private onUsernameChange = ev => {
+    private onUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             username: ev.target.value,
         });
     };
 
-    private onUsernameValidate = async fieldState => {
+    private onUsernameValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validateUsernameRules(fieldState);
-        this.markFieldValid(RegistrationField.Username, result.valid);
+        this.markFieldValid(RegistrationField.Username, !!result.valid);
         return result;
     };
 
     private validateUsernameRules = withValidation<this, UsernameAvailableStatus>({
         description: (_, results) => {
             // omit the description if the only failing result is the `available` one as it makes no sense for it.
-            if (results.every(({ key, valid }) => key === "available" || valid)) return;
-            return _t("Use lowercase letters, numbers, dashes and underscores only");
+            if (results.every(({ key, valid }) => key === "available" || valid)) return null;
+            return _t("auth|registration_username_validation");
         },
         hideDescriptionIfValid: true,
         async deriveData(this: RegistrationForm, { value }) {
@@ -375,27 +380,29 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             {
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Enter username"),
+                invalid: () => _t("auth|username_field_required_invalid"),
             },
             {
                 key: "safeLocalpart",
-                test: ({ value }, usernameAvailable) => (!value || SAFE_LOCALPART_REGEX.test(value))
-                    && usernameAvailable !== UsernameAvailableStatus.Invalid,
-                invalid: () => _t("Some characters not allowed"),
+                test: ({ value }, usernameAvailable) =>
+                    (!value || SAFE_LOCALPART_REGEX.test(value)) &&
+                    usernameAvailable !== UsernameAvailableStatus.Invalid,
+                invalid: () => _t("room_settings|general|alias_field_safe_localpart_invalid"),
             },
             {
                 key: "available",
                 final: true,
-                test: async ({ value }, usernameAvailable) => {
+                test: async ({ value }, usernameAvailable): Promise<boolean> => {
                     if (!value) {
                         return true;
                     }
 
                     return usernameAvailable === UsernameAvailableStatus.Available;
                 },
-                invalid: (usernameAvailable) => usernameAvailable === UsernameAvailableStatus.Error
-                    ? _t("Unable to check if username has been taken. Try again later.")
-                    : _t("Someone already has that username. Try another or if it is you, sign in below."),
+                invalid: (usernameAvailable) =>
+                    usernameAvailable === UsernameAvailableStatus.Error
+                        ? _t("auth|registration_username_unable_check")
+                        : _t("auth|registration_username_in_use"),
             },
         ],
     });
@@ -406,7 +413,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is required
      */
-    private authStepIsRequired(step: string) {
+    private authStepIsRequired(step: string): boolean {
         return this.props.flows.every((flow) => {
             return flow.stages.includes(step);
         });
@@ -418,147 +425,160 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is used
      */
-    private authStepIsUsed(step: string) {
+    private authStepIsUsed(step: string): boolean {
         return this.props.flows.some((flow) => {
             return flow.stages.includes(step);
         });
     }
 
-    private showEmail() {
-        if (!this.authStepIsUsed('m.login.email.identity')) {
-            return false;
-        }
-        return true;
-    }
-
-    private showPhoneNumber() {
+    private showEmail(): boolean {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        if (!threePidLogin || !this.authStepIsUsed('m.login.msisdn')) {
+        if (!threePidLogin || !this.authStepIsUsed("m.login.email.identity")) {
             return false;
         }
         return true;
     }
 
-    private renderEmail() {
+    private showPhoneNumber(): boolean {
+        const threePidLogin = !SdkConfig.get().disable_3pid_login;
+        if (!threePidLogin || !this.authStepIsUsed("m.login.msisdn")) {
+            return false;
+        }
+        return true;
+    }
+
+    private renderEmail(): ReactNode {
         if (!this.showEmail()) {
             return null;
         }
-        const emailLabel = this.authStepIsRequired('m.login.email.identity') ?
-            _td("Email") :
-            _td("Email (optional)");
-        return <EmailField
-            fieldRef={field => this[RegistrationField.Email] = field}
-            label={emailLabel}
-            value={this.state.email}
-            validationRules={this.validateEmailRules.bind(this)}
-            onChange={this.onEmailChange}
-            onValidate={this.onEmailValidate}
-        />;
+        const emailLabel = this.authStepIsRequired("m.login.email.identity")
+            ? _td("auth|email_field_label")
+            : _td("auth|registration|continue_without_email_field_label");
+        return (
+            <EmailField
+                fieldRef={(field) => (this[RegistrationField.Email] = field)}
+                label={emailLabel}
+                value={this.state.email}
+                validationRules={this.validateEmailRules.bind(this)}
+                onChange={this.onEmailChange}
+                onValidate={this.onEmailValidate}
+            />
+        );
     }
 
-    private renderPassword() {
-        return <PassphraseField
-            id="mx_RegistrationForm_password"
-            fieldRef={field => this[RegistrationField.Password] = field}
-            minScore={PASSWORD_MIN_SCORE}
-            value={this.state.password}
-            onChange={this.onPasswordChange}
-            onValidate={this.onPasswordValidate}
-        />;
+    private renderPassword(): JSX.Element {
+        return (
+            <PassphraseField
+                id="mx_RegistrationForm_password"
+                fieldRef={(field) => (this[RegistrationField.Password] = field)}
+                minScore={PASSWORD_MIN_SCORE}
+                value={this.state.password}
+                onChange={this.onPasswordChange}
+                onValidate={this.onPasswordValidate}
+                userInputs={[this.state.username]}
+            />
+        );
     }
 
-    renderPasswordConfirm() {
-        return <PassphraseConfirmField
-            id="mx_RegistrationForm_passwordConfirm"
-            fieldRef={field => this[RegistrationField.PasswordConfirm] = field}
-            autoComplete="new-password"
-            value={this.state.passwordConfirm}
-            password={this.state.password}
-            onChange={this.onPasswordConfirmChange}
-            onValidate={this.onPasswordConfirmValidate}
-        />;
+    public renderPasswordConfirm(): JSX.Element {
+        return (
+            <PassphraseConfirmField
+                id="mx_RegistrationForm_passwordConfirm"
+                fieldRef={(field) => (this[RegistrationField.PasswordConfirm] = field)}
+                autoComplete="new-password"
+                value={this.state.passwordConfirm}
+                password={this.state.password}
+                onChange={this.onPasswordConfirmChange}
+                onValidate={this.onPasswordConfirmValidate}
+            />
+        );
     }
 
-    renderPhoneNumber() {
+    public renderPhoneNumber(): ReactNode {
         if (!this.showPhoneNumber()) {
             return null;
         }
-        const phoneLabel = this.authStepIsRequired('m.login.msisdn') ?
-            _t("Phone") :
-            _t("Phone (optional)");
-        const phoneCountry = <CountryDropdown
-            value={this.state.phoneCountry}
-            isSmall={true}
-            showPrefix={true}
-            onOptionChange={this.onPhoneCountryChange}
-        />;
-        return <Field
-            ref={field => this[RegistrationField.PhoneNumber] = field}
-            type="text"
-            label={phoneLabel}
-            value={this.state.phoneNumber}
-            prefixComponent={phoneCountry}
-            onChange={this.onPhoneNumberChange}
-            onValidate={this.onPhoneNumberValidate}
-        />;
+        const phoneLabel = this.authStepIsRequired("m.login.msisdn")
+            ? _t("auth|phone_label")
+            : _t("auth|phone_optional_label");
+        const phoneCountry = (
+            <CountryDropdown
+                value={this.state.phoneCountry}
+                isSmall={true}
+                showPrefix={true}
+                onOptionChange={this.onPhoneCountryChange}
+            />
+        );
+        return (
+            <Field
+                ref={(field) => (this[RegistrationField.PhoneNumber] = field)}
+                type="text"
+                label={phoneLabel}
+                value={this.state.phoneNumber}
+                prefixComponent={phoneCountry}
+                onChange={this.onPhoneNumberChange}
+                onValidate={this.onPhoneNumberValidate}
+            />
+        );
     }
 
-    renderUsername() {
-        return <Field
-            id="mx_RegistrationForm_username"
-            ref={field => this[RegistrationField.Username] = field}
-            type="text"
-            autoFocus={true}
-            label={_t("Username")}
-            placeholder={_t("Username").toLocaleLowerCase()}
-            value={this.state.username}
-            onChange={this.onUsernameChange}
-            onValidate={this.onUsernameValidate}
-        />;
+    public renderUsername(): ReactNode {
+        return (
+            <Field
+                id="mx_RegistrationForm_username"
+                ref={(field) => (this[RegistrationField.Username] = field)}
+                type="text"
+                autoFocus={true}
+                label={_t("common|username")}
+                placeholder={_t("common|username")}
+                value={this.state.username}
+                onChange={this.onUsernameChange}
+                onValidate={this.onUsernameValidate}
+            />
+        );
     }
 
-    render() {
+    public render(): ReactNode {
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
+            <input
+                className="mx_Login_submit"
+                type="submit"
+                value={_t("action|register")}
+                disabled={!this.props.canSubmit}
+            />
         );
 
-        let emailHelperText = null;
+        let emailHelperText: JSX.Element | undefined;
         if (this.showEmail()) {
             if (this.showPhoneNumber()) {
-                emailHelperText = <div>
-                    {
-                        _t("Add an email to be able to reset your password.")
-                    } {
-                        _t("Use email or phone to optionally be discoverable by existing contacts.")
-                    }
-                </div>;
+                emailHelperText = (
+                    <div>
+                        {_t("auth|email_help_text")} {_t("auth|email_phone_discovery_text")}
+                    </div>
+                );
             } else {
-                emailHelperText = <div>
-                    {
-                        _t("Add an email to be able to reset your password.")
-                    } {
-                        _t("Use email to optionally be discoverable by existing contacts.")
-                    }
-                </div>;
+                emailHelperText = (
+                    <div>
+                        {_t("auth|email_help_text")} {_t("auth|email_discovery_text")}
+                    </div>
+                );
             }
         }
 
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
+                    <div className="mx_AuthBody_fieldRow">{this.renderUsername()}</div>
                     <div className="mx_AuthBody_fieldRow">
-                        { this.renderUsername() }
+                        {this.renderPassword()}
+                        {this.renderPasswordConfirm()}
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        { this.renderPassword() }
-                        { this.renderPasswordConfirm() }
+                        {this.renderEmail()}
+                        {this.renderPhoneNumber()}
                     </div>
-                    <div className="mx_AuthBody_fieldRow">
-                        { this.renderEmail() }
-                        { this.renderPhoneNumber() }
-                    </div>
-                    { emailHelperText }
-                    { registerButton }
+                    {emailHelperText}
+                    {registerButton}
                 </form>
             </div>
         );

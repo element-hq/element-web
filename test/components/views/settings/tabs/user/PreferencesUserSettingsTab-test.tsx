@@ -17,12 +17,12 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 
-import PreferencesUserSettingsTab from
-    "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
+import PreferencesUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { mockPlatformPeg, stubClient } from "../../../../../test-utils";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
+import MatrixClientBackedController from "../../../../../../src/settings/controllers/MatrixClientBackedController";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
@@ -32,6 +32,11 @@ describe("PreferencesUserSettingsTab", () => {
     const renderTab = (): RenderResult => {
         return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
     };
+
+    it("should render", () => {
+        const { asFragment } = renderTab();
+        expect(asFragment()).toMatchSnapshot();
+    });
 
     describe("send read receipts", () => {
         beforeEach(() => {
@@ -47,10 +52,13 @@ describe("PreferencesUserSettingsTab", () => {
         const getToggle = () => renderTab().getByRole("switch", { name: "Send read receipts" });
 
         const mockIsVersionSupported = (val: boolean) => {
-            const client = MatrixClientPeg.get();
+            const client = MatrixClientPeg.safeGet();
+            jest.spyOn(client, "doesServerSupportUnstableFeature").mockResolvedValue(false);
             jest.spyOn(client, "isVersionSupported").mockImplementation(async (version: string) => {
                 if (version === "v1.4") return val;
+                return false;
             });
+            MatrixClientBackedController.matrixClient = client;
         };
 
         const mockGetValue = (val: boolean) => {
@@ -64,7 +72,7 @@ describe("PreferencesUserSettingsTab", () => {
 
         const expectSetValueToHaveBeenCalled = (
             name: string,
-            roomId: string,
+            roomId: string | null,
             level: SettingLevel,
             value: boolean,
         ) => expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);
@@ -80,7 +88,7 @@ describe("PreferencesUserSettingsTab", () => {
 
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
                 fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, true);
+                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
             });
 
             it("can be disabled", async () => {
@@ -89,7 +97,7 @@ describe("PreferencesUserSettingsTab", () => {
 
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
                 fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, false);
+                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
             });
         });
 
@@ -98,13 +106,12 @@ describe("PreferencesUserSettingsTab", () => {
                 mockIsVersionSupported(false);
             });
 
-            it("can be enabled", async () => {
-                mockGetValue(false);
+            it("is forcibly enabled", async () => {
                 const toggle = getToggle();
-
-                await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
-                fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, true);
+                await waitFor(() => {
+                    expect(toggle).toHaveAttribute("aria-checked", "true");
+                    expect(toggle).toHaveAttribute("aria-disabled", "true");
+                });
             });
 
             it("cannot be disabled", async () => {

@@ -1,5 +1,5 @@
 /*
- Copyright 2020 The Matrix.org Foundation C.I.C.
+ Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type SnowfallOptions = {
@@ -51,21 +51,21 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Snowfall implements ICanvasEffect {
     private readonly options: SnowfallOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Snowflake> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -78,7 +78,7 @@ export default class Snowfall implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -86,9 +86,9 @@ export default class Snowfall implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * -height;
         particle.xCol = particle.x;
-        particle.diameter = (Math.random() * 7) + 4;
-        particle.maximumDrift = (Math.random() * this.options.maxDrift) + 3.5;
-        particle.gravity = this.options.gravity + (Math.random() * 6) + 4;
+        particle.diameter = Math.random() * 7 + 4;
+        particle.maximumDrift = Math.random() * this.options.maxDrift + 3.5;
+        particle.gravity = this.options.gravity + Math.random() * 6 + 4;
         return particle;
     };
 
@@ -111,7 +111,7 @@ export default class Snowfall implements ICanvasEffect {
         }
     };
 
-    private animateAndRenderSnowflakes() {
+    private animateAndRenderSnowflakes(): void {
         if (!this.context || !this.context.canvas) {
             return;
         }
@@ -132,14 +132,14 @@ export default class Snowfall implements ICanvasEffect {
             this.context.save();
             this.context.beginPath();
             this.context.ellipse(particle.x, particle.y, radius, radius, 0, 0, 360);
-            this.context.fillStyle = '#eaeaea'; // grey so it shows up on the light theme
+            this.context.fillStyle = "#eaeaea"; // grey so it shows up on the light theme
             this.context.fill();
             this.context.closePath();
             this.context.restore();
 
             // Remove any dead snowflakes
             const maxBounds = radius * 4; // make sure it's *really* off screen
-            if (particle.y > (height + maxBounds)) {
+            if (particle.y > height + maxBounds) {
                 const idx = this.particles.indexOf(particle);
                 this.particles.splice(idx, 1);
             }

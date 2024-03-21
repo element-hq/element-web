@@ -18,23 +18,8 @@ limitations under the License.
     display: flex;
     column-gap: $spacing-4;
 
-    .mx_MImageBody_thumbnail_container,
-    .mx_MImageReplyBody_info {
+    .mx_MImageBody_thumbnail_container {
         flex: 1;
         min-width: 0; /* Prevent a blowout */
-    }
-
-    .mx_MImageReplyBody_info {
-        .mx_MImageReplyBody_sender {
-            grid-area: sender;
-
-            .mx_DisambiguatedProfile {
-                max-width: 100%;
-            }
-        }
-
-        .mx_MImageReplyBody_filename {
-            grid-area: filename;
-        }
     }
 }

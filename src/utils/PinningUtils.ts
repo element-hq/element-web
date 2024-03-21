@@ -14,15 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { M_POLL_START } from "matrix-events-sdk";
+import { MatrixEvent, EventType, M_POLL_START } from "matrix-js-sdk/src/matrix";
 
 export default class PinningUtils {
     /**
      * Event types that may be pinned.
      */
-    static pinnableEventTypes: (EventType | string)[] = [
+    public static pinnableEventTypes: (EventType | string)[] = [
         EventType.RoomMessage,
         M_POLL_START.name,
         M_POLL_START.altName,
@@ -33,7 +31,7 @@ export default class PinningUtils {
      * @param {MatrixEvent} event The event to check.
      * @return {boolean} True if the event may be pinned, false otherwise.
      */
-    static isPinnable(event: MatrixEvent): boolean {
+    public static isPinnable(event: MatrixEvent): boolean {
         if (!event) return false;
         if (!this.pinnableEventTypes.includes(event.getType())) return false;
         if (event.isRedacted()) return false;

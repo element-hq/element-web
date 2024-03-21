@@ -20,13 +20,38 @@ limitations under the License.
 }
 
 .mx_SettingsSubsection_description {
+    margin-top: $spacing-8;
+}
+
+.mx_SettingsSubsection_text {
     width: 100%;
     box-sizing: inherit;
-    line-height: $font-24px;
-    margin-bottom: $spacing-32;
     color: $secondary-content;
 }
 
 .mx_SettingsSubsection_content {
     width: 100%;
+    display: grid;
+    grid-gap: $spacing-8;
+    /* setting minwidth 0 makes columns definitely sized fixing horizontal overflow */
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: flex-start;
+    margin-top: $spacing-24;
+
+    summary {
+        color: $accent;
+    }
+    details[open] {
+        summary {
+            margin-bottom: $spacing-8;
+        }
+    }
+
+    &.mx_SettingsSubsection_contentStretch {
+        justify-items: stretch;
+    }
+
+    &.mx_SettingsSubsection_noHeading {
+        margin-top: 0;
+    }
 }

@@ -27,16 +27,15 @@ function showToast(text) {
     const el = document.getElementById("snackbar");
     el.innerHTML = text;
     el.className = "mx_show";
-    setTimeout(() => {
+    window.setTimeout(() => {
         el.className = el.className.replace("mx_show", "");
     }, 2000);
 }
 
 window.onload = () => {
-    document.querySelectorAll('.mx_reply_anchor').forEach(element => {
-        element.addEventListener('click', event => {
-            showToastIfNeeded(event.target.getAttribute("scroll-to"));
+    document.querySelectorAll(".mx_reply_anchor").forEach((element) => {
+        element.addEventListener("click", (event) => {
+            showToastIfNeeded(event.target.dataset.scrollTo);
         });
     });
 };
-

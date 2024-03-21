@@ -33,47 +33,46 @@ export default class ResizeNotifier extends EventEmitter {
     // if there was another call in that timespan
     private throttledMiddlePanel = throttle(() => this.emit("middlePanelResized"), 200);
 
-    public get isResizing() {
+    public get isResizing(): boolean {
         return this._isResizing;
     }
 
-    public startResizing() {
+    public startResizing(): void {
         this._isResizing = true;
         this.emit("isResizing", true);
     }
 
-    public stopResizing() {
+    public stopResizing(): void {
         this._isResizing = false;
         this.emit("isResizing", false);
     }
 
-    private noisyMiddlePanel() {
+    private noisyMiddlePanel(): void {
         this.emit("middlePanelResizedNoisy");
     }
 
-    private updateMiddlePanel() {
+    private updateMiddlePanel(): void {
         this.throttledMiddlePanel();
         this.noisyMiddlePanel();
     }
 
     // can be called in quick succession
-    public notifyLeftHandleResized() {
+    public notifyLeftHandleResized(): void {
         // don't emit event for own region
         this.updateMiddlePanel();
     }
 
     // can be called in quick succession
-    public notifyRightHandleResized() {
+    public notifyRightHandleResized(): void {
         this.updateMiddlePanel();
     }
 
-    public notifyTimelineHeightChanged() {
+    public notifyTimelineHeightChanged(): void {
         this.updateMiddlePanel();
     }
 
     // can be called in quick succession
-    public notifyWindowResized() {
+    public notifyWindowResized(): void {
         this.updateMiddlePanel();
     }
 }
-

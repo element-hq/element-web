@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_ProfileSettings {
-    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
     border-bottom: 1px solid $quinary-content;
 
     .mx_ProfileSettings_avatarUpload {
@@ -29,11 +28,13 @@ limitations under the License.
             flex-grow: 1;
             margin-inline-end: 54px;
 
-            .mx_Field:first-child {
-                margin-top: 0;
+            .mx_Field {
+                margin-top: $spacing-8;
             }
 
             .mx_ProfileSettings_profile_controls_topic {
+                margin-top: $spacing-8;
+
                 & > textarea {
                     font-family: inherit;
                     resize: vertical;
@@ -51,12 +52,9 @@ limitations under the License.
     }
 
     .mx_ProfileSettings_buttons {
+        display: flex;
+        gap: var(--cpd-space-4x);
         margin-top: 10px; /* 18px is already accounted for by the <p> above the buttons */
         margin-bottom: $spacing-28;
-
-        > .mx_AccessibleButton_kind_link {
-            font-size: $font-14px;
-            margin-inline-end: 10px; /* TODO: Use a spacing variable */
-        }
     }
 }

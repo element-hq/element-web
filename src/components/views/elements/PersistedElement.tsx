@@ -14,21 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject } from 'react';
-import ReactDOM from 'react-dom';
-import { throttle } from "lodash";
+import React, { MutableRefObject, ReactNode } from "react";
+import ReactDOM from "react-dom";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { TooltipProvider } from "@vector-im/compound-web";
 
-import dis from '../../../dispatcher/dispatcher';
+import dis from "../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { ActionPayload } from "../../../dispatcher/payloads";
 
-export const getPersistKey = (appId: string) => 'widget_' + appId;
+export const getPersistKey = (appId: string): string => "widget_" + appId;
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
+
+// We contain all persisted elements within a master container to allow them all to be within the same
+// CSS stacking context, and thus be able to control their z-indexes relative to each other.
+function getOrCreateMasterContainer(): HTMLDivElement {
+    let container = getContainer("mx_PersistedElement_container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "mx_PersistedElement_container";
+        document.body.appendChild(container);
+    }
+
+    return container;
+}
 
 function getContainer(containerId: string): HTMLDivElement {
     return document.getElementById(containerId) as HTMLDivElement;
@@ -40,7 +53,7 @@ function getOrCreateContainer(containerId: string): HTMLDivElement {
     if (!container) {
         container = document.createElement("div");
         container.id = containerId;
-        document.body.appendChild(container);
+        getOrCreateMasterContainer().appendChild(container);
     }
 
     return container;
@@ -58,7 +71,8 @@ interface IProps {
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
 
     // Handle to manually notify this PersistedElement that it needs to move
-    moveRef?: MutableRefObject<() => void>;
+    moveRef?: MutableRefObject<(() => void) | undefined>;
+    children: ReactNode;
 }
 
 /**
@@ -75,10 +89,10 @@ interface IProps {
 export default class PersistedElement extends React.Component<IProps> {
     private resizeObserver: ResizeObserver;
     private dispatcherRef: string;
-    private childContainer: HTMLDivElement;
-    private child: HTMLDivElement;
+    private childContainer?: HTMLDivElement;
+    private child?: HTMLDivElement;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.resizeObserver = new ResizeObserver(this.repositionChild);
@@ -87,7 +101,7 @@ export default class PersistedElement extends React.Component<IProps> {
         // dimensions. Doesn't look like there's a ResizeObserver equivalent
         // for this, so we bodge it by listening for document resize and
         // the timeline_resize action.
-        window.addEventListener('resize', this.repositionChild);
+        window.addEventListener("resize", this.repositionChild);
         this.dispatcherRef = dis.register(this.onAction);
 
         if (this.props.moveRef) this.props.moveRef.current = this.repositionChild;
@@ -101,14 +115,14 @@ export default class PersistedElement extends React.Component<IProps> {
      * @param {string} persistKey Key used to uniquely identify this PersistedElement
      */
     public static destroyElement(persistKey: string): void {
-        const container = getContainer('mx_persistedElement_' + persistKey);
+        const container = getContainer("mx_persistedElement_" + persistKey);
         if (container) {
             container.remove();
         }
     }
 
-    static isMounted(persistKey) {
-        return Boolean(getContainer('mx_persistedElement_' + persistKey));
+    public static isMounted(persistKey: string): boolean {
+        return Boolean(getContainer("mx_persistedElement_" + persistKey));
     }
 
     private collectChildContainer = (ref: HTMLDivElement): void => {
@@ -139,14 +153,14 @@ export default class PersistedElement extends React.Component<IProps> {
     public componentWillUnmount(): void {
         this.updateChildVisibility(this.child, false);
         this.resizeObserver.disconnect();
-        window.removeEventListener('resize', this.repositionChild);
+        window.removeEventListener("resize", this.repositionChild);
         dis.unregister(this.dispatcherRef);
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === 'timeline_resize') {
+        if (payload.action === "timeline_resize") {
             this.repositionChild();
-        } else if (payload.action === 'logout') {
+        } else if (payload.action === "logout") {
             PersistedElement.destroyElement(this.props.persistKey);
         }
     };
@@ -161,37 +175,40 @@ export default class PersistedElement extends React.Component<IProps> {
     }
 
     private renderApp(): void {
-        const content = <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
-            <div ref={this.collectChild} style={this.props.style}>
-                { this.props.children }
-            </div>
-        </MatrixClientContext.Provider>;
+        const content = (
+            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                <TooltipProvider>
+                    <div ref={this.collectChild} style={this.props.style}>
+                        {this.props.children}
+                    </div>
+                </TooltipProvider>
+            </MatrixClientContext.Provider>
+        );
 
-        ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
+        ReactDOM.render(content, getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));
     }
 
-    private updateChildVisibility(child: HTMLDivElement, visible: boolean): void {
+    private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
         if (!child) return;
-        child.style.display = visible ? 'block' : 'none';
+        child.style.display = visible ? "block" : "none";
     }
 
-    private updateChildPosition = throttle((child: HTMLDivElement, parent: HTMLDivElement): void => {
+    private updateChildPosition(child?: HTMLDivElement, parent?: HTMLDivElement): void {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
             zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
-            position: 'absolute',
-            top: '0',
-            left: '0',
+            position: "absolute",
+            top: "0",
+            left: "0",
             transform: `translateX(${parentRect.left}px) translateY(${parentRect.top}px)`,
-            width: parentRect.width + 'px',
-            height: parentRect.height + 'px',
+            width: parentRect.width + "px",
+            height: parentRect.height + "px",
         });
-    }, 16, { trailing: true, leading: true });
+    }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <div ref={this.collectChildContainer} />;
     }
 }
-

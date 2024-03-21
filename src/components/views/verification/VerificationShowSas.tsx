@@ -14,22 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { IGeneratedSas } from "matrix-js-sdk/src/crypto/verification/SAS";
-import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
+import React from "react";
+import { Device } from "matrix-js-sdk/src/matrix";
+import { GeneratedSas, EmojiMapping } from "matrix-js-sdk/src/crypto-api/verification";
+import SasEmoji from "@matrix-org/spec/sas-emoji.json";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
-import { fixupColorFonts } from '../../../utils/FontManager';
+import { fixupColorFonts } from "../../../utils/FontManager";
 
 interface IProps {
     pending?: boolean;
     displayName?: string; // required if pending is true
-    device?: DeviceInfo;
+
+    /** Details of the other device involved in the verification, if known */
+    otherDeviceDetails?: Device;
+
     onDone: () => void;
     onCancel: () => void;
-    sas: IGeneratedSas;
+    sas: GeneratedSas;
     isSelf?: boolean;
     inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
 }
@@ -39,20 +43,60 @@ interface IState {
     cancelling?: boolean;
 }
 
-function capFirst(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
+const SasEmojiMap = new Map<
+    string, // lowercase
+    {
+        description: string;
+        translations: {
+            [normalizedLanguageKey: string]: string;
+        };
+    }
+>(
+    SasEmoji.map(({ description, translated_descriptions: translations }) => [
+        description.toLowerCase(),
+        {
+            description,
+            // Normalize the translation keys
+            translations: Object.keys(translations).reduce<Record<string, string>>((o, k) => {
+                for (const key of getNormalizedLanguageKeys(k)) {
+                    o[key] = translations[k as keyof typeof translations]!;
+                }
+                return o;
+            }, {}),
+        },
+    ]),
+);
+
+/**
+ * Translate given EmojiMapping into the target locale
+ * @param mapping - the given EmojiMapping to translate
+ * @param locale - the BCP 47 locale to translate to, will fall back to English as the base locale for Matrix SAS Emoji.
+ */
+export function tEmoji(mapping: EmojiMapping, locale: string): string {
+    const name = mapping[1];
+    const emoji = SasEmojiMap.get(name.toLowerCase());
+    if (!emoji) {
+        console.warn("Emoji not found for translation", name);
+        return name;
+    }
+
+    for (const key of getNormalizedLanguageKeys(locale)) {
+        if (!!emoji.translations[key]) {
+            return emoji.translations[key];
+        }
+    }
+
+    return emoji.description;
 }
 
 export default class VerificationShowSas extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
             pending: false,
         };
-    }
 
-    public componentWillMount(): void {
         // As this component is also used before login (during complete security),
         // also make sure we have a working emoji font to display the SAS emojis here.
         // This is also done from LoggedInView.
@@ -69,53 +113,43 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         this.props.onCancel();
     };
 
-    render() {
+    public render(): React.ReactNode {
+        const locale = getUserLanguage();
+
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
-            const emojiBlocks = this.props.sas.emoji.map(
-                (emoji, i) => <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
-                    <div className="mx_VerificationShowSas_emojiSas_emoji">
-                        { emoji[0] }
-                    </div>
-                    <div className="mx_VerificationShowSas_emojiSas_label">
-                        { _t(capFirst(emoji[1])) }
-                    </div>
-                </div>,
+            const emojiBlocks = this.props.sas.emoji.map((emoji, i) => (
+                <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
+                    <div className="mx_VerificationShowSas_emojiSas_emoji">{emoji[0]}</div>
+                    <div className="mx_VerificationShowSas_emojiSas_label">{tEmoji(emoji, locale)}</div>
+                </div>
+            ));
+            sasDisplay = (
+                <div className="mx_VerificationShowSas_emojiSas">
+                    {emojiBlocks.slice(0, 4)}
+                    <div className="mx_VerificationShowSas_emojiSas_break" />
+                    {emojiBlocks.slice(4)}
+                </div>
             );
-            sasDisplay = <div className="mx_VerificationShowSas_emojiSas">
-                { emojiBlocks.slice(0, 4) }
-                <div className="mx_VerificationShowSas_emojiSas_break" />
-                { emojiBlocks.slice(4) }
-            </div>;
-            sasCaption = this.props.isSelf ?
-                _t(
-                    "Confirm the emoji below are displayed on both devices, in the same order:",
-                ):
-                _t(
-                    "Verify this user by confirming the following emoji appear on their screen.",
-                );
+            sasCaption = this.props.isSelf
+                ? _t("encryption|verification|sas_emoji_caption_self")
+                : _t("encryption|verification|sas_emoji_caption_user");
         } else if (this.props.sas.decimal) {
-            const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>
-                { num }
-            </span>);
-            sasDisplay = <div className="mx_VerificationShowSas_decimalSas">
-                { numberBlocks }
-            </div>;
-            sasCaption = this.props.isSelf ?
-                _t(
-                    "Verify this device by confirming the following number appears on its screen.",
-                ):
-                _t(
-                    "Verify this user by confirming the following number appears on their screen.",
-                );
+            const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);
+            sasDisplay = <div className="mx_VerificationShowSas_decimalSas">{numberBlocks}</div>;
+            sasCaption = this.props.isSelf
+                ? _t("encryption|verification|sas_caption_self")
+                : _t("encryption|verification|sas_caption_user");
         } else {
-            return <div>
-                { _t("Unable to find a supported verification method.") }
-                <AccessibleButton kind="primary" onClick={this.props.onCancel}>
-                    { _t('Cancel') }
-                </AccessibleButton>
-            </div>;
+            return (
+                <div>
+                    {_t("encryption|verification|unsupported_method")}
+                    <AccessibleButton kind="primary" onClick={this.props.onCancel}>
+                        {_t("action|cancel")}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
         let confirm;
@@ -123,108 +157,45 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
             let text;
             // device shouldn't be null in this situation but it can be, eg. if the device is
             // logged out during verification
-            if (this.props.device) {
-                text = _t("Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…", {
-                    deviceName: this.props.device ? this.props.device.getDisplayName() : '',
-                    deviceId: this.props.device ? this.props.device.deviceId : '',
+            const otherDevice = this.props.otherDeviceDetails;
+            if (otherDevice) {
+                text = _t("encryption|verification|waiting_other_device_details", {
+                    deviceName: otherDevice.displayName,
+                    deviceId: otherDevice.deviceId,
                 });
             } else {
-                text = _t("Waiting for you to verify on your other device…");
+                text = _t("encryption|verification|waiting_other_device");
             }
-            confirm = <p>{ text }</p>;
+            confirm = <p>{text}</p>;
         } else if (this.state.pending || this.state.cancelling) {
             let text;
             if (this.state.pending) {
                 const { displayName } = this.props;
-                text = _t("Waiting for %(displayName)s to verify…", { displayName });
+                text = _t("encryption|verification|waiting_other_user", { displayName });
             } else {
-                text = _t("Cancelling…");
+                text = _t("encryption|verification|cancelling");
             }
             confirm = <PendingActionSpinner text={text} />;
         } else {
-            confirm = <div className="mx_VerificationShowSas_buttonRow">
-                <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
-                    { _t("They don't match") }
-                </AccessibleButton>
-                <AccessibleButton onClick={this.onMatchClick} kind="primary">
-                    { _t("They match") }
-                </AccessibleButton>
-            </div>;
+            confirm = (
+                <div className="mx_VerificationShowSas_buttonRow">
+                    <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
+                        {_t("encryption|verification|sas_no_match")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                        {_t("encryption|verification|sas_match")}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
-        return <div className="mx_VerificationShowSas">
-            <p>{ sasCaption }</p>
-            { sasDisplay }
-            <p>{ this.props.isSelf ?
-                "":
-                _t("To be secure, do this in person or use a trusted way to communicate.") }</p>
-            { confirm }
-        </div>;
+        return (
+            <div className="mx_VerificationShowSas">
+                <p>{sasCaption}</p>
+                {sasDisplay}
+                <p>{this.props.isSelf ? "" : _t("encryption|verification|in_person")}</p>
+                {confirm}
+            </div>
+        );
     }
 }
-
-// List of Emoji strings from the js-sdk, for i18n
-_td("Dog");
-_td("Cat");
-_td("Lion");
-_td("Horse");
-_td("Unicorn");
-_td("Pig");
-_td("Elephant");
-_td("Rabbit");
-_td("Panda");
-_td("Rooster");
-_td("Penguin");
-_td("Turtle");
-_td("Fish");
-_td("Octopus");
-_td("Butterfly");
-_td("Flower");
-_td("Tree");
-_td("Cactus");
-_td("Mushroom");
-_td("Globe");
-_td("Moon");
-_td("Cloud");
-_td("Fire");
-_td("Banana");
-_td("Apple");
-_td("Strawberry");
-_td("Corn");
-_td("Pizza");
-_td("Cake");
-_td("Heart");
-_td("Smiley");
-_td("Robot");
-_td("Hat");
-_td("Glasses");
-_td("Spanner");
-_td("Santa");
-_td("Thumbs up");
-_td("Umbrella");
-_td("Hourglass");
-_td("Clock");
-_td("Gift");
-_td("Light bulb");
-_td("Book");
-_td("Pencil");
-_td("Paperclip");
-_td("Scissors");
-_td("Lock");
-_td("Key");
-_td("Hammer");
-_td("Telephone");
-_td("Flag");
-_td("Train");
-_td("Bicycle");
-_td("Aeroplane");
-_td("Rocket");
-_td("Trophy");
-_td("Ball");
-_td("Guitar");
-_td("Trumpet");
-_td("Bell");
-_td("Anchor");
-_td("Headphones");
-_td("Folder");
-_td("Pin");

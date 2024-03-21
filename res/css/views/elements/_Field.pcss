@@ -22,29 +22,27 @@ limitations under the License.
     min-width: 0;
     position: relative;
     margin: 1em 0;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: border-color 0.25s;
-    border: 1px solid $input-border-color;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
 }
 
 .mx_Field_prefix {
-    border-right: 1px solid $input-border-color;
+    border-right: 1px solid var(--cpd-color-border-interactive-secondary);
 }
 
 .mx_Field_postfix {
-    border-left: 1px solid $input-border-color;
+    border-left: 1px solid var(--cpd-color-border-interactive-secondary);
 }
 
 .mx_Field input,
 .mx_Field select,
 .mx_Field textarea {
-    font-family: inherit;
-    font-weight: normal;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     border: none;
     /* Even without a border here, we still need this avoid overlapping the rounded */
     /* corners on the field above. */
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 8px 9px;
     color: $primary-content;
     background-color: $background;
@@ -55,6 +53,7 @@ limitations under the License.
 .mx_Field select {
     -moz-appearance: none;
     -webkit-appearance: none;
+    text-overflow: ellipsis;
 }
 
 /* Can't add pseudo-elements to a select directly, so we use its parent. */
@@ -65,7 +64,7 @@ limitations under the License.
     right: 10px;
     width: 10px;
     height: 6px;
-    mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
+    mask: url("$(res)/img/feather-customised/dropdown-arrow.svg");
     mask-repeat: no-repeat;
     background-color: $primary-content;
     z-index: 1;
@@ -102,7 +101,8 @@ limitations under the License.
         transform 0.25s ease-out 0.1s,
         background-color 0.25s ease-out 0.1s;
     background-color: transparent;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-secondary);
     transform: translateY(0);
     position: absolute;
     left: 0px;
@@ -174,8 +174,6 @@ limitations under the License.
 }
 
 .mx_Field_tooltip {
-    margin-top: -12px;
-    margin-left: 4px;
     width: 200px;
 }
 
@@ -191,5 +189,5 @@ limitations under the License.
 }
 
 .mx_Field .mx_CountryDropdown {
-    width: $font-78px;
+    width: fit-content;
 }

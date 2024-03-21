@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { arraySeed } from "../utils/arrays";
+
 export const WORKLET_NAME = "mx-voice-worklet";
 
 export enum PayloadEvent {
@@ -35,3 +37,6 @@ export interface IAmplitudePayload extends IPayload {
     forIndex: number;
     amplitude: number;
 }
+
+export const PLAYBACK_WAVEFORM_SAMPLES = 39;
+export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);

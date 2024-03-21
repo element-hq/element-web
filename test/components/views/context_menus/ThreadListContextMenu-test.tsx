@@ -17,9 +17,7 @@ limitations under the License.
 import { getByTestId, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient, PendingEventOrdering, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import ThreadListContextMenu, {
@@ -38,17 +36,14 @@ describe("ThreadListContextMenu", () => {
     let event: MatrixEvent;
 
     function getComponent(props: Partial<ThreadListContextMenuProps>) {
-        return render(<ThreadListContextMenu
-            mxEvent={event}
-            {...props}
-        />);
+        return render(<ThreadListContextMenu mxEvent={event} {...props} />);
     }
 
     beforeEach(() => {
         jest.clearAllMocks();
 
         stubClient();
-        mockClient = mocked(MatrixClientPeg.get());
+        mockClient = mocked(MatrixClientPeg.safeGet());
 
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -57,8 +52,8 @@ describe("ThreadListContextMenu", () => {
         const res = mkThread({
             room,
             client: mockClient,
-            authorId: mockClient.getUserId(),
-            participantUserIds: [mockClient.getUserId()],
+            authorId: mockClient.getUserId()!,
+            participantUserIds: [mockClient.getUserId()!],
         });
 
         event = res.rootEvent;

@@ -14,14 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageTimestamp {
+:root {
+    --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
     --MessageTimestamp-max-width: 80px;
+    --MessageTimestamp-color: $event-timestamp-color;
+}
 
-    color: $event-timestamp-color;
+.mx_MessageTimestamp {
+    color: var(--MessageTimestamp-color);
     font-size: $font-10px;
     font-variant-numeric: tabular-nums;
     display: block; /* enable the width setting below */
-    width: $MessageTimestamp_width;
+    width: var(--MessageTimestamp-width);
     white-space: nowrap;
     user-select: none;
+}
+
+.mx_MessageTimestamp_lateIcon {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: inherit;
 }

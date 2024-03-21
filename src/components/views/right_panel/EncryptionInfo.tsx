@@ -15,18 +15,19 @@ limitations under the License.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { User } from "matrix-js-sdk/src/models/user";
+import { RoomMember, User } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 
-export const PendingActionSpinner = ({ text }) => {
-    return <div className="mx_EncryptionInfo_spinner">
-        <Spinner />
-        { text }
-    </div>;
+export const PendingActionSpinner: React.FC<{ text: string }> = ({ text }) => {
+    return (
+        <div className="mx_EncryptionInfo_spinner">
+            <Spinner />
+            {text}
+        </div>
+    );
 };
 
 interface IProps {
@@ -50,19 +51,15 @@ const EncryptionInfo: React.FC<IProps> = ({
 }: IProps) => {
     let content: JSX.Element;
     if (waitingForOtherParty && isSelfVerification) {
-        content = (
-            <div>
-                { _t("To proceed, please accept the verification request on your other device.") }
-            </div>
-        );
+        content = <div>{_t("encryption|verification|self_verification_hint")}</div>;
     } else if (waitingForOtherParty || waitingForNetwork) {
         let text: string;
         if (waitingForOtherParty) {
-            text = _t("Waiting for %(displayName)s to accept…", {
+            text = _t("encryption|verification|waiting_for_user_accept", {
                 displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
             });
         } else {
-            text = _t("Accepting…");
+            text = _t("encryption|verification|accepting");
         }
         content = <PendingActionSpinner text={text} />;
     } else {
@@ -72,7 +69,7 @@ const EncryptionInfo: React.FC<IProps> = ({
                 className="mx_UserInfo_wideButton mx_UserInfo_startVerification"
                 onClick={onStartVerification}
             >
-                { _t("Start Verification") }
+                {_t("encryption|verification|start_button")}
             </AccessibleButton>
         );
     }
@@ -81,17 +78,15 @@ const EncryptionInfo: React.FC<IProps> = ({
     if (isRoomEncrypted) {
         description = (
             <div>
-                <p>{ _t("Messages in this room are end-to-end encrypted.") }</p>
-                <p>{ _t("Your messages are secured and only you and the recipient have " +
-                    "the unique keys to unlock them.") }</p>
+                <p>{_t("user_info|room_encrypted")}</p>
+                <p>{_t("user_info|room_encrypted_detail")}</p>
             </div>
         );
     } else {
         description = (
             <div>
-                <p>{ _t("Messages in this room are not end-to-end encrypted.") }</p>
-                <p>{ _t("In encrypted rooms, your messages are secured and only you and the recipient have " +
-                    "the unique keys to unlock them.") }</p>
+                <p>{_t("user_info|room_unencrypted")}</p>
+                <p>{_t("user_info|room_unencrypted_detail")}</p>
             </div>
         );
     }
@@ -100,20 +95,22 @@ const EncryptionInfo: React.FC<IProps> = ({
         return content;
     }
 
-    return <React.Fragment>
-        <div data-test-id='encryption-info-description' className="mx_UserInfo_container">
-            <h3>{ _t("Encryption") }</h3>
-            { description }
-        </div>
-        <div className="mx_UserInfo_container">
-            <h3>{ _t("Verify User") }</h3>
-            <div>
-                <p>{ _t("For extra security, verify this user by checking a one-time code on both of your devices.") }</p>
-                <p>{ _t("To be secure, do this in person or use a trusted way to communicate.") }</p>
-                { content }
+    return (
+        <React.Fragment>
+            <div data-testid="encryption-info-description" className="mx_UserInfo_container">
+                <h3>{_t("settings|security|encryption_section")}</h3>
+                {description}
             </div>
-        </div>
-    </React.Fragment>;
+            <div className="mx_UserInfo_container">
+                <h3>{_t("user_info|verify_button")}</h3>
+                <div>
+                    <p>{_t("user_info|verify_explainer")}</p>
+                    <p>{_t("encryption|verification|in_person")}</p>
+                    {content}
+                </div>
+            </div>
+        </React.Fragment>
+    );
 };
 
 export default EncryptionInfo;

@@ -1,5 +1,5 @@
 /*
- Copyright 2021 The Matrix.org Foundation C.I.C.
+ Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
  Copyright 2022 Arseny Uskov
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type HeartOptions = {
@@ -59,35 +59,36 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Hearts implements ICanvasEffect {
     private readonly options: HeartOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Heart> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
     private colours = [
-        'rgba(194,210,224,1)',
-        'rgba(235,214,219,1)',
-        'rgba(255,211,45,1)',
-        'rgba(255,190,174,1)',
-        'rgba(255,173,226,1)',
-        'rgba(242,114,171,1)',
-        'rgba(228,55,116,1)',
-        'rgba(255,86,130,1)',
-        'rgba(244,36,57,1)',
-        'rgba(247,126,157,1)',
-        'rgba(243,142,140,1)',
-        'rgba(252,116,183,1)'];
+        "rgba(194,210,224,1)",
+        "rgba(235,214,219,1)",
+        "rgba(255,211,45,1)",
+        "rgba(255,190,174,1)",
+        "rgba(255,173,226,1)",
+        "rgba(242,114,171,1)",
+        "rgba(228,55,116,1)",
+        "rgba(255,86,130,1)",
+        "rgba(244,36,57,1)",
+        "rgba(247,126,157,1)",
+        "rgba(243,142,140,1)",
+        "rgba(252,116,183,1)",
+    ];
 
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -100,7 +101,7 @@ export default class Hearts implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -109,10 +110,10 @@ export default class Hearts implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * height + height;
         particle.xCol = particle.x;
-        particle.scale = (Math.random() * 0.07) + 0.04;
-        particle.maximumDrift = (Math.random() * this.options.maxDrift) + 3.5;
-        particle.maximumRot = (Math.random() * this.options.maxRot) + 3.5;
-        particle.gravity = this.options.gravity + (Math.random() * 4.8);
+        particle.scale = Math.random() * 0.07 + 0.04;
+        particle.maximumDrift = Math.random() * this.options.maxDrift + 3.5;
+        particle.maximumRot = Math.random() * this.options.maxRot + 3.5;
+        particle.gravity = this.options.gravity + Math.random() * 4.8;
         return particle;
     };
 
@@ -135,7 +136,7 @@ export default class Hearts implements ICanvasEffect {
         }
     };
 
-    private animateAndRenderHearts() {
+    private animateAndRenderHearts(): void {
         if (!this.context || !this.context.canvas) {
             return;
         }

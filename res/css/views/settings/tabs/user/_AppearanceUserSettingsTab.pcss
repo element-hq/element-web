@@ -14,25 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppearanceUserSettingsTab {
-    --AppearanceUserSettingsTab_Field-margin-inline-start: calc($font-16px + 10px);
-
-    .mx_SettingsTab_subsectionText {
-        margin-block: $spacing-12 $spacing-32;
-        color: $primary-content; /* Same as mx_SettingsTab */
-    }
-
-    .mx_Field {
-        width: 256px;
-    }
-
-    .mx_AppearanceUserSettingsTab_Advanced {
-        .mx_Checkbox {
-            margin-block: $spacing-16;
-        }
-
-        .mx_AppearanceUserSettingsTab_systemFont {
-            margin-inline-start: var(--AppearanceUserSettingsTab_Field-margin-inline-start);
-        }
-    }
+.mx_Field.mx_AppearanceUserSettingsTab_checkboxControlledField {
+    width: 256px;
+    /* matches checkbox box + padding to align with checkbox label */
+    margin-inline-start: calc($font-16px + 10px);
 }

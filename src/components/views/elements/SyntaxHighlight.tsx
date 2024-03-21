@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +15,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import hljs from 'highlight.js';
+import React from "react";
 
-interface IProps {
+import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+
+interface Props {
     language?: string;
     children: string;
 }
 
-export default class SyntaxHighlight extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
-        const { children: content, language } = this.props;
-        const highlighted = language ? hljs.highlight(language, content) : hljs.highlightAuto(content);
+export default function SyntaxHighlight({ children, language }: Props): JSX.Element {
+    const highlighted = useAsyncMemo(async () => {
+        const { default: highlight } = await import("highlight.js");
+        return language ? highlight.highlight(children, { language }) : highlight.highlightAuto(children);
+    }, [language, children]);
 
-        return (
-            <pre className={`mx_SyntaxHighlight hljs language-${highlighted.language}`}>
-                <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
-            </pre>
-        );
-    }
+    return (
+        <pre className={`mx_SyntaxHighlight hljs language-${highlighted?.language}`}>
+            {highlighted ? <code dangerouslySetInnerHTML={{ __html: highlighted.value }} /> : children}
+        </pre>
+    );
 }
-

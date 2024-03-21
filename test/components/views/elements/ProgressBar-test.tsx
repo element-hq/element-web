@@ -28,7 +28,9 @@ describe("<ProgressBar/>", () => {
         expect(progress.value).toBe(0);
 
         // Await the animation to conclude to our initial value of 50
-        act(() => { jest.runAllTimers(); });
+        act(() => {
+            jest.runAllTimers();
+        });
         expect(progress.position).toBe(0.5);
 
         // Move the needle to 80%
@@ -36,7 +38,9 @@ describe("<ProgressBar/>", () => {
         expect(progress.position).toBe(0.5);
 
         // Let the animaiton run a tiny bit, assert it has moved from where it was to where it needs to go
-        act(() => { jest.advanceTimersByTime(150); });
+        act(() => {
+            jest.advanceTimersByTime(150);
+        });
         expect(progress.position).toBeGreaterThan(0.5);
         expect(progress.position).toBeLessThan(0.8);
     });

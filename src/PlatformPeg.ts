@@ -32,13 +32,13 @@ import { PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayload";
  * object.
  */
 export class PlatformPeg {
-    private platform: BasePlatform = null;
+    private platform: BasePlatform | null = null;
 
     /**
      * Returns the current Platform object for the application.
      * This should be an instance of a class extending BasePlatform.
      */
-    public get() {
+    public get(): BasePlatform | null {
         return this.platform;
     }
 
@@ -46,7 +46,7 @@ export class PlatformPeg {
      * Sets the current platform handler object to use for the application.
      * @param {BasePlatform} platform an instance of a class extending BasePlatform.
      */
-    public set(platform: BasePlatform) {
+    public set(platform: BasePlatform): void {
         this.platform = platform;
         defaultDispatcher.dispatch<PlatformSetPayload>({
             action: Action.PlatformSet,

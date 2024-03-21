@@ -14,34 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent, useContext, useState } from 'react';
-import { Room } from 'matrix-js-sdk/src/models/room';
-import { IEventRelation } from 'matrix-js-sdk/src/models/event';
+import React, { SyntheticEvent, useContext, useState } from "react";
+import { Room, IEventRelation } from "matrix-js-sdk/src/matrix";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import ContextMenu, { AboveLeftOf } from '../../structures/ContextMenu';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import ContextMenu, { MenuProps } from "../../structures/ContextMenu";
 import LocationPicker, { ILocationPickerProps } from "./LocationPicker";
-import { shareLiveLocation, shareLocation, LocationShareType } from './shareLocation';
-import SettingsStore from '../../../settings/SettingsStore';
-import ShareDialogButtons from './ShareDialogButtons';
-import ShareType from './ShareType';
-import { OwnProfileStore } from '../../../stores/OwnProfileStore';
-import { EnableLiveShare } from './EnableLiveShare';
-import { useFeatureEnabled } from '../../../hooks/useSettings';
-import { SettingLevel } from '../../../settings/SettingLevel';
+import { shareLiveLocation, shareLocation, LocationShareType } from "./shareLocation";
+import SettingsStore from "../../../settings/SettingsStore";
+import ShareDialogButtons from "./ShareDialogButtons";
+import ShareType from "./ShareType";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
+import { EnableLiveShare } from "./EnableLiveShare";
+import { useFeatureEnabled } from "../../../hooks/useSettings";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
-type Props = Omit<ILocationPickerProps, 'onChoose' | 'shareType'> & {
+type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     onFinished: (ev?: SyntheticEvent) => void;
-    menuPosition: AboveLeftOf;
+    menuPosition: MenuProps;
     openMenu: () => void;
     roomId: Room["roomId"];
     relation?: IEventRelation;
 };
 
-const getEnabledShareTypes = (relation): LocationShareType[] => {
-    const enabledShareTypes = [
-        LocationShareType.Own,
-    ];
+const getEnabledShareTypes = (relation?: IEventRelation): LocationShareType[] => {
+    const enabledShareTypes = [LocationShareType.Own];
 
     // live locations cannot have a relation
     // hide the option when composer has a relation
@@ -54,14 +51,7 @@ const getEnabledShareTypes = (relation): LocationShareType[] => {
     return enabledShareTypes;
 };
 
-const LocationShareMenu: React.FC<Props> = ({
-    menuPosition,
-    onFinished,
-    sender,
-    roomId,
-    openMenu,
-    relation,
-}) => {
+const LocationShareMenu: React.FC<Props> = ({ menuPosition, onFinished, sender, roomId, openMenu, relation }) => {
     const matrixClient = useContext(MatrixClientContext);
     const enabledShareTypes = getEnabledShareTypes(relation);
     const isLiveShareEnabled = useFeatureEnabled("feature_location_share_live");
@@ -73,42 +63,40 @@ const LocationShareMenu: React.FC<Props> = ({
     );
 
     const displayName = OwnProfileStore.instance.displayName;
+    const userId = matrixClient.getSafeUserId();
 
-    const onLocationSubmit = shareType === LocationShareType.Live ?
-        shareLiveLocation(matrixClient, roomId, displayName, openMenu) :
-        shareLocation(matrixClient, roomId, shareType, relation, openMenu);
+    const onLocationSubmit =
+        shareType === LocationShareType.Live
+            ? shareLiveLocation(matrixClient, roomId, displayName || userId, openMenu)
+            : shareLocation(matrixClient, roomId, shareType ?? LocationShareType.Own, relation, openMenu);
 
-    const onLiveShareEnableSubmit = () => {
-        SettingsStore.setValue("feature_location_share_live", undefined, SettingLevel.DEVICE, true);
+    const onLiveShareEnableSubmit = (): void => {
+        SettingsStore.setValue("feature_location_share_live", null, SettingLevel.DEVICE, true);
     };
 
     const shouldAdvertiseLiveLabsFlag = shareType === LocationShareType.Live && !isLiveShareEnabled;
 
-    return <ContextMenu
-        {...menuPosition}
-        onFinished={onFinished}
-        managed={false}
-    >
-        <div className="mx_LocationShareMenu">
-            { shouldAdvertiseLiveLabsFlag &&
-                <EnableLiveShare
-                    onSubmit={onLiveShareEnableSubmit}
+    return (
+        <ContextMenu {...menuPosition} onFinished={onFinished} managed={false}>
+            <div className="mx_LocationShareMenu">
+                {shouldAdvertiseLiveLabsFlag && <EnableLiveShare onSubmit={onLiveShareEnableSubmit} />}
+                {!shouldAdvertiseLiveLabsFlag && !!shareType && (
+                    <LocationPicker
+                        sender={sender}
+                        shareType={shareType}
+                        onChoose={onLocationSubmit}
+                        onFinished={onFinished}
+                    />
+                )}
+                {!shareType && <ShareType setShareType={setShareType} enabledShareTypes={enabledShareTypes} />}
+                <ShareDialogButtons
+                    displayBack={!!shareType && multipleShareTypesEnabled}
+                    onBack={() => setShareType(undefined)}
+                    onCancel={onFinished}
                 />
-            }
-            { !shouldAdvertiseLiveLabsFlag && !!shareType &&
-                <LocationPicker
-                    sender={sender}
-                    shareType={shareType}
-                    onChoose={onLocationSubmit}
-                    onFinished={onFinished}
-                />
-            }
-            { !shareType &&
-                <ShareType setShareType={setShareType} enabledShareTypes={enabledShareTypes} />
-            }
-            <ShareDialogButtons displayBack={!!shareType && multipleShareTypesEnabled} onBack={() => setShareType(undefined)} onCancel={onFinished} />
-        </div>
-    </ContextMenu>;
+            </div>
+        </ContextMenu>
+    );
 };
 
 export default LocationShareMenu;

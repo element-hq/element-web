@@ -15,22 +15,21 @@ limitations under the License.
 */
 
 import { IEventRelation, UploadProgress } from "matrix-js-sdk/src/matrix";
-
-import { IEncryptedFile } from "../customisations/models/IMediaEventContent";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 export class RoomUpload {
     public readonly abortController = new AbortController();
-    public promise: Promise<{ url?: string, file?: IEncryptedFile }>;
+    public promise?: Promise<{ url?: string; file?: EncryptedFile }>;
     private uploaded = 0;
 
-    constructor(
+    public constructor(
         public readonly roomId: string,
         public readonly fileName: string,
         public readonly relation?: IEventRelation,
         public fileSize = 0,
     ) {}
 
-    public onProgress(progress: UploadProgress) {
+    public onProgress(progress: UploadProgress): void {
         this.uploaded = progress.loaded;
         this.fileSize = progress.total;
     }

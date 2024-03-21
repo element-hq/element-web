@@ -26,7 +26,7 @@ const makeDeviceExtendedInfo = (
     deviceType,
     deviceModel,
     deviceOperatingSystem,
-    client: clientName && [clientName, clientVersion].filter(Boolean).join(' '),
+    client: clientName && [clientName, clientVersion].filter(Boolean).join(" "),
 });
 
 /* eslint-disable max-len */
@@ -66,11 +66,11 @@ const IOS_EXPECTED_RESULT = [
 ];
 const DESKTOP_UA = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102" +
-            " Electron/20.1.1 Safari/537.36",
+        " Electron/20.1.1 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
 ];
 const DESKTOP_EXPECTED_RESULT = [
-    makeDeviceExtendedInfo(DeviceType.Desktop, undefined, "Mac OS", "Electron", "20.1.1"),
+    makeDeviceExtendedInfo(DeviceType.Desktop, "Apple Macintosh", "Mac OS", "Electron", "20.1.1"),
     makeDeviceExtendedInfo(DeviceType.Desktop, undefined, "Windows", "Electron", "20.1.1"),
 ];
 
@@ -88,17 +88,16 @@ const WEB_UA = [
 ];
 
 const WEB_EXPECTED_RESULT = [
-    makeDeviceExtendedInfo(DeviceType.Web, undefined, "Mac OS", "Chrome", "104.0.5112.102"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Chrome", "104.0.5112.102"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Chrome", "104.0.5112.102"),
-    makeDeviceExtendedInfo(DeviceType.Web, undefined, "Mac OS", "Firefox", "39.0"),
-    makeDeviceExtendedInfo(DeviceType.Web, undefined, "Mac OS", "Safari", "8.0.3"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Firefox", "39.0"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Safari", "8.0.3"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Firefox", "40.0"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Edge", "12.246"),
     // using mobile browser
     makeDeviceExtendedInfo(DeviceType.Web, "Apple iPad", "iOS", "Mobile Safari", "8.0"),
     makeDeviceExtendedInfo(DeviceType.Web, "Apple iPhone", "iOS", "Mobile Safari", "8.0"),
     makeDeviceExtendedInfo(DeviceType.Web, "Samsung SM-G973U", "Android", "Chrome", "69.0.3497.100"),
-
 ];
 
 const MISC_UA = [
@@ -119,8 +118,8 @@ const MISC_EXPECTED_RESULT = [
 ];
 /* eslint-disable max-len */
 
-describe('parseUserAgent()', () => {
-    it('returns deviceType unknown when user agent is falsy', () => {
+describe("parseUserAgent()", () => {
+    it("returns deviceType unknown when user agent is falsy", () => {
         expect(parseUserAgent(undefined)).toEqual({
             deviceType: DeviceType.Unknown,
         });
@@ -131,18 +130,16 @@ describe('parseUserAgent()', () => {
     const testPlatform = (platform: string, userAgents: string[], results: ExtendedDeviceInformation[]): void => {
         const testCases: TestCase[] = userAgents.map((userAgent, index) => [userAgent, results[index]]);
 
-        describe(platform, () => {
-            it.each(
-                testCases,
-            )('Parses user agent correctly -  %s', (userAgent, expectedResult) => {
+        describe(`on platform ${platform}`, () => {
+            it.each(testCases)("should parse the user agent correctly -  %s", (userAgent, expectedResult) => {
                 expect(parseUserAgent(userAgent)).toEqual(expectedResult);
             });
         });
     };
 
-    testPlatform('Android', ANDROID_UA, ANDROID_EXPECTED_RESULT);
-    testPlatform('iOS', IOS_UA, IOS_EXPECTED_RESULT);
-    testPlatform('Desktop', DESKTOP_UA, DESKTOP_EXPECTED_RESULT);
-    testPlatform('Web', WEB_UA, WEB_EXPECTED_RESULT);
-    testPlatform('Misc', MISC_UA, MISC_EXPECTED_RESULT);
+    testPlatform("Android", ANDROID_UA, ANDROID_EXPECTED_RESULT);
+    testPlatform("iOS", IOS_UA, IOS_EXPECTED_RESULT);
+    testPlatform("Desktop", DESKTOP_UA, DESKTOP_EXPECTED_RESULT);
+    testPlatform("Web", WEB_UA, WEB_EXPECTED_RESULT);
+    testPlatform("Misc", MISC_UA, MISC_EXPECTED_RESULT);
 });

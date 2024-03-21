@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { createTestClient } from "../test-utils";
@@ -28,6 +29,8 @@ import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "../../src/utils/lo
 import { findDMRoom } from "../../src/utils/dm/findDMRoom";
 import { createDmLocalRoom } from "../../src/utils/dm/createDmLocalRoom";
 import { startDm } from "../../src/utils/dm/startDm";
+import { Member } from "../../src/utils/direct-messages";
+import { resolveThreePids } from "../../src/utils/threepids";
 
 jest.mock("../../src/utils/rooms", () => ({
     ...(jest.requireActual("../../src/utils/rooms") as object),
@@ -59,6 +62,12 @@ jest.mock("../../src/utils/dm/startDm", () => ({
     startDm: jest.fn(),
 }));
 
+jest.mock("../../src/utils/threepids", () => ({
+    resolveThreePids: jest.fn().mockImplementation(async (members: Member[]) => {
+        return members;
+    }),
+}));
+
 describe("direct-messages", () => {
     const userId1 = "@user1:example.com";
     const member1 = new dmModule.DirectoryMember({ user_id: userId1 });
@@ -69,8 +78,6 @@ describe("direct-messages", () => {
     let roomEvents: Room[];
 
     beforeEach(() => {
-        jest.restoreAllMocks();
-
         mockClient = createTestClient();
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         roomEvents = [];
@@ -89,8 +96,15 @@ describe("direct-messages", () => {
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
         jest.spyOn(dis, "dispatch");
+        jest.spyOn(logger, "warn");
 
+        jest.useFakeTimers();
         jest.setSystemTime(new Date(2022, 7, 4, 11, 12, 30, 42));
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+        jest.useRealTimers();
     });
 
     describe("startDmOnFirstMessage", () => {
@@ -101,14 +115,34 @@ describe("direct-messages", () => {
 
             it("should create a local room and dispatch a view room event", async () => {
                 mocked(createDmLocalRoom).mockResolvedValue(localRoom);
-                const room = await dmModule.startDmOnFirstMessage(mockClient, [member1]);
-                expect(room).toBe(localRoom);
+                const members = [member1];
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
+                expect(roomId).toBe(localRoom.roomId);
                 expect(dis.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewRoom,
-                    room_id: room.roomId,
+                    room_id: roomId,
                     joining: false,
                     targets: [member1],
                 });
+
+                // assert, that startDmOnFirstMessage tries to resolve 3rd-party IDs
+                expect(resolveThreePids).toHaveBeenCalledWith(members, mockClient);
+            });
+
+            it("should work when resolveThreePids raises an error", async () => {
+                const error = new Error("error 4711");
+                mocked(resolveThreePids).mockRejectedValue(error);
+
+                mocked(createDmLocalRoom).mockResolvedValue(localRoom);
+                const members = [member1];
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
+                expect(roomId).toBe(localRoom.roomId);
+
+                // ensure that startDmOnFirstMessage tries to resolve 3rd-party IDs
+                expect(resolveThreePids).toHaveBeenCalledWith(members, mockClient);
+
+                // ensure that the error is logged
+                expect(logger.warn).toHaveBeenCalledWith("Error resolving 3rd-party members", error);
             });
         });
 
@@ -118,8 +152,8 @@ describe("direct-messages", () => {
             });
 
             it("should return the room and dispatch a view room event", async () => {
-                const room = await dmModule.startDmOnFirstMessage(mockClient, [member1]);
-                expect(room).toBe(room1);
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, [member1]);
+                expect(roomId).toBe(room1.roomId);
                 expect(dis.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewRoom,
                     room_id: room1.roomId,
@@ -158,18 +192,16 @@ describe("direct-messages", () => {
                 mocked(startDm).mockResolvedValue(room1.roomId);
             });
 
-            it(
-                "should set the room into creating state and call waitForRoomReadyAndApplyAfterCreateCallbacks",
-                async () => {
-                    const result = await dmModule.createRoomFromLocalRoom(mockClient, localRoom);
-                    expect(result).toBe(room1.roomId);
-                    expect(localRoom.state).toBe(LocalRoomState.CREATING);
-                    expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(
-                        mockClient,
-                        localRoom,
-                    );
-                },
-            );
+            it("should set the room into creating state and call waitForRoomReadyAndApplyAfterCreateCallbacks", async () => {
+                const result = await dmModule.createRoomFromLocalRoom(mockClient, localRoom);
+                expect(result).toBe(room1.roomId);
+                expect(localRoom.state).toBe(LocalRoomState.CREATING);
+                expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(
+                    mockClient,
+                    localRoom,
+                    room1.roomId,
+                );
+            });
         });
     });
 });

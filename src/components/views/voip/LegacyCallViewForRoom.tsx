@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React from 'react';
+import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import React from "react";
 import { Resizable } from "re-resizable";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../../LegacyCallHandler';
-import LegacyCallView from './LegacyCallView';
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
+import LegacyCallView from "./LegacyCallView";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 interface IProps {
@@ -40,24 +40,24 @@ interface IState {
  * or nothing if there is no call in that room.
  */
 export default class LegacyCallViewForRoom extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             call: this.getCall(),
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
-    private updateCall = () => {
+    private updateCall = (): void => {
         const newCall = this.getCall();
         if (newCall !== this.state.call) {
             this.setState({ call: newCall });
@@ -71,19 +71,19 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         return call;
     }
 
-    private onResizeStart = () => {
+    private onResizeStart = (): void => {
         this.props.resizeNotifier.startResizing();
     };
 
-    private onResize = () => {
+    private onResize = (): void => {
         this.props.resizeNotifier.notifyTimelineHeightChanged();
     };
 
-    private onResizeStop = () => {
+    private onResizeStop = (): void => {
         this.props.resizeNotifier.stopResizing();
     };
 
-    public render() {
+    public render(): React.ReactNode {
         if (!this.state.call) return null;
 
         return (
@@ -107,11 +107,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
                     className="mx_LegacyCallViewForRoom_ResizeWrapper"
                     handleClasses={{ bottom: "mx_LegacyCallViewForRoom_ResizeHandle" }}
                 >
-                    <LegacyCallView
-                        call={this.state.call}
-                        pipMode={false}
-                        showApps={this.props.showApps}
-                    />
+                    <LegacyCallView call={this.state.call} pipMode={false} showApps={this.props.showApps} />
                 </Resizable>
             </div>
         );

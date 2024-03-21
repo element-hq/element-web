@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import * as Sentry from "@sentry/browser";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Integration } from "@sentry/types/types/integration";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -38,6 +39,7 @@ type UserContext = {
 };
 
 type CryptoContext = {
+    crypto_version?: string;
     device_keys?: string;
     cross_signing_ready?: string;
     cross_signing_supported_by_hs?: string;
@@ -53,8 +55,8 @@ type CryptoContext = {
 };
 
 type DeviceContext = {
-    device_id: string;
-    mx_local_settings: string;
+    device_id?: string;
+    mx_local_settings: string | null;
     modernizr_missing_features?: string;
 };
 
@@ -68,14 +70,15 @@ type Contexts = {
 /* eslint-enable camelcase */
 
 async function getStorageContext(): Promise<StorageContext> {
-    const result = {};
+    const result: StorageContext = {};
 
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
         try {
             result["storageManager_persisted"] = String(await navigator.storage.persisted());
         } catch (e) {}
-    } else if (document.hasStorageAccess) { // Safari
+    } else if (document.hasStorageAccess) {
+        // Safari
         try {
             result["storageManager_persisted"] = String(await document.hasStorageAccess());
         } catch (e) {}
@@ -86,9 +89,9 @@ async function getStorageContext(): Promise<StorageContext> {
             result["storageManager_quota"] = String(estimate.quota);
             result["storageManager_usage"] = String(estimate.usage);
             if (estimate.usageDetails) {
-                const usageDetails = [];
-                Object.keys(estimate.usageDetails).forEach(k => {
-                    usageDetails.push(`${k}: ${String(estimate.usageDetails[k])}`);
+                const usageDetails: string[] = [];
+                Object.keys(estimate.usageDetails).forEach((k) => {
+                    usageDetails.push(`${k}: ${String(estimate.usageDetails![k])}`);
                 });
                 result[`storageManager_usage`] = usageDetails.join(", ");
             }
@@ -100,14 +103,14 @@ async function getStorageContext(): Promise<StorageContext> {
 
 function getUserContext(client: MatrixClient): UserContext {
     return {
-        "username": client.credentials.userId,
-        "enabled_labs": getEnabledLabs(),
-        "low_bandwidth": SettingsStore.getValue("lowBandwidth") ? "enabled" : "disabled",
+        username: client.credentials.userId!,
+        enabled_labs: getEnabledLabs(),
+        low_bandwidth: SettingsStore.getValue("lowBandwidth") ? "enabled" : "disabled",
     };
 }
 
 function getEnabledLabs(): string {
-    const enabledLabs = SettingsStore.getFeatureSettingNames().filter(f => SettingsStore.getValue(f));
+    const enabledLabs = SettingsStore.getFeatureSettingNames().filter((f) => SettingsStore.getValue(f));
     if (enabledLabs.length) {
         return enabledLabs.join(", ");
     }
@@ -115,46 +118,45 @@ function getEnabledLabs(): string {
 }
 
 async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
-    if (!client.isCryptoEnabled()) {
+    const cryptoApi = client.getCrypto();
+    if (!cryptoApi) {
         return {};
     }
-    const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
-    if (client.getDeviceCurve25519Key) {
-        keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
-    }
-    const crossSigning = client.crypto.crossSigningInfo;
-    const secretStorage = client.crypto.secretStorage;
-    const pkCache = client.getCrossSigningCacheCallbacks();
-    const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
+
+    const ownDeviceKeys = await cryptoApi.getOwnDeviceKeys();
+
+    const keys = [`curve25519:${ownDeviceKeys.curve25519}`, `ed25519:${ownDeviceKeys.ed25519}`];
+
+    const crossSigningStatus = await cryptoApi.getCrossSigningStatus();
+    const secretStorage = client.secretStorage;
+    const sessionBackupKeyFromCache = await cryptoApi.getSessionBackupPrivateKey();
 
     return {
-        "device_keys": keys.join(', '),
-        "cross_signing_ready": String(await client.isCrossSigningReady()),
-        "cross_signing_supported_by_hs":
-            String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")),
-        "cross_signing_key": crossSigning.getId(),
-        "cross_signing_privkey_in_secret_storage": String(
-            !!(await crossSigning.isStoredInSecretStorage(secretStorage))),
-        "cross_signing_master_privkey_cached": String(
-            !!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))),
-        "cross_signing_user_signing_privkey_cached": String(
-            !!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")))),
-        "secret_storage_ready": String(await client.isSecretStorageReady()),
-        "secret_storage_key_in_account": String(!!(await secretStorage.hasKey())),
-        "session_backup_key_in_secret_storage": String(!!(await client.isKeyBackupKeyStored())),
-        "session_backup_key_cached": String(!!sessionBackupKeyFromCache),
-        "session_backup_key_well_formed": String(sessionBackupKeyFromCache instanceof Uint8Array),
+        crypto_version: cryptoApi.getVersion(),
+        device_keys: keys.join(", "),
+        cross_signing_ready: String(await cryptoApi.isCrossSigningReady()),
+        cross_signing_key: (await cryptoApi.getCrossSigningKeyId()) ?? undefined,
+        cross_signing_privkey_in_secret_storage: String(crossSigningStatus.privateKeysInSecretStorage),
+        cross_signing_master_privkey_cached: String(crossSigningStatus.privateKeysCachedLocally.masterKey),
+        cross_signing_user_signing_privkey_cached: String(crossSigningStatus.privateKeysCachedLocally.userSigningKey),
+        secret_storage_ready: String(await cryptoApi.isSecretStorageReady()),
+        secret_storage_key_in_account: String(await secretStorage.hasKey()),
+        session_backup_key_in_secret_storage: String(!!(await client.isKeyBackupKeyStored())),
+        session_backup_key_cached: String(!!sessionBackupKeyFromCache),
+        session_backup_key_well_formed: String(sessionBackupKeyFromCache instanceof Uint8Array),
     };
 }
 
 function getDeviceContext(client: MatrixClient): DeviceContext {
-    const result = {
-        "device_id": client?.deviceId,
-        "mx_local_settings": localStorage.getItem('mx_local_settings'),
+    const result: DeviceContext = {
+        device_id: client?.deviceId ?? undefined,
+        mx_local_settings: localStorage.getItem("mx_local_settings"),
     };
 
     if (window.Modernizr) {
-        const missingFeatures = Object.keys(window.Modernizr).filter(key => window.Modernizr[key] === false);
+        const missingFeatures = Object.keys(window.Modernizr).filter(
+            (key) => window.Modernizr[key as keyof ModernizrStatic] === false,
+        );
         if (missingFeatures.length > 0) {
             result["modernizr_missing_features"] = missingFeatures.join(", ");
         }
@@ -164,24 +166,24 @@ function getDeviceContext(client: MatrixClient): DeviceContext {
 }
 
 async function getContexts(): Promise<Contexts> {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     return {
-        "user": getUserContext(client),
-        "crypto": await getCryptoContext(client),
-        "device": getDeviceContext(client),
-        "storage": await getStorageContext(),
+        user: getUserContext(client),
+        crypto: await getCryptoContext(client),
+        device: getDeviceContext(client),
+        storage: await getStorageContext(),
     };
 }
 
-export async function sendSentryReport(userText: string, issueUrl: string, error: Error): Promise<void> {
+export async function sendSentryReport(userText: string, issueUrl: string, error?: unknown): Promise<void> {
     const sentryConfig = SdkConfig.getObject("sentry");
     if (!sentryConfig) return;
 
     const captureContext = {
-        "contexts": await getContexts(),
-        "extra": {
-            "user_text": userText,
-            "issue_url": issueUrl,
+        contexts: await getContexts(),
+        extra: {
+            user_text: userText,
+            issue_url: issueUrl,
         },
     };
 
@@ -202,17 +204,16 @@ export function setSentryUser(mxid: string): void {
 export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
     // Only enable Integrations.GlobalHandlers, which hooks uncaught exceptions, if automaticErrorReporting is true
-    const integrations = [
+    const integrations: Integration[] = [
         new Sentry.Integrations.InboundFilters(),
         new Sentry.Integrations.FunctionToString(),
         new Sentry.Integrations.Breadcrumbs(),
-        new Sentry.Integrations.UserAgent(),
+        new Sentry.Integrations.HttpContext(),
         new Sentry.Integrations.Dedupe(),
     ];
 
     if (SettingsStore.getValue("automaticErrorReporting")) {
-        integrations.push(new Sentry.Integrations.GlobalHandlers(
-            { onerror: false, onunhandledrejection: true }));
+        integrations.push(new Sentry.Integrations.GlobalHandlers({ onerror: false, onunhandledrejection: true }));
         integrations.push(new Sentry.Integrations.TryCatch());
     }
 

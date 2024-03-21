@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 .mx_RoomView_body[data-layout="bubble"] {
-    .mx_RoomView_timeline, .mx_RoomView_statusArea, .mx_MessageComposer {
+    .mx_RoomView_timeline,
+    .mx_RoomView_statusArea,
+    .mx_MessageComposer {
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
@@ -42,11 +44,6 @@ limitations under the License.
     --EventTile_bubble_line-margin-inline-end: -12px;
     --EventTile_bubble_gap-inline: 5px;
 
-    position: relative;
-    margin-top: var(--gutterSize);
-    margin-left: var(--EventTile_bubble-margin-inline-start);
-    font-size: $font-14px;
-
     .mx_MessageTimestamp {
         width: unset; /* Cancel the default width */
         max-width: var(--MessageTimestamp-max-width);
@@ -61,9 +58,31 @@ limitations under the License.
         margin-right: 0;
     }
 
+    .mx_EventTile_avatar {
+        line-height: 0;
+        border: 4px solid $background;
+        border-radius: 50%;
+        position: absolute;
+        top: 6px;
+        z-index: 9;
+        img {
+            box-shadow: 0 0 0 3px $background;
+            border-radius: 50%;
+        }
+    }
+
     &.mx_EventTile_highlight {
+        .mx_EventTile_avatar {
+            border-color: $event-highlight-bg-color;
+        }
         &::before {
             background-color: $event-highlight-bg-color;
+        }
+    }
+
+    &:hover {
+        .mx_EventTile_avatar {
+            border-color: $eventbubble-bg-hover;
         }
     }
 
@@ -73,7 +92,7 @@ limitations under the License.
     }
 
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: -1px;
         bottom: -1px;
@@ -85,7 +104,6 @@ limitations under the License.
 
     &:hover,
     &.mx_EventTile_selected {
-
         &::before {
             background: $eventbubble-bg-hover;
         }
@@ -181,7 +199,7 @@ limitations under the License.
         }
 
         .mx_EventTile_avatar {
-            left: -34px;
+            left: -36px;
         }
 
         .mx_MessageActionBar {
@@ -245,7 +263,7 @@ limitations under the License.
 
         .mx_EventTile_avatar {
             top: -19px; /* height of the sender block */
-            right: -35px;
+            right: -38px;
         }
 
         .mx_MediaBody {
@@ -294,7 +312,7 @@ limitations under the License.
             /* we put the timestamps for media (other than stickers) atop the media */
             &.mx_EventTile_image {
                 .mx_MessageTimestamp {
-                    border-radius: $timeline-image-border-radius;
+                    border-radius: var(--MBody-border-radius);
                     /* Hardcoded colours because it's the same on all themes */
                     background-color: rgba(0, 0, 0, 0.6);
                     color: #ffffff;
@@ -336,6 +354,14 @@ limitations under the License.
 
         .mx_EventTile_e2eIcon {
             flex-shrink: 0; /* keep it at full size */
+
+            /* Keep height equal to text for shield alignment, additional 2px because of 1px padding on text */
+            height: calc($font-18px + 2px);
+        }
+
+        .mx_MPollEndBody {
+            /* Prevent the poll end body from exceeding the tile width */
+            width: 100%;
         }
     }
 
@@ -402,26 +428,10 @@ limitations under the License.
         }
     }
 
-    .mx_EventTile_avatar {
-        position: absolute;
-        top: 0;
-        line-height: 1;
-        z-index: 9;
-        img {
-            box-shadow: 0 0 0 3px $background;
-            border-radius: 50%;
-        }
-    }
-
     &.mx_EventTile_noSender {
         .mx_EventTile_avatar {
             top: -19px;
         }
-    }
-
-    .mx_BaseAvatar,
-    .mx_EventTile_avatar {
-        line-height: 1;
     }
 
     &[data-has-reply="true"] {
@@ -475,11 +485,9 @@ limitations under the License.
             grid-template:
                 "reply reply" auto
                 "shield body" auto
-                "shield link" auto
-                / auto  1fr;
+                / auto 1fr;
 
             .mx_UnknownBody,
-            .mx_EventTile_keyRequestInfo,
             .mx_ReplyChain_wrapper,
             .mx_ViewSourceEvent {
                 min-width: 0; /* Prevent a grid blowout */
@@ -487,14 +495,13 @@ limitations under the License.
 
             .mx_EventTile_e2eIcon {
                 grid-area: shield;
+                margin-top: auto;
+                margin-bottom: auto;
             }
 
-            .mx_UnknownBody {
+            .mx_UnknownBody,
+            .mx_DecryptionFailureBody {
                 grid-area: body;
-            }
-
-            .mx_EventTile_keyRequestInfo {
-                grid-area: link;
             }
 
             .mx_ReplyChain_wrapper {
@@ -509,8 +516,7 @@ limitations under the License.
                 align-items: center;
                 grid-template:
                     "shield source" auto
-                    "shield link" auto
-                    / auto  1fr;
+                    / auto 1fr;
 
                 .mx_ViewSourceEvent {
                     grid-area: source;
@@ -536,7 +542,8 @@ limitations under the License.
         padding-right: 60px; /* align with bubbles text */
         font-style: italic;
 
-        > a { /* timestamp anchor wrapper */
+        > a {
+            /* timestamp anchor wrapper */
             align-self: center;
             bottom: unset;
             top: unset;
@@ -599,7 +606,8 @@ limitations under the License.
             bottom: unset;
             align-self: center;
 
-            .mx_MessageTimestamp, &.mx_MessageTimestamp {
+            .mx_MessageTimestamp,
+            &.mx_MessageTimestamp {
                 vertical-align: middle;
             }
         }

@@ -14,21 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import SdkConfig from '../../../SdkConfig';
-import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
+import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import BugReportDialog from "./BugReportDialog";
-import { IDialogProps } from "./IDialogProps";
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
-interface IProps extends IDialogProps { }
+interface IProps {
+    onFinished(signOut?: boolean): void;
+}
 
 export default class StorageEvictedDialog extends React.Component<IProps> {
-    private sendBugReport = (ev: React.MouseEvent): void => {
+    private sendBugReport = (ev: ButtonEvent): void => {
         ev.preventDefault();
         Modal.createDialog(BugReportDialog, {});
     };
@@ -37,16 +38,18 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
         this.props.onFinished(true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let logRequest;
         if (SdkConfig.get().bug_report_endpoint_url) {
             logRequest = _t(
-                "To help us prevent this in future, please <a>send us logs</a>.",
+                "bug_reporting|log_request",
                 {},
                 {
-                    a: text => <AccessibleButton kind='link_inline' onClick={this.sendBugReport}>
-                        { text }
-                    </AccessibleButton>,
+                    a: (text) => (
+                        <AccessibleButton kind="link_inline" onClick={this.sendBugReport}>
+                            {text}
+                        </AccessibleButton>
+                    ),
                 },
             );
         }
@@ -55,22 +58,18 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
             <BaseDialog
                 className="mx_ErrorDialog"
                 onFinished={this.props.onFinished}
-                title={_t('Missing session data')}
-                contentId='mx_Dialog_content'
+                title={_t("error|storage_evicted_title")}
+                contentId="mx_Dialog_content"
                 hasCancel={false}
             >
-                <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                    <p>{ _t(
-                        "Some session data, including encrypted message keys, is " +
-                        "missing. Sign out and sign in to fix this, restoring keys " +
-                        "from backup.",
-                    ) }</p>
-                    <p>{ _t(
-                        "Your browser likely removed this data when running low on " +
-                        "disk space.",
-                    ) } { logRequest }</p>
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                    <p>{_t("error|storage_evicted_description_1")}</p>
+                    <p>
+                        {_t("error|storage_evicted_description_2")} {logRequest}
+                    </p>
                 </div>
-                <DialogButtons primaryButton={_t("Sign out")}
+                <DialogButtons
+                    primaryButton={_t("action|sign_out")}
                     onPrimaryButtonClick={this.onSignOutClick}
                     focus={true}
                     hasCancel={false}

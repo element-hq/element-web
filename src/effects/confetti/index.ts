@@ -1,6 +1,7 @@
 /*
  Copyright 2020 Nurjin Jafar
  Copyright 2020 Nordeck IT + Consulting GmbH.
+ Copyright 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 
 export type ConfettiOptions = {
     /**
@@ -61,28 +62,38 @@ export const DefaultOptions: ConfettiOptions = {
 export default class Confetti implements ICanvasEffect {
     private readonly options: ConfettiOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 
     private context: CanvasRenderingContext2D | null = null;
     private supportsAnimationFrame = window.requestAnimationFrame;
-    private colors = ['rgba(30,144,255,', 'rgba(107,142,35,', 'rgba(255,215,0,',
-        'rgba(255,192,203,', 'rgba(106,90,205,', 'rgba(173,216,230,',
-        'rgba(238,130,238,', 'rgba(152,251,152,', 'rgba(70,130,180,',
-        'rgba(244,164,96,', 'rgba(210,105,30,', 'rgba(220,20,60,'];
+    private colors = [
+        "rgba(30,144,255,",
+        "rgba(107,142,35,",
+        "rgba(255,215,0,",
+        "rgba(255,192,203,",
+        "rgba(106,90,205,",
+        "rgba(173,216,230,",
+        "rgba(238,130,238,",
+        "rgba(152,251,152,",
+        "rgba(70,130,180,",
+        "rgba(244,164,96,",
+        "rgba(210,105,30,",
+        "rgba(220,20,60,",
+    ];
 
     private lastFrameTime = Date.now();
     private particles: Array<ConfettiParticle> = [];
     private waveAngle = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -95,14 +106,14 @@ export default class Confetti implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
-        particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
+        particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ")");
         if (this.options.gradient) {
-            particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
+            particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ")");
         } else {
             particle.color2 = particle.color;
         }
@@ -138,7 +149,9 @@ export default class Confetti implements ICanvasEffect {
         if (!this.context || !this.context.canvas) {
             return;
         }
-        let x; let x2; let y2;
+        let x;
+        let x2;
+        let y2;
         for (const particle of this.particles) {
             this.context.beginPath();
             context.lineWidth = particle.diameter;
@@ -159,7 +172,7 @@ export default class Confetti implements ICanvasEffect {
         }
     };
 
-    private updateParticles = () => {
+    private updateParticles = (): void => {
         if (!this.context || !this.context.canvas) {
             return;
         }

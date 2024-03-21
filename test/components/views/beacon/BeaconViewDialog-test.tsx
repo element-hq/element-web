@@ -14,49 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from 'enzyme';
-import { act } from 'react-dom/test-utils';
-import {
-    MatrixClient,
-    MatrixEvent,
-    Room,
-    RoomMember,
-    getBeaconInfoIdentifier,
-} from 'matrix-js-sdk/src/matrix';
-import maplibregl from 'maplibre-gl';
-import { mocked } from 'jest-mock';
+import React from "react";
+import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
+import * as maplibregl from "maplibre-gl";
+import { mocked } from "jest-mock";
+import { TooltipProvider } from "@vector-im/compound-web";
 
-import BeaconViewDialog from '../../../../src/components/views/beacon/BeaconViewDialog';
+import BeaconViewDialog from "../../../../src/components/views/beacon/BeaconViewDialog";
 import {
-    findByAttr,
-    findByTestId,
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
     makeRoomWithBeacons,
     makeRoomWithStateEvents,
-} from '../../../test-utils';
-import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
-import { OwnBeaconStore } from '../../../../src/stores/OwnBeaconStore';
-import { BeaconDisplayStatus } from '../../../../src/components/views/beacon/displayStatus';
-import BeaconListItem from '../../../../src/components/views/beacon/BeaconListItem';
+} from "../../../test-utils";
+import { TILE_SERVER_WK_KEY } from "../../../../src/utils/WellKnownUtils";
+import { OwnBeaconStore } from "../../../../src/stores/OwnBeaconStore";
 
-describe('<BeaconViewDialog />', () => {
+describe("<BeaconViewDialog />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;
     // stable date for snapshots
-    jest.spyOn(global.Date, 'now').mockReturnValue(now);
-    const roomId = '!room:server';
-    const aliceId = '@alice:server';
-    const bobId = '@bob:server';
+    jest.spyOn(global.Date, "now").mockReturnValue(now);
+    const roomId = "!room:server";
+    const aliceId = "@alice:server";
+    const bobId = "@bob:server";
 
     const aliceMember = new RoomMember(roomId, aliceId);
 
     const mockClient = getMockClientWithEventEmitter({
         getClientWellKnown: jest.fn().mockReturnValue({
-            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         }),
         getUserId: jest.fn().mockReturnValue(bobId),
         getRoom: jest.fn(),
@@ -64,26 +53,26 @@ describe('<BeaconViewDialog />', () => {
         getVisibleRooms: jest.fn().mockReturnValue([]),
     });
 
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
+    const mockMarker = new maplibregl.Marker();
 
     // make fresh rooms every time
     // as we update room state
     const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
         const room1 = makeRoomWithStateEvents(stateEvents, { roomId, mockClient });
-        jest.spyOn(room1, 'getMember').mockReturnValue(aliceMember);
+        jest.spyOn(room1, "getMember").mockReturnValue(aliceMember);
 
         return room1;
     };
 
-    const defaultEvent = makeBeaconInfoEvent(aliceId,
-        roomId,
-        { isLive: true },
-        '$alice-room1-1',
-    );
+    const defaultEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
 
-    const location1 = makeBeaconEvent(
-        aliceId, { beaconInfoId: defaultEvent.getId(), geoUri: 'geo:51,41', timestamp: now + 1 },
-    );
+    const location1 = makeBeaconEvent(aliceId, {
+        beaconInfoId: defaultEvent.getId(),
+        geoUri: "geo:51,41",
+        timestamp: now + 1,
+    });
 
     const defaultProps = {
         onFinished: jest.fn(),
@@ -91,143 +80,122 @@ describe('<BeaconViewDialog />', () => {
         matrixClient: mockClient as MatrixClient,
     };
 
-    const getComponent = (props = {}) =>
-        mount(<BeaconViewDialog {...defaultProps} {...props} />);
+    const getComponent = (props = {}): RenderResult =>
+        render(<BeaconViewDialog {...defaultProps} {...props} />, { wrapper: TooltipProvider });
 
-    const openSidebar = (component: ReactWrapper) => act(() => {
-        findByTestId(component, 'beacon-view-dialog-open-sidebar').at(0).simulate('click');
-        component.setProps({});
-    });
-
-    beforeAll(() => {
-        maplibregl.AttributionControl = jest.fn();
-    });
+    const openSidebar = (getByTestId: RenderResult["getByTestId"]) => {
+        fireEvent.click(getByTestId("beacon-view-dialog-open-sidebar"));
+    };
 
     beforeEach(() => {
-        jest.spyOn(OwnBeaconStore.instance, 'getLiveBeaconIds').mockRestore();
-        jest.spyOn(OwnBeaconStore.instance, 'getBeaconById').mockRestore();
-        jest.spyOn(global.Date, 'now').mockReturnValue(now);
+        jest.spyOn(OwnBeaconStore.instance, "getLiveBeaconIds").mockRestore();
+        jest.spyOn(OwnBeaconStore.instance, "getBeaconById").mockRestore();
+        jest.spyOn(global.Date, "now").mockReturnValue(now);
         jest.clearAllMocks();
     });
 
-    it('renders a map with markers', () => {
+    it("renders a map with markers", () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        const component = getComponent();
-        expect(component.find('Map').props()).toEqual(expect.objectContaining({
-            centerGeoUri: 'geo:51,41',
-            interactive: true,
-        }));
-        expect(component.find('SmartMarker').length).toEqual(1);
+        getComponent();
+        // centered on default event
+        expect(mockMap.setCenter).toHaveBeenCalledWith({
+            lon: 41,
+            lat: 51,
+        });
+        // marker added
+        expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
     });
 
-    it('does not render any own beacon status when user is not live sharing', () => {
+    it("does not render any own beacon status when user is not live sharing", () => {
         // default event belongs to alice, we are bob
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        const component = getComponent();
-        expect(component.find('DialogOwnBeaconStatus').html()).toBeNull();
+        const { queryByText } = getComponent();
+        expect(queryByText("Live location enabled")).not.toBeInTheDocument();
     });
 
-    it('renders own beacon status when user is live sharing', () => {
+    it("renders own beacon status when user is live sharing", () => {
         // default event belongs to alice
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         // mock own beacon store to show default event as alice's live beacon
-        jest.spyOn(OwnBeaconStore.instance, 'getLiveBeaconIds').mockReturnValue([beacon.identifier]);
-        jest.spyOn(OwnBeaconStore.instance, 'getBeaconById').mockReturnValue(beacon);
-        const component = getComponent();
-        expect(component.find('MemberAvatar').length).toBeTruthy();
-        expect(component.find('OwnBeaconStatus').props()).toEqual({
-            beacon, displayStatus: BeaconDisplayStatus.Active,
-            className: 'mx_DialogOwnBeaconStatus_status',
-        });
+        jest.spyOn(OwnBeaconStore.instance, "getLiveBeaconIds").mockReturnValue([beacon.identifier]);
+        jest.spyOn(OwnBeaconStore.instance, "getBeaconById").mockReturnValue(beacon);
+        const { container } = getComponent();
+        expect(container.querySelector(".mx_DialogOwnBeaconStatus")).toMatchSnapshot();
     });
 
-    it('updates markers on changes to beacons', () => {
+    it("updates markers on changes to beacons", async () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        const component = getComponent();
-        expect(component.find('BeaconMarker').length).toEqual(1);
+        const { container } = getComponent();
 
-        const anotherBeaconEvent = makeBeaconInfoEvent(bobId,
-            roomId,
-            { isLive: true },
-            '$bob-room1-1',
-        );
+        // one marker
+        expect(mockMarker.addTo).toHaveBeenCalledTimes(1);
+        expect(container.getElementsByClassName("mx_Marker").length).toEqual(1);
 
+        const anotherBeaconEvent = makeBeaconInfoEvent(bobId, roomId, { isLive: true }, "$bob-room1-1");
         act(() => {
             // emits RoomStateEvent.BeaconLiveness
             room.currentState.setStateEvents([anotherBeaconEvent]);
+            const beacon2 = room.currentState.beacons.get(getBeaconInfoIdentifier(anotherBeaconEvent))!;
+            beacon2.addLocations([location1]);
         });
 
-        component.setProps({});
-
         // two markers now!
-        expect(component.find('BeaconMarker').length).toEqual(2);
+        expect(container.getElementsByClassName("mx_Marker").length).toEqual(2);
     });
 
-    it('does not update bounds or center on changing beacons', () => {
+    it("does not update bounds or center on changing beacons", () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        const component = getComponent();
-        expect(component.find('BeaconMarker').length).toEqual(1);
+        const { container } = getComponent();
+        expect(container.getElementsByClassName("mx_Marker").length).toEqual(1);
 
-        const anotherBeaconEvent = makeBeaconInfoEvent(bobId,
-            roomId,
-            { isLive: true },
-            '$bob-room1-1',
-        );
-
+        const anotherBeaconEvent = makeBeaconInfoEvent(bobId, roomId, { isLive: true }, "$bob-room1-1");
         act(() => {
             // emits RoomStateEvent.BeaconLiveness
             room.currentState.setStateEvents([anotherBeaconEvent]);
+            const beacon2 = room.currentState.beacons.get(getBeaconInfoIdentifier(anotherBeaconEvent))!;
+            beacon2.addLocations([location1]);
         });
-
-        component.setProps({});
-
-        // two markers now!
+        // called once on init
         expect(mockMap.setCenter).toHaveBeenCalledTimes(1);
         expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
     });
 
-    it('renders a fallback when there are no locations', () => {
+    it("renders a fallback when there are no locations", () => {
         // this is a cornercase, should not be a reachable state in UI anymore
         const onFinished = jest.fn();
         const room = setupRoom([defaultEvent]);
         room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
-        const component = getComponent({ onFinished });
+        const { getByTestId } = getComponent({ onFinished });
 
         // map placeholder
-        expect(findByTestId(component, 'beacon-view-dialog-map-fallback')).toMatchSnapshot();
+        expect(getByTestId("beacon-view-dialog-map-fallback")).toMatchSnapshot();
 
-        act(() => {
-            findByTestId(component, 'beacon-view-dialog-fallback-close').at(0).simulate('click');
-        });
+        fireEvent.click(getByTestId("beacon-view-dialog-fallback-close"));
 
         expect(onFinished).toHaveBeenCalled();
     });
 
-    it('renders map without markers when no live beacons remain', () => {
+    it("renders map without markers when no live beacons remain", () => {
         const onFinished = jest.fn();
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        const component = getComponent({ onFinished });
-        expect(component.find('BeaconMarker').length).toEqual(1);
+        const { container } = getComponent({ onFinished });
+        expect(container.getElementsByClassName("mx_Marker").length).toEqual(1);
 
         // this will replace the defaultEvent
         // leading to no more live beacons
-        const anotherBeaconEvent = makeBeaconInfoEvent(aliceId,
-            roomId,
-            { isLive: false },
-            '$alice-room1-2',
-        );
+        const anotherBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false }, "$alice-room1-2");
 
         expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 51, lon: 41 });
         // reset call counts
@@ -239,66 +207,62 @@ describe('<BeaconViewDialog />', () => {
             room.currentState.setStateEvents([anotherBeaconEvent]);
         });
 
-        component.setProps({});
-
         // no more avatars
-        expect(component.find('MemberAvatar').length).toBeFalsy();
+        expect(container.getElementsByClassName("mx_Marker").length).toEqual(0);
         // map still rendered
-        expect(component.find('Map').length).toBeTruthy();
+        expect(container.querySelector("#mx_Map_mx_BeaconViewDialog")).toBeInTheDocument();
         // map location unchanged
         expect(mockMap.setCenter).not.toHaveBeenCalled();
         expect(mockMap.fitBounds).not.toHaveBeenCalled();
     });
 
-    describe('sidebar', () => {
-        it('opens sidebar on view list button click', () => {
+    describe("sidebar", () => {
+        it("opens sidebar on view list button click", () => {
             const room = setupRoom([defaultEvent]);
-            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
             beacon.addLocations([location1]);
-            const component = getComponent();
+            const { container, getByTestId } = getComponent();
 
-            openSidebar(component);
+            openSidebar(getByTestId);
 
-            expect(component.find('DialogSidebar').length).toBeTruthy();
+            expect(container.querySelector(".mx_DialogSidebar")).toBeInTheDocument();
         });
 
-        it('closes sidebar on close button click', () => {
+        it("closes sidebar on close button click", () => {
             const room = setupRoom([defaultEvent]);
-            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
             beacon.addLocations([location1]);
-            const component = getComponent();
+            const { container, getByTestId } = getComponent();
 
             // open the sidebar
-            openSidebar(component);
+            openSidebar(getByTestId);
 
-            expect(component.find('DialogSidebar').length).toBeTruthy();
+            expect(container.querySelector(".mx_DialogSidebar")).toBeInTheDocument();
 
             // now close it
-            act(() => {
-                findByAttr('data-testid')(component, 'dialog-sidebar-close').at(0).simulate('click');
-                component.setProps({});
-            });
+            fireEvent.click(getByTestId("dialog-sidebar-close"));
 
-            expect(component.find('DialogSidebar').length).toBeFalsy();
+            expect(container.querySelector(".mx_DialogSidebar")).not.toBeInTheDocument();
         });
     });
 
-    describe('focused beacons', () => {
-        const beacon2Event = makeBeaconInfoEvent(bobId,
-            roomId,
-            { isLive: true },
-            '$bob-room1-2',
-        );
+    describe("focused beacons", () => {
+        const beacon2Event = makeBeaconInfoEvent(bobId, roomId, { isLive: true }, "$bob-room1-2");
 
-        const location2 = makeBeaconEvent(
-            bobId, { beaconInfoId: beacon2Event.getId(), geoUri: 'geo:33,22', timestamp: now + 1 },
-        );
+        const location2 = makeBeaconEvent(bobId, {
+            beaconInfoId: beacon2Event.getId(),
+            geoUri: "geo:33,22",
+            timestamp: now + 1,
+        });
 
         const fitBoundsOptions = { maxZoom: 15, padding: 100 };
 
-        it('opens map with both beacons in view on first load without initialFocusedBeacon', () => {
+        it("opens map with both beacons in view on first load without initialFocusedBeacon", () => {
             const [beacon1, beacon2] = makeRoomWithBeacons(
-                roomId, mockClient, [defaultEvent, beacon2Event], [location1, location2],
+                roomId,
+                mockClient,
+                [defaultEvent, beacon2Event],
+                [location1, location2],
             );
 
             getComponent({ beacons: [beacon1, beacon2] });
@@ -308,15 +272,19 @@ describe('<BeaconViewDialog />', () => {
             // only called once
             expect(mockMap.setCenter).toHaveBeenCalledTimes(1);
             // bounds fit both beacons, only called once
-            expect(mockMap.fitBounds).toHaveBeenCalledWith(new maplibregl.LngLatBounds(
-                [22, 33], [41, 51],
-            ), fitBoundsOptions);
+            expect(mockMap.fitBounds).toHaveBeenCalledWith(
+                new maplibregl.LngLatBounds([22, 33], [41, 51]),
+                fitBoundsOptions,
+            );
             expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
         });
 
-        it('opens map with both beacons in view on first load with an initially focused beacon', () => {
+        it("opens map with both beacons in view on first load with an initially focused beacon", () => {
             const [beacon1, beacon2] = makeRoomWithBeacons(
-                roomId, mockClient, [defaultEvent, beacon2Event], [location1, location2],
+                roomId,
+                mockClient,
+                [defaultEvent, beacon2Event],
+                [location1, location2],
             );
 
             getComponent({ beacons: [beacon1, beacon2], initialFocusedBeacon: beacon1 });
@@ -326,27 +294,32 @@ describe('<BeaconViewDialog />', () => {
             // only called once
             expect(mockMap.setCenter).toHaveBeenCalledTimes(1);
             // bounds fit both beacons, only called once
-            expect(mockMap.fitBounds).toHaveBeenCalledWith(new maplibregl.LngLatBounds(
-                [22, 33], [41, 51],
-            ), fitBoundsOptions);
+            expect(mockMap.fitBounds).toHaveBeenCalledWith(
+                new maplibregl.LngLatBounds([22, 33], [41, 51]),
+                fitBoundsOptions,
+            );
             expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
         });
 
-        it('focuses on beacon location on sidebar list item click', () => {
+        it("focuses on beacon location on sidebar list item click", () => {
             const [beacon1, beacon2] = makeRoomWithBeacons(
-                roomId, mockClient, [defaultEvent, beacon2Event], [location1, location2],
+                roomId,
+                mockClient,
+                [defaultEvent, beacon2Event],
+                [location1, location2],
             );
 
-            const component = getComponent({ beacons: [beacon1, beacon2] });
+            const { container, getByTestId } = getComponent({ beacons: [beacon1, beacon2] });
 
             // reset call counts on map mocks after initial render
             jest.clearAllMocks();
 
-            openSidebar(component);
+            openSidebar(getByTestId);
 
             act(() => {
+                const listItems = container.querySelectorAll(".mx_BeaconListItem");
                 // click on the first beacon in the list
-                component.find(BeaconListItem).at(0).simulate('click');
+                fireEvent.click(listItems[0]!);
             });
 
             // centered on clicked beacon
@@ -354,40 +327,44 @@ describe('<BeaconViewDialog />', () => {
             // only called once
             expect(mockMap.setCenter).toHaveBeenCalledTimes(1);
             // bounds fitted just to clicked beacon
-            expect(mockMap.fitBounds).toHaveBeenCalledWith(new maplibregl.LngLatBounds(
-                [41, 51], [41, 51],
-            ), fitBoundsOptions);
+            expect(mockMap.fitBounds).toHaveBeenCalledWith(
+                new maplibregl.LngLatBounds([41, 51], [41, 51]),
+                fitBoundsOptions,
+            );
             expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
         });
 
-        it('refocuses on same beacon when clicking list item again', () => {
+        it("refocuses on same beacon when clicking list item again", () => {
             // test the map responds to refocusing the same beacon
             const [beacon1, beacon2] = makeRoomWithBeacons(
-                roomId, mockClient, [defaultEvent, beacon2Event], [location1, location2],
+                roomId,
+                mockClient,
+                [defaultEvent, beacon2Event],
+                [location1, location2],
             );
 
-            const component = getComponent({ beacons: [beacon1, beacon2] });
+            const { container, getByTestId } = getComponent({ beacons: [beacon1, beacon2] });
 
             // reset call counts on map mocks after initial render
             jest.clearAllMocks();
 
-            openSidebar(component);
+            openSidebar(getByTestId);
 
             act(() => {
                 // click on the second beacon in the list
-                component.find(BeaconListItem).at(1).simulate('click');
+                const listItems = container.querySelectorAll(".mx_BeaconListItem");
+                fireEvent.click(listItems[1]!);
             });
 
-            const expectedBounds = new maplibregl.LngLatBounds(
-                [22, 33], [22, 33],
-            );
+            const expectedBounds = new maplibregl.LngLatBounds([22, 33], [22, 33]);
 
             // date is mocked but this relies on timestamp, manually mock a tick
-            jest.spyOn(global.Date, 'now').mockReturnValue(now + 1);
+            jest.spyOn(global.Date, "now").mockReturnValue(now + 1);
 
             act(() => {
                 // click on the second beacon in the list
-                component.find(BeaconListItem).at(1).simulate('click');
+                const listItems = container.querySelectorAll(".mx_BeaconListItem");
+                fireEvent.click(listItems[1]!);
             });
 
             // centered on clicked beacon

@@ -14,55 +14,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act, fireEvent, render } from '@testing-library/react';
-import React from 'react';
+import { act, fireEvent, render } from "@testing-library/react";
+import React from "react";
 
-import { FilterDropdown } from '../../../../src/components/views/elements/FilterDropdown';
-import { flushPromises, mockPlatformPeg } from '../../../test-utils';
+import { FilterDropdown } from "../../../../src/components/views/elements/FilterDropdown";
+import { flushPromises, mockPlatformPeg } from "../../../test-utils";
 
 mockPlatformPeg();
 
-describe('<FilterDropdown />', () => {
+describe("<FilterDropdown />", () => {
     const options = [
-        { id: 'one', label: 'Option one' },
-        { id: 'two', label: 'Option two', description: 'with description' },
+        { id: "one", label: "Option one" },
+        { id: "two", label: "Option two", description: "with description" },
     ];
     const defaultProps = {
-        className: 'test',
-        value: 'one',
+        className: "test",
+        value: "one",
         options,
-        id: 'test',
-        label: 'test label',
+        id: "test",
+        label: "test label",
         onOptionChange: jest.fn(),
     };
-    const getComponent = (props = {}): JSX.Element =>
-        (<FilterDropdown {...defaultProps} {...props} />);
+    const getComponent = (props = {}): JSX.Element => <FilterDropdown {...defaultProps} {...props} />;
 
-    const openDropdown = async (container: HTMLElement): Promise<void> => await act(async () => {
-        const button = container.querySelector('[role="button"]');
-        expect(button).toBeTruthy();
-        fireEvent.click(button as Element);
-        await flushPromises();
-    });
+    const openDropdown = async (container: HTMLElement): Promise<void> =>
+        await act(async () => {
+            const button = container.querySelector('[role="button"]');
+            expect(button).toBeTruthy();
+            fireEvent.click(button as Element);
+            await flushPromises();
+        });
 
-    it('renders selected option', () => {
+    it("renders selected option", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders when selected option is not in options', () => {
-        const { container } = render(getComponent({ value: 'oops' }));
+    it("renders when selected option is not in options", () => {
+        const { container } = render(getComponent({ value: "oops" }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders selected option with selectedLabel', () => {
-        const { container } = render(getComponent({ selectedLabel: 'Show' }));
+    it("renders selected option with selectedLabel", () => {
+        const { container } = render(getComponent({ selectedLabel: "Show" }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders dropdown options in menu', async () => {
+    it("renders dropdown options in menu", async () => {
         const { container } = render(getComponent());
         await openDropdown(container);
-        expect(container.querySelector('.mx_Dropdown_menu')).toMatchSnapshot();
+        expect(container.querySelector(".mx_Dropdown_menu")).toMatchSnapshot();
     });
 });

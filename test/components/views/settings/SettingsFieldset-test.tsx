@@ -12,35 +12,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { renderIntoDocument } from 'react-dom/test-utils';
+import { render } from "@testing-library/react";
+import React from "react";
 
-import SettingsFieldset from '../../../../src/components/views/settings/SettingsFieldset';
+import SettingsFieldset from "../../../../src/components/views/settings/SettingsFieldset";
 
-describe('<SettingsFieldset />', () => {
+describe("<SettingsFieldset />", () => {
     const defaultProps = {
-        "legend": 'Who can read history?',
+        "legend": "Who can read history?",
         "children": <div>test</div>,
-        'data-test-id': 'test',
+        "data-testid": "test",
     };
     const getComponent = (props = {}) => {
-        const wrapper = renderIntoDocument<HTMLDivElement>(
-            <div><SettingsFieldset {...defaultProps} {...props} /></div>,
-        ) as HTMLDivElement;
-        return wrapper.children[0];
+        return render(<SettingsFieldset {...defaultProps} {...props} />);
     };
 
-    it('renders fieldset without description', () => {
-        expect(getComponent()).toMatchSnapshot();
+    it("renders fieldset without description", () => {
+        expect(getComponent().asFragment()).toMatchSnapshot();
     });
 
-    it('renders fieldset with plain text description', () => {
-        const description = 'Changes to who can read history.';
-        expect(getComponent({ description })).toMatchSnapshot();
+    it("renders fieldset with plain text description", () => {
+        const description = "Changes to who can read history.";
+        expect(getComponent({ description }).asFragment()).toMatchSnapshot();
     });
 
-    it('renders fieldset with react description', () => {
-        const description = <><p>Test</p><a href='#test'>a link</a></>;
-        expect(getComponent({ description })).toMatchSnapshot();
+    it("renders fieldset with react description", () => {
+        const description = (
+            <>
+                <p>Test</p>
+                <a href="#test">a link</a>
+            </>
+        );
+        expect(getComponent({ description }).asFragment()).toMatchSnapshot();
     });
 });

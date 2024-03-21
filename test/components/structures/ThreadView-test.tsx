@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { getByTestId, render, RenderResult, waitFor } from "@testing-library/react";
+import { act, getByTestId, render, RenderResult, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
+import {
+    MsgType,
+    RelationType,
+    EventStatus,
+    MatrixEvent,
+    Room,
+    MatrixClient,
+    PendingEventOrdering,
+    THREAD_RELATION_TYPE,
+} from "matrix-js-sdk/src/matrix";
 import React, { useState } from "react";
-import { act } from "react-dom/test-utils";
 
 import ThreadView from "../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { Action } from "../../../src/dispatcher/actions";
+import dispatcher from "../../../src/dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { mockPlatformPeg } from "../../test-utils/platform";
 import { getRoomContext } from "../../test-utils/room";
-import { stubClient } from "../../test-utils/test-utils";
+import { mkMessage, stubClient } from "../../test-utils/test-utils";
 import { mkThread } from "../../test-utils/threads";
 
 describe("ThreadView", () => {
@@ -47,37 +53,41 @@ describe("ThreadView", () => {
 
     let changeEvent: (event: MatrixEvent) => void;
 
-    function TestThreadView() {
+    function TestThreadView({ initialEvent }: { initialEvent?: MatrixEvent }) {
         const [event, setEvent] = useState(rootEvent);
         changeEvent = setEvent;
 
-        return <MatrixClientContext.Provider value={mockClient}>
-            <RoomContext.Provider value={getRoomContext(room, {
-                canSendMessages: true,
-            })}>
-                <ThreadView
-                    room={room}
-                    onClose={jest.fn()}
-                    mxEvent={event}
-                    resizeNotifier={new ResizeNotifier()}
-                />
-            </RoomContext.Provider>,
-        </MatrixClientContext.Provider>;
+        return (
+            <MatrixClientContext.Provider value={mockClient}>
+                <RoomContext.Provider
+                    value={getRoomContext(room, {
+                        canSendMessages: true,
+                    })}
+                >
+                    <ThreadView
+                        room={room}
+                        onClose={jest.fn()}
+                        mxEvent={event}
+                        initialEvent={initialEvent}
+                        resizeNotifier={new ResizeNotifier()}
+                    />
+                </RoomContext.Provider>
+                ,
+            </MatrixClientContext.Provider>
+        );
     }
 
-    async function getComponent(): Promise<RenderResult> {
-        const renderResult = render(
-            <TestThreadView />,
-        );
+    async function getComponent(initialEvent?: MatrixEvent): Promise<RenderResult> {
+        const renderResult = render(<TestThreadView initialEvent={initialEvent} />);
 
         await waitFor(() => {
-            expect(() => getByTestId(renderResult.container, 'spinner')).toThrow();
+            expect(() => getByTestId(renderResult.container, "spinner")).toThrow();
         });
 
         return renderResult;
     }
 
-    async function sendMessage(container, text): Promise<void> {
+    async function sendMessage(container: HTMLElement, text: string): Promise<void> {
         const composer = getByTestId(container, "basicmessagecomposer");
         await userEvent.click(composer);
         await userEvent.keyboard(text);
@@ -85,20 +95,24 @@ describe("ThreadView", () => {
         await userEvent.click(sendMessageBtn);
     }
 
-    function expectedMessageBody(rootEvent, message) {
+    function expectedMessageBody(rootEvent: MatrixEvent, message: string) {
         return {
             "body": message,
             "m.relates_to": {
                 "event_id": rootEvent.getId(),
                 "is_falling_back": true,
                 "m.in_reply_to": {
-                    "event_id": rootEvent.getThread().lastReply((ev: MatrixEvent) => {
-                        return ev.isRelation(THREAD_RELATION_TYPE.name);
-                    }).getId(),
+                    event_id: rootEvent
+                        .getThread()!
+                        .lastReply((ev: MatrixEvent) => {
+                            return ev.isRelation(THREAD_RELATION_TYPE.name);
+                        })!
+                        .getId(),
                 },
                 "rel_type": RelationType.Thread,
             },
             "msgtype": MsgType.Text,
+            "m.mentions": {},
         };
     }
 
@@ -107,7 +121,8 @@ describe("ThreadView", () => {
 
         stubClient();
         mockPlatformPeg();
-        mockClient = mocked(MatrixClientPeg.get());
+        mockClient = mocked(MatrixClientPeg.safeGet());
+        jest.spyOn(mockClient, "supportsThreads").mockReturnValue(true);
 
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -116,14 +131,32 @@ describe("ThreadView", () => {
         const res = mkThread({
             room,
             client: mockClient,
-            authorId: mockClient.getUserId(),
-            participantUserIds: [mockClient.getUserId()],
+            authorId: mockClient.getUserId()!,
+            participantUserIds: [mockClient.getUserId()!],
         });
 
         rootEvent = res.rootEvent;
 
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(SENDER);
+    });
+
+    it("does not include pending root event in the timeline twice", async () => {
+        rootEvent = mkMessage({
+            user: mockClient.getUserId()!,
+            event: true,
+            room: room.roomId,
+            msg: "root event message " + Math.random(),
+        });
+
+        rootEvent.status = EventStatus.SENDING;
+        rootEvent.setTxnId("1234");
+        room.addPendingEvent(rootEvent, "1234");
+        room.updatePendingEvent(rootEvent, EventStatus.SENT, rootEvent.getId());
+
+        const { container } = await getComponent();
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(1);
     });
 
     it("sends a message with the correct fallback", async () => {
@@ -132,18 +165,20 @@ describe("ThreadView", () => {
         await sendMessage(container, "Hello world!");
 
         expect(mockClient.sendMessage).toHaveBeenCalledWith(
-            ROOM_ID, rootEvent.getId(), expectedMessageBody(rootEvent, "Hello world!"),
+            ROOM_ID,
+            rootEvent.getId(),
+            expectedMessageBody(rootEvent, "Hello world!"),
         );
     });
 
-    it("sends a message with the correct fallback", async () => {
+    it("sends a thread message with the correct fallback", async () => {
         const { container } = await getComponent();
 
         const { rootEvent: rootEvent2 } = mkThread({
             room,
             client: mockClient,
-            authorId: mockClient.getUserId(),
-            participantUserIds: [mockClient.getUserId()],
+            authorId: mockClient.getUserId()!,
+            participantUserIds: [mockClient.getUserId()!],
         });
 
         act(() => {
@@ -153,7 +188,9 @@ describe("ThreadView", () => {
         await sendMessage(container, "yolo");
 
         expect(mockClient.sendMessage).toHaveBeenCalledWith(
-            ROOM_ID, rootEvent2.getId(), expectedMessageBody(rootEvent2, "yolo"),
+            ROOM_ID,
+            rootEvent2.getId(),
+            expectedMessageBody(rootEvent2, "yolo"),
         );
     });
 
@@ -164,5 +201,18 @@ describe("ThreadView", () => {
 
         unmount();
         await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull());
+    });
+
+    it("clears highlight message in the room view store", async () => {
+        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
+        const mock = jest.spyOn(dispatcher, "dispatch");
+        const { unmount } = await getComponent(rootEvent);
+        mock.mockClear();
+        unmount();
+        expect(mock).toHaveBeenCalledWith({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            metricsTrigger: undefined,
+        });
     });
 });

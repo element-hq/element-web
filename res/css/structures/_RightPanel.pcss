@@ -21,195 +21,49 @@ limitations under the License.
     position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: 8px;
-    padding: $container-border-width 0;
+    border-left: 1px solid $separator;
     box-sizing: border-box;
     height: 100%;
     contain: strict;
+    background-color: var(--cpd-color-bg-canvas-default);
 
     .mx_RoomView_MessageList {
         padding: 14px 18px; /* top and bottom is 4px smaller to balance with the padding set above */
     }
 }
 
-.mx_RightPanel_header {
-    order: 1;
-    border-bottom: 1px solid $primary-hairline-color;
-    flex: 0 0 52px;
-}
-
 /** Fixme - factor this out with the main header **/
 
-.mx_RightPanel_headerButtonGroup {
-    height: 100%;
-    display: flex;
-    background-color: $background;
-    padding: 0 9px;
-    align-items: center;
-}
-
-.mx_RightPanel_headerButton {
-    cursor: pointer;
-    flex: 0 0 auto;
-    margin-left: 1px;
-    margin-right: 1px;
-    height: 32px;
-    width: 32px;
-    position: relative;
-    border-radius: 100%;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 4px; /* center with parent of 32px */
-        left: 4px; /* center with parent of 32px */
-        height: 24px;
-        width: 24px;
-        background-color: $icon-button-color;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-    }
-
-    &:hover {
-        background: rgba($accent, 0.1);
-
-        &::before {
-            background-color: $accent;
-        }
-    }
-}
-
 .mx_RightPanel_threadsButton::before {
-    mask-image: url('$(res)/img/element-icons/room/thread.svg');
+    mask-image: url("$(res)/img/element-icons/room/thread.svg");
 }
 
 .mx_RightPanel_notifsButton::before {
-    mask-image: url('$(res)/img/element-icons/notifications.svg');
+    mask-image: url("$(res)/img/element-icons/notifications.svg");
     mask-position: center;
 }
 
 .mx_RightPanel_roomSummaryButton::before {
-    mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+    mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
     mask-position: center;
 }
 
-$dot-size: 8px;
-$dot-offset: -3px;
-$pulse-color: $alert;
-
 .mx_RightPanel_pinnedMessagesButton {
     &::before {
-        mask-image: url('$(res)/img/element-icons/room/pin.svg');
+        mask-image: url("$(res)/img/element-icons/room/pin.svg");
         mask-position: center;
-    }
-}
-
-.mx_RightPanel_headerButton_unreadIndicator_bg {
-    position: absolute;
-    right: $dot-offset;
-    top: $dot-offset;
-    margin: 4px;
-    width: $dot-size;
-    height: $dot-size;
-    border-radius: 50%;
-    transform: scale(1.6);
-    transform-origin: center center;
-    background: rgba($background, 1);
-}
-
-.mx_RightPanel_headerButton_unreadIndicator {
-    position: absolute;
-    right: $dot-offset;
-    top: $dot-offset;
-    margin: 4px;
-
-    &.mx_Indicator_red {
-        background: rgba($alert, 1);
-        box-shadow: rgba($alert, 1);
-    }
-
-    &.mx_Indicator_gray {
-        background: rgba($room-icon-unread-color, 1);
-        box-shadow: rgba($room-icon-unread-color, 1);
-    }
-
-    &.mx_Indicator_bold {
-        background: rgba($primary-content, 1);
-        box-shadow: rgba($primary-content, 1);
     }
 }
 
 .mx_RightPanel_timelineCardButton {
     &::before {
-        mask-image: url('$(res)/img/element-icons/feedback.svg');
+        mask-image: url("$(res)/img/element-icons/feedback.svg");
         mask-position: center;
     }
 }
 
-@keyframes mx_RightPanel_indicator_pulse {
-    0% {
-        transform: scale(0.95);
-    }
-
-    70% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0.95);
-    }
-}
-
-@keyframes mx_RightPanel_indicator_pulse_shadow {
-    0% {
-        opacity: 0.7;
-    }
-
-    70% {
-        transform: scale(2.2);
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-.mx_RightPanel_headerButton_unread {
-    &::before {
-        background-color: $room-icon-unread-color !important;
-    }
-}
-
-.mx_RightPanel_headerButton_highlight,
-.mx_RightPanel_headerButton:hover {
-    &::before {
-        background-color: $accent !important;
-    }
-}
-
-.mx_RightPanel_headerButton_badge {
-    font-size: $font-8px;
-    border-radius: 8px;
-    color: $accent-fg-color;
-    background-color: $accent;
-    font-weight: bold;
-    position: absolute;
-    top: -4px;
-    left: 20px;
-    padding: 2px 4px;
-}
-
-.mx_RightPanel_collapsebutton {
-    flex: 1;
-    text-align: right;
-    height: 16px;
-    border: none;
-}
-
 .mx_RightPanel .mx_MemberList,
-.mx_RightPanel .mx_MemberInfo,
-.mx_RightPanel_blank {
+.mx_RightPanel .mx_MemberInfo {
     order: 2;
     flex: 1 1 0;
 }
@@ -229,35 +83,19 @@ $pulse-color: $alert;
 
     h2,
     p {
-        font-size: $font-14px;
+        font: var(--cpd-font-body-md-regular);
     }
 
     &::before {
-        content: '';
+        content: "";
         display: block;
         margin: 11px auto 29px auto;
         height: 42px;
         width: 42px;
         background-color: $header-panel-text-primary-color;
+        mask-image: var(--maskImage);
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
-    }
-}
-
-.mx_RightPanel_scopeHeader {
-    margin: 24px;
-    text-align: center;
-    font-weight: $font-semi-bold;
-    font-size: $font-18px;
-    line-height: $font-22px;
-
-    .mx_BaseAvatar {
-        margin-right: 8px;
-        vertical-align: middle;
-    }
-
-    .mx_BaseAvatar_image {
-        border-radius: 8px;
     }
 }

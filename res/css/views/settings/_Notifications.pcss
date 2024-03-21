@@ -20,7 +20,6 @@ limitations under the License.
     grid-template-columns: auto repeat(3, 62px);
     place-items: center center;
     grid-gap: 8px;
-    margin-top: $spacing-40;
 
     /* Override StyledRadioButton default styles */
     .mx_StyledRadioButton {
@@ -33,6 +32,11 @@ limitations under the License.
         .mx_StyledRadioButton_spacer {
             display: none;
         }
+    }
+
+    // left align section heading
+    .mx_SettingsSubsectionHeading {
+        justify-self: start;
     }
 }
 
@@ -51,47 +55,47 @@ limitations under the License.
     /* force it inline using float */
     float: left;
 }
-.mx_UserNotifSettings_gridRowHeading {
-    font-size: $font-18px;
-    font-weight: $font-semi-bold;
-}
 
 .mx_UserNotifSettings_gridColumnLabel {
     color: $secondary-content;
-    font-size: $font-12px;
-    font-weight: $font-semi-bold;
+    font: var(--cpd-font-body-sm-semibold);
+}
+.mx_UserNotifSettings_gridRowError {
+    /* occupy full row */
+    grid-column: 1/-1;
+    justify-self: start;
+    padding-right: 30%;
+    /* collapse half of the grid-gap */
+    margin-top: -$spacing-4;
 }
 
-.mx_UserNotifSettings {
-    color: $primary-content; /* override from default settings page styles */
+.mx_UserNotifSettings_floatingSection {
+    margin-top: 40px;
 
-    .mx_UserNotifSettings_floatingSection {
-        margin-top: 40px;
-
-        & > div:first-child { /* section header */
-            font-size: $font-18px;
-            font-weight: $font-semi-bold;
-        }
-
-        > table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin-top: 8px;
-
-            tr > td:first-child {
-                /* Just for a bit of spacing */
-                padding-right: 8px;
-            }
-        }
+    & > div:first-child {
+        /* section header */
+        font-size: $font-18px;
+        font-weight: var(--cpd-font-weight-semibold);
     }
 
-    .mx_UserNotifSettings_clearNotifsButton {
+    > table {
+        border-collapse: collapse;
+        border-spacing: 0;
         margin-top: 8px;
-    }
 
-    .mx_TagComposer {
-        margin-top: 35px; /* lots of distance from the last line of the table */
+        tr > td:first-child {
+            /* Just for a bit of spacing */
+            padding-right: 8px;
+        }
     }
+}
+
+.mx_UserNotifSettings_clearNotifsButton {
+    margin-top: 8px;
+}
+
+.mx_TagComposer {
+    margin-top: 35px; /* lots of distance from the last line of the table */
 }
 
 .mx_AccessibleButton.mx_NotificationSound_browse {

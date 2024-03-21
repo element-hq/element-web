@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { Room, EventType, RoomMember, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import AliasCustomisations from './customisations/Alias';
+import AliasCustomisations from "./customisations/Alias";
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -29,74 +27,76 @@ import AliasCustomisations from './customisations/Alias';
  * @param {Object} room The room object
  * @returns {string} A display alias for the given room
  */
-export function getDisplayAliasForRoom(room: Room): string {
-    return getDisplayAliasForAliasSet(
-        room.getCanonicalAlias(), room.getAltAliases(),
-    );
+export function getDisplayAliasForRoom(room: Room): string | null {
+    return getDisplayAliasForAliasSet(room.getCanonicalAlias(), room.getAltAliases());
 }
 
 // The various display alias getters should all feed through this one path so
 // there's a single place to change the logic.
-export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
+export function getDisplayAliasForAliasSet(canonicalAlias: string | null, altAliases: string[]): string | null {
     if (AliasCustomisations.getDisplayAliasForAliasSet) {
         return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
     }
-    return canonicalAlias || altAliases?.[0];
+    return (canonicalAlias || altAliases?.[0]) ?? "";
 }
 
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {
-        const guessedUserId = guessDMRoomTargetId(
-            room, MatrixClientPeg.get().getUserId(),
-        );
+        const guessedUserId = guessDMRoomTargetId(room, room.client.getSafeUserId());
         newTarget = guessedUserId;
     } else {
         newTarget = null;
     }
 
-    return setDMRoom(room.roomId, newTarget);
+    return setDMRoom(room.client, room.roomId, newTarget);
 }
 
 /**
  * Marks or unmarks the given room as being as a DM room.
+ * @param client the Matrix Client instance of the logged-in user
  * @param {string} roomId The ID of the room to modify
- * @param {string} userId The user ID of the desired DM
- room target user or null to un-mark
- this room as a DM room
+ * @param {string | null} userId The user ID of the desired DM room target user or
+ *                        null to un-mark this room as a DM room
  * @returns {object} A promise
  */
-export async function setDMRoom(roomId: string, userId: string): Promise<void> {
-    if (MatrixClientPeg.get().isGuest()) return;
+export async function setDMRoom(client: MatrixClient, roomId: string, userId: string | null): Promise<void> {
+    if (client.isGuest()) return;
 
-    const mDirectEvent = MatrixClientPeg.get().getAccountData(EventType.Direct);
-    let dmRoomMap = {};
+    const mDirectEvent = client.getAccountData(EventType.Direct);
+    const currentContent = mDirectEvent?.getContent() || {};
 
-    if (mDirectEvent !== undefined) dmRoomMap = { ...mDirectEvent.getContent() }; // copy as we will mutate
+    const dmRoomMap = new Map(Object.entries(currentContent));
+    let modified = false;
 
     // remove it from the lists of any others users
     // (it can only be a DM room for one person)
-    for (const thisUserId of Object.keys(dmRoomMap)) {
-        const roomList = dmRoomMap[thisUserId];
+    for (const thisUserId of dmRoomMap.keys()) {
+        const roomList = dmRoomMap.get(thisUserId) || [];
 
         if (thisUserId != userId) {
             const indexOfRoom = roomList.indexOf(roomId);
             if (indexOfRoom > -1) {
                 roomList.splice(indexOfRoom, 1);
+                modified = true;
             }
         }
     }
 
     // now add it, if it's not already there
     if (userId) {
-        const roomList = dmRoomMap[userId] || [];
+        const roomList = dmRoomMap.get(userId) || [];
         if (roomList.indexOf(roomId) == -1) {
             roomList.push(roomId);
+            modified = true;
         }
-        dmRoomMap[userId] = roomList;
+        dmRoomMap.set(userId, roomList);
     }
 
-    await MatrixClientPeg.get().setAccountData(EventType.Direct, dmRoomMap);
+    // prevent unnecessary calls to setAccountData
+    if (!modified) return;
+
+    await client.setAccountData(EventType.Direct, Object.fromEntries(dmRoomMap));
 }
 
 /**
@@ -108,8 +108,8 @@ export async function setDMRoom(roomId: string, userId: string): Promise<void> {
  * @returns {string} User ID of the user that the room is probably a DM with
  */
 function guessDMRoomTargetId(room: Room, myUserId: string): string {
-    let oldestTs;
-    let oldestUser;
+    let oldestTs: number | undefined;
+    let oldestUser: RoomMember | undefined;
 
     // Pick the joined user who's been here longest (and isn't us),
     for (const user of room.getJoinedMembers()) {
@@ -117,7 +117,7 @@ function guessDMRoomTargetId(room: Room, myUserId: string): string {
 
         if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
-            oldestTs = user.events.member.getTs();
+            oldestTs = user.events.member?.getTs();
         }
     }
     if (oldestUser) return oldestUser.userId;
@@ -128,7 +128,7 @@ function guessDMRoomTargetId(room: Room, myUserId: string): string {
 
         if (oldestTs === undefined || (user.events.member && user.events.member.getTs() < oldestTs)) {
             oldestUser = user;
-            oldestTs = user.events.member.getTs();
+            oldestTs = user.events.member?.getTs();
         }
     }
 

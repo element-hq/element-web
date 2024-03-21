@@ -15,13 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ImageContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
-import { presentableTextForFile } from "../../../utils/FileUtils";
-import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
-import SenderProfile from "./SenderProfile";
-import { _t } from "../../../languageHandler";
 
 const FORCED_IMAGE_HEIGHT = 44;
 
@@ -34,34 +30,16 @@ export default class MImageReplyBody extends MImageBody {
         return children;
     }
 
-    // Don't show "Download this_file.png ..."
-    public getFileBody(): string {
-        const sticker = this.props.mxEvent.getType() === EventType.Sticker;
-        return presentableTextForFile(this.props.mxEvent.getContent(), sticker ? _t("Sticker") : _t("Image"), !sticker);
-    }
-
-    protected getBanner(content: IMediaEventContent): JSX.Element {
-        return null; // we don't need a banner, nor have space for one
-    }
-
-    render() {
+    public render(): React.ReactNode {
         if (this.state.error) {
             return super.render();
         }
 
-        const content = this.props.mxEvent.getContent<IMediaEventContent>();
-        const thumbnail = this.messageContent(this.state.contentUrl, this.state.thumbUrl, content, FORCED_IMAGE_HEIGHT);
-        const fileBody = this.getFileBody();
-        const sender = <SenderProfile
-            mxEvent={this.props.mxEvent}
-        />;
+        const content = this.props.mxEvent.getContent<ImageContent>();
+        const thumbnail = this.state.contentUrl
+            ? this.messageContent(this.state.contentUrl, this.state.thumbUrl, content, FORCED_IMAGE_HEIGHT)
+            : undefined;
 
-        return <div className="mx_MImageReplyBody">
-            { thumbnail }
-            <div className="mx_MImageReplyBody_info">
-                <div className="mx_MImageReplyBody_sender">{ sender }</div>
-                <div className="mx_MImageReplyBody_filename">{ fileBody }</div>
-            </div>
-        </div>;
+        return <div className="mx_MImageReplyBody">{thumbnail}</div>;
     }
 }

@@ -38,6 +38,10 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpace_section {
+        margin-right: 12px;
+
+        // provides space for scrollbar so that checkbox and scrollbar do not collide
+
         &:not(:first-child) {
             margin-top: 24px;
         }
@@ -46,7 +50,7 @@ limitations under the License.
             margin: 0;
             color: $secondary-content;
             font-size: $font-12px;
-            font-weight: $font-semi-bold;
+            font-weight: var(--cpd-font-weight-semibold);
             line-height: $font-15px;
         }
 
@@ -94,7 +98,7 @@ limitations under the License.
             }
 
             .mx_AddExistingToSpace_errorHeading {
-                font-weight: $font-semi-bold;
+                font-weight: var(--cpd-font-weight-semibold);
                 font-size: $font-15px;
                 line-height: $font-18px;
                 color: $alert;
@@ -123,13 +127,13 @@ limitations under the License.
             position: relative;
 
             &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 background-color: $primary-content;
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
-                mask-image: url('$(res)/img/element-icons/retry.svg');
+                mask-image: url("$(res)/img/element-icons/retry.svg");
                 width: 18px;
                 height: 18px;
                 left: 0;
@@ -155,21 +159,13 @@ limitations under the License.
 .mx_SubspaceSelector {
     display: flex;
 
-    .mx_BaseAvatar_image {
-        border-radius: 8px;
-        margin: 0;
-        vertical-align: unset;
-    }
-
     .mx_BaseAvatar {
-        display: inline-flex;
         margin: auto 16px auto 5px;
-        vertical-align: middle;
     }
 
     > div {
         > h1 {
-            font-weight: $font-semi-bold;
+            font-weight: var(--cpd-font-weight-semibold);
             font-size: $font-18px;
             line-height: $font-22px;
             margin: 0;
@@ -199,7 +195,7 @@ limitations under the License.
                 position: relative;
 
                 &::before {
-                    content: '';
+                    content: "";
                     width: 20px;
                     height: 20px;
                     top: 8px;
@@ -209,7 +205,7 @@ limitations under the License.
                     mask-size: contain;
                     mask-repeat: no-repeat;
                     background-color: $accent;
-                    mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+                    mask-image: url("$(res)/img/element-icons/roomlist/checkmark.svg");
                 }
             }
         }
@@ -226,14 +222,8 @@ limitations under the License.
     display: flex;
     margin-top: 12px;
 
-    .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */
-    .mx_BaseAvatar.mx_RoomAvatar_isSpaceRoom {
+    .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */ {
         margin-right: 12px;
-    }
-
-    img.mx_RoomAvatar_isSpaceRoom,
-    .mx_RoomAvatar_isSpaceRoom img {
-        border-radius: 8px;
     }
 
     .mx_AddExistingToSpace_entry_name {

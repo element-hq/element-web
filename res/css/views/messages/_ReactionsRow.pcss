@@ -29,7 +29,7 @@ limitations under the License.
         margin-right: 4px;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
             height: 100%;
             width: 100%;
@@ -37,14 +37,15 @@ limitations under the License.
             mask-repeat: no-repeat;
             mask-position: center;
             background-color: $tertiary-content;
-            mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+            mask-image: url("$(res)/img/element-icons/room/message-bar/emoji.svg");
         }
 
         &.mx_ReactionsRow_addReactionButton_active {
             visibility: visible; /* keep showing whilst the context menu is shown */
         }
 
-        &:hover, &.mx_ReactionsRow_addReactionButton_active {
+        &:hover,
+        &.mx_ReactionsRow_addReactionButton_active {
             &::before {
                 background-color: $primary-content;
             }

@@ -9,7 +9,7 @@ exports[`<SettingsSubsection /> renders with plain text description 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
       </h3>
@@ -17,7 +17,11 @@ exports[`<SettingsSubsection /> renders with plain text description 1`] = `
     <div
       class="mx_SettingsSubsection_description"
     >
-      This describes the subsection
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        This describes the subsection
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -39,7 +43,7 @@ exports[`<SettingsSubsection /> renders with plain text heading 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
       </h3>
@@ -64,7 +68,7 @@ exports[`<SettingsSubsection /> renders with react element description 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
       </h3>
@@ -72,14 +76,18 @@ exports[`<SettingsSubsection /> renders with react element description 1`] = `
     <div
       class="mx_SettingsSubsection_description"
     >
-      <p>
-        This describes the section 
-        <a
-          href="/#"
-        >
-          link
-        </a>
-      </p>
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        <p>
+          This describes the section 
+          <a
+            href="/#"
+          >
+            link
+          </a>
+        </p>
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -120,7 +128,7 @@ exports[`<SettingsSubsection /> renders without description 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
       </h3>

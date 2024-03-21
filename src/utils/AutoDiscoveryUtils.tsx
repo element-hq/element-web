@@ -14,16 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
-import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import React, { ReactNode } from "react";
+import {
+    AutoDiscovery,
+    AutoDiscoveryError,
+    ClientConfig,
+    discoverAndValidateOIDCIssuerWellKnown,
+    IClientWellKnown,
+    MatrixClient,
+    MatrixError,
+    OidcClientConfig,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td, newTranslatableError } from "../languageHandler";
-import { makeType } from "./TypeUtils";
-import SdkConfig from '../SdkConfig';
-import { ValidatedServerConfig } from './ValidatedServerConfig';
+import { _t, _td, TranslationKey, UserFriendlyError } from "../languageHandler";
+import SdkConfig from "../SdkConfig";
+import { ValidatedServerConfig } from "./ValidatedServerConfig";
 
-const LIVELINESS_DISCOVERY_ERRORS: string[] = [
+const LIVELINESS_DISCOVERY_ERRORS: AutoDiscoveryError[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
@@ -34,6 +42,37 @@ export interface IAuthComponentState {
     serverDeadError?: ReactNode;
 }
 
+const AutoDiscoveryErrors = Object.values(AutoDiscoveryError);
+
+const isAutoDiscoveryError = (err: unknown): err is AutoDiscoveryError => {
+    return AutoDiscoveryErrors.includes(err as AutoDiscoveryError);
+};
+
+const mapAutoDiscoveryErrorTranslation = (err: AutoDiscoveryError): TranslationKey => {
+    switch (err) {
+        case AutoDiscoveryError.GenericFailure:
+            return _td("auth|autodiscovery_invalid");
+        case AutoDiscoveryError.Invalid:
+            return _td("auth|autodiscovery_generic_failure");
+        case AutoDiscoveryError.InvalidHsBaseUrl:
+            return _td("auth|autodiscovery_invalid_hs_base_url");
+        case AutoDiscoveryError.InvalidHomeserver:
+            return _td("auth|autodiscovery_invalid_hs");
+        case AutoDiscoveryError.InvalidIsBaseUrl:
+            return _td("auth|autodiscovery_invalid_is_base_url");
+        case AutoDiscoveryError.InvalidIdentityServer:
+            return _td("auth|autodiscovery_invalid_is");
+        case AutoDiscoveryError.InvalidIs:
+            return _td("auth|autodiscovery_invalid_is_response");
+        case AutoDiscoveryError.MissingWellknown:
+            return _td("auth|autodiscovery_no_well_known");
+        case AutoDiscoveryError.InvalidJson:
+            return _td("auth|autodiscovery_invalid_json");
+        case AutoDiscoveryError.HomeserverTooOld:
+            return _td("auth|autodiscovery_hs_incompatible");
+    }
+};
+
 export default class AutoDiscoveryUtils {
     /**
      * Checks if a given error or error message is considered an error
@@ -42,9 +81,15 @@ export default class AutoDiscoveryUtils {
      * @param {string | Error} error The error to check
      * @returns {boolean} True if the error is a liveliness error.
      */
-    static isLivelinessError(error: string | Error): boolean {
+    public static isLivelinessError(error: unknown): boolean {
         if (!error) return false;
-        return !!LIVELINESS_DISCOVERY_ERRORS.find(e => typeof error === "string" ? e === error : e === error.message);
+        let msg: unknown = error;
+        if (error instanceof UserFriendlyError) {
+            msg = error.cause;
+        } else if (error instanceof Error) {
+            msg = error.message;
+        }
+        return LIVELINESS_DISCOVERY_ERRORS.includes(msg as AutoDiscoveryError);
     }
 
     /**
@@ -55,7 +100,7 @@ export default class AutoDiscoveryUtils {
      * implementation for known values.
      * @returns {*} The state for the component, given the error.
      */
-    static authComponentStateForError(err: string | Error | null, pageName = "login"): IAuthComponentState {
+    public static authComponentStateForError(err: unknown, pageName = "login"): IAuthComponentState {
         if (!err) {
             return {
                 serverIsAlive: true,
@@ -63,54 +108,46 @@ export default class AutoDiscoveryUtils {
                 serverDeadError: null,
             };
         }
-        let title = _t("Cannot reach homeserver");
-        let body: ReactNode = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
+        let title = _t("cannot_reach_homeserver");
+        let body: ReactNode = _t("cannot_reach_homeserver_detail");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
             const brand = SdkConfig.get().brand;
-            title = _t("Your %(brand)s is misconfigured", { brand });
+            title = _t("auth|misconfigured_title", { brand });
             body = _t(
-                "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
+                "auth|misconfigured_body",
                 {
                     brand,
                 },
                 {
                     a: (sub) => {
-                        return <a
-                            href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                        >{ sub }</a>;
+                        return (
+                            <a
+                                href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                            >
+                                {sub}
+                            </a>
+                        );
                     },
                 },
             );
         }
 
         let isFatalError = true;
-        const errorMessage = typeof err === "string" ? err : err.message;
+        const errorMessage = err instanceof Error ? err.message : err;
         if (errorMessage === AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER) {
             isFatalError = false;
-            title = _t("Cannot reach identity server");
+            title = _t("auth|failed_connect_identity_server");
 
             // It's annoying having a ladder for the third word in the same sentence, but our translations
             // don't make this easy to avoid.
             if (pageName === "register") {
-                body = _t(
-                    "You can register, but some features will be unavailable until the identity server is " +
-                    "back online. If you keep seeing this warning, check your configuration or contact a server " +
-                    "admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_register");
             } else if (pageName === "reset_password") {
-                body = _t(
-                    "You can reset your password, but some features will be unavailable until the identity " +
-                    "server is back online. If you keep seeing this warning, check your configuration or contact " +
-                    "a server admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_reset_password");
             } else {
-                body = _t(
-                    "You can log in, but some features will be unavailable until the identity server is " +
-                    "back online. If you keep seeing this warning, check your configuration or contact a server " +
-                    "admin.",
-                );
+                body = _t("auth|failed_connect_identity_server_other");
             }
         }
 
@@ -119,8 +156,8 @@ export default class AutoDiscoveryUtils {
             serverErrorIsFatal: isFatalError,
             serverDeadError: (
                 <div>
-                    <strong>{ title }</strong>
-                    <div>{ body }</div>
+                    <strong>{title}</strong>
+                    <div>{body}</div>
                 </div>
             ),
         };
@@ -134,23 +171,23 @@ export default class AutoDiscoveryUtils {
      * not be raised.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerConfigWithStaticUrls(
+    public static async validateServerConfigWithStaticUrls(
         homeserverUrl: string,
         identityUrl?: string,
         syntaxOnly = false,
     ): Promise<ValidatedServerConfig> {
         if (!homeserverUrl) {
-            throw newTranslatableError(_td("No homeserver URL provided"));
+            throw new UserFriendlyError("auth|no_hs_url_provided");
         }
 
-        const wellknownConfig = {
+        const wellknownConfig: IClientWellKnown = {
             "m.homeserver": {
                 base_url: homeserverUrl,
             },
         };
 
         if (identityUrl) {
-            wellknownConfig['m.identity_server'] = {
+            wellknownConfig["m.identity_server"] = {
                 base_url: identityUrl,
             };
         }
@@ -168,7 +205,7 @@ export default class AutoDiscoveryUtils {
      * @param {string} serverName The homeserver domain name (eg: "matrix.org") to validate.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerName(serverName: string): Promise<ValidatedServerConfig> {
+    public static async validateServerName(serverName: string): Promise<ValidatedServerConfig> {
         const result = await AutoDiscovery.findClientConfig(serverName);
         return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
     }
@@ -182,17 +219,21 @@ export default class AutoDiscoveryUtils {
      * @param {boolean} isSynthetic If true, then the discoveryResult was synthesised locally.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static buildValidatedConfigFromDiscovery(
-        serverName: string, discoveryResult, syntaxOnly=false, isSynthetic=false): ValidatedServerConfig {
-        if (!discoveryResult || !discoveryResult["m.homeserver"]) {
+    public static async buildValidatedConfigFromDiscovery(
+        serverName?: string,
+        discoveryResult?: ClientConfig,
+        syntaxOnly = false,
+        isSynthetic = false,
+    ): Promise<ValidatedServerConfig> {
+        if (!discoveryResult?.["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
-            // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
+            // in the log so we can find this bit of code but otherwise tell the user "it broke".
             logger.error("Ended up in a state of not knowing which homeserver to connect to.");
-            throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
-        const hsResult = discoveryResult['m.homeserver'];
-        const isResult = discoveryResult['m.identity_server'];
+        const hsResult = discoveryResult["m.homeserver"];
+        const isResult = discoveryResult["m.identity_server"];
 
         const defaultConfig = SdkConfig.get("validated_server_config");
 
@@ -203,16 +244,18 @@ export default class AutoDiscoveryUtils {
         // lack of identity server provided by the discovery method), we intentionally do not
         // validate it. This has already been validated and this helps some off-the-grid usage
         // of Element.
-        let preferredIdentityUrl = defaultConfig && defaultConfig['isUrl'];
+        let preferredIdentityUrl = defaultConfig && defaultConfig["isUrl"];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
-            preferredIdentityUrl = isResult["base_url"];
+            preferredIdentityUrl = isResult["base_url"] ?? undefined;
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error) !== -1) {
-                    throw newTranslatableError(isResult.error);
+                if (isAutoDiscoveryError(isResult.error)) {
+                    throw new UserFriendlyError(mapAutoDiscoveryErrorTranslation(isResult.error), {
+                        cause: hsResult.error,
+                    });
                 }
-                throw newTranslatableError(_td("Unexpected error resolving identity server configuration"));
+                throw new UserFriendlyError("auth|autodiscovery_unexpected_error_is");
             } // else the error is not related to syntax - continue anyways.
 
             // rewrite homeserver error since we don't care about problems
@@ -225,15 +268,23 @@ export default class AutoDiscoveryUtils {
         if (hsResult.state !== AutoDiscovery.SUCCESS) {
             logger.error("Error processing homeserver config:", hsResult);
             if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
-                    throw newTranslatableError(hsResult.error);
+                if (isAutoDiscoveryError(hsResult.error)) {
+                    throw new UserFriendlyError(mapAutoDiscoveryErrorTranslation(hsResult.error), {
+                        cause: hsResult.error,
+                    });
                 }
-                throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+                throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
             } // else the error is not related to syntax - continue anyways.
         }
 
         const preferredHomeserverUrl = hsResult["base_url"];
-        let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
+
+        if (!preferredHomeserverUrl) {
+            logger.error("No homeserver URL configured");
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
+        }
+
+        let preferredHomeserverName = serverName ?? hsResult["server_name"];
 
         const url = new URL(preferredHomeserverUrl);
         if (!preferredHomeserverName) preferredHomeserverName = url.hostname;
@@ -241,17 +292,34 @@ export default class AutoDiscoveryUtils {
         // It should have been set by now, so check it
         if (!preferredHomeserverName) {
             logger.error("Failed to parse homeserver name from homeserver URL");
-            throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
+            throw new UserFriendlyError("auth|autodiscovery_unexpected_error_hs");
         }
 
-        return makeType(ValidatedServerConfig, {
+        // This isn't inherently auto-discovery but used to be in an earlier incarnation of the MSC,
+        // and shuttling the data together makes a lot of sense
+        let delegatedAuthentication: OidcClientConfig | undefined;
+        let delegatedAuthenticationError: Error | undefined;
+        try {
+            const tempClient = new MatrixClient({ baseUrl: preferredHomeserverUrl });
+            const { issuer } = await tempClient.getAuthIssuer();
+            delegatedAuthentication = await discoverAndValidateOIDCIssuerWellKnown(issuer);
+        } catch (e) {
+            if (e instanceof MatrixError && e.httpStatus === 404 && e.errcode === "M_UNRECOGNIZED") {
+                // 404 M_UNRECOGNIZED means the server does not support OIDC
+            } else {
+                delegatedAuthenticationError = e as Error;
+            }
+        }
+
+        return {
             hsUrl: preferredHomeserverUrl,
             hsName: preferredHomeserverName,
             hsNameIsDifferent: url.hostname !== preferredHomeserverName,
             isUrl: preferredIdentityUrl,
             isDefault: false,
-            warning: hsResult.error,
+            warning: hsResult.error ?? delegatedAuthenticationError ?? null,
             isNameResolvable: !isSynthetic,
-        });
+            delegatedAuthentication,
+        } as ValidatedServerConfig;
     }
 }

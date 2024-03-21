@@ -1,5 +1,5 @@
 /*
-Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import {
-    RovingAccessibleButton,
-    RovingAccessibleTooltipButton,
-} from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton, RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import useHover from "../../../hooks/useHover";
 
-interface IProps {
+interface ExtraTileProps {
     isMinimized: boolean;
     isSelected: boolean;
     displayName: string;
@@ -34,92 +32,64 @@ interface IProps {
     onClick: (ev: ButtonEvent) => void;
 }
 
-interface IState {
-    hover: boolean;
-}
+export default function ExtraTile({
+    isSelected,
+    isMinimized,
+    notificationState,
+    displayName,
+    onClick,
+    avatar,
+}: ExtraTileProps): JSX.Element {
+    const [, { onMouseOver, onMouseLeave }] = useHover(() => false);
 
-export default class ExtraTile extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
+    // XXX: We copy classes because it's easier
+    const classes = classNames({
+        mx_ExtraTile: true,
+        mx_RoomTile: true,
+        mx_RoomTile_selected: isSelected,
+        mx_RoomTile_minimized: isMinimized,
+    });
 
-        this.state = {
-            hover: false,
-        };
+    let badge: JSX.Element | null = null;
+    if (notificationState) {
+        badge = <NotificationBadge notification={notificationState} />;
     }
 
-    private onTileMouseEnter = () => {
-        this.setState({ hover: true });
-    };
+    let name = displayName;
+    if (typeof name !== "string") name = "";
+    name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
-    private onTileMouseLeave = () => {
-        this.setState({ hover: false });
-    };
+    const nameClasses = classNames({
+        mx_RoomTile_title: true,
+        mx_RoomTile_titleHasUnreadEvents: notificationState?.isUnread,
+    });
 
-    public render(): React.ReactElement {
-        // XXX: We copy classes because it's easier
-        const classes = classNames({
-            'mx_ExtraTile': true,
-            'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.props.isSelected,
-            'mx_RoomTile_minimized': this.props.isMinimized,
-        });
+    let nameContainer: JSX.Element | null = (
+        <div className="mx_RoomTile_titleContainer">
+            <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
+                {name}
+            </div>
+        </div>
+    );
+    if (isMinimized) nameContainer = null;
 
-        let badge;
-        if (this.props.notificationState) {
-            badge = (
-                <NotificationBadge
-                    notification={this.props.notificationState}
-                    forceCount={false}
-                />
-            );
-        }
-
-        let name = this.props.displayName;
-        if (typeof name !== 'string') name = '';
-        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
-
-        const nameClasses = classNames({
-            "mx_RoomTile_title": true,
-            "mx_RoomTile_titleHasUnreadEvents": this.props.notificationState?.isUnread,
-        });
-
-        let nameContainer = (
-            <div className="mx_RoomTile_titleContainer">
-                <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                    { name }
+    const Button = isMinimized ? RovingAccessibleTooltipButton : RovingAccessibleButton;
+    return (
+        <Button
+            className={classes}
+            onMouseEnter={onMouseOver}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            role="treeitem"
+            title={isMinimized ? name : undefined}
+        >
+            <div className="mx_RoomTile_avatarContainer">{avatar}</div>
+            <div className="mx_RoomTile_details">
+                <div className="mx_RoomTile_primaryDetails">
+                    {nameContainer}
+                    <div className="mx_RoomTile_badgeContainer">{badge}</div>
                 </div>
             </div>
-        );
-        if (this.props.isMinimized) nameContainer = null;
-
-        let Button = RovingAccessibleButton;
-        if (this.props.isMinimized) {
-            Button = RovingAccessibleTooltipButton;
-        }
-
-        return (
-            <React.Fragment>
-                <Button
-                    className={classes}
-                    onMouseEnter={this.onTileMouseEnter}
-                    onMouseLeave={this.onTileMouseLeave}
-                    onClick={this.props.onClick}
-                    role="treeitem"
-                    title={this.props.isMinimized ? name : undefined}
-                >
-                    <div className="mx_RoomTile_avatarContainer">
-                        { this.props.avatar }
-                    </div>
-                    <div className="mx_RoomTile_details">
-                        <div className="mx_RoomTile_primaryDetails">
-                            { nameContainer }
-                            <div className="mx_RoomTile_badgeContainer">
-                                { badge }
-                            </div>
-                        </div>
-                    </div>
-                </Button>
-            </React.Fragment>
-        );
-    }
+        </Button>
+    );
 }

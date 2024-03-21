@@ -16,17 +16,11 @@ limitations under the License.
 
 .mx_JoinRuleDropdown {
     margin-bottom: 8px;
-    font-weight: normal;
-    font-family: $font-family;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     color: $primary-content;
 
-    .mx_Dropdown_input {
-        border: 1px solid $input-border-color;
-    }
-
     .mx_Dropdown_option {
-        font-size: $font-14px;
+        font: var(--cpd-font-body-md-regular);
         line-height: $font-32px;
         height: 32px;
         min-height: 32px;
@@ -46,21 +40,34 @@ limitations under the License.
                 mask-position: center;
                 background-color: $secondary-content;
             }
+
+            &.mx_JoinRuleDropdown_knock::before {
+                content: normal;
+            }
         }
     }
 
     .mx_JoinRuleDropdown_invite::before {
-        mask-image: url('$(res)/img/element-icons/lock.svg');
+        box-sizing: border-box;
+        mask-image: url("$(res)/img/element-icons/lock.svg");
         mask-size: contain;
+        padding: 1px;
     }
 
     .mx_JoinRuleDropdown_public::before {
-        mask-image: url('$(res)/img/globe.svg');
+        mask-image: url("$(res)/img/globe.svg");
         mask-size: 12px;
     }
 
     .mx_JoinRuleDropdown_restricted::before {
-        mask-image: url('$(res)/img/element-icons/group-members.svg');
+        mask-image: url("$(res)/img/element-icons/group-members.svg");
         mask-size: contain;
+    }
+
+    .mx_JoinRuleDropdown_icon {
+        color: $secondary-content;
+        position: absolute;
+        left: 6px;
+        top: 8px;
     }
 }

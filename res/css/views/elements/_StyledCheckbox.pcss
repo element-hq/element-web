@@ -16,8 +16,7 @@ limitations under the License.
 
 .mx_Checkbox {
     $size: $font-16px;
-    $border-size: $font-1-5px;
-    $border-radius: $font-4px;
+    $border-radius: 0.27rem;
 
     display: flex;
     align-items: flex-start;
@@ -43,8 +42,7 @@ limitations under the License.
             height: $size;
             width: $size;
             size: 0.5rem;
-
-            border: $border-size solid rgba($muted-fg-color, 0.5);
+            border: 1px solid var(--cpd-color-border-interactive-primary);
             box-sizing: border-box;
             border-radius: $border-radius;
 
@@ -53,7 +51,7 @@ limitations under the License.
 
                 height: 100%;
                 width: 100%;
-                mask-image: url('$(res)/img/feather-customised/check.svg');
+                mask-image: url("$(res)/img/feather-customised/check.svg");
                 mask-position: center;
                 mask-size: 100%;
                 mask-repeat: no-repeat;
@@ -69,11 +67,10 @@ limitations under the License.
         }
 
         &:disabled + label {
-            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        &.focus-visible {
+        &:focus-visible {
             & + label .mx_Checkbox_background {
                 @mixin unreal-focus;
             }
@@ -83,22 +80,27 @@ limitations under the License.
 
 .mx_Checkbox.mx_Checkbox_kind_solid input[type="checkbox"] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: #ffffff;
+        background: var(--cpd-color-icon-on-solid-primary);
     }
 
     &:checked + label > .mx_Checkbox_background {
-        background: $accent;
-        border-color: $accent;
+        background: var(--cpd-color-bg-accent-rest);
+        border-color: var(--cpd-color-bg-accent-rest);
+    }
+
+    &:checked:disabled + label > .mx_Checkbox_background {
+        background: var(--cpd-color-bg-action-primary-disabled);
+        border-color: var(--cpd-color-bg-action-primary-disabled);
     }
 }
 
 .mx_Checkbox.mx_Checkbox_kind_outline input[type="checkbox"] {
     & + label > .mx_Checkbox_background .mx_Checkbox_checkmark {
-        background: $accent;
+        background: var(--cpd-color-bg-accent-rest);
     }
 
     &:checked + label > .mx_Checkbox_background {
         background: transparent;
-        border-color: $accent;
+        border-color: var(--cpd-color-bg-accent-rest);
     }
 }

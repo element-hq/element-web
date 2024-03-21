@@ -15,17 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { Dispatch } from "react";
+import { DATA_BY_CATEGORY, getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
-import { _t } from '../../../languageHandler';
-import * as recent from '../../../emojipicker/recent';
-import { DATA_BY_CATEGORY, getEmojiFromUnicode, IEmoji } from "../../../emoji";
+import { _t } from "../../../languageHandler";
+import * as recent from "../../../emojipicker/recent";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import Header from "./Header";
 import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
-import Category, { ICategory, CategoryKey } from "./Category";
+import Category, { CategoryKey, ICategory } from "./Category";
+import { filterBoolean } from "../../../utils/arrays";
+import {
+    IAction as RovingAction,
+    IState as RovingState,
+    RovingTabIndexProvider,
+    Type,
+} from "../../../accessibility/RovingTabIndex";
+import { Key } from "../../../Keyboard";
+import { clamp } from "../../../utils/numbers";
+import { ButtonEvent } from "../elements/AccessibleButton";
+import { Ref } from "../../../accessibility/roving/types";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;
@@ -35,8 +46,8 @@ const ZERO_WIDTH_JOINER = "\u200D";
 
 interface IProps {
     selectedEmojis?: Set<string>;
-    showQuickReactions?: boolean;
     onChoose(unicode: string): boolean;
+    onFinished(): void;
     isEmojiDisabled?: (unicode: string) => boolean;
 }
 
@@ -57,82 +68,92 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
             filter: "",
-            previewEmoji: null,
             scrollTop: 0,
             viewportHeight: 280,
         };
 
         // Convert recent emoji characters to emoji data, removing unknowns and duplicates
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
+        this.recentlyUsed = Array.from(new Set(filterBoolean(recent.get().map(getEmojiFromUnicode))));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,
         };
 
-        this.categories = [{
-            id: "recent",
-            name: _t("Frequently Used"),
-            enabled: this.recentlyUsed.length > 0,
-            visible: this.recentlyUsed.length > 0,
-            ref: React.createRef(),
-        }, {
-            id: "people",
-            name: _t("Smileys & People"),
-            enabled: true,
-            visible: true,
-            ref: React.createRef(),
-        }, {
-            id: "nature",
-            name: _t("Animals & Nature"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "foods",
-            name: _t("Food & Drink"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "activity",
-            name: _t("Activities"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "places",
-            name: _t("Travel & Places"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "objects",
-            name: _t("Objects"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "symbols",
-            name: _t("Symbols"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }, {
-            id: "flags",
-            name: _t("Flags"),
-            enabled: true,
-            visible: false,
-            ref: React.createRef(),
-        }];
+        this.categories = [
+            {
+                id: "recent",
+                name: _t("emoji|category_frequently_used"),
+                enabled: this.recentlyUsed.length > 0,
+                visible: this.recentlyUsed.length > 0,
+                ref: React.createRef(),
+            },
+            {
+                id: "people",
+                name: _t("emoji|category_smileys_people"),
+                enabled: true,
+                visible: true,
+                ref: React.createRef(),
+            },
+            {
+                id: "nature",
+                name: _t("emoji|category_animals_nature"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "foods",
+                name: _t("emoji|category_food_drink"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "activity",
+                name: _t("emoji|category_activities"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "places",
+                name: _t("emoji|category_travel_places"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "objects",
+                name: _t("emoji|category_objects"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "symbols",
+                name: _t("emoji|category_symbols"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+            {
+                id: "flags",
+                name: _t("emoji|category_flags"),
+                enabled: true,
+                visible: false,
+                ref: React.createRef(),
+            },
+        ];
     }
 
-    private onScroll = () => {
+    private onScroll = (): void => {
         const body = this.scrollRef.current?.containerRef.current;
+        if (!body) return;
         this.setState({
             scrollTop: body.scrollTop,
             viewportHeight: body.clientHeight,
@@ -140,14 +161,77 @@ class EmojiPicker extends React.Component<IProps, IState> {
         this.updateVisibility();
     };
 
-    private updateVisibility = () => {
+    private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
+        const node = state.activeRef?.current;
+        const parent = node?.parentElement;
+        if (!parent || !state.activeRef) return;
+        const rowIndex = Array.from(parent.children).indexOf(node);
+        const refIndex = state.refs.indexOf(state.activeRef);
+
+        let focusRef: Ref | undefined;
+        let newParent: HTMLElement | undefined;
+        switch (ev.key) {
+            case Key.ARROW_LEFT:
+                focusRef = state.refs[refIndex - 1];
+                newParent = focusRef?.current?.parentElement ?? undefined;
+                break;
+
+            case Key.ARROW_RIGHT:
+                focusRef = state.refs[refIndex + 1];
+                newParent = focusRef?.current?.parentElement ?? undefined;
+                break;
+
+            case Key.ARROW_UP:
+            case Key.ARROW_DOWN: {
+                // For up/down we find the prev/next parent by inspecting the refs either side of our row
+                const ref =
+                    ev.key === Key.ARROW_UP
+                        ? state.refs[refIndex - rowIndex - 1]
+                        : state.refs[refIndex - rowIndex + EMOJIS_PER_ROW];
+                newParent = ref?.current?.parentElement ?? undefined;
+                const newTarget = newParent?.children[clamp(rowIndex, 0, newParent.children.length - 1)];
+                focusRef = state.refs.find((r) => r.current === newTarget);
+                break;
+            }
+        }
+
+        if (focusRef) {
+            dispatch({
+                type: Type.SetFocus,
+                payload: { ref: focusRef },
+            });
+
+            if (parent !== newParent) {
+                focusRef.current?.scrollIntoView({
+                    behavior: "auto",
+                    block: "center",
+                    inline: "center",
+                });
+            }
+        }
+
+        ev.preventDefault();
+        ev.stopPropagation();
+    }
+
+    private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
+        if (
+            state.activeRef?.current &&
+            [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)
+        ) {
+            this.keyboardNavigation(ev, state, dispatch);
+        }
+    };
+
+    private updateVisibility = (): void => {
         const body = this.scrollRef.current?.containerRef.current;
+        if (!body) return;
         const rect = body.getBoundingClientRect();
         for (const cat of this.categories) {
             const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
                 cat.visible = false;
-                cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                cat.ref.current?.classList.remove("mx_EmojiPicker_anchor_visible");
                 continue;
             }
             const elemRect = elem.getBoundingClientRect();
@@ -155,6 +239,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
             const yEnd = elemRect.y + elemRect.height - rect.y;
             cat.visible = y < rect.height && yEnd > 0;
             // We update this here instead of through React to avoid re-render on scroll.
+            if (!cat.ref.current) continue;
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "true");
@@ -167,114 +252,170 @@ class EmojiPicker extends React.Component<IProps, IState> {
         }
     };
 
-    private scrollToCategory = (category: string) => {
+    private scrollToCategory = (category: string): void => {
         this.scrollRef.current?.containerRef.current
-            ?.querySelector(`[data-category-id="${category}"]`).scrollIntoView();
+            ?.querySelector(`[data-category-id="${category}"]`)
+            ?.scrollIntoView();
     };
 
-    private onChangeFilter = (filter: string) => {
+    private onChangeFilter = (filter: string): void => {
         const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
         for (const cat of this.categories) {
-            let emojis;
+            let emojis: IEmoji[];
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
             if (lcFilter.includes(this.state.filter)) {
                 emojis = this.memoizedDataByCategory[cat.id];
             } else {
                 emojis = cat.id === "recent" ? this.recentlyUsed : DATA_BY_CATEGORY[cat.id];
             }
-            emojis = emojis.filter(emoji => this.emojiMatchesFilter(emoji, lcFilter));
+
+            if (lcFilter !== "") {
+                emojis = emojis.filter((emoji) => this.emojiMatchesFilter(emoji, lcFilter));
+                // Copy the array to not clobber the original unfiltered sorting
+                emojis = [...emojis].sort((a, b) => {
+                    const indexA = a.shortcodes[0].indexOf(lcFilter);
+                    const indexB = b.shortcodes[0].indexOf(lcFilter);
+
+                    // Prioritize emojis containing the filter in its shortcode
+                    if (indexA == -1 || indexB == -1) {
+                        return indexB - indexA;
+                    }
+
+                    // If both emojis start with the filter
+                    // put the shorter emoji first
+                    if (indexA == 0 && indexB == 0) {
+                        return a.shortcodes[0].length - b.shortcodes[0].length;
+                    }
+
+                    // Prioritize emojis starting with the filter
+                    return indexA - indexB;
+                });
+            }
+
             this.memoizedDataByCategory[cat.id] = emojis;
             cat.enabled = emojis.length > 0;
             // The setState below doesn't re-render the header and we already have the refs for updateVisibility, so...
-            cat.ref.current.disabled = !cat.enabled;
+            if (cat.ref.current) {
+                cat.ref.current.disabled = !cat.enabled;
+            }
         }
         this.setState({ filter });
         // Header underlines need to be updated, but updating requires knowing
         // where the categories are, so we wait for a tick.
-        setTimeout(this.updateVisibility, 0);
+        window.setTimeout(this.updateVisibility, 0);
     };
 
     private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {
-        return emoji.label.toLowerCase().includes(filter) ||
+        // If the query is an emoji containing a variation then strip it to provide more useful matches
+        if (filter.includes(ZERO_WIDTH_JOINER)) {
+            filter = filter.split(ZERO_WIDTH_JOINER, 2)[0];
+        }
+        return (
+            emoji.label.toLowerCase().includes(filter) ||
             (Array.isArray(emoji.emoticon)
                 ? emoji.emoticon.some((x) => x.includes(filter))
-                : emoji.emoticon?.includes(filter)
-            ) ||
-            emoji.shortcodes.some(x => x.toLowerCase().includes(filter)) ||
-            emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter);
+                : emoji.emoticon?.includes(filter)) ||
+            emoji.shortcodes.some((x) => x.toLowerCase().includes(filter)) ||
+            emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter)
+        );
     };
 
-    private onEnterFilter = () => {
-        const btn = this.scrollRef.current?.containerRef.current
-            ?.querySelector<HTMLButtonElement>(".mx_EmojiPicker_item");
-        if (btn) {
-            btn.click();
-        }
+    private onEnterFilter = (): void => {
+        const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
+            '.mx_EmojiPicker_item_wrapper[tabindex="0"]',
+        );
+        btn?.click();
+        this.props.onFinished();
     };
 
-    private onHoverEmoji = (emoji: IEmoji) => {
+    private onHoverEmoji = (emoji: IEmoji): void => {
         this.setState({
             previewEmoji: emoji,
         });
     };
 
-    private onHoverEmojiEnd = (emoji: IEmoji) => {
+    private onHoverEmojiEnd = (): void => {
         this.setState({
-            previewEmoji: null,
+            previewEmoji: undefined,
         });
     };
 
-    private onClickEmoji = (emoji: IEmoji) => {
+    private onClickEmoji = (ev: ButtonEvent, emoji: IEmoji): void => {
         if (this.props.onChoose(emoji.unicode) !== false) {
             recent.add(emoji.unicode);
         }
+        if ((ev as React.KeyboardEvent).key === Key.ENTER) {
+            this.props.onFinished();
+        }
     };
 
-    private static categoryHeightForEmojiCount(count: number) {
+    private static categoryHeightForEmojiCount(count: number): number {
         if (count === 0) {
             return 0;
         }
-        return CATEGORY_HEADER_HEIGHT + (Math.ceil(count / EMOJIS_PER_ROW) * EMOJI_HEIGHT);
+        return CATEGORY_HEADER_HEIGHT + Math.ceil(count / EMOJIS_PER_ROW) * EMOJI_HEIGHT;
     }
 
-    render() {
-        let heightBefore = 0;
+    public render(): React.ReactNode {
         return (
-            <div className="mx_EmojiPicker" data-testid='mx_EmojiPicker'>
-                <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
-                <Search query={this.state.filter} onChange={this.onChangeFilter} onEnter={this.onEnterFilter} />
-                <AutoHideScrollbar
-                    className="mx_EmojiPicker_body"
-                    ref={this.scrollRef}
-                    onScroll={this.onScroll}
-                >
-                    { this.categories.map(category => {
-                        const emojis = this.memoizedDataByCategory[category.id];
-                        const categoryElement = (
-                            <Category
-                                key={category.id}
-                                id={category.id}
-                                name={category.name}
-                                heightBefore={heightBefore}
-                                viewportHeight={this.state.viewportHeight}
-                                scrollTop={this.state.scrollTop}
-                                emojis={emojis}
-                                onClick={this.onClickEmoji}
-                                onMouseEnter={this.onHoverEmoji}
-                                onMouseLeave={this.onHoverEmojiEnd}
-                                isEmojiDisabled={this.props.isEmojiDisabled}
-                                selectedEmojis={this.props.selectedEmojis}
+            <RovingTabIndexProvider onKeyDown={this.onKeyDown}>
+                {({ onKeyDownHandler }) => {
+                    let heightBefore = 0;
+                    return (
+                        <section
+                            className="mx_EmojiPicker"
+                            data-testid="mx_EmojiPicker"
+                            onKeyDown={onKeyDownHandler}
+                            aria-label={_t("a11y|emoji_picker")}
+                        >
+                            <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
+                            <Search
+                                query={this.state.filter}
+                                onChange={this.onChangeFilter}
+                                onEnter={this.onEnterFilter}
+                                onKeyDown={onKeyDownHandler}
                             />
-                        );
-                        const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
-                        heightBefore += height;
-                        return categoryElement;
-                    }) }
-                </AutoHideScrollbar>
-                { this.state.previewEmoji || !this.props.showQuickReactions
-                    ? <Preview emoji={this.state.previewEmoji} />
-                    : <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} /> }
-            </div>
+                            <AutoHideScrollbar
+                                id="mx_EmojiPicker_body"
+                                className="mx_EmojiPicker_body"
+                                ref={this.scrollRef}
+                                onScroll={this.onScroll}
+                            >
+                                {this.categories.map((category) => {
+                                    const emojis = this.memoizedDataByCategory[category.id];
+                                    const categoryElement = (
+                                        <Category
+                                            key={category.id}
+                                            id={category.id}
+                                            name={category.name}
+                                            heightBefore={heightBefore}
+                                            viewportHeight={this.state.viewportHeight}
+                                            scrollTop={this.state.scrollTop}
+                                            emojis={emojis}
+                                            onClick={this.onClickEmoji}
+                                            onMouseEnter={this.onHoverEmoji}
+                                            onMouseLeave={this.onHoverEmojiEnd}
+                                            isEmojiDisabled={this.props.isEmojiDisabled}
+                                            selectedEmojis={this.props.selectedEmojis}
+                                        />
+                                    );
+                                    const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
+                                    heightBefore += height;
+                                    return categoryElement;
+                                })}
+                            </AutoHideScrollbar>
+                            {this.state.previewEmoji ? (
+                                <Preview emoji={this.state.previewEmoji} />
+                            ) : (
+                                <QuickReactions
+                                    onClick={this.onClickEmoji}
+                                    selectedEmojis={this.props.selectedEmojis}
+                                />
+                            )}
+                        </section>
+                    );
+                }}
+            </RovingTabIndexProvider>
         );
     }
 }

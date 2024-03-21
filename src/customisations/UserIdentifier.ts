@@ -22,7 +22,7 @@ limitations under the License.
  */
 function getDisplayUserIdentifier(
     userId: string,
-    { roomId, withDisplayName }: { roomId?: string, withDisplayName?: boolean },
+    { roomId, withDisplayName }: { roomId?: string; withDisplayName?: boolean },
 ): string | null {
     return userId;
 }
@@ -31,7 +31,7 @@ function getDisplayUserIdentifier(
 // them all as optional. This allows customisers to only define and export the
 // customisations they need while still maintaining type safety.
 export interface IUserIdentifierCustomisations {
-    getDisplayUserIdentifier?: typeof getDisplayUserIdentifier;
+    getDisplayUserIdentifier: typeof getDisplayUserIdentifier;
 }
 
 // A real customisation module will define and export one or more of the

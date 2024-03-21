@@ -17,14 +17,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/crypto/olmlib";
+import {
+    MatrixClient,
+    MatrixEvent,
+    Room,
+    SSOAction,
+    encodeUnpaddedBase64,
+    OidcRegistrationClientMetadata,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
 
-import dis from './dispatcher/dispatcher';
-import BaseEventIndexManager from './indexing/BaseEventIndexManager';
+import dis from "./dispatcher/dispatcher";
+import BaseEventIndexManager from "./indexing/BaseEventIndexManager";
 import { ActionPayload } from "./dispatcher/payloads";
 import { CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
 import { Action } from "./dispatcher/actions";
@@ -33,6 +37,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { IConfigOptions } from "./IConfigOptions";
+import SdkConfig from "./SdkConfig";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -69,18 +74,18 @@ export default abstract class BasePlatform {
     protected notificationCount = 0;
     protected errorDidOccur = false;
 
-    constructor() {
+    protected constructor() {
         dis.register(this.onAction);
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    public abstract getConfig(): Promise<IConfigOptions>;
+    public abstract getConfig(): Promise<IConfigOptions | undefined>;
 
     public abstract getDefaultDeviceDisplayName(): string;
 
     protected onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
-            case 'on_client_not_viable':
+            case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;
@@ -129,7 +134,7 @@ export default abstract class BasePlatform {
         if (MatrixClientPeg.userRegisteredWithinLastHours(24)) return false;
 
         try {
-            const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY));
+            const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY)!);
             return newVersion !== version || Date.now() > deferUntil;
         } catch (e) {
             return true;
@@ -192,15 +197,15 @@ export default abstract class BasePlatform {
     public displayNotification(
         title: string,
         msg: string,
-        avatarUrl: string,
+        avatarUrl: string | null,
         room: Room,
         ev?: MatrixEvent,
     ): Notification {
-        const notifBody = {
+        const notifBody: NotificationOptions = {
             body: msg,
             silent: true, // we play our own sounds
         };
-        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        if (avatarUrl) notifBody["icon"] = avatarUrl;
         const notification = new window.Notification(title, notifBody);
 
         notification.onclick = () => {
@@ -210,7 +215,7 @@ export default abstract class BasePlatform {
                 metricsTrigger: "Notification",
             };
 
-            if (ev.getThread()) {
+            if (ev?.getThread()) {
                 payload.event_id = ev.getId();
             }
 
@@ -254,7 +259,7 @@ export default abstract class BasePlatform {
         return false;
     }
 
-    public getSettingValue(settingName: string): Promise<any> {
+    public async getSettingValue(settingName: string): Promise<any> {
         return undefined;
     }
 
@@ -272,15 +277,15 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    public setLanguage(preferredLangs: string[]) {}
+    public setLanguage(preferredLangs: string[]): void {}
 
     public setSpellCheckEnabled(enabled: boolean): void {}
 
     public async getSpellCheckEnabled(): Promise<boolean> {
-        return null;
+        return false;
     }
 
-    public setSpellCheckLanguages(preferredLangs: string[]) {}
+    public setSpellCheckLanguages(preferredLangs: string[]): void {}
 
     public getSpellCheckLanguages(): Promise<string[]> | null {
         return null;
@@ -308,9 +313,13 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    /**
+     * The URL to return to after a successful SSO/OIDC authentication
+     * @param fragmentAfterLogin optional fragment for specific view to return to
+     */
+    public getSSOCallbackUrl(fragmentAfterLogin = ""): URL {
         const url = new URL(window.location.href);
-        url.hash = fragmentAfterLogin || "";
+        url.hash = fragmentAfterLogin;
         return url;
     }
 
@@ -319,24 +328,26 @@ export default abstract class BasePlatform {
      * @param {MatrixClient} mxClient the matrix client using which we should start the flow
      * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
      * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
+     * @param {SSOAction} action the SSO flow to indicate to the IdP, optional.
      * @param {string} idpId The ID of the Identity Provider being targeted, optional.
      */
     public startSingleSignOn(
         mxClient: MatrixClient,
         loginType: "sso" | "cas",
-        fragmentAfterLogin: string,
+        fragmentAfterLogin?: string,
         idpId?: string,
+        action?: SSOAction,
     ): void {
         // persist hs url and is url for when the user is returned to the app with the login token
         localStorage.setItem(SSO_HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
         if (mxClient.getIdentityServerUrl()) {
-            localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
+            localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl()!);
         }
         if (idpId) {
             localStorage.setItem(SSO_IDP_ID_KEY, idpId);
         }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
-        window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType, idpId); // redirect to SSO
+        window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType, idpId, action); // redirect to SSO
     }
 
     /**
@@ -365,6 +376,22 @@ export default abstract class BasePlatform {
             return null;
         }
 
+        const additionalData = this.getPickleAdditionalData(userId, deviceId);
+
+        try {
+            const key = await crypto.subtle.decrypt(
+                { name: "AES-GCM", iv: data.iv, additionalData },
+                data.cryptoKey,
+                data.encrypted,
+            );
+            return encodeUnpaddedBase64(key);
+        } catch (e) {
+            logger.error("Error decrypting pickle key");
+            return null;
+        }
+    }
+
+    private getPickleAdditionalData(userId: string, deviceId: string): Uint8Array {
         const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
         for (let i = 0; i < userId.length; i++) {
             additionalData[i] = userId.charCodeAt(i);
@@ -373,17 +400,7 @@ export default abstract class BasePlatform {
         for (let i = 0; i < deviceId.length; i++) {
             additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
         }
-
-        try {
-            const key = await crypto.subtle.decrypt(
-                { name: "AES-GCM", iv: data.iv, additionalData }, data.cryptoKey,
-                data.encrypted,
-            );
-            return encodeUnpaddedBase64(key);
-        } catch (e) {
-            logger.error("Error decrypting pickle key");
-            return null;
-        }
+        return additionalData;
     }
 
     /**
@@ -400,24 +417,15 @@ export default abstract class BasePlatform {
         const crypto = window.crypto;
         const randomArray = new Uint8Array(32);
         crypto.getRandomValues(randomArray);
-        const cryptoKey = await crypto.subtle.generateKey(
-            { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"],
-        );
+        const cryptoKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, false, [
+            "encrypt",
+            "decrypt",
+        ]);
         const iv = new Uint8Array(32);
         crypto.getRandomValues(iv);
 
-        const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
-        for (let i = 0; i < userId.length; i++) {
-            additionalData[i] = userId.charCodeAt(i);
-        }
-        additionalData[userId.length] = 124; // "|"
-        for (let i = 0; i < deviceId.length; i++) {
-            additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
-        }
-
-        const encrypted = await crypto.subtle.encrypt(
-            { name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray,
-        );
+        const additionalData = this.getPickleAdditionalData(userId, deviceId);
+        const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray);
 
         try {
             await idbSave("pickleKey", [userId, deviceId], { encrypted, iv, cryptoKey });
@@ -430,7 +438,7 @@ export default abstract class BasePlatform {
     /**
      * Delete a previously stored pickle key from storage.
      * @param {string} userId the user ID for the user that the pickle key is for.
-     * @param {string} userId the device ID that the pickle key is for.
+     * @param {string} deviceId the device ID that the pickle key is for.
      */
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
@@ -438,5 +446,48 @@ export default abstract class BasePlatform {
         } catch (e) {
             logger.error("idbDelete failed in destroyPickleKey", e);
         }
+    }
+
+    /**
+     * Clear app storage, called when logging out to perform data clean up.
+     */
+    public async clearStorage(): Promise<void> {
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+    }
+
+    /**
+     * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance
+     */
+    public get baseUrl(): string {
+        return window.location.origin + window.location.pathname;
+    }
+
+    /**
+     * Metadata to use for dynamic OIDC client registrations
+     */
+    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+        const config = SdkConfig.get();
+        return {
+            clientName: config.brand,
+            clientUri: this.baseUrl,
+            redirectUris: [this.getSSOCallbackUrl().href],
+            logoUri: new URL("vector-icons/1024.png", this.baseUrl).href,
+            applicationType: "web",
+            // XXX: We break the spec by not consistently supplying these required fields
+            // contacts: [],
+            // @ts-ignore
+            tosUri: config.terms_and_conditions_links?.[0]?.url,
+            // @ts-ignore
+            policyUri: config.privacy_policy_url,
+        };
+    }
+
+    /**
+     * Suffix to append to the `state` parameter of OIDC /auth calls. Will be round-tripped to the callback URI.
+     * Currently only required for ElectronPlatform for passing element-desktop-ssoid.
+     */
+    public getOidcClientState(): string {
+        return "";
     }
 }

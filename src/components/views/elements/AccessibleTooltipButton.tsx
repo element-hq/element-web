@@ -15,87 +15,100 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent, FocusEvent } from 'react';
+import React, { SyntheticEvent, FocusEvent, forwardRef, useEffect, Ref, useState, ComponentProps } from "react";
 
 import AccessibleButton from "./AccessibleButton";
-import Tooltip, { Alignment } from './Tooltip';
+import Tooltip, { Alignment } from "./Tooltip";
 
-interface IProps extends React.ComponentProps<typeof AccessibleButton> {
+/**
+ * Type of props accepted by {@link AccessibleTooltipButton}.
+ *
+ * Extends that of {@link AccessibleButton}.
+ */
+type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleButton<T>> & {
+    /**
+     * Title to show in the tooltip and use as aria-label
+     */
     title?: string;
+    /**
+     * Tooltip node to show in the tooltip, takes precedence over `title`
+     */
     tooltip?: React.ReactNode;
+    /**
+     * Trigger label to render
+     */
     label?: string;
+    /**
+     * Classname to apply to the tooltip
+     */
     tooltipClassName?: string;
+    /**
+     * Force the tooltip to be hidden
+     */
     forceHide?: boolean;
+    /**
+     * Alignment to render the tooltip with
+     */
     alignment?: Alignment;
+    /**
+     * Function to call when the children are hovered over
+     */
     onHover?: (hovering: boolean) => void;
+    /**
+     * Function to call when the tooltip goes from shown to hidden.
+     */
     onHideTooltip?(ev: SyntheticEvent): void;
-}
+};
 
-interface IState {
-    hover: boolean;
-}
+const AccessibleTooltipButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
+    { title, tooltip, children, forceHide, alignment, onHideTooltip, tooltipClassName, ...props }: Props<T>,
+    ref: Ref<HTMLElement>,
+) {
+    const [hover, setHover] = useState(false);
 
-export default class AccessibleTooltipButton extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
-        super(props);
-        this.state = {
-            hover: false,
-        };
-    }
-
-    componentDidUpdate(prevProps: Readonly<IProps>) {
-        if (!prevProps.forceHide && this.props.forceHide && this.state.hover) {
-            this.setState({
-                hover: false,
-            });
+    useEffect(() => {
+        // If forceHide is set then force hover to off to hide the tooltip
+        if (forceHide && hover) {
+            setHover(false);
         }
-    }
+    }, [forceHide, hover]);
 
-    private showTooltip = () => {
-        if (this.props.onHover) this.props.onHover(true);
-        if (this.props.forceHide) return;
-        this.setState({
-            hover: true,
-        });
+    const showTooltip = (): void => {
+        props.onHover?.(true);
+        if (forceHide) return;
+        setHover(true);
     };
 
-    private hideTooltip = (ev: SyntheticEvent) => {
-        if (this.props.onHover) this.props.onHover(false);
-        this.setState({
-            hover: false,
-        });
-        this.props.onHideTooltip?.(ev);
+    const hideTooltip = (ev: SyntheticEvent): void => {
+        props.onHover?.(false);
+        setHover(false);
+        onHideTooltip?.(ev);
     };
 
-    private onFocus = (ev: FocusEvent) => {
+    const onFocus = (ev: FocusEvent): void => {
         // We only show the tooltip if focus arrived here from some other
         // element, to avoid leaving tooltips hanging around when a modal closes
-        if (ev.relatedTarget) this.showTooltip();
+        if (ev.relatedTarget) showTooltip();
     };
 
-    render() {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip,
-            ...props } = this.props;
+    const tip = hover && (title || tooltip) && (
+        <Tooltip tooltipClassName={tooltipClassName} label={tooltip || title} alignment={alignment} />
+    );
+    return (
+        <AccessibleButton
+            {...props}
+            onMouseOver={showTooltip}
+            onMouseLeave={hideTooltip}
+            onFocus={onFocus}
+            onBlur={hideTooltip}
+            aria-label={title || props["aria-label"]}
+            ref={ref}
+        >
+            {children}
+            {props.label}
+            {(tooltip || title) && tip}
+        </AccessibleButton>
+    );
+});
 
-        const tip = this.state.hover && (title || tooltip) && <Tooltip
-            tooltipClassName={tooltipClassName}
-            label={tooltip || title}
-            alignment={alignment}
-        />;
-        return (
-            <AccessibleButton
-                {...props}
-                onMouseOver={this.showTooltip || props.onMouseOver}
-                onMouseLeave={this.hideTooltip || props.onMouseLeave}
-                onFocus={this.onFocus || props.onFocus}
-                onBlur={this.hideTooltip || props.onBlur}
-                aria-label={title || props["aria-label"]}
-            >
-                { children }
-                { this.props.label }
-                { (tooltip || title) && tip }
-            </AccessibleButton>
-        );
-    }
-}
+export default AccessibleTooltipButton;

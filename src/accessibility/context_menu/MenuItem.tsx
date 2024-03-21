@@ -30,14 +30,16 @@ export const MenuItem: React.FC<IProps> = ({ children, label, tooltip, ...props 
     const ariaLabel = props["aria-label"] || label;
 
     if (tooltip) {
-        return <RovingAccessibleTooltipButton {...props} role="menuitem" aria-label={ariaLabel} title={tooltip}>
-            { children }
-        </RovingAccessibleTooltipButton>;
+        return (
+            <RovingAccessibleTooltipButton {...props} role="menuitem" aria-label={ariaLabel} title={tooltip}>
+                {children}
+            </RovingAccessibleTooltipButton>
+        );
     }
 
     return (
         <RovingAccessibleButton {...props} role="menuitem" aria-label={ariaLabel}>
-            { children }
+            {children}
         </RovingAccessibleButton>
     );
 };
