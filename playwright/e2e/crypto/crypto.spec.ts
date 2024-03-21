@@ -152,6 +152,12 @@ test.describe("Cryptography", function () {
                     await app.client.bootstrapCrossSigning(aliceCredentials);
                 }
 
+                await page.route("**/_matrix/client/v3/keys/signatures/upload", async (route) => {
+                    // We delay this API otherwise the `Setting up keys` may happen too quickly and cause flakiness
+                    await new Promise((resolve) => setTimeout(resolve, 500));
+                    await route.continue();
+                });
+
                 await app.settings.openUserSettings("Security & Privacy");
                 await page.getByRole("button", { name: "Set up Secure Backup" }).click();
 

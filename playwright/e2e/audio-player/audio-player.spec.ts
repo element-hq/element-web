@@ -95,6 +95,10 @@ test.describe("Audio player", () => {
                 .mx_MessageTimestamp {
                     display: none !important;
                 }
+                /* The MAB showing up on hover is not needed for the test */
+                .mx_MessageActionBar {
+                    display: none !important;
+                }
             `,
             mask: [page.locator(".mx_AudioPlayer_seek")],
         };
