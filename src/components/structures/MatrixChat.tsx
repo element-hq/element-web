@@ -1214,11 +1214,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     maxUserLevel === currentUserLevel &&
                     userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)
                 ) {
+                    const warning =
+                        maxUserLevel >= 100
+                            ? _t("leave_room_dialog|room_leave_admin_warning")
+                            : _t("leave_room_dialog|room_leave_mod_warning");
                     warnings.push(
-                        <span className="warning" key="last_admin_warning">
+                        <strong className="warning" key="last_admin_warning">
                             {" " /* Whitespace, otherwise the sentences get smashed together */}
-                            {_t("leave_room_dialog|room_leave_admin_warning")}
-                        </span>,
+                            {warning}
+                        </strong>,
                     );
                 }
             }
@@ -1248,6 +1252,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("action|leave"),
+            danger: warnings.length > 0,
             onFinished: async (shouldLeave) => {
                 if (shouldLeave) {
                     await leaveRoomBehaviour(cli, roomId);

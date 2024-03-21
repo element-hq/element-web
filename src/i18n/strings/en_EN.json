@@ -1524,7 +1524,8 @@
         "leave_room_question": "Are you sure you want to leave the room '%(roomName)s'?",
         "leave_space_question": "Are you sure you want to leave the space '%(spaceName)s'?",
         "room_rejoin_warning": "This room is not public. You will not be able to rejoin without an invite.",
-        "room_leave_admin_warning": "You are the sole person with the highest role in this room. If you leave, the room could become unmoderable. Consider giving another user your role.",
+        "room_leave_admin_warning": "You're the only administrator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
+        "room_leave_mod_warning": "You're the only moderator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
         "space_rejoin_warning": "This space is not public. You will not be able to rejoin without an invite."
     },
     "left_panel": {
