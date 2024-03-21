@@ -42,12 +42,11 @@ import {
     HierarchyRelation,
     HierarchyRoom,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, SpaceChildEventContent } from "matrix-js-sdk/src/types";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
