@@ -84,6 +84,13 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
 
+            # We may be trying to deploy the same webapp bundles again, we need to ensure that the live bundles
+            # are not present in the _redirects file and instead accessed directly from Cloudflare Pages.
+            - name: Trim _redirects
+              working-directory: _deploy
+              run: |
+                  find bundles -type d -mindepth 1 -maxdepth 1 -exec sed -i "\:{}:d" _redirects \;
+
             - name: Wait for other steps to succeed
               uses: t3chguy/wait-on-check-action@05861d3a448898eb33dfce34153bd1ecb9422fb9 # fork
               with:

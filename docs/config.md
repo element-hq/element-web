@@ -344,6 +344,12 @@ The VoIP and Jitsi options are:
       this number is exceeded, the user will not be able to join a given call.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
+    - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
+      for guest links. If this is set, Element Web will expose a "join" link
+      for public video rooms, which can then be shared to non-matrix users.
+      The target Element Call SPA is typically set up to use a homeserver that
+      allows users to register without email ("passwordless guest users") and to
+      federate.
 
 ## Bug reporting
 
