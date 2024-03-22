@@ -422,12 +422,14 @@
         "unmute": "صدادار",
         "unnamed_room": "اتاق بدون نام",
         "unnamed_space": "فضای کاری بدون نام",
+        "user": "کاربر",
         "user_avatar": "تصویر پروفایل",
         "username": "نام کاربری",
         "verification_cancelled": "تأیید هویت لغو شد",
         "video": "ویدئو",
         "view_message": "مشاهده پیام",
-        "warning": "هشدار"
+        "warning": "هشدار",
+        "welcome": "خوش آمدید"
     },
     "composer": {
         "autocomplete": {

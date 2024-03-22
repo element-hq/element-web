@@ -2422,6 +2422,7 @@
             "custom_theme_success": "Tema aggiunto!",
             "custom_theme_url": "URL tema personalizzato",
             "font_size": "Dimensione carattere",
+            "font_size_default": "%(fontSize)s (predefinito)",
             "heading": "Personalizza l'aspetto",
             "image_size_default": "Predefinito",
             "image_size_large": "Grande",

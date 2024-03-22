@@ -763,6 +763,7 @@
         "room_notifications_type": "Type : ",
         "room_status": "Statut du salon",
         "room_unread_status_count": {
+            "one": "Statut non-lus du salon : <strong>%(status)s</strong>, total : <strong>%(count)s</strong>",
             "other": "Statut non-lus du salon : <strong>%(status)s</strong>, total : <strong>%(count)s</strong>"
         },
         "save_setting_values": "Enregistrer les valeurs des paramètres",
@@ -2627,6 +2628,7 @@
             "voip": "Appels audio et vidéo"
         },
         "preferences": {
+            "Electron.enableHardwareAcceleration": "Activer l’accélération matérielle (redémarrez %(appName)s pour l'activer)",
             "always_show_menu_bar": "Toujours afficher la barre de menu de la fenêtre",
             "autocomplete_delay": "Délai pour l’autocomplétion (ms)",
             "code_blocks_heading": "Blocs de code",
@@ -3488,6 +3490,7 @@
                 "other": "%(severalUsers)s ont changé de nom %(count)s fois",
                 "one": "%(severalUsers)s ont changé de nom"
             },
+            "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)s a envoyé un message caché",
                 "other": "%(oneUser)s ont envoyé %(count)s messages cachés"

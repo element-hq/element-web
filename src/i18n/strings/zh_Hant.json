@@ -424,6 +424,7 @@
             "other": "與另 %(count)s 個人…",
             "one": "與另 1 個人…"
         },
+        "android": "安卓",
         "appearance": "外觀",
         "application": "應用程式",
         "are_you_sure": "您確定嗎？",
@@ -462,6 +463,7 @@
         "identity_server": "身分伺服器",
         "image": "圖片",
         "integration_manager": "整合管理員",
+        "ios": "iOS",
         "joined": "已加入",
         "labs": "實驗室",
         "legal": "法律",
@@ -469,6 +471,7 @@
         "loading": "載入中…",
         "location": "位置",
         "low_priority": "低優先度",
+        "matrix": "Matrix",
         "message": "訊息",
         "message_layout": "訊息佈局",
         "microphone": "麥克風",
