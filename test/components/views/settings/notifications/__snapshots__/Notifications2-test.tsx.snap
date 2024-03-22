@@ -480,7 +480,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               <span>
                 Show a badge 
                 <div
-                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char"
+                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
                 >
                   <span
                     class="mx_NotificationBadge_count"
@@ -1190,7 +1190,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               <span>
                 Show a badge 
                 <div
-                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char"
+                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
                 >
                   <span
                     class="mx_NotificationBadge_count"

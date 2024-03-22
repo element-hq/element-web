@@ -81,16 +81,18 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
                   : "badge_3char";
 
         const classes = classNames({
-            mx_NotificationBadge: true,
-            mx_NotificationBadge_visible: isEmptyBadge || knocked ? true : hasUnreadCount,
-            mx_NotificationBadge_level_notification: level == NotificationLevel.Notification,
-            mx_NotificationBadge_level_highlight: level >= NotificationLevel.Highlight,
-            mx_NotificationBadge_knocked: knocked,
+            "mx_NotificationBadge": true,
+            "mx_NotificationBadge_visible": isEmptyBadge || knocked ? true : hasUnreadCount,
+            "mx_NotificationBadge_level_notification": level == NotificationLevel.Notification,
+            "mx_NotificationBadge_level_highlight": level >= NotificationLevel.Highlight,
+            "mx_NotificationBadge_knocked": knocked,
 
             // Exactly one of mx_NotificationBadge_dot, mx_NotificationBadge_2char, mx_NotificationBadge_3char
-            mx_NotificationBadge_dot: badgeType === "dot",
-            mx_NotificationBadge_2char: badgeType === "badge_2char",
-            mx_NotificationBadge_3char: badgeType === "badge_3char",
+            "mx_NotificationBadge_dot": badgeType === "dot",
+            "mx_NotificationBadge_2char": badgeType === "badge_2char",
+            "mx_NotificationBadge_3char": badgeType === "badge_3char",
+            // Badges with text should always use light colors
+            "cpd-theme-light": badgeType !== "dot",
         });
 
         if (props.onClick) {
