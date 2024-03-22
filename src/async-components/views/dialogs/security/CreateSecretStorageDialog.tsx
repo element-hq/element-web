@@ -19,10 +19,9 @@ import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import classNames from "classnames";
-import { BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t, _td } from "../../../../languageHandler";
@@ -122,7 +121,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         hasCancel: true,
         forceReset: false,
     };
-    private recoveryKey?: IRecoveryKey;
+    private recoveryKey?: GeneratedSecretStorageKey;
     private backupKey?: Uint8Array;
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();

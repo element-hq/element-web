@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { IPassphraseInfo } from "matrix-js-sdk/src/crypto/api";
+import { SecretStorage, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Mocked } from "jest-mock";
 
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../../../test-utils";
@@ -117,7 +116,7 @@ describe("AccessSecretStorageDialog", () => {
             passphrase: {
                 // this type is weird in js-sdk
                 // cast 'm.pbkdf2' to itself
-                algorithm: "m.pbkdf2" as IPassphraseInfo["algorithm"],
+                algorithm: "m.pbkdf2" as SecretStorage.PassphraseInfo["algorithm"],
                 iterations: 2,
                 salt: "nonempty",
             },

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Device } from "matrix-js-sdk/src/matrix";
-import { GeneratedSas, EmojiMapping } from "matrix-js-sdk/src/crypto-api/verification";
+import { GeneratedSas, EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 import SasEmoji from "@matrix-org/spec/sas-emoji.json";
 
 import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";

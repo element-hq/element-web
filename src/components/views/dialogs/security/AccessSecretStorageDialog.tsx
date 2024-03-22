@@ -17,8 +17,8 @@ limitations under the License.
 import { debounce } from "lodash";
 import classNames from "classnames";
 import React, { ChangeEvent, FormEvent } from "react";
-import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
@@ -42,7 +42,7 @@ const VALIDATION_THROTTLE_MS = 200;
 export type KeyParams = { passphrase?: string; recoveryKey?: string };
 
 interface IProps {
-    keyInfo: ISecretStorageKeyInfo;
+    keyInfo: SecretStorage.SecretStorageKeyDescription;
     checkPrivateKey: (k: KeyParams) => Promise<boolean>;
     onFinished(result?: false | KeyParams): void;
 }

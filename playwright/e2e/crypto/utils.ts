@@ -17,12 +17,7 @@ limitations under the License.
 import { type Page, expect, JSHandle } from "@playwright/test";
 
 import type { CryptoEvent, ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
-import type {
-    VerificationRequest,
-    Verifier,
-    EmojiMapping,
-    VerifierEvent,
-} from "matrix-js-sdk/src/crypto-api/verification";
+import type { VerificationRequest, Verifier, EmojiMapping, VerifierEvent } from "matrix-js-sdk/src/crypto-api";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";

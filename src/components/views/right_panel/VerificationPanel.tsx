@@ -21,10 +21,12 @@ import {
     VerificationPhase as Phase,
     VerificationRequest,
     VerificationRequestEvent,
+    ShowQrCodeCallbacks,
+    ShowSasCallbacks,
+    VerifierEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { RoomMember, Device, User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ShowQrCodeCallbacks, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";

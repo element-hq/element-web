@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EmojiMapping } from "matrix-js-sdk/src/crypto-api/verification";
+import { EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 
 import { tEmoji } from "../../../src/components/views/verification/VerificationShowSas";
 
