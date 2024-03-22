@@ -31,6 +31,7 @@
         "summary": "您的瀏覽器無法執行 %(brand)s",
         "title": "不支援的瀏覽器"
     },
+    "powered_by_matrix": "由Matrix支持",
     "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "unknown_device": "未知裝置",
     "use_brand_on_mobile": "在行動裝置上使用 %(brand)s",
