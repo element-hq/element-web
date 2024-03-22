@@ -1511,14 +1511,6 @@
         "view_rules": "View rules"
     },
     "language_dropdown_label": "Language Dropdown",
-    "lazy_loading": {
-        "disabled_action": "Clear cache and resync",
-        "disabled_description1": "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.",
-        "disabled_description2": "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.",
-        "disabled_title": "Incompatible local cache",
-        "resync_description": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!",
-        "resync_title": "Updating %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "You are the only person here. If you leave, no one will be able to join in the future, including you.",
         "leave_room_question": "Are you sure you want to leave the room '%(roomName)s'?",
