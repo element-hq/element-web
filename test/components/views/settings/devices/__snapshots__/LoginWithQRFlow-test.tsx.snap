@@ -8,14 +8,7 @@ exports[`<LoginWithQRFlow /> errors renders data_mismatch 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -57,14 +50,7 @@ exports[`<LoginWithQRFlow /> errors renders expired 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -106,14 +92,7 @@ exports[`<LoginWithQRFlow /> errors renders homeserver_lacks_support 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -155,14 +134,7 @@ exports[`<LoginWithQRFlow /> errors renders invalid_code 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -204,14 +176,7 @@ exports[`<LoginWithQRFlow /> errors renders other_device_already_signed_in 1`] =
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -253,14 +218,7 @@ exports[`<LoginWithQRFlow /> errors renders other_device_not_signed_in 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -302,14 +260,7 @@ exports[`<LoginWithQRFlow /> errors renders rate_limited 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -351,14 +302,7 @@ exports[`<LoginWithQRFlow /> errors renders unknown 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -400,14 +344,7 @@ exports[`<LoginWithQRFlow /> errors renders unsupported_algorithm 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -449,14 +386,7 @@ exports[`<LoginWithQRFlow /> errors renders unsupported_transport 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -498,14 +428,7 @@ exports[`<LoginWithQRFlow /> errors renders user_cancelled 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -547,14 +470,7 @@ exports[`<LoginWithQRFlow /> errors renders user_declined 1`] = `
   >
     <div
       class="mx_LoginWithQR_centreTitle"
-    >
-      <h1>
-        <div
-          class="error"
-        />
-        Connection failed
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -598,35 +514,32 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
       class=""
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        Sign in with QR code
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"
     >
-      <p>
-        Scan the QR code below with your device that's signed out.
-      </p>
-      <ol>
-        <li>
-          Start at the sign in screen
-        </li>
-        <li>
-          Select 'Scan QR code'
-        </li>
-        <li>
-          Review and approve the sign in
-        </li>
-      </ol>
+      <h1>
+        Scan the QR code with another device
+      </h1>
       <div
         class="mx_LoginWithQR_qrWrapper"
       >
@@ -640,6 +553,26 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
           />
         </div>
       </div>
+      <ol>
+        <li>
+          Open Element on your other device
+        </li>
+        <li>
+          <span>
+            Select "
+            <b>
+              Scan QR code
+            </b>
+            "
+          </span>
+        </li>
+        <li>
+          Point the camera at the QR code shown here
+        </li>
+        <li>
+          Follow the remaining instructions to verify your other device
+        </li>
+      </ol>
     </div>
     <div
       class="mx_LoginWithQR_buttons"
@@ -656,14 +589,7 @@ exports[`<LoginWithQRFlow /> renders code when connected 1`] = `
   >
     <div
       class=""
-    >
-      <h1>
-        <div
-          class="normal"
-        />
-        Devices connected
-      </h1>
-    </div>
+    />
     <div
       class="mx_LoginWithQR_main"
     >
@@ -720,17 +646,25 @@ exports[`<LoginWithQRFlow /> renders spinner while connecting 1`] = `
       class=""
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"
@@ -782,17 +716,25 @@ exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
       class=""
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"
@@ -832,17 +774,25 @@ exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
       class=""
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"
@@ -894,17 +844,25 @@ exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
       class="mx_LoginWithQR_centreTitle"
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        Success
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"
@@ -947,17 +905,25 @@ exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
       class=""
     >
       <div
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
-        title="Back"
+        class="mx_LoginWithQR_heading"
       >
-        <div />
+        <div
+          class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+          data-testid="back-button"
+          role="button"
+          tabindex="0"
+          title="Back"
+        >
+          <div />
+        </div>
+        <div
+          class="mx_LoginWithQR_breadcrumbs"
+        >
+          Sessions
+           / 
+          Link new device
+        </div>
       </div>
-      <h1>
-        Sign in with QR code
-      </h1>
     </div>
     <div
       class="mx_LoginWithQR_main"

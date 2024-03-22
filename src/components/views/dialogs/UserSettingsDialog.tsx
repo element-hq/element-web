@@ -86,6 +86,16 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         );
         tabs.push(
             new Tab(
+                UserTab.SessionManager,
+                _td("settings|sessions|title"),
+                "mx_UserSettingsDialog_sessionsIcon",
+                <SessionManagerTab />,
+                // don't track with posthog while under construction
+                undefined,
+            ),
+        );
+        tabs.push(
+            new Tab(
                 UserTab.Appearance,
                 _td("common|appearance"),
                 "mx_UserSettingsDialog_appearanceIcon",
@@ -149,16 +159,6 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 "mx_UserSettingsDialog_securityIcon",
                 <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
                 "UserSettingsSecurityPrivacy",
-            ),
-        );
-        tabs.push(
-            new Tab(
-                UserTab.SessionManager,
-                _td("settings|sessions|title"),
-                "mx_UserSettingsDialog_sessionsIcon",
-                <SessionManagerTab />,
-                // don't track with posthog while under construction
-                undefined,
             ),
         );
         // Show the Labs tab if enabled or if there are any active betas
