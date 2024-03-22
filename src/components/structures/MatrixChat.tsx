@@ -1198,6 +1198,35 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             }
         }
+
+        const client = MatrixClientPeg.get();
+        if (client && roomToLeave) {
+            const plEvent = roomToLeave.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+            const plContent = plEvent ? plEvent.getContent() : {};
+            const userLevels = plContent.users || {};
+            const currentUserLevel = userLevels[client.getUserId()!];
+            const userLevelValues = Object.values(userLevels);
+            if (userLevelValues.every((x) => typeof x === "number")) {
+                const maxUserLevel = Math.max(...(userLevelValues as number[]));
+                // If the user is the only user with highest power level
+                if (
+                    maxUserLevel === currentUserLevel &&
+                    userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)
+                ) {
+                    const warning =
+                        maxUserLevel >= 100
+                            ? _t("leave_room_dialog|room_leave_admin_warning")
+                            : _t("leave_room_dialog|room_leave_mod_warning");
+                    warnings.push(
+                        <strong className="warning" key="last_admin_warning">
+                            {" " /* Whitespace, otherwise the sentences get smashed together */}
+                            {warning}
+                        </strong>,
+                    );
+                }
+            }
+        }
+
         return warnings;
     }
 
@@ -1222,6 +1251,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("action|leave"),
+            danger: warnings.length > 0,
             onFinished: async (shouldLeave) => {
                 if (shouldLeave) {
                     await leaveRoomBehaviour(cli, roomId);
