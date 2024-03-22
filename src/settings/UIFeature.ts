@@ -44,6 +44,10 @@ export const enum UIFeature {
     RoomSummaryFilesOption = "UIFeature.roomSummaryFilesOption",
     RoomSummaryCopyLink = "UIFeature.roomSummaryCopyLink",
     NewRoomIntroInviteThisRoom = "UIFeature.newRoomIntroInviteThisRoom",
+    EmailAddressShowRemoveButton = "UIFeature.emailAddressShowRemoveButton",
+    EmailAddressShowAddButton = "UIFeature.emailAddressShowAddButton",
+    PhoneNumerShowRemoveButton = "UIFeature.phoneNumerShowRemoveButton",
+    PhoneNumerShowAddButton = "UIFeature.phoneNumerShowAddButton",
 }
 
 export enum UIComponent {

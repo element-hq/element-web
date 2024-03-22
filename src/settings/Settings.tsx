@@ -1259,6 +1259,22 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.EmailAddressShowRemoveButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EmailAddressShowAddButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PhoneNumerShowRemoveButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PhoneNumerShowAddButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
 
     // Electron-specific settings, they are stored by Electron and set/read over an IPC.
     // We store them over there are they are necessary to know before the renderer process launches.
