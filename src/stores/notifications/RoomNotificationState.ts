@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEventEvent, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { IDestroyable } from "../../utils/IDestroyable";
@@ -105,7 +106,8 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         const { level, symbol, count } = RoomNotifs.determineUnreadState(this.room, undefined, this.includeThreads);
         const muted =
             RoomNotifs.getRoomNotifsState(this.room.client, this.room.roomId) === RoomNotifs.RoomNotifState.Mute;
-        const knocked = SettingsStore.getValue("feature_ask_to_join") && this.room.getMyMembership() === "knock";
+        const knocked =
+            SettingsStore.getValue("feature_ask_to_join") && this.room.getMyMembership() === KnownMembership.Knock;
         this._level = level;
         this._symbol = symbol;
         this._count = count;

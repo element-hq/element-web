@@ -39,6 +39,7 @@ import {
     IEventDecryptionResult,
     OidcClientConfig,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
@@ -50,6 +51,7 @@ import { MatrixRTCSessionManager } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSe
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
 import type { GroupCall } from "matrix-js-sdk/src/matrix";
+import type { Membership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";
@@ -391,7 +393,7 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
     if (!mxEvent.sender && opts.user && opts.room) {
         mxEvent.sender = {
             userId: opts.user,
-            membership: "join",
+            membership: KnownMembership.Join,
             name: opts.user,
             rawDisplayName: opts.user,
             roomId: opts.room,
@@ -465,8 +467,8 @@ export async function mkEncryptedEvent(opts: {
 export function mkMembership(
     opts: MakeEventPassThruProps & {
         room: Room["roomId"];
-        mship: string;
-        prevMship?: string;
+        mship: Membership;
+        prevMship?: Membership;
         name?: string;
         url?: string;
         skey?: string;
@@ -506,7 +508,7 @@ export function mkMembership(
 export function mkRoomMember(
     roomId: string,
     userId: string,
-    membership = "join",
+    membership = KnownMembership.Join,
     isKicked = false,
     prevMemberContent: Partial<IContent> = {},
 ): RoomMember {
@@ -654,7 +656,7 @@ export function mkStubRoom(
         getMembers: jest.fn().mockReturnValue([]),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
-        getMyMembership: jest.fn().mockReturnValue("join"),
+        getMyMembership: jest.fn().mockReturnValue(KnownMembership.Join),
         getPendingEvents: () => [] as MatrixEvent[],
         getReceiptsForEvent: jest.fn().mockReturnValue([]),
         getRecommendedVersion: jest.fn().mockReturnValue(Promise.resolve("")),
@@ -794,7 +796,7 @@ export const mkRoomMemberJoinEvent = (user: string, room: string, content?: ICon
         event: true,
         type: EventType.RoomMember,
         content: {
-            membership: "join",
+            membership: KnownMembership.Join,
             ...content,
         },
         skey: user,

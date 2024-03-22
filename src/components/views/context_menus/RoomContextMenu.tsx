@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { useContext } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
@@ -144,7 +145,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     let favouriteOption: JSX.Element | undefined;
     let lowPriorityOption: JSX.Element | undefined;
     let notificationOption: JSX.Element | undefined;
-    if (room.getMyMembership() === "join") {
+    if (room.getMyMembership() === KnownMembership.Join) {
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
         favouriteOption = (
             <IconizedContextMenuCheckbox

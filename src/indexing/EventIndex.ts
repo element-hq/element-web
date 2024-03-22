@@ -38,6 +38,7 @@ import {
     TimelineIndex,
     TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -533,7 +534,7 @@ export default class EventIndex extends EventEmitter {
             const profiles: Record<string, IMatrixProfile> = {};
 
             stateEvents.forEach((ev) => {
-                if (ev.getContent().membership === "join") {
+                if (ev.getContent().membership === KnownMembership.Join) {
                     profiles[ev.getSender()!] = {
                         displayname: ev.getContent().displayname,
                         avatar_url: ev.getContent().avatar_url,
@@ -754,7 +755,7 @@ export default class EventIndex extends EventEmitter {
             // This is sets the avatar URL.
             const memberEvent = eventMapper({
                 content: {
-                    membership: "join",
+                    membership: KnownMembership.Join,
                     avatar_url: e.profile.avatar_url,
                     displayname: e.profile.displayname,
                 },

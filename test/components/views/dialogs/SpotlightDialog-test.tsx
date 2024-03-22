@@ -25,6 +25,7 @@ import {
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import sanitizeHtml from "sanitize-html";
 import { fireEvent, render, screen } from "@testing-library/react";
 
@@ -158,9 +159,9 @@ describe("Spotlight Dialog", () => {
     beforeEach(() => {
         mockedClient = mockClient({ rooms: [testPublicRoom], users: [testPerson] });
         testRoom = mkRoom(mockedClient, "!test23:example.com");
-        mocked(testRoom.getMyMembership).mockReturnValue("join");
+        mocked(testRoom.getMyMembership).mockReturnValue(KnownMembership.Join);
         testLocalRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test23", mockedClient, mockedClient.getUserId()!);
-        testLocalRoom.updateMyMembership("join");
+        testLocalRoom.updateMyMembership(KnownMembership.Join);
         mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom]);
 
         jest.spyOn(DMRoomMap, "shared").mockReturnValue({
@@ -169,7 +170,7 @@ describe("Spotlight Dialog", () => {
 
         testDM = mkRoom(mockedClient, testDMRoomId);
         testDM.name = "Chat with Alice";
-        mocked(testDM.getMyMembership).mockReturnValue("join");
+        mocked(testDM.getMyMembership).mockReturnValue(KnownMembership.Join);
 
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
             if (roomId === testDMRoomId) {

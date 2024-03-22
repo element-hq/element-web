@@ -23,6 +23,7 @@ import {
     EventTimelineSet,
     Thread,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import BaseCard from "./BaseCard";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
@@ -217,7 +218,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         const isUploading = ContentMessages.sharedInstance().getCurrentUploads(this.props.composerRelation).length > 0;
 
         const myMembership = this.props.room.getMyMembership();
-        const showComposer = myMembership === "join";
+        const showComposer = myMembership === KnownMembership.Join;
 
         return (
             <RoomContext.Provider

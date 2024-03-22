@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixClient, Room, RoomState, EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -350,7 +351,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
-        if (cause === RoomUpdateCause.NewRoom && room.getMyMembership() === "invite") {
+        if (cause === RoomUpdateCause.NewRoom && room.getMyMembership() === KnownMembership.Invite) {
             // Let the visibility provider know that there is a new invited room. It would be nice
             // if this could just be an event that things listen for but the point of this is that
             // we delay doing anything about this room until the VoipUserMapper had had a chance

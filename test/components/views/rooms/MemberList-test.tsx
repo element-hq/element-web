@@ -18,6 +18,7 @@ limitations under the License.
 import React from "react";
 import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { compare } from "matrix-js-sdk/src/utils";
 import { mocked, MockedObject } from "jest-mock";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -170,7 +171,7 @@ describe("MemberList", () => {
         const usersPerLevel = 2;
         for (let i = 0; i < usersPerLevel; i++) {
             const adminUser = new RoomMember(memberListRoom.roomId, `@admin${i}:localhost`);
-            adminUser.membership = "join";
+            adminUser.membership = KnownMembership.Join;
             adminUser.powerLevel = 100;
             adminUser.user = User.createUser(adminUser.userId, client);
             adminUser.user.currentlyActive = true;
@@ -180,7 +181,7 @@ describe("MemberList", () => {
             adminUsers.push(adminUser);
 
             const moderatorUser = new RoomMember(memberListRoom.roomId, `@moderator${i}:localhost`);
-            moderatorUser.membership = "join";
+            moderatorUser.membership = KnownMembership.Join;
             moderatorUser.powerLevel = 50;
             moderatorUser.user = User.createUser(moderatorUser.userId, client);
             moderatorUser.user.currentlyActive = true;
@@ -190,7 +191,7 @@ describe("MemberList", () => {
             moderatorUsers.push(moderatorUser);
 
             const defaultUser = new RoomMember(memberListRoom.roomId, `@default${i}:localhost`);
-            defaultUser.membership = "join";
+            defaultUser.membership = KnownMembership.Join;
             defaultUser.powerLevel = 0;
             defaultUser.user = User.createUser(defaultUser.userId, client);
             defaultUser.user.currentlyActive = true;
@@ -402,7 +403,7 @@ describe("MemberList", () => {
             });
 
             it("renders disabled invite button when current user is a member but does not have rights to invite", async () => {
-                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(false);
 
                 renderComponent();
@@ -413,7 +414,7 @@ describe("MemberList", () => {
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {
-                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(true);
 
                 renderComponent();
@@ -424,7 +425,7 @@ describe("MemberList", () => {
 
             it("opens room inviter on button click", async () => {
                 jest.spyOn(defaultDispatcher, "dispatch");
-                jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+                jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(true);
 
                 renderComponent();

@@ -23,6 +23,7 @@ import {
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
@@ -504,12 +505,12 @@ describe("TextForEvent", () => {
                         type: "m.room.member",
                         sender: "@a:foo",
                         content: {
-                            membership: "join",
+                            membership: KnownMembership.Join,
                             avatar_url: "b",
                             displayname: "Bob",
                         },
                         prev_content: {
-                            membership: "join",
+                            membership: KnownMembership.Join,
                             avatar_url: "a",
                             displayname: "Andy",
                         },

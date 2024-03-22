@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import DMRoomMap from "../DMRoomMap";
 import { isLocalRoom } from "../localRoom/isLocalRoom";
@@ -42,7 +43,7 @@ function extractSuitableRoom(rooms: Room[], userId: string, findRoomWithThirdpar
             // a DM is a room of two people that contains those two people exactly. This does mean
             // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
             // canonical DMs to solve.
-            if (r && r.getMyMembership() === "join") {
+            if (r && r.getMyMembership() === KnownMembership.Join) {
                 if (isLocalRoom(r)) return false;
 
                 const functionalUsers = getFunctionalMembers(r);

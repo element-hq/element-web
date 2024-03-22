@@ -17,6 +17,7 @@ limitations under the License.
 
 import React, { useContext, useMemo } from "react";
 import { EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";
@@ -27,7 +28,7 @@ const ServersInRoom: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const servers = useMemo<Record<string, number>>(() => {
         const servers: Record<string, number> = {};
         context.room.currentState.getStateEvents(EventType.RoomMember).forEach((ev) => {
-            if (ev.getContent().membership !== "join") return; // only count joined users
+            if (ev.getContent().membership !== KnownMembership.Join) return; // only count joined users
             const server = ev.getSender()!.split(":")[1];
             servers[server] = (servers[server] ?? 0) + 1;
         });

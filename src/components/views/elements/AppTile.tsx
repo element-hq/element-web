@@ -21,6 +21,7 @@ import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNo
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
@@ -219,7 +220,10 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onMyMembership = (room: Room, membership: string): void => {
-        if ((membership === "leave" || membership === "ban") && room.roomId === this.props.room?.roomId) {
+        if (
+            (membership === KnownMembership.Leave || membership === KnownMembership.Ban) &&
+            room.roomId === this.props.room?.roomId
+        ) {
             this.onUserLeftRoom();
         }
     };

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { EventTimeline, JoinRule, MatrixError, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { ReactElement, ReactNode, useCallback, useState, VFC } from "react";
 
 import { Icon as CheckIcon } from "../../../../res/img/feather-customised/check.svg";
@@ -35,7 +36,7 @@ export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
     const knockMembers = useTypedEventEmitterState(
         room,
         RoomStateEvent.Update,
-        useCallback(() => room.getMembersWithMembership("knock"), [room]),
+        useCallback(() => room.getMembersWithMembership(KnownMembership.Knock), [room]),
     );
     const knockMembersCount = knockMembers.length;
 

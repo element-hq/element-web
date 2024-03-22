@@ -29,6 +29,7 @@ import {
     M_TIMESTAMP,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -267,7 +268,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             sortRooms(
                 cli
                     .getVisibleRooms(msc3946DynamicRoomPredecessors)
-                    .filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom()),
+                    .filter((room) => room.getMyMembership() === KnownMembership.Join && !room.isSpaceRoom()),
             ),
         [cli, msc3946DynamicRoomPredecessors],
     );

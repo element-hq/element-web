@@ -25,6 +25,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -99,7 +100,7 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     let notifBadge;
     if (spaceKey && notificationState) {
         let ariaLabel = _t("a11y_jump_first_unread_room");
-        if (space?.getMyMembership() === "invite") {
+        if (space?.getMyMembership() === KnownMembership.Invite) {
             ariaLabel = _t("a11y|jump_first_invite");
         }
 
@@ -325,7 +326,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             hasSubSpaces: this.state.childSpaces?.length,
         });
 
-        const isInvite = space.getMyMembership() === "invite";
+        const isInvite = space.getMyMembership() === KnownMembership.Invite;
 
         const notificationState = isInvite
             ? StaticNotificationState.forSymbol("!", NotificationLevel.Highlight)
@@ -378,7 +379,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     isNarrow={isPanelCollapsed}
                     size={isNested ? "24px" : "32px"}
                     onKeyDown={this.onKeyDown}
-                    ContextMenuComponent={this.props.space.getMyMembership() === "join" ? SpaceContextMenu : undefined}
+                    ContextMenuComponent={
+                        this.props.space.getMyMembership() === KnownMembership.Join ? SpaceContextMenu : undefined
+                    }
                 >
                     {toggleCollapseButton}
                 </SpaceButton>

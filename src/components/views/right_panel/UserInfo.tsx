@@ -30,6 +30,7 @@ import {
     Device,
     EventType,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
@@ -473,7 +474,7 @@ export const UserOptionsSection: React.FC<{
         if (
             member instanceof RoomMember &&
             canInvite &&
-            (member?.membership ?? "leave") === "leave" &&
+            (member?.membership ?? KnownMembership.Leave) === KnownMembership.Leave &&
             shouldShowComponent(UIComponent.InviteUsers)
         ) {
             const roomId = member && member.roomId ? member.roomId : SdkContextClass.instance.roomViewStore.getRoomId();
@@ -638,7 +639,7 @@ export const RoomKickButton = ({
     const cli = useContext(MatrixClientContext);
 
     // check if user can be kicked/disinvited
-    if (member.membership !== "invite" && member.membership !== "join") return <></>;
+    if (member.membership !== KnownMembership.Invite && member.membership !== KnownMembership.Join) return <></>;
 
     const onKick = async (): Promise<void> => {
         if (isUpdating) return; // only allow one operation at a time
@@ -647,17 +648,17 @@ export const RoomKickButton = ({
         const commonProps = {
             member,
             action: room.isSpaceRoom()
-                ? member.membership === "invite"
+                ? member.membership === KnownMembership.Invite
                     ? _t("user_info|disinvite_button_space")
                     : _t("user_info|kick_button_space")
-                : member.membership === "invite"
+                : member.membership === KnownMembership.Invite
                   ? _t("user_info|disinvite_button_room")
                   : _t("user_info|kick_button_room"),
             title:
-                member.membership === "invite"
+                member.membership === KnownMembership.Invite
                     ? _t("user_info|disinvite_button_room_name", { roomName: room.name })
                     : _t("user_info|kick_button_room_name", { roomName: room.name }),
-            askReason: member.membership === "join",
+            askReason: member.membership === KnownMembership.Join,
             danger: true,
         };
 
@@ -718,10 +719,10 @@ export const RoomKickButton = ({
     };
 
     const kickLabel = room.isSpaceRoom()
-        ? member.membership === "invite"
+        ? member.membership === KnownMembership.Invite
             ? _t("user_info|disinvite_button_space")
             : _t("user_info|kick_button_space")
-        : member.membership === "invite"
+        : member.membership === KnownMembership.Invite
           ? _t("user_info|disinvite_button_room")
           : _t("user_info|kick_button_room");
 
@@ -771,7 +772,7 @@ export const BanToggleButton = ({
 }: Omit<IBaseRoomProps, "powerLevels">): JSX.Element => {
     const cli = useContext(MatrixClientContext);
 
-    const isBanned = member.membership === "ban";
+    const isBanned = member.membership === KnownMembership.Ban;
     const onBanOrUnban = async (): Promise<void> => {
         if (isUpdating) return; // only allow one operation at a time
         startUpdating();
@@ -808,7 +809,7 @@ export const BanToggleButton = ({
                               return (
                                   !!myMember &&
                                   !!theirMember &&
-                                  theirMember.membership === "ban" &&
+                                  theirMember.membership === KnownMembership.Ban &&
                                   myMember.powerLevel > theirMember.powerLevel &&
                                   child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
                               );
@@ -820,7 +821,7 @@ export const BanToggleButton = ({
                               return (
                                   !!myMember &&
                                   !!theirMember &&
-                                  theirMember.membership !== "ban" &&
+                                  theirMember.membership !== KnownMembership.Ban &&
                                   myMember.powerLevel > theirMember.powerLevel &&
                                   child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
                               );
@@ -903,7 +904,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
     const cli = useContext(MatrixClientContext);
 
     // Don't show the mute/unmute option if the user is not in the room
-    if (member.membership !== "join") return null;
+    if (member.membership !== KnownMembership.Join) return null;
 
     const muted = isMuted(member, powerLevels);
     const onMuteToggle = async (): Promise<void> => {

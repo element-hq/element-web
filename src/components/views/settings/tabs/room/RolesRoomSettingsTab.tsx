@@ -18,7 +18,7 @@ import React from "react";
 import { EventType, RoomMember, RoomState, RoomStateEvent, Room, IContent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
-import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import { _t, _td, TranslationKey } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -375,7 +375,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             );
         }
 
-        const banned = room.getMembersWithMembership("ban");
+        const banned = room.getMembersWithMembership(KnownMembership.Ban);
         let bannedUsersSection: JSX.Element | undefined;
         if (banned?.length) {
             const canBanUsers = currentUserLevel >= banLevel;

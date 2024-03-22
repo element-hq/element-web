@@ -35,6 +35,7 @@ import {
     ThreadEvent,
     ThreadFilterType,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { createRef } from "react";
 import { Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";
@@ -988,8 +989,8 @@ describe("TimelinePanel", () => {
         events.forEach((event) => timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true }));
 
         const roomMembership = mkMembership({
-            mship: "join",
-            prevMship: "join",
+            mship: KnownMembership.Join,
+            prevMship: KnownMembership.Join,
             user: authorId,
             room: room.roomId,
             event: true,
@@ -999,7 +1000,7 @@ describe("TimelinePanel", () => {
         events.push(roomMembership);
 
         const member = new RoomMember(room.roomId, authorId);
-        member.membership = "join";
+        member.membership = KnownMembership.Join;
 
         const roomState = new RoomState(room.roomId);
         jest.spyOn(roomState, "getMember").mockReturnValue(member);

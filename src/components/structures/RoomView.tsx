@@ -38,6 +38,7 @@ import {
     ISearchResults,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
@@ -1454,7 +1455,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private async loadMembersIfJoined(room: Room): Promise<void> {
         // lazy load members if enabled
         if (this.context.client?.hasLazyLoadMembersEnabled()) {
-            if (room && room.getMyMembership() === "join") {
+            if (room && room.getMyMembership() === KnownMembership.Join) {
                 try {
                     await room.loadMembersIfNeeded();
                     if (!this.unmounted) {
@@ -1588,7 +1589,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (room && this.context.client) {
             const me = this.context.client.getSafeUserId();
             const canReact =
-                room.getMyMembership() === "join" && room.currentState.maySendEvent(EventType.Reaction, me);
+                room.getMyMembership() === KnownMembership.Join &&
+                room.currentState.maySendEvent(EventType.Reaction, me);
             const canSendMessages = room.maySendMessage();
             const canSelfRedact = room.currentState.maySendEvent(EventType.RoomRedaction, me);
 
@@ -1622,10 +1624,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private updateDMState(): void {
         const room = this.state.room;
-        if (room?.getMyMembership() !== "join") {
+        if (room?.getMyMembership() != KnownMembership.Join) {
             return;
         }
-        const dmInviter = room.getDMInviter();
+        const dmInviter = room?.getDMInviter();
         if (dmInviter) {
             Rooms.setDMRoom(room.client, room.roomId, dmInviter);
         }
@@ -1662,7 +1664,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         action: Action.JoinRoom,
                         roomId,
                         opts: { inviteSignUrl: signUrl },
-                        metricsTrigger: this.state.room?.getMyMembership() === "invite" ? "Invite" : "RoomPreview",
+                        metricsTrigger:
+                            this.state.room?.getMyMembership() === KnownMembership.Invite ? "Invite" : "RoomPreview",
                         canAskToJoin: this.state.canAskToJoin,
                     });
                 }
@@ -2183,7 +2186,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const myMembership = this.state.room.getMyMembership();
         if (
             isVideoRoom(this.state.room) &&
-            !(SettingsStore.getValue("feature_video_rooms") && myMembership === "join")
+            !(SettingsStore.getValue("feature_video_rooms") && myMembership === KnownMembership.Join)
         ) {
             return (
                 <ErrorBoundary>
@@ -2200,7 +2203,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         // SpaceRoomView handles invites itself
-        if (myMembership === "invite" && !this.state.room.isSpaceRoom()) {
+        if (myMembership === KnownMembership.Invite && !this.state.room.isSpaceRoom()) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -2247,16 +2250,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        if (this.state.canAskToJoin && ["knock", "leave"].includes(myMembership)) {
+        if (
+            this.state.canAskToJoin &&
+            ([KnownMembership.Knock, KnownMembership.Leave] as Array<string>).includes(myMembership)
+        ) {
             return (
                 <div className="mx_RoomView" data-room-header={roomHeaderType}>
                     <ErrorBoundary>
                         <RoomPreviewBar
                             onJoinClick={this.onJoinButtonClicked}
                             room={this.state.room}
-                            canAskToJoinAndMembershipIsLeave={myMembership === "leave"}
+                            canAskToJoinAndMembershipIsLeave={myMembership === KnownMembership.Leave}
                             promptAskToJoin={this.state.promptAskToJoin}
-                            knocked={myMembership === "knock"}
+                            knocked={myMembership === KnownMembership.Knock}
                             onSubmitAskToJoin={this.onSubmitAskToJoin}
                             onCancelAskToJoin={this.onCancelAskToJoin}
                             onForgetClick={this.onForgetClick}
@@ -2288,7 +2294,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             statusBar = (
                 <RoomStatusBar
                     room={this.state.room}
-                    isPeeking={myMembership !== "join"}
+                    isPeeking={myMembership !== KnownMembership.Join}
                     onInviteClick={this.onInviteClick}
                     onVisible={this.onStatusBarVisible}
                     onHidden={this.onStatusBarHidden}
@@ -2332,7 +2338,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
-        } else if (myMembership !== "join") {
+        } else if (myMembership !== KnownMembership.Join) {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
             let inviterName: string | undefined;
@@ -2406,7 +2412,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let messageComposer;
         const showComposer =
             // joined and not showing search results
-            myMembership === "join" && !this.state.search;
+            myMembership === KnownMembership.Join && !this.state.search;
         if (showComposer) {
             messageComposer = (
                 <MessageComposer
@@ -2603,7 +2609,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const myMember = this.state.room!.getMember(this.context.client!.getSafeUserId());
         const showForgetButton =
-            !this.context.client.isGuest() && (["leave", "ban"].includes(myMembership) || myMember?.isKicked());
+            !this.context.client.isGuest() &&
+            (([KnownMembership.Leave, KnownMembership.Ban] as Array<string>).includes(myMembership) ||
+                myMember?.isKicked());
 
         return (
             <RoomContext.Provider value={this.state}>
@@ -2640,7 +2648,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                         room={this.state.room}
                                         searchInfo={this.state.search}
                                         oobData={this.props.oobData}
-                                        inRoom={myMembership === "join"}
+                                        inRoom={myMembership === KnownMembership.Join}
                                         onSearchClick={onSearchClick}
                                         onInviteClick={onInviteClick}
                                         onForgetClick={showForgetButton ? onForgetClick : null}

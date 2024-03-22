@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { Room, RoomMember, RoomState, RoomStateEvent, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
@@ -65,10 +66,13 @@ export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
     return split;
 }
 
-export function getEffectiveMembership(membership: string): EffectiveMembership {
-    if (membership === "invite") {
+export function getEffectiveMembership(membership: Membership): EffectiveMembership {
+    if (membership === KnownMembership.Invite) {
         return EffectiveMembership.Invite;
-    } else if (membership === "join" || (SettingsStore.getValue("feature_ask_to_join") && membership === "knock")) {
+    } else if (
+        membership === KnownMembership.Join ||
+        (SettingsStore.getValue("feature_ask_to_join") && membership === KnownMembership.Knock)
+    ) {
         return EffectiveMembership.Join;
     } else {
         // Probably a leave, kick, or ban
@@ -81,7 +85,7 @@ export function isKnockDenied(room: Room): boolean | undefined {
     const member = memberId ? room.getMember(memberId) : null;
     const previousMembership = member?.events.member?.getPrevContent().membership;
 
-    return member?.isKicked() && previousMembership === "knock";
+    return member?.isKicked() && previousMembership === KnownMembership.Knock;
 }
 
 export function getEffectiveMembershipTag(room: Room, membership?: string): EffectiveMembership {
@@ -90,7 +94,7 @@ export function getEffectiveMembershipTag(room: Room, membership?: string): Effe
         : getEffectiveMembership(membership ?? room.getMyMembership());
 }
 
-export function isJoinedOrNearlyJoined(membership: string): boolean {
+export function isJoinedOrNearlyJoined(membership: Membership): boolean {
     const effective = getEffectiveMembership(membership);
     return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
 }

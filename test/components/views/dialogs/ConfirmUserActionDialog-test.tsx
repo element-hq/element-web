@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import ConfirmUserActionDialog from "../../../../src/components/views/dialogs/ConfirmUserActionDialog";
 import { mkRoomMember } from "../../../test-utils";
@@ -25,7 +26,7 @@ describe("ConfirmUserActionDialog", () => {
         const { asFragment } = render(
             <ConfirmUserActionDialog
                 onFinished={jest.fn()}
-                member={mkRoomMember("123", "@user:test.com", "join")}
+                member={mkRoomMember("123", "@user:test.com", KnownMembership.Join)}
                 action="Ban"
                 title="Ban this " // eg. 'Ban this user?'
             />,

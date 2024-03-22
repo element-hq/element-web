@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import jsQR from "jsqr";
+import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
-import type { Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 import { test, expect } from "../../element-web-test";
 import {

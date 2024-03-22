@@ -23,6 +23,7 @@ import {
     RuleId,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
@@ -102,7 +103,7 @@ function mkStubDM(roomId: string, userId: string) {
             name: "Member",
             rawDisplayName: "Member",
             roomId: roomId,
-            membership: "join",
+            membership: KnownMembership.Join,
             getAvatarUrl: () => "mxc://avatar.url/image.png",
             getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
@@ -111,7 +112,7 @@ function mkStubDM(roomId: string, userId: string) {
             name: "Member",
             rawDisplayName: "Member",
             roomId: roomId,
-            membership: "join",
+            membership: KnownMembership.Join,
             getAvatarUrl: () => "mxc://avatar.url/image.png",
             getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
@@ -120,7 +121,7 @@ function mkStubDM(roomId: string, userId: string) {
             name: "Bot user",
             rawDisplayName: "Bot user",
             roomId: roomId,
-            membership: "join",
+            membership: KnownMembership.Join,
             getAvatarUrl: () => "mxc://avatar.url/image.png",
             getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
