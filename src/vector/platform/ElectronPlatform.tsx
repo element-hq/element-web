@@ -445,6 +445,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const baseMetadata = await super.getOidcClientMetadata();
         const redirectUri = this.getSSOCallbackUrl();
         redirectUri.searchParams.delete(SSO_ID_KEY); // it will be shuttled via the state param instead

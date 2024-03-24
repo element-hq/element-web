@@ -24,5 +24,6 @@
     "src/components/views/rooms/RoomSublist.tsx": "src/components/views/rooms/RoomSublist.tsx",
     "src/components/views/dialogs/FeedbackDialog.tsx": "src/components/views/dialogs/FeedbackDialog.tsx",
     "src/components/views/user-onboarding/UserOnboardingHeader.tsx": "src/components/views/user-onboarding/UserOnboardingHeader.tsx",
-    "src/components/views/dialogs/AppDownloadDialog.tsx": "src/components/views/dialogs/AppDownloadDialog.tsx"
+    "src/components/views/dialogs/AppDownloadDialog.tsx": "src/components/views/dialogs/AppDownloadDialog.tsx",
+    "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx": "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx"
 }
