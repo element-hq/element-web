@@ -679,7 +679,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
                     const badge = (
                         <NotificationBadge
-                            forceCount={true}
+                            hideIfDot={true}
                             notification={this.notificationState}
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
