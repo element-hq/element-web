@@ -22,6 +22,7 @@
         "./node_modules/matrix-react-sdk/src/@types/opus-recorder.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/matrix-js-sdk.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",

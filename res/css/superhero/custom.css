@@ -190,6 +190,8 @@ h2 .sh_VerifiedIcon {
 
 /* CPD Light Theme Overwrite */
 .cpd-theme-light.cpd-theme-light {
+    --cpd-color-icon-accent-tertiary: #6147ff !important;
+    --cpd-color-bg-accent-rest: #6147ff !important;
     --cpd-color-text-action-accent: #6147ff !important;
     --cpd-color-alpha-gray-500: hsla(212, 87%, 15%, 0.2);
     --cpd-color-pink-1200: #a80298 !important;
@@ -212,6 +214,7 @@ h2 .sh_VerifiedIcon {
 
 /* CPD Dark Theme Overwrite */
 .cpd-theme-dark.cpd-theme-dark {
+    --cpd-color-icon-accent-tertiary: #6147ff !important;
     --cpd-color-text-action-accent: #6147ff !important;
     --cpd-color-theme-bg: #313338 !important;
     --cpd-color-text-link-external: rgb(141, 149, 255) !important;
