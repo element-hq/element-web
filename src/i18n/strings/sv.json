@@ -249,7 +249,6 @@
             "completing_setup": "Slutför inställning av din nya enhet",
             "confirm_code_match": "Kolla att koden nedan matchar din andra enhet:",
             "connecting": "Kopplar upp …",
-            "devices_connected": "Enheter anslutna",
             "error_device_already_signed_in": "Den andra enheten är redan inloggad.",
             "error_device_not_signed_in": "Den andra enheten är inte inloggad.",
             "error_device_unsupported": "Länkning med den här enheten stöds inte.",
@@ -260,12 +259,10 @@
             "error_request_cancelled": "Förfrågan avbröts.",
             "error_request_declined": "Förfrågan nekades på den andra enheten.",
             "error_unexpected": "Ett oväntade fel inträffade.",
-            "review_and_approve": "Granska och godkänn inloggningen",
             "scan_code_instruction": "Skanna QR-koden nedan med din andra enhet som är utloggad.",
             "scan_qr_code": "Skanna QR-kod",
             "select_qr_code": "Välj '%(scanQRCode)s'",
             "sign_in_new_device": "Logga in ny enhet",
-            "start_at_sign_in_screen": "Börja på inloggningsskärmen",
             "waiting_for_device": "Väntar på att enheter loggar in"
         },
         "register_action": "Skapa konto",
@@ -742,7 +739,6 @@
         "notification_state": "Aviseringsstatus är <strong>%(notificationState)s</strong>",
         "notifications_debug": "Aviseringsfelsökning",
         "number_of_users": "Antal användare",
-        "observe_only": "Bara kolla",
         "original_event_source": "Ursprunglig händelsekällkod",
         "phase": "Fas",
         "phase_cancelled": "Avbruten",
@@ -750,7 +746,6 @@
         "phase_requested": "Efterfrågad",
         "phase_started": "Påbörjad",
         "phase_transaction": "Transaktion",
-        "requester": "Den som skickat förfrågan",
         "room_encrypted": "Rummet är <strong>krypterat ✅</strong>",
         "room_id": "Rums-ID: %(roomId)s",
         "room_not_encrypted": "Rummet är <strong>inte krypterat 🚨</strong>",
@@ -1511,14 +1506,6 @@
         "view_rules": "Visa regler"
     },
     "language_dropdown_label": "Språkmeny",
-    "lazy_loading": {
-        "disabled_action": "Töm cache och synkronisera om",
-        "disabled_description1": "Du har tidigare använt %(brand)s på %(host)s med fördröjd inladdning av medlemmar aktiverat. I den här versionen är fördröjd inladdning inaktiverat. Eftersom den lokala cachen inte är kompatibel mellan dessa två inställningar behöver %(brand)s synkronisera om ditt konto.",
-        "disabled_description2": "Om den andra versionen av %(brand)s fortfarande är öppen i en annan flik, stäng den eftersom användning av %(brand)s på samma värd med fördröjd inladdning både aktiverad och inaktiverad samtidigt kommer att orsaka problem.",
-        "disabled_title": "Inkompatibel lokal cache",
-        "resync_description": "%(brand)s använder nu 3-5 gånger mindre minne, genom att bara ladda information om andra användare när det behövs. Vänta medan vi återsynkroniserar med servern!",
-        "resync_title": "Uppdaterar %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Du är den enda personen här. Om du lämnar så kommer ingen kunna gå med igen, inklusive du.",
         "leave_room_question": "Vill du lämna rummet '%(roomName)s'?",

@@ -1341,14 +1341,6 @@
         "view_rules": "Xem các quy tắc"
     },
     "language_dropdown_label": "Danh sách ngôn ngữ",
-    "lazy_loading": {
-        "disabled_action": "Xóa bộ nhớ cache và đồng bộ hóa lại",
-        "disabled_description1": "Trước đây, bạn đã sử dụng %(brand)s trên %(host)s khi đã bật tính năng tải chậm các thành viên. Trong phiên bản này, tính năng tải lười biếng bị vô hiệu hóa. Vì bộ nhớ cache cục bộ không tương thích giữa hai cài đặt này, %(brand)s cần phải đồng bộ hóa lại tài khoản của bạn.",
-        "disabled_description2": "Nếu phiên bản khác của %(brand)s vẫn đang mở trong một tab khác, vui lòng đóng nó lại vì việc sử dụng %(brand)s trên cùng một máy chủ với cả hai chế độ tải chậm được bật và tắt đồng thời sẽ gây ra sự cố.",
-        "disabled_title": "Bộ nhớ cache cục bộ không tương thích",
-        "resync_description": "%(brand)s hiện sử dụng bộ nhớ ít hơn 3-5 lần, bằng cách chỉ tải thông tin về những người dùng khác khi cần thiết. Vui lòng đợi trong khi chúng tôi đồng bộ hóa lại với máy chủ!",
-        "resync_title": "Đang cập nhật %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Bạn là người duy nhất ở đây. Nếu bạn rời, không ai có thể tham gia trong tương lai, kể cả bạn.",
         "leave_room_question": "Bạn có chắc chắn muốn rời khỏi phòng '%(roomName)s' không?",

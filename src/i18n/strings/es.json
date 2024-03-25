@@ -233,7 +233,6 @@
             "completing_setup": "Terminando de configurar tu nuevo dispositivo",
             "confirm_code_match": "Comprueba que el siguiente código también aparece en el otro dispositivo:",
             "connecting": "Conectando…",
-            "devices_connected": "Dispositivos conectados",
             "error_device_already_signed_in": "El otro dispositivo ya tiene una sesión iniciada.",
             "error_device_not_signed_in": "El otro dispositivo no tiene una sesión iniciada.",
             "error_homeserver_lacks_support": "Tu servidor base no es compatible con el inicio de sesión en otro dispositivo.",
@@ -243,12 +242,10 @@
             "error_request_cancelled": "La solicitud ha sido cancelada.",
             "error_request_declined": "El otro dispositivo ha rechazado la solicitud.",
             "error_unexpected": "Ha ocurrido un error inesperado.",
-            "review_and_approve": "Revisar y aprobar inicio de sesión",
             "scan_code_instruction": "Escanea el siguiente código QR con tu dispositivo.",
             "scan_qr_code": "Escanear código QR",
             "select_qr_code": "Selecciona «%(scanQRCode)s»",
             "sign_in_new_device": "Conectar nuevo dispositivo",
-            "start_at_sign_in_screen": "Ve a la pantalla de inicio de sesión",
             "waiting_for_device": "Esperando a que el dispositivo inicie sesión"
         },
         "register_action": "Crear cuenta",
@@ -692,7 +689,6 @@
         "methods": "Métodos",
         "no_verification_requests_found": "Ninguna solicitud de verificación encontrada",
         "number_of_users": "Número de usuarios",
-        "observe_only": "Solo observar",
         "original_event_source": "Fuente original del evento",
         "phase": "Fase",
         "phase_cancelled": "Cancelado",
@@ -700,7 +696,6 @@
         "phase_requested": "Solicitado",
         "phase_started": "Empezado",
         "phase_transaction": "Transacción",
-        "requester": "Solicitante",
         "room_encrypted": "La sala está <strong>cifrada ✅</strong>",
         "room_id": "ID de la sala: %(roomId)s",
         "room_not_encrypted": "La sala <strong>no está cifrada 🚨</strong>",
@@ -1383,14 +1378,6 @@
         "view_rules": "Ver reglas"
     },
     "language_dropdown_label": "Lista selección de idiomas",
-    "lazy_loading": {
-        "disabled_action": "Limpiar la caché y resincronizar",
-        "disabled_description1": "Has usado %(brand)s anteriormente en %(host)s con carga diferida de usuarios activada. En esta versión la carga diferida está desactivada. Como el caché local no es compatible entre estas dos configuraciones, %(brand)s tiene que resincronizar tu cuenta.",
-        "disabled_description2": "Si la otra versión de %(brand)s esta todavía abierta en otra pestaña, por favor, ciérrala, ya que usar %(brand)s en el mismo host con la opción de carga diferida activada y desactivada simultáneamente causará problemas.",
-        "disabled_title": "Caché local incompatible",
-        "resync_description": "%(brand)s ahora utiliza de 3 a 5 veces menos memoria, porque solo carga información sobre otros usuarios cuando es necesario. Por favor, ¡aguarda mientras volvemos a sincronizar con el servidor!",
-        "resync_title": "Actualizando %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Eres la única persona aquí. Si te vas, no podrá unirse nadie en el futuro, incluyéndote a ti.",
         "leave_room_question": "¿Salir de la sala «%(roomName)s»?",

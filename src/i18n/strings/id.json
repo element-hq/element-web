@@ -243,7 +243,6 @@
             "completing_setup": "Menyelesaikan penyiapan perangkat baru Anda",
             "confirm_code_match": "Periksa bahwa kode di bawah cocok dengan perangkat Anda yang lain:",
             "connecting": "Menghubungkan…",
-            "devices_connected": "Perangkat terhubung",
             "error_device_already_signed_in": "Perangkat yang lain sudah masuk.",
             "error_device_not_signed_in": "Perangkat yang lain belum masuk.",
             "error_device_unsupported": "Penautan dengan perangkat ini tidak didukung.",
@@ -253,12 +252,10 @@
             "error_request_cancelled": "Permintaan dibatalkan.",
             "error_request_declined": "Permintaan ditolak di perangkat yang lain.",
             "error_unexpected": "Sebuah kesalahan terjadi secara tidak terduga.",
-            "review_and_approve": "Lihat dan perbolehkan pemasukan",
             "scan_code_instruction": "Pindai kode QR di bawah dengan perangkat Anda yang sudah keluar dari akun.",
             "scan_qr_code": "Pindai kode QR",
             "select_qr_code": "Pilih '%(scanQRCode)s'",
             "sign_in_new_device": "Masuk perangkat baru",
-            "start_at_sign_in_screen": "Mulai dari layar masuk",
             "waiting_for_device": "Menunggu perangkat untuk masuk"
         },
         "register_action": "Buat Akun",
@@ -732,7 +729,6 @@
         "notification_state": "Keadaan notifikasi adalah <strong>%(notificationState)s</strong>",
         "notifications_debug": "Pengawakutuan notifikasi",
         "number_of_users": "Jumlah pengguna",
-        "observe_only": "Lihat saja",
         "original_event_source": "Sumber peristiwa asli",
         "phase": "Masa",
         "phase_cancelled": "Dibatalkan",
@@ -740,7 +736,6 @@
         "phase_requested": "Diminta",
         "phase_started": "Dimulai",
         "phase_transaction": "Transaksi",
-        "requester": "Peminta",
         "room_encrypted": "Ruangan <strong>terenkripsi ✅</strong>",
         "room_id": "ID ruangan: %(roomId)s",
         "room_not_encrypted": "Ruangan <strong>tidak terenkripsi 🚨</strong>",
@@ -1482,14 +1477,6 @@
         "view_rules": "Tampilkan aturan"
     },
     "language_dropdown_label": "Dropdown Bahasa",
-    "lazy_loading": {
-        "disabled_action": "Hapus cache dan sinkron ulang",
-        "disabled_description1": "Anda sebelumnya menggunakan %(brand)s di %(host)s dengan pemuatan malas pengguna diaktifkan. Di versi ini pemuatan malas dinonaktifkan. Karena cache lokal tidak kompatibel antara dua pengaturan ini, %(brand)s harus mengsinkronisasi ulang akun Anda.",
-        "disabled_description2": "Jika versi %(brand)s yang lain masih terbuka di tab yang lain, mohon menutupnya karena menggunakan %(brand)s di host yang sama dengan pemuatan malas diaktifkan dan dinonaktifkan secara bersamaan akan mengakibatkan masalah.",
-        "disabled_title": "Cache lokal tidak kompatibel",
-        "resync_description": "%(brand)s sekarang menggunakan memori 3-5x kecil dari sebelumnya dengan hanya memuat informasi tentang pengguna lain jika dibutuhkan. Mohon tunggu selagi kita mengsinkronisasi ulang dengan servernya!",
-        "resync_title": "Memperbarui %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Anda adalah satu-satunya di sini. Jika Anda keluar, tidak ada siapa saja dapat bergabung di masa mendatang, termasuk Anda.",
         "leave_room_question": "Anda yakin ingin meninggalkan ruangan '%(roomName)s'?",

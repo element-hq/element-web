@@ -244,7 +244,6 @@
             "completing_setup": "完成新设备的设置",
             "confirm_code_match": "检查以下代码是否与你的其他设备匹配：",
             "connecting": "正在连接……",
-            "devices_connected": "已连接的设备",
             "error_homeserver_lacks_support": "此服务器不支持多设备登录"
         },
         "register_action": "创建账户",
@@ -686,14 +685,12 @@
         "methods": "方法",
         "no_verification_requests_found": "未找到验证请求",
         "number_of_users": "用户数",
-        "observe_only": "仅观察",
         "original_event_source": "原始事件源码",
         "phase": "阶段",
         "phase_cancelled": "已取消",
         "phase_requested": "已请求",
         "phase_started": "已开始",
         "phase_transaction": "交易",
-        "requester": "请求者",
         "room_id": "房间ID: %(roomId)s",
         "save_setting_values": "保存设置值",
         "send_custom_account_data_event": "发送自定义账户数据事件",
@@ -1363,14 +1360,6 @@
         "view_rules": "查看规则"
     },
     "language_dropdown_label": "语言下拉菜单",
-    "lazy_loading": {
-        "disabled_action": "清除缓存并重新同步",
-        "disabled_description1": "你之前在 %(host)s 上开启了 %(brand)s 的成员列表延迟加载设置。目前版本中延迟加载功能已被停用。因为本地缓存在这两个设置项上不相容，%(brand)s 需要重新同步你的账户。",
-        "disabled_description2": "如果别的 %(brand)s 版本在别的标签页中仍然开启，请关闭它，因为在同一宿主上同时使用开启了延迟加载和关闭了延迟加载的 %(brand)s 会导致问题。",
-        "disabled_title": "本地缓存不兼容",
-        "resync_description": "通过仅在需要时加载其他用户的信息，%(brand)s 现在使用的内存减少到了原来的三分之一至五分之一。 请等待与服务器重新同步！",
-        "resync_title": "正在更新 %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "你是这里唯一的人。如果你离开了，以后包括你在内任何人都将无法加入。",
         "leave_room_question": "你确定要离开房间 “%(roomName)s” 吗？",

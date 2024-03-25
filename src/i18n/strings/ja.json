@@ -233,7 +233,6 @@
             "completing_setup": "新しい端末の設定を完了しています",
             "confirm_code_match": "以下のコードが他の端末と一致していることを確認してください：",
             "connecting": "接続しています…",
-            "devices_connected": "接続中の端末",
             "error_device_already_signed_in": "もう一方のデバイスは既にサインインしています。",
             "error_device_not_signed_in": "もう一方の端末はサインインしていません。",
             "error_device_unsupported": "この端末とのリンクはサポートしていません。",
@@ -244,12 +243,10 @@
             "error_request_cancelled": "リクエストはキャンセルされました。",
             "error_request_declined": "リクエストはもう一方の端末で拒否されました。",
             "error_unexpected": "予期しないエラーが発生しました。",
-            "review_and_approve": "サインインを確認して承認",
             "scan_code_instruction": "サインアウトした端末で以下のQRコードをスキャンしてください。",
             "scan_qr_code": "QRコードをスキャン",
             "select_qr_code": "「%(scanQRCode)s」を選択",
             "sign_in_new_device": "新しい端末でサインイン",
-            "start_at_sign_in_screen": "サインインの画面で開始",
             "waiting_for_device": "端末のサインインを待機しています"
         },
         "register_action": "アカウントを作成",
@@ -706,7 +703,6 @@
         "no_verification_requests_found": "認証リクエストがありません",
         "notifications_debug": "通知のデバッグ",
         "number_of_users": "ユーザー数",
-        "observe_only": "観察のみ",
         "original_event_source": "元のイベントのソースコード",
         "phase": "フェーズ",
         "phase_cancelled": "キャンセル済",
@@ -714,7 +710,6 @@
         "phase_requested": "要求済",
         "phase_started": "開始済",
         "phase_transaction": "トランザクション",
-        "requester": "リクエストしたユーザー",
         "room_id": "ルームID：%(roomId)s",
         "room_notifications_dot": "ドット： ",
         "room_notifications_highlight": "ハイライト： ",
@@ -1399,14 +1394,6 @@
         "view_rules": "ルールを表示"
     },
     "language_dropdown_label": "言語一覧",
-    "lazy_loading": {
-        "disabled_action": "キャッシュをクリアして再同期",
-        "disabled_description1": "以前%(host)sにて、メンバーの遅延ロードを有効にした%(brand)sが使用されていました。このバージョンでは、遅延ロードは無効です。ローカルのキャッシュにはこれらの2つの設定の間での互換性がないため、%(brand)sはアカウントを再同期する必要があります。",
-        "disabled_description2": "他のバージョンの%(brand)sが別のタブで開いている場合は、それを閉じてください。同じホスト上で遅延ロードを有効と無効の両方に設定して%(brand)sを使用すると、問題が発生します。",
-        "disabled_title": "互換性のないローカルキャッシュ",
-        "resync_description": "%(brand)sは、必要なときだけに他のユーザーに関する情報を読み込むようにすることで、メモリの使用量を3〜5倍減らしました。サーバーと再同期するのを待ってください！",
-        "resync_title": "%(brand)sを更新しています"
-    },
     "leave_room_dialog": {
         "last_person_warning": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
         "leave_room_question": "このルーム「%(roomName)s」から退出してよろしいですか？",

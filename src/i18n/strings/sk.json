@@ -244,7 +244,6 @@
             "completing_setup": "Dokončenie nastavenia nového zariadenia",
             "confirm_code_match": "Skontrolujte, či sa nižšie uvedený kód zhoduje s vaším druhým zariadením:",
             "connecting": "Pripájanie…",
-            "devices_connected": "Zariadenia pripojené",
             "error_device_already_signed_in": "Druhé zariadenie je už prihlásené.",
             "error_device_not_signed_in": "Druhé zariadenie nie je prihlásené.",
             "error_device_unsupported": "Prepojenie s týmto zariadením nie je podporované.",
@@ -254,12 +253,10 @@
             "error_request_cancelled": "Žiadosť bola zrušená.",
             "error_request_declined": "Žiadosť bola na druhom zariadení zamietnutá.",
             "error_unexpected": "Vyskytla sa neočakávaná chyba.",
-            "review_and_approve": "Skontrolujte a schváľte prihlásenie",
             "scan_code_instruction": "Naskenujte nižšie uvedený QR kód pomocou zariadenia, ktoré je odhlásené.",
             "scan_qr_code": "Skenovať QR kód",
             "select_qr_code": "Vyberte '%(scanQRCode)s'",
             "sign_in_new_device": "Prihlásiť nové zariadenie",
-            "start_at_sign_in_screen": "Začnite na prihlasovacej obrazovke",
             "waiting_for_device": "Čaká sa na prihlásenie zariadenia"
         },
         "register_action": "Vytvoriť účet",
@@ -735,7 +732,6 @@
         "notification_state": "Stav oznámenia je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Ladenie oznámení",
         "number_of_users": "Počet používateľov",
-        "observe_only": "Iba pozorovať",
         "original_event_source": "Pôvodný zdroj udalosti",
         "phase": "Fáza",
         "phase_cancelled": "Zrušené",
@@ -743,7 +739,6 @@
         "phase_requested": "Vyžiadané",
         "phase_started": "Spustené",
         "phase_transaction": "Transakcia",
-        "requester": "Žiadateľ",
         "room_encrypted": "Miestnosť je <strong>šifrovaná ✅</strong>",
         "room_id": "ID miestnosti: %(roomId)s",
         "room_not_encrypted": "Miestnosť <strong>nie je šifrovaná 🚨</strong>",
@@ -1499,14 +1494,6 @@
         "view_rules": "Zobraziť pravidlá"
     },
     "language_dropdown_label": "Rozbaľovací zoznam jazykov",
-    "lazy_loading": {
-        "disabled_action": "Vymazať vyrovnávaciu pamäť a synchronizovať znovu",
-        "disabled_description1": "Použili ste aj %(brand)s na adrese %(host)s so zapnutou voľbou Načítanie zoznamu členov pri prvom zobrazení. V tejto verzii je Načítanie zoznamu členov pri prvom zobrazení vypnuté. Keď že lokálna vyrovnávacia pamäť nie je vzájomne kompatibilná s takýmito nastaveniami, %(brand)s potrebuje znovu synchronizovať údaje z vašeho účtu.",
-        "disabled_description2": "Ak máte %(brand)s s iným nastavením otvorený na ďalšej karte, prosím zatvorte ju, pretože použitie %(brand)s s rôznym nastavením na jednom zariadení vám spôsobí len problémy.",
-        "disabled_title": "Nekompatibilná lokálna vyrovnávacia pamäť",
-        "resync_description": "%(brand)s teraz vyžaduje 3-5× menej pamäte, pretože informácie o ostatných používateľoch načítava len podľa potreby. Prosím počkajte na dokončenie synchronizácie so serverom!",
-        "resync_title": "Prebieha aktualizácia %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Ste tu jediný človek. Ak odídete, nikto sa už v budúcnosti nebude môcť pripojiť do tejto miestnosti, vrátane vás.",
         "leave_room_question": "Ste si istí, že chcete opustiť miestnosť '%(roomName)s'?",

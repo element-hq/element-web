@@ -1036,14 +1036,6 @@
         "view_rules": "Ver regras"
     },
     "language_dropdown_label": "Menu suspenso de idiomas",
-    "lazy_loading": {
-        "disabled_action": "Limpar cache e ressincronizar",
-        "disabled_description1": "Você já usou o %(brand)s em %(host)s com o carregamento Lazy de participantes ativado. Nesta versão, o carregamento Lazy está desativado. Como o cache local não é compatível entre essas duas configurações, o %(brand)s precisa ressincronizar sua conta.",
-        "disabled_description2": "Se a outra versão do %(brand)s ainda estiver aberta em outra aba, por favor, feche-a pois usar o %(brand)s no mesmo host com o carregamento Lazy ativado e desativado simultaneamente causará problemas.",
-        "disabled_title": "Cache local incompatível",
-        "resync_description": "%(brand)s agora usa de 3 a 5 vezes menos memória, pois carrega as informações dos outros usuários apenas quando for necessário. Por favor, aguarde enquanto ressincronizamos com o servidor!",
-        "resync_title": "Atualizando o %(brand)s"
-    },
     "leave_room_dialog": {
         "leave_room_question": "Tem certeza de que deseja sair da sala '%(roomName)s'?",
         "leave_space_question": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",

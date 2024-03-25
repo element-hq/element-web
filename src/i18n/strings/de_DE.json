@@ -245,7 +245,6 @@
             "completing_setup": "Schließe Anmeldung deines neuen Gerätes ab",
             "confirm_code_match": "Überprüfe, dass der unten angezeigte Code mit deinem anderen Gerät übereinstimmt:",
             "connecting": "Verbinde …",
-            "devices_connected": "Geräte verbunden",
             "error_device_already_signed_in": "Das andere Gerät ist bereits angemeldet.",
             "error_device_not_signed_in": "Das andere Gerät ist nicht angemeldet.",
             "error_device_unsupported": "Die Verbindung mit diesem Gerät wird nicht unterstützt.",
@@ -256,12 +255,10 @@
             "error_request_cancelled": "Die Anfrage wurde abgebrochen.",
             "error_request_declined": "Die Anfrage wurde auf dem anderen Gerät abgelehnt.",
             "error_unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
-            "review_and_approve": "Überprüfe und genehmige die Anmeldung",
             "scan_code_instruction": "Lese den folgenden QR-Code mit deinem nicht angemeldeten Gerät ein.",
             "scan_qr_code": "QR-Code einlesen",
             "select_qr_code": "Wähle „%(scanQRCode)s“",
             "sign_in_new_device": "Neues Gerät anmelden",
-            "start_at_sign_in_screen": "Beginne auf dem Anmeldebildschirm",
             "waiting_for_device": "Warte auf Anmeldung des Gerätes"
         },
         "register_action": "Konto erstellen",
@@ -737,7 +734,6 @@
         "notification_state": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug-Modus für Benachrichtigungen",
         "number_of_users": "Benutzeranzahl",
-        "observe_only": "Nur beobachten",
         "original_event_source": "Ursprüngliche Rohdaten",
         "phase": "Phase",
         "phase_cancelled": "Abgebrochen",
@@ -745,7 +741,6 @@
         "phase_requested": "Angefragt",
         "phase_started": "Gestartet",
         "phase_transaction": "Transaktion",
-        "requester": "Anforderer",
         "room_encrypted": "Raum ist <strong>verschlüsselt ✅</strong>",
         "room_id": "Raum-ID: %(roomId)s",
         "room_not_encrypted": "Raum ist <strong>nicht verschlüsselt 🚨</strong>",
@@ -1495,14 +1490,6 @@
         "view_rules": "Regeln öffnen"
     },
     "language_dropdown_label": "Sprachauswahl",
-    "lazy_loading": {
-        "disabled_action": "Zwischenspeicher löschen und erneut synchronisieren",
-        "disabled_description1": "Du hast zuvor %(brand)s auf %(host)s ohne das verzögerte Laden von Mitgliedern genutzt. In dieser Version war das verzögerte Laden deaktiviert. Da die lokal zwischengespeicherten Daten zwischen diesen Einstellungen nicht kompatibel sind, muss %(brand)s dein Konto neu synchronisieren.",
-        "disabled_description2": "Wenn %(brand)s mit der alten Version in einem anderen Tab geöffnet ist, schließe dies bitte, da das parallele Nutzen von %(brand)s auf demselben Host mit aktivierten und deaktivierten verzögertem Laden, Probleme verursachen wird.",
-        "disabled_title": "Inkompatibler lokaler Zwischenspeicher",
-        "resync_description": "%(brand)s benutzt nun 3 bis 5 Mal weniger Arbeitsspeicher, indem Informationen über andere Nutzer erst bei Bedarf geladen werden. Bitte warte, während die Daten erneut mit dem Server abgeglichen werden!",
-        "resync_title": "Aktualisiere %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Du bist die einzige Person im Raum. Sobald du ihn verlässt, wird niemand mehr hineingelangen, auch du nicht.",
         "leave_room_question": "Bist du sicher, dass du den Raum „%(roomName)s“ verlassen möchtest?",

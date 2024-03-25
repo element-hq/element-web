@@ -616,7 +616,6 @@
         "methods": "ວິທີການ",
         "no_verification_requests_found": "ບໍ່ພົບການຮ້ອງຂໍການຢັ້ງຢືນ",
         "number_of_users": "ຈໍານວນຜູ້ໃຊ້",
-        "observe_only": "ສັງເກດເທົ່ານັ້ນ",
         "original_event_source": "ແຫຼ່ງຕົ້ນສະບັບ",
         "phase": "ໄລຍະ",
         "phase_cancelled": "ຍົກເລີກ",
@@ -624,7 +623,6 @@
         "phase_requested": "ຮ້ອງຂໍ",
         "phase_started": "ໄດ້ເລີ່ມແລ້ວ",
         "phase_transaction": "ທຸລະກໍາ",
-        "requester": "ຜູ້ຮ້ອງຂໍ",
         "room_id": "ID ຫ້ອງ: %(roomId)s",
         "save_setting_values": "ບັນທຶກຄ່າການຕັ້ງຄ່າ",
         "send_custom_account_data_event": "ສົ່ງຂໍ້ມູນບັນຊີແບບກຳນົດເອງທຸກເຫດການ",
@@ -1227,14 +1225,6 @@
         "view_rules": "ເບິ່ງກົດລະບຽບ"
     },
     "language_dropdown_label": "ເລື່ອນພາສາລົງ",
-    "lazy_loading": {
-        "disabled_action": "ລຶບ cache ແລະ resync",
-        "disabled_description1": "ກ່ອນໜ້ານີ້ທ່ານເຄີຍໃຊ້ %(brand)sກັບ %(host)s ດ້ວຍການເປີດໂຫຼດສະມາຊິກ. ໃນເວີຊັ້ນນີ້ ໄດ້ປິດການໃຊ້ງານ. ເນື່ອງຈາກ cache ໃນເຄື່ອງບໍ່ເຂົ້າກັນລະຫວ່າງສອງການຕັ້ງຄ່ານີ້, %(brand)s ຕ້ອງການ sync ບັນຊີຂອງທ່ານຄືນໃໝ່.",
-        "disabled_description2": "ຖ້າເວີຊັ້ນອື່ນຂອງ %(brand)s ເປີດຢູ່ໃນແຖບອື່ນ, ກະລຸນາປິດການໃຊ້ %(brand)s ຢູ່ໃນໂຮດດຽວກັນທັງການໂຫຼດແບບ lazy ເປີດໃຊ້ງານ ແລະປິດໃຊ້ງານພ້ອມກັນຈະເຮັດໃຫ້ເກີດບັນຫາ.",
-        "disabled_title": "ແຄດໃນເຄື່ອງບໍ່ເຂົ້າກັນໄດ້",
-        "resync_description": "ຕອນນີ້ %(brand)s ໃຊ້ຄວາມຈຳໜ້ອຍກວ່າ 3-5x, ໂດຍການໂຫຼດຂໍ້ມູນກ່ຽວກັບຜູ້ໃຊ້ອື່ນເມື່ອຕ້ອງການເທົ່ານັ້ນ. ກະລຸນາລໍຖ້າໃນຂະນະທີ່ພວກເຮົາ synchronise ກັບເຊີບເວີ!",
-        "resync_title": "ກຳລັງອັບເດດ %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "ເຈົ້າເປັນພຽງຄົນດຽວຢູ່ທີ່ນີ້. ຖ້າທ່ານອອກໄປ, ບໍ່ມີໃຜຈະສາມາດເຂົ້າຮ່ວມໃນອະນາຄົດໄດ້, ລວມທັງທ່ານ.",
         "leave_room_question": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກຫ້ອງ '%(roomName)s'?",

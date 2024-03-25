@@ -249,7 +249,6 @@
             "completing_setup": "Lõpetame uue seadme seadistamise",
             "confirm_code_match": "Kontrolli, et järgnev kood klapib teises seadmes kuvatava koodiga:",
             "connecting": "Kõne on ühendamisel…",
-            "devices_connected": "Seadmed on ühendatud",
             "error_device_already_signed_in": "Teine seade on juba võrku loginud.",
             "error_device_not_signed_in": "Teine seade ei ole võrku loginud.",
             "error_device_unsupported": "Sidumine selle seadmega ei ole toetatud.",
@@ -260,12 +259,10 @@
             "error_request_cancelled": "Päring katkestati.",
             "error_request_declined": "Teine seade lükkas päringu tagasi.",
             "error_unexpected": "Tekkis teadmata viga.",
-            "review_and_approve": "Vaata üle ja kinnita sisselogimine Matrixi'i võrku",
             "scan_code_instruction": "Loe QR-koodi seadmega, kus sa oled Matrix'i võrgust välja loginud.",
             "scan_qr_code": "Loe QR-koodi",
             "select_qr_code": "Vali „%(scanQRCode)s“",
             "sign_in_new_device": "Logi sisse uus seade",
-            "start_at_sign_in_screen": "Alusta sisselogimisvaatest",
             "waiting_for_device": "Ootame, et teine seade logiks võrku"
         },
         "register_action": "Loo konto",
@@ -741,7 +738,6 @@
         "notification_state": "Teavituste olek: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Teavituste silumine",
         "number_of_users": "Kasutajate arv",
-        "observe_only": "Ainult vaatle",
         "original_event_source": "Sündmuse töötlemata lähtekood",
         "phase": "Faas",
         "phase_cancelled": "Katkestatud",
@@ -749,7 +745,6 @@
         "phase_requested": "Päring tehtud",
         "phase_started": "Alustatud",
         "phase_transaction": "Transaktsioon",
-        "requester": "Päringu tegija",
         "room_encrypted": "Jututuba on <strong>krüptitud ✅</strong>",
         "room_id": "Jututoa tunnus: %(roomId)s",
         "room_not_encrypted": "Jututuba on <strong>krüptimata 🚨</strong>",
@@ -1501,14 +1496,6 @@
         "view_rules": "Näita reegleid"
     },
     "language_dropdown_label": "Keelevalik",
-    "lazy_loading": {
-        "disabled_action": "Tühjenda puhver ja sünkroniseeri andmed uuesti",
-        "disabled_description1": "Oled varem kasutanud %(brand)s serveriga %(host)s ja lubanud andmete laisa laadimise. Selles versioonis on laisk laadimine keelatud. Kuna kohalik vahemälu nende kahe seadistuse vahel ei ühildu, peab %(brand)s sinu konto uuesti sünkroonima.",
-        "disabled_description2": "Kui %(brand)s teine versioon on mõnel teisel vahekaardil endiselt avatud, palun sulge see. %(brand)s kasutamine samal serveril põhjustab vigu olukorras, kus laisk laadimine on samal ajal lubatud ja keelatud.",
-        "disabled_title": "Kohalikud andmepuhvrid ei ühildu",
-        "resync_description": "%(brand)s kasutab varasemaga võrreldes 3-5 korda vähem mälu, sest laadib teavet kasutajate kohta vaid siis, kui vaja. Palun oota hetke, kuni sünkroniseerime andmeid serveriga!",
-        "resync_title": "Uuendan rakendust %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.",
         "leave_room_question": "Kas oled kindel, et soovid lahkuda jututoast „%(roomName)s“?",

@@ -249,7 +249,6 @@
             "completing_setup": "Fin de la configuration de votre nouvel appareil",
             "confirm_code_match": "Vérifiez que le code ci-dessous correspond à celui sur votre autre appareil :",
             "connecting": "Connexion…",
-            "devices_connected": "Appareils connectés",
             "error_device_already_signed_in": "L’autre appareil est déjà connecté.",
             "error_device_not_signed_in": "L’autre appareil n’est pas connecté.",
             "error_device_unsupported": "L’appairage avec cet appareil n’est pas pris en charge.",
@@ -260,12 +259,10 @@
             "error_request_cancelled": "La demande a été annulée.",
             "error_request_declined": "La requête a été refusée sur l’autre appareil.",
             "error_unexpected": "Une erreur inattendue s’est produite.",
-            "review_and_approve": "Vérifier et autoriser la connexion",
             "scan_code_instruction": "Scannez le QR code ci-dessous avec l’appareil qui n’est pas connecté.",
             "scan_qr_code": "Scanner le QR code",
             "select_qr_code": "Sélectionnez « %(scanQRCode)s »",
             "sign_in_new_device": "Connecter le nouvel appareil",
-            "start_at_sign_in_screen": "Démarrez à l’écran de connexion",
             "waiting_for_device": "En attente de connexion de l’appareil"
         },
         "register_action": "Créer un compte",
@@ -742,7 +739,6 @@
         "notification_state": "L’état des notifications est <strong>%(notificationState)s</strong>",
         "notifications_debug": "Débogage des notifications",
         "number_of_users": "Nombre d’utilisateurs",
-        "observe_only": "Observer uniquement",
         "original_event_source": "Évènement source original",
         "phase": "Phase",
         "phase_cancelled": "Annulé",
@@ -750,7 +746,6 @@
         "phase_requested": "Envoyé",
         "phase_started": "Démarré",
         "phase_transaction": "Transaction",
-        "requester": "Demandeur",
         "room_encrypted": "Le salon est <strong>chiffré ✅</strong>",
         "room_id": "Identifiant du salon : %(roomId)s",
         "room_not_encrypted": "Le salon <strong>n’est pas chiffré 🚨</strong>",
@@ -1511,14 +1506,6 @@
         "view_rules": "Voir les règles"
     },
     "language_dropdown_label": "Sélection de la langue",
-    "lazy_loading": {
-        "disabled_action": "Vider le cache et resynchroniser",
-        "disabled_description1": "Vous avez utilisé auparavant %(brand)s sur %(host)s avec le chargement différé activé. Dans cette version le chargement différé est désactivé. Comme le cache local n’est pas compatible entre ces deux réglages, %(brand)s doit resynchroniser votre compte.",
-        "disabled_description2": "Si l’autre version de %(brand)s est encore ouverte dans un autre onglet, merci de le fermer car l’utilisation de %(brand)s sur le même hôte avec le chargement différé activé et désactivé à la fois causera des problèmes.",
-        "disabled_title": "Cache local incompatible",
-        "resync_description": "%(brand)s utilise maintenant 3 à 5 fois moins de mémoire, en ne chargeant les informations des autres utilisateurs que quand elles sont nécessaires. Veuillez patienter pendant que l’on se resynchronise avec le serveur !",
-        "resync_title": "Mise à jour de %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Vous êtes la seule personne ici. Si vous partez, plus personne ne pourra rejoindre cette conversation, y compris vous.",
         "leave_room_question": "Voulez-vous vraiment quitter le salon « %(roomName)s » ?",

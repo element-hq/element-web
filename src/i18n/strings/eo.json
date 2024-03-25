@@ -1109,14 +1109,6 @@
         "view_rules": "Montri regulojn"
     },
     "language_dropdown_label": "Lingva falmenuo",
-    "lazy_loading": {
-        "disabled_action": "Vakigi kaŝmemoron kaj respeguli",
-        "disabled_description1": "Vi antaŭe uzis %(brand)s-on je %(host)s kun ŝaltita malfrua enlegado de anoj. En ĉi tiu versio, malfrua enlegado estas malŝaltita. Ĉar la loka kaŝmemoro de ambaŭ versioj ne akordas, %(brand)s bezonas respeguli vian konton.",
-        "disabled_description2": "Se la alia versio de %(brand)s ankoraŭ estas malfermita en alia langeto, bonvolu tiun fermi, ĉar uzado de %(brand)s je la sama gastiganto, kun malfrua enlegado samtempe ŝaltita kaj malŝaltita, kaŭzos problemojn.",
-        "disabled_title": "Neakorda loka kaŝmemoro",
-        "resync_description": "%(brand)s nun uzas 3–5-oble malpli da memoro, ĉar ĝi enlegas informojn pri aliaj uzantoj nur tiam, kiam ĝi bezonas. Bonvolu atendi ĝis ni respegulos la servilon!",
-        "resync_title": "Ĝisdatigante %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Vi estas la nura persono tie ĉi. Se vi foriros, neniu alia plu povos aliĝi, inkluzive vin mem.",
         "leave_room_question": "Ĉu vi certe volas forlasi la ĉambron '%(roomName)s'?",

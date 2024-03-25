@@ -249,7 +249,6 @@
             "completing_setup": "Kończenie konfiguracji nowego urządzenia",
             "confirm_code_match": "Potwierdź, że kod poniżej pasuje z Twoim drugim urządzeniem:",
             "connecting": "Łączenie…",
-            "devices_connected": "Urządzenia połączone",
             "error_device_already_signed_in": "Drugie urządzenie jest już zalogowane.",
             "error_device_not_signed_in": "Drugie urządzenie nie jest zalogowane.",
             "error_device_unsupported": "Wiązanie z tym urządzeniem nie jest wspierane.",
@@ -260,12 +259,10 @@
             "error_request_cancelled": "Żądanie zostało anulowane.",
             "error_request_declined": "Żądanie zostało odrzucone przez drugie urządzenie.",
             "error_unexpected": "Wystąpił niespodziewany błąd.",
-            "review_and_approve": "Sprawdź i potwierdź logowanie",
             "scan_code_instruction": "Zeskanuj kod QR poniżej za pomocą urządzenia, które jest wylogowane.",
             "scan_qr_code": "Skanuj kod QR",
             "select_qr_code": "Wybierz '%(scanQRCode)s'",
             "sign_in_new_device": "Zaloguj nowe urządzenie",
-            "start_at_sign_in_screen": "Rozpocznij na ekranie logowania",
             "waiting_for_device": "Oczekiwanie na logowanie urządzenia"
         },
         "register_action": "Utwórz konto",
@@ -743,7 +740,6 @@
         "notification_state": "Status powiadomień <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug powiadomień",
         "number_of_users": "Liczba użytkowników",
-        "observe_only": "Tylko obserwuj",
         "original_event_source": "Oryginalne źródło wydarzenia",
         "phase": "Etap",
         "phase_cancelled": "Anulowano",
@@ -751,7 +747,6 @@
         "phase_requested": "Żądane",
         "phase_started": "Rozpoczęto",
         "phase_transaction": "Transakcja",
-        "requester": "Żądający",
         "room_encrypted": "Pokój jest <strong>szyfrowany ✅</strong>",
         "room_id": "ID pokoju: %(roomId)s",
         "room_not_encrypted": "Pokój nie jest <strong>szyfrowany 🚨</strong>",
@@ -1513,14 +1508,6 @@
         "view_rules": "Zobacz zasady"
     },
     "language_dropdown_label": "Rozwiń języki",
-    "lazy_loading": {
-        "disabled_action": "Wyczyść pamięć podręczną i zsynchronizuj ponownie",
-        "disabled_description1": "Ostatnia sesja %(brand)s na %(host)s miała włączone leniwe ładowanie członków. W tej wersji leniwe ładowanie jest wyłączone. Ponieważ lokalna pamięć podręczna nie jest kompatybilna pomiędzy tymi wersjami, %(brand)s musi zsynchronizować ponownie Twoje konto.",
-        "disabled_description2": "Jeśli inna wersja %(brand)s jest nadal otwarta w innej zakładce, proszę zamknij ją, ponieważ używanie %(brand)s na tym samym komputerze z włączonym i wyłączonym jednocześnie leniwym ładowaniem będzie powodować problemy.",
-        "disabled_title": "Niekompatybilna lokalna pamięć podręczna",
-        "resync_description": "%(brand)s używa teraz 3-5x mniej pamięci, ładując informacje o innych użytkownikach tylko wtedy, gdy jest to konieczne. Poczekaj, aż ponownie zsynchronizujemy się z serwerem!",
-        "resync_title": "Aktualizowanie %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Jesteś jedyną osoba tutaj. Jeśli wyjdziesz, nikt nie będzie w stanie dołączyć w przyszłości, włączając Ciebie.",
         "leave_room_question": "Czy na pewno chcesz opuścić pokój '%(roomName)s'?",

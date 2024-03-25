@@ -243,7 +243,6 @@
             "completing_setup": "Új eszköz beállításának elvégzése",
             "confirm_code_match": "Ellenőrizze, hogy az alábbi kód megegyezik a másik eszközödön lévővel:",
             "connecting": "Kapcsolás…",
-            "devices_connected": "Összekötött eszközök",
             "error_device_already_signed_in": "A másik eszköz már bejelentkezett.",
             "error_device_not_signed_in": "A másik eszköz még nincs bejelentkezve.",
             "error_device_unsupported": "Összekötés ezzel az eszközzel nem támogatott.",
@@ -253,12 +252,10 @@
             "error_request_cancelled": "A kérés megszakítva.",
             "error_request_declined": "A kérést elutasították a másik eszközön.",
             "error_unexpected": "Nemvárt hiba történt.",
-            "review_and_approve": "Belépés áttekintése és engedélyezés",
             "scan_code_instruction": "A kijelentkezett eszközzel olvasd be a QR kódot alább.",
             "scan_qr_code": "QR kód beolvasása",
             "select_qr_code": "Kiválasztás „%(scanQRCode)s”",
             "sign_in_new_device": "Új eszköz bejelentkeztetése",
-            "start_at_sign_in_screen": "Kezdje a bejelentkező képernyőn",
             "waiting_for_device": "Várakozás a másik eszköz bejelentkezésére"
         },
         "register_action": "Fiók létrehozása",
@@ -733,7 +730,6 @@
         "notification_state": "Értesítés állapot: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Értesítések hibakeresése",
         "number_of_users": "Felhasználószám",
-        "observe_only": "Csak megfigyel",
         "original_event_source": "Eredeti esemény forráskód",
         "phase": "Fázis",
         "phase_cancelled": "Megszakítva",
@@ -741,7 +737,6 @@
         "phase_requested": "Kérve",
         "phase_started": "Elindult",
         "phase_transaction": "Tranzakció",
-        "requester": "Kérelmező",
         "room_encrypted": "A szoba <strong>titkosított ✅</strong>",
         "room_id": "Szoba azon.: %(roomId)s",
         "room_not_encrypted": "A szoba <strong>nincs titkosítva 🚨</strong>",
@@ -1474,14 +1469,6 @@
         "view_rules": "Szabályok megtekintése"
     },
     "language_dropdown_label": "Nyelvválasztó lenyíló menü",
-    "lazy_loading": {
-        "disabled_action": "Gyorsítótár törlése és újraszinkronizálás",
-        "disabled_description1": "Előzőleg a szoba tagság késleltetett betöltésének engedélyével itt használtad a %(brand)sot: %(host)s. Ebben a verzióban viszont a késleltetett betöltés nem engedélyezett. Mivel a két gyorsítótár nem kompatibilis egymással így %(brand)snak újra kell szinkronizálnia a fiókot.",
-        "disabled_description2": "Ha a másik %(brand)s verzió még fut egy másik fülön, akkor zárja be, mert ha egy gépen használja a %(brand)sot úgy, hogy az egyiken be van kapcsolva a késleltetett betöltés, a másikon pedig ki, akkor problémák adódhatnak.",
-        "disabled_title": "A helyi gyorsítótár nem kompatibilis ezzel a verzióval",
-        "resync_description": "Az %(brand)s harmad-ötöd annyi memóriát használ azáltal, hogy csak akkor tölti be a felhasználók információit, amikor az szükséges. Kis türelmet, amíg megtörténik az újbóli szinkronizálás a kiszolgálóval.",
-        "resync_title": "%(brand)s frissítése"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Csak ön van itt. Ha kilép, akkor a jövőben senki nem tud majd ide belépni, beleértve önt is.",
         "leave_room_question": "Biztos, hogy elhagyja a(z) „%(roomName)s” szobát?",
