@@ -660,15 +660,23 @@ legend {
 }
 
 /* Spinner Dialog overide */
-.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
-    width: auto;
-    border-radius: 8px;
-    padding: 8px;
-    box-shadow: none;
+.mx_Dialog_wrapper.mx_Dialog_spinner {
+    /* This is not a real dialog, so we shouldn't show a glass border */
+    .mx_Dialog_border {
+        display: contents;
+    }
 
-    /* Don't show scroll-bars on spinner dialogs */
-    overflow-x: hidden;
-    overflow-y: hidden;
+    .mx_Dialog {
+        inline-size: auto;
+        block-size: auto;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: none;
+
+        /* Don't show scroll-bars on spinner dialogs */
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
 }
 
 /* TODO: Review mx_GeneralButton usage to see if it can use a different class */
