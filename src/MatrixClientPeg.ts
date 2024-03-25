@@ -29,9 +29,8 @@ import {
     RoomNameType,
     TokenRefreshFunction,
 } from "matrix-js-sdk/src/matrix";
+import { VerificationMethod } from "matrix-js-sdk/src/types";
 import * as utils from "matrix-js-sdk/src/utils";
-import { verificationMethods } from "matrix-js-sdk/src/crypto";
-import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import createMatrixClient from "./utils/createMatrixClient";
@@ -433,9 +432,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             // the call arrives.
             iceCandidatePoolSize: 20,
             verificationMethods: [
-                verificationMethods.SAS,
-                SHOW_QR_CODE_METHOD,
-                verificationMethods.RECIPROCATE_QR_CODE,
+                VerificationMethod.Sas,
+                VerificationMethod.ShowQrCode,
+                VerificationMethod.Reciprocate,
             ],
             identityServer: new IdentityAuthClient(),
             // These are always installed regardless of the labs flag so that cross-signing features

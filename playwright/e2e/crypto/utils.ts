@@ -17,8 +17,13 @@ limitations under the License.
 import { type Page, expect, JSHandle } from "@playwright/test";
 
 import type { CryptoEvent, ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { VerificationRequest, Verifier, EmojiMapping, VerifierEvent } from "matrix-js-sdk/src/crypto-api";
-import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import type {
+    VerificationRequest,
+    Verifier,
+    EmojiMapping,
+    VerifierEvent,
+    ShowSasCallbacks,
+} from "matrix-js-sdk/src/crypto-api";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -58,7 +63,7 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
         if (event) return event.sas.emoji;
 
         return new Promise<EmojiMapping[]>((resolve) => {
-            const onShowSas = (event: ISasEvent) => {
+            const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
                 event.confirm();
                 resolve(event.sas.emoji);

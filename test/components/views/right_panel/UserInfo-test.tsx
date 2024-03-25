@@ -30,14 +30,14 @@ import {
     Device,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import {
-    Phase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import {
+    UserVerificationStatus,
+    VerificationRequest,
+    VerificationPhase as Phase,
+    VerificationRequestEvent,
+} from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserInfo, {
