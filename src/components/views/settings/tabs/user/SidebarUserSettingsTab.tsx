@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useMemo } from "react";
+import { Icon as CameraCircle } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 
 import { Icon as HomeIcon } from "../../../../../../res/img/element-icons/home.svg";
 import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";
@@ -30,6 +31,7 @@ import PosthogTrackers from "../../../../../PosthogTrackers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import SdkConfig from "../../../../../SdkConfig";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
 
@@ -44,7 +46,14 @@ export const onMetaSpaceChangeFactory =
         PosthogTrackers.trackInteraction(
             interactionName,
             e,
-            [MetaSpace.Home, null, MetaSpace.Favourites, MetaSpace.People, MetaSpace.Orphans].indexOf(metaSpace),
+            [
+                MetaSpace.Home,
+                null,
+                MetaSpace.Favourites,
+                MetaSpace.People,
+                MetaSpace.Orphans,
+                MetaSpace.VideoRooms,
+            ].indexOf(metaSpace),
         );
     };
 
@@ -54,8 +63,15 @@ const SidebarUserSettingsTab: React.FC = () => {
         [MetaSpace.Favourites]: favouritesEnabled,
         [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
+        [MetaSpace.VideoRooms]: videoRoomsEnabled,
     } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
     const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    const guestSpaUrl = useMemo(() => {
+        return SdkConfig.get("element_call").guest_spa_url;
+    }, []);
+    const conferenceSubsectionText =
+        _t("settings|sidebar|metaspaces_video_rooms_description") +
+        (guestSpaUrl ? " " + _t("settings|sidebar|metaspaces_video_rooms_description_invite_extension") : "");
 
     const onAllRoomsInHomeToggle = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
@@ -140,6 +156,22 @@ const SidebarUserSettingsTab: React.FC = () => {
                             {_t("settings|sidebar|metaspaces_orphans_description")}
                         </SettingsSubsectionText>
                     </StyledCheckbox>
+                    {SettingsStore.getValue("feature_video_rooms") && (
+                        <StyledCheckbox
+                            checked={!!videoRoomsEnabled}
+                            onChange={onMetaSpaceChangeFactory(
+                                MetaSpace.VideoRooms,
+                                "WebSettingsSidebarTabSpacesCheckbox",
+                            )}
+                            className="mx_SidebarUserSettingsTab_checkbox"
+                        >
+                            <SettingsSubsectionText>
+                                <CameraCircle />
+                                {_t("settings|sidebar|metaspaces_video_rooms")}
+                            </SettingsSubsectionText>
+                            <SettingsSubsectionText>{conferenceSubsectionText}</SettingsSubsectionText>
+                        </StyledCheckbox>
+                    )}
                 </SettingsSubsection>
             </SettingsSection>
         </SettingsTab>

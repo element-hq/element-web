@@ -23,6 +23,7 @@ import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { flushPromises } from "../../../../../test-utils";
+import SdkConfig from "../../../../../../src/SdkConfig";
 
 describe("<SidebarUserSettingsTab />", () => {
     beforeEach(() => {
@@ -31,9 +32,25 @@ describe("<SidebarUserSettingsTab />", () => {
         jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
     });
 
-    it("renders sidebar settings", () => {
+    it("renders sidebar settings with guest spa url", () => {
+        const spy = jest.spyOn(SdkConfig, "get").mockReturnValue({ guest_spa_url: "https://somewhere.org" });
+        const originalGetValue = SettingsStore.getValue;
+        const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            return setting === "feature_video_rooms" ? true : originalGetValue(setting);
+        });
         const { container } = render(<SidebarUserSettingsTab />);
         expect(container).toMatchSnapshot();
+        spySettingsStore.mockRestore();
+        spy.mockRestore();
+    });
+    it("renders sidebar settings without guest spa url", () => {
+        const originalGetValue = SettingsStore.getValue;
+        const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            return setting === "feature_video_rooms" ? true : originalGetValue(setting);
+        });
+        const { container } = render(<SidebarUserSettingsTab />);
+        expect(container).toMatchSnapshot();
+        spySettingsStore.mockRestore();
     });
 
     it("toggles all rooms in home setting", async () => {

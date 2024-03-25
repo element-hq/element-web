@@ -2853,6 +2853,9 @@
             "metaspaces_orphans_description": "Group all your rooms that aren't part of a space in one place.",
             "metaspaces_people_description": "Group all your people in one place.",
             "metaspaces_subsection": "Spaces to show",
+            "metaspaces_video_rooms": "Video rooms and conferences",
+            "metaspaces_video_rooms_description": "Group all private video rooms and conferences.",
+            "metaspaces_video_rooms_description_invite_extension": "In conferences you can invite people outside of matrix.",
             "spaces_explainer": "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
             "title": "Sidebar"
         },
@@ -3836,6 +3839,9 @@
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
+        "metaspace_video_rooms": {
+            "conference_room_section": "Conferences"
+        },
         "minimise_call": "Minimise call",
         "misconfigured_server": "Call failed due to misconfigured server",
         "misconfigured_server_description": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",

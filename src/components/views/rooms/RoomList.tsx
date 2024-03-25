@@ -83,6 +83,7 @@ export const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
+    DefaultTagID.Conference,
     DefaultTagID.Untagged,
     DefaultTagID.LowPriority,
     DefaultTagID.ServerNotice,
@@ -387,6 +388,11 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         defaultHidden: false,
         AuxButtonComponent: DmAuxButton,
     },
+    [DefaultTagID.Conference]: {
+        sectionLabel: _td("voip|metaspace_video_rooms|conference_room_section"),
+        isInvite: false,
+        defaultHidden: false,
+    },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("common|rooms"),
         isInvite: false,
@@ -594,6 +600,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 (this.props.activeSpace === MetaSpace.Favourites && orderedTagId !== DefaultTagID.Favourite) ||
                 (this.props.activeSpace === MetaSpace.People && orderedTagId !== DefaultTagID.DM) ||
                 (this.props.activeSpace === MetaSpace.Orphans && orderedTagId === DefaultTagID.DM) ||
+                (this.props.activeSpace === MetaSpace.VideoRooms && orderedTagId === DefaultTagID.DM) ||
                 (!isMetaSpace(this.props.activeSpace) &&
                     orderedTagId === DefaultTagID.DM &&
                     !SettingsStore.getValue("Spaces.showPeopleInSpace", this.props.activeSpace))

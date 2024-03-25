@@ -75,7 +75,13 @@ interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
-const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Favourites, MetaSpace.People, MetaSpace.Orphans];
+const metaSpaceOrder: MetaSpace[] = [
+    MetaSpace.Home,
+    MetaSpace.Favourites,
+    MetaSpace.People,
+    MetaSpace.Orphans,
+    MetaSpace.VideoRooms,
+];
 
 const MAX_SUGGESTED_ROOMS = 20;
 
@@ -432,7 +438,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             return true;
         }
-
+        if (space === MetaSpace.VideoRooms) {
+            return !!this.matrixClient?.getRoom(roomId)?.isCallRoom();
+        }
         if (this.getSpaceFilteredRoomIds(space, includeDescendantSpaces)?.has(roomId)) {
             return true;
         }
@@ -1032,6 +1040,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 if (room.isSpaceRoom()) {
                     this.onRoomsUpdate();
                 }
+                break;
+            case EventType.RoomCreate:
+                // The room might become a video room. We need to tag it for that videoRooms space.
+                this.onRoomsUpdate();
                 break;
         }
     };

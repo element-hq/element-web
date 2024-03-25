@@ -24,6 +24,8 @@ import {
     MatrixEvent,
     Room,
     RoomEvent,
+    JoinRule,
+    RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
@@ -73,6 +75,8 @@ const room1 = "!room1:server";
 const room2 = "!room2:server";
 const room3 = "!room3:server";
 const room4 = "!room4:server";
+const videoRoomPrivate = "!videoRoomPrivate:server";
+const videoRoomPublic = "!videoRoomPublic:server";
 const space1 = "!space1:server";
 const space2 = "!space2:server";
 const space3 = "!space3:server";
@@ -317,6 +321,8 @@ describe("SpaceStore", () => {
                     room2,
                     room3,
                     room4,
+                    videoRoomPrivate,
+                    videoRoomPublic,
                 ].forEach(mkRoom);
                 mkSpace(space1, [fav1, room1]);
                 mkSpace(space2, [fav1, fav2, fav3, room1]);
@@ -404,6 +410,12 @@ describe("SpaceStore", () => {
                     },
                 );
 
+                [videoRoomPrivate, videoRoomPublic].forEach((roomId) => {
+                    const videoRoom = client.getRoom(roomId);
+                    (videoRoom!.isCallRoom as jest.Mock).mockReturnValue(true);
+                });
+                const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
+                (videoRoomPublicRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Public);
                 await run();
             });
 
@@ -459,6 +471,28 @@ describe("SpaceStore", () => {
                 it("home space doesn't contain rooms/low priority if they are also shown in a space", async () => {
                     await setShowAllRooms(false);
                     expect(store.isRoomInSpace(MetaSpace.Home, room1)).toBeFalsy();
+                });
+
+                it("video room space contains all video rooms", async () => {
+                    await setShowAllRooms(false);
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPublic)).toBeTruthy();
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, room1)).toBeFalsy();
+                });
+
+                it("updates the video room space when the room type changes", async () => {
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
+                    (client.getRoom(videoRoomPublic)!.isCallRoom as jest.Mock).mockReturnValue(false);
+                    client.emit(
+                        RoomStateEvent.Events,
+                        {
+                            getRoomId: () => videoRoomPublic,
+                            getType: () => EventType.RoomCreate,
+                        } as unknown as MatrixEvent,
+                        {} as unknown as RoomState,
+                        null,
+                    );
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPublic)).toBeFalsy();
                 });
 
                 it("space contains child rooms", () => {
