@@ -933,12 +933,7 @@ describe("<PowerLevelEditor />", () => {
         // firing the event will raise a dialog warning about self demotion, wait for this to appear then click on it
         await userEvent.click(await screen.findByText("Demote", { exact: true }));
         expect(mockClient.setPowerLevel).toHaveBeenCalledTimes(1);
-        expect(mockClient.setPowerLevel).toHaveBeenCalledWith(
-            mockRoom.roomId,
-            defaultMember.userId,
-            changedPowerLevel,
-            powerLevelEvent,
-        );
+        expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, changedPowerLevel);
     });
 });
 

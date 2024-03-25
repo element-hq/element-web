@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { IAuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { AuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
@@ -25,7 +25,7 @@ import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 
 const makeDeleteRequest =
     (matrixClient: MatrixClient, deviceIds: string[]) =>
-    async (auth: IAuthDict | null): Promise<IAuthData> => {
+    async (auth: AuthDict | null): Promise<IAuthData> => {
         return matrixClient.deleteMultipleDevices(deviceIds, auth ?? undefined);
     };
 

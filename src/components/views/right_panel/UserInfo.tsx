@@ -932,7 +932,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
             return;
         }
 
-        cli.setPowerLevel(roomId, target, level, powerLevelEvent)
+        cli.setPowerLevel(roomId, target, level)
             .then(
                 () => {
                     // NO-OP; rely on the m.room.member event coming down else we could
@@ -1159,13 +1159,8 @@ export const PowerLevelEditor: React.FC<{
         async (powerLevel: number) => {
             setSelectedPowerLevel(powerLevel);
 
-            const applyPowerChange = (
-                roomId: string,
-                target: string,
-                powerLevel: number,
-                powerLevelEvent: MatrixEvent,
-            ): Promise<unknown> => {
-                return cli.setPowerLevel(roomId, target, powerLevel, powerLevelEvent).then(
+            const applyPowerChange = (roomId: string, target: string, powerLevel: number): Promise<unknown> => {
+                return cli.setPowerLevel(roomId, target, powerLevel).then(
                     function () {
                         // NO-OP; rely on the m.room.member event coming down else we could
                         // get out of sync if we force setState here!
@@ -1213,7 +1208,7 @@ export const PowerLevelEditor: React.FC<{
                 }
             }
 
-            await applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            await applyPowerChange(roomId, target, powerLevel);
         },
         [user.roomId, user.userId, cli, room],
     );

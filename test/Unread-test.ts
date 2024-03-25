@@ -63,7 +63,7 @@ describe("Unread", () => {
             type: EventType.RoomMessage,
             sender: aliceId,
         });
-        redactedEvent.makeRedacted(redactedEvent);
+        redactedEvent.makeRedacted(redactedEvent, new Room(redactedEvent.getRoomId()!, client, aliceId));
 
         beforeEach(() => {
             jest.clearAllMocks();
@@ -408,7 +408,7 @@ describe("Unread", () => {
                 content: {},
             });
             console.log("Event Id", redactedEvent.getId());
-            redactedEvent.makeRedacted(redactedEvent);
+            redactedEvent.makeRedacted(redactedEvent, room);
             console.log("Event Id", redactedEvent.getId());
             // Only for timeline events.
             room.addLiveEvents([redactedEvent]);

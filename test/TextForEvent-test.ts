@@ -419,7 +419,7 @@ describe("TextForEvent", () => {
         });
 
         it("returns correct message for redacted poll start", () => {
-            pollEvent.makeRedacted(pollEvent);
+            pollEvent.makeRedacted(pollEvent, new Room(pollEvent.getRoomId()!, mockClient, mockClient.getSafeUserId()));
 
             expect(textForEvent(pollEvent, mockClient)).toEqual("@a: Message deleted");
         });
@@ -445,7 +445,10 @@ describe("TextForEvent", () => {
         });
 
         it("returns correct message for redacted message", () => {
-            messageEvent.makeRedacted(messageEvent);
+            messageEvent.makeRedacted(
+                messageEvent,
+                new Room(messageEvent.getRoomId()!, mockClient, mockClient.getSafeUserId()),
+            );
 
             expect(textForEvent(messageEvent, mockClient)).toEqual("@a: Message deleted");
         });

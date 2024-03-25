@@ -612,15 +612,7 @@ async function setBotPower(
                 });
             }
         }
-        await client.setPowerLevel(
-            roomId,
-            userId,
-            level,
-            new MatrixEvent({
-                type: "m.room.power_levels",
-                content: powerLevels,
-            }),
-        );
+        await client.setPowerLevel(roomId, userId, level);
         return sendResponse(event, {
             success: true,
         });

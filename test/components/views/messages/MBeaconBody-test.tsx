@@ -25,6 +25,7 @@ import {
     EventType,
     Relations,
     M_BEACON,
+    Room,
 } from "matrix-js-sdk/src/matrix";
 
 import MBeaconBody from "../../../../src/components/views/messages/MBeaconBody";
@@ -304,10 +305,11 @@ describe("<MBeaconBody />", () => {
 
         const redactionEvent = new MatrixEvent({ type: EventType.RoomRedaction, content: { reason: "test reason" } });
 
-        const setupRoomWithBeacon = (beaconInfoEvent: MatrixEvent, locationEvents: MatrixEvent[] = []) => {
+        const setupRoomWithBeacon = (beaconInfoEvent: MatrixEvent, locationEvents: MatrixEvent[] = []): Room => {
             const room = makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(beaconInfoEvent))!;
             beaconInstance.addLocations(locationEvents);
+            return room;
         };
         const mockGetRelationsForEvent = (locationEvents: MatrixEvent[] = []) => {
             const relations = new Relations(RelationType.Reference, M_BEACON.name, mockClient);
@@ -320,12 +322,12 @@ describe("<MBeaconBody />", () => {
 
         it("does nothing when getRelationsForEvent is falsy", () => {
             const { beaconInfoEvent, location1, location2 } = makeEvents();
-            setupRoomWithBeacon(beaconInfoEvent, [location1, location2]);
+            const room = setupRoomWithBeacon(beaconInfoEvent, [location1, location2]);
 
             getComponent({ mxEvent: beaconInfoEvent });
 
             act(() => {
-                beaconInfoEvent.makeRedacted(redactionEvent);
+                beaconInfoEvent.makeRedacted(redactionEvent, room);
             });
 
             // no error, no redactions
@@ -349,13 +351,13 @@ describe("<MBeaconBody />", () => {
         it("does nothing when beacon has no related locations", async () => {
             const { beaconInfoEvent } = makeEvents();
             // no locations
-            setupRoomWithBeacon(beaconInfoEvent, []);
+            const room = setupRoomWithBeacon(beaconInfoEvent, []);
             const getRelationsForEvent = await mockGetRelationsForEvent();
 
             getComponent({ mxEvent: beaconInfoEvent, getRelationsForEvent });
 
             act(() => {
-                beaconInfoEvent.makeRedacted(redactionEvent);
+                beaconInfoEvent.makeRedacted(redactionEvent, room);
             });
 
             expect(getRelationsForEvent).toHaveBeenCalledWith(
@@ -368,14 +370,14 @@ describe("<MBeaconBody />", () => {
 
         it("redacts related locations on beacon redaction", async () => {
             const { beaconInfoEvent, location1, location2 } = makeEvents();
-            setupRoomWithBeacon(beaconInfoEvent, [location1, location2]);
+            const room = setupRoomWithBeacon(beaconInfoEvent, [location1, location2]);
 
             const getRelationsForEvent = await mockGetRelationsForEvent([location1, location2]);
 
             getComponent({ mxEvent: beaconInfoEvent, getRelationsForEvent });
 
             act(() => {
-                beaconInfoEvent.makeRedacted(redactionEvent);
+                beaconInfoEvent.makeRedacted(redactionEvent, room);
             });
 
             expect(getRelationsForEvent).toHaveBeenCalledWith(

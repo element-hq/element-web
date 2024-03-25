@@ -19,7 +19,6 @@ limitations under the License.
 import {
     MatrixClient,
     MsgType,
-    IImageInfo,
     HTTPError,
     IEventRelation,
     ISendEventResponse,
@@ -390,7 +389,7 @@ export default class ContentMessages {
         url: string,
         roomId: string,
         threadId: string | null,
-        info: IImageInfo,
+        info: ImageInfo,
         text: string,
         matrixClient: MatrixClient,
     ): Promise<ISendEventResponse> {

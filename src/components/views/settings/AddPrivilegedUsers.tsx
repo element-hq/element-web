@@ -62,7 +62,7 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
         }
 
         try {
-            await client.setPowerLevel(room.roomId, userIds, powerLevel, powerLevelEvent);
+            await client.setPowerLevel(room.roomId, userIds, powerLevel);
             setSelectedUsers([]);
             setPowerLevel(defaultUserLevel);
         } catch (error) {

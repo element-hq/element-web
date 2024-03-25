@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { render } from "@testing-library/react";
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import ViewSource from "../../../src/components/structures/ViewSource";
@@ -43,7 +43,7 @@ describe("ViewSource", () => {
             content: {},
             state_key: undefined,
         });
-        redactedMessageEvent.makeRedacted(redactionEvent);
+        redactedMessageEvent.makeRedacted(redactionEvent, new Room(ROOM_ID, stubClient(), SENDER));
     });
 
     beforeEach(stubClient);
