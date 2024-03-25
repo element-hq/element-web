@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent } from "matrix-js-sdk/src/matrix";
+import { RoomMessageEventContent, RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
-export function isContentModified(newContent: IContent, editorStateTransfer: EditorStateTransfer): boolean {
+export function isContentModified(
+    newContent: RoomMessageEventContent,
+    editorStateTransfer: EditorStateTransfer,
+): boolean {
     // if nothing has changed then bail
-    const oldContent = editorStateTransfer.getEvent().getContent();
+    const oldContent = editorStateTransfer.getEvent().getContent<RoomMessageEventContent>();
     if (
         oldContent["msgtype"] === newContent["msgtype"] &&
         oldContent["body"] === newContent["body"] &&
-        oldContent["format"] === newContent["format"] &&
-        oldContent["formatted_body"] === newContent["formatted_body"]
+        (<RoomMessageTextEventContent>oldContent)["format"] === (<RoomMessageTextEventContent>newContent)["format"] &&
+        (<RoomMessageTextEventContent>oldContent)["formatted_body"] ===
+            (<RoomMessageTextEventContent>newContent)["formatted_body"]
     ) {
         return false;
     }

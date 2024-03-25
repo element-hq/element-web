@@ -25,6 +25,7 @@ import {
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { ReplacementEvent } from "matrix-js-sdk/src/types";
 
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -273,7 +274,9 @@ describe("PollCreateDialog", () => {
         const [, , eventType, sentEventContent] = mockClient.sendEvent.mock.calls[0];
         expect(M_POLL_START.matches(eventType)).toBeTruthy();
         // didnt change
-        expect(sentEventContent["m.new_content"][M_POLL_START.name].kind).toEqual(M_POLL_KIND_DISCLOSED.name);
+        expect((sentEventContent as ReplacementEvent<any>)["m.new_content"][M_POLL_START.name].kind).toEqual(
+            M_POLL_KIND_DISCLOSED.name,
+        );
     });
 });
 

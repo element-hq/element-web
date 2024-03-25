@@ -25,6 +25,7 @@ import {
     M_POLL_KIND_DISCLOSED,
     M_POLL_RESPONSE,
     M_POLL_START,
+    TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
 import { PollStartEvent, PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
@@ -225,14 +226,20 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         const response = PollResponseEvent.from([answerId], this.props.mxEvent.getId()!).serialize();
 
-        this.context.sendEvent(this.props.mxEvent.getRoomId()!, response.type, response.content).catch((e: any) => {
-            console.error("Failed to submit poll response event:", e);
+        this.context
+            .sendEvent(
+                this.props.mxEvent.getRoomId()!,
+                response.type as keyof TimelineEvents,
+                response.content as TimelineEvents[keyof TimelineEvents],
+            )
+            .catch((e: any) => {
+                console.error("Failed to submit poll response event:", e);
 
-            Modal.createDialog(ErrorDialog, {
-                title: _t("poll|error_voting_title"),
-                description: _t("poll|error_voting_description"),
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("poll|error_voting_title"),
+                    description: _t("poll|error_voting_description"),
+                });
             });
-        });
 
         this.setState({ selected: answerId });
     }

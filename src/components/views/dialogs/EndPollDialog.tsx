@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MatrixClient, TimelineEvents } from "matrix-js-sdk/src/matrix";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 
 import { _t } from "../../../languageHandler";
@@ -51,7 +51,11 @@ export default class EndPollDialog extends React.Component<IProps> {
 
                 const endEvent = PollEndEvent.from(this.props.event.getId()!, message).serialize();
 
-                await this.props.matrixClient.sendEvent(this.props.event.getRoomId()!, endEvent.type, endEvent.content);
+                await this.props.matrixClient.sendEvent(
+                    this.props.event.getRoomId()!,
+                    endEvent.type as keyof TimelineEvents,
+                    endEvent.content as TimelineEvents[keyof TimelineEvents],
+                );
             } catch (e) {
                 console.error("Failed to submit poll response event:", e);
                 Modal.createDialog(ErrorDialog, {

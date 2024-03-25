@@ -16,13 +16,13 @@ limitations under the License.
 
 import {
     MatrixClient,
-    IContent,
     IEventRelation,
     MatrixError,
     THREAD_RELATION_TYPE,
     ContentHelpers,
     LocationAssetType,
 } from "matrix-js-sdk/src/matrix";
+import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -146,7 +146,7 @@ export const shareLocation =
                 timestamp,
                 undefined,
                 assetType,
-            ) as IContent;
+            ) as RoomMessageEventContent;
             await doMaybeLocalRoomAction(
                 roomId,
                 (actualRoomId: string) => client.sendMessage(actualRoomId, threadId, content),

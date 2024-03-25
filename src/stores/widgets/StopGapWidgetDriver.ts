@@ -44,6 +44,7 @@ import {
     Direction,
     THREAD_RELATION_TYPE,
     StateEvents,
+    TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -248,13 +249,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
         stateKey?: string,
         targetRoomId?: string,
     ): Promise<ISendEventDetails>;
-    public async sendEvent(
-        eventType: Exclude<EventType, keyof StateEvents>,
-        content: IContent,
+    public async sendEvent<K extends keyof TimelineEvents>(
+        eventType: K,
+        content: TimelineEvents[K],
         stateKey: null,
         targetRoomId?: string,
     ): Promise<ISendEventDetails>;
-    public async sendEvent<K extends keyof StateEvents>(
+    public async sendEvent(
         eventType: string,
         content: IContent,
         stateKey?: string | null,
@@ -268,13 +269,22 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let r: { event_id: string } | null;
         if (stateKey !== null) {
             // state event
-            r = await client.sendStateEvent(roomId, eventType as K, content as StateEvents[K], stateKey);
+            r = await client.sendStateEvent(
+                roomId,
+                eventType as keyof StateEvents,
+                content as StateEvents[keyof StateEvents],
+                stateKey,
+            );
         } else if (eventType === EventType.RoomRedaction) {
             // special case: extract the `redacts` property and call redact
             r = await client.redactEvent(roomId, content["redacts"]);
         } else {
             // message event
-            r = await client.sendEvent(roomId, eventType, content);
+            r = await client.sendEvent(
+                roomId,
+                eventType as keyof TimelineEvents,
+                content as TimelineEvents[keyof TimelineEvents],
+            );
 
             if (eventType === EventType.RoomMessage) {
                 CHAT_EFFECTS.forEach((effect) => {

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { IContent, MatrixEvent, TimelineEvents } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, TranslationKey } from "../../../../languageHandler";
 import Field from "../../elements/Field";
@@ -32,7 +32,7 @@ export const stringify = (object: object): string => {
 interface IEventEditorProps extends Pick<IDevtoolsProps, "onBack"> {
     fieldDefs: IFieldDef[]; // immutable
     defaultContent?: string;
-    onSend(fields: string[], content?: IContent): Promise<unknown>;
+    onSend(fields: string[], content: IContent): Promise<unknown>;
 }
 
 interface IFieldDef {
@@ -180,8 +180,8 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
 
     const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
-    const onSend = ([eventType]: string[], content?: IContent): Promise<unknown> => {
-        return cli.sendEvent(context.room.roomId, eventType, content || {});
+    const onSend = ([eventType]: string[], content: TimelineEvents[keyof TimelineEvents]): Promise<unknown> => {
+        return cli.sendEvent(context.room.roomId, eventType as keyof TimelineEvents, content);
     };
 
     let defaultContent: string | undefined;

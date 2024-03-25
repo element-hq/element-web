@@ -16,9 +16,10 @@ limitations under the License.
 
 import React, { createRef, KeyboardEvent } from "react";
 import classNames from "classnames";
-import { EventStatus, IContent, MatrixEvent, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, MatrixEvent, Room, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import { ReplacementEvent, RoomMessageEventContent, RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -70,7 +71,11 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
 }
 
 // exported for tests
-export function createEditContent(model: EditorModel, editedEvent: MatrixEvent, replyToEvent?: MatrixEvent): IContent {
+export function createEditContent(
+    model: EditorModel,
+    editedEvent: MatrixEvent,
+    replyToEvent?: MatrixEvent,
+): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
@@ -86,11 +91,11 @@ export function createEditContent(model: EditorModel, editedEvent: MatrixEvent, 
 
     const body = textSerialize(model);
 
-    const newContent: IContent = {
+    const newContent: RoomMessageEventContent = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
         body: body,
     };
-    const contentBody: IContent = {
+    const contentBody: RoomMessageTextEventContent & Omit<ReplacementEvent<RoomMessageEventContent>, "m.relates_to"> = {
         "msgtype": newContent.msgtype,
         "body": `${plainPrefix} * ${body}`,
         "m.new_content": newContent,
@@ -111,7 +116,7 @@ export function createEditContent(model: EditorModel, editedEvent: MatrixEvent, 
     attachMentions(editedEvent.sender!.userId, contentBody, model, replyToEvent, editedEvent.getContent());
     attachRelation(contentBody, { rel_type: "m.replace", event_id: editedEvent.getId() });
 
-    return contentBody;
+    return contentBody as RoomMessageEventContent;
 }
 
 interface IEditMessageComposerProps extends MatrixClientProps {
@@ -142,7 +147,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
         const editContent = createEditContent(this.model, ev, this.replyToEvent);
         this.state = {
-            saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]),
+            saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]!),
         };
 
         window.addEventListener("beforeunload", this.saveStoredEditorState);
@@ -284,14 +289,16 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         localStorage.setItem(this.editorStateKey, JSON.stringify(item));
     };
 
-    private isContentModified(newContent: IContent): boolean {
+    private isContentModified(newContent: RoomMessageEventContent): boolean {
         // if nothing has changed then bail
-        const oldContent = this.props.editState.getEvent().getContent();
+        const oldContent = this.props.editState.getEvent().getContent<RoomMessageEventContent>();
         if (
             oldContent["msgtype"] === newContent["msgtype"] &&
             oldContent["body"] === newContent["body"] &&
-            oldContent["format"] === newContent["format"] &&
-            oldContent["formatted_body"] === newContent["formatted_body"]
+            (oldContent as RoomMessageTextEventContent)["format"] ===
+                (newContent as RoomMessageTextEventContent)["format"] &&
+            (oldContent as RoomMessageTextEventContent)["formatted_body"] ===
+                (newContent as RoomMessageTextEventContent)["formatted_body"]
         ) {
             return false;
         }
@@ -318,7 +325,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
         const editContent = createEditContent(this.model, editedEvent, this.replyToEvent);
-        const newContent = editContent["m.new_content"];
+        const newContent = editContent["m.new_content"]!;
 
         let shouldSend = true;
 
@@ -352,7 +359,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     }
 
                     if (cmd.category === CommandCategories.messages || cmd.category === CommandCategories.effects) {
-                        editContent["m.new_content"] = content;
+                        editContent["m.new_content"] = content!;
                     } else {
                         shouldSend = false;
                     }
