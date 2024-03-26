@@ -8235,26 +8235,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@31.6.0:
-  version "31.6.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-31.6.0.tgz#d414775c80d2c350d8bc168b2c4d364454bcb04f"
-  integrity sha512-5U/QOjR54gPa91MbHGv0vrrVUkmn7ts4J+vRI5fxF+W0B4cu/98I0hbRnxikOAltfc+iED7KclXaZLprGL6Pyg==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^4.6.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "31.6.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/706002cdcb4933dc728987dddf0d5dd297b330dc"
