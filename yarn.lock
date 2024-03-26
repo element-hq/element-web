@@ -8255,6 +8255,25 @@ matrix-js-sdk@31.6.0:
     unhomoglyph "^1.0.6"
     uuid "9"
 
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "31.6.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/706002cdcb4933dc728987dddf0d5dd297b330dc"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^4.6.0"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.6.0"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8262,10 +8281,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.96.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.96.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.96.0.tgz#1913757642ea300fd648514c3a43895483f41aed"
-  integrity sha512-Hcmb0+qmdBpo7/sLpT3FzuW8uJYy/xwMppgme7g7Q7dtdOuhcnRt1ttFYBIOkrlmRiRzZ8N+MqCaLxCcplzVsQ==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/de154ffba98da20152f5327f82a5b3f14d89ac68"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.12.0"
@@ -8309,7 +8327,7 @@ matrix-react-sdk@3.96.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "31.6.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
@@ -8317,7 +8335,7 @@ matrix-react-sdk@3.96.0:
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.110.0"
+    posthog-js "1.116.0"
     proposal-temporal "^0.9.0"
     qrcode "1.5.3"
     re-resizable "^6.9.0"
@@ -9707,10 +9725,10 @@ postcss@^8.3.11, postcss@^8.4.33:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.110.0:
-  version "1.110.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.110.0.tgz#8f2bfda0d8ec50154864e984638fc95f831a6353"
-  integrity sha512-A5d0vYKLjmVtwF2uPxoFidDkVC6bTQUebm4s1LgKDIE+hHVfSmhbZ4pHqvwWmeJXdQHoQdvzG5Ve4STiiizBGQ==
+posthog-js@1.116.0:
+  version "1.116.0"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.116.0.tgz#ac2a77eba6389a195f2bd6c605e228386edcd630"
+  integrity sha512-mSXEnB8W/hgiT8HE8Y0bWlLIM9JSI1e4TlosJL9H4/H/ekDJqL+Yi8JQNWhIefTgUBCU/ZuXmHzs2mO0rbVxhQ==
   dependencies:
     fflate "^0.4.8"
     preact "^10.19.3"
