@@ -41,6 +41,7 @@ import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { calculateRoomVia } from "../../utils/permalinks/Permalinks";
+import { isVideoRoom } from "../../utils/video-rooms";
 
 export enum PlatformCallType {
     ElementCall,
@@ -113,8 +114,10 @@ export const useRoomCall = (
     const isConnectedToCall = useConnectionState(groupCall) === ConnectionState.Connected;
     const hasGroupCall = groupCall !== null;
     const hasActiveCallSession = useParticipantCount(groupCall) > 0;
-    const isViewingCall = useEventEmitterState(SdkContextClass.instance.roomViewStore, UPDATE_EVENT, () =>
-        SdkContextClass.instance.roomViewStore.isViewingCall(),
+    const isViewingCall = useEventEmitterState(
+        SdkContextClass.instance.roomViewStore,
+        UPDATE_EVENT,
+        () => SdkContextClass.instance.roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     // room
