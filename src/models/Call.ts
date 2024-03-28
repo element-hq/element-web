@@ -778,7 +778,10 @@ export class ElementCall extends Call {
         overwriteData: IWidgetData,
     ): IWidgetData {
         let perParticipantE2EE = false;
-        if (client.isRoomEncrypted(roomId) && !SettingsStore.getValue("feature_disable_call_per_sender_encryption"))
+        if (
+            client.getRoom(roomId)?.hasEncryptionStateEvent() &&
+            !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
+        )
             perParticipantE2EE = true;
         return {
             ...currentData,

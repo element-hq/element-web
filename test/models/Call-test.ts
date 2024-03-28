@@ -1039,7 +1039,7 @@ describe("ElementCall", () => {
             call.destroy();
             const addWidgetSpy = jest.spyOn(WidgetStore.instance, "addVirtualWidget");
             // If a room is not encrypted we will never add the perParticipantE2EE flag.
-            client.isRoomEncrypted.mockReturnValue(true);
+            const roomSpy = jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
 
             // should create call with perParticipantE2EE flag
             ElementCall.create(room);
@@ -1049,8 +1049,7 @@ describe("ElementCall", () => {
             enabledSettings.add("feature_disable_call_per_sender_encryption");
             expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(false);
             enabledSettings.delete("feature_disable_call_per_sender_encryption");
-
-            client.isRoomEncrypted.mockClear();
+            roomSpy.mockRestore();
             addWidgetSpy.mockRestore();
         });
 

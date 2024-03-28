@@ -282,7 +282,7 @@ export const useRoomCall = (
         url.pathname = "/room/";
         // Set params for the sharable url
         url.searchParams.set("roomId", room.roomId);
-        url.searchParams.set("perParticipantE2EE", "true");
+        if (room.hasEncryptionStateEvent()) url.searchParams.set("perParticipantE2EE", "true");
         for (const server of calculateRoomVia(room)) {
             url.searchParams.set("viaServers", server);
         }

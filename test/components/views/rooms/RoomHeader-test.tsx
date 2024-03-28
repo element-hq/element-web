@@ -563,9 +563,10 @@ describe("RoomHeader", () => {
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             expect(getByLabelText(container, _t("voip|get_call_link"))).toBeInTheDocument();
         });
-        it("opens the share dialog with the correct share link", () => {
+        it("opens the share dialog with the correct share link in an encrypted room", () => {
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+            jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             const modalSpy = jest.spyOn(Modal, "createDialog");
@@ -581,6 +582,20 @@ describe("RoomHeader", () => {
                 customTitle: "Conference invite link",
                 subtitle: _t("share|share_call_subtitle"),
             });
+            expect(arg1.target.toString()).toEqual(target);
+        });
+
+        it("share dialog has correct link in an unencrypted room", () => {
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+            jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+
+            const { container } = render(<RoomHeader room={room} />, getWrapper());
+            const modalSpy = jest.spyOn(Modal, "createDialog");
+            fireEvent.click(getByLabelText(container, _t("voip|get_call_link")));
+            const target =
+                "https://guest_spa_url.com/room/#/!1:example.org?roomId=%211%3Aexample.org&viaServers=example.org";
+            const arg1 = modalSpy.mock.calls[0][1] as any;
             expect(arg1.target.toString()).toEqual(target);
         });
     });
