@@ -598,6 +598,7 @@ export function mkStubRoom(
         getJoinedMemberCount: jest.fn().mockReturnValue(1),
         getJoinedMembers: jest.fn().mockReturnValue([]),
         getLiveTimeline: jest.fn().mockReturnValue(stubTimeline),
+        getLastLiveEvent: jest.fn().mockReturnValue(undefined),
         getMember: jest.fn().mockReturnValue({
             userId: "@member:domain.bla",
             name: "Member",

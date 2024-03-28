@@ -3151,6 +3151,7 @@
         "empty_heading": "Keep discussions organised with threads",
         "empty_tip": "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.",
         "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
+        "mark_all_read": "Mark all as read",
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
         "open_thread": "Open thread",

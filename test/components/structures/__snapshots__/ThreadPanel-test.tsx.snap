@@ -10,6 +10,24 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
     >
       Threads
     </h4>
+    <button
+      aria-label="Mark all as read"
+      class="_icon-button_16nk7_17"
+      data-state="closed"
+      role="button"
+      style="--cpd-icon-button-size: 24px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -33,6 +51,24 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
     >
       Threads
     </h4>
+    <button
+      aria-label="Mark all as read"
+      class="_icon-button_16nk7_17"
+      data-state="closed"
+      role="button"
+      style="--cpd-icon-button-size: 24px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -60,4 +96,18 @@ exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option
     Shows all threads from current room
   </span>
 </div>
+`;
+
+exports[`ThreadPanel Header matches snapshot when no threads 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard_header_title"
+  >
+    <h4
+      class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+    >
+      Threads
+    </h4>
+  </div>
+</DocumentFragment>
 `;
