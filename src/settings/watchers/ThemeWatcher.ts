@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
@@ -26,15 +25,7 @@ import { findHighContrastTheme, setTheme } from "../../theme";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
-export enum ThemeWatcherEvents {
-    ThemeChange = "theme_change",
-}
-
-type EventHandlerMap = {
-    [ThemeWatcherEvents.ThemeChange]: (theme: string) => void;
-};
-
-export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvents, EventHandlerMap> {
+export default class ThemeWatcher {
     private themeWatchRef: string | null;
     private systemThemeWatchRef: string | null;
     private dispatcherRef: string | null;
@@ -46,7 +37,6 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvents, 
     private currentTheme: string;
 
     public constructor() {
-        super();
         this.themeWatchRef = null;
         this.systemThemeWatchRef = null;
         this.dispatcherRef = null;
@@ -96,7 +86,6 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvents, 
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
         if (oldTheme !== this.currentTheme) {
             setTheme(this.currentTheme);
-            this.emit(ThemeWatcherEvents.ThemeChange, this.currentTheme);
         }
     }
 
