@@ -1,3 +1,14 @@
+Changes in [1.11.63](https://github.com/element-hq/element-web/releases/tag/v1.11.63) (2024-03-28)
+==================================================================================================
+This is a hotfix release to fix a couple of issues: one where the client would sometimes call the client/server API to set a push rule in a loop, and one where authentication was not sent for widgets when it should have been.
+
+## 🐛 Bug Fixes
+
+* Revert "Make EC widget theme reactive - Update widget url when the theme changes" ([#12383](https://github.com/matrix-org/matrix-react-sdk/pull/12383)) in order to fix widgets that require authentication.
+* Update to hotfixed js-sdk to fix an issue where Element could try to set a push rule in a loop.
+
+
+
 Changes in [1.11.62](https://github.com/element-hq/element-web/releases/tag/v1.11.62) (2024-03-26)
 ==================================================================================================
 ## ✨ Features
