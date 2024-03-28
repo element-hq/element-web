@@ -1,3 +1,10 @@
+Changes in [3.96.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.96.1) (2024-03-28)
+=====================================================================================================
+## 🐛 Bug Fixes
+
+* Revert "Make EC widget theme reactive - Update widget url when the theme changes" ([#12383](https://github.com/matrix-org/matrix-react-sdk/pull/12383)) in order to fix widgets that require authentication.
+
+
 Changes in [3.96.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.96.0) (2024-03-26)
 =====================================================================================================
 ## ✨ Features
