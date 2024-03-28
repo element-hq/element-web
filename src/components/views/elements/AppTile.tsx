@@ -58,7 +58,6 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { parseUrl } from "../../../utils/UrlUtils";
-import ThemeWatcher, { ThemeWatcherEvents } from "../../../settings/watchers/ThemeWatcher";
 
 interface IProps {
     app: IWidget | IApp;
@@ -117,7 +116,6 @@ interface IState {
     menuDisplayed: boolean;
     requiresClient: boolean;
     hasContextMenuOptions: boolean;
-    widgetUrl?: string;
 }
 
 export default class AppTile extends React.Component<IProps, IState> {
@@ -143,7 +141,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private sgWidget: StopGapWidget | null;
     private dispatcherRef?: string;
     private unmounted = false;
-    private themeWatcher = new ThemeWatcher();
+
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props);
         this.context = context; // XXX: workaround for lack of `declare` support on `public context!:` definition
@@ -273,7 +271,6 @@ export default class AppTile extends React.Component<IProps, IState> {
                 !newProps.userWidget,
                 newProps.onDeleteClick,
             ),
-            widgetUrl: this.sgWidget?.embedUrl,
         };
     }
 
@@ -359,8 +356,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private setupSgListeners(): void {
-        this.themeWatcher.on(ThemeWatcherEvents.ThemeChange, this.onThemeChanged);
-        this.themeWatcher.start();
         this.sgWidget?.on("ready", this.onWidgetReady);
         this.sgWidget?.on("error:preparing", this.updateRequiresClient);
         // emits when the capabilities have been set up or changed
@@ -368,9 +363,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private stopSgListeners(): void {
-        this.themeWatcher.stop();
         if (!this.sgWidget) return;
-        this.themeWatcher.off(ThemeWatcherEvents.ThemeChange, this.onThemeChanged);
         this.sgWidget?.off("ready", this.onWidgetReady);
         this.sgWidget.off("error:preparing", this.updateRequiresClient);
         this.sgWidget.off("capabilitiesNotified", this.updateRequiresClient);
@@ -393,7 +386,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     private startWidget(): void {
         this.sgWidget?.prepare().then(() => {
             if (this.unmounted) return;
-            if (!this.state.initialising) return;
             this.setState({ initialising: false });
         });
     }
@@ -466,17 +458,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({
             requiresClient: !!this.sgWidget?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
         });
-    };
-
-    private onThemeChanged = (): void => {
-        // Regenerate widget url when the theme changes
-        // this updates the url from e.g. `theme=light` to `theme=dark`
-        // We only do this with EC widgets where the theme prop is in the hash. If the widget puts the
-        // theme template variable outside the url hash this would cause a (IFrame) page reload on every theme change.
-        if (WidgetType.CALL.matches(this.props.app.type)) this.setState({ widgetUrl: this.sgWidget?.embedUrl });
-
-        // TODO: This is a stop gap solution to responsively update the theme of the widget.
-        // A new action should be introduced and the widget driver should be called here, so it informs the widget. (or connect to this by itself)
     };
 
     private onAction = (payload: ActionPayload): void => {
@@ -571,9 +552,9 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.resetWidget(this.props);
             this.startMessaging();
 
-            if (this.iframe && this.state.widgetUrl) {
+            if (this.iframe && this.sgWidget) {
                 // Reload iframe
-                this.iframe.src = this.state.widgetUrl;
+                this.iframe.src = this.sgWidget.embedUrl;
             }
         });
     }
@@ -642,7 +623,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             "mx_AppTileBody--mini": this.props.miniMode,
             "mx_AppTileBody--loading": this.state.loading,
             // We don't want mx_AppTileBody (rounded corners) for call widgets
-            "mx_AppTileBody--call": WidgetType.CALL.matches(this.props.app.type),
+            "mx_AppTileBody--call": this.props.app.type === WidgetType.CALL.preferred,
         });
         const appTileBodyStyles: CSSProperties = {};
         if (this.props.pointerEvents) {
@@ -671,7 +652,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <AppPermission
                         roomId={this.props.room.roomId}
                         creatorUserId={this.props.creatorUserId}
-                        url={this.state.widgetUrl}
+                        url={this.sgWidget.embedUrl}
                         isRoomEncrypted={isEncrypted}
                         onPermissionGranted={this.grantWidgetPermission}
                     />
@@ -699,7 +680,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                 title={widgetTitle}
                                 allow={iframeFeatures}
                                 ref={this.iframeRefChange}
-                                src={this.state.widgetUrl}
+                                src={this.sgWidget.embedUrl}
                                 allowFullScreen={true}
                                 sandbox={sandboxFlags}
                             />
@@ -722,12 +703,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     const zIndexAboveOtherPersistentElements = 101;
 
                     appTileBody = (
-                        <div
-                            className="mx_AppTile_persistedWrapper"
-                            // We store the widget url to make it possible to test the value of the widgetUrl. since the iframe itself wont be here. (PersistedElement are in a different dom tree)
-                            data-test-widget-url={this.state.widgetUrl}
-                            data-testid="widget-app-tile"
-                        >
+                        <div className="mx_AppTile_persistedWrapper">
                             <PersistedElement
                                 zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
                                 persistKey={this.persistKey}
