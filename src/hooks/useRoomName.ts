@@ -2,7 +2,6 @@ import { IPublicRoomsChunkRoom, Room } from "matrix-js-sdk/src/matrix";
 import { getDisplayAliasForAliasSet } from "matrix-react-sdk/src/Rooms";
 import { _t } from "matrix-react-sdk/src/languageHandler";
 import { IOOBData } from "matrix-react-sdk/src/stores/ThreepidInviteStore";
-import { useMemo } from "react";
 
 /**
  * Removes the [TG] prefix and leading whitespace from a room name
@@ -32,21 +31,4 @@ export function getRoomName(room?: Room | IPublicRoomsChunkRoom, oobName?: IOOBD
     return getSafeRoomName(
         (roomName || "").replace(":", ":\u200b"), // add a zero-width space to allow linewrapping after the colon (matrix defaults)
     );
-}
-
-/**
- * Determines the room name from a combination of the room model and potential
- * out-of-band information
- * @param room - The room model
- * @param oobData - out-of-band information about the room
- * @returns {string} the room name
- *
- * TODO: check if useTypedEventEmitter is needed
- */
-export function useRoomName(room?: Room | IPublicRoomsChunkRoom, oobData?: IOOBData): string {
-    const name = useMemo(() => {
-        return getRoomName(room, oobData);
-    }, [room, oobData]);
-
-    return name;
 }

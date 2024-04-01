@@ -19,7 +19,7 @@ import React, { useCallback, useMemo } from "react";
 
 import { Icon as TokenGatedRoomIcon } from "../../../../res/themes/superhero/img/icons/tokengated-room.svg";
 import { Icon as CommunityRoomIcon } from "../../../../res/themes/superhero/img/icons/community-room.svg";
-import { useRoomName } from "../../../hooks/useRoomName";
+import { getRoomName } from "../../../hooks/useRoomName";
 import { useVerifiedRoom } from "../../../hooks/useVerifiedRoom";
 import { UserVerifiedBadge } from "./UserVerifiedBadge";
 import { BotVerifiedBadge } from "./BotVerifiedBadge";
@@ -31,7 +31,7 @@ interface IProps {
 }
 
 export const RoomName = ({ room, children, maxLength }: IProps): JSX.Element => {
-    const roomName = useRoomName(room);
+    const roomName = getRoomName(room);
     const { isTokenGatedRoom, isCommunityRoom } = useVerifiedRoom(room);
 
     const roomUser: string | undefined = useMemo(() => {
