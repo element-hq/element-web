@@ -27,6 +27,8 @@ import { filterBoolean } from "matrix-react-sdk/src/utils/arrays";
 import { timeout } from "matrix-react-sdk/src/utils/promise";
 import { ReactElement } from "react";
 
+import CommandProvider from "./CommandProvider";
+
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
     start: number; // byte offset relative to the start anchor of the current editor selection.
@@ -46,7 +48,7 @@ export interface ICompletion {
     href?: string;
 }
 
-const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, SpaceProvider];
+const PROVIDERS = [UserProvider, RoomProvider, EmojiProvider, NotifProvider, CommandProvider, SpaceProvider];
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;

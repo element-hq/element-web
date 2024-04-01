@@ -1,18 +1,21 @@
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect } from "react";
 
-import { minimumTokenThresholdAtom, verifiedAccountsAtom, botAccountsAtom } from "../atoms";
+import { minimumTokenThresholdAtom, verifiedAccountsAtom, botAccountsAtom, botCommandsAtom } from "../atoms";
 
 type BotAccounts = {
     domain: string;
     communityBot: {
         userId: string;
+        apiPrefix: string;
     };
     superheroBot: {
         userId: string;
+        apiPrefix: string;
     };
     blockchainBot: {
         userId: string;
+        apiPrefix: string;
     };
 };
 
@@ -52,6 +55,7 @@ const useMinimumTokenThreshold = (config: any): void => {
 export const SuperheroProvider = ({ children, config }: any): any => {
     const [verifiedAccounts, setVerifiedAccounts] = useAtom(verifiedAccountsAtom);
     const [, setBotAccounts] = useAtom(botAccountsAtom);
+    const [, setBotCommands] = useAtom(botCommandsAtom);
 
     function loadVerifiedAccounts(): void {
         if (config.bots_backend_url) {
@@ -78,11 +82,14 @@ export const SuperheroProvider = ({ children, config }: any): any => {
                         superheroBot: "@" + data.superheroBot.userId + ":" + data.domain,
                         blockchainBot: "@" + data.blockchainBot.userId + ":" + data.domain,
                     });
+                    fetchBotCommands(data.communityBot);
+                    fetchBotCommands(data.superheroBot);
                 })
                 .catch(() => {
                     //
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [config.bots_backend_url, setBotAccounts]);
 
     useEffect(() => {
@@ -97,6 +104,22 @@ export const SuperheroProvider = ({ children, config }: any): any => {
         return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    function fetchBotCommands(bot: { userId: string; apiPrefix: string }): void {
+        fetch(`${config.bots_backend_url}${bot.apiPrefix}/commands`, {
+            method: "GET",
+        })
+            .then((res) => res.json())
+            .then((data: any) => {
+                setBotCommands((prev) => ({
+                    ...prev,
+                    [bot.userId]: data.commands,
+                }));
+            })
+            .catch(() => {
+                //
+            });
+    }
 
     /**
      * Handles the click event on an element.
