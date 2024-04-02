@@ -14,7 +14,7 @@
 
 ## How to check if your language already is being translated
 
-Go to https://localazy.com/p/element-web. If your language is listed then you can get started, have a read
+Go to https://localazy.com/p/element-web. If your language is listed then you can get started. Have a read
 of https://localazy.com/docs/general/translating-strings if you need help getting started. If your language is not yet
 listed please express your wishes to start translating it in the general discussion room linked above.
 
