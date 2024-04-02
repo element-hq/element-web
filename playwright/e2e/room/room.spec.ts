@@ -92,6 +92,10 @@ test.describe("Room Directory", () => {
 
         // Display Room B
         await app.viewRoomById(roomBId);
+
+        // Let the app settle to avoid flakiness
+        await page.waitForTimeout(500);
+
         // Display Room A
         await app.viewRoomById(roomAId);
 

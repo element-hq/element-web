@@ -23,6 +23,7 @@ import {
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_START,
     IPartialEvent,
+    TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
@@ -166,8 +167,8 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 this.matrixClient.sendEvent(
                     actualRoomId,
                     this.props.threadId ?? null,
-                    pollEvent.type,
-                    pollEvent.content,
+                    pollEvent.type as keyof TimelineEvents,
+                    pollEvent.content as TimelineEvents[keyof TimelineEvents],
                 ),
             this.matrixClient,
         )

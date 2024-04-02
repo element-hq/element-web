@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ComponentProps } from "react";
 import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { withClientContextRenderOptions, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -49,10 +50,10 @@ const makeMockRoomMember = ({
 }: {
     userId?: string;
     isKicked?: boolean;
-    membership?: "invite" | "ban" | "leave";
+    membership?: KnownMembership.Invite | KnownMembership.Ban | KnownMembership.Leave;
     content?: Partial<IContent>;
     memberContent?: Partial<IContent>;
-    oldMembership?: "join" | "knock";
+    oldMembership?: KnownMembership.Join | KnownMembership.Knock;
 }) =>
     ({
         userId,
@@ -180,7 +181,11 @@ describe("<RoomPreviewBar />", () => {
     it("renders denied request message", () => {
         const room = createRoom(roomId, otherUserId);
         jest.spyOn(room, "getMember").mockReturnValue(
-            makeMockRoomMember({ isKicked: true, membership: "leave", oldMembership: "knock" }),
+            makeMockRoomMember({
+                isKicked: true,
+                membership: KnownMembership.Leave,
+                oldMembership: KnownMembership.Knock,
+            }),
         );
         const component = getComponent({ room, promptAskToJoin: true });
 
@@ -191,7 +196,11 @@ describe("<RoomPreviewBar />", () => {
         const onForgetClick = jest.fn();
         const room = createRoom(roomId, otherUserId);
         jest.spyOn(room, "getMember").mockReturnValue(
-            makeMockRoomMember({ isKicked: true, membership: "leave", oldMembership: "knock" }),
+            makeMockRoomMember({
+                isKicked: true,
+                membership: KnownMembership.Leave,
+                oldMembership: KnownMembership.Knock,
+            }),
         );
         const component = getComponent({ room, promptAskToJoin: true, onForgetClick });
 
@@ -201,7 +210,7 @@ describe("<RoomPreviewBar />", () => {
 
     it("renders banned message", () => {
         const room = createRoom(roomId, otherUserId);
-        jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ membership: "ban" }));
+        jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ membership: KnownMembership.Ban }));
         const component = getComponent({ loading: true, room });
 
         expect(getMessage(component)).toMatchSnapshot();
@@ -244,8 +253,8 @@ describe("<RoomPreviewBar />", () => {
         const userMember = makeMockRoomMember({ userId });
         const userMemberWithDmInvite = makeMockRoomMember({
             userId,
-            membership: "invite",
-            memberContent: { is_direct: true, membership: "invite" },
+            membership: KnownMembership.Invite,
+            memberContent: { is_direct: true, membership: KnownMembership.Invite },
         });
         const inviterMember = makeMockRoomMember({
             userId: inviterUserId,

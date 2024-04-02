@@ -209,6 +209,20 @@ const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollap
     );
 };
 
+const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+    return (
+        <MetaSpaceButton
+            spaceKey={MetaSpace.VideoRooms}
+            className="mx_SpaceButton_videoRooms"
+            selected={selected}
+            isPanelCollapsed={isPanelCollapsed}
+            label={getMetaSpaceName(MetaSpace.VideoRooms)}
+            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.VideoRooms)}
+            size="32px"
+        />
+    );
+};
+
 const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">> = ({
     isPanelCollapsed,
     setPanelCollapsed,
@@ -263,6 +277,7 @@ const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
     [MetaSpace.Favourites]: FavouritesButton,
     [MetaSpace.People]: PeopleButton,
     [MetaSpace.Orphans]: OrphansButton,
+    [MetaSpace.VideoRooms]: VideoRoomsButton,
 };
 
 interface IInnerSpacePanelProps extends DroppableProvidedProps {
@@ -279,10 +294,12 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
         const [invites, metaSpaces, actualSpaces, activeSpace] = useSpaces();
         const activeSpaces = activeSpace ? [activeSpace] : [];
 
-        const metaSpacesSection = metaSpaces.map((key) => {
-            const Component = metaSpaceComponentMap[key];
-            return <Component key={key} selected={activeSpace === key} isPanelCollapsed={isPanelCollapsed} />;
-        });
+        const metaSpacesSection = metaSpaces
+            .filter((key) => !(key === MetaSpace.VideoRooms && !SettingsStore.getValue("feature_video_rooms")))
+            .map((key) => {
+                const Component = metaSpaceComponentMap[key];
+                return <Component key={key} selected={activeSpace === key} isPanelCollapsed={isPanelCollapsed} />;
+            });
 
         return (
             <IndicatorScrollbar

@@ -16,6 +16,7 @@ limitations under the License.
 
 import { richToPlain, plainToRich } from "@matrix-org/matrix-wysiwyg";
 import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { ReplacementEvent, RoomMessageEventContent, RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { parsePermalink, RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
@@ -76,7 +77,7 @@ export async function createMessageContent(
         includeReplyLegacyFallback = true,
         editedEvent,
     }: CreateMessageContentParams,
-): Promise<IContent> {
+): Promise<RoomMessageEventContent> {
     const isEditing = isMatrixEvent(editedEvent);
     const isReply = isEditing ? Boolean(editedEvent.replyEventId) : isMatrixEvent(replyToEvent);
     const isReplyAndEditing = isEditing && isReply;
@@ -100,10 +101,10 @@ export async function createMessageContent(
     const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
     const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
-    const content: IContent = {
+    const content = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
         body: isEditing ? `${bodyPrefix} * ${body}` : body,
-    };
+    } as RoomMessageTextEventContent & ReplacementEvent<RoomMessageTextEventContent>;
 
     // TODO markdown support
 

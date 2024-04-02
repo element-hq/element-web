@@ -46,6 +46,14 @@ jest.mock("../../../../src/dispatcher/dispatcher");
 describe("<MessageActionBar />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
+
+    const client = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(userId),
+        ...mockClientMethodsEvents(),
+        getRoom: jest.fn(),
+    });
+    const room = new Room(roomId, client, userId);
+
     const alicesMessageEvent = new MatrixEvent({
         type: EventType.RoomMessage,
         sender: userId,
@@ -72,13 +80,7 @@ describe("<MessageActionBar />", () => {
         type: EventType.RoomMessage,
         sender: userId,
     });
-    redactedEvent.makeRedacted(redactedEvent);
-
-    const client = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        ...mockClientMethodsEvents(),
-        getRoom: jest.fn(),
-    });
+    redactedEvent.makeRedacted(redactedEvent, room);
 
     const localStorageMock = (() => {
         let store: Record<string, any> = {};
@@ -98,7 +100,6 @@ describe("<MessageActionBar />", () => {
         writable: true,
     });
 
-    const room = new Room(roomId, client, userId);
     jest.spyOn(room, "getPendingEvents").mockReturnValue([]);
 
     client.getRoom.mockReturnValue(room);

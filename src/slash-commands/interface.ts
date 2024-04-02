@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent } from "matrix-js-sdk/src/matrix";
+import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import { _td } from "../languageHandler";
 import { XOR } from "../@types/common";
@@ -31,4 +31,4 @@ export const CommandCategories = {
     other: _td("slash_command|category_other"),
 };
 
-export type RunResult = XOR<{ error: Error }, { promise: Promise<IContent | undefined> }>;
+export type RunResult = XOR<{ error: Error }, { promise: Promise<RoomMessageEventContent | undefined> }>;

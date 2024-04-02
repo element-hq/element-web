@@ -16,6 +16,7 @@ limitations under the License.
 
 import { renderHook } from "@testing-library/react-hooks";
 import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useUnreadNotifications } from "../../src/hooks/useUnreadNotifications";
@@ -66,7 +67,7 @@ describe("useUnreadNotifications", () => {
     });
 
     it("indicates the user has been invited to a channel", async () => {
-        room.updateMyMembership("invite");
+        room.updateMyMembership(KnownMembership.Invite);
 
         const { result } = renderHook(() => useUnreadNotifications(room));
         const { level, symbol, count } = result.current;

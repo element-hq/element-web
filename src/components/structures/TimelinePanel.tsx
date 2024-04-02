@@ -39,6 +39,7 @@ import {
     ThreadEvent,
     ReceiptType,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -1824,7 +1825,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // that the event belongs to, and traversing the timeline looking for
         // that event, while keeping track of the user's membership
         let i = events.length - 1;
-        let userMembership = "leave";
+        let userMembership: Membership = KnownMembership.Leave;
         for (; i >= 0; i--) {
             const timeline = this.props.timelineSet.getTimelineForEvent(events[i].getId()!);
             if (!timeline) {
@@ -1837,14 +1838,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 continue;
             }
 
-            userMembership = timeline.getState(EventTimeline.FORWARDS)?.getMember(userId)?.membership ?? "leave";
+            userMembership =
+                timeline.getState(EventTimeline.FORWARDS)?.getMember(userId)?.membership ?? KnownMembership.Leave;
             const timelineEvents = timeline.getEvents();
             for (let j = timelineEvents.length - 1; j >= 0; j--) {
                 const event = timelineEvents[j];
                 if (event.getId() === events[i].getId()) {
                     break;
                 } else if (event.getStateKey() === userId && event.getType() === EventType.RoomMember) {
-                    userMembership = event.getPrevContent().membership || "leave";
+                    userMembership = event.getPrevContent().membership || KnownMembership.Leave;
                 }
             }
             break;
@@ -1855,8 +1857,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
         for (; i >= 0; i--) {
             const event = events[i];
             if (event.getStateKey() === userId && event.getType() === EventType.RoomMember) {
-                userMembership = event.getPrevContent().membership || "leave";
-            } else if (userMembership === "leave" && (event.isDecryptionFailure() || event.isBeingDecrypted())) {
+                userMembership = event.getPrevContent().membership || KnownMembership.Leave;
+            } else if (
+                userMembership === KnownMembership.Leave &&
+                (event.isDecryptionFailure() || event.isBeingDecrypted())
+            ) {
                 // reached an undecryptable message when the user wasn't in the room -- don't try to load any more
                 // Note: for now, we assume that events that are being decrypted are
                 // not decryptable - we will be called once more when it is decrypted.

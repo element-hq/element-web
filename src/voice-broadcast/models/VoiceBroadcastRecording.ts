@@ -26,7 +26,7 @@ import {
     RelationType,
     TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { AudioContent, EncryptedFile } from "matrix-js-sdk/src/types";
 
 import {
     ChunkRecordedPayload,
@@ -387,7 +387,7 @@ export class VoiceBroadcastRecording
                 rel_type: RelationType.Reference,
                 event_id: this.infoEventId,
             };
-            content["io.element.voice_broadcast_chunk"] = {
+            (<AudioContent>content)["io.element.voice_broadcast_chunk"] = {
                 sequence,
             };
 

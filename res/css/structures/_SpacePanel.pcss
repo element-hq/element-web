@@ -203,7 +203,8 @@ limitations under the License.
         &.mx_SpaceButton_home,
         &.mx_SpaceButton_favourites,
         &.mx_SpaceButton_people,
-        &.mx_SpaceButton_orphans {
+        &.mx_SpaceButton_orphans,
+        &.mx_SpaceButton_videoRooms {
             .mx_SpaceButton_icon {
                 background-color: $panel-actions;
 
@@ -227,6 +228,10 @@ limitations under the License.
 
         &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
             mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+        }
+
+        &.mx_SpaceButton_videoRooms .mx_SpaceButton_icon::before {
+            mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {

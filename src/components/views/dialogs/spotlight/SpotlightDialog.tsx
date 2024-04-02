@@ -26,6 +26,7 @@ import {
     HierarchyRoom,
     JoinRule,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import React, { ChangeEvent, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import sanitizeHtml from "sanitize-html";
@@ -244,7 +245,7 @@ const findVisibleRooms = (cli: MatrixClient, msc3946ProcessDynamicPredecessor: b
         if (isLocalRoom(room)) return false;
 
         // TODO we may want to put invites in their own list
-        return room.getMyMembership() === "join" || room.getMyMembership() == "invite";
+        return room.getMyMembership() === KnownMembership.Join || room.getMyMembership() == KnownMembership.Invite;
     });
 };
 
@@ -675,7 +676,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 // world readable, a modal will appear asking you to register first. If
                 // it is readable, the preview appears as normal.
                 const showViewButton =
-                    clientRoom?.getMyMembership() === "join" ||
+                    clientRoom?.getMyMembership() === KnownMembership.Join ||
                     (result.publicRoom.world_readable && !canAskToJoin(joinRule)) ||
                     cli.isGuest();
 

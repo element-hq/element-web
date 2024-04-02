@@ -18,6 +18,7 @@ limitations under the License.
 import { base32 } from "rfc4648";
 import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { randomString, randomLowercaseString, randomUppercaseString } from "matrix-js-sdk/src/randomstring";
@@ -83,7 +84,7 @@ export default class WidgetUtils {
             return false;
         }
 
-        if (room.getMyMembership() !== "join") {
+        if (room.getMyMembership() !== KnownMembership.Join) {
             logger.warn(`User ${me} is not in room ${roomId}`);
             return false;
         }
@@ -520,7 +521,7 @@ export default class WidgetUtils {
             // safe to send.
             // We'll end up using a local render URL when we see a Jitsi widget anyways, so this is
             // really just for backwards compatibility and to appease the spec.
-            baseUrl = "https://app.element.io/";
+            baseUrl = PlatformPeg.get()!.baseUrl;
         }
         const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
         return url.href;

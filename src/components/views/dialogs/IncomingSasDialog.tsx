@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { GeneratedSas, ShowSasCallbacks, Verifier, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
+import { GeneratedSas, ShowSasCallbacks, Verifier, VerifierEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

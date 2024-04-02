@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixError, MatrixClient, EventType, HistoryVisibility } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -159,17 +160,17 @@ export default class MultiInviter {
             if (!room) throw new Error("Room not found");
 
             const member = room.getMember(addr);
-            if (member?.membership === "join") {
+            if (member?.membership === KnownMembership.Join) {
                 throw new MatrixError({
                     errcode: USER_ALREADY_JOINED,
                     error: "Member already joined",
                 });
-            } else if (member?.membership === "invite") {
+            } else if (member?.membership === KnownMembership.Invite) {
                 throw new MatrixError({
                     errcode: USER_ALREADY_INVITED,
                     error: "Member already invited",
                 });
-            } else if (member?.membership === "ban") {
+            } else if (member?.membership === KnownMembership.Ban) {
                 let proceed = false;
                 // Check if we can unban the invitee.
                 // See https://spec.matrix.org/v1.7/rooms/v10/#authorization-rules, particularly 4.5.3 and 4.5.4.

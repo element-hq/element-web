@@ -3399,15 +3399,20 @@ await-lock@^2.1.0:
   resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.2.2.tgz#a95a9b269bfd2f69d22b17a321686f551152bcef"
   integrity sha512-aDczADvlvTGajTDjcjpJMqRkOF6Qdz3YbPZm/PyW6tKPkx2hlYBzxMhEywM/tU72HrVZjgl5VCdRuMlA7pZ8Gw==
 
-axe-core@4.8.4, axe-core@~4.8.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.4.tgz#90db39a2b316f963f00196434d964e6e23648643"
-  integrity sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==
+axe-core@4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.9.0.tgz#b18971494551ab39d4ff5f7d4c6411bd20cc7c2a"
+  integrity sha512-H5orY+M2Fr56DWmMFpMrq5Ge93qjNdPVqzBv5gWK3aD1OvjBEJlEzxf09z93dGVQeI0LiW+aCMIx1QtShC/zUw==
 
 axe-core@=4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.7.0.tgz#34ba5a48a8b564f67e103f0aa5768d76e15bbbbf"
   integrity sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==
+
+axe-core@~4.8.4:
+  version "4.8.4"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.4.tgz#90db39a2b316f963f00196434d964e6e23648643"
+  integrity sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==
 
 axobject-query@^3.2.1:
   version "3.2.1"
@@ -3896,10 +3901,10 @@ cookie-signature@1.0.6:
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
   integrity sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==
 
-cookie@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
-  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
+cookie@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
+  integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
 
 core-js-compat@^3.31.0, core-js-compat@^3.36.0:
   version "3.36.1"
@@ -5095,16 +5100,16 @@ expect@^29.0.0, expect@^29.7.0:
     jest-util "^29.7.0"
 
 express@^4.18.2:
-  version "4.18.3"
-  resolved "https://registry.yarnpkg.com/express/-/express-4.18.3.tgz#6870746f3ff904dee1819b82e4b51509afffb0d4"
-  integrity sha512-6VyCijWQ+9O7WuVMTRBTl+cjNNIzD5cY5mQ1WM8r/LEkI2u8EYpOotESNwzNlyCn3g+dmjKYI6BmNneSr/FSRw==
+  version "4.19.2"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.19.2.tgz#e25437827a3aa7f2a827bc8171bbbb664a356465"
+  integrity sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==
   dependencies:
     accepts "~1.3.8"
     array-flatten "1.1.1"
     body-parser "1.20.2"
     content-disposition "0.5.4"
     content-type "~1.0.4"
-    cookie "0.5.0"
+    cookie "0.6.0"
     cookie-signature "1.0.6"
     debug "2.6.9"
     depd "2.0.0"
@@ -6724,9 +6729,9 @@ jwt-decode@4.0.0, jwt-decode@^4.0.0:
   integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
 katex@^0.16.0:
-  version "0.16.9"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.9.tgz#bc62d8f7abfea6e181250f85a56e4ef292dcb1fa"
-  integrity sha512-fsSYjWS0EEOwvy81j3vRA8TEAhQhKiqO+FQaKWp0m39qwOzHVBgAUBIXWj1pB+O2W3fIpNa6Y9KSKCVbfPhyAQ==
+  version "0.16.10"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.10.tgz#6f81b71ac37ff4ec7556861160f53bc5f058b185"
+  integrity sha512-ZiqaC04tp2O5utMsl2TEZTXxa6WSC4yo0fv5ML++D3QZv/vx2Mct0mTlRx3O+uUkjfuAgOkzsCmq5MiUEsDDdA==
   dependencies:
     commander "^8.3.0"
 
@@ -6991,8 +6996,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "31.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8e0ef5ff2cd927efa1bd22cabb075a14b10e39d5"
+  version "31.6.1"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/514633c5fa0d226b686d607e40a238b5a9237f73"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.6.0"

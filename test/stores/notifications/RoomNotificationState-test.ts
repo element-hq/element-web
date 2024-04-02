@@ -24,6 +24,7 @@ import {
     MatrixEvent,
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, muteRoom, stubClient } from "../../test-utils";
@@ -150,7 +151,7 @@ describe("RoomNotificationState", () => {
 
         muteRoom(room);
         setUnreads(room, 1234, 0);
-        room.updateMyMembership("join"); // emit
+        room.updateMyMembership(KnownMembership.Join); // emit
 
         expect(roomNotifState.level).toBe(NotificationLevel.None);
         expect(roomNotifState.symbol).toBe(null);
@@ -160,7 +161,7 @@ describe("RoomNotificationState", () => {
     it("suggests a red ! if the user has been invited to a room", () => {
         const roomNotifState = new RoomNotificationState(room, false);
 
-        room.updateMyMembership("invite"); // emit
+        room.updateMyMembership(KnownMembership.Invite); // emit
 
         expect(roomNotifState.level).toBe(NotificationLevel.Highlight);
         expect(roomNotifState.symbol).toBe("!");
@@ -171,7 +172,7 @@ describe("RoomNotificationState", () => {
         const roomNotifState = new RoomNotificationState(room, false);
 
         setUnreads(room, 4321, 0);
-        room.updateMyMembership("join"); // emit
+        room.updateMyMembership(KnownMembership.Join); // emit
 
         expect(roomNotifState.level).toBe(NotificationLevel.Notification);
         expect(roomNotifState.symbol).toBe(null);
@@ -182,7 +183,7 @@ describe("RoomNotificationState", () => {
         const roomNotifState = new RoomNotificationState(room, false);
 
         setUnreads(room, 0, 69);
-        room.updateMyMembership("join"); // emit
+        room.updateMyMembership(KnownMembership.Join); // emit
 
         expect(roomNotifState.level).toBe(NotificationLevel.Highlight);
         expect(roomNotifState.symbol).toBe(null);
@@ -202,7 +203,7 @@ describe("RoomNotificationState", () => {
         );
 
         addThread(room);
-        room.updateMyMembership("join"); // emit
+        room.updateMyMembership(KnownMembership.Join); // emit
 
         expect(roomNotifState.level).toBe(NotificationLevel.Activity);
         expect(roomNotifState.symbol).toBe(null);

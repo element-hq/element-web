@@ -928,14 +928,6 @@
         "title": "Ignoruojami vartotojai",
         "view_rules": "Peržiūrėti taisykles"
     },
-    "lazy_loading": {
-        "disabled_action": "Išvalyti talpyklą ir sinchronizuoti iš naujo",
-        "disabled_description1": "Jūs anksčiau naudojote %(brand)s ant %(host)s įjungę tingų narių įkėlimą. Šioje versijoje tingus įkėlimas yra išjungtas. Kadangi vietinė talpykla nesuderinama tarp šių dviejų nustatymų, %(brand)s reikia iš naujo sinchronizuoti jūsų paskyrą.",
-        "disabled_description2": "Jei kita %(brand)s versija vis dar yra atidaryta kitame skirtuke, uždarykite jį, nes %(brand)s naudojimas tame pačiame serveryje, tuo pačiu metu įjungus ir išjungus tingų įkėlimą, sukelks problemų.",
-        "disabled_title": "Nesuderinamas vietinis podėlis",
-        "resync_description": "%(brand)s dabar naudoja 3-5 kartus mažiau atminties, įkeliant vartotojų informaciją tik prireikus. Palaukite, kol mes iš naujo sinchronizuosime su serveriu!",
-        "resync_title": "Atnaujinama %(brand)s"
-    },
     "leave_room_dialog": {
         "leave_room_question": "Ar tikrai norite išeiti iš kambario %(roomName)s?",
         "room_rejoin_warning": "Šis kambarys nėra viešas. Jūs negalėsite prisijungti iš naujo be pakvietimo."

@@ -230,7 +230,6 @@
         "phone_optional_label": "Puhelin (valinnainen)",
         "qr_code_login": {
             "connecting": "Yhdistetään…",
-            "devices_connected": "Yhdistetyt laitteet",
             "error_device_already_signed_in": "Toinen laite on jo sisäänkirjautunut.",
             "error_device_not_signed_in": "Toinen laite ei ole sisäänkirjautunut.",
             "error_device_unsupported": "Tämän laitteen kanssa linkittäminen ei ole tuettu.",
@@ -240,7 +239,6 @@
             "error_request_cancelled": "Pyyntö peruttiin.",
             "error_request_declined": "Pyyntö hylättiin toiselta laitteelta.",
             "error_unexpected": "Tapahtui odottamaton virhe.",
-            "review_and_approve": "Katselmoi ja hyväksy sisäänkirjautuminen",
             "sign_in_new_device": "Kirjaa sisään uusi laite",
             "waiting_for_device": "Odotetaan laitteen sisäänkirjautumista"
         },
@@ -679,7 +677,6 @@
         "no_receipt_found": "Kuittausta ei löytynyt",
         "no_verification_requests_found": "Vahvistuspyyntöjä ei löytynyt",
         "number_of_users": "Käyttäjämäärä",
-        "observe_only": "Tarkkaile ainoastaan",
         "original_event_source": "Alkuperäinen tapahtumalähde",
         "phase": "Vaihe",
         "phase_cancelled": "Peruttu",
@@ -687,7 +684,6 @@
         "phase_requested": "Pyydetty",
         "phase_started": "Käynnistetty",
         "phase_transaction": "Transaktio",
-        "requester": "Pyytäjä",
         "room_id": "Huoneen ID-tunniste: %(roomId)s",
         "room_notifications_sender": "Lähettäjä: ",
         "save_setting_values": "Tallenna asetusarvot",
@@ -1309,14 +1305,6 @@
         "view_rules": "Näytä säännöt"
     },
     "language_dropdown_label": "Kielipudotusvalikko",
-    "lazy_loading": {
-        "disabled_action": "Tyhjennä välimuisti ja hae tiedot uudelleen",
-        "disabled_description1": "Olet aikaisemmin käytttänyt %(brand)sia laitteella %(host)s, jossa oli jäsenten laiska lataus käytössä. Tässä versiossa laiska lataus on pois käytöstä. Koska paikallinen välimuisti ei ole yhteensopiva näiden kahden asetuksen välillä, %(brand)sin täytyy synkronoida tilisi tiedot uudelleen.",
-        "disabled_description2": "Jos sinulla on toinen %(brand)sin versio edelleen auki toisessa välilehdessä, suljethan sen, koska %(brand)sin käyttäminen samalla laitteella niin, että laiska lataus on toisessa välilehdessä käytössä ja toisessa ei, aiheuttaa ongelmia.",
-        "disabled_title": "Yhteensopimaton paikallinen välimuisti",
-        "resync_description": "%(brand)s käyttää nyt 3-5 kertaa vähemmän muistia, koska se lataa tietoa muista käyttäjistä vain tarvittaessa. Odotathan, kun haemme tarvittavat tiedot palvelimelta!",
-        "resync_title": "Päivitetään %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Olet ainoa henkilö täällä. Jos lähdet, kukaan ei voi liittyä tulevaisuudessa, et myöskään sinä.",
         "leave_room_question": "Oletko varma että haluat poistua huoneesta '%(roomName)s'?",

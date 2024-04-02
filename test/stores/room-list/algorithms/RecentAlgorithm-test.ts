@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { mkMessage, mkRoom, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import "../../../../src/stores/room-list/RoomListStore";
 import { RecentAlgorithm } from "../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
-import { EffectiveMembership } from "../../../../src/utils/membership";
 import { makeThreadEvent, mkThread } from "../../../test-utils/threads";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 
@@ -53,7 +53,7 @@ describe("RecentAlgorithm", () => {
                 event: true,
             });
 
-            room.getMyMembership = () => "join";
+            room.getMyMembership = () => KnownMembership.Join;
 
             room.addLiveEvents([event1]);
             expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(5);
@@ -74,7 +74,7 @@ describe("RecentAlgorithm", () => {
 
         it("works when not a member", () => {
             const room = mkRoom(cli, "!new:example.org");
-            room.getMyMembership.mockReturnValue(EffectiveMembership.Invite);
+            room.getMyMembership.mockReturnValue(KnownMembership.Invite);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
         });
     });
@@ -84,8 +84,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => KnownMembership.Join;
+            room2.getMyMembership = () => KnownMembership.Join;
 
             const evt = mkMessage({
                 room: room1.roomId,
@@ -112,8 +112,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => KnownMembership.Join;
+            room2.getMyMembership = () => KnownMembership.Join;
 
             const evt = mkMessage({
                 room: room1.roomId,
@@ -142,8 +142,8 @@ describe("RecentAlgorithm", () => {
             const room1 = new Room("room1", cli, "@bob:matrix.org");
             const room2 = new Room("room2", cli, "@bob:matrix.org");
 
-            room1.getMyMembership = () => "join";
-            room2.getMyMembership = () => "join";
+            room1.getMyMembership = () => KnownMembership.Join;
+            room2.getMyMembership = () => KnownMembership.Join;
 
             const { rootEvent, events: events1 } = mkThread({
                 room: room1,

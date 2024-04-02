@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import * as localRoomModule from "../../src/utils/local-room";
@@ -36,7 +37,7 @@ describe("local-room", () => {
     beforeEach(() => {
         client = createTestClient();
         room1 = new Room("!room1:example.com", client, userId1);
-        room1.getMyMembership = () => "join";
+        room1.getMyMembership = () => KnownMembership.Join;
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", client, "@test:example.com");
         mocked(client.getRoom).mockImplementation((roomId: string) => {
             if (roomId === localRoom.roomId) {

@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import DMRoomMap from "../../src/utils/DMRoomMap";
@@ -86,7 +87,7 @@ describe("direct-messages", () => {
         });
 
         room1 = new Room("!room1:example.com", mockClient, userId1);
-        room1.getMyMembership = () => "join";
+        room1.getMyMembership = () => KnownMembership.Join;
 
         localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test", mockClient, userId1);
 

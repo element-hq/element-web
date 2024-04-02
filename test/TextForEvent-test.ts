@@ -23,6 +23,7 @@ import {
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
@@ -418,7 +419,7 @@ describe("TextForEvent", () => {
         });
 
         it("returns correct message for redacted poll start", () => {
-            pollEvent.makeRedacted(pollEvent);
+            pollEvent.makeRedacted(pollEvent, new Room(pollEvent.getRoomId()!, mockClient, mockClient.getSafeUserId()));
 
             expect(textForEvent(pollEvent, mockClient)).toEqual("@a: Message deleted");
         });
@@ -444,7 +445,10 @@ describe("TextForEvent", () => {
         });
 
         it("returns correct message for redacted message", () => {
-            messageEvent.makeRedacted(messageEvent);
+            messageEvent.makeRedacted(
+                messageEvent,
+                new Room(messageEvent.getRoomId()!, mockClient, mockClient.getSafeUserId()),
+            );
 
             expect(textForEvent(messageEvent, mockClient)).toEqual("@a: Message deleted");
         });
@@ -504,12 +508,12 @@ describe("TextForEvent", () => {
                         type: "m.room.member",
                         sender: "@a:foo",
                         content: {
-                            membership: "join",
+                            membership: KnownMembership.Join,
                             avatar_url: "b",
                             displayname: "Bob",
                         },
                         prev_content: {
-                            membership: "join",
+                            membership: KnownMembership.Join,
                             avatar_url: "a",
                             displayname: "Andy",
                         },

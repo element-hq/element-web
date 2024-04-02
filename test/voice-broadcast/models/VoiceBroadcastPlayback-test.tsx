@@ -454,7 +454,7 @@ describe("VoiceBroadcastPlayback", () => {
 
             describe("and the info event is deleted", () => {
                 beforeEach(() => {
-                    infoEvent.makeRedacted(new MatrixEvent({}));
+                    infoEvent.makeRedacted(new MatrixEvent({}), room);
                 });
 
                 it("should stop and destroy the playback", () => {

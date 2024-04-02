@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, getByRole } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import {
     MatrixClient,
@@ -34,8 +34,9 @@ import { _t } from "../../../src/languageHandler";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { RoomPermalinkCreator } from "../../../src/utils/permalinks/Permalinks";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
-import { getRoomContext, mockPlatformPeg, stubClient } from "../../test-utils";
+import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
+import { IRoomState } from "../../../src/components/structures/RoomView";
 
 jest.mock("../../../src/utils/Feedback");
 
@@ -48,6 +49,7 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
+                { wrapper: TooltipProvider },
             );
             expect(asFragment()).toMatchSnapshot();
         });
@@ -57,6 +59,18 @@ describe("ThreadPanel", () => {
                 <ThreadPanelHeader
                     empty={false}
                     filterOption={ThreadFilterType.My}
+                    setFilterOption={() => undefined}
+                />,
+                { wrapper: TooltipProvider },
+            );
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("matches snapshot when no threads", () => {
+            const { asFragment } = render(
+                <ThreadPanelHeader
+                    empty={true}
+                    filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
                 { wrapper: TooltipProvider },
@@ -97,6 +111,50 @@ describe("ThreadPanel", () => {
                 `${_t("threads|all_threads")}${_t("threads|all_threads_description")}`,
             );
             expect(foundButton).toMatchSnapshot();
+        });
+
+        it("sends an unthreaded read receipt when the Mark All Threads Read button is clicked", async () => {
+            const mockClient = createTestClient();
+            const mockEvent = {} as MatrixEvent;
+            const mockRoom = mkRoom(mockClient, "!roomId:example.org");
+            mockRoom.getLastLiveEvent.mockReturnValue(mockEvent);
+            const roomContextObject = {
+                room: mockRoom,
+            } as unknown as IRoomState;
+            const { container } = render(
+                <RoomContext.Provider value={roomContextObject}>
+                    <MatrixClientContext.Provider value={mockClient}>
+                        <TooltipProvider>
+                            <ThreadPanelHeader
+                                empty={false}
+                                filterOption={ThreadFilterType.All}
+                                setFilterOption={() => undefined}
+                            />
+                        </TooltipProvider>
+                    </MatrixClientContext.Provider>
+                </RoomContext.Provider>,
+            );
+            fireEvent.click(getByRole(container, "button", { name: "Mark all as read" }));
+            await waitFor(() =>
+                expect(mockClient.sendReadReceipt).toHaveBeenCalledWith(mockEvent, expect.anything(), true),
+            );
+        });
+
+        it("doesn't send a receipt if no room is in context", async () => {
+            const mockClient = createTestClient();
+            const { container } = render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <TooltipProvider>
+                        <ThreadPanelHeader
+                            empty={false}
+                            filterOption={ThreadFilterType.All}
+                            setFilterOption={() => undefined}
+                        />
+                    </TooltipProvider>
+                </MatrixClientContext.Provider>,
+            );
+            fireEvent.click(getByRole(container, "button", { name: "Mark all as read" }));
+            await waitFor(() => expect(mockClient.sendReadReceipt).not.toHaveBeenCalled());
         });
     });
 

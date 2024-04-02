@@ -18,20 +18,23 @@ import {
     ConditionKind,
     EventType,
     IPushRule,
+    JoinRule,
     MatrixEvent,
     PendingEventOrdering,
     PushRuleActionName,
     Room,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { mocked } from "jest-mock";
 
 import defaultDispatcher, { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore, { CallbackFn } from "../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../src/stores/room-list/algorithms/models";
-import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../src/stores/room-list/models";
+import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause } from "../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { flushPromises, stubClient, upsertRoomStateEvents } from "../../test-utils";
+import { flushPromises, stubClient, upsertRoomStateEvents, mkRoom } from "../../test-utils";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../test-utils/pushRules";
 
 describe("RoomListStore", () => {
@@ -123,8 +126,8 @@ describe("RoomListStore", () => {
         // When we tell it we joined a new room that has an old room as
         // predecessor in the create event
         const payload = {
-            oldMembership: "invite",
-            membership: "join",
+            oldMembership: KnownMembership.Invite,
+            membership: KnownMembership.Join,
             room: roomWithCreatePredecessor,
         };
         store.onDispatchMyMembership(payload);
@@ -142,8 +145,8 @@ describe("RoomListStore", () => {
 
         // When we tell it we joined a new room with no predecessor
         const payload = {
-            oldMembership: "invite",
-            membership: "join",
+            oldMembership: KnownMembership.Invite,
+            membership: KnownMembership.Join,
             room: roomNoPredecessor,
         };
         store.onDispatchMyMembership(payload);
@@ -159,9 +162,9 @@ describe("RoomListStore", () => {
         const room1 = new Room("!r1:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
         const room2 = new Room("!r2:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
         const room3 = new Room("!r3:e.com", client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
-        room1.updateMyMembership("join");
-        room2.updateMyMembership("join");
-        room3.updateMyMembership("join");
+        room1.updateMyMembership(KnownMembership.Join);
+        room2.updateMyMembership(KnownMembership.Join);
+        room3.updateMyMembership(KnownMembership.Join);
         DMRoomMap.makeShared(client);
         const { store } = createStore();
         client.getVisibleRooms = jest.fn().mockReturnValue([room1, room2, room3]);
@@ -259,8 +262,8 @@ describe("RoomListStore", () => {
             // When we tell it we joined a new room that has an old room as
             // predecessor in the create event
             const payload = {
-                oldMembership: "invite",
-                membership: "join",
+                oldMembership: KnownMembership.Invite,
+                membership: KnownMembership.Join,
                 room: roomWithPredecessorEvent,
             };
             store.onDispatchMyMembership(payload);
@@ -350,6 +353,52 @@ describe("RoomListStore", () => {
                 expect(algorithmSpy).toHaveBeenCalledTimes(1);
                 expect(algorithmSpy).toHaveBeenCalledWith(normalRoom, RoomUpdateCause.PossibleMuteChange);
             });
+        });
+    });
+
+    describe("Correctly tags rooms", () => {
+        it("renders Public and Knock rooms in Conferences section", () => {
+            const videoRoomPrivate = "!videoRoomPrivate_server";
+            const videoRoomPublic = "!videoRoomPublic_server";
+            const videoRoomKnock = "!videoRoomKnock_server";
+
+            const rooms: Room[] = [];
+            RoomListStore.instance;
+            mkRoom(client, videoRoomPrivate, rooms);
+            mkRoom(client, videoRoomPublic, rooms);
+            mkRoom(client, videoRoomKnock, rooms);
+
+            mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
+            mocked(client).getRooms.mockImplementation(() => rooms);
+
+            const videoRoomKnockRoom = client.getRoom(videoRoomKnock);
+            (videoRoomKnockRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Knock);
+
+            const videoRoomPrivateRoom = client.getRoom(videoRoomPrivate);
+            (videoRoomPrivateRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Invite);
+
+            const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
+            (videoRoomPublicRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Public);
+
+            [videoRoomPrivateRoom, videoRoomPublicRoom, videoRoomKnockRoom].forEach((room) => {
+                (room!.isCallRoom as jest.Mock).mockReturnValue(true);
+            });
+
+            expect(
+                RoomListStore.instance
+                    .getTagsForRoom(client.getRoom(videoRoomPublic)!)
+                    .includes(DefaultTagID.Conference),
+            ).toBeTruthy();
+            expect(
+                RoomListStore.instance
+                    .getTagsForRoom(client.getRoom(videoRoomKnock)!)
+                    .includes(DefaultTagID.Conference),
+            ).toBeTruthy();
+            expect(
+                RoomListStore.instance
+                    .getTagsForRoom(client.getRoom(videoRoomPrivate)!)
+                    .includes(DefaultTagID.Conference),
+            ).toBeFalsy();
         });
     });
 });

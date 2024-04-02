@@ -283,8 +283,12 @@ export class Helpers {
     /**
      * Assert that the threads activity centre button has no indicator
      */
-    assertNoTacIndicator() {
-        return expect(this.getTacButton()).toMatchScreenshot("tac-no-indicator.png");
+    async assertNoTacIndicator() {
+        // Assert by checkng neither of the known indicators are visible first. This will wait
+        // if it takes a little time to disappear, but the screenshot comparison won't.
+        await expect(this.getTacButton().locator("[data-indicator='success']")).not.toBeVisible();
+        await expect(this.getTacButton().locator("[data-indicator='critical']")).not.toBeVisible();
+        await expect(this.getTacButton()).toMatchScreenshot("tac-no-indicator.png");
     }
 
     /**
@@ -374,6 +378,13 @@ export class Helpers {
      */
     expandSpacePanel() {
         return this.page.getByRole("button", { name: "Expand" }).click();
+    }
+
+    /**
+     * Clicks the button to mark all threads as read in the current room
+     */
+    clickMarkAllThreadsRead() {
+        return this.page.getByLabel("Mark all as read").click();
     }
 }
 

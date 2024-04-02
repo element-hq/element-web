@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { shouldDisplayAsBeaconTile } from "../../../src/utils/beacon/timeline";
-import { makeBeaconInfoEvent } from "../../test-utils";
+import { makeBeaconInfoEvent, stubClient } from "../../test-utils";
 
 describe("shouldDisplayAsBeaconTile", () => {
     const userId = "@user:server";
@@ -26,7 +26,7 @@ describe("shouldDisplayAsBeaconTile", () => {
     const notLiveBeacon = makeBeaconInfoEvent(userId, roomId, { isLive: false });
     const memberEvent = new MatrixEvent({ type: EventType.RoomMember });
     const redactedBeacon = makeBeaconInfoEvent(userId, roomId, { isLive: false });
-    redactedBeacon.makeRedacted(redactedBeacon);
+    redactedBeacon.makeRedacted(redactedBeacon, new Room(roomId, stubClient(), userId));
 
     it("returns true for a beacon with live property set to true", () => {
         expect(shouldDisplayAsBeaconTile(liveBeacon)).toBe(true);

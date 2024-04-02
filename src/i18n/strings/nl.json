@@ -221,7 +221,6 @@
             "approve_access_warning": "Door de toegang voor dit apparaat goed te keuren, heeft het volledige toegang tot jouw account.",
             "completing_setup": "De configuratie van je nieuwe apparaat voltooien",
             "confirm_code_match": "Controleer of de onderstaande code overeenkomt met je andere apparaat:",
-            "devices_connected": "Verbonden apparaten",
             "error_device_already_signed_in": "Het andere apparaat is al aangemeld.",
             "error_device_not_signed_in": "Het andere apparaat is niet ingelogd.",
             "error_device_unsupported": "Koppelen met dit apparaat wordt niet ondersteund.",
@@ -231,10 +230,8 @@
             "error_request_cancelled": "Het verzoek is geannuleerd.",
             "error_request_declined": "Het verzoek is afgewezen op het andere apparaat.",
             "error_unexpected": "Er is een onverwachte fout opgetreden.",
-            "review_and_approve": "Controleer en keur de aanmelding goed",
             "scan_code_instruction": "Scan de onderstaande QR-code met je apparaat dat is uitgelogd.",
             "sign_in_new_device": "Aanmelden nieuw apparaat",
-            "start_at_sign_in_screen": "Begin bij het inlogscherm",
             "waiting_for_device": "Wachten op apparaat om in te loggen"
         },
         "register_action": "Registreren",
@@ -630,7 +627,6 @@
         "methods": "Methoden",
         "no_verification_requests_found": "Geen verificatieverzoeken gevonden",
         "number_of_users": "Aantal personen",
-        "observe_only": "Alleen observeren",
         "original_event_source": "Originele gebeurtenisbron",
         "phase": "Fase",
         "phase_cancelled": "Geannuleerd",
@@ -638,7 +634,6 @@
         "phase_requested": "Aangevraagd",
         "phase_started": "Begonnen",
         "phase_transaction": "Transactie",
-        "requester": "Aanvrager",
         "room_id": "Kamer ID: %(roomId)s",
         "save_setting_values": "Instelling waardes opslaan",
         "send_custom_account_data_event": "Aangepaste accountgegevens gebeurtenis versturen",
@@ -1257,14 +1252,6 @@
         "view_rules": "Bekijk regels"
     },
     "language_dropdown_label": "Taalselectie",
-    "lazy_loading": {
-        "disabled_action": "Cache wissen en hersynchroniseren",
-        "disabled_description1": "Je hebt voorheen %(brand)s op %(host)s gebruikt met lui laden van leden ingeschakeld. In deze versie is lui laden uitgeschakeld. De lokale cache is niet compatibel tussen deze twee instellingen, zodat %(brand)s je account moet hersynchroniseren.",
-        "disabled_description2": "Indien de andere versie van %(brand)s nog open staat in een ander tabblad kan je dat beter sluiten, want het geeft problemen als %(brand)s op dezelfde host gelijktijdig met lui laden ingeschakeld en uitgeschakeld draait.",
-        "disabled_title": "Incompatibele lokale cache",
-        "resync_description": "%(brand)s verbruikt nu 3-5x minder geheugen, door informatie over andere personen enkel te laden wanneer nodig. Even geduld, we synchroniseren met de server!",
-        "resync_title": "%(brand)s wordt bijgewerkt"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Je bent de enige persoon hier. Als je weggaat, zal niemand in de toekomst kunnen toetreden, jij ook niet.",
         "leave_room_question": "Weet je zeker dat je de kamer ‘%(roomName)s’ wil verlaten?",

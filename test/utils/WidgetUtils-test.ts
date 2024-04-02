@@ -19,6 +19,15 @@ import WidgetUtils from "../../src/utils/WidgetUtils";
 import { mockPlatformPeg } from "../test-utils";
 
 describe("getLocalJitsiWrapperUrl", () => {
+    beforeEach(() => {
+        Object.defineProperty(window, "location", {
+            value: {
+                origin: "https://app.element.io",
+                pathname: "",
+            },
+        });
+    });
+
     it("should generate jitsi URL (for defaults)", () => {
         mockPlatformPeg();
 

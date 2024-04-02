@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import React from "react";
-import { verificationMethods } from "matrix-js-sdk/src/crypto";
-import { SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import {
+    ShowQrCodeCallbacks,
+    ShowSasCallbacks,
     VerificationPhase as Phase,
     VerificationRequest,
     VerificationRequestEvent,
+    VerifierEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { RoomMember, Device, User } from "matrix-js-sdk/src/matrix";
+import { Device, RoomMember, User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ShowQrCodeCallbacks, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
+import { VerificationMethod } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
@@ -85,8 +86,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private renderQRPhase(): JSX.Element {
         const { member, request } = this.props;
-        const showSAS: boolean = request.otherPartySupportsMethod(verificationMethods.SAS);
-        const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
+        const showSAS: boolean = request.otherPartySupportsMethod(VerificationMethod.Sas);
+        const showQR: boolean = request.otherPartySupportsMethod(VerificationMethod.ScanQrCode);
         const brand = SdkConfig.get().brand;
 
         const noCommonMethodError: JSX.Element | null =
@@ -366,9 +367,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 return this.renderQRPhase();
             case Phase.Started:
                 switch (request.chosenMethod) {
-                    case verificationMethods.RECIPROCATE_QR_CODE:
+                    case VerificationMethod.Reciprocate:
                         return this.renderQRReciprocatePhase();
-                    case verificationMethods.SAS: {
+                    case VerificationMethod.Sas: {
                         const emojis = this.state.sasEvent ? (
                             <VerificationShowSas
                                 displayName={displayName}
@@ -398,7 +399,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private startSAS = async (): Promise<void> => {
         this.setState({ emojiButtonClicked: true });
-        await this.props.request.startVerification(verificationMethods.SAS);
+        await this.props.request.startVerification(VerificationMethod.Sas);
     };
 
     private onSasMatchesClick = (): void => {

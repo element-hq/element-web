@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus, IEventRelation } from "matrix-js-sdk/src/matrix";
+import { EventStatus, IEventRelation, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { IRoomState } from "../../../../../../src/components/structures/RoomView";
 import { editMessage, sendMessage } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/message";
@@ -272,7 +272,10 @@ describe("message", () => {
             it("returns undefined when the command is not successful", async () => {
                 // When
                 const validCommand = "/spoiler";
-                jest.spyOn(Commands, "runSlashCommand").mockResolvedValueOnce([{ content: "mock content" }, false]);
+                jest.spyOn(Commands, "runSlashCommand").mockResolvedValueOnce([
+                    { body: "mock content", msgtype: MsgType.Text },
+                    false,
+                ]);
 
                 const result = await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,

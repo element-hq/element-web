@@ -26,6 +26,7 @@ import {
     M_POLL_START,
     M_POLL_END,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
@@ -122,7 +123,7 @@ function textForMemberEvent(
     const reason = content.reason;
 
     switch (content.membership) {
-        case "invite": {
+        case KnownMembership.Invite: {
             const threePidContent = content.third_party_invite;
             if (threePidContent) {
                 if (threePidContent.display_name) {
@@ -138,13 +139,13 @@ function textForMemberEvent(
                 return () => _t("timeline|m.room.member|invite", { senderName, targetName });
             }
         }
-        case "ban":
+        case KnownMembership.Ban:
             return () =>
                 reason
                     ? _t("timeline|m.room.member|ban_reason", { senderName, targetName, reason })
                     : _t("timeline|m.room.member|ban", { senderName, targetName });
-        case "join":
-            if (prevContent && prevContent.membership === "join") {
+        case KnownMembership.Join:
+            if (prevContent && prevContent.membership === KnownMembership.Join) {
                 const modDisplayname = getModification(prevContent.displayname, content.displayname);
                 const modAvatarUrl = getModification(prevContent.avatar_url, content.avatar_url);
 
@@ -194,9 +195,9 @@ function textForMemberEvent(
                 if (!ev.target) logger.warn("Join message has no target! -- " + ev.getContent().state_key);
                 return () => _t("timeline|m.room.member|join", { targetName });
             }
-        case "leave":
+        case KnownMembership.Leave:
             if (ev.getSender() === ev.getStateKey()) {
-                if (prevContent.membership === "invite") {
+                if (prevContent.membership === KnownMembership.Invite) {
                     return () => _t("timeline|m.room.member|reject_invite", { targetName });
                 } else {
                     return () =>
@@ -204,9 +205,9 @@ function textForMemberEvent(
                             ? _t("timeline|m.room.member|left_reason", { targetName, reason })
                             : _t("timeline|m.room.member|left", { targetName });
                 }
-            } else if (prevContent.membership === "ban") {
+            } else if (prevContent.membership === KnownMembership.Ban) {
                 return () => _t("timeline|m.room.member|unban", { senderName, targetName });
-            } else if (prevContent.membership === "invite") {
+            } else if (prevContent.membership === KnownMembership.Invite) {
                 return () =>
                     reason
                         ? _t("timeline|m.room.member|withdrew_invite_reason", {
@@ -215,7 +216,7 @@ function textForMemberEvent(
                               reason,
                           })
                         : _t("timeline|m.room.member|withdrew_invite", { senderName, targetName });
-            } else if (prevContent.membership === "join") {
+            } else if (prevContent.membership === KnownMembership.Join) {
                 return () =>
                     reason
                         ? _t("timeline|m.room.member|kick_reason", {

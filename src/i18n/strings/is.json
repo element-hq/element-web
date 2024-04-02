@@ -219,7 +219,6 @@
         "phone_optional_label": "Sími (valfrjálst)",
         "qr_code_login": {
             "error_invalid_scanned_code": "Skannaði kóðinn er ógildur.",
-            "review_and_approve": "Yfirfarðu og samþykktu innskráninguna",
             "sign_in_new_device": "Skrá inn nýtt tæki",
             "waiting_for_device": "Bíð eftir að tækið skráist inn"
         },
@@ -630,14 +629,12 @@
         "methods": "Aðferðir",
         "no_verification_requests_found": "Engar staðfestingarbeiðnir fundust",
         "number_of_users": "Fjöldi notenda",
-        "observe_only": "Aðeins fylgjast með",
         "phase": "Fasi",
         "phase_cancelled": "Hætt við",
         "phase_ready": "Tilbúið",
         "phase_requested": "Umbeðið",
         "phase_started": "Hafið",
         "phase_transaction": "Færsluaðgerð",
-        "requester": "Beiðandi",
         "room_id": "Auðkenni spjallrásar: %(roomId)s",
         "save_setting_values": "Vista gildi valkosta",
         "send_custom_state_event": "Senda sérsniðinn stöðuatburð",
@@ -1154,6 +1151,7 @@
         "group_rooms": "Spjallrásir",
         "group_spaces": "Svæði",
         "group_themes": "Þemu",
+        "group_threads": "Spjallþræðir",
         "group_voip": "Tal og myndmerki",
         "group_widgets": "Viðmótshlutar",
         "html_topic": "Birta HTML-framsetningu umfjöllunarefnis spjallrása",
@@ -1212,11 +1210,6 @@
         "view_rules": "Skoða reglur"
     },
     "language_dropdown_label": "Fellilisti tungumála",
-    "lazy_loading": {
-        "disabled_action": "Hreinsa skyndiminni og endursamstilla",
-        "disabled_title": "Ósamhæft staðvært skyndiminni",
-        "resync_title": "Uppfæri %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Þú ert eini eintaklingurinn hérna. Ef þú ferð út, mun enginn framar geta tekið þátt, að þér meðtöldum.",
         "leave_room_question": "Ertu viss um að þú viljir yfirgefa spjallrásina '%(roomName)s'?",

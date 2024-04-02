@@ -17,10 +17,9 @@ limitations under the License.
 import EventEmitter from "events";
 import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
-import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { Device } from "matrix-js-sdk/src/matrix";
+import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
@@ -48,7 +47,7 @@ export class SetupEncryptionStore extends EventEmitter {
     // ID of the key that the secrets we want are encrypted with
     public keyId: string | null = null;
     // Descriptor of the key that the secrets we want are encrypted with
-    public keyInfo: ISecretStorageKeyInfo | null = null;
+    public keyInfo: SecretStorage.SecretStorageKeyDescription | null = null;
     public hasDevicesToVerifyAgainst?: boolean;
 
     public static sharedInstance(): SetupEncryptionStore {

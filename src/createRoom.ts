@@ -347,15 +347,13 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 await JitsiCall.create(await room);
 
                 // Reset our power level back to admin so that the widget becomes immutable
-                const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
-                await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
+                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
                 await ElementCall.create(await room);
 
                 // Reset our power level back to admin so that the call becomes immutable
-                const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
-                await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
+                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             }
         })
         .then(

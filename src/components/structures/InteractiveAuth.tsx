@@ -18,7 +18,7 @@ import React, { createRef } from "react";
 import {
     AuthType,
     IAuthData,
-    IAuthDict,
+    AuthDict,
     IInputs,
     InteractiveAuth,
     IStageStatus,
@@ -64,7 +64,7 @@ export interface InteractiveAuthProps<T> {
     continueText?: string;
     continueKind?: ContinueKind;
     // callback
-    makeRequest(auth: IAuthDict | null): Promise<T>;
+    makeRequest(auth: AuthDict | null): Promise<T>;
     // callback called when the auth process has finished,
     // successfully or unsuccessfully.
     // @param {boolean} status True if the operation requiring
@@ -213,7 +213,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
         );
     };
 
-    private requestCallback = (auth: IAuthDict | null, background: boolean): Promise<T> => {
+    private requestCallback = (auth: AuthDict | null, background: boolean): Promise<T> => {
         // This wrapper just exists because the js-sdk passes a second
         // 'busy' param for backwards compat. This throws the tests off
         // so discard it here.
@@ -246,7 +246,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
         this.stageComponent.current?.focus?.();
     }
 
-    private submitAuthDict = (authData: IAuthDict): void => {
+    private submitAuthDict = (authData: AuthDict): void => {
         this.authLogic.submitAuthDict(authData);
     };
 

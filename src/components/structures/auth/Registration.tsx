@@ -18,7 +18,7 @@ import {
     AuthType,
     createClient,
     IAuthData,
-    IAuthDict,
+    AuthDict,
     IInputs,
     MatrixError,
     IRegisterRequestParams,
@@ -478,7 +478,7 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     };
 
-    private makeRegisterRequest = (auth: IAuthDict | null): Promise<RegisterResponse> => {
+    private makeRegisterRequest = (auth: AuthDict | null): Promise<RegisterResponse> => {
         if (!this.state.matrixClient) throw new Error("Matrix client has not yet been loaded");
 
         const registerParams: IRegisterRequestParams = {

@@ -235,7 +235,6 @@
             "completing_setup": "Po plotësohet ujdisja e pajisjes tuaj të re",
             "confirm_code_match": "Kontrolloni se kodi më poshtë përkon me atë në pajisjen tuaj tjetër:",
             "connecting": "Po lidhet…",
-            "devices_connected": "Pajisje të lidhura",
             "error_device_already_signed_in": "Nga pajisja tjetër është bërë tashmë hyrja.",
             "error_device_not_signed_in": "Te pajisja tjetër s’është bërë hyrja.",
             "error_device_unsupported": "Lidhja me këtë pajisje nuk mbulohet.",
@@ -246,12 +245,10 @@
             "error_request_cancelled": "Kërkesa u anulua.",
             "error_request_declined": "Kërkesa u hodh poshtë në pajisjen tjetër.",
             "error_unexpected": "Ndodhi një gabim të papritur.",
-            "review_and_approve": "Shqyrtoni dhe miratojeni hyrjen",
             "scan_code_instruction": "Skanoni kodin QR më poshtë me pajisjen ku është bërë dalja.",
             "scan_qr_code": "Skanoni kodin QR",
             "select_qr_code": "Përzgjidhni “%(scanQRCode)s”",
             "sign_in_new_device": "Hyni në pajisje të re",
-            "start_at_sign_in_screen": "Filloja në skenën e hyrjes",
             "waiting_for_device": "Po pritet që të bëhet hyrja te pajisja"
         },
         "register_action": "Krijoni Llogari",
@@ -706,7 +703,6 @@
         "notification_state": "Gjendje njoftimi është <strong>%(notificationState)s</strong>",
         "notifications_debug": "Diagnostikim njoftimesh",
         "number_of_users": "Numër përdoruesish",
-        "observe_only": "Vetëm vëzhgo",
         "original_event_source": "Burim i veprimtarisë origjinale",
         "phase": "Fazë",
         "phase_cancelled": "Anuluar",
@@ -714,7 +710,6 @@
         "phase_requested": "E kërkuar",
         "phase_started": "Nisur më",
         "phase_transaction": "Transaksion",
-        "requester": "Kërkues",
         "room_encrypted": "Dhoma është <strong>e fshehtëzuar ✅</strong>",
         "room_id": "ID Dhome: %(roomId)s",
         "room_not_encrypted": "Dhoma është <strong>e pafshehtëzuar 🚨</strong>",
@@ -1410,14 +1405,6 @@
         "view_rules": "Shihni rregulla"
     },
     "language_dropdown_label": "Menu Hapmbyll Gjuhësh",
-    "lazy_loading": {
-        "disabled_action": "Spastro fshehtinën dhe rinjëkohëso",
-        "disabled_description1": "Më parë përdornit %(brand)s në %(host)s me <em>lazy loading</em> anëtarësh të aktivizuar. Në këtë version <em>lazy loading</em> është çaktivizuar. Ngaqë fshehtina vendore s’është e përputhshme mes këtyre dy rregullimeve, %(brand)s-i lyp të rinjëkohësohet llogaria juaj.",
-        "disabled_description2": "Nëse versioni tjetër i %(brand)s-it është ende i hapur në një skedë tjetër, ju lutemi, mbylleni, ngaqë përdorimi njëkohësisht i %(brand)s-it në të njëjtën strehë, në njërën anë me <em>lazy loading</em> të aktivizuar dhe në anën tjetër të çaktivizuar do të shkaktojë probleme.",
-        "disabled_title": "Fshehtinë vendore e papërputhshme",
-        "resync_description": "%(brand)s-i tani përdor 3 deri 5 herë më pak kujtesë, duke ngarkuar të dhëna mbi përdorues të tjerë vetëm kur duhen. Ju lutemi, prisni, teksa njëkohësojmë të dhënat me shërbyesin!",
-        "resync_title": "%(brand)s-i po përditësohet"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Jeni i vetmi person këtu. Nëse e braktisni, askush s’do të jetë në gjendje të hyjë në të ardhmen, përfshi ju.",
         "leave_room_question": "Jeni i sigurt se doni të dilni nga dhoma '%(roomName)s'?",

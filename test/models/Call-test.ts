@@ -26,6 +26,7 @@ import {
     PendingEventOrdering,
     IContent,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
@@ -103,7 +104,7 @@ const setUpClientRoomAndStores = (): {
         }
     });
 
-    jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+    jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
 
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
     client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
@@ -388,7 +389,7 @@ describe("JitsiCall", () => {
         it("disconnects when we leave the room", async () => {
             await call.start();
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, "leave");
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
@@ -403,7 +404,7 @@ describe("JitsiCall", () => {
         it("remains connected if we stay in the room", async () => {
             await call.start();
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, "join");
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Join);
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
@@ -919,14 +920,14 @@ describe("ElementCall", () => {
         it("disconnects when we leave the room", async () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, "leave");
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
         });
 
         it("remains connected if we stay in the room", async () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
-            room.emit(RoomEvent.MyMembership, room, "join");
+            room.emit(RoomEvent.MyMembership, room, KnownMembership.Join);
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
@@ -1038,7 +1039,7 @@ describe("ElementCall", () => {
             call.destroy();
             const addWidgetSpy = jest.spyOn(WidgetStore.instance, "addVirtualWidget");
             // If a room is not encrypted we will never add the perParticipantE2EE flag.
-            client.isRoomEncrypted.mockReturnValue(true);
+            const roomSpy = jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
 
             // should create call with perParticipantE2EE flag
             ElementCall.create(room);
@@ -1048,8 +1049,7 @@ describe("ElementCall", () => {
             enabledSettings.add("feature_disable_call_per_sender_encryption");
             expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(false);
             enabledSettings.delete("feature_disable_call_per_sender_encryption");
-
-            client.isRoomEncrypted.mockClear();
+            roomSpy.mockRestore();
             addWidgetSpy.mockRestore();
         });
 

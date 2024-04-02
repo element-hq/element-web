@@ -22,6 +22,7 @@ import {
     LocationAssetType,
     M_ASSET,
     M_POLL_END,
+    Room,
 } from "matrix-js-sdk/src/matrix";
 
 import {
@@ -31,7 +32,7 @@ import {
     stripHTMLReply,
     stripPlainReply,
 } from "../src/utils/Reply";
-import { makePollStartEvent, mkEvent } from "./test-utils";
+import { makePollStartEvent, mkEvent, stubClient } from "./test-utils";
 import { RoomPermalinkCreator } from "../src/utils/permalinks/Permalinks";
 
 function makeTestEvent(type: string, content: IContent): MatrixEvent {
@@ -66,7 +67,7 @@ describe("Reply", () => {
                 room: "!room1:server",
                 content: {},
             });
-            event.makeRedacted(event);
+            event.makeRedacted(event, new Room(event.getRoomId()!, stubClient(), event.getSender()!));
 
             expect(getParentEventId(event)).toBeUndefined();
         });
@@ -182,7 +183,7 @@ But this is not
                 room: "!room1:server",
                 content: {},
             });
-            event.makeRedacted(event);
+            event.makeRedacted(event, new Room(event.getRoomId()!, stubClient(), event.getSender()!));
 
             expect(shouldDisplayReply(event)).toBe(false);
         });

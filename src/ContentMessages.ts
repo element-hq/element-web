@@ -19,7 +19,6 @@ limitations under the License.
 import {
     MatrixClient,
     MsgType,
-    IImageInfo,
     HTTPError,
     IEventRelation,
     ISendEventResponse,
@@ -390,7 +389,7 @@ export default class ContentMessages {
         url: string,
         roomId: string,
         threadId: string | null,
-        info: IImageInfo,
+        info: ImageInfo,
         text: string,
         matrixClient: MatrixClient,
     ): Promise<ISendEventResponse> {
@@ -623,7 +622,7 @@ export default class ContentMessages {
             if (upload.cancelled) throw new UploadCanceledError();
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
 
-            const response = await matrixClient.sendMessage(roomId, threadId ?? null, content);
+            const response = await matrixClient.sendMessage(roomId, threadId ?? null, content as MediaEventContent);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 sendRoundTripMetric(matrixClient, roomId, response.event_id);

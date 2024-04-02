@@ -12,7 +12,7 @@ exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning w
         class="mx_RoomStatusBar_unsentBadge"
       >
         <div
-          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char"
+          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char cpd-theme-light"
         >
           <span
             class="mx_NotificationBadge_count"
@@ -81,7 +81,7 @@ exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning w
         class="mx_RoomStatusBar_unsentBadge"
       >
         <div
-          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char"
+          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char cpd-theme-light"
         >
           <span
             class="mx_NotificationBadge_count"

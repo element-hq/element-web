@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -102,7 +103,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     if (!room) {
                         return { roomId, name: roomId } as Room;
                     }
-                    if (room.getMyMembership() !== "join" || !room.isSpaceRoom()) {
+                    if (room.getMyMembership() !== KnownMembership.Join || !room.isSpaceRoom()) {
                         return room;
                     }
                 }),

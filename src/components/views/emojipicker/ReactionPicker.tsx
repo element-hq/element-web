@@ -108,7 +108,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
             MatrixClientPeg.safeGet().sendEvent(this.props.mxEvent.getRoomId()!, EventType.Reaction, {
                 "m.relates_to": {
                     rel_type: RelationType.Annotation,
-                    event_id: this.props.mxEvent.getId(),
+                    event_id: this.props.mxEvent.getId()!,
                     key: reaction,
                 },
             });

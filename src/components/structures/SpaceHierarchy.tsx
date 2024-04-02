@@ -46,7 +46,7 @@ import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, SpaceChildEventContent } from "matrix-js-sdk/src/types";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -113,7 +113,7 @@ const Tile: React.FC<ITileProps> = ({
     const cli = useContext(MatrixClientContext);
     const joinedRoom = useTypedEventEmitterState(cli, ClientEvent.Room, () => {
         const cliRoom = cli?.getRoom(room.room_id);
-        return cliRoom?.getMyMembership() === "join" ? cliRoom : undefined;
+        return cliRoom?.getMyMembership() === KnownMembership.Join ? cliRoom : undefined;
     });
     const joinedRoomName = useTypedEventEmitterState(joinedRoom, RoomEvent.Name, (room) => room?.name);
     const name =
@@ -829,7 +829,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                     content = <Spinner />;
                 } else {
                     const hasPermissions =
-                        space?.getMyMembership() === "join" &&
+                        space?.getMyMembership() === KnownMembership.Join &&
                         space.currentState.maySendStateEvent(EventType.SpaceChild, cli.getSafeUserId());
 
                     const root = hierarchy.roomMap.get(space.roomId);
@@ -847,7 +847,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                                     onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
                                     onJoinRoomClick={async (roomId, parents) => {
                                         for (const parent of parents) {
-                                            if (cli.getRoom(parent)?.getMyMembership() !== "join") {
+                                            if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
                                                 await joinRoom(cli, hierarchy, parent);
                                             }
                                         }

@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { IImageInfo, ISendEventResponse, MatrixClient, RelationType, UploadResponse } from "matrix-js-sdk/src/matrix";
+import { ISendEventResponse, MatrixClient, RelationType, UploadResponse } from "matrix-js-sdk/src/matrix";
+import { ImageInfo } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import encrypt, { IEncryptedFile } from "matrix-encrypt-attachment";
 
@@ -43,7 +44,7 @@ const createElement = document.createElement.bind(document);
 describe("ContentMessages", () => {
     const stickerUrl = "https://example.com/sticker";
     const roomId = "!room:example.com";
-    const imageInfo = {} as unknown as IImageInfo;
+    const imageInfo = {} as unknown as ImageInfo;
     const text = "test sticker";
     let client: MatrixClient;
     let contentMessages: ContentMessages;

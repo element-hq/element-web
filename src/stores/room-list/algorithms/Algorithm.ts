@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -172,7 +173,7 @@ export class Algorithm extends EventEmitter {
     }
 
     private doUpdateStickyRoom(val: Room | null): void {
-        if (val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
+        if (val?.isSpaceRoom() && val.getMyMembership() !== KnownMembership.Invite) {
             // no-op sticky rooms for spaces - they're effectively virtual rooms
             val = null;
         }
@@ -575,6 +576,9 @@ export class Algorithm extends EventEmitter {
             if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
                 tags = [DefaultTagID.DM];
             }
+        }
+        if (room.isCallRoom() && (room.getJoinRule() === JoinRule.Public || room.getJoinRule() === JoinRule.Knock)) {
+            tags.push(DefaultTagID.Conference);
         }
 
         return tags;

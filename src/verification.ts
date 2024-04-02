@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { User, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { verificationMethods as VerificationMethods } from "matrix-js-sdk/src/crypto";
+import { VerificationMethod } from "matrix-js-sdk/src/types";
 import { CrossSigningKey, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
@@ -61,7 +61,7 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
                 const verificationRequestPromise = matrixClient.legacyDeviceVerification(
                     user.userId,
                     device.deviceId,
-                    VerificationMethods.SAS,
+                    VerificationMethod.Sas,
                 );
                 setRightPanel({ member: user, verificationRequestPromise });
             } else if (action === "legacy") {

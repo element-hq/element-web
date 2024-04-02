@@ -1534,7 +1534,8 @@ describe("<SessionManagerTab />", () => {
             // wait for versions call to settle
             await flushPromises();
 
-            expect(getByText("Sign in with QR code")).toBeTruthy();
+            expect(getByText("Link new device")).toBeTruthy();
+            expect(getByText("Show QR code")).toBeTruthy();
         });
 
         it("enters qr code login section when show QR code button clicked", async () => {

@@ -292,6 +292,7 @@ Response:
 */
 
 import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -357,7 +358,10 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     if (room) {
         // if they are already invited or joined we can resolve immediately.
         const member = room.getMember(userId);
-        if (member && ["join", "invite"].includes(member.membership!)) {
+        if (
+            member &&
+            ([KnownMembership.Join, KnownMembership.Invite] as Array<string | undefined>).includes(member.membership)
+        ) {
             sendResponse(event, {
                 success: true,
             });
@@ -608,15 +612,7 @@ async function setBotPower(
                 });
             }
         }
-        await client.setPowerLevel(
-            roomId,
-            userId,
-            level,
-            new MatrixEvent({
-                type: "m.room.power_levels",
-                content: powerLevels,
-            }),
-        );
+        await client.setPowerLevel(roomId, userId, level);
         return sendResponse(event, {
             success: true,
         });
@@ -669,7 +665,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    if (room.getMyMembership() !== "join") {
+    if (room.getMyMembership() !== KnownMembership.Join) {
         sendError(event, _t("scalar|error_membership"));
         return;
     }

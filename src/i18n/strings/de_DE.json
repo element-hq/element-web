@@ -1,5 +1,6 @@
 {
     "a11y": {
+        "emoji_picker": "Emoji-Auswahl",
         "jump_first_invite": "Zur ersten Einladung springen.",
         "n_unread_messages": {
             "other": "%(count)s ungelesene Nachrichten.",
@@ -244,7 +245,6 @@
             "completing_setup": "Schließe Anmeldung deines neuen Gerätes ab",
             "confirm_code_match": "Überprüfe, dass der unten angezeigte Code mit deinem anderen Gerät übereinstimmt:",
             "connecting": "Verbinde …",
-            "devices_connected": "Geräte verbunden",
             "error_device_already_signed_in": "Das andere Gerät ist bereits angemeldet.",
             "error_device_not_signed_in": "Das andere Gerät ist nicht angemeldet.",
             "error_device_unsupported": "Die Verbindung mit diesem Gerät wird nicht unterstützt.",
@@ -255,12 +255,10 @@
             "error_request_cancelled": "Die Anfrage wurde abgebrochen.",
             "error_request_declined": "Die Anfrage wurde auf dem anderen Gerät abgelehnt.",
             "error_unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
-            "review_and_approve": "Überprüfe und genehmige die Anmeldung",
             "scan_code_instruction": "Lese den folgenden QR-Code mit deinem nicht angemeldeten Gerät ein.",
             "scan_qr_code": "QR-Code einlesen",
             "select_qr_code": "Wähle „%(scanQRCode)s“",
             "sign_in_new_device": "Neues Gerät anmelden",
-            "start_at_sign_in_screen": "Beginne auf dem Anmeldebildschirm",
             "waiting_for_device": "Warte auf Anmeldung des Gerätes"
         },
         "register_action": "Konto erstellen",
@@ -736,7 +734,6 @@
         "notification_state": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug-Modus für Benachrichtigungen",
         "number_of_users": "Benutzeranzahl",
-        "observe_only": "Nur beobachten",
         "original_event_source": "Ursprüngliche Rohdaten",
         "phase": "Phase",
         "phase_cancelled": "Abgebrochen",
@@ -744,7 +741,6 @@
         "phase_requested": "Angefragt",
         "phase_started": "Gestartet",
         "phase_transaction": "Transaktion",
-        "requester": "Anforderer",
         "room_encrypted": "Raum ist <strong>verschlüsselt ✅</strong>",
         "room_id": "Raum-ID: %(roomId)s",
         "room_not_encrypted": "Raum ist <strong>nicht verschlüsselt 🚨</strong>",
@@ -1007,7 +1003,7 @@
             "verify_emoji_prompt": "Durch den Vergleich einzigartiger Emojis verifizieren.",
             "verify_emoji_prompt_qr": "Wenn du obigen Code nicht erfassen kannst, verifiziere stattdessen durch den Vergleich von Emojis.",
             "verify_later": "Später verifizieren",
-            "verify_reset_warning_1": "Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können un Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.",
+            "verify_reset_warning_1": "Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können und Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.",
             "verify_reset_warning_2": "Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast.",
             "verify_using_device": "Mit anderem Gerät verifizieren",
             "verify_using_key": "Mit Sicherheitsschlüssel verifizieren",
@@ -1055,7 +1051,7 @@
     "error_app_open_in_another_tab": "Wechsle zu einem anderen Tab um mit %(brand)s zu verbinden. Dieser Tab kann jetzt geschlossen werden.",
     "error_app_open_in_another_tab_title": "%(brand)s läuft bereits in einem anderen Tab.",
     "error_app_opened_in_another_window": "%(brand)s läuft bereit in einem anderen Fenster. Klicke \"%(label)s um %(brand)s hier zu nutzen und beende das andere Fenster.",
-    "error_database_closed_title": "Datenbank unerwartet geschlossen",
+    "error_database_closed_title": "%(brand)s funktioniert nicht mehr",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Der Link zum Raum konnte nicht kopiert werden.",
@@ -1359,7 +1355,7 @@
         "send_sticker": "Sticker senden",
         "shift": "Umschalt",
         "space": "Leertaste",
-        "switch_to_space": "Mit Nummer zu Space springen",
+        "switch_to_space": "Mit Nummer zu Leerzeichen springen",
         "toggle_hidden_events": "Sichtbarkeit versteckter Ereignisse umschalten",
         "toggle_microphone_mute": "Mikrofon an-/ausschalten",
         "toggle_right_panel": "Rechtes Panel ein-/ausblenden",
@@ -1405,6 +1401,7 @@
         "group_rooms": "Räume",
         "group_spaces": "Räume",
         "group_themes": "Themen",
+        "group_threads": "Themen",
         "group_voip": "Anrufe",
         "group_widgets": "Widgets",
         "hidebold": "Benachrichtigungspunkt ausblenden (nur Zähler zeigen)",
@@ -1493,14 +1490,6 @@
         "view_rules": "Regeln öffnen"
     },
     "language_dropdown_label": "Sprachauswahl",
-    "lazy_loading": {
-        "disabled_action": "Zwischenspeicher löschen und erneut synchronisieren",
-        "disabled_description1": "Du hast zuvor %(brand)s auf %(host)s ohne das verzögerte Laden von Mitgliedern genutzt. In dieser Version war das verzögerte Laden deaktiviert. Da die lokal zwischengespeicherten Daten zwischen diesen Einstellungen nicht kompatibel sind, muss %(brand)s dein Konto neu synchronisieren.",
-        "disabled_description2": "Wenn %(brand)s mit der alten Version in einem anderen Tab geöffnet ist, schließe dies bitte, da das parallele Nutzen von %(brand)s auf demselben Host mit aktivierten und deaktivierten verzögertem Laden, Probleme verursachen wird.",
-        "disabled_title": "Inkompatibler lokaler Zwischenspeicher",
-        "resync_description": "%(brand)s benutzt nun 3 bis 5 Mal weniger Arbeitsspeicher, indem Informationen über andere Nutzer erst bei Bedarf geladen werden. Bitte warte, während die Daten erneut mit dem Server abgeglichen werden!",
-        "resync_title": "Aktualisiere %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Du bist die einzige Person im Raum. Sobald du ihn verlässt, wird niemand mehr hineingelangen, auch du nicht.",
         "leave_room_question": "Bist du sicher, dass du den Raum „%(roomName)s“ verlassen möchtest?",
@@ -2304,7 +2293,7 @@
             "join_rule_upgrade_upgrading_room": "Raum wird aktualisiert",
             "public_without_alias_warning": "Um den Raum zu verlinken, füge bitte eine Adresse hinzu.",
             "publish_room": "Diesen Raum im Raumverzeichnis veröffentlichen.",
-            "publish_space": "Diesen Space im Raumerzeichnis veröffentlichen.",
+            "publish_space": "Diesen Space im Raumverzeichnis veröffentlichen.",
             "strict_encryption": "Niemals verschlüsselte Nachrichten von dieser Sitzung zu unverifizierten Sitzungen in diesem Raum senden",
             "title": "Sicherheit"
         },
@@ -3996,6 +3985,7 @@
             "extendedRepeat": "Wiederholungen wie \"abcabcabc\" sind fast so schnell zu erraten wie \"abc\"",
             "keyPattern": "Kurze Tastaturmuster sind einfach zu erraten",
             "namesByThemselves": "Namen und Familiennamen alleine sind einfach zu erraten",
+            "pwned": "Dein Passwort wurde durch eine Datenleck im Internet offengelegt.",
             "recentYears": "Kürzlich vergangene Jahre sind einfach zu raten",
             "sequences": "Sequenzen wie \"abc\" oder \"6543\" sind leicht zu raten",
             "similarToCommon": "Dies ist ähnlich zu einem oft genutzten Passwort",

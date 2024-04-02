@@ -14,7 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LoginWithQRSection .mx_AccessibleButton {
+.mx_LoginWithQRSection p {
+    margin-top: 0;
+    margin-bottom: $spacing-16;
+}
+
+.mx_LoginWithQRSection .mx_AccessibleButton svg {
     margin-right: $spacing-12;
 }
 
@@ -69,7 +74,6 @@ limitations under the License.
     }
 
     .mx_QRCode {
-        padding: $spacing-12 $spacing-40;
         margin: $spacing-28 0;
     }
 
@@ -89,7 +93,7 @@ limitations under the License.
 
     .mx_LoginWithQR_centreTitle {
         h1 {
-            text-align: centre;
+            text-align: center;
         }
     }
 
@@ -141,12 +145,26 @@ limitations under the License.
         }
     }
 
+    .mx_LoginWithQR_heading {
+        display: flex;
+        gap: $spacing-12;
+        align-items: center;
+    }
+
     .mx_LoginWithQR_BackButton {
-        height: $spacing-12;
-        margin-bottom: $spacing-24;
+        height: $spacing-28;
+        border-radius: $spacing-28;
+        padding: $spacing-4;
+        box-sizing: border-box;
+        background-color: var(--cpd-color-bg-subtle-secondary);
         svg {
             height: 100%;
         }
+    }
+
+    .mx_LoginWithQR_breadcrumbs {
+        font-size: $font-13px;
+        color: var(--cpd-color-text-secondary);
     }
 
     .mx_LoginWithQR_main {
@@ -156,7 +174,6 @@ limitations under the License.
     }
 
     .mx_QRCode {
-        border: 1px solid $quinary-content;
         border-radius: $spacing-8;
         display: flex;
         justify-content: center;

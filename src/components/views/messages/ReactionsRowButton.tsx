@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
@@ -26,6 +26,7 @@ import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
+
 export interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -62,10 +63,10 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         if (myReactionEvent) {
             this.context.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId()!);
         } else {
-            this.context.sendEvent(mxEvent.getRoomId()!, "m.reaction", {
+            this.context.sendEvent(mxEvent.getRoomId()!, EventType.Reaction, {
                 "m.relates_to": {
-                    rel_type: "m.annotation",
-                    event_id: mxEvent.getId(),
+                    rel_type: RelationType.Annotation,
+                    event_id: mxEvent.getId()!,
                     key: content,
                 },
             });

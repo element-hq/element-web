@@ -30,6 +30,7 @@ import {
 import { DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";
@@ -183,7 +184,7 @@ export function createMessageContent(
     relation: IEventRelation | undefined,
     permalinkCreator?: RoomPermalinkCreator,
     includeReplyLegacyFallback = true,
-): IContent {
+): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
@@ -195,7 +196,7 @@ export function createMessageContent(
 
     const body = textSerialize(model);
 
-    const content: IContent = {
+    const content: RoomMessageEventContent = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
         body: body,
     };
@@ -432,7 +433,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     MatrixClientPeg.safeGet().sendEvent(lastMessage.getRoomId()!, EventType.Reaction, {
                         "m.relates_to": {
                             rel_type: RelationType.Annotation,
-                            event_id: lastMessage.getId(),
+                            event_id: lastMessage.getId()!,
                             key: reaction,
                         },
                     });
@@ -475,7 +476,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
-        let content: IContent | null = null;
+        let content: RoomMessageEventContent | null = null;
 
         if (!containsEmote(model) && isSlashCommand(this.model)) {
             const [cmd, args, commandText] = getSlashCommand(this.model);

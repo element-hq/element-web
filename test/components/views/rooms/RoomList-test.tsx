@@ -16,10 +16,11 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { render, screen, within } from "@testing-library/react";
+import { cleanup, queryByRole, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
@@ -33,6 +34,9 @@ import { mkSpace, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
+import { ITagMap } from "../../../../src/stores/room-list/algorithms/models";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -52,16 +56,18 @@ describe("RoomList", () => {
 
     function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
         return (
-            <RoomList
-                onKeyDown={jest.fn()}
-                onFocus={jest.fn()}
-                onBlur={jest.fn()}
-                onResize={jest.fn()}
-                resizeNotifier={new ResizeNotifier()}
-                isMinimized={false}
-                activeSpace={MetaSpace.Home}
-                {...props}
-            />
+            <TooltipProvider>
+                <RoomList
+                    onKeyDown={jest.fn()}
+                    onFocus={jest.fn()}
+                    onBlur={jest.fn()}
+                    onResize={jest.fn()}
+                    resizeNotifier={new ResizeNotifier()}
+                    isMinimized={false}
+                    activeSpace={MetaSpace.Home}
+                    {...props}
+                />
+            </TooltipProvider>
         );
     }
 
@@ -204,6 +210,75 @@ describe("RoomList", () => {
                     action: Action.ViewRoom,
                     room_id: space1,
                 });
+            });
+        });
+
+        describe("when video meta space is active", () => {
+            const videoRoomPrivate = "!videoRoomPrivate_server";
+            const videoRoomPublic = "!videoRoomPublic_server";
+            const videoRoomKnock = "!videoRoomKnock_server";
+
+            beforeEach(async () => {
+                cleanup();
+                const rooms: Room[] = [];
+                RoomListStore.instance;
+                testUtils.mkRoom(client, videoRoomPrivate, rooms);
+                testUtils.mkRoom(client, videoRoomPublic, rooms);
+                testUtils.mkRoom(client, videoRoomKnock, rooms);
+
+                mocked(client).getRoom.mockImplementation(
+                    (roomId) => rooms.find((room) => room.roomId === roomId) || null,
+                );
+                mocked(client).getRooms.mockImplementation(() => rooms);
+
+                const videoRoomKnockRoom = client.getRoom(videoRoomKnock)!;
+                const videoRoomPrivateRoom = client.getRoom(videoRoomPrivate)!;
+                const videoRoomPublicRoom = client.getRoom(videoRoomPublic)!;
+
+                [videoRoomPrivateRoom, videoRoomPublicRoom, videoRoomKnockRoom].forEach((room) => {
+                    (room.isCallRoom as jest.Mock).mockReturnValue(true);
+                });
+
+                const roomLists: ITagMap = {};
+                roomLists[DefaultTagID.Conference] = [videoRoomKnockRoom, videoRoomPublicRoom];
+                roomLists[DefaultTagID.Untagged] = [videoRoomPrivateRoom];
+                jest.spyOn(RoomListStore.instance, "orderedLists", "get").mockReturnValue(roomLists);
+                await testUtils.setupAsyncStoreWithClient(store, client);
+
+                store.setActiveSpace(MetaSpace.VideoRooms);
+            });
+
+            it("renders Conferences and Room but no People section", () => {
+                const renderResult = render(getComponent({ activeSpace: MetaSpace.VideoRooms }));
+                const roomsEl = renderResult.getByRole("treeitem", { name: "Rooms" });
+                const conferenceEl = renderResult.getByRole("treeitem", { name: "Conferences" });
+
+                const noInvites = screen.queryByRole("treeitem", { name: "Invites" });
+                const noFavourites = screen.queryByRole("treeitem", { name: "Favourites" });
+                const noPeople = screen.queryByRole("treeitem", { name: "People" });
+                const noLowPriority = screen.queryByRole("treeitem", { name: "Low priority" });
+                const noHistorical = screen.queryByRole("treeitem", { name: "Historical" });
+
+                expect(roomsEl).toBeVisible();
+                expect(conferenceEl).toBeVisible();
+
+                expect(noInvites).toBeFalsy();
+                expect(noFavourites).toBeFalsy();
+                expect(noPeople).toBeFalsy();
+                expect(noLowPriority).toBeFalsy();
+                expect(noHistorical).toBeFalsy();
+            });
+            it("renders Public and Knock rooms in Conferences section", () => {
+                const renderResult = render(getComponent({ activeSpace: MetaSpace.VideoRooms }));
+                const conferenceList = renderResult.getByRole("group", { name: "Conferences" });
+                expect(queryByRole(conferenceList, "treeitem", { name: videoRoomPublic })).toBeVisible();
+                expect(queryByRole(conferenceList, "treeitem", { name: videoRoomKnock })).toBeVisible();
+                expect(queryByRole(conferenceList, "treeitem", { name: videoRoomPrivate })).toBeFalsy();
+
+                const roomsList = renderResult.getByRole("group", { name: "Rooms" });
+                expect(queryByRole(roomsList, "treeitem", { name: videoRoomPrivate })).toBeVisible();
+                expect(queryByRole(roomsList, "treeitem", { name: videoRoomPublic })).toBeFalsy();
+                expect(queryByRole(roomsList, "treeitem", { name: videoRoomKnock })).toBeFalsy();
             });
         });
     });

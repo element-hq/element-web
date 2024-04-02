@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { EventType, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SdkConfig from "../../src/SdkConfig";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -55,7 +56,7 @@ describe("MemberListStore", () => {
                 type: EventType.RoomMember,
                 state_key: alice,
                 content: {
-                    membership: "join",
+                    membership: KnownMembership.Join,
                 },
                 sender: alice,
                 room_id: roomId,
@@ -77,8 +78,8 @@ describe("MemberListStore", () => {
     });
 
     it("loads members in a room", async () => {
-        addMember(room, bob, "invite");
-        addMember(room, charlie, "leave");
+        addMember(room, bob, KnownMembership.Invite);
+        addMember(room, charlie, KnownMembership.Leave);
 
         const { invited, joined } = await store.loadMemberList(roomId);
         expect(invited).toEqual([room.getMember(bob)]);
@@ -92,8 +93,8 @@ describe("MemberListStore", () => {
     });
 
     it("sorts by power level", async () => {
-        addMember(room, bob, "join");
-        addMember(room, charlie, "join");
+        addMember(room, bob, KnownMembership.Join);
+        addMember(room, charlie, KnownMembership.Join);
         setPowerLevels(room, {
             users: {
                 [alice]: 100,
@@ -109,8 +110,8 @@ describe("MemberListStore", () => {
 
     it("sorts by name if power level is equal", async () => {
         const doris = "@doris:bar";
-        addMember(room, bob, "join");
-        addMember(room, charlie, "join");
+        addMember(room, bob, KnownMembership.Join);
+        addMember(room, charlie, KnownMembership.Join);
         setPowerLevels(room, {
             users_default: 10,
         });
@@ -120,7 +121,7 @@ describe("MemberListStore", () => {
         expect(joined).toEqual([room.getMember(alice), room.getMember(bob), room.getMember(charlie)]);
 
         // Ensure it sorts by display name if they are set
-        addMember(room, doris, "join", "AAAAA");
+        addMember(room, doris, KnownMembership.Join, "AAAAA");
         ({ invited, joined } = await store.loadMemberList(roomId));
         expect(invited).toEqual([]);
         expect(joined).toEqual([
@@ -134,15 +135,15 @@ describe("MemberListStore", () => {
     it("filters based on a search query", async () => {
         const mice = "@mice:bar";
         const zorro = "@zorro:bar";
-        addMember(room, bob, "join");
-        addMember(room, mice, "join");
+        addMember(room, bob, KnownMembership.Join);
+        addMember(room, mice, KnownMembership.Join);
 
         let { invited, joined } = await store.loadMemberList(roomId, "ice");
         expect(invited).toEqual([]);
         expect(joined).toEqual([room.getMember(alice), room.getMember(mice)]);
 
         // Ensure it filters by display name if they are set
-        addMember(room, zorro, "join", "ice ice baby");
+        addMember(room, zorro, KnownMembership.Join, "ice ice baby");
         ({ invited, joined } = await store.loadMemberList(roomId, "ice"));
         expect(invited).toEqual([]);
         expect(joined).toEqual([room.getMember(alice), room.getMember(zorro), room.getMember(mice)]);
@@ -180,7 +181,7 @@ describe("MemberListStore", () => {
                         type: EventType.RoomMember,
                         state_key: bob,
                         content: {
-                            membership: "join",
+                            membership: KnownMembership.Join,
                             displayname: "Bob",
                         },
                         sender: bob,

@@ -16,7 +16,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { AuthType, IAuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
+import { AuthType, AuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { ChangeEvent, createRef, FormEvent, Fragment } from "react";
 
@@ -89,7 +89,7 @@ interface IAuthEntryProps {
     // Is the auth logic currently waiting for something to happen?
     busy?: boolean;
     onPhaseChange: (phase: number) => void;
-    submitAuthDict: (auth: IAuthDict) => void;
+    submitAuthDict: (auth: AuthDict) => void;
     requestEmailToken?: () => Promise<void>;
     fail: (error: Error) => void;
     clientSecret: string;

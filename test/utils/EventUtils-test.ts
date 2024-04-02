@@ -73,7 +73,10 @@ describe("EventUtils", () => {
         type: EventType.RoomMessage,
         sender: userId,
     });
-    redactedEvent.makeRedacted(redactedEvent);
+    redactedEvent.makeRedacted(
+        redactedEvent,
+        new Room(redactedEvent.getRoomId()!, mockClient, mockClient.getUserId()!),
+    );
 
     const stateEvent = new MatrixEvent({
         type: EventType.RoomTopic,

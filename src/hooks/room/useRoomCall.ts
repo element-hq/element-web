@@ -41,6 +41,7 @@ import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { calculateRoomVia } from "../../utils/permalinks/Permalinks";
+import { isVideoRoom } from "../../utils/video-rooms";
 
 export enum PlatformCallType {
     ElementCall,
@@ -113,8 +114,10 @@ export const useRoomCall = (
     const isConnectedToCall = useConnectionState(groupCall) === ConnectionState.Connected;
     const hasGroupCall = groupCall !== null;
     const hasActiveCallSession = useParticipantCount(groupCall) > 0;
-    const isViewingCall = useEventEmitterState(SdkContextClass.instance.roomViewStore, UPDATE_EVENT, () =>
-        SdkContextClass.instance.roomViewStore.isViewingCall(),
+    const isViewingCall = useEventEmitterState(
+        SdkContextClass.instance.roomViewStore,
+        UPDATE_EVENT,
+        () => SdkContextClass.instance.roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     // room
@@ -279,7 +282,7 @@ export const useRoomCall = (
         url.pathname = "/room/";
         // Set params for the sharable url
         url.searchParams.set("roomId", room.roomId);
-        url.searchParams.set("perParticipantE2EE", "true");
+        if (room.hasEncryptionStateEvent()) url.searchParams.set("perParticipantE2EE", "true");
         for (const server of calculateRoomVia(room)) {
             url.searchParams.set("viaServers", server);
         }

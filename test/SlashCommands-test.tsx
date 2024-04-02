@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
 import { Command, Commands, getCommand } from "../src/SlashCommands";
@@ -162,7 +163,7 @@ describe("SlashCommands", () => {
         it("should warn about self demotion", async () => {
             setCurrentRoom();
             const member = new RoomMember(roomId, client.getSafeUserId());
-            member.membership = "join";
+            member.membership = KnownMembership.Join;
             member.powerLevel = 100;
             room.getMember = () => member;
             command.run(client, roomId, null, `${client.getUserId()} 0`);
@@ -172,7 +173,7 @@ describe("SlashCommands", () => {
         it("should default to 50 if no powerlevel specified", async () => {
             setCurrentRoom();
             const member = new RoomMember(roomId, "@user:server");
-            member.membership = "join";
+            member.membership = KnownMembership.Join;
             room.getMember = () => member;
             command.run(client, roomId, null, member.userId);
             expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, member.userId, 50);
@@ -191,7 +192,7 @@ describe("SlashCommands", () => {
         it("should warn about self demotion", async () => {
             setCurrentRoom();
             const member = new RoomMember(roomId, client.getSafeUserId());
-            member.membership = "join";
+            member.membership = KnownMembership.Join;
             member.powerLevel = 100;
             room.getMember = () => member;
             command.run(client, roomId, null, client.getSafeUserId());
@@ -366,7 +367,7 @@ describe("SlashCommands", () => {
     describe("/join", () => {
         beforeEach(() => {
             jest.spyOn(dispatcher, "dispatch");
-            command = findCommand("join")!;
+            command = findCommand(KnownMembership.Join)!;
         });
 
         it("should return usage if no args", () => {

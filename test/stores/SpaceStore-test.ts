@@ -24,7 +24,10 @@ import {
     MatrixEvent,
     Room,
     RoomEvent,
+    JoinRule,
+    RoomState,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
@@ -57,13 +60,13 @@ const fav2 = "!fav2:server";
 const fav3 = "!fav3:server";
 const dm1 = "!dm1:server";
 const dm1Partner = new RoomMember(dm1, "@dm1Partner:server");
-dm1Partner.membership = "join";
+dm1Partner.membership = KnownMembership.Join;
 const dm2 = "!dm2:server";
 const dm2Partner = new RoomMember(dm2, "@dm2Partner:server");
-dm2Partner.membership = "join";
+dm2Partner.membership = KnownMembership.Join;
 const dm3 = "!dm3:server";
 const dm3Partner = new RoomMember(dm3, "@dm3Partner:server");
-dm3Partner.membership = "join";
+dm3Partner.membership = KnownMembership.Join;
 const orphan1 = "!orphan1:server";
 const orphan2 = "!orphan2:server";
 const invite1 = "!invite1:server";
@@ -72,6 +75,8 @@ const room1 = "!room1:server";
 const room2 = "!room2:server";
 const room3 = "!room3:server";
 const room4 = "!room4:server";
+const videoRoomPrivate = "!videoRoomPrivate:server";
+const videoRoomPublic = "!videoRoomPublic:server";
 const space1 = "!space1:server";
 const space2 = "!space2:server";
 const space3 = "!space3:server";
@@ -289,7 +294,7 @@ describe("SpaceStore", () => {
         });
 
         it("invite to a subspace is only shown at the top level", async () => {
-            mkSpace(invite1).getMyMembership.mockReturnValue("invite");
+            mkSpace(invite1).getMyMembership.mockReturnValue(KnownMembership.Invite);
             mkSpace(space1, [invite1]);
             await run();
 
@@ -316,6 +321,8 @@ describe("SpaceStore", () => {
                     room2,
                     room3,
                     room4,
+                    videoRoomPrivate,
+                    videoRoomPublic,
                 ].forEach(mkRoom);
                 mkSpace(space1, [fav1, room1]);
                 mkSpace(space2, [fav1, fav2, fav3, room1]);
@@ -335,19 +342,19 @@ describe("SpaceStore", () => {
                 });
 
                 [invite1, invite2].forEach((roomId) => {
-                    mocked(client.getRoom(roomId)!).getMyMembership.mockReturnValue("invite");
+                    mocked(client.getRoom(roomId)!).getMyMembership.mockReturnValue(KnownMembership.Invite);
                 });
 
                 // have dmPartner1 be in space1 with you
                 const mySpace1Member = new RoomMember(space1, testUserId);
-                mySpace1Member.membership = "join";
+                mySpace1Member.membership = KnownMembership.Join;
                 (rooms.find((r) => r.roomId === space1)!.getMembers as jest.Mock).mockReturnValue([
                     mySpace1Member,
                     dm1Partner,
                 ]);
                 // have dmPartner2 be in space2 with you
                 const mySpace2Member = new RoomMember(space2, testUserId);
-                mySpace2Member.membership = "join";
+                mySpace2Member.membership = KnownMembership.Join;
                 (rooms.find((r) => r.roomId === space2)!.getMembers as jest.Mock).mockReturnValue([
                     mySpace2Member,
                     dm2Partner,
@@ -403,6 +410,12 @@ describe("SpaceStore", () => {
                     },
                 );
 
+                [videoRoomPrivate, videoRoomPublic].forEach((roomId) => {
+                    const videoRoom = client.getRoom(roomId);
+                    (videoRoom!.isCallRoom as jest.Mock).mockReturnValue(true);
+                });
+                const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
+                (videoRoomPublicRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Public);
                 await run();
             });
 
@@ -458,6 +471,28 @@ describe("SpaceStore", () => {
                 it("home space doesn't contain rooms/low priority if they are also shown in a space", async () => {
                     await setShowAllRooms(false);
                     expect(store.isRoomInSpace(MetaSpace.Home, room1)).toBeFalsy();
+                });
+
+                it("video room space contains all video rooms", async () => {
+                    await setShowAllRooms(false);
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPublic)).toBeTruthy();
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, room1)).toBeFalsy();
+                });
+
+                it("updates the video room space when the room type changes", async () => {
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
+                    (client.getRoom(videoRoomPublic)!.isCallRoom as jest.Mock).mockReturnValue(false);
+                    client.emit(
+                        RoomStateEvent.Events,
+                        {
+                            getRoomId: () => videoRoomPublic,
+                            getType: () => EventType.RoomCreate,
+                        } as unknown as MatrixEvent,
+                        {} as unknown as RoomState,
+                        null,
+                    );
+                    expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPublic)).toBeFalsy();
                 });
 
                 it("space contains child rooms", () => {
@@ -683,16 +718,16 @@ describe("SpaceStore", () => {
 
     it("should add new DM Invites to the People Space Notification State", async () => {
         mkRoom(dm1);
-        mocked(client.getRoom(dm1)!).getMyMembership.mockReturnValue("join");
+        mocked(client.getRoom(dm1)!).getMyMembership.mockReturnValue(KnownMembership.Join);
         mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
 
         await run();
 
         mkRoom(dm2);
         const cliDm2 = client.getRoom(dm2)!;
-        mocked(cliDm2).getMyMembership.mockReturnValue("invite");
+        mocked(cliDm2).getMyMembership.mockReturnValue(KnownMembership.Invite);
         mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
-        client.emit(RoomEvent.MyMembership, cliDm2, "invite");
+        client.emit(RoomEvent.MyMembership, cliDm2, KnownMembership.Invite);
 
         [dm1, dm2].forEach((d) => {
             expect(
@@ -721,9 +756,9 @@ describe("SpaceStore", () => {
             await run();
 
             expect(store.spacePanelSpaces).toStrictEqual([space]);
-            space.getMyMembership.mockReturnValue("leave");
+            space.getMyMembership.mockReturnValue(KnownMembership.Leave);
             const prom = testUtils.emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
-            client.emit(RoomEvent.MyMembership, space, "leave", "join");
+            client.emit(RoomEvent.MyMembership, space, KnownMembership.Leave, KnownMembership.Join);
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([]);
         });
@@ -733,7 +768,7 @@ describe("SpaceStore", () => {
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([]);
             const space = mkSpace(space1);
-            space.getMyMembership.mockReturnValue("invite");
+            space.getMyMembership.mockReturnValue(KnownMembership.Invite);
             const prom = testUtils.emitPromise(store, UPDATE_INVITED_SPACES);
             client.emit(ClientEvent.Room, space);
             await prom;
@@ -743,14 +778,14 @@ describe("SpaceStore", () => {
 
         it("updates state when space invite is accepted", async () => {
             const space = mkSpace(space1);
-            space.getMyMembership.mockReturnValue("invite");
+            space.getMyMembership.mockReturnValue(KnownMembership.Invite);
             await run();
 
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([space]);
-            space.getMyMembership.mockReturnValue("join");
+            space.getMyMembership.mockReturnValue(KnownMembership.Join);
             const prom = testUtils.emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
-            client.emit(RoomEvent.MyMembership, space, "join", "invite");
+            client.emit(RoomEvent.MyMembership, space, KnownMembership.Join, KnownMembership.Invite);
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([space]);
             expect(store.invitedSpaces).toStrictEqual([]);
@@ -758,14 +793,14 @@ describe("SpaceStore", () => {
 
         it("updates state when space invite is rejected", async () => {
             const space = mkSpace(space1);
-            space.getMyMembership.mockReturnValue("invite");
+            space.getMyMembership.mockReturnValue(KnownMembership.Invite);
             await run();
 
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([space]);
-            space.getMyMembership.mockReturnValue("leave");
+            space.getMyMembership.mockReturnValue(KnownMembership.Leave);
             const prom = testUtils.emitPromise(store, UPDATE_INVITED_SPACES);
-            client.emit(RoomEvent.MyMembership, space, "leave", "invite");
+            client.emit(RoomEvent.MyMembership, space, KnownMembership.Leave, KnownMembership.Invite);
             await prom;
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([]);
@@ -783,7 +818,7 @@ describe("SpaceStore", () => {
             expect(store.isRoomInSpace(MetaSpace.Home, invite1)).toBeFalsy();
 
             const invite = mkRoom(invite1);
-            invite.getMyMembership.mockReturnValue("invite");
+            invite.getMyMembership.mockReturnValue(KnownMembership.Invite);
             const prom = testUtils.emitPromise(store, space1);
             client.emit(ClientEvent.Room, space);
             await prom;
@@ -845,7 +880,7 @@ describe("SpaceStore", () => {
                     room: spaceId,
                     user: client.getUserId()!,
                     skey: user.userId,
-                    content: { membership: "join" },
+                    content: { membership: KnownMembership.Join },
                     ts: Date.now(),
                 });
                 const spaceRoom = client.getRoom(spaceId)!;
@@ -926,7 +961,7 @@ describe("SpaceStore", () => {
         beforeEach(async () => {
             mkRoom(room1); // not a space
             mkSpace(space1, [mkSpace(space2).roomId]);
-            mkSpace(space3).getMyMembership.mockReturnValue("invite");
+            mkSpace(space3).getMyMembership.mockReturnValue(KnownMembership.Invite);
             await run();
             store.setActiveSpace(MetaSpace.Home);
             expect(store.activeSpace).toBe(MetaSpace.Home);
@@ -986,7 +1021,7 @@ describe("SpaceStore", () => {
             const event = mkEvent({
                 event: true,
                 type: EventType.RoomMember,
-                content: { membership: "join" },
+                content: { membership: KnownMembership.Join },
                 skey: dm1Partner.userId,
                 user: dm1Partner.userId,
                 room: space1,
@@ -994,7 +1029,7 @@ describe("SpaceStore", () => {
             space.getMember.mockImplementation((userId) => {
                 if (userId === dm1Partner.userId) {
                     const member = new RoomMember(space1, dm1Partner.userId);
-                    member.membership = "join";
+                    member.membership = KnownMembership.Join;
                     return member;
                 }
                 return null;
@@ -1249,15 +1284,15 @@ describe("SpaceStore", () => {
 
         // receive invite to space
         const rootSpace = mkSpace(space1, [room1, room2, space2]);
-        rootSpace.getMyMembership.mockReturnValue("invite");
+        rootSpace.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpace);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([]);
 
         // accept invite to space
-        rootSpace.getMyMembership.mockReturnValue("join");
-        client.emit(RoomEvent.MyMembership, rootSpace, "join", "invite");
+        rootSpace.getMyMembership.mockReturnValue(KnownMembership.Join);
+        client.emit(RoomEvent.MyMembership, rootSpace, KnownMembership.Join, KnownMembership.Invite);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
@@ -1265,7 +1300,7 @@ describe("SpaceStore", () => {
         // join room in space
         expect(SpaceStore.instance.isRoomInSpace(space1, room1)).toBeFalsy();
         const rootSpaceRoom1 = mkRoom(room1);
-        rootSpaceRoom1.getMyMembership.mockReturnValue("join");
+        rootSpaceRoom1.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, rootSpaceRoom1);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
@@ -1279,7 +1314,7 @@ describe("SpaceStore", () => {
         // receive room invite
         expect(SpaceStore.instance.isRoomInSpace(space1, room2)).toBeFalsy();
         const rootSpaceRoom2 = mkRoom(room2);
-        rootSpaceRoom2.getMyMembership.mockReturnValue("invite");
+        rootSpaceRoom2.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpaceRoom2);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
@@ -1292,9 +1327,9 @@ describe("SpaceStore", () => {
 
         // start DM in space
         const myRootSpaceMember = new RoomMember(space1, testUserId);
-        myRootSpaceMember.membership = "join";
+        myRootSpaceMember.membership = KnownMembership.Join;
         const rootSpaceFriend = new RoomMember(space1, dm1Partner.userId);
-        rootSpaceFriend.membership = "join";
+        rootSpaceFriend.membership = KnownMembership.Join;
         rootSpace.getMembers.mockReturnValue([myRootSpaceMember, rootSpaceFriend]);
         rootSpace.getMember.mockImplementation((userId) => {
             switch (userId) {
@@ -1310,7 +1345,7 @@ describe("SpaceStore", () => {
             event: true,
             type: EventType.RoomMember,
             content: {
-                membership: "join",
+                membership: KnownMembership.Join,
             },
             skey: dm1Partner.userId,
             user: dm1Partner.userId,
@@ -1320,7 +1355,7 @@ describe("SpaceStore", () => {
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId)).toBeTruthy();
         const dm1Room = mkRoom(dm1);
-        dm1Room.getMyMembership.mockReturnValue("join");
+        dm1Room.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, dm1Room);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
@@ -1333,7 +1368,7 @@ describe("SpaceStore", () => {
 
         // join subspace
         const subspace = mkSpace(space2);
-        subspace.getMyMembership.mockReturnValue("join");
+        subspace.getMyMembership.mockReturnValue(KnownMembership.Join);
         const prom = testUtils.emitPromise(SpaceStore.instance, space1);
         client.emit(ClientEvent.Room, subspace);
         jest.runOnlyPendingTimers();

@@ -25,6 +25,7 @@ import {
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     createEvent,
     fireEvent,
@@ -154,7 +155,7 @@ describe("RoomHeader", () => {
                 name: "Member",
                 rawDisplayName: "Member",
                 roomId: room.roomId,
-                membership: "join",
+                membership: KnownMembership.Join,
                 getAvatarUrl: () => "mxc://avatar.url/image.png",
                 getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
             },
@@ -172,7 +173,7 @@ describe("RoomHeader", () => {
                 name: "Member",
                 rawDisplayName: "Member",
                 roomId: room.roomId,
-                membership: "join",
+                membership: KnownMembership.Join,
                 getAvatarUrl: () => "mxc://avatar.url/image.png",
                 getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
             },
@@ -181,7 +182,7 @@ describe("RoomHeader", () => {
                 name: "Member",
                 rawDisplayName: "Member",
                 roomId: room.roomId,
-                membership: "join",
+                membership: KnownMembership.Join,
                 getAvatarUrl: () => "mxc://avatar.url/image.png",
                 getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
             },
@@ -190,7 +191,7 @@ describe("RoomHeader", () => {
                 name: "Member",
                 rawDisplayName: "Member",
                 roomId: room.roomId,
-                membership: "join",
+                membership: KnownMembership.Join,
                 getAvatarUrl: () => "mxc://avatar.url/image.png",
                 getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
             },
@@ -199,7 +200,7 @@ describe("RoomHeader", () => {
                 name: "Bot user",
                 rawDisplayName: "Bot user",
                 roomId: room.roomId,
-                membership: "join",
+                membership: KnownMembership.Join,
                 getAvatarUrl: () => "mxc://avatar.url/image.png",
                 getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
             },
@@ -562,9 +563,10 @@ describe("RoomHeader", () => {
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             expect(getByLabelText(container, _t("voip|get_call_link"))).toBeInTheDocument();
         });
-        it("opens the share dialog with the correct share link", () => {
+        it("opens the share dialog with the correct share link in an encrypted room", () => {
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+            jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             const modalSpy = jest.spyOn(Modal, "createDialog");
@@ -580,6 +582,20 @@ describe("RoomHeader", () => {
                 customTitle: "Conference invite link",
                 subtitle: _t("share|share_call_subtitle"),
             });
+            expect(arg1.target.toString()).toEqual(target);
+        });
+
+        it("share dialog has correct link in an unencrypted room", () => {
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+            jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+
+            const { container } = render(<RoomHeader room={room} />, getWrapper());
+            const modalSpy = jest.spyOn(Modal, "createDialog");
+            fireEvent.click(getByLabelText(container, _t("voip|get_call_link")));
+            const target =
+                "https://guest_spa_url.com/room/#/!1:example.org?roomId=%211%3Aexample.org&viaServers=example.org";
+            const arg1 = modalSpy.mock.calls[0][1] as any;
             expect(arg1.target.toString()).toEqual(target);
         });
     });
@@ -703,7 +719,7 @@ function mockRoomMembers(room: Room, count: number) {
             name: `Member ${index}`,
             rawDisplayName: `Member ${index}`,
             roomId: room.roomId,
-            membership: "join",
+            membership: KnownMembership.Join,
             getAvatarUrl: () => `mxc://avatar.url/user-${index}.png`,
             getMxcAvatarUrl: () => `mxc://avatar.url/user-${index}.png`,
         }));

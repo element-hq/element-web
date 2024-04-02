@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, cleanup } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import UnwrappedSpacePanel from "../../../../src/components/views/spaces/SpacePanel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
@@ -29,6 +28,8 @@ import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SpaceNotificationState } from "../../../../src/stores/notifications/SpaceNotificationState";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import UnwrappedSpacePanel from "../../../../src/components/views/spaces/SpacePanel";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -135,7 +136,27 @@ describe("<SpacePanel />", () => {
     });
 
     beforeEach(() => {
+        SpaceStore.instance.enabledMetaSpaces.push(
+            MetaSpace.Home,
+            MetaSpace.Favourites,
+            MetaSpace.People,
+            MetaSpace.Orphans,
+            MetaSpace.VideoRooms,
+        );
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
+    });
+    afterEach(() => {
+        cleanup();
+    });
+
+    it("should show all activated MetaSpaces in the correct order", async () => {
+        const originalGetValue = SettingsStore.getValue;
+        const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            return setting === "feature_video_rooms" ? true : originalGetValue(setting);
+        });
+        const renderResult = render(<SpacePanel />);
+        expect(renderResult.asFragment()).toMatchSnapshot();
+        spySettingsStore.mockRestore();
     });
 
     describe("create new space button", () => {

@@ -74,9 +74,7 @@ export default class JSONExporter extends Exporter {
                 logger.log("Error fetching file: " + err);
             }
         }
-        const jsonEvent: any = mxEv.toJSON();
-        const clearEvent = mxEv.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
-        return clearEvent;
+        return mxEv.getEffectiveEvent();
     }
 
     protected async createOutput(events: MatrixEvent[]): Promise<string> {

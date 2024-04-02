@@ -619,7 +619,6 @@
         "methods": "Métodos",
         "no_verification_requests_found": "Non se atopan solicitudes de verificación",
         "number_of_users": "Número de usuarias",
-        "observe_only": "Só observar",
         "original_event_source": "Fonte orixinal do evento",
         "phase": "Fase",
         "phase_cancelled": "Cancelado",
@@ -627,7 +626,6 @@
         "phase_requested": "Solicitado",
         "phase_started": "Iniciado",
         "phase_transaction": "Transacción",
-        "requester": "Solicitante",
         "room_id": "ID da sala: %(roomId)s",
         "save_setting_values": "Gardar valores configurados",
         "send_custom_account_data_event": "Enviar evento de datos da conta personalizado",
@@ -1263,14 +1261,6 @@
         "view_rules": "Ver regras"
     },
     "language_dropdown_label": "Selector de idioma",
-    "lazy_loading": {
-        "disabled_action": "Baleirar caché e sincronizar",
-        "disabled_description1": "Anteriormente utilizaches %(brand)s en %(host)s con carga preguiceira de membros. Nesta versión a carga preguiceira está desactivada. Como a caché local non é compatible entre as dúas configuracións, %(brand)s precisa volver a sincronizar a conta.",
-        "disabled_description2": "Se a outra versión de %(brand)s aínda está aberta noutra lapela, péchaa xa que usar %(brand)s no mesmo servidor con carga preguiceira activada e desactivada ao mesmo tempo causará problemas.",
-        "disabled_title": "Caché local incompatible",
-        "resync_description": "%(brand)s utiliza agora entre 3 e 5 veces menos memoria, cargando só información sobre as usuarias cando é preciso. Agarda mentras se sincroniza co servidor!",
-        "resync_title": "Actualizando %(brand)s"
-    },
     "leave_room_dialog": {
         "last_person_warning": "Es a única persoa aquí. Se saes, ninguén poderá unirse no futuro, incluíndote a ti.",
         "leave_room_question": "Seguro que desexa saír da sala '%(roomName)s'?",

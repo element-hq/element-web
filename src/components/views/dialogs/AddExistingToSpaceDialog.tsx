@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ReactElement, ReactNode, useContext, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { Room, EventType } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -140,7 +141,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
     const visibleRooms = useMemo(
         () =>
-            cli?.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === "join") ?? [],
+            cli
+                ?.getVisibleRooms(msc3946ProcessDynamicPredecessor)
+                .filter((r) => r.getMyMembership() === KnownMembership.Join) ?? [],
         [cli, msc3946ProcessDynamicPredecessor],
     );
 

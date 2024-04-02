@@ -30,20 +30,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import {
-    filterConsole,
-    flushPromises,
-    getRoomContext,
-    mkEncryptedEvent,
-    mkEvent,
-    mkMessage,
-    stubClient,
-} from "../../../test-utils";
+import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import dis from "../../../../src/dispatcher/dispatcher";
@@ -225,11 +218,11 @@ describe("EventTile", () => {
         });
 
         it("shows a warning for an event from an unverified device", async () => {
-            mxEvent = await mkEncryptedEvent({
+            mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
                 shieldColour: EventShieldColour.RED,
@@ -250,11 +243,11 @@ describe("EventTile", () => {
         });
 
         it("shows no shield for a verified event", async () => {
-            mxEvent = await mkEncryptedEvent({
+            mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
                 shieldColour: EventShieldColour.NONE,
@@ -279,11 +272,11 @@ describe("EventTile", () => {
             [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
-            mxEvent = await mkEncryptedEvent({
+            mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
                 shieldColour: EventShieldColour.GREY,
@@ -337,11 +330,11 @@ describe("EventTile", () => {
 
         it("should update the warning when the event is edited", async () => {
             // we start out with an event from the trusted device
-            mxEvent = await mkEncryptedEvent({
+            mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
                 shieldColour: EventShieldColour.NONE,
@@ -360,11 +353,11 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
 
             // then we replace the event with one from the unverified device
-            const replacementEvent = await mkEncryptedEvent({
+            const replacementEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(replacementEvent.getId()!, {
                 shieldColour: EventShieldColour.RED,
@@ -388,11 +381,11 @@ describe("EventTile", () => {
             jest.spyOn(client, "isRoomEncrypted").mockReturnValue(true);
 
             // we start out with an event from the trusted device
-            mxEvent = await mkEncryptedEvent({
+            mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                user: "@alice:example.org",
-                room: room.roomId,
+                sender: "@alice:example.org",
+                roomId: room.roomId,
             });
 
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {

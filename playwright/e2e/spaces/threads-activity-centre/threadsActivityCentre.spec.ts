@@ -147,4 +147,17 @@ test.describe("Threads Activity Centre", () => {
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered-expanded.png");
     });
+
+    test("should mark all threads as read", async ({ room1, room2, util, msg, page }) => {
+        await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
+
+        await util.assertNotificationTac();
+
+        await util.openTac();
+        await util.clickRoomInTac(room1.name);
+
+        util.clickMarkAllThreadsRead();
+
+        await util.assertNoTacIndicator();
+    });
 });

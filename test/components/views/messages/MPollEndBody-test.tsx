@@ -96,7 +96,7 @@ describe("<MPollEndBody />", () => {
         mockClient.relations.mockResolvedValue({
             events: [],
         });
-        mockClient.fetchRoomEvent.mockResolvedValue(pollStartEvent.toJSON());
+        mockClient.fetchRoomEvent.mockResolvedValue(pollStartEvent.getEffectiveEvent());
     });
 
     afterEach(() => {

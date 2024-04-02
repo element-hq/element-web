@@ -28,7 +28,9 @@ import {
     LocationAssetType,
     M_TIMESTAMP,
     M_BEACON,
+    TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -79,10 +81,10 @@ interface IProps {
     onFinished(): void;
 }
 
-interface IEntryProps {
+interface IEntryProps<K extends keyof TimelineEvents> {
     room: Room;
-    type: EventType | string;
-    content: IContent;
+    type: K;
+    content: TimelineEvents[K];
     matrixClient: MatrixClient;
     onFinished(success: boolean): void;
 }
@@ -94,7 +96,7 @@ enum SendState {
     Failed,
 }
 
-const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, onFinished }) => {
+const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>();
 
@@ -267,7 +269,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             sortRooms(
                 cli
                     .getVisibleRooms(msc3946DynamicRoomPredecessors)
-                    .filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom()),
+                    .filter((room) => room.getMyMembership() === KnownMembership.Join && !room.isSpaceRoom()),
             ),
         [cli, msc3946DynamicRoomPredecessors],
     );

@@ -31,6 +31,7 @@ import {
     EventType,
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add-solid.svg";
@@ -171,7 +172,11 @@ export default class MemberList extends React.Component<IProps, IState> {
     };
 
     private onMyMembership = (room: Room, membership: string, oldMembership?: string): void => {
-        if (room.roomId === this.props.roomId && membership === "join" && oldMembership !== "join") {
+        if (
+            room.roomId === this.props.roomId &&
+            membership === KnownMembership.Join &&
+            oldMembership !== KnownMembership.Join
+        ) {
             // we just joined the room, load the member list
             this.updateListNow(true);
         }
@@ -363,7 +368,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         const room = cli.getRoom(this.props.roomId);
         let inviteButton: JSX.Element | undefined;
 
-        if (room?.getMyMembership() === "join" && shouldShowComponent(UIComponent.InviteUsers)) {
+        if (room?.getMyMembership() === KnownMembership.Join && shouldShowComponent(UIComponent.InviteUsers)) {
             const inviteButtonText = room.isSpaceRoom() ? _t("space|invite_this_space") : _t("room|invite_this_room");
 
             const button = (
