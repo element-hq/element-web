@@ -1012,7 +1012,7 @@
             "verify_reset_warning_1": "La réinitialisation de vos clés de vérification ne peut pas être annulé. Après la réinitialisation, vous n’aurez plus accès à vos anciens messages chiffrés, et tous les amis que vous aviez précédemment vérifiés verront des avertissement de sécurité jusqu'à ce vous les vérifiiez à nouveau.",
             "verify_reset_warning_2": "Veuillez ne continuer que si vous êtes certain d’avoir perdu tous vos autres appareils et votre Clé de Sécurité.",
             "verify_using_device": "Vérifier avec un autre appareil",
-            "verify_using_key": "Vérifié avec une clé de sécurité",
+            "verify_using_key": "Vérifier avec une clé de sécurité",
             "verify_using_key_or_phrase": "Vérifier avec une clé de sécurité ou une phrase",
             "waiting_for_user_accept": "En attente d’acceptation par %(displayName)s…",
             "waiting_other_device": "En attente de votre vérification sur votre autre appareil…",
