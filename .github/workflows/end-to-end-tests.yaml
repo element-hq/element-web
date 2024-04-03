@@ -45,7 +45,7 @@ jobs:
             statuses: write
         runs-on: ubuntu-latest
         steps:
-            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
               with:
                   authToken: "${{ secrets.GITHUB_TOKEN }}"
                   state: success
