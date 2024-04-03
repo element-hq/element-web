@@ -121,9 +121,6 @@ test.describe("Cryptography", function () {
         botCreateOpts: {
             displayName: "Bob",
             autoAcceptInvites: false,
-            // XXX: We use a custom prefix here to coerce the Rust Crypto SDK to prefer `@user` in race resolution
-            // by using a prefix that is lexically after `@user` in the alphabet.
-            userIdPrefix: "zzz_",
         },
     });
 
