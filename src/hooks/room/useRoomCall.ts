@@ -189,6 +189,8 @@ export const useRoomCall = (
     // We only want to prompt to pin the widget if it's not element call based.
     const isECWidget = WidgetType.CALL.matches(widget?.type ?? "");
     const promptPinWidget = !isECWidget && canPinWidget && !widgetPinned;
+    const userId = room.client.getUserId();
+    const canInviteToRoom = userId ? room.canInvite(userId) : false;
     const state = useMemo((): State => {
         if (activeCalls.find((call) => call.roomId != room.roomId)) {
             return State.Ongoing;
@@ -199,8 +201,9 @@ export const useRoomCall = (
         if (hasLegacyCall) {
             return State.Ongoing;
         }
-
-        if (memberCount <= 1) {
+        const canCallAlone =
+            canInviteToRoom && (room.getJoinRule() === "public" || room.getJoinRule() === JoinRule.Knock);
+        if (!(memberCount > 1 || canCallAlone)) {
             return State.NoOneHere;
         }
 
@@ -210,6 +213,7 @@ export const useRoomCall = (
         return State.NoCall;
     }, [
         activeCalls,
+        canInviteToRoom,
         hasGroupCall,
         hasJitsiWidget,
         hasLegacyCall,
@@ -218,7 +222,7 @@ export const useRoomCall = (
         mayEditWidgets,
         memberCount,
         promptPinWidget,
-        room.roomId,
+        room,
     ]);
 
     const voiceCallClick = useCallback(
