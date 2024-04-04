@@ -116,20 +116,24 @@ export const ThreadPanelHeader: React.FC<{
         </ContextMenu>
     ) : null;
 
-    const onMarkAllThreadsReadClick = React.useCallback(() => {
-        if (!roomContext.room) {
-            logger.error("No room in context to mark all threads read");
-            return;
-        }
-        // This actually clears all room notifications by sending an unthreaded read receipt.
-        // We'd have to loop over all unread threads (pagninating back to find any we don't
-        // know about yet) and send threaded receipts for all of them... or implement a
-        // specific API for it. In practice, the user will have to be viewing the room to
-        // see this button, so will have marked the room itself read anyway.
-        clearRoomNotification(roomContext.room, mxClient).catch((e) => {
-            logger.error("Failed to mark all threads read", e);
-        });
-    }, [roomContext.room, mxClient]);
+    const onMarkAllThreadsReadClick = React.useCallback(
+        (e) => {
+            PosthogTrackers.trackInteraction("WebThreadsMarkAllReadButton", e);
+            if (!roomContext.room) {
+                logger.error("No room in context to mark all threads read");
+                return;
+            }
+            // This actually clears all room notifications by sending an unthreaded read receipt.
+            // We'd have to loop over all unread threads (pagninating back to find any we don't
+            // know about yet) and send threaded receipts for all of them... or implement a
+            // specific API for it. In practice, the user will have to be viewing the room to
+            // see this button, so will have marked the room itself read anyway.
+            clearRoomNotification(roomContext.room, mxClient).catch((e) => {
+                logger.error("Failed to mark all threads read", e);
+            });
+        },
+        [roomContext.room, mxClient],
+    );
 
     return (
         <div className="mx_BaseCard_header_title">
