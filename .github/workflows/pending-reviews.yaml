@@ -9,6 +9,7 @@ jobs:
         name: Pending reviews bot
         runs-on: ubuntu-latest
         environment: Matrix
+        timeout-minutes: 1
         env:
             URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
             RELEASE_BLOCKERS_URL: "https://github.com/pulls?q=is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+sort%3Aupdated-desc+label%3AX-Release-Blocker+"
