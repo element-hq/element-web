@@ -21,6 +21,9 @@ import { Client } from "./client";
 import { Timeline } from "./timeline";
 import { Spotlight } from "./Spotlight";
 
+/**
+ * A set of utility methods for interacting with the Element-Web UI.
+ */
 export class ElementAppPage {
     public constructor(public readonly page: Page) {}
 

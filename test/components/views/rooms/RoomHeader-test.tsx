@@ -33,6 +33,7 @@ import {
     getByLabelText,
     getByRole,
     getByText,
+    queryAllByLabelText,
     render,
     RenderOptions,
     screen,
@@ -83,7 +84,6 @@ describe("RoomHeader", () => {
     );
 
     let room: Room;
-
     const ROOM_ID = "!1:example.org";
 
     let setCardSpy: jest.SpyInstance | undefined;
@@ -371,12 +371,35 @@ describe("RoomHeader", () => {
             }
         });
 
-        it("can't call if you have no friends", () => {
+        it("can't call if you have no friends and cannot invite friends", () => {
             mockRoomMembers(room, 1);
             const { container } = render(<RoomHeader room={room} />, getWrapper());
             for (const button of getAllByLabelText(container, "There's no one here to call")) {
                 expect(button).toHaveAttribute("aria-disabled", "true");
             }
+        });
+
+        it("can call if you have no friends but can invite friends", () => {
+            mockRoomMembers(room, 1);
+            // go through all the different `canInvite` and `getJoinRule` combinations
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
+            jest.spyOn(room, "canInvite").mockReturnValue(false);
+            const { container: containerNoInviteNotPublic } = render(<RoomHeader room={room} />, getWrapper());
+            expect(queryAllByLabelText(containerNoInviteNotPublic, "There's no one here to call")).toHaveLength(2);
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
+            jest.spyOn(room, "canInvite").mockReturnValue(false);
+            const { container: containerNoInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
+            expect(queryAllByLabelText(containerNoInvitePublic, "There's no one here to call")).toHaveLength(2);
+
+            jest.spyOn(room, "canInvite").mockReturnValue(true);
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
+            const { container: containerInviteNotPublic } = render(<RoomHeader room={room} />, getWrapper());
+            expect(queryAllByLabelText(containerInviteNotPublic, "There's no one here to call")).toHaveLength(2);
+
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
+            jest.spyOn(room, "canInvite").mockReturnValue(true);
+            const { container: containerInvitePublic } = render(<RoomHeader room={room} />, getWrapper());
+            expect(queryAllByLabelText(containerInvitePublic, "There's no one here to call")).toHaveLength(0);
         });
 
         it("calls using legacy or jitsi", async () => {

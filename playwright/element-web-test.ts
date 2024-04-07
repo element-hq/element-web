@@ -66,12 +66,32 @@ export const test = base.extend<
     TestOptions & {
         axe: AxeBuilder;
         checkA11y: () => Promise<void>;
-        // The contents of the config.json to send
+
+        /**
+         * The contents of the config.json to send when the client requests it.
+         */
         config: typeof CONFIG_JSON;
-        // The options with which to run the `homeserver` fixture
+
+        /**
+         * The options with which to run the {@link #homeserver} fixture.
+         */
         startHomeserverOpts: StartHomeserverOpts | string;
+
         homeserver: HomeserverInstance;
         oAuthServer: { port: number };
+
+        /**
+         * The displayname to use for the user registered in {@link #credentials}.
+         *
+         * To set it, call `test.use({ displayName: "myDisplayName" })` in the test file or `describe` block.
+         * See {@link https://playwright.dev/docs/api/class-test#test-use}.
+         */
+        displayName?: string;
+
+        /**
+         * A test fixture which registers a test user on the {@link #homeserver} and supplies the details
+         * of the registered user.
+         */
         credentials: CredentialsWithDisplayName;
 
         /**
@@ -83,9 +103,20 @@ export const test = base.extend<
          */
         pageWithCredentials: Page;
 
+        /**
+         * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
+         * the credentials into localStorage per {@link #homeserver}, and then loads the front page of the
+         * app.
+         */
         user: CredentialsWithDisplayName;
-        displayName?: string;
+
+        /**
+         * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
+         * but wraps the returned `Page` in a class of utilities for interacting with the Element-Web UI,
+         * {@link ElementAppPage}.
+         */
         app: ElementAppPage;
+
         mailhog: { api: mailhog.API; instance: Instance };
         crypto: Crypto;
         room?: { roomId: string };
