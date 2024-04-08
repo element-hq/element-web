@@ -82,7 +82,8 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                         <Linkify
                             options={{
                                 attributes: {
-                                    onClick() {
+                                    onClick(e: React.MouseEvent<HTMLDivElement>) {
+                                        onClick(e);
                                         modal.close();
                                     },
                                 },
