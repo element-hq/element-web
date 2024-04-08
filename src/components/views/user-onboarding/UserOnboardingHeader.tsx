@@ -101,19 +101,19 @@ export function UserOnboardingHeader(): JSX.Element {
                                 </div>
                             </div>
                             <div className="sh_userOnboarding_chat">
-                                <p>Say hello to Wallet Bot and connect your Superhero Wallet:</p>
+                                <p>Say hello to the Community Bot to create or start interacting with a community:</p>
                                 <AccessibleButton
                                     onClick={(): void => {
-                                        startDmOnFirstMessage(cli, [
+                                        void startDmOnFirstMessage(cli, [
                                             new DirectoryMember({
-                                                user_id: botAccounts?.superheroBot || "",
+                                                user_id: botAccounts?.communityBot || "",
                                             }),
                                         ]);
                                     }}
                                     kind="primary"
                                     className="sh_userOnboarding_btn"
                                 >
-                                    Chat With Wallet Bot
+                                    Chat With Community Bot
                                 </AccessibleButton>
                             </div>
                         </div>
