@@ -136,11 +136,12 @@ const Tile: React.FC<ITileProps> = ({
         setBusy(true);
         ev.preventDefault();
         ev.stopPropagation();
-        onJoinRoomClick()
-            .then(() => awaitRoomDownSync(cli, room.room_id))
-            .finally(() => {
-                setBusy(false);
-            });
+        try {
+            await onJoinRoomClick();
+            await awaitRoomDownSync(cli, room.room_id);
+        } finally {
+            setBusy(false);
+        }
     };
 
     let button: ReactElement;
@@ -418,7 +419,8 @@ export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, room
             );
         }
 
-        return;
+        // rethrow error so that the caller can handle react to it too
+        throw err;
     }
 
     defaultDispatcher.dispatch<JoinRoomReadyPayload>({
