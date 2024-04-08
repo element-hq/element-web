@@ -1417,6 +1417,7 @@
         "group_spaces": "Spaces",
         "group_themes": "Themes",
         "group_threads": "Threads",
+        "group_ui": "User interface",
         "group_voip": "Voice & Video",
         "group_widgets": "Widgets",
         "hidebold": "Hide notification dot (only display counters badges)",
@@ -1440,6 +1441,7 @@
         "oidc_native_flow": "OIDC native authentication",
         "oidc_native_flow_description": "⚠ WARNING: Experimental. Use OIDC native authentication when supported by the server.",
         "pinning": "Message Pinning",
+        "release_announcement": "Release announcement",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "report_to_moderators": "Report to moderators",
@@ -3161,7 +3163,9 @@
     },
     "threads_activity_centre": {
         "header": "Threads activity",
-        "no_rooms_with_unreads_threads": "You don't have rooms with unread threads yet."
+        "no_rooms_with_unreads_threads": "You don't have rooms with unread threads yet.",
+        "release_announcement_description": "Threads notifications have moved, find them here from now on.",
+        "release_announcement_header": "Threads Activity Centre"
     },
     "time": {
         "about_day_ago": "about a day ago",

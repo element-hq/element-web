@@ -34,6 +34,8 @@ import { NotificationLevel } from "../../../../stores/notifications/Notification
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
+import { ReleaseAnnouncement } from "../../../structures/ReleaseAnnouncement";
+import { useIsReleaseAnnouncementOpen } from "../../../../hooks/useIsReleaseAnnouncementOpen";
 
 interface ThreadsActivityCentreProps {
     /**
@@ -49,6 +51,7 @@ interface ThreadsActivityCentreProps {
 export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCentreProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const roomsAndNotifications = useUnreadThreadRooms(open);
+    const isReleaseAnnouncementOpen = useIsReleaseAnnouncementOpen("threadsActivityCentre");
 
     return (
         <div
@@ -65,41 +68,55 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                 }
             }}
         >
-            <Menu
-                align="end"
-                open={open}
-                onOpenChange={(newOpen) => {
-                    // Track only when the Threads Activity Centre is opened
-                    if (newOpen) PosthogTrackers.trackInteraction("WebThreadsActivityCentreButton");
-
-                    setOpen(newOpen);
-                }}
-                side="right"
-                title={_t("threads_activity_centre|header")}
-                trigger={
+            {isReleaseAnnouncementOpen ? (
+                <ReleaseAnnouncement
+                    feature="threadsActivityCentre"
+                    header={_t("threads_activity_centre|release_announcement_header")}
+                    description={_t("threads_activity_centre|release_announcement_description")}
+                    closeLabel={_t("action|ok")}
+                >
                     <ThreadsActivityCentreButton
                         displayLabel={displayButtonLabel}
                         notificationLevel={roomsAndNotifications.greatestNotificationLevel}
                     />
-                }
-            >
-                {/* Make the content of the pop-up scrollable */}
-                <div className="mx_ThreadsActivityCentre_rows">
-                    {roomsAndNotifications.rooms.map(({ room, notificationLevel }) => (
-                        <ThreadsActivityCentreRow
-                            key={room.roomId}
-                            room={room}
-                            notificationLevel={notificationLevel}
-                            onClick={() => setOpen(false)}
+                </ReleaseAnnouncement>
+            ) : (
+                <Menu
+                    align="end"
+                    open={open}
+                    onOpenChange={(newOpen) => {
+                        // Track only when the Threads Activity Centre is opened
+                        if (newOpen) PosthogTrackers.trackInteraction("WebThreadsActivityCentreButton");
+
+                        setOpen(newOpen);
+                    }}
+                    side="right"
+                    title={_t("threads_activity_centre|header")}
+                    trigger={
+                        <ThreadsActivityCentreButton
+                            displayLabel={displayButtonLabel}
+                            notificationLevel={roomsAndNotifications.greatestNotificationLevel}
                         />
-                    ))}
-                    {roomsAndNotifications.rooms.length === 0 && (
-                        <div className="mx_ThreadsActivityCentre_emptyCaption">
-                            {_t("threads_activity_centre|no_rooms_with_unreads_threads")}
-                        </div>
-                    )}
-                </div>
-            </Menu>
+                    }
+                >
+                    {/* Make the content of the pop-up scrollable */}
+                    <div className="mx_ThreadsActivityCentre_rows">
+                        {roomsAndNotifications.rooms.map(({ room, notificationLevel }) => (
+                            <ThreadsActivityCentreRow
+                                key={room.roomId}
+                                room={room}
+                                notificationLevel={notificationLevel}
+                                onClick={() => setOpen(false)}
+                            />
+                        ))}
+                        {roomsAndNotifications.rooms.length === 0 && (
+                            <div className="mx_ThreadsActivityCentre_emptyCaption">
+                                {_t("threads_activity_centre|no_rooms_with_unreads_threads")}
+                            </div>
+                        )}
+                    </div>
+                </Menu>
+            )}
         </div>
     );
 }

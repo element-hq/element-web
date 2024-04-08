@@ -28,6 +28,8 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { stubClient } from "../../../test-utils";
 import { populateThread } from "../../../test-utils/threads";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 describe("ThreadsActivityCentre", () => {
     const getTACButton = () => {
@@ -101,9 +103,21 @@ describe("ThreadsActivityCentre", () => {
         );
     });
 
+    beforeEach(async () => {
+        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, false);
+    });
+
     it("should render the threads activity centre button", async () => {
         renderTAC();
         expect(getTACButton()).toBeInTheDocument();
+    });
+
+    it("should render the release announcement", async () => {
+        // Enable release announcement
+        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, true);
+
+        renderTAC();
+        expect(document.body).toMatchSnapshot();
     });
 
     it("should render the threads activity centre button and the display label", async () => {

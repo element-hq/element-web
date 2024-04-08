@@ -60,7 +60,7 @@ describe("<LabsUserSettingsTab />", () => {
         // non-beta labs section
         expect(screen.getByText("Early previews")).toBeInTheDocument();
         const labsSections = container.getElementsByClassName("mx_SettingsSubsection");
-        expect(labsSections).toHaveLength(10);
+        expect(labsSections).toHaveLength(11);
     });
 
     describe("Rust crypto setting", () => {

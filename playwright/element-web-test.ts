@@ -52,6 +52,11 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
 
     // the location tests want a map style url.
     map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+
+    features: {
+        // We don't want to go through the feature announcement during the e2e test
+        feature_release_announcement: false,
+    },
 };
 
 export type TestOptions = {

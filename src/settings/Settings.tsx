@@ -89,6 +89,7 @@ export enum LabGroup {
     Encryption,
     Experimental,
     Developer,
+    Ui,
 }
 
 export enum Features {
@@ -98,6 +99,7 @@ export enum Features {
     OidcNativeFlow = "feature_oidc_native_flow",
     // If true, every new login will use the new rust crypto implementation
     RustCrypto = "feature_rust_crypto",
+    ReleaseAnnouncement = "feature_release_announcement",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -114,6 +116,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
+    [LabGroup.Ui]: _td("labs|group_ui"),
 };
 
 export type SettingValueType =
@@ -1144,6 +1147,24 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         description: () => _t("labs|threads_activity_centre_description", { brand: SdkConfig.get().brand }),
         default: false,
         isFeature: true,
+    },
+    /**
+     * Enable or disable the release announcement feature
+     */
+    [Features.ReleaseAnnouncement]: {
+        isFeature: true,
+        labsGroup: LabGroup.Ui,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+        displayName: _td("labs|release_announcement"),
+    },
+    /**
+     * Managed by the {@link ReleaseAnnouncementStore}
+     * Store the release announcement data
+     */
+    "releaseAnnouncementData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
