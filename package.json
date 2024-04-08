@@ -199,7 +199,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
-        "typescript": "5.4.2",
+        "typescript": "5.4.3",
         "util": "^0.12.5",
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^4.8.0",

@@ -60,8 +60,8 @@ jobs:
             - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
               with:
                   action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-                  project-url: "https://github.com/element-hq/element-web/projects/27"
-                  column-name: "Need info"
+                  project-url: "https://github.com/orgs/element-hq/projects/120"
+                  column-name: "Needs info"
                   label-name: "X-Needs-Info"
 
     add_priority_design_issues_to_project:
@@ -148,7 +148,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Element-R')
         steps:
             - id: add_to_project
-              uses: actions/add-to-project@v0.6.1
+              uses: actions/add-to-project@v1.0.0
               with:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
