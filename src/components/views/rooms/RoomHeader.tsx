@@ -18,7 +18,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Body as BodyText, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
-import { Icon as ExternalLinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
 import { Icon as CloseCallIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
 import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
@@ -27,7 +26,6 @@ import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error
 import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
 import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { useRoomName } from "../../../hooks/useRoomName";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -56,8 +54,7 @@ import { VideoRoomChatButton } from "./RoomHeader/VideoRoomChatButton";
 import { RoomKnocksBar } from "./RoomKnocksBar";
 import { isVideoRoom } from "../../../utils/video-rooms";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
-import Modal from "../../../Modal";
-import ShareDialog from "../dialogs/ShareDialog";
+import { CallGuestLinkButton } from "./RoomHeader/CallGuestLinkButton";
 
 export default function RoomHeader({
     room,
@@ -82,8 +79,6 @@ export default function RoomHeader({
         videoCallClick,
         toggleCallMaximized: toggleCall,
         isViewingCall,
-        generateCallLink,
-        canGenerateCallLink,
         isConnectedToCall,
         hasActiveCallSession,
         callOptions,
@@ -124,20 +119,6 @@ export default function RoomHeader({
 
     const videoClick = useCallback((ev) => videoCallClick(ev, callOptions[0]), [callOptions, videoCallClick]);
 
-    const shareClick = useCallback(() => {
-        try {
-            // generateCallLink throws if the permissions are not met
-            const target = generateCallLink();
-            Modal.createDialog(ShareDialog, {
-                target,
-                customTitle: _t("share|share_call"),
-                subtitle: _t("share|share_call_subtitle"),
-            });
-        } catch (e) {
-            logger.error("Could not generate call link.", e);
-        }
-    }, [generateCallLink]);
-
     const toggleCallButton = (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
             <IconButton onClick={toggleCall}>
@@ -145,13 +126,7 @@ export default function RoomHeader({
             </IconButton>
         </Tooltip>
     );
-    const createExternalLinkButton = (
-        <Tooltip label={_t("voip|get_call_link")}>
-            <IconButton onClick={shareClick} aria-label={_t("voip|get_call_link")}>
-                <ExternalLinkIcon />
-            </IconButton>
-        </Tooltip>
-    );
+
     const joinCallButton = (
         <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
             <Button
@@ -227,7 +202,10 @@ export default function RoomHeader({
     const voiceCallButton = (
         <Tooltip label={voiceCallDisabledReason ?? _t("voip|voice_call")}>
             <IconButton
-                disabled={!!voiceCallDisabledReason}
+                // We need both: isViewingCall and isConnectedToCall
+                //  - in the Lobby we are viewing a call but are not connected to it.
+                //  - in pip view we are connected to the call but not viewing it.
+                disabled={!!voiceCallDisabledReason || isViewingCall || isConnectedToCall}
                 aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
                 onClick={(ev) => voiceCallClick(ev, callOptions[0])}
             >
@@ -335,7 +313,8 @@ export default function RoomHeader({
                             </Tooltip>
                         );
                     })}
-                    {isViewingCall && canGenerateCallLink && createExternalLinkButton}
+
+                    {isViewingCall && <CallGuestLinkButton room={room} />}
                     {((isConnectedToCall && isViewingCall) || isVideoRoom(room)) && <VideoRoomChatButton room={room} />}
 
                     {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
