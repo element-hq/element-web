@@ -27,7 +27,7 @@ import { notificationLevelToIndicator } from "../../../../utils/notifications";
 
 interface ThreadsActivityCentreButtonProps extends ComponentProps<typeof IconButton> {
     /**
-     * Display the `Treads` label next to the icon.
+     * Display the `Threads` label next to the icon.
      */
     displayLabel?: boolean;
     /**

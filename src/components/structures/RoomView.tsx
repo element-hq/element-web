@@ -1268,7 +1268,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.FocusAComposer: {
                 dis.dispatch<FocusComposerPayload>({
                     ...(payload as FocusComposerPayload),
-                    // re-dispatch to the correct composer
+                    // re-dispatch to the correct composer (the send message will still be on screen even when editing a message)
                     action: this.state.editState ? Action.FocusEditMessageComposer : Action.FocusSendMessageComposer,
                 });
                 break;

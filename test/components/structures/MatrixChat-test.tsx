@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { fireEvent, render, RenderResult, screen, within } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen, waitFor, within } from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
 import { Mocked, mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -59,6 +59,7 @@ import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../src/Base
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -220,6 +221,9 @@ describe("<MatrixChat />", () => {
         jest.spyOn(StorageManager, "idbLoad").mockReset();
         jest.spyOn(StorageManager, "idbSave").mockResolvedValue(undefined);
         jest.spyOn(defaultDispatcher, "dispatch").mockClear();
+        jest.spyOn(defaultDispatcher, "fire").mockClear();
+
+        DMRoomMap.makeShared(mockClient);
 
         await clearAllModals();
     });
@@ -227,6 +231,9 @@ describe("<MatrixChat />", () => {
     resetJsDomAfterEach();
 
     afterEach(() => {
+        // @ts-ignore
+        DMRoomMap.setShared(null);
+
         jest.restoreAllMocks();
 
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
@@ -237,6 +244,22 @@ describe("<MatrixChat />", () => {
         const { container } = getComponent();
 
         expect(container).toMatchSnapshot();
+    });
+
+    it("should fire to focus the message composer", async () => {
+        getComponent();
+        defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: "!room:server.org", focusNext: "composer" });
+        await waitFor(() => {
+            expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusSendMessageComposer);
+        });
+    });
+
+    it("should fire to focus the threads panel", async () => {
+        getComponent();
+        defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: "!room:server.org", focusNext: "threadsPanel" });
+        await waitFor(() => {
+            expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusThreadsPanel);
+        });
     });
 
     describe("when query params have a OIDC params", () => {

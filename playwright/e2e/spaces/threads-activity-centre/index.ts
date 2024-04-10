@@ -337,6 +337,15 @@ export class Helpers {
     }
 
     /**
+     * Assert that the thread panel is focused (actually the 'close' button, specifically)
+     */
+    assertThreadPanelFocused() {
+        return expect(
+            this.page.locator(".mx_ThreadPanel").locator(".mx_BaseCard_header").getByTitle("Close"),
+        ).toBeFocused();
+    }
+
+    /**
      * Populate the rooms with messages and threads
      * @param room1
      * @param room2

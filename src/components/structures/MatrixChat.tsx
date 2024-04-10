@@ -116,7 +116,7 @@ import { ButtonEvent } from "../views/elements/AccessibleButton";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
 import Views from "../../Views";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { FocusNextType, ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
@@ -229,7 +229,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
-    private focusComposer: boolean;
+    // What to focus on next component update, if anything
+    private focusNext: FocusNextType;
     private subTitleStatus: string;
     private prevWindowWidth: number;
     private voiceBroadcastResumer?: VoiceBroadcastResumer;
@@ -297,8 +298,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.fontWatcher = new FontWatcher();
         this.themeWatcher.start();
         this.fontWatcher.start();
-
-        this.focusComposer = false;
 
         // object field used for tracking the status info appended to the title tag.
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
@@ -483,9 +482,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
             }
         }
-        if (this.focusComposer) {
+        if (this.focusNext === "composer") {
             dis.fire(Action.FocusSendMessageComposer);
-            this.focusComposer = false;
+            this.focusNext = undefined;
+        } else if (this.focusNext === "threadsPanel") {
+            dis.fire(Action.FocusThreadsPanel);
         }
     }
 
@@ -985,7 +986,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // switch view to the given room
     private async viewRoom(roomInfo: ViewRoomPayload): Promise<void> {
-        this.focusComposer = true;
+        this.focusNext = roomInfo.focusNext ?? "composer";
 
         if (roomInfo.room_alias) {
             logger.log(`Switching to room alias ${roomInfo.room_alias} at event ${roomInfo.event_id}`);

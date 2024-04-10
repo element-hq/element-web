@@ -159,6 +159,7 @@ function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsA
                     show_room_tile: true, // make sure the room is visible in the list
                     room_id: room.roomId,
                     metricsTrigger: "WebThreadsActivityCentre",
+                    focusNext: "threadsPanel",
                 });
             }}
             label={room.name}
