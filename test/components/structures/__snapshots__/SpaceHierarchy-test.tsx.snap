@@ -196,6 +196,76 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
       </div>
     </li>
     <li
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+        role="button"
+        tabindex="-1"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="6"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              K
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Knock room
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            3 members
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+            role="button"
+            tabindex="-1"
+          >
+            View
+          </div>
+          <span
+            class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+          >
+            <input
+              id="checkbox_wKpa6hpi3Y"
+              tabindex="-1"
+              type="checkbox"
+            />
+            <label
+              for="checkbox_wKpa6hpi3Y"
+            >
+              <div
+                class="mx_Checkbox_background"
+              >
+                <div
+                  class="mx_Checkbox_checkmark"
+                />
+              </div>
+            </label>
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
       aria-expanded="true"
       class="mx_SpaceHierarchy_roomTileWrapper"
       role="treeitem"
@@ -247,12 +317,12 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
           >
             <input
-              id="checkbox_wKpa6hpi3Y"
+              id="checkbox_EetmBG4yVC"
               tabindex="-1"
               type="checkbox"
             />
             <label
-              for="checkbox_wKpa6hpi3Y"
+              for="checkbox_EetmBG4yVC"
             >
               <div
                 class="mx_Checkbox_background"
@@ -330,12 +400,12 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             >
               <input
                 disabled=""
-                id="checkbox_EetmBG4yVC"
+                id="checkbox_eEefiPqpMR"
                 tabindex="-1"
                 type="checkbox"
               />
               <label
-                for="checkbox_EetmBG4yVC"
+                for="checkbox_eEefiPqpMR"
               >
                 <div
                   class="mx_Checkbox_background"
