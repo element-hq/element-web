@@ -153,6 +153,10 @@ module.exports = (env, argv) => {
             mobileguide: "./src/vector/mobile_guide/index.ts",
             jitsi: "./src/vector/jitsi/index.ts",
             usercontent: "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
+            serviceworker: {
+                import: "./src/serviceworker/index.ts",
+                filename: "sw.js", // update WebPlatform if this changes
+            },
             ...(useHMR ? {} : cssThemes),
         },
 
@@ -666,7 +670,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi"],
+                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -739,7 +743,6 @@ module.exports = (env, argv) => {
                     "res/jitsi_external_api.min.js",
                     "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
-                    "res/sw.js",
                     "res/welcome.html",
                     { from: "welcome/**", context: path.resolve(__dirname, "res") },
                     { from: "themes/**", context: path.resolve(__dirname, "res") },

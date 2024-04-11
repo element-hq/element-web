@@ -46,7 +46,10 @@ export default class WebPlatform extends VectorBasePlatform {
         super();
         // Register service worker if available on this platform
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js");
+            // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+            navigator.serviceWorker.register("sw.js")
+                .then(r => r.update())
+                .catch(e => console.error("Error registering/updating service worker:", e));
         }
     }
 
