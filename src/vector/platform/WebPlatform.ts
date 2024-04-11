@@ -47,10 +47,13 @@ export default class WebPlatform extends VectorBasePlatform {
         // Register service worker if available on this platform
         if ("serviceWorker" in navigator) {
             // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-            navigator.serviceWorker
-                .register("sw.js")
-                .then((r) => r.update())
-                .catch((e) => console.error("Error registering/updating service worker:", e));
+            const swPromise = navigator.serviceWorker.register("sw.js");
+
+            // Jest causes `register()` to return undefined, so swallow that case.
+            if (swPromise) {
+                swPromise.then((r) => r.update())
+                    .catch((e) => console.error("Error registering/updating service worker:", e));
+            }
         }
     }
 
