@@ -51,7 +51,8 @@ export default class WebPlatform extends VectorBasePlatform {
 
             // Jest causes `register()` to return undefined, so swallow that case.
             if (swPromise) {
-                swPromise.then((r) => r.update())
+                swPromise
+                    .then((r) => r.update())
                     .catch((e) => console.error("Error registering/updating service worker:", e));
             }
         }
