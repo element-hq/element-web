@@ -2846,6 +2846,7 @@
         "show_redaction_placeholder": "Show a placeholder for removed messages",
         "show_stickers_button": "Show stickers button",
         "show_typing_notifications": "Show typing notifications",
+        "showbold": "Show all activity in the room list (dots or number of unread messages)",
         "sidebar": {
             "metaspaces_favourites_description": "Group all your favourite rooms and people in one place.",
             "metaspaces_home_all_rooms": "Show all rooms",
@@ -2862,6 +2863,7 @@
             "title": "Sidebar"
         },
         "start_automatically": "Start automatically after system login",
+        "tac_only_notifications": "Only show notifications in the thread activity centre",
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
         "use_command_f_search": "Use Command + F to search timeline",

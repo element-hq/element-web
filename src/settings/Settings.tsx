@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -586,13 +586,22 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,
     },
+    // Used to be a feature, name kept for backwards compat
     "feature_hidebold": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        configDisablesSetting: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("labs|hidebold"),
         default: false,
+    },
+    "Notifications.showbold": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|showbold"),
+        default: false,
+        invertedSettingName: "feature_hidebold",
+    },
+    "Notifications.tac_only_notifications": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|tac_only_notifications"),
+        default: true,
     },
     "feature_ask_to_join": {
         isFeature: true,
