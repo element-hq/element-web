@@ -65,7 +65,7 @@ describe("<Pill>", () => {
             <div onClick={pillParentClickHandler}>
                 <Pill {...withDefault} />
             </div>,
-            { wrapper: TooltipProvider },
+            ,
         );
     };
 

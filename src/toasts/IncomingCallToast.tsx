@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
-import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
+import { Button, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 
 import { _t } from "../languageHandler";
@@ -168,7 +168,7 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     );
 
     return (
-        <TooltipProvider>
+        <>
             <div>
                 <RoomAvatar room={room ?? undefined} size="24px" />
             </div>
@@ -200,6 +200,6 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
                 onClick={onCloseClick}
                 title={_t("action|close")}
             />
-        </TooltipProvider>
+        </>
     );
 }

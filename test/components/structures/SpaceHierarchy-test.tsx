@@ -20,7 +20,6 @@ import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@
 import { HierarchyRoom, JoinRule, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
@@ -287,9 +286,7 @@ describe("SpaceHierarchy", () => {
         };
         const getComponent = (props = {}): React.ReactElement => (
             <MatrixClientContext.Provider value={client}>
-                <TooltipProvider>
-                    <SpaceHierarchy {...defaultProps} {...props} />
-                </TooltipProvider>
+                <SpaceHierarchy {...defaultProps} {...props} />
             </MatrixClientContext.Provider>
         );
 

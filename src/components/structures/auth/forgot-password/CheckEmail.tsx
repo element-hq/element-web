@@ -66,7 +66,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
             <input onClick={onSubmitForm} type="button" className="mx_Login_submit" value={_t("action|next")} />
             <div className="mx_AuthBody_did-not-receive">
                 <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_resend_prompt")}</span>
-                <Tooltip label={_t("auth|check_email_resend_tooltip")} side="top" open={tooltipVisible}>
+                <Tooltip label={_t("auth|check_email_resend_tooltip")} placement="top" open={tooltipVisible}>
                     <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onResendClickFn}>
                         <RetryIcon className="mx_Icon mx_Icon_16" />
                         {_t("action|resend")}

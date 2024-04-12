@@ -80,8 +80,7 @@ describe("<BeaconViewDialog />", () => {
         matrixClient: mockClient as MatrixClient,
     };
 
-    const getComponent = (props = {}): RenderResult =>
-        render(<BeaconViewDialog {...defaultProps} {...props} />, { wrapper: TooltipProvider });
+    const getComponent = (props = {}): RenderResult => render(<BeaconViewDialog {...defaultProps} {...props} />);
 
     const openSidebar = (getByTestId: RenderResult["getByTestId"]) => {
         fireEvent.click(getByTestId("beacon-view-dialog-open-sidebar"));

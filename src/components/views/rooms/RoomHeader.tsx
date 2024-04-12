@@ -252,7 +252,7 @@ export default function RoomHeader({
                             <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
                             {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                                <Tooltip label={_t("common|public_room")} side="right">
+                                <Tooltip label={_t("common|public_room")} placement="right">
                                     <PublicIcon
                                         width="16px"
                                         height="16px"
@@ -263,7 +263,7 @@ export default function RoomHeader({
                             )}
 
                             {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                                <Tooltip label={_t("common|verified")} side="right">
+                                <Tooltip label={_t("common|verified")} placement="right">
                                     <VerifiedIcon
                                         width="16px"
                                         height="16px"
@@ -274,7 +274,7 @@ export default function RoomHeader({
                             )}
 
                             {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                                <Tooltip label={_t("room|header_untrusted_label")} side="right">
+                                <Tooltip label={_t("room|header_untrusted_label")} placement="right">
                                     <ErrorIcon
                                         width="16px"
                                         height="16px"

@@ -48,7 +48,7 @@ interface Props {
     size?: number;
     onClick?: () => void;
     hideTooltip?: boolean;
-    tooltipSide?: ComponentProps<typeof Tooltip>["side"];
+    tooltipPlacement?: ComponentProps<typeof Tooltip>["placement"];
     bordered?: boolean;
 }
 
@@ -69,7 +69,7 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
     size,
     onClick,
     hideTooltip,
-    tooltipSide,
+    tooltipPlacement,
     bordered,
 }) => {
     const classes = classNames(
@@ -109,7 +109,7 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
     }
 
     return (
-        <Tooltip label={label} side={tooltipSide} isTriggerInteractive={!!onClick}>
+        <Tooltip label={label} placement={tooltipPlacement} isTriggerInteractive={!!onClick}>
             {content}
         </Tooltip>
     );

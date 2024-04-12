@@ -405,7 +405,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
                 align="center"
                 justify="space-between"
             >
-                <Tooltip label={_t("action|search")} side="right">
+                <Tooltip label={_t("action|search")} placement="right">
                     <button
                         className="mx_RoomSummaryCard_searchBtn"
                         data-testid="summary-search"

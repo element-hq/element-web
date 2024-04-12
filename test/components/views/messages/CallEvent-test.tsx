@@ -103,7 +103,7 @@ describe("CallEvent", () => {
     });
 
     const renderEvent = () => {
-        render(<CallEvent mxEvent={call.event} />, { wrapper: TooltipProvider });
+        render(<CallEvent mxEvent={call.event} />);
     };
 
     it("shows a message and duration if the call was ended", () => {

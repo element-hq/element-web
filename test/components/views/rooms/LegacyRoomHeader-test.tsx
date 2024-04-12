@@ -226,7 +226,7 @@ describe("LegacyRoomHeader", () => {
                     {...props}
                 />
             </RoomContext.Provider>,
-            { wrapper: TooltipProvider },
+            ,
         );
     };
 
@@ -870,7 +870,7 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
         <RoomContext.Provider value={{ ...roomContext, room } as IRoomState}>
             <RoomHeader {...props} />
         </RoomContext.Provider>,
-        { wrapper: TooltipProvider },
+        ,
     );
 }
 

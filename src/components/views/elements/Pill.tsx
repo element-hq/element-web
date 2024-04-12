@@ -151,7 +151,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
                 <Tooltip
                     label={resourceId ?? ""}
                     open={resourceId ? undefined : false}
-                    side="right"
+                    placement="right"
                     isTriggerInteractive={isAnchor}
                 >
                     {isAnchor ? (
