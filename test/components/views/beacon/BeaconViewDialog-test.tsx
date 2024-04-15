@@ -19,7 +19,6 @@ import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { mocked } from "jest-mock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import BeaconViewDialog from "../../../../src/components/views/beacon/BeaconViewDialog";
 import {

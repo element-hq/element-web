@@ -38,7 +38,6 @@ import {
     VerificationPhase as Phase,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserInfo, {
     BanToggleButton,
@@ -206,11 +205,7 @@ describe("<UserInfo />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return (
-                <TooltipProvider>
-                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
-                </TooltipProvider>
-            );
+            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
 
         return render(<UserInfo {...defaultProps} {...props} />, {
@@ -454,11 +449,7 @@ describe("<UserInfoHeader />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return (
-                <TooltipProvider>
-                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
-                </TooltipProvider>
-            );
+            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
 
         return render(<UserInfoHeader {...defaultProps} {...props} />, {

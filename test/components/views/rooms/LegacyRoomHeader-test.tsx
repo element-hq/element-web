@@ -32,7 +32,6 @@ import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";
 import { setupJestCanvasMock } from "jest-canvas-mock";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import { TooltipProvider } from "@vector-im/compound-web";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
 // eslint-disable-next-line no-restricted-imports
@@ -226,7 +225,6 @@ describe("LegacyRoomHeader", () => {
                     {...props}
                 />
             </RoomContext.Provider>,
-            ,
         );
     };
 
@@ -870,7 +868,6 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
         <RoomContext.Provider value={{ ...roomContext, room } as IRoomState}>
             <RoomHeader {...props} />
         </RoomContext.Provider>,
-        ,
     );
 }
 

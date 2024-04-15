@@ -19,7 +19,6 @@ import { render, screen, act, cleanup, fireEvent, waitFor } from "@testing-libra
 import { mocked, Mocked } from "jest-mock";
 import { Room, RoomStateEvent, MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import {

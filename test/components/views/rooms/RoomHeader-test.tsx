@@ -40,7 +40,6 @@ import {
     waitFor,
 } from "@testing-library/react";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { filterConsole, mkEvent, stubClient } from "../../../test-utils";
 import RoomHeader from "../../../../src/components/views/rooms/RoomHeader";
@@ -67,11 +66,7 @@ jest.mock("../../../../src/utils/ShieldUtils");
 function getWrapper(): RenderOptions {
     return {
         wrapper: ({ children }) => (
-            <TooltipProvider>
-                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                    {children}
-                </MatrixClientContext.Provider>
-            </TooltipProvider>
+            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>{children}</MatrixClientContext.Provider>
         ),
     };
 }
