@@ -290,6 +290,20 @@ function DevicesSection({
     let expandHideCaption;
     let expandIconClasses = "mx_E2EIcon";
 
+    const dehydratedDeviceIds: string[] = [];
+    for (const device of devices) {
+        if (device.dehydrated) {
+            dehydratedDeviceIds.push(device.deviceId);
+        }
+    }
+    // If the user has exactly one device marked as dehydrated, we consider
+    // that as the dehydrated device, and hide it as a normal device (but
+    // indicate that the user is using a dehydrated device).  If the user has
+    // more than one, that is anomalous, and we show all the devices so that
+    // nothing is hidden.
+    const dehydratedDeviceId: string | undefined = dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : undefined;
+    let dehydratedDeviceInExpandSection = false;
+
     if (isUserVerified) {
         for (let i = 0; i < devices.length; ++i) {
             const device = devices[i];
@@ -302,7 +316,13 @@ function DevicesSection({
             const isVerified = deviceTrust && (isMe ? deviceTrust.crossSigningVerified : deviceTrust.isVerified());
 
             if (isVerified) {
-                expandSectionDevices.push(device);
+                // don't show dehydrated device as a normal device, if it's
+                // verified
+                if (device.deviceId === dehydratedDeviceId) {
+                    dehydratedDeviceInExpandSection = true;
+                } else {
+                    expandSectionDevices.push(device);
+                }
             } else {
                 unverifiedDevices.push(device);
             }
@@ -311,6 +331,10 @@ function DevicesSection({
         expandHideCaption = _t("user_info|hide_verified_sessions");
         expandIconClasses += " mx_E2EIcon_verified";
     } else {
+        if (dehydratedDeviceId) {
+            devices = devices.filter((device) => device.deviceId !== dehydratedDeviceId);
+            dehydratedDeviceInExpandSection = true;
+        }
         expandSectionDevices = devices;
         expandCountCaption = _t("user_info|count_of_sessions", { count: devices.length });
         expandHideCaption = _t("user_info|hide_sessions");
@@ -347,6 +371,9 @@ function DevicesSection({
                 );
             }),
         );
+        if (dehydratedDeviceInExpandSection) {
+            deviceList.push(<div>{_t("user_info|dehydrated_device_enabled")}</div>);
+        }
     }
 
     return (

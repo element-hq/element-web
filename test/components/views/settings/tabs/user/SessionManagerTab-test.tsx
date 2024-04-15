@@ -22,6 +22,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 import {
     ClientEvent,
+    Device,
     IMyDevice,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
@@ -61,6 +62,18 @@ mockPlatformPeg();
 // to restore later
 const realWindowLocation = window.location;
 
+function deviceToDeviceObj(userId: string, device: IMyDevice, opts: Partial<Device> = {}): Device {
+    const deviceOpts: Pick<Device, "deviceId" | "userId" | "algorithms" | "keys"> & Partial<Device> = {
+        deviceId: device.device_id,
+        userId,
+        algorithms: [],
+        displayName: device.display_name,
+        keys: new Map(),
+        ...opts,
+    };
+    return new Device(deviceOpts);
+}
+
 describe("<SessionManagerTab />", () => {
     const aliceId = "@alice:server.org";
     const deviceId = "alices_device";
@@ -69,10 +82,12 @@ describe("<SessionManagerTab />", () => {
         device_id: deviceId,
         display_name: "Alices device",
     };
+    const alicesDeviceObj = deviceToDeviceObj(aliceId, alicesDevice);
     const alicesMobileDevice = {
         device_id: "alices_mobile_device",
         last_seen_ts: Date.now(),
     };
+    const alicesMobileDeviceObj = deviceToDeviceObj(aliceId, alicesMobileDevice);
 
     const alicesOlderMobileDevice = {
         device_id: "alices_older_mobile_device",
@@ -84,6 +99,20 @@ describe("<SessionManagerTab />", () => {
         last_seen_ts: Date.now() - (INACTIVE_DEVICE_AGE_MS + 1000),
     };
 
+    const alicesDehydratedDevice = {
+        device_id: "alices_dehydrated_device",
+        last_seen_ts: Date.now(),
+    };
+    const alicesDehydratedDeviceObj = deviceToDeviceObj(aliceId, alicesDehydratedDevice, { dehydrated: true });
+
+    const alicesOtherDehydratedDevice = {
+        device_id: "alices_other_dehydrated_device",
+        last_seen_ts: Date.now(),
+    };
+    const alicesOtherDehydratedDeviceObj = deviceToDeviceObj(aliceId, alicesOtherDehydratedDevice, {
+        dehydrated: true,
+    });
+
     const mockVerificationRequest = {
         cancel: jest.fn(),
         on: jest.fn(),
@@ -91,6 +120,7 @@ describe("<SessionManagerTab />", () => {
 
     const mockCrypto = mocked({
         getDeviceVerificationStatus: jest.fn(),
+        getUserDeviceInfo: jest.fn(),
         requestDeviceVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
     } as unknown as CryptoApi);
 
@@ -624,6 +654,137 @@ describe("<SessionManagerTab />", () => {
             expect(mockVerificationRequest.cancel).toHaveBeenCalled();
             // devices refreshed
             expect(mockClient.getDevices).toHaveBeenCalled();
+        });
+    });
+
+    describe("device dehydration", () => {
+        it("Hides a verified dehydrated device", async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
+            });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+
+            const devicesMap = new Map<string, Device>([
+                [alicesDeviceObj.deviceId, alicesDeviceObj],
+                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
+                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
+            ]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+            mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
+                // alices device is trusted
+                if (deviceId === alicesDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
+                }
+                // the dehydrated device is trusted
+                if (deviceId === alicesDehydratedDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
+                }
+                // alices mobile device is not
+                if (deviceId === alicesMobileDevice.device_id) {
+                    return new DeviceVerificationStatus({});
+                }
+                return null;
+            });
+
+            const { queryByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            // the dehydrated device should be hidden
+            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeFalsy();
+        });
+
+        it("Shows an unverified dehydrated device", async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
+            });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+
+            const devicesMap = new Map<string, Device>([
+                [alicesDeviceObj.deviceId, alicesDeviceObj],
+                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
+                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
+            ]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+            mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
+                // alices device is trusted
+                if (deviceId === alicesDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
+                }
+                // the dehydrated device is not
+                if (deviceId === alicesDehydratedDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: false, localVerified: false });
+                }
+                // alices mobile device is not
+                if (deviceId === alicesMobileDevice.device_id) {
+                    return new DeviceVerificationStatus({});
+                }
+                return null;
+            });
+
+            const { queryByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            // the dehydrated device should be shown since it is unverified
+            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeTruthy();
+        });
+
+        it("Shows the dehydrated devices if there are multiple", async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice, alicesOtherDehydratedDevice],
+            });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+
+            const devicesMap = new Map<string, Device>([
+                [alicesDeviceObj.deviceId, alicesDeviceObj],
+                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
+                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
+                [alicesOtherDehydratedDeviceObj.deviceId, alicesOtherDehydratedDeviceObj],
+            ]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+            mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
+                // alices device is trusted
+                if (deviceId === alicesDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
+                }
+                // one dehydrated device is trusted
+                if (deviceId === alicesDehydratedDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
+                }
+                // the other is not
+                if (deviceId === alicesOtherDehydratedDevice.device_id) {
+                    return new DeviceVerificationStatus({ crossSigningVerified: false, localVerified: false });
+                }
+                // alices mobile device is not
+                if (deviceId === alicesMobileDevice.device_id) {
+                    return new DeviceVerificationStatus({});
+                }
+                return null;
+            });
+
+            const { queryByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            // both the dehydrated devices should be shown, since there are multiple
+            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${alicesOtherDehydratedDevice.device_id}`)).toBeTruthy();
         });
     });
 

@@ -115,6 +115,8 @@ export function createTestClient(): MatrixClient {
         credentials: { userId: "@userId:matrix.org" },
         bootstrapCrossSigning: jest.fn(),
         hasSecretStorageKey: jest.fn(),
+        getKeyBackupVersion: jest.fn(),
+        checkOwnCrossSigningTrust: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),

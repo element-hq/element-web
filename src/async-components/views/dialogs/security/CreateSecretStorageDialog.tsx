@@ -48,6 +48,7 @@ import InteractiveAuthDialog from "../../../../components/views/dialogs/Interact
 import { IValidationResult } from "../../../../components/views/elements/Validation";
 import { Icon as CheckmarkIcon } from "../../../../../res/img/element-icons/check.svg";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
+import { initialiseDehydration } from "../../../../utils/device/dehydration";
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
@@ -397,6 +398,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     },
                 });
             }
+            await initialiseDehydration(true);
 
             this.setState({
                 phase: Phase.Stored,
