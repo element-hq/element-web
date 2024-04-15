@@ -641,6 +641,60 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                 role="list"
               />
             </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_QRlYy75nfv5b"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Show all activity in the room list (dots or number of unread messages)
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Show all activity in the room list (dots or number of unread messages)"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_QRlYy75nfv5b"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_OEPN1su1JYVt"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Only show notifications in the thread activity centre
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Only show notifications in the thread activity centre"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_OEPN1su1JYVt"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div
@@ -1472,6 +1526,60 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                 </div>
               </div>
             </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_QRlYy75nfv5b"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Show all activity in the room list (dots or number of unread messages)
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Show all activity in the room list (dots or number of unread messages)"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_QRlYy75nfv5b"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_OEPN1su1JYVt"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Only show notifications in the thread activity centre
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Only show notifications in the thread activity centre"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_OEPN1su1JYVt"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div
@@ -1523,11 +1631,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                   class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
                 >
                   <input
-                    id="checkbox_QRlYy75nfv"
+                    id="checkbox_OyR5kbu3pE"
                     type="checkbox"
                   />
                   <label
-                    for="checkbox_QRlYy75nfv"
+                    for="checkbox_OyR5kbu3pE"
                   >
                     <div
                       class="mx_Checkbox_background"

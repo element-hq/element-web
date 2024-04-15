@@ -79,7 +79,6 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
                 // If the user cannot invite the Knocking is not given as an option.
                 canInvite,
             }).finished.then(() => {
-                // we need to use the function here because the callback got called before the state was updated.
                 if (isRoomJoinable()) showLinkModal();
             });
         }

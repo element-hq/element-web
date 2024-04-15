@@ -35,5 +35,61 @@ exports[`<Notifications /> main notification switches renders only enable notifi
       />
     </div>
   </div>
+  <div>
+    <div
+      class="mx_SettingsFlag"
+    >
+      <label
+        class="mx_SettingsFlag_label"
+        for="mx_SettingsFlag_testid_1"
+      >
+        <span
+          class="mx_SettingsFlag_labelText"
+        >
+          Show all activity in the room list (dots or number of unread messages)
+        </span>
+      </label>
+      <div
+        aria-checked="true"
+        aria-disabled="false"
+        aria-label="Show all activity in the room list (dots or number of unread messages)"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+        id="mx_SettingsFlag_testid_1"
+        role="switch"
+        tabindex="0"
+      >
+        <div
+          class="mx_ToggleSwitch_ball"
+        />
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFlag"
+    >
+      <label
+        class="mx_SettingsFlag_label"
+        for="mx_SettingsFlag_testid_2"
+      >
+        <span
+          class="mx_SettingsFlag_labelText"
+        >
+          Only show notifications in the thread activity centre
+        </span>
+      </label>
+      <div
+        aria-checked="true"
+        aria-disabled="false"
+        aria-label="Only show notifications in the thread activity centre"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+        id="mx_SettingsFlag_testid_2"
+        role="switch"
+        tabindex="0"
+      >
+        <div
+          class="mx_ToggleSwitch_ball"
+        />
+      </div>
+    </div>
+  </div>
 </div>
 `;

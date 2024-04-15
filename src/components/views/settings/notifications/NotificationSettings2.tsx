@@ -41,6 +41,7 @@ import { SettingsBanner } from "../shared/SettingsBanner";
 import { SettingsSection } from "../shared/SettingsSection";
 import SettingsSubsection from "../shared/SettingsSubsection";
 import { NotificationPusherSettings } from "./NotificationPusherSettings";
+import SettingsFlag from "../../elements/SettingsFlag";
 
 enum NotificationDefaultLevels {
     AllMessages = "all_messages",
@@ -71,6 +72,9 @@ function useHasUnreadNotifications(): boolean {
     return cli.getRooms().some((room) => room.getUnreadNotificationCount() > 0);
 }
 
+/**
+ * The new notification settings tab view, only displayed if the user has Features.NotificationSettings2 enabled
+ */
 export default function NotificationSettings2(): JSX.Element {
     const cli = useMatrixClientContext();
 
@@ -352,6 +356,9 @@ export default function NotificationSettings2(): JSX.Element {
                         label={_t("notifications|keyword")}
                         placeholder={_t("notifications|keyword_new")}
                     />
+
+                    <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
                 </SettingsSubsection>
                 <NotificationPusherSettings />
                 <SettingsSubsection heading={_t("settings|notifications|quick_actions_section")}>
