@@ -681,4 +681,3 @@ export default function eventSearch(
         return eventIndexSearch(client, term, roomId, abortSignal);
     }
 }
-
