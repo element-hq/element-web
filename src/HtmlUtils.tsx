@@ -348,7 +348,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
             isHtmlMessage = !isPlainText;
 
             if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
-                [...phtml.querySelectorAll<HTMLElement>("div, span[data-mx-maths]")].forEach((e) => {
+                [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
                     e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
                         throwOnError: false,
                         displayMode: e.tagName == "DIV",
