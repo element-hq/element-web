@@ -92,7 +92,7 @@ jobs:
                   find bundles -type d -mindepth 1 -maxdepth 1 -exec sed -i "\:{}:d" _redirects \;
 
             - name: Wait for other steps to succeed
-              uses: t3chguy/wait-on-check-action@05861d3a448898eb33dfce34153bd1ecb9422fb9 # fork
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Build & Deploy develop.element.io"
