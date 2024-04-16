@@ -50,6 +50,7 @@ describe("CreateSecretStorageDialog", () => {
         mockCrypto = mocked(mockClient.getCrypto()!);
         Object.assign(mockCrypto, {
             isKeyBackupTrusted: jest.fn(),
+            isDehydrationSupported: jest.fn(() => false),
             bootstrapCrossSigning: jest.fn(),
             bootstrapSecretStorage: jest.fn(),
         });
