@@ -3167,7 +3167,8 @@
     },
     "threads_activity_centre": {
         "header": "Threads activity",
-        "no_rooms_with_unreads_threads": "You don't have rooms with unread threads yet.",
+        "no_rooms_with_threads_notifs": "You don't have rooms with thread notifications yet.",
+        "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet.",
         "release_announcement_description": "Threads notifications have moved, find them here from now on.",
         "release_announcement_header": "Threads Activity Centre"
     },
