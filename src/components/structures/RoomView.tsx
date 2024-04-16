@@ -121,7 +121,6 @@ import { SDKContext } from "../../contexts/SDKContext";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -133,6 +132,8 @@ import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoi
 import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
+// import eventSearch from "../../Searching";
+import searchAllEventsLocally from "../../VerjiLocalSearch"; // ROSBERG
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1730,7 +1731,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+
+        // ROSBERG START
+        // const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        const promise = searchAllEventsLocally(term, roomId);
+        // ROSBERG END
 
         this.setState({
             search: {
@@ -1740,7 +1745,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 roomId,
                 term,
                 scope,
-                promise,
+                // ROSBERG START
+                // promise,
+                promise: promise as any,
+                // ROSBERG END
                 abortController,
             },
         });
