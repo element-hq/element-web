@@ -33,11 +33,11 @@
     "@jridgewell/trace-mapping" "^0.3.24"
 
 "@axe-core/playwright@^4.8.1":
-  version "4.8.5"
-  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.8.5.tgz#85975b4dce114120c79a248897570a5ee757e155"
-  integrity sha512-GFdXXAEn9uk0Vyzgl2eEP+VwvgGzas0YSnacoJ/0U237G83zWZ1PhbP/RDymm0cqevoA+xRjMo+ONzh9Q711nw==
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.9.0.tgz#3538c5af8868f1704eedeb58a6b5a84feb0ccfe1"
+  integrity sha512-Q1Lz75dNsX38jof+aev7RficDMdH/HLOLySkDdXR0fUoeFcLdw4UNgDO2CNNP4CTpoesEdfYRdd6VmDXjhBgbA==
   dependencies:
-    axe-core "~4.8.4"
+    axe-core "~4.9.0"
 
 "@babel/cli@^7.12.10":
   version "7.24.1"
@@ -3424,7 +3424,7 @@ await-lock@^2.1.0:
   resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.2.2.tgz#a95a9b269bfd2f69d22b17a321686f551152bcef"
   integrity sha512-aDczADvlvTGajTDjcjpJMqRkOF6Qdz3YbPZm/PyW6tKPkx2hlYBzxMhEywM/tU72HrVZjgl5VCdRuMlA7pZ8Gw==
 
-axe-core@4.9.0:
+axe-core@4.9.0, axe-core@~4.9.0:
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.9.0.tgz#b18971494551ab39d4ff5f7d4c6411bd20cc7c2a"
   integrity sha512-H5orY+M2Fr56DWmMFpMrq5Ge93qjNdPVqzBv5gWK3aD1OvjBEJlEzxf09z93dGVQeI0LiW+aCMIx1QtShC/zUw==
@@ -3433,11 +3433,6 @@ axe-core@=4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.7.0.tgz#34ba5a48a8b564f67e103f0aa5768d76e15bbbbf"
   integrity sha512-M0JtH+hlOL5pLQwHOLNYZaXuhqmvS8oExsqB1SBYgA4Dk7u/xx+YdGHXaK5pyUfed5mYXdlYiphWq3G8cRi5JQ==
-
-axe-core@~4.8.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.4.tgz#90db39a2b316f963f00196434d964e6e23648643"
-  integrity sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==
 
 axobject-query@^3.2.1:
   version "3.2.1"
@@ -4271,9 +4266,9 @@ detect-node-es@^1.1.0:
   integrity sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==
 
 diff-dom@^5.0.0:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-5.1.2.tgz#951627784bc45e32999f0c97cd42e4cf8c35791f"
-  integrity sha512-ayOX+pBYzyLdt7iXFd+8jvWzhrcWk+9gQqYk7Zz8/0hpIsqSbtk6MNbtds+Ox6B8ONsdtIcfPmk3NXPdgb3+xQ==
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-5.1.3.tgz#1a00ac023bdc9b7a6de702a51fd6566a34b8d9a4"
+  integrity sha512-cIQQSQywwn98yIEt1B7BhRRRH+M3tDEbJeV+j7NY0nSM4o3LdP7D3r/kRZDzT2tINX5r9Dpzvk7+RkeSMhzjhA==
 
 diff-match-patch@^1.0.5:
   version "1.0.5"
@@ -5346,10 +5341,10 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
-focus-lock@^1.3.2:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-1.3.3.tgz#b26711506025ec1ecdca69bb41fd10f0c15c4ae2"
-  integrity sha512-hfXkZha7Xt4RQtrL1HBfspAuIj89Y0fb6GX0dfJilb8S2G/lvL4akPAcHq6xoD2NuZnDMCnZL/zQesMyeu6Psg==
+focus-lock@^1.3.5:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-1.3.5.tgz#aa644576e5ec47d227b57eb14e1efb2abf33914c"
+  integrity sha512-QFaHbhv9WPUeLYBDe/PAuLKJ4Dd9OPvKs9xZBr3yLXnUrDNaVXKu2baDBXe3naPY30hgHYSsf2JW4jzas2mDEQ==
   dependencies:
     tslib "^2.0.3"
 
@@ -7727,10 +7722,10 @@ postcss@^8.4.38:
     picocolors "^1.0.0"
     source-map-js "^1.2.0"
 
-posthog-js@1.116.6:
-  version "1.116.6"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.116.6.tgz#9a5c9f49230a76642f4c44d93b96710f886c2880"
-  integrity sha512-rvt8HxzJD4c2B/xsUa4jle8ApdqljeBI2Qqjp4XJMohQf18DXRyM6b96H5/UMs8jxYuZG14Er0h/kEIWeU6Fmw==
+posthog-js@1.121.2:
+  version "1.121.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.121.2.tgz#1e72c0a8ce3a26241378f3f1cbafb9bd1780dc69"
+  integrity sha512-2rhPgzeOaSR7Ztf77fGxGnUavBJCV3+tR5O1UHsnygxKL+XIt+Vr9i/hYYgu9Gz9/eq2Y7sxpszjxSTDMZprRQ==
   dependencies:
     fflate "^0.4.8"
     preact "^10.19.3"
@@ -7965,15 +7960,15 @@ react-error-boundary@^3.1.0:
     "@babel/runtime" "^7.12.5"
 
 react-focus-lock@^2.5.1:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.11.2.tgz#dcc9a0dde630f0b9c694b823066f1b954c024422"
-  integrity sha512-DDTbEiov0+RthESPVSTIdAWPPKic+op3sCcP+icbMRobvQNt7LuAlJ3KoarqQv5sCgKArru3kXmlmFTa27/CdQ==
+  version "2.11.3"
+  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.11.3.tgz#a7c98b4ab11fd270d78f90a7c9a9e69352c2af6d"
+  integrity sha512-CfWYS86y6KvAIGxYzO1/HlWI2zGON9Fa3L2xfREDGMNFAtYj3m/ZRvnsMH4H75dj5FpgDy2LWA1Vyx+twV80vw==
   dependencies:
     "@babel/runtime" "^7.0.0"
-    focus-lock "^1.3.2"
+    focus-lock "^1.3.5"
     prop-types "^15.6.2"
     react-clientside-effect "^1.2.6"
-    use-callback-ref "^1.3.0"
+    use-callback-ref "^1.3.2"
     use-sidecar "^1.1.2"
 
 react-is@^16.13.1, react-is@^16.7.0:
@@ -9310,6 +9305,13 @@ use-callback-ref@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.3.1.tgz#9be64c3902cbd72b07fe55e56408ae3a26036fd0"
   integrity sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==
+  dependencies:
+    tslib "^2.0.0"
+
+use-callback-ref@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.3.2.tgz#6134c7f6ff76e2be0b56c809b17a650c942b1693"
+  integrity sha512-elOQwe6Q8gqZgDA8mrh44qRTQqpIHDcZ3hXTLjBe1i4ph8XpNJnO+aQf3NaG+lriLopI4HMx9VjQLfPQ6vhnoA==
   dependencies:
     tslib "^2.0.0"
 
