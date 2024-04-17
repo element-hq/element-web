@@ -1419,6 +1419,7 @@
         "group_spaces": "Przestrzenie",
         "group_themes": "Motywy",
         "group_threads": "Wątki",
+        "group_ui": "Interfejs użytkownika",
         "group_voip": "Głos i wideo",
         "group_widgets": "Widżety",
         "hidebold": "Ukryj kropkę powiadomienia (wyświetlaj tylko licznik plakietek)",
@@ -1442,6 +1443,7 @@
         "oidc_native_flow": "Uwierzytelnianie natywne OIDC",
         "oidc_native_flow_description": "⚠ OSTRZEŻENIE: Funkcja eksperymentalna. Użyj uwierzytelniania natywnego OIDC, gdy jest wspierane przez serwer.",
         "pinning": "Przypinanie wiadomości",
+        "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
@@ -2685,6 +2687,8 @@
             "cross_signing_self_signing_private_key": "Samo-podpisujący klucz prywatny:",
             "cross_signing_user_signing_private_key": "Podpisany przez użytkownika klucz prywatny:",
             "cryptography_section": "Kryptografia",
+            "dehydrated_device_description": "Funkcja urządzenia offline umożliwia odbieranie wiadomości szyfrowanych, nawet jeśli nie jesteś zalogowany na żadnym urządzeniu",
+            "dehydrated_device_enabled": "Urządzenie offline włączone",
             "delete_backup": "Usuń kopię zapasową",
             "delete_backup_confirm_description": "Czy jesteś pewien? Stracisz dostęp do wszystkich swoich zaszyfrowanych wiadomości, jeżeli nie utworzyłeś poprawnej kopii zapasowej kluczy.",
             "e2ee_default_disabled_warning": "Twój administrator serwera wyłączył szyfrowanie end-to-end domyślnie w pokojach prywatnych i wiadomościach bezpośrednich.",
@@ -2847,6 +2851,7 @@
         "show_redaction_placeholder": "Pokaż symbol zastępczy dla usuniętych wiadomości",
         "show_stickers_button": "Pokaż przycisk naklejek",
         "show_typing_notifications": "Pokazuj powiadomienia o pisaniu",
+        "showbold": "Pokaż całą aktywność na liście pomieszczeń (kropki lub liczbę nieprzeczytanych wiadomości)",
         "sidebar": {
             "metaspaces_favourites_description": "Pogrupuj wszystkie swoje ulubione pokoje i osoby w jednym miejscu.",
             "metaspaces_home_all_rooms": "Pokaż wszystkie pokoje",
@@ -2863,6 +2868,7 @@
             "title": "Pasek boczny"
         },
         "start_automatically": "Uruchom automatycznie po zalogowaniu się do systemu",
+        "tac_only_notifications": "Pokaż powiadomienia tylko w centrum aktywności wątków",
         "use_12_hour_format": "Pokaż czas w formacie 12-sto godzinnym (np. 2:30pm)",
         "use_command_enter_send_message": "Użyj Command + Enter, aby wysłać wiadomość",
         "use_command_f_search": "Użyj Command + F aby przeszukać oś czasu",
@@ -3164,7 +3170,10 @@
     },
     "threads_activity_centre": {
         "header": "Aktywność wątków",
-        "no_rooms_with_unreads_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
+        "no_rooms_with_threads_notifs": "Nie masz jeszcze pokoi z powiadomieniami w wątku.",
+        "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami.",
+        "release_announcement_description": "Powiadomienia w wątkach zostały przeniesione, teraz znajdziesz je tutaj.",
+        "release_announcement_header": "Centrum aktywności wątków"
     },
     "time": {
         "about_day_ago": "około dzień temu",
@@ -3659,6 +3668,12 @@
         "toast_title": "Aktualizuj %(brand)s",
         "unavailable": "Niedostępny"
     },
+    "update_room_access_modal": {
+        "description": "Aby utworzyć link udostępniania, musisz zezwolić gościom na dołączenie do tego pokoju. Może to zmniejszyć bezpieczeństwo pokoju. Gdy zakończysz połączenie, możesz ustawić pokój jako prywatny z powrotem.",
+        "dont_change_description": "Możesz również zadzwonić w innym pokoju.",
+        "no_change": "Nie chce zmieniać poziomu uprawnień.",
+        "title": "Zmień poziom dostępu pokoju"
+    },
     "upload_failed_generic": "Nie udało się przesłać pliku '%(fileName)s'.",
     "upload_failed_size": "Plik '%(fileName)s' przekracza limit rozmiaru dla tego serwera głównego",
     "upload_failed_title": "Błąd przesyłania",
@@ -3694,6 +3709,7 @@
         "deactivate_confirm_action": "Dezaktywuj użytkownika",
         "deactivate_confirm_description": "Dezaktywacja tego użytkownika, wyloguje go i uniemożliwi logowanie ponowne. Dodatkowo, opuści wszystkie pokoje, w których się znajdują. Tej akcji nie można cofnąć. Czy na pewno chcesz dezaktywować tego użytkownika?",
         "deactivate_confirm_title": "Dezaktywować użytkownika?",
+        "dehydrated_device_enabled": "Urządzenie offline włączone",
         "demote_button": "Degraduj",
         "demote_self_confirm_description_space": "Nie będziesz mógł cofnąć tej zmiany, ponieważ degradujesz swoje uprawnienia. Jeśli jesteś ostatnim użytkownikiem uprzywilejowanym w tej przestrzeni, nie będziesz mógł ich odzyskać.",
         "demote_self_confirm_room": "Nie będziesz mógł cofnąć tej zmiany, ponieważ degradujesz swoje uprawnienia. Jeśli jesteś ostatnim użytkownikiem uprzywilejowanym w tym pokoju, nie będziesz mógł ich odzyskać.",

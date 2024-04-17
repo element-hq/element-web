@@ -26,6 +26,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import MatrixChat from "../../../src/components/structures/MatrixChat";
 import * as StorageManager from "../../../src/utils/StorageManager";
@@ -948,6 +949,9 @@ describe("<MatrixChat />", () => {
                 const mockCrypto = {
                     getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
                     getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
+                    getUserVerificationStatus: jest
+                        .fn()
+                        .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                 };
                 loginClient.isCryptoEnabled.mockReturnValue(true);
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
