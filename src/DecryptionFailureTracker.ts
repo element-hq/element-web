@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
+import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
 
@@ -25,17 +25,15 @@ export class DecryptionFailure {
 
     public constructor(
         public readonly failedEventId: string,
-        public readonly errorCode: string,
+        public readonly errorCode: DecryptionFailureCode,
     ) {
         this.ts = Date.now();
     }
 }
 
-type ErrorCode = "OlmKeysNotSentError" | "OlmIndexError" | "UnknownError" | "OlmUnspecifiedError";
-
+type ErrorCode = ErrorEvent["name"];
 type TrackingFn = (count: number, trackedErrCode: ErrorCode, rawError: string) => void;
-
-export type ErrCodeMapFn = (errcode: string) => ErrorCode;
+export type ErrCodeMapFn = (errcode: DecryptionFailureCode) => ErrorCode;
 
 export class DecryptionFailureTracker {
     private static internalInstance = new DecryptionFailureTracker(
@@ -52,12 +50,14 @@ export class DecryptionFailureTracker {
         (errorCode) => {
             // Map JS-SDK error codes to tracker codes for aggregation
             switch (errorCode) {
-                case "MEGOLM_UNKNOWN_INBOUND_SESSION_ID":
+                case DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID:
                     return "OlmKeysNotSentError";
-                case "OLM_UNKNOWN_MESSAGE_INDEX":
+                case DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX:
                     return "OlmIndexError";
-                case undefined:
-                    return "OlmUnspecifiedError";
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP:
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED:
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP:
+                    return "HistoricalMessage";
                 default:
                     return "UnknownError";
             }
@@ -76,11 +76,11 @@ export class DecryptionFailureTracker {
     // accumulated in `failureCounts`.
     public visibleFailures: Map<string, DecryptionFailure> = new Map();
 
-    // A histogram of the number of failures that will be tracked at the next tracking
-    // interval, split by failure error code.
-    public failureCounts: Record<string, number> = {
-        // [errorCode]: 42
-    };
+    /**
+     * A histogram of the number of failures that will be tracked at the next tracking
+     * interval, split by failure error code.
+     */
+    private failureCounts: Map<DecryptionFailureCode, number> = new Map();
 
     // Event IDs of failures that were tracked previously
     public trackedEvents: Set<string> = new Set();
@@ -108,10 +108,10 @@ export class DecryptionFailureTracker {
      *
      * @param {function} fn The tracking function, which will be called when failures
      * are tracked. The function should have a signature `(count, trackedErrorCode) => {...}`,
-     * where `count` is the number of failures and `errorCode` matches the `.code` of
-     * provided DecryptionError errors (by default, unless `errorCodeMapFn` is specified.
-     * @param {function?} errorCodeMapFn The function used to map error codes to the
-     * trackedErrorCode. If not provided, the `.code` of errors will be used.
+     * where `count` is the number of failures and `errorCode` matches the output of `errorCodeMapFn`.
+     *
+     * @param {function} errorCodeMapFn The function used to map decryption failure reason  codes to the
+     * `trackedErrorCode`.
      */
     private constructor(
         private readonly fn: TrackingFn,
@@ -138,13 +138,15 @@ export class DecryptionFailureTracker {
     //     localStorage.setItem('mx-decryption-failure-event-ids', JSON.stringify([...this.trackedEvents]));
     // }
 
-    public eventDecrypted(e: MatrixEvent, err: DecryptionError): void {
-        // for now we only track megolm decrytion failures
+    public eventDecrypted(e: MatrixEvent): void {
+        // for now we only track megolm decryption failures
         if (e.getWireContent().algorithm != "m.megolm.v1.aes-sha2") {
             return;
         }
-        if (err) {
-            this.addDecryptionFailure(new DecryptionFailure(e.getId()!, err.code));
+
+        const errCode = e.decryptionFailureReason;
+        if (errCode !== null) {
+            this.addDecryptionFailure(new DecryptionFailure(e.getId()!, errCode));
         } else {
             // Could be an event in the failures, remove it
             this.removeDecryptionFailuresForEvent(e);
@@ -205,7 +207,7 @@ export class DecryptionFailureTracker {
         this.failures = new Map();
         this.visibleEvents = new Set();
         this.visibleFailures = new Map();
-        this.failureCounts = {};
+        this.failureCounts = new Map();
     }
 
     /**
@@ -236,7 +238,7 @@ export class DecryptionFailureTracker {
     private aggregateFailures(failures: Set<DecryptionFailure>): void {
         for (const failure of failures) {
             const errorCode = failure.errorCode;
-            this.failureCounts[errorCode] = (this.failureCounts[errorCode] || 0) + 1;
+            this.failureCounts.set(errorCode, (this.failureCounts.get(errorCode) ?? 0) + 1);
         }
     }
 
@@ -245,12 +247,12 @@ export class DecryptionFailureTracker {
      * function with the number of failures that should be tracked.
      */
     public trackFailures(): void {
-        for (const errorCode of Object.keys(this.failureCounts)) {
-            if (this.failureCounts[errorCode] > 0) {
+        for (const [errorCode, count] of this.failureCounts.entries()) {
+            if (count > 0) {
                 const trackedErrorCode = this.errorCodeMapFn(errorCode);
 
-                this.fn(this.failureCounts[errorCode], trackedErrorCode, errorCode);
-                this.failureCounts[errorCode] = 0;
+                this.fn(count, trackedErrorCode, errorCode);
+                this.failureCounts.set(errorCode, 0);
             }
         }
     }
