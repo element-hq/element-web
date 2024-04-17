@@ -3152,8 +3152,7 @@
         "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vláken",
-        "no_rooms_with_unreads_threads": "Zatím nemáte místnosti s nepřečtenými vlákny."
+        "header": "Aktivita vláken"
     },
     "time": {
         "about_day_ago": "před jedním dnem",

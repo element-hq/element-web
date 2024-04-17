@@ -3096,9 +3096,6 @@
         "show_thread_filter": "Näita:",
         "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
     },
-    "threads_activity_centre": {
-        "no_rooms_with_unreads_threads": "Sul veel pole lugemata jutulõngadega jututubasid."
-    },
     "time": {
         "about_day_ago": "umbes päev tagasi",
         "about_hour_ago": "umbes tund aega tagasi",
