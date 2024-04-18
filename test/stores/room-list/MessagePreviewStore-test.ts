@@ -126,6 +126,62 @@ describe("MessagePreviewStore", () => {
         );
     });
 
+    it("should not display a redacted edit", async () => {
+        const firstMessage = mkMessage({
+            user: "@sender:server",
+            event: true,
+            room: room.roomId,
+            msg: "First message",
+        });
+        await addEvent(store, room, firstMessage, false);
+
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
+            `"@sender:server: First message"`,
+        );
+
+        const secondMessage = mkMessage({
+            user: "@sender:server",
+            event: true,
+            room: room.roomId,
+            msg: "Second message",
+        });
+        await addEvent(store, room, secondMessage);
+
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
+            `"@sender:server: Second message"`,
+        );
+
+        const secondMessageEdit = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@sender:server",
+            room: room.roomId,
+            content: {
+                "body": "* Second Message Edit",
+                "m.new_content": {
+                    body: "Second Message Edit",
+                },
+                "m.relates_to": {
+                    rel_type: RelationType.Replace,
+                    event_id: secondMessage.getId()!,
+                },
+            },
+        });
+        await addEvent(store, room, secondMessageEdit);
+
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
+            `"@sender:server: Second Message Edit"`,
+        );
+
+        secondMessage.makeRedacted(secondMessage, room);
+
+        await addEvent(store, room, secondMessage);
+
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
+            `"@sender:server: First message"`,
+        );
+    });
+
     it("should ignore edits to unknown events", async () => {
         await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toBeNull();
 

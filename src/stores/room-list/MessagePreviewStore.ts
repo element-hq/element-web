@@ -32,6 +32,7 @@ import { UPDATE_EVENT } from "../AsyncStore";
 import { IPreview } from "./previews/IPreview";
 import { VoiceBroadcastInfoEventType } from "../../voice-broadcast";
 import { VoiceBroadcastPreview } from "./previews/VoiceBroadcastPreview";
+import shouldHideEvent from "../../shouldHideEvent";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -184,21 +185,6 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return previewDef?.previewer.getTextFor(event, undefined, true) ?? "";
     }
 
-    private shouldSkipPreview(event: MatrixEvent, previousEvent?: MatrixEvent): boolean {
-        if (event.isRelation(RelationType.Replace)) {
-            if (previousEvent !== undefined) {
-                // Ignore edits if they don't apply to the latest event in the room to keep the preview on the latest event
-                const room = this.matrixClient?.getRoom(event.getRoomId()!);
-                const relatedEvent = room?.findEventById(event.relationEventId!);
-                if (relatedEvent !== previousEvent) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
         const events = [...room.getLiveTimeline().getEvents()];
 
@@ -221,8 +207,6 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             this.previews.set(room.roomId, map);
         }
 
-        const previousEventInAny = map.get(TAG_ANY)?.event;
-
         // Set the tags so we know what to generate
         if (!map.has(TAG_ANY)) map.set(TAG_ANY, null);
         if (tagId && !map.has(tagId)) map.set(tagId, null);
@@ -237,7 +221,8 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             const event = events[i];
 
             await this.matrixClient?.decryptEventIfNeeded(event);
-
+            const shouldHide = shouldHideEvent(event);
+            if (shouldHide) continue;
             const previewDef = PREVIEWS[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
@@ -245,16 +230,11 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             const anyPreviewText = previewDef.previewer.getTextFor(event);
             if (!anyPreviewText) continue; // not previewable for some reason
 
-            if (!this.shouldSkipPreview(event, previousEventInAny)) {
-                changed = changed || anyPreviewText !== map.get(TAG_ANY)?.text;
-                map.set(TAG_ANY, mkMessagePreview(anyPreviewText, event));
-            }
+            changed = changed || anyPreviewText !== map.get(TAG_ANY)?.text;
+            map.set(TAG_ANY, mkMessagePreview(anyPreviewText, event));
 
             const tagsToGenerate = Array.from(map.keys()).filter((t) => t !== TAG_ANY); // we did the any tag above
             for (const genTagId of tagsToGenerate) {
-                const previousEventInTag = map.get(genTagId)?.event;
-                if (this.shouldSkipPreview(event, previousEventInTag)) continue;
-
                 const realTagId = genTagId === TAG_ANY ? undefined : genTagId;
                 const preview = previewDef.previewer.getTextFor(event, realTagId);
 
