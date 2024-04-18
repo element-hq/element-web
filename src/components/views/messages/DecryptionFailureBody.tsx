@@ -22,8 +22,8 @@ import { IBodyProps } from "./IBodyProps";
 
 function getErrorMessage(mxEvent?: MatrixEvent): string {
     return mxEvent?.isEncryptedDisabledForUnverifiedDevices
-        ? _t("timeline|decryption_failure_blocked")
-        : _t("threads|unable_to_decrypt");
+        ? _t("timeline|decryption_failure|blocked")
+        : _t("timeline|decryption_failure|unable_to_decrypt");
 }
 
 // A placeholder element for messages that could not be decrypted

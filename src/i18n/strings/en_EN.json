@@ -3162,8 +3162,7 @@
         "my_threads_description": "Shows all threads you've participated in",
         "open_thread": "Open thread",
         "show_all_threads": "Show all threads",
-        "show_thread_filter": "Show:",
-        "unable_to_decrypt": "Unable to decrypt message"
+        "show_thread_filter": "Show:"
     },
     "threads_activity_centre": {
         "header": "Threads activity",
@@ -3213,7 +3212,10 @@
         },
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
-        "decryption_failure_blocked": "The sender has blocked you from receiving this message",
+        "decryption_failure": {
+            "blocked": "The sender has blocked you from receiving this message",
+            "unable_to_decrypt": "Unable to decrypt message"
+        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",

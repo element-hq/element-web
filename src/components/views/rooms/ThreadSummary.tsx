@@ -120,9 +120,11 @@ export const ThreadMessagePreview: React.FC<IPreviewProps> = ({ thread, showDisp
             {lastReply.isDecryptionFailure() ? (
                 <div
                     className="mx_ThreadSummary_content mx_DecryptionFailureBody"
-                    title={_t("threads|unable_to_decrypt")}
+                    title={_t("timeline|decryption_failure|unable_to_decrypt")}
                 >
-                    <span className="mx_ThreadSummary_message-preview">{_t("threads|unable_to_decrypt")}</span>
+                    <span className="mx_ThreadSummary_message-preview">
+                        {_t("timeline|decryption_failure|unable_to_decrypt")}
+                    </span>
                 </div>
             ) : (
                 <div className="mx_ThreadSummary_content" title={preview}>
