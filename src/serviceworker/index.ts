@@ -63,6 +63,9 @@ self.addEventListener("fetch", (event: FetchEvent) => {
                     // Figure out which homeserver we're communicating with
                     const csApi = url.substring(0, url.indexOf("/_matrix/media/v3"));
 
+                    // Add jitter to reduce request spam, particularly to `/versions` on initial page load
+                    await new Promise<void>(resolve => setTimeout(() => resolve(), Math.random() * 10));
+
                     // Locate our access token, and populate the fetchConfig with the authentication header.
                     // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
                     const client = await self.clients.get(event.clientId);
