@@ -392,7 +392,7 @@ test.describe("Cryptography", function () {
             await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
             await expect(lastTile).toContainText("test encrypted from unverified");
             await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastTileE2eIcon.hover();
+            await lastTileE2eIcon.focus();
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
 
             /* Should show a grey padlock for a message from an unknown device */
@@ -431,7 +431,7 @@ test.describe("Cryptography", function () {
             } else {
                 await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_normal/);
             }
-            await lastE2eIcon.hover();
+            await lastE2eIcon.focus();
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
         });
 
