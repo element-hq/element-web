@@ -55,7 +55,7 @@ jobs:
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@v1
+              uses: peaceiris/actions-mdbook@v2
               with:
                   mdbook-version: "0.4.10"
 
