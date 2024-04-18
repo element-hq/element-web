@@ -1,0 +1,16 @@
+name: Close stale flaky issues
+on:
+    schedule:
+        - cron: "30 1 * * *"
+jobs:
+    close:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+        steps:
+            - uses: actions/stale@v9
+              with:
+                  only-labels: "Z-Flaky-Test"
+                  days-before-stale: 14
+                  days-before-close: 0
+                  close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."
