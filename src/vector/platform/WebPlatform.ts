@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2017-2020 New Vector Ltd
+Copyright 2017-2020, 2024 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,7 +52,27 @@ export default class WebPlatform extends VectorBasePlatform {
             // Jest causes `register()` to return undefined, so swallow that case.
             if (swPromise) {
                 swPromise
-                    .then((r) => r.update())
+                    .then(async (r) => {
+                        await r.update();
+                        return r;
+                    })
+                    .then((r) => {
+                        navigator.serviceWorker.addEventListener("message", (e) => {
+                            try {
+                                if (e.data?.["type"] === "userinfo" && e.data?.["responseKey"]) {
+                                    const userId = localStorage.getItem("mx_user_id");
+                                    const deviceId = localStorage.getItem("mx_device_id");
+                                    r.active!.postMessage({
+                                        responseKey: e.data["responseKey"],
+                                        userId,
+                                        deviceId,
+                                    });
+                                }
+                            } catch (e) {
+                                console.error("Error responding to service worker: ", e);
+                            }
+                        });
+                    })
                     .catch((e) => console.error("Error registering/updating service worker:", e));
             }
         }
