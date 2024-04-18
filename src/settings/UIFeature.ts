@@ -48,6 +48,12 @@ export const enum UIFeature {
     EmailAddressShowAddButton = "UIFeature.emailAddressShowAddButton",
     PhoneNumerShowRemoveButton = "UIFeature.phoneNumerShowRemoveButton",
     PhoneNumerShowAddButton = "UIFeature.phoneNumerShowAddButton",
+    RoomSettingsAlias = "UIFeature.roomSettingsAlias",
+    UserSettingsExternalAccount = "UIFeature.userSettingsExternalAccount",
+    UserSettingsChangePassword = "UIFeature.userSettingsChangePassword",
+    UserSettingsSetIdServer = "UIFeature.userSettingsSetIdServer",
+    UserSettingsDiscovery = "UIFeature.userSettingsDiscovery",
+    UserSettingsIntegrationManager = "UIFeature.userSettingsIntegrationManager",
 }
 
 export enum UIComponent {
