@@ -18,7 +18,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { MatrixClient, MatrixEvent, RuleId } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
 import { Pill, pillRoomNotifLen, pillRoomNotifPos, PillType } from "../components/views/elements/Pill";
@@ -84,9 +83,7 @@ export function pillifyLinks(
                 const pillContainer = document.createElement("span");
 
                 const pill = (
-                    <TooltipProvider>
-                        <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
-                    </TooltipProvider>
+                    <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
                 );
 
                 ReactDOM.render(pill, pillContainer);
@@ -141,14 +138,12 @@ export function pillifyLinks(
 
                         const pillContainer = document.createElement("span");
                         const pill = (
-                            <TooltipProvider>
-                                <Pill
-                                    type={PillType.AtRoomMention}
-                                    inMessage={true}
-                                    room={room}
-                                    shouldShowPillAvatar={shouldShowPillAvatar}
-                                />
-                            </TooltipProvider>
+                            <Pill
+                                type={PillType.AtRoomMention}
+                                inMessage={true}
+                                room={room}
+                                shouldShowPillAvatar={shouldShowPillAvatar}
+                            />
                         );
 
                         ReactDOM.render(pill, pillContainer);

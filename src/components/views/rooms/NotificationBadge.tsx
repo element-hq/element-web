@@ -121,7 +121,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
         if (showUnsentTooltip && notification.level === NotificationLevel.Unsent) {
             return (
-                <Tooltip label={_t("notifications|message_didnt_send")} side="right">
+                <Tooltip label={_t("notifications|message_didnt_send")} placement="right">
                     {badge}
                 </Tooltip>
             );

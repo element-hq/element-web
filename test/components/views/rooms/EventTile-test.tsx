@@ -29,7 +29,6 @@ import {
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import { EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
-import { TooltipProvider } from "@vector-im/compound-web";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";
@@ -59,13 +58,11 @@ describe("EventTile", () => {
         return (
             <MatrixClientContext.Provider value={client}>
                 <RoomContext.Provider value={props.roomContext}>
-                    <TooltipProvider>
-                        <EventTile
-                            mxEvent={mxEvent}
-                            replacingEventId={mxEvent.replacingEventId()}
-                            {...(props.eventTilePropertyOverrides ?? {})}
-                        />
-                    </TooltipProvider>
+                    <EventTile
+                        mxEvent={mxEvent}
+                        replacingEventId={mxEvent.replacingEventId()}
+                        {...(props.eventTilePropertyOverrides ?? {})}
+                    />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>
         );

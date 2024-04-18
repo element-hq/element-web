@@ -16,7 +16,6 @@ limitations under the License.
 
 import { fireEvent, render } from "@testing-library/react";
 import React from "react";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import FilteredDeviceListHeader from "../../../../../src/components/views/settings/devices/FilteredDeviceListHeader";
 
@@ -28,11 +27,7 @@ describe("<FilteredDeviceListHeader />", () => {
         children: <div>test</div>,
         ["data-testid"]: "test123",
     };
-    const getComponent = (props = {}) => (
-        <TooltipProvider>
-            <FilteredDeviceListHeader {...defaultProps} {...props} />
-        </TooltipProvider>
-    );
+    const getComponent = (props = {}) => <FilteredDeviceListHeader {...defaultProps} {...props} />;
 
     it("renders correctly when no devices are selected", () => {
         const { container } = render(getComponent());

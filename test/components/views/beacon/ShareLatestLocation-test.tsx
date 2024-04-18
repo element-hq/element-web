@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import ShareLatestLocation from "../../../../src/components/views/beacon/ShareLatestLocation";
 import { copyPlaintext } from "../../../../src/utils/strings";
@@ -33,8 +32,7 @@ describe("<ShareLatestLocation />", () => {
             timestamp: 123,
         },
     };
-    const getComponent = (props = {}) =>
-        render(<ShareLatestLocation {...defaultProps} {...props} />, { wrapper: TooltipProvider });
+    const getComponent = (props = {}) => render(<ShareLatestLocation {...defaultProps} {...props} />);
 
     beforeEach(() => {
         jest.clearAllMocks();

@@ -391,7 +391,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             Join
           </div>
           <span
-            class=""
             data-state="closed"
             tabindex="0"
           >

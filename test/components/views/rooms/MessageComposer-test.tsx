@@ -18,7 +18,6 @@ import * as React from "react";
 import { EventType, MatrixEvent, Room, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import {
     clearAllModals,
@@ -514,7 +513,6 @@ function wrapAndRender(
                     <MessageComposer {...defaultProps} {...props} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
-            { wrapper: TooltipProvider },
         ),
         roomContext,
     };

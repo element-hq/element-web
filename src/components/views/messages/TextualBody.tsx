@@ -17,7 +17,6 @@ limitations under the License.
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -349,11 +348,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
                 const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
-                const spoiler = (
-                    <TooltipProvider>
-                        <Spoiler reason={reason} contentHtml={node.outerHTML} />
-                    </TooltipProvider>
-                );
+                const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
 
                 ReactDOM.render(spoiler, spoilerContainer);
                 node.parentNode?.replaceChild(spoilerContainer, node);

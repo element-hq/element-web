@@ -20,7 +20,6 @@ import React, { ComponentProps } from "react";
 import { getByText, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { ThreadsActivityCentre } from "../../../../src/components/views/spaces/threads-activity-centre";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -49,7 +48,6 @@ describe("ThreadsActivityCentre", () => {
             <MatrixClientContext.Provider value={cli}>
                 <ThreadsActivityCentre {...props} />
             </MatrixClientContext.Provider>,
-            { wrapper: TooltipProvider },
         );
     };
 
@@ -251,7 +249,6 @@ describe("ThreadsActivityCentre", () => {
                     <ThreadsActivityCentre />
                 </MatrixClientContext.Provider>
             </div>,
-            { wrapper: TooltipProvider },
         );
         await userEvent.click(getTACButton());
 

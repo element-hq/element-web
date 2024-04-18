@@ -43,7 +43,7 @@ export default class InfoTooltip extends React.PureComponent<TooltipProps> {
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
         return (
-            <Tooltip label={tooltip || title} side="right">
+            <Tooltip label={tooltip || title} placement="right">
                 <div className={classNames("mx_InfoTooltip", className)} tabIndex={this.props.tabIndex ?? 0}>
                     <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
                     {children}

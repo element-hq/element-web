@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { TooltipProvider } from "@vector-im/compound-web";
 import { fireEvent, getByLabelText, getByText, render, screen, waitFor } from "@testing-library/react";
 import { EventTimeline, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -75,11 +74,7 @@ describe("<CallGuestLinkButton />", () => {
 
     const getComponent = (room: Room) =>
         render(<CallGuestLinkButton room={room} />, {
-            wrapper: ({ children }) => (
-                <SDKContext.Provider value={sdkContext}>
-                    <TooltipProvider>{children}</TooltipProvider>
-                </SDKContext.Provider>
-            ),
+            wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
         });
 
     const oldGet = SdkConfig.get;
@@ -225,11 +220,7 @@ describe("<CallGuestLinkButton />", () => {
 
         const getComponent = (room: Room, canInvite: boolean = true) =>
             render(<JoinRuleDialog room={room} canInvite={canInvite} onFinished={onFinished} />, {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <TooltipProvider>{children}</TooltipProvider>
-                    </SDKContext.Provider>
-                ),
+                wrapper: ({ children }) => <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>,
             });
 
         beforeEach(() => {

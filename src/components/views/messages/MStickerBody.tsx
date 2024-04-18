@@ -69,8 +69,7 @@ export default class MStickerBody extends MImageBody {
         if (!content?.body || !content.info?.w) return null;
 
         return {
-            align: "center",
-            side: "right",
+            placement: "right",
             label: content.body,
         };
     }
