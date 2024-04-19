@@ -201,7 +201,7 @@ describe("<SpacePanel />", () => {
         await drop(room1);
 
         expect(SpaceStore.instance.moveRootSpace).toHaveBeenCalledWith(0, 1);
-    }, 8000);
+    });
 
     describe("CustomComponentLifecycle.UserMenu", () => {
         it("should invoke CustomComponentLifecycle.UserMenu on render", () => {
