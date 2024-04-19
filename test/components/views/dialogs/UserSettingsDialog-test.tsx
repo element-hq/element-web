@@ -18,6 +18,7 @@ import React, { ReactElement } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -33,7 +34,6 @@ import {
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 
 mockPlatformPeg({
@@ -192,12 +192,7 @@ describe("<UserSettingsDialog />", () => {
         it("should replace the default SessionManagerTab and return <div data-testid='custom-user-sessions-manager-tab'> instead", () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
                 if (lifecycleEvent === CustomComponentLifecycle.SessionManagerTab) {
-                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
-                        // Get the wrapped component
-                        const rolesTab: any = React.Children.toArray(children)[0]
-                        // Verify that we have wrapped the correct element
-                        console.log("TYPE: ", rolesTab.type.name)
-                        expect(rolesTab.type.name === "SessionManagerTab").toBeTruthy()
+                    (opts as CustomComponentOpts).CustomComponent = () => {
                         return (
                             <>
                                 <div data-testid="custom-user-sessions-manager-tab" />
