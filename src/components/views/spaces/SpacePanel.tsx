@@ -73,6 +73,8 @@ import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { ThreadsActivityCentre } from "./threads-activity-centre/";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -369,7 +371,8 @@ const SpacePanel: React.FC = () => {
     });
 
     const isThreadsActivityCentreEnabled = useSettingValue<boolean>("threadsActivityCentre");
-
+    const customUserMenuOpts: CustomComponentOpts = ( { CustomComponent: React.Fragment } )
+    ModuleRunner.instance.invoke(CustomComponentLifecycle.UserMenu, customUserMenuOpts)
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
             {({ onKeyDownHandler, onDragEndHandler }) => (
@@ -390,6 +393,7 @@ const SpacePanel: React.FC = () => {
                         ref={ref}
                         aria-label={_t("common|spaces")}
                     >
+                    <customUserMenuOpts.CustomComponent>
                         <UserMenu isPanelCollapsed={isPanelCollapsed}>
                             <AccessibleTooltipButton
                                 className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
@@ -404,14 +408,16 @@ const SpacePanel: React.FC = () => {
                                             {IS_MAC
                                                 ? "⌘ + ⇧ + D"
                                                 : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) +
-                                                  " + " +
-                                                  _t(ALTERNATE_KEY_NAME[Key.SHIFT]) +
-                                                  " + D"}
+                                                " + " +
+                                                _t(ALTERNATE_KEY_NAME[Key.SHIFT]) +
+                                                " + D"}
                                         </div>
                                     </div>
                                 }
                             />
                         </UserMenu>
+                    </customUserMenuOpts.CustomComponent>
+
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (
                                 <InnerSpacePanel

@@ -31,6 +31,8 @@ import RoomSettingsDialog from "../../../../src/components/views/dialogs/RoomSet
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../src/settings/UIFeature";
+import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
@@ -180,6 +182,48 @@ describe("<RoomSettingsDialog />", () => {
             fireEvent.click(screen.getByText("Poll history"));
 
             expect(container.querySelector(".mx_SettingsTab")).toMatchSnapshot();
+        });
+    });
+
+    describe("on CustomComponentLifecycle.RolesRoomSettingsTab", () => {
+        it("should invoke CustomComponentLifecycle.RolesRoomSettingsTab on rendering the RolesRoomSettingsDialog component", () => { 
+            jest.spyOn(ModuleRunner.instance, "invoke");
+            getComponent();
+            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.RolesRoomSettingsTab, {CustomComponent: expect.any(Symbol)});
+        });
+
+        it("should render standard RolesRoomSettingsTab if if there are no module-implementations using the lifecycle", () => {
+            const container = getComponent().container as HTMLElement
+            fireEvent.click(screen.getByText("Roles & Permissions"));
+
+            expect(container.querySelector("#mx_tabpanel_ROOM_ROLES_TAB")).toBeVisible();
+            // Expect that element unique to Roles-tab is rendered.
+            expect(screen.getByTestId("add-privileged-users-submit-button")).toBeVisible();
+        });
+
+        it("should replace the default RolesRoomSettingsTab and return <div data-testid='custom-roles-room-settings-tab'> instead", () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RolesRoomSettingsTab) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        // Get the wrapped component
+                        const rolesTab: any = React.Children.toArray(children)[0]
+                        // Verify that we have wrapped the correct element
+                        expect(rolesTab.type.name === "RolesRoomSettingsTab").toBeTruthy()
+                        return (
+                            <>
+                                <div data-testid="custom-roles-room-settings-tab" />
+                            </>
+                        );
+                    };
+                }
+            });
+            getComponent()
+            fireEvent.click(screen.getByText("Roles & Permissions"));
+            const customRolesTab = screen.queryByTestId("custom-roles-room-settings-tab");
+            expect(customRolesTab).toBeVisible();
+            
+            // Expect that element unique to RolesRoomSettingsTab is NOT-rendered, as proof of default RolesRoomSettingsTab not being in the document.
+            expect(screen.queryByTestId("add-privileged-users-submit-button")).toBeFalsy();
         });
     });
 });
