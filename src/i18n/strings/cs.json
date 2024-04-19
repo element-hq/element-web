@@ -3148,8 +3148,7 @@
         "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
         "open_thread": "Otevřít vlákno",
         "show_all_threads": "Zobrazit všechna vlákna",
-        "show_thread_filter": "Zobrazit:",
-        "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
+        "show_thread_filter": "Zobrazit:"
     },
     "threads_activity_centre": {
         "header": "Aktivita vláken"
@@ -3195,7 +3194,6 @@
         },
         "creation_summary_dm": "%(creator)s vytvořil(a) tuto přímou zprávu.",
         "creation_summary_room": "%(creator)s vytvořil(a) a nakonfiguroval(a) místnost.",
-        "decryption_failure_blocked": "Odesílatel vám zablokoval přijetí této zprávy",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",

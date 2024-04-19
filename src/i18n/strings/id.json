@@ -3091,8 +3091,7 @@
         "my_threads_description": "Menampilkan semua utasan yang Anda berpartisipasi",
         "open_thread": "Buka utasan",
         "show_all_threads": "Tampilkan semua utasan",
-        "show_thread_filter": "Tampilkan:",
-        "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
+        "show_thread_filter": "Tampilkan:"
     },
     "time": {
         "about_day_ago": "1 hari yang lalu",
@@ -3135,7 +3134,6 @@
         },
         "creation_summary_dm": "%(creator)s membuat pesan langsung ini.",
         "creation_summary_room": "%(creator)s membuat dan mengatur ruangan ini.",
-        "decryption_failure_blocked": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",

@@ -2872,8 +2872,7 @@
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
         "show_all_threads": "全てのスレッドを表示",
-        "show_thread_filter": "表示：",
-        "unable_to_decrypt": "メッセージを復号化できません"
+        "show_thread_filter": "表示："
     },
     "time": {
         "about_day_ago": "約1日前",

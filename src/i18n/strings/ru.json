@@ -3119,8 +3119,7 @@
         "my_threads_description": "Показывает все обсуждения, в которых вы принимали участие",
         "open_thread": "Открыть ветку",
         "show_all_threads": "Показать все обсуждения",
-        "show_thread_filter": "Показать:",
-        "unable_to_decrypt": "Невозможно расшифровать сообщение"
+        "show_thread_filter": "Показать:"
     },
     "time": {
         "about_day_ago": "около суток назад",
@@ -3163,7 +3162,6 @@
         },
         "creation_summary_dm": "%(creator)s начал(а) этот чат.",
         "creation_summary_room": "%(creator)s создал(а) и настроил(а) комнату.",
-        "decryption_failure_blocked": "Отправитель заблокировал получение этого сообщения",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Расшифровка",
         "download_action_downloading": "Загрузка",

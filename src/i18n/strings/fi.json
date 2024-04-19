@@ -2733,8 +2733,7 @@
         "my_threads_description": "Näyttää kaikki ketjut, joissa olet ollut osallinen",
         "open_thread": "Avaa ketju",
         "show_all_threads": "Näytä kaikki ketjut",
-        "show_thread_filter": "Näytä:",
-        "unable_to_decrypt": "Viestin salauksen purkaminen ei onnistu"
+        "show_thread_filter": "Näytä:"
     },
     "time": {
         "about_day_ago": "noin päivä sitten",
@@ -2776,7 +2775,6 @@
         },
         "creation_summary_dm": "%(creator)s loi tämän yksityisviestin.",
         "creation_summary_room": "%(creator)s loi ja määritti huoneen.",
-        "decryption_failure_blocked": "Lähettäjä on estänyt sinua saamasta tätä viestiä",
         "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "edits": {

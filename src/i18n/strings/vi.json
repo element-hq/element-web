@@ -2798,8 +2798,7 @@
         "my_threads": "Các chủ đề của tôi",
         "my_threads_description": "Hiển thị tất cả các chủ đề bạn đã tham gia",
         "show_all_threads": "Hiển thị tất cả chủ đề",
-        "show_thread_filter": "Hiển thị:",
-        "unable_to_decrypt": "Không thể giải mã tin nhắn"
+        "show_thread_filter": "Hiển thị:"
     },
     "time": {
         "about_day_ago": "khoảng một ngày trước",
@@ -2837,7 +2836,6 @@
         },
         "creation_summary_dm": "%(creator)s đã tạo DM này.",
         "creation_summary_room": "%(creator)s đã tạo và định cấu hình phòng.",
-        "decryption_failure_blocked": "Người gửi không cho bạn nhận tin nhắn này",
         "download_action_decrypting": "Đang giải mã",
         "download_action_downloading": "Đang tải xuống",
         "edits": {

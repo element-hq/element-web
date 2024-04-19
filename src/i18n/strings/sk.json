@@ -3122,8 +3122,7 @@
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
         "open_thread": "Otvoriť vlákno",
         "show_all_threads": "Zobraziť všetky vlákna",
-        "show_thread_filter": "Zobraziť:",
-        "unable_to_decrypt": "Nie je možné dešifrovať správu"
+        "show_thread_filter": "Zobraziť:"
     },
     "time": {
         "about_day_ago": "asi pred jedným dňom",
@@ -3166,7 +3165,6 @@
         },
         "creation_summary_dm": "%(creator)s vytvoril/a túto priamu správu.",
         "creation_summary_room": "%(creator)s vytvoril a nastavil miestnosť.",
-        "decryption_failure_blocked": "Odosielateľ vám zablokoval príjem tejto správy",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",

@@ -3049,8 +3049,7 @@
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
         "show_all_threads": "顯示所有討論串",
-        "show_thread_filter": "顯示：",
-        "unable_to_decrypt": "無法解密訊息"
+        "show_thread_filter": "顯示："
     },
     "time": {
         "about_day_ago": "大約一天前",
@@ -3089,7 +3088,6 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
-        "decryption_failure_blocked": "傳送者已封鎖您，因此無法接收此訊息",
         "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {

@@ -3141,8 +3141,7 @@
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
         "show_all_threads": "Mostra tutte le conversazioni",
-        "show_thread_filter": "Mostra:",
-        "unable_to_decrypt": "Impossibile decifrare il messaggio"
+        "show_thread_filter": "Mostra:"
     },
     "threads_activity_centre": {
         "header": "Attività delle conversazioni"
@@ -3188,7 +3187,6 @@
         },
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
-        "decryption_failure_blocked": "Il mittente ti ha bloccato dalla ricezione di questo messaggio",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",

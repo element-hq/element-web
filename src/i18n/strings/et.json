@@ -3093,8 +3093,7 @@
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
         "open_thread": "Ava jutulõng",
         "show_all_threads": "Näita kõiki jutulõngasid",
-        "show_thread_filter": "Näita:",
-        "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
+        "show_thread_filter": "Näita:"
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -3137,7 +3136,6 @@
         },
         "creation_summary_dm": "%(creator)s alustas seda otsesuhtlust.",
         "creation_summary_room": "%(creator)s lõi ja seadistas jututoa.",
-        "decryption_failure_blocked": "Sõnumi saatja on keelanud sul selle sõnumi saamise",
         "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "edits": {

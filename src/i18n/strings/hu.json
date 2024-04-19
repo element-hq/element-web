@@ -3057,8 +3057,7 @@
         "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
         "open_thread": "Üzenetszál megnyitása",
         "show_all_threads": "Minden üzenetszál megjelenítése",
-        "show_thread_filter": "Megjelenítés:",
-        "unable_to_decrypt": "Üzenet visszafejtése sikertelen"
+        "show_thread_filter": "Megjelenítés:"
     },
     "time": {
         "about_day_ago": "egy napja",
@@ -3101,7 +3100,6 @@
         },
         "creation_summary_dm": "%(creator)s hozta létre ezt az üzenetet.",
         "creation_summary_room": "%(creator)s elkészítette és beállította a szobát.",
-        "decryption_failure_blocked": "A feladó megtagadta az Ön hozzáférését ehhez az üzenethez",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",

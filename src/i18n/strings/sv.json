@@ -3140,8 +3140,7 @@
         "my_threads_description": "Visar alla trådar du har medverkat i",
         "open_thread": "Öppna tråd",
         "show_all_threads": "Visa alla trådar",
-        "show_thread_filter": "Visa:",
-        "unable_to_decrypt": "Kunde inte avkryptera meddelande"
+        "show_thread_filter": "Visa:"
     },
     "threads_activity_centre": {
         "header": "Aktivitet för trådar"
@@ -3187,7 +3186,6 @@
         },
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
-        "decryption_failure_blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",

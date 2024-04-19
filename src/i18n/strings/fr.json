@@ -3132,8 +3132,7 @@
         "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
         "open_thread": "Ouvrir le fil de discussion",
         "show_all_threads": "Afficher tous les fils de discussion",
-        "show_thread_filter": "Affiche :",
-        "unable_to_decrypt": "Impossible de déchiffrer le message"
+        "show_thread_filter": "Affiche :"
     },
     "time": {
         "about_day_ago": "il y a environ un jour",
@@ -3176,7 +3175,6 @@
         },
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
-        "decryption_failure_blocked": "L’expéditeur a bloqué la réception de votre message",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
