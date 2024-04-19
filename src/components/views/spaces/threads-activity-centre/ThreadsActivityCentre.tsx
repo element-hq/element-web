@@ -88,7 +88,8 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                 </ReleaseAnnouncement>
             ) : (
                 <Menu
-                    align="end"
+                    align="start"
+                    side="top"
                     open={open}
                     onOpenChange={(newOpen) => {
                         // Track only when the Threads Activity Centre is opened
@@ -96,7 +97,6 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
 
                         setOpen(newOpen);
                     }}
-                    side="right"
                     title={_t("threads_activity_centre|header")}
                     trigger={
                         <ThreadsActivityCentreButton
