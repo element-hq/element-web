@@ -29,6 +29,7 @@ import React, {
 import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -73,7 +74,6 @@ import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { ThreadsActivityCentre } from "./threads-activity-centre/";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {

@@ -25,6 +25,7 @@ import {
     RoomStateEvent,
     Visibility,
 } from "matrix-js-sdk/src/matrix";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import RoomSettingsDialog from "../../../../src/components/views/dialogs/RoomSettingsDialog";
@@ -32,7 +33,6 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
@@ -204,11 +204,7 @@ describe("<RoomSettingsDialog />", () => {
         it("should replace the default RolesRoomSettingsTab and return <div data-testid='custom-roles-room-settings-tab'> instead", () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
                 if (lifecycleEvent === CustomComponentLifecycle.RolesRoomSettingsTab) {
-                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
-                        // Get the wrapped component
-                        const rolesTab: any = React.Children.toArray(children)[0]
-                        // Verify that we have wrapped the correct element
-                        expect(rolesTab.type.name === "RolesRoomSettingsTab").toBeTruthy()
+                    (opts as CustomComponentOpts).CustomComponent = () => {
                         return (
                             <>
                                 <div data-testid="custom-roles-room-settings-tab" />

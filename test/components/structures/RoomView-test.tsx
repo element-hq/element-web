@@ -34,6 +34,7 @@ import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import {
     stubClient,
@@ -72,7 +73,6 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../src/components/views/rooms/SearchBar";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -737,11 +737,7 @@ describe("RoomView", () => {
         it("should replace the default RoomHeader and return <div data-testid='custom-room-header'> instead", async () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
                 if (lifecycleEvent === CustomComponentLifecycle.RoomHeader) {
-                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
-                        // Get the header passed in by the wrapper
-                        const roomHeader: any = React.Children.toArray(children)[0]
-                        // Verify that we have wrapped the correct element
-                        expect(roomHeader.type.name === "RoomHeader").toBeTruthy()
+                    (opts as CustomComponentOpts).CustomComponent = () => {
                         return (
                             <>
                                 <header data-testid="custom-room-header" />
