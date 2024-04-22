@@ -53,6 +53,7 @@ export default class WebPlatform extends VectorBasePlatform {
             if (swPromise) {
                 swPromise
                     .then(async (r) => {
+                        // always ask the browser to update. The browser might not actually do it, but at least we asked.
                         await r.update();
                         return r;
                     })
