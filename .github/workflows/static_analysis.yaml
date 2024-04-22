@@ -1,5 +1,6 @@
 name: Static Analysis
 on:
+    workflow_dispatch:
     pull_request: {}
     merge_group:
         types: [checks_requested]
