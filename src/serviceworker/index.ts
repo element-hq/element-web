@@ -16,7 +16,7 @@ limitations under the License.
 
 import { idbLoad } from "matrix-react-sdk/src/utils/StorageAccess";
 import { ACCESS_TOKEN_IV, tryDecryptToken } from "matrix-react-sdk/src/utils/tokens/tokens";
-import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/base64";
+import { buildAndEncodePickleKey } from "matrix-react-sdk/src/utils/tokens/pickling";
 
 const serverSupportMap: {
     [serverUrl: string]: {
@@ -37,8 +37,9 @@ self.addEventListener("activate", (event) => {
     event.waitUntil(clients.claim());
 });
 
-// @ts-expect-error - getting types to work for this is difficult, so we anticipate that "addEventListener" doesn't
-// have a valid signature.
+// @ts-expect-error - the service worker types conflict with the DOM types available through TypeScript. Many hours
+// have been spent trying to convince the type system that there's no actual conflict, but it has yet to work. Instead
+// of trying to make it do the thing, we force-cast to something close enough where we can (and ignore errors otherwise).
 self.addEventListener("fetch", (event: FetchEvent) => {
     // This is the authenticated media (MSC3916) check, proxying what was unauthenticated to the authenticated variants.
 
@@ -90,6 +91,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
                     // If we have server support (and a means of authentication), rewrite the URL to use MSC3916 endpoints.
                     if (serverSupportMap[csApi].supportsMSC3916 && accessToken) {
                         // Currently unstable only.
+                        // TODO: Support stable endpoints when available.
                         url = url.replace(/\/media\/v3\/(.*)\//, "/client/unstable/org.matrix.msc3916/media/$1/");
                     } // else by default we make no changes
                 } catch (err) {
@@ -114,7 +116,29 @@ async function getAccessToken(client: unknown): Promise<string | undefined> {
 
     // We need to extract a user ID and device ID from localstorage, which means calling WebPlatform for the
     // read operation. Service workers can't access localstorage.
-    const { userId, deviceId } = await new Promise<{ userId: string; deviceId: string }>((resolve, reject) => {
+    const { userId, deviceId } = await askClientForUserIdParams(client);
+
+    // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
+    const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
+    if (pickleKeyData && (!pickleKeyData.encrypted || !pickleKeyData.iv || !pickleKeyData.cryptoKey)) {
+        console.error("SW: Invalid pickle key loaded - ignoring");
+        return undefined;
+    }
+
+    // Finally, try decrypting the thing and return that. This may fail, but that's okay.
+    try {
+        const pickleKey = await buildAndEncodePickleKey(pickleKeyData, userId, deviceId);
+        return tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_IV);
+    } catch (e) {
+        console.error("SW: Error decrypting access token.", e);
+        return undefined;
+    }
+}
+
+// Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
+// unknown for now and force-cast it to something close enough inside the function.
+async function askClientForUserIdParams(client: unknown): Promise<{ userId: string, deviceId: string }> {
+    return new Promise((resolve, reject) => {
         // Avoid stalling the tab in case something goes wrong.
         const timeoutId = setTimeout(() => reject(new Error("timeout in postMessage")), 1000);
 
@@ -134,39 +158,4 @@ async function getAccessToken(client: unknown): Promise<string | undefined> {
         // Ask the tab for the information we need. This is handled by WebPlatform.
         (client as Window).postMessage({ responseKey, type: "userinfo" });
     });
-
-    // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
-    const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
-    if (pickleKeyData && (!pickleKeyData.encrypted || !pickleKeyData.iv || !pickleKeyData.cryptoKey)) {
-        console.error("SW: Invalid pickle key loaded - ignoring");
-        return undefined;
-    }
-
-    let pickleKey: string | undefined;
-
-    // Extract a useful pickle key out of our queries.
-    if (pickleKeyData) {
-        // We also need to generate the additional data needed for the key
-        const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
-        for (let i = 0; i < userId.length; i++) {
-            additionalData[i] = userId.charCodeAt(i);
-        }
-        additionalData[userId.length] = 124; // "|"
-        for (let i = 0; i < deviceId.length; i++) {
-            additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
-        }
-
-        // Convert pickle key to a base64 key we can use
-        const pickleKeyBuf = await crypto.subtle.decrypt(
-            { name: "AES-GCM", iv: pickleKeyData.iv, additionalData },
-            pickleKeyData.cryptoKey,
-            pickleKeyData.encrypted,
-        );
-        if (pickleKeyBuf) {
-            pickleKey = encodeUnpaddedBase64(pickleKeyBuf);
-        }
-    }
-
-    // Finally, try decrypting the thing and return that. This may fail, but that's okay.
-    return tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_IV);
 }
