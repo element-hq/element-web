@@ -32,7 +32,7 @@ jobs:
             # Depth of the clone (default: full history)
             depth: 1
             # Branch name (default: main)
-            branch: 'verji-main
+            branch: 'verji-main'
           
           
     ts_lint:
