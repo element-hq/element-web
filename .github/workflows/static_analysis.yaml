@@ -23,7 +23,7 @@ jobs:
       # You may pin to the exact commit or the version.
       # uses: whyakari/github-repo-action@809aeef1050b89b6f64d36fb9893c5e9ceaecbba
     uses: whyakari/github-repo-action@v3.1
-          with:
+    with:
             # Repository Owner
             owner: 'verji'
             # Repository name
