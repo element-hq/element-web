@@ -47,6 +47,7 @@ import ServerSupportUnstableFeatureController from "./controllers/ServerSupportU
 import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
 import SettingsStore from "./SettingsStore";
+import AnalyticsController from "./controllers/AnalyticsController";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -597,11 +598,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("settings|showbold"),
         default: false,
         invertedSettingName: "feature_hidebold",
+        controller: new AnalyticsController("WebSettingsNotificationsShowBoldToggle"),
     },
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|tac_only_notifications"),
         default: true,
+        controller: new AnalyticsController("WebSettingsNotificationsTACOnlyNotificationsToggle"),
     },
     "feature_ask_to_join": {
         isFeature: true,
