@@ -65,7 +65,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
                     const csApi = url.substring(0, url.indexOf("/_matrix/media/v3"));
 
                     // Add jitter to reduce request spam, particularly to `/versions` on initial page load
-                    await new Promise<void>(resolve => setTimeout(() => resolve(), Math.random() * 10));
+                    await new Promise<void>((resolve) => setTimeout(() => resolve(), Math.random() * 10));
 
                     // Locate our access token, and populate the fetchConfig with the authentication header.
                     // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
@@ -137,7 +137,7 @@ async function getAccessToken(client: unknown): Promise<string | undefined> {
 
 // Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
 // unknown for now and force-cast it to something close enough inside the function.
-async function askClientForUserIdParams(client: unknown): Promise<{ userId: string, deviceId: string }> {
+async function askClientForUserIdParams(client: unknown): Promise<{ userId: string; deviceId: string }> {
     return new Promise((resolve, reject) => {
         // Avoid stalling the tab in case something goes wrong.
         const timeoutId = setTimeout(() => reject(new Error("timeout in postMessage")), 1000);
