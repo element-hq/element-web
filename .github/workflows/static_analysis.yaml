@@ -41,6 +41,10 @@ jobs:
         name: "Typescript Syntax Check"
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  
             - name: Clone Github Repo Action
               # You may pin to the exact commit or the version.
               # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
