@@ -107,11 +107,12 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
         return; // up to date
     }
 
-    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, {
+    const config = !accessToken ? undefined : {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
-    })).json();
+    };
+    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
 
     serverSupportMap[clientApiUrl] = {
         supportsMSC3916: Boolean(versions?.unstable_features?.["org.matrix.msc3916"]),
