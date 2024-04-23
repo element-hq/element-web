@@ -67,7 +67,7 @@ jobs:
               uses: Azure/powershell@v2
               with:
                 # Specify the Az PowerShell script here.
-                inlineScript: "Write-Output 'ls 1' && ls && cd matrix-react-sdk-module-api && Write-Output 'ls2' && ls && yarn && yarn link && cd .. && Write-Output 'ls3' && ls && cd .. && Write-Output 'ls 4' && cd 'matrix-react-sdk' && ls && Write-Output 'ls 5' && yarn link '@matrix-org/react-sdk-module-api'"
+                inlineScript: "Write-Output 'ls 1' && ls && cd matrix-react-sdk-module-api && Write-Output 'ls2' && ls && yarn && yarn link && cd .. && Write-Output 'ls3' && ls && cd .. && Write-Output 'ls 4' && cd 'matrix-react-sdk' && Write-Output 'ls 5' && ls  && yarn link '@matrix-org/react-sdk-module-api' && cd .. && Write-Output 'ls 6' && cd.. && Write-Output 'ls 7' && ls"
                 # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
                 azPSVersion: "latest"
 
