@@ -139,6 +139,15 @@ async function getAccessToken(client: unknown): Promise<string | undefined> {
 // unknown for now and force-cast it to something close enough inside the function.
 async function askClientForUserIdParams(client: unknown): Promise<{ userId: string; deviceId: string }> {
     return new Promise((resolve, reject) => {
+        // Dev note: this uses postMessage, which is a highly insecure channel. postMessage is typically visible to other
+        // tabs, windows, browser extensions, etc, making it far from ideal for sharing sensitive information. This is
+        // why our service worker calculates/decrypts the access token manually: we don't want the user's access token
+        // to be available to (potentially) malicious listeners. We do require some information for that decryption to
+        // work though, and request that in the least sensitive way possible.
+        //
+        // We could also potentially use some version of TLS to encrypt postMessage, though that feels way more involved
+        // than just reading IndexedDB ourselves.
+
         // Avoid stalling the tab in case something goes wrong.
         const timeoutId = setTimeout(() => reject(new Error("timeout in postMessage")), 1000);
 
