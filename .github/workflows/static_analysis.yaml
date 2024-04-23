@@ -58,7 +58,15 @@ jobs:
                 branch: 'verji-main'
                 # Clone with submodules
                 submodule: false # optional, default is false
+
+            - name: Azure PowerShell Action
+              uses: Azure/powershell@v2
+              with:
+                # Specify the Az PowerShell script here.
+                inlineScript: "ls && cd matrix-react-sdk-module-api && ls"
+                # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
           
+
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
