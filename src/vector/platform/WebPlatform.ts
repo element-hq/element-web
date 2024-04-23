@@ -27,6 +27,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
+import regist = jsrsasign.KJUR.crypto.ECParameterDB.regist;
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -44,24 +45,31 @@ export default class WebPlatform extends VectorBasePlatform {
 
     public constructor() {
         super();
-        // Register service worker if available on this platform
-        if ("serviceWorker" in navigator) {
-            // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-            const swPromise = navigator.serviceWorker.register("sw.js");
 
-            // Jest causes `register()` to return undefined, so swallow that case.
-            if (swPromise) {
-                swPromise
-                    .then(async (r) => {
-                        // always ask the browser to update. The browser might not actually do it, but at least we asked.
-                        await r.update();
-                        return r;
-                    })
-                    .then((r) => {
-                        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
-                    })
-                    .catch((e) => console.error("Error registering/updating service worker:", e));
-            }
+        // noinspection JSIgnoredPromiseFromCall - can run async
+        this.tryRegisterServiceWorker();
+    }
+
+    private async tryRegisterServiceWorker(): Promise<void> {
+        if (!("serviceWorker" in navigator)) {
+            return; // not available on this platform - don't try to register the service worker
+        }
+
+        // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+        const swPromise = navigator.serviceWorker.register("sw.js");
+        if (!swPromise) {
+            // Registration didn't return a promise for some reason - assume failed and ignore.
+            // This typically happens in Jest.
+            return;
+        }
+
+        try {
+            const registration = await swPromise;
+            await registration.update();
+            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+        } catch (e) {
+            console.error("Error registering/updating service worker:", e);
+            // otherwise ignore the error and remain unregistered
         }
     }
 
