@@ -45,10 +45,36 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
-
+            
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
+            #JT EX
+            - name: Clone Github Repo Action
+              # You may pin to the exact commit or the version.
+              # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
+              uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+              with:
+                # Repository Owner
+                owner: verji
+                # Repository name
+                repository: 'matrix-react-sdk-module-api'
+                # PAT with repository scope (https://github.com/settings/tokens)
+                access-token: ${{secrets.PAT}}
+                # Depth of the clone (default: full history)
+                depth: 1
+                # Branch name (default: main)
+                branch: 'verji-main'
+                # Clone with submodules
+                submodule: false # optional, default is false
 
+            - name: Azure PowerShell Action
+              uses: Azure/powershell@v2
+              with:
+                # Specify the Az PowerShell script here.
+                inlineScript: "Write-Output 'ls 1' && ls && cd matrix-react-sdk-module-api && Write-Output 'ls2' && ls && yarn && yarn link && cd .. && Write-Output 'ls3' && ls && cd .. && Write-Output 'ls 4' && cd 'matrix-react-sdk' && Write-Output 'ls 5' && ls  && yarn link '@matrix-org/react-sdk-module-api' && cd .. && Write-Output 'ls 6' && cd.. && Write-Output 'ls 7' && ls"
+                # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+                azPSVersion: "latest"
+            #END JT EX
             - name: Typecheck
               run: "yarn run lint:types"
 
