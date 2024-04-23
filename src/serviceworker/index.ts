@@ -54,58 +54,70 @@ self.addEventListener("fetch", (event: FetchEvent) => {
     // We only intercept v3 download and thumbnail requests as presumably everything else is deliberate.
     // For example, `/_matrix/media/unstable` or `/_matrix/media/v3/preview_url` are something well within
     // the control of the application, and appear to be choices made at a higher level than us.
-    if (url.includes("/_matrix/media/v3/download") || url.includes("/_matrix/media/v3/thumbnail")) {
-        // We need to call respondWith synchronously, otherwise we may never execute properly. This means
-        // later on we need to proxy the request through if it turns out the server doesn't support authentication.
-        event.respondWith(
-            (async (): Promise<Response> => {
-                let fetchConfig: { headers?: { [key: string]: string } } = {};
-                try {
-                    // Figure out which homeserver we're communicating with
-                    const csApi = url.substring(0, url.indexOf("/_matrix/media/v3"));
-
-                    // Add jitter to reduce request spam, particularly to `/versions` on initial page load
-                    await new Promise<void>((resolve) => setTimeout(() => resolve(), Math.random() * 10));
-
-                    // Locate our access token, and populate the fetchConfig with the authentication header.
-                    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-                    const client = await self.clients.get(event.clientId);
-                    const accessToken = await getAccessToken(client);
-                    if (accessToken) {
-                        fetchConfig = {
-                            headers: {
-                                Authorization: `Bearer ${accessToken}`,
-                            },
-                        };
-                    }
-
-                    // Update or populate the server support map using a (usually) authenticated `/versions` call.
-                    if (!serverSupportMap[csApi] || serverSupportMap[csApi].cacheExpires <= new Date().getTime()) {
-                        const versions = await (await fetch(`${csApi}/_matrix/client/versions`, fetchConfig)).json();
-                        serverSupportMap[csApi] = {
-                            supportsMSC3916: Boolean(versions?.unstable_features?.["org.matrix.msc3916"]),
-                            cacheExpires: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
-                        };
-                    }
-
-                    // If we have server support (and a means of authentication), rewrite the URL to use MSC3916 endpoints.
-                    if (serverSupportMap[csApi].supportsMSC3916 && accessToken) {
-                        // Currently unstable only.
-                        // TODO: Support stable endpoints when available.
-                        url = url.replace(/\/media\/v3\/(.*)\//, "/client/unstable/org.matrix.msc3916/media/$1/");
-                    } // else by default we make no changes
-                } catch (err) {
-                    console.error("SW: Error in request rewrite.", err);
-                }
-
-                // Add authentication and send the request. We add authentication even if MSC3916 endpoints aren't
-                // being used to ensure patches like this work:
-                // https://github.com/matrix-org/synapse/commit/2390b66bf0ec3ff5ffb0c7333f3c9b239eeb92bb
-                return fetch(url, fetchConfig);
-            })(),
-        );
+    if (!url.includes("/_matrix/media/v3/download") && !url.includes("/_matrix/media/v3/thumbnail")) {
+        return; // not a URL we care about
     }
+
+    // We need to call respondWith synchronously, otherwise we may never execute properly. This means
+    // later on we need to proxy the request through if it turns out the server doesn't support authentication.
+    event.respondWith(
+        (async (): Promise<Response> => {
+            let accessToken: string | undefined;
+            try {
+                // Figure out which homeserver we're communicating with
+                const csApi = url.substring(0, url.indexOf("/_matrix/media/v3"));
+
+                // Add jitter to reduce request spam, particularly to `/versions` on initial page load
+                await new Promise<void>((resolve) => setTimeout(() => resolve(), Math.random() * 10));
+
+                // Locate our access token, and populate the fetchConfig with the authentication header.
+                // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
+                const client = await self.clients.get(event.clientId);
+                accessToken = await getAccessToken(client);
+
+                // Update or populate the server support map using a (usually) authenticated `/versions` call.
+                await tryUpdateServerSupportMap(csApi, accessToken);
+
+                // If we have server support (and a means of authentication), rewrite the URL to use MSC3916 endpoints.
+                if (serverSupportMap[csApi].supportsMSC3916 && accessToken) {
+                    // Currently unstable only.
+                    // TODO: Support stable endpoints when available.
+                    url = url.replace(/\/media\/v3\/(.*)\//, "/client/unstable/org.matrix.msc3916/media/$1/");
+                } // else by default we make no changes
+            } catch (err) {
+                console.error("SW: Error in request rewrite.", err);
+            }
+
+            // Add authentication and send the request. We add authentication even if MSC3916 endpoints aren't
+            // being used to ensure patches like this work:
+            // https://github.com/matrix-org/synapse/commit/2390b66bf0ec3ff5ffb0c7333f3c9b239eeb92bb
+            const config = !accessToken ? undefined : {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            };
+            return fetch(url, config);
+        })(),
+    );
 });
+
+async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: string): Promise<void> {
+    // only update if we don't know about it, or if the data is stale
+    if (serverSupportMap[clientApiUrl]?.cacheExpires > new Date().getTime()) {
+        return; // up to date
+    }
+
+    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })).json();
+
+    serverSupportMap[clientApiUrl] = {
+        supportsMSC3916: Boolean(versions?.unstable_features?.["org.matrix.msc3916"]),
+        cacheExpires: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
+    };
+}
 
 // Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
 // unknown for now and force-cast it to something close enough later.
