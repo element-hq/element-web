@@ -1,5 +1,6 @@
 name: Static Analysis
 on:
+    workflow_dispatch:
     pull_request: {}
     merge_group:
         types: [checks_requested]
@@ -21,14 +22,39 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
 
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
+            # VERJI SPECIFIC - USE yarn link FOR matrix-react-sdk-module-api
+            - name: Clone Github Repo Action
+              # You may pin to the exact commit or the version.
+              # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
+              uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+              with:
+                  # Repository Owner
+                  owner: verji
+                  # Repository name
+                  repository: "matrix-react-sdk-module-api"
+                  # PAT with repository scope (https://github.com/settings/tokens)
+                  access-token: ${{secrets.PAT}}
+                  # Depth of the clone (default: full history)
+                  depth: 1
+                  # Branch name (default: main)
+                  branch: "verji-main"
+                  # Clone with submodules
+                  submodule: false # optional, default is false
 
+            - name: Azure PowerShell Action
+              uses: Azure/powershell@v2
+              with:
+                  # Specify the Az PowerShell script here.
+                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
+                  # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+                  azPSVersion: "latest"
+            #END VERJI SPECIFIC
             - name: Typecheck
               run: "yarn run lint:types"
 
