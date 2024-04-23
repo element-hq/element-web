@@ -58,24 +58,26 @@ export default class WebPlatform extends VectorBasePlatform {
                         return r;
                     })
                     .then((r) => {
-                        navigator.serviceWorker.addEventListener("message", (e) => {
-                            try {
-                                if (e.data?.["type"] === "userinfo" && e.data?.["responseKey"]) {
-                                    const userId = localStorage.getItem("mx_user_id");
-                                    const deviceId = localStorage.getItem("mx_device_id");
-                                    r.active!.postMessage({
-                                        responseKey: e.data["responseKey"],
-                                        userId,
-                                        deviceId,
-                                    });
-                                }
-                            } catch (e) {
-                                console.error("Error responding to service worker: ", e);
-                            }
-                        });
+                        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
                     })
                     .catch((e) => console.error("Error registering/updating service worker:", e));
             }
+        }
+    }
+
+    private onServiceWorkerPostMessage(event: MessageEvent): void {
+        try {
+            if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
+                const userId = localStorage.getItem("mx_user_id");
+                const deviceId = localStorage.getItem("mx_device_id");
+                event.source!.postMessage({
+                    responseKey: event.data["responseKey"],
+                    userId,
+                    deviceId,
+                });
+            }
+        } catch (e) {
+            console.error("Error responding to service worker: ", e);
         }
     }
 
