@@ -54,6 +54,10 @@ export const enum UIFeature {
     UserSettingsSetIdServer = "UIFeature.userSettingsSetIdServer",
     UserSettingsDiscovery = "UIFeature.userSettingsDiscovery",
     UserSettingsIntegrationManager = "UIFeature.userSettingsIntegrationManager",
+    UserSettingsResetCrossSigning = "UIFeature.userSettingsResetCrossSigning",
+    UserSettingsDeleteBackup = "UIFeature.userSettingsDeleteBackup",
+    UserSettingsResetBackup = "UIFeature.userSettingsResetBackup",
+    SetupEncryptionResetButton = "UIFeature.setupEncryptionResetButton",
 }
 
 export enum UIComponent {
