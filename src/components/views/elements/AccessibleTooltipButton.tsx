@@ -60,6 +60,9 @@ type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof Access
     onHideTooltip?(ev: SyntheticEvent): void;
 };
 
+/**
+ * @deprecated use AccessibleButton with `title` and `caption` instead.
+ */
 const AccessibleTooltipButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
     { title, tooltip, children, forceHide, alignment, onHideTooltip, tooltipClassName, ...props }: Props<T>,
     ref: Ref<HTMLElement>,

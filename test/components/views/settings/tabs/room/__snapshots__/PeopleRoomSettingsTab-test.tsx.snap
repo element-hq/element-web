@@ -68,10 +68,11 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
         </div>
       </div>
       <div
+        aria-label="Deny"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        data-state="closed"
         role="button"
         tabindex="0"
-        title="Deny"
       >
         <div
           height="18"
@@ -79,10 +80,11 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
         />
       </div>
       <div
+        aria-label="Approve"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        data-state="closed"
         role="button"
         tabindex="0"
-        title="Approve"
       >
         <div
           height="18"
@@ -135,10 +137,11 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
         </span>
       </div>
       <div
+        aria-label="Deny"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        data-state="closed"
         role="button"
         tabindex="0"
-        title="Deny"
       >
         <div
           height="18"
@@ -146,10 +149,11 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
         />
       </div>
       <div
+        aria-label="Approve"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        data-state="closed"
         role="button"
         tabindex="0"
-        title="Approve"
       >
         <div
           height="18"

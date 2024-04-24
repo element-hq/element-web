@@ -3,10 +3,11 @@
 exports[`<DeviceItem /> ambiguous display name 1`] = `
 <div>
   <div
+    aria-label="my display name (deviceId)"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    data-state="closed"
     role="button"
     tabindex="0"
-    title="deviceId"
   >
     <div
       class="mx_E2EIcon mx_E2EIcon_normal"
@@ -26,10 +27,11 @@ exports[`<DeviceItem /> ambiguous display name 1`] = `
 exports[`<DeviceItem /> with display name 1`] = `
 <div>
   <div
+    aria-label="deviceName"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    data-state="closed"
     role="button"
     tabindex="0"
-    title="deviceId"
   >
     <div
       class="mx_E2EIcon mx_E2EIcon_normal"
@@ -49,10 +51,11 @@ exports[`<DeviceItem /> with display name 1`] = `
 exports[`<DeviceItem /> without display name 1`] = `
 <div>
   <div
+    aria-label="deviceId"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    data-state="closed"
     role="button"
     tabindex="0"
-    title="deviceId"
   >
     <div
       class="mx_E2EIcon mx_E2EIcon_normal"
@@ -78,11 +81,12 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       class="mx_BaseCard_header"
     >
       <div
+        aria-label="Close"
         class="mx_AccessibleButton mx_BaseCard_close"
+        data-state="closed"
         data-testid="base-card-close-button"
         role="button"
         tabindex="0"
-        title="Close"
       />
       <div
         class="mx_BaseCard_headerProp"

@@ -135,20 +135,26 @@ exports[`<CurrentDeviceSection /> handles when device is falsy 1`] = `
       >
         Current session
       </h3>
-      <div
-        aria-disabled="true"
-        aria-expanded="false"
-        aria-haspopup="true"
-        class="mx_AccessibleButton mx_AccessibleButton_disabled"
-        data-testid="current-session-menu"
-        disabled=""
-        role="button"
+      <span
+        data-state="closed"
         tabindex="0"
       >
         <div
-          class="mx_KebabContextMenu_icon"
-        />
-      </div>
+          aria-disabled="true"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AccessibleButton_disabled"
+          data-testid="current-session-menu"
+          disabled=""
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_KebabContextMenu_icon"
+          />
+        </div>
+      </span>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -174,7 +180,9 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       <div
         aria-expanded="false"
         aria-haspopup="true"
+        aria-label="Options"
         class="mx_AccessibleButton"
+        data-state="closed"
         data-testid="current-session-menu"
         role="button"
         tabindex="0"
@@ -317,7 +325,9 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       <div
         aria-expanded="false"
         aria-haspopup="true"
+        aria-label="Options"
         class="mx_AccessibleButton"
+        data-state="closed"
         data-testid="current-session-menu"
         role="button"
         tabindex="0"

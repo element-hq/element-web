@@ -84,7 +84,9 @@ exports[`<SessionManagerTab /> current session section renders current session s
     <div
       aria-expanded="false"
       aria-haspopup="true"
+      aria-label="Options"
       class="mx_AccessibleButton"
+      data-state="closed"
       data-testid="current-session-menu"
       role="button"
       tabindex="0"
@@ -213,7 +215,9 @@ exports[`<SessionManagerTab /> current session section renders current session s
     <div
       aria-expanded="false"
       aria-haspopup="true"
+      aria-label="Options"
       class="mx_AccessibleButton"
+      data-state="closed"
       data-testid="current-session-menu"
       role="button"
       tabindex="0"

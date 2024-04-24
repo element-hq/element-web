@@ -36,7 +36,6 @@ export const ContextMenuButton = forwardRef(function <T extends keyof JSX.Intrin
             {...props}
             onClick={onClick}
             onContextMenu={onContextMenu ?? onClick ?? undefined}
-            title={label}
             aria-label={label}
             aria-haspopup={true}
             aria-expanded={isExpanded}

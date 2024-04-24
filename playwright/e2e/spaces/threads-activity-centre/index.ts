@@ -341,7 +341,7 @@ export class Helpers {
      */
     assertThreadPanelFocused() {
         return expect(
-            this.page.locator(".mx_ThreadPanel").locator(".mx_BaseCard_header").getByTitle("Close"),
+            this.page.locator(".mx_ThreadPanel").locator(".mx_BaseCard_header").getByLabel("Close"),
         ).toBeFocused();
     }
 

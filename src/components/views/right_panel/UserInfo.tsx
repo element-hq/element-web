@@ -237,7 +237,12 @@ export function DeviceItem({
         );
     } else {
         return (
-            <AccessibleButton className={classes} title={device.deviceId} onClick={onDeviceClick}>
+            <AccessibleButton
+                className={classes}
+                title={device.deviceId}
+                aria-label={deviceName}
+                onClick={onDeviceClick}
+            >
                 <div className={iconClasses} />
                 <div className="mx_UserInfo_device_name">{deviceName}</div>
                 <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
