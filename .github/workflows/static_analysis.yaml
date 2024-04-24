@@ -57,7 +57,7 @@ jobs:
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api
-                  inlineScript: "cd matrix-react-sdk-module-api && Write-Output 'ls1' && ls && cd 'lib' && Write-Output 'ls2' && ls && cd .. && cd .. && cd 'matrix-react-sdk' && Write-Output 'ls3' && ls && cd 'node_modules' && cd '@matrix-org' && Write-Output 'ls4' && ls && cd 'react-sdk-module-api' && Write-Output 'ls3' && ls"
+                  inlineScript: "cd matrix-react-sdk-module-api && Write-Output 'ls1' && ls && cd 'lib' && Write-Output 'ls2' && ls && cd .. && Write-Output 'ls4' && ls && cd .. && Write-Output 'ls4' && ls "
                   azPSVersion: "latest"
             #END VERJI SPECIFIC
             - name: Typecheck
