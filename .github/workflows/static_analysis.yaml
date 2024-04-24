@@ -50,9 +50,14 @@ jobs:
             - name: Azure PowerShell Action
               uses: Azure/powershell@v2
               with:
-                  # Specify the Az PowerShell script here.
+                  # Yarn link matrix-react-sdk-module-api
                   inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
-                  # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+                  azPSVersion: "latest"
+            - name: Azure PowerShell Action
+              uses: Azure/powershell@v2
+              with:
+                  # Yarn link matrix-react-sdk-module-api
+                  inlineScript: "cd matrix-react-sdk-module-api && Write-Output 'ls1' && ls && cd 'lib' Write-Output 'ls2' && ls && cd .. && cd .. && cd 'matrix-react-sdk && Write-Output 'ls3' && ls && cd 'node_modules' && cd '@matrix-org' && Write-Output 'ls4' && ls && cd 'react-sdk-module-api' && Write-Output 'ls3' && ls"
                   azPSVersion: "latest"
             #END VERJI SPECIFIC
             - name: Typecheck
