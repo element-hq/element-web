@@ -405,7 +405,7 @@ function getClientSearchResponse(searchResults: ISearchResults, matches: SearchR
         }
     }
 
-    //response.search_categories.room_events.count = matches.length;
+    response.search_categories.room_events.count = matches.length;
     for (let i = 0; i < matches.length; i++) {
 
         const matchEvent = matches[i].result.event;
