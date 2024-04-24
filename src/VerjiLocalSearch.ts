@@ -9,11 +9,14 @@ import {
     MatrixEvent,
     Room,
     RoomMember,
-    SearchResult as ElementSearchResult,
+    SearchResult,
+    ISearchResult,
+    ISearchResults,
+    ISearchResponse,
+    IEventWithRoomId
 } from "matrix-js-sdk/src/matrix";
-import { EventContext } from "matrix-js-sdk/src/models/event-context"; // eslint-disable-line
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
+import { EventContext } from "matrix-js-sdk/src/models/event-context"; // eslint-disable-line
 
 interface WordHighlight {
     word: string;
@@ -44,30 +47,22 @@ interface SearchResultItem {
     context: EventContext;
 }
 
-interface SearchResult {
-    _query: string;
-    results: any[];
-    highlights: any[];
-    count: number;
-}
 
 /**
  * Searches all events locally based on the provided search term and room ID.
  *
  * @param {string} term - The search term.
  * @param {string | undefined} roomId - The ID of the room to search in.
- * @returns {Promise<SearchResult>} A promise that resolves to the search result.
+ * @returns {Promise<ISearchResult>} A promise that resolves to the search result.
  * @throws {Error} If the Matrix client is not initialized or the room is not found.
  */
-export default async function searchAllEventsLocally(term: string, roomId: string | undefined): Promise<SearchResult> {
-    const searchResult: SearchResult = {
-        _query: term,
+export default async function searchAllEventsLocally(client: MatrixClient, term: string, roomId: string | undefined): Promise<ISearchResults> {
+    let searchResults: ISearchResults = {
         results: [],
         highlights: [],
         count: 0,
     };
 
-    const client: MatrixClient | null = MatrixClientPeg.get();
     if (!client) {
         throw new Error("Matrix client is not initialized");
     }
@@ -81,7 +76,7 @@ export default async function searchAllEventsLocally(term: string, roomId: strin
     const termObj: SearchTerm = makeSearchTermObject(term.trim());
 
     if (termObj.isEmptySearch) {
-        return searchResult;
+        return searchResults;
     }
 
     let matchingMembers: Member[] = [];
@@ -95,21 +90,20 @@ export default async function searchAllEventsLocally(term: string, roomId: strin
     }
 
     await loadFullHistory(client, room);
-    const matches = await findAllMatches(termObj, room, memberObj);
 
-    processSearchResults(searchResult, matches, termObj);
+    // Search and return intermediary form of matches 
+    let matches = await findAllMatches(termObj, room, memberObj);
 
-    // console.log("Search results 1: ", searchResult);
+    // search context is reversed there ☝️, so fix 
+    //matches.forEach(m => m.context = reverseEventContext(m.context)); 
 
-    // const results = searchResult.results;
+    // Process the matches to produce the equivalent result from a client.search() call 
+    let searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId)
 
-    // results.forEach(result => {
-    //     result.context.timeline = result.context.timeline.reverse();
-    // });
+    // mimic the original code
+    client.processRoomEventsSearch(searchResults, searchResponse);
 
-    // console.log("Search results 2: ", searchResult);
-
-    return searchResult;
+    return searchResults;
 }
 
 /**
@@ -148,6 +142,7 @@ async function loadFullHistory(client: MatrixClient | null, room: Room): Promise
     } while (hasMoreEvents);
 }
 
+
 /**
  * Retrieves the first live timeline neighbour of a given room.
  * A live timeline neighbour is a timeline that is adjacent to the current timeline in the backwards direction.
@@ -182,7 +177,7 @@ function iterateAllEvents(room: Room, callback: (event: MatrixEvent) => void): v
         for (let i = events.length - 1; i >= 0; i--) {
             callback(events[i]);
         }
-        timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
+        timeline = timeline.getNeighbouringTimeline(EventTimeline.FORWARDS);
     }
 }
 
@@ -194,22 +189,24 @@ function iterateAllEvents(room: Room, callback: (event: MatrixEvent) => void): v
  * @param matchingMembers - The matching members.
  * @returns A promise that resolves to an array of search result items.
  */
-export async function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): Promise<any[]> {
+export async function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): Promise<SearchResultItem[]> {
     return new Promise((resolve) => {
         const matches: SearchResultItem[] = [];
         let searchHit: SearchResultItem | null = null;
-        let mostRecentEvent: MatrixEvent | null = null;
+        let prevEvent: MatrixEvent | null = null;
         const iterationCallback = (roomEvent: MatrixEvent): void => {
+            
             if (searchHit !== null) {
                 searchHit.context.addEvents([roomEvent], false);
             }
             searchHit = null;
 
             if (roomEvent.getType() === "m.room.message" && !roomEvent.isRedacted()) {
+
                 if (eventMatchesSearchTerms(termObj, roomEvent, matchingMembers)) {
                     const evCtx = new EventContext(roomEvent);
-                    if (mostRecentEvent !== null) {
-                        evCtx.addEvents([mostRecentEvent], true);
+                    if (prevEvent !== null) {
+                        evCtx.addEvents([prevEvent], true);
                     }
 
                     const resObj: SearchResultItem = { result: roomEvent, context: evCtx };
@@ -219,11 +216,11 @@ export async function findAllMatches(termObj: SearchTerm, room: Room, matchingMe
                     return;
                 }
             }
-            mostRecentEvent = roomEvent;
+            prevEvent  = roomEvent;
         };
 
-        iterateAllEvents(room, iterationCallback);
         resolve(matches);
+        iterateAllEvents(room, iterationCallback);
     });
 }
 
@@ -378,26 +375,59 @@ export function makeSearchTermObject(searchTerm: string): SearchTerm {
     };
 }
 
+
+function reverseEventContext(eventContext: EventContext): EventContext{
+    var contextTimeline = eventContext.getTimeline();    
+    var reversedContexted = new EventContext(contextTimeline[1]);
+    reversedContexted.addEvents([contextTimeline[0]], false);
+    reversedContexted.addEvents([contextTimeline[2]], true);
+    return reversedContexted;
+}
+
+
 /**
- * Processes the search results and updates the searchResults object.
+ * Transform the matches by projecting them into a ISearchResponse
  *
  * @param searchResults - The search results object to be updated.
  * @param matches - An array of matches.
  * @param termObj - The search term object.
  * @returns The updated searchResults object.
  */
-function processSearchResults(searchResults: SearchResult, matches: any[], termObj: SearchTerm): SearchResult {
-    for (let i = 0; i < matches.length; i++) {
-        const sr = new ElementSearchResult(1, matches[i].context);
-        // sr.context.timeline = sr.context.timeline.reverse();
-        searchResults.results.push(sr);
+function getClientSearchResponse(searchResults: ISearchResults, matches: SearchResultItem[], termObj: SearchTerm, roomId: string|undefined): ISearchResponse {
+
+    var response: ISearchResponse = {
+        search_categories: {
+            room_events: {
+                count: 0,
+                highlights: [],
+                results: []
+            }
+        }
     }
 
-    const highlights = termObj.words.filter((w) => w.highlight).map((w) => w.word);
-    searchResults.highlights = highlights;
-    for (let i = 0; i < termObj.regExpHighlights.length; i++) {
-        searchResults.highlights.push(termObj.regExpHighlights[i]);
+    //response.search_categories.room_events.count = matches.length;
+    for (let i = 0; i < matches.length; i++) {
+
+        const matchEvent = matches[i].result.event;
+        const reversedContext = reverseEventContext(matches[i].context)
+
+        const sr = new SearchResult(0, reversedContext);
+        searchResults.results.push(sr);
+    
+        response.search_categories.room_events.results.push(
+            <ISearchResult>{
+                rank: 0,                
+                context: {},
+                result:  <IEventWithRoomId>{
+                    room_id: matchEvent.room_id,
+                    event_id: matchEvent.event_id,
+                    sender: matchEvent.sender,
+                    origin_server_ts: matchEvent.origin_server_ts,
+                    age: matchEvent?.unsigned?.age ?? 0
+                }
+            }
+        );
     }
-    searchResults.count = matches.length;
-    return searchResults;
+
+    return response;
 }

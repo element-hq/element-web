@@ -1734,7 +1734,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // VERJI START
         // const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
-        const promise = searchAllEventsLocally(term, roomId);
+        const promise = searchAllEventsLocally(this.context.client!, term, roomId);
+
         // VERJI END
 
         this.setState({
@@ -1747,7 +1748,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 scope,
                 // VERJI START
                 // promise,
-                promise: promise as any,
+                promise: promise,
                 // VERJI END
                 abortController,
             },
