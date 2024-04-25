@@ -58,6 +58,12 @@ export const enum UIFeature {
     UserSettingsDeleteBackup = "UIFeature.userSettingsDeleteBackup",
     UserSettingsResetBackup = "UIFeature.userSettingsResetBackup",
     SetupEncryptionResetButton = "UIFeature.setupEncryptionResetButton",
+    AccountSendAccountEvent = "UIFeature.accountSendAccountEvent",
+    AccountSendRoomEvent = "UIFeature.accountSendRoomEvent",
+    EnableLoginPage = "UIFeature.enableLoginPage",
+    EnableNewRoomIntro = "UIFeature.enableNewRoomIntro",
+    EnableRoomDevTools = "UIFeature.enableRoomDevTools",
+    WidgetContextDeleteButton = "UIFeature.WidgetContextDeleteButton",
 }
 
 export enum UIComponent {
