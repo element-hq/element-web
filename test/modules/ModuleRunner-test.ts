@@ -16,7 +16,7 @@ limitations under the License.
 
 import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
-import { MockModule, registerMockModule } from "./MockModule";
+import { MockModule, registerMockModule, registerMockModuleWithCryptoSetupExtension } from "./MockModule";
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 
 describe("ModuleRunner", () => {
@@ -47,6 +47,32 @@ describe("ModuleRunner", () => {
                 [opts, roomId], // module 1
                 [opts, roomId], // module 2
             ]);
+        });
+    });
+
+    describe("extensions", () => {
+        it("should return default values when no crypto-setup extensions are provided by a registered module", async () => {
+            registerMockModule();
+            const result = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+            expect(result).toBeNull();
+        });
+
+        it("should return default values when no experimental extensions are provided by a registered module", async () => {
+            registerMockModule();
+            const result = ModuleRunner.instance.extensions?.experimental?.experimentalMethod();
+            expect(result).toBeNull();
+        });
+
+        it("should return value from crypto-setup-extensions provided by a registered module", async () => {
+            registerMockModuleWithCryptoSetupExtension();
+            const result = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+            expect(result).toEqual(Uint8Array.from([0x11, 0x22, 0x99]));
+        });
+
+        it("must not allow multiple modules to provide a given extension", async () => {
+            registerMockModuleWithCryptoSetupExtension();
+            const t = () => registerMockModuleWithCryptoSetupExtension();
+            expect(t).toThrow(Error);
         });
     });
 });

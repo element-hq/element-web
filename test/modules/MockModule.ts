@@ -16,6 +16,13 @@ limitations under the License.
 
 import { RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
 import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import { AllExtensions } from "@matrix-org/react-sdk-module-api/lib/types/extensions";
+import {
+    CryptoSetupExtensionsBase,
+    ExtendedMatrixClientCreds,
+    SecretStorageKeyDescriptionAesV1,
+    CryptoSetupArgs,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
 
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 
@@ -36,6 +43,67 @@ export function registerMockModule(): MockModule {
             throw new Error("State machine error: ModuleRunner created the module twice");
         }
         module = new MockModule(api);
+        return module;
+    });
+    if (!module) {
+        throw new Error("State machine error: ModuleRunner did not create module");
+    }
+    return module;
+}
+
+export class MockModuleWithCryptoSetupExtension extends RuntimeModule {
+    public get apiInstance(): ModuleApi {
+        return this.moduleApi;
+    }
+
+    moduleName: string = MockModuleWithCryptoSetupExtension.name;
+
+    extensions: AllExtensions = {
+        cryptoSetup: new (class extends CryptoSetupExtensionsBase {
+            SHOW_ENCRYPTION_SETUP_UI = true;
+
+            examineLoginResponse(response: any, credentials: ExtendedMatrixClientCreds): void {
+                throw new Error("Method not implemented.");
+            }
+            persistCredentials(credentials: ExtendedMatrixClientCreds): void {
+                throw new Error("Method not implemented.");
+            }
+            getSecretStorageKey(): Uint8Array | null {
+                return Uint8Array.from([0x11, 0x22, 0x99]);
+            }
+            createSecretStorageKey(): Uint8Array | null {
+                throw new Error("Method not implemented.");
+            }
+            catchAccessSecretStorageError(e: Error): void {
+                throw new Error("Method not implemented.");
+            }
+            setupEncryptionNeeded(args: CryptoSetupArgs): boolean {
+                throw new Error("Method not implemented.");
+            }
+            getDehydrationKeyCallback():
+                | ((
+                      keyInfo: SecretStorageKeyDescriptionAesV1,
+                      checkFunc: (key: Uint8Array) => void,
+                  ) => Promise<Uint8Array>)
+                | null {
+                throw new Error("Method not implemented.");
+            }
+        })(),
+    };
+
+    public constructor(moduleApi: ModuleApi) {
+        super(moduleApi);
+    }
+}
+
+export function registerMockModuleWithCryptoSetupExtension(): MockModuleWithCryptoSetupExtension {
+    let module: MockModuleWithCryptoSetupExtension | undefined;
+
+    ModuleRunner.instance.registerModule((api) => {
+        if (module) {
+            throw new Error("State machine error: ModuleRunner created the module twice");
+        }
+        module = new MockModuleWithCryptoSetupExtension(api);
         return module;
     });
     if (!module) {
