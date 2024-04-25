@@ -31,6 +31,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { Features } from "../../../../src/settings/Settings";
 import * as registerClientUtils from "../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
 jest.useRealTimers();
 
@@ -380,17 +381,21 @@ describe("Login", function () {
         const delegatedAuth = makeDelegatedAuthConfig(issuer);
         beforeEach(() => {
             jest.spyOn(logger, "error");
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === Features.OidcNativeFlow,
-            );
-        });
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.EnableLoginPage) return true;
+                return name === Features.OidcNativeFlow
+            });
+           });
 
         afterEach(() => {
             jest.spyOn(logger, "error").mockRestore();
         });
 
         it("should not attempt registration when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.EnableLoginPage) return true;
+                return false;
+            });
 
             getComponent(hsUrl, isUrl, delegatedAuth);
 
@@ -450,7 +455,11 @@ describe("Login", function () {
          * Oidc-aware flows still work while the oidc-native feature flag is disabled
          */
         it("should show oidc-aware flow for oidc-enabled homeserver when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            // jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.UserSettingsResetBackup) return false;
+                return true;
+            });
             mockClient.loginFlows.mockResolvedValue({
                 flows: [
                     {
