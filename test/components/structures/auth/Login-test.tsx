@@ -383,9 +383,9 @@ describe("Login", function () {
             jest.spyOn(logger, "error");
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
                 if (name == UIFeature.EnableLoginPage) return true;
-                return name === Features.OidcNativeFlow
+                return name === Features.OidcNativeFlow;
             });
-           });
+        });
 
         afterEach(() => {
             jest.spyOn(logger, "error").mockRestore();
