@@ -33,6 +33,12 @@ export const enum UIFeature {
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
+    AccountSendAccountEvent = "UIFeature.accountSendAccountEvent",
+    AccountSendRoomEvent = "UIFeature.accountSendRoomEvent",
+    EnableLoginPage = "UIFeature.enableLoginPage",
+    EnableNewRoomIntro = "UIFeature.enableNewRoomIntro",
+    EnableRoomDevTools = "UIFeature.enableRoomDevTools",
+    WidgetContextDeleteButton = "UIFeature.WidgetContextDeleteButton",
 }
 
 export enum UIComponent {
