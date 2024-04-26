@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React, { forwardRef, FunctionComponent, HTMLAttributes, InputHTMLAttributes, Ref } from "react";
+import React, { ComponentProps, forwardRef, FunctionComponent, HTMLAttributes, InputHTMLAttributes, Ref } from "react";
 import classnames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -61,6 +61,8 @@ type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<
 > &
     Omit<InputHTMLAttributes<Element>, "onClick">;
 
+type TooltipProps = ComponentProps<typeof Tooltip>;
+
 /**
  * Type of props accepted by {@link AccessibleButton}.
  *
@@ -96,6 +98,14 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
      * Only valid when used in conjunction with `title`.
      */
     caption?: string;
+    /**
+     * The placement of the tooltip.
+     */
+    placement?: TooltipProps["placement"];
+    /**
+     * Callback for when the tooltip is opened or closed.
+     */
+    onTooltipOpenChange?: TooltipProps["onOpenChange"];
 };
 
 /**
@@ -128,6 +138,8 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
         triggerOnMouseDown,
         title,
         caption,
+        placement,
+        onTooltipOpenChange,
         ...restProps
     }: Props<T>,
     ref: Ref<HTMLElement>,
@@ -199,7 +211,13 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
 
     if (title) {
         return (
-            <Tooltip label={title} caption={caption} isTriggerInteractive={!disabled}>
+            <Tooltip
+                label={title}
+                caption={caption}
+                isTriggerInteractive={true}
+                placement={placement}
+                onOpenChange={onTooltipOpenChange}
+            >
                 {button}
             </Tooltip>
         );

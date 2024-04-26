@@ -135,26 +135,22 @@ exports[`<CurrentDeviceSection /> handles when device is falsy 1`] = `
       >
         Current session
       </h3>
-      <span
+      <div
+        aria-disabled="true"
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="Options"
+        class="mx_AccessibleButton mx_AccessibleButton_disabled"
         data-state="closed"
+        data-testid="current-session-menu"
+        disabled=""
+        role="button"
         tabindex="0"
       >
         <div
-          aria-disabled="true"
-          aria-expanded="false"
-          aria-haspopup="true"
-          aria-label="Options"
-          class="mx_AccessibleButton mx_AccessibleButton_disabled"
-          data-testid="current-session-menu"
-          disabled=""
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="mx_KebabContextMenu_icon"
-          />
-        </div>
-      </span>
+          class="mx_KebabContextMenu_icon"
+        />
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
