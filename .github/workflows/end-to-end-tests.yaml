@@ -1,89 +1,113 @@
-# Triggers after the layered build has finished, taking the artifact and running Playwright on it
+# Produce a build of element-web with this version of react-sdk
+# and any matching branches of element-web and js-sdk, output it
+# as an artifact and run end-to-end tests.
 name: End to End Tests
 on:
-    workflow_run:
-        workflows: ["Element Web - Build"]
-        types:
-            - completed
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
 
-    # support calls from other workflows for downstream testing
+    # support triggering from other workflows
     workflow_call:
         inputs:
             react-sdk-repository:
                 type: string
                 required: true
                 description: "The name of the github repository to check out and build."
-        secrets:
-            ELEMENT_BOT_TOKEN:
-                required: true
+
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
+            element-web-sha:
+                type: string
+                required: false
+                description: "The Git SHA of element-web to build against. By default, will use a matching branch name if it exists, or develop."
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
-    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
-    prepare:
-        name: Prepare
-        if: github.event.workflow_run.conclusion == 'success'
+    build:
+        name: "Build Element-Web"
         runs-on: ubuntu-latest
-        permissions:
-            statuses: write
         steps:
-            # We create the status here and then update it to success/failure in the `report` stage
-            # This provides an easy link to this workflow_run from the PR before the tests are done.
-            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+            - name: Checkout code
+              uses: actions/checkout@v4
               with:
-                  authToken: ${{ secrets.GITHUB_TOKEN }}
-                  state: pending
-                  context: ${{ github.workflow }} / end-to-end-tests
-                  sha: ${{ github.event.workflow_run.head_sha }}
-                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
 
-    tests:
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Fetch layered build
+              id: layered_build
+              env:
+                  # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+                  ELEMENT_WEB_GITHUB_BASE_REF: ${{ inputs.element-web-sha }}
+              run: |
+                  scripts/ci/layered.sh
+                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+                  REACT_SHA=$(git rev-parse --short=12 HEAD)
+                  VECTOR_SHA=$(git -C element-web rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
+              working-directory: ./element-web
+
+            - name: Build
+              env:
+                  CI_PACKAGE: true
+                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+              run: |
+                  yarn build
+                  echo $VERSION > webapp/version
+              working-directory: ./element-web
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: webapp
+                  path: element-web/webapp
+                  retention-days: 1
+
+    playwright:
         name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
-        needs: prepare
+        needs: build
         runs-on: ubuntu-latest
         permissions:
             actions: read
             issues: read
             pull-requests: read
-        environment: EndToEndTests
         strategy:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2, 3, 4, 5, 6, 7, 8]
         steps:
-            - name: 📥 Download artifact
-              uses: actions/download-artifact@v4
-              with:
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  run-id: ${{ github.event.workflow_run.id }}
-                  name: previewbuild
-                  path: webapp
-
-            # The workflow_run.head_sha is the sha of the head commit but the element-web was built using a simulated
-            # merge commit - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
-            # so use the sha from the tarball for the checkout of the tests
-            # to make sure we get a matching set of code and tests.
-            - name: Grab sha from webapp
-              id: sha
-              run: |
-                  echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
-
             - uses: actions/checkout@v4
               with:
-                  # XXX: We're checking out untrusted code in a secure context
-                  # We need to be careful to not trust anything this code outputs/may do
-                  #
-                  # Note that (in the absence of a `react-sdk-repository` input),
-                  # we check out from the default repository, which is (for this workflow) the
-                  # *target* repository for the pull request.
-                  #
-                  ref: ${{ steps.sha.outputs.sha }}
                   persist-credentials: false
                   path: matrix-react-sdk
                   repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            - name: 📥 Download artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: webapp
+                  path: webapp
 
             - uses: actions/setup-node@v4
               with:
@@ -126,66 +150,9 @@ jobs:
                   path: matrix-react-sdk/blob-report
                   retention-days: 1
 
-    report:
-        name: Report results
-        needs: tests
+    complete:
+        name: end-to-end-tests
+        needs: playwright
         runs-on: ubuntu-latest
-        environment: Netlify
-        if: always()
-        permissions:
-            statuses: write
-            deployments: write
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  persist-credentials: false
-                  repository: ${{ inputs.react-sdk-repository || github.repository }}
-
-            - uses: actions/setup-node@v4
-              with:
-                  cache: "yarn"
-
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile
-
-            - name: Download blob reports from GitHub Actions Artifacts
-              uses: actions/download-artifact@v4
-              with:
-                  pattern: all-blob-reports-*
-                  path: all-blob-reports
-                  merge-multiple: true
-
-            - name: Merge into HTML Report
-              run: yarn playwright merge-reports --reporter=html,github,./playwright/flaky-reporter.ts ./all-blob-reports
-              env:
-                  # Only pass creds to the flaky-reporter on main branch runs
-                  GITHUB_TOKEN: ${{ github.event.workflow_run.head_branch == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
-
-            - name: Upload HTML report
-              uses: actions/upload-artifact@v4
-              with:
-                  name: html-report--attempt-${{ github.run_attempt }}
-                  path: playwright-report
-                  retention-days: 14
-
-            - uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
-              if: always()
-              with:
-                  authToken: ${{ secrets.GITHUB_TOKEN }}
-                  state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
-                  context: ${{ github.workflow }} / end-to-end-tests
-                  sha: ${{ github.event.workflow_run.head_sha }}
-                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-            - name: 📤 Deploy to Netlify
-              uses: matrix-org/netlify-pr-preview@v3
-              with:
-                  path: playwright-report
-                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
-                  branch: ${{ github.event.workflow_run.head_branch }}
-                  revision: ${{ github.event.workflow_run.head_sha }}
-                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-                  site_id: ${{ secrets.NETLIFY_SITE_ID }}
-                  desc: Playwright Report
-                  deployment_env: EndToEndTests
-                  prefix: "e2e-"
+            - run: echo "All tests passed!"
