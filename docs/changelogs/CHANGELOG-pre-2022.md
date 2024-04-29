@@ -259,7 +259,7 @@ Changes in [1.9.6-rc.1](https://github.com/vector-im/element-web/releases/tag/v1
  * Fix an edge case when trying to join an upgraded room ([\#7159](https://github.com/matrix-org/matrix-react-sdk/pull/7159)).
 
 Changes in [1.9.5](https://github.com/vector-im/element-web/releases/tag/v1.9.5) (2021-11-22)
-=============================================================================================
+==============================================================================================
 
 ## ✨ Features
  * Make double-clicking the PiP take you to the call room ([\#7142](https://github.com/matrix-org/matrix-react-sdk/pull/7142)). Fixes #18421 #15920 and #18421. Contributed by @SimonBrandner.
