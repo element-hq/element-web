@@ -58,6 +58,8 @@ export class DecryptionFailureTracker {
                 case DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED:
                 case DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP:
                     return "HistoricalMessage";
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
+                    return "ExpectedDueToMembership";
                 default:
                     return "UnknownError";
             }

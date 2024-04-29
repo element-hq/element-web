@@ -100,4 +100,18 @@ describe("DecryptionFailureBody", () => {
             );
         },
     );
+
+    it("should handle undecryptable pre-join messages", async () => {
+        // When
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED,
+            msg: "Not joined",
+            roomId: "fakeroom",
+            sender: "fakesender",
+        });
+        const { container } = customRender(event);
+
+        // Then
+        expect(container).toHaveTextContent("You don't have access to this message");
+    });
 });

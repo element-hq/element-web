@@ -3214,6 +3214,7 @@
             "blocked": "The sender has blocked you from receiving this message",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
+            "historical_event_user_not_joined": "You don't have access to this message",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -36,6 +36,9 @@ function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined):
             }
             // otherwise, use the default.
             break;
+
+        case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
+            return _t("timeline|decryption_failure|historical_event_user_not_joined");
     }
     return _t("timeline|decryption_failure|unable_to_decrypt");
 }

@@ -388,4 +388,60 @@ describe("DecryptionFailureTracker", function () {
         // should track remapped error code
         expect(counts["XEDNI_EGASSEM_NWONKNU_MLO"]).toBe(1);
     });
+
+    it("default error code mapper maps error codes correctly", async () => {
+        const errorCodes: string[] = [];
+
+        // @ts-ignore access to private constructor
+        const tracker = new DecryptionFailureTracker(
+            (total: number, errorCode: string) => {
+                errorCodes.push(errorCode);
+            },
+            // @ts-ignore access to private member
+            DecryptionFailureTracker.instance.errorCodeMapFn,
+        );
+
+        const event1 = await createFailedDecryptionEvent(DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID);
+        tracker.addVisibleEvent(event1);
+        tracker.eventDecrypted(event1);
+
+        const event2 = await createFailedDecryptionEvent(DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX);
+        tracker.addVisibleEvent(event2);
+        tracker.eventDecrypted(event2);
+
+        const event3 = await createFailedDecryptionEvent(DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP);
+        tracker.addVisibleEvent(event3);
+        tracker.eventDecrypted(event3);
+
+        const event4 = await createFailedDecryptionEvent(DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED);
+        tracker.addVisibleEvent(event4);
+        tracker.eventDecrypted(event4);
+
+        const event5 = await createFailedDecryptionEvent(DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP);
+        tracker.addVisibleEvent(event5);
+        tracker.eventDecrypted(event5);
+
+        const event6 = await createFailedDecryptionEvent(DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED);
+        tracker.addVisibleEvent(event6);
+        tracker.eventDecrypted(event6);
+
+        const event7 = await createFailedDecryptionEvent(DecryptionFailureCode.UNKNOWN_ERROR);
+        tracker.addVisibleEvent(event7);
+        tracker.eventDecrypted(event7);
+
+        // Pretend "now" is Infinity
+        tracker.checkFailures(Infinity);
+
+        tracker.trackFailures();
+
+        expect(errorCodes).toEqual([
+            "OlmKeysNotSentError",
+            "OlmIndexError",
+            "HistoricalMessage",
+            "HistoricalMessage",
+            "HistoricalMessage",
+            "ExpectedDueToMembership",
+            "UnknownError",
+        ]);
+    });
 });
