@@ -3,10 +3,11 @@
 
 name: matrix-react-sdk End to End Tests
 on:
-    workflow_run:
-        workflows: ["Build downstream artifacts"]
-        types:
-            - completed
+    merge_group:
+        types: [checks_requested]
+    pull_request: {}
+    push:
+        branches: [develop, master]
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
@@ -22,37 +23,6 @@ jobs:
         permissions:
             actions: read
             issues: read
-            statuses: write
             pull-requests: read
-            deployments: write
         with:
             react-sdk-repository: matrix-org/matrix-react-sdk
-        secrets:
-            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-    # We want to make the Playwright tests a required check for the merge queue.
-    #
-    # Unfortunately, github doesn't distinguish between "checks needed for branch
-    # protection" (ie, the things that must pass before the PR will even be added
-    # to the merge queue) and "checks needed in the merge queue". We just have to add
-    # the check to the branch protection list.
-    #
-    # Ergo, if we know we're not going to run the Playwright tests, we need to add a
-    # passing status check manually.
-    mark_skipped:
-        if: github.event.workflow_run.event != 'merge_group'
-        permissions:
-            statuses: write
-        runs-on: ubuntu-latest
-        steps:
-            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
-              with:
-                  authToken: "${{ secrets.GITHUB_TOKEN }}"
-                  state: success
-                  description: Playwright skipped
-
-                  # Keep in step with the `context` that is updated by `Sibz/github-status-action`
-                  # in matrix-org/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml.
-                  context: "${{ github.workflow }} / end-to-end-tests"
-
-                  sha: "${{ github.event.workflow_run.head_sha }}"
