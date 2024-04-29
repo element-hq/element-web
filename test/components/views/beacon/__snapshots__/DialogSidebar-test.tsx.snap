@@ -82,6 +82,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
                 <div
                   aria-label="Copy"
                   class="mx_AccessibleButton mx_CopyableText_copyButton"
+                  data-state="closed"
                   role="button"
                   tabindex="0"
                 />

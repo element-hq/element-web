@@ -138,7 +138,7 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
         triggerOnMouseDown,
         title,
         caption,
-        placement,
+        placement = "right",
         onTooltipOpenChange,
         ...restProps
     }: Props<T>,

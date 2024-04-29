@@ -289,6 +289,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Send read receipts"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  data-state="closed"
                   id="mx_SettingsFlag_GQvdMWe954DV"
                   role="switch"
                   tabindex="0"

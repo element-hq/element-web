@@ -45,6 +45,7 @@ exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
                   <div
                     aria-label="Copy"
                     class="mx_AccessibleButton mx_CopyableText_copyButton"
+                    data-state="closed"
                     role="button"
                     tabindex="0"
                   />

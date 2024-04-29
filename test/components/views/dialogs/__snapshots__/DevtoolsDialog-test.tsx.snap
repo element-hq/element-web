@@ -41,6 +41,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
       <div
         aria-label="Copy"
         class="mx_AccessibleButton mx_CopyableText_copyButton"
+        data-state="closed"
         role="button"
         tabindex="0"
       />
