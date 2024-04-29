@@ -3,7 +3,7 @@
 name: Upload Preview Build to Netlify
 on:
     workflow_run:
-        workflows: ["Element Web - Build"]
+        workflows: ["End to End Tests"]
         types:
             - completed
 jobs:
@@ -29,7 +29,7 @@ jobs:
               with:
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}
-                  name: previewbuild
+                  name: webapp
                   path: webapp
 
             - name: 📤 Deploy to Netlify
