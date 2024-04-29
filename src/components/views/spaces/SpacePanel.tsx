@@ -368,8 +368,6 @@ const SpacePanel: React.FC = () => {
         }
     });
 
-    const isThreadsActivityCentreEnabled = useSettingValue<boolean>("threadsActivityCentre");
-
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
             {({ onKeyDownHandler, onDragEndHandler }) => (
@@ -426,9 +424,8 @@ const SpacePanel: React.FC = () => {
                             )}
                         </Droppable>
 
-                        {isThreadsActivityCentreEnabled && (
-                            <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
-                        )}
+                        <ThreadsActivityCentre displayButtonLabel={!isPanelCollapsed} />
+
                         <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </nav>
                 </DragDropContext>

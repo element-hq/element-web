@@ -226,6 +226,48 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       </li>
     </ul>
     <div
+      class="mx_ThreadsActivityCentre_container"
+    >
+      <button
+        aria-controls="floating-ui-7"
+        aria-expanded="true"
+        aria-haspopup="dialog"
+        aria-label="Threads"
+        class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
+        data-state="closed"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div
+            class="mx_ThreadsActivityCentreButton_Icon"
+          />
+        </div>
+      </button>
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+      <span
+        aria-owns="undefined"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      />
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+    </div>
+    <div
       aria-expanded="false"
       aria-label="Quick settings"
       class="mx_AccessibleButton mx_QuickSettingsButton"

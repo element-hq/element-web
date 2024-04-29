@@ -187,11 +187,11 @@ test.describe("Read receipts", () => {
                 // Given we have read the thread
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.goTo(room2);
                 await util.openThread("Msg1");
                 await util.assertRead(room2);
-                await util.backToThreadsList();
+                await util.assertReadThread("Resp1");
                 await util.goTo(room1);
 
                 // When a message inside it is edited
@@ -202,6 +202,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room2);
                 await util.assertReadThread("Msg1");
             });
+
             test("Reading an edit of a threaded message makes the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -211,11 +212,11 @@ test.describe("Read receipts", () => {
                 // Given an edited thread message appears after we read it
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.goTo(room2);
                 await util.openThread("Msg1");
                 await util.assertRead(room2);
-                await util.backToThreadsList();
+                await util.assertReadThread("Resp1");
                 await util.goTo(room1);
                 await util.receiveMessages(room2, [msg.editOf("Resp1", "Edit1")]);
                 await util.assertStillRead(room2);
@@ -228,6 +229,7 @@ test.describe("Read receipts", () => {
                 await util.assertStillRead(room2);
                 await util.assertReadThread("Msg1");
             });
+
             test("Marking a room as read after an edit in a thread makes it read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -241,14 +243,16 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.editOf("Resp1", "Edit1"),
                 ]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
 
                 // When I mark the room as read
                 await util.markAsRead(room2);
 
                 // Then it is read
                 await util.assertRead(room2);
+                await util.assertReadThread("Msg1");
             });
+
             test("Editing a thread message after marking as read leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -258,7 +262,7 @@ test.describe("Read receipts", () => {
                 // Given a room is marked as read
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.markAsRead(room2);
                 await util.assertRead(room2);
 
@@ -267,7 +271,9 @@ test.describe("Read receipts", () => {
 
                 // Then the room remains read
                 await util.assertStillRead(room2);
+                await util.assertReadThread("Msg1");
             });
+
             test("A room with an edited threaded message is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -287,6 +293,7 @@ test.describe("Read receipts", () => {
                 // Then is it still read
                 await util.assertRead(room2);
             });
+
             test("A room where all threaded edits are read is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -295,20 +302,23 @@ test.describe("Read receipts", () => {
             }) => {
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.receiveMessages(room2, [msg.editOf("Resp1", "Edit1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
 
                 await util.goTo(room2);
 
                 await util.openThread("Msg1");
                 await util.assertRead(room2);
+                await util.assertReadThread("Msg1");
                 await util.goTo(room1); // Make sure we are looking at room1 after reload
                 await util.assertStillRead(room2);
 
                 await util.saveAndReload();
                 await util.assertRead(room2);
+                await util.assertReadThread("Msg1");
             });
+
             test("A room where all threaded edits are marked as read is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -321,15 +331,17 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.editOf("Resp1", "Edit1"),
                 ]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.markAsRead(room2);
                 await util.assertRead(room2);
+                await util.assertReadThread("Msg1");
 
                 // When I restart
                 await util.saveAndReload();
 
                 // It is still read
                 await util.assertRead(room2);
+                await util.assertReadThread("Msg1");
             });
         });
 
@@ -343,7 +355,7 @@ test.describe("Read receipts", () => {
                 // Given I have read a thread
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.goTo(room2);
                 await util.openThread("Msg1");
                 await util.backToThreadsList();
@@ -361,6 +373,7 @@ test.describe("Read receipts", () => {
                 await util.assertStillRead(room2);
                 await util.assertReadThread("Edit1");
             });
+
             test("Reading an edit of a thread root leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -386,6 +399,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room1);
                 await util.assertStillRead(room2);
             });
+
             test("Editing a thread root after reading leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -405,6 +419,7 @@ test.describe("Read receipts", () => {
                 // Then the room stays read
                 await util.assertStillRead(room2);
             });
+
             test("Marking a room as read after an edit of a thread root keeps it read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -431,6 +446,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room1);
                 await util.assertStillRead(room2);
             });
+
             test("Editing a thread root that is a reply after marking as read leaves the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -444,7 +460,7 @@ test.describe("Read receipts", () => {
                     msg.replyTo("Msg", "Reply"),
                     msg.threadedOff("Reply", "InThread"),
                 ]);
-                await util.assertUnread(room2, 3);
+                await util.assertUnread(room2, 2);
                 await util.markAsRead(room2);
                 await util.assertRead(room2);
 
@@ -458,6 +474,7 @@ test.describe("Read receipts", () => {
                 await util.goTo(room2);
                 await util.assertReadThread("Edited Reply");
             });
+
             test("Marking a room as read after an edit of a thread root that is a reply leaves it read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -472,7 +489,7 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Reply", "InThread"),
                 ]);
                 await util.receiveMessages(room2, [msg.editOf("Reply", "Edited Reply")]);
-                await util.assertUnread(room2, 3);
+                await util.assertUnread(room2, 2);
 
                 // When I mark the room as read
                 await util.markAsRead(room2);

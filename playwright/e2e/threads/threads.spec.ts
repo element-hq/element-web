@@ -495,14 +495,14 @@ test.describe("Threads", () => {
         await createThread("Hello again Mr. Bot", "Hello again Mr. User in a thread");
 
         // Open thread panel
-        await page.getByRole("button", { name: "Threads" }).click();
+        await page.getByTestId("threadsButton").click();
         const threadPanel = page.locator(".mx_ThreadPanel");
         await expect(
             threadPanel.locator(".mx_EventTile_last").getByText("Hello again Mr. User in a thread"),
         ).toBeVisible();
 
         // Open threads list
-        await threadPanel.getByRole("button", { name: "Threads" }).click();
+        await page.locator(".mx_BaseCard_back").click();
         const rightPanel = page.locator(".mx_RightPanel");
         // Check that the threads are listed
         await expect(rightPanel.locator(".mx_EventTile").getByText("Hello Mr. User in a thread")).toBeVisible();

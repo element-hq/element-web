@@ -1151,15 +1151,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: [],
     },
-    "threadsActivityCentre": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        labsGroup: LabGroup.Threads,
-        controller: new ReloadOnChangeController(),
-        displayName: _td("labs|threads_activity_centre"),
-        description: () => _t("labs|threads_activity_centre_description", { brand: SdkConfig.get().brand }),
-        default: false,
-        isFeature: true,
-    },
     /**
      * Enable or disable the release announcement feature
      */

@@ -16,9 +16,10 @@ limitations under the License.
 
 import type { JSHandle } from "@playwright/test";
 import type { MatrixEvent, ISendEventResponse, ReceiptType } from "matrix-js-sdk/src/matrix";
-import { test, expect } from "../../element-web-test";
+import { expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+import { test } from ".";
 
 test.describe("Read receipts", () => {
     test.use({
@@ -189,29 +190,31 @@ test.describe("Read receipts", () => {
         page,
         app,
         bot,
+        util,
     }) => {
         // Given we sent 3 events on the main thread
         const main1 = await sendMessage(bot);
         const thread1a = await botSendThreadMessage(bot, main1.event_id);
         await botSendThreadMessage(bot, main1.event_id);
-        // 1 unread on the main thread, 2 in the new thread
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        // 1 unread on the main thread, 2 in the new thread that aren't shown
+        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
 
         // When we send receipts for main, and the second-last in the thread
         await sendThreadedReadReceipt(app, main1);
         await sendThreadedReadReceipt(app, thread1a, main1);
 
         // Then the room has only one unread - the one in the thread
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        await util.goTo(otherRoomName);
+        await util.assertUnreadThread("Message 1");
     });
 
-    test("Considers room read if there are receipts for main and other thread", async ({ page, app, bot }) => {
+    test("Considers room read if there are receipts for main and other thread", async ({ page, app, bot, util }) => {
         // Given we sent 3 events on the main thread
         const main1 = await sendMessage(bot);
         await botSendThreadMessage(bot, main1.event_id);
         const thread1b = await botSendThreadMessage(bot, main1.event_id);
-        // 1 unread on the main thread, 2 in the new thread
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        // 1 unread on the main thread, 2 in the new thread which don't show
+        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
 
         // When we send receipts for main, and the last in the thread
         await sendThreadedReadReceipt(app, main1);
@@ -219,27 +222,33 @@ test.describe("Read receipts", () => {
 
         // Then the room has no unreads
         await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await util.goTo(otherRoomName);
+        await util.assertReadThread("Message 1");
     });
 
     test("Recognises unread messages on a thread after receiving a unthreaded receipt for earlier ones", async ({
         page,
         app,
         bot,
+        util,
     }) => {
         // Given we sent 3 events on the main thread
         const main1 = await sendMessage(bot);
         const thread1a = await botSendThreadMessage(bot, main1.event_id);
         await botSendThreadMessage(bot, main1.event_id);
-        // 1 unread on the main thread, 2 in the new thread
-        await expect(page.getByLabel(`${otherRoomName} 3 unread messages.`)).toBeVisible();
+        // 1 unread on the main thread, 2 in the new thread which don't count
+        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
 
         // When we send an unthreaded receipt for the second-last in the thread
         await sendUnthreadedReadReceipt(app, thread1a);
 
         // Then the room has only one unread - the one in the
         // thread. The one in main is read because the unthreaded
-        // receipt is for a later event.
-        await expect(page.getByLabel(`${otherRoomName} 1 unread message.`)).toBeVisible();
+        // receipt is for a later event. The room should therefore be
+        // read, and the thread unread.
+        await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
+        await util.goTo(otherRoomName);
+        await util.assertUnreadThread("Message 1");
     });
 
     test("Recognises unread messages on main after receiving a unthreaded receipt for a thread message", async ({
@@ -252,8 +261,8 @@ test.describe("Read receipts", () => {
         await botSendThreadMessage(bot, main1.event_id);
         const thread1b = await botSendThreadMessage(bot, main1.event_id);
         await sendMessage(bot);
-        // 2 unreads on the main thread, 2 in the new thread
-        await expect(page.getByLabel(`${otherRoomName} 4 unread messages.`)).toBeVisible();
+        // 2 unreads on the main thread, 2 in the new thread which don't count
+        await expect(page.getByLabel(`${otherRoomName} 2 unread messages.`)).toBeVisible();
 
         // When we send an unthreaded receipt for the last in the thread
         await sendUnthreadedReadReceipt(app, thread1b);
