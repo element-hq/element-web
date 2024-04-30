@@ -51,7 +51,7 @@ jobs:
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api
-                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn build && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
+                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn build --skipLibCheck && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
                   azPSVersion: "latest"
             - name: Azure PowerShell Action
               uses: Azure/powershell@v2
