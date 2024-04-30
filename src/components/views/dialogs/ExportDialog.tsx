@@ -42,6 +42,8 @@ import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
 import ChatExport from "../../../customisations/ChatExport";
 import { validateNumberInRange } from "../../../utils/validate";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     room: Room;
@@ -70,10 +72,10 @@ const useExportFormState = (): ExportConfig => {
     const config = ChatExport.getForceChatExportParameters();
 
     const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
-    const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
-    const [includeAttachments, setAttachments] = useState(config.includeAttachments ?? false);
-    const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
-    const [sizeLimit, setSizeLimit] = useState<number>(config.sizeMb ?? 8);
+    const [exportType, setExportType] = SettingsStore.getValue(UIFeature.AllExportTypes)==false ? useState(ExportType.Beginning) : useState(config.range ?? ExportType.Timeline);
+    const [includeAttachments, setAttachments] = SettingsStore.getValue(UIFeature.ExportAttatchmentsDefaultOff)==false ? useState(true) : useState(config.includeAttachments ?? false);
+    const [numberOfMessages, setNumberOfMessages] =  useState<number>(config.numberOfMessages ?? 100);
+    const [sizeLimit, setSizeLimit] = SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit)==false ? useState(20) :useState<number>(config.sizeMb ?? 8);
 
     return {
         exportFormat,
@@ -118,6 +120,9 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             });
         },
     );
+
+    // setExporter(ExportType.[Beginning as ExportTypeKey]);
+    // setNumberOfMessages(parseInt(e.target.value));
 
     const startExport = async (): Promise<void> => {
         const exportOptions = {
@@ -280,6 +285,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const sizePostFix = <span>{_t("export_chat|size_limit_postfix")}</span>;
 
+
     if (exportCancelled) {
         // Display successful cancellation message
         return (
@@ -348,7 +354,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         </>
                     )}
 
-                    {!!setExportType && (
+                    {!!setExportType && SettingsStore.getValue(UIFeature.AllExportTypes) && (
                         <>
                             <span className="mx_ExportDialog_subheading">{_t("export_chat|messages")}</span>
 
@@ -366,7 +372,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         </>
                     )}
 
-                    {setSizeLimit && (
+                    {setSizeLimit && SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit) && (
                         <>
                             <span className="mx_ExportDialog_subheading">{_t("export_chat|size_limit")}</span>
 

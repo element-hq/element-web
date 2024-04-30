@@ -160,15 +160,22 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        tabs.push(
-            new Tab(
-                RoomSettingsTab.Security,
-                _td("room_settings|security|title"),
-                "mx_RoomSettingsDialog_securityIcon",
-                <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
-                "RoomSettingsSecurityPrivacy",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.RoomSettingsSecurity)) {
+            tabs.push(
+                new Tab(
+                    RoomSettingsTab.Security,
+                    _td("room_settings|security|title"),
+                    "mx_RoomSettingsDialog_securityIcon",
+                    (
+                        <SecurityRoomSettingsTab
+                            room={this.state.room}
+                            closeSettingsFn={() => this.props.onFinished(true)}
+                        />
+                    ),
+                    "RoomSettingsSecurityPrivacy",
+                ),
+            );
+        }
         tabs.push(
             new Tab(
                 RoomSettingsTab.Roles,
