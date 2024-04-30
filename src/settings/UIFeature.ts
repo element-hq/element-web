@@ -63,7 +63,12 @@ export const enum UIFeature {
     EnableLoginPage = "UIFeature.enableLoginPage",
     EnableNewRoomIntro = "UIFeature.enableNewRoomIntro",
     EnableRoomDevTools = "UIFeature.enableRoomDevTools",
-    WidgetContextDeleteButton = "UIFeature.WidgetContextDeleteButton",
+    WidgetContextDeleteButton = "UIFeature.widgetContextDeleteButton",
+    ExportDefaultSizeLimit = "UIFeature.exportDefaultSizeLimit",
+    AllExportTypes = "UIFeature.allExportTypes",
+    ExportAttatchmentsDefaultOff = "UIFeature.exportAttatchmentsDefaultOff",
+    RoomSettingsSecurity = "UIFeature.roomSettingsSecurity",
+    RoomPreviewRejectIgnoreButton = "UIFeature.roomPreviewRejectIgnoreButton",
 }
 
 export enum UIComponent {
