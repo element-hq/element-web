@@ -64,7 +64,7 @@ type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof Access
  * @deprecated use AccessibleButton with `title` and `caption` instead.
  */
 const AccessibleTooltipButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
-    { title, tooltip, children, forceHide, alignment, onHideTooltip, tooltipClassName, ...props }: Props<T>,
+    { title, tooltip, children, forceHide, alignment, onHideTooltip, tooltipClassName, element, ...props }: Props<T>,
     ref: Ref<HTMLElement>,
 ) {
     const [hover, setHover] = useState(false);
@@ -100,6 +100,7 @@ const AccessibleTooltipButton = forwardRef(function <T extends keyof JSX.Intrins
     return (
         <AccessibleButton
             {...props}
+            element={element as keyof JSX.IntrinsicElements}
             onMouseOver={showTooltip}
             onMouseLeave={hideTooltip}
             onFocus={onFocus}

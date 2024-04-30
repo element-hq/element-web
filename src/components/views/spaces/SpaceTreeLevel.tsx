@@ -51,7 +51,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     ComponentProps<typeof AccessibleTooltipButton<T>>,
-    "title" | "onClick" | "size"
+    "title" | "onClick" | "size" | "element"
 > & {
     space?: Room;
     spaceKey?: SpaceKey;

@@ -28,12 +28,14 @@ type Props<T extends keyof JSX.IntrinsicElements> = Omit<ComponentProps<typeof A
 export const RovingAccessibleTooltipButton = <T extends keyof JSX.IntrinsicElements>({
     inputRef,
     onFocus,
+    element,
     ...props
 }: Props<T>): JSX.Element => {
     const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
     return (
         <AccessibleButton
             {...props}
+            element={element as keyof JSX.IntrinsicElements}
             onFocus={(event: React.FocusEvent) => {
                 onFocusInternal();
                 onFocus?.(event);

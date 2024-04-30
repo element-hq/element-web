@@ -23,7 +23,7 @@ import AccessibleTooltipButton from "../../elements/AccessibleTooltipButton";
 
 type Props<T extends keyof JSX.IntrinsicElements> = Omit<
     ComponentProps<typeof AccessibleTooltipButton<T>>,
-    "aria-label" | "title" | "kind" | "className" | "onClick"
+    "aria-label" | "title" | "kind" | "className" | "onClick" | "element"
 > & {
     isExpanded: boolean;
     onClick: () => void;
