@@ -19,7 +19,7 @@ on:
                 required: false
                 default: false
                 description: "A boolean to skip the playwright check itself while still creating the passing check. Useful when only running in Merge Queues."
-        
+
             react-sdk-repository:
                 type: string
                 required: true
