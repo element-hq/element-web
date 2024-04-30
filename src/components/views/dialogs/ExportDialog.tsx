@@ -72,10 +72,13 @@ const useExportFormState = (): ExportConfig => {
     const config = ChatExport.getForceChatExportParameters();
 
     const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
-    const [exportType, setExportType] = SettingsStore.getValue(UIFeature.AllExportTypes)==false ? useState(ExportType.Beginning) : useState(config.range ?? ExportType.Timeline);
-    const [includeAttachments, setAttachments] = SettingsStore.getValue(UIFeature.ExportAttatchmentsDefaultOff)==false ? useState(true) : useState(config.includeAttachments ?? false);
+    // const [exportType, setExportType] = SettingsStore.getValue(UIFeature.AllExportTypes)==false ? useState(ExportType.Beginning) : useState(config.range ?? ExportType.Timeline);
+    const [exportType, setExportType] = useState(SettingsStore.getValue(UIFeature.AllExportTypes)==false ? ExportType.Beginning : (config.range ?? ExportType.Timeline));
+    // const [includeAttachments, setAttachments] = SettingsStore.getValue(UIFeature.ExportAttatchmentsDefaultOff)==false ? useState(true) : useState(config.includeAttachments ?? false);
+    const [includeAttachments, setAttachments] = useState(SettingsStore.getValue(UIFeature.ExportAttatchmentsDefaultOff)==false ? true : (config.includeAttachments ?? false));
     const [numberOfMessages, setNumberOfMessages] =  useState<number>(config.numberOfMessages ?? 100);
-    const [sizeLimit, setSizeLimit] = SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit)==false ? useState(20) :useState<number>(config.sizeMb ?? 8);
+    // const [sizeLimit, setSizeLimit] = SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit)==false ? useState(20) :useState<number>(config.sizeMb ?? 8);
+    const [sizeLimit, setSizeLimit] = useState(SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit)==false ? 20 : (config.sizeMb ?? 8));
 
     return {
         exportFormat,
