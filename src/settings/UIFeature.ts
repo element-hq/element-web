@@ -68,7 +68,7 @@ export const enum UIFeature {
     AllExportTypes = "UIFeature.allExportTypes",
     ExportAttatchmentsDefaultOff = "UIFeature.exportAttatchmentsDefaultOff",
     RoomSettingsSecurity = "UIFeature.roomSettingsSecurity",
-    RoomPreviewRejectIgnoreButton ="UIFeature.roomPreviewRejectIgnoreButton",
+    RoomPreviewRejectIgnoreButton = "UIFeature.roomPreviewRejectIgnoreButton",
 }
 
 export enum UIComponent {
