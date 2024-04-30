@@ -28,8 +28,8 @@ jobs:
 
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
-            # VERJI SPECIFIC - USE yarn link FOR matrix-react-sdk-module-api
-            - name: Clone Github Repo Action
+            # VERJI SPECIFIC - yarn link FOR matrix-react-sdk-module-api on verji-main branch
+            - name: "Veri - Clone Github Repo Action - Download verji-main of module-api"
               # You may pin to the exact commit or the version.
               # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
               uses: GuillaumeFalourd/clone-github-repo-action@v2.3
@@ -47,17 +47,11 @@ jobs:
                   # Clone with submodules
                   submodule: false # optional, default is false
 
-            - name: Azure PowerShell Action
+            - name: "Verji - Build and yarn link matrix-react-sdk-module-api"
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api
                   inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn build --skipLibCheck && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
-                  azPSVersion: "latest"
-            - name: Azure PowerShell Action
-              uses: Azure/powershell@v2
-              with:
-                  # Yarn link matrix-react-sdk-module-api
-                  inlineScript: "cd matrix-react-sdk-module-api && Write-Output 'ls1' && ls && cd 'lib' && Write-Output 'ls2' && ls && cd .. && Write-Output 'ls4' && ls && cd .. && Write-Output 'ls4' && ls "
                   azPSVersion: "latest"
             #END VERJI SPECIFIC
             - name: Typecheck
