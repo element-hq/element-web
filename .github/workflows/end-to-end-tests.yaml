@@ -160,7 +160,8 @@ jobs:
     complete:
         name: end-to-end-tests
         needs: playwright
-        if: always() && !failure() && !cancelled()
+        if: always()
         runs-on: ubuntu-latest
         steps:
-            - run: echo "All tests passed!"
+            - run: exit 1
+              if: failure() || cancelled()
