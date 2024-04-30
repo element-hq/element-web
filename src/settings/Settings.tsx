@@ -407,7 +407,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new SlidingSyncController(),
     },
     "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a setting for feature_sliding_sync above
+        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "",
     },
