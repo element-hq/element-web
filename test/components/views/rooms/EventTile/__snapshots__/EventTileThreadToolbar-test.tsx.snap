@@ -11,6 +11,7 @@ exports[`EventTileThreadToolbar renders 1`] = `
     <div
       aria-label="View in room"
       class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+      data-state="closed"
       role="button"
       tabindex="0"
     >
@@ -19,6 +20,7 @@ exports[`EventTileThreadToolbar renders 1`] = `
     <div
       aria-label="Copy link to thread"
       class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+      data-state="closed"
       role="button"
       tabindex="-1"
     >

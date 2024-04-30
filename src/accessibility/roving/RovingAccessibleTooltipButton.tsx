@@ -16,18 +16,15 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 
-import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
 import { useRovingTabIndex } from "../RovingTabIndex";
 import { Ref } from "./types";
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-type Props<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleTooltipButton<T>>,
-    "tabIndex"
-> & {
+type Props<T extends keyof JSX.IntrinsicElements> = Omit<ComponentProps<typeof AccessibleButton<T>>, "tabIndex"> & {
     inputRef?: Ref;
 };
 
-// Wrapper to allow use of useRovingTabIndex for simple AccessibleTooltipButtons outside of React Functional Components.
+// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
 export const RovingAccessibleTooltipButton = <T extends keyof JSX.IntrinsicElements>({
     inputRef,
     onFocus,
@@ -35,7 +32,7 @@ export const RovingAccessibleTooltipButton = <T extends keyof JSX.IntrinsicEleme
 }: Props<T>): JSX.Element => {
     const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
     return (
-        <AccessibleTooltipButton
+        <AccessibleButton
             {...props}
             onFocus={(event: React.FocusEvent) => {
                 onFocusInternal();
