@@ -1746,10 +1746,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 roomId,
                 term,
                 scope,
-                // VERJI START
-                // promise,
-                promise: promise,
-                // VERJI END
+                promise,
                 abortController,
             },
         });

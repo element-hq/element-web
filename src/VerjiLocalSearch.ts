@@ -15,7 +15,6 @@ import {
     ISearchResponse,
     IEventWithRoomId
 } from "matrix-js-sdk/src/matrix";
-
 import { EventContext } from "matrix-js-sdk/src/models/event-context"; // eslint-disable-line
 
 interface WordHighlight {
@@ -51,13 +50,14 @@ interface SearchResultItem {
 /**
  * Searches all events locally based on the provided search term and room ID.
  *
+ * @param {MatrixClient} client - The Matrix client instance.
  * @param {string} term - The search term.
  * @param {string | undefined} roomId - The ID of the room to search in.
- * @returns {Promise<ISearchResult>} A promise that resolves to the search result.
+ * @returns {Promise<ISearchResults>} A promise that resolves to the search results.
  * @throws {Error} If the Matrix client is not initialized or the room is not found.
  */
 export default async function searchAllEventsLocally(client: MatrixClient, term: string, roomId: string | undefined): Promise<ISearchResults> {
-    let searchResults: ISearchResults = {
+    const searchResults: ISearchResults = {
         results: [],
         highlights: [],
         count: 0,
@@ -80,7 +80,7 @@ export default async function searchAllEventsLocally(client: MatrixClient, term:
     }
 
     let matchingMembers: Member[] = [];
-    if (members && Array(members).length) {
+    if (Array.isArray(members) && members.length) {
         matchingMembers = members.filter((member: RoomMember) => isMemberMatch(member, termObj));
     }
 
@@ -91,19 +91,19 @@ export default async function searchAllEventsLocally(client: MatrixClient, term:
 
     await loadFullHistory(client, room);
 
-    // Search and return intermediary form of matches 
-    let matches = await findAllMatches(termObj, room, memberObj);
+    // Search and return intermediary form of matches
+    const matches = await findAllMatches(termObj, room, memberObj);
 
-    // search context is reversed there ☝️, so fix 
-    //matches.forEach(m => m.context = reverseEventContext(m.context)); 
+    // search context is reversed there ☝️, so fix
+    //matches.forEach(m => m.context = reverseEventContext(m.context));
 
-    // Process the matches to produce the equivalent result from a client.search() call 
-    let searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId)
+    // Process the matches to produce the equivalent result from a client.search() call
+    const searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId)
 
     // mimic the original code
-    client.processRoomEventsSearch(searchResults, searchResponse);
+    const results = client.processRoomEventsSearch(searchResults, searchResponse);
 
-    return searchResults;
+    return results;
 }
 
 /**
@@ -189,13 +189,13 @@ function iterateAllEvents(room: Room, callback: (event: MatrixEvent) => void): v
  * @param matchingMembers - The matching members.
  * @returns A promise that resolves to an array of search result items.
  */
-export async function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): Promise<SearchResultItem[]> {
+export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): Promise<SearchResultItem[]> {
     return new Promise((resolve) => {
         const matches: SearchResultItem[] = [];
         let searchHit: SearchResultItem | null = null;
         let prevEvent: MatrixEvent | null = null;
         const iterationCallback = (roomEvent: MatrixEvent): void => {
-            
+
             if (searchHit !== null) {
                 searchHit.context.addEvents([roomEvent], false);
             }
@@ -219,8 +219,8 @@ export async function findAllMatches(termObj: SearchTerm, room: Room, matchingMe
             prevEvent  = roomEvent;
         };
 
-        resolve(matches);
         iterateAllEvents(room, iterationCallback);
+        resolve(matches);
     });
 }
 
@@ -377,11 +377,26 @@ export function makeSearchTermObject(searchTerm: string): SearchTerm {
 
 
 function reverseEventContext(eventContext: EventContext): EventContext{
-    var contextTimeline = eventContext.getTimeline();    
-    var reversedContexted = new EventContext(contextTimeline[1]);
-    reversedContexted.addEvents([contextTimeline[0]], false);
-    reversedContexted.addEvents([contextTimeline[2]], true);
-    return reversedContexted;
+    const contextTimeline = eventContext.getTimeline();
+    const ourEventIndex = eventContext.getOurEventIndex();
+    const ourEvent = eventContext.getEvent();
+    const reversedContext = new EventContext(contextTimeline[ourEventIndex]);
+    let afterOurEvent = false;
+
+    for (let i = 0; i < contextTimeline.length; i++) {
+        const event = contextTimeline[i];
+        if (event.getId() === ourEvent.getId()) {
+            afterOurEvent = true;
+            continue;
+        }
+        if (afterOurEvent) {
+            reversedContext.addEvents([event], true);
+        } else {
+            reversedContext.addEvents([event], false);
+        }
+    }
+
+    return reversedContext;
 }
 
 
@@ -395,7 +410,7 @@ function reverseEventContext(eventContext: EventContext): EventContext{
  */
 function getClientSearchResponse(searchResults: ISearchResults, matches: SearchResultItem[], termObj: SearchTerm, roomId: string|undefined): ISearchResponse {
 
-    var response: ISearchResponse = {
+    const response: ISearchResponse = {
         search_categories: {
             room_events: {
                 count: 0,
@@ -408,25 +423,25 @@ function getClientSearchResponse(searchResults: ISearchResults, matches: SearchR
     response.search_categories.room_events.count = matches.length;
     for (let i = 0; i < matches.length; i++) {
 
-        const matchEvent = matches[i].result.event;
-        const reversedContext = reverseEventContext(matches[i].context)
+        // const matchEvent = matches[i].result.event;
+        const reversedContext = reverseEventContext( matches[i].context );
 
         const sr = new SearchResult(0, reversedContext);
         searchResults.results.push(sr);
-    
-        response.search_categories.room_events.results.push(
-            <ISearchResult>{
-                rank: 0,                
-                context: {},
-                result:  <IEventWithRoomId>{
-                    room_id: matchEvent.room_id,
-                    event_id: matchEvent.event_id,
-                    sender: matchEvent.sender,
-                    origin_server_ts: matchEvent.origin_server_ts,
-                    age: matchEvent?.unsigned?.age ?? 0
-                }
-            }
-        );
+
+        // response.search_categories.room_events.results.push(
+        //     <ISearchResult>{
+        //         rank: 0,
+        //         context: {},
+        //         result:  <IEventWithRoomId>{
+        //             room_id: matchEvent.room_id,
+        //             event_id: matchEvent.event_id,
+        //             sender: matchEvent.sender,
+        //             origin_server_ts: matchEvent.origin_server_ts,
+        //             age: matchEvent?.unsigned?.age ?? 0
+        //         }
+        //     }
+        // );
     }
 
     return response;
