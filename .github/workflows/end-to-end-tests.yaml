@@ -16,9 +16,6 @@ concurrency:
 jobs:
     playwright:
         name: Playwright
-        # We only want to run the playwright tests on merge queue to prevent regressions
-        # from creeping in. They take a long time to run and consume multiple concurrent runners.
-        if: github.event_name == 'merge_group'
         uses: matrix-org/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml@develop
         permissions:
             actions: read
@@ -26,3 +23,6 @@ jobs:
             pull-requests: read
         with:
             react-sdk-repository: matrix-org/matrix-react-sdk
+            # We only want to run the playwright tests on merge queue to prevent regressions
+            # from creeping in. They take a long time to run and consume multiple concurrent runners.
+            skip: ${{ github.event_name != 'merge_group' }}
