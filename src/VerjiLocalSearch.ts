@@ -365,7 +365,12 @@ export function makeSearchTermObject(searchTerm: string): SearchTerm {
     };
 }
 
-
+/**
+ * Reverses the order of events in the given event context.
+ *
+ * @param {EventContext} context - The event context to reverse.
+ * @returns {EventContext} The reversed event context.
+ */
 function reverseEventContext(eventContext: EventContext): EventContext{
     const contextTimeline = eventContext.getTimeline();
     const ourEventIndex = eventContext.getOurEventIndex();
@@ -413,26 +418,11 @@ function getClientSearchResponse(searchResults: ISearchResults, matches: SearchR
     response.search_categories.room_events.count = matches.length;
     for (let i = 0; i < matches.length; i++) {
 
-        // const matchEvent = matches[i].result.event;
         const reversedContext = reverseEventContext( matches[i].context );
 
         const sr = new SearchResult(0, reversedContext);
         searchResults.results.push(sr);
-
-        // response.search_categories.room_events.results.push(
-        //     <ISearchResult>{
-        //         rank: 0,
-        //         context: {},
-        //         result:  <IEventWithRoomId>{
-        //             room_id: matchEvent.room_id,
-        //             event_id: matchEvent.event_id,
-        //             sender: matchEvent.sender,
-        //             origin_server_ts: matchEvent.origin_server_ts,
-        //             age: matchEvent?.unsigned?.age ?? 0
-        //         }
-        //     }
-        // );
-    }
+    };
 
     return response;
 }
