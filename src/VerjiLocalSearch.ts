@@ -92,7 +92,7 @@ export default async function searchAllEventsLocally(client: MatrixClient, term:
     await loadFullHistory(client, room);
 
     // Search and return intermediary form of matches
-    const matches = await findAllMatches(termObj, room, memberObj);
+    const matches = findAllMatches(termObj, room, memberObj);
 
     // search context is reversed there ☝️, so fix
     //matches.forEach(m => m.context = reverseEventContext(m.context));
@@ -164,24 +164,6 @@ function getFirstLiveTimelineNeighbour(room: Room): EventTimeline | null {
 }
 
 /**
- * Iterates over all events in a room and invokes a callback function for each event.
- * The iteration starts from the most recent event and goes backwards in time.
- *
- * @param room - The room to iterate over.
- * @param callback - The callback function to invoke for each event.
- */
-function iterateAllEvents(room: Room, callback: (event: MatrixEvent) => void): void {
-    let timeline: EventTimeline | null = room.getLiveTimeline();
-    while (timeline) {
-        const events = timeline.getEvents();
-        for (let i = events.length - 1; i >= 0; i--) {
-            callback(events[i]);
-        }
-        timeline = timeline.getNeighbouringTimeline(EventTimeline.FORWARDS);
-    }
-}
-
-/**
  * Finds all matches in a room based on the given search term object and matching members.
  *
  * @param termObj - The search term object.
@@ -189,39 +171,47 @@ function iterateAllEvents(room: Room, callback: (event: MatrixEvent) => void): v
  * @param matchingMembers - The matching members.
  * @returns A promise that resolves to an array of search result items.
  */
-export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): Promise<SearchResultItem[]> {
-    return new Promise((resolve) => {
-        const matches: SearchResultItem[] = [];
-        let searchHit: SearchResultItem | null = null;
-        let prevEvent: MatrixEvent | null = null;
-        const iterationCallback = (roomEvent: MatrixEvent): void => {
+export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): SearchResultItem[] {
+    const matches: SearchResultItem[] = [];
+    let searchHit: SearchResultItem | null = null;
+    let prevEvent: MatrixEvent | null = null;
+    let timeline: EventTimeline | null = room.getLiveTimeline();
 
-            if (searchHit !== null) {
-                searchHit.context.addEvents([roomEvent], false);
-            }
-            searchHit = null;
+    const iterationCallback = (roomEvent: MatrixEvent): void => {
 
-            if (roomEvent.getType() === "m.room.message" && !roomEvent.isRedacted()) {
+        if (searchHit !== null) {
+            searchHit.context.addEvents([roomEvent], false);
+        }
+        searchHit = null;
 
-                if (eventMatchesSearchTerms(termObj, roomEvent, matchingMembers)) {
-                    const evCtx = new EventContext(roomEvent);
-                    if (prevEvent !== null) {
-                        evCtx.addEvents([prevEvent], true);
-                    }
+        if (roomEvent.getType() === "m.room.message" && !roomEvent.isRedacted()) {
 
-                    const resObj: SearchResultItem = { result: roomEvent, context: evCtx };
-
-                    matches.push(resObj);
-                    searchHit = resObj;
-                    return;
+            if (eventMatchesSearchTerms(termObj, roomEvent, matchingMembers)) {
+                const evCtx = new EventContext(roomEvent);
+                if (prevEvent !== null) {
+                    evCtx.addEvents([prevEvent], true);
                 }
-            }
-            prevEvent  = roomEvent;
-        };
 
-        iterateAllEvents(room, iterationCallback);
-        resolve(matches);
-    });
+                const resObj: SearchResultItem = { result: roomEvent, context: evCtx };
+                matches.push(resObj);
+                searchHit = resObj;
+            }
+
+            prevEvent = roomEvent;
+        }
+
+    };
+
+    // This code iterates over a timeline, retrieves events from the timeline, and invokes a callback function for each event in reverse order.
+    while (timeline) {
+        const events = timeline.getEvents();
+        for (let i = events.length - 1; i >= 0; i--) {
+            iterationCallback(events[i]);
+        }
+        timeline = timeline.getNeighbouringTimeline(EventTimeline.FORWARDS);
+    };
+
+    return matches;
 }
 
 /**
