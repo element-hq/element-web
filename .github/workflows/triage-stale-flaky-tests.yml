@@ -14,3 +14,4 @@ jobs:
                   days-before-stale: 14
                   days-before-close: 0
                   close-issue-message: "This flaky test issue has not been updated in 14 days. It is being closed as presumed resolved."
+                  exempt-issue-labels: "Z-Flaky-Test-Disabled"
