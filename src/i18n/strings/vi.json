@@ -229,9 +229,6 @@
         "password_field_weak_label": "Mật khẩu được phép, nhưng không an toàn",
         "phone_label": "Điện thoại",
         "phone_optional_label": "Điện thoại (tùy chọn)",
-        "qr_code_login": {
-            "error_invalid_scanned_code": "Mã vừa quét là không hợp lệ."
-        },
         "register_action": "Tạo tài khoản",
         "registration": {
             "continue_without_email_description": "Lưu ý là nếu bạn không thêm địa chỉ thư điện tử và quên mật khẩu, bạn có thể <b>vĩnh viễn mất quyền truy cập vào tài khoản của mình</b>.",
@@ -1291,10 +1288,7 @@
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
         "sliding_sync_description": "Đang được phát triển tích cực, không thể vô hiệu.",
         "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",
-        "sliding_sync_proxy_url_label": "Đường dẫn máy chủ ủy nhiệm (proxy)",
         "sliding_sync_server_no_support": "Máy chủ của bạn không hoàn toàn hỗ trợ",
-        "sliding_sync_server_specify_proxy": "Máy chủ của bạn không hỗ trợ, bạn cần chỉ định máy chủ ủy nhiệm (proxy)",
-        "sliding_sync_server_support": "Máy chủ của bạn hoàn toàn hỗ trợ",
         "under_active_development": "Đang được phát triển tích cực.",
         "video_rooms": "Phòng video",
         "video_rooms_a_new_way_to_chat": "Một cách mới để trò chuyện bằng thoại và video trong %(brand)s.",
