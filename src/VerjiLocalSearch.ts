@@ -10,10 +10,10 @@ import {
     Room,
     RoomMember,
     SearchResult,
-    ISearchResult,
     ISearchResults,
     ISearchResponse,
-    IEventWithRoomId
+    // ISearchResult,
+    // IEventWithRoomId
 } from "matrix-js-sdk/src/matrix";
 import { EventContext } from "matrix-js-sdk/src/models/event-context"; // eslint-disable-line
 
@@ -166,10 +166,10 @@ function getFirstLiveTimelineNeighbour(room: Room): EventTimeline | null {
 /**
  * Finds all matches in a room based on the given search term object and matching members.
  *
- * @param termObj - The search term object.
- * @param room - The room to search in.
- * @param matchingMembers - The matching members.
- * @returns A promise that resolves to an array of search result items.
+ * @param {SearchTerm} termObj - The search term object.
+ * @param {Room} room - The room to search in.
+ * @param {MemberObj} matchingMembers - The matching members.
+ * @returns {SearchResultItem[]} An array of search result items.
  */
 export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers: MemberObj): SearchResultItem[] {
     const matches: SearchResultItem[] = [];
