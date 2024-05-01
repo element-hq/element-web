@@ -67,8 +67,8 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
-        "@types/react-dom": "17.0.21",
-        "@types/react": "17.0.68"
+        "@types/react-dom": "17.0.25",
+        "@types/react": "17.0.80"
     },
     "dependencies": {
         "@matrix-org/olm": "3.2.15",
@@ -127,9 +127,9 @@
         "@types/node-fetch": "^2.6.4",
         "@types/pako": "^2.0.3",
         "@types/qrcode": "^1.5.5",
-        "@types/react": "17.0.68",
+        "@types/react": "17.0.80",
         "@types/react-beautiful-dnd": "^13.1.7",
-        "@types/react-dom": "17.0.21",
+        "@types/react-dom": "17.0.25",
         "@types/react-transition-group": "^4.4.9",
         "@types/sanitize-html": "^2.9.5",
         "@types/sdp-transform": "^2.4.9",
