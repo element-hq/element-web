@@ -118,6 +118,17 @@ describe("ThreadsActivityCentre", () => {
         expect(document.body).toMatchSnapshot();
     });
 
+    it("should render not display the tooltip when the release announcement is displayed", async () => {
+        // Enable release announcement
+        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, true);
+
+        renderTAC();
+
+        // The tooltip should not be displayed
+        await userEvent.hover(getTACButton());
+        expect(screen.queryByRole("tooltip")).toBeNull();
+    });
+
     it("should render the threads activity centre button and the display label", async () => {
         renderTAC({ displayButtonLabel: true });
         expect(getTACButton()).toBeInTheDocument();
