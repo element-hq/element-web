@@ -91,14 +91,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
             // Add authentication and send the request. We add authentication even if MSC3916 endpoints aren't
             // being used to ensure patches like this work:
             // https://github.com/matrix-org/synapse/commit/2390b66bf0ec3ff5ffb0c7333f3c9b239eeb92bb
-            const config = !accessToken
-                ? undefined
-                : {
-                      headers: {
-                          Authorization: `Bearer ${accessToken}`,
-                      },
-                  };
-            return fetch(url, config);
+            return fetch(url, fetchConfigForToken(accessToken));
         })(),
     );
 });
@@ -109,13 +102,7 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
         return; // up to date
     }
 
-    const config = !accessToken
-        ? undefined
-        : {
-              headers: {
-                  Authorization: `Bearer ${accessToken}`,
-              },
-          };
+    const config = fetchConfigForToken(accessToken);
     const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
 
     serverSupportMap[clientApiUrl] = {
@@ -184,4 +171,16 @@ async function askClientForUserIdParams(client: unknown): Promise<{ userId: stri
         // Ask the tab for the information we need. This is handled by WebPlatform.
         (client as Window).postMessage({ responseKey, type: "userinfo" });
     });
+}
+
+function fetchConfigForToken(accessToken?: string): RequestInit | undefined {
+    if (!accessToken) {
+        return undefined; // no headers/config to specify
+    }
+
+    return {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    };
 }
