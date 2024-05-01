@@ -61,14 +61,9 @@ export default class WebPlatform extends VectorBasePlatform {
             // This typically happens in Jest.
             return;
         }
-        
-        try {
-            await registration.update();
-            navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
-        } catch (e) {
-            console.error("Error registering/updating service worker:", e);
-            // otherwise ignore the error and remain unregistered
-        }
+
+        await registration.update();
+        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
     }
 
     private onServiceWorkerPostMessage(event: MessageEvent): void {
