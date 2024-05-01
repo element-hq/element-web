@@ -45,8 +45,8 @@ export default class WebPlatform extends VectorBasePlatform {
     public constructor() {
         super();
 
-        // noinspection JSIgnoredPromiseFromCall - can run async
-        this.tryRegisterServiceWorker();
+        // Register the service worker in the background
+        this.tryRegisterServiceWorker().catch((e) => console.error("Error registering/updating service worker:", e));
     }
 
     private async tryRegisterServiceWorker(): Promise<void> {
@@ -55,15 +55,14 @@ export default class WebPlatform extends VectorBasePlatform {
         }
 
         // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-        const swPromise = navigator.serviceWorker.register("sw.js");
-        if (!swPromise) {
-            // Registration didn't return a promise for some reason - assume failed and ignore.
+        const registration = await navigator.serviceWorker.register("sw.js");
+        if (!registration) {
+            // Registration didn't work for some reason - assume failed and ignore.
             // This typically happens in Jest.
             return;
         }
-
+        
         try {
-            const registration = await swPromise;
             await registration.update();
             navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
         } catch (e) {
