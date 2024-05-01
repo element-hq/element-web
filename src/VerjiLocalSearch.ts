@@ -46,7 +46,6 @@ interface SearchResultItem {
     context: EventContext;
 }
 
-
 /**
  * Searches all events locally based on the provided search term and room ID.
  *
@@ -56,7 +55,11 @@ interface SearchResultItem {
  * @returns {Promise<ISearchResults>} A promise that resolves to the search results.
  * @throws {Error} If the Matrix client is not initialized or the room is not found.
  */
-export default async function searchAllEventsLocally(client: MatrixClient, term: string, roomId: string | undefined): Promise<ISearchResults> {
+export default async function searchAllEventsLocally(
+    client: MatrixClient,
+    term: string,
+    roomId: string | undefined,
+): Promise<ISearchResults> {
     const searchResults: ISearchResults = {
         results: [],
         highlights: [],
@@ -98,7 +101,7 @@ export default async function searchAllEventsLocally(client: MatrixClient, term:
     //matches.forEach(m => m.context = reverseEventContext(m.context));
 
     // Process the matches to produce the equivalent result from a client.search() call
-    const searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId)
+    const searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId);
 
     // mimic the original code
     const results = client.processRoomEventsSearch(searchResults, searchResponse);
@@ -142,7 +145,6 @@ async function loadFullHistory(client: MatrixClient | null, room: Room): Promise
     } while (hasMoreEvents);
 }
 
-
 /**
  * Retrieves the first live timeline neighbour of a given room.
  * A live timeline neighbour is a timeline that is adjacent to the current timeline in the backwards direction.
@@ -178,14 +180,12 @@ export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers:
     let timeline: EventTimeline | null = room.getLiveTimeline();
 
     const iterationCallback = (roomEvent: MatrixEvent): void => {
-
         if (searchHit !== null) {
             searchHit.context.addEvents([roomEvent], false);
         }
         searchHit = null;
 
         if (roomEvent.getType() === "m.room.message" && !roomEvent.isRedacted()) {
-
             if (eventMatchesSearchTerms(termObj, roomEvent, matchingMembers)) {
                 const evCtx = new EventContext(roomEvent);
                 if (prevEvent !== null) {
@@ -199,7 +199,6 @@ export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers:
 
             prevEvent = roomEvent;
         }
-
     };
 
     // This code iterates over a timeline, retrieves events from the timeline, and invokes a callback function for each event in reverse order.
@@ -209,7 +208,7 @@ export function findAllMatches(termObj: SearchTerm, room: Room, matchingMembers:
             iterationCallback(events[i]);
         }
         timeline = timeline.getNeighbouringTimeline(EventTimeline.FORWARDS);
-    };
+    }
 
     return matches;
 }
@@ -371,7 +370,7 @@ export function makeSearchTermObject(searchTerm: string): SearchTerm {
  * @param {EventContext} context - The event context to reverse.
  * @returns {EventContext} The reversed event context.
  */
-function reverseEventContext(eventContext: EventContext): EventContext{
+function reverseEventContext(eventContext: EventContext): EventContext {
     const contextTimeline = eventContext.getTimeline();
     const ourEventIndex = eventContext.getOurEventIndex();
     const ourEvent = eventContext.getEvent();
@@ -394,7 +393,6 @@ function reverseEventContext(eventContext: EventContext): EventContext{
     return reversedContext;
 }
 
-
 /**
  * Transform the matches by projecting them into a ISearchResponse
  *
@@ -403,26 +401,29 @@ function reverseEventContext(eventContext: EventContext): EventContext{
  * @param termObj - The search term object.
  * @returns The updated searchResults object.
  */
-function getClientSearchResponse(searchResults: ISearchResults, matches: SearchResultItem[], termObj: SearchTerm, roomId: string|undefined): ISearchResponse {
-
+function getClientSearchResponse(
+    searchResults: ISearchResults,
+    matches: SearchResultItem[],
+    termObj: SearchTerm,
+    roomId: string | undefined,
+): ISearchResponse {
     const response: ISearchResponse = {
         search_categories: {
             room_events: {
                 count: 0,
                 highlights: [],
-                results: []
-            }
-        }
-    }
+                results: [],
+            },
+        },
+    };
 
     response.search_categories.room_events.count = matches.length;
     for (let i = 0; i < matches.length; i++) {
-
-        const reversedContext = reverseEventContext( matches[i].context );
+        const reversedContext = reverseEventContext(matches[i].context);
 
         const sr = new SearchResult(0, reversedContext);
         searchResults.results.push(sr);
-    };
+    }
 
     return response;
 }
