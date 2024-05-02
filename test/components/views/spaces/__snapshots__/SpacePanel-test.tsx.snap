@@ -230,6 +230,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     >
       <button
         aria-controls="floating-ui-7"
+        aria-describedby="floating-ui-7"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
