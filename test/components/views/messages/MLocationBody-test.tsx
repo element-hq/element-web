@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -90,8 +90,13 @@ describe("MLocationBody", () => {
                 jest.spyOn(logger, "error").mockRestore();
             });
 
-            it("displays correct fallback content without error style when map_style_url is not configured", () => {
+            it("displays correct fallback content without error style when map_style_url is not configured", async () => {
                 const component = getComponent();
+
+                // The map code needs to be lazy loaded so this will take some time to appear
+                await waitFor(() =>
+                    expect(component.container.querySelector(".mx_EventTile_body")).toBeInTheDocument(),
+                );
                 expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 

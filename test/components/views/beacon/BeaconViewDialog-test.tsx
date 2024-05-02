@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { mocked } from "jest-mock";
@@ -92,7 +92,7 @@ describe("<BeaconViewDialog />", () => {
         jest.clearAllMocks();
     });
 
-    it("renders a map with markers", () => {
+    it("renders a map with markers", async () => {
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
@@ -103,7 +103,9 @@ describe("<BeaconViewDialog />", () => {
             lat: 51,
         });
         // marker added
-        expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
+        await waitFor(() => {
+            expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
+        });
     });
 
     it("does not render any own beacon status when user is not live sharing", () => {
