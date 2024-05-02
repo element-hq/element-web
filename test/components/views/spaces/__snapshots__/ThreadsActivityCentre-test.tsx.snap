@@ -2,7 +2,7 @@
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
-  aria-labelledby="radix-14"
+  aria-labelledby="radix-16"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
   data-align="start"
@@ -11,14 +11,14 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-15"
+  id="radix-17"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
-    id=":r5:"
+    id=":r6:"
   >
     Threads activity
   </h3>
@@ -125,41 +125,98 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 </div>
 `;
 
-exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
-<div
-  aria-labelledby="radix-20"
-  aria-orientation="vertical"
-  class="_menu_1x5h1_17"
-  data-align="start"
-  data-orientation="vertical"
-  data-radix-menu-content=""
-  data-side="top"
-  data-state="open"
-  dir="ltr"
-  id="radix-21"
-  role="menu"
-  style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
-  tabindex="-1"
+exports[`ThreadsActivityCentre should close the release announcement when the TAC button is clicked 1`] = `
+<body
+  data-scroll-locked=""
+  style="pointer-events: none;"
 >
-  <h3
-    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
-    id=":r7:"
-  >
-    Threads activity
-  </h3>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
   <div
-    class="mx_ThreadsActivityCentre_rows"
+    aria-hidden="true"
+    data-aria-hidden="true"
   >
     <div
-      class="mx_ThreadsActivityCentre_emptyCaption"
+      class="mx_ThreadsActivityCentre_container"
     >
-      You don't have rooms with thread notifications yet.
+      <button
+        aria-controls="radix-3"
+        aria-disabled="false"
+        aria-expanded="true"
+        aria-haspopup="menu"
+        aria-label="Threads"
+        class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
+        data-state="closed"
+        id="radix-2"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div
+            class="mx_ThreadsActivityCentreButton_Icon"
+          />
+        </div>
+      </button>
     </div>
   </div>
-</div>
+  <div
+    data-radix-popper-content-wrapper=""
+    dir="ltr"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px; --radix-popper-transform-origin: 0% 0px;"
+  >
+    <div
+      aria-labelledby="radix-2"
+      aria-orientation="vertical"
+      class="_menu_1x5h1_17"
+      data-align="start"
+      data-orientation="vertical"
+      data-radix-menu-content=""
+      data-side="top"
+      data-state="open"
+      dir="ltr"
+      id="radix-3"
+      role="menu"
+      style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+      tabindex="-1"
+    >
+      <h3
+        class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+        id=":r1:"
+      >
+        Threads activity
+      </h3>
+      <div
+        class="mx_ThreadsActivityCentre_rows"
+      >
+        <div
+          class="mx_ThreadsActivityCentre_emptyCaption"
+        >
+          You don't have rooms with thread notifications yet.
+        </div>
+      </div>
+    </div>
+  </div>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
+</body>
 `;
 
-exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
+exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
   aria-labelledby="radix-22"
   aria-orientation="vertical"
@@ -178,6 +235,40 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   <h3
     class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
     id=":r8:"
+  >
+    Threads activity
+  </h3>
+  <div
+    class="mx_ThreadsActivityCentre_rows"
+  >
+    <div
+      class="mx_ThreadsActivityCentre_emptyCaption"
+    >
+      You don't have rooms with thread notifications yet.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
+<div
+  aria-labelledby="radix-24"
+  aria-orientation="vertical"
+  class="_menu_1x5h1_17"
+  data-align="start"
+  data-orientation="vertical"
+  data-radix-menu-content=""
+  data-side="top"
+  data-state="open"
+  dir="ltr"
+  id="radix-25"
+  role="menu"
+  style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+  tabindex="-1"
+>
+  <h3
+    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+    id=":r9:"
   >
     Threads activity
   </h3>
