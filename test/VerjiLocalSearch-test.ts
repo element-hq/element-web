@@ -130,29 +130,29 @@ describe("LocalSearch", () => {
         const testEvent = {} as MatrixEvent;
         testEvent.getType = () => "m.room.message";
         testEvent.isRedacted = () => false;
-        testEvent.getContent = () => ({ body: "body text Testsson" }) as any;
-        testEvent.getSender = () => ({ userId: "testtestsson" }) as any;
+        testEvent.getContent = () => ({ body: "body text Santa Clause" }) as any;
+        testEvent.getSender = () => "testtestssen" as any;
         testEvent.getDate = () => new Date();
 
         const testEvent2 = {} as MatrixEvent;
         testEvent2.getType = () => "m.room.message";
         testEvent2.isRedacted = () => false;
         testEvent2.getContent = () => ({ body: "not that text at all" }) as any;
-        testEvent2.getSender = () => ({ userId: "namersson" }) as any;
+        testEvent2.getSender = () => "namerssen" as any;
         testEvent2.getDate = () => new Date();
 
         const testEvent3 = {} as MatrixEvent;
         testEvent3.getType = () => "m.room.message";
         testEvent3.isRedacted = () => false;
         testEvent3.getContent = () => ({ body: "some different text, but not the one Testsson" }) as any;
-        testEvent3.getSender = () => ({ userId: "namersson" }) as any;
+        testEvent3.getSender = () => "namersson" as any;
         testEvent3.getDate = () => new Date();
 
         const testEvent4 = {} as MatrixEvent;
         testEvent4.getType = () => "m.room.message";
         testEvent4.isRedacted = () => false;
         testEvent4.getContent = () => ({ body: "a text" }) as any;
-        testEvent4.getSender = () => ({ userId: "testtestsson" }) as any;
+        testEvent4.getSender = () => "testtestsson" as any;
         testEvent4.getDate = () => new Date();
 
         const room = {
@@ -173,8 +173,8 @@ describe("LocalSearch", () => {
         console.log(matches.length);
 
         expect(matches.length).toBe(2);
-        expect(matches[0].result.getSender().userId).toBe("namersson");
-        expect(matches[1].result.getSender().userId).toBe("testtestsson");
+        expect(matches[0].result.getSender()).toBe("testtestsson");
+        expect(matches[1].result.getSender()).toBe("namersson");
     });
 
     it("can find by ISO date", async () => {
@@ -182,14 +182,14 @@ describe("LocalSearch", () => {
         testEvent.getType = () => "m.room.message";
         testEvent.isRedacted = () => false;
         testEvent.getContent = () => ({ body: "body text" }) as any;
-        testEvent.getSender = () => ({ userId: "testtestsson" }) as any;
+        testEvent.getSender = () => "testtestsson" as any;
         testEvent.getDate = () => new Date(2020, 10, 2, 13, 30, 0);
 
         const testEvent2 = {} as MatrixEvent;
         testEvent2.getType = () => "m.room.message";
         testEvent2.isRedacted = () => false;
         testEvent2.getContent = () => ({ body: "not that text at all" }) as any;
-        testEvent2.getSender = () => ({ userId: "namersson" }) as any;
+        testEvent2.getSender = () => "namersson" as any;
         testEvent2.getDate = () => new Date(2020, 9, 28, 14, 0, 0);
 
         const room = {
@@ -206,7 +206,7 @@ describe("LocalSearch", () => {
         const termObj = makeSearchTermObject("2020-10-28");
         const matches = await findAllMatches(termObj, room as any, foundUsers);
         expect(matches.length).toBe(1);
-        expect(matches[0].result.getSender().userId).toBe("namersson");
+        expect(matches[0].result.getSender()).toBe("namersson");
     });
 
     it("matches users", async () => {
