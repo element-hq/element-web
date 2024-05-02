@@ -58,6 +58,17 @@ export const enum UIFeature {
     UserSettingsDeleteBackup = "UIFeature.userSettingsDeleteBackup",
     UserSettingsResetBackup = "UIFeature.userSettingsResetBackup",
     SetupEncryptionResetButton = "UIFeature.setupEncryptionResetButton",
+    AccountSendAccountEvent = "UIFeature.accountSendAccountEvent",
+    AccountSendRoomEvent = "UIFeature.accountSendRoomEvent",
+    EnableLoginPage = "UIFeature.enableLoginPage",
+    EnableNewRoomIntro = "UIFeature.enableNewRoomIntro",
+    EnableRoomDevTools = "UIFeature.enableRoomDevTools",
+    WidgetContextDeleteButton = "UIFeature.widgetContextDeleteButton",
+    ExportDefaultSizeLimit = "UIFeature.exportDefaultSizeLimit",
+    AllExportTypes = "UIFeature.allExportTypes",
+    ExportAttatchmentsDefaultOff = "UIFeature.exportAttatchmentsDefaultOff",
+    RoomSettingsSecurity = "UIFeature.roomSettingsSecurity",
+    RoomPreviewRejectIgnoreButton = "UIFeature.roomPreviewRejectIgnoreButton",
 }
 
 export enum UIComponent {

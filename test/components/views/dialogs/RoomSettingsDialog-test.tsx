@@ -25,14 +25,12 @@ import {
     RoomStateEvent,
     Visibility,
 } from "matrix-js-sdk/src/matrix";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import RoomSettingsDialog from "../../../../src/components/views/dialogs/RoomSettingsDialog";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../src/settings/UIFeature";
-import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
@@ -93,7 +91,24 @@ describe("<RoomSettingsDialog />", () => {
             const { container } = getComponent();
             expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
         });
-
+        it("renders security & privacy if UIFeature is on", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.RoomSettingsSecurity) return true;
+                return true;
+            });
+            getComponent();
+            // expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
+            expect(screen.queryByText("Security & Privacy")).not.toBeNull();
+        });
+        it("does not renders security & privacy if UIFeature is off", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.RoomSettingsSecurity) return false;
+                return true;
+            });
+            getComponent();
+            // expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
+            expect(screen.queryByText("Security & Privacy")).toBeNull();
+        });
         describe("people settings tab", () => {
             it("does not render when disabled and room join rule is not knock", () => {
                 jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
