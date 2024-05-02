@@ -26,7 +26,7 @@ import StorageEvictedDialog from "../src/components/views/dialogs/StorageEvicted
 import { logout, restoreFromLocalStorage, setLoggedIn } from "../src/Lifecycle";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
-import * as StorageManager from "../src/utils/StorageManager";
+import * as StorageAccess from "../src/utils/StorageAccess";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "./test-utils";
 import { OidcClientStore } from "../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "./test-utils/oidc";
@@ -128,13 +128,13 @@ describe("Lifecycle", () => {
     };
 
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
-        jest.spyOn(StorageManager, "idbLoad")
+        jest.spyOn(StorageAccess, "idbLoad")
             .mockClear()
             .mockImplementation(
                 // @ts-ignore mock type
                 async (table: string, key: string) => mockStore[table]?.[key] ?? null,
             );
-        jest.spyOn(StorageManager, "idbSave")
+        jest.spyOn(StorageAccess, "idbSave")
             .mockClear()
             .mockImplementation(
                 // @ts-ignore mock type
@@ -144,7 +144,7 @@ describe("Lifecycle", () => {
                     mockStore[tableKey] = table;
                 },
             );
-        jest.spyOn(StorageManager, "idbDelete").mockClear().mockResolvedValue(undefined);
+        jest.spyOn(StorageAccess, "idbDelete").mockClear().mockResolvedValue(undefined);
     };
 
     const homeserverUrl = "https://server.org";
@@ -258,16 +258,16 @@ describe("Lifecycle", () => {
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
-                    expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                    expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                     // dont put accessToken in localstorage when we have idb
                     expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
                 });
 
                 it("should persist access token when idb is not available", async () => {
-                    jest.spyOn(StorageManager, "idbSave").mockRejectedValue("oups");
+                    jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
                     expect(await restoreFromLocalStorage()).toEqual(true);
 
-                    expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                    expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                     // put accessToken in localstorage as fallback
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_access_token", accessToken);
                 });
@@ -316,11 +316,7 @@ describe("Lifecycle", () => {
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
-                        expect(StorageManager.idbSave).toHaveBeenCalledWith(
-                            "account",
-                            "mx_refresh_token",
-                            refreshToken,
-                        );
+                        expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_refresh_token", refreshToken);
                     });
 
                     it("should create new matrix client with credentials", async () => {
@@ -359,7 +355,7 @@ describe("Lifecycle", () => {
                     expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_access_token", "true");
 
                     // token encrypted and persisted
-                    expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                    expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                         "account",
                         "mx_access_token",
                         encryptedTokenShapedObject,
@@ -368,7 +364,7 @@ describe("Lifecycle", () => {
 
                 it("should persist access token when idb is not available", async () => {
                     // dont fail for pickle key persist
-                    jest.spyOn(StorageManager, "idbSave").mockImplementation(
+                    jest.spyOn(StorageAccess, "idbSave").mockImplementation(
                         async (table: string, key: string | string[]) => {
                             if (table === "account" && key === "mx_access_token") {
                                 throw new Error("oups");
@@ -378,7 +374,7 @@ describe("Lifecycle", () => {
 
                     expect(await restoreFromLocalStorage()).toEqual(true);
 
-                    expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                    expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                         "account",
                         "mx_access_token",
                         encryptedTokenShapedObject,
@@ -422,7 +418,7 @@ describe("Lifecycle", () => {
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_refresh_token", "true");
-                        expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                        expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                             "account",
                             "mx_refresh_token",
                             encryptedTokenShapedObject,
@@ -502,7 +498,7 @@ describe("Lifecycle", () => {
                 expect(localStorage.setItem).toHaveBeenCalledWith("mx_is_guest", "false");
                 expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
-                expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 // dont put accessToken in localstorage when we have idb
                 expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
@@ -513,14 +509,14 @@ describe("Lifecycle", () => {
                     refreshToken,
                 });
 
-                expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
-                expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_refresh_token", refreshToken);
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_refresh_token", refreshToken);
                 // dont put accessToken in localstorage when we have idb
                 expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
-                jest.spyOn(StorageManager, "idbSave").mockRejectedValue("oups");
+                jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
                 await setLoggedIn({
                     ...credentials,
                     // @ts-ignore
@@ -534,7 +530,7 @@ describe("Lifecycle", () => {
             it("should clear stores", async () => {
                 await setLoggedIn(credentials);
 
-                expect(StorageManager.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
+                expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
                 expect(sessionStorage.clear).toHaveBeenCalled();
                 expect(mockClient.clearStores).toHaveBeenCalled();
             });
@@ -566,7 +562,7 @@ describe("Lifecycle", () => {
                 });
 
                 // unpickled access token saved
-                expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                 expect(mockPlatform.createPickleKey).not.toHaveBeenCalled();
             });
 
@@ -585,16 +581,12 @@ describe("Lifecycle", () => {
                 expect(localStorage.setItem).toHaveBeenCalledWith("mx_device_id", deviceId);
 
                 expect(localStorage.setItem).toHaveBeenCalledWith("mx_has_pickle_key", "true");
-                expect(StorageManager.idbSave).toHaveBeenCalledWith(
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                     "account",
                     "mx_access_token",
                     encryptedTokenShapedObject,
                 );
-                expect(StorageManager.idbSave).toHaveBeenCalledWith(
-                    "pickleKey",
-                    [userId, deviceId],
-                    expect.any(Object),
-                );
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("pickleKey", [userId, deviceId], expect.any(Object));
                 // dont put accessToken in localstorage when we have idb
                 expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token", accessToken);
             });
@@ -604,12 +596,12 @@ describe("Lifecycle", () => {
                 await setLoggedIn(credentials);
 
                 // persist the unencrypted token
-                expect(StorageManager.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
             });
 
             it("should persist token in localStorage when idb fails to save token", async () => {
                 // dont fail for pickle key persist
-                jest.spyOn(StorageManager, "idbSave").mockImplementation(
+                jest.spyOn(StorageAccess, "idbSave").mockImplementation(
                     async (table: string, key: string | string[]) => {
                         if (table === "account" && key === "mx_access_token") {
                             throw new Error("oups");
@@ -624,7 +616,7 @@ describe("Lifecycle", () => {
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
                 // dont fail for pickle key persist
-                jest.spyOn(StorageManager, "idbSave").mockImplementation(
+                jest.spyOn(StorageAccess, "idbSave").mockImplementation(
                     async (table: string, key: string | string[]) => {
                         if (table === "account" && key === "mx_access_token") {
                             throw new Error("oups");
