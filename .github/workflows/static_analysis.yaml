@@ -51,7 +51,7 @@ jobs:
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api #--skipLibCheck
-                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn build && yarn link && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
+                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn build && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
                   azPSVersion: "latest"
             #END VERJI SPECIFIC
             - name: Typecheck
