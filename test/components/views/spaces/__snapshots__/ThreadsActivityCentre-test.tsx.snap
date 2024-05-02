@@ -433,6 +433,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
     >
       <button
         aria-controls="floating-ui-6"
+        aria-describedby="floating-ui-6"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
