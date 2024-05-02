@@ -3518,10 +3518,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.1.0.tgz#45fa22e4e91b5fd4c2f535e040072990d5a33712"
-  integrity sha512-FQSJK7PaJ3dR1c1Q3TYVSShJBl9TwlrhKadnTWsPIX6xE+rvCAeujE50QbcEWdDlWeaJ9Hi0bVPlEssJ+eRwtQ==
+"@vector-im/compound-web@^4.1.1":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.1.2.tgz#d8f9ba523700660942722a800c64406216bbbfea"
+  integrity sha512-u/jj8HF8qpX1NU+sh6f/S1B7HUMGcoAGYLH0wc5lVbf6x6elBsYKD0LSa+/8NDPuQqVWMztu76chUsM5slC49w==
   dependencies:
     "@floating-ui/react" "^0.26.9"
     "@floating-ui/react-dom" "^2.0.8"
@@ -8328,10 +8328,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.99.0-rc.0:
-  version "3.99.0-rc.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.99.0-rc.0.tgz#1f159f3a5f0fece935d60dfb81319927e083ae22"
-  integrity sha512-RJx0bkx4elN5VJ4fhy95gnCVQ3h1Nb/sIf4bkdxA6315aGztSfX/vEB+LxXlsrs35s2wnRGacroj6hNS88tkNQ==
+matrix-react-sdk@3.99.0-rc.1:
+  version "3.99.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.99.0-rc.1.tgz#1c055ae6c37ec521867a5ad8da687f292604ffe1"
+  integrity sha512-mkQL4/JodS/zhUn+F29ZT7X/ggjAL+jxIY78Kgjx+bM8PX1ymEUEAhDHDD1ZqeyD7tqC47Pg1aFOtPDCyuwxJQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.20.0"
@@ -8343,7 +8343,7 @@ matrix-react-sdk@3.99.0-rc.0:
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^1.2.0"
-    "@vector-im/compound-web" "^4.1.0"
+    "@vector-im/compound-web" "^4.1.1"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
