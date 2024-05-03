@@ -44,7 +44,7 @@ jobs:
                   # Clone with submodules
                   submodule: false # optional, default is false
 
-            - name: "Verji - Build and yarn link matrix-react-sdk-module-api"
+            - name: "Verji - Build and yarn link matrix-react-sdk-module-api (prepublish)"
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api #--skipLibCheck build --skipLibCheck
