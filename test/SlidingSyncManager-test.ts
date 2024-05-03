@@ -16,8 +16,7 @@ limitations under the License.
 
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
-import { IRequestOpts, MatrixClient, MatrixEvent, Method, Room } from "matrix-js-sdk/src/matrix";
-import { QueryDict } from "matrix-js-sdk/src/utils";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { SlidingSyncManager } from "../src/SlidingSyncManager";
 import { stubClient } from "./test-utils";
@@ -261,41 +260,18 @@ describe("SlidingSyncManager", () => {
         it("should make an OPTIONS request to avoid unintended side effects", async () => {
             // See https://github.com/element-hq/element-web/issues/27426
 
-            // Developer note: We mock this in a truly terrible way because of how the call is done. There's not
-            // really much we can do to avoid it.
-            client.http = {
-                async authedRequest(
-                    method: Method,
-                    path: string,
-                    queryParams?: QueryDict,
-                    body?: Body,
-                    paramOpts: IRequestOpts & {
-                        doNotAttemptTokenRefresh?: boolean;
-                    } = {},
-                ): Promise<any> {
-                    // XXX: Ideally we'd use ResponseType<> like in the real thing, but it's not exported
-                    expect(method).toBe(Method.Options);
-                    expect(path).toBe("/sync");
-                    expect(queryParams).toBeUndefined();
-                    expect(body).toBeUndefined();
-                    expect(paramOpts).toEqual({
-                        localTimeoutMs: 10 * 1000, // 10s
-                        prefix: "/_matrix/client/unstable/org.matrix.msc3575",
-                    });
-                    return {};
-                },
-            } as any;
-
+            const unstableSpy = jest
+                .spyOn(client, "doesServerSupportUnstableFeature")
+                .mockImplementation(async (feature: string) => {
+                    expect(feature).toBe("org.matrix.msc3575");
+                    return true;
+                });
             const proxySpy = jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("proxy");
 
             expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
-
             await manager.checkSupport(client); // first thing it does is call nativeSlidingSyncSupport
-
-            // Note: if this expectation is failing, it may mean the authedRequest mock threw an expectation failure
-            // which got consumed by `nativeSlidingSyncSupport`. Log your errors to discover more.
             expect(proxySpy).not.toHaveBeenCalled();
-
+            expect(unstableSpy).toHaveBeenCalled();
             expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
         });
     });
