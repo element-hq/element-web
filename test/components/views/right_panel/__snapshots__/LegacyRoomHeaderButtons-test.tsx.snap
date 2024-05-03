@@ -6,6 +6,7 @@ exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
     aria-current="false"
     aria-label="Chat"
     class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_timelineCardButton"
+    data-state="closed"
     role="button"
     tabindex="0"
   />
@@ -13,6 +14,7 @@ exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
     aria-current="false"
     aria-label="Threads"
     class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_threadsButton"
+    data-state="closed"
     data-testid="threadsButton"
     role="button"
     tabindex="0"
@@ -21,6 +23,7 @@ exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
     aria-current="false"
     aria-label="Room info"
     class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_roomSummaryButton"
+    data-state="closed"
     role="button"
     tabindex="0"
   />

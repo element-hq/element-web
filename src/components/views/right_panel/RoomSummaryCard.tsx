@@ -49,7 +49,6 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -184,18 +183,17 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
 
     return (
         <div className={classes} ref={handle}>
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_icon_app"
                 onClick={onOpenWidgetClick}
                 // only show a tooltip if the widget is pinned
-                title={openTitle}
-                forceHide={!(isPinned || isMaximised)}
+                title={!(isPinned || isMaximised) ? undefined : openTitle}
                 disabled={isPinned || isMaximised}
             >
                 <WidgetAvatar app={app} size="20px" />
                 <span>{name}</span>
                 {subtitle}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
 
             {canModifyWidget && (
                 <ContextMenuTooltipButton
@@ -206,13 +204,13 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 />
             )}
 
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_app_pinToggle"
                 onClick={togglePin}
                 title={pinTitle}
                 disabled={cannotPin}
             />
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_app_maximiseToggle"
                 onClick={toggleMaximised}
                 title={maximiseTitle}
