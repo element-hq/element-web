@@ -34,6 +34,7 @@ import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import {
     stubClient,
@@ -72,7 +73,7 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../src/components/views/rooms/SearchBar";
-
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
 describe("RoomView", () => {
@@ -717,5 +718,40 @@ describe("RoomView", () => {
         jest.spyOn(dis, "dispatch");
         await mountRoomView();
         expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
+
+    describe("CustomComponentLifecycle.RoomHeader", () => {
+        it("should invoke CustomComponentLifecycle.RoomHeader when you are joined (not previewing)", async () => { 
+            jest.spyOn(ModuleRunner.instance, "invoke");
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            await renderRoomView();
+            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.RoomHeader, {CustomComponent: expect.any(Symbol)});
+        });
+
+        it("should render LegacyRoomHeader if if there are no module-implementations using the lifecycle", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            const { container } = await renderRoomView();
+            expect(container.querySelector(".mx_LegacyRoomHeader")).toBeVisible();
+        });
+
+        it("should replace the default RoomHeader and return <div data-testid='custom-room-header'> instead", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RoomHeader) {
+                    (opts as CustomComponentOpts).CustomComponent = () => {
+                        return (
+                            <>
+                                <header data-testid="custom-room-header" />
+                            </>
+                        );
+                    };
+                }
+            });
+
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            const { container } = await renderRoomView();
+            const customRoomHeader = screen.queryByTestId("custom-room-header");
+            expect(customRoomHeader).toBeVisible()
+            expect(container.querySelector(".mx_LegacyRoomHeader")).toBeNull();
+        });
     });
 });
