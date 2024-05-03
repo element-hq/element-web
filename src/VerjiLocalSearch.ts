@@ -41,7 +41,7 @@ interface MemberObj {
     [key: string]: Member;
 }
 
-interface SearchResultItem {
+export interface SearchResultItem {
     result: MatrixEvent;
     context: EventContext;
 }
@@ -370,7 +370,7 @@ export function makeSearchTermObject(searchTerm: string): SearchTerm {
  * @param {EventContext} context - The event context to reverse.
  * @returns {EventContext} The reversed event context.
  */
-function reverseEventContext(eventContext: EventContext): EventContext {
+export function reverseEventContext(eventContext: EventContext): EventContext {
     const contextTimeline = eventContext.getTimeline();
     const ourEventIndex = eventContext.getOurEventIndex();
     const ourEvent = eventContext.getEvent();
@@ -401,12 +401,7 @@ function reverseEventContext(eventContext: EventContext): EventContext {
  * @param termObj - The search term object.
  * @returns The updated searchResults object.
  */
-function getClientSearchResponse(
-    searchResults: ISearchResults,
-    matches: SearchResultItem[],
-    termObj: SearchTerm,
-    roomId: string | undefined,
-): ISearchResponse {
+function getClientSearchResponse(searchResults: ISearchResults, matches: SearchResultItem[]): ISearchResponse {
     const response: ISearchResponse = {
         search_categories: {
             room_events: {
