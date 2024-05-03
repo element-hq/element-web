@@ -20,7 +20,11 @@ jobs:
     ts_lint:
         name: "Typescript Syntax Check"
         runs-on: ubuntu-latest
-        steps:
+        steps:  
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
             # VERJI SPECIFIC - yarn link FOR matrix-react-sdk-module-api on verji-main branch
             - name: "Veri - Clone Github Repo Action - Download verji-main of module-api"
               # You may pin to the exact commit or the version.
@@ -46,11 +50,7 @@ jobs:
                   # Yarn link matrix-react-sdk-module-api #--skipLibCheck
                   inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn build --skipLibCheck && cd .. && cd .. && cd 'matrix-react-sdk'"
                   azPSVersion: "latest"
-            #END VERJI SPECIFIC        
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  cache: "yarn"
+            #END VERJI SPECIFIC                        
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
               # VERJI
