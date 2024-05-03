@@ -26,40 +26,40 @@ jobs:
               with:
                   cache: "yarn"
             # VERJI SPECIFIC - yarn link FOR matrix-react-sdk-module-api on verji-main branch
-            - name: "Veri - Clone Github Repo Action - Download verji-main of module-api"
-              # You may pin to the exact commit or the version.
-              # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
-              uses: GuillaumeFalourd/clone-github-repo-action@v2.3
-              with:
-                  # Repository Owner
-                  owner: verji
-                  # Repository name
-                  repository: "matrix-react-sdk-module-api"
-                  # PAT with repository scope (https://github.com/settings/tokens)
-                  access-token: ${{secrets.PAT}}
-                  # Depth of the clone (default: full history)
-                  depth: 1
-                  # Branch name (default: main)
-                  branch: "verji-main"
-                  # Clone with submodules
-                  submodule: false # optional, default is false
+            #- name: "Veri - Clone Github Repo Action - Download verji-main of module-api"
+            #  # You may pin to the exact commit or the version.
+            #  # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
+            #  uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+            #  with:
+            #       # Repository Owner
+            #       owner: verji
+            #       # Repository name
+            #       repository: "matrix-react-sdk-module-api"
+            #       # PAT with repository scope (https://github.com/settings/tokens)
+            #       access-token: ${{secrets.PAT}}
+            #       # Depth of the clone (default: full history)
+            #       depth: 1
+            #       # Branch name (default: main)
+            #       branch: "verji-main"
+            #       # Clone with submodules
+            #       submodule: false # optional, default is false
 
-            - name: "Verji - Build and yarn link matrix-react-sdk-module-api (prepublish)"
-              uses: Azure/powershell@v2
-              with:
-                  # Yarn link matrix-react-sdk-module-api #--skipLibCheck build --skipLibCheck
-                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn prepublishOnly && cd .. && cd .. && cd 'matrix-react-sdk'"
-                  azPSVersion: "latest"
+            # - name: "Verji - Build and yarn link matrix-react-sdk-module-api (prepublish)"
+            #   uses: Azure/powershell@v2
+            #   with:
+            #       # Yarn link matrix-react-sdk-module-api #--skipLibCheck build --skipLibCheck
+            #       inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn prepublishOnly && cd .. && cd .. && cd 'matrix-react-sdk'"
+            #       azPSVersion: "latest"
             #END VERJI SPECIFIC                        
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
               # VERJI
-            - name: "Verji - yarn link matrix-react-sdk-module-api/verji-main into matrix-react-sdk"
-              uses: Azure/powershell@v2
-              with:
-                  # Yarn link matrix-react-sdk-module-api #--skipLibCheck
-                  inlineScript: "yarn link '@matrix-org/react-sdk-module-api'"
-                  azPSVersion: "latest"
+            # - name: "Verji - yarn link matrix-react-sdk-module-api/verji-main into matrix-react-sdk"
+            #   uses: Azure/powershell@v2
+            #   with:
+            #       # Yarn link matrix-react-sdk-module-api #--skipLibCheck
+            #       inlineScript: "yarn link '@matrix-org/react-sdk-module-api'"
+            #       azPSVersion: "latest"
               # VERJI END
             - name: Typecheck
               run: "yarn run lint:types"
