@@ -22,6 +22,8 @@ import classNames from "classnames";
 import { _t, TranslationKey } from "../../../../languageHandler";
 import { XOR } from "../../../../@types/common";
 import { Tool } from "../DevtoolsDialog";
+import SettingsStore from "../../../../settings/SettingsStore"
+import { UIFeature } from "../../../../settings/UIFeature"
 
 export interface IDevtoolsProps {
     onBack(): void;
@@ -78,7 +80,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
             <div className="mx_Dialog_buttons">
                 {extraButton}
                 <button onClick={onBackClick}>{_t("action|back")}</button>
-                {actionButton}
+                {SettingsStore.getValue(UIFeature.BaseToolActionButton) && actionButton}
             </div>
         </>
     );

@@ -30,6 +30,7 @@ import { GenericDropdownMenu, GenericDropdownMenuItem } from "../../structures/G
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
+import { UIFeature } from "../../../settings/UIFeature";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -181,7 +182,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
     }));
 
     const addNewServer = useCallback(
-        ({ closeMenu }) => (
+        ({ closeMenu }) => ( SettingsStore.getValue(UIFeature.NetworkOptions)  &&
             <>
                 <span className="mx_GenericDropdownMenu_divider" />
                 <MenuItemRadio
@@ -232,7 +233,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
             toKey={(config: IPublicRoomDirectoryConfig | null) =>
                 config ? `${config.roomServer}-${config.instanceId}` : "null"
             }
-            options={options}
+            options={SettingsStore.getValue(UIFeature.NetworkOptions)  ?  options : []}
             onChange={(option) => setConfig(option)}
             selectedLabel={(option) =>
                 option?.key

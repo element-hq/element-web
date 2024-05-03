@@ -24,6 +24,8 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 export enum WarningKind {
     Files,
@@ -88,7 +90,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
                     },
                 );
                 break;
-            case WarningKind.Search:
+            case WarningKind.Search: SettingsStore.getValue(UIFeature.SearchWarnings)==false ? text = "" :
                 text = _t(
                     "seshat|warning_kind_search_app",
                     {},
@@ -101,10 +103,11 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
                     },
                 );
                 break;
+                
         }
     } else {
         switch (kind) {
-            case WarningKind.Files:
+            case WarningKind.Files: SettingsStore.getValue(UIFeature.SearchWarnings)==false ? text = "" :
                 text = _t("seshat|warning_kind_files", { brand });
                 break;
             case WarningKind.Search:
