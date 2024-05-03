@@ -101,7 +101,7 @@ export default async function searchAllEventsLocally(
     //matches.forEach(m => m.context = reverseEventContext(m.context));
 
     // Process the matches to produce the equivalent result from a client.search() call
-    const searchResponse = getClientSearchResponse(searchResults, matches, termObj, roomId);
+    const searchResponse = getClientSearchResponse(searchResults, matches);
 
     // mimic the original code
     const results = client.processRoomEventsSearch(searchResults, searchResponse);

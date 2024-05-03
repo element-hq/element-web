@@ -3,8 +3,8 @@
     Unauthorized copying or distribution of this file, via any medium, is strictly prohibited.
 */
 
-// import { MatrixEvent } from "matrix-js-sdk";
-import { ISearchResults, MatrixEvent, ISearchResponse } from "matrix-js-sdk/src/matrix";
+import { EventContext } from "matrix-js-sdk/src/models/event-context"; // eslint-disable-line
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import {
     findAllMatches,
@@ -14,7 +14,7 @@ import {
     SearchTerm,
     reverseEventContext,
 } from "../src/VerjiLocalSearch";
-import { EventContext } from "matrix-js-sdk/src/models/event-context";
+
 
 describe("LocalSearch", () => {
     it("should return true for matches", async () => {
