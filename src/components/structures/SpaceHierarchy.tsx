@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, {
-    ComponentProps,
     Dispatch,
     KeyboardEvent,
     KeyboardEventHandler,
@@ -62,7 +61,6 @@ import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/spaces/SpaceStore";
-import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { Linkify, topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -75,7 +73,6 @@ import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import { Alignment } from "../views/elements/Tooltip";
 import { getTopic } from "../../hooks/room/useTopic";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
@@ -148,7 +145,7 @@ const Tile: React.FC<ITileProps> = ({
     let button: ReactElement;
     if (busy) {
         button = (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 disabled={true}
                 onClick={onJoinClick}
                 kind="primary_outline"
@@ -157,7 +154,7 @@ const Tile: React.FC<ITileProps> = ({
                 title={_t("space|joining_space")}
             >
                 <Spinner w={24} h={24} />
-            </AccessibleTooltipButton>
+            </AccessibleButton>
         );
     } else if (joinedRoom || room.join_rule === JoinRule.Knock) {
         // If the room is knockable, show the "View" button even if we are not a member; that
@@ -670,25 +667,16 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
 
     const disabled = !selectedRelations.length || removing || saving;
 
-    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
-    let props: Partial<ComponentProps<typeof AccessibleTooltipButton>> = {};
-    if (!selectedRelations.length) {
-        Button = AccessibleTooltipButton;
-        props = {
-            tooltip: _t("space|select_room_below"),
-            alignment: Alignment.Top,
-        };
-    }
-
     let buttonText = _t("common|saving");
     if (!saving) {
         buttonText = selectionAllSuggested ? _t("space|unmark_suggested") : _t("space|mark_suggested");
     }
 
+    const title = !selectedRelations.length ? _t("space|select_room_below") : undefined;
+
     return (
         <>
-            <Button
-                {...props}
+            <AccessibleButton
                 onClick={async (): Promise<void> => {
                     setRemoving(true);
                     try {
@@ -719,11 +707,13 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                 }}
                 kind="danger_outline"
                 disabled={disabled}
+                aria-label={removing ? _t("redact|ongoing") : _t("action|remove")}
+                title={title}
+                placement="top"
             >
                 {removing ? _t("redact|ongoing") : _t("action|remove")}
-            </Button>
-            <Button
-                {...props}
+            </AccessibleButton>
+            <AccessibleButton
                 onClick={async (): Promise<void> => {
                     setSaving(true);
                     try {
@@ -750,9 +740,12 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                 }}
                 kind="primary_outline"
                 disabled={disabled}
+                aria-label={buttonText}
+                title={title}
+                placement="top"
             >
                 {buttonText}
-            </Button>
+            </AccessibleButton>
         </>
     );
 };
