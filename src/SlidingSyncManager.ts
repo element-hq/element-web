@@ -378,7 +378,11 @@ export class SlidingSyncManager {
      */
     public async nativeSlidingSyncSupport(client: MatrixClient): Promise<boolean> {
         try {
-            await client.http.authedRequest<void>(Method.Post, "/sync", undefined, undefined, {
+            // We use OPTIONS to avoid causing a real sync to happen, as that may be intensive or encourage
+            // middleware software to start polling as our access token (thus stealing our to-device messages).
+            // See https://github.com/element-hq/element-web/issues/27426
+            // XXX: Using client.http is a bad thing - it's meant to be private access. See `client.http` for details.
+            await client.http.authedRequest<void>(Method.Options, "/sync", undefined, undefined, {
                 localTimeoutMs: 10 * 1000, // 10s
                 prefix: "/_matrix/client/unstable/org.matrix.msc3575",
             });
