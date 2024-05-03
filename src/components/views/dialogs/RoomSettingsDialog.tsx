@@ -56,11 +56,12 @@ export const enum RoomSettingsTab {
 interface IProps {
     roomId: string;
     onFinished: (success?: boolean) => void;
-    initialTabId?: string;
+    initialTabId?: RoomSettingsTab;
 }
 
 interface IState {
     room: Room;
+    activeTabId: RoomSettingsTab;
 }
 
 class RoomSettingsDialog extends React.Component<IProps, IState> {
@@ -70,7 +71,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         super(props);
 
         const room = this.getRoom();
-        this.state = { room };
+        this.state = { room, activeTabId: props.initialTabId || RoomSettingsTab.General };
     }
 
     public componentDidMount(): void {
@@ -126,6 +127,10 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
 
     private onStateEvent = (event: MatrixEvent): void => {
         if (event.getType() === EventType.RoomJoinRules) this.forceUpdate();
+    };
+
+    private onTabChange = (tabId: RoomSettingsTab): void => {
+        this.setState({ activeTabId: tabId });
     };
 
     private getTabs(): NonEmptyArray<Tab<RoomSettingsTab>> {
@@ -246,8 +251,9 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 <div className="mx_SettingsDialog_content">
                     <TabbedView
                         tabs={this.getTabs()}
-                        initialTabId={this.props.initialTabId}
+                        activeTabId={this.state.activeTabId}
                         screenName="RoomSettings"
+                        onChange={this.onTabChange}
                     />
                 </div>
             </BaseDialog>

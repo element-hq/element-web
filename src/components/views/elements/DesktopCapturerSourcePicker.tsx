@@ -85,8 +85,6 @@ export interface PickerIProps {
     onFinished(source?: DesktopCapturerSource): void;
 }
 
-type TabId = "screen" | "window";
-
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
     public interval?: number;
 
@@ -127,15 +125,15 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         this.props.onFinished(this.state.selectedSource);
     };
 
-    private onTabChange = (): void => {
-        this.setState({ selectedSource: undefined });
+    private onTabChange = (tab: Tabs): void => {
+        this.setState({ selectedSource: undefined, selectedTab: tab });
     };
 
     private onCloseClick = (): void => {
         this.props.onFinished();
     };
 
-    private getTab(type: TabId, label: TranslationKey): Tab<TabId> {
+    private getTab(type: Tabs, label: TranslationKey): Tab<Tabs> {
         const sources = this.state.sources
             .filter((source) => source.id.startsWith(type))
             .map((source) => {
@@ -153,9 +151,9 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     }
 
     public render(): React.ReactNode {
-        const tabs: NonEmptyArray<Tab<TabId>> = [
-            this.getTab("screen", _td("voip|screenshare_monitor")),
-            this.getTab("window", _td("voip|screenshare_window")),
+        const tabs: NonEmptyArray<Tab<Tabs>> = [
+            this.getTab(Tabs.Screens, _td("voip|screenshare_monitor")),
+            this.getTab(Tabs.Windows, _td("voip|screenshare_window")),
         ];
 
         return (
@@ -164,7 +162,12 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
                 onFinished={this.onCloseClick}
                 title={_t("voip|screenshare_title")}
             >
-                <TabbedView tabs={tabs} tabLocation={TabLocation.TOP} onChange={this.onTabChange} />
+                <TabbedView
+                    tabs={tabs}
+                    tabLocation={TabLocation.TOP}
+                    activeTabId={this.state.selectedTab}
+                    onChange={this.onTabChange}
+                />
                 <DialogButtons
                     primaryButton={_t("action|share")}
                     hasCancel={true}

@@ -18,7 +18,6 @@ limitations under the License.
 
 import * as React from "react";
 import classNames from "classnames";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, TranslationKey } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -45,6 +44,18 @@ export class Tab<T extends string> {
         public readonly body: React.ReactNode,
         public readonly screenName?: ScreenName,
     ) {}
+}
+
+export function useActiveTabWithDefault<T extends string>(
+    tabs: NonEmptyArray<Tab<string>>,
+    defaultTabID: T,
+    initialTabID?: T,
+): [T, (tabId: T) => void] {
+    const [activeTabId, setActiveTabId] = React.useState(
+        initialTabID && tabs.some((t) => t.id === initialTabID) ? initialTabID : defaultTabID,
+    );
+
+    return [activeTabId, setActiveTabId];
 }
 
 export enum TabLocation {
@@ -113,12 +124,12 @@ function TabLabel<T extends string>({ tab, isActive, onClick }: ITabLabelProps<T
 interface IProps<T extends string> {
     // An array of objects representign tabs that the tabbed view will display.
     tabs: NonEmptyArray<Tab<T>>;
-    // The ID of the tab to display initially.
-    initialTabId?: T;
+    // The ID of the tab to show
+    activeTabId: T;
     // The location of the tabs, dictating the layout of the TabbedView.
     tabLocation?: TabLocation;
-    // A callback that is called when the active tab changes.
-    onChange?: (tabId: T) => void;
+    // A callback that is called when the active tab should change
+    onChange: (tabId: T) => void;
     // The screen name to report to Posthog.
     screenName?: ScreenName;
 }
@@ -130,39 +141,19 @@ interface IProps<T extends string> {
 export default function TabbedView<T extends string>(props: IProps<T>): JSX.Element {
     const tabLocation = props.tabLocation ?? TabLocation.LEFT;
 
-    const [activeTabId, setActiveTabId] = React.useState<T>((): T => {
-        const initialTabIdIsValid = props.tabs.find((tab) => tab.id === props.initialTabId);
-        // unfortunately typescript doesn't infer the types coorectly if the null check is included above
-        return initialTabIdIsValid && props.initialTabId ? props.initialTabId : props.tabs[0].id;
-    });
-
     const getTabById = (id: T): Tab<T> | undefined => {
         return props.tabs.find((tab) => tab.id === id);
-    };
-
-    /**
-     * Shows the given tab
-     * @param {Tab} tab the tab to show
-     */
-    const setActiveTab = (tab: Tab<T>): void => {
-        // make sure this tab is still in available tabs
-        if (!!getTabById(tab.id)) {
-            props.onChange?.(tab.id);
-            setActiveTabId(tab.id);
-        } else {
-            logger.error("Could not find tab " + tab.label + " in tabs");
-        }
     };
 
     const labels = props.tabs.map((tab) => (
         <TabLabel
             key={"tab_label_" + tab.id}
             tab={tab}
-            isActive={tab.id === activeTabId}
-            onClick={() => setActiveTab(tab)}
+            isActive={tab.id === props.activeTabId}
+            onClick={() => props.onChange(tab.id)}
         />
     ));
-    const tab = getTabById(activeTabId);
+    const tab = getTabById(props.activeTabId);
     const panel = tab ? <TabPanel tab={tab} /> : null;
 
     const tabbedViewClasses = classNames({
