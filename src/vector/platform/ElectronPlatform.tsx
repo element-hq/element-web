@@ -377,10 +377,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call("getAvailableSpellCheckLanguages");
     }
 
-    public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
-        const url = super.getSSOCallbackUrl(fragmentAfterLogin);
+    public getSSOCallbackUrl(forOidc = false, fragmentAfterLogin?: string): URL {
+        const url = super.getSSOCallbackUrl(forOidc, fragmentAfterLogin);
         url.protocol = "element";
-        url.searchParams.set(SSO_ID_KEY, this.ssoID);
+        if (!forOidc) {
+            url.searchParams.set(SSO_ID_KEY, this.ssoID);
+        }
         return url;
     }
 
@@ -446,8 +448,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
         const baseMetadata = await super.getOidcClientMetadata();
-        const redirectUri = this.getSSOCallbackUrl();
-        redirectUri.searchParams.delete(SSO_ID_KEY); // it will be shuttled via the state param instead
+        const redirectUri = this.getSSOCallbackUrl(true);
         return {
             ...baseMetadata,
             applicationType: "native",
