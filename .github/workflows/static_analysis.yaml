@@ -44,7 +44,7 @@ jobs:
               uses: Azure/powershell@v2
               with:
                   # Yarn link matrix-react-sdk-module-api #--skipLibCheck
-                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn build --skipLibCheck && cd .. && cd .. && cd 'matrix-react-sdk' && yarn link '@matrix-org/react-sdk-module-api'"
+                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn build --skipLibCheck && cd .. && cd .. && cd 'matrix-react-sdk'"
                   azPSVersion: "latest"
             #END VERJI SPECIFIC        
             - uses: actions/checkout@v4
@@ -53,7 +53,14 @@ jobs:
                   cache: "yarn"
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
-
+              # VERJI
+            - name: "Verji - yarn link matrix-react-sdk-module-api/verji-main into matrix-react-sdk"
+              uses: Azure/powershell@v2
+              with:
+                  # Yarn link matrix-react-sdk-module-api #--skipLibCheck
+                  inlineScript: "yarn link '@matrix-org/react-sdk-module-api'"
+                  azPSVersion: "latest"
+              # VERJI END
             - name: Typecheck
               run: "yarn run lint:types"
 
