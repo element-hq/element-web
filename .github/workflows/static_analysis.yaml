@@ -47,8 +47,8 @@ jobs:
             - name: "Verji - Build and yarn link matrix-react-sdk-module-api"
               uses: Azure/powershell@v2
               with:
-                  # Yarn link matrix-react-sdk-module-api #--skipLibCheck
-                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn build --skipLibCheck && cd .. && cd .. && cd 'matrix-react-sdk'"
+                  # Yarn link matrix-react-sdk-module-api #--skipLibCheck build --skipLibCheck
+                  inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn prepublishOnly && cd .. && cd .. && cd 'matrix-react-sdk'"
                   azPSVersion: "latest"
             #END VERJI SPECIFIC                        
             - name: Install Deps
