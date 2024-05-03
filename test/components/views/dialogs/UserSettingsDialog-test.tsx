@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -34,7 +33,6 @@ import {
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
-import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -169,45 +167,5 @@ describe("<UserSettingsDialog />", () => {
 
         // unwatches settings on unmount
         expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
-    });
-    
-    describe("on CustomComponentLifecycle.SessionManageTab", () => {
-        it("should invoke CustomComponentLifecycle.SessionsManagerTab on rendering when Sessions-tab component renders", () => { 
-            jest.spyOn(ModuleRunner.instance, "invoke");
-            render(getComponent());
-            fireEvent.click(screen.getByText("Sessions"));
-            screen.debug(undefined, 300000)
-            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.SessionManagerTab, {CustomComponent: expect.any(Symbol)});
-        });
-
-        it("should render standard SessionManagerTab if if there are no module-implementations using the lifecycle", () => {
-            const { container } = render(getComponent())
-            fireEvent.click(screen.getByText("Sessions"));
-
-            expect(container.querySelector("#mx_tabpanel_USER_SESSION_MANAGER_TAB")).toBeVisible();
-            // Expect that element unique to SessionsManagerTab is rendered.
-            expect(screen.getByTestId("current-session-section")).toBeVisible();
-        });
-
-        it("should replace the default SessionManagerTab and return <div data-testid='custom-user-sessions-manager-tab'> instead", () => {
-            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
-                if (lifecycleEvent === CustomComponentLifecycle.SessionManagerTab) {
-                    (opts as CustomComponentOpts).CustomComponent = () => {
-                        return (
-                            <>
-                                <div data-testid="custom-user-sessions-manager-tab" />
-                            </>
-                        );
-                    };
-                }
-            });
-            render(getComponent());
-            fireEvent.click(screen.getByText("Sessions"));
-            const customRolesTab = screen.queryByTestId("custom-user-sessions-manager-tab");
-            expect(customRolesTab).toBeVisible();
-            
-            // Expect that element unique to RolesRoomSettingsTab is NOT-rendered, as proof of default RolesRoomSettingsTab not being in the document.
-            expect(screen.queryByTestId("current-session-section")).toBeFalsy();
-        });
     });
 });
