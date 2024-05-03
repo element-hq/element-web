@@ -20,7 +20,7 @@ jobs:
     ts_lint:
         name: "Typescript Syntax Check"
         runs-on: ubuntu-latest
-        steps:  
+        steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
@@ -43,14 +43,13 @@ jobs:
             #       branch: "verji-main"
             #       # Clone with submodules
             #       submodule: false # optional, default is false
-
             # - name: "Verji - Build and yarn link matrix-react-sdk-module-api (prepublish)"
             #   uses: Azure/powershell@v2
             #   with:
             #       # Yarn link matrix-react-sdk-module-api #--skipLibCheck build --skipLibCheck
             #       inlineScript: "cd matrix-react-sdk-module-api && yarn && yarn link && yarn prepublishOnly && cd .. && cd .. && cd 'matrix-react-sdk'"
             #       azPSVersion: "latest"
-            #END VERJI SPECIFIC                        
+            #END VERJI SPECIFIC
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
               # VERJI
@@ -60,7 +59,7 @@ jobs:
             #       # Yarn link matrix-react-sdk-module-api #--skipLibCheck
             #       inlineScript: "yarn link '@matrix-org/react-sdk-module-api'"
             #       azPSVersion: "latest"
-              # VERJI END
+            # VERJI END
             - name: Typecheck
               run: "yarn run lint:types"
 

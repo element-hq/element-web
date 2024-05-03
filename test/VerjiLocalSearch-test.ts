@@ -15,7 +15,6 @@ import {
     reverseEventContext,
 } from "../src/VerjiLocalSearch";
 
-
 describe("LocalSearch", () => {
     it("should return true for matches", async () => {
         const testEvent = {} as MatrixEvent;
