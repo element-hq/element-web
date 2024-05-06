@@ -86,7 +86,6 @@ exports[`<SessionManagerTab /> current session section renders current session s
       aria-haspopup="true"
       aria-label="Options"
       class="mx_AccessibleButton"
-      data-state="closed"
       data-testid="current-session-menu"
       role="button"
       tabindex="0"
@@ -217,7 +216,6 @@ exports[`<SessionManagerTab /> current session section renders current session s
       aria-haspopup="true"
       aria-label="Options"
       class="mx_AccessibleButton"
-      data-state="closed"
       data-testid="current-session-menu"
       role="button"
       tabindex="0"
@@ -347,7 +345,6 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
   class="mx_FilteredDeviceListHeader"
 >
   <span
-    data-state="closed"
     tabindex="0"
   >
     <span

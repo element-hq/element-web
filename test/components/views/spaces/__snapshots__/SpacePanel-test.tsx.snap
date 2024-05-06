@@ -35,7 +35,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       <div
         aria-label="Expand"
         class="mx_AccessibleButton mx_SpacePanel_toggleCollapse"
-        data-state="closed"
         role="button"
         tabindex="0"
       />
@@ -56,7 +55,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="Home"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_home mx_SpaceButton_narrow"
-          data-state="closed"
           role="button"
           tabindex="0"
         >
@@ -93,7 +91,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="Favourites"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_favourites mx_SpaceButton_narrow"
-          data-state="closed"
           role="button"
           tabindex="-1"
         >
@@ -122,7 +119,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="People"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_people mx_SpaceButton_narrow"
-          data-state="closed"
           role="button"
           tabindex="-1"
         >
@@ -151,7 +147,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="Other rooms"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_orphans mx_SpaceButton_narrow"
-          data-state="closed"
           role="button"
           tabindex="-1"
         >
@@ -180,7 +175,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="Conferences"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_videoRooms mx_SpaceButton_narrow"
-          data-state="closed"
           role="button"
           tabindex="-1"
         >
@@ -209,7 +203,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         <div
           aria-label="Create a space"
           class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_new mx_SpaceButton_narrow"
-          data-state="closed"
           data-testid="create-space-button"
           role="button"
           tabindex="-1"
@@ -242,7 +235,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-haspopup="dialog"
         aria-label="Threads"
         class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
-        data-state="closed"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -279,7 +271,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       aria-expanded="false"
       aria-label="Quick settings"
       class="mx_AccessibleButton mx_QuickSettingsButton"
-      data-state="closed"
       role="button"
       tabindex="0"
     />

@@ -5,7 +5,6 @@ exports[`<LeftPanelLiveShareWarning /> when user has live location monitor rende
   <div
     aria-label="You are sharing your live location"
     class="mx_AccessibleButton mx_LeftPanelLiveShareWarning mx_LeftPanelLiveShareWarning__minimized"
-    data-state="closed"
     role="button"
     tabindex="0"
   >

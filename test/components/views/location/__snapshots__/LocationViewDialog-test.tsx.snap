@@ -25,7 +25,6 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
     <div
       aria-label="Zoom in"
       class="mx_AccessibleButton mx_ZoomButtons_button"
-      data-state="closed"
       data-testid="map-zoom-in-button"
       role="button"
       tabindex="0"
@@ -37,7 +36,6 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
     <div
       aria-label="Zoom out"
       class="mx_AccessibleButton mx_ZoomButtons_button"
-      data-state="closed"
       data-testid="map-zoom-out-button"
       role="button"
       tabindex="0"

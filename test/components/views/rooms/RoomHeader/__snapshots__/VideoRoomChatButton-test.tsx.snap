@@ -5,7 +5,6 @@ exports[`<VideoRoomChatButton /> renders button with an unread marker when room 
   aria-label="Chat"
   class="_icon-button_16nk7_17"
   data-indicator="default"
-  data-state="closed"
   role="button"
   style="--cpd-icon-button-size: 32px;"
   tabindex="0"

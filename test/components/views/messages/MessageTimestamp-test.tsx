@@ -32,17 +32,16 @@ describe("MessageTimestamp", () => {
     it("should render HH:MM", () => {
         const { asFragment } = render(<MessageTimestamp ts={nowDate.getTime()} />);
         expect(asFragment()).toMatchInlineSnapshot(`
-            <DocumentFragment>
-              <span
-                aria-hidden="true"
-                aria-live="off"
-                class="mx_MessageTimestamp"
-                data-state="closed"
-              >
-                08:09
-              </span>
-            </DocumentFragment>
-        `);
+<DocumentFragment>
+  <span
+    aria-hidden="true"
+    aria-live="off"
+    class="mx_MessageTimestamp"
+  >
+    08:09
+  </span>
+</DocumentFragment>
+`);
     });
 
     it("should show full date & time on hover", async () => {

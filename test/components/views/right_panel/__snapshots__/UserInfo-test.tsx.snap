@@ -5,7 +5,6 @@ exports[`<DeviceItem /> ambiguous display name 1`] = `
   <div
     aria-label="my display name (deviceId)"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
-    data-state="closed"
     role="button"
     tabindex="0"
   >
@@ -29,7 +28,6 @@ exports[`<DeviceItem /> with display name 1`] = `
   <div
     aria-label="deviceName"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
-    data-state="closed"
     role="button"
     tabindex="0"
   >
@@ -53,7 +51,6 @@ exports[`<DeviceItem /> without display name 1`] = `
   <div
     aria-label="deviceId"
     class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
-    data-state="closed"
     role="button"
     tabindex="0"
   >
@@ -83,7 +80,6 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       <div
         aria-label="Close"
         class="mx_AccessibleButton mx_BaseCard_close"
-        data-state="closed"
         data-testid="base-card-close-button"
         role="button"
         tabindex="0"

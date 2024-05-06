@@ -5,7 +5,6 @@ exports[`InfoTooltip should show tooltip on hover 1`] = `
   <div
     aria-describedby="floating-ui-2"
     class="mx_InfoTooltip"
-    data-state="open"
     tabindex="0"
   >
     <span

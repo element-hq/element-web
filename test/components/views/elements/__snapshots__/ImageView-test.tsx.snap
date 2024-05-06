@@ -24,42 +24,36 @@ exports[`<ImageView /> renders correctly 1`] = `
           aria-describedby="floating-ui-2"
           aria-label="Zoom out"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomOut"
-          data-state="open"
           role="button"
           tabindex="0"
         />
         <div
           aria-label="Zoom in"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomIn"
-          data-state="closed"
           role="button"
           tabindex="0"
         />
         <div
           aria-label="Rotate Left"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCCW"
-          data-state="closed"
           role="button"
           tabindex="0"
         />
         <div
           aria-label="Rotate Right"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCW"
-          data-state="closed"
           role="button"
           tabindex="0"
         />
         <div
           aria-label="Download"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_download"
-          data-state="closed"
           role="button"
           tabindex="0"
         />
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_close"
-          data-state="closed"
           role="button"
           tabindex="0"
         />

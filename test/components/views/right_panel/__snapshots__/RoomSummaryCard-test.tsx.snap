@@ -16,7 +16,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         <button
           aria-label="Search"
           class="mx_RoomSummaryCard_searchBtn"
-          data-state="closed"
           data-testid="summary-search"
         >
           <div
@@ -27,7 +26,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_BaseCard_close"
-          data-state="closed"
           data-testid="base-card-close-button"
           role="button"
           tabindex="0"

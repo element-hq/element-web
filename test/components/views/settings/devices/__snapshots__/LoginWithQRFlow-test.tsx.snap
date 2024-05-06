@@ -637,7 +637,6 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"
@@ -765,7 +764,6 @@ exports[`<LoginWithQRFlow /> renders spinner while connecting 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"
@@ -832,7 +830,6 @@ exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"
@@ -887,7 +884,6 @@ exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"
@@ -954,7 +950,6 @@ exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"
@@ -1012,7 +1007,6 @@ exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
       <div
         aria-label="Back"
         class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-state="closed"
         data-testid="back-button"
         role="button"
         tabindex="0"

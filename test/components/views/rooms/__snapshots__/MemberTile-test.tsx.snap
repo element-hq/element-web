@@ -6,7 +6,6 @@ exports[`MemberTile should display an verified E2EIcon when the e2E status = Ver
     <div
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
-      data-state="closed"
       role="button"
       tabindex="0"
     >
@@ -60,7 +59,6 @@ exports[`MemberTile should display an warning E2EIcon when the e2E status = Warn
     <div
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
-      data-state="closed"
       role="button"
       tabindex="0"
     >
@@ -114,7 +112,6 @@ exports[`MemberTile should not display an E2EIcon when the e2E status = normal 1
     <div
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
-      data-state="closed"
       role="button"
       tabindex="0"
     >

@@ -111,7 +111,6 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
     <button
       aria-label="Stop and close"
       class="mx_AccessibleButton mx_RoomLiveShareWarning_closeButton"
-      data-state="closed"
       data-testid="room-live-share-wire-error-close-button"
       role="button"
       tabindex="0"

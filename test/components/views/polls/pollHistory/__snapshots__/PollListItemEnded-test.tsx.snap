@@ -7,7 +7,6 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
     data-testid="pollListItem-1"
   >
     <span
-      data-state="closed"
       tabindex="0"
     >
       <div
