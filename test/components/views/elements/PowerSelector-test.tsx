@@ -19,7 +19,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import PowerSelector from "../../../../src/components/views/elements/PowerSelector";
-import SettingsStore from "../../../../src/settings/SettingsStore"
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 describe("<PowerSelector />", () => {
     it("should reset back to custom value when custom input is blurred blank", async () => {
@@ -98,24 +98,20 @@ describe("<PowerSelector />", () => {
         deferred.reject("Some error");
         await screen.findByDisplayValue(25);
     });
-//eik
-    it.only("should render custom value choice when feature is on", async () => {
+    it("should render custom value choice when feature is on", async () => {
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 
         const fn = jest.fn();
         render(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
 
         expect(await screen.queryByText("Custom level")).not.toBeNull();
-
     });
-    it.only("should not render custom value choice when feature is off", async () => {
+    it("should not render custom value choice when feature is off", async () => {
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
         const fn = jest.fn();
         render(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
 
         expect(await screen.queryByText("Custom level")).toBeNull();
-
     });
-
 });

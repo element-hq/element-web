@@ -22,8 +22,8 @@ import classNames from "classnames";
 import { _t, TranslationKey } from "../../../../languageHandler";
 import { XOR } from "../../../../@types/common";
 import { Tool } from "../DevtoolsDialog";
-import SettingsStore from "../../../../settings/SettingsStore"
-import { UIFeature } from "../../../../settings/UIFeature"
+import SettingsStore from "../../../../settings/SettingsStore";
+import { UIFeature } from "../../../../settings/UIFeature";
 
 export interface IDevtoolsProps {
     onBack(): void;
