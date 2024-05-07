@@ -90,25 +90,28 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
                     },
                 );
                 break;
-            case WarningKind.Search: SettingsStore.getValue(UIFeature.SearchWarnings)==false ? text = "" :
-                text = _t(
-                    "seshat|warning_kind_search_app",
-                    {},
-                    {
-                        a: (sub) => (
-                            <a href={buildUrl} target="_blank" rel="noreferrer noopener">
-                                {sub}
-                            </a>
-                        ),
-                    },
-                );
+            case WarningKind.Search:
+                SettingsStore.getValue(UIFeature.SearchWarnings) == false
+                    ? (text = "")
+                    : (text = _t(
+                          "seshat|warning_kind_search_app",
+                          {},
+                          {
+                              a: (sub) => (
+                                  <a href={buildUrl} target="_blank" rel="noreferrer noopener">
+                                      {sub}
+                                  </a>
+                              ),
+                          },
+                      ));
                 break;
-                
         }
     } else {
         switch (kind) {
-            case WarningKind.Files: SettingsStore.getValue(UIFeature.SearchWarnings)==false ? text = "" :
-                text = _t("seshat|warning_kind_files", { brand });
+            case WarningKind.Files:
+                SettingsStore.getValue(UIFeature.SearchWarnings) == false
+                    ? (text = "")
+                    : (text = _t("seshat|warning_kind_files", { brand }));
                 break;
             case WarningKind.Search:
                 text = _t("seshat|warning_kind_search", { brand });
