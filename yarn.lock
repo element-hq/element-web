@@ -2183,10 +2183,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.19.0.tgz#e20e4df54530ed1c755ab728e9c22891e376f9e2"
-  integrity sha512-wN/hbpTpOxz2u3zHbsJgVMi88oKmK1yqeSZuif3yNW68XQnV2cc0XGUEpl0fgLOl6fj1bZOtxbDg5rCLbqf4CQ==
+"@matrix-org/analytics-events@^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.20.0.tgz#062a532ddcf0e2e5eb64c5576cd212cb32a11ccf"
+  integrity sha512-YCRbZrpZU9q+nrB6RsfPZ4NlKs31ySjP2F7GFUZNPKv96GcbihrnMK086td480SJOYpjPv2vttDJC+S67SFe2w==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
   version "1.1.3"
@@ -3544,10 +3544,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.0.2.tgz#cd89ca076b9b0528718e45110a4c8126e7556c63"
-  integrity sha512-MBqmSbtcWC6KJjuTWPZ6FYc83YrUJ9dOageUdbayjhVGZ/de/a+nl/vPIAX+5ic2QWUN7nn9hujfzQF69mbIeg==
+"@vector-im/compound-web@^4.1.1":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.1.2.tgz#d8f9ba523700660942722a800c64406216bbbfea"
+  integrity sha512-u/jj8HF8qpX1NU+sh6f/S1B7HUMGcoAGYLH0wc5lVbf6x6elBsYKD0LSa+/8NDPuQqVWMztu76chUsM5slC49w==
   dependencies:
     "@floating-ui/react" "^0.26.9"
     "@floating-ui/react-dom" "^2.0.8"
@@ -8337,9 +8337,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "32.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1da5e8f56a29afef0197dd4c3553d2ee4dfbd576"
+matrix-js-sdk@32.2.0:
+  version "32.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-32.2.0.tgz#9b49206ba292890ba4fe2cd58e0741a269ade9a5"
+  integrity sha512-LnfJNq5nMF/R+Wigv7dP+Q6I/D5zKHOIdGg9mYyQmhpLc+skWLCtjqa4cLH+hq5CUyppQXMuPH/FFQaGQQ3ImA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^4.9.0"
@@ -8363,12 +8364,13 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.98.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/33c56e565db5922a7d87089cd2baf8bdadc66434"
+matrix-react-sdk@3.99.0:
+  version "3.99.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.99.0.tgz#bf89a30fa0c28177b40d9963ea254d762fce3f03"
+  integrity sha512-gFCQ4v3oE4PMZFkZxexp+KVibipO2UvzgLjFKGOkgD2WnfTrCBISCZ0mz19MQbFoxftQRJw65B47bwe6PnD88Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.19.0"
+    "@matrix-org/analytics-events" "^0.20.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "2.17.0"
     "@matrix-org/olm" "3.2.15"
@@ -8377,7 +8379,7 @@ matrix-mock-request@^2.5.0:
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^1.2.0"
-    "@vector-im/compound-web" "^4.0.2"
+    "@vector-im/compound-web" "^4.1.1"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8409,7 +8411,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "32.2.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
