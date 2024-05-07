@@ -36,13 +36,12 @@ import {
     LiveContentType,
 } from "../components/views/rooms/LiveContentSummary";
 import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
-import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { Call } from "../models/Call";
 import { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
-import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 
 export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
@@ -195,7 +194,7 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
                     disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                 />
             </div>
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_IncomingCallToast_closeButton"
                 onClick={onCloseClick}
                 title={_t("action|close")}

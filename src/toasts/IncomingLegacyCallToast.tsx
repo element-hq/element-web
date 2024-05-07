@@ -25,7 +25,6 @@ import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler"
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
 import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
@@ -136,7 +135,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
                         </AccessibleButton>
                     </div>
                 </div>
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className={silenceClass}
                     disabled={callForcedSilent}
                     onClick={this.onSilenceClick}
