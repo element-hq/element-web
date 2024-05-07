@@ -73,6 +73,9 @@ export const enum UIFeature {
     NetworkOptions = "UIFeature.networkOptions",
     SearchWarnings = "UIFeature.searchWarnings",
     PowerSelectorCustomValue = "UIFeature.powerSelectorCustomValue",
+    CustomThemePanel = "UIFeature.customThemePanel",
+    VideoMirrorLocalVideo = "UIFeature.videoMirrorLocalVideo",
+    VideoConnectionSettings = "UIFeature.videoConnectionSettings",
 }
 
 export enum UIComponent {

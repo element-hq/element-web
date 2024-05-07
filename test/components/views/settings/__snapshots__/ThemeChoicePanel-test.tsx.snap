@@ -1,5 +1,110 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ThemeChoicePanel does renders custom theme choice URL when feature is on 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_ThemeChoicePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_ThemeChoicePanel_themeSelectors"
+        data-testid="theme-choice-panel-selectors"
+      >
+        <label
+          class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+        >
+          <input
+            disabled=""
+            id="theme-light"
+            name="theme"
+            type="radio"
+            value="light"
+          />
+          <div>
+            <div />
+          </div>
+          <div
+            class="mx_StyledRadioButton_content"
+          >
+            Light
+          </div>
+          <div
+            class="mx_StyledRadioButton_spacer"
+          />
+        </label>
+        <label
+          class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+        >
+          <input
+            disabled=""
+            id="theme-dark"
+            name="theme"
+            type="radio"
+            value="dark"
+          />
+          <div>
+            <div />
+          </div>
+          <div
+            class="mx_StyledRadioButton_content"
+          >
+            Dark
+          </div>
+          <div
+            class="mx_StyledRadioButton_spacer"
+          />
+        </label>
+      </div>
+      <div
+        class="mx_SettingsTab_section"
+      >
+        <form>
+          <div
+            class="mx_Field mx_Field_input"
+          >
+            <input
+              autocomplete="off"
+              id="mx_GeneralUserSettingsTab_customThemeInput"
+              label="Custom theme URL"
+              placeholder="Custom theme URL"
+              type="text"
+              value=""
+            />
+            <label
+              for="mx_GeneralUserSettingsTab_customThemeInput"
+            >
+              Custom theme URL
+            </label>
+          </div>
+          <div
+            aria-disabled="true"
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm mx_AccessibleButton_disabled"
+            disabled=""
+            role="button"
+            tabindex="0"
+            type="submit"
+          >
+            Add theme
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
 <DocumentFragment>
   <div
