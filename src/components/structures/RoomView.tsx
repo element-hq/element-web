@@ -134,6 +134,7 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 // import eventSearch from "../../Searching";
 import searchAllEventsLocally from "../../VerjiLocalSearch"; // VERJI
+import eventSearch from "../../Searching";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1733,8 +1734,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const abortController = new AbortController();
 
         // VERJI START
-        // const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
-        const promise = searchAllEventsLocally(term, roomId);
+        let promise: Promise<ISearchResults>;
+        // currently, we use the local search for all events. edit this 'if' statement to change that.
+        if (scope === SearchScope.Room || scope === SearchScope.All) {
+            promise = searchAllEventsLocally(this.context.client!, term, roomId);
+        } else {
+            promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        }
         // VERJI END
 
         this.setState({
@@ -1745,10 +1751,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 roomId,
                 term,
                 scope,
-                // VERJI START
-                // promise,
-                promise: promise as any,
-                // VERJI END
+                promise,
                 abortController,
             },
         });
