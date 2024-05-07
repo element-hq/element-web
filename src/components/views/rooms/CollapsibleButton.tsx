@@ -18,7 +18,6 @@ import React, { ComponentProps, useContext } from "react";
 import classNames from "classnames";
 
 import AccessibleButton from "../elements/AccessibleButton";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
 import { IconizedContextMenuOption } from "../context_menus/IconizedContextMenu";
 import { Ref } from "../../../accessibility/roving/types";
@@ -43,13 +42,8 @@ export const CollapsibleButton: React.FC<Props> = ({
     }
 
     return (
-        <AccessibleTooltipButton
-            {...props}
-            title={title}
-            className={classNames(className, iconClassName)}
-            ref={inputRef}
-        >
+        <AccessibleButton {...props} title={title} className={classNames(className, iconClassName)} ref={inputRef}>
             {children}
-        </AccessibleTooltipButton>
+        </AccessibleButton>
     );
 };

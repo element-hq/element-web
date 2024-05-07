@@ -57,10 +57,10 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ExtraTile from "./ExtraTile";
 import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -185,7 +185,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
         );
     } else if (!activeSpace && showCreateRooms) {
         return (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 tabIndex={tabIndex}
                 onClick={(e) => {
                     dispatcher.dispatch({ action: "view_create_chat" });
