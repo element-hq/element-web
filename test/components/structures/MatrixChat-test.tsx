@@ -284,6 +284,7 @@ describe("<MatrixChat />", () => {
         const tokenResponse: BearerTokenResponse = {
             access_token: accessToken,
             refresh_token: "def456",
+            id_token: "ghi789",
             scope: "test",
             token_type: "Bearer",
             expires_at: 12345,

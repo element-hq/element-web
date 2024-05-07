@@ -115,6 +115,7 @@ describe("OIDC authorization", () => {
         const tokenResponse: BearerTokenResponse = {
             access_token: "abc123",
             refresh_token: "def456",
+            id_token: "ghi789",
             scope: "test",
             token_type: "Bearer",
             expires_at: 12345,
@@ -163,6 +164,7 @@ describe("OIDC authorization", () => {
                 identityServerUrl,
                 issuer,
                 clientId,
+                idToken: "ghi789",
                 idTokenClaims: result.idTokenClaims,
             });
         });

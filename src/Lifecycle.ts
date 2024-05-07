@@ -289,7 +289,7 @@ export async function attemptDelegatedAuthLogin(
  */
 async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
     try {
-        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idTokenClaims, clientId, issuer } =
+        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(queryParams);
 
         const {
@@ -311,7 +311,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         logger.debug("Logged in via OIDC native flow");
         await onSuccessfulDelegatedAuthLogin(credentials);
         // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idTokenClaims);
+        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
