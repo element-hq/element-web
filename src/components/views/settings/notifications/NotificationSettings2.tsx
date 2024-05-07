@@ -123,7 +123,7 @@ export default function NotificationSettings2(): JSX.Element {
                     )}
                 </SettingsBanner>
             )}
-            <SettingsSection heading={_t("notifications|enable_prompt_toast_title")}>
+            <SettingsSection>
                 <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
                     <LabelledToggleSwitch
                         label={_t("settings|notifications|enable_notifications_account")}

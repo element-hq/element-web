@@ -284,7 +284,7 @@ const SessionManagerTab: React.FC = () => {
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("settings|sessions|title")}>
+            <SettingsSection>
                 <LoginWithQRSection
                     onShowQr={onShowQrClicked}
                     versions={clientVersions}

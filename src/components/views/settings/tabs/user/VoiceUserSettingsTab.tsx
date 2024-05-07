@@ -180,7 +180,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("settings|voip|title")}>
+                <SettingsSection>
                     {requestButton}
                     <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
                         {speakerDropdown}

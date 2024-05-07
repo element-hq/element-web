@@ -2395,6 +2395,7 @@
             "brand_version": "%(brand)s version:",
             "clear_cache_reload": "Clear cache and reload",
             "crypto_version": "Crypto version:",
+            "dialog_title": "<strong>Settings:</strong> Help & About",
             "help_link": "For help with using %(brand)s, click <a>here</a>.",
             "homeserver": "Homeserver is <code>%(homeserverUrl)s</code>",
             "identity_server": "Identity server is <code>%(identityServerUrl)s</code>",
@@ -2417,15 +2418,14 @@
             "custom_theme_invalid": "Invalid theme schema.",
             "custom_theme_success": "Theme added!",
             "custom_theme_url": "Custom theme URL",
+            "dialog_title": "<strong>Settings:</strong> Appearance",
             "font_size": "Font size",
             "font_size_default": "%(fontSize)s (default)",
-            "heading": "Customise your appearance",
             "image_size_default": "Default",
             "image_size_large": "Large",
             "layout_bubbles": "Message bubbles",
             "layout_irc": "IRC (Experimental)",
             "match_system_theme": "Match system theme",
-            "subheading": "Appearance Settings only affect this %(brand)s session.",
             "timeline_image_size": "Image size in the timeline",
             "use_high_contrast": "Use high contrast"
         },
@@ -2467,6 +2467,7 @@
             "deactivate_confirm_erase_label": "Hide my messages from new joiners",
             "deactivate_section": "Deactivate Account",
             "deactivate_warning": "Deactivating your account is a permanent action — be careful!",
+            "dialog_title": "<strong>Settings:</strong> General",
             "discovery_email_empty": "Discovery options will appear once you have added an email above.",
             "discovery_email_verification_instructions": "Verify the link in your inbox",
             "discovery_msisdn_empty": "Discovery options will appear once you have added a phone number above.",
@@ -2574,12 +2575,20 @@
             "phrase_strong_enough": "Great! This passphrase looks strong enough"
         },
         "keyboard": {
+            "dialog_title": "<strong>Settings:</strong> Keyboard",
             "title": "Keyboard"
+        },
+        "labs": {
+            "dialog_title": "<strong>Settings:</strong> Labs"
+        },
+        "labs_mjolnir": {
+            "dialog_title": "<strong>Settings:</strong> Ignored Users"
         },
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
             "default_setting_section": "I want to be notified for (Default Setting)",
             "desktop_notification_message_preview": "Show message preview in desktop notification",
+            "dialog_title": "<strong>Settings:</strong> Notifications",
             "email_description": "Receive an email summary of missed notifications",
             "email_section": "Email summary",
             "email_select": "Select which emails you want to send summaries to. Manage your emails in <button>General</button>.",
@@ -2638,6 +2647,7 @@
             "code_blocks_heading": "Code blocks",
             "compact_modern": "Use a more compact 'Modern' layout",
             "composer_heading": "Composer",
+            "dialog_title": "<strong>Settings:</strong> Preferences",
             "enable_hardware_acceleration": "Enable hardware acceleration",
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
             "keyboard_heading": "Keyboard shortcuts",
@@ -2687,6 +2697,7 @@
             "dehydrated_device_enabled": "Offline device enabled",
             "delete_backup": "Delete Backup",
             "delete_backup_confirm_description": "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.",
+            "dialog_title": "<strong>Settings:</strong> Security & Privacy",
             "e2ee_default_disabled_warning": "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
             "enable_message_search": "Enable message search in encrypted rooms",
             "encryption_individual_verification_mode": "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.",
@@ -2766,6 +2777,7 @@
             "device_unverified_description_current": "Verify your current session for enhanced secure messaging.",
             "device_verified_description": "This session is ready for secure messaging.",
             "device_verified_description_current": "Your current session is ready for secure messaging.",
+            "dialog_title": "<strong>Settings:</strong> Sessions",
             "error_pusher_state": "Failed to set pusher state",
             "error_set_name": "Failed to set session name",
             "filter_all": "All",
@@ -2849,6 +2861,7 @@
         "show_typing_notifications": "Show typing notifications",
         "showbold": "Show all activity in the room list (dots or number of unread messages)",
         "sidebar": {
+            "dialog_title": "<strong>Settings:</strong> Sidebar",
             "metaspaces_favourites_description": "Group all your favourite rooms and people in one place.",
             "metaspaces_home_all_rooms": "Show all rooms",
             "metaspaces_home_all_rooms_description": "Show all your rooms in Home, even if they're in a space.",
@@ -2878,6 +2891,7 @@
             "audio_output_empty": "No Audio Outputs detected",
             "auto_gain_control": "Automatic gain control",
             "connection_section": "Connection",
+            "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
