@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { useMemo } from "react";
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CustomComponentOpts, CustomComponentLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -30,6 +31,7 @@ import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsT
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import { Action } from "../../../dispatcher/actions";
 import { NonEmptyArray } from "../../../@types/common";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
@@ -50,8 +52,9 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             onFinished();
         }
     });
-
     const tabs = useMemo(() => {
+        const customRolesRoomSettingsTabOpts = { CustomComponent: React.Fragment }
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.RolesRoomSettingsTab, customRolesRoomSettingsTabOpts as CustomComponentOpts)
         return [
             new Tab(
                 SpaceSettingsTab.General,
@@ -68,8 +71,12 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             new Tab(
                 SpaceSettingsTab.Roles,
                 _td("room_settings|permissions|title"),
-                "mx_RoomSettingsDialog_rolesIcon",
-                <RolesRoomSettingsTab room={space} />,
+                "mx_RoomSettingsDialog_rolesIcon",        
+                <customRolesRoomSettingsTabOpts.CustomComponent>
+                    <RolesRoomSettingsTab room={space} />
+                </customRolesRoomSettingsTabOpts.CustomComponent>
+                ,
+
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
