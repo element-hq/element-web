@@ -52,6 +52,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { tagRoom } from "../../../utils/room/tagRoom";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -254,7 +255,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     }
 
     let filesOption: JSX.Element | undefined;
-    if (!isVideoRoom) {
+    if (!isVideoRoom && SettingsStore.getValue(UIFeature.RoomSummaryFilesOption)) {
         filesOption = (
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {
