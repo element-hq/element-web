@@ -80,7 +80,7 @@ jobs:
               run: |
                   images=""
                   for tag in ${TAGS}; do
-                    images+="${tag}@${DIGEST} "
+                      images+="${tag}@${DIGEST} "
                   done
                   cosign sign --yes ${images}
 
