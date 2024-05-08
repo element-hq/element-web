@@ -2393,13 +2393,11 @@
             "custom_theme_url": "URL tema personalizzato",
             "font_size": "Dimensione carattere",
             "font_size_default": "%(fontSize)s (predefinito)",
-            "heading": "Personalizza l'aspetto",
             "image_size_default": "Predefinito",
             "image_size_large": "Grande",
             "layout_bubbles": "Messaggi",
             "layout_irc": "IRC (Sperimentale)",
             "match_system_theme": "Usa il tema di sistema",
-            "subheading": "Le impostazioni dell'aspetto hanno effetto solo in questa sessione di %(brand)s.",
             "timeline_image_size": "Dimensione immagine nella linea temporale",
             "use_high_contrast": "Usa contrasto alto"
         },

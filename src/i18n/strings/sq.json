@@ -2241,13 +2241,11 @@
             "custom_theme_success": "Tema u shtua!",
             "custom_theme_url": "URL teme vetjake",
             "font_size": "Madhësi shkronjash",
-            "heading": "Përshtatni dukjen tuaj",
             "image_size_default": "Parazgjedhje",
             "image_size_large": "E madhe",
             "layout_bubbles": "Flluska mesazhesh",
             "layout_irc": "IRC (Eksperimentale)",
             "match_system_theme": "Përputhe me temën e sistemit",
-            "subheading": "Rregullimet e Dukjes prekin vetëm këtë sesion %(brand)s.",
             "timeline_image_size": "Madhësi figure në rrjedhën kohore",
             "use_high_contrast": "Përdor kontrast të lartë"
         },

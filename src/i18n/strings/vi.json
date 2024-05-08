@@ -2114,13 +2114,11 @@
             "custom_theme_success": "Đã thêm chủ đề!",
             "custom_theme_url": "URL chủ đề tùy chỉnh",
             "font_size": "Cỡ chữ",
-            "heading": "Tùy chỉnh diện mạo của bạn",
             "image_size_default": "Mặc định",
             "image_size_large": "Lớn",
             "layout_bubbles": "Bong bóng tin nhắn",
             "layout_irc": "IRC (thử nghiệm)",
             "match_system_theme": "Theo chủ đề hệ thống",
-            "subheading": "Cài đặt Giao diện chỉ ảnh hưởng đến phiên %(brand)s này.",
             "timeline_image_size": "Kích thước hình ảnh trong timeline",
             "use_high_contrast": "Sử dụng độ tương phản cao"
         },

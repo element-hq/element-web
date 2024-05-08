@@ -2347,13 +2347,11 @@
             "custom_theme_success": "Tema ditambahkan!",
             "custom_theme_url": "URL tema kustom",
             "font_size": "Ukuran font",
-            "heading": "Ubah tampilan Anda",
             "image_size_default": "Bawaan",
             "image_size_large": "Besar",
             "layout_bubbles": "Gelembung pesan",
             "layout_irc": "IRC (Eksperimental)",
             "match_system_theme": "Sesuaikan dengan tema sistem",
-            "subheading": "Pengaturan Tampilan hanya ditetapkan di sesi %(brand)s ini.",
             "timeline_image_size": "Ukuran gambar di lini masa",
             "use_high_contrast": "Gunakan kontras tinggi"
         },

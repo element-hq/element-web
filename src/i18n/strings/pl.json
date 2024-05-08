@@ -2406,13 +2406,11 @@
             "custom_theme_url": "Niestandardowy adres URL motywu",
             "font_size": "Rozmiar czcionki",
             "font_size_default": "%(fontSize)s (domyślny)",
-            "heading": "Dostosuj wygląd",
             "image_size_default": "Zwykły",
             "image_size_large": "Duży",
             "layout_bubbles": "Dymki wiadomości",
             "layout_irc": "IRC (eksperymentalny)",
             "match_system_theme": "Dopasuj do motywu systemowego",
-            "subheading": "Ustawienia wyglądu wpływają tylko na tę sesję %(brand)s.",
             "timeline_image_size": "Rozmiar obrazu na osi czasu",
             "use_high_contrast": "Użyj wysokiego kontrastu"
         },

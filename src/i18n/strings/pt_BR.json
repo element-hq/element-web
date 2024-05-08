@@ -1617,13 +1617,11 @@
             "custom_theme_success": "Tema adicionado!",
             "custom_theme_url": "Link do tema personalizado",
             "font_size": "Tamanho da fonte",
-            "heading": "Personalize sua aparência",
             "image_size_default": "Padrão",
             "image_size_large": "Grande",
             "layout_bubbles": "Balões de mensagem",
             "layout_irc": "IRC (experimental)",
             "match_system_theme": "Se adaptar ao tema do sistema",
-            "subheading": "As configurações de aparência afetam apenas esta sessão do %(brand)s.",
             "timeline_image_size": "Tamanho da imagem na linha do tempo",
             "use_high_contrast": "Usar alto contraste"
         },

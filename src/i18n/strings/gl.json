@@ -2027,12 +2027,10 @@
             "custom_theme_success": "Decorado engadido!",
             "custom_theme_url": "URL do decorado personalizado",
             "font_size": "Tamaño da letra",
-            "heading": "Personaliza o aspecto",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",
             "layout_bubbles": "Burbullas con mensaxes",
             "match_system_theme": "Imitar o aspecto do sistema",
-            "subheading": "Os axustes da aparencia só lle afectan a esta sesión %(brand)s.",
             "timeline_image_size": "Tamaño de imaxe na cronoloxía",
             "use_high_contrast": "Usar alto contraste"
         },

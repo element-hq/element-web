@@ -2079,13 +2079,11 @@
             "custom_theme_success": "Teema lisätty!",
             "custom_theme_url": "Mukautettu teeman osoite",
             "font_size": "Fontin koko",
-            "heading": "Mukauta ulkoasua",
             "image_size_default": "Oletus",
             "image_size_large": "Suuri",
             "layout_bubbles": "Viestikuplat",
             "layout_irc": "IRC (kokeellinen)",
             "match_system_theme": "Käytä järjestelmän teemaa",
-            "subheading": "Ulkoasuasetukset vaikuttavat vain tähän %(brand)s-istuntoon.",
             "timeline_image_size": "Kuvan koko aikajanalla",
             "use_high_contrast": "Käytä suurta kontrastia"
         },

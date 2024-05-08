@@ -2315,13 +2315,11 @@
             "custom_theme_success": "已新增佈景主題！",
             "custom_theme_url": "自訂佈景主題網址",
             "font_size": "字型大小",
-            "heading": "自訂您的外觀",
             "image_size_default": "預設",
             "image_size_large": "大",
             "layout_bubbles": "訊息泡泡",
             "layout_irc": "IRC（實驗性）",
             "match_system_theme": "符合系統佈景主題",
-            "subheading": "外觀設定僅會影響此 %(brand)s 工作階段。",
             "timeline_image_size": "時間軸中的圖片大小",
             "use_high_contrast": "使用高對比"
         },

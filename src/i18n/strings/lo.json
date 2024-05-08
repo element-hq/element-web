@@ -1940,13 +1940,11 @@
             "custom_theme_success": "ເພີ່ມຫົວຂໍ້!",
             "custom_theme_url": "ການ ກຳນົດເອງຫົວຂໍ້ URL",
             "font_size": "ຂະໜາດຕົວອັກສອນ",
-            "heading": "ປັບແຕ່ງຮູບລັກສະນະຂອງທ່ານ",
             "image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
             "image_size_large": "ຂະຫນາດໃຫຍ່",
             "layout_bubbles": "ຟອງຂໍ້ຄວາມ",
             "layout_irc": "(ທົດລອງ)IRC",
             "match_system_theme": "ລະບົບຈັບຄູ່ຫົວຂໍ້",
-            "subheading": "ການຕັ້ງຄ່າຮູບລັກສະນະມີຜົນກະທົບພຽງແຕ່ %(brand)s ໃນລະບົບ ນີ້.",
             "timeline_image_size": "ຂະຫນາດຮູບພາບຢູ່ໃນທາມລາຍ",
             "use_high_contrast": "ໃຊ້ຄວາມຄົມຊັດສູງ"
         },

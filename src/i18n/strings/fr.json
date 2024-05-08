@@ -2385,13 +2385,11 @@
             "custom_theme_success": "Thème ajouté !",
             "custom_theme_url": "URL personnalisée pour le thème",
             "font_size": "Taille de la police",
-            "heading": "Personnalisez l’apparence",
             "image_size_default": "Par défaut",
             "image_size_large": "Grande",
             "layout_bubbles": "Message en bulles",
             "layout_irc": "IRC (Expérimental)",
             "match_system_theme": "S’adapter au thème du système",
-            "subheading": "Les paramètres d’apparence affecteront uniquement cette session de %(brand)s.",
             "timeline_image_size": "Taille d’image dans l’historique",
             "use_high_contrast": "Utiliser un contraste élevé"
         },

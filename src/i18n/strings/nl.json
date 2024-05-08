@@ -2022,13 +2022,11 @@
             "custom_theme_success": "Thema toegevoegd!",
             "custom_theme_url": "Aangepaste thema-URL",
             "font_size": "Lettergrootte",
-            "heading": "Weergave aanpassen",
             "image_size_default": "Standaard",
             "image_size_large": "Groot",
             "layout_bubbles": "Berichtenbubbels",
             "layout_irc": "IRC (Experimenteel)",
             "match_system_theme": "Aanpassen aan systeemthema",
-            "subheading": "Weergave-instellingen zijn alleen van toepassing op deze %(brand)s sessie.",
             "timeline_image_size": "Afbeeldingformaat in de tijdlijn",
             "use_high_contrast": "Hoog contrast inschakelen"
         },

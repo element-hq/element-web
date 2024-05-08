@@ -2186,13 +2186,11 @@
             "custom_theme_success": "テーマが追加されました！",
             "custom_theme_url": "ユーザー定義のテーマのURL",
             "font_size": "フォントの大きさ",
-            "heading": "外観のカスタマイズ",
             "image_size_default": "既定値",
             "image_size_large": "大",
             "layout_bubbles": "吹き出し",
             "layout_irc": "IRC（実験的）",
             "match_system_theme": "システムテーマに合わせる",
-            "subheading": "外観の設定はこの%(brand)sのセッションにのみ適用されます。",
             "timeline_image_size": "タイムライン上での画像のサイズ",
             "use_high_contrast": "高コントラストを使用"
         },

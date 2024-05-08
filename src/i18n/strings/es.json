@@ -2191,13 +2191,11 @@
             "custom_theme_success": "¡Se añadió el tema!",
             "custom_theme_url": "URL de tema personalizado",
             "font_size": "Tamaño del texto",
-            "heading": "Personaliza la apariencia",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",
             "layout_bubbles": "Burbujas de mensaje",
             "layout_irc": "IRC (en pruebas)",
             "match_system_theme": "Usar el mismo tema que el sistema",
-            "subheading": "Cambiar las opciones de apariencia solo afecta a esta sesión de %(brand)s.",
             "timeline_image_size": "Tamaño de las imágenes en la línea de tiempo",
             "use_high_contrast": "Usar un modo con contraste alto"
         },

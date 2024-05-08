@@ -2376,13 +2376,11 @@
             "custom_theme_success": "Vzhľad pridaný!",
             "custom_theme_url": "URL adresa vlastného vzhľadu",
             "font_size": "Veľkosť písma",
-            "heading": "Upravte svoj vzhľad",
             "image_size_default": "Predvolené",
             "image_size_large": "Veľký",
             "layout_bubbles": "Správy v bublinách",
             "layout_irc": "IRC (experimentálne)",
             "match_system_theme": "Prispôsobiť sa vzhľadu systému",
-            "subheading": "Nastavenia vzhľadu ovplyvnia len túto reláciu %(brand)s.",
             "timeline_image_size": "Veľkosť obrázku na časovej osi",
             "use_high_contrast": "Použiť vysoký kontrast"
         },

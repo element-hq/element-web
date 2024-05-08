@@ -1926,13 +1926,11 @@
             "custom_theme_success": "Þema bætt við!",
             "custom_theme_url": "Slóð á sérsniðið þema",
             "font_size": "Leturstærð",
-            "heading": "Sérsníddu útlitið þitt",
             "image_size_default": "Sjálfgefið",
             "image_size_large": "Stórt",
             "layout_bubbles": "Skilaboðablöðrur",
             "layout_irc": "IRC (á tilraunastigi)",
             "match_system_theme": "Samsvara þema kerfis",
-            "subheading": "Stillingar útlits hafa einungis áhrif á þessa %(brand)s setu.",
             "timeline_image_size": "Stærð myndar í tímalínunni",
             "use_high_contrast": "Nota mikil birtuskil"
         },

@@ -2372,13 +2372,11 @@
             "custom_theme_success": "Тема добавлена!",
             "custom_theme_url": "Ссылка на стороннюю тему",
             "font_size": "Размер шрифта",
-            "heading": "Настройка внешнего вида",
             "image_size_default": "По умолчанию",
             "image_size_large": "Большой",
             "layout_bubbles": "Пузыри сообщений",
             "layout_irc": "IRC (Экспериментально)",
             "match_system_theme": "Тема системы",
-            "subheading": "Настройки внешнего вида работают только в этом сеансе %(brand)s.",
             "timeline_image_size": "Размер изображения в ленте сообщений",
             "use_high_contrast": "Высокая контрастность"
         },

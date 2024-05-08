@@ -2313,13 +2313,11 @@
             "custom_theme_success": "Тему додано!",
             "custom_theme_url": "Посилання на власну тему",
             "font_size": "Розмір шрифту",
-            "heading": "Налаштування вигляду",
             "image_size_default": "Типовий",
             "image_size_large": "Великі",
             "layout_bubbles": "Бульбашки повідомлень",
             "layout_irc": "IRC (Експериментально)",
             "match_system_theme": "Тема системи",
-            "subheading": "Налаштування вигляду впливають тільки на цей сеанс %(brand)s.",
             "timeline_image_size": "Розмір зображень у стрічці",
             "use_high_contrast": "Висока контрастність"
         },

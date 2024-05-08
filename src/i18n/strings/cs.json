@@ -2397,13 +2397,11 @@
             "custom_theme_url": "URL adresa vlastního vzhledu",
             "font_size": "Velikost písma",
             "font_size_default": "%(fontSize)s (výchozí)",
-            "heading": "Přizpůsobte si vzhled aplikace",
             "image_size_default": "Výchozí",
             "image_size_large": "Velký",
             "layout_bubbles": "Bubliny zpráv",
             "layout_irc": "IRC (experimentální)",
             "match_system_theme": "Nastavit podle vzhledu systému",
-            "subheading": "Nastavení vzhledu působí jen v této relaci programu %(brand)s.",
             "timeline_image_size": "Velikost obrázku na časové ose",
             "use_high_contrast": "Použít vysoký kontrast"
         },

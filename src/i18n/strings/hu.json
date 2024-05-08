@@ -2314,13 +2314,11 @@
             "custom_theme_success": "Téma hozzáadva!",
             "custom_theme_url": "Egyéni téma webcíme",
             "font_size": "Betűméret",
-            "heading": "A megjelenés testreszabása",
             "image_size_default": "Alapértelmezett",
             "image_size_large": "Nagy",
             "layout_bubbles": "Üzenetbuborékok",
             "layout_irc": "IRC (kísérleti)",
             "match_system_theme": "Rendszer témájához megfelelő",
-            "subheading": "A megjelenés beállításai csak erre az %(brand)s munkamenetre lesznek érvényesek.",
             "timeline_image_size": "Képméret az idővonalon",
             "use_high_contrast": "Nagy kontraszt használata"
         },

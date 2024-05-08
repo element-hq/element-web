@@ -2359,13 +2359,11 @@
             "custom_theme_success": "Teema sai lisatud!",
             "custom_theme_url": "Kohandatud teema URL",
             "font_size": "Fontide suurus",
-            "heading": "Kohenda välimust",
             "image_size_default": "Tavaline",
             "image_size_large": "Suur",
             "layout_bubbles": "Jutumullid",
             "layout_irc": "IRC (katseline)",
             "match_system_theme": "Kasuta süsteemset teemat",
-            "subheading": "Välimuse kohendused kehtivad vaid selles %(brand)s'i sessioonis.",
             "timeline_image_size": "Piltide suurus ajajoonel",
             "use_high_contrast": "Kasuta kontrastset välimust"
         },

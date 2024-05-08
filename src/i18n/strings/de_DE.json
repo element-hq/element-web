@@ -2372,13 +2372,11 @@
             "custom_theme_success": "Design hinzugefügt!",
             "custom_theme_url": "URL des selbstdefinierten Designs",
             "font_size": "Schriftgröße",
-            "heading": "Verändere das Erscheinungsbild",
             "image_size_default": "Standard",
             "image_size_large": "Groß",
             "layout_bubbles": "Nachrichtenblasen",
             "layout_irc": "IRC (Experimentell)",
             "match_system_theme": "An Systemdesign anpassen",
-            "subheading": "Die %(brand)s Einstellungen zum Erscheinungsbild wirken sich nur auf diese Sitzung aus.",
             "timeline_image_size": "Bildgröße im Verlauf",
             "use_high_contrast": "Hohen Kontrast verwenden"
         },
