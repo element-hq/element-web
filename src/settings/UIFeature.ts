@@ -34,6 +34,7 @@ export const enum UIFeature {
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
     UnverifiedSessionsToast = "UIFeature.unverifiedSessionsToast",
+    SearchShortcutPreferences = "UIFeature.searchShortcutPreferences",
 }
 
 export enum UIComponent {

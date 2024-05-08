@@ -33,6 +33,7 @@ import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingP
 import SettingsSubsection from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import { UIFeature } from "../../../../../settings/UIFeature";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -170,7 +171,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             },
                         )}
                     >
-                        {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                        {
+                            SettingsStore.getValue(UIFeature.SearchShortcutPreferences) &&
+                            this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)
+                        }
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
