@@ -40,7 +40,7 @@ export const showToast = (deviceIds: Set<string>): void => {
         snoozeBulkUnverifiedDeviceReminder();
     };
 
-    if(SettingsStore.getValue(UIFeature.UnverifiedSessionsToast)) {
+    if (SettingsStore.getValue(UIFeature.UnverifiedSessionsToast)) {
         ToastStore.sharedInstance().addOrReplaceToast({
             key: TOAST_KEY,
             title: _t("encryption|verification|unverified_sessions_toast_title"),

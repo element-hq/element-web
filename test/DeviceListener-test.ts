@@ -411,7 +411,10 @@ describe("DeviceListener", () => {
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
                 jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-                    if (settingName === UIFeature.BulkUnverifiedSessionsReminder || settingName === UIFeature.UnverifiedSessionsToast) {
+                    if (
+                        settingName === UIFeature.BulkUnverifiedSessionsReminder ||
+                        settingName === UIFeature.UnverifiedSessionsToast
+                    ) {
                         return true;
                     }
                     return false;
