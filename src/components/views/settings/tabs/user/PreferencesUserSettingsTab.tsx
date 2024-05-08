@@ -171,10 +171,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             },
                         )}
                     >
-                        {
-                            SettingsStore.getValue(UIFeature.SearchShortcutPreferences) &&
-                            this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)
-                        }
+                        {SettingsStore.getValue(UIFeature.SearchShortcutPreferences) &&
+                            this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|time_heading")}>

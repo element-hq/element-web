@@ -127,7 +127,7 @@ describe("PreferencesUserSettingsTab", () => {
         describe("testing with UIFeature.SearchShortcutPreferences being true or false.", () => {
             beforeEach(() => {
                 jest.clearAllMocks();
-                jest.spyOn(SettingsStore, 'getValueAt').mockImplementation((level, key) => {
+                jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
                     if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
                         return "10";
                     }
@@ -136,7 +136,7 @@ describe("PreferencesUserSettingsTab", () => {
             });
 
             it('renders "Use Ctrl + F to search timeline" when UIFeature.SearchShortcutPreferences is true', () => {
-                jest.spyOn(SettingsStore, 'getValue').mockImplementation((name) => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
                     if (name === "UIFeature.searchShortcutPreferences") {
                         return true;
                     }
@@ -144,11 +144,11 @@ describe("PreferencesUserSettingsTab", () => {
                 });
                 renderTab();
 
-                expect(screen.queryByText('Use Ctrl + F to search timeline')).not.toBeNull();
+                expect(screen.queryByText("Use Ctrl + F to search timeline")).not.toBeNull();
             });
 
             it('does not render "Use Ctrl + F to search timeline" when UIFeature.SearchShortcutPreferences is false', () => {
-                jest.spyOn(SettingsStore, 'getValue').mockImplementation((name) => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
                     if (name === "UIFeature.searchShortcutPreferences") {
                         return false;
                     }
@@ -156,7 +156,7 @@ describe("PreferencesUserSettingsTab", () => {
                 });
                 renderTab();
 
-                expect(screen.queryByText('Use Ctrl + F to search timeline')).toBeNull();
+                expect(screen.queryByText("Use Ctrl + F to search timeline")).toBeNull();
             });
         });
     });
