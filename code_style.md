@@ -224,6 +224,7 @@ Unless otherwise specified, the following applies to all code:
         // ...
     }
     ```
+
 37. Avoid functions whose behaviour / return type varies with different parameter types.
     Multiple return types are fine when appropriate (eg. SDKConfig.get() with a string param which
     returns the type according to the param given) but SDKConfig.get() with no args returning the
