@@ -107,6 +107,40 @@ describe("<RoomSummaryCard />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("renders the room topic in the summary", () => {
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
+        const { container } = getComponent();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("has button to edit topic when expanded", () => {
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
+        const { container, getByText } = getComponent();
+        fireEvent.click(screen.getByText("This is the room's topic."));
+        expect(getByText("Edit")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
     it("opens the search", async () => {
         const onSearchClick = jest.fn();
         const { getByLabelText } = getComponent({

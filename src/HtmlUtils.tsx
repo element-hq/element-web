@@ -461,9 +461,13 @@ export function topicToHtml(
         emojiBodyElements = formatEmojis(topic, false);
     }
 
-    return isFormattedTopic ? (
-        <span ref={ref} dangerouslySetInnerHTML={{ __html: safeTopic }} dir="auto" />
-    ) : (
+    if (isFormattedTopic) {
+        if (!safeTopic) return null;
+        return <span ref={ref} dangerouslySetInnerHTML={{ __html: safeTopic }} dir="auto" />;
+    }
+
+    if (!emojiBodyElements && !topic) return null;
+    return (
         <span ref={ref} dir="auto">
             {emojiBodyElements || topic}
         </span>

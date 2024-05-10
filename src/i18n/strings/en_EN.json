@@ -1821,6 +1821,7 @@
     },
     "right_panel": {
         "add_integrations": "Add widgets, bridges & bots",
+        "add_topic": "Add topic",
         "edit_integrations": "Edit widgets, bridges & bots",
         "export_chat_button": "Export chat",
         "files_button": "Files",
