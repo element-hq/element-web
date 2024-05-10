@@ -224,6 +224,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                         activeTabId={activeTabId}
                         screenName="UserSettings"
                         onChange={setActiveTabId}
+                        responsive={true}
                     />
                 </div>
             </BaseDialog>
