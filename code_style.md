@@ -227,9 +227,9 @@ Unless otherwise specified, the following applies to all code:
 
 37. Avoid functions whose behaviour / return type varies with different parameter types.
     Multiple return types are fine, but the function's fundamental behaviour should not
-    change according its arguments: have two separate functions. For example,SDKConfig.get()
-    with a string param which returns the type according to the param given but SDKConfig.get()
-    with no args returning the whole config object is not: this could just be a separate function.
+    change according its arguments: have two separate functions. For example, `SDKConfig.get()`
+    with a string param which returns the type according to the param given is ok, but `SDKConfig.get()`
+    with no args returning the whole config object would not be: this should just be a separate function.
 
 ## React
 
