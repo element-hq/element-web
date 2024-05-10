@@ -57,6 +57,8 @@ interface SquirrelUpdate {
     updateURL: string;
 }
 
+const LEGACY_PROTOCOL = "element";
+const OIDC_PROTOCOL = "io.element.desktop";
 const SSO_ID_KEY = "element-desktop-ssoid";
 
 const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -377,12 +379,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call("getAvailableSpellCheckLanguages");
     }
 
-    public getSSOCallbackUrl(forOidc = false, fragmentAfterLogin?: string): URL {
-        const url = super.getSSOCallbackUrl(forOidc, fragmentAfterLogin);
-        url.protocol = "element";
-        if (!forOidc) {
-            url.searchParams.set(SSO_ID_KEY, this.ssoID);
-        }
+    public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
+        const url = super.getSSOCallbackUrl(fragmentAfterLogin);
+        url.protocol = LEGACY_PROTOCOL;
+        url.searchParams.set(SSO_ID_KEY, this.ssoID);
         return url;
     }
 
@@ -448,11 +448,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
         const baseMetadata = await super.getOidcClientMetadata();
-        const redirectUri = this.getSSOCallbackUrl(true);
         return {
             ...baseMetadata,
             applicationType: "native",
-            redirectUris: [redirectUri.href],
             // XXX: This should be overridable in config
             clientUri: "https://element.io",
         };
@@ -460,5 +458,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public getOidcClientState(): string {
         return `:${SSO_ID_KEY}:${this.ssoID}`;
+    }
+
+    /**
+     * The URL to return to after a successful OIDC authentication
+     */
+    public getOidcCallbackUrl(): URL {
+        const url = super.getOidcCallbackUrl();
+        url.protocol = OIDC_PROTOCOL;
+        return url;
     }
 }
