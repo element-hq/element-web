@@ -41,7 +41,7 @@ export default defineConfig<TestOptions>({
     outputDir: "playwright/test-results",
     workers: 1,
     retries: process.env.CI ? 2 : 0,
-    reporter: process.env.CI ? "blob" : [["html", { outputFolder: "playwright/html-report" }]],
+    reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     projects: [
         {
             name: "Legacy Crypto",
