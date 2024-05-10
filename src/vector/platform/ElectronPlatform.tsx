@@ -446,13 +446,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return (SdkConfig.get() as unknown as Record<string, string>)["web_base_url"] ?? "https://app.element.io";
     }
 
+    public get defaultOidcClientUri(): string {
+        // Default to element.io as our scheme `io.element.desktop` is within its scope on default MAS policies
+        return "https://element.io";
+    }
+
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
         const baseMetadata = await super.getOidcClientMetadata();
         return {
             ...baseMetadata,
             applicationType: "native",
-            // XXX: This should be overridable in config
-            clientUri: "https://element.io",
         };
     }
 
