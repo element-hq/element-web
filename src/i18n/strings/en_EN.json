@@ -3241,7 +3241,6 @@
             "tooltip_sub": "Click to view edits",
             "tooltip_title": "Edited at %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Encrypted messages before this point are unavailable.",
         "error_no_renderer": "This event could not be displayed",
         "error_rendering_message": "Can't load this message",
         "historical_messages_unavailable": "You can't see earlier messages",
