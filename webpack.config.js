@@ -449,7 +449,7 @@ module.exports = (env, argv) => {
                     loader: "file-loader",
                     type: "javascript/auto",
                     options: {
-                        name: "[name].[hash:7].[ext]",
+                        name: "[name].[fullhash:7].[ext]",
                         outputPath: ".",
                     },
                 },
@@ -461,7 +461,7 @@ module.exports = (env, argv) => {
                     type: "javascript/auto",
                     options: {
                         // We deliberately override the name so it makes sense in debugging
-                        name: "opus-encoderWorker.min.[hash:7].[ext]",
+                        name: "opus-encoderWorker.min.[fullhash:7].[ext]",
                         outputPath: ".",
                     },
                 },
@@ -489,7 +489,7 @@ module.exports = (env, argv) => {
                     type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
                     options: {
                         // We deliberately override the name so it makes sense in debugging
-                        name: "opus-decoderWorker.min.[hash:7].[ext]",
+                        name: "opus-decoderWorker.min.[fullhash:7].[ext]",
                         outputPath: ".",
                     },
                 },
@@ -514,7 +514,7 @@ module.exports = (env, argv) => {
                     type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
                     options: {
                         // We deliberately override the name so it makes sense in debugging
-                        name: "wave-encoderWorker.min.[hash:7].[ext]",
+                        name: "wave-encoderWorker.min.[fullhash:7].[ext]",
                         outputPath: ".",
                     },
                 },
@@ -525,7 +525,7 @@ module.exports = (env, argv) => {
                     type: "javascript/auto",
                     loader: "file-loader",
                     options: {
-                        name: "i18n/[name].[hash:7].[ext]",
+                        name: "i18n/[name].[fullhash:7].[ext]",
                     },
                 },
                 {
@@ -595,10 +595,10 @@ module.exports = (env, argv) => {
                             loader: "file-loader",
                             options: {
                                 esModule: false,
-                                name: "[name].[hash:7].[ext]",
+                                name: "[name].[fullhash:7].[ext]",
                                 outputPath: getAssetOutputPath,
                                 publicPath: function (url, resourcePath) {
-                                    // CSS image usages end up in the `bundles/[hash]` output
+                                    // CSS image usages end up in the `bundles/[fullhash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
                                     const outputPath = getAssetOutputPath(url, resourcePath);
@@ -610,7 +610,7 @@ module.exports = (env, argv) => {
                 },
                 {
                     test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,
-                    // Use a content-based hash in the name so that we can set a long cache
+                    // Use a content-based fullhash in the name so that we can set a long cache
                     // lifetime for assets while still delivering changes quickly.
                     oneOf: [
                         {
@@ -619,10 +619,10 @@ module.exports = (env, argv) => {
                             loader: "file-loader",
                             options: {
                                 esModule: false,
-                                name: "[name].[hash:7].[ext]",
+                                name: "[name].[fullhash:7].[ext]",
                                 outputPath: getAssetOutputPath,
                                 publicPath: function (url, resourcePath) {
-                                    // CSS image usages end up in the `bundles/[hash]` output
+                                    // CSS image usages end up in the `bundles/[fullhash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
                                     const outputPath = getAssetOutputPath(url, resourcePath);
@@ -653,8 +653,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -770,9 +770,9 @@ module.exports = (env, argv) => {
             // directory and symlink it into place - this allows users who loaded
             // an older version of the application to continue to access webpack
             // chunks even after the app is redeployed.
-            filename: "bundles/[hash]/[name].js",
-            chunkFilename: "bundles/[hash]/[name].js",
-            webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+            filename: "bundles/[fullhash]/[name].js",
+            chunkFilename: "bundles/[fullhash]/[name].js",
+            webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
         },
 
         // configuration for the webpack-dev-server
