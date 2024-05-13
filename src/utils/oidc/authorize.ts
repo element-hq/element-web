@@ -40,7 +40,7 @@ export const startOidcLogin = async (
     identityServerUrl?: string,
     isRegistration?: boolean,
 ): Promise<void> => {
-    const redirectUri = PlatformPeg.get()!.getSSOCallbackUrl().href;
+    const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
 
     const nonce = randomString(10);
 

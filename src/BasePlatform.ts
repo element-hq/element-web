@@ -315,7 +315,7 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * The URL to return to after a successful SSO/OIDC authentication
+     * The URL to return to after a successful SSO authentication
      * @param fragmentAfterLogin optional fragment for specific view to return to
      */
     public getSSOCallbackUrl(fragmentAfterLogin = ""): URL {
@@ -438,7 +438,7 @@ export default abstract class BasePlatform {
         return {
             clientName: config.brand,
             clientUri: this.baseUrl,
-            redirectUris: [this.getSSOCallbackUrl().href],
+            redirectUris: [this.getOidcCallbackUrl().href],
             logoUri: new URL("vector-icons/1024.png", this.baseUrl).href,
             applicationType: "web",
             // XXX: We break the spec by not consistently supplying these required fields
@@ -456,5 +456,16 @@ export default abstract class BasePlatform {
      */
     public getOidcClientState(): string {
         return "";
+    }
+
+    /**
+     * The URL to return to after a successful OIDC authentication
+     */
+    public getOidcCallbackUrl(): URL {
+        const url = new URL(window.location.href);
+        // The redirect URL has to exactly match that registered at the OIDC server, so
+        // ensure that the fragment part of the URL is empty.
+        url.hash = "";
+        return url;
     }
 }

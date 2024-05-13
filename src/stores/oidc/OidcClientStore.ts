@@ -169,7 +169,7 @@ export class OidcClientStore {
                 ...metadata,
                 authority: metadata.issuer,
                 signingKeys,
-                redirect_uri: PlatformPeg.get()!.getSSOCallbackUrl().href,
+                redirect_uri: PlatformPeg.get()!.getOidcCallbackUrl().href,
                 client_id: clientId,
             });
         } catch (error) {

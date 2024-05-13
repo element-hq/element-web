@@ -44,7 +44,7 @@ describe("getOidcClientId()", () => {
                 return baseUrl;
             },
         });
-        Object.defineProperty(PlatformPeg.get(), "getSSOCallbackUrl", {
+        Object.defineProperty(PlatformPeg.get(), "getOidcCallbackUrl", {
             value: () => ({
                 href: baseUrl,
             }),

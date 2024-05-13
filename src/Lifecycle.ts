@@ -720,7 +720,7 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
     try {
         const clientId = getStoredOidcClientId();
         const idTokenClaims = getStoredOidcIdTokenClaims();
-        const redirectUri = PlatformPeg.get()!.getSSOCallbackUrl().href;
+        const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
         const deviceId = credentials.deviceId;
         if (!deviceId) {
             throw new Error("Expected deviceId in user credentials.");
