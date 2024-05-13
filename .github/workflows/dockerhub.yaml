@@ -7,6 +7,9 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+
+permissions:
+    id-token: write # needed for signing the images with GitHub OIDC Token
 jobs:
     buildx:
         name: Docker Buildx
@@ -25,6 +28,9 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3
 
             - name: Prepare
               if: matrix.prepare
@@ -58,6 +64,7 @@ jobs:
                       ${{ matrix.flavor }}
 
             - name: Build and push
+              id: build-and-push
               uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
               with:
                   context: .
@@ -65,6 +72,17 @@ jobs:
                   platforms: linux/amd64,linux/arm64
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
+
+            - name: Sign the images with GitHub OIDC Token
+              env:
+                  DIGEST: ${{ steps.build-and-push.outputs.digest }}
+                  TAGS: ${{ steps.meta.outputs.tags }}
+              run: |
+                  images=""
+                  for tag in ${TAGS}; do
+                      images+="${tag}@${DIGEST} "
+                  done
+                  cosign sign --yes ${images}
 
             - name: Update repo description
               if: matrix.variant == 'vanilla'
