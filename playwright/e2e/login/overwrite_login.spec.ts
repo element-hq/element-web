@@ -47,7 +47,6 @@ test.describe("Overwrite login action", () => {
         }, clientCredentials);
 
         // It should be now another user!!
-        const newUserMenu = await app.openUserMenu();
-        await expect(newUserMenu.getByText(bobRegister.userId)).toBeVisible();
+        await expect(page.getByText("Welcome BOB")).toBeVisible();
     });
 });
