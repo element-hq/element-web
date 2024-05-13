@@ -57,8 +57,6 @@ interface SquirrelUpdate {
     updateURL: string;
 }
 
-const LEGACY_PROTOCOL = "element";
-const OIDC_PROTOCOL = "io.element.desktop";
 const SSO_ID_KEY = "element-desktop-ssoid";
 
 const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -381,7 +379,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
-        url.protocol = LEGACY_PROTOCOL;
+        url.protocol = "element";
         url.searchParams.set(SSO_ID_KEY, this.ssoID);
         return url;
     }
@@ -468,7 +466,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
      */
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
-        url.protocol = OIDC_PROTOCOL;
+        url.protocol = "io.element.desktop";
         return url;
     }
 }
