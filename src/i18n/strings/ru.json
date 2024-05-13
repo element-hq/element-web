@@ -3153,7 +3153,6 @@
             "tooltip_sub": "Нажмите для просмотра правок",
             "tooltip_title": "Изменено %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Зашифрованные сообщения до этого момента недоступны.",
         "error_no_renderer": "Не удалось отобразить это событие",
         "error_rendering_message": "Не удалось загрузить это сообщение",
         "historical_messages_unavailable": "Вы не можете просматривать более старые сообщения",

@@ -2828,7 +2828,6 @@
             "tooltip_sub": "点击查看编辑历史",
             "tooltip_title": "编辑于 %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "在此之前的加密消息不可用。",
         "error_no_renderer": "无法显示此事件",
         "error_rendering_message": "无法加载此消息",
         "historical_messages_unavailable": "你不能查看更早的消息",

@@ -3091,7 +3091,6 @@
             "tooltip_sub": "A szerkesztések megtekintéséhez kattints",
             "tooltip_title": "Szerkesztve ekkor: %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "A régebbi titkosított üzenetek elérhetetlenek.",
         "error_no_renderer": "Az eseményt nem lehet megjeleníteni",
         "error_rendering_message": "Ezt az üzenetet nem sikerült betölteni",
         "historical_messages_unavailable": "Nem tekintheted meg a régebbi üzeneteket",

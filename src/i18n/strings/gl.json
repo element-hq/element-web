@@ -2666,7 +2666,6 @@
             "tooltip_sub": "Preme para ver as edicións",
             "tooltip_title": "Editado o %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Non están dispoñibles as mensaxes cifradas anteriores a este punto.",
         "error_no_renderer": "Non se puido amosar este evento",
         "error_rendering_message": "Non se cargou a mensaxe",
         "historical_messages_unavailable": "Non podes ver mensaxes anteriores",

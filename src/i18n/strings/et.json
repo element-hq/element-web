@@ -3126,7 +3126,6 @@
             "tooltip_sub": "Muudatuste nägemiseks klõpsi",
             "tooltip_title": "Muutmise kuupäev %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Enne seda ajahetke saadetud krüptitud sõnumid pole saadaval.",
         "error_no_renderer": "Seda sündmust ei õnnestunud kuvada",
         "error_rendering_message": "Selle sõnumi laadimine ei õnnestu",
         "historical_messages_unavailable": "Sa ei saa näha varasemaid sõnumeid",

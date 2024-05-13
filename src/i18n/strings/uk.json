@@ -3087,7 +3087,6 @@
             "tooltip_sub": "Натисніть, щоб переглянути зміни",
             "tooltip_title": "Змінено %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Зашифровані повідомлення до цієї точки недоступні.",
         "error_no_renderer": "Неможливо показати цю подію",
         "error_rendering_message": "Не вдалося завантажити це повідомлення",
         "historical_messages_unavailable": "Ви не можете переглядати давніші повідомлення",

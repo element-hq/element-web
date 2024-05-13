@@ -3125,7 +3125,6 @@
             "tooltip_sub": "Klik untuk melihat editan",
             "tooltip_title": "Diedit di %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Pesan-pesan terenkripsi sebelum titik ini tidak tersedia.",
         "error_no_renderer": "Peristiwa ini tidak dapat ditampilkan",
         "error_rendering_message": "Tidak dapat memuat pesan ini",
         "historical_messages_unavailable": "Anda tidak dapat melihat pesan-pesan awal",

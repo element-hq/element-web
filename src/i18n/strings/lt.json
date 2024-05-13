@@ -2010,7 +2010,6 @@
             "tooltip_sub": "Spustelėkite kad peržiūrėti pakeitimus",
             "tooltip_title": "Keista %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Iki šio taško užšifruotos žinutės yra neprieinamos.",
         "error_no_renderer": "Nepavyko parodyti šio įvykio",
         "error_rendering_message": "Nepavyko įkelti šios žinutės",
         "historical_messages_unavailable": "Negalite matyti ankstesnių žinučių",

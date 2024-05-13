@@ -2906,7 +2906,6 @@
             "tooltip_sub": "クリックすると変更履歴を表示",
             "tooltip_title": "%(date)sに編集済"
         },
-        "encrypted_historical_messages_unavailable": "これ以前の暗号化されたメッセージは利用できません。",
         "error_no_renderer": "このイベントは表示できませんでした",
         "error_rendering_message": "このメッセージを読み込めません",
         "historical_messages_unavailable": "以前のメッセージは表示できません",

@@ -2835,7 +2835,6 @@
             "tooltip_sub": "Nhấp để xem các chỉnh sửa",
             "tooltip_title": "Đã chỉnh sửa lúc %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Các tin nhắn được mã hóa trước thời điểm này không có sẵn.",
         "error_no_renderer": "Sự kiện này không thể được hiển thị",
         "error_rendering_message": "Không thể tải tin nhắn này",
         "historical_messages_unavailable": "Bạn khồng thể thấy các tin nhắn trước",

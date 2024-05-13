@@ -2686,7 +2686,6 @@
             "tooltip_sub": "Klik om bewerkingen te zien",
             "tooltip_title": "Bewerkt op %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Versleutelde berichten vóór dit punt zijn niet beschikbaar.",
         "error_no_renderer": "Deze gebeurtenis kon niet weergegeven worden",
         "error_rendering_message": "Dit bericht kan niet geladen worden",
         "historical_messages_unavailable": "Je kan eerdere berichten niet zien",

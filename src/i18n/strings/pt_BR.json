@@ -2139,7 +2139,6 @@
             "tooltip_sub": "Clicar para ver edições",
             "tooltip_title": "Editado em %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "As mensagens criptografadas antes deste ponto não estão disponíveis.",
         "error_no_renderer": "Este evento não pôde ser exibido",
         "error_rendering_message": "Não foi possível carregar esta mensagem",
         "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",

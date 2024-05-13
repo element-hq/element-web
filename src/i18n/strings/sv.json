@@ -3175,7 +3175,6 @@
             "tooltip_sub": "Klicka för att visa redigeringar",
             "tooltip_title": "Redigerat vid %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Krypterade meddelanden innan den här tidpunkten är otillgängliga.",
         "error_no_renderer": "Den här händelsen kunde inte visas",
         "error_rendering_message": "Kan inte ladda det här meddelandet",
         "historical_messages_unavailable": "Du kan inte se tidigare meddelanden",

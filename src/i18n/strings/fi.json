@@ -2768,7 +2768,6 @@
             "tooltip_sub": "Napsauta nähdäksesi muokkaukset",
             "tooltip_title": "Muokattu %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Tätä aiemmat salatut viestit eivät ole saatavilla.",
         "error_no_renderer": "Tätä tapahtumaa ei voitu näyttää",
         "error_rendering_message": "Tätä viestiä ei voi ladata",
         "historical_messages_unavailable": "Et voi nähdä aiempia viestejä",

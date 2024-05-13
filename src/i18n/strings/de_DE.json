@@ -3152,7 +3152,6 @@
             "tooltip_sub": "Klicke, um Änderungen anzuzeigen",
             "tooltip_title": "Geändert am %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Vor diesem Zeitpunkt sind keine verschlüsselten Nachrichten verfügbar.",
         "error_no_renderer": "Dieses Ereignis konnte nicht angezeigt werden",
         "error_rendering_message": "Diese Nachricht kann nicht geladen werden",
         "historical_messages_unavailable": "Du kannst keine älteren Nachrichten lesen",

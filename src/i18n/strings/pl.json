@@ -3204,7 +3204,6 @@
             "tooltip_sub": "Kliknij, aby wyświetlić edycje",
             "tooltip_title": "Edytowano o %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Wiadomości szyfrowane przed tym punktem są niedostępne.",
         "error_no_renderer": "Ten event nie może zostać wyświetlony",
         "error_rendering_message": "Nie można wczytać tej wiadomości",
         "historical_messages_unavailable": "Nie możesz widzieć poprzednich wiadomości",

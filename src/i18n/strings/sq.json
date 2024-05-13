@@ -2965,7 +2965,6 @@
             "tooltip_sub": "Klikoni që të shihni përpunime",
             "tooltip_title": "Përpunuar më %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "S’mund të kihen më mesazhe të fshehtëzuar para kësaj pike.",
         "error_no_renderer": "Ky akt s’u shfaq dot",
         "error_rendering_message": "S’ngarkohet dot ky mesazh",
         "historical_messages_unavailable": "S’mund të shihni mesazhe më të hershëm",

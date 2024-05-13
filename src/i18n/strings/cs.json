@@ -3183,7 +3183,6 @@
             "tooltip_sub": "Klikněte pro zobrazení úprav",
             "tooltip_title": "Upraveno %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Šifrované zprávy před tímto bodem nejsou k dispozici.",
         "error_no_renderer": "Tato událost nemohla být zobrazena",
         "error_rendering_message": "Tuto zprávu nelze načíst",
         "historical_messages_unavailable": "Dřívější zprávy nelze zobrazit",

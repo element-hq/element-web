@@ -3078,7 +3078,6 @@
             "tooltip_sub": "點擊以檢視編輯",
             "tooltip_title": "編輯於 %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "在此之前的加密訊息不可用。",
         "error_no_renderer": "此活動無法顯示",
         "error_rendering_message": "無法載入此訊息",
         "historical_messages_unavailable": "您看不到更早的訊息",

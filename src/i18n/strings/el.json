@@ -2508,7 +2508,6 @@
             "tooltip_sub": "Κάντε κλικ για να δείτε τις τροποποιήσεις",
             "tooltip_title": "Τροποποιήθηκε στις %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Κρυπτογραφημένα μηνύματα πριν από αυτό το σημείο δεν είναι διαθέσιμα.",
         "error_no_renderer": "Δεν ήταν δυνατή η εμφάνιση αυτού του συμβάντος",
         "error_rendering_message": "Δεν είναι δυνατή η φόρτωση αυτού του μηνύματος",
         "historical_messages_unavailable": "Δεν μπορείτε να δείτε προηγούμενα μηνύματα",

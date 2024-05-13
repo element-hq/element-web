@@ -3176,7 +3176,6 @@
             "tooltip_sub": "Clicca per vedere le modifiche",
             "tooltip_title": "Modificato il %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "I messaggi cifrati prima di questo punto non sono disponibili.",
         "error_no_renderer": "Questo evento non può essere mostrato",
         "error_rendering_message": "Impossibile caricare questo messaggio",
         "historical_messages_unavailable": "Non puoi vedere i messaggi precedenti",

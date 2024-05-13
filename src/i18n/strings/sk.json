@@ -3156,7 +3156,6 @@
             "tooltip_sub": "Kliknutím zobrazíte úpravy",
             "tooltip_title": "Upravené %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Šifrované správy pred týmto bodom nie sú k dispozícii.",
         "error_no_renderer": "Nie je možné zobraziť túto udalosť",
         "error_rendering_message": "Nemožno načítať túto správu",
         "historical_messages_unavailable": "Nemôžete vidieť predchádzajúce správy",

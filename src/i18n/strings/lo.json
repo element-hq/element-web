@@ -2521,7 +2521,6 @@
             "tooltip_sub": "ກົດເພື່ອເບິ່ງການແກ້ໄຂ",
             "tooltip_title": "ແກ້ໄຂເມື່ອ %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໄວ້ກ່ອນຈຸດນີ້ບໍ່ສາມາດໃຊ້ໄດ້.",
         "error_no_renderer": "ເຫດການນີ້ບໍ່ສາມາດສະແດງໄດ້",
         "error_rendering_message": "ບໍ່ສາມາດໂຫຼດຂໍ້ຄວາມນີ້ໄດ້",
         "historical_messages_unavailable": "ທ່ານບໍ່ສາມາດເຫັນຂໍ້ຄວາມກ່ອນໜ້ານີ້",
