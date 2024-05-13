@@ -17,7 +17,7 @@ import { Icon as ExternalLinkIcon } from "@vector-im/compound-design-tokens/icon
 import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import React, { useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType, IJoinRuleEventContent, JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../../Modal";
 import ShareDialog from "../../dialogs/ShareDialog";
@@ -118,7 +118,7 @@ export const JoinRuleDialog: React.FC<{
                 EventType.RoomJoinRules,
                 {
                     join_rule: newRule,
-                } as IJoinRuleEventContent,
+                },
                 "",
             );
             // Show the dialog for a bit to give the user feedback
