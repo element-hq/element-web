@@ -261,6 +261,47 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
     ```
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
 
+## Native OIDC
+
+Native OIDC support is currently in labs and is subject to change.
+
+Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
+Issuer must have a trailing forward slash. As an example:
+
+```json
+{
+    "oidc_static_clients": {
+        "https://auth.example.com/": {
+            "client_id": "example-client-id"
+        }
+    }
+}
+```
+
+If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.
+The app has sane defaults for the metadata properties below but on stricter policy identity providers they may not pass muster, e.g. `contacts` may be required.
+The following subproperties are available:
+
+1. `client_uri`: This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.
+2. `logo_uri`: Optional URI for the client logo.
+3. `tos_uri`: Optional URI for the client's terms of service.
+4. `policy_uri`: Optional URI for the client's privacy policy.
+5. `contacts`: Optional list of contact emails for the client.
+
+As an example:
+
+```json
+{
+    "oidc_metadata": {
+        "client_uri": "https://example.com",
+        "logo_uri": "https://example.com/logo.png",
+        "tos_uri": "https://example.com/tos",
+        "policy_uri": "https://example.com/policy",
+        "contacts": ["support@example.com"]
+    }
+}
+```
+
 ## VoIP / Jitsi calls
 
 Currently, Element uses Jitsi to offer conference calls in rooms, with an experimental Element Call implementation in the works.
