@@ -98,7 +98,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
 
 async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: string): Promise<void> {
     // only update if we don't know about it, or if the data is stale
-    if (serverSupportMap[clientApiUrl]?.cacheExpires > new Date().getTime()) {
+    if (serverSupportMap[clientApiUrl]?.cacheExpiryTimeMs > new Date().getTime()) {
         return; // up to date
     }
 
@@ -107,7 +107,7 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
 
     serverSupportMap[clientApiUrl] = {
         supportsMSC3916: Boolean(versions?.unstable_features?.["org.matrix.msc3916"]),
-        cacheExpires: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
+        cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
 }
 
