@@ -78,8 +78,8 @@ const SidebarUserSettingsTab: React.FC = () => {
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
         PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", event, 1);
     };
-    
-    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return (<></>);
+
+    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return <></>;
 
     return (
         <SettingsTab>
