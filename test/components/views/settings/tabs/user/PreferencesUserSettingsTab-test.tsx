@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor, screen } from "@testing-library/react";
 
 import PreferencesUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -121,6 +121,42 @@ describe("PreferencesUserSettingsTab", () => {
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "true"));
                 fireEvent.click(toggle);
                 expect(SettingsStore.setValue).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("testing with UIFeature.SearchShortcutPreferences being true or false.", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+                jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
+                    if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
+                        return "10";
+                    }
+                    return "default";
+                });
+            });
+
+            it('renders "Use Ctrl + F to search timeline" when UIFeature.SearchShortcutPreferences is true', () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                    if (name === "UIFeature.searchShortcutPreferences") {
+                        return true;
+                    }
+                    return "default";
+                });
+                renderTab();
+
+                expect(screen.queryByText("Use Ctrl + F to search timeline")).not.toBeNull();
+            });
+
+            it('does not render "Use Ctrl + F to search timeline" when UIFeature.SearchShortcutPreferences is false', () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                    if (name === "UIFeature.searchShortcutPreferences") {
+                        return false;
+                    }
+                    return "default";
+                });
+                renderTab();
+
+                expect(screen.queryByText("Use Ctrl + F to search timeline")).toBeNull();
             });
         });
     });
