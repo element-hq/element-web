@@ -1,0 +1,62 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "im.vector.app.debug",
+            "sha256_cert_fingerprints": [
+                "B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E"
+            ]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "im.vector.app.nightly",
+            "sha256_cert_fingerprints": [
+                "CA:D3:85:16:84:3A:05:CC:EB:00:AB:7B:D3:80:0F:01:BA:8F:E0:4B:38:86:F3:97:D8:F7:9A:1B:C4:54:E4:0F"
+            ]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "im.vector.app",
+            "sha256_cert_fingerprints": [
+                "F3:FF:38:D2:E5:A6:38:84:86:4A:4E:0D:45:C5:3B:19:8E:7E:39:C0:50:5B:D9:63:F5:55:D6:53:2D:EA:BF:5F"
+            ]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "io.element.android.x.debug",
+            "sha256_cert_fingerprints": [
+                "B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E"
+            ]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "io.element.android.x.nightly",
+            "sha256_cert_fingerprints": [
+                "CA:D3:85:16:84:3A:05:CC:EB:00:AB:7B:D3:80:0F:01:BA:8F:E0:4B:38:86:F3:97:D8:F7:9A:1B:C4:54:E4:0F"
+            ]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "io.element.android.x",
+            "sha256_cert_fingerprints": [
+                "C6:DB:9B:9C:8C:BD:D6:5D:16:E8:EC:8C:8B:91:C8:31:B9:EF:C9:5C:BF:98:AE:41:F6:A9:D8:35:15:1A:7E:16"
+            ]
+        }
+    }
+]
