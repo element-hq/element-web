@@ -21,7 +21,7 @@ import { buildAndEncodePickleKey } from "matrix-react-sdk/src/utils/tokens/pickl
 const serverSupportMap: {
     [serverUrl: string]: {
         supportsMSC3916: boolean;
-        cacheExpires: number;
+        cacheExpiryTimeMs: number;
     };
 } = {};
 
@@ -47,7 +47,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
         return; // not important to us
     }
 
-    // Note: ideally we'd keep the request headers and etc, but in practice we can't even see those details.
+    // Note: ideally we'd keep the request headers etc, but in practice we can't even see those details.
     // See https://stackoverflow.com/a/59152482
     let url = event.request.url;
 
