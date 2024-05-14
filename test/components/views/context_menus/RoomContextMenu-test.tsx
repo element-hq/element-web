@@ -93,9 +93,9 @@ describe("RoomContextMenu", () => {
         renderComponent();
         expect(screen.queryByText("Developer tools")).not.toBeInTheDocument();
     });
-//eik
+    //eik
     it("renders files menuitem when feature is on", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
             if (name == UIFeature.RoomSummaryFilesOption) return true;
             return true;
         });
@@ -104,7 +104,7 @@ describe("RoomContextMenu", () => {
         expect(screen.queryByText("Files")).toBeInTheDocument();
     });
     it("does not render files menuitem when feature is off", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
             if (name == UIFeature.RoomSummaryFilesOption) return false;
             return true;
         });
@@ -112,10 +112,12 @@ describe("RoomContextMenu", () => {
         renderComponent();
         expect(screen.queryByText("Files")).not.toBeInTheDocument();
     });
-//eik end
+    //eik end
     describe("when developer mode is enabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => { if (setting == "developerMode") return true;});
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting == "developerMode") return true;
+            });
         });
 
         it("should render the developer tools option", () => {
