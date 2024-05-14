@@ -76,6 +76,7 @@ export const enum UIFeature {
     CustomThemePanel = "UIFeature.customThemePanel",
     VideoMirrorLocalVideo = "UIFeature.videoMirrorLocalVideo",
     VideoConnectionSettings = "UIFeature.videoConnectionSettings",
+    SpacesEnabled = "UIFeature.spacesEnabled",
 }
 
 export enum UIComponent {

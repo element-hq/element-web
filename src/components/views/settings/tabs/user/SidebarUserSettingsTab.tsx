@@ -32,6 +32,7 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
+import { UIFeature } from "../../../../../settings/UIFeature";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
 
@@ -58,6 +59,7 @@ export const onMetaSpaceChangeFactory =
     };
 
 const SidebarUserSettingsTab: React.FC = () => {
+    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return <></>;
     const {
         [MetaSpace.Home]: homeEnabled,
         [MetaSpace.Favourites]: favouritesEnabled,

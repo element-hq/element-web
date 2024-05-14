@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -108,6 +108,10 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders tabs correctly", () => {
+        // jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
+        //     if (name == UIFeature.SpacesEnabled) return true;
+        //     return true;
+        // });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });
@@ -167,5 +171,18 @@ describe("<UserSettingsDialog />", () => {
 
         // unwatches settings on unmount
         expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
+    });
+    it("renders sidebar and access tab when feature is on", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
+
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Sidebar}`)).toBeTruthy();
+        expect(getByTestId(`settings-tab-${UserTab.Security}`)).toBeTruthy();
+    });
+    it("does not render sidebar and security/access tab when feature is off", () => {
+        render(getComponent());
+
+        expect(screen.queryByText("Sidebar")).toBeNull();
+        expect(screen.queryByText("Access")).toBeNull();
     });
 });

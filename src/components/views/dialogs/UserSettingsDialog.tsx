@@ -130,15 +130,17 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 "UserSettingsKeyboard",
             ),
         );
-        tabs.push(
-            new Tab(
-                UserTab.Sidebar,
-                _td("settings|sidebar|title"),
-                "mx_UserSettingsDialog_sidebarIcon",
-                <SidebarUserSettingsTab />,
-                "UserSettingsSidebar",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
+            tabs.push(
+                new Tab(
+                    UserTab.Sidebar,
+                    _td("settings|sidebar|title"),
+                    "mx_UserSettingsDialog_sidebarIcon",
+                    <SidebarUserSettingsTab />,
+                    "UserSettingsSidebar",
+                ),
+            );
+        }
 
         if (SettingsStore.getValue(UIFeature.Voip)) {
             tabs.push(
@@ -152,15 +154,17 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             );
         }
 
-        tabs.push(
-            new Tab(
-                UserTab.Security,
-                _td("room_settings|security|title"),
-                "mx_UserSettingsDialog_securityIcon",
-                <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
-                "UserSettingsSecurityPrivacy",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
+            tabs.push(
+                new Tab(
+                    UserTab.Security,
+                    _td("room_settings|security|title"),
+                    "mx_UserSettingsDialog_securityIcon",
+                    <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                    "UserSettingsSecurityPrivacy",
+                ),
+            );
+        }
         // Show the Labs tab if enabled or if there are any active betas
         if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
             tabs.push(
