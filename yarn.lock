@@ -2585,7 +2585,7 @@
   dependencies:
     htmlparser2 "^8.0.0"
 
-"@types/scheduler@*":
+"@types/scheduler@*", "@types/scheduler@^0.23.0":
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.23.0.tgz#0a6655b3e2708eaabca00b7372fafd7a792a7b09"
   integrity sha512-YIoDCTH3Af6XM5VuwGG/QL/CJqga1Zm3NkU3HZ4ZHK2fRMPYP1VczsTUqtsf43PH/iJNVlPHAo2oWX7BSdB2Hw==
