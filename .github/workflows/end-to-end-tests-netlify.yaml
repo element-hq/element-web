@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
     report:
+        if: github.event.workflow_run.conclusion != 'cancelled'
         name: Report results
         runs-on: ubuntu-latest
         environment: Netlify
