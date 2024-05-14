@@ -59,7 +59,7 @@ export const onMetaSpaceChangeFactory =
     };
 
 const SidebarUserSettingsTab: React.FC = () => {
-    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return <></>;
+    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return (<></>)
     const {
         [MetaSpace.Home]: homeEnabled,
         [MetaSpace.Favourites]: favouritesEnabled,

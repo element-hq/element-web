@@ -49,10 +49,9 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { tagRoom } from "../../../utils/room/tagRoom";
-import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps extends IContextMenuProps {
     room: Room;
