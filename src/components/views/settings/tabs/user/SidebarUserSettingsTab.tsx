@@ -59,7 +59,6 @@ export const onMetaSpaceChangeFactory =
     };
 
 const SidebarUserSettingsTab: React.FC = () => {
-    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return (<></>)
     const {
         [MetaSpace.Home]: homeEnabled,
         [MetaSpace.Favourites]: favouritesEnabled,
@@ -79,6 +78,8 @@ const SidebarUserSettingsTab: React.FC = () => {
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
         PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", event, 1);
     };
+    
+    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return (<></>);
 
     return (
         <SettingsTab>
