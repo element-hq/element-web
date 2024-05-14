@@ -279,6 +279,7 @@ Issuer must have a trailing forward slash. As an example:
 ```
 
 If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.
+The app has sane defaults for the metadata properties below but on stricter policy identity providers they may not pass muster, e.g. `contacts` may be required.
 The following subproperties are available:
 
 1. `client_uri`: This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.
