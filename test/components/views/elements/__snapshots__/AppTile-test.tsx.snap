@@ -116,7 +116,6 @@ exports[`AppTile for a pinned widget should render 1`] = `
             <img
               alt=""
               class="_image_mcap2_50"
-              crossorigin="anonymous"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -202,7 +201,6 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <img
               alt=""
               class="_image_mcap2_50"
-              crossorigin="anonymous"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -355,7 +353,6 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                   <img
                     alt=""
                     class="_image_mcap2_50"
-                    crossorigin="anonymous"
                     data-type="round"
                     height="20px"
                     loading="lazy"
