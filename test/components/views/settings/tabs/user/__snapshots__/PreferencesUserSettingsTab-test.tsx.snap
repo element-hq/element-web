@@ -325,6 +325,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   />
                 </div>
               </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_yrA2ohjWVJIP"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show stickers button
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show stickers button"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_yrA2ohjWVJIP"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -347,7 +374,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_yrA2ohjWVJIP"
+                  for="mx_SettingsFlag_auy1OmnTidX4"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -360,7 +387,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Automatically replace plain text Emoji"
                   class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_yrA2ohjWVJIP"
+                  id="mx_SettingsFlag_auy1OmnTidX4"
                   role="switch"
                   tabindex="0"
                 >
@@ -374,7 +401,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_auy1OmnTidX4"
+                  for="mx_SettingsFlag_ePDS0OpWwAHG"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -398,33 +425,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Enable Markdown"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_auy1OmnTidX4"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_ePDS0OpWwAHG"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Enable Emoji suggestions while typing
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Enable Emoji suggestions while typing"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_ePDS0OpWwAHG"
                   role="switch"
                   tabindex="0"
@@ -444,14 +444,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Use Ctrl + Enter to send a message
+                    Enable Emoji suggestions while typing
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Use Ctrl + Enter to send a message"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  aria-label="Enable Emoji suggestions while typing"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_75JNTNkNU64r"
                   role="switch"
                   tabindex="0"
@@ -471,13 +471,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Surround selected text when typing special characters
+                    Use Ctrl + Enter to send a message
                   </span>
                 </label>
                 <div
                   aria-checked="false"
                   aria-disabled="true"
-                  aria-label="Surround selected text when typing special characters"
+                  aria-label="Use Ctrl + Enter to send a message"
                   class="mx_AccessibleButton mx_ToggleSwitch"
                   id="mx_SettingsFlag_aTLcRsQRlYy7"
                   role="switch"
@@ -498,14 +498,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show stickers button
+                    Surround selected text when typing special characters
                   </span>
                 </label>
                 <div
-                  aria-checked="true"
+                  aria-checked="false"
                   aria-disabled="true"
-                  aria-label="Show stickers button"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  aria-label="Surround selected text when typing special characters"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
                   id="mx_SettingsFlag_5nfv5bOEPN1s"
                   role="switch"
                   tabindex="0"

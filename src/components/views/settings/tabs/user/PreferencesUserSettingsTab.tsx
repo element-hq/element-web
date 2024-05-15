@@ -33,6 +33,7 @@ import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingP
 import SettingsSubsection from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import { UIFeature } from "../../../../../settings/UIFeature";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -59,7 +60,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "MessageComposerInput.suggestEmoji",
         "MessageComposerInput.ctrlEnterToSend",
         "MessageComposerInput.surroundWith",
-        "MessageComposerInput.showStickersButton",
+        // "MessageComposerInput.showStickersButton",
         "MessageComposerInput.insertTrailingColon",
     ];
 
@@ -137,7 +138,16 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     };
 
+    private onAddPresenceSetting = (setting: string): void => {
+        PreferencesUserSettingsTab.PRESENCE_SETTINGS.push(setting);
+    }
+
     public render(): React.ReactNode {
+        console.log("xxx::: ", SettingsStore.getValue(UIFeature.ShowStickersButtonSetting));
+        if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting)) {
+            this.onAddPresenceSetting("MessageComposerInput.showStickersButton");
+        }
+
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
             // Only show the user onboarding setting if the user should see the user onboarding page
