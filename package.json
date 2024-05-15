@@ -133,6 +133,7 @@
         "@types/react-transition-group": "^4.4.9",
         "@types/sanitize-html": "^2.9.5",
         "@types/sdp-transform": "^2.4.9",
+        "@types/semver": "^7.5.8",
         "@types/tar-js": "^0.3.5",
         "@types/ua-parser-js": "^0.7.36",
         "@types/uuid": "^9.0.7",
