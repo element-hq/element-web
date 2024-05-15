@@ -3544,10 +3544,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.1.2.tgz#d8f9ba523700660942722a800c64406216bbbfea"
-  integrity sha512-u/jj8HF8qpX1NU+sh6f/S1B7HUMGcoAGYLH0wc5lVbf6x6elBsYKD0LSa+/8NDPuQqVWMztu76chUsM5slC49w==
+"@vector-im/compound-web@^4.2.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-4.3.0.tgz#7725dec55f738aa0ccaf3c790b57b36955b90d6a"
+  integrity sha512-AH8TdmkteR5VL4HgHq+p3H1NngOUJhkhiHr+hb9H0dB35vWNPhs5R3edyzFZhWMWWsJ2E8jhiXf/NqdGh/k4jg==
   dependencies:
     "@floating-ui/react" "^0.26.9"
     "@floating-ui/react-dom" "^2.0.8"
@@ -8357,25 +8357,6 @@ matrix-js-sdk@32.3.0-rc.0:
     unhomoglyph "^1.0.6"
     uuid "9"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "32.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a716bd076459f48fed967f3eb4158ebdc1f3600"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^4.9.0"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.6.0"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8383,9 +8364,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.99.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d1eab0aa7ed0adfeb16160e3983ca38aa4a6fcfd"
+matrix-react-sdk@3.100.0-rc.0:
+  version "3.100.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.100.0-rc.0.tgz#d787fa529e959b030409e37ee2be47906639534f"
+  integrity sha512-I2BLZTYAep39wtkuY5VV7dvfiD/RWYQM2RMrcv9sPVIbeEaZDcVbzX74qvUw7WmEOziAgeBd9nDCz57dTfP/vA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.20.0"
@@ -8397,7 +8379,7 @@ matrix-mock-request@^2.5.0:
     "@sentry/browser" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^1.2.0"
-    "@vector-im/compound-web" "^4.1.2"
+    "@vector-im/compound-web" "^4.2.0"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8429,7 +8411,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "32.3.0-rc.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
