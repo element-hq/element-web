@@ -92,12 +92,12 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
     /**
      * The tooltip to show on hover or focus.
      */
-    title?: string;
+    title?: TooltipProps["label"];
     /**
      * The caption is a secondary text displayed under the `title` of the tooltip.
      * Only valid when used in conjunction with `title`.
      */
-    caption?: string;
+    caption?: TooltipProps["caption"];
     /**
      * The placement of the tooltip.
      */

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ActionState, ActionTypes, AllActionStates, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
@@ -135,7 +135,7 @@ describe("FormattingButtons", () => {
             const { label } = testCase;
 
             await userEvent.hover(screen.getByLabelText(label));
-            expect(screen.getByText(label)).toBeInTheDocument();
+            await waitFor(() => expect(screen.getByText(label)).toBeInTheDocument());
         }
     });
 
