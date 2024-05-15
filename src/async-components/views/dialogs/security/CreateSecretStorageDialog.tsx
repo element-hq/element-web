@@ -316,9 +316,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     type: "m.id.user",
                     user: MatrixClientPeg.safeGet().getSafeUserId(),
                 },
-                // TODO: Remove `user` once servers support proper UIA
-                // See https://github.com/matrix-org/synapse/issues/5665
-                user: MatrixClientPeg.safeGet().getSafeUserId(),
                 password: this.state.accountPassword,
             });
         } else {

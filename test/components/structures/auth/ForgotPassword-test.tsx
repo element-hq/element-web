@@ -302,10 +302,6 @@ describe("<ForgotPassword>", () => {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },
-                                    threepidCreds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
                                 },
                                 testPassword,
                                 false,
@@ -331,10 +327,6 @@ describe("<ForgotPassword>", () => {
                                 {
                                     type: "m.login.email.identity",
                                     threepid_creds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
-                                    threepidCreds: {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },
@@ -427,10 +419,6 @@ describe("<ForgotPassword>", () => {
                                 {
                                     type: "m.login.email.identity",
                                     threepid_creds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
-                                    threepidCreds: {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },
