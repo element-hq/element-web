@@ -18,9 +18,9 @@ limitations under the License.
 
 import React, { ComponentProps, forwardRef, Ref } from "react";
 
-import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleTooltipButton<T>> & {
+type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleButton<T>> & {
     // whether the context menu is currently open
     isExpanded: boolean;
 };
@@ -31,17 +31,17 @@ export const ContextMenuTooltipButton = forwardRef(function <T extends keyof JSX
     ref: Ref<HTMLElement>,
 ) {
     return (
-        <AccessibleTooltipButton
+        <AccessibleButton
             {...props}
             element={element as keyof JSX.IntrinsicElements}
             onClick={onClick}
             onContextMenu={onContextMenu ?? onClick ?? undefined}
             aria-haspopup={true}
             aria-expanded={isExpanded}
-            forceHide={isExpanded}
+            disableTooltip={isExpanded}
             ref={ref}
         >
             {children}
-        </AccessibleTooltipButton>
+        </AccessibleButton>
     );
 });
