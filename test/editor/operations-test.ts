@@ -101,7 +101,7 @@ describe("editor/operations: formatting operations", () => {
             expect(range.parts[0].text).toBe("world");
             expect(model.serializeParts()).toEqual([{ text: "hello world!", type: "plain" }]);
             formatRange(range, Formatting.Italics);
-            expect(model.serializeParts()).toEqual([{ text: "hello _world_!", type: "plain" }]);
+            expect(model.serializeParts()).toEqual([{ text: "hello *world*!", type: "plain" }]);
         });
 
         describe("escape backticks", () => {
@@ -204,9 +204,9 @@ describe("editor/operations: formatting operations", () => {
             ]);
             formatRange(range, Formatting.Italics);
             expect(model.serializeParts()).toEqual([
-                { text: "hello _there ", type: "plain" },
+                { text: "hello *there ", type: "plain" },
                 { text: "@room", type: "at-room-pill" },
-                { text: ", how are you_ doing?", type: "plain" },
+                { text: ", how are you* doing?", type: "plain" },
             ]);
         });
 
@@ -377,7 +377,7 @@ describe("editor/operations: formatting operations", () => {
 
             // We expect formatting to still happen in the first line as the caret should not jump down
             expect(model.serializeParts()).toEqual([
-                { text: "hello _hello!_", type: "plain" },
+                { text: "hello *hello!*", type: "plain" },
                 SERIALIZED_NEWLINE,
                 { text: "world", type: "plain" },
             ]);
