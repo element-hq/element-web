@@ -61,7 +61,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "MessageComposerInput.ctrlEnterToSend",
         "MessageComposerInput.surroundWith",
         // "MessageComposerInput.showStickersButton",
-        "MessageComposerInput.insertTrailingColon",
+        // "MessageComposerInput.insertTrailingColon",
     ];
 
     private static TIME_SETTINGS = ["showTwelveHourTimestamps", "alwaysShowTimestamps"];
@@ -138,15 +138,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     };
 
-    private onAddPresenceSetting = (setting: string): void => {
-        PreferencesUserSettingsTab.PRESENCE_SETTINGS.push(setting);
-    }
-
     public render(): React.ReactNode {
-        console.log("xxx::: ", SettingsStore.getValue(UIFeature.ShowStickersButtonSetting));
         if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting)) {
-            this.onAddPresenceSetting("MessageComposerInput.showStickersButton");
+            PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.showStickersButton");
+        };
+
+        if (SettingsStore.getValue(UIFeature.InsertTrailingColonSetting)) {
+            PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.insertTrailingColon");
         }
+
+        console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
+        console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
 
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS

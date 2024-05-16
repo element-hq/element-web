@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor, screen, cleanup } from "@testing-library/react";
 
 import PreferencesUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -23,11 +23,20 @@ import { mockPlatformPeg, stubClient } from "../../../../../test-utils";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../src/settings/controllers/MatrixClientBackedController";
+import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
         mockPlatformPeg();
+        // jest.clearAllMocks();
+        console.log("AAA")
     });
+
+    // afterEach(() => {
+    //     cleanup();
+    //     jest.restoreAllMocks();
+    //     console.log("BBB")
+    // });
 
     const renderTab = (): RenderResult => {
         return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
@@ -43,6 +52,7 @@ describe("PreferencesUserSettingsTab", () => {
             stubClient();
             jest.spyOn(SettingsStore, "setValue");
             jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
+
         });
 
         afterEach(() => {
@@ -80,6 +90,7 @@ describe("PreferencesUserSettingsTab", () => {
         describe("with server support", () => {
             beforeEach(() => {
                 mockIsVersionSupported(true);
+                console.log("CCC")
             });
 
             it("can be enabled", async () => {
@@ -104,6 +115,7 @@ describe("PreferencesUserSettingsTab", () => {
         describe("without server support", () => {
             beforeEach(() => {
                 mockIsVersionSupported(false);
+                console.log("DDD")
             });
 
             it("is forcibly enabled", async () => {
@@ -124,4 +136,87 @@ describe("PreferencesUserSettingsTab", () => {
             });
         });
     });
+
+    describe("Feature flag: ShowStickersButtonSetting", () => {
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+            jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
+                if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
+                    return "10";
+                }
+                return "default";
+            });
+            jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
+            console.log("BEFORE")
+        });
+
+        it("ShowStickersButtonSetting: false > should NOT render the 'Show Sticker button' toggle", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                if (settingName === UIFeature.ShowStickersButtonSetting) {
+                    return false;
+                }
+                return "default";
+            });
+
+            renderTab();
+
+            expect(screen.queryByText("Show stickers button")).toBeFalsy();
+        });
+
+        // it("ShowStickersButtonSetting: true > should render the 'Show Sticker button' toggle", () => {
+
+        //     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+        //         if (settingName === UIFeature.ShowStickersButtonSetting) {
+        //             return true;
+        //         }
+        //         return "default";
+        //     });
+
+        //     renderTab();
+
+        //     expect(screen.queryByText("Show stickers button")).toBeTruthy();
+        // });
+    });
+
+
+    // describe("Feature flag: InsertTrailingColonSetting", () => {
+    //     beforeEach(() => {
+    //         stubClient();
+    //         jest.clearAllMocks();
+    //         jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
+    //             if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
+    //                 return "10";
+    //             }
+    //             return "default";
+    //         });
+    //     });
+
+    //     it("InsertTrailingColonSetting: false > should NOT render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
+    //         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+    //             if (settingName === UIFeature.InsertTrailingColonSetting) {
+    //                 return false;
+    //             }
+    //             return "default";
+    //         });
+
+    //         renderTab();
+
+    //         expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeNull();
+    //     });
+
+    //     it("InsertTrailingColonSetting: false > should render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
+    //         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+    //             if (settingName === UIFeature.InsertTrailingColonSetting) {
+    //                 return true;
+    //             }
+    //             return "default";
+    //         });
+
+    //         renderTab();
+
+    //         expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeTruthy();
+    //     });
+    // });
+
 });
