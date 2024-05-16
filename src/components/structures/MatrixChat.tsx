@@ -21,7 +21,6 @@ import {
     EventType,
     HttpApiEvent,
     MatrixClient,
-    MatrixEventEvent,
     MatrixEvent,
     RoomType,
     SyncStateData,
@@ -1592,11 +1591,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // tracked events across sessions.
         // dft.loadTrackedEventHashMap();
 
-        dft.start();
-
-        // When logging out, stop tracking failures and destroy state
-        cli.on(HttpApiEvent.SessionLoggedOut, () => dft.stop());
-        cli.on(MatrixEventEvent.Decrypted, (e) => dft.eventDecrypted(e));
+        dft.start(cli);
 
         cli.on(ClientEvent.Room, (room) => {
             if (cli.isCryptoEnabled()) {
