@@ -55,9 +55,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        // Immediately track the newest failures
-        tracker.trackFailures();
-
         // should track a failure for an event that failed decryption
         expect(count).not.toBe(0);
     });
@@ -84,9 +81,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        // Immediately track the newest failures
-        tracker.trackFailures();
-
         // should track a failure for an event that failed decryption
         expect(count).not.toBe(0);
 
@@ -109,9 +103,6 @@ describe("DecryptionFailureTracker", function () {
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
-
-        // Immediately track the newest failures
-        tracker.trackFailures();
 
         // should track a failure for an event that failed decryption
         expect(count).not.toBe(0);
@@ -151,8 +142,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         expect(propertiesByErrorCode[error1].wasVisibleToUser).toBe(true);
         expect(propertiesByErrorCode[error2].wasVisibleToUser).toBe(true);
         expect(propertiesByErrorCode[error3].wasVisibleToUser).toBe(false);
@@ -181,9 +170,6 @@ describe("DecryptionFailureTracker", function () {
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
-
-        // Immediately track the newest failures
-        tracker.trackFailures();
     });
 
     it(
@@ -213,9 +199,6 @@ describe("DecryptionFailureTracker", function () {
 
             // Pretend "now" is Infinity
             tracker.checkFailures(Infinity);
-
-            // Immediately track the newest failures
-            tracker.trackFailures();
         },
     );
 
@@ -247,11 +230,9 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        // Simulated polling of `trackFailures`, an arbitrary number ( > 2 ) times
-        tracker.trackFailures();
-        tracker.trackFailures();
-        tracker.trackFailures();
-        tracker.trackFailures();
+        // Simulated polling of `checkFailures`, an arbitrary number ( > 2 ) times
+        tracker.checkFailures(Infinity);
+        tracker.checkFailures(Infinity);
 
         // should only track a single failure per event
         expect(count).toBe(2);
@@ -275,12 +256,9 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         // Indicate a second decryption, after having tracked the failure
         eventDecrypted(tracker, decryptedEvent, Date.now());
-
-        tracker.trackFailures();
+        tracker.checkFailures(Infinity);
 
         // should only track a single failure per event
         expect(count).toBe(1);
@@ -308,8 +286,6 @@ describe("DecryptionFailureTracker", function () {
         // NB: This saves to localStorage specific to DFT
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         // Simulate the browser refreshing by destroying tracker and creating a new tracker
         // @ts-ignore access to private constructor
         const secondTracker = new DecryptionFailureTracker(
@@ -323,7 +299,6 @@ describe("DecryptionFailureTracker", function () {
 
         eventDecrypted(secondTracker, decryptedEvent, Date.now());
         secondTracker.checkFailures(Infinity);
-        secondTracker.trackFailures();
 
         // should only track a single failure per event
         expect(count).toBe(1);
@@ -363,8 +338,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         //expect(counts['UnknownError']).toBe(1, 'should track one UnknownError');
         expect(counts["OlmKeysNotSentError"]).toBe(2);
     });
@@ -400,8 +373,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         expect(counts["OlmUnspecifiedError"]).toBe(3);
     });
 
@@ -422,8 +393,6 @@ describe("DecryptionFailureTracker", function () {
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
-
-        tracker.trackFailures();
 
         // should track remapped error code
         expect(counts["XEDNI_EGASSEM_NWONKNU_MLO"]).toBe(1);
@@ -488,8 +457,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         expect(errorCodes).toEqual([
             "OlmKeysNotSentError",
             "OlmIndexError",
@@ -546,8 +513,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         expect(propertiesByErrorCode[error1].timeToDecryptMillis).toEqual(40000);
         expect(propertiesByErrorCode[error2].timeToDecryptMillis).toEqual(-1);
         expect(propertiesByErrorCode[error3].timeToDecryptMillis).toEqual(-1);
@@ -576,14 +541,13 @@ describe("DecryptionFailureTracker", function () {
         // long enough for the timers to fire, but we'll use fake timers just
         // to be safe.
         jest.useFakeTimers();
-        tracker.start(client);
+        await tracker.start(client);
 
         // If the client fails to decrypt, it should get tracked
         const failedDecryption = await createFailedDecryptionEvent();
         client.emit(MatrixEventEvent.Decrypted, failedDecryption);
 
         tracker.checkFailures(Infinity);
-        tracker.trackFailures();
 
         expect(errorCount).toEqual(1);
 
@@ -597,7 +561,6 @@ describe("DecryptionFailureTracker", function () {
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
-        tracker.trackFailures();
 
         expect(errorCount).toEqual(1);
 
@@ -655,8 +618,6 @@ describe("DecryptionFailureTracker", function () {
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
 
-        tracker.trackFailures();
-
         expect(propertiesByErrorCode[error1].isMatrixDotOrg).toBe(true);
         expect(propertiesByErrorCode[error1].cryptoSDK).toEqual("Rust");
 
@@ -677,7 +638,6 @@ describe("DecryptionFailureTracker", function () {
         tracker.addVisibleEvent(anotherFailure);
         eventDecrypted(tracker, anotherFailure, now);
         tracker.checkFailures(Infinity);
-        tracker.trackFailures();
         expect(propertiesByErrorCode[error3].isMatrixDotOrg).toBe(false);
         expect(propertiesByErrorCode[error3].cryptoSDK).toEqual("Legacy");
     });
@@ -707,7 +667,6 @@ describe("DecryptionFailureTracker", function () {
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
-        tracker.trackFailures();
 
         // the time to decrypt should be relative to the first time we failed
         // to decrypt, not the second

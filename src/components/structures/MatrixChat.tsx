@@ -1591,7 +1591,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // tracked events across sessions.
         // dft.loadTrackedEventHashMap();
 
-        dft.start(cli);
+        dft.start(cli).catch((e) => logger.error("Unable to start DecryptionFailureTracker", e));
 
         cli.on(ClientEvent.Room, (room) => {
             if (cli.isCryptoEnabled()) {
