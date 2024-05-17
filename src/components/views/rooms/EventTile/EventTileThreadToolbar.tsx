@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 
-import { RovingAccessibleTooltipButton } from "../../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { Icon as LinkIcon } from "../../../../../res/img/element-icons/link.svg";
@@ -32,22 +32,22 @@ export function EventTileThreadToolbar({
 }): JSX.Element {
     return (
         <Toolbar className="mx_MessageActionBar" aria-label={_t("timeline|mab|label")} aria-live="off">
-            <RovingAccessibleTooltipButton
+            <RovingAccessibleButton
                 className="mx_MessageActionBar_iconButton"
                 onClick={viewInRoom}
                 title={_t("timeline|mab|view_in_room")}
                 key="view_in_room"
             >
                 <ViewInRoomIcon />
-            </RovingAccessibleTooltipButton>
-            <RovingAccessibleTooltipButton
+            </RovingAccessibleButton>
+            <RovingAccessibleButton
                 className="mx_MessageActionBar_iconButton"
                 onClick={copyLinkToThread}
                 title={_t("timeline|mab|copy_link_thread")}
                 key="copy_link_to_thread"
             >
                 <LinkIcon />
-            </RovingAccessibleTooltipButton>
+            </RovingAccessibleButton>
         </Toolbar>
     );
 }

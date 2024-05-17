@@ -18,7 +18,7 @@ import React, { createRef } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 
 export enum Formatting {
@@ -131,7 +131,7 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
         // element="button" and type="button" are necessary for the buttons to work on WebKit,
         // otherwise the text is deselected before onClick can ever be called
         return (
-            <RovingAccessibleTooltipButton
+            <RovingAccessibleButton
                 element="button"
                 type="button"
                 onClick={this.props.onClick}

@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import { RovingAccessibleButton, RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -73,15 +73,15 @@ export default function ExtraTile({
     );
     if (isMinimized) nameContainer = null;
 
-    const Button = isMinimized ? RovingAccessibleTooltipButton : RovingAccessibleButton;
     return (
-        <Button
+        <RovingAccessibleButton
             className={classes}
             onMouseEnter={onMouseOver}
             onMouseLeave={onMouseLeave}
             onClick={onClick}
             role="treeitem"
-            title={isMinimized ? name : undefined}
+            title={name}
+            disableTooltip={!isMinimized}
         >
             <div className="mx_RoomTile_avatarContainer">{avatar}</div>
             <div className="mx_RoomTile_details">
@@ -90,6 +90,6 @@ export default function ExtraTile({
                     <div className="mx_RoomTile_badgeContainer">{badge}</div>
                 </div>
             </div>
-        </Button>
+        </RovingAccessibleButton>
     );
 }
