@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmailIdentityAuthEntry/> should render 1`] = `
+<div>
+  <div
+    class="mx_InteractiveAuthEntryComponents_emailWrapper"
+  >
+    <p>
+      <span>
+        To create your account, open the link in the email we just sent to 
+        <b>
+          alice@example.xyz
+        </b>
+        .
+      </span>
+    </p>
+    <p
+      class="secondary"
+    >
+      <span>
+        Did not receive it? 
+        <div
+          aria-label="Resend"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Resend it
+        </div>
+      </span>
+    </p>
+  </div>
+</div>
+`;

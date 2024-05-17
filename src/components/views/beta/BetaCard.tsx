@@ -27,7 +27,6 @@ import SdkConfig from "../../../SdkConfig";
 import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { shouldShowFeedback } from "../../../utils/Feedback";
 
 // XXX: Keep this around for re-use in future Betas
@@ -50,19 +49,15 @@ export const BetaPill: React.FC<IBetaPillProps> = ({
 }) => {
     if (onClick) {
         return (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_BetaCard_betaPill"
-                title={`${tooltipTitle} ${tooltipCaption}`}
-                tooltip={
-                    <div>
-                        <div className="mx_Tooltip_title">{tooltipTitle}</div>
-                        <div className="mx_Tooltip_sub">{tooltipCaption}</div>
-                    </div>
-                }
+                aria-label={`${tooltipTitle} ${tooltipCaption}`}
+                title={tooltipTitle}
+                caption={tooltipCaption}
                 onClick={onClick}
             >
                 {_t("common|beta")}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
         );
     }
 
