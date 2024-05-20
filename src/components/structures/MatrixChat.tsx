@@ -23,8 +23,8 @@ import {
     MatrixClient,
     MatrixEvent,
     RoomType,
-    SyncStateData,
     SyncState,
+    SyncStateData,
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
@@ -128,7 +128,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { UseCaseSelection } from "../views/elements/UseCaseSelection";
 import { ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { SdkContextClass, SDKContext } from "../../contexts/SDKContext";
+import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
 import { cleanUpBroadcasts, VoiceBroadcastResumer } from "../../voice-broadcast";
 import GenericToast from "../views/toasts/GenericToast";
@@ -1585,13 +1585,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             );
         });
 
-        const dft = DecryptionFailureTracker.instance;
-
-        // Shelved for later date when we have time to think about persisting history of
-        // tracked events across sessions.
-        // dft.loadTrackedEventHashMap();
-
-        dft.start(cli).catch((e) => logger.error("Unable to start DecryptionFailureTracker", e));
+        DecryptionFailureTracker.instance
+            .start(cli)
+            .catch((e) => logger.error("Unable to start DecryptionFailureTracker", e));
 
         cli.on(ClientEvent.Room, (room) => {
             if (cli.isCryptoEnabled()) {
