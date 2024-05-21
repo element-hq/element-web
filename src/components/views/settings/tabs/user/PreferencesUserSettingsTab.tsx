@@ -78,14 +78,14 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "showTypingNotifications",
         "showRedactions",
         "showReadReceipts",
-        // "showJoinLeaves",
         "showDisplaynameChanges",
-        "showChatEffects",
         "showAvatarChanges",
         "Pill.shouldShowPillAvatar",
         "TextualBody.enableBigEmoji",
         "scrollToBottomOnMessageSent",
         "useOnlyCurrentProfiles",
+        // "showJoinLeaves",
+        // "showChatEffects",
     ];
 
     private static ROOM_DIRECTORY_SETTINGS = ["SpotlightSearch.showNsfwPublicRooms"];
@@ -139,8 +139,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     public render(): React.ReactNode {
-        console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
-        console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
+        // console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
+        // console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
+        console.log("XXX3: ", PreferencesUserSettingsTab.TIMELINE_SETTINGS)
 
         if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting) && !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.showStickersButton")) {
             PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.showStickersButton");
@@ -154,6 +155,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showJoinLeaves");
         }
 
+        if(SettingsStore.getValue(UIFeature.ShowChatEffectSetting) && !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showChatEffects")) {
+            PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showChatEffects");
+        }
 
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS

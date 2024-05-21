@@ -41,6 +41,9 @@ describe("PreferencesUserSettingsTab", () => {
                 case UIFeature.ShowJoinLeavesSetting:
                     return false;
 
+                case UIFeature.ShowChatEffectSetting:
+                    return false;
+
                 default:
                     return "default";
             }
@@ -87,6 +90,9 @@ describe("PreferencesUserSettingsTab", () => {
                         case UIFeature.ShowJoinLeavesSetting:
                             return false;
 
+                        case UIFeature.ShowChatEffectSetting:
+                            return false;
+
                         default:
                             return "default";
                     }
@@ -117,6 +123,9 @@ describe("PreferencesUserSettingsTab", () => {
                             return true;
 
                         case UIFeature.ShowJoinLeavesSetting:
+                            return false;
+
+                        case UIFeature.ShowChatEffectSetting:
                             return false;
 
                         default:
@@ -151,6 +160,9 @@ describe("PreferencesUserSettingsTab", () => {
                         case UIFeature.ShowJoinLeavesSetting:
                             return true;
 
+                        case UIFeature.ShowChatEffectSetting:
+                            return false;
+
                         default:
                             return "default";
                     }
@@ -158,6 +170,41 @@ describe("PreferencesUserSettingsTab", () => {
 
                 renderTab();
                 expect(screen.queryByText("Show join/leave messages (invites/removes/bans unaffected)")).toBeTruthy();
+            });
+        });
+
+        describe("Feature flag: ShowChatEffectSetting", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+            });
+
+            it("ShowChatEffectSetting: false > should NOT render the 'Show chat effects (animations when receiving e.g. confetti)' toggle", () => {
+                renderTab();
+                expect(screen.queryByText("Show chat effects (animations when receiving e.g. confetti)")).toBeNull();
+            });
+
+            it("ShowChatEffectSetting: true > should render the 'Show chat effects (animations when receiving e.g. confetti)' toggle", () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                    switch (settingName) {
+                        case UIFeature.ShowStickersButtonSetting:
+                            return false;
+
+                        case UIFeature.InsertTrailingColonSetting:
+                            return false;
+
+                        case UIFeature.ShowJoinLeavesSetting:
+                            return false;
+
+                        case UIFeature.ShowChatEffectSetting:
+                            return true;
+
+                        default:
+                            return "default";
+                    }
+                });
+
+                renderTab();
+                expect(screen.queryByText("Show chat effects (animations when receiving e.g. confetti)")).toBeTruthy();
             });
         });
     });
@@ -251,5 +298,4 @@ describe("PreferencesUserSettingsTab", () => {
             });
         });
     });
-
 });

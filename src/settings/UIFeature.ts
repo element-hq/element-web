@@ -36,6 +36,7 @@ export const enum UIFeature {
     ShowStickersButtonSetting = "UIFeature.showStickersButtonSetting",
     InsertTrailingColonSetting = "UIFeature.insertTrailingColonSetting",
     ShowJoinLeavesSetting = "UIFeature.showJoinLeavesSetting",
+    ShowChatEffectSetting = "UIFeature.showChatEffectSetting",
 }
 
 export enum UIComponent {
