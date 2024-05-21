@@ -138,26 +138,38 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     };
 
-    public render(): React.ReactNode {
-        // console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
-        // console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
-        console.log("XXX3: ", PreferencesUserSettingsTab.TIMELINE_SETTINGS)
-
-        if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting) && !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.showStickersButton")) {
+    private addFeatureFlagSettings(): void {
+        if (
+            SettingsStore.getValue(UIFeature.ShowStickersButtonSetting) &&
+            !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.showStickersButton")
+        ) {
             PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.showStickersButton");
-        };
+        }
 
-        if (SettingsStore.getValue(UIFeature.InsertTrailingColonSetting) && !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.insertTrailingColon")) {
+        if (
+            SettingsStore.getValue(UIFeature.InsertTrailingColonSetting) &&
+            !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.insertTrailingColon")
+        ) {
             PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.insertTrailingColon");
         }
 
-        if(SettingsStore.getValue(UIFeature.ShowJoinLeavesSetting) && !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showJoinLeaves")) {
+        if (
+            SettingsStore.getValue(UIFeature.ShowJoinLeavesSetting) &&
+            !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showJoinLeaves")
+        ) {
             PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showJoinLeaves");
         }
 
-        if(SettingsStore.getValue(UIFeature.ShowChatEffectSetting) && !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showChatEffects")) {
+        if (
+            SettingsStore.getValue(UIFeature.ShowChatEffectSetting) &&
+            !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showChatEffects")
+        ) {
             PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showChatEffects");
         }
+    }
+
+    public render(): React.ReactNode {
+        this.addFeatureFlagSettings();
 
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, waitFor, screen, cleanup } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor, screen } from "@testing-library/react";
 
 import PreferencesUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -67,7 +67,6 @@ describe("PreferencesUserSettingsTab", () => {
     });
 
     describe("Feature flag tests for PreferencesUserSettingsTab", () => {
-
         describe("Feature flag: ShowStickersButtonSetting", () => {
             beforeEach(() => {
                 jest.clearAllMocks();
@@ -110,7 +109,9 @@ describe("PreferencesUserSettingsTab", () => {
 
             it("InsertTrailingColonSetting: false > should NOT render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
                 renderTab();
-                expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeNull();
+                expect(
+                    screen.queryByText("Insert a trailing colon after user mentions at the start of a message"),
+                ).toBeNull();
             });
 
             it("InsertTrailingColonSetting: true > should render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
@@ -134,7 +135,9 @@ describe("PreferencesUserSettingsTab", () => {
                 });
 
                 renderTab();
-                expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeTruthy();
+                expect(
+                    screen.queryByText("Insert a trailing colon after user mentions at the start of a message"),
+                ).toBeTruthy();
             });
         });
 
@@ -214,7 +217,6 @@ describe("PreferencesUserSettingsTab", () => {
             stubClient();
             jest.spyOn(SettingsStore, "setValue");
             jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
-
         });
 
         afterEach(() => {
@@ -252,7 +254,6 @@ describe("PreferencesUserSettingsTab", () => {
         describe("with server support", () => {
             beforeEach(() => {
                 mockIsVersionSupported(true);
-                console.log("CCC")
             });
 
             it("can be enabled", async () => {
@@ -277,7 +278,6 @@ describe("PreferencesUserSettingsTab", () => {
         describe("without server support", () => {
             beforeEach(() => {
                 mockIsVersionSupported(false);
-                console.log("DDD")
             });
 
             it("is forcibly enabled", async () => {
