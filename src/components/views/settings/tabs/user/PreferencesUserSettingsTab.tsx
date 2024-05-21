@@ -78,7 +78,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "showTypingNotifications",
         "showRedactions",
         "showReadReceipts",
-        "showJoinLeaves",
+        // "showJoinLeaves",
         "showDisplaynameChanges",
         "showChatEffects",
         "showAvatarChanges",
@@ -139,16 +139,21 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     public render(): React.ReactNode {
-        if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting)) {
+        console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
+        console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
+
+        if (SettingsStore.getValue(UIFeature.ShowStickersButtonSetting) && !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.showStickersButton")) {
             PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.showStickersButton");
         };
 
-        if (SettingsStore.getValue(UIFeature.InsertTrailingColonSetting)) {
+        if (SettingsStore.getValue(UIFeature.InsertTrailingColonSetting) && !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.insertTrailingColon")) {
             PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.insertTrailingColon");
         }
 
-        console.log("XXX1: ", SettingsStore.getValue(UIFeature.InsertTrailingColonSetting))
-        console.log("XXX2: ", PreferencesUserSettingsTab.COMPOSER_SETTINGS)
+        if(SettingsStore.getValue(UIFeature.ShowJoinLeavesSetting) && !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showJoinLeaves")) {
+            PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showJoinLeaves");
+        }
+
 
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS

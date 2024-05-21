@@ -28,15 +28,31 @@ import { UIFeature } from "../../../../../../src/settings/UIFeature";
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
         mockPlatformPeg();
-        // jest.clearAllMocks();
-        console.log("AAA")
-    });
 
-    // afterEach(() => {
-    //     cleanup();
-    //     jest.restoreAllMocks();
-    //     console.log("BBB")
-    // });
+        // NOTE: keep updated with new feature flags you intend to test further down.
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+            switch (settingName) {
+                case UIFeature.ShowStickersButtonSetting:
+                    return false;
+
+                case UIFeature.InsertTrailingColonSetting:
+                    return false;
+
+                case UIFeature.ShowJoinLeavesSetting:
+                    return false;
+
+                default:
+                    return "default";
+            }
+        });
+
+        jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
+            if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
+                return "10";
+            }
+            return "default";
+        });
+    });
 
     const renderTab = (): RenderResult => {
         return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
@@ -45,6 +61,105 @@ describe("PreferencesUserSettingsTab", () => {
     it("should render", () => {
         const { asFragment } = renderTab();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("Feature flag tests for PreferencesUserSettingsTab", () => {
+
+        describe("Feature flag: ShowStickersButtonSetting", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+            });
+
+            it("ShowStickersButtonSetting: false > should NOT render the 'Show Sticker button' toggle", () => {
+                renderTab();
+                expect(screen.queryByText("Show stickers button")).toBeFalsy();
+            });
+
+            it("ShowStickersButtonSetting: true > should render the 'Show Sticker button' toggle", () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                    switch (settingName) {
+                        case UIFeature.ShowStickersButtonSetting:
+                            return true;
+
+                        case UIFeature.InsertTrailingColonSetting:
+                            return false;
+
+                        case UIFeature.ShowJoinLeavesSetting:
+                            return false;
+
+                        default:
+                            return "default";
+                    }
+                });
+
+                renderTab();
+                expect(screen.queryByText("Show stickers button")).toBeTruthy();
+            });
+        });
+
+        describe("Feature flag: InsertTrailingColonSetting", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+            });
+
+            it("InsertTrailingColonSetting: false > should NOT render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
+                renderTab();
+                expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeNull();
+            });
+
+            it("InsertTrailingColonSetting: true > should render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                    switch (settingName) {
+                        case UIFeature.ShowStickersButtonSetting:
+                            return false;
+
+                        case UIFeature.InsertTrailingColonSetting:
+                            return true;
+
+                        case UIFeature.ShowJoinLeavesSetting:
+                            return false;
+
+                        default:
+                            return "default";
+                    }
+                });
+
+                renderTab();
+                expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeTruthy();
+            });
+        });
+
+        describe("Feature flag: ShowJoinLeavesSetting", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+            });
+
+            it("ShowJoinLeavesSetting: false > should NOT render the 'Show join/leave messages (invites/removes/bans unaffected)' toggle", () => {
+                renderTab();
+                expect(screen.queryByText("Show join/leave messages (invites/removes/bans unaffected)")).toBeNull();
+            });
+
+            it("InsertTrailingColonSetting: true > should render the 'Show join/leave messages (invites/removes/bans unaffected)' toggle", () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                    switch (settingName) {
+                        case UIFeature.ShowStickersButtonSetting:
+                            return false;
+
+                        case UIFeature.InsertTrailingColonSetting:
+                            return false;
+
+                        case UIFeature.ShowJoinLeavesSetting:
+                            return true;
+
+                        default:
+                            return "default";
+                    }
+                });
+
+                renderTab();
+                expect(screen.queryByText("Show join/leave messages (invites/removes/bans unaffected)")).toBeTruthy();
+            });
+        });
     });
 
     describe("send read receipts", () => {
@@ -136,87 +251,5 @@ describe("PreferencesUserSettingsTab", () => {
             });
         });
     });
-
-    describe("Feature flag: ShowStickersButtonSetting", () => {
-
-        beforeEach(() => {
-            jest.clearAllMocks();
-            jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
-                if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
-                    return "10";
-                }
-                return "default";
-            });
-            jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
-            console.log("BEFORE")
-        });
-
-        it("ShowStickersButtonSetting: false > should NOT render the 'Show Sticker button' toggle", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-                if (settingName === UIFeature.ShowStickersButtonSetting) {
-                    return false;
-                }
-                return "default";
-            });
-
-            renderTab();
-
-            expect(screen.queryByText("Show stickers button")).toBeFalsy();
-        });
-
-        // it("ShowStickersButtonSetting: true > should render the 'Show Sticker button' toggle", () => {
-
-        //     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-        //         if (settingName === UIFeature.ShowStickersButtonSetting) {
-        //             return true;
-        //         }
-        //         return "default";
-        //     });
-
-        //     renderTab();
-
-        //     expect(screen.queryByText("Show stickers button")).toBeTruthy();
-        // });
-    });
-
-
-    // describe("Feature flag: InsertTrailingColonSetting", () => {
-    //     beforeEach(() => {
-    //         stubClient();
-    //         jest.clearAllMocks();
-    //         jest.spyOn(SettingsStore, "getValueAt").mockImplementation((level, key) => {
-    //             if (level === SettingLevel.DEVICE && key === "autocompleteDelay") {
-    //                 return "10";
-    //             }
-    //             return "default";
-    //         });
-    //     });
-
-    //     it("InsertTrailingColonSetting: false > should NOT render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
-    //         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-    //             if (settingName === UIFeature.InsertTrailingColonSetting) {
-    //                 return false;
-    //             }
-    //             return "default";
-    //         });
-
-    //         renderTab();
-
-    //         expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeNull();
-    //     });
-
-    //     it("InsertTrailingColonSetting: false > should render the 'Insert a trailing colon after user mentions at the start of a message' toggle", () => {
-    //         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-    //             if (settingName === UIFeature.InsertTrailingColonSetting) {
-    //                 return true;
-    //             }
-    //             return "default";
-    //         });
-
-    //         renderTab();
-
-    //         expect(screen.queryByText("Insert a trailing colon after user mentions at the start of a message")).toBeTruthy();
-    //     });
-    // });
 
 });
