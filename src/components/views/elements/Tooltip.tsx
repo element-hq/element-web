@@ -57,6 +57,9 @@ export interface ITooltipProps {
 
 type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "transform" | "left">>;
 
+/**
+ * @deprecated Use [compound tooltip](https://element-hq.github.io/compound-web/?path=/docs/tooltip--docs) instead
+ */
 export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
     private static container: HTMLElement;
     private parent: Element | null = null;
