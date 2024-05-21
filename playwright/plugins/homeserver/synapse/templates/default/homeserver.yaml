@@ -96,3 +96,9 @@ oidc_providers:
 background_updates:
     min_batch_size: 100000
     sleep_duration_ms: 100000
+
+experimental_features:
+    # Needed for e2e/crypto/crypto.spec.ts > Cryptography > decryption failure
+    # messages > non-joined historical messages.
+    # Can be removed after Synapse enables it by default
+    msc4115_membership_on_events: true

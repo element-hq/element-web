@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IEncryptedFile, MsgType } from "matrix-js-sdk/src/matrix";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { MsgType } from "matrix-js-sdk/src/matrix";
+import { EncryptedFile, RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 /**
  * @param {string} mxc MXC URL of the file
@@ -23,14 +23,14 @@ import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
  * @param {number} duration Duration in milliseconds
  * @param {number} size
  * @param {number[]} [waveform]
- * @param {IEncryptedFile} [file] Encrypted file
+ * @param {EncryptedFile} [file] Encrypted file
  */
 export const createVoiceMessageContent = (
     mxc: string | undefined,
     mimetype: string,
     duration: number,
     size: number,
-    file?: IEncryptedFile,
+    file?: EncryptedFile,
     waveform?: number[],
 ): RoomMessageEventContent => {
     return {

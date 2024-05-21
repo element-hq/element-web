@@ -32,7 +32,8 @@ import { ExtendedDevice } from "../../devices/types";
 import { deleteDevicesWithInteractiveAuth } from "../../devices/deleteDevices";
 import SettingsTab from "../SettingsTab";
 import LoginWithQRSection from "../../devices/LoginWithQRSection";
-import LoginWithQR, { Mode } from "../../../auth/LoginWithQR";
+import LoginWithQR from "../../../auth/LoginWithQR";
+import { Mode } from "../../../auth/LoginWithQR-types";
 import { useAsyncMemo } from "../../../../../hooks/useAsyncMemo";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import { FilterVariation } from "../../devices/filter";
@@ -150,6 +151,7 @@ const useSignOut = (
 const SessionManagerTab: React.FC = () => {
     const {
         devices,
+        dehydratedDeviceId,
         pushers,
         localNotificationSettings,
         currentDeviceId,
@@ -208,6 +210,9 @@ const SessionManagerTab: React.FC = () => {
     };
 
     const { [currentDeviceId]: currentDevice, ...otherDevices } = devices;
+    if (dehydratedDeviceId && otherDevices[dehydratedDeviceId]?.isVerified) {
+        delete otherDevices[dehydratedDeviceId];
+    }
     const otherSessionsCount = Object.keys(otherDevices).length;
     const shouldShowOtherSessions = otherSessionsCount > 0;
 
@@ -279,7 +284,13 @@ const SessionManagerTab: React.FC = () => {
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("settings|sessions|title")}>
+            <SettingsSection>
+                <LoginWithQRSection
+                    onShowQr={onShowQrClicked}
+                    versions={clientVersions}
+                    capabilities={capabilities}
+                    wellKnown={wellKnown}
+                />
                 <SecurityRecommendations
                     devices={devices}
                     goToFilteredList={onGoToFilteredList}
@@ -333,12 +344,6 @@ const SessionManagerTab: React.FC = () => {
                         />
                     </SettingsSubsection>
                 )}
-                <LoginWithQRSection
-                    onShowQr={onShowQrClicked}
-                    versions={clientVersions}
-                    capabilities={capabilities}
-                    wellKnown={wellKnown}
-                />
             </SettingsSection>
         </SettingsTab>
     );

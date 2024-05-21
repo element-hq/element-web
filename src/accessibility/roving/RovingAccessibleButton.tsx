@@ -34,12 +34,14 @@ export const RovingAccessibleButton = <T extends keyof JSX.IntrinsicElements>({
     onFocus,
     onMouseOver,
     focusOnMouseOver,
+    element,
     ...props
 }: Props<T>): JSX.Element => {
     const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
     return (
         <AccessibleButton
             {...props}
+            element={element as keyof JSX.IntrinsicElements}
             onFocus={(event: React.FocusEvent) => {
                 onFocusInternal();
                 onFocus?.(event);

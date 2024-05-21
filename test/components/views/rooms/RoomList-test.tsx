@@ -20,7 +20,6 @@ import { cleanup, queryByRole, render, screen, within } from "@testing-library/r
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
@@ -56,18 +55,16 @@ describe("RoomList", () => {
 
     function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
         return (
-            <TooltipProvider>
-                <RoomList
-                    onKeyDown={jest.fn()}
-                    onFocus={jest.fn()}
-                    onBlur={jest.fn()}
-                    onResize={jest.fn()}
-                    resizeNotifier={new ResizeNotifier()}
-                    isMinimized={false}
-                    activeSpace={MetaSpace.Home}
-                    {...props}
-                />
-            </TooltipProvider>
+            <RoomList
+                onKeyDown={jest.fn()}
+                onFocus={jest.fn()}
+                onBlur={jest.fn()}
+                onResize={jest.fn()}
+                resizeNotifier={new ResizeNotifier()}
+                isMinimized={false}
+                activeSpace={MetaSpace.Home}
+                {...props}
+            />
         );
     }
 

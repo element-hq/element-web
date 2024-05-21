@@ -12,7 +12,6 @@ exports[`<UserMenu> <UserMenu> when video broadcast when rendered should render 
       class="mx_AccessibleButton mx_UserMenu_contextMenuButton"
       role="button"
       tabindex="0"
-      title="User menu"
     >
       <div
         class="mx_UserMenu_userAvatar"

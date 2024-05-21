@@ -92,6 +92,11 @@ export enum Action {
     FocusAComposer = "focus_a_composer",
 
     /**
+     * Focuses the threads panel.
+     */
+    FocusThreadsPanel = "focus_threads_panel",
+
+    /**
      * Opens the user menu (previously known as the top left menu). No additional payload information required.
      */
     ToggleUserMenu = "toggle_user_menu",

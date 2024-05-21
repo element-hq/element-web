@@ -37,13 +37,6 @@ beforeEach(() => {
     });
 });
 
-// Retry to work around our flaky app & tests
-if (process.env.CI) {
-    jest.retryTimes(2, {
-        logErrorsBeforeRetry: true,
-    });
-}
-
 // Very carefully enable the mocks for everything else in
 // a specific order. We use this order to ensure we properly
 // establish an application state that actually works.

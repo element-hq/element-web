@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { PollListItem } from "../../../../../src/components/views/polls/pollHistory/PollListItem";
 import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../../../test-utils";
@@ -26,8 +25,7 @@ describe("<PollListItem />", () => {
     const event = makePollStartEvent("Question?", "@me:domain.org");
     event.getContent().origin;
     const defaultProps = { event, onClick: jest.fn() };
-    const getComponent = (props = {}) =>
-        render(<PollListItem {...defaultProps} {...props} />, { wrapper: TooltipProvider });
+    const getComponent = (props = {}) => render(<PollListItem {...defaultProps} {...props} />);
 
     beforeAll(() => {
         // mock default locale to en-GB and set timezone

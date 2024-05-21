@@ -11,11 +11,6 @@ exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored u
       <div
         class="mx_SettingsSection"
       >
-        <h2
-          class="mx_Heading_h3"
-        >
-          Ignored users
-        </h2>
         <div
           class="mx_SettingsSection_subSections"
         >

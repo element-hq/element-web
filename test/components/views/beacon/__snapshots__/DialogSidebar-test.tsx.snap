@@ -14,11 +14,11 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
         View list
       </h4>
       <div
+        aria-label="Close sidebar"
         class="mx_AccessibleButton mx_DialogSidebar_closeButton"
         data-testid="dialog-sidebar-close"
         role="button"
         tabindex="0"
-        title="Close sidebar"
       >
         <div
           class="mx_DialogSidebar_closeButtonIcon"
@@ -65,7 +65,6 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
               class="mx_BeaconListItem_interactions"
             >
               <a
-                data-state="closed"
                 data-testid="open-location-in-osm"
                 href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
                 rel="noreferrer noopener"
@@ -113,11 +112,11 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
         View list
       </h4>
       <div
+        aria-label="Close sidebar"
         class="mx_AccessibleButton mx_DialogSidebar_closeButton"
         data-testid="dialog-sidebar-close"
         role="button"
         tabindex="0"
-        title="Close sidebar"
       >
         <div
           class="mx_DialogSidebar_closeButtonIcon"

@@ -18,7 +18,11 @@ import { MatrixClient, discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcClient } from "oidc-client-ts";
 
-import { getStoredOidcTokenIssuer, getStoredOidcClientId } from "../../utils/oidc/persistOidcSettings";
+import {
+    getStoredOidcTokenIssuer,
+    getStoredOidcClientId,
+    getStoredOidcIdToken,
+} from "../../utils/oidc/persistOidcSettings";
 import PlatformPeg from "../../PlatformPeg";
 
 /**
@@ -58,7 +62,7 @@ export class OidcClientStore {
                 const { accountManagementEndpoint, metadata } = await discoverAndValidateOIDCIssuerWellKnown(
                     authIssuer.issuer,
                 );
-                this._accountManagementEndpoint = accountManagementEndpoint ?? metadata.issuer;
+                this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
             } catch (e) {
                 console.log("Auth issuer not found", e);
             }
@@ -70,6 +74,16 @@ export class OidcClientStore {
      */
     public get isUserAuthenticatedWithOidc(): boolean {
         return !!this.authenticatedIssuer;
+    }
+
+    private setAccountManagementEndpoint(endpoint: string | undefined, issuer: string): void {
+        // if no account endpoint is configured default to the issuer
+        const url = new URL(endpoint ?? issuer);
+        const idToken = getStoredOidcIdToken();
+        if (idToken) {
+            url.searchParams.set("id_token_hint", idToken);
+        }
+        this._accountManagementEndpoint = url.toString();
     }
 
     public get accountManagementEndpoint(): string | undefined {
@@ -150,13 +164,12 @@ export class OidcClientStore {
             const { accountManagementEndpoint, metadata, signingKeys } = await discoverAndValidateOIDCIssuerWellKnown(
                 this.authenticatedIssuer,
             );
-            // if no account endpoint is configured default to the issuer
-            this._accountManagementEndpoint = accountManagementEndpoint ?? metadata.issuer;
+            this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
             this.oidcClient = new OidcClient({
                 ...metadata,
                 authority: metadata.issuer,
                 signingKeys,
-                redirect_uri: PlatformPeg.get()!.getSSOCallbackUrl().href,
+                redirect_uri: PlatformPeg.get()!.getOidcCallbackUrl().href,
                 client_id: clientId,
             });
         } catch (error) {

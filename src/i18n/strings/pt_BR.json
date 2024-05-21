@@ -1617,13 +1617,11 @@
             "custom_theme_success": "Tema adicionado!",
             "custom_theme_url": "Link do tema personalizado",
             "font_size": "Tamanho da fonte",
-            "heading": "Personalize sua aparência",
             "image_size_default": "Padrão",
             "image_size_large": "Grande",
             "layout_bubbles": "Balões de mensagem",
             "layout_irc": "IRC (experimental)",
             "match_system_theme": "Se adaptar ao tema do sistema",
-            "subheading": "As configurações de aparência afetam apenas esta sessão do %(brand)s.",
             "timeline_image_size": "Tamanho da imagem na linha do tempo",
             "use_high_contrast": "Usar alto contraste"
         },
@@ -2141,7 +2139,6 @@
             "tooltip_sub": "Clicar para ver edições",
             "tooltip_title": "Editado em %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "As mensagens criptografadas antes deste ponto não estão disponíveis.",
         "error_no_renderer": "Este evento não pôde ser exibido",
         "error_rendering_message": "Não foi possível carregar esta mensagem",
         "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",

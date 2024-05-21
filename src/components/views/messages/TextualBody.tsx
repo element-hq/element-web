@@ -17,7 +17,6 @@ limitations under the License.
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -32,7 +31,6 @@ import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import UIStore from "../../../stores/UIStore";
 import { Action } from "../../../dispatcher/actions";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
@@ -349,11 +347,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
                 const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
-                const spoiler = (
-                    <TooltipProvider>
-                        <Spoiler reason={reason} contentHtml={node.outerHTML} />
-                    </TooltipProvider>
-                );
+                const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
 
                 ReactDOM.render(spoiler, spoilerContainer);
                 node.parentNode?.replaceChild(spoilerContainer, node);
@@ -527,22 +521,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const date = this.props.mxEvent.replacingEventDate();
         const dateString = date && formatDate(date);
 
-        const tooltip = (
-            <div>
-                <div className="mx_Tooltip_title">{_t("timeline|edits|tooltip_title", { date: dateString })}</div>
-                <div className="mx_Tooltip_sub">{_t("timeline|edits|tooltip_sub")}</div>
-            </div>
-        );
-
         return (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_EventTile_edited"
                 onClick={this.openHistoryDialog}
-                title={_t("timeline|edits|tooltip_label", { date: dateString })}
-                tooltip={tooltip}
+                aria-label={_t("timeline|edits|tooltip_label", { date: dateString })}
+                title={_t("timeline|edits|tooltip_title", { date: dateString })}
+                caption={_t("timeline|edits|tooltip_sub")}
             >
                 <span>{`(${_t("common|edited")})`}</span>
-            </AccessibleTooltipButton>
+            </AccessibleButton>
         );
     }
 

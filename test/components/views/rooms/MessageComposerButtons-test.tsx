@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../src/contexts/RoomContext";
@@ -82,7 +82,7 @@ describe("MessageComposerButtons", () => {
         expect(getButtonLabels()).toEqual(["Emoji", "Attachment", "More options"]);
     });
 
-    it("Renders other buttons in menu in wide mode", () => {
+    it("Renders other buttons in menu in wide mode", async () => {
         wrapAndRender(
             <MessageComposerButtons
                 {...mockProps}
@@ -94,12 +94,16 @@ describe("MessageComposerButtons", () => {
             false,
         );
 
-        expect(getButtonLabels()).toEqual([
-            "Emoji",
-            "Attachment",
-            "More options",
-            ["Sticker", "Voice Message", "Poll", "Location"],
-        ]);
+        // The location code is lazy loaded, so the button will take a little while
+        // to appear, so we need to wait.
+        await waitFor(() => {
+            expect(getButtonLabels()).toEqual([
+                "Emoji",
+                "Attachment",
+                "More options",
+                ["Sticker", "Voice Message", "Poll", "Location"],
+            ]);
+        });
     });
 
     it("Renders only some buttons in narrow mode", () => {

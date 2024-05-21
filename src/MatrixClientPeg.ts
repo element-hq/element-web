@@ -73,22 +73,44 @@ export interface IMatrixClientCreds {
  * you'll find a `MatrixClient` hanging on the `MatrixClientPeg`.
  */
 export interface IMatrixClientPeg {
+    /**
+     * The opts used to start the client
+     */
     opts: IStartClientOpts;
 
     /**
      * Return the server name of the user's homeserver
      * Throws an error if unable to deduce the homeserver name
-     * (eg. if the user is not logged in)
+     * (e.g. if the user is not logged in)
      *
      * @returns {string} The homeserver name, if present.
      */
     getHomeserverName(): string;
 
+    /**
+     * Get the current MatrixClient, if any
+     */
     get(): MatrixClient | null;
+
+    /**
+     * Get the current MatrixClient, throwing an error if there isn't one
+     */
     safeGet(): MatrixClient;
+
+    /**
+     * Unset the current MatrixClient
+     */
     unset(): void;
-    assign(): Promise<any>;
-    start(): Promise<any>;
+
+    /**
+     * Prepare the MatrixClient for use, including initialising the store and crypto, but do not start it
+     */
+    assign(): Promise<IStartClientOpts>;
+
+    /**
+     * Prepare the MatrixClient for use, including initialising the store and crypto, and start it
+     */
+    start(): Promise<void>;
 
     /**
      * If we've registered a user ID we set this to the ID of the
@@ -235,7 +257,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         PlatformPeg.get()?.reload();
     };
 
-    public async assign(): Promise<any> {
+    public async assign(): Promise<IStartClientOpts> {
         if (!this.matrixClient) {
             throw new Error("createClient must be called first");
         }
@@ -273,17 +295,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.threadSupport = true;
 
         if (SettingsStore.getValue("feature_sliding_sync")) {
-            const proxyUrl = SettingsStore.getValue("feature_sliding_sync_proxy_url");
-            if (proxyUrl) {
-                logger.log("Activating sliding sync using proxy at ", proxyUrl);
-            } else {
-                logger.log("Activating sliding sync");
-            }
-            opts.slidingSync = SlidingSyncManager.instance.configure(
-                this.matrixClient,
-                proxyUrl || this.matrixClient.baseUrl,
-            );
-            SlidingSyncManager.instance.startSpidering(100, 50); // 100 rooms at a time, 50ms apart
+            opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
+        } else {
+            SlidingSyncManager.instance.checkSupport(this.matrixClient);
         }
 
         // Connect the matrix client to the dispatcher and setting handlers
@@ -362,7 +376,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
     }
 
-    public async start(): Promise<any> {
+    public async start(): Promise<void> {
         const opts = await this.assign();
 
         logger.log(`MatrixClientPeg: really starting MatrixClient`);

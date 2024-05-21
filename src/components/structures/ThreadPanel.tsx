@@ -37,6 +37,9 @@ import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import Heading from "../views/typography/Heading";
 import { clearRoomNotification } from "../../utils/notifications";
+import { useDispatcher } from "../../hooks/useDispatcher";
+import dis from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
 
 interface IProps {
     roomId: string;
@@ -229,6 +232,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     const roomContext = useContext(RoomContext);
     const timelinePanel = useRef<TimelinePanel | null>(null);
     const card = useRef<HTMLDivElement | null>(null);
+    const closeButonRef = useRef<HTMLDivElement | null>(null);
 
     const [filterOption, setFilterOption] = useState<ThreadFilterType>(ThreadFilterType.All);
     const [room, setRoom] = useState<Room | null>(null);
@@ -255,6 +259,14 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
         }
     }, [timelineSet, timelinePanel]);
 
+    useDispatcher(dis, (payload) => {
+        // This actually foucses the close button on the threads panel, as its the only interactive element,
+        // but at least it puts the user in the right area of the app.
+        if (payload.action === Action.FocusThreadsPanel) {
+            closeButonRef.current?.focus();
+        }
+    });
+
     return (
         <RoomContext.Provider
             value={{
@@ -276,6 +288,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 onClose={onClose}
                 withoutScrollContainer={true}
                 ref={card}
+                closeButtonRef={closeButonRef}
             >
                 {card.current && <Measured sensor={card.current} onMeasurement={setNarrow} />}
                 {timelineSet ? (

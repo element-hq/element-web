@@ -19,7 +19,6 @@ import { Room, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -44,6 +43,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
 import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     room: Room;
@@ -271,7 +271,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             }
 
             stopBtn = (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className="mx_VoiceRecordComposerTile_stop"
                     onClick={this.onRecordStartEndClick}
                     title={tooltip}
@@ -284,7 +284,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         if (this.state.recorder && this.state.recordingPhase !== RecordingState.Uploading) {
             deleteButton = (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className="mx_VoiceRecordComposerTile_delete"
                     title={_t("action|delete")}
                     onClick={this.onCancel}

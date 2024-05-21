@@ -166,6 +166,16 @@ describe("bodyToHtml", () => {
             });
             expect(html).toMatchSnapshot();
         });
+
+        it("should not mangle divs", () => {
+            const html = getHtml({
+                body: "hello world",
+                msgtype: "m.text",
+                formatted_body: "<p>hello</p><div>world</div>",
+                format: "org.matrix.custom.html",
+            });
+            expect(html).toMatchSnapshot();
+        });
     });
 });
 

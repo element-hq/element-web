@@ -17,9 +17,12 @@ limitations under the License.
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import fetchMockJest from "fetch-mock-jest";
 
 import { SlidingSyncManager } from "../src/SlidingSyncManager";
 import { stubClient } from "./test-utils";
+import SlidingSyncController from "../src/settings/controllers/SlidingSyncController";
+import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("matrix-js-sdk/src/sliding-sync");
 const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
@@ -37,6 +40,8 @@ describe("SlidingSyncManager", () => {
         mocked(client.getRoom).mockReturnValue(null);
         manager.configure(client, "invalid");
         manager.slidingSync = slidingSync;
+        fetchMockJest.reset();
+        fetchMockJest.get("https://proxy/client/server.json", {});
     });
 
     describe("setRoomVisible", () => {
@@ -229,6 +234,96 @@ describe("SlidingSyncManager", () => {
                     ],
                 }),
             );
+        });
+    });
+    describe("checkSupport", () => {
+        beforeEach(() => {
+            SlidingSyncController.serverSupportsSlidingSync = false;
+            jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
+        });
+        it("shorts out if the server has 'native' sliding sync support", async () => {
+            jest.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(true);
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
+            await manager.checkSupport(client);
+            expect(manager.getProxyFromWellKnown).not.toHaveBeenCalled(); // We return earlier
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
+        });
+        it("tries to find a sliding sync proxy url from the client well-known if there's no 'native' support", async () => {
+            jest.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(false);
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
+            await manager.checkSupport(client);
+            expect(manager.getProxyFromWellKnown).toHaveBeenCalled();
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
+        });
+        it("should query well-known on server_name not baseUrl", async () => {
+            fetchMockJest.get("https://matrix.org/.well-known/matrix/client", {
+                "m.homeserver": {
+                    base_url: "https://matrix-client.matrix.org",
+                    server: "matrix.org",
+                },
+                "org.matrix.msc3575.proxy": {
+                    url: "https://proxy/",
+                },
+            });
+            fetchMockJest.get("https://matrix-client.matrix.org/_matrix/client/versions", { versions: ["v1.4"] });
+
+            mocked(manager.getProxyFromWellKnown).mockRestore();
+            jest.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(false);
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
+            await manager.checkSupport(client);
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
+            expect(fetchMockJest).not.toHaveFetched("https://matrix-client.matrix.org/.well-known/matrix/client");
+        });
+    });
+    describe("nativeSlidingSyncSupport", () => {
+        beforeEach(() => {
+            SlidingSyncController.serverSupportsSlidingSync = false;
+        });
+        it("should make an OPTIONS request to avoid unintended side effects", async () => {
+            // See https://github.com/element-hq/element-web/issues/27426
+
+            const unstableSpy = jest
+                .spyOn(client, "doesServerSupportUnstableFeature")
+                .mockImplementation(async (feature: string) => {
+                    expect(feature).toBe("org.matrix.msc3575");
+                    return true;
+                });
+            const proxySpy = jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
+
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
+            await manager.checkSupport(client); // first thing it does is call nativeSlidingSyncSupport
+            expect(proxySpy).not.toHaveBeenCalled();
+            expect(unstableSpy).toHaveBeenCalled();
+            expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
+        });
+    });
+    describe("setup", () => {
+        beforeEach(() => {
+            jest.spyOn(manager, "configure");
+            jest.spyOn(manager, "startSpidering");
+        });
+        it("uses the baseUrl as a proxy if no proxy is set in the client well-known and the server has no native support", async () => {
+            await manager.setup(client);
+            expect(manager.configure).toHaveBeenCalled();
+            expect(manager.configure).toHaveBeenCalledWith(client, client.baseUrl);
+            expect(manager.startSpidering).toHaveBeenCalled();
+        });
+        it("uses the proxy declared in the client well-known", async () => {
+            jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
+            await manager.setup(client);
+            expect(manager.configure).toHaveBeenCalled();
+            expect(manager.configure).toHaveBeenCalledWith(client, "https://proxy/");
+            expect(manager.startSpidering).toHaveBeenCalled();
+        });
+        it("uses the legacy `feature_sliding_sync_proxy_url` if it was set", async () => {
+            jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name === "feature_sliding_sync_proxy_url") return "legacy-proxy";
+            });
+            await manager.setup(client);
+            expect(manager.configure).toHaveBeenCalled();
+            expect(manager.configure).toHaveBeenCalledWith(client, "legacy-proxy");
+            expect(manager.startSpidering).toHaveBeenCalled();
         });
     });
 });

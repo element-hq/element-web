@@ -108,7 +108,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
                             "!matrix-js-sdk/src/crypto",
-                            "!matrix-js-sdk/src/crypto/algorithms",
                             "!matrix-js-sdk/src/crypto/aes",
                             "!matrix-js-sdk/src/crypto/olmlib",
                             "!matrix-js-sdk/src/crypto/crypto",

@@ -80,7 +80,7 @@ const SidebarUserSettingsTab: React.FC = () => {
 
     return (
         <SettingsTab>
-            <SettingsSection heading={_t("settings|sidebar|title")}>
+            <SettingsSection>
                 <SettingsSubsection
                     heading={_t("settings|sidebar|metaspaces_subsection")}
                     description={_t("settings|sidebar|spaces_explainer")}

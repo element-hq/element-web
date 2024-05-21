@@ -41,8 +41,6 @@ import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { Alignment } from "../elements/Tooltip";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
@@ -54,7 +52,7 @@ import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { isLocationEvent } from "../../../utils/EventUtils";
 import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
 import { RoomContextDetails } from "../rooms/RoomContextDetails";
@@ -159,11 +157,11 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
             onFocus={onFocus}
             id={id}
         >
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_ForwardList_roomButton"
                 onClick={jumpToRoom}
                 title={_t("forward|open_room")}
-                alignment={Alignment.Top}
+                placement="top"
                 tabIndex={isActive ? 0 : -1}
             >
                 <DecoratedRoomAvatar room={room} size="32px" tooltipProps={{ tabIndex: isActive ? 0 : -1 }} />
@@ -171,20 +169,20 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
                     {room.name}
                 </span>
                 <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
-            </AccessibleTooltipButton>
-            <AccessibleTooltipButton
+            </AccessibleButton>
+            <AccessibleButton
                 kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
                 className={`mx_ForwardList_sendButton ${className}`}
                 onClick={send}
                 disabled={disabled}
                 title={title}
-                alignment={Alignment.Top}
+                placement="top"
                 tabIndex={isActive ? 0 : -1}
                 id={`${id}_send`}
             >
                 <div className="mx_ForwardList_sendLabel">{_t("forward|send_label")}</div>
                 {icon}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
         </div>
     );
 };

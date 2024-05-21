@@ -43,13 +43,14 @@ type Result = {
  */
 export function useUnreadThreadRooms(forceComputation: boolean): Result {
     const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
+    const settingTACOnlyNotifs = useSettingValue<boolean>("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
     const [result, setResult] = useState<Result>({ greatestNotificationLevel: NotificationLevel.None, rooms: [] });
 
     const doUpdate = useCallback(() => {
-        setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor));
-    }, [mxClient, msc3946ProcessDynamicPredecessor]);
+        setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs));
+    }, [mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs]);
 
     // The exhautive deps lint rule can't compute dependencies here since it's not a plain inline func.
     // We make this as simple as possible so its only dep is doUpdate itself.
@@ -83,7 +84,11 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
  * @param mxClient - MatrixClient
  * @param msc3946ProcessDynamicPredecessor
  */
-function computeUnreadThreadRooms(mxClient: MatrixClient, msc3946ProcessDynamicPredecessor: boolean): Result {
+function computeUnreadThreadRooms(
+    mxClient: MatrixClient,
+    msc3946ProcessDynamicPredecessor: boolean,
+    settingTACOnlyNotifs: boolean,
+): Result {
     // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
     // This will include highlights from the previous version of the room internally
     const visibleRooms = mxClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
@@ -98,7 +103,7 @@ function computeUnreadThreadRooms(mxClient: MatrixClient, msc3946ProcessDynamicP
             const notificationLevel = getThreadNotificationLevel(room);
 
             // If the room has an activity notification or less, we ignore it
-            if (notificationLevel <= NotificationLevel.Activity) {
+            if (settingTACOnlyNotifs && notificationLevel <= NotificationLevel.Activity) {
                 continue;
             }
 

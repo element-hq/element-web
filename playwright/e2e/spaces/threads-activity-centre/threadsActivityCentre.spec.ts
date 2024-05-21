@@ -160,4 +160,18 @@ test.describe("Threads Activity Centre", () => {
 
         await util.assertNoTacIndicator();
     });
+
+    test("should focus the thread panel close button when clicking an item in the TAC", async ({
+        room1,
+        room2,
+        util,
+        msg,
+    }) => {
+        await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
+
+        await util.openTac();
+        await util.clickRoomInTac(room1.name);
+
+        await util.assertThreadPanelFocused();
+    });
 });

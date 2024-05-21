@@ -1913,13 +1913,11 @@
             "custom_theme_success": "Το θέμα προστέθηκε!",
             "custom_theme_url": "URL προσαρμοσμένου θέματος",
             "font_size": "Μέγεθος γραμματοσειράς",
-            "heading": "Προσαρμόστε την εμφάνισή σας",
             "image_size_default": "Προεπιλογή",
             "image_size_large": "Μεγάλο",
             "layout_bubbles": "Συννεφάκια μηνυμάτων",
             "layout_irc": "IRC (Πειραματικό)",
             "match_system_theme": "Αντιστοίχιση θέματος συστήματος",
-            "subheading": "Οι ρυθμίσεις εμφάνισης επηρεάζουν μόνο αυτή τη %(brand)s συνεδρία.",
             "timeline_image_size": "Μέγεθος εικόνας στη γραμμή χρόνου",
             "use_high_contrast": "Χρησιμοποιήστε υψηλή αντίθεση"
         },
@@ -2510,7 +2508,6 @@
             "tooltip_sub": "Κάντε κλικ για να δείτε τις τροποποιήσεις",
             "tooltip_title": "Τροποποιήθηκε στις %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "Κρυπτογραφημένα μηνύματα πριν από αυτό το σημείο δεν είναι διαθέσιμα.",
         "error_no_renderer": "Δεν ήταν δυνατή η εμφάνιση αυτού του συμβάντος",
         "error_rendering_message": "Δεν είναι δυνατή η φόρτωση αυτού του μηνύματος",
         "historical_messages_unavailable": "Δεν μπορείτε να δείτε προηγούμενα μηνύματα",

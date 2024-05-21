@@ -1712,11 +1712,9 @@
             "custom_theme_success": "Haŭto aldoniĝis!",
             "custom_theme_url": "Propra URL al haŭto",
             "font_size": "Grando de tiparo",
-            "heading": "Adaptu vian aspekton",
             "image_size_default": "Ordinara",
             "layout_bubbles": "Mesaĝaj vezikoj",
-            "match_system_theme": "Similiĝi la sisteman haŭton",
-            "subheading": "Agordoj de aspekto nur efikos sur ĉi tiun salutaĵon de %(brand)s."
+            "match_system_theme": "Similiĝi la sisteman haŭton"
         },
         "automatic_language_detection_syntax_highlight": "Ŝalti memagan rekonon de lingvo por sintaksa markado",
         "autoplay_gifs": "Memage ludi GIF-ojn",

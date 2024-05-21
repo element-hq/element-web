@@ -1625,12 +1625,10 @@
             "custom_theme_success": "ערכת נושא התווספה בהצלחה!",
             "custom_theme_url": "כתובת ערכת נושא מותאמת אישית",
             "font_size": "גודל אותיות",
-            "heading": "התאם את התצוגה שלך",
             "image_size_default": "ברירת מחדל",
             "image_size_large": "גדול",
             "layout_bubbles": "בועות הודעות",
             "match_system_theme": "התאם לתבנית המערכת",
-            "subheading": "התאמת תצוגה משפיעה רק על התחברות זו %(brand)s.",
             "timeline_image_size": "גודל תמונה בציר הזמן"
         },
         "automatic_language_detection_syntax_highlight": "החל זיהוי שפה אוטומטי עבור הדגשת מבנה הכתיבה",

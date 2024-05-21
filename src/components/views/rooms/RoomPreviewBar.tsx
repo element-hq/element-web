@@ -15,16 +15,8 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ReactNode } from "react";
-import {
-    Room,
-    RoomMember,
-    EventType,
-    RoomType,
-    IJoinRuleEventContent,
-    JoinRule,
-    MatrixError,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { Room, RoomMember, EventType, RoomType, JoinRule, MatrixError } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
 import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
@@ -257,7 +249,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         return (
             this.props.room?.currentState
                 .getStateEvents(EventType.RoomJoinRules, "")
-                ?.getContent<IJoinRuleEventContent>().join_rule ?? null
+                ?.getContent<RoomJoinRulesEventContent>().join_rule ?? null
         );
     }
 

@@ -49,7 +49,6 @@ import ContextMenu, {
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ExtraTile from "./ExtraTile";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SlidingSyncManager } from "../../../SlidingSyncManager";
@@ -684,11 +683,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
                     const badgeContainer = <div className="mx_RoomSublist_badgeContainer">{badge}</div>;
 
-                    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
-                    if (this.props.isMinimized) {
-                        Button = AccessibleTooltipButton;
-                    }
-
                     // Note: the addRoomButton conditionally gets moved around
                     // the DOM depending on whether or not the list is minimized.
                     // If we're minimized, we want it below the header so it
@@ -707,7 +701,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         >
                             <div className="mx_RoomSublist_stickableContainer">
                                 <div className="mx_RoomSublist_stickable">
-                                    <Button
+                                    <AccessibleButton
                                         onFocus={onFocus}
                                         ref={ref}
                                         tabIndex={tabIndex}
@@ -719,7 +713,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                     >
                                         <span className={collapseClasses} />
                                         <span id={getLabelId(this.props.tagId)}>{this.props.label}</span>
-                                    </Button>
+                                    </AccessibleButton>
                                     {this.renderMenu()}
                                     {this.props.isMinimized ? null : badgeContainer}
                                     {this.props.isMinimized ? null : addRoomButton}

@@ -38,7 +38,6 @@ import {
     VerificationPhase as Phase,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserInfo, {
     BanToggleButton,
@@ -207,11 +206,7 @@ describe("<UserInfo />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return (
-                <TooltipProvider>
-                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
-                </TooltipProvider>
-            );
+            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
 
         return render(<UserInfo {...defaultProps} {...props} />, {
@@ -299,7 +294,8 @@ describe("<UserInfo />", () => {
 
         it("renders close button correctly when encryption panel with a pending verification request", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
-            expect(screen.getByTestId("base-card-close-button")).toHaveAttribute("title", "Cancel");
+            screen.getByTestId("base-card-close-button").focus();
+            expect(screen.getByRole("tooltip")).toHaveTextContent("Cancel");
         });
     });
 
@@ -393,11 +389,8 @@ describe("<UserInfo />", () => {
             // click it
             await userEvent.click(devicesButton);
 
-            // there should now be a button with the device id ...
-            const deviceButton = screen.getByRole("button", { description: "d1" });
-
-            // ... which should contain the device name
-            expect(within(deviceButton).getByText("my device")).toBeInTheDocument();
+            // there should now be a button with the device id which should contain the device name
+            expect(screen.getByRole("button", { name: "my device" })).toBeInTheDocument();
         });
 
         it("renders <BasicUserInfo />", async () => {
@@ -412,6 +405,185 @@ describe("<UserInfo />", () => {
 
             await waitFor(() => expect(screen.getByRole("button", { name: "Verify" })).toBeInTheDocument());
             expect(container).toMatchSnapshot();
+        });
+
+        describe("device dehydration", () => {
+            it("hides a verified dehydrated device (unverified user)", async () => {
+                const device1 = new Device({
+                    deviceId: "d1",
+                    userId: defaultUserId,
+                    displayName: "my device",
+                    algorithms: [],
+                    keys: new Map(),
+                });
+                const device2 = new Device({
+                    deviceId: "d2",
+                    userId: defaultUserId,
+                    displayName: "dehydrated device",
+                    algorithms: [],
+                    keys: new Map(),
+                    dehydrated: true,
+                });
+                const devicesMap = new Map<string, Device>([
+                    [device1.deviceId, device1],
+                    [device2.deviceId, device2],
+                ]);
+                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
+                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+
+                renderComponent({ room: mockRoom });
+                await act(flushPromises);
+
+                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
+                const devicesButton = screen.getByRole("button", { name: "1 session" });
+
+                // click it
+                await act(() => {
+                    return userEvent.click(devicesButton);
+                });
+
+                // there should now be a button with the non-dehydrated device ID
+                expect(screen.getByRole("button", { name: "my device" })).toBeInTheDocument();
+
+                // but not for the dehydrated device ID
+                expect(screen.queryByRole("button", { name: "dehydrated device" })).not.toBeInTheDocument();
+
+                // there should be a line saying that the user has "Offline device" enabled
+                expect(screen.getByText("Offline device enabled")).toBeInTheDocument();
+            });
+
+            it("hides a verified dehydrated device (verified user)", async () => {
+                const device1 = new Device({
+                    deviceId: "d1",
+                    userId: defaultUserId,
+                    displayName: "my device",
+                    algorithms: [],
+                    keys: new Map(),
+                });
+                const device2 = new Device({
+                    deviceId: "d2",
+                    userId: defaultUserId,
+                    displayName: "dehydrated device",
+                    algorithms: [],
+                    keys: new Map(),
+                    dehydrated: true,
+                });
+                const devicesMap = new Map<string, Device>([
+                    [device1.deviceId, device1],
+                    [device2.deviceId, device2],
+                ]);
+                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
+                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+                mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, true));
+                mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
+                    isVerified: () => true,
+                } as DeviceVerificationStatus);
+
+                renderComponent({ room: mockRoom });
+                await act(flushPromises);
+
+                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
+                const devicesButton = screen.getByRole("button", { name: "1 verified session" });
+
+                // click it
+                await act(() => {
+                    return userEvent.click(devicesButton);
+                });
+
+                // there should now be a button with the non-dehydrated device ID
+                expect(screen.getByTitle("d1")).toBeInTheDocument();
+
+                // but not for the dehydrated device ID
+                expect(screen.queryByTitle("d2")).not.toBeInTheDocument();
+
+                // there should be a line saying that the user has "Offline device" enabled
+                expect(screen.getByText("Offline device enabled")).toBeInTheDocument();
+            });
+
+            it("shows an unverified dehydrated device", async () => {
+                const device1 = new Device({
+                    deviceId: "d1",
+                    userId: defaultUserId,
+                    displayName: "my device",
+                    algorithms: [],
+                    keys: new Map(),
+                });
+                const device2 = new Device({
+                    deviceId: "d2",
+                    userId: defaultUserId,
+                    displayName: "dehydrated device",
+                    algorithms: [],
+                    keys: new Map(),
+                    dehydrated: true,
+                });
+                const devicesMap = new Map<string, Device>([
+                    [device1.deviceId, device1],
+                    [device2.deviceId, device2],
+                ]);
+                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
+                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+                mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, true));
+
+                renderComponent({ room: mockRoom });
+                await act(flushPromises);
+
+                // the dehydrated device should be shown as an unverified device, which means
+                // there should now be a button with the device id ...
+                const deviceButton = screen.getByRole("button", { name: "dehydrated device" });
+
+                // ... which should contain the device name
+                expect(within(deviceButton).getByText("dehydrated device")).toBeInTheDocument();
+            });
+
+            it("shows dehydrated devices if there is more than one", async () => {
+                const device1 = new Device({
+                    deviceId: "d1",
+                    userId: defaultUserId,
+                    displayName: "dehydrated device 1",
+                    algorithms: [],
+                    keys: new Map(),
+                    dehydrated: true,
+                });
+                const device2 = new Device({
+                    deviceId: "d2",
+                    userId: defaultUserId,
+                    displayName: "dehydrated device 2",
+                    algorithms: [],
+                    keys: new Map(),
+                    dehydrated: true,
+                });
+                const devicesMap = new Map<string, Device>([
+                    [device1.deviceId, device1],
+                    [device2.deviceId, device2],
+                ]);
+                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
+                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+
+                renderComponent({ room: mockRoom });
+                await act(flushPromises);
+
+                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
+                const devicesButton = screen.getByRole("button", { name: "2 sessions" });
+
+                // click it
+                await act(() => {
+                    return userEvent.click(devicesButton);
+                });
+
+                // the dehydrated devices should be shown as an unverified device, which means
+                // there should now be a button with the first dehydrated device...
+                const device1Button = screen.getByRole("button", { name: "dehydrated device 1" });
+                expect(device1Button).toBeVisible();
+
+                // ... which should contain the device name
+                expect(within(device1Button).getByText("dehydrated device 1")).toBeInTheDocument();
+                // and a button with the second dehydrated device...
+                const device2Button = screen.getByRole("button", { name: "dehydrated device 2" });
+                expect(device2Button).toBeVisible();
+
+                // ... which should contain the device name
+                expect(within(device2Button).getByText("dehydrated device 2")).toBeInTheDocument();
+            });
         });
     });
 
@@ -455,11 +627,7 @@ describe("<UserInfoHeader />", () => {
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
-            return (
-                <TooltipProvider>
-                    <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />
-                </TooltipProvider>
-            );
+            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
 
         return render(<UserInfoHeader {...defaultProps} {...props} />, {
@@ -540,7 +708,8 @@ describe("<DeviceItem />", () => {
         renderComponent({ isUserVerified: true });
         await act(flushPromises);
 
-        expect(screen.getByRole("button", { name: `${device.displayName} Not trusted` })).toBeInTheDocument();
+        const button = screen.getByRole("button", { name: device.displayName });
+        expect(button).toHaveTextContent(`${device.displayName}Not trusted`);
     });
 
     it("with verified device only, displays no button without a label", async () => {

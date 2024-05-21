@@ -1162,20 +1162,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
         let msgOption: JSX.Element | undefined;
-        if (this.props.showReadReceipts) {
-            if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-                msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
-            } else {
-                msgOption = (
-                    <ReadReceiptGroup
-                        readReceipts={this.props.readReceipts ?? []}
-                        readReceiptMap={this.props.readReceiptMap ?? {}}
-                        checkUnmounting={this.props.checkUnmounting}
-                        suppressAnimation={this.suppressReadReceiptAnimation}
-                        isTwelveHour={this.props.isTwelveHour}
-                    />
-                );
-            }
+        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
+            msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+        } else if (this.props.showReadReceipts) {
+            msgOption = (
+                <ReadReceiptGroup
+                    readReceipts={this.props.readReceipts ?? []}
+                    readReceiptMap={this.props.readReceiptMap ?? {}}
+                    checkUnmounting={this.props.checkUnmounting}
+                    suppressAnimation={this.suppressReadReceiptAnimation}
+                    isTwelveHour={this.props.isTwelveHour}
+                />
+            );
         }
 
         let replyChain: JSX.Element | undefined;
@@ -1546,7 +1544,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     return (
         <div className="mx_EventTile_msgOption">
             <div className="mx_ReadReceiptGroup">
-                <Tooltip label={label} side="top" align="end">
+                <Tooltip label={label} placement="top-end">
                     <div className="mx_ReadReceiptGroup_button">
                         <span className="mx_ReadReceiptGroup_container">
                             <span className={receiptClasses}>{nonCssBadge}</span>

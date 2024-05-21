@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
 import { Beacon, Room, RoomMember, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
@@ -111,13 +111,15 @@ describe("<BeaconMarker />", () => {
         expect(screen.queryByTestId("avatar-img")).not.toBeInTheDocument();
     });
 
-    it("renders marker when beacon has location", () => {
+    it("renders marker when beacon has location", async () => {
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon?.addLocations([location1]);
         const { asFragment } = renderComponent({ beacon });
+        await waitFor(() => {
+            expect(screen.getByTestId("avatar-img")).toBeInTheDocument();
+        });
         expect(asFragment()).toMatchSnapshot();
-        expect(screen.getByTestId("avatar-img")).toBeInTheDocument();
     });
 
     it("updates with new locations", () => {

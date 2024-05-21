@@ -14,9 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { SyntheticEvent, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-import { MenuItem, Tooltip, Separator, ToggleMenuItem, Text, Badge, Heading } from "@vector-im/compound-web";
+import {
+    MenuItem,
+    Tooltip,
+    Separator,
+    ToggleMenuItem,
+    Text,
+    Badge,
+    Heading,
+    IconButton,
+    Link,
+} from "@vector-im/compound-web";
 import { Icon as SearchIcon } from "@vector-im/compound-design-tokens/icons/search.svg";
 import { Icon as FavouriteIcon } from "@vector-im/compound-design-tokens/icons/favourite.svg";
 import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
@@ -32,7 +42,8 @@ import { Icon as LockIcon } from "@vector-im/compound-design-tokens/icons/lock-s
 import { Icon as LockOffIcon } from "@vector-im/compound-design-tokens/icons/lock-off.svg";
 import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
 import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
-import { EventType, JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { Icon as ChevronDownIcon } from "@vector-im/compound-design-tokens/icons/chevron-down.svg";
+import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -49,7 +60,6 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -75,6 +85,10 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useRoomState } from "../../../hooks/useRoomState";
+import { useTopic } from "../../../hooks/room/useTopic";
+import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import { Box } from "../../utils/Box";
+import { onRoomTopicLinkClick } from "../elements/RoomTopic";
 
 interface IProps {
     room: Room;
@@ -184,18 +198,17 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
 
     return (
         <div className={classes} ref={handle}>
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_icon_app"
                 onClick={onOpenWidgetClick}
                 // only show a tooltip if the widget is pinned
-                title={openTitle}
-                forceHide={!(isPinned || isMaximised)}
+                title={!(isPinned || isMaximised) ? undefined : openTitle}
                 disabled={isPinned || isMaximised}
             >
                 <WidgetAvatar app={app} size="20px" />
                 <span>{name}</span>
                 {subtitle}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
 
             {canModifyWidget && (
                 <ContextMenuTooltipButton
@@ -206,13 +219,13 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 />
             )}
 
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_app_pinToggle"
                 onClick={togglePin}
                 title={pinTitle}
                 disabled={cannotPin}
             />
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_RoomSummaryCard_app_maximiseToggle"
                 onClick={toggleMaximised}
                 title={maximiseTitle}
@@ -271,6 +284,84 @@ const onRoomPinsClick = (): void => {
 const onRoomSettingsClick = (ev: Event): void => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
+};
+
+const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
+    const [expanded, setExpanded] = useState(false);
+
+    const topic = useTopic(room);
+    const body = topicToHtml(topic?.text, topic?.html);
+
+    const onEditClick = (e: SyntheticEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        defaultDispatcher.dispatch({ action: "open_room_settings" });
+    };
+
+    if (!body) {
+        return (
+            <Flex
+                as="section"
+                direction="column"
+                justify="center"
+                gap="var(--cpd-space-2x)"
+                className="mx_RoomSummaryCard_topic"
+            >
+                <Box flex="1">
+                    <Link kind="primary" onClick={onEditClick}>
+                        <Text size="sm" weight="regular">
+                            {_t("right_panel|add_topic")}
+                        </Text>
+                    </Link>
+                </Box>
+            </Flex>
+        );
+    }
+
+    const content = expanded ? <Linkify>{body}</Linkify> : body;
+    return (
+        <Flex
+            as="section"
+            direction="column"
+            justify="center"
+            gap="var(--cpd-space-2x)"
+            className={classNames("mx_RoomSummaryCard_topic", {
+                mx_RoomSummaryCard_topic_collapsed: !expanded,
+            })}
+        >
+            <Box flex="1" className="mx_RoomSummaryCard_topic_container">
+                <Text
+                    size="sm"
+                    weight="regular"
+                    onClick={(ev: React.MouseEvent): void => {
+                        if (ev.target instanceof HTMLAnchorElement) {
+                            onRoomTopicLinkClick(ev);
+                            return;
+                        }
+                        setExpanded(!expanded);
+                    }}
+                >
+                    {content}
+                </Text>
+                <IconButton
+                    className="mx_RoomSummaryCard_topic_chevron"
+                    size="24px"
+                    onClick={() => setExpanded(!expanded)}
+                >
+                    <ChevronDownIcon />
+                </IconButton>
+            </Box>
+            {expanded && (
+                <Box flex="1" className="mx_RoomSummaryCard_topic_edit">
+                    <Link kind="primary" onClick={onEditClick}>
+                        <Text size="sm" weight="regular">
+                            {_t("action|edit")}
+                        </Text>
+                    </Link>
+                </Box>
+            )}
+        </Flex>
+    );
 };
 
 const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, onSearchClick }) => {
@@ -384,6 +475,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
                     </Badge>
                 )}
             </Flex>
+
+            <RoomTopic room={room} />
         </header>
     );
 
@@ -393,6 +486,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
     const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
         RoomListStore.instance.getTagsForRoom(room),
     );
+    const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
     return (
@@ -404,7 +498,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
                 align="center"
                 justify="space-between"
             >
-                <Tooltip label={_t("action|search")} side="right">
+                <Tooltip label={_t("action|search")} placement="right">
                     <button
                         className="mx_RoomSummaryCard_searchBtn"
                         data-testid="summary-search"
@@ -439,7 +533,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
             <MenuItem
                 Icon={UserAddIcon}
                 label={_t("action|invite")}
-                disabled={!canInviteTo(room)}
+                disabled={!canInviteToState}
                 onSelect={() => inviteToRoom(room)}
             />
             {SettingsStore.getValue(UIFeature.RoomSummaryCopyLink) && (

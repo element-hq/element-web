@@ -17,13 +17,20 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
+import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 
 import { mkEvent } from "../../../test-utils";
 import { DecryptionFailureBody } from "../../../../src/components/views/messages/DecryptionFailureBody";
+import { LocalDeviceVerificationStateContext } from "../../../../src/contexts/LocalDeviceVerificationStateContext";
 
 describe("DecryptionFailureBody", () => {
-    function customRender(event: MatrixEvent) {
-        return render(<DecryptionFailureBody mxEvent={event} />);
+    function customRender(event: MatrixEvent, localDeviceVerified: boolean = false) {
+        return render(
+            <LocalDeviceVerificationStateContext.Provider value={localDeviceVerified}>
+                <DecryptionFailureBody mxEvent={event} />
+            </LocalDeviceVerificationStateContext.Provider>,
+        );
     }
 
     it(`Should display "Unable to decrypt message"`, () => {
@@ -59,5 +66,52 @@ describe("DecryptionFailureBody", () => {
 
         // Then
         expect(container).toMatchSnapshot();
+    });
+
+    it("should handle historical messages with no key backup", async () => {
+        // When
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP,
+            msg: "No backup",
+            roomId: "fakeroom",
+            sender: "fakesender",
+        });
+        const { container } = customRender(event);
+
+        // Then
+        expect(container).toHaveTextContent("Historical messages are not available on this device");
+    });
+
+    it.each([true, false])(
+        "should handle historical messages when there is a backup and device verification is %s",
+        async (verified) => {
+            // When
+            const event = await mkDecryptionFailureMatrixEvent({
+                code: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+                msg: "Failure",
+                roomId: "fakeroom",
+                sender: "fakesender",
+            });
+            const { container } = customRender(event, verified);
+
+            // Then
+            expect(container).toHaveTextContent(
+                verified ? "Unable to decrypt" : "You need to verify this device for access to historical messages",
+            );
+        },
+    );
+
+    it("should handle undecryptable pre-join messages", async () => {
+        // When
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED,
+            msg: "Not joined",
+            roomId: "fakeroom",
+            sender: "fakesender",
+        });
+        const { container } = customRender(event);
+
+        // Then
+        expect(container).toHaveTextContent("You don't have access to this message");
     });
 });

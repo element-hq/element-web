@@ -115,6 +115,8 @@ export function createTestClient(): MatrixClient {
         credentials: { userId: "@userId:matrix.org" },
         bootstrapCrossSigning: jest.fn(),
         hasSecretStorageKey: jest.fn(),
+        getKeyBackupVersion: jest.fn(),
+        checkOwnCrossSigningTrust: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),
@@ -269,6 +271,7 @@ export function createTestClient(): MatrixClient {
         getMediaConfig: jest.fn(),
         baseUrl: "https://matrix-client.matrix.org",
         matrixRTC: createStubMatrixRTC(),
+        isFallbackICEServerAllowed: jest.fn().mockReturnValue(false),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -620,6 +623,7 @@ export function mkStubRoom(
         getType: jest.fn().mockReturnValue(undefined),
         getUnfilteredTimelineSet: jest.fn(),
         getUnreadNotificationCount: jest.fn(() => 0),
+        getRoomUnreadNotificationCount: jest.fn().mockReturnValue(0),
         getVersion: jest.fn().mockReturnValue("1"),
         hasMembershipState: () => false,
         isElementVideoRoom: jest.fn().mockReturnValue(false),
@@ -637,7 +641,6 @@ export function mkStubRoom(
         roomId,
         setBlacklistUnverifiedDevices: jest.fn(),
         setUnreadNotificationCount: jest.fn(),
-        shouldUpgradeToVersion: (() => null) as () => string | null,
         tags: {},
         timeline: [],
     } as unknown as Room;

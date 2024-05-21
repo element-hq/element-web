@@ -57,10 +57,10 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ExtraTile from "./ExtraTile";
 import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -160,7 +160,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                                     showSpaceInvite(activeSpace);
                                 }}
                                 disabled={!canInvite}
-                                tooltip={canInvite ? undefined : _t("spaces|error_no_permission_invite")}
+                                title={canInvite ? undefined : _t("spaces|error_no_permission_invite")}
                             />
                         )}
                     </IconizedContextMenuOptionList>
@@ -185,7 +185,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
         );
     } else if (!activeSpace && showCreateRooms) {
         return (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 tabIndex={tabIndex}
                 onClick={(e) => {
                     dispatcher.dispatch({ action: "view_create_chat" });
@@ -250,7 +250,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                 PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                             }}
                             disabled={!canAddRooms}
-                            tooltip={canAddRooms ? undefined : _t("spaces|error_no_permission_create_room")}
+                            title={canAddRooms ? undefined : _t("spaces|error_no_permission_create_room")}
                         />
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
@@ -266,7 +266,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                     );
                                 }}
                                 disabled={!canAddRooms}
-                                tooltip={canAddRooms ? undefined : _t("spaces|error_no_permission_create_room")}
+                                title={canAddRooms ? undefined : _t("spaces|error_no_permission_create_room")}
                             >
                                 <BetaPill />
                             </IconizedContextMenuOption>
@@ -281,7 +281,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                 showAddExistingRooms(activeSpace);
                             }}
                             disabled={!canAddRooms}
-                            tooltip={canAddRooms ? undefined : _t("spaces|error_no_permission_add_room")}
+                            title={canAddRooms ? undefined : _t("spaces|error_no_permission_add_room")}
                         />
                     </>
                 ) : null}

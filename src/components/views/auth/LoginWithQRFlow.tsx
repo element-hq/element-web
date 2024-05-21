@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
+import React, { ReactNode } from "react";
+import { RendezvousFailureReason as LegacyRendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
 import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
+import { Icon as CheckCircleSolidIcon } from "@vector-im/compound-design-tokens/icons/check-circle-solid.svg";
+import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
+import { Heading, Text } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import QRCode from "../elements/QRCode";
 import Spinner from "../elements/Spinner";
 import { Icon as InfoIcon } from "../../../../res/img/element-icons/i.svg";
-import { Click, FailureReason, LoginWithQRFailureReason, Phase } from "./LoginWithQR";
+import { Click, Phase } from "./LoginWithQR-types";
 import SdkConfig from "../../../SdkConfig";
+import { FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
 
-interface IProps {
+interface Props {
     phase: Phase;
     code?: string;
     onClick(type: Click): Promise<void>;
@@ -34,13 +39,17 @@ interface IProps {
     confirmationDigits?: string;
 }
 
+// n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
+// However, we want to keep this implementation around for some time.
+// TODO: define an end-of-life date for this implementation.
+
 /**
  * A component that implements the UI for sign in and E2EE set up with a QR code.
  *
  * This uses the unstable feature of MSC3906: https://github.com/matrix-org/matrix-spec-proposals/pull/3906
  */
-export default class LoginWithQRFlow extends React.Component<IProps> {
-    public constructor(props: IProps) {
+export default class LoginWithQRFlow extends React.Component<Props> {
+    public constructor(props: Props) {
         super(props);
     }
 
@@ -72,49 +81,75 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
         let main: JSX.Element | undefined;
         let buttons: JSX.Element | undefined;
         let backButton = true;
-        let cancellationMessage: string | undefined;
-        let centreTitle = false;
+        let className = "";
 
         switch (this.props.phase) {
-            case Phase.Error:
+            case Phase.Error: {
+                let success = false;
+                let title: string | undefined;
+                let message: ReactNode | undefined;
+
                 switch (this.props.failureReason) {
-                    case RendezvousFailureReason.Expired:
-                        cancellationMessage = _t("auth|qr_code_login|error_linking_incomplete");
+                    case LegacyRendezvousFailureReason.UnsupportedAlgorithm:
+                    case LegacyRendezvousFailureReason.UnsupportedTransport:
+                    case LegacyRendezvousFailureReason.HomeserverLacksSupport:
+                        title = _t("auth|qr_code_login|error_unsupported_protocol_title");
+                        message = _t("auth|qr_code_login|error_unsupported_protocol");
                         break;
-                    case RendezvousFailureReason.InvalidCode:
-                        cancellationMessage = _t("auth|qr_code_login|error_invalid_scanned_code");
+
+                    case LegacyRendezvousFailureReason.UserCancelled:
+                        title = _t("auth|qr_code_login|error_user_cancelled_title");
+                        message = _t("auth|qr_code_login|error_user_cancelled");
                         break;
-                    case RendezvousFailureReason.UnsupportedAlgorithm:
-                        cancellationMessage = _t("auth|qr_code_login|error_device_unsupported");
+
+                    case LegacyRendezvousFailureReason.Expired:
+                        title = _t("auth|qr_code_login|error_expired_title");
+                        message = _t("auth|qr_code_login|error_expired");
                         break;
-                    case RendezvousFailureReason.UserDeclined:
-                        cancellationMessage = _t("auth|qr_code_login|error_request_declined");
+
+                    case LegacyRendezvousFailureReason.InvalidCode:
+                        title = _t("auth|qr_code_login|error_insecure_channel_detected_title");
+                        message = (
+                            <>
+                                {_t("auth|qr_code_login|error_insecure_channel_detected")}
+
+                                <Text as="h2" size="lg" weight="semibold" data-testid="cancellation-message">
+                                    {_t("auth|qr_code_login|error_insecure_channel_detected_instructions")}
+                                </Text>
+                                <ol>
+                                    <li>{_t("auth|qr_code_login|error_insecure_channel_detected_instructions_1")}</li>
+                                    <li>{_t("auth|qr_code_login|error_insecure_channel_detected_instructions_2")}</li>
+                                    <li>{_t("auth|qr_code_login|error_insecure_channel_detected_instructions_3")}</li>
+                                </ol>
+                            </>
+                        );
                         break;
-                    case RendezvousFailureReason.OtherDeviceAlreadySignedIn:
-                        cancellationMessage = _t("auth|qr_code_login|error_device_already_signed_in");
+
+                    case LegacyRendezvousFailureReason.OtherDeviceAlreadySignedIn:
+                        success = true;
+                        title = _t("auth|qr_code_login|error_other_device_already_signed_in_title");
+                        message = _t("auth|qr_code_login|error_other_device_already_signed_in");
                         break;
-                    case RendezvousFailureReason.OtherDeviceNotSignedIn:
-                        cancellationMessage = _t("auth|qr_code_login|error_device_not_signed_in");
+
+                    case LegacyRendezvousFailureReason.UserDeclined:
+                        title = _t("auth|qr_code_login|error_user_declined_title");
+                        message = _t("auth|qr_code_login|error_user_declined");
                         break;
-                    case RendezvousFailureReason.UserCancelled:
-                        cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
-                        break;
+
                     case LoginWithQRFailureReason.RateLimited:
-                        cancellationMessage = _t("auth|qr_code_login|error_rate_limited");
+                        title = _t("error|something_went_wrong");
+                        message = _t("auth|qr_code_login|error_rate_limited");
                         break;
-                    case RendezvousFailureReason.Unknown:
-                        cancellationMessage = _t("auth|qr_code_login|error_unexpected");
-                        break;
-                    case RendezvousFailureReason.HomeserverLacksSupport:
-                        cancellationMessage = _t("auth|qr_code_login|error_homeserver_lacks_support");
-                        break;
+
+                    case LegacyRendezvousFailureReason.OtherDeviceNotSignedIn:
+                    case LegacyRendezvousFailureReason.Unknown:
                     default:
-                        cancellationMessage = _t("auth|qr_code_login|error_request_cancelled");
+                        title = _t("error|something_went_wrong");
+                        message = _t("auth|qr_code_login|error_unexpected");
                         break;
                 }
-                centreTitle = true;
+                className = "mx_LoginWithQR_error";
                 backButton = false;
-                main = <p data-testid="cancellation-message">{cancellationMessage}</p>;
                 buttons = (
                     <>
                         <AccessibleButton
@@ -127,7 +162,23 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                         {this.cancelButton()}
                     </>
                 );
+                main = (
+                    <>
+                        <div
+                            className={classNames("mx_LoginWithQR_icon", {
+                                "mx_LoginWithQR_icon--critical": !success,
+                            })}
+                        >
+                            {success ? <CheckCircleSolidIcon width="32px" /> : <ErrorIcon width="32px" />}
+                        </div>
+                        <Heading as="h1" size="sm" weight="semibold">
+                            {title}
+                        </Heading>
+                        {typeof message === "object" ? message : <p data-testid="cancellation-message">{message}</p>}
+                    </>
+                );
                 break;
+            }
             case Phase.Connected:
                 backButton = false;
                 main = (
@@ -146,36 +197,34 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 buttons = (
                     <>
                         <AccessibleButton
-                            data-testid="decline-login-button"
-                            kind="primary_outline"
-                            onClick={this.handleClick(Click.Decline)}
-                        >
-                            {_t("action|cancel")}
-                        </AccessibleButton>
-                        <AccessibleButton
                             data-testid="approve-login-button"
                             kind="primary"
                             onClick={this.handleClick(Click.Approve)}
                         >
                             {_t("action|approve")}
                         </AccessibleButton>
+                        <AccessibleButton
+                            data-testid="decline-login-button"
+                            kind="primary_outline"
+                            onClick={this.handleClick(Click.Decline)}
+                        >
+                            {_t("action|cancel")}
+                        </AccessibleButton>
                     </>
                 );
                 break;
             case Phase.ShowingQR:
                 if (this.props.code) {
-                    const code = (
-                        <div className="mx_LoginWithQR_qrWrapper">
-                            <QRCode
-                                data={[{ data: Buffer.from(this.props.code ?? ""), mode: "byte" }]}
-                                className="mx_QRCode"
-                            />
-                        </div>
-                    );
+                    const data = Buffer.from(this.props.code ?? "");
+
                     main = (
                         <>
-                            <h1>{_t("auth|qr_code_login|scan_code_instruction")}</h1>
-                            {code}
+                            <Heading as="h1" size="sm" weight="semibold">
+                                {_t("auth|qr_code_login|scan_code_instruction")}
+                            </Heading>
+                            <div className="mx_LoginWithQR_qrWrapper">
+                                <QRCode data={[{ data, mode: "byte" }]} className="mx_QRCode" />
+                            </div>
                             <ol>
                                 <li>
                                     {_t("auth|qr_code_login|open_element_other_device", {
@@ -209,30 +258,27 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 buttons = this.cancelButton();
                 break;
             case Phase.Verifying:
-                centreTitle = true;
                 main = this.simpleSpinner(_t("auth|qr_code_login|completing_setup"));
                 break;
         }
 
         return (
-            <div data-testid="login-with-qr" className="mx_LoginWithQR">
-                <div className={centreTitle ? "mx_LoginWithQR_centreTitle" : ""}>
-                    {backButton ? (
-                        <div className="mx_LoginWithQR_heading">
-                            <AccessibleButton
-                                data-testid="back-button"
-                                className="mx_LoginWithQR_BackButton"
-                                onClick={this.handleClick(Click.Back)}
-                                title="Back"
-                            >
-                                <ChevronLeftIcon />
-                            </AccessibleButton>
-                            <div className="mx_LoginWithQR_breadcrumbs">
-                                {_t("settings|sessions|title")} / {_t("settings|sessions|sign_in_with_qr")}
-                            </div>
+            <div data-testid="login-with-qr" className={classNames("mx_LoginWithQR", className)}>
+                {backButton ? (
+                    <div className="mx_LoginWithQR_heading">
+                        <AccessibleButton
+                            data-testid="back-button"
+                            className="mx_LoginWithQR_BackButton"
+                            onClick={this.handleClick(Click.Back)}
+                            title="Back"
+                        >
+                            <ChevronLeftIcon />
+                        </AccessibleButton>
+                        <div className="mx_LoginWithQR_breadcrumbs">
+                            {_t("settings|sessions|title")} / {_t("settings|sessions|sign_in_with_qr")}
                         </div>
-                    ) : null}
-                </div>
+                    </div>
+                ) : null}
                 <div className="mx_LoginWithQR_main">{main}</div>
                 <div className="mx_LoginWithQR_buttons">{buttons}</div>
             </div>

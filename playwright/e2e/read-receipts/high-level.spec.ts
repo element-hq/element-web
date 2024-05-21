@@ -224,15 +224,15 @@ test.describe("Read receipts", () => {
                 ...msg.manyThreadedOff("Root3", many("T", 20)),
             ]);
             await util.goTo(room2);
-            await util.assertUnread(room2, 60);
+            await util.assertRead(room2);
+            await util.assertUnreadThread("Root1");
+            await util.assertUnreadThread("Root2");
+            await util.assertUnreadThread("Root3");
             await util.openThread("Root1");
-            await util.assertUnread(room2, 40);
             await util.assertReadThread("Root1");
             await util.openThread("Root2");
-            await util.assertUnread(room2, 20);
             await util.assertReadThread("Root2");
             await util.openThread("Root3");
-            await util.assertRead(room2);
             await util.assertReadThread("Root3");
 
             // When I restart and page up to load old thread roots
@@ -247,6 +247,7 @@ test.describe("Read receipts", () => {
             await util.assertReadThread("Root2");
             await util.assertReadThread("Root3");
         });
+
         test("Paging up to find old threads that were never read keeps the room unread", async ({
             cryptoBackend,
             roomAlpha: room1,
@@ -268,7 +269,7 @@ test.describe("Read receipts", () => {
                 ...many("Msg", 100),
             ]);
             await util.goTo(room2);
-            await util.assertUnread(room2, 6);
+            await util.assertRead(room2);
             await util.assertUnreadThread("Root1");
             await util.assertUnreadThread("Root2");
             await util.assertUnreadThread("Root3");
@@ -278,20 +279,21 @@ test.describe("Read receipts", () => {
             await util.goTo(room1);
             await util.saveAndReload();
 
-            // Then the room remembers it's unread
+            // Then the room remembers it's read
             // TODO: I (andyb) think this will fall in an encrypted room
-            await util.assertUnread(room2, 6);
+            await util.assertRead(room2);
 
             // And when I page up to load old thread roots
             await util.goTo(room2);
             await util.pageUp();
 
-            // Then the room remains unread
-            await util.assertUnread(room2, 6);
+            // Then the room remains read
+            await util.assertRead(room2);
             await util.assertUnreadThread("Root1");
             await util.assertUnreadThread("Root2");
             await util.assertUnreadThread("Root3");
         });
+
         test("Looking in thread view to find old threads that were never read makes the room unread", async ({
             roomAlpha: room1,
             roomBeta: room2,
@@ -310,7 +312,7 @@ test.describe("Read receipts", () => {
                 ...many("Msg", 100),
             ]);
             await util.goTo(room2);
-            await util.assertUnread(room2, 6);
+            await util.assertRead(room2);
             await util.assertUnreadThread("Root1");
             await util.assertUnreadThread("Root2");
             await util.assertUnreadThread("Root3");
@@ -320,20 +322,21 @@ test.describe("Read receipts", () => {
             await util.goTo(room1);
             await util.saveAndReload();
 
-            // Then the room remembers it's unread
+            // Then the room remembers it's read
             // TODO: I (andyb) think this will fall in an encrypted room
-            await util.assertUnread(room2, 6);
+            await util.assertRead(room2);
 
             // And when I open the threads view
             await util.goTo(room2);
             await util.openThreadList();
 
-            // Then the room remains unread
-            await util.assertUnread(room2, 6);
+            // Then the room remains read
+            await util.assertRead(room2);
             await util.assertUnreadThread("Root1");
             await util.assertUnreadThread("Root2");
             await util.assertUnreadThread("Root3");
         });
+
         test("After marking room as read, paging up to find old threads that were never read leaves the room read", async ({
             cryptoBackend,
             roomAlpha: room1,

@@ -240,24 +240,26 @@ test.describe("User verification", () => {
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Bob", autoAcceptInvites: true, userIdPrefix: "bob_" },
+        room: async ({ page, app, bot: bob, user: aliceCredentials }, use) => {
+            await app.client.bootstrapCrossSigning(aliceCredentials);
+
+            // the other user creates a DM
+            const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
+
+            // accept the DM
+            await app.viewRoomByName("Bob");
+            await page.getByRole("button", { name: "Start chatting" }).click();
+            await use({ roomId: dmRoomId });
+        },
     });
 
     test("can receive a verification request when there is no existing DM", async ({
         page,
-        app,
         bot: bob,
         user: aliceCredentials,
         toasts,
+        room: { roomId: dmRoomId },
     }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
-
-        // the other user creates a DM
-        const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
-
-        // accept the DM
-        await app.viewRoomByName("Bob");
-        await page.getByRole("button", { name: "Start chatting" }).click();
-
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
@@ -293,6 +295,51 @@ test.describe("User verification", () => {
         await page.getByRole("button", { name: "They match" }).click();
         await expect(page.getByText("You've successfully verified Bob!")).toBeVisible();
         await page.getByRole("button", { name: "Got it" }).click();
+    });
+
+    test("can abort emoji verification when emoji mismatch", async ({
+        page,
+        bot: bob,
+        user: aliceCredentials,
+        toasts,
+        room: { roomId: dmRoomId },
+        cryptoBackend,
+    }) => {
+        test.skip(cryptoBackend === "legacy", "Not implemented for legacy crypto");
+
+        // once Alice has joined, Bob starts the verification
+        const bobVerificationRequest = await bob.evaluateHandle(
+            async (client, { dmRoomId, aliceCredentials }) => {
+                const room = client.getRoom(dmRoomId);
+                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
+                    await new Promise((resolve) => {
+                        room.once(window.matrixcs.RoomStateEvent.Members, resolve);
+                    });
+                }
+
+                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+            },
+            { dmRoomId, aliceCredentials },
+        );
+
+        // Accept verification via toast
+        const toast = await toasts.getToast("Verification requested");
+        await toast.getByRole("button", { name: "Verify Session" }).click();
+
+        // request verification by emoji
+        await page.locator("#mx_RightPanel").getByRole("button", { name: "Verify by emoji" }).click();
+
+        /* on the bot side, wait for the verifier to exist ... */
+        const botVerifier = await awaitVerifier(bobVerificationRequest);
+        // ... confirm ...
+        botVerifier.evaluate((verifier) => verifier.verify()).catch(() => {});
+        // ... and abort the verification
+        await page.getByRole("button", { name: "They don't match" }).click();
+
+        const dialog = page.locator(".mx_Dialog");
+        await expect(dialog.getByText("Your messages are not secure")).toBeVisible();
+        await dialog.getByRole("button", { name: "OK" }).click();
+        await expect(dialog).not.toBeVisible();
     });
 });
 

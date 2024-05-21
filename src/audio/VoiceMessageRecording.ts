@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IEncryptedFile, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 import { SimpleObservable } from "matrix-widget-api";
 
 import { uploadFile } from "../ContentMessages";
@@ -26,7 +27,7 @@ import { IRecordingUpdate, RecordingState, VoiceRecording } from "./VoiceRecordi
 
 export interface IUpload {
     mxc?: string; // for unencrypted uploads
-    encrypted?: IEncryptedFile;
+    encrypted?: EncryptedFile;
 }
 
 /**

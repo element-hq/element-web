@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2024 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,11 +21,9 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
-import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 
 interface IProps {
     roomId: string;
@@ -35,8 +33,9 @@ interface IState {
     originalDisplayName: string;
     displayName: string;
     originalAvatarUrl: string | null;
-    avatarUrl: string | null;
     avatarFile: File | null;
+    // If true, the user has indicated that they wish to remove the avatar and this should happen on save.
+    avatarRemovalPending: boolean;
     originalTopic: string;
     topic: string;
     profileFieldsTouched: Record<string, boolean>;
@@ -57,8 +56,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         if (!room) throw new Error(`Expected a room for ID: ${props.roomId}`);
 
         const avatarEvent = room.currentState.getStateEvents(EventType.RoomAvatar, "");
-        let avatarUrl = avatarEvent?.getContent()["url"] ?? null;
-        if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
+        const avatarUrl = avatarEvent?.getContent()["url"] ?? null;
 
         const topicEvent = room.currentState.getStateEvents(EventType.RoomTopic, "");
         const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()["topic"] : "";
@@ -71,8 +69,8 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
             originalDisplayName: name,
             displayName: name,
             originalAvatarUrl: avatarUrl,
-            avatarUrl: avatarUrl,
             avatarFile: null,
+            avatarRemovalPending: false,
             originalTopic: topic,
             topic: topic,
             profileFieldsTouched: {},
@@ -82,16 +80,23 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         };
     }
 
-    private uploadAvatar = (): void => {
-        this.avatarUpload.current?.click();
+    private onAvatarChanged = (file: File): void => {
+        this.setState({
+            avatarFile: file,
+            avatarRemovalPending: false,
+            profileFieldsTouched: {
+                ...this.state.profileFieldsTouched,
+                avatar: true,
+            },
+        });
     };
 
     private removeAvatar = (): void => {
         // clear file upload field so same file can be selected
         if (this.avatarUpload.current) this.avatarUpload.current.value = "";
         this.setState({
-            avatarUrl: null,
             avatarFile: null,
+            avatarRemovalPending: true,
             profileFieldsTouched: {
                 ...this.state.profileFieldsTouched,
                 avatar: true,
@@ -112,8 +117,8 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
             profileFieldsTouched: {},
             displayName: this.state.originalDisplayName,
             topic: this.state.originalTopic,
-            avatarUrl: this.state.originalAvatarUrl,
             avatarFile: null,
+            avatarRemovalPending: false,
         });
     };
 
@@ -138,11 +143,12 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         if (this.state.avatarFile) {
             const { content_uri: uri } = await client.uploadContent(this.state.avatarFile);
             await client.sendStateEvent(this.props.roomId, EventType.RoomAvatar, { url: uri }, "");
-            newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
-            newState.originalAvatarUrl = newState.avatarUrl;
+            newState.originalAvatarUrl = uri;
             newState.avatarFile = null;
-        } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+        } else if (this.state.avatarRemovalPending) {
             await client.sendStateEvent(this.props.roomId, EventType.RoomAvatar, {}, "");
+            newState.avatarRemovalPending = false;
+            newState.originalAvatarUrl = null;
         }
 
         if (this.state.originalTopic !== this.state.topic) {
@@ -192,34 +198,6 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         }
     };
 
-    private onAvatarChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        if (!e.target.files || !e.target.files.length) {
-            this.setState({
-                avatarUrl: this.state.originalAvatarUrl,
-                avatarFile: null,
-                profileFieldsTouched: {
-                    ...this.state.profileFieldsTouched,
-                    avatar: false,
-                },
-            });
-            return;
-        }
-
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            this.setState({
-                avatarUrl: String(ev.target?.result),
-                avatarFile: file,
-                profileFieldsTouched: {
-                    ...this.state.profileFieldsTouched,
-                    avatar: true,
-                },
-            });
-        };
-        reader.readAsDataURL(file);
-    };
-
     public render(): React.ReactNode {
         let profileSettingsButtons;
         if (this.state.canSetName || this.state.canSetTopic || this.state.canSetAvatar) {
@@ -241,14 +219,6 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
 
         return (
             <form onSubmit={this.saveProfile} autoComplete="off" noValidate={true} className="mx_ProfileSettings">
-                <input
-                    type="file"
-                    ref={this.avatarUpload}
-                    className="mx_ProfileSettings_avatarUpload"
-                    onClick={chromeFileInputFix}
-                    onChange={this.onAvatarChanged}
-                    accept="image/*"
-                />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_profile_controls">
                         <Field
@@ -275,11 +245,15 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                         />
                     </div>
                     <AvatarSetting
-                        avatarUrl={this.state.avatarUrl ?? undefined}
-                        avatarName={this.state.displayName || this.props.roomId}
+                        avatar={
+                            this.state.avatarRemovalPending
+                                ? undefined
+                                : this.state.avatarFile ?? this.state.originalAvatarUrl ?? undefined
+                        }
                         avatarAltText={_t("room_settings|general|avatar_field_label")}
-                        uploadAvatar={this.state.canSetAvatar ? this.uploadAvatar : undefined}
-                        removeAvatar={this.state.canSetAvatar ? this.removeAvatar : undefined}
+                        disabled={!this.state.canSetAvatar}
+                        onChange={this.onAvatarChanged}
+                        removeAvatar={this.removeAvatar}
                     />
                 </div>
                 {profileSettingsButtons}

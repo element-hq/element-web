@@ -3,7 +3,6 @@
 exports[`<ShareLatestLocation /> renders share buttons when there is a location 1`] = `
 <DocumentFragment>
   <a
-    data-state="closed"
     data-testid="open-location-in-osm"
     href="https://www.openstreetmap.org/?mlat=51&mlon=42#map=16/51/42"
     rel="noreferrer noopener"

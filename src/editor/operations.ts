@@ -48,7 +48,7 @@ export function formatRange(range: Range, action: Formatting): void {
             toggleInlineFormat(range, "**");
             break;
         case Formatting.Italics:
-            toggleInlineFormat(range, "_");
+            toggleInlineFormat(range, "*");
             break;
         case Formatting.Strikethrough:
             toggleInlineFormat(range, "<del>", "</del>");
