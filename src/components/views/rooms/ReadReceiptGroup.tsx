@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { PropsWithChildren } from "react";
 import { User } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import { IReadReceiptProps } from "./EventTile";
@@ -86,18 +87,6 @@ export function ReadReceiptGroup({
 
     const tooltipMembers: string[] = readReceipts.map((it) => it.roomMember?.name ?? it.userId);
     const tooltipText = readReceiptTooltip(tooltipMembers, maxAvatars);
-
-    const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
-        label: (
-            <>
-                <div className="mx_Tooltip_title">
-                    {_t("timeline|read_receipt_title", { count: readReceipts.length })}
-                </div>
-                <div className="mx_Tooltip_sub">{tooltipText}</div>
-            </>
-        ),
-        alignment: Alignment.TopRight,
-    });
 
     // return early if there are no read receipts
     if (readReceipts.length === 0) {
@@ -185,34 +174,35 @@ export function ReadReceiptGroup({
 
     return (
         <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
-                <AccessibleButton
-                    className="mx_ReadReceiptGroup_button"
-                    ref={button}
-                    aria-label={tooltipText}
-                    aria-haspopup="true"
-                    onClick={openMenu}
-                    onMouseOver={showTooltip}
-                    onMouseLeave={hideTooltip}
-                    onFocus={showTooltip}
-                    onBlur={hideTooltip}
-                >
-                    {remText}
-                    <span
-                        className="mx_ReadReceiptGroup_container"
-                        style={{
-                            width:
-                                Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
-                                READ_AVATAR_SIZE -
-                                READ_AVATAR_OFFSET,
-                        }}
+            <Tooltip
+                label={_t("timeline|read_receipt_title", { count: readReceipts.length })}
+                caption={tooltipText}
+                placement="top-end"
+            >
+                <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
+                    <AccessibleButton
+                        className="mx_ReadReceiptGroup_button"
+                        ref={button}
+                        aria-label={tooltipText}
+                        aria-haspopup="true"
+                        onClick={openMenu}
                     >
-                        {avatars}
-                    </span>
-                </AccessibleButton>
-                {tooltip}
-                {contextMenu}
-            </div>
+                        {remText}
+                        <span
+                            className="mx_ReadReceiptGroup_container"
+                            style={{
+                                width:
+                                    Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
+                                    READ_AVATAR_SIZE -
+                                    READ_AVATAR_OFFSET,
+                            }}
+                        >
+                            {avatars}
+                        </span>
+                    </AccessibleButton>
+                    {contextMenu}
+                </div>
+            </Tooltip>
         </div>
     );
 }
