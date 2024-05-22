@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
@@ -26,6 +26,8 @@ import {
 } from "../../../../src/components/views/rooms/ReadReceiptGroup";
 import * as languageHandler from "../../../../src/languageHandler";
 import { stubClient } from "../../../test-utils";
+import dispatcher from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
@@ -100,10 +102,14 @@ describe("ReadReceiptGroup", () => {
         member.rawDisplayName = "Alice";
         member.getMxcAvatarUrl = () => "http://placekitten.com/400/400";
 
-        const renderReadReceipt = () => {
+        const renderReadReceipt = (props?: Partial<ComponentProps<typeof ReadReceiptPerson>>) => {
             const currentDate = new Date(2024, 4, 15).getTime();
-            return render(<ReadReceiptPerson userId={USER_ID} roomMember={member} ts={currentDate} />);
+            return render(<ReadReceiptPerson userId={USER_ID} roomMember={member} ts={currentDate} {...props} />);
         };
+
+        beforeEach(() => {
+            jest.spyOn(dispatcher, "dispatch");
+        });
 
         it("should render", () => {
             const { container } = renderReadReceipt();
@@ -118,6 +124,22 @@ describe("ReadReceiptGroup", () => {
                 const tooltip = screen.getByRole("tooltip", { name: member.rawDisplayName });
                 expect(tooltip).toMatchSnapshot();
             });
+        });
+
+        it("should send an event when clicked", async () => {
+            const onAfterClick = jest.fn();
+            renderReadReceipt({ onAfterClick });
+
+            screen.getByRole("menuitem").click();
+
+            expect(onAfterClick).toHaveBeenCalled();
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewUser,
+                    member,
+                    push: false,
+                }),
+            );
         });
     });
 });
