@@ -119,7 +119,6 @@ describe("OIDC authorization", () => {
             scope: "test",
             token_type: "Bearer",
             expires_at: 12345,
-            id_token: "test",
         };
 
         beforeEach(() => {

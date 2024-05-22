@@ -288,7 +288,6 @@ describe("<MatrixChat />", () => {
             scope: "test",
             token_type: "Bearer",
             expires_at: 12345,
-            id_token: "test",
         };
 
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
