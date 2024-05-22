@@ -46,7 +46,6 @@ exports[`ReactionsRowButton renders reaction row button custom image reactions c
     >
       2
     </span>
-    <div />
   </div>
 </DocumentFragment>
 `;
@@ -95,7 +94,6 @@ exports[`ReactionsRowButton renders reaction row button emojis correctly 2`] = `
     >
       2
     </span>
-    <div />
   </div>
 </DocumentFragment>
 `;
