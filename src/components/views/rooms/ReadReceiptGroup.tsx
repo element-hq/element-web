@@ -210,7 +210,8 @@ interface ReadReceiptPersonProps extends IReadReceiptProps {
     onAfterClick?: () => void;
 }
 
-function ReadReceiptPerson({
+// Export for testing
+export function ReadReceiptPerson({
     userId,
     roomMember,
     ts,
