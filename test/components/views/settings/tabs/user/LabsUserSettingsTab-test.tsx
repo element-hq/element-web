@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import LabsUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
@@ -113,12 +114,14 @@ describe("<LabsUserSettingsTab />", () => {
                 expect(toggle.getAttribute("aria-checked")).toEqual("true");
 
                 // Hover over the toggle to make it show the tooltip
-                fireEvent.mouseOver(toggle);
+                await userEvent.hover(toggle);
 
-                const tooltip = rendered.getByRole("tooltip");
-                expect(tooltip).toHaveTextContent(
-                    "Once enabled, Rust cryptography can only be disabled by logging out and in again",
-                );
+                await waitFor(() => {
+                    const tooltip = screen.getByRole("tooltip");
+                    expect(tooltip).toHaveTextContent(
+                        "Once enabled, Rust cryptography can only be disabled by logging out and in again",
+                    );
+                });
             });
         });
 
@@ -150,12 +153,14 @@ describe("<LabsUserSettingsTab />", () => {
                 expect(toggle.getAttribute("aria-checked")).toEqual("true");
 
                 // Hover over the toggle to make it show the tooltip
-                fireEvent.mouseOver(toggle);
+                await userEvent.hover(toggle);
 
-                const tooltip = rendered.getByRole("tooltip");
-                expect(tooltip).toHaveTextContent(
-                    "Rust cryptography cannot be disabled on this deployment of BrandedClient",
-                );
+                await waitFor(() => {
+                    const tooltip = rendered.getByRole("tooltip");
+                    expect(tooltip).toHaveTextContent(
+                        "Rust cryptography cannot be disabled on this deployment of BrandedClient",
+                    );
+                });
             });
         });
     });

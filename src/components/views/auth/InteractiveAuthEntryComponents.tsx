@@ -26,10 +26,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { LocalisedPolicy, Policies } from "../../../Terms";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
 import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
-import { Alignment } from "../elements/Tooltip";
 import CaptchaForm from "./CaptchaForm";
 
 /* This file contains a collection of components which are used by the
@@ -121,9 +119,6 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
 
         this.props.submitAuthDict({
             type: AuthType.Password,
-            // TODO: Remove `user` once servers support proper UIA
-            // See https://github.com/vector-im/element-web/issues/10312
-            user: this.props.matrixClient.credentials.userId ?? undefined,
             identifier: {
                 type: "m.id.user",
                 user: this.props.matrixClient.credentials.userId,
@@ -504,15 +499,16 @@ export class EmailIdentityAuthEntry extends React.Component<
                                 {},
                                 {
                                     a: (text: string) => (
-                                        <AccessibleTooltipButton
+                                        <AccessibleButton
                                             kind="link_inline"
                                             title={
                                                 this.state.requested ? _t("auth|uia|email_resent") : _t("action|resend")
                                             }
-                                            alignment={Alignment.Right}
-                                            onHideTooltip={
+                                            onTooltipOpenChange={
                                                 this.state.requested
-                                                    ? () => this.setState({ requested: false })
+                                                    ? (open) => {
+                                                          if (!open) this.setState({ requested: false });
+                                                      }
                                                     : undefined
                                             }
                                             onClick={async (): Promise<void> => {
@@ -527,7 +523,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                                             }}
                                         >
                                             {text}
-                                        </AccessibleTooltipButton>
+                                        </AccessibleButton>
                                     ),
                                 },
                             )}
@@ -634,11 +630,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                 };
                 this.props.submitAuthDict({
                     type: AuthType.Msisdn,
-                    // TODO: Remove `threepid_creds` once servers support proper UIA
-                    // See https://github.com/vector-im/element-web/issues/10312
-                    // See https://github.com/matrix-org/matrix-doc/issues/2220
                     threepid_creds: creds,
-                    threepidCreds: creds,
                 });
             } else {
                 this.setState({

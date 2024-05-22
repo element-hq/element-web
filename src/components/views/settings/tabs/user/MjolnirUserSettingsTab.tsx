@@ -254,7 +254,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("labs_mjolnir|title")}>
+                <SettingsSection>
                     <SettingsSubsectionText>
                         <strong className="warning">{_t("labs_mjolnir|advanced_warning")}</strong>
                         <p>{_t("labs_mjolnir|explainer_1", { brand }, { code: (s) => <code>{s}</code> })}</p>

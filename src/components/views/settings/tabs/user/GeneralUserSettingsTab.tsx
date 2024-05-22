@@ -412,12 +412,15 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <>
                 <SettingsSubsection
-                    heading={_t("settings|general|account_section")}
+                    heading={
+                        SettingsStore.getValue(UIFeature.UserSettingsExternalAccount) &&
+                        _t("settings|general|account_section")
+                    }
                     stretchContent
                     data-testid="accountSection"
                 >
-                    {externalAccountManagement}
-                    {passwordChangeSection}
+                    {SettingsStore.getValue(UIFeature.UserSettingsExternalAccount) && externalAccountManagement}
+                    {SettingsStore.getValue(UIFeature.UserSettingsChangePassword) && passwordChangeSection}
                 </SettingsSubsection>
                 {threepidSection}
             </>
@@ -495,7 +498,12 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             <>
                 {threepidSection}
                 {/* has its own heading as it includes the current identity server */}
-                <SetIdServer missingTerms={false} />
+                {SettingsStore.getValue(UIFeature.UserSettingsSetIdServer) && (
+                    <>
+                        {" "}
+                        <SetIdServer missingTerms={false} />{" "}
+                    </>
+                )}
             </>
         );
     }
@@ -560,14 +568,15 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         return (
             <SettingsTab data-testid="mx_GeneralUserSettingsTab">
-                <SettingsSection heading={_t("common|general")}>
+                <SettingsSection>
                     <ProfileSettings />
                     {this.renderAccountSection()}
                     {this.renderLanguageSection()}
                     {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
                 </SettingsSection>
-                {discoverySection}
-                {this.renderIntegrationManagerSection()}
+                {SettingsStore.getValue(UIFeature.UserSettingsDiscovery) && <> {discoverySection} </>}
+                {SettingsStore.getValue(UIFeature.UserSettingsIntegrationManager) &&
+                    this.renderIntegrationManagerSection()}
                 {accountManagementSection}
             </SettingsTab>
         );

@@ -27,7 +27,6 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
         <img
           alt=""
           class="_image_mcap2_50"
-          crossorigin="anonymous"
           data-type="round"
           height="42px"
           loading="lazy"
@@ -68,10 +67,10 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
         </div>
       </div>
       <div
+        aria-label="Deny"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
         role="button"
         tabindex="0"
-        title="Deny"
       >
         <div
           height="18"
@@ -79,10 +78,10 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
         />
       </div>
       <div
+        aria-label="Approve"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
         role="button"
         tabindex="0"
-        title="Approve"
       >
         <div
           height="18"
@@ -135,10 +134,10 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
         </span>
       </div>
       <div
+        aria-label="Deny"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
         role="button"
         tabindex="0"
-        title="Deny"
       >
         <div
           height="18"
@@ -146,10 +145,10 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
         />
       </div>
       <div
+        aria-label="Approve"
         class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
         role="button"
         tabindex="0"
-        title="Approve"
       >
         <div
           height="18"

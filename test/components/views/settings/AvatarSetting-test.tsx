@@ -14,18 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import AvatarSetting from "../../../../src/components/views/settings/AvatarSetting";
+import { stubClient } from "../../../test-utils";
+
+const BASE64_GIF = "R0lGODlhAQABAAAAACw=";
+const AVATAR_FILE = new File([Uint8Array.from(atob(BASE64_GIF), (c) => c.charCodeAt(0))], "avatar.gif", {
+    type: "image/gif",
+});
 
 describe("<AvatarSetting />", () => {
+    beforeEach(() => {
+        stubClient();
+    });
+
     it("renders avatar with specified alt text", async () => {
         const { queryByAltText } = render(
-            <AvatarSetting
-                avatarName="Peter Fox"
-                avatarAltText="Avatar of Peter Fox"
-                avatarUrl="https://avatar.fictional/my-avatar"
-            />,
+            <AvatarSetting avatarAltText="Avatar of Peter Fox" avatar="mxc://example.org/my-avatar" />,
         );
 
         const imgElement = queryByAltText("Avatar of Peter Fox");
@@ -35,9 +42,8 @@ describe("<AvatarSetting />", () => {
     it("renders avatar with remove button", async () => {
         const { queryByText } = render(
             <AvatarSetting
-                avatarName="Peter Fox"
                 avatarAltText="Avatar of Peter Fox"
-                avatarUrl="https://avatar.fictional/my-avatar"
+                avatar="mxc://example.org/my-avatar"
                 removeAvatar={jest.fn()}
             />,
         );
@@ -47,9 +53,38 @@ describe("<AvatarSetting />", () => {
     });
 
     it("renders avatar without remove button", async () => {
-        const { queryByText } = render(<AvatarSetting avatarName="Peter Fox" avatarAltText="Avatar of Peter Fox" />);
+        const { queryByText } = render(<AvatarSetting disabled={true} avatarAltText="Avatar of Peter Fox" />);
 
         const removeButton = queryByText("Remove");
         expect(removeButton).toBeNull();
+    });
+
+    it("renders a file as the avatar when supplied", async () => {
+        render(<AvatarSetting avatarAltText="Avatar of Peter Fox" avatar={AVATAR_FILE} />);
+
+        const imgElement = await screen.findByRole("button", { name: "Avatar of Peter Fox" });
+        expect(imgElement).toBeInTheDocument();
+        expect(imgElement).toHaveAttribute("src", "data:image/gif;base64," + BASE64_GIF);
+    });
+
+    it("calls onChange when a file is uploaded", async () => {
+        const onChange = jest.fn();
+        const user = userEvent.setup();
+
+        render(
+            <AvatarSetting
+                avatar="mxc://example.org/my-avatar"
+                avatarAltText="Avatar of Peter Fox"
+                onChange={onChange}
+            />,
+        );
+
+        // not really necessary, but to follow the expected user flow as much as possible
+        await user.click(screen.getByRole("button", { name: "Avatar of Peter Fox" }));
+
+        const fileInput = screen.getByAltText("Upload");
+        await user.upload(fileInput, AVATAR_FILE);
+
+        expect(onChange).toHaveBeenCalledWith(AVATAR_FILE);
     });
 });

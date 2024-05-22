@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ limitations under the License.
 
 import React from "react";
 
-import TabbedView, { Tab } from "../../structures/TabbedView";
+import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
-import SettingsStore, { CallbackFn } from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import LabsUserSettingsTab, { showLabsFlags } from "../settings/tabs/user/LabsUserSettingsTab";
 import AppearanceUserSettingsTab from "../settings/tabs/user/AppearanceUserSettingsTab";
 import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
@@ -37,6 +37,7 @@ import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
 import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -44,35 +45,43 @@ interface IProps {
     onFinished(): void;
 }
 
-interface IState {
-    mjolnirEnabled: boolean;
+function titleForTabID(tabId: UserTab): React.ReactNode {
+    const subs = {
+        strong: (sub: string) => <strong>{sub}</strong>,
+    };
+    switch (tabId) {
+        case UserTab.General:
+            return _t("settings|general|dialog_title", undefined, subs);
+        case UserTab.SessionManager:
+            return _t("settings|sessions|dialog_title", undefined, subs);
+        case UserTab.Appearance:
+            return _t("settings|appearance|dialog_title", undefined, subs);
+        case UserTab.Notifications:
+            return _t("settings|notifications|dialog_title", undefined, subs);
+        case UserTab.Preferences:
+            return _t("settings|preferences|dialog_title", undefined, subs);
+        case UserTab.Keyboard:
+            return _t("settings|keyboard|dialog_title", undefined, subs);
+        case UserTab.Sidebar:
+            return _t("settings|sidebar|dialog_title", undefined, subs);
+        case UserTab.Voice:
+            return _t("settings|voip|dialog_title", undefined, subs);
+        case UserTab.Security:
+            return _t("settings|security|dialog_title", undefined, subs);
+        case UserTab.Labs:
+            return _t("settings|labs|dialog_title", undefined, subs);
+        case UserTab.Mjolnir:
+            return _t("settings|labs_mjolnir|dialog_title", undefined, subs);
+        case UserTab.Help:
+            return _t("setting|help_about|dialog_title", undefined, subs);
+    }
 }
 
-export default class UserSettingsDialog extends React.Component<IProps, IState> {
-    private settingsWatchers: string[] = [];
+export default function UserSettingsDialog(props: IProps): JSX.Element {
+    const voipEnabled = useSettingValue<boolean>(UIFeature.Voip);
+    const mjolnirEnabled = useSettingValue<boolean>("feature_mjolnir");
 
-    public constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            mjolnirEnabled: SettingsStore.getValue("feature_mjolnir"),
-        };
-    }
-
-    public componentDidMount(): void {
-        this.settingsWatchers = [SettingsStore.watchSetting("feature_mjolnir", null, this.mjolnirChanged)];
-    }
-
-    public componentWillUnmount(): void {
-        this.settingsWatchers.forEach((watcherRef) => SettingsStore.unwatchSetting(watcherRef));
-    }
-
-    private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
-        // We can cheat because we know what levels a feature is tracked at, and how it is tracked
-        this.setState({ mjolnirEnabled: newValue });
-    };
-
-    private getTabs(): NonEmptyArray<Tab<UserTab>> {
+    const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
 
         tabs.push(
@@ -80,7 +89,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 UserTab.General,
                 _td("common|general"),
                 "mx_UserSettingsDialog_settingsIcon",
-                <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                <GeneralUserSettingsTab closeSettingsFn={props.onFinished} />,
                 "UserSettingsGeneral",
             ),
         );
@@ -90,7 +99,6 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 _td("settings|sessions|title"),
                 "mx_UserSettingsDialog_sessionsIcon",
                 <SessionManagerTab />,
-                // don't track with posthog while under construction
                 undefined,
             ),
         );
@@ -117,7 +125,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 UserTab.Preferences,
                 _td("common|preferences"),
                 "mx_UserSettingsDialog_preferencesIcon",
-                <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                <PreferencesUserSettingsTab closeSettingsFn={props.onFinished} />,
                 "UserSettingsPreferences",
             ),
         );
@@ -140,7 +148,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             ),
         );
 
-        if (SettingsStore.getValue(UIFeature.Voip)) {
+        if (voipEnabled) {
             tabs.push(
                 new Tab(
                     UserTab.Voice,
@@ -157,11 +165,11 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 UserTab.Security,
                 _td("room_settings|security|title"),
                 "mx_UserSettingsDialog_securityIcon",
-                <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
                 "UserSettingsSecurityPrivacy",
             ),
         );
-        // Show the Labs tab if enabled or if there are any active betas
+
         if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
             tabs.push(
                 new Tab(
@@ -173,7 +181,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 ),
             );
         }
-        if (this.state.mjolnirEnabled) {
+        if (mjolnirEnabled) {
             tabs.push(
                 new Tab(
                     UserTab.Mjolnir,
@@ -195,29 +203,31 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         );
 
         return tabs as NonEmptyArray<Tab<UserTab>>;
-    }
+    };
 
-    public render(): React.ReactNode {
-        return (
-            // XXX: SDKContext is provided within the LoggedInView subtree.
-            // Modals function outside the MatrixChat React tree, so sdkContext is reprovided here to simulate that.
-            // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
-            <SDKContext.Provider value={this.props.sdkContext}>
-                <BaseDialog
-                    className="mx_UserSettingsDialog"
-                    hasCancel={true}
-                    onFinished={this.props.onFinished}
-                    title={_t("common|settings")}
-                >
-                    <div className="mx_SettingsDialog_content">
-                        <TabbedView
-                            tabs={this.getTabs()}
-                            initialTabId={this.props.initialTabId}
-                            screenName="UserSettings"
-                        />
-                    </div>
-                </BaseDialog>
-            </SDKContext.Provider>
-        );
-    }
+    const [activeTabId, setActiveTabId] = useActiveTabWithDefault(getTabs(), UserTab.General, props.initialTabId);
+
+    return (
+        // XXX: SDKContext is provided within the LoggedInView subtree.
+        // Modals function outside the MatrixChat React tree, so sdkContext is reprovided here to simulate that.
+        // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
+        <SDKContext.Provider value={props.sdkContext}>
+            <BaseDialog
+                className="mx_UserSettingsDialog"
+                hasCancel={true}
+                onFinished={props.onFinished}
+                title={titleForTabID(activeTabId)}
+            >
+                <div className="mx_SettingsDialog_content">
+                    <TabbedView
+                        tabs={getTabs()}
+                        activeTabId={activeTabId}
+                        screenName="UserSettings"
+                        onChange={setActiveTabId}
+                        responsive={true}
+                    />
+                </div>
+            </BaseDialog>
+        </SDKContext.Provider>
+    );
 }

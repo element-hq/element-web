@@ -26,7 +26,7 @@ import WidgetStore from "../../../stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import Toolbar from "../../../accessibility/Toolbar";
-import { RovingAccessibleButton, RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import { Icon as BackIcon } from "../../../../res/img/element-icons/back.svg";
 import { Icon as HangupIcon } from "../../../../res/img/element-icons/call/hangup.svg";
 import { _t } from "../../../languageHandler";
@@ -34,7 +34,6 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
-import { Alignment } from "../elements/Tooltip";
 
 interface Props {
     widgetId: string;
@@ -126,14 +125,14 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                     </Toolbar>
                     {(call !== null || WidgetType.JITSI.matches(widget?.type)) && (
                         <Toolbar className="mx_WidgetPip_footer">
-                            <RovingAccessibleTooltipButton
+                            <RovingAccessibleButton
                                 onClick={onLeaveClick}
-                                tooltip={_t("action|leave")}
+                                title={_t("action|leave")}
                                 aria-label={_t("action|leave")}
-                                alignment={Alignment.Top}
+                                placement="top"
                             >
                                 <HangupIcon className="mx_Icon mx_Icon_24" />
-                            </RovingAccessibleTooltipButton>
+                            </RovingAccessibleButton>
                         </Toolbar>
                     )}
                 </div>

@@ -21,7 +21,6 @@ import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "ma
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { compare } from "matrix-js-sdk/src/utils";
 import { mocked, MockedObject } from "jest-mock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../test-utils";
@@ -93,7 +92,7 @@ describe("MemberList", () => {
         let prevMember: RoomMember | undefined;
         for (const tile of memberTiles) {
             const memberA = prevMember;
-            const memberB = memberListRoom.currentState.members[tile.getAttribute("title")!.split(" ")[0]];
+            const memberB = memberListRoom.currentState.members[tile.getAttribute("aria-label")!.split(" ")[0]];
             prevMember = memberB; // just in case an expect fails, set this early
             if (!memberA) {
                 continue;
@@ -231,7 +230,6 @@ describe("MemberList", () => {
                     ref={gatherWrappedRef}
                 />
             </SDKContext.Provider>,
-            { wrapper: TooltipProvider },
         );
     }
 
@@ -383,7 +381,6 @@ describe("MemberList", () => {
                             roomId={room.roomId}
                         />
                     </SDKContext.Provider>,
-                    { wrapper: TooltipProvider },
                 );
             };
 

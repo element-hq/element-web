@@ -17,6 +17,10 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMockJest from "fetch-mock-jest";
 import EventEmitter from "events";
+import {
+    ProvideCryptoSetupExtensions,
+    SecretStorageKeyDescription,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
 
 import { advanceDateAndTime, stubClient } from "./test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../src/MatrixClientPeg";
@@ -25,6 +29,7 @@ import Modal from "../src/Modal";
 import PlatformPeg from "../src/PlatformPeg";
 import { SettingLevel } from "../src/settings/SettingLevel";
 import { Features } from "../src/settings/Settings";
+import { ModuleRunner } from "../src/modules/ModuleRunner";
 
 jest.useFakeTimers();
 
@@ -75,6 +80,78 @@ describe("MatrixClientPeg", () => {
         expect(peg.userRegisteredWithinLastHours(0)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(1)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(24)).toBe(false);
+    });
+
+    describe(".start extensions", () => {
+        let testPeg: IMatrixClientPeg;
+
+        beforeEach(() => {
+            // instantiate a MatrixClientPegClass instance, with a new MatrixClient
+            testPeg = new PegClass();
+            fetchMockJest.get("http://example.com/_matrix/client/versions", {});
+        });
+
+        describe("cryptoSetup extension", () => {
+            it("should call default cryptoSetup.getDehydrationKeyCallback", async () => {
+                const mockCryptoSetup = {
+                    SHOW_ENCRYPTION_SETUP_UI: true,
+                    examineLoginResponse: jest.fn(),
+                    persistCredentials: jest.fn(),
+                    getSecretStorageKey: jest.fn(),
+                    createSecretStorageKey: jest.fn(),
+                    catchAccessSecretStorageError: jest.fn(),
+                    setupEncryptionNeeded: jest.fn(),
+                    getDehydrationKeyCallback: jest.fn().mockReturnValue(null),
+                } as ProvideCryptoSetupExtensions;
+
+                // Ensure we have an instance before we set up spies
+                const instance = ModuleRunner.instance;
+                jest.spyOn(instance.extensions, "cryptoSetup", "get").mockReturnValue(mockCryptoSetup);
+
+                testPeg.replaceUsingCreds({
+                    accessToken: "SEKRET",
+                    homeserverUrl: "http://example.com",
+                    userId: "@user:example.com",
+                    deviceId: "TEST_DEVICE_ID",
+                });
+
+                expect(mockCryptoSetup.getDehydrationKeyCallback).toHaveBeenCalledTimes(1);
+            });
+
+            it("should call overridden cryptoSetup.getDehydrationKeyCallback", async () => {
+                const mockDehydrationKeyCallback = () => Uint8Array.from([0x11, 0x22, 0x33]);
+
+                const mockCryptoSetup = {
+                    SHOW_ENCRYPTION_SETUP_UI: true,
+                    examineLoginResponse: jest.fn(),
+                    persistCredentials: jest.fn(),
+                    getSecretStorageKey: jest.fn(),
+                    createSecretStorageKey: jest.fn(),
+                    catchAccessSecretStorageError: jest.fn(),
+                    setupEncryptionNeeded: jest.fn(),
+                    getDehydrationKeyCallback: jest.fn().mockReturnValue(mockDehydrationKeyCallback),
+                } as ProvideCryptoSetupExtensions;
+
+                // Ensure we have an instance before we set up spies
+                const instance = ModuleRunner.instance;
+                jest.spyOn(instance.extensions, "cryptoSetup", "get").mockReturnValue(mockCryptoSetup);
+
+                testPeg.replaceUsingCreds({
+                    accessToken: "SEKRET",
+                    homeserverUrl: "http://example.com",
+                    userId: "@user:example.com",
+                    deviceId: "TEST_DEVICE_ID",
+                });
+                expect(mockCryptoSetup.getDehydrationKeyCallback).toHaveBeenCalledTimes(1);
+
+                const client = testPeg.get();
+                const dehydrationKey = await client?.cryptoCallbacks.getDehydrationKey!(
+                    {} as SecretStorageKeyDescription,
+                    (key: Uint8Array) => true,
+                );
+                expect(dehydrationKey).toEqual(Uint8Array.from([0x11, 0x22, 0x33]));
+            });
+        });
     });
 
     describe(".start", () => {

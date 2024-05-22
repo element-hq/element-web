@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -29,6 +29,8 @@ import {
     mockClientMethodsServer,
     mockPlatformPeg,
     mockClientMethodsCrypto,
+    mockClientMethodsRooms,
+    useMockMediaDevices,
 } from "../../../test-utils";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -48,6 +50,10 @@ jest.mock("../../../../src/settings/SettingsStore", () => ({
     unwatchSetting: jest.fn(),
     getFeatureSettingNames: jest.fn(),
     getBetaInfo: jest.fn(),
+    getDisplayName: jest.fn(),
+    getDescription: jest.fn(),
+    shouldHaveWarning: jest.fn(),
+    disabledMessage: jest.fn(),
 }));
 
 jest.mock("../../../../src/SdkConfig", () => ({
@@ -72,31 +78,32 @@ describe("<UserSettingsDialog />", () => {
             ...mockClientMethodsUser(userId),
             ...mockClientMethodsServer(),
             ...mockClientMethodsCrypto(),
+            ...mockClientMethodsRooms(),
+            getIgnoredUsers: jest.fn().mockResolvedValue([]),
+            getPushers: jest.fn().mockResolvedValue([]),
+            getProfileInfo: jest.fn().mockResolvedValue({}),
         });
         sdkContext = new SdkContextClass();
         sdkContext.client = mockClient;
         mockSettingsStore.getValue.mockReturnValue(false);
+        mockSettingsStore.getValueAt.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
         mockSdkConfig.get.mockReturnValue({ brand: "Test" });
     });
 
     const getActiveTabLabel = (container: Element) =>
         container.querySelector(".mx_TabbedView_tabLabel_active")?.textContent;
-    const getActiveTabHeading = (container: Element) =>
-        container.querySelector(".mx_SettingsSection .mx_Heading_h3")?.textContent;
 
     it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());
 
         expect(getActiveTabLabel(container)).toEqual("General");
-        expect(getActiveTabHeading(container)).toEqual("General");
     });
 
     it("should render initial tab when initialTabId is set", () => {
         const { container } = render(getComponent({ initialTabId: UserTab.Help }));
 
         expect(getActiveTabLabel(container)).toEqual("Help & About");
-        expect(getActiveTabHeading(container)).toEqual("Help & About");
     });
 
     it("should render general tab if initialTabId tab cannot be rendered", () => {
@@ -104,7 +111,6 @@ describe("<UserSettingsDialog />", () => {
         const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
 
         expect(getActiveTabLabel(container)).toEqual("General");
-        expect(getActiveTabHeading(container)).toEqual("General");
     });
 
     it("renders tabs correctly", () => {
@@ -124,9 +130,95 @@ describe("<UserSettingsDialog />", () => {
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
 
-    it("renders session manager tab", () => {
-        const { getByTestId } = render(getComponent());
+    it("renders with session manager tab selected", () => {
+        const { getByTestId } = render(getComponent({ initialTabId: UserTab.SessionManager }));
         expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Sessions");
+    });
+
+    it("renders with appearance tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Appearance }));
+
+        expect(getActiveTabLabel(container)).toEqual("Appearance");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Appearance");
+    });
+
+    it("renders with notifications tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Notifications }));
+
+        expect(getActiveTabLabel(container)).toEqual("Notifications");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Notifications");
+    });
+
+    it("renders with preferences tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Preferences }));
+
+        expect(getActiveTabLabel(container)).toEqual("Preferences");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Preferences");
+    });
+
+    it("renders with keyboard tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Keyboard }));
+
+        expect(getActiveTabLabel(container)).toEqual("Keyboard");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Keyboard");
+    });
+
+    it("renders with sidebar tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Sidebar }));
+
+        expect(getActiveTabLabel(container)).toEqual("Sidebar");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Sidebar");
+    });
+
+    it("renders with voip tab selected", () => {
+        useMockMediaDevices();
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.Voip);
+        const { container } = render(getComponent({ initialTabId: UserTab.Voice }));
+
+        expect(getActiveTabLabel(container)).toEqual("Voice & Video");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Voice & Video");
+    });
+
+    it("renders with secutity tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Security }));
+
+        expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Security & Privacy");
+    });
+
+    it("renders with labs tab selected", () => {
+        // @ts-ignore I give up trying to get the types right here
+        // why do we have functions that return different things depending on what they're passed?
+        mockSdkConfig.get.mockImplementation((x) => {
+            const mockConfig = { show_labs_settings: true, brand: "Test" };
+            switch (x) {
+                case "show_labs_settings":
+                case "brand":
+                    // @ts-ignore
+                    return mockConfig[x];
+                default:
+                    return mockConfig;
+            }
+        });
+        const { container } = render(getComponent({ initialTabId: UserTab.Labs }));
+
+        expect(getActiveTabLabel(container)).toEqual("Labs");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Labs");
+    });
+
+    it("renders with mjolnir tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === "feature_mjolnir");
+        const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
+        expect(getActiveTabLabel(container)).toEqual("Ignored users");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Ignored Users");
+    });
+
+    it("renders with help tab selected", () => {
+        const { container } = render(getComponent({ initialTabId: UserTab.Help }));
+
+        expect(getActiveTabLabel(container)).toEqual("Help & About");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Help & About");
     });
 
     it("renders labs tab when show_labs_settings is enabled in config", () => {
@@ -152,14 +244,17 @@ describe("<UserSettingsDialog />", () => {
             watchSettingCallbacks[settingName] = callback;
             return `mock-watcher-id-${settingName}`;
         });
+        mockSettingsStore.getValue.mockReturnValue(false);
 
         const { queryByTestId, unmount } = render(getComponent());
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeFalsy();
 
-        expect(mockSettingsStore.watchSetting.mock.calls[0][0]).toEqual("feature_mjolnir");
+        expect(mockSettingsStore.watchSetting).toHaveBeenCalledWith("feature_mjolnir", null, expect.anything());
 
         // call the watch setting callback
+        mockSettingsStore.getValue.mockReturnValue(true);
         watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", "", SettingLevel.ACCOUNT, true, true);
+
         // tab is rendered now
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
 

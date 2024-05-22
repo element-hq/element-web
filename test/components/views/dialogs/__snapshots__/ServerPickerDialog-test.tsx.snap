@@ -57,7 +57,6 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
         >
           <span
             class="mx_Login_underlinedServerName"
-            data-state="closed"
             tabindex="0"
           >
             matrix.org

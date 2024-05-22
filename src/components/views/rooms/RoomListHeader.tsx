@@ -267,7 +267,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                             closePlusMenu();
                         }}
                         disabled={!canAddSubRooms}
-                        tooltip={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
+                        title={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
                     />
                     {canCreateSpaces && (
                         <IconizedContextMenuOption
@@ -280,7 +280,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                                 closePlusMenu();
                             }}
                             disabled={!canAddSubSpaces}
-                            tooltip={!canAddSubSpaces ? _t("spaces|error_no_permission_add_space") : undefined}
+                            title={!canAddSubSpaces ? _t("spaces|error_no_permission_add_space") : undefined}
                         >
                             <BetaPill />
                         </IconizedContextMenuOption>

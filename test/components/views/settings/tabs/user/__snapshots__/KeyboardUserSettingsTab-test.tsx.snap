@@ -11,11 +11,6 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       <div
         class="mx_SettingsSection"
       >
-        <h2
-          class="mx_Heading_h3"
-        >
-          Keyboard
-        </h2>
         <div
           class="mx_SettingsSection_subSections"
         >

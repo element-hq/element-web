@@ -34,10 +34,11 @@ import { CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
 import { Action } from "./dispatcher/actions";
 import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
+import { idbLoad, idbSave, idbDelete } from "./utils/StorageAccess";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
+import { buildAndEncodePickleKey, getPickleAdditionalData } from "./utils/tokens/pickling";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -314,7 +315,7 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * The URL to return to after a successful SSO/OIDC authentication
+     * The URL to return to after a successful SSO authentication
      * @param fragmentAfterLogin optional fragment for specific view to return to
      */
     public getSSOCallbackUrl(fragmentAfterLogin = ""): URL {
@@ -352,55 +353,21 @@ export default abstract class BasePlatform {
 
     /**
      * Get a previously stored pickle key.  The pickle key is used for
-     * encrypting libolm objects.
+     * encrypting libolm objects and react-sdk-crypto data.
      * @param {string} userId the user ID for the user that the pickle key is for.
-     * @param {string} userId the device ID that the pickle key is for.
+     * @param {string} deviceId the device ID that the pickle key is for.
      * @returns {string|null} the previously stored pickle key, or null if no
      *     pickle key has been stored.
      */
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        if (!window.crypto || !window.crypto.subtle) {
-            return null;
-        }
-        let data;
+        let data: { encrypted?: BufferSource; iv?: BufferSource; cryptoKey?: CryptoKey } | undefined;
         try {
             data = await idbLoad("pickleKey", [userId, deviceId]);
         } catch (e) {
             logger.error("idbLoad for pickleKey failed", e);
         }
-        if (!data) {
-            return null;
-        }
-        if (!data.encrypted || !data.iv || !data.cryptoKey) {
-            logger.error("Badly formatted pickle key");
-            return null;
-        }
 
-        const additionalData = this.getPickleAdditionalData(userId, deviceId);
-
-        try {
-            const key = await crypto.subtle.decrypt(
-                { name: "AES-GCM", iv: data.iv, additionalData },
-                data.cryptoKey,
-                data.encrypted,
-            );
-            return encodeUnpaddedBase64(key);
-        } catch (e) {
-            logger.error("Error decrypting pickle key");
-            return null;
-        }
-    }
-
-    private getPickleAdditionalData(userId: string, deviceId: string): Uint8Array {
-        const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
-        for (let i = 0; i < userId.length; i++) {
-            additionalData[i] = userId.charCodeAt(i);
-        }
-        additionalData[userId.length] = 124; // "|"
-        for (let i = 0; i < deviceId.length; i++) {
-            additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
-        }
-        return additionalData;
+        return (await buildAndEncodePickleKey(data, userId, deviceId)) ?? null;
     }
 
     /**
@@ -424,7 +391,7 @@ export default abstract class BasePlatform {
         const iv = new Uint8Array(32);
         crypto.getRandomValues(iv);
 
-        const additionalData = this.getPickleAdditionalData(userId, deviceId);
+        const additionalData = getPickleAdditionalData(userId, deviceId);
         const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray);
 
         try {
@@ -464,22 +431,30 @@ export default abstract class BasePlatform {
     }
 
     /**
+     * Fallback Client URI to use for OIDC client registration for if one is not specified in config.json
+     */
+    public get defaultOidcClientUri(): string {
+        return window.location.origin;
+    }
+
+    /**
      * Metadata to use for dynamic OIDC client registrations
      */
     public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
         const config = SdkConfig.get();
         return {
             clientName: config.brand,
-            clientUri: this.baseUrl,
-            redirectUris: [this.getSSOCallbackUrl().href],
-            logoUri: new URL("vector-icons/1024.png", this.baseUrl).href,
+            clientUri: config.oidc_metadata?.client_uri ?? this.defaultOidcClientUri,
+            redirectUris: [this.getOidcCallbackUrl().href],
+            logoUri: config.oidc_metadata?.logo_uri ?? new URL("vector-icons/1024.png", this.baseUrl).href,
             applicationType: "web",
             // XXX: We break the spec by not consistently supplying these required fields
-            // contacts: [],
             // @ts-ignore
-            tosUri: config.terms_and_conditions_links?.[0]?.url,
+            contacts: config.oidc_metadata?.contacts,
             // @ts-ignore
-            policyUri: config.privacy_policy_url,
+            tosUri: config.oidc_metadata?.tos_uri ?? config.terms_and_conditions_links?.[0]?.url,
+            // @ts-ignore
+            policyUri: config.oidc_metadata?.policy_uri ?? config.privacy_policy_url,
         };
     }
 
@@ -489,5 +464,16 @@ export default abstract class BasePlatform {
      */
     public getOidcClientState(): string {
         return "";
+    }
+
+    /**
+     * The URL to return to after a successful OIDC authentication
+     */
+    public getOidcCallbackUrl(): URL {
+        const url = new URL(window.location.href);
+        // The redirect URL has to exactly match that registered at the OIDC server, so
+        // ensure that the fragment part of the URL is empty.
+        url.hash = "";
+        return url;
     }
 }

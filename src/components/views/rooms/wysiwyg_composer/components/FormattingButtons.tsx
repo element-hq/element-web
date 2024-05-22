@@ -30,54 +30,42 @@ import { Icon as NumberedListIcon } from "../../../../../../res/img/element-icon
 import { Icon as CodeBlockIcon } from "../../../../../../res/img/element-icons/room/composer/code_block.svg";
 import { Icon as IndentIcon } from "../../../../../../res/img/element-icons/room/composer/indent_increase.svg";
 import { Icon as UnIndentIcon } from "../../../../../../res/img/element-icons/room/composer/indent_decrease.svg";
-import AccessibleTooltipButton from "../../../elements/AccessibleTooltipButton";
-import { Alignment } from "../../../elements/Tooltip";
-import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
-import { KeyCombo } from "../../../../../KeyBindingsManager";
 import { _t } from "../../../../../languageHandler";
-import { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import { openLinkModal } from "./LinkModal";
 import { useComposerContext } from "../ComposerContext";
+import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
+import { KeyCombo } from "../../../../../KeyBindingsManager";
 
-interface TooltipProps {
+interface ButtonProps {
+    icon: ReactNode;
+    actionState: ActionState;
+    onClick: MouseEventHandler<HTMLButtonElement>;
     label: string;
     keyCombo?: KeyCombo;
 }
 
-function Tooltip({ label, keyCombo }: TooltipProps): JSX.Element {
-    return (
-        <div className="mx_FormattingButtons_Tooltip">
-            {label}
-            {keyCombo && (
-                <KeyboardShortcut value={keyCombo} className="mx_FormattingButtons_Tooltip_KeyboardShortcut" />
-            )}
-        </div>
-    );
-}
-
-interface ButtonProps extends TooltipProps {
-    icon: ReactNode;
-    actionState: ActionState;
-    onClick: MouseEventHandler<HTMLButtonElement>;
-}
-
 function Button({ label, keyCombo, onClick, actionState, icon }: ButtonProps): JSX.Element {
     return (
-        <AccessibleTooltipButton
+        <AccessibleButton
             element="button"
             onClick={onClick as (e: ButtonEvent) => void}
-            title={label}
+            aria-label={label}
             className={classNames("mx_FormattingButtons_Button", {
                 mx_FormattingButtons_active: actionState === "reversed",
                 mx_FormattingButtons_Button_hover: actionState === "enabled",
                 mx_FormattingButtons_disabled: actionState === "disabled",
             })}
-            tooltip={keyCombo && <Tooltip label={label} keyCombo={keyCombo} />}
-            forceHide={actionState === "disabled"}
-            alignment={Alignment.Top}
+            title={actionState === "disabled" ? undefined : label}
+            caption={
+                keyCombo && (
+                    <KeyboardShortcut value={keyCombo} className="mx_FormattingButtons_Tooltip_KeyboardShortcut" />
+                )
+            }
+            placement="top"
         >
             {icon}
-        </AccessibleTooltipButton>
+        </AccessibleButton>
     );
 }
 

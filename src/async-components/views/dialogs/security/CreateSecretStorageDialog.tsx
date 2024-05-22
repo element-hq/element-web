@@ -40,7 +40,7 @@ import {
     isSecureBackupRequired,
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
-import SecurityCustomisations from "../../../../customisations/Security";
+import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -48,6 +48,7 @@ import InteractiveAuthDialog from "../../../../components/views/dialogs/Interact
 import { IValidationResult } from "../../../../components/views/elements/Validation";
 import { Icon as CheckmarkIcon } from "../../../../../res/img/element-icons/check.svg";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
+import { initialiseDehydration } from "../../../../utils/device/dehydration";
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
@@ -180,9 +181,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private getInitialPhase(): void {
-        const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
+        //const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
+        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.createSecretStorageKey();
         if (keyFromCustomisations) {
-            logger.log("Created key via customisations, jumping to bootstrap step");
+            logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
             this.recoveryKey = {
                 privateKey: keyFromCustomisations,
             };
@@ -315,9 +317,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     type: "m.id.user",
                     user: MatrixClientPeg.safeGet().getSafeUserId(),
                 },
-                // TODO: Remove `user` once servers support proper UIA
-                // See https://github.com/matrix-org/synapse/issues/5665
-                user: MatrixClientPeg.safeGet().getSafeUserId(),
                 password: this.state.accountPassword,
             });
         } else {
@@ -397,6 +396,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     },
                 });
             }
+            await initialiseDehydration(true);
 
             this.setState({
                 phase: Phase.Stored,

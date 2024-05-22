@@ -26,9 +26,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 import { Action } from "../../../dispatcher/actions";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {}
 
@@ -47,15 +46,15 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
     const [onFocus, isActive, ref] = useRovingTabIndex();
 
     return (
-        <AccessibleTooltipButton
+        <AccessibleButton
             className="mx_RoomBreadcrumbs_crumb"
             onClick={onClick}
             aria-label={_t("a11y|room_name", { name: room.name })}
             title={room.name}
-            tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
             onFocus={onFocus}
             ref={ref}
             tabIndex={isActive ? 0 : -1}
+            placement="right"
         >
             <DecoratedRoomAvatar
                 room={room}
@@ -64,7 +63,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
                 hideIfDot={true}
                 tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
             />
-        </AccessibleTooltipButton>
+        </AccessibleButton>
     );
 };
 

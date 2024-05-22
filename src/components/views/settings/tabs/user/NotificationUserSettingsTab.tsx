@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 
-import { _t } from "../../../../../languageHandler";
 import { Features } from "../../../../../settings/Settings";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Notifications from "../../Notifications";
@@ -33,7 +32,7 @@ export default class NotificationUserSettingsTab extends React.Component {
                 {newNotificationSettingsEnabled ? (
                     <NotificationSettings2 />
                 ) : (
-                    <SettingsSection heading={_t("notifications|enable_prompt_toast_title")}>
+                    <SettingsSection>
                         <Notifications />
                     </SettingsSection>
                 )}

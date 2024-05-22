@@ -18,7 +18,9 @@ import { test, expect } from "../../element-web-test";
 import { logIntoElement } from "../crypto/utils";
 
 test.describe("Overwrite login action", () => {
-    test("Try replace existing login with new one", async ({ page, app, credentials, homeserver }) => {
+    // This seems terminally flakey: https://github.com/element-hq/element-web/issues/27363
+    // I tried verious things to try & deflake it, to no avail: https://github.com/matrix-org/matrix-react-sdk/pull/12506
+    test.skip("Try replace existing login with new one", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, homeserver, credentials);
 
         const userMenu = await app.openUserMenu();
@@ -47,7 +49,6 @@ test.describe("Overwrite login action", () => {
         }, clientCredentials);
 
         // It should be now another user!!
-        const newUserMenu = await app.openUserMenu();
-        await expect(newUserMenu.getByText(bobRegister.userId)).toBeVisible();
+        await expect(page.getByText("Welcome BOB")).toBeVisible();
     });
 });

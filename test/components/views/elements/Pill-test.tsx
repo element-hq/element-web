@@ -19,7 +19,6 @@ import { act, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Pill, PillProps, PillType } from "../../../../src/components/views/elements/Pill";
@@ -65,7 +64,6 @@ describe("<Pill>", () => {
             <div onClick={pillParentClickHandler}>
                 <Pill {...withDefault} />
             </div>,
-            { wrapper: TooltipProvider },
         );
     };
 

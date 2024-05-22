@@ -19,7 +19,6 @@ import { mocked } from "jest-mock";
 import { act, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import ForgotPassword from "../../../../src/components/structures/auth/ForgotPassword";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
@@ -103,7 +102,6 @@ describe("<ForgotPassword>", () => {
         beforeEach(() => {
             renderResult = render(
                 <ForgotPassword serverConfig={serverConfig} onComplete={onComplete} onLoginClick={onLoginClick} />,
-                { wrapper: TooltipProvider },
             );
         });
 
@@ -304,10 +302,6 @@ describe("<ForgotPassword>", () => {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },
-                                    threepidCreds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
                                 },
                                 testPassword,
                                 false,
@@ -333,10 +327,6 @@ describe("<ForgotPassword>", () => {
                                 {
                                     type: "m.login.email.identity",
                                     threepid_creds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
-                                    threepidCreds: {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },
@@ -429,10 +419,6 @@ describe("<ForgotPassword>", () => {
                                 {
                                     type: "m.login.email.identity",
                                     threepid_creds: {
-                                        client_secret: expect.any(String),
-                                        sid: testSid,
-                                    },
-                                    threepidCreds: {
                                         client_secret: expect.any(String),
                                         sid: testSid,
                                     },

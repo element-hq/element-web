@@ -390,4 +390,3 @@ export const useRovingTabIndex = <T extends HTMLElement>(
 // re-export the semantic helper components for simplicity
 export { RovingTabIndexWrapper } from "./roving/RovingTabIndexWrapper";
 export { RovingAccessibleButton } from "./roving/RovingAccessibleButton";
-export { RovingAccessibleTooltipButton } from "./roving/RovingAccessibleTooltipButton";

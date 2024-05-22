@@ -17,14 +17,11 @@ limitations under the License.
 import React, { ComponentProps, ReactNode } from "react";
 import classNames from "classnames";
 
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
 import { Playback, PlaybackState } from "../../../audio/Playback";
+import AccessibleButton from "../elements/AccessibleButton";
 
-type Props = Omit<
-    ComponentProps<typeof AccessibleTooltipButton>,
-    "title" | "onClick" | "disabled" | "element" | "ref"
-> & {
+type Props = Omit<ComponentProps<typeof AccessibleButton>, "title" | "onClick" | "disabled" | "element" | "ref"> & {
     // Playback instance to manipulate. Cannot change during the component lifecycle.
     playback: Playback;
 
@@ -61,7 +58,7 @@ export default class PlayPauseButton extends React.PureComponent<Props> {
         });
 
         return (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 data-testid="play-pause-button"
                 className={classes}
                 title={isPlaying ? _t("action|pause") : _t("action|play")}

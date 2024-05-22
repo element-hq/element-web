@@ -19,17 +19,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../settings/SettingsStore";
 import { Features } from "../settings/Settings";
+import { getIDBFactory } from "./StorageAccess";
 
 const localStorage = window.localStorage;
-
-// make this lazy in order to make testing easier
-function getIndexedDb(): IDBFactory | undefined {
-    // just *accessing* _indexedDB throws an exception in firefox with
-    // indexeddb disabled.
-    try {
-        return window.indexedDB;
-    } catch (e) {}
-}
 
 // The JS SDK will add a prefix of "matrix-js-sdk:" to the sync store name.
 const SYNC_STORE_NAME = "riot-web-sync";
@@ -68,7 +60,7 @@ export async function checkConsistency(): Promise<{
 }> {
     log("Checking storage consistency");
     log(`Local storage supported? ${!!localStorage}`);
-    log(`IndexedDB supported? ${!!getIndexedDb()}`);
+    log(`IndexedDB supported? ${!!getIDBFactory()}`);
 
     let dataInLocalStorage = false;
     let dataInCryptoStore = false;
@@ -86,7 +78,7 @@ export async function checkConsistency(): Promise<{
         error("Local storage cannot be used on this browser");
     }
 
-    if (getIndexedDb() && localStorage) {
+    if (getIDBFactory() && localStorage) {
         const results = await checkSyncStore();
         if (!results.healthy) {
             healthy = false;
@@ -96,7 +88,7 @@ export async function checkConsistency(): Promise<{
         error("Sync store cannot be used on this browser");
     }
 
-    if (getIndexedDb()) {
+    if (getIDBFactory()) {
         const results = await checkCryptoStore();
         dataInCryptoStore = results.exists;
         if (!results.healthy) {
@@ -138,7 +130,7 @@ interface StoreCheck {
 async function checkSyncStore(): Promise<StoreCheck> {
     let exists = false;
     try {
-        exists = await IndexedDBStore.exists(getIndexedDb()!, SYNC_STORE_NAME);
+        exists = await IndexedDBStore.exists(getIDBFactory()!, SYNC_STORE_NAME);
         log(`Sync store using IndexedDB contains data? ${exists}`);
         return { exists, healthy: true };
     } catch (e) {
@@ -152,7 +144,7 @@ async function checkCryptoStore(): Promise<StoreCheck> {
     if (await SettingsStore.getValue(Features.RustCrypto)) {
         // check first if there is a rust crypto store
         try {
-            const rustDbExists = await IndexedDBCryptoStore.exists(getIndexedDb()!, RUST_CRYPTO_STORE_NAME);
+            const rustDbExists = await IndexedDBCryptoStore.exists(getIDBFactory()!, RUST_CRYPTO_STORE_NAME);
             log(`Rust Crypto store using IndexedDB contains data? ${rustDbExists}`);
 
             if (rustDbExists) {
@@ -162,7 +154,7 @@ async function checkCryptoStore(): Promise<StoreCheck> {
                 // No rust store, so let's check if there is a legacy store not yet migrated.
                 try {
                     const legacyIdbExists = await IndexedDBCryptoStore.existsAndIsNotMigrated(
-                        getIndexedDb()!,
+                        getIDBFactory()!,
                         LEGACY_CRYPTO_STORE_NAME,
                     );
                     log(`Legacy Crypto store using IndexedDB contains non migrated data? ${legacyIdbExists}`);
@@ -183,7 +175,7 @@ async function checkCryptoStore(): Promise<StoreCheck> {
         let exists = false;
         // legacy checks
         try {
-            exists = await IndexedDBCryptoStore.exists(getIndexedDb()!, LEGACY_CRYPTO_STORE_NAME);
+            exists = await IndexedDBCryptoStore.exists(getIDBFactory()!, LEGACY_CRYPTO_STORE_NAME);
             log(`Crypto store using IndexedDB contains data? ${exists}`);
             return { exists, healthy: true };
         } catch (e) {
@@ -213,78 +205,4 @@ async function checkCryptoStore(): Promise<StoreCheck> {
  */
 export function setCryptoInitialised(cryptoInited: boolean): void {
     localStorage.setItem("mx_crypto_initialised", String(cryptoInited));
-}
-
-/* Simple wrapper functions around IndexedDB.
- */
-
-let idb: IDBDatabase | null = null;
-
-async function idbInit(): Promise<void> {
-    if (!getIndexedDb()) {
-        throw new Error("IndexedDB not available");
-    }
-    idb = await new Promise((resolve, reject) => {
-        const request = getIndexedDb()!.open("matrix-react-sdk", 1);
-        request.onerror = reject;
-        request.onsuccess = (): void => {
-            resolve(request.result);
-        };
-        request.onupgradeneeded = (): void => {
-            const db = request.result;
-            db.createObjectStore("pickleKey");
-            db.createObjectStore("account");
-        };
-    });
-}
-
-export async function idbLoad(table: string, key: string | string[]): Promise<any> {
-    if (!idb) {
-        await idbInit();
-    }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readonly");
-        txn.onerror = reject;
-
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.get(key);
-        request.onerror = reject;
-        request.onsuccess = (event): void => {
-            resolve(request.result);
-        };
-    });
-}
-
-export async function idbSave(table: string, key: string | string[], data: any): Promise<void> {
-    if (!idb) {
-        await idbInit();
-    }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readwrite");
-        txn.onerror = reject;
-
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.put(data, key);
-        request.onerror = reject;
-        request.onsuccess = (event): void => {
-            resolve();
-        };
-    });
-}
-
-export async function idbDelete(table: string, key: string | string[]): Promise<void> {
-    if (!idb) {
-        await idbInit();
-    }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readwrite");
-        txn.onerror = reject;
-
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.delete(key);
-        request.onerror = reject;
-        request.onsuccess = (): void => {
-            resolve();
-        };
-    });
 }

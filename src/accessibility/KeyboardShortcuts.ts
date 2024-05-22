@@ -203,6 +203,7 @@ export const KEY_ICON: Record<string, string> = {
 if (IS_MAC) {
     KEY_ICON[Key.META] = "⌘";
     KEY_ICON[Key.ALT] = "⌥";
+    KEY_ICON[Key.SHIFT] = "⇧";
 }
 
 export const CATEGORIES: Record<CategoryName, ICategory> = {

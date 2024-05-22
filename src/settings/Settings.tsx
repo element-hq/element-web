@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import ServerSupportUnstableFeatureController from "./controllers/ServerSupportU
 import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
 import SettingsStore from "./SettingsStore";
+import AnalyticsController from "./controllers/AnalyticsController";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -89,6 +90,7 @@ export enum LabGroup {
     Encryption,
     Experimental,
     Developer,
+    Ui,
 }
 
 export enum Features {
@@ -98,6 +100,7 @@ export enum Features {
     OidcNativeFlow = "feature_oidc_native_flow",
     // If true, every new login will use the new rust crypto implementation
     RustCrypto = "feature_rust_crypto",
+    ReleaseAnnouncement = "feature_release_announcement",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -114,6 +117,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
+    [LabGroup.Ui]: _td("labs|group_ui"),
 };
 
 export type SettingValueType =
@@ -403,7 +407,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new SlidingSyncController(),
     },
     "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a setting for feature_sliding_sync above
+        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "",
     },
@@ -583,13 +587,24 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,
     },
+    // Used to be a feature, name kept for backwards compat
     "feature_hidebold": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        configDisablesSetting: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("labs|hidebold"),
         default: false,
+    },
+    "Notifications.showbold": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|showbold"),
+        default: false,
+        invertedSettingName: "feature_hidebold",
+        controller: new AnalyticsController("WebSettingsNotificationsShowBoldToggle"),
+    },
+    "Notifications.tac_only_notifications": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|tac_only_notifications"),
+        default: true,
+        controller: new AnalyticsController("WebSettingsNotificationsTACOnlyNotificationsToggle"),
     },
     "feature_ask_to_join": {
         isFeature: true,
@@ -1136,14 +1151,23 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: [],
     },
-    "threadsActivityCentre": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        labsGroup: LabGroup.Threads,
-        controller: new ReloadOnChangeController(),
-        displayName: _td("labs|threads_activity_centre"),
-        description: () => _t("labs|threads_activity_centre_description", { brand: SdkConfig.get().brand }),
-        default: false,
+    /**
+     * Enable or disable the release announcement feature
+     */
+    [Features.ReleaseAnnouncement]: {
         isFeature: true,
+        labsGroup: LabGroup.Ui,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+        displayName: _td("labs|release_announcement"),
+    },
+    /**
+     * Managed by the {@link ReleaseAnnouncementStore}
+     * Store the release announcement data
+     */
+    "releaseAnnouncementData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
@@ -1228,6 +1252,182 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: true,
     },
     [UIFeature.ShowChatEffectSetting]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UnverifiedSessionsToast]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.SearchShortcutPreferences]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.HomePageButtons]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserInfoVerifyDevice]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserInfoShareLinkToUserButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserInfoRedactButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomListExplorePublicRooms]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.CreateRoomE2eeSection]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.CreateRoomShowJoinRuleDropdown]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.CreateRoomShowAdvancedSettings]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomSummaryFilesOption]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomSummaryCopyLink]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.NewRoomIntroInviteThisRoom]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EmailAddressShowRemoveButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EmailAddressShowAddButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PhoneNumerShowRemoveButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PhoneNumerShowAddButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomSettingsAlias]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsExternalAccount]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsSetIdServer]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsDiscovery]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsIntegrationManager]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsChangePassword]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsResetCrossSigning]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsDeleteBackup]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.UserSettingsResetBackup]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AccountSendAccountEvent]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AccountSendRoomEvent]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EnableLoginPage]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EnableNewRoomIntro]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.EnableRoomDevTools]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.WidgetContextDeleteButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ExportDefaultSizeLimit]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AllExportTypes]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ExportAttatchmentsDefaultOff]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomSettingsSecurity]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.RoomPreviewRejectIgnoreButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.BaseToolActionButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.NetworkOptions]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.SearchWarnings]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PowerSelectorCustomValue]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.CustomThemePanel]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.VideoMirrorLocalVideo]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.VideoConnectionSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },

@@ -1940,13 +1940,11 @@
             "custom_theme_success": "ເພີ່ມຫົວຂໍ້!",
             "custom_theme_url": "ການ ກຳນົດເອງຫົວຂໍ້ URL",
             "font_size": "ຂະໜາດຕົວອັກສອນ",
-            "heading": "ປັບແຕ່ງຮູບລັກສະນະຂອງທ່ານ",
             "image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
             "image_size_large": "ຂະຫນາດໃຫຍ່",
             "layout_bubbles": "ຟອງຂໍ້ຄວາມ",
             "layout_irc": "(ທົດລອງ)IRC",
             "match_system_theme": "ລະບົບຈັບຄູ່ຫົວຂໍ້",
-            "subheading": "ການຕັ້ງຄ່າຮູບລັກສະນະມີຜົນກະທົບພຽງແຕ່ %(brand)s ໃນລະບົບ ນີ້.",
             "timeline_image_size": "ຂະຫນາດຮູບພາບຢູ່ໃນທາມລາຍ",
             "use_high_contrast": "ໃຊ້ຄວາມຄົມຊັດສູງ"
         },
@@ -2523,7 +2521,6 @@
             "tooltip_sub": "ກົດເພື່ອເບິ່ງການແກ້ໄຂ",
             "tooltip_title": "ແກ້ໄຂເມື່ອ %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໄວ້ກ່ອນຈຸດນີ້ບໍ່ສາມາດໃຊ້ໄດ້.",
         "error_no_renderer": "ເຫດການນີ້ບໍ່ສາມາດສະແດງໄດ້",
         "error_rendering_message": "ບໍ່ສາມາດໂຫຼດຂໍ້ຄວາມນີ້ໄດ້",
         "historical_messages_unavailable": "ທ່ານບໍ່ສາມາດເຫັນຂໍ້ຄວາມກ່ອນໜ້ານີ້",

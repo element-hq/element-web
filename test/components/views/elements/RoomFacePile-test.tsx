@@ -14,7 +14,6 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import React from "react";
-import { TooltipProvider } from "@vector-im/compound-web";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "../../../test-utils";
@@ -33,9 +32,7 @@ describe("<RoomFacePile />", () => {
         ]);
 
         const { asFragment } = render(
-            <TooltipProvider>
-                <RoomFacePile onlyKnownUsers={false} room={room} />
-            </TooltipProvider>,
+            <RoomFacePile onlyKnownUsers={false} room={room} />,
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 

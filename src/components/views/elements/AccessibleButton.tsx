@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-import React, { forwardRef, FunctionComponent, HTMLAttributes, InputHTMLAttributes, Ref } from "react";
+import React, { ComponentProps, forwardRef, FunctionComponent, HTMLAttributes, InputHTMLAttributes, Ref } from "react";
 import classnames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -60,6 +61,8 @@ type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<
 > &
     Omit<InputHTMLAttributes<Element>, "onClick">;
 
+type TooltipProps = ComponentProps<typeof Tooltip>;
+
 /**
  * Type of props accepted by {@link AccessibleButton}.
  *
@@ -86,6 +89,28 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
      * Event handler for button activation. Should be implemented exactly like a normal `onClick` handler.
      */
     onClick: ((e: ButtonEvent) => void | Promise<void>) | null;
+    /**
+     * The tooltip to show on hover or focus.
+     */
+    title?: TooltipProps["label"];
+    /**
+     * The caption is a secondary text displayed under the `title` of the tooltip.
+     * Only valid when used in conjunction with `title`.
+     */
+    caption?: TooltipProps["caption"];
+    /**
+     * The placement of the tooltip.
+     */
+    placement?: TooltipProps["placement"];
+    /**
+     * Callback for when the tooltip is opened or closed.
+     */
+    onTooltipOpenChange?: TooltipProps["onOpenChange"];
+
+    /**
+     * Whether the tooltip should be disabled.
+     */
+    disableTooltip?: TooltipProps["disabled"];
 };
 
 /**
@@ -116,11 +141,17 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
         onKeyDown,
         onKeyUp,
         triggerOnMouseDown,
+        title,
+        caption,
+        placement = "right",
+        onTooltipOpenChange,
+        disableTooltip,
         ...restProps
     }: Props<T>,
     ref: Ref<HTMLElement>,
 ): JSX.Element {
     const newProps: RenderedElementProps = restProps;
+    newProps["aria-label"] = newProps["aria-label"] ?? title;
     if (disabled) {
         newProps["aria-disabled"] = true;
         newProps["disabled"] = true;
@@ -182,7 +213,23 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
     });
 
     // React.createElement expects InputHTMLAttributes
-    return React.createElement(element, newProps, children);
+    const button = React.createElement(element, newProps, children);
+
+    if (title) {
+        return (
+            <Tooltip
+                label={title}
+                caption={caption}
+                isTriggerInteractive={true}
+                placement={placement}
+                onOpenChange={onTooltipOpenChange}
+                disabled={disableTooltip}
+            >
+                {button}
+            </Tooltip>
+        );
+    }
+    return button;
 });
 
 // Type assertion required due to forwardRef type workaround in react.d.ts

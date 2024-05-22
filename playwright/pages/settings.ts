@@ -25,8 +25,9 @@ export class Settings {
      * Open the top left user menu, returning a Locator to the resulting context menu.
      */
     public async openUserMenu(): Promise<Locator> {
-        await this.page.getByRole("button", { name: "User menu" }).click();
         const locator = this.page.locator(".mx_ContextualMenu");
+        if (await locator.locator(".mx_UserMenu_contextMenu_header").isVisible()) return locator;
+        await this.page.getByRole("button", { name: "User menu" }).click();
         await locator.waitFor();
         return locator;
     }

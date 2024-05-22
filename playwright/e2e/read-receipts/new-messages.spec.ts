@@ -183,9 +183,13 @@ test.describe("Read receipts", () => {
                 // When I receive a threaded message
                 await util.receiveMessages(room2, [msg.threadedOff("Msg1", "Resp1")]);
 
-                // Then the room becomes unread
-                await util.assertUnread(room2, 1);
+                // Then the room stays read
+                await util.assertRead(room2);
+                // but the thread is unread
+                await util.goTo(room2);
+                await util.assertUnreadThread("Msg1");
             });
+
             test("Reading the last threaded message makes the room read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -195,15 +199,16 @@ test.describe("Read receipts", () => {
                 // Given a thread exists and is not read
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2);
+                await util.assertUnread(room2, 1);
                 await util.goTo(room2);
 
                 // When I read it
                 await util.openThread("Msg1");
 
-                // The room becomes read
-                await util.assertRead(room2);
+                // The thread becomes read
+                await util.assertReadThread("Msg1");
             });
+
             test("Reading a thread message makes the thread read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -217,19 +222,20 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg1", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 3); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
 
                 // When I read the main timeline
                 await util.goTo(room2);
 
-                // Then room does appear unread
-                await util.assertUnread(room2, 2);
+                // Then room is read
+                await util.assertRead(room2);
 
-                // Until we open the thread
+                // Reading the thread causes it to become read too
                 await util.openThread("Msg1");
                 await util.assertReadThread("Msg1");
                 await util.assertRead(room2);
             });
+
             test("Reading an older thread message leaves the thread unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -242,40 +248,19 @@ test.describe("Read receipts", () => {
                     "ThreadRoot",
                     ...msg.manyThreadedOff("ThreadRoot", many("InThread", 20)),
                 ]);
-                await util.assertUnread(room2, 21);
+                await util.assertUnread(room2, 1);
+                await util.goTo(room2);
+                await util.assertUnreadThread("ThreadRoot");
+                await util.goTo(room1);
 
                 // When I read an older message in the thread
                 await msg.jumpTo(room2.name, "InThread0000", true);
-                await util.assertUnreadLessThan(room2, 21);
 
                 // Then the thread is still marked as unread
                 await util.backToThreadsList();
                 await util.assertUnreadThread("ThreadRoot");
             });
-            test("Reading only one thread's message does not make the room read", async ({
-                roomAlpha: room1,
-                roomBeta: room2,
-                util,
-                msg,
-            }) => {
-                // Given two threads are unread
-                await util.goTo(room1);
-                await util.receiveMessages(room2, [
-                    "Msg1",
-                    msg.threadedOff("Msg1", "Resp1"),
-                    "Msg2",
-                    msg.threadedOff("Msg2", "Resp2"),
-                ]);
-                await util.assertUnread(room2, 4);
-                await util.goTo(room2);
-                await util.assertUnread(room2, 2);
 
-                // When I only read one of them
-                await util.openThread("Msg1");
-
-                // The room is still unread
-                await util.assertUnread(room2, 1);
-            });
             test("Reading only one thread's message makes that thread read but not others", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -290,9 +275,9 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg2", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 4); // (Sanity)
+                await util.assertUnread(room2, 2); // (Sanity)
                 await util.goTo(room2);
-                await util.assertUnread(room2, 2);
+                await util.assertRead(room2);
                 await util.assertUnreadThread("Msg1");
                 await util.assertUnreadThread("Msg2");
 
@@ -303,6 +288,7 @@ test.describe("Read receipts", () => {
                 await util.assertReadThread("Msg1");
                 await util.assertUnreadThread("Msg2");
             });
+
             test("Reading the main timeline does not mark a thread message as read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -316,15 +302,16 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg1", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 3); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
 
                 // When I read the main timeline
                 await util.goTo(room2);
-                await util.assertUnread(room2, 2);
+                await util.assertRead(room2);
 
                 // Then thread does appear unread
                 await util.assertUnreadThread("Msg1");
             });
+
             test("Marking a room with unread threads as read makes it read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -338,14 +325,17 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg1", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 3); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
 
                 // When I mark the room as read
                 await util.markAsRead(room2);
 
                 // Then the room is read
                 await util.assertRead(room2);
+                // and so are the threads
+                await util.assertReadThread("Msg1");
             });
+
             test("Sending a new thread message after marking as read makes it unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -367,9 +357,11 @@ test.describe("Read receipts", () => {
                 // Then another message appears in the thread
                 await util.receiveMessages(room2, [msg.threadedOff("Msg1", "Resp3")]);
 
-                // Then the room becomes unread
-                await util.assertUnread(room2, 1);
+                // Then the thread becomes unread
+                await util.goTo(room2);
+                await util.assertUnreadThread("Msg1");
             });
+
             test("Sending a new different-thread message after marking as read makes it unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -381,11 +373,8 @@ test.describe("Read receipts", () => {
                 await util.receiveMessages(room2, ["Thread1", "Thread2", msg.threadedOff("Thread1", "t1a")]);
                 // Make sure the message in Thread 1 has definitely arrived, so that we know for sure
                 // that the one in Thread 2 is the latest.
-                await util.assertUnread(room2, 3);
 
                 await util.receiveMessages(room2, [msg.threadedOff("Thread2", "t2a")]);
-                // Make sure the 4th message has arrived before we mark as read.
-                await util.assertUnread(room2, 4);
 
                 // When I mark the room as read (making an unthreaded receipt for t2a)
                 await util.markAsRead(room2);
@@ -394,9 +383,11 @@ test.describe("Read receipts", () => {
                 // Then another message appears in the other thread
                 await util.receiveMessages(room2, [msg.threadedOff("Thread1", "t1b")]);
 
-                // Then the room becomes unread
-                await util.assertUnread(room2, 1);
+                // Then the other thread becomes unread
+                await util.goTo(room2);
+                await util.assertUnreadThread("Thread1");
             });
+
             test("A room with a new threaded message is still unread after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -410,21 +401,26 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg1", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 3); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
 
                 // When I read the main timeline
                 await util.goTo(room2);
 
-                // Then room does appear unread
-                await util.assertUnread(room2, 2);
+                // Then room appears read
+                await util.assertRead(room2);
+                /// but with an unread thread
+                await util.assertUnreadThread("Msg1");
 
                 await util.saveAndReload();
-                await util.assertUnread(room2, 2);
-
-                // Until we open the thread
-                await util.openThread("Msg1");
                 await util.assertRead(room2);
+                await util.goTo(room2);
+                await util.assertUnreadThread("Msg1");
+
+                // Opening the thread now marks it as read
+                await util.openThread("Msg1");
+                await util.assertReadThread("Msg1");
             });
+
             test("A room where all threaded messages are read is still read after restart", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -438,17 +434,20 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("Msg1", "Resp1"),
                     msg.threadedOff("Msg1", "Resp2"),
                 ]);
-                await util.assertUnread(room2, 3); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
                 await util.goTo(room2);
-                await util.assertUnread(room2, 2);
-                await util.openThread("Msg1");
                 await util.assertRead(room2);
+                await util.assertUnreadThread("Msg1");
+                await util.openThread("Msg1");
+                await util.assertReadThread("Msg1");
 
                 // When I restart
                 await util.saveAndReload();
 
-                // Then the room is still read
+                // Then the room & thread still read
                 await util.assertRead(room2);
+                await util.goTo(room2);
+                await util.assertReadThread("Msg1");
             });
         });
 
@@ -462,15 +461,16 @@ test.describe("Read receipts", () => {
                 // Given a thread exists
                 await util.goTo(room1);
                 await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
-                await util.assertUnread(room2, 2); // (Sanity)
+                await util.assertUnread(room2, 1); // (Sanity)
 
                 // When I read the main timeline
                 await util.goTo(room2);
 
-                // Then room does appear unread
-                await util.assertUnread(room2, 1);
+                // Then room doesn't appear unread but the thread does
+                await util.assertRead(room2);
                 await util.assertUnreadThread("Msg1");
             });
+
             test("Reading a thread root within the thread view marks it as read in the main timeline", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -485,7 +485,7 @@ test.describe("Read receipts", () => {
                     msg.threadedOff("ThreadRoot", "InThread"),
                     ...many("afterThread", 30),
                 ]);
-                await util.assertUnread(room2, 62); // Sanity
+                await util.assertUnread(room2, 61); // Sanity
 
                 // When I jump to an old message and read the thread
                 await msg.jumpTo(room2.name, "beforeThread0000");
@@ -496,6 +496,7 @@ test.describe("Read receipts", () => {
                 // 30 remaining messages are unread - 7 messages are displayed under the thread root
                 await util.assertUnread(room2, 30 - 7);
             });
+
             test("Creating a new thread based on a reply makes the room unread", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
@@ -513,10 +514,12 @@ test.describe("Read receipts", () => {
                 // When I receive a thread message created on the reply
                 await util.receiveMessages(room2, [msg.threadedOff("Reply1", "Resp1")]);
 
-                // Then the room is unread
-                await util.assertUnread(room2, 1);
+                // Then the thread is unread
+                await util.goTo(room2);
+                await util.assertUnreadThread("Reply1");
             });
-            test("Reading a thread whose root is a reply makes the room read", async ({
+
+            test("Reading a thread whose root is a reply makes the thread read", async ({
                 roomAlpha: room1,
                 roomBeta: room2,
                 util,
@@ -529,9 +532,9 @@ test.describe("Read receipts", () => {
                     msg.replyTo("Msg1", "Reply1"),
                     msg.threadedOff("Reply1", "Resp1"),
                 ]);
-                await util.assertUnread(room2, 3);
+                await util.assertUnread(room2, 2);
                 await util.goTo(room2);
-                await util.assertUnread(room2, 1);
+                await util.assertRead(room2);
                 await util.assertUnreadThread("Reply1");
 
                 // When I read the thread

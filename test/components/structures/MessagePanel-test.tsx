@@ -20,7 +20,6 @@ import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "@testing-library/react";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -38,6 +37,7 @@ import {
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { IRoomState } from "../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { UIFeature } from "../../../src/settings/UIFeature";
 
 jest.mock("../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -99,9 +99,7 @@ describe("MessagePanel", function () {
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
         <MatrixClientContext.Provider value={client}>
             <RoomContext.Provider value={{ ...defaultRoomContext, ...roomContext }}>
-                <TooltipProvider>
-                    <MessagePanel {...defaultProps} {...props} />
-                </TooltipProvider>
+                <MessagePanel {...defaultProps} {...props} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>
     );
@@ -110,6 +108,7 @@ describe("MessagePanel", function () {
         jest.clearAllMocks();
         // HACK: We assume all settings want to be disabled
         jest.spyOn(SettingsStore, "getValue").mockImplementation((arg) => {
+            if (arg == UIFeature.EnableNewRoomIntro) return true;
             return arg === "showDisplaynameChanges";
         });
 
@@ -517,7 +516,59 @@ describe("MessagePanel", function () {
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
     });
+    it("should show NewRoomIntro if featrue is on", function () {
+        const events = mkCreationEvents();
+        const createEvent = events.find((event) => event.getType() === "m.room.create");
+        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
+        TestUtilsMatrix.upsertRoomStateEvents(room, events);
 
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.EnableNewRoomIntro) return true;
+            return true;
+        });
+
+        const { container } = render(
+            getComponent({
+                events,
+                readMarkerEventId: events[5].getId(),
+                readMarkerVisible: true,
+            }),
+        );
+
+        // find the <li> which wraps the read marker
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
+
+        const [messageList] = container.getElementsByClassName("mx_RoomView_MessageList");
+        const rows = messageList.children;
+        expect(rows.length).toEqual(7); // 6 events + the NewRoomIntro
+        expect(rm.previousSibling).toEqual(rows[5]);
+
+        // read marker should be hidden given props and at the last event
+        expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+    it("should not show NewRoomIntro if featrue is off", function () {
+        const events = mkCreationEvents();
+        const createEvent = events.find((event) => event.getType() === "m.room.create");
+        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
+        TestUtilsMatrix.upsertRoomStateEvents(room, events);
+
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.EnableNewRoomIntro) return false;
+            return true;
+        });
+
+        const { container } = render(
+            getComponent({
+                events,
+                readMarkerEventId: events[5].getId(),
+                readMarkerVisible: true,
+            }),
+        );
+
+        const [messageList] = container.getElementsByClassName("mx_RoomView_MessageList");
+        const rows = messageList.children;
+        expect(rows.length).toEqual(6); // 6 events without the NewRoomIntro
+    });
     it("should render Date separators for the events", function () {
         const events = mkOneDayEvents();
         const { queryAllByRole } = render(getComponent({ events }));

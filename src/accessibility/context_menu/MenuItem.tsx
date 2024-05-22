@@ -18,24 +18,15 @@ limitations under the License.
 
 import React from "react";
 
-import { RovingAccessibleButton, RovingAccessibleTooltipButton } from "../RovingTabIndex";
+import { RovingAccessibleButton } from "../RovingTabIndex";
 
 interface IProps extends React.ComponentProps<typeof RovingAccessibleButton> {
     label?: string;
-    tooltip?: string;
 }
 
 // Semantic component for representing a role=menuitem
-export const MenuItem: React.FC<IProps> = ({ children, label, tooltip, ...props }) => {
+export const MenuItem: React.FC<IProps> = ({ children, label, ...props }) => {
     const ariaLabel = props["aria-label"] || label;
-
-    if (tooltip) {
-        return (
-            <RovingAccessibleTooltipButton {...props} role="menuitem" aria-label={ariaLabel} title={tooltip}>
-                {children}
-            </RovingAccessibleTooltipButton>
-        );
-    }
 
     return (
         <RovingAccessibleButton {...props} role="menuitem" aria-label={ariaLabel}>

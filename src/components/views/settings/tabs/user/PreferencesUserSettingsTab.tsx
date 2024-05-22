@@ -178,7 +178,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
         return (
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
-                <SettingsSection heading={_t("common|preferences")}>
+                <SettingsSection>
                     {roomListSettings.length > 0 && (
                         <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                             {this.renderGroup(roomListSettings)}
@@ -203,7 +203,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             },
                         )}
                     >
-                        {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                        {SettingsStore.getValue(UIFeature.SearchShortcutPreferences) &&
+                            this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|time_heading")}>

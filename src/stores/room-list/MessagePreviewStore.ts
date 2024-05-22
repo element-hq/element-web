@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, RelationType, MatrixEvent, Thread, M_POLL_START } from "matrix-js-sdk/src/matrix";
+import { Room, RelationType, MatrixEvent, Thread, M_POLL_START, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -32,6 +32,7 @@ import { UPDATE_EVENT } from "../AsyncStore";
 import { IPreview } from "./previews/IPreview";
 import { VoiceBroadcastInfoEventType } from "../../voice-broadcast";
 import { VoiceBroadcastPreview } from "./previews/VoiceBroadcastPreview";
+import shouldHideEvent from "../../shouldHideEvent";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -184,23 +185,8 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return previewDef?.previewer.getTextFor(event, undefined, true) ?? "";
     }
 
-    private shouldSkipPreview(event: MatrixEvent, previousEvent?: MatrixEvent): boolean {
-        if (event.isRelation(RelationType.Replace)) {
-            if (previousEvent !== undefined) {
-                // Ignore edits if they don't apply to the latest event in the room to keep the preview on the latest event
-                const room = this.matrixClient?.getRoom(event.getRoomId()!);
-                const relatedEvent = room?.findEventById(event.relationEventId!);
-                if (relatedEvent !== previousEvent) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
-        const events = [...room.getLiveTimeline().getEvents()];
+        const events = [...room.getLiveTimeline().getEvents(), ...room.getPendingEvents()];
 
         // add last reply from each thread
         room.getThreads().forEach((thread: Thread): void => {
@@ -221,8 +207,6 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             this.previews.set(room.roomId, map);
         }
 
-        const previousEventInAny = map.get(TAG_ANY)?.event;
-
         // Set the tags so we know what to generate
         if (!map.has(TAG_ANY)) map.set(TAG_ANY, null);
         if (tagId && !map.has(tagId)) map.set(tagId, null);
@@ -237,7 +221,8 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             const event = events[i];
 
             await this.matrixClient?.decryptEventIfNeeded(event);
-
+            const shouldHide = shouldHideEvent(event);
+            if (shouldHide) continue;
             const previewDef = PREVIEWS[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
@@ -245,16 +230,11 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             const anyPreviewText = previewDef.previewer.getTextFor(event);
             if (!anyPreviewText) continue; // not previewable for some reason
 
-            if (!this.shouldSkipPreview(event, previousEventInAny)) {
-                changed = changed || anyPreviewText !== map.get(TAG_ANY)?.text;
-                map.set(TAG_ANY, mkMessagePreview(anyPreviewText, event));
-            }
+            changed = changed || anyPreviewText !== map.get(TAG_ANY)?.text;
+            map.set(TAG_ANY, mkMessagePreview(anyPreviewText, event));
 
             const tagsToGenerate = Array.from(map.keys()).filter((t) => t !== TAG_ANY); // we did the any tag above
             for (const genTagId of tagsToGenerate) {
-                const previousEventInTag = map.get(genTagId)?.event;
-                if (this.shouldSkipPreview(event, previousEventInTag)) continue;
-
                 const realTagId = genTagId === TAG_ANY ? undefined : genTagId;
                 const preview = previewDef.previewer.getTextFor(event, realTagId);
 
@@ -299,4 +279,19 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             await this.generatePreview(room, TAG_ANY);
         }
     }
+
+    protected async onReady(): Promise<void> {
+        if (!this.matrixClient) return;
+        this.matrixClient.on(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+    }
+
+    protected async onNotReady(): Promise<void> {
+        if (!this.matrixClient) return;
+        this.matrixClient.off(RoomEvent.LocalEchoUpdated, this.onLocalEchoUpdated);
+    }
+
+    protected onLocalEchoUpdated = async (ev: MatrixEvent, room: Room): Promise<void> => {
+        if (!this.previews.has(room.roomId)) return;
+        await this.generatePreview(room, TAG_ANY);
+    };
 }

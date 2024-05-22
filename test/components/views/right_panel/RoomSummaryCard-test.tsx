@@ -19,7 +19,6 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../src/components/views/right_panel/RoomSummaryCard";
@@ -38,8 +37,13 @@ import { _t } from "../../../../src/languageHandler";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { UIFeature } from "../../../../src/settings/UIFeature";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 
 jest.mock("../../../../src/utils/room/tagRoom");
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
@@ -57,9 +61,7 @@ describe("<RoomSummaryCard />", () => {
 
         return render(<RoomSummaryCard {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>
-                    <TooltipProvider>{children}</TooltipProvider>
-                </MatrixClientContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
         });
     };
@@ -99,6 +101,12 @@ describe("<RoomSummaryCard />", () => {
         mockClient.getRoom.mockReturnValue(room);
         jest.spyOn(room, "isElementVideoRoom").mockRestore();
         jest.spyOn(room, "isCallRoom").mockRestore();
+
+        mocked(shouldShowComponent).mockReturnValue(true);
+
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            return true;
+        });
     });
 
     afterEach(() => {
@@ -107,6 +115,40 @@ describe("<RoomSummaryCard />", () => {
 
     it("renders the room summary", () => {
         const { container } = getComponent();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders the room topic in the summary", () => {
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
+        const { container } = getComponent();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("has button to edit topic when expanded", () => {
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
+        const { container, getByText } = getComponent();
+        fireEvent.click(screen.getByText("This is the room's topic."));
+        expect(getByText("Edit")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 
@@ -179,6 +221,67 @@ describe("<RoomSummaryCard />", () => {
             { phase: RightPanelPhases.RoomMemberList },
             true,
         );
+    });
+
+    it("renders 'add widgets, bridges..' option when UIFeature is enabled", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.Widgets) return true;
+            return true;
+        });
+        const { getByText } = getComponent();
+
+        expect(getByText("Add widgets, bridges & bots")).toBeInTheDocument();
+        expect(screen.queryAllByText("Add widgets, bridges & bots")).toBeTruthy();
+    });
+    it("do not render 'add widgets, bridges..' option when UIFeature is false", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.Widgets) return false;
+            return true;
+        });
+
+        getComponent();
+
+        expect(screen.queryByText("Add widgets, bridges & bots")).toBeFalsy();
+    });
+    it("do render 'Files' option when UIFeature is true", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.RoomSummaryFilesOption) return true;
+            return true;
+        });
+        const { getByText } = getComponent();
+
+        expect(getByText("Files")).toBeInTheDocument();
+        expect(screen.queryByText(_t("right_panel|files_button"))).toBeTruthy();
+    });
+    it("does not render 'Files' option when UIFeature is false", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.RoomSummaryFilesOption) return false;
+            return true;
+        });
+        getComponent();
+
+        expect(screen.queryByText("Files")).toBeFalsy();
+        expect(screen.queryByText(_t("right_panel|files_button"))).toBeFalsy();
+    });
+    it("does not render 'Copy link' option when UIFeature is false", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.RoomSummaryCopyLink) return false;
+            return true;
+        });
+        getComponent();
+
+        expect(screen.queryByText("Copy link")).toBeFalsy();
+        expect(screen.queryByText(_t("action|copy_link"))).toBeFalsy();
+    });
+    it("does not render 'Copy link' option when UIFeature is true", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === UIFeature.RoomSummaryCopyLink) return true;
+            return true;
+        });
+        const { getByText } = getComponent();
+
+        expect(getByText("Copy link")).toBeInTheDocument();
+        expect(screen.queryByText(_t("action|copy_link"))).toBeTruthy();
     });
 
     describe("pinning", () => {

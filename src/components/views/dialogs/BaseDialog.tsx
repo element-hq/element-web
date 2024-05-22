@@ -53,7 +53,7 @@ interface IProps {
     "top"?: React.ReactNode;
 
     // Title for the dialog.
-    "title"?: JSX.Element | string;
+    "title"?: React.ReactNode;
     // Specific aria label to use, if not provided will set aria-labelledBy to mx_Dialog_title
     "aria-label"?: string;
 

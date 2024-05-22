@@ -31,6 +31,7 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import PosthogTrackers from "../../../PosthogTrackers";
 import SettingsSubsection from "./shared/SettingsSubsection";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {}
 
@@ -270,7 +271,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
                     />
                 </div>
                 {this.renderHighContrastCheckbox()}
-                {customThemeForm}
+                {SettingsStore.getValue(UIFeature.CustomThemePanel) && customThemeForm}
             </SettingsSubsection>
         );
     }

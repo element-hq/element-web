@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { mocked } from "jest-mock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import BeaconViewDialog from "../../../../src/components/views/beacon/BeaconViewDialog";
 import {
@@ -80,8 +79,7 @@ describe("<BeaconViewDialog />", () => {
         matrixClient: mockClient as MatrixClient,
     };
 
-    const getComponent = (props = {}): RenderResult =>
-        render(<BeaconViewDialog {...defaultProps} {...props} />, { wrapper: TooltipProvider });
+    const getComponent = (props = {}): RenderResult => render(<BeaconViewDialog {...defaultProps} {...props} />);
 
     const openSidebar = (getByTestId: RenderResult["getByTestId"]) => {
         fireEvent.click(getByTestId("beacon-view-dialog-open-sidebar"));
@@ -94,7 +92,7 @@ describe("<BeaconViewDialog />", () => {
         jest.clearAllMocks();
     });
 
-    it("renders a map with markers", () => {
+    it("renders a map with markers", async () => {
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
@@ -105,7 +103,9 @@ describe("<BeaconViewDialog />", () => {
             lat: 51,
         });
         // marker added
-        expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
+        await waitFor(() => {
+            expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
+        });
     });
 
     it("does not render any own beacon status when user is not live sharing", () => {

@@ -109,11 +109,11 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
       Retry
     </button>
     <button
+      aria-label="Stop and close"
       class="mx_AccessibleButton mx_RoomLiveShareWarning_closeButton"
       data-testid="room-live-share-wire-error-close-button"
       role="button"
       tabindex="0"
-      title="Stop and close"
     >
       <div
         class="mx_RoomLiveShareWarning_closeButtonIcon"

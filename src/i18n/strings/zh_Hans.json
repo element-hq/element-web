@@ -243,8 +243,7 @@
             "approve_access_warning": "为此设备批准访问权限后，它对你的帐户有完全的访问权限。",
             "completing_setup": "完成新设备的设置",
             "confirm_code_match": "检查以下代码是否与你的其他设备匹配：",
-            "connecting": "正在连接……",
-            "error_homeserver_lacks_support": "此服务器不支持多设备登录"
+            "connecting": "正在连接……"
         },
         "register_action": "创建账户",
         "registration": {
@@ -1309,12 +1308,7 @@
         "rust_crypto": "Rust加密实现",
         "sliding_sync": "滑动同步模式",
         "sliding_sync_description": "正在积极开发中，不能禁用。",
-        "sliding_sync_disable_warning": "要停用，你必须登出并重新登录，请小心！",
-        "sliding_sync_proxy_url_label": "代理URL",
-        "sliding_sync_proxy_url_optional_label": "代理URL（可选）",
         "sliding_sync_server_no_support": "你的服务器缺少原生支持",
-        "sliding_sync_server_specify_proxy": "你的服务器缺少原生支持，你必须指定代理",
-        "sliding_sync_server_support": "你的服务器有原生支持",
         "under_active_development": "积极开发中。",
         "video_rooms": "视频房间",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中使用语音和视频的新方式。",
@@ -2157,13 +2151,11 @@
             "custom_theme_success": "主题已添加！",
             "custom_theme_url": "自定义主题URL",
             "font_size": "字体大小",
-            "heading": "自定义你的外观",
             "image_size_default": "默认",
             "image_size_large": "大",
             "layout_bubbles": "消息气泡",
             "layout_irc": "IRC（实验性）",
             "match_system_theme": "匹配系统主题",
-            "subheading": "外观设置仅会影响此 %(brand)s 会话。",
             "timeline_image_size": "时间线中的图像大小",
             "use_high_contrast": "使用高对比度"
         },
@@ -2836,7 +2828,6 @@
             "tooltip_sub": "点击查看编辑历史",
             "tooltip_title": "编辑于 %(date)s"
         },
-        "encrypted_historical_messages_unavailable": "在此之前的加密消息不可用。",
         "error_no_renderer": "无法显示此事件",
         "error_rendering_message": "无法加载此消息",
         "historical_messages_unavailable": "你不能查看更早的消息",

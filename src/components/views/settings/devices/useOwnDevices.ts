@@ -77,6 +77,7 @@ export enum OwnDevicesError {
 }
 export type DevicesState = {
     devices: DevicesDictionary;
+    dehydratedDeviceId?: string;
     pushers: IPusher[];
     localNotificationSettings: Map<string, LocalNotificationSettings>;
     currentDeviceId: string;
@@ -97,6 +98,7 @@ export const useOwnDevices = (): DevicesState => {
     const userId = matrixClient.getSafeUserId();
 
     const [devices, setDevices] = useState<DevicesState["devices"]>({});
+    const [dehydratedDeviceId, setDehydratedDeviceId] = useState<DevicesState["dehydratedDeviceId"]>(undefined);
     const [pushers, setPushers] = useState<DevicesState["pushers"]>([]);
     const [localNotificationSettings, setLocalNotificationSettings] = useState<
         DevicesState["localNotificationSettings"]
@@ -130,6 +132,21 @@ export const useOwnDevices = (): DevicesState => {
                 }
             });
             setLocalNotificationSettings(notificationSettings);
+
+            const ownUserId = matrixClient.getUserId()!;
+            const userDevices = (await matrixClient.getCrypto()?.getUserDeviceInfo([ownUserId]))?.get(ownUserId);
+            const dehydratedDeviceIds: string[] = [];
+            for (const device of userDevices?.values() ?? []) {
+                if (device.dehydrated) {
+                    dehydratedDeviceIds.push(device.deviceId);
+                }
+            }
+            // If the user has exactly one device marked as dehydrated, we consider
+            // that as the dehydrated device, and hide it as a normal device (but
+            // indicate that the user is using a dehydrated device).  If the user has
+            // more than one, that is anomalous, and we show all the devices so that
+            // nothing is hidden.
+            setDehydratedDeviceId(dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : undefined);
 
             setIsLoadingDeviceList(false);
         } catch (error) {
@@ -228,6 +245,7 @@ export const useOwnDevices = (): DevicesState => {
 
     return {
         devices,
+        dehydratedDeviceId,
         pushers,
         localNotificationSettings,
         currentDeviceId,

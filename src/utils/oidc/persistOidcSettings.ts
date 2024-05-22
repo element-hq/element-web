@@ -15,9 +15,14 @@ limitations under the License.
 */
 
 import { IdTokenClaims } from "oidc-client-ts";
+import { decodeIdToken } from "matrix-js-sdk/src/matrix";
 
 const clientIdStorageKey = "mx_oidc_client_id";
 const tokenIssuerStorageKey = "mx_oidc_token_issuer";
+const idTokenStorageKey = "mx_oidc_id_token";
+/**
+ * @deprecated in favour of using idTokenStorageKey
+ */
 const idTokenClaimsStorageKey = "mx_oidc_id_token_claims";
 
 /**
@@ -25,15 +30,13 @@ const idTokenClaimsStorageKey = "mx_oidc_id_token_claims";
  * Only set after successful authentication
  * @param clientId
  * @param issuer
+ * @param idToken
+ * @param idTokenClaims
  */
-export const persistOidcAuthenticatedSettings = (
-    clientId: string,
-    issuer: string,
-    idTokenClaims: IdTokenClaims,
-): void => {
+export const persistOidcAuthenticatedSettings = (clientId: string, issuer: string, idToken: string): void => {
     localStorage.setItem(clientIdStorageKey, clientId);
     localStorage.setItem(tokenIssuerStorageKey, issuer);
-    localStorage.setItem(idTokenClaimsStorageKey, JSON.stringify(idTokenClaims));
+    localStorage.setItem(idTokenStorageKey, idToken);
 };
 
 /**
@@ -59,13 +62,26 @@ export const getStoredOidcClientId = (): string => {
 };
 
 /**
- * Retrieve stored id token claims from local storage
- * @returns idtokenclaims or undefined
+ * Retrieve stored id token claims from stored id token or local storage
+ * @returns idTokenClaims or undefined
  */
 export const getStoredOidcIdTokenClaims = (): IdTokenClaims | undefined => {
+    const idToken = getStoredOidcIdToken();
+    if (idToken) {
+        return decodeIdToken(idToken);
+    }
+
     const idTokenClaims = localStorage.getItem(idTokenClaimsStorageKey);
     if (!idTokenClaims) {
         return;
     }
     return JSON.parse(idTokenClaims) as IdTokenClaims;
+};
+
+/**
+ * Retrieve stored id token from local storage
+ * @returns idToken or undefined
+ */
+export const getStoredOidcIdToken = (): string | undefined => {
+    return localStorage.getItem(idTokenStorageKey) ?? undefined;
 };

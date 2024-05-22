@@ -2,23 +2,23 @@
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
-  aria-labelledby="radix-20"
+  aria-labelledby="radix-16"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
-  data-align="end"
+  data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
-  data-side="right"
+  data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-21"
+  id="radix-17"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
-    id=":r5:"
+    id=":r6:"
   >
     Threads activity
   </h3>
@@ -125,25 +125,116 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 </div>
 `;
 
+exports[`ThreadsActivityCentre should close the release announcement when the TAC button is clicked 1`] = `
+<body
+  data-scroll-locked=""
+  style="pointer-events: none;"
+>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
+  <div
+    aria-hidden="true"
+    data-aria-hidden="true"
+  >
+    <div
+      class="mx_ThreadsActivityCentre_container"
+    >
+      <button
+        aria-controls="radix-3"
+        aria-disabled="false"
+        aria-expanded="true"
+        aria-haspopup="menu"
+        aria-label="Threads"
+        class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
+        data-state="open"
+        id="radix-2"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div
+            class="mx_ThreadsActivityCentreButton_Icon"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+  <div
+    data-radix-popper-content-wrapper=""
+    dir="ltr"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px; --radix-popper-transform-origin: 0% 0px;"
+  >
+    <div
+      aria-labelledby="radix-2"
+      aria-orientation="vertical"
+      class="_menu_1x5h1_17"
+      data-align="start"
+      data-orientation="vertical"
+      data-radix-menu-content=""
+      data-side="top"
+      data-state="open"
+      dir="ltr"
+      id="radix-3"
+      role="menu"
+      style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+      tabindex="-1"
+    >
+      <h3
+        class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+        id=":r1:"
+      >
+        Threads activity
+      </h3>
+      <div
+        class="mx_ThreadsActivityCentre_rows"
+      >
+        <div
+          class="mx_ThreadsActivityCentre_emptyCaption"
+        >
+          You don't have rooms with thread notifications yet.
+        </div>
+      </div>
+    </div>
+  </div>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
+</body>
+`;
+
 exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
-  aria-labelledby="radix-28"
+  aria-labelledby="radix-22"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
-  data-align="end"
+  data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
-  data-side="right"
+  data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-29"
+  id="radix-23"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
-    id=":r7:"
+    id=":r8:"
   >
     Threads activity
   </h3>
@@ -153,7 +244,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
     <div
       class="mx_ThreadsActivityCentre_emptyCaption"
     >
-      You don't have rooms with unread threads yet.
+      You don't have rooms with thread notifications yet.
     </div>
   </div>
 </div>
@@ -161,23 +252,23 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 
 exports[`ThreadsActivityCentre should order the room with the same notification level by most recent 1`] = `
 <div
-  aria-labelledby="radix-31"
+  aria-labelledby="radix-24"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
-  data-align="end"
+  data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
-  data-side="right"
+  data-side="top"
   data-state="open"
   dir="ltr"
-  id="radix-32"
+  id="radix-25"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <h3
     class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
-    id=":r8:"
+    id=":r9:"
   >
     Threads activity
   </h3>
@@ -330,4 +421,130 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
     </button>
   </div>
 </div>
+`;
+
+exports[`ThreadsActivityCentre should render the release announcement 1`] = `
+<body>
+  <div
+    data-floating-ui-inert=""
+  >
+    <div
+      class="mx_ThreadsActivityCentre_container"
+    >
+      <button
+        aria-controls="floating-ui-6"
+        aria-describedby="floating-ui-6"
+        aria-expanded="true"
+        aria-haspopup="dialog"
+        aria-label="Threads"
+        class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div
+            class="mx_ThreadsActivityCentreButton_Icon"
+          />
+        </div>
+      </button>
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+      <span
+        aria-owns="floating-ui-12"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      />
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+    </div>
+  </div>
+  <div
+    data-floating-ui-portal=""
+    id="floating-ui-12"
+  >
+    <span
+      data-floating-ui-focus-guard=""
+      data-floating-ui-inert=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+    <div
+      aria-describedby="floating-ui-5"
+      aria-labelledby="floating-ui-4"
+      class="_content_1oa1y_17"
+      id="floating-ui-6"
+      role="dialog"
+      style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
+      tabindex="-1"
+    >
+      <svg
+        aria-hidden="true"
+        class="_arrow_1oa1y_62"
+        height="20"
+        style="position: absolute; pointer-events: none; right: calc(100% - 0px); transform: rotate(90deg);"
+        viewBox="0 0 20 20"
+        width="20"
+      >
+        <path
+          d="M0,0 H20 L10,12 Q10,12 10,12 Z"
+          stroke="none"
+        />
+        <clippath
+          id="floating-ui-13"
+        >
+          <rect
+            height="20"
+            width="20"
+            x="0"
+            y="0"
+          />
+        </clippath>
+      </svg>
+      <h3
+        class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 _header_1oa1y_46"
+        id="floating-ui-4"
+      >
+        Threads Activity Centre
+      </h3>
+      <span
+        class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40 _description_1oa1y_52"
+        id="floating-ui-5"
+      >
+        Threads notifications have moved, find them here from now on.
+      </span>
+      <button
+        class="_button_dyfp8_17 _button_1oa1y_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        OK
+      </button>
+    </div>
+    <span
+      data-floating-ui-focus-guard=""
+      data-floating-ui-inert=""
+      data-type="inside"
+      role="button"
+      style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      tabindex="0"
+    />
+  </div>
+</body>
 `;

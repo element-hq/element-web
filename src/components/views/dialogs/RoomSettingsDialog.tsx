@@ -56,11 +56,12 @@ export const enum RoomSettingsTab {
 interface IProps {
     roomId: string;
     onFinished: (success?: boolean) => void;
-    initialTabId?: string;
+    initialTabId?: RoomSettingsTab;
 }
 
 interface IState {
     room: Room;
+    activeTabId: RoomSettingsTab;
 }
 
 class RoomSettingsDialog extends React.Component<IProps, IState> {
@@ -70,7 +71,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         super(props);
 
         const room = this.getRoom();
-        this.state = { room };
+        this.state = { room, activeTabId: props.initialTabId || RoomSettingsTab.General };
     }
 
     public componentDidMount(): void {
@@ -128,6 +129,10 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         if (event.getType() === EventType.RoomJoinRules) this.forceUpdate();
     };
 
+    private onTabChange = (tabId: RoomSettingsTab): void => {
+        this.setState({ activeTabId: tabId });
+    };
+
     private getTabs(): NonEmptyArray<Tab<RoomSettingsTab>> {
         const tabs: Tab<RoomSettingsTab>[] = [];
 
@@ -160,15 +165,22 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        tabs.push(
-            new Tab(
-                RoomSettingsTab.Security,
-                _td("room_settings|security|title"),
-                "mx_RoomSettingsDialog_securityIcon",
-                <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
-                "RoomSettingsSecurityPrivacy",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.RoomSettingsSecurity)) {
+            tabs.push(
+                new Tab(
+                    RoomSettingsTab.Security,
+                    _td("room_settings|security|title"),
+                    "mx_RoomSettingsDialog_securityIcon",
+                    (
+                        <SecurityRoomSettingsTab
+                            room={this.state.room}
+                            closeSettingsFn={() => this.props.onFinished(true)}
+                        />
+                    ),
+                    "RoomSettingsSecurityPrivacy",
+                ),
+            );
+        }
         tabs.push(
             new Tab(
                 RoomSettingsTab.Roles,
@@ -246,8 +258,9 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 <div className="mx_SettingsDialog_content">
                     <TabbedView
                         tabs={this.getTabs()}
-                        initialTabId={this.props.initialTabId}
+                        activeTabId={this.state.activeTabId}
                         screenName="RoomSettings"
+                        onChange={this.onTabChange}
                     />
                 </div>
             </BaseDialog>

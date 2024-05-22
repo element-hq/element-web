@@ -45,13 +45,12 @@ import { NotificationLevel } from "../../../stores/notifications/NotificationLev
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleTooltipButton<T>>,
-    "title" | "onClick" | "size"
+    ComponentProps<typeof AccessibleButton<T>>,
+    "title" | "onClick" | "size" | "element"
 > & {
     space?: Room;
     spaceKey?: SpaceKey;
@@ -143,17 +142,17 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     const onClick = props.onClick ?? (selected && space ? viewSpaceHome : activateSpace);
 
     return (
-        <AccessibleTooltipButton
+        <AccessibleButton
             {...props}
             className={classNames("mx_SpaceButton", className, {
                 mx_SpaceButton_active: selected,
                 mx_SpaceButton_hasMenuOpen: menuDisplayed,
                 mx_SpaceButton_narrow: isNarrow,
             })}
-            title={label}
+            aria-label={label}
+            title={!isNarrow || menuDisplayed ? undefined : label}
             onClick={onClick}
             onContextMenu={openMenu}
-            forceHide={!isNarrow || menuDisplayed}
             ref={handle}
             tabIndex={tabIndex}
             onFocus={onFocus}
@@ -177,7 +176,7 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
 
                 {contextMenu}
             </div>
-        </AccessibleTooltipButton>
+        </AccessibleButton>
     );
 };
 

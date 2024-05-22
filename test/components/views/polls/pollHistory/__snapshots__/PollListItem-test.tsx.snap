@@ -7,7 +7,6 @@ exports[`<PollListItem /> renders a poll 1`] = `
     data-testid="pollListItem-$mypoll"
   >
     <span
-      data-state="closed"
       tabindex="0"
     >
       <div

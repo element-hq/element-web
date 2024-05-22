@@ -1503,10 +1503,8 @@
             "custom_theme_success": "پوسته اضافه شد!",
             "custom_theme_url": "آدرس پوسته دلخواه",
             "font_size": "اندازه فونت",
-            "heading": "ظاهر پیام‌رسان خود را سفارشی‌سازی کنید",
             "image_size_default": "پیشفرض",
-            "match_system_theme": "با پوسته‌ی سیستم تطبیق پیدا کن",
-            "subheading": "تنظیمات ظاهری برنامه تنها همین نشست %(brand)s را تحت تاثیر قرار می‌دهد."
+            "match_system_theme": "با پوسته‌ی سیستم تطبیق پیدا کن"
         },
         "automatic_language_detection_syntax_highlight": "فعال‌سازی تشخیص خودکار زبان برای پررنگ‌سازی نحوی",
         "big_emoji": "نمایش شکلک‌های بزرگ در گفتگوها را فعال کن",
