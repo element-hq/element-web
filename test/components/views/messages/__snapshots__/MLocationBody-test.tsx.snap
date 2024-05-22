@@ -34,8 +34,7 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
     class="mx_MLocationBody"
   >
     <div
-      aria-describedby="mx_TooltipTarget_9K38QgU2"
-      tabindex="0"
+      class="mx_MLocationBody_map"
     >
       <div
         class="mx_Map mx_MLocationBody_map"
@@ -67,8 +66,7 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
     class="mx_MLocationBody"
   >
     <div
-      aria-describedby="mx_TooltipTarget_9K38QgU2"
-      tabindex="0"
+      class="mx_MLocationBody_map"
     >
       <div
         class="mx_Map mx_MLocationBody_map"
