@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2024 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,11 +23,9 @@ import Field from "../elements/Field";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "./AvatarSetting";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
-import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 
@@ -35,8 +33,9 @@ interface IState {
     originalDisplayName: string;
     displayName: string;
     originalAvatarUrl: string | null;
-    avatarUrl?: string | ArrayBuffer;
     avatarFile?: File | null;
+    // If true, the user has indicated that they wish to remove the avatar and this should happen on save.
+    avatarRemovalPending: boolean;
     enableProfileSave?: boolean;
 }
 
@@ -48,20 +47,24 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         super(props);
 
         this.userId = MatrixClientPeg.safeGet().getSafeUserId();
-        let avatarUrl = OwnProfileStore.instance.avatarMxc;
-        if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
+        const avatarUrl = OwnProfileStore.instance.avatarMxc;
         this.state = {
             originalDisplayName: OwnProfileStore.instance.displayName ?? "",
             displayName: OwnProfileStore.instance.displayName ?? "",
             originalAvatarUrl: avatarUrl,
-            avatarUrl: avatarUrl ?? undefined,
             avatarFile: null,
+            avatarRemovalPending: false,
             enableProfileSave: false,
         };
     }
 
-    private uploadAvatar = (): void => {
-        this.avatarUpload.current?.click();
+    private onChange = (file: File): void => {
+        PosthogTrackers.trackInteraction("WebProfileSettingsAvatarUploadButton");
+        this.setState({
+            avatarFile: file,
+            avatarRemovalPending: false,
+            enableProfileSave: true,
+        });
     };
 
     private removeAvatar = (): void => {
@@ -70,8 +73,8 @@ export default class ProfileSettings extends React.Component<{}, IState> {
             this.avatarUpload.current.value = "";
         }
         this.setState({
-            avatarUrl: undefined,
             avatarFile: null,
+            avatarRemovalPending: true,
             enableProfileSave: true,
         });
     };
@@ -84,8 +87,8 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         this.setState({
             enableProfileSave: false,
             displayName: this.state.originalDisplayName,
-            avatarUrl: this.state.originalAvatarUrl ?? undefined,
             avatarFile: null,
+            avatarRemovalPending: false,
         });
     };
 
@@ -114,11 +117,12 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 );
                 const { content_uri: uri } = await client.uploadContent(this.state.avatarFile);
                 await client.setAvatarUrl(uri);
-                newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96) ?? undefined;
-                newState.originalAvatarUrl = newState.avatarUrl;
+                newState.originalAvatarUrl = uri;
                 newState.avatarFile = null;
-            } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+            } else if (this.state.avatarRemovalPending) {
                 await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+                newState.originalAvatarUrl = null;
+                newState.avatarRemovalPending = false;
             }
         } catch (err) {
             logger.log("Failed to save profile", err);
@@ -138,50 +142,13 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         });
     };
 
-    private onAvatarChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        if (!e.target.files || !e.target.files.length) {
-            this.setState({
-                avatarUrl: this.state.originalAvatarUrl ?? undefined,
-                avatarFile: null,
-                enableProfileSave: false,
-            });
-            return;
-        }
-
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            this.setState({
-                avatarUrl: ev.target?.result ?? undefined,
-                avatarFile: file,
-                enableProfileSave: true,
-            });
-        };
-        reader.readAsDataURL(file);
-    };
-
     public render(): React.ReactNode {
         const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.userId, {
             withDisplayName: true,
         });
 
-        // False negative result from no-base-to-string rule, doesn't seem to account for Symbol.toStringTag
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        const avatarUrl = this.state.avatarUrl?.toString();
-
         return (
             <form onSubmit={this.saveProfile} autoComplete="off" noValidate={true} className="mx_ProfileSettings">
-                <input
-                    type="file"
-                    ref={this.avatarUpload}
-                    className="mx_ProfileSettings_avatarUpload"
-                    onClick={(ev) => {
-                        chromeFileInputFix(ev);
-                        PosthogTrackers.trackInteraction("WebProfileSettingsAvatarUploadButton", ev);
-                    }}
-                    onChange={this.onAvatarChanged}
-                    accept="image/*"
-                />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_profile_controls">
                         <SettingsSubsectionHeading heading={_t("common|profile")} />
@@ -199,10 +166,13 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                         </p>
                     </div>
                     <AvatarSetting
-                        avatarUrl={avatarUrl}
-                        avatarName={this.state.displayName || this.userId}
+                        avatar={
+                            this.state.avatarRemovalPending
+                                ? undefined
+                                : this.state.avatarFile ?? this.state.originalAvatarUrl ?? undefined
+                        }
                         avatarAltText={_t("common|user_avatar")}
-                        uploadAvatar={this.uploadAvatar}
+                        onChange={this.onChange}
                         removeAvatar={this.removeAvatar}
                     />
                 </div>

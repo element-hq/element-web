@@ -6,22 +6,22 @@ exports[`<ZoomButtons /> renders buttons 1`] = `
     class="mx_ZoomButtons"
   >
     <div
+      aria-label="Zoom in"
       class="mx_AccessibleButton mx_ZoomButtons_button"
       data-testid="map-zoom-in-button"
       role="button"
       tabindex="0"
-      title="Zoom in"
     >
       <div
         class="mx_ZoomButtons_icon"
       />
     </div>
     <div
+      aria-label="Zoom out"
       class="mx_AccessibleButton mx_ZoomButtons_button"
       data-testid="map-zoom-out-button"
       role="button"
       tabindex="0"
-      title="Zoom out"
     >
       <div
         class="mx_ZoomButtons_icon"

@@ -130,9 +130,9 @@ describe("ForwardDialog", () => {
         expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(3);
 
         const searchInput = getByTestId(container, "searchbox-input");
-        act(() => userEvent.type(searchInput, "a"));
+        await userEvent.type(searchInput, "a");
 
-        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(3);
+        expect(container.querySelectorAll(".mx_ForwardList_entry")).toHaveLength(2);
     });
 
     it("should be navigable using arrow keys", async () => {

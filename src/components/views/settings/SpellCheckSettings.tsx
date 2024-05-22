@@ -18,10 +18,14 @@ import React from "react";
 
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
 import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
-import { _t } from "../../../languageHandler";
+import { _t, getUserLanguage } from "../../../languageHandler";
 
 interface ExistingSpellCheckLanguageIProps {
     language: string;
+    /**
+     * The label to render on the component. If not provided, the language code will be used.
+     */
+    label?: string;
     onRemoved(language: string): void;
 }
 
@@ -45,7 +49,9 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
     public render(): React.ReactNode {
         return (
             <div className="mx_ExistingSpellCheckLanguage">
-                <span className="mx_ExistingSpellCheckLanguage_language">{this.props.language}</span>
+                <span className="mx_ExistingSpellCheckLanguage_language">
+                    {this.props.label ?? this.props.language}
+                </span>
                 <AccessibleButton onClick={this.onRemove} kind="danger_sm">
                     {_t("action|remove")}
                 </AccessibleButton>
@@ -87,8 +93,9 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
     };
 
     public render(): React.ReactNode {
+        const intl = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
         const existingSpellCheckLanguages = this.props.languages.map((e) => {
-            return <ExistingSpellCheckLanguage language={e} onRemoved={this.onRemoved} key={e} />;
+            return <ExistingSpellCheckLanguage language={e} label={intl.of(e)} onRemoved={this.onRemoved} key={e} />;
         });
 
         const addButton = (

@@ -33,6 +33,10 @@ import { Bot, CreateBotOpts } from "./pages/bot";
 import { ProxyInstance, SlidingSyncProxy } from "./plugins/sliding-sync-proxy";
 import { Webserver } from "./plugins/webserver";
 
+// Enable experimental service worker support
+// See https://playwright.dev/docs/service-workers-experimental#how-to-enable
+process.env["PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS"] = "1";
+
 const CONFIG_JSON: Partial<IConfigOptions> = {
     // This is deliberately quite a minimal config.json, so that we can test that the default settings
     // actually work.
@@ -52,6 +56,11 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
 
     // the location tests want a map style url.
     map_style_url: "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+
+    features: {
+        // We don't want to go through the feature announcement during the e2e test
+        feature_release_announcement: false,
+    },
 };
 
 export type TestOptions = {

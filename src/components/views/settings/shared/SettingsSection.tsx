@@ -20,8 +20,23 @@ import React, { HTMLAttributes } from "react";
 import Heading from "../../typography/Heading";
 
 export interface SettingsSectionProps extends HTMLAttributes<HTMLDivElement> {
-    heading: string | React.ReactNode;
+    heading?: string | React.ReactNode;
     children?: React.ReactNode;
+}
+
+function renderHeading(heading: string | React.ReactNode | undefined): React.ReactNode | undefined {
+    switch (typeof heading) {
+        case "string":
+            return (
+                <Heading as="h2" size="3">
+                    {heading}
+                </Heading>
+            );
+        case "undefined":
+            return undefined;
+        default:
+            return heading;
+    }
 }
 
 /**
@@ -43,13 +58,7 @@ export interface SettingsSectionProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const SettingsSection: React.FC<SettingsSectionProps> = ({ className, heading, children, ...rest }) => (
     <div {...rest} className={classnames("mx_SettingsSection", className)}>
-        {typeof heading === "string" ? (
-            <Heading as="h2" size="3">
-                {heading}
-            </Heading>
-        ) : (
-            <>{heading}</>
-        )}
+        {renderHeading(heading)}
         <div className="mx_SettingsSection_subSections">{children}</div>
     </div>
 );

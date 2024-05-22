@@ -28,15 +28,15 @@ type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof Access
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
 export const ContextMenuButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
-    { label, isExpanded, children, onClick, onContextMenu, ...props }: Props<T>,
+    { label, isExpanded, children, onClick, onContextMenu, element, ...props }: Props<T>,
     ref: Ref<HTMLElement>,
 ) {
     return (
         <AccessibleButton
             {...props}
+            element={element as keyof JSX.IntrinsicElements}
             onClick={onClick}
             onContextMenu={onContextMenu ?? onClick ?? undefined}
-            title={label}
             aria-label={label}
             aria-haspopup={true}
             aria-expanded={isExpanded}

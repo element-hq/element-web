@@ -20,7 +20,6 @@ import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } fro
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";
@@ -630,17 +629,15 @@ export function createMenu(
     };
 
     const menu = (
-        <TooltipProvider>
-            <ContextMenu
-                {...props}
-                mountAsChild={true}
-                hasBackground={false}
-                onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
-                windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
-            >
-                <ElementClass {...props} onFinished={onFinished} />
-            </ContextMenu>
-        </TooltipProvider>
+        <ContextMenu
+            {...props}
+            mountAsChild={true}
+            hasBackground={false}
+            onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
+            windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
+        >
+            <ElementClass {...props} onFinished={onFinished} />
+        </ContextMenu>
     );
 
     ReactDOM.render(menu, getOrCreateContainer());

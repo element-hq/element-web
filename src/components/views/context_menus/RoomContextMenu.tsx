@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
@@ -117,9 +117,9 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const isVideoRoom =
         videoRoomsEnabled && (room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom()));
-
+    const canInvite = useEventEmitterState(cli, RoomMemberEvent.PowerLevel, () => room.canInvite(cli.getUserId()!));
     let inviteOption: JSX.Element | undefined;
-    if (room.canInvite(cli.getUserId()!) && !isDm && shouldShowComponent(UIComponent.InviteUsers)) {
+    if (canInvite && !isDm && shouldShowComponent(UIComponent.InviteUsers)) {
         const onInviteClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();

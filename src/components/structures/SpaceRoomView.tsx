@@ -60,7 +60,6 @@ import {
     defaultRoomsRenderer,
 } from "../views/dialogs/AddExistingToSpaceDialog";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Field from "../views/elements/Field";
 import RoomFacePile from "../views/elements/RoomFacePile";
@@ -248,12 +247,13 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     let settingsButton;
     if (shouldShowSpaceSettings(space)) {
         settingsButton = (
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className="mx_SpaceRoomView_landing_settingsButton"
                 onClick={() => {
                     showSpaceSettings(space);
                 }}
                 title={_t("common|settings")}
+                placement="bottom"
             />
         );
     }

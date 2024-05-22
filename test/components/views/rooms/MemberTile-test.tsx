@@ -21,7 +21,6 @@ import { MatrixClient, RoomMember, Device } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import * as TestUtils from "../../../test-utils";
 import MemberTile from "../../../../src/components/views/rooms/MemberTile";
@@ -37,7 +36,7 @@ describe("MemberTile", () => {
     });
 
     it("should not display an E2EIcon when the e2E status = normal", () => {
-        const { container } = render(<MemberTile member={member} />, { wrapper: TooltipProvider });
+        const { container } = render(<MemberTile member={member} />);
 
         expect(container).toMatchSnapshot();
     });
@@ -48,7 +47,7 @@ describe("MemberTile", () => {
             wasCrossSigningVerified: jest.fn().mockReturnValue(true),
         } as unknown as UserVerificationStatus);
 
-        const { container } = render(<MemberTile member={member} />, { wrapper: TooltipProvider });
+        const { container } = render(<MemberTile member={member} />);
 
         expect(container).toMatchSnapshot();
         await waitFor(async () => {
@@ -72,7 +71,7 @@ describe("MemberTile", () => {
             crossSigningVerified: true,
         } as DeviceVerificationStatus);
 
-        const { container } = render(<MemberTile member={member} />, { wrapper: TooltipProvider });
+        const { container } = render(<MemberTile member={member} />);
 
         expect(container).toMatchSnapshot();
         await waitFor(async () => {

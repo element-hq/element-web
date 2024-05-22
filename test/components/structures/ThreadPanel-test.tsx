@@ -25,7 +25,6 @@ import {
     FeatureSupport,
     Thread,
 } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import ThreadPanel, { ThreadFilterType, ThreadPanelHeader } from "../../../src/components/structures/ThreadPanel";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -37,6 +36,8 @@ import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
 import { IRoomState } from "../../../src/components/structures/RoomView";
+import defaultDispatcher from "../../../src/dispatcher/dispatcher";
+import { Action } from "../../../src/dispatcher/actions";
 
 jest.mock("../../../src/utils/Feedback");
 
@@ -49,7 +50,6 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
-                { wrapper: TooltipProvider },
             );
             expect(asFragment()).toMatchSnapshot();
         });
@@ -61,7 +61,6 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.My}
                     setFilterOption={() => undefined}
                 />,
-                { wrapper: TooltipProvider },
             );
             expect(asFragment()).toMatchSnapshot();
         });
@@ -73,7 +72,6 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
-                { wrapper: TooltipProvider },
             );
             expect(asFragment()).toMatchSnapshot();
         });
@@ -85,7 +83,6 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
-                { wrapper: TooltipProvider },
             );
             const found = container.querySelector(".mx_ThreadPanel_dropdown");
             expect(found).toBeTruthy();
@@ -101,7 +98,6 @@ describe("ThreadPanel", () => {
                     filterOption={ThreadFilterType.All}
                     setFilterOption={() => undefined}
                 />,
-                { wrapper: TooltipProvider },
             );
             fireEvent.click(container.querySelector(".mx_ThreadPanel_dropdown")!);
             const found = screen.queryAllByRole("menuitemradio");
@@ -124,13 +120,11 @@ describe("ThreadPanel", () => {
             const { container } = render(
                 <RoomContext.Provider value={roomContextObject}>
                     <MatrixClientContext.Provider value={mockClient}>
-                        <TooltipProvider>
-                            <ThreadPanelHeader
-                                empty={false}
-                                filterOption={ThreadFilterType.All}
-                                setFilterOption={() => undefined}
-                            />
-                        </TooltipProvider>
+                        <ThreadPanelHeader
+                            empty={false}
+                            filterOption={ThreadFilterType.All}
+                            setFilterOption={() => undefined}
+                        />
                     </MatrixClientContext.Provider>
                 </RoomContext.Provider>,
             );
@@ -144,17 +138,52 @@ describe("ThreadPanel", () => {
             const mockClient = createTestClient();
             const { container } = render(
                 <MatrixClientContext.Provider value={mockClient}>
-                    <TooltipProvider>
-                        <ThreadPanelHeader
-                            empty={false}
-                            filterOption={ThreadFilterType.All}
-                            setFilterOption={() => undefined}
-                        />
-                    </TooltipProvider>
+                    <ThreadPanelHeader
+                        empty={false}
+                        filterOption={ThreadFilterType.All}
+                        setFilterOption={() => undefined}
+                    />
                 </MatrixClientContext.Provider>,
             );
             fireEvent.click(getByRole(container, "button", { name: "Mark all as read" }));
             await waitFor(() => expect(mockClient.sendReadReceipt).not.toHaveBeenCalled());
+        });
+
+        it("focuses the close button on FocusThreadsPanel dispatch", () => {
+            const ROOM_ID = "!roomId:example.org";
+
+            stubClient();
+            mockPlatformPeg();
+            const mockClient = mocked(MatrixClientPeg.safeGet());
+
+            const room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
+                pendingEventOrdering: PendingEventOrdering.Detached,
+            });
+
+            render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <RoomContext.Provider
+                        value={getRoomContext(room, {
+                            canSendMessages: true,
+                        })}
+                    >
+                        <ThreadPanel
+                            roomId={ROOM_ID}
+                            onClose={jest.fn()}
+                            resizeNotifier={new ResizeNotifier()}
+                            permalinkCreator={new RoomPermalinkCreator(room)}
+                        />
+                    </RoomContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+
+            // Unfocus it first so we know it's not just focused by coincidence
+            screen.getByTestId("base-card-close-button").blur();
+            expect(screen.getByTestId("base-card-close-button")).not.toHaveFocus();
+
+            defaultDispatcher.dispatch({ action: Action.FocusThreadsPanel }, true);
+
+            expect(screen.getByTestId("base-card-close-button")).toHaveFocus();
         });
     });
 
@@ -269,7 +298,7 @@ describe("ThreadPanel", () => {
             myThreads!.addLiveEvent(ownThread.rootEvent);
 
             let events: EventData[] = [];
-            const renderResult = render(<TestThreadPanel />, { wrapper: TooltipProvider });
+            const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 events = findEvents(renderResult.container);
@@ -315,7 +344,7 @@ describe("ThreadPanel", () => {
             allThreads!.addLiveEvent(otherThread.rootEvent);
 
             let events: EventData[] = [];
-            const renderResult = render(<TestThreadPanel />, { wrapper: TooltipProvider });
+            const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
                 events = findEvents(renderResult.container);

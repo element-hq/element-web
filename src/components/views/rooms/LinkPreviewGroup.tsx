@@ -81,6 +81,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
                                 src={require("../../../../res/img/cancel.svg").default}
                                 width="18"
                                 height="18"
+                                draggable="false"
                             />
                         </AccessibleButton>
                     ) : undefined}

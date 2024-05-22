@@ -40,7 +40,7 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
     return (
         <div className="mx_FilteredDeviceListHeader" {...rest}>
             {!isSelectDisabled && (
-                <Tooltip label={checkboxLabel} side="top" isTriggerInteractive={false}>
+                <Tooltip label={checkboxLabel} placement="top" isTriggerInteractive={false}>
                     <StyledCheckbox
                         kind={CheckboxStyle.Solid}
                         checked={isAllSelected}

@@ -125,12 +125,15 @@ test.describe("General user settings tab", () => {
         );
     });
 
+    test("should respond to small screen sizes", async ({ page, uut }) => {
+        await page.setViewportSize({ width: 700, height: 600 });
+        await expect(uut).toMatchScreenshot("general-smallscreen.png");
+    });
+
     test("should support adding and removing a profile picture", async ({ uut }) => {
         const profileSettings = uut.locator(".mx_ProfileSettings");
         // Upload a picture
-        await profileSettings
-            .locator(".mx_ProfileSettings_avatarUpload")
-            .setInputFiles("playwright/sample-files/riot.png");
+        await profileSettings.getByAltText("Upload").setInputFiles("playwright/sample-files/riot.png");
 
         // Find and click "Remove" link button
         await profileSettings.locator(".mx_ProfileSettings_profile").getByRole("button", { name: "Remove" }).click();

@@ -82,6 +82,8 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         ].filter(Boolean) as NonEmptyArray<Tab<SpaceSettingsTab>>;
     }, [cli, space, onFinished]);
 
+    const [activeTabId, setActiveTabId] = React.useState(SpaceSettingsTab.General);
+
     return (
         <BaseDialog
             title={_t("space_settings|title", { spaceName: space.name || _t("common|unnamed_space") })}
@@ -91,7 +93,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             fixedWidth={false}
         >
             <div className="mx_SpaceSettingsDialog_content" id="mx_SpaceSettingsDialog">
-                <TabbedView tabs={tabs} />
+                <TabbedView tabs={tabs} activeTabId={activeTabId} onChange={setActiveTabId} />
             </div>
         </BaseDialog>
     );

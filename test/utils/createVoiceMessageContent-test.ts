@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IEncryptedFile } from "matrix-js-sdk/src/matrix";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 import { createVoiceMessageContent } from "../../src/utils/createVoiceMessageContent";
 
@@ -26,7 +26,7 @@ describe("createVoiceMessageContent", () => {
                 "ogg/opus",
                 23000,
                 42000,
-                {} as unknown as IEncryptedFile,
+                {} as unknown as EncryptedFile,
                 [1, 2, 3],
             ),
         ).toMatchSnapshot();

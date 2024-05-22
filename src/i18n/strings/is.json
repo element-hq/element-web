@@ -218,7 +218,6 @@
         "phone_label": "Sími",
         "phone_optional_label": "Sími (valfrjálst)",
         "qr_code_login": {
-            "error_invalid_scanned_code": "Skannaði kóðinn er ógildur.",
             "sign_in_new_device": "Skrá inn nýtt tæki",
             "waiting_for_device": "Bíð eftir að tækið skráist inn"
         },
@@ -1167,8 +1166,6 @@
         "pinning": "Festing skilaboða",
         "report_to_moderators": "Tilkynna til umsjónarmanna",
         "report_to_moderators_description": "Í spjallrásum sem styðja eftirlit umsjónarmanna, mun 'Kæra'-hnappurinn gefa þér færi á að tilkynna misnotkun til umsjónarmanna spjallrása.",
-        "sliding_sync_proxy_url_label": "Slóð milliþjóns",
-        "sliding_sync_proxy_url_optional_label": "Slóð milliþjóns (valfrjálst)",
         "under_active_development": "Í virkri þróun.",
         "video_rooms": "Myndspjallrásir",
         "video_rooms_a_new_way_to_chat": "Ný leið til að spjalla með tali og myndmerki í %(brand)s.",
@@ -1929,13 +1926,11 @@
             "custom_theme_success": "Þema bætt við!",
             "custom_theme_url": "Slóð á sérsniðið þema",
             "font_size": "Leturstærð",
-            "heading": "Sérsníddu útlitið þitt",
             "image_size_default": "Sjálfgefið",
             "image_size_large": "Stórt",
             "layout_bubbles": "Skilaboðablöðrur",
             "layout_irc": "IRC (á tilraunastigi)",
             "match_system_theme": "Samsvara þema kerfis",
-            "subheading": "Stillingar útlits hafa einungis áhrif á þessa %(brand)s setu.",
             "timeline_image_size": "Stærð myndar í tímalínunni",
             "use_high_contrast": "Nota mikil birtuskil"
         },
@@ -2531,8 +2526,7 @@
         "my_threads_description": "Birtir alla spjallþræði sem þú hefur tekið þátt í",
         "open_thread": "Opna spjallþráð",
         "show_all_threads": "Birta alla spjallþræði",
-        "show_thread_filter": "Sýna:",
-        "unable_to_decrypt": "Tókst ekki að afkóða skilaboð"
+        "show_thread_filter": "Sýna:"
     },
     "time": {
         "about_day_ago": "fyrir um degi síðan",

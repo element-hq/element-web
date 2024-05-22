@@ -91,7 +91,6 @@ export class DialogOpener {
                 Modal.createDialog(
                     SpacePreferencesDialog,
                     {
-                        initialTabId: payload.initalTabId,
                         space: payload.space,
                     },
                     undefined,

@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { EventTimeline, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, RenderOptions } from "@testing-library/react";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -31,11 +30,7 @@ jest.mock("../../../../src/utils/ShieldUtils");
 function getWrapper(): RenderOptions {
     return {
         wrapper: ({ children }) => (
-            <TooltipProvider>
-                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                    {children}
-                </MatrixClientContext.Provider>
-            </TooltipProvider>
+            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>{children}</MatrixClientContext.Provider>
         ),
     };
 }

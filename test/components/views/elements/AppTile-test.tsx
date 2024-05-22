@@ -377,12 +377,12 @@ describe("AppTile", () => {
         });
 
         it("clicking 'minimise' should send the widget to the right", async () => {
-            await userEvent.click(renderResult.getByTitle("Minimise"));
+            await userEvent.click(renderResult.getByLabelText("Minimise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Right);
         });
 
         it("clicking 'maximise' should send the widget to the center", async () => {
-            await userEvent.click(renderResult.getByTitle("Maximise"));
+            await userEvent.click(renderResult.getByLabelText("Maximise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Center);
         });
 
@@ -435,7 +435,7 @@ describe("AppTile", () => {
             });
 
             it("clicking 'un-maximise' should send the widget to the top", async () => {
-                await userEvent.click(renderResult.getByTitle("Un-maximise"));
+                await userEvent.click(renderResult.getByLabelText("Un-maximise"));
                 expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Top);
             });
         });
@@ -461,7 +461,7 @@ describe("AppTile", () => {
             });
 
             it("should display the »Popout widget« button", () => {
-                expect(renderResult.getByTitle("Popout widget")).toBeInTheDocument();
+                expect(renderResult.getByLabelText("Popout widget")).toBeInTheDocument();
             });
         });
     });

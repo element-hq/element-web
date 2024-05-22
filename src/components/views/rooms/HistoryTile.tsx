@@ -25,7 +25,6 @@ const HistoryTile: React.FC = () => {
     const { room } = useContext(RoomContext);
 
     const oldState = room?.getLiveTimeline().getState(EventTimeline.BACKWARDS);
-    const encryptionState = oldState?.getStateEvents("m.room.encryption")[0];
     const historyState = oldState?.getStateEvents("m.room.history_visibility")[0]?.getContent().history_visibility;
 
     let subtitle: string | undefined;
@@ -33,8 +32,6 @@ const HistoryTile: React.FC = () => {
         subtitle = _t("timeline|no_permission_messages_before_invite");
     } else if (historyState == "joined") {
         subtitle = _t("timeline|no_permission_messages_before_join");
-    } else if (encryptionState) {
-        subtitle = _t("timeline|encrypted_historical_messages_unavailable");
     }
 
     return (

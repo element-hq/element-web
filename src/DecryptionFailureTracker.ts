@@ -14,104 +14,150 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ScalableBloomFilter } from "bloom-filters";
+import { CryptoEvent, HttpApiEvent, MatrixClient, MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
+import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
 
+/** The key that we use to store the `reportedEvents` bloom filter in localstorage */
+const DECRYPTION_FAILURE_STORAGE_KEY = "mx_decryption_failure_event_ids";
+
 export class DecryptionFailure {
-    public readonly ts: number;
+    /**
+     * The time between our initial failure to decrypt and our successful
+     * decryption (if we managed to decrypt).
+     */
+    public timeToDecryptMillis?: number;
 
     public constructor(
         public readonly failedEventId: string,
-        public readonly errorCode: string,
-    ) {
-        this.ts = Date.now();
-    }
+        public readonly errorCode: DecryptionFailureCode,
+        /**
+         * The time that we failed to decrypt the event.  If we failed to decrypt
+         * multiple times, this will be the time of the first failure.
+         */
+        public readonly ts: number,
+        /**
+         * Is the sender on a different server from us?
+         */
+        public readonly isFederated: boolean | undefined,
+        /**
+         * Was the failed event ever visible to the user?
+         */
+        public wasVisibleToUser: boolean,
+        /**
+         * Has the user verified their own cross-signing identity, as of the most
+         * recent decryption attempt for this event?
+         */
+        public userTrustsOwnIdentity: boolean | undefined,
+    ) {}
 }
 
-type ErrorCode = "OlmKeysNotSentError" | "OlmIndexError" | "UnknownError" | "OlmUnspecifiedError";
-
-type TrackingFn = (count: number, trackedErrCode: ErrorCode, rawError: string) => void;
-
-export type ErrCodeMapFn = (errcode: string) => ErrorCode;
+type ErrorCode = ErrorEvent["name"];
+/** Properties associated with decryption errors, for classifying the error. */
+export type ErrorProperties = Omit<ErrorEvent, "eventName" | "domain" | "name" | "context">;
+type TrackingFn = (trackedErrCode: ErrorCode, rawError: string, properties: ErrorProperties) => void;
+export type ErrCodeMapFn = (errcode: DecryptionFailureCode) => ErrorCode;
 
 export class DecryptionFailureTracker {
     private static internalInstance = new DecryptionFailureTracker(
-        (total, errorCode, rawError) => {
-            for (let i = 0; i < total; i++) {
-                PosthogAnalytics.instance.trackEvent<ErrorEvent>({
-                    eventName: "Error",
-                    domain: "E2EE",
-                    name: errorCode,
-                    context: `mxc_crypto_error_type_${rawError}`,
-                });
-            }
+        (errorCode, rawError, properties) => {
+            const event: ErrorEvent = {
+                eventName: "Error",
+                domain: "E2EE",
+                name: errorCode,
+                context: `mxc_crypto_error_type_${rawError}`,
+                ...properties,
+            };
+            PosthogAnalytics.instance.trackEvent<ErrorEvent>(event);
         },
         (errorCode) => {
             // Map JS-SDK error codes to tracker codes for aggregation
             switch (errorCode) {
-                case "MEGOLM_UNKNOWN_INBOUND_SESSION_ID":
+                case DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID:
                     return "OlmKeysNotSentError";
-                case "OLM_UNKNOWN_MESSAGE_INDEX":
+                case DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX:
                     return "OlmIndexError";
-                case undefined:
-                    return "OlmUnspecifiedError";
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP:
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED:
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP:
+                    return "HistoricalMessage";
+                case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
+                    return "ExpectedDueToMembership";
                 default:
                     return "UnknownError";
             }
         },
     );
 
-    // Map of event IDs to DecryptionFailure items.
+    /** Map of event IDs to `DecryptionFailure` items.
+     *
+     * Every `CHECK_INTERVAL_MS`, this map is checked for failures that happened >
+     * `MAXIMUM_LATE_DECRYPTION_PERIOD` ago (considered undecryptable), or
+     * decryptions that took > `GRACE_PERIOD_MS` (considered late decryptions).
+     *
+     * Any such events are then reported via the `TrackingFn`.
+     */
     public failures: Map<string, DecryptionFailure> = new Map();
 
-    // Set of event IDs that have been visible to the user.
+    /** Set of event IDs that have been visible to the user.
+     *
+     * This will only contain events that are not already in `reportedEvents`.
+     */
     public visibleEvents: Set<string> = new Set();
 
-    // Map of visible event IDs to `DecryptionFailure`s. Every
-    // `CHECK_INTERVAL_MS`, this map is checked for failures that
-    // happened > `GRACE_PERIOD_MS` ago. Those that did are
-    // accumulated in `failureCounts`.
-    public visibleFailures: Map<string, DecryptionFailure> = new Map();
+    /** Bloom filter tracking event IDs of failures that were reported previously */
+    private reportedEvents: ScalableBloomFilter = new ScalableBloomFilter();
 
-    // A histogram of the number of failures that will be tracked at the next tracking
-    // interval, split by failure error code.
-    public failureCounts: Record<string, number> = {
-        // [errorCode]: 42
-    };
-
-    // Event IDs of failures that were tracked previously
-    public trackedEvents: Set<string> = new Set();
-
-    // Set to an interval ID when `start` is called
+    /** Set to an interval ID when `start` is called */
     public checkInterval: number | null = null;
     public trackInterval: number | null = null;
 
-    // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
-    public static TRACK_INTERVAL_MS = 60000;
-
-    // Call `checkFailures` every `CHECK_INTERVAL_MS`.
+    /** Call `checkFailures` every `CHECK_INTERVAL_MS`. */
     public static CHECK_INTERVAL_MS = 40000;
 
-    // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before counting
-    // the failure in `failureCounts`.
-    public static GRACE_PERIOD_MS = 30000;
+    /** If the event is successfully decrypted in less than 4s, we don't report. */
+    public static GRACE_PERIOD_MS = 4000;
+
+    /** Maximum time for an event to be decrypted to be considered a late
+     * decryption.  If it takes longer, we consider it undecryptable. */
+    public static MAXIMUM_LATE_DECRYPTION_PERIOD = 60000;
+
+    /** Properties that will be added to all reported events (mainly reporting
+     * information about the Matrix client). */
+    private baseProperties?: ErrorProperties = {};
+
+    /** The user's domain (homeserver name). */
+    private userDomain?: string;
+
+    /** Whether the user has verified their own cross-signing keys. */
+    private userTrustsOwnIdentity: boolean | undefined = undefined;
+
+    /** Whether we are currently checking our own verification status. */
+    private checkingVerificationStatus: boolean = false;
+
+    /** Whether we should retry checking our own verification status after we're
+     * done our current check. i.e. we got notified that our keys changed while
+     * we were already checking, so the result could be out of date. */
+    private retryVerificationStatus: boolean = false;
 
     /**
      * Create a new DecryptionFailureTracker.
      *
-     * Call `eventDecrypted(event, err)` on this instance when an event is decrypted.
-     *
-     * Call `start()` to start the tracker, and `stop()` to stop tracking.
+     * Call `start(client)` to start the tracker.  The tracker will listen for
+     * decryption events on the client and track decryption failures, and will
+     * automatically stop tracking when the client logs out.
      *
      * @param {function} fn The tracking function, which will be called when failures
-     * are tracked. The function should have a signature `(count, trackedErrorCode) => {...}`,
-     * where `count` is the number of failures and `errorCode` matches the `.code` of
-     * provided DecryptionError errors (by default, unless `errorCodeMapFn` is specified.
-     * @param {function?} errorCodeMapFn The function used to map error codes to the
-     * trackedErrorCode. If not provided, the `.code` of errors will be used.
+     * are tracked. The function should have a signature `(trackedErrorCode, rawError, properties) => {...}`,
+     * where `errorCode` matches the output of `errorCodeMapFn`, `rawError` is the original
+     * error (that is, the input to `errorCodeMapFn`), and `properties` is a map of the
+     * error properties for classifying the error.
+     *
+     * @param {function} errorCodeMapFn The function used to map decryption failure reason  codes to the
+     * `trackedErrorCode`.
      */
     private constructor(
         private readonly fn: TrackingFn,
@@ -130,128 +176,253 @@ export class DecryptionFailureTracker {
         return DecryptionFailureTracker.internalInstance;
     }
 
-    // loadTrackedEvents() {
-    //     this.trackedEvents = new Set(JSON.parse(localStorage.getItem('mx-decryption-failure-event-ids')) || []);
-    // }
+    private loadReportedEvents(): void {
+        const storedFailures = localStorage.getItem(DECRYPTION_FAILURE_STORAGE_KEY);
+        if (storedFailures) {
+            this.reportedEvents = ScalableBloomFilter.fromJSON(JSON.parse(storedFailures));
+        } else {
+            this.reportedEvents = new ScalableBloomFilter();
+        }
+    }
 
-    // saveTrackedEvents() {
-    //     localStorage.setItem('mx-decryption-failure-event-ids', JSON.stringify([...this.trackedEvents]));
-    // }
+    private saveReportedEvents(): void {
+        localStorage.setItem(DECRYPTION_FAILURE_STORAGE_KEY, JSON.stringify(this.reportedEvents.saveAsJSON()));
+    }
 
-    public eventDecrypted(e: MatrixEvent, err: DecryptionError): void {
-        // for now we only track megolm decrytion failures
+    /** Callback for when an event is decrypted.
+     *
+     * This function is called by our `MatrixEventEvent.Decrypted` event
+     * handler after a decryption attempt on an event, whether the decryption
+     * is successful or not.
+     *
+     * @param e the event that was decrypted
+     *
+     * @param nowTs the current timestamp
+     */
+    private eventDecrypted(e: MatrixEvent, nowTs: number): void {
+        // for now we only track megolm decryption failures
         if (e.getWireContent().algorithm != "m.megolm.v1.aes-sha2") {
             return;
         }
-        if (err) {
-            this.addDecryptionFailure(new DecryptionFailure(e.getId()!, err.code));
-        } else {
+        const errCode = e.decryptionFailureReason;
+        if (errCode === null) {
             // Could be an event in the failures, remove it
-            this.removeDecryptionFailuresForEvent(e);
+            this.removeDecryptionFailuresForEvent(e, nowTs);
+            return;
         }
+
+        const eventId = e.getId()!;
+
+        // if it's already reported, we don't need to do anything
+        if (this.reportedEvents.has(eventId)) {
+            return;
+        }
+
+        // if we already have a record of this event, use the previously-recorded timestamp
+        const failure = this.failures.get(eventId);
+        const ts = failure ? failure.ts : nowTs;
+
+        const sender = e.getSender();
+        const senderDomain = sender?.replace(/^.*?:/, "");
+        let isFederated: boolean | undefined;
+        if (this.userDomain !== undefined && senderDomain !== undefined) {
+            isFederated = this.userDomain !== senderDomain;
+        }
+
+        const wasVisibleToUser = this.visibleEvents.has(eventId);
+        this.failures.set(
+            eventId,
+            new DecryptionFailure(eventId, errCode, ts, isFederated, wasVisibleToUser, this.userTrustsOwnIdentity),
+        );
     }
 
     public addVisibleEvent(e: MatrixEvent): void {
         const eventId = e.getId()!;
 
-        if (this.trackedEvents.has(eventId)) {
+        // if it's already reported, we don't need to do anything
+        if (this.reportedEvents.has(eventId)) {
             return;
+        }
+
+        // if we've already marked the event as a failure, mark it as visible
+        // in the failure object
+        const failure = this.failures.get(eventId);
+        if (failure) {
+            failure.wasVisibleToUser = true;
         }
 
         this.visibleEvents.add(eventId);
-        if (this.failures.has(eventId) && !this.visibleFailures.has(eventId)) {
-            this.visibleFailures.set(eventId, this.failures.get(eventId)!);
+    }
+
+    public removeDecryptionFailuresForEvent(e: MatrixEvent, nowTs: number): void {
+        const eventId = e.getId()!;
+        const failure = this.failures.get(eventId);
+        if (failure) {
+            this.failures.delete(eventId);
+
+            const timeToDecryptMillis = nowTs - failure.ts;
+            if (timeToDecryptMillis < DecryptionFailureTracker.GRACE_PERIOD_MS) {
+                // the event decrypted on time, so we don't need to report it
+                return;
+            } else if (timeToDecryptMillis <= DecryptionFailureTracker.MAXIMUM_LATE_DECRYPTION_PERIOD) {
+                // The event is a late decryption, so store the time it took.
+                // If the time to decrypt is longer than
+                // MAXIMUM_LATE_DECRYPTION_PERIOD, we consider the event as
+                // undecryptable, and leave timeToDecryptMillis undefined
+                failure.timeToDecryptMillis = timeToDecryptMillis;
+            }
+            this.reportFailure(failure);
         }
     }
 
-    public addDecryptionFailure(failure: DecryptionFailure): void {
-        const eventId = failure.failedEventId;
-
-        if (this.trackedEvents.has(eventId)) {
+    private async handleKeysChanged(client: MatrixClient): Promise<void> {
+        if (this.checkingVerificationStatus) {
+            // Flag that we'll need to do another check once the current check completes.
+            this.retryVerificationStatus = true;
             return;
         }
 
-        this.failures.set(eventId, failure);
-        if (this.visibleEvents.has(eventId) && !this.visibleFailures.has(eventId)) {
-            this.visibleFailures.set(eventId, failure);
+        this.checkingVerificationStatus = true;
+        try {
+            do {
+                this.retryVerificationStatus = false;
+                this.userTrustsOwnIdentity = (
+                    await client.getCrypto()!.getUserVerificationStatus(client.getUserId()!)
+                ).isCrossSigningVerified();
+            } while (this.retryVerificationStatus);
+        } finally {
+            this.checkingVerificationStatus = false;
         }
-    }
-
-    public removeDecryptionFailuresForEvent(e: MatrixEvent): void {
-        const eventId = e.getId()!;
-        this.failures.delete(eventId);
-        this.visibleFailures.delete(eventId);
     }
 
     /**
      * Start checking for and tracking failures.
      */
-    public start(): void {
+    public async start(client: MatrixClient): Promise<void> {
+        this.loadReportedEvents();
+        await this.calculateClientProperties(client);
+        this.registerHandlers(client);
         this.checkInterval = window.setInterval(
             () => this.checkFailures(Date.now()),
             DecryptionFailureTracker.CHECK_INTERVAL_MS,
         );
+    }
 
-        this.trackInterval = window.setInterval(() => this.trackFailures(), DecryptionFailureTracker.TRACK_INTERVAL_MS);
+    private async calculateClientProperties(client: MatrixClient): Promise<void> {
+        const baseProperties: ErrorProperties = {};
+        this.baseProperties = baseProperties;
+
+        this.userDomain = client.getDomain() ?? undefined;
+        if (this.userDomain === "matrix.org") {
+            baseProperties.isMatrixDotOrg = true;
+        } else if (this.userDomain !== undefined) {
+            baseProperties.isMatrixDotOrg = false;
+        }
+
+        const crypto = client.getCrypto();
+        if (crypto) {
+            const version = crypto.getVersion();
+            if (version.startsWith("Rust SDK")) {
+                baseProperties.cryptoSDK = "Rust";
+            } else {
+                baseProperties.cryptoSDK = "Legacy";
+            }
+            this.userTrustsOwnIdentity = (
+                await crypto.getUserVerificationStatus(client.getUserId()!)
+            ).isCrossSigningVerified();
+        }
+    }
+
+    private registerHandlers(client: MatrixClient): void {
+        // After the client attempts to decrypt an event, we examine it to see
+        // if it needs to be reported.
+        const decryptedHandler = (e: MatrixEvent): void => this.eventDecrypted(e, Date.now());
+        // When our keys change, we check if the cross-signing keys are now trusted.
+        const keysChangedHandler = (): void => {
+            this.handleKeysChanged(client).catch((e) => {
+                console.log("Error handling KeysChanged event", e);
+            });
+        };
+        // When logging out, remove our handlers and destroy state
+        const loggedOutHandler = (): void => {
+            client.removeListener(MatrixEventEvent.Decrypted, decryptedHandler);
+            client.removeListener(CryptoEvent.KeysChanged, keysChangedHandler);
+            client.removeListener(HttpApiEvent.SessionLoggedOut, loggedOutHandler);
+            this.stop();
+        };
+
+        client.on(MatrixEventEvent.Decrypted, decryptedHandler);
+        client.on(CryptoEvent.KeysChanged, keysChangedHandler);
+        client.on(HttpApiEvent.SessionLoggedOut, loggedOutHandler);
     }
 
     /**
      * Clear state and stop checking for and tracking failures.
      */
-    public stop(): void {
+    private stop(): void {
         if (this.checkInterval) clearInterval(this.checkInterval);
         if (this.trackInterval) clearInterval(this.trackInterval);
 
+        this.userTrustsOwnIdentity = undefined;
         this.failures = new Map();
         this.visibleEvents = new Set();
-        this.visibleFailures = new Map();
-        this.failureCounts = {};
     }
 
     /**
-     * Mark failures that occurred before nowTs - GRACE_PERIOD_MS as failures that should be
-     * tracked. Only mark one failure per event ID.
+     * Mark failures as undecryptable or late. Only mark one failure per event ID.
+     *
      * @param {number} nowTs the timestamp that represents the time now.
      */
     public checkFailures(nowTs: number): void {
-        const failuresGivenGrace: Set<DecryptionFailure> = new Set();
         const failuresNotReady: Map<string, DecryptionFailure> = new Map();
-        for (const [eventId, failure] of this.visibleFailures) {
-            if (nowTs > failure.ts + DecryptionFailureTracker.GRACE_PERIOD_MS) {
-                failuresGivenGrace.add(failure);
-                this.trackedEvents.add(eventId);
+        for (const [eventId, failure] of this.failures) {
+            if (
+                failure.timeToDecryptMillis !== undefined ||
+                nowTs > failure.ts + DecryptionFailureTracker.MAXIMUM_LATE_DECRYPTION_PERIOD
+            ) {
+                // we report failures under two conditions:
+                // - if `timeToDecryptMillis` is set, we successfully decrypted
+                //   the event, but we got the key late.  We report it so that we
+                //   have the late decrytion stats.
+                // - we haven't decrypted yet and it's past the time for it to be
+                //   considered a "late" decryption, so we count it as
+                //   undecryptable.
+                this.reportFailure(failure);
             } else {
+                // the event isn't old enough, so we still need to keep track of it
                 failuresNotReady.set(eventId, failure);
             }
         }
-        this.visibleFailures = failuresNotReady;
+        this.failures = failuresNotReady;
 
-        // Commented out for now for expediency, we need to consider unbound nature of storing
-        // this in localStorage
-        // this.saveTrackedEvents();
-
-        this.aggregateFailures(failuresGivenGrace);
-    }
-
-    private aggregateFailures(failures: Set<DecryptionFailure>): void {
-        for (const failure of failures) {
-            const errorCode = failure.errorCode;
-            this.failureCounts[errorCode] = (this.failureCounts[errorCode] || 0) + 1;
-        }
+        this.saveReportedEvents();
     }
 
     /**
      * If there are failures that should be tracked, call the given trackDecryptionFailure
-     * function with the number of failures that should be tracked.
+     * function with the failures that should be tracked.
      */
-    public trackFailures(): void {
-        for (const errorCode of Object.keys(this.failureCounts)) {
-            if (this.failureCounts[errorCode] > 0) {
-                const trackedErrorCode = this.errorCodeMapFn(errorCode);
-
-                this.fn(this.failureCounts[errorCode], trackedErrorCode, errorCode);
-                this.failureCounts[errorCode] = 0;
-            }
+    private reportFailure(failure: DecryptionFailure): void {
+        const errorCode = failure.errorCode;
+        const trackedErrorCode = this.errorCodeMapFn(errorCode);
+        const properties: ErrorProperties = {
+            timeToDecryptMillis: failure.timeToDecryptMillis ?? -1,
+            wasVisibleToUser: failure.wasVisibleToUser,
+        };
+        if (failure.isFederated !== undefined) {
+            properties.isFederated = failure.isFederated;
         }
+        if (failure.userTrustsOwnIdentity !== undefined) {
+            properties.userTrustsOwnIdentity = failure.userTrustsOwnIdentity;
+        }
+        if (this.baseProperties) {
+            Object.assign(properties, this.baseProperties);
+        }
+        this.fn(trackedErrorCode, errorCode, properties);
+
+        this.reportedEvents.add(failure.failedEventId);
+        // once we've added it to reportedEvents, we won't check
+        // visibleEvents for it any more
+        this.visibleEvents.delete(failure.failedEventId);
     }
 }

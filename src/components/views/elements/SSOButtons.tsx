@@ -30,7 +30,6 @@ import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
-import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
@@ -131,9 +130,9 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     if (mini) {
         // TODO fallback icon
         return (
-            <AccessibleTooltipButton {...props} title={label} className={classes} onClick={onClick}>
+            <AccessibleButton {...props} title={label} className={classes} onClick={onClick}>
                 {icon}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
         );
     }
 

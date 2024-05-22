@@ -19,7 +19,7 @@ import React from "react";
 
 import { _t } from "../../../../languageHandler";
 import RoomAvatar from "../../avatars/RoomAvatar";
-import AccessibleTooltipButton from "../../elements/AccessibleTooltipButton";
+import AccessibleButton from "../../elements/AccessibleButton";
 
 interface LegacyCallControlsProps {
     onExpand?: () => void;
@@ -31,21 +31,21 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
     return (
         <div className="mx_LegacyCallViewHeader_controls">
             {onMaximize && (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_fullscreen"
                     onClick={onMaximize}
                     title={_t("voip|maximise")}
                 />
             )}
             {onPin && (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_pin"
                     onClick={onPin}
                     title={_t("action|pin")}
                 />
             )}
             {onExpand && (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_expand"
                     onClick={onExpand}
                     title={_t("voip|expand")}

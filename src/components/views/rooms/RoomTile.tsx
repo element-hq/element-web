@@ -37,7 +37,6 @@ import NotificationBadge from "./NotificationBadge";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
 import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
@@ -464,21 +463,11 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             ariaDescribedBy = messagePreviewId(this.props.room.roomId);
         }
 
-        const props: Partial<React.ComponentProps<typeof AccessibleTooltipButton>> = {};
-        let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
-        if (this.props.isMinimized) {
-            Button = AccessibleTooltipButton;
-            props.title = name;
-            // force the tooltip to hide whilst we are showing the context menu
-            props.forceHide = !!this.state.generalMenuPosition;
-        }
-
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
                     {({ onFocus, isActive, ref }) => (
-                        <Button
-                            {...props}
+                        <AccessibleButton
                             onFocus={onFocus}
                             tabIndex={isActive ? 0 : -1}
                             ref={ref}
@@ -489,6 +478,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                             aria-label={ariaLabel}
                             aria-selected={this.state.selected}
                             aria-describedby={ariaDescribedBy}
+                            title={this.props.isMinimized && !this.state.generalMenuPosition ? name : undefined}
                         >
                             <DecoratedRoomAvatar
                                 room={this.props.room}
@@ -500,7 +490,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                             {badge}
                             {this.renderGeneralMenu()}
                             {this.renderNotificationsMenu(isActive)}
-                        </Button>
+                        </AccessibleButton>
                     )}
                 </RovingTabIndexWrapper>
             </React.Fragment>

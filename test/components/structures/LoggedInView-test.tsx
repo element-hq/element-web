@@ -38,6 +38,7 @@ describe("<LoggedInView />", () => {
         getMediaHandler: jest.fn(),
         setPushRuleEnabled: jest.fn(),
         setPushRuleActions: jest.fn(),
+        getCrypto: jest.fn().mockReturnValue(undefined),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSdkContext();

@@ -32,7 +32,7 @@ import ThemeChoicePanel from "../../ThemeChoicePanel";
 import ImageSizePanel from "../../ImageSizePanel";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {}
@@ -152,12 +152,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     public render(): React.ReactNode {
-        const brand = SdkConfig.get().brand;
-
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
-                <SettingsSection heading={_t("settings|appearance|heading")}>
-                    <SettingsSubsectionText>{_t("settings|appearance|subheading", { brand })}</SettingsSubsectionText>
+                <SettingsSection>
                     <ThemeChoicePanel />
                     <LayoutSwitcher
                         userId={this.state.userId}

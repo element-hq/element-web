@@ -19,7 +19,6 @@ import { mocked } from "jest-mock";
 import { JoinRule, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { stubClient } from "../../../test-utils";
@@ -39,9 +38,7 @@ describe("DecoratedRoomAvatar", () => {
     let room: Room;
 
     function renderComponent() {
-        return render(<DecoratedRoomAvatar room={room} size="32px" />, {
-            wrapper: TooltipProvider,
-        });
+        return render(<DecoratedRoomAvatar room={room} size="32px" />);
     }
 
     beforeEach(() => {

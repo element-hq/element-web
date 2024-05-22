@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { act, fireEvent, render } from "@testing-library/react";
 import { Filter, EventTimeline, Room, MatrixEvent, M_POLL_START } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { PollHistory } from "../../../../../src/components/views/polls/pollHistory/PollHistory";
 import {
@@ -68,9 +67,7 @@ describe("<PollHistory />", () => {
     const getComponent = () =>
         render(<PollHistory {...defaultProps} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>
-                    <TooltipProvider>{children}</TooltipProvider>
-                </MatrixClientContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
         });
 

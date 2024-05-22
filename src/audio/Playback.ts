@@ -19,17 +19,14 @@ import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer } from "matrix-js-sdk/src/utils";
 
-// @ts-ignore - `.ts` is needed here to make TS happy
-import { Request, Response } from "../workers/playback.worker.ts";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
 import { IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
-import { WorkerManager } from "../WorkerManager";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
-import playbackWorkerFactory from "../workers/playbackWorkerFactory";
+import { PlaybackEncoder } from "../PlaybackEncoder";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -64,7 +61,6 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
-    private readonly worker = new WorkerManager<Request, Response>(playbackWorkerFactory());
 
     /**
      * Creates a new playback instance from a buffer.
@@ -209,7 +205,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
             // Update the waveform to the real waveform once we have channel data to use. We don't
             // exactly trust the user-provided waveform to be accurate...
-            this.resampledWaveform = await this.makePlaybackWaveform(this.audioBuf.getChannelData(0));
+            this.resampledWaveform = await PlaybackEncoder.instance.getPlaybackWaveform(
+                this.audioBuf.getChannelData(0),
+            );
         }
 
         this.waveformObservable.update(this.resampledWaveform);
@@ -220,10 +218,6 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         // Signal that we're not decoding anymore. This is done last to ensure the clock is updated for
         // when the downstream callers try to use it.
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
-    }
-
-    private makePlaybackWaveform(input: Float32Array): Promise<number[]> {
-        return this.worker.call({ data: Array.from(input) }).then((resp) => resp.waveform);
     }
 
     private onPlaybackEnd = async (): Promise<void> => {

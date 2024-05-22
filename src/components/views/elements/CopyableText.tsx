@@ -20,8 +20,7 @@ import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
-import { ButtonEvent } from "./AccessibleButton";
-import AccessibleTooltipButton from "./AccessibleTooltipButton";
+import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
 
 interface IProps {
     children?: React.ReactNode;
@@ -53,11 +52,13 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     return (
         <div className={combinedClassName}>
             {children}
-            <AccessibleTooltipButton
+            <AccessibleButton
                 title={tooltip ?? _t("action|copy")}
                 onClick={onCopyClickInternal}
                 className="mx_CopyableText_copyButton"
-                onHideTooltip={onHideTooltip}
+                onTooltipOpenChange={(open) => {
+                    if (!open) onHideTooltip();
+                }}
             />
         </div>
     );

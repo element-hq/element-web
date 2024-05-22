@@ -27,7 +27,11 @@ import { notificationLevelToIndicator } from "../../../../utils/notifications";
 
 interface ThreadsActivityCentreButtonProps extends ComponentProps<typeof IconButton> {
     /**
-     * Display the `Treads` label next to the icon.
+     * Whether to disable the tooltip.
+     */
+    disableTooltip?: boolean;
+    /**
+     * Display the `Threads` label next to the icon.
      */
     displayLabel?: boolean;
     /**
@@ -40,12 +44,15 @@ interface ThreadsActivityCentreButtonProps extends ComponentProps<typeof IconBut
  * A button to open the thread activity centre.
  */
 export const ThreadsActivityCentreButton = forwardRef<HTMLButtonElement, ThreadsActivityCentreButtonProps>(
-    function ThreadsActivityCentreButton({ displayLabel, notificationLevel, ...props }, ref): React.JSX.Element {
+    function ThreadsActivityCentreButton(
+        { displayLabel, notificationLevel, disableTooltip, ...props },
+        ref,
+    ): React.JSX.Element {
         // Disable tooltip when the label is displayed
-        const openTooltip = displayLabel ? false : undefined;
+        const openTooltip = disableTooltip || displayLabel ? false : undefined;
 
         return (
-            <Tooltip label={_t("common|threads")} side="right" open={openTooltip}>
+            <Tooltip label={_t("common|threads")} placement="right" open={openTooltip}>
                 <IconButton
                     aria-label={_t("common|threads")}
                     className={classNames("mx_ThreadsActivityCentreButton", { expanded: displayLabel })}

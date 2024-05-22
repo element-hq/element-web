@@ -30,7 +30,7 @@ import {
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { act, fireEvent, getByTestId, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -907,6 +907,7 @@ describe("<Notifications />", () => {
             fireEvent.click(clearNotificationEl);
 
             expect(clearNotificationEl.className).toContain("mx_AccessibleButton_disabled");
+            await waitFor(() => expect(clearNotificationEl.className).not.toContain("mx_AccessibleButton_disabled"));
             expect(mockClient.sendReadReceipt).toHaveBeenCalled();
         });
     });

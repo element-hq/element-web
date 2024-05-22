@@ -37,6 +37,7 @@ import ActiveWidgetStore from "./stores/ActiveWidgetStore";
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from "./utils/StorageManager";
+import * as StorageAccess from "./utils/StorageAccess";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import ToastStore from "./stores/ToastStore";
@@ -288,7 +289,7 @@ export async function attemptDelegatedAuthLogin(
  */
 async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
     try {
-        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idTokenClaims, clientId, issuer } =
+        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(queryParams);
 
         const {
@@ -310,7 +311,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         logger.debug("Logged in via OIDC native flow");
         await onSuccessfulDelegatedAuthLogin(credentials);
         // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idTokenClaims);
+        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
@@ -493,7 +494,7 @@ export interface IStoredSession {
 async function getStoredToken(storageKey: string): Promise<string | undefined> {
     let token: string | undefined;
     try {
-        token = await StorageManager.idbLoad("account", storageKey);
+        token = await StorageAccess.idbLoad("account", storageKey);
     } catch (e) {
         logger.error(`StorageManager.idbLoad failed for account:${storageKey}`, e);
     }
@@ -502,7 +503,7 @@ async function getStoredToken(storageKey: string): Promise<string | undefined> {
         if (token) {
             try {
                 // try to migrate access token to IndexedDB if we can
-                await StorageManager.idbSave("account", storageKey, token);
+                await StorageAccess.idbSave("account", storageKey, token);
                 localStorage.removeItem(storageKey);
             } catch (e) {
                 logger.error(`migration of token ${storageKey} to IndexedDB failed`, e);
@@ -719,7 +720,7 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
     try {
         const clientId = getStoredOidcClientId();
         const idTokenClaims = getStoredOidcIdTokenClaims();
-        const redirectUri = PlatformPeg.get()!.getSSOCallbackUrl().href;
+        const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
         const deviceId = credentials.deviceId;
         if (!deviceId) {
             throw new Error("Expected deviceId in user credentials.");
@@ -1065,7 +1066,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         AbstractLocalStorageSettingsHandler.clear();
 
         try {
-            await StorageManager.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
+            await StorageAccess.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
         } catch (e) {
             logger.error("idbDelete failed for account:mx_access_token", e);
         }

@@ -403,7 +403,7 @@ class Helpers {
      * tests we only open the threads panel.)
      */
     async closeThreadsPanel() {
-        await this.page.locator(".mx_RightPanel").getByTitle("Close").click();
+        await this.page.locator(".mx_RightPanel").getByLabel("Close").click();
         await expect(this.page.locator(".mx_RightPanel")).not.toBeVisible();
     }
 
@@ -411,7 +411,7 @@ class Helpers {
      * Return to the list of threads, given we are viewing a single thread.
      */
     async backToThreadsList() {
-        await this.page.locator(".mx_RightPanel").getByTitle("Threads").click();
+        await this.page.locator(".mx_RightPanel").getByLabel("Threads").click();
     }
 
     /**
@@ -539,7 +539,7 @@ class Helpers {
         const threadPanel = this.page.locator(".mx_ThreadPanel");
         await expect(threadPanel).toBeVisible();
         await threadPanel.evaluate(($panel) => {
-            const $button = $panel.querySelector<HTMLElement>('.mx_BaseCard_back[title="Threads"]');
+            const $button = $panel.querySelector<HTMLElement>('.mx_BaseCard_back[aria-label="Threads"]');
             // If the Threads back button is present then click it - the
             // threads button can open either threads list or thread panel
             if ($button) {

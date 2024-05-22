@@ -17,10 +17,9 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
-import { MatrixClient, Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { HierarchyRoom, JoinRule, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
@@ -210,6 +209,13 @@ describe("SpaceHierarchy", () => {
                     type: "m.space.child",
                     sender: "@other:server",
                 },
+                {
+                    state_key: "!knock1:server",
+                    content: { order: "4" },
+                    origin_server_ts: 111,
+                    type: "m.space.child",
+                    sender: "@other:server",
+                },
             ],
             world_readable: true,
             guest_can_join: true,
@@ -253,9 +259,25 @@ describe("SpaceHierarchy", () => {
             world_readable: true,
             guest_can_join: true,
         };
+        const hierarchyKnockRoom1: HierarchyRoom = {
+            room_id: "!knock1:server",
+            name: "Knock room",
+            num_joined_members: 3,
+            children_state: [],
+            world_readable: true,
+            guest_can_join: true,
+            join_rule: JoinRule.Knock,
+        };
 
         mocked(client.getRoomHierarchy).mockResolvedValue({
-            rooms: [hierarchyRoot, hierarchyRoom1, hierarchyRoom2, hierarchySpace1, hierarchyRoom3],
+            rooms: [
+                hierarchyRoot,
+                hierarchyRoom1,
+                hierarchyRoom2,
+                hierarchySpace1,
+                hierarchyRoom3,
+                hierarchyKnockRoom1,
+            ],
         });
 
         const defaultProps = {
@@ -264,9 +286,7 @@ describe("SpaceHierarchy", () => {
         };
         const getComponent = (props = {}): React.ReactElement => (
             <MatrixClientContext.Provider value={client}>
-                <TooltipProvider>
-                    <SpaceHierarchy {...defaultProps} {...props} />
-                </TooltipProvider>
+                <SpaceHierarchy {...defaultProps} {...props} />
             </MatrixClientContext.Provider>
         );
 
@@ -292,6 +312,25 @@ describe("SpaceHierarchy", () => {
             // Joins subspace
             expect(client.joinRoom).toHaveBeenCalledWith(space1.roomId, expect.any(Object));
             expect(client.joinRoom).toHaveBeenCalledWith(room3.roomId, expect.any(Object));
+        });
+
+        it("should take user to view room for unjoined knockable rooms", async () => {
+            jest.spyOn(dispatcher, "dispatch");
+
+            const { getByText } = render(getComponent());
+            // Wait for spinners to go away
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+            const button = getByText("Knock room")!
+                .closest("li")!
+                .querySelector(".mx_AccessibleButton_kind_primary_outline")!;
+            fireEvent.click(button);
+
+            expect(defaultProps.showRoom).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.anything(),
+                hierarchyKnockRoom1.room_id,
+                undefined,
+            );
         });
     });
 });

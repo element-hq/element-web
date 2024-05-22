@@ -32,7 +32,7 @@ import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.sv
 import { _t } from "../../../languageHandler";
 import { useAudioDeviceSelection } from "../../../hooks/useAudioDeviceSelection";
 import { DevicesContextMenu } from "../../../components/views/audio_messages/DevicesContextMenu";
-import AccessibleTooltipButton from "../../../components/views/elements/AccessibleTooltipButton";
+import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 
 interface VoiceBroadcastRecordingPipProps {
     recording: VoiceBroadcastRecording;
@@ -92,12 +92,12 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         ) : (
             <div className="mx_VoiceBroadcastBody_controls">
                 {toggleControl}
-                <AccessibleTooltipButton
+                <AccessibleButton
                     onClick={(): void => setShowDeviceSelect(true)}
                     title={_t("voip|change_input_device")}
                 >
                     <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
-                </AccessibleTooltipButton>
+                </AccessibleButton>
                 <VoiceBroadcastControl
                     icon={<StopIcon className="mx_Icon mx_Icon_16" />}
                     label="Stop Recording"

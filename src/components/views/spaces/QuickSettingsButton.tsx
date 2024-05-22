@@ -18,7 +18,6 @@ import React from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -130,16 +129,16 @@ const QuickSettingsButton: React.FC<{
 
     return (
         <>
-            <AccessibleTooltipButton
+            <AccessibleButton
                 className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
                 onClick={openMenu}
-                title={_t("quick_settings|title")}
+                aria-label={_t("quick_settings|title")}
+                title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
                 ref={handle}
-                forceHide={!isPanelCollapsed}
                 aria-expanded={!isPanelCollapsed}
             >
                 {!isPanelCollapsed ? _t("common|settings") : null}
-            </AccessibleTooltipButton>
+            </AccessibleButton>
 
             {contextMenu}
         </>

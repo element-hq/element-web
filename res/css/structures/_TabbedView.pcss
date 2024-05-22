@@ -129,6 +129,7 @@ limitations under the License.
     padding-inline: var(--cpd-space-3x) var(--cpd-space-4x);
     box-sizing: border-box;
     min-block-size: 40px;
+    min-inline-size: 40px;
     border-radius: 24px;
     font: var(--cpd-font-body-md-medium);
     position: relative;
@@ -163,4 +164,26 @@ limitations under the License.
     flex-grow: 1;
     overflow: auto;
     min-height: 0; /* firefox */
+}
+
+/* Hide the labels on tabs, showing only the icons, on narrow viewports. */
+@media (max-width: 768px) {
+    .mx_TabbedView_tabsOnLeft.mx_TabbedView_responsive {
+        .mx_TabbedView_tabLabel_text {
+            display: none;
+        }
+        .mx_TabbedView_tabPanel {
+            margin-left: 72px; /* 40px sidebar + 32px padding */
+        }
+        .mx_TabbedView_maskedIcon {
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .mx_TabbedView_tabLabels {
+            width: auto;
+        }
+        .mx_TabbedView_tabLabel {
+            padding-inline: 0 0;
+        }
+    }
 }

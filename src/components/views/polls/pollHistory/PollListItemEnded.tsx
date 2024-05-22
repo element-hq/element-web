@@ -99,7 +99,7 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
 
     return (
         <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
-            <Tooltip label={_t("right_panel|poll|view_poll")} side="top" isTriggerInteractive={false}>
+            <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItemEnded_content">
                     <div className="mx_PollListItemEnded_title">
                         <PollIcon className="mx_PollListItemEnded_icon" />

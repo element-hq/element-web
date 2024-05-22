@@ -15,14 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode, useEffect, useState } from "react";
-import {
-    IJoinRuleEventContent,
-    JoinRule,
-    RestrictedAllowType,
-    Room,
-    EventType,
-    Visibility,
-} from "matrix-js-sdk/src/matrix";
+import { JoinRule, RestrictedAllowType, Room, EventType, Visibility } from "matrix-js-sdk/src/matrix";
+import { RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 
 import StyledRadioGroup, { IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";
@@ -72,7 +66,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
 
     const disabled = !room.currentState.mayClientSendStateEvent(EventType.RoomJoinRules, cli);
 
-    const [content, setContent] = useLocalEcho<IJoinRuleEventContent | undefined, IJoinRuleEventContent>(
+    const [content, setContent] = useLocalEcho<RoomJoinRulesEventContent | undefined, RoomJoinRulesEventContent>(
         () => room.currentState.getStateEvents(EventType.RoomJoinRules, "")?.getContent(),
         (content) => cli.sendStateEvent(room.roomId, EventType.RoomJoinRules, content, ""),
         onError,
@@ -391,7 +385,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         if (beforeJoinRule === joinRule && !restrictedAllowRoomIds) return;
         if (beforeChange && !(await beforeChange(joinRule))) return;
 
-        const newContent: IJoinRuleEventContent = {
+        const newContent: RoomJoinRulesEventContent = {
             join_rule: joinRule,
         };
 

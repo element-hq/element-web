@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { IEncryptedFile, UploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { UploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 import { createVoiceMessageRecording, VoiceMessageRecording } from "../../src/audio/VoiceMessageRecording";
 import { RecordingState, VoiceRecording } from "../../src/audio/VoiceRecording";
@@ -122,7 +123,7 @@ describe("VoiceMessageRecording", () => {
 
     describe("when the first data has been received", () => {
         const uploadUrl = "https://example.com/content123";
-        const encryptedFile = {} as unknown as IEncryptedFile;
+        const encryptedFile = {} as unknown as EncryptedFile;
 
         beforeEach(() => {
             voiceRecording.onDataAvailable!(testBuf);
@@ -158,7 +159,7 @@ describe("VoiceMessageRecording", () => {
                         roomId: string,
                         file: File | Blob,
                         _progressHandler?: UploadOpts["progressHandler"],
-                    ): Promise<{ url?: string; file?: IEncryptedFile }> => {
+                    ): Promise<{ url?: string; file?: EncryptedFile }> => {
                         uploadFileClient = matrixClient;
                         uploadFileRoomId = roomId;
                         uploadBlob = file;

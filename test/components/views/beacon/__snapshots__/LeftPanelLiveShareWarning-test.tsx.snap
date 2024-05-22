@@ -3,10 +3,10 @@
 exports[`<LeftPanelLiveShareWarning /> when user has live location monitor renders correctly when minimized 1`] = `
 <DocumentFragment>
   <div
+    aria-label="You are sharing your live location"
     class="mx_AccessibleButton mx_LeftPanelLiveShareWarning mx_LeftPanelLiveShareWarning__minimized"
     role="button"
     tabindex="0"
-    title="You are sharing your live location"
   >
     <div
       height="10"

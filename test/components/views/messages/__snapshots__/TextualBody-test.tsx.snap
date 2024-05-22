@@ -51,7 +51,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
     <bdi>
       <a
         class="mx_Pill mx_UserPill"
-        data-state="closed"
         href="https://matrix.to/#/@user:example.com"
       >
         <span
@@ -66,7 +65,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
           <img
             alt=""
             class="_image_mcap2_50"
-            crossorigin="anonymous"
             data-type="round"
             height="16px"
             loading="lazy"
@@ -100,7 +98,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
         <bdi>
           <a
             class="mx_Pill mx_EventPill"
-            data-state="closed"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
           >
             <span
@@ -115,7 +112,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
               <img
                 alt=""
                 class="_image_mcap2_50"
-                crossorigin="anonymous"
                 data-type="round"
                 height="16px"
                 loading="lazy"
@@ -151,7 +147,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
         <bdi>
           <a
             class="mx_Pill mx_RoomPill"
-            data-state="closed"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
           >
             <span
@@ -166,7 +161,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
               <img
                 alt=""
                 class="_image_mcap2_50"
-                crossorigin="anonymous"
                 data-type="round"
                 height="16px"
                 loading="lazy"
@@ -261,7 +255,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
     <bdi>
       <a
         class="mx_Pill mx_UserPill"
-        data-state="closed"
         href="https://matrix.to/#/@user:server"
       >
         <span
@@ -276,7 +269,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
           <img
             alt=""
             class="_image_mcap2_50"
-            crossorigin="anonymous"
             data-type="round"
             height="16px"
             loading="lazy"
@@ -296,9 +288,9 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
 </span>
 `;
 
-exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%" data-state="closed"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" crossorigin="anonymous" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message from Member</span></a></bdi></span>"`;
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message from Member</span></a></bdi></span>"`;
 
-exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%" data-state="closed"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/room.png" crossorigin="anonymous" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi></span>"`;
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/room.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi></span>"`;
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
 <span
@@ -310,7 +302,6 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
     <bdi>
       <a
         class="mx_Pill mx_EventPill"
-        data-state="closed"
         href="https://matrix.to/#/!room1:example.com/!abc123"
       >
         <div

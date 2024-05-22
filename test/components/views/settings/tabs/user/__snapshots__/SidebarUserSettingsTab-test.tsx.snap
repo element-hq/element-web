@@ -11,11 +11,6 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
       <div
         class="mx_SettingsSection"
       >
-        <h2
-          class="mx_Heading_h3"
-        >
-          Sidebar
-        </h2>
         <div
           class="mx_SettingsSection_subSections"
         >
@@ -257,11 +252,6 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
       <div
         class="mx_SettingsSection"
       >
-        <h2
-          class="mx_Heading_h3"
-        >
-          Sidebar
-        </h2>
         <div
           class="mx_SettingsSection_subSections"
         >

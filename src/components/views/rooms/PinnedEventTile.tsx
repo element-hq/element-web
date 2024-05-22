@@ -27,7 +27,6 @@ import { _t } from "../../../languageHandler";
 import { formatDate } from "../../../DateUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 
@@ -76,7 +75,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
         let unpinButton: JSX.Element | undefined;
         if (this.props.onUnpinClicked) {
             unpinButton = (
-                <AccessibleTooltipButton
+                <AccessibleButton
                     onClick={this.props.onUnpinClicked}
                     className="mx_PinnedEventTile_unpinButton"
                     title={_t("action|unpin")}

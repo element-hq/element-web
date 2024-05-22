@@ -35,7 +35,6 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
             <img
               alt=""
               class="_image_mcap2_50"
-              crossorigin="anonymous"
               data-type="square"
               height="40px"
               loading="lazy"

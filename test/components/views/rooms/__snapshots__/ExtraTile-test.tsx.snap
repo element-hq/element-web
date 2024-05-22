@@ -3,6 +3,7 @@
 exports[`ExtraTile renders 1`] = `
 <DocumentFragment>
   <div
+    aria-label="test"
     class="mx_AccessibleButton mx_ExtraTile mx_RoomTile"
     role="treeitem"
     tabindex="-1"

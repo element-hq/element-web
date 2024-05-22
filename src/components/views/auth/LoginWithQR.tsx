@@ -24,34 +24,7 @@ import { HTTPError, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import { wrapRequestWithDialog } from "../../../utils/UserInteractiveAuth";
 import LoginWithQRFlow from "./LoginWithQRFlow";
-
-/**
- * The intention of this enum is to have a mode that scans a QR code instead of generating one.
- */
-export enum Mode {
-    /**
-     * A QR code with be generated and shown
-     */
-    Show = "show",
-}
-
-export enum Phase {
-    Loading,
-    ShowingQR,
-    Connecting,
-    Connected,
-    WaitingForDevice,
-    Verifying,
-    Error,
-}
-
-export enum Click {
-    Cancel,
-    Decline,
-    Approve,
-    TryAgain,
-    Back,
-}
+import { Click, Mode, Phase } from "./LoginWithQR-types";
 
 interface IProps {
     client: MatrixClient;
@@ -72,6 +45,10 @@ export enum LoginWithQRFailureReason {
 }
 
 export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
+
+// n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
+// However, we want to keep this implementation around for some time.
+// TODO: define an end-of-life date for this implementation.
 
 /**
  * A component that allows sign in and E2EE set up with a QR code.
