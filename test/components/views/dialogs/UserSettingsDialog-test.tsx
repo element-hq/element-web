@@ -169,6 +169,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with sidebar tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Sidebar }));
 
         expect(getActiveTabLabel(container)).toEqual("Sidebar");
@@ -185,6 +186,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with secutity tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Security }));
 
         expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
