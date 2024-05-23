@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
-import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
 interface IProps {
@@ -30,20 +30,18 @@ interface IProps {
     content: string;
     // A list of Matrix reaction events for this key
     reactionEvents: MatrixEvent[];
-    visible: boolean;
     // Whether to render custom image reactions
     customReactionImagesEnabled?: boolean;
 }
 
-export default class ReactionsRowButtonTooltip extends React.PureComponent<IProps> {
+export default class ReactionsRowButtonTooltip extends React.PureComponent<PropsWithChildren<IProps>> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
     public render(): React.ReactNode {
-        const { content, reactionEvents, mxEvent, visible } = this.props;
+        const { content, reactionEvents, mxEvent, children } = this.props;
 
         const room = this.context.getRoom(mxEvent.getRoomId());
-        let tooltipLabel: JSX.Element | undefined;
         if (room) {
             const senders: string[] = [];
             let customReactionName: string | undefined;
@@ -57,34 +55,16 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                     undefined;
             }
             const shortName = unicodeToShortcode(content) || customReactionName;
-            tooltipLabel = (
-                <div>
-                    {_t(
-                        "timeline|reactions|tooltip",
-                        {
-                            shortName,
-                        },
-                        {
-                            reactors: () => {
-                                return <div className="mx_Tooltip_title">{formatList(senders, 6)}</div>;
-                            },
-                            reactedWith: (sub) => {
-                                if (!shortName) {
-                                    return null;
-                                }
-                                return <div className="mx_Tooltip_sub">{sub}</div>;
-                            },
-                        },
-                    )}
-                </div>
+            const formattedSenders = formatList(senders, 6);
+            const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
+
+            return (
+                <Tooltip label={formattedSenders} caption={caption} placement="right">
+                    {children}
+                </Tooltip>
             );
         }
 
-        let tooltip: JSX.Element | undefined;
-        if (tooltipLabel) {
-            tooltip = <Tooltip visible={visible} label={tooltipLabel} />;
-        }
-
-        return tooltip;
+        return children;
     }
 }
