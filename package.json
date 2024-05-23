@@ -62,6 +62,7 @@
     "resolutions": {
         "@types/react-dom": "17.0.25",
         "@types/react": "17.0.80",
+        "@types/seedrandom": "3.0.4",
         "oidc-client-ts": "3.0.1",
         "jwt-decode": "4.0.0"
     },
@@ -183,7 +184,7 @@
         "@types/react-transition-group": "^4.4.0",
         "@types/sanitize-html": "2.11.0",
         "@types/sdp-transform": "^2.4.6",
-        "@types/seedrandom": "<3.0.5",
+        "@types/seedrandom": "3.0.4",
         "@types/tar-js": "^0.3.2",
         "@types/ua-parser-js": "^0.7.36",
         "@types/uuid": "^9.0.2",
