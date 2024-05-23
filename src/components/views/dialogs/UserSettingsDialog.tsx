@@ -168,7 +168,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                     UserTab.Security,
                     _td("room_settings|security|title"),
                     "mx_UserSettingsDialog_securityIcon",
-                    <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                    <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
                     "UserSettingsSecurityPrivacy",
                 ),
             );
