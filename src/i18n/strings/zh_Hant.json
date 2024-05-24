@@ -3315,8 +3315,7 @@
         "pending_moderation_reason": "待審核的訊息：%(reason)s",
         "reactions": {
             "add_reaction_prompt": "新增反應",
-            "label": "%(reactors)s 使用了 %(content)s 反應",
-            "tooltip": "<reactors/><reactedWith> 反應時使用 %(shortName)s</reactedWith>"
+            "label": "%(reactors)s 使用了 %(content)s 反應"
         },
         "read_receipt_title": {
             "one": "已被 %(count)s 個人看過",

@@ -3394,8 +3394,7 @@
         "reactions": {
             "add_reaction_prompt": "Отреагировать",
             "custom_reaction_fallback_label": "Пользовательская реакция",
-            "label": "%(reactors)s отреагировали %(content)s",
-            "tooltip": "<reactors/><reactedWith>отреагировал с %(shortName)s</reactedWith>"
+            "label": "%(reactors)s отреагировали %(content)s"
         },
         "read_receipt_title": {
             "one": "Просмотрел %(count)s человек",

@@ -3424,8 +3424,7 @@
         "reactions": {
             "add_reaction_prompt": "Přidat reakci",
             "custom_reaction_fallback_label": "Vlastní reakce",
-            "label": "%(reactors)s reagoval(a) na %(content)s",
-            "tooltip": "<reactors/><reactedWith> reagoval(a) %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagoval(a) na %(content)s"
         },
         "read_receipt_title": {
             "one": "Viděl %(count)s člověk",
