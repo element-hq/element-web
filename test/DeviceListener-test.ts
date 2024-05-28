@@ -15,20 +15,12 @@ limitations under the License.
 */
 
 import { Mocked, mocked } from "jest-mock";
-import {
-    MatrixEvent,
-    Room,
-    MatrixClient,
-    DeviceVerificationStatus,
-    CryptoApi,
-    Device,
-    ClientStoppedError,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
-import { CrossSigningStatus, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { CrossSigningStatus, CryptoApi, DeviceVerificationStatus, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import DeviceListener from "../src/DeviceListener";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";

@@ -118,7 +118,7 @@ function useServers(): ServerList {
         SettingLevel.ACCOUNT,
     );
 
-    const homeServer = MatrixClientPeg.getHomeserverName();
+    const homeServer = MatrixClientPeg.safeGet().getDomain()!;
     const configServers = new Set<string>(SdkConfig.getObject("room_directory")?.get("servers") ?? []);
     removeAll(configServers, homeServer);
     // configured servers take preference over user-defined ones, if one occurs in both ignore the latter one.

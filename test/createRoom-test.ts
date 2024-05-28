@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { mocked, Mocked } from "jest-mock";
-import { CryptoApi, MatrixClient, Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
+import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 

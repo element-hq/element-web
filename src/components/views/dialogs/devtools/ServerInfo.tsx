@@ -38,7 +38,7 @@ export async function getServerVersionFromFederationApi(client: MatrixClient): P
     let baseUrl = client.getHomeserverUrl();
 
     try {
-        const hsName = MatrixClientPeg.getHomeserverName();
+        const hsName = MatrixClientPeg.safeGet().getDomain();
         // We don't use the js-sdk Autodiscovery module here as it only support client well-known, not server ones.
         const response = await fetch(`https://${hsName}/.well-known/matrix/server`);
         const json = await response.json();
