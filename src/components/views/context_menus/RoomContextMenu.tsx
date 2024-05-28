@@ -49,7 +49,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { tagRoom } from "../../../utils/room/tagRoom";
 
@@ -254,7 +254,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     }
 
     let filesOption: JSX.Element | undefined;
-    if (!isVideoRoom) {
+    if (!isVideoRoom && SettingsStore.getValue(UIFeature.RoomSummaryFilesOption)) {
         filesOption = (
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {

@@ -125,7 +125,6 @@ import { SDKContext } from "../../contexts/SDKContext";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -138,6 +137,9 @@ import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoi
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import { ModuleRunner } from "../../modules/ModuleRunner";
+// import eventSearch from "../../Searching";
+import searchAllEventsLocally from "../../VerjiLocalSearch"; // VERJI
+import eventSearch from "../../Searching";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1734,7 +1736,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+
+        // VERJI START
+        let promise: Promise<ISearchResults>;
+        // currently, we use the local search for all events. edit this 'if' statement to change that.
+        if (scope === SearchScope.Room || scope === SearchScope.All) {
+            promise = searchAllEventsLocally(this.context.client!, term, roomId);
+        } else {
+            promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        }
+        // VERJI END
 
         this.setState({
             search: {

@@ -22,6 +22,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import VoiceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../../src/MediaDeviceHandler";
 import { flushPromises } from "../../../../../test-utils";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
 jest.mock("../../../../../../src/MediaDeviceHandler");
 const MediaDeviceHandlerMock = mocked(MediaDeviceHandler);
@@ -139,5 +141,41 @@ describe("<VoiceUserSettingsTab />", () => {
         expect(MediaDeviceHandler.setAudioAutoGainControl).toHaveBeenCalledWith(true);
         expect(MediaDeviceHandler.setAudioEchoCancellation).toHaveBeenCalledWith(false);
         expect(MediaDeviceHandler.setAudioNoiseSuppression).toHaveBeenCalledWith(true);
+    });
+    it("renders mirror video setting when feature is on", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.VideoMirrorLocalVideo) return true;
+            return true;
+        });
+        render(getComponent());
+
+        expect(screen.queryByText("Mirror local video feed")).not.toBeNull();
+    });
+    it("does not render mirror video setting when feature is off", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.VideoMirrorLocalVideo) return false;
+            return true;
+        });
+        render(getComponent());
+
+        expect(screen.queryByText("Mirror local video feed")).toBeNull();
+    });
+    it("renders connection settings when feature is on", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.VideoConnectionSettings) return true;
+            return true;
+        });
+        render(getComponent());
+
+        expect(screen.queryByText("Connection")).not.toBeNull();
+    });
+    it("does not render connection settings when feature is off", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name == UIFeature.VideoConnectionSettings) return false;
+            return true;
+        });
+        render(getComponent());
+
+        expect(screen.queryByText("Connection")).toBeNull();
     });
 });

@@ -477,7 +477,13 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             },
         };
 
-        const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup.getDehydrationKeyCallback();
+        // if (SecurityCustomisations.getDehydrationKey) {
+        //     opts.cryptoCallbacks!.getDehydrationKey = SecurityCustomisations.getDehydrationKey;
+        // }
+
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...");
+        const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup?.getDehydrationKeyCallback();
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...Done");
         if (dehydrationKeyCallback) {
             opts.cryptoCallbacks!.getDehydrationKey = dehydrationKeyCallback;
         }

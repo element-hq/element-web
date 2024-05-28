@@ -119,6 +119,10 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders tabs correctly", () => {
+        // jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
+        //     if (name == UIFeature.SpacesEnabled) return true;
+        //     return true;
+        // });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });
@@ -170,6 +174,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with sidebar tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Sidebar }));
 
         expect(getActiveTabLabel(container)).toEqual("Sidebar");
@@ -186,6 +191,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with secutity tab selected", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Security }));
 
         expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
@@ -308,5 +314,18 @@ describe("<UserSettingsDialog />", () => {
                 expect(screen.queryByTestId("current-session-section")).toBeFalsy();
             });
         });
+    });
+    it("renders sidebar and access tab when feature is on", () => {
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
+
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.Sidebar}`)).toBeTruthy();
+        expect(getByTestId(`settings-tab-${UserTab.Security}`)).toBeTruthy();
+    });
+    it("does not render sidebar and security/access tab when feature is off", () => {
+        render(getComponent());
+
+        expect(screen.queryByText("Sidebar")).toBeNull();
+        expect(screen.queryByText("Access")).toBeNull();
     });
 });
