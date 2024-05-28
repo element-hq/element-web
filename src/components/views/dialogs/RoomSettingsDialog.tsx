@@ -19,6 +19,10 @@ limitations under the License.
 
 import React from "react";
 import { RoomEvent, Room, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -40,6 +44,7 @@ import { NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
@@ -135,7 +140,11 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
 
     private getTabs(): NonEmptyArray<Tab<RoomSettingsTab>> {
         const tabs: Tab<RoomSettingsTab>[] = [];
-
+        const customRolesRoomSettingsTabOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.RolesRoomSettingsTab,
+            customRolesRoomSettingsTabOpts as CustomComponentOpts,
+        );
         tabs.push(
             new Tab(
                 RoomSettingsTab.General,
@@ -179,7 +188,11 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 RoomSettingsTab.Roles,
                 _td("room_settings|permissions|title"),
                 "mx_RoomSettingsDialog_rolesIcon",
-                <RolesRoomSettingsTab room={this.state.room} />,
+                (
+                    <customRolesRoomSettingsTabOpts.CustomComponent>
+                        <RolesRoomSettingsTab room={this.state.room} />
+                    </customRolesRoomSettingsTabOpts.CustomComponent>
+                ),
                 "RoomSettingsRolesPermissions",
             ),
         );
