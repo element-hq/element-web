@@ -70,6 +70,8 @@ import { SessionDuration } from "../voip/CallDuration";
 import RoomCallBanner from "../beacon/RoomCallBanner";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 class DisabledWithReason {
     public constructor(public readonly reason: string) {}
@@ -843,24 +845,29 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
         ) : null;
 
+        const customLegacyRoomHeaderOpts = { CustomComponent: React.Fragment};
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.LegacyRoomHeader, customLegacyRoomHeaderOpts as CustomComponentOpts);
+
         return (
-            <header className="mx_LegacyRoomHeader light-panel">
-                <div
-                    className="mx_LegacyRoomHeader_wrapper"
-                    aria-owns={this.state.rightPanelOpen ? "mx_RightPanel" : undefined}
-                >
-                    <div className="mx_LegacyRoomHeader_avatar">{roomAvatar}</div>
-                    {icon}
-                    {name}
-                    {searchStatus}
-                    {topicElement}
-                    {betaPill}
-                    {buttons}
-                </div>
-                {!isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} />}
-                <RoomLiveShareWarning roomId={this.props.room.roomId} />
-                {this.state.featureAskToJoin && <RoomKnocksBar room={this.props.room} />}
-            </header>
+            <customLegacyRoomHeaderOpts.CustomComponent>
+                <header className="mx_LegacyRoomHeader light-panel">
+                    <div
+                        className="mx_LegacyRoomHeader_wrapper"
+                        aria-owns={this.state.rightPanelOpen ? "mx_RightPanel" : undefined}
+                    >
+                        <div className="mx_LegacyRoomHeader_avatar">{roomAvatar}</div>
+                        {icon}
+                        {name}
+                        {searchStatus}
+                        {topicElement}
+                        {betaPill}
+                        {buttons}
+                    </div>
+                    {!isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} />}
+                    <RoomLiveShareWarning roomId={this.props.room.roomId} />
+                    {this.state.featureAskToJoin && <RoomKnocksBar room={this.props.room} />}
+                </header>
+            </customLegacyRoomHeaderOpts.CustomComponent>
         );
     }
 }

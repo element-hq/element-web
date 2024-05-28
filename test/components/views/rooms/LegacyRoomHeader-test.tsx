@@ -69,6 +69,8 @@ import { shouldShowComponent } from "../../../../src/customisations/helpers/UICo
 import { UIComponent } from "../../../../src/settings/UIFeature";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
+import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -200,6 +202,32 @@ describe("LegacyRoomHeader", () => {
         call.destroy();
         WidgetMessagingStore.instance.stopMessaging(widget, call.roomId);
     };
+
+    describe("wrap the LegacyRoomHeader with a React.Fragment", () => {
+        it("should wrap the LegacyRoomHeader with a React.Fragment", () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.LegacyRoomHeader) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        return (
+                            <>
+                                <div data-testid="wrapper-header">Header</div>
+                                <div data-testid="wrapper-LegacyRoomHeader">{children}</div>
+                                <div data-testid="wrapper-footer">Footer</div>
+                            </>
+                        );
+                    };
+                }
+            });
+
+            renderHeader();
+            expect(screen.getByTestId("wrapper-header")).toBeDefined();
+            expect(screen.getByTestId("wrapper-LegacyRoomHeader")).toBeDefined();
+            expect(screen.getByTestId("wrapper-footer")).toBeDefined();
+            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(screen.getByTestId("wrapper-LegacyRoomHeader"));
+            expect(screen.getByTestId("wrapper-LegacyRoomHeader").nextSibling).toBe(screen.getByTestId("wrapper-footer"));
+        });
+
+    });
 
     const renderHeader = (props: Partial<RoomHeaderProps> = {}, roomContext: Partial<IRoomState> = {}) => {
         render(

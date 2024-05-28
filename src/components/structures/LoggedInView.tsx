@@ -678,9 +678,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         const customLoggedInViewOpts = { CustomComponent: React.Fragment};
         ModuleRunner.instance.invoke(CustomComponentLifecycle.LoggedInView, customLoggedInViewOpts as CustomComponentOpts);
 
-        // const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
-        // ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
-
         return (
             <customLoggedInViewOpts.CustomComponent>
                 <MatrixClientContextProvider client={this._matrixClient}>
