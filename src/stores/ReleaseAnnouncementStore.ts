@@ -18,6 +18,7 @@
 
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { cloneDeep } from "lodash";
 
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
@@ -90,7 +91,8 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      * @private
      */
     private getViewedReleaseAnnouncements(): StoredSettings {
-        return SettingsStore.getValue<StoredSettings>("releaseAnnouncementData");
+        // Clone the settings to avoid to mutate the internal stored value in the SettingsStore
+        return cloneDeep(SettingsStore.getValue<StoredSettings>("releaseAnnouncementData"));
     }
 
     /**
