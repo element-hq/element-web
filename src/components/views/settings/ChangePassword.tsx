@@ -99,9 +99,6 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                 type: "m.id.user",
                 user: cli.credentials.userId,
             },
-            // TODO: Remove `user` once servers support proper UIA
-            // See https://github.com/matrix-org/synapse/issues/5665
-            user: cli.credentials.userId ?? undefined,
             password: oldPassword,
         };
 

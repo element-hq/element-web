@@ -3051,8 +3051,7 @@
         "pending_moderation_reason": "消息待审核：%(reason)s",
         "reactions": {
             "add_reaction_prompt": "添加反应",
-            "label": "%(reactors)s做出了%(content)s的反应",
-            "tooltip": "<reactors/><reactedWith>回应了 %(shortName)s</reactedWith>"
+            "label": "%(reactors)s做出了%(content)s的反应"
         },
         "read_receipt_title": {
             "one": "已被%(count)s人查看",

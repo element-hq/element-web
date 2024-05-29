@@ -436,7 +436,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             </summary>
                             <LabelledToggleSwitch
                                 label={_t("create_room|unfederated", {
-                                    serverName: MatrixClientPeg.getHomeserverName(),
+                                    serverName: MatrixClientPeg.safeGet().getDomain(),
                                 })}
                                 onChange={this.onNoFederateChange}
                                 value={this.state.noFederate}

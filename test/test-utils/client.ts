@@ -98,6 +98,7 @@ export const unmockClientPeg = () => {
  */
 export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     getUserId: jest.fn().mockReturnValue(userId),
+    getDomain: jest.fn().mockReturnValue(userId.split(":")[1]),
     getSafeUserId: jest.fn().mockReturnValue(userId),
     getUser: jest.fn().mockReturnValue(new User(userId)),
     isGuest: jest.fn().mockReturnValue(false),

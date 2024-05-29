@@ -101,9 +101,6 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                     type: "m.id.user",
                     user: MatrixClientPeg.safeGet().getUserId(),
                 },
-                // TODO: Remove `user` once servers support proper UIA
-                // See https://github.com/matrix-org/synapse/issues/5665
-                user: MatrixClientPeg.safeGet().getUserId(),
                 password: this.state.accountPassword,
             });
         } else if (this.props.tokenLogin) {

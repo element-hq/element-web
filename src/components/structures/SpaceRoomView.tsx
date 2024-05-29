@@ -253,6 +253,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                     showSpaceSettings(space);
                 }}
                 title={_t("common|settings")}
+                placement="bottom"
             />
         );
     }

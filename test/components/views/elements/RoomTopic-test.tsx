@@ -16,7 +16,8 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { mkEvent, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -33,9 +34,12 @@ describe("<RoomTopic/>", () => {
         window.location.href = originalHref;
     });
 
-    function runClickTest(topic: string, clickText: string) {
+    /**
+     * Create a room with the given topic
+     * @param topic
+     */
+    function createRoom(topic: string) {
         stubClient();
-
         const room = new Room("!pMBteVpcoJRdCJxDmn:matrix.org", MatrixClientPeg.safeGet(), "@alice:example.org");
         const topicEvent = mkEvent({
             type: "m.room.topic",
@@ -45,11 +49,27 @@ describe("<RoomTopic/>", () => {
             ts: 123,
             event: true,
         });
-
         room.addLiveEvents([topicEvent]);
 
-        render(<RoomTopic room={room} />);
+        return room;
+    }
 
+    /**
+     * Create a room and render it
+     * @param topic
+     */
+    const renderRoom = (topic: string) => {
+        const room = createRoom(topic);
+        render(<RoomTopic room={room} />);
+    };
+
+    /**
+     * Create a room and click on the given text
+     * @param topic
+     * @param clickText
+     */
+    function runClickTest(topic: string, clickText: string) {
+        renderRoom(topic);
         fireEvent.click(screen.getByText(clickText));
     }
 
@@ -77,5 +97,19 @@ describe("<RoomTopic/>", () => {
         runClickTest(topic, topic);
         expect(window.location.href).toEqual(expectedHref);
         expect(dis.fire).toHaveBeenCalledWith(Action.ShowRoomTopic);
+    });
+
+    it("should open the tooltip when hovering a text", async () => {
+        const topic = "room topic";
+        renderRoom(topic);
+        await userEvent.hover(screen.getByText(topic));
+        await waitFor(() => expect(screen.getByRole("tooltip", { name: "Click to read topic" })).toBeInTheDocument());
+    });
+
+    it("should not open the tooltip when hovering a link", async () => {
+        const topic = "https://matrix.org";
+        renderRoom(topic);
+        await userEvent.hover(screen.getByText(topic));
+        await waitFor(() => expect(screen.queryByRole("tooltip", { name: "Click to read topic" })).toBeNull());
     });
 });

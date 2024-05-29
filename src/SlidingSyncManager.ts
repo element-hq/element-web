@@ -359,10 +359,14 @@ export class SlidingSyncManager {
         let proxyUrl: string | undefined;
 
         try {
-            const clientWellKnown = await AutoDiscovery.findClientConfig(client.getDomain()!);
+            const clientDomain = await client.getDomain();
+            if (clientDomain === null) {
+                throw new RangeError("Homeserver domain is null");
+            }
+            const clientWellKnown = await AutoDiscovery.findClientConfig(clientDomain);
             proxyUrl = clientWellKnown?.["org.matrix.msc3575.proxy"]?.url;
         } catch (e) {
-            // client.getDomain() is invalid, `AutoDiscovery.findClientConfig` has thrown
+            // Either client.getDomain() is null so we've shorted out, or is invalid so `AutoDiscovery.findClientConfig` has thrown
         }
 
         if (proxyUrl != undefined) {

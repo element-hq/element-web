@@ -353,7 +353,6 @@ describe("RoomView", () => {
                             content: {
                                 algorithm: MEGOLM_ALGORITHM,
                             },
-                            user_id: cli.getUserId()!,
                             sender: cli.getUserId()!,
                             state_key: "",
                             room_id: localRoom.roomId,

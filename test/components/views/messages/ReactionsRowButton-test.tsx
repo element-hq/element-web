@@ -116,4 +116,18 @@ describe("ReactionsRowButton", () => {
 
         expect(root.asFragment()).toMatchSnapshot();
     });
+
+    it("renders without a room", () => {
+        mockClient.getRoom.mockImplementation(() => null);
+
+        const props = createProps({});
+
+        const root = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(root.asFragment()).toMatchSnapshot();
+    });
 });

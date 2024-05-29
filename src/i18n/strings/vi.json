@@ -3060,8 +3060,7 @@
         "pending_moderation_reason": "Tin nhắn chờ duyệt: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Thêm phản ứng",
-            "label": "%(reactors)s đã phản hồi với %(content)s",
-            "tooltip": "<reactors/><reactedWith>đã phản hồi với %(shortName)s</reactedWith>"
+            "label": "%(reactors)s đã phản hồi với %(content)s"
         },
         "read_receipt_title": {
             "one": "Gửi bởi %(count)s người",

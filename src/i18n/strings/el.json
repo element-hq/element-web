@@ -2720,8 +2720,7 @@
         "pending_moderation_reason": "Μήνυμα σε εκκρεμότητα συντονισμού: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Προσθέστε αντίδραση",
-            "label": "%(reactors)s αντέδρασαν με %(content)s",
-            "tooltip": "<reactors/><reactedWith>αντέδρασε με %(shortName)s</reactedWith>"
+            "label": "%(reactors)s αντέδρασαν με %(content)s"
         },
         "read_receipt_title": {
             "one": "Αναγνώστηκε από %(count)s άτομο",

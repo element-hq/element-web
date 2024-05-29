@@ -276,4 +276,26 @@ test.describe("Room Header", () => {
             await expect(header).toMatchScreenshot("room-header-with-apps-button-not-highlighted.png");
         });
     });
+
+    test.describe("with encryption", () => {
+        test("should render the E2E icon and the buttons", async ({ page, app, user }) => {
+            // Create an encrypted room
+            await app.client.createRoom({
+                name: "Test Encrypted Room",
+                initial_state: [
+                    {
+                        type: "m.room.encryption",
+                        state_key: "",
+                        content: {
+                            algorithm: "m.megolm.v1.aes-sha2",
+                        },
+                    },
+                ],
+            });
+            await app.viewRoomByName("Test Encrypted Room");
+
+            const header = page.locator(".mx_LegacyRoomHeader");
+            await expect(header).toMatchScreenshot("encrypted-room-header.png");
+        });
+    });
 });

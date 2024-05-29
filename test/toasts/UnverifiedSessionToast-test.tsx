@@ -18,8 +18,9 @@ import React from "react";
 import { render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
-import { CryptoApi, DeviceVerificationStatus, IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../src/dispatcher/dispatcher";
 import { showToast } from "../../src/toasts/UnverifiedSessionToast";

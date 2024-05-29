@@ -218,7 +218,7 @@ describe("AutoDiscoveryUtils", () => {
                 ...validIsConfig,
                 "m.homeserver": {
                     state: AutoDiscoveryAction.FAIL_ERROR,
-                    error: AutoDiscovery.ERROR_HOMESERVER_TOO_OLD,
+                    error: AutoDiscovery.ERROR_UNSUPPORTED_HOMESERVER_SPEC_VERSION,
                     base_url: "https://matrix.org",
                 },
             };

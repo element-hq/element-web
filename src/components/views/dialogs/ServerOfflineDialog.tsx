@@ -95,7 +95,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             timeline = [<div key={1}>{_t("server_offline|empty_timeline")}</div>];
         }
 
-        const serverName = MatrixClientPeg.getHomeserverName();
+        const serverName = MatrixClientPeg.safeGet().getDomain();
         return (
             <BaseDialog
                 title={_t("server_offline|title")}

@@ -116,7 +116,6 @@ exports[`AppTile for a pinned widget should render 1`] = `
             <img
               alt=""
               class="_image_mcap2_50"
-              crossorigin="anonymous"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -202,7 +201,6 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <img
               alt=""
               class="_image_mcap2_50"
-              crossorigin="anonymous"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -290,9 +288,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="mx_TooltipTarget_vY7Q4uEh"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
-                tabindex="0"
               >
                 <div
                   class="mx_Icon mx_Icon_12"
@@ -355,7 +351,6 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                   <img
                     alt=""
                     class="_image_mcap2_50"
-                    crossorigin="anonymous"
                     data-type="round"
                     height="20px"
                     loading="lazy"
