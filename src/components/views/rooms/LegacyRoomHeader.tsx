@@ -22,6 +22,10 @@ import { RoomStateEvent, ISearchResults } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import type { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
@@ -71,10 +75,6 @@ import RoomCallBanner from "../beacon/RoomCallBanner";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 class DisabledWithReason {
     public constructor(public readonly reason: string) {}

@@ -16,6 +16,10 @@ limitations under the License.
 
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
@@ -24,10 +28,6 @@ import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;

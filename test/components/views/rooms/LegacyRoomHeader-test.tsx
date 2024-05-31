@@ -36,6 +36,10 @@ import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/Ro
 import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
 // eslint-disable-next-line no-restricted-imports
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import type { MatrixClient, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
@@ -70,10 +74,6 @@ import { UIComponent } from "../../../../src/settings/UIFeature";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),

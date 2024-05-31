@@ -6,14 +6,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
-import ReactionsRowButtonTooltip from "../../../src/components/views/messages/ReactionsRowButtonTooltip";
-import { getMockClientWithEventEmitter } from "../../test-utils";
-import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
-import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import {
     CustomComponentLifecycle,
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+
+import ReactionsRowButtonTooltip from "../../../src/components/views/messages/ReactionsRowButtonTooltip";
+import { getMockClientWithEventEmitter } from "../../test-utils";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 
 describe("ReactionsRowButtonTooltip", () => {
     const content = "Hello world!";

@@ -19,6 +19,10 @@ import { render, RenderResult } from "@testing-library/react";
 import { ConditionKind, EventType, IPushRule, MatrixEvent, ClientEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import LoggedInView from "../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../src/contexts/SDKContext";
@@ -27,10 +31,6 @@ import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../test-utils";
 import { TestSdkContext } from "../../TestSdkContext";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
