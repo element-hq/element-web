@@ -71,7 +71,10 @@ import RoomCallBanner from "../beacon/RoomCallBanner";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 class DisabledWithReason {
     public constructor(public readonly reason: string) {}
@@ -845,8 +848,11 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
         ) : null;
 
-        const customLegacyRoomHeaderOpts = { CustomComponent: React.Fragment};
-        ModuleRunner.instance.invoke(CustomComponentLifecycle.LegacyRoomHeader, customLegacyRoomHeaderOpts as CustomComponentOpts);
+        const customLegacyRoomHeaderOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.LegacyRoomHeader,
+            customLegacyRoomHeaderOpts as CustomComponentOpts,
+        );
 
         return (
             <customLegacyRoomHeaderOpts.CustomComponent>

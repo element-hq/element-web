@@ -70,7 +70,10 @@ import { UIComponent } from "../../../../src/settings/UIFeature";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -223,10 +226,13 @@ describe("LegacyRoomHeader", () => {
             expect(screen.getByTestId("wrapper-header")).toBeDefined();
             expect(screen.getByTestId("wrapper-LegacyRoomHeader")).toBeDefined();
             expect(screen.getByTestId("wrapper-footer")).toBeDefined();
-            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(screen.getByTestId("wrapper-LegacyRoomHeader"));
-            expect(screen.getByTestId("wrapper-LegacyRoomHeader").nextSibling).toBe(screen.getByTestId("wrapper-footer"));
+            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(
+                screen.getByTestId("wrapper-LegacyRoomHeader"),
+            );
+            expect(screen.getByTestId("wrapper-LegacyRoomHeader").nextSibling).toBe(
+                screen.getByTestId("wrapper-footer"),
+            );
         });
-
     });
 
     const renderHeader = (props: Partial<RoomHeaderProps> = {}, roomContext: Partial<IRoomState> = {}) => {

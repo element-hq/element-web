@@ -27,7 +27,10 @@ import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../test-utils";
 import { TestSdkContext } from "../../TestSdkContext";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -89,11 +92,9 @@ describe("<LoggedInView />", () => {
             const { container } = getComponent();
 
             const header = container.querySelector("[data-testid=wrapper-header]");
-            expect (header?.nextSibling).toBe(container.querySelector("[data-testid=wrapper-LoggedInView]"));
+            expect(header?.nextSibling).toBe(container.querySelector("[data-testid=wrapper-LoggedInView]"));
             expect(container.children[0].tagName).toEqual("DIV");
-            // expect(container.children[0].tagName).toEqual("DIV");
         });
-
     });
 
     describe("synced push rules", () => {

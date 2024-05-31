@@ -27,6 +27,10 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
@@ -77,7 +81,6 @@ import { ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 // import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 import { ModuleRunner } from "../../modules/ModuleRunner";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -674,9 +677,11 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
-
-        const customLoggedInViewOpts = { CustomComponent: React.Fragment};
-        ModuleRunner.instance.invoke(CustomComponentLifecycle.LoggedInView, customLoggedInViewOpts as CustomComponentOpts);
+        const customLoggedInViewOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.LoggedInView,
+            customLoggedInViewOpts as CustomComponentOpts,
+        );
 
         return (
             <customLoggedInViewOpts.CustomComponent>
