@@ -138,15 +138,17 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 "UserSettingsKeyboard",
             ),
         );
-        tabs.push(
-            new Tab(
-                UserTab.Sidebar,
-                _td("settings|sidebar|title"),
-                "mx_UserSettingsDialog_sidebarIcon",
-                <SidebarUserSettingsTab />,
-                "UserSettingsSidebar",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
+            tabs.push(
+                new Tab(
+                    UserTab.Sidebar,
+                    _td("settings|sidebar|title"),
+                    "mx_UserSettingsDialog_sidebarIcon",
+                    <SidebarUserSettingsTab />,
+                    "UserSettingsSidebar",
+                ),
+            );
+        }
 
         if (voipEnabled) {
             tabs.push(
@@ -160,15 +162,17 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
             );
         }
 
-        tabs.push(
-            new Tab(
-                UserTab.Security,
-                _td("room_settings|security|title"),
-                "mx_UserSettingsDialog_securityIcon",
-                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
-                "UserSettingsSecurityPrivacy",
-            ),
-        );
+        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
+            tabs.push(
+                new Tab(
+                    UserTab.Security,
+                    _td("room_settings|security|title"),
+                    "mx_UserSettingsDialog_securityIcon",
+                    <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
+                    "UserSettingsSecurityPrivacy",
+                ),
+            );
+        }
 
         if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
             tabs.push(
