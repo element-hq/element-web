@@ -5,7 +5,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import {
     CustomComponentLifecycle,
     CustomComponentOpts,
