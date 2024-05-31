@@ -11,4 +11,7 @@
 /src/stores/SetupEncryptionStore.ts               @matrix-org/element-crypto-web-reviewers
 /test/stores/SetupEncryptionStore-test.ts         @matrix-org/element-crypto-web-reviewers
 
+# Ignore translations as those will be updated by GHA for Localazy download
 /src/i18n/strings
+# Ignore the synapse plugin as this is updated by GHA for docker image updating
+/playwright/plugins/homeserver/synapse/index.ts
