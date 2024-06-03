@@ -79,7 +79,6 @@ import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
 import { ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
-// import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 
 // We need to fetch each pinned message individually (if we don't already have it)
@@ -682,7 +681,10 @@ class LoggedInView extends React.Component<IProps, IState> {
             CustomComponentLifecycle.LoggedInView,
             customLoggedInViewOpts as CustomComponentOpts,
         );
-
+        const customSpacePanelOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.SpacePanel, customSpacePanelOpts as CustomComponentOpts);
+        const customLeftPanelOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.LeftPanel, customLeftPanelOpts as CustomComponentOpts);
         return (
             <customLoggedInViewOpts.CustomComponent>
                 <MatrixClientContextProvider client={this._matrixClient}>
@@ -698,18 +700,22 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
                                 <div className="mx_LeftPanel_wrapper">
                                     <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
-                                    <SpacePanel />
+                                    <customSpacePanelOpts.CustomComponent>
+                                        <SpacePanel />
+                                    </customSpacePanelOpts.CustomComponent>
                                     <BackdropPanel backgroundImage={this.state.backgroundImage} />
                                     <div
                                         className="mx_LeftPanel_wrapper--user"
                                         ref={this._resizeContainer}
                                         data-collapsed={this.props.collapseLhs ? true : undefined}
                                     >
+                                    <customLeftPanelOpts.CustomComponent>
                                         <LeftPanel
                                             pageType={this.props.page_type as PageTypes}
                                             isMinimized={this.props.collapseLhs || false}
                                             resizeNotifier={this.props.resizeNotifier}
                                         />
+                                    </customLeftPanelOpts.CustomComponent>
                                     </div>
                                 </div>
                             </div>
