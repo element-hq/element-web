@@ -73,6 +73,30 @@ describe("<LoggedInView />", () => {
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
     });
 
+    describe("wrap the LoggedInView with a React.Fragment", () => {
+        it("should wrap the LoggedInView with a React.Fragment", () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.LoggedInView) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        return (
+                            <>
+                                <div data-testid="wrapper-header">Header</div>
+                                <div data-testid="wrapper-LoggedInView">{children}</div>
+                                <div data-testid="wrapper-footer">Footer</div>
+                            </>
+                        );
+                    };
+                }
+            });
+
+            const { container } = getComponent();
+
+            const header = container.querySelector("[data-testid=wrapper-header]");
+            expect(header?.nextSibling).toBe(container.querySelector("[data-testid=wrapper-LoggedInView]"));
+            expect(container.children[0].tagName).toEqual("DIV");
+        });
+    });
+
     describe("synced push rules", () => {
         const pushRulesEvent = new MatrixEvent({ type: EventType.PushRules });
 
