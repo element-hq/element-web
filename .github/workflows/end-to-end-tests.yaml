@@ -46,6 +46,7 @@ jobs:
     build:
         name: "Build Element-Web"
         runs-on: ubuntu-latest
+        if: inputs.skip != true
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -167,17 +168,21 @@ jobs:
               run: exit 1
 
             - uses: actions/checkout@v4
+              if: inputs.skip != true
               with:
                   persist-credentials: false
 
             - uses: actions/setup-node@v4
+              if: inputs.skip != true
               with:
                   cache: "yarn"
 
             - name: Install dependencies
+              if: inputs.skip != true
               run: yarn install --frozen-lockfile
 
             - name: Download blob reports from GitHub Actions Artifacts
+              if: inputs.skip != true
               uses: actions/download-artifact@v4
               with:
                   pattern: all-blob-reports-*
@@ -185,12 +190,14 @@ jobs:
                   merge-multiple: true
 
             - name: Merge into HTML Report
+              if: inputs.skip != true
               run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.event.workflow_run.head_branch == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
 
             - name: Upload HTML report
+              if: inputs.skip != true
               uses: actions/upload-artifact@v4
               with:
                   name: html-report
