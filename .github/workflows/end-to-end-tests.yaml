@@ -165,3 +165,34 @@ jobs:
         steps:
             - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
               run: exit 1
+
+            - uses: actions/checkout@v4
+              with:
+                  persist-credentials: false
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Download blob reports from GitHub Actions Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  pattern: all-blob-reports-*
+                  path: all-blob-reports
+                  merge-multiple: true
+
+            - name: Merge into HTML Report
+              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts ./all-blob-reports
+              env:
+                  # Only pass creds to the flaky-reporter on main branch runs
+                  GITHUB_TOKEN: ${{ github.event.workflow_run.head_branch == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
+
+            - name: Upload HTML report
+              uses: actions/upload-artifact@v4
+              with:
+                  name: html-report
+                  path: playwright-report
+                  retention-days: 14
