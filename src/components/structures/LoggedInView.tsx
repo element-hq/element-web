@@ -195,6 +195,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.loadResizerPreferences();
         this.refreshBackgroundImage();
+        this.attachFreshworksWidget(); //Verji
     }
 
     public componentWillUnmount(): void {
@@ -209,6 +210,21 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (this.backgroundImageWatcherRef) SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.resizer?.detach();
     }
+
+    // Verji start
+    private attachFreshworksWidget(){
+        const head = document.querySelector("head");
+        const script = document.createElement("script");
+        const scriptExt = document.createElement("script");
+        script.setAttribute("src", "./scripts/freshworks.js");
+        scriptExt.setAttribute("src", "https://euc-widget.freshworks.com/widgets/80000004505.js");
+        scriptExt.async = true;
+        scriptExt.defer = true;
+        head?.appendChild(script);
+        head?.appendChild(scriptExt);
+    }
+    // Vreji end
+    
 
     private onCallState = (): void => {
         const activeCalls = LegacyCallHandler.instance.getAllActiveCalls();

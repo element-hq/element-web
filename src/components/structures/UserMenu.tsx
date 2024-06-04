@@ -226,6 +226,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+        // Verji start
+        const oldTheme: string = SettingsStore.getValue("theme");
+        const rostheme = oldTheme === "custom-Verji_dark" ? "custom-Verji_light" : "custom-Verji_dark";
+        // Verji end
 
         let newTheme = this.state.isDarkTheme ? "light" : "dark";
         if (this.state.isHighContrast) {
@@ -234,7 +238,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 newTheme = hcTheme;
             }
         }
-        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
+        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, rostheme ?? newTheme); // Verji
     };
 
     private onSettingsOpen = (ev: ButtonEvent, tabId?: string): void => {
@@ -266,6 +270,33 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
+
+    // Verji start
+    private onManageProfile = (): void => async (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const config = SdkConfig.get();
+        window.location.href = config.oidcmanagelocation;
+    };
+    private onPortalClick = (): void => async (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const config = SdkConfig.get();
+        window.open(config.portallocation, "_blank");
+        //window.location.href = config.portallocation
+        return true;
+    };
+
+    private nSigningClick = (): void => async (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const config = SdkConfig.get();
+        window.open(config.signinglocation, "_blank");
+        return true;
+        //window.open("https://verjiweb.staging.verji.app/signingordersoverview", '_blank'); // Temprorary address for demo
+        //window.location.href = config.portallocation
+    };
+    // Verji end
 
     /**
      * Checks if the `LogoutDialog` should be shown instead of the simple logout flow.
@@ -382,6 +413,26 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     onClick={(e) => this.onSettingsOpen(e)}
                 />
                 {feedbackButton}
+                {/* Verji start */}
+                <IconizedContextMenuOptionList>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_oidcmanage"
+                        label={_t("Account and login")}
+                        onClick={this.onManageProfile}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_portal"
+                        label={_t("Administrationportal")}
+                        onClick={this.onPortalClick}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_signing"
+                        label={_t("Signingsorder")}
+                        onClick={this.onSigningClick}
+                    />
+                    {/* Verji end */}
+                </IconizedContextMenuOptionList>
+
                 <IconizedContextMenuOption
                     className="mx_IconizedContextMenu_option_red"
                     iconClassName="mx_UserMenu_iconSignOut"

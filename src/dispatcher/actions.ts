@@ -388,4 +388,23 @@ export enum Action {
      * Opens right panel with 3pid invite information
      */
     View3pidInvite = "view_3pid_invite",
+
+    // Verji start
+    /**
+     * View Verji news
+     */
+    ViewNews = "view_news",
+
+    /**
+     * View Verji status messages
+     */
+    ViewOperatingMessages = "view_operatingmessages",
+
+    /**
+    * Opens dialog to invite external Verji users
+    */
+    OpenInviteExternalUsersDialog = "open_invite_external_users_dialog"
+    // Verji end
+}
+
 }

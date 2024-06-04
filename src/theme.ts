@@ -115,10 +115,10 @@ export function getOrderedThemes(): ITheme[] {
     const builtInThemes = themes.filter((p) => !p.id.startsWith("custom-"));
     const customThemes = themes.filter((p) => !builtInThemes.includes(p)).sort((a, b) => compare(a.name, b.name)); // Verji
     //verji start
-    if(!customThemes){
+    if (!customThemes) {
         return [...builtInThemes];
     }
-    return [...customThemes]
+    return [...customThemes];
     //verji end
 }
 
