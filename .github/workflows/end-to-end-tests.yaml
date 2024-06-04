@@ -171,6 +171,7 @@ jobs:
               if: inputs.skip != true
               with:
                   persist-credentials: false
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
 
             - uses: actions/setup-node@v4
               if: inputs.skip != true
