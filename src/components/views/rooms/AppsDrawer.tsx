@@ -84,6 +84,12 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         ScalarMessaging.startListening();
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         this.dispatcherRef = dis.register(this.onAction);
+        //verji custom start
+        dis.dispatch({
+            action: "appsDrawer",
+            show: true,
+        });
+        //verji custom end
     }
 
     public componentWillUnmount(): void {

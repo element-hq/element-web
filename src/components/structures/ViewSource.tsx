@@ -21,7 +21,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SyntaxHighlight from "../views/elements/SyntaxHighlight";
 import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { canEditContent } from "../../utils/EventUtils";
+// import { canEditContent } from "../../utils/EventUtils"; //Verji
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import { DevtoolsContext } from "../views/dialogs/devtools/BaseTool";
@@ -155,9 +155,9 @@ export default class ViewSource extends React.Component<IProps, IState> {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId()!;
         const eventId = mxEvent.getId()!;
-        const canEdit = mxEvent.isState()
-            ? this.canSendStateEvent(mxEvent)
-            : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        // const canEdit = mxEvent.isState()    //Verji
+        //     ? this.canSendStateEvent(mxEvent)
+        //     : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("action|view_source")}>
                 <div className="mx_ViewSource_header">
@@ -175,9 +175,9 @@ export default class ViewSource extends React.Component<IProps, IState> {
                         </CopyableText>
                     )}
                 </div>
+                {isEditing ? this.editSourceContent() : this.viewSourceContent()}
                 {/* NOTE: Verji - Removed the Edit button as we have no use for it at the moment. */}
-                {/* {isEditing ? this.editSourceContent() : this.viewSourceContent()}
-                {!isEditing && canEdit && (
+                {/* {!isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
                         <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
                     </div>
