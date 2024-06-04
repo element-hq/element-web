@@ -27,6 +27,7 @@ import {
     Relations,
     Thread,
     M_POLL_START,
+    EventTimeline,
 } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -168,14 +169,33 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private checkPermissions = (): void => {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const roomState = room?.getLiveTimeline().getState(EventTimeline.FORWARDS); // Verji
 
         // We explicitly decline to show the redact option on ACL events as it has a potential
         // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
         // Similarly for encryption events, since redacting them "breaks everything"
+        // Verji start, adds more events to prevent redact
+        let redactable = true;
+        if (
+            this.props.mxEvent?.event?.type?.includes('.avatar') ||
+            this.props.mxEvent?.event?.type?.includes('.topic') ||
+            this.props.mxEvent.getType() === EventType.RoomMember ||
+            this.props.mxEvent.getType() === EventType.RoomJoinRules ||
+            this.props.mxEvent.getType() === EventType.RoomPowerLevels ||
+            this.props.mxEvent.getType() === EventType.RoomHistoryVisibility ||
+            this.props.mxEvent.getType() === EventType.RoomGuestAccess ||
+            this.props.mxEvent.getType() === EventType.RoomName ||
+            this.props.mxEvent.getType() === EventType.RoomTopic
+            ){
+                redactable = false;
+            }
         const canRedact =
+            //!!roomState?.maySendRedactionForEvent(this.props.mxEvent, cli.getSafeUserId()) &&
             !!room?.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.getSafeUserId()) &&
             this.props.mxEvent.getType() !== EventType.RoomServerAcl &&
-            this.props.mxEvent.getType() !== EventType.RoomEncryption;
+            this.props.mxEvent.getType() !== EventType.RoomEncryption &&
+            redactable;
+            //Verji end
 
         let canPin =
             !!room?.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) &&
@@ -189,16 +209,19 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private isPinned(): boolean {
         const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-        const pinnedEvent = room?.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
+        const roomState = room?.getLiveTimeline().getState(EventTimeline.FORWARDS); // Verji
+        const pinnedEvent = roomState?.getStateEvents(EventType.RoomPinnedEvents, ""); //Verji
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     }
 
     private canEndPoll(mxEvent: MatrixEvent): boolean {
+        // ROSBERG isMyEvent to overide verji strict canRedact rules - in case where ender of the poll is the owner of the poll
+        const isMyEvent = (mxEvent.sender?.userId === MatrixClientPeg.safeGet().getSafeUserId())
         return (
             M_POLL_START.matches(mxEvent.getType()) &&
-            this.state.canRedact &&
+            (this.state.canRedact || isMyEvent) && //Verji- isMyEvent evaluates to true if you are admin or event is yours
             !isPollEnded(mxEvent, MatrixClientPeg.safeGet())
         );
     }
@@ -689,8 +712,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {endPollButton}
                 {forwardButton}
                 {pinButton}
-                {permalinkButton}
-                {reportEventButton}
+                {/* Verji remove - {permalinkButton} */}
+                {/* Verji remove - {reportEventButton} */}
                 {externalURLButton}
                 {jumpToRelatedEventButton}
                 {unhidePreviewButton}

@@ -47,6 +47,8 @@ import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingBut
 import NotificationBadge from "../views/rooms/NotificationBadge";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
+import Parser from "rss-parser";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 interface IProps {
     isMinimized: boolean;
@@ -74,7 +76,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     //Verji start
     private parser = null;
-    private verjiRssUrl = "https://verji.no/kategori/nyheter/nyheter-i-app/feed/atom"; // ROSBERG https://verji.no/kategori/nyheter/feed/atom
+    private verjiRssUrl = "https://verji.no/kategori/nyheter/nyheter-i-app/feed/atom"; // Verji https://verji.no/kategori/nyheter/feed/atom
     private newsIndex = [];
     private newsInterval = null;
     // Operating messages
@@ -105,7 +107,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         // Verji end
     }
 
-    // ROSBERG START
+    // Verji start
     private setNewsFetcher(): void {
         const INTERVAL = 900000;
         this.newsInterval = setInterval(() => {
@@ -205,7 +207,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             })();
         })();
     }
-    // ROSBERG END
+    // Verji end
 
     private static get breadcrumbsMode(): BreadcrumbsMode {
         return !BreadcrumbsStore.instance.visible ? BreadcrumbsMode.Disabled : BreadcrumbsMode.Legacy;
