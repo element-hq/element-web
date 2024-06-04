@@ -55,7 +55,7 @@ export interface ITooltipProps {
     role?: React.AriaRole;
 }
 
-type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "transform" | "left">>;
+type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "bottom" | "transform" | "left">>; //Verji added bottom
 
 export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
     private static container: HTMLElement;
