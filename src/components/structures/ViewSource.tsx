@@ -183,11 +183,11 @@ export default class ViewSource extends React.Component<IProps, IState> {
                     </div>
                 )} */}
 
-                    <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
-                    </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
+                </div>
                 {/* Verji end */}
-                </BaseDialog>
+            </BaseDialog>
         );
     }
 }

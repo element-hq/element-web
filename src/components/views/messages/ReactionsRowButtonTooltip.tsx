@@ -79,7 +79,9 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                             },
                             {
                                 reactors: () => {
-                                    return <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>; //Verji
+                                    return (
+                                        <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>
+                                    ); //Verji
                                 },
                                 reactedWith: (sub) => {
                                     if (!shortName) {
