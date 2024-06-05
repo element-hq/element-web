@@ -83,7 +83,6 @@ export const enum UIFeature {
     VideoMirrorLocalVideo = "UIFeature.videoMirrorLocalVideo",
     VideoConnectionSettings = "UIFeature.videoConnectionSettings",
     SpacesEnabled = "UIFeature.spacesEnabled",
-    MultipleCallsInRoom = "UIFeature.multipleCallsInRoom",
 }
 
 export enum UIComponent {
