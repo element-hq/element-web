@@ -209,7 +209,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private isPinned(): boolean {
         const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
         const roomState = room?.getLiveTimeline().getState(EventTimeline.FORWARDS); // Verji
-        const pinnedEvent = roomState?.getStateEvents(EventType.RoomPinnedEvents, ""); //Verji
+        const pinnedEvent = roomState?.getStateEvents(EventType.RoomPinnedEvents, "");
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
@@ -220,7 +220,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const isMyEvent = mxEvent.sender?.userId === MatrixClientPeg.safeGet().getSafeUserId();
         return (
             M_POLL_START.matches(mxEvent.getType()) &&
-            (this.state.canRedact || isMyEvent) && //Verji- isMyEvent evaluates to true if you are admin or event is yours
+            (this.state.canRedact || isMyEvent) && // Verji - evaluates to true if you are admin OR the event is yours
             !isPollEnded(mxEvent, MatrixClientPeg.safeGet())
         );
     }
@@ -715,8 +715,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {endPollButton}
                 {forwardButton}
                 {pinButton}
-                {/* Verji remove - {permalinkButton} */}
-                {/* Verji remove - {reportEventButton} */}
+                {/*Verji removed {permalinkButton} */}
+                {/*Verji removed  {reportEventButton} */}
                 {externalURLButton}
                 {jumpToRelatedEventButton}
                 {unhidePreviewButton}

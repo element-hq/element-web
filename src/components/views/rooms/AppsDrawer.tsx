@@ -341,7 +341,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
         defaultHeight = clamp(defaultHeight, 0, 100);
         defaultHeight = percentageWithin(defaultHeight / 100, minHeight, maxHeight);
     } else {
-        defaultHeight = 280;
+        defaultHeight = 380; //Verji changed from 280
     }
 
     return (

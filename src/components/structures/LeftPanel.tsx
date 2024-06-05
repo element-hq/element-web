@@ -44,11 +44,6 @@ import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButto
 import PosthogTrackers from "../../PosthogTrackers";
 import PageType from "../../PageTypes";
 import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
-import NotificationBadge from "../views/rooms/NotificationBadge";
-import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
-import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
-import Parser from "rss-parser";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 interface IProps {
     isMinimized: boolean;
@@ -64,8 +59,6 @@ enum BreadcrumbsMode {
 interface IState {
     showBreadcrumbs: BreadcrumbsMode;
     activeSpace: SpaceKey;
-    unreadNews: number | null; // Verji
-    unreadOm?: number; // Verji
 }
 
 export default class LeftPanel extends React.Component<IProps, IState> {
@@ -74,140 +67,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
-    //Verji start
-    private parser = null;
-    private verjiRssUrl = "https://verji.no/kategori/nyheter/nyheter-i-app/feed/atom"; // Verji https://verji.no/kategori/nyheter/feed/atom
-    private newsIndex = [];
-    private newsInterval = null;
-    // Operating messages
-    private omParser = null;
-    private omVerjiRssUrl = "https://verji.no/kategori/driftsmeldinger/feed/atom";
-    private omIndex = [];
-    private omInterval = null;
-    //Verji end
-
     public constructor(props: IProps) {
         super(props);
 
         this.state = {
             activeSpace: SpaceStore.instance.activeSpace,
             showBreadcrumbs: LeftPanel.breadcrumbsMode,
-            unreadNews: null, // Verji
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-
-        // Verji start
-        this.fetchNews();
-        this.fetchOperatingMessages();
-        this.setNewsFetcher();
-        this.setOmFetcher();
-        // Verji end
     }
-
-    // Verji start
-    private setNewsFetcher(): void {
-        const INTERVAL = 900000;
-        this.newsInterval = setInterval(() => {
-            this.fetchNews();
-        }, INTERVAL);
-    }
-
-    private setOmFetcher(): void {
-        const INTERVAL = 300000;
-        this.omInterval = setInterval(() => {
-            this.fetchOperatingMessages();
-        }, INTERVAL);
-    }
-
-    private fetchNews() {
-        (async () => {
-            this.parser = new Parser();
-            const cliLogout = MatrixClientPeg;
-            const _userId = cliLogout.getCredentials()?.userId;
-            (async () => {
-                const feed = await this.parser.parseURL(this.verjiRssUrl);
-                console.log("Fetching verjiblogg");
-                console.log(feed.title);
-
-                const newsFeed: any = JSON.parse(localStorage.getItem(_userId + "_newsFeed"));
-                localStorage.setItem(_userId + "_newsFeed_fetched", JSON.stringify(feed));
-                let unread = 0;
-                if (newsFeed?.items && newsFeed?.items?.length > 0) {
-                    feed.items.forEach((item, _index) => {
-                        let exists = false;
-                        for (let i = 0; i < newsFeed.items.length; i++) {
-                            if (newsFeed.items[i].id == item.id) {
-                                exists = true;
-                                break;
-                            }
-                        }
-                        if (exists == false) {
-                            unread++;
-                            this.newsIndex.push(_index);
-                        }
-                    });
-                } else {
-                    unread = parseInt(feed.items.length);
-                    feed.items.forEach((item, i) => {
-                        this.newsIndex.push(i);
-                    });
-                }
-
-                if (unread > 0) {
-                    this.setState({
-                        unreadNews: unread,
-                    });
-                }
-            })();
-        })();
-    }
-
-    private fetchOperatingMessages() {
-        (async () => {
-            this.omParser = new Parser();
-            const cliLogout = MatrixClientPeg;
-            const _userId = cliLogout.getCredentials()?.userId;
-            (async () => {
-                const feed = await this.omParser.parseURL(this.omVerjiRssUrl);
-                console.log("Fetching operating messages");
-                console.log(feed.title);
-
-                const omFeed: any = JSON.parse(localStorage.getItem(_userId + "_omFeed"));
-                localStorage.setItem(_userId + "_omFeed_fetched", JSON.stringify(feed));
-                let unread = 0;
-                if (omFeed?.items && omFeed?.items?.length > 0) {
-                    feed.items.forEach((item, _index) => {
-                        let exists = false;
-                        for (let i = 0; i < omFeed.items.length; i++) {
-                            if (omFeed.items[i].id == item.id) {
-                                exists = true;
-                                break;
-                            }
-                        }
-                        if (exists == false) {
-                            unread++;
-                            this.omIndex.push(_index);
-                        }
-                    });
-                } else {
-                    unread = parseInt(feed.items.length);
-                    feed.items.forEach((item, i) => {
-                        this.omIndex.push(i);
-                    });
-                }
-
-                if (unread > 0) {
-                    this.setState({
-                        unreadOm: unread,
-                    });
-                }
-            })();
-        })();
-    }
-    // Verji end
 
     private static get breadcrumbsMode(): BreadcrumbsMode {
         return !BreadcrumbsStore.instance.visible ? BreadcrumbsMode.Disabled : BreadcrumbsMode.Legacy;
@@ -250,19 +121,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         dis.fire(Action.ViewRoomDirectory);
         PosthogTrackers.trackInteraction("WebLeftPanelExploreRoomsButton", ev);
     };
-
-    //ROSBERG START
-    private onNews = () => {
-        this.setState({ unreadNews: null });
-        dis.dispatch({ action: Action.ViewNews, initialText: JSON.stringify(this.newsIndex) }, true);
-        this.newsIndex = [];
-    };
-    private onOperatingMessages = () => {
-        this.setState({ unreadOm: null });
-        dis.dispatch({ action: Action.ViewOperatingMessages, initialText: JSON.stringify(this.omIndex) }, true);
-        this.omIndex = [];
-    };
-    //ROSBERG END
 
     private refreshStickyHeaders = (): void => {
         if (!this.listContainerRef.current) return; // ignore: no headers to sticky
@@ -482,31 +340,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             );
         }
 
-        // Verij start
-        let badge;
-        let omBadge;
-        badge = (
-            <NotificationBadge
-                notification={StaticNotificationState.forSymbol(
-                    this.state.unreadNews ? this.state.unreadNews.toString() : "",
-                    this.state.unreadNews ? NotificationLevel.Highlight : NotificationLevel.None,
-                )}
-            />
-        );
-        omBadge = (
-            <NotificationBadge
-                notification={StaticNotificationState.forSymbol(
-                    this.state.unreadOm ? this.state.unreadOm.toString() : "",
-                    this.state.unreadOm ? NotificationLevel.Highlight : NotificationLevel.None,
-                )}
-            />
-        );
-
-        const classes = classNames("mx_DecoratedRoomAvatar", {
-            mx_DecoratedRoomAvatar_cutout: null,
-        });
-        // Verji end
-
         let rightButton: JSX.Element | undefined;
         if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
             rightButton = (
@@ -529,28 +362,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <RoomSearch isMinimized={this.props.isMinimized} />
 
                 {dialPadButton}
-                {/* ROSBERG START */}
-                <div className={classes}>
-                    <AccessibleButton
-                        className={classNames("mx_LeftPanel_newsButton")}
-                        onClick={this.onNews}
-                        // title={_t("News")}
-                        title="Nyheter"
-                    />
-                    {badge}
-                </div>
-                <div className={classes}>
-                    <AccessibleButton
-                        className={classNames("mx_LeftPanel_omButton")}
-                        onClick={this.onOperatingMessages}
-                        //title={_t("Operating messages")}
-                        title="Driftsmeldinger"
-                    />
-                    {omBadge}
-                </div>
-                {/* ROSBERG END */}
-
-                {/* {rightButton} //Verji */}
+                {rightButton}
             </div>
         );
     }

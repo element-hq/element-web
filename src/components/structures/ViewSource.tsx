@@ -179,11 +179,15 @@ export default class ViewSource extends React.Component<IProps, IState> {
                 {/* NOTE: Verji - Removed the Edit button as we have no use for it at the moment. */}
                 {/* {!isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
+                        <button onClick={() => this.onEdit()}>{_t("Edit")}</button>
                     </div>
                 )} */}
+
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
+                    </div>
                 {/* Verji end */}
-            </BaseDialog>
+                </BaseDialog>
         );
     }
 }
