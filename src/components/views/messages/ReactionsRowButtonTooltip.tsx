@@ -23,7 +23,7 @@ import {
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
-import { formatList } from "../../../utils/FormattingUtils";
+import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
 import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
@@ -79,7 +79,9 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                             },
                             {
                                 reactors: () => {
-                                    return <div className="mx_Tooltip_title">{formatList(senders, 6)}</div>;
+                                    return (
+                                        <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>
+                                    ); //Verji
                                 },
                                 reactedWith: (sub) => {
                                     if (!shortName) {
