@@ -128,7 +128,6 @@
         "react-focus-lock": "^2.5.1",
         "react-transition-group": "^4.4.1",
         "rfc4648": "^1.4.0",
-        "rss-parser": "^3.12.0",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.13.0",
         "tar-js": "^0.3.0",
