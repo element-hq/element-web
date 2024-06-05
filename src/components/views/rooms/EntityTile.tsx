@@ -18,12 +18,17 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import E2EIcon, { E2EState } from "./E2EIcon";
 import BaseAvatar from "../avatars/BaseAvatar";
 import PresenceLabel from "./PresenceLabel";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 export enum PowerStatus {
     Admin = "admin",
@@ -172,23 +177,28 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
 
         const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} size="36px" aria-hidden="true" />;
 
+        const CustomEntityTile = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.EntityTile, CustomEntityTile as CustomComponentOpts);
+
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
-            <div>
-                <AccessibleButton
-                    className={classNames(mainClassNames)}
-                    title={this.props.title}
-                    onClick={this.props.onClick}
-                >
-                    <div className="mx_EntityTile_avatar">
-                        {av}
-                        {e2eIcon}
-                    </div>
-                    {nameAndPresence}
-                    {powerLabel}
-                    {inviteButton}
-                </AccessibleButton>
-            </div>
+            <CustomEntityTile.CustomComponent>
+                <div>
+                    <AccessibleButton
+                        className={classNames(mainClassNames)}
+                        title={this.props.title}
+                        onClick={this.props.onClick}
+                    >
+                        <div className="mx_EntityTile_avatar">
+                            {av}
+                            {e2eIcon}
+                        </div>
+                        {nameAndPresence}
+                        {powerLabel}
+                        {inviteButton}
+                    </AccessibleButton>
+                </div>
+            </CustomEntityTile.CustomComponent>
         );
     }
 }
