@@ -57,7 +57,7 @@ jobs:
             - name: Setup mdBook
               uses: peaceiris/actions-mdbook@v2
               with:
-                  mdbook-version: "0.4.10"
+                  mdbook-version: "0.4.40"
 
             - name: Install mdbook extensions
               run: cargo install mdbook-combiner mdbook-mermaid
