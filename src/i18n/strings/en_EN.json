@@ -574,11 +574,11 @@
         "view_message": "View message",
         "warning": "Warning",
         "welcome": "Welcome",
-        "(items)s and (count)s others": {
+        "formattingresult": {
             "other": "%(items)s and %(count)s others",
             "one": "%(items)s andd one other"
         },
-        "(items)s and (lastItem)s" : "%(items)s and one other"
+        "formattingresult2" : "%(items)s og %(lastItem)s"
     },
     "composer": {
         "autocomplete": {
