@@ -471,10 +471,10 @@
         "feedback": "Feedback",
         "filter_results": "Filter results",
         "formattingresult": {
-            "other": "%(items)s and %(count)s others",
-            "one": "%(items)s andd one other"
+            "one": "%(items)s andd one other",
+            "other": "%(items)s and %(count)s others"
         },
-        "formattingresult2" : "%(items)s og %(lastItem)s",
+        "formattingresult2": "%(items)s og %(lastItem)s",
         "forward_message": "Forward message",
         "general": "General",
         "go_to_settings": "Go to Settings",
