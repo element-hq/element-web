@@ -168,9 +168,9 @@ export function formatCommaSeparatedList(items: ReactNode[], itemLimit?: number)
         }
 
         if (remaining > 0) {
-            return _t("%(items)s and %(count)s others", { items: joinedItems, count: remaining });
+            return _t("common|%(items)s and %(count)s others", { items: joinedItems, count: remaining });
         } else {
-            return _t("%(items)s and %(lastItem)s", { items: joinedItems, lastItem });
+            return _t("common|%(items)s and %(lastItem)s", { items: joinedItems, lastItem });
         }
     }
 }
