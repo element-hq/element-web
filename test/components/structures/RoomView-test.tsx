@@ -71,6 +71,8 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../src/components/views/rooms/SearchBar";
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
+import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -714,5 +716,33 @@ describe("RoomView", () => {
         jest.spyOn(dis, "dispatch");
         await mountRoomView();
         expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
+
+    describe("CustomComponent for RoomView", () => {
+        it("should wrap RoomView with a custom RoomHeader", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RoomView) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        return (
+                            <>
+                                <div data-testid="wrapper-header">Header</div>
+                                <div data-testid="wrapper-RoomView">{children}</div>
+                                <div data-testid="wrapper-footer">Footer</div>
+                            </>
+                        );
+                    };
+                }
+            });
+
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            await renderRoomView();
+
+            expect(screen.getByTestId("wrapper-header")).toBeDefined();
+            expect(screen.getByTestId("wrapper-RoomView")).toBeDefined();
+            expect(screen.getByTestId("wrapper-footer")).toBeDefined();
+            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(screen.getByTestId("wrapper-RoomView"));
+            expect(screen.getByTestId("wrapper-RoomView").nextSibling).toBe(screen.getByTestId("wrapper-footer"));
+        });
     });
 });

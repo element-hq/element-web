@@ -35,6 +35,8 @@ import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import UIStore from "../../../stores/UIStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { CustomComponentLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 interface IProps {
     userId: string;
@@ -294,11 +296,16 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
             );
         }
 
+        const CustomAppDrawer = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.AppsDrawer, CustomAppDrawer);
+
         return (
-            <div role={this.props.role} className={classes}>
-                {drawer}
-                {spinner}
-            </div>
+            <CustomAppDrawer.CustomComponent>
+                <div role={this.props.role} className={classes}>
+                    {drawer}
+                    {spinner}
+                </div>
+            </CustomAppDrawer.CustomComponent>
         );
     }
 }
