@@ -2,7 +2,7 @@ name: Deploy documentation
 
 on:
     push:
-        branches: [develop]
+        branches: [florianduros/ci/update-mdbook]
     workflow_dispatch: {}
 
 permissions:
@@ -98,18 +98,18 @@ jobs:
             - name: Build docs
               run: mdbook build
 
-            - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
-              with:
-                  path: ./book
+#            - name: Upload artifact
+#              uses: actions/upload-pages-artifact@v3
+#              with:
+#                  path: ./book
 
-    deploy:
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-latest
-        needs: build
-        steps:
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v4
+#    deploy:
+#        environment:
+#            name: github-pages
+#            url: ${{ steps.deployment.outputs.page_url }}
+#        runs-on: ubuntu-latest
+#        needs: build
+#        steps:
+#            - name: Deploy to GitHub Pages
+#              id: deployment
+#              uses: actions/deploy-pages@v4
