@@ -18,12 +18,12 @@ limitations under the License.
 */
 
 import { ReactNode } from "react";
-import { createClient, MatrixClient, SSOAction, OidcTokenRefresher } from "matrix-js-sdk/src/matrix";
+import { createClient, MatrixClient, SSOAction, OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk/src/matrix";
 import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { IMatrixClientCreds, MatrixClientPeg } from "./MatrixClientPeg";
+import { IMatrixClientCreds, MatrixClientPeg, MatrixClientPegAssignOpts } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import createMatrixClient from "./utils/createMatrixClient";
@@ -422,6 +422,7 @@ async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): 
 }
 
 type TryAgainFunction = () => void;
+
 /**
  * Display a friendly error to the user when token login or OIDC authorization fails
  * @param description error description
@@ -821,7 +822,23 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     checkSessionLock();
 
     dis.fire(Action.OnLoggedIn);
-    await startMatrixClient(client, /*startSyncing=*/ !softLogout);
+
+    const clientPegOpts: MatrixClientPegAssignOpts = {};
+    if (credentials.pickleKey) {
+        // The pickleKey, if provided, is probably a base64-encoded 256-bit key, so can be used for the crypto store.
+        if (credentials.pickleKey.length === 43) {
+            clientPegOpts.rustCryptoStoreKey = decodeBase64(credentials.pickleKey);
+        } else {
+            // We have some legacy pickle key. Continue using it as a password.
+            clientPegOpts.rustCryptoStorePassword = credentials.pickleKey;
+        }
+    }
+
+    try {
+        await startMatrixClient(client, /*startSyncing=*/ !softLogout, clientPegOpts);
+    } finally {
+        clientPegOpts.rustCryptoStoreKey?.fill(0);
+    }
 
     return client;
 }
@@ -955,11 +972,16 @@ export function isLoggingOut(): boolean {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ *
  * @param client the matrix client to start
- * @param {boolean} startSyncing True (default) to actually start
- * syncing the client.
+ * @param startSyncing - `true` to actually start syncing the client.
+ * @param clientPegOpts - Options to pass through to {@link MatrixClientPeg.start}.
  */
-async function startMatrixClient(client: MatrixClient, startSyncing = true): Promise<void> {
+async function startMatrixClient(
+    client: MatrixClient,
+    startSyncing: boolean,
+    clientPegOpts: MatrixClientPegAssignOpts,
+): Promise<void> {
     logger.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -990,10 +1012,10 @@ async function startMatrixClient(client: MatrixClient, startSyncing = true): Pro
         // index (e.g. the FilePanel), therefore initialize the event index
         // before the client.
         await EventIndexPeg.init();
-        await MatrixClientPeg.start();
+        await MatrixClientPeg.start(clientPegOpts);
     } else {
         logger.warn("Caller requested only auxiliary services be started");
-        await MatrixClientPeg.assign();
+        await MatrixClientPeg.assign(clientPegOpts);
     }
 
     checkSessionLock();

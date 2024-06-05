@@ -217,7 +217,7 @@ describe("MatrixClientPeg", () => {
                 testPeg.safeGet().store.on = emitter.on.bind(emitter);
                 const platform: any = { reload: jest.fn() };
                 PlatformPeg.set(platform);
-                await testPeg.assign();
+                await testPeg.assign({});
                 emitter.emit("closed" as any);
                 expect(platform.reload).toHaveBeenCalled();
             });
@@ -229,7 +229,7 @@ describe("MatrixClientPeg", () => {
                 PlatformPeg.set(platform);
                 testPeg.safeGet().store.on = emitter.on.bind(emitter);
                 const spy = jest.spyOn(Modal, "createDialog");
-                await testPeg.assign();
+                await testPeg.assign({});
                 emitter.emit("closed" as any);
                 expect(spy).toHaveBeenCalled();
             });
@@ -243,9 +243,10 @@ describe("MatrixClientPeg", () => {
             const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
-            await testPeg.start();
+            const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
+            await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
             expect(mockInitCrypto).not.toHaveBeenCalled();
-            expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
+            expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
 
             // we should have stashed the setting in the settings store
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
@@ -271,7 +272,7 @@ describe("MatrixClientPeg", () => {
 
             await testPeg.start();
             expect(mockInitCrypto).toHaveBeenCalled();
-            expect(mockInitRustCrypto).not.toHaveBeenCalledTimes(1);
+            expect(mockInitRustCrypto).not.toHaveBeenCalled();
 
             // we should have stashed the setting in the settings store
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, false);

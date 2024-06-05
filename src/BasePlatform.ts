@@ -38,7 +38,7 @@ import { idbLoad, idbSave, idbDelete } from "./utils/StorageAccess";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
-import { buildAndEncodePickleKey, getPickleAdditionalData } from "./utils/tokens/pickling";
+import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -378,24 +378,16 @@ export default abstract class BasePlatform {
      *     support storing pickle keys.
      */
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        if (!window.crypto || !window.crypto.subtle) {
-            return null;
-        }
-        const crypto = window.crypto;
         const randomArray = new Uint8Array(32);
         crypto.getRandomValues(randomArray);
-        const cryptoKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, false, [
-            "encrypt",
-            "decrypt",
-        ]);
-        const iv = new Uint8Array(32);
-        crypto.getRandomValues(iv);
-
-        const additionalData = getPickleAdditionalData(userId, deviceId);
-        const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray);
+        const data = await encryptPickleKey(randomArray, userId, deviceId);
+        if (data === undefined) {
+            // no crypto support
+            return null;
+        }
 
         try {
-            await idbSave("pickleKey", [userId, deviceId], { encrypted, iv, cryptoKey });
+            await idbSave("pickleKey", [userId, deviceId], data);
         } catch (e) {
             return null;
         }
