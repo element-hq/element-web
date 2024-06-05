@@ -16,6 +16,10 @@ limitations under the License.
 
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
@@ -23,6 +27,7 @@ import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
 import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -57,26 +62,35 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                     undefined;
             }
             const shortName = unicodeToShortcode(content) || customReactionName;
+
+            const customReactionButtonTooltip = { CustomComponent: React.Fragment };
+            ModuleRunner.instance.invoke(
+                CustomComponentLifecycle.ReactionsRowButtonTooltip,
+                customReactionButtonTooltip as CustomComponentOpts,
+            );
+
             tooltipLabel = (
-                <div>
-                    {_t(
-                        "timeline|reactions|tooltip",
-                        {
-                            shortName,
-                        },
-                        {
-                            reactors: () => {
-                                return <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>; //Verji
+                <customReactionButtonTooltip.CustomComponent>
+                    <div>
+                        {_t(
+                            "timeline|reactions|tooltip",
+                            {
+                                shortName,
                             },
-                            reactedWith: (sub) => {
-                                if (!shortName) {
-                                    return null;
-                                }
-                                return <div className="mx_Tooltip_sub">{sub}</div>;
+                            {
+                                reactors: () => {
+                                    return <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>; //Verji
+                                },
+                                reactedWith: (sub) => {
+                                    if (!shortName) {
+                                        return null;
+                                    }
+                                    return <div className="mx_Tooltip_sub">{sub}</div>;
+                                },
                             },
-                        },
-                    )}
-                </div>
+                        )}
+                    </div>
+                </customReactionButtonTooltip.CustomComponent>
             );
         }
 
