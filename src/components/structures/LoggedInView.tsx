@@ -217,7 +217,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     // Verji start
-    private attachFreshworksWidget(){
+    private attachFreshworksWidget(): void {
         const head = document.querySelector("head");
         const script = document.createElement("script");
         const scriptExt = document.createElement("script");
@@ -228,8 +228,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         head?.appendChild(script);
         head?.appendChild(scriptExt);
     }
-    // Vreji end
-    
+    // Verji end
 
     private onCallState = (): void => {
         const activeCalls = LegacyCallHandler.instance.getAllActiveCalls();

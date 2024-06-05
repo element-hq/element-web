@@ -328,17 +328,4 @@ describe("<UserSettingsDialog />", () => {
         expect(screen.queryByText("Sidebar")).toBeNull();
         expect(screen.queryByText("Access")).toBeNull();
     });
-    it("renders sidebar and access tab when feature is on", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
-
-        const { getByTestId } = render(getComponent());
-        expect(getByTestId(`settings-tab-${UserTab.Sidebar}`)).toBeTruthy();
-        expect(getByTestId(`settings-tab-${UserTab.Security}`)).toBeTruthy();
-    });
-    it("does not render sidebar and security/access tab when feature is off", () => {
-        render(getComponent());
-
-        expect(screen.queryByText("Sidebar")).toBeNull();
-        expect(screen.queryByText("Access")).toBeNull();
-    });
 });

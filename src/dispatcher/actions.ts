@@ -406,5 +406,3 @@ export enum Action {
     OpenInviteExternalUsersDialog = "open_invite_external_users_dialog"
     // Verji end
 }
-
-}
