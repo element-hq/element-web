@@ -95,6 +95,8 @@ jobs:
 
                   mv element-web/book.toml .
 
+            - name: debug
+              run: ls -la && cat docs/SUMMARY.md && ls element-web/docs
             - name: Build docs
               run: mdbook build
 
