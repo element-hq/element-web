@@ -15,7 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { MSC3906Rendezvous, MSC3906RendezvousPayload, RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
+import {
+    MSC3906Rendezvous,
+    MSC3906RendezvousPayload,
+    LegacyRendezvousFailureReason,
+} from "matrix-js-sdk/src/rendezvous";
 import { MSC3886SimpleHttpRendezvousTransport } from "matrix-js-sdk/src/rendezvous/transports";
 import { MSC3903ECDHPayload, MSC3903ECDHv2RendezvousChannel } from "matrix-js-sdk/src/rendezvous/channels";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -44,7 +48,7 @@ export enum LoginWithQRFailureReason {
     RateLimited = "rate_limited",
 }
 
-export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
+export type FailureReason = LegacyRendezvousFailureReason | LoginWithQRFailureReason;
 
 // n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
 // However, we want to keep this implementation around for some time.
@@ -81,7 +85,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         if (this.state.rendezvous) {
             const rendezvous = this.state.rendezvous;
             rendezvous.onFailure = undefined;
-            await rendezvous.cancel(RendezvousFailureReason.UserCancelled);
+            await rendezvous.cancel(LegacyRendezvousFailureReason.UserCancelled);
             this.setState({ rendezvous: undefined });
         }
         if (mode === Mode.Show) {
@@ -94,7 +98,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             // eslint-disable-next-line react/no-direct-mutation-state
             this.state.rendezvous.onFailure = undefined;
             // calling cancel will call close() as well to clean up the resources
-            this.state.rendezvous.cancel(RendezvousFailureReason.UserCancelled).then(() => {});
+            this.state.rendezvous.cancel(LegacyRendezvousFailureReason.UserCancelled).then(() => {});
         }
     }
 
@@ -140,7 +144,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 this.setState({ phase: Phase.Error, failureReason: LoginWithQRFailureReason.RateLimited });
                 return;
             }
-            this.setState({ phase: Phase.Error, failureReason: RendezvousFailureReason.Unknown });
+            this.setState({ phase: Phase.Error, failureReason: LegacyRendezvousFailureReason.Unknown });
         }
     };
 
@@ -170,7 +174,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             });
         } catch (e) {
             logger.error("Error whilst generating QR code", e);
-            this.setState({ phase: Phase.Error, failureReason: RendezvousFailureReason.HomeserverLacksSupport });
+            this.setState({ phase: Phase.Error, failureReason: LegacyRendezvousFailureReason.HomeserverLacksSupport });
             return;
         }
 
@@ -181,12 +185,12 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             logger.error("Error whilst doing QR login", e);
             // only set to error phase if it hasn't already been set by onFailure or similar
             if (this.state.phase !== Phase.Error) {
-                this.setState({ phase: Phase.Error, failureReason: RendezvousFailureReason.Unknown });
+                this.setState({ phase: Phase.Error, failureReason: LegacyRendezvousFailureReason.Unknown });
             }
         }
     };
 
-    private onFailure = (reason: RendezvousFailureReason): void => {
+    private onFailure = (reason: LegacyRendezvousFailureReason): void => {
         logger.info(`Rendezvous failed: ${reason}`);
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
@@ -202,7 +206,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private onClick = async (type: Click): Promise<void> => {
         switch (type) {
             case Click.Cancel:
-                await this.state.rendezvous?.cancel(RendezvousFailureReason.UserCancelled);
+                await this.state.rendezvous?.cancel(LegacyRendezvousFailureReason.UserCancelled);
                 this.reset();
                 this.props.onFinished(false);
                 break;
@@ -219,7 +223,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 await this.updateMode(this.props.mode);
                 break;
             case Click.Back:
-                await this.state.rendezvous?.cancel(RendezvousFailureReason.UserCancelled);
+                await this.state.rendezvous?.cancel(LegacyRendezvousFailureReason.UserCancelled);
                 this.props.onFinished(false);
                 break;
         }

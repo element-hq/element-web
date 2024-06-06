@@ -16,7 +16,7 @@ limitations under the License.
 
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
-import { RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
+import { LegacyRendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
 
 import LoginWithQRFlow from "../../../../../src/components/views/auth/LoginWithQRFlow";
 import { LoginWithQRFailureReason, FailureReason } from "../../../../../src/components/views/auth/LoginWithQR";
@@ -99,7 +99,7 @@ describe("<LoginWithQRFlow />", () => {
 
     describe("errors", () => {
         for (const failureReason of [
-            ...Object.values(RendezvousFailureReason),
+            ...Object.values(LegacyRendezvousFailureReason),
             ...Object.values(LoginWithQRFailureReason),
         ]) {
             it(`renders ${failureReason}`, async () => {
