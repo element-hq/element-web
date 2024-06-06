@@ -159,7 +159,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
         // show searching spinner
-        if (results?.count === undefined) {
+        if (results === null) {
             return (
                 <div
                     className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner"

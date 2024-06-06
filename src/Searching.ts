@@ -248,7 +248,7 @@ async function localPagination(
 
     // We only need to restore the encryption state for the new results, so
     // remember how many of them we got.
-    const newResultCount = localResult.results.length;
+    const newResultCount = localResult.results?.length ?? 0;
 
     const response = {
         search_categories: {
@@ -419,21 +419,21 @@ function combineEvents(
         // This is a first search call, combine the events from the server and
         // the local index. Note where our oldest event came from, we shall
         // fetch the next batch of events from the other source.
-        if (compareOldestEvents(localEvents.results, serverEvents.results) < 0) {
+        if (compareOldestEvents(localEvents.results ?? [], serverEvents.results) < 0) {
             oldestEventFrom = "local";
         }
 
-        combineEventSources(previousSearchResult, response, localEvents.results, serverEvents.results);
-        response.highlights = localEvents.highlights.concat(serverEvents.highlights);
+        combineEventSources(previousSearchResult, response, localEvents.results ?? [], serverEvents.results);
+        response.highlights = (localEvents.highlights ?? []).concat(serverEvents.highlights ?? []);
     } else if (localEvents) {
         // This is a pagination call fetching more events from the local index,
         // meaning that our oldest event was on the server.
         // Change the source of the oldest event if our local event is older
         // than the cached one.
-        if (compareOldestEvents(localEvents.results, cachedEvents) < 0) {
+        if (compareOldestEvents(localEvents.results ?? [], cachedEvents) < 0) {
             oldestEventFrom = "local";
         }
-        combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
+        combineEventSources(previousSearchResult, response, localEvents.results ?? [], cachedEvents);
     } else if (serverEvents && serverEvents.results) {
         // This is a pagination call fetching more events from the server,
         // meaning that our oldest event was in the local index.
