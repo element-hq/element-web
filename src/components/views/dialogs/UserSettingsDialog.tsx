@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Toast } from "@vector-im/compound-web";
 import React, { useState } from "react";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
@@ -38,6 +39,7 @@ import { UserTab } from "./UserTab";
 import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -215,27 +217,34 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         setShowMsc4108QrCode(false);
     };
 
+    const [activeToast, toastRack] = useActiveToast();
+
     return (
         // XXX: SDKContext is provided within the LoggedInView subtree.
         // Modals function outside the MatrixChat React tree, so sdkContext is reprovided here to simulate that.
         // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
         <SDKContext.Provider value={props.sdkContext}>
-            <BaseDialog
-                className="mx_UserSettingsDialog"
-                hasCancel={true}
-                onFinished={props.onFinished}
-                title={titleForTabID(activeTabId)}
-            >
-                <div className="mx_SettingsDialog_content">
-                    <TabbedView
-                        tabs={getTabs()}
-                        activeTabId={activeTabId}
-                        screenName="UserSettings"
-                        onChange={setActiveTabId}
-                        responsive={true}
-                    />
-                </div>
-            </BaseDialog>
+            <ToastContext.Provider value={toastRack}>
+                <BaseDialog
+                    className="mx_UserSettingsDialog"
+                    hasCancel={true}
+                    onFinished={props.onFinished}
+                    title={titleForTabID(activeTabId)}
+                >
+                    <div className="mx_SettingsDialog_content">
+                        <TabbedView
+                            tabs={getTabs()}
+                            activeTabId={activeTabId}
+                            screenName="UserSettings"
+                            onChange={setActiveTabId}
+                            responsive={true}
+                        />
+                    </div>
+                    <div className="mx_SettingsDialog_toastContainer">
+                        {activeToast && <Toast>{activeToast}</Toast>}
+                    </div>
+                </BaseDialog>
+            </ToastContext.Provider>
         </SDKContext.Provider>
     );
 }

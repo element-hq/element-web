@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { Icon as WarningIcon } from "../../../../../../res/img/feather-customised/warning-triangle.svg";
 import { UserFriendlyError, _t } from "../../../../../languageHandler";
-import ProfileSettings from "../../ProfileSettings";
+import UserProfileSettings from "../../UserProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
@@ -561,7 +561,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <SettingsTab data-testid="mx_GeneralUserSettingsTab">
                 <SettingsSection>
-                    <ProfileSettings />
+                    <UserProfileSettings />
                     {this.renderAccountSection()}
                     {this.renderLanguageSection()}
                     {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}

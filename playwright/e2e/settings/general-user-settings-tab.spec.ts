@@ -21,8 +21,6 @@ const USER_NAME_NEW = "Alice";
 const IntegrationManager = "scalar.vector.im";
 
 test.describe("General user settings tab", () => {
-    let userId: string;
-
     test.use({
         displayName: USER_NAME,
         config: {
@@ -34,18 +32,18 @@ test.describe("General user settings tab", () => {
         },
     });
 
-    test("should be rendered properly", async ({ uut }) => {
+    test("should be rendered properly", async ({ uut, user }) => {
         await expect(uut).toMatchScreenshot("general.png");
 
         // Assert that the top heading is rendered
         await expect(uut.getByRole("heading", { name: "General" })).toBeVisible();
 
-        const profile = uut.locator(".mx_ProfileSettings_profile");
+        const profile = uut.locator(".mx_UserProfileSettings_profile");
         await profile.scrollIntoViewIfNeeded();
         await expect(profile.getByRole("textbox", { name: "Display Name" })).toHaveValue(USER_NAME);
 
         // Assert that a userId is rendered
-        await expect(profile.locator(".mx_ProfileSettings_profile_controls_userId", { hasText: userId })).toBeVisible();
+        expect(uut.getByLabel("Username")).toHaveText(user.userId);
 
         // Check avatar setting
         const avatar = profile.locator(".mx_AvatarSetting_avatar");
@@ -131,12 +129,15 @@ test.describe("General user settings tab", () => {
     });
 
     test("should support adding and removing a profile picture", async ({ uut }) => {
-        const profileSettings = uut.locator(".mx_ProfileSettings");
+        const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
         await profileSettings.getByAltText("Upload").setInputFiles("playwright/sample-files/riot.png");
 
         // Find and click "Remove" link button
-        await profileSettings.locator(".mx_ProfileSettings_profile").getByRole("button", { name: "Remove" }).click();
+        await profileSettings
+            .locator(".mx_UserProfileSettings_profile")
+            .getByRole("button", { name: "Remove" })
+            .click();
 
         // Assert that the link button disappeared
         await expect(
@@ -175,7 +176,7 @@ test.describe("General user settings tab", () => {
     test("should support changing a display name", async ({ uut, page, app }) => {
         // Change the diaplay name to USER_NAME_NEW
         const displayNameInput = uut
-            .locator(".mx_SettingsTab .mx_ProfileSettings")
+            .locator(".mx_SettingsTab .mx_UserProfileSettings")
             .getByRole("textbox", { name: "Display Name" });
         await displayNameInput.fill(USER_NAME_NEW);
         await displayNameInput.press("Enter");

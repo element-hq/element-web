@@ -22,14 +22,14 @@ import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
 
-interface IProps {
+interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
     getTextToCopy: () => string | null;
     border?: boolean;
     className?: string;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className }) => {
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className, ...props }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
@@ -50,7 +50,7 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     });
 
     return (
-        <div className={combinedClassName}>
+        <div className={combinedClassName} {...props}>
             {children}
             <AccessibleButton
                 title={tooltip ?? _t("action|copy")}
