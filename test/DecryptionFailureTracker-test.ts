@@ -52,6 +52,7 @@ describe("DecryptionFailureTracker", function () {
         const tracker = new DecryptionFailureTracker(
             () => count++,
             () => "UnknownError",
+            false,
         );
 
         tracker.addVisibleEvent(failedDecryptionEvent);
@@ -78,6 +79,7 @@ describe("DecryptionFailureTracker", function () {
                 reportedRawCode = rawCode;
             },
             () => "UnknownError",
+            false,
         );
 
         tracker.addVisibleEvent(failedDecryptionEvent);
@@ -101,6 +103,7 @@ describe("DecryptionFailureTracker", function () {
         const tracker = new DecryptionFailureTracker(
             () => count++,
             () => "UnknownError",
+            false,
         );
 
         eventDecrypted(tracker, failedDecryptionEvent, Date.now());
@@ -121,6 +124,7 @@ describe("DecryptionFailureTracker", function () {
                 propertiesByErrorCode[errorCode] = properties;
             },
             (error: string) => error,
+            false,
         );
 
         // use three different errors so that we can distinguish the reports
@@ -161,6 +165,7 @@ describe("DecryptionFailureTracker", function () {
                 expect(true).toBe(false);
             },
             () => "UnknownError",
+            false,
         );
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -189,6 +194,7 @@ describe("DecryptionFailureTracker", function () {
                     expect(true).toBe(false);
                 },
                 () => "UnknownError",
+                false,
             );
 
             eventDecrypted(tracker, decryptedEvent, Date.now());
@@ -216,6 +222,7 @@ describe("DecryptionFailureTracker", function () {
         const tracker = new DecryptionFailureTracker(
             () => count++,
             () => "UnknownError",
+            false,
         );
 
         tracker.addVisibleEvent(decryptedEvent);
@@ -379,6 +386,7 @@ describe("DecryptionFailureTracker", function () {
             (errorCode: string) => (counts[errorCode] = (counts[errorCode] || 0) + 1),
             (error: DecryptionFailureCode) =>
                 error === DecryptionFailureCode.UNKNOWN_ERROR ? "UnknownError" : "OlmKeysNotSentError",
+            false,
         );
 
         const decryptedEvent1 = await createFailedDecryptionEvent({
@@ -416,6 +424,7 @@ describe("DecryptionFailureTracker", function () {
         const tracker = new DecryptionFailureTracker(
             (errorCode: string) => (counts[errorCode] = (counts[errorCode] || 0) + 1),
             (_errorCode: string) => "OlmUnspecifiedError",
+            false,
         );
 
         const decryptedEvent1 = await createFailedDecryptionEvent({
@@ -450,6 +459,7 @@ describe("DecryptionFailureTracker", function () {
         const tracker = new DecryptionFailureTracker(
             (errorCode: string) => (counts[errorCode] = (counts[errorCode] || 0) + 1),
             (errorCode: string) => Array.from(errorCode).reverse().join(""),
+            false,
         );
 
         const decryptedEvent = await createFailedDecryptionEvent({
@@ -475,6 +485,7 @@ describe("DecryptionFailureTracker", function () {
             },
             // @ts-ignore access to private member
             DecryptionFailureTracker.instance.errorCodeMapFn,
+            false,
         );
 
         const now = Date.now();
@@ -543,6 +554,7 @@ describe("DecryptionFailureTracker", function () {
                 propertiesByErrorCode[errorCode] = properties;
             },
             (error: string) => error,
+            false,
         );
 
         // use three different errors so that we can distinguish the reports
@@ -597,6 +609,7 @@ describe("DecryptionFailureTracker", function () {
                 errorCount++;
             },
             (error: string) => error,
+            false,
         );
 
         // Calling .start will start some intervals.  This test shouldn't run
@@ -638,6 +651,7 @@ describe("DecryptionFailureTracker", function () {
                 propertiesByErrorCode[errorCode] = properties;
             },
             (error: string) => error,
+            false,
         );
 
         // @ts-ignore access to private method
@@ -710,6 +724,7 @@ describe("DecryptionFailureTracker", function () {
                 failure = properties;
             },
             () => "UnknownError",
+            false,
         );
 
         tracker.addVisibleEvent(failedDecryptionEvent);

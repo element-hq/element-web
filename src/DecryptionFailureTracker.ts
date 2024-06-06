@@ -158,10 +158,16 @@ export class DecryptionFailureTracker {
      *
      * @param {function} errorCodeMapFn The function used to map decryption failure reason  codes to the
      * `trackedErrorCode`.
+     *
+     * @param {boolean} checkReportedEvents Check if we have already reported an event.
+     * Defaults to `true`. This is only used for tests, to avoid possible false positives from
+     * the Bloom filter. This should be set to `false` for all tests except for those
+     * that specifically test the `reportedEvents` functionality.
      */
     private constructor(
         private readonly fn: TrackingFn,
         private readonly errorCodeMapFn: ErrCodeMapFn,
+        private readonly checkReportedEvents: boolean = true,
     ) {
         if (!fn || typeof fn !== "function") {
             throw new Error("DecryptionFailureTracker requires tracking function");
@@ -214,7 +220,7 @@ export class DecryptionFailureTracker {
         const eventId = e.getId()!;
 
         // if it's already reported, we don't need to do anything
-        if (this.reportedEvents.has(eventId)) {
+        if (this.reportedEvents.has(eventId) && this.checkReportedEvents) {
             return;
         }
 
@@ -240,7 +246,7 @@ export class DecryptionFailureTracker {
         const eventId = e.getId()!;
 
         // if it's already reported, we don't need to do anything
-        if (this.reportedEvents.has(eventId)) {
+        if (this.reportedEvents.has(eventId) && this.checkReportedEvents) {
             return;
         }
 
