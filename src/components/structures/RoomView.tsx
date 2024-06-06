@@ -125,7 +125,6 @@ import { SDKContext } from "../../contexts/SDKContext";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -138,6 +137,9 @@ import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoi
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import { ModuleRunner } from "../../modules/ModuleRunner";
+// import eventSearch from "../../Searching";
+import searchAllEventsLocally from "../../VerjiLocalSearch"; // VERJI
+import eventSearch from "../../Searching";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -319,30 +321,33 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
             />
         );
     }
-
+    const customRoomHeaderOpts = { CustomComponent: React.Fragment };
+    ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomHeader, customRoomHeaderOpts as CustomComponentOpts);
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
-                {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                    <RoomHeader room={room} />
-                ) : (
-                    <LegacyRoomHeader
-                        room={context.room}
-                        searchInfo={undefined}
-                        inRoom={true}
-                        onSearchClick={null}
-                        onInviteClick={null}
-                        onForgetClick={null}
-                        e2eStatus={room.encrypted ? E2EStatus.Normal : undefined}
-                        onAppsClick={null}
-                        appsShown={false}
-                        excludedRightPanelPhaseButtons={[]}
-                        showButtons={false}
-                        enableRoomOptionsMenu={false}
-                        viewingCall={false}
-                        activeCall={null}
-                    />
-                )}
+                <customRoomHeaderOpts.CustomComponent>
+                    {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                        <RoomHeader room={room} />
+                    ) : (
+                        <LegacyRoomHeader
+                            room={context.room}
+                            searchInfo={undefined}
+                            inRoom={true}
+                            onSearchClick={null}
+                            onInviteClick={null}
+                            onForgetClick={null}
+                            e2eStatus={room.encrypted ? E2EStatus.Normal : undefined}
+                            onAppsClick={null}
+                            appsShown={false}
+                            excludedRightPanelPhaseButtons={[]}
+                            showButtons={false}
+                            enableRoomOptionsMenu={false}
+                            viewingCall={false}
+                            activeCall={null}
+                        />
+                    )}
+                </customRoomHeaderOpts.CustomComponent>
                 <main className="mx_RoomView_body" ref={props.roomView}>
                     <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} />
                     <div className="mx_RoomView_timeline">
@@ -373,29 +378,33 @@ interface ILocalRoomCreateLoaderProps {
  */
 function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
     const text = _t("room|creating_room_text", { names: props.names });
+    const customRoomHeaderOpts = { CustomComponent: React.Fragment };
+    ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomHeader, customRoomHeaderOpts as CustomComponentOpts);
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
-                {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                    <RoomHeader room={props.localRoom} />
-                ) : (
-                    <LegacyRoomHeader
-                        room={props.localRoom}
-                        searchInfo={undefined}
-                        inRoom={true}
-                        onSearchClick={null}
-                        onInviteClick={null}
-                        onForgetClick={null}
-                        e2eStatus={props.localRoom.encrypted ? E2EStatus.Normal : undefined}
-                        onAppsClick={null}
-                        appsShown={false}
-                        excludedRightPanelPhaseButtons={[]}
-                        showButtons={false}
-                        enableRoomOptionsMenu={false}
-                        viewingCall={false}
-                        activeCall={null}
-                    />
-                )}
+                <customRoomHeaderOpts.CustomComponent>
+                    {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                        <RoomHeader room={props.localRoom} />
+                    ) : (
+                        <LegacyRoomHeader
+                            room={props.localRoom}
+                            searchInfo={undefined}
+                            inRoom={true}
+                            onSearchClick={null}
+                            onInviteClick={null}
+                            onForgetClick={null}
+                            e2eStatus={props.localRoom.encrypted ? E2EStatus.Normal : undefined}
+                            onAppsClick={null}
+                            appsShown={false}
+                            excludedRightPanelPhaseButtons={[]}
+                            showButtons={false}
+                            enableRoomOptionsMenu={false}
+                            viewingCall={false}
+                            activeCall={null}
+                        />
+                    )}
+                </customRoomHeaderOpts.CustomComponent>
                 <div className="mx_RoomView_body">
                     <LargeLoader text={text} />
                 </div>
@@ -1727,7 +1736,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+
+        // VERJI START
+        let promise: Promise<ISearchResults>;
+        // currently, we use the local search for all events. edit this 'if' statement to change that.
+        if (scope === SearchScope.Room || scope === SearchScope.All) {
+            promise = searchAllEventsLocally(this.context.client!, term, roomId);
+        } else {
+            promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        }
+        // VERJI END
 
         this.setState({
             search: {
@@ -2520,6 +2538,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const showChatEffects = SettingsStore.getValue("showChatEffects");
 
+        const customAppsDrawerOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.AppsDrawer, customAppsDrawerOpts as CustomComponentOpts);
+
         let mainSplitBody: JSX.Element | undefined;
         let mainSplitContentClassName: string | undefined;
         // Decide what to show in the main split
@@ -2549,13 +2570,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 mainSplitContentClassName = "mx_MainSplit_maximisedWidget";
                 mainSplitBody = (
                     <>
-                        <AppsDrawer
-                            room={this.state.room}
-                            userId={this.context.client.getSafeUserId()}
-                            resizeNotifier={this.props.resizeNotifier}
-                            showApps={true}
-                            role="main"
-                        />
+                        <customAppsDrawerOpts.CustomComponent>
+                            <AppsDrawer
+                                room={this.state.room}
+                                userId={this.context.client.getSafeUserId()}
+                                resizeNotifier={this.props.resizeNotifier}
+                                showApps={true}
+                                role="main"
+                            />
+                        </customAppsDrawerOpts.CustomComponent>
                         {previewBar}
                     </>
                 );
@@ -2612,6 +2635,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const CustomRoomView = { CustomComponent: React.Fragment };
         ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomView, CustomRoomView as CustomComponentOpts);
+        const customRoomHeaderOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomHeader, customRoomHeaderOpts as CustomComponentOpts);
         return (
             <CustomRoomView.CustomComponent>
                 <RoomContext.Provider value={this.state}>
@@ -2638,31 +2663,33 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                     ref={this.roomViewBody}
                                     data-layout={this.state.layout}
                                 >
-                                    {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                                        <RoomHeader
-                                            room={this.state.room}
-                                            additionalButtons={this.state.viewRoomOpts.buttons}
-                                        />
-                                    ) : (
-                                        <LegacyRoomHeader
-                                            room={this.state.room}
-                                            searchInfo={this.state.search}
-                                            oobData={this.props.oobData}
-                                            inRoom={myMembership === KnownMembership.Join}
-                                            onSearchClick={onSearchClick}
-                                            onInviteClick={onInviteClick}
-                                            onForgetClick={showForgetButton ? onForgetClick : null}
-                                            e2eStatus={this.state.e2eStatus}
-                                            onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
-                                            appsShown={this.state.showApps}
-                                            excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
-                                            showButtons={!this.viewsLocalRoom}
-                                            enableRoomOptionsMenu={!this.viewsLocalRoom}
-                                            viewingCall={viewingCall}
-                                            activeCall={this.state.activeCall}
-                                            additionalButtons={this.state.viewRoomOpts.buttons}
-                                        />
-                                    )}
+                                    <customRoomHeaderOpts.CustomComponent>
+                                        {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                                            <RoomHeader
+                                                room={this.state.room}
+                                                additionalButtons={this.state.viewRoomOpts.buttons}
+                                            />
+                                        ) : (
+                                            <LegacyRoomHeader
+                                                room={this.state.room}
+                                                searchInfo={this.state.search}
+                                                oobData={this.props.oobData}
+                                                inRoom={myMembership === KnownMembership.Join}
+                                                onSearchClick={onSearchClick}
+                                                onInviteClick={onInviteClick}
+                                                onForgetClick={showForgetButton ? onForgetClick : null}
+                                                e2eStatus={this.state.e2eStatus}
+                                                onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
+                                                appsShown={this.state.showApps}
+                                                excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
+                                                showButtons={!this.viewsLocalRoom}
+                                                enableRoomOptionsMenu={!this.viewsLocalRoom}
+                                                viewingCall={viewingCall}
+                                                activeCall={this.state.activeCall}
+                                                additionalButtons={this.state.viewRoomOpts.buttons}
+                                            />
+                                        )}
+                                    </customRoomHeaderOpts.CustomComponent>
                                     {mainSplitBody}
                                 </div>
                             </MainSplit>
