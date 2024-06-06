@@ -20,6 +20,10 @@ import classNames from "classnames";
 import { Resizable, Size } from "re-resizable";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { IWidget } from "matrix-widget-api";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
@@ -36,7 +40,6 @@ import UIStore from "../../../stores/UIStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { CustomComponentLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 interface IProps {
     userId: string;
@@ -297,7 +300,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         }
 
         const CustomAppDrawer = { CustomComponent: React.Fragment };
-        ModuleRunner.instance.invoke(CustomComponentLifecycle.AppsDrawer, CustomAppDrawer);
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.AppsDrawer, CustomAppDrawer as CustomComponentOpts);
 
         return (
             <CustomAppDrawer.CustomComponent>
