@@ -758,7 +758,7 @@ describe("RoomView", () => {
         });
     });
 
-    describe.only("CustomComponentLifecycle.RoomView", () => {
+    describe("CustomComponentLifecycle.RoomView", () => {
         it("should wrap RoomView with a custom RoomHeader", async () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
                 if (lifecycleEvent === CustomComponentLifecycle.RoomView) {
