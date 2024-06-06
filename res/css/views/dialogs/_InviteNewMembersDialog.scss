@@ -72,8 +72,6 @@
     }
 }
 
-
-
 .vmx_invite_external_user_field {
     flex: 1 1 0;
     /* min-width: 300px;     */
@@ -83,7 +81,7 @@
 
 @media (max-width: 960px) {
     .vmx_invite_external_user_field {
-    flex-basis: 100%;
+        flex-basis: 100%;
     }
 }
 
@@ -104,10 +102,9 @@
 }
 
 .vmx_input_readonly {
-    background-color: var(--quinary-content, #6F7882);
-    color: var(--primary-content, #FFFFFF);
+    background-color: var(--quinary-content, #6f7882);
+    color: var(--primary-content, #ffffff);
 }
-
 
 .vmx_dialog_footer {
     display: flex;
