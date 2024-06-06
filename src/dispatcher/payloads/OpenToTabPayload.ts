@@ -24,4 +24,9 @@ export interface OpenToTabPayload extends ActionPayload {
      * The tab ID to open in the settings view to start, if possible.
      */
     initialTabId?: string;
+
+    /**
+     * Additional properties to pass to the settings view.
+     */
+    props?: Record<string, any>;
 }

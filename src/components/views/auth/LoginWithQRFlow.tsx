@@ -14,12 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
-import { LegacyRendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
+import React, { createRef, ReactNode } from "react";
+import {
+    ClientRendezvousFailureReason,
+    LegacyRendezvousFailureReason,
+    MSC4108FailureReason,
+} from "matrix-js-sdk/src/rendezvous";
 import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
 import { Icon as CheckCircleSolidIcon } from "@vector-im/compound-design-tokens/icons/check-circle-solid.svg";
 import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
-import { Heading, Text } from "@vector-im/compound-web";
+import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
@@ -30,13 +34,24 @@ import { Icon as InfoIcon } from "../../../../res/img/element-icons/i.svg";
 import { Click, Phase } from "./LoginWithQR-types";
 import SdkConfig from "../../../SdkConfig";
 import { FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
+import { XOR } from "../../../@types/common";
+import { ErrorMessage } from "../../structures/ErrorMessage";
+
+/**
+ * @deprecated the MSC3906 implementation is deprecated in favour of MSC4108.
+ */
+interface MSC3906Props extends Pick<Props, "phase" | "onClick" | "failureReason"> {
+    code?: string;
+    confirmationDigits?: string;
+}
 
 interface Props {
     phase: Phase;
-    code?: string;
-    onClick(type: Click): Promise<void>;
+    code?: Uint8Array;
+    onClick(type: Click, checkCodeEntered?: string): Promise<void>;
     failureReason?: FailureReason;
-    confirmationDigits?: string;
+    userCode?: string;
+    checkCode?: string;
 }
 
 // n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
@@ -46,17 +61,19 @@ interface Props {
 /**
  * A component that implements the UI for sign in and E2EE set up with a QR code.
  *
- * This uses the unstable feature of MSC3906: https://github.com/matrix-org/matrix-spec-proposals/pull/3906
+ * This supports the unstable features of MSC3906 and MSC4108
  */
-export default class LoginWithQRFlow extends React.Component<Props> {
-    public constructor(props: Props) {
+export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906Props>> {
+    private checkCodeInput = createRef<HTMLInputElement>();
+
+    public constructor(props: XOR<Props, MSC3906Props>) {
         super(props);
     }
 
     private handleClick = (type: Click): ((e: React.FormEvent) => Promise<void>) => {
         return async (e: React.FormEvent): Promise<void> => {
             e.preventDefault();
-            await this.props.onClick(type);
+            await this.props.onClick(type, type === Click.Approve ? this.checkCodeInput.current?.value : undefined);
         };
     };
 
@@ -90,24 +107,26 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 let message: ReactNode | undefined;
 
                 switch (this.props.failureReason) {
-                    case LegacyRendezvousFailureReason.UnsupportedAlgorithm:
-                    case LegacyRendezvousFailureReason.UnsupportedTransport:
-                    case LegacyRendezvousFailureReason.HomeserverLacksSupport:
+                    case MSC4108FailureReason.UnsupportedProtocol:
+                    case LegacyRendezvousFailureReason.UnsupportedProtocol:
                         title = _t("auth|qr_code_login|error_unsupported_protocol_title");
                         message = _t("auth|qr_code_login|error_unsupported_protocol");
                         break;
 
+                    case MSC4108FailureReason.UserCancelled:
                     case LegacyRendezvousFailureReason.UserCancelled:
                         title = _t("auth|qr_code_login|error_user_cancelled_title");
                         message = _t("auth|qr_code_login|error_user_cancelled");
                         break;
 
+                    case MSC4108FailureReason.AuthorizationExpired:
+                    case ClientRendezvousFailureReason.Expired:
                     case LegacyRendezvousFailureReason.Expired:
                         title = _t("auth|qr_code_login|error_expired_title");
                         message = _t("auth|qr_code_login|error_expired");
                         break;
 
-                    case LegacyRendezvousFailureReason.InvalidCode:
+                    case ClientRendezvousFailureReason.InsecureChannelDetected:
                         title = _t("auth|qr_code_login|error_insecure_channel_detected_title");
                         message = (
                             <>
@@ -125,13 +144,13 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         );
                         break;
 
-                    case LegacyRendezvousFailureReason.OtherDeviceAlreadySignedIn:
+                    case ClientRendezvousFailureReason.OtherDeviceAlreadySignedIn:
                         success = true;
                         title = _t("auth|qr_code_login|error_other_device_already_signed_in_title");
                         message = _t("auth|qr_code_login|error_other_device_already_signed_in");
                         break;
 
-                    case LegacyRendezvousFailureReason.UserDeclined:
+                    case ClientRendezvousFailureReason.UserDeclined:
                         title = _t("auth|qr_code_login|error_user_declined_title");
                         message = _t("auth|qr_code_login|error_user_declined");
                         break;
@@ -141,8 +160,16 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         message = _t("auth|qr_code_login|error_rate_limited");
                         break;
 
-                    case LegacyRendezvousFailureReason.OtherDeviceNotSignedIn:
-                    case LegacyRendezvousFailureReason.Unknown:
+                    case ClientRendezvousFailureReason.ETagMissing:
+                        title = _t("error|something_went_wrong");
+                        message = _t("auth|qr_code_login|error_etag_missing");
+                        break;
+
+                    case MSC4108FailureReason.DeviceAlreadyExists:
+                    case MSC4108FailureReason.DeviceNotFound:
+                    case MSC4108FailureReason.UnexpectedMessageReceived:
+                    case ClientRendezvousFailureReason.OtherDeviceNotSignedIn:
+                    case ClientRendezvousFailureReason.Unknown:
                     default:
                         title = _t("error|something_went_wrong");
                         message = _t("auth|qr_code_login|error_unexpected");
@@ -150,18 +177,6 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 }
                 className = "mx_LoginWithQR_error";
                 backButton = false;
-                buttons = (
-                    <>
-                        <AccessibleButton
-                            data-testid="try-again-button"
-                            kind="primary"
-                            onClick={this.handleClick(Click.TryAgain)}
-                        >
-                            {_t("action|try_again")}
-                        </AccessibleButton>
-                        {this.cancelButton()}
-                    </>
-                );
                 main = (
                     <>
                         <div
@@ -179,7 +194,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 );
                 break;
             }
-            case Phase.Connected:
+            case Phase.LegacyConnected:
                 backButton = false;
                 main = (
                     <>
@@ -213,9 +228,62 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                     </>
                 );
                 break;
+            case Phase.OutOfBandConfirmation:
+                backButton = false;
+                main = (
+                    <>
+                        <Heading as="h1" size="sm" weight="semibold">
+                            {_t("auth|qr_code_login|check_code_heading")}
+                        </Heading>
+                        <Text size="md">{_t("auth|qr_code_login|check_code_explainer")}</Text>
+                        <label htmlFor="mx_LoginWithQR_checkCode">
+                            {_t("auth|qr_code_login|check_code_input_label")}
+                        </label>
+                        <MFAInput
+                            className="mx_LoginWithQR_checkCode_input mx_no_textinput"
+                            ref={this.checkCodeInput}
+                            length={2}
+                            autoFocus
+                            id="mx_LoginWithQR_checkCode"
+                            data-invalid={
+                                this.props.failureReason === LoginWithQRFailureReason.CheckCodeMismatch
+                                    ? true
+                                    : undefined
+                            }
+                        />
+                        <ErrorMessage
+                            message={
+                                this.props.failureReason === LoginWithQRFailureReason.CheckCodeMismatch
+                                    ? _t("auth|qr_code_login|check_code_mismatch")
+                                    : null
+                            }
+                        />
+                    </>
+                );
+
+                buttons = (
+                    <>
+                        <AccessibleButton
+                            data-testid="approve-login-button"
+                            kind="primary"
+                            onClick={this.handleClick(Click.Approve)}
+                        >
+                            {_t("action|continue")}
+                        </AccessibleButton>
+                        <AccessibleButton
+                            data-testid="decline-login-button"
+                            kind="primary_outline"
+                            onClick={this.handleClick(Click.Decline)}
+                        >
+                            {_t("action|cancel")}
+                        </AccessibleButton>
+                    </>
+                );
+                break;
             case Phase.ShowingQR:
                 if (this.props.code) {
-                    const data = Buffer.from(this.props.code ?? "");
+                    const data =
+                        typeof this.props.code !== "string" ? this.props.code : Buffer.from(this.props.code ?? "");
 
                     main = (
                         <>
@@ -249,12 +317,19 @@ export default class LoginWithQRFlow extends React.Component<Props> {
             case Phase.Loading:
                 main = this.simpleSpinner();
                 break;
-            case Phase.Connecting:
-                main = this.simpleSpinner(_t("auth|qr_code_login|connecting"));
-                buttons = this.cancelButton();
-                break;
             case Phase.WaitingForDevice:
-                main = this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"));
+                main = (
+                    <>
+                        {this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"))}
+                        {this.props.userCode ? (
+                            <div>
+                                <p>{_t("auth|qr_code_login|security_code")}</p>
+                                <p>{_t("auth|qr_code_login|security_code_prompt")}</p>
+                                <p>{this.props.userCode}</p>
+                            </div>
+                        ) : null}
+                    </>
+                );
                 buttons = this.cancelButton();
                 break;
             case Phase.Verifying:

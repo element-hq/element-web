@@ -764,7 +764,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const tabPayload = payload as OpenToTabPayload;
                 Modal.createDialog(
                     UserSettingsDialog,
-                    { initialTabId: tabPayload.initialTabId as UserTab, sdkContext: this.stores },
+                    { ...payload.props, initialTabId: tabPayload.initialTabId as UserTab, sdkContext: this.stores },
                     /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,

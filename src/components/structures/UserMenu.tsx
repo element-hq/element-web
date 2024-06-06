@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef, ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { discoverAndValidateOIDCIssuerWellKnown, Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -52,6 +52,8 @@ import { Icon as LiveIcon } from "../../../res/img/compound/live-8px.svg";
 import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStoreEvent } from "../../voice-broadcast";
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
+import { shouldShowQr } from "../views/settings/devices/LoginWithQRSection";
+import { Features } from "../../settings/Settings";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -66,6 +68,8 @@ interface IState {
     isHighContrast: boolean;
     selectedSpace?: Room | null;
     showLiveAvatarAddon: boolean;
+    showQrLogin: boolean;
+    supportsQrLogin: boolean;
 }
 
 const toRightOf = (rect: PartialDOMRect): MenuProps => {
@@ -103,6 +107,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
             isHighContrast: this.isUserOnHighContrastTheme(),
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
             showLiveAvatarAddon: this.context.voiceBroadcastRecordingsStore.hasCurrent(),
+            showQrLogin: false,
+            supportsQrLogin: false,
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -126,6 +132,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         );
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
+        this.checkQrLoginSupport();
     }
 
     public componentWillUnmount(): void {
@@ -139,6 +146,29 @@ export default class UserMenu extends React.Component<IProps, IState> {
             this.onCurrentVoiceBroadcastRecordingChanged,
         );
     }
+
+    private checkQrLoginSupport = async (): Promise<void> => {
+        if (!this.context.client || !SettingsStore.getValue(Features.OidcNativeFlow)) return;
+
+        const { issuer } = await this.context.client.getAuthIssuer().catch(() => ({ issuer: undefined }));
+        if (issuer) {
+            const [oidcClientConfig, versions, wellKnown, isCrossSigningReady] = await Promise.all([
+                discoverAndValidateOIDCIssuerWellKnown(issuer),
+                this.context.client.getVersions(),
+                this.context.client.waitForClientWellKnown(),
+                this.context.client.getCrypto()?.isCrossSigningReady(),
+            ]);
+
+            const supportsQrLogin = shouldShowQr(
+                this.context.client,
+                !!isCrossSigningReady,
+                oidcClientConfig,
+                versions,
+                wellKnown,
+            );
+            this.setState({ supportsQrLogin, showQrLogin: true });
+        }
+    };
 
     private isUserOnDarkTheme(): boolean {
         if (SettingsStore.getValue("use_system_theme")) {
@@ -237,11 +267,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
-    private onSettingsOpen = (ev: ButtonEvent, tabId?: string): void => {
+    private onSettingsOpen = (ev: ButtonEvent, tabId?: string, props?: Record<string, any>): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        const payload: OpenToTabPayload = { action: Action.ViewUserSettings, initialTabId: tabId };
+        const payload: OpenToTabPayload = { action: Action.ViewUserSettings, initialTabId: tabId, props };
         defaultDispatcher.dispatch(payload);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
@@ -363,9 +393,33 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
+        let linkNewDeviceButton: JSX.Element | undefined;
+        if (this.state.showQrLogin) {
+            const extraProps: Omit<
+                React.ComponentProps<typeof IconizedContextMenuOption>,
+                "iconClassname" | "label" | "onClick"
+            > = {};
+            if (!this.state.supportsQrLogin) {
+                extraProps.disabled = true;
+                extraProps.title = _t("user_menu|link_new_device_not_supported");
+                extraProps.caption = _t("user_menu|link_new_device_not_supported_caption");
+                extraProps.placement = "right";
+            }
+
+            linkNewDeviceButton = (
+                <IconizedContextMenuOption
+                    {...extraProps}
+                    iconClassName="mx_UserMenu_iconQr"
+                    label={_t("user_menu|link_new_device")}
+                    onClick={(e) => this.onSettingsOpen(e, UserTab.SessionManager, { showMsc4108QrCode: true })}
+                />
+            );
+        }
+
         let primaryOptionList = (
             <IconizedContextMenuOptionList>
                 {homeButton}
+                {linkNewDeviceButton}
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconBell"
                     label={_t("notifications|enable_prompt_toast_title")}

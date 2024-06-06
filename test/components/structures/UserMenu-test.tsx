@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from "react";
 import { act, render, RenderResult, screen, waitFor } from "@testing-library/react";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { DEVICE_CODE_SCOPE, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
+import fetchMock from "fetch-mock-jest";
 
 import UnwrappedUserMenu from "../../../src/components/structures/UserMenu";
 import { stubClient, wrapInSdkContext } from "../../test-utils";
@@ -31,6 +33,12 @@ import { TestSdkContext } from "../../TestSdkContext";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import LogoutDialog from "../../../src/components/views/dialogs/LogoutDialog";
 import Modal from "../../../src/Modal";
+import SettingsStore from "../../../src/settings/SettingsStore";
+import { Features } from "../../../src/settings/Settings";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { mockOpenIdConfiguration } from "../../test-utils/oidc";
+import { Action } from "../../../src/dispatcher/actions";
+import { UserTab } from "../../../src/components/views/dialogs/UserTab";
 
 describe("<UserMenu>", () => {
     let client: MatrixClient;
@@ -174,6 +182,50 @@ describe("<UserMenu>", () => {
 
             await waitFor(() => {
                 expect(spy).toHaveBeenCalledWith(LogoutDialog);
+            });
+        });
+    });
+
+    it("should render 'Link new device' button in OIDC native mode", async () => {
+        sdkContext.client = stubClient();
+        mocked(sdkContext.client.getAuthIssuer).mockResolvedValue({ issuer: "https://issuer/" });
+        const openIdMetadata = mockOpenIdConfiguration("https://issuer/");
+        openIdMetadata.grant_types_supported.push(DEVICE_CODE_SCOPE);
+        fetchMock.get("https://issuer/.well-known/openid-configuration", openIdMetadata);
+        fetchMock.get("https://issuer/jwks", {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            keys: [],
+        });
+        mocked(sdkContext.client.getVersions).mockResolvedValue({
+            versions: [],
+            unstable_features: {
+                "org.matrix.msc4108": true,
+            },
+        });
+        mocked(sdkContext.client.waitForClientWellKnown).mockResolvedValue({});
+        mocked(sdkContext.client.getCrypto).mockReturnValue({
+            isCrossSigningReady: jest.fn().mockResolvedValue(true),
+            exportSecretsBundle: jest.fn().mockResolvedValue({}),
+        } as unknown as CryptoApi);
+        await SettingsStore.setValue(Features.OidcNativeFlow, null, SettingLevel.DEVICE, true);
+        const spy = jest.spyOn(defaultDispatcher, "dispatch");
+
+        const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
+        render(<UserMenu isPanelCollapsed={true} />);
+
+        screen.getByRole("button", { name: /User menu/i }).click();
+        await expect(screen.findByText("Link new device")).resolves.toBeInTheDocument();
+
+        // Assert the QR code is shown directly
+        screen.getByRole("menuitem", { name: "Link new device" }).click();
+        await waitFor(() => {
+            expect(spy).toHaveBeenCalledWith({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.SessionManager,
+                props: { showMsc4108QrCode: true },
             });
         });
     });

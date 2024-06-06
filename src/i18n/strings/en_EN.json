@@ -246,9 +246,13 @@
         "phone_optional_label": "Phone (optional)",
         "qr_code_login": {
             "approve_access_warning": "By approving access for this device, it will have full access to your account.",
+            "check_code_explainer": "This will verify that the connection to your other device is secure.",
+            "check_code_heading": "Enter the number shown on your other device",
+            "check_code_input_label": "2-digit code",
+            "check_code_mismatch": "The numbers don't match",
             "completing_setup": "Completing set up of your new device",
             "confirm_code_match": "Check that the code below matches with your other device:",
-            "connecting": "Connecting…",
+            "error_etag_missing": "An unexpected error occurred. This may be due to a browser extension, proxy server, or server misconfiguration.",
             "error_expired": "Sign in expired. Please try again.",
             "error_expired_title": "The sign in was not completed in time",
             "error_insecure_channel_detected": "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.",
@@ -265,13 +269,15 @@
             "error_unsupported_protocol_title": "Other device not compatible",
             "error_user_cancelled": "The sign in was cancelled on the other device.",
             "error_user_cancelled_title": "Sign in request cancelled",
-            "error_user_declined": "You declined the request from your other device to sign in.",
+            "error_user_declined": "You or the account provider declined the sign in request.",
             "error_user_declined_title": "Sign in declined",
-            "follow_remaining_instructions": "Follow the instructions to link your other device",
+            "follow_remaining_instructions": "Follow the remaining instructions",
             "open_element_other_device": "Open %(brand)s on your other device",
-            "point_the_camera": "Point the camera at the QR code shown here",
+            "point_the_camera": "Scan the QR code shown here",
             "scan_code_instruction": "Scan the QR code with another device",
             "scan_qr_code": "Sign in with QR code",
+            "security_code": "Security code",
+            "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "sign_in_new_device": "Sign in new device",
             "waiting_for_device": "Waiting for device to sign in"
@@ -3788,6 +3794,9 @@
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },
     "user_menu": {
+        "link_new_device": "Link new device",
+        "link_new_device_not_supported": "Not supported",
+        "link_new_device_not_supported_caption": "You need to sign in manually",
         "settings": "All settings",
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"

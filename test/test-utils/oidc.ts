@@ -45,6 +45,7 @@ export const mockOpenIdConfiguration = (issuer = "https://auth.org/"): Validated
     token_endpoint: issuer + "token",
     authorization_endpoint: issuer + "auth",
     registration_endpoint: issuer + "registration",
+    device_authorization_endpoint: issuer + "device",
     jwks_uri: issuer + "jwks",
     response_types_supported: ["code"],
     grant_types_supported: ["authorization_code", "refresh_token"],

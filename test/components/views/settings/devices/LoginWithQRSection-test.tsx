@@ -18,11 +18,17 @@ import { render } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { IClientWellKnown, IServerVersions, MatrixClient, GET_LOGIN_TOKEN_CAPABILITY } from "matrix-js-sdk/src/matrix";
 import React from "react";
+import fetchMock from "fetch-mock-jest";
 
 import LoginWithQRSection from "../../../../../src/components/views/settings/devices/LoginWithQRSection";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
 function makeClient(wellKnown: IClientWellKnown) {
+    const crypto = mocked({
+        supportsSecretsForQrLogin: jest.fn().mockReturnValue(true),
+        isCrossSigningReady: jest.fn().mockReturnValue(true),
+    });
+
     return mocked({
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
@@ -38,6 +44,7 @@ function makeClient(wellKnown: IClientWellKnown) {
             on: jest.fn(),
         },
         getClientWellKnown: jest.fn().mockReturnValue(wellKnown),
+        getCrypto: jest.fn().mockReturnValue(crypto),
     } as unknown as MatrixClient);
 }
 
@@ -53,68 +60,105 @@ describe("<LoginWithQRSection />", () => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient({}));
     });
 
-    const defaultProps = {
-        onShowQr: () => {},
-        versions: makeVersions({}),
-        wellKnown: {},
-    };
+    describe("MSC3906", () => {
+        const defaultProps = {
+            onShowQr: () => {},
+            versions: makeVersions({}),
+            wellKnown: {},
+        };
 
-    const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;
+        const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;
 
-    describe("should not render", () => {
-        it("no support at all", () => {
-            const { container } = render(getComponent());
-            expect(container).toMatchSnapshot();
+        describe("should not render", () => {
+            it("no support at all", () => {
+                const { container } = render(getComponent());
+                expect(container).toMatchSnapshot();
+            });
+
+            it("only get_login_token enabled", async () => {
+                const { container } = render(
+                    getComponent({ capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } } }),
+                );
+                expect(container).toMatchSnapshot();
+            });
+
+            it("MSC3886 + get_login_token disabled", async () => {
+                const { container } = render(
+                    getComponent({
+                        versions: makeVersions({ "org.matrix.msc3886": true }),
+                        capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: false } },
+                    }),
+                );
+                expect(container).toMatchSnapshot();
+            });
         });
 
-        it("only get_login_token enabled", async () => {
-            const { container } = render(
-                getComponent({ capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } } }),
-            );
-            expect(container).toMatchSnapshot();
-        });
+        describe("should render panel", () => {
+            it("get_login_token + MSC3886", async () => {
+                const { container } = render(
+                    getComponent({
+                        versions: makeVersions({
+                            "org.matrix.msc3886": true,
+                        }),
+                        capabilities: {
+                            [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true },
+                        },
+                    }),
+                );
+                expect(container).toMatchSnapshot();
+            });
 
-        it("MSC3886 + get_login_token disabled", async () => {
-            const { container } = render(
-                getComponent({
-                    versions: makeVersions({ "org.matrix.msc3886": true }),
-                    capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: false } },
-                }),
-            );
-            expect(container).toMatchSnapshot();
+            it("get_login_token + .well-known", async () => {
+                const wellKnown = {
+                    "io.element.rendezvous": {
+                        server: "https://rz.local",
+                    },
+                };
+                jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient(wellKnown));
+                const { container } = render(
+                    getComponent({
+                        versions: makeVersions({}),
+                        capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } },
+                        wellKnown,
+                    }),
+                );
+                expect(container).toMatchSnapshot();
+            });
         });
     });
 
-    describe("should render panel", () => {
-        it("get_login_token + MSC3886", async () => {
-            const { container } = render(
-                getComponent({
-                    versions: makeVersions({
-                        "org.matrix.msc3886": true,
-                    }),
-                    capabilities: {
-                        [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true },
-                    },
-                }),
-            );
-            expect(container).toMatchSnapshot();
-        });
-
-        it("get_login_token + .well-known", async () => {
-            const wellKnown = {
-                "io.element.rendezvous": {
-                    server: "https://rz.local",
-                },
+    describe("MSC4108", () => {
+        describe("MSC4108", () => {
+            const defaultProps = {
+                onShowQr: () => {},
+                versions: makeVersions({ "org.matrix.msc4108": true }),
+                wellKnown: {},
             };
-            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(makeClient(wellKnown));
-            const { container } = render(
-                getComponent({
-                    versions: makeVersions({}),
-                    capabilities: { [GET_LOGIN_TOKEN_CAPABILITY.name]: { enabled: true } },
-                    wellKnown,
-                }),
-            );
-            expect(container).toMatchSnapshot();
+
+            const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;
+
+            let client: MatrixClient;
+            beforeEach(() => {
+                client = makeClient({});
+                jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
+            });
+
+            test("no homeserver support", async () => {
+                const { container } = render(getComponent({ versions: makeVersions({ "org.matrix.msc4108": false }) }));
+                expect(container.textContent).toBe(""); // show nothing
+            });
+
+            test("no support in crypto", async () => {
+                client.getCrypto()!.exportSecretsBundle = undefined;
+                const { container } = render(getComponent({ client }));
+                expect(container.textContent).toBe(""); // show nothing
+            });
+
+            test("failed to connect", async () => {
+                fetchMock.catch(500);
+                const { container } = render(getComponent({ client }));
+                expect(container.textContent).toBe(""); // show nothing
+            });
         });
     });
 });

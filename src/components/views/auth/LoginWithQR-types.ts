@@ -27,17 +27,21 @@ export enum Mode {
 export enum Phase {
     Loading,
     ShowingQR,
-    Connecting,
-    Connected,
+    // The following are specific to MSC4108
+    OutOfBandConfirmation,
     WaitingForDevice,
     Verifying,
     Error,
+    /**
+     * @deprecated the MSC3906 implementation is deprecated in favour of MSC4108.
+     */
+    LegacyConnected,
 }
 
 export enum Click {
     Cancel,
     Decline,
     Approve,
-    TryAgain,
     Back,
+    ShowQr,
 }

@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LoginWithQRSection /> should not render MSC3886 + get_login_token disabled 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render MSC3886 + get_login_token disabled 1`] = `<div />`;
 
-exports[`<LoginWithQRSection /> should not render no support at all 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render no support at all 1`] = `<div />`;
 
-exports[`<LoginWithQRSection /> should not render only get_login_token enabled 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render only get_login_token enabled 1`] = `<div />`;
 
-exports[`<LoginWithQRSection /> should render panel get_login_token + .well-known 1`] = `
+exports[`<LoginWithQRSection /> MSC3906 should render panel get_login_token + .well-known 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
@@ -48,7 +48,7 @@ exports[`<LoginWithQRSection /> should render panel get_login_token + .well-know
 </div>
 `;
 
-exports[`<LoginWithQRSection /> should render panel get_login_token + MSC3886 1`] = `
+exports[`<LoginWithQRSection /> MSC3906 should render panel get_login_token + MSC3886 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { useState } from "react";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -41,6 +41,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 
 interface IProps {
     initialTabId?: UserTab;
+    showMsc4108QrCode?: boolean;
     sdkContext: SdkContextClass;
     onFinished(): void;
 }
@@ -80,6 +81,8 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 export default function UserSettingsDialog(props: IProps): JSX.Element {
     const voipEnabled = useSettingValue<boolean>(UIFeature.Voip);
     const mjolnirEnabled = useSettingValue<boolean>("feature_mjolnir");
+    // store this prop in state as changing tabs back and forth should clear it
+    const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -98,7 +101,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.SessionManager,
                 _td("settings|sessions|title"),
                 "mx_UserSettingsDialog_sessionsIcon",
-                <SessionManagerTab />,
+                <SessionManagerTab showMsc4108QrCode={showMsc4108QrCode} />,
                 undefined,
             ),
         );
@@ -205,7 +208,12 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         return tabs as NonEmptyArray<Tab<UserTab>>;
     };
 
-    const [activeTabId, setActiveTabId] = useActiveTabWithDefault(getTabs(), UserTab.General, props.initialTabId);
+    const [activeTabId, _setActiveTabId] = useActiveTabWithDefault(getTabs(), UserTab.General, props.initialTabId);
+    const setActiveTabId = (tabId: UserTab): void => {
+        _setActiveTabId(tabId);
+        // Clear this so switching away from the tab and back to it will not show the QR code again
+        setShowMsc4108QrCode(false);
+    };
 
     return (
         // XXX: SDKContext is provided within the LoggedInView subtree.
