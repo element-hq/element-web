@@ -32,7 +32,12 @@ describe("<AvatarSetting />", () => {
 
     it("renders avatar with specified alt text", async () => {
         const { queryByAltText } = render(
-            <AvatarSetting avatarAltText="Avatar of Peter Fox" avatar="mxc://example.org/my-avatar" />,
+            <AvatarSetting
+                placeholderId="blee"
+                placeholderName="boo"
+                avatarAltText="Avatar of Peter Fox"
+                avatar="mxc://example.org/my-avatar"
+            />,
         );
 
         const imgElement = queryByAltText("Avatar of Peter Fox");
@@ -45,6 +50,8 @@ describe("<AvatarSetting />", () => {
                 avatarAltText="Avatar of Peter Fox"
                 avatar="mxc://example.org/my-avatar"
                 removeAvatar={jest.fn()}
+                placeholderId="blee"
+                placeholderName="boo"
             />,
         );
 
@@ -53,14 +60,28 @@ describe("<AvatarSetting />", () => {
     });
 
     it("renders avatar without remove button", async () => {
-        const { queryByText } = render(<AvatarSetting disabled={true} avatarAltText="Avatar of Peter Fox" />);
+        const { queryByText } = render(
+            <AvatarSetting
+                placeholderId="blee"
+                placeholderName="boo"
+                disabled={true}
+                avatarAltText="Avatar of Peter Fox"
+            />,
+        );
 
         const removeButton = queryByText("Remove");
         expect(removeButton).toBeNull();
     });
 
     it("renders a file as the avatar when supplied", async () => {
-        render(<AvatarSetting avatarAltText="Avatar of Peter Fox" avatar={AVATAR_FILE} />);
+        render(
+            <AvatarSetting
+                placeholderId="blee"
+                placeholderName="boo"
+                avatarAltText="Avatar of Peter Fox"
+                avatar={AVATAR_FILE}
+            />,
+        );
 
         const imgElement = await screen.findByRole("button", { name: "Avatar of Peter Fox" });
         expect(imgElement).toBeInTheDocument();
@@ -73,6 +94,8 @@ describe("<AvatarSetting />", () => {
 
         render(
             <AvatarSetting
+                placeholderId="blee"
+                placeholderName="boo"
                 avatar="mxc://example.org/my-avatar"
                 avatarAltText="Avatar of Peter Fox"
                 onChange={onChange}

@@ -29,6 +29,7 @@ import {
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { OidcClientStore } from "../../../../../../src/stores/oidc/OidcClientStore";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 describe("<GeneralUserSettingsTab />", () => {
     const defaultProps = {
@@ -48,9 +49,11 @@ describe("<GeneralUserSettingsTab />", () => {
     let stores: SdkContextClass;
 
     const getComponent = () => (
-        <SDKContext.Provider value={stores}>
-            <GeneralUserSettingsTab {...defaultProps} />
-        </SDKContext.Provider>
+        <MatrixClientContext.Provider value={mockClient}>
+            <SDKContext.Provider value={stores}>
+                <GeneralUserSettingsTab {...defaultProps} />
+            </SDKContext.Provider>
+        </MatrixClientContext.Provider>
     );
 
     beforeEach(() => {

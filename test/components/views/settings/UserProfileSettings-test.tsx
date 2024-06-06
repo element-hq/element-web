@@ -23,6 +23,7 @@ import UserProfileSettings from "../../../../src/components/views/settings/UserP
 import { stubClient } from "../../../test-utils";
 import { ToastContext, ToastRack } from "../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../src/stores/OwnProfileStore";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 
 interface MockedAvatarSettingProps {
     removeAvatar: () => void;
@@ -62,6 +63,16 @@ jest.mock("@vector-im/compound-web", () => ({
     }) as React.FC<MockedEditInPlaceProps>,
 }));
 
+const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClient) => {
+    return render(
+        <MatrixClientContext.Provider value={client}>
+            <ToastContext.Provider value={toastRack}>
+                <UserProfileSettings />
+            </ToastContext.Provider>
+        </MatrixClientContext.Provider>,
+    );
+};
+
 describe("ProfileSettings", () => {
     let client: MatrixClient;
     let toastRack: Partial<ToastRack>;
@@ -74,11 +85,7 @@ describe("ProfileSettings", () => {
     });
 
     it("removes avatar", async () => {
-        render(
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings />
-            </ToastContext.Provider>,
-        );
+        renderProfileSettings(toastRack, client);
 
         expect(await screen.findByText("Mocked AvatarSetting")).toBeInTheDocument();
         expect(removeAvatarFn).toBeDefined();
@@ -91,11 +98,7 @@ describe("ProfileSettings", () => {
     });
 
     it("changes avatar", async () => {
-        render(
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings />
-            </ToastContext.Provider>,
-        );
+        renderProfileSettings(toastRack, client);
 
         expect(await screen.findByText("Mocked AvatarSetting")).toBeInTheDocument();
         expect(changeAvatarFn).toBeDefined();
@@ -113,11 +116,7 @@ describe("ProfileSettings", () => {
     });
 
     it("displays toast while uploading avatar", async () => {
-        render(
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings />
-            </ToastContext.Provider>,
-        );
+        renderProfileSettings(toastRack, client);
 
         const clearToastFn = jest.fn();
         mocked(toastRack.displayToast!).mockReturnValue(clearToastFn);
@@ -149,11 +148,7 @@ describe("ProfileSettings", () => {
     it("changes display name", async () => {
         jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
 
-        render(
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings />
-            </ToastContext.Provider>,
-        );
+        renderProfileSettings(toastRack, client);
 
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
         expect(editInPlaceOnSave).toBeDefined();
@@ -174,11 +169,7 @@ describe("ProfileSettings", () => {
     it("resets on cancel", async () => {
         jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
 
-        render(
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings />
-            </ToastContext.Provider>,
-        );
+        renderProfileSettings(toastRack, client);
 
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
         expect(editInPlaceOnChange).toBeDefined();

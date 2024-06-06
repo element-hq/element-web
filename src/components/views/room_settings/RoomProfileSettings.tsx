@@ -24,6 +24,7 @@ import Field from "../elements/Field";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
+import { idNameForRoom } from "../avatars/RoomAvatar";
 
 interface IProps {
     roomId: string;
@@ -254,6 +255,8 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                         disabled={!this.state.canSetAvatar}
                         onChange={this.onAvatarChanged}
                         removeAvatar={this.removeAvatar}
+                        placeholderId={idNameForRoom(MatrixClientPeg.safeGet().getRoom(this.props.roomId)!)}
+                        placeholderName={this.state.displayName}
                     />
                 </div>
                 {profileSettingsButtons}

@@ -21,6 +21,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import { useId } from "../../../utils/useId";
+import BaseAvatar from "../avatars/BaseAvatar";
 
 interface IProps {
     /**
@@ -51,12 +52,30 @@ interface IProps {
      * The alt text for the avatar
      */
     avatarAltText: string;
+
+    /**
+     * String to use for computing the colour of the placeholder avatar if no avatar is set
+     */
+    placeholderId: string;
+
+    /**
+     * String to use for the placeholder display if no avatar is set
+     */
+    placeholderName: string;
 }
 
 /**
  * Component for setting or removing an avatar on something (eg. a user or a room)
  */
-const AvatarSetting: React.FC<IProps> = ({ avatar, avatarAltText, onChange, removeAvatar, disabled }) => {
+const AvatarSetting: React.FC<IProps> = ({
+    avatar,
+    avatarAltText,
+    onChange,
+    removeAvatar,
+    disabled,
+    placeholderId,
+    placeholderName,
+}) => {
     const fileInputRef = createRef<HTMLInputElement>();
 
     // Real URL that we can supply to the img element, either a data URL or whatever mediaFromMxc gives
@@ -98,7 +117,9 @@ const AvatarSetting: React.FC<IProps> = ({ avatar, avatarAltText, onChange, remo
             aria-labelledby={disabled ? undefined : a11yId}
             // Inhibit tab stop as we have explicit upload/remove buttons
             tabIndex={-1}
-        />
+        >
+            <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
+        </AccessibleButton>
     );
     if (avatarURL) {
         avatarElement = (

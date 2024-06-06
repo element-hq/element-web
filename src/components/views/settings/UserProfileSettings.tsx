@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import AvatarSetting from "./AvatarSetting";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -29,6 +28,7 @@ import InlineSpinner from "../elements/InlineSpinner";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { useId } from "../../../utils/useId";
 import CopyableText from "../elements/CopyableText";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 const SpinnerToast: React.FC = ({ children }) => (
     <>
@@ -68,28 +68,30 @@ const UserProfileSettings: React.FC = () => {
 
     const toastRack = useToastContext();
 
+    const client = useMatrixClientContext();
+
     useEffect(() => {
         (async () => {
             try {
-                const mediaConfig = await MatrixClientPeg.safeGet().getMediaConfig();
+                const mediaConfig = await client.getMediaConfig();
                 setMaxUploadSize(mediaConfig["m.upload.size"]);
             } catch (e) {
                 logger.warn("Failed to get media config", e);
             }
         })();
-    }, []);
+    }, [client]);
 
     const onAvatarRemove = useCallback(async () => {
         const removeToast = toastRack.displayToast(
             <SpinnerToast>{_t("settings|general|avatar_remove_progress")}</SpinnerToast>,
         );
         try {
-            await MatrixClientPeg.safeGet().setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+            await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
             setAvatarURL("");
         } finally {
             removeToast();
         }
-    }, [toastRack]);
+    }, [toastRack, client]);
 
     const onAvatarChange = useCallback(
         async (avatarFile: File) => {
@@ -102,7 +104,6 @@ const UserProfileSettings: React.FC = () => {
             );
             try {
                 setAvatarError(false);
-                const client = MatrixClientPeg.safeGet();
                 const { content_uri: uri } = await client.uploadContent(avatarFile);
                 await client.setAvatarUrl(uri);
                 setAvatarURL(uri);
@@ -112,7 +113,7 @@ const UserProfileSettings: React.FC = () => {
                 removeToast();
             }
         },
-        [toastRack],
+        [toastRack, client],
     );
 
     const onDisplayNameChanged = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -126,19 +127,19 @@ const UserProfileSettings: React.FC = () => {
     const onDisplayNameSave = useCallback(async (): Promise<void> => {
         try {
             setDisplayNameError(false);
-            await MatrixClientPeg.safeGet().setDisplayName(displayName);
+            await client.setDisplayName(displayName);
             setInitialDisplayName(displayName);
         } catch (e) {
             setDisplayNameError(true);
         }
-    }, [displayName]);
+    }, [displayName, client]);
 
     const userIdentifier = useMemo(
         () =>
-            UserIdentifierCustomisations.getDisplayUserIdentifier(MatrixClientPeg.safeGet().getSafeUserId(), {
+            UserIdentifierCustomisations.getDisplayUserIdentifier(client.getSafeUserId(), {
                 withDisplayName: true,
             }),
-        [],
+        [client],
     );
 
     return (
@@ -151,6 +152,8 @@ const UserProfileSettings: React.FC = () => {
                     avatarAltText={_t("common|user_avatar")}
                     onChange={onAvatarChange}
                     removeAvatar={onAvatarRemove}
+                    placeholderName={displayName}
+                    placeholderId={client.getUserId() ?? ""}
                 />
                 <EditInPlace
                     className="mx_UserProfileSettings_profile_displayName"
