@@ -242,8 +242,7 @@
         "qr_code_login": {
             "approve_access_warning": "为此设备批准访问权限后，它对你的帐户有完全的访问权限。",
             "completing_setup": "完成新设备的设置",
-            "confirm_code_match": "检查以下代码是否与你的其他设备匹配：",
-            "connecting": "正在连接……"
+            "confirm_code_match": "检查以下代码是否与你的其他设备匹配："
         },
         "register_action": "创建账户",
         "registration": {
@@ -416,7 +415,6 @@
         "description": "描述",
         "deselect_all": "取消全选",
         "device": "设备",
-        "display_name": "显示名称",
         "edited": "已编辑",
         "email_address": "邮箱地址",
         "emoji": "表情符号",
@@ -2211,8 +2209,6 @@
             "error_remove_3pid": "无法移除联系人信息",
             "error_revoke_email_discovery": "无法撤消电子邮件地址共享",
             "error_revoke_msisdn_discovery": "无法撤销电话号码共享",
-            "error_saving_profile": "操作无法完成",
-            "error_saving_profile_title": "个人资料保存失败",
             "error_share_email_discovery": "无法共享邮件地址",
             "error_share_msisdn_discovery": "无法共享电话号码",
             "identity_server_no_token": "找不到身份访问令牌",
