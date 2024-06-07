@@ -164,9 +164,6 @@ jobs:
         if: always()
         runs-on: ubuntu-latest
         steps:
-            - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
-              run: exit 1
-
             - uses: actions/checkout@v4
               if: inputs.skip != true
               with:
@@ -204,3 +201,6 @@ jobs:
                   name: html-report
                   path: playwright-report
                   retention-days: 14
+
+            - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
+              run: exit 1
