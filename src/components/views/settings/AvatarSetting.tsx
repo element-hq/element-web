@@ -19,6 +19,7 @@ import { Icon as EditIcon } from "@vector-im/compound-design-tokens/icons/edit.s
 import { Icon as UploadIcon } from "@vector-im/compound-design-tokens/icons/share.svg";
 import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
 import { Menu, MenuItem } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -31,15 +32,17 @@ interface MenuProps {
     trigger: ReactNode;
     onUploadSelect: () => void;
     onRemoveSelect?: () => void;
+    menuOpen: boolean;
+    onOpenChange: (newOpen: boolean) => void;
 }
 
-const AvatarSettingContextMenu: React.FC<MenuProps> = ({ trigger, onUploadSelect, onRemoveSelect }) => {
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    const onOpenChange = useCallback((newOpen: boolean) => {
-        setMenuOpen(newOpen);
-    }, []);
-
+const AvatarSettingContextMenu: React.FC<MenuProps> = ({
+    trigger,
+    onUploadSelect,
+    onRemoveSelect,
+    menuOpen,
+    onOpenChange,
+}) => {
     return (
         <Menu
             trigger={trigger}
@@ -153,6 +156,12 @@ const AvatarSetting: React.FC<IProps> = ({
         fileInputRef.current?.click();
     }, [fileInputRef]);
 
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const onOpenChange = useCallback((newOpen: boolean) => {
+        setMenuOpen(newOpen);
+    }, []);
+
     let avatarElement = (
         <AccessibleButton
             element="div"
@@ -181,8 +190,11 @@ const AvatarSetting: React.FC<IProps> = ({
 
     let uploadAvatarBtn: JSX.Element | undefined;
     if (!disabled) {
+        const uploadButtonClasses = classNames("mx_AvatarSetting_uploadButton", {
+            mx_AvatarSetting_uploadButton_active: menuOpen,
+        });
         uploadAvatarBtn = (
-            <div className="mx_AvatarSetting_uploadButton">
+            <div className={uploadButtonClasses}>
                 <EditIcon width="20px" height="20px" />
             </div>
         );
@@ -201,7 +213,13 @@ const AvatarSetting: React.FC<IProps> = ({
 
     return (
         <>
-            <AvatarSettingContextMenu trigger={content} onUploadSelect={uploadAvatar} onRemoveSelect={removeAvatar} />
+            <AvatarSettingContextMenu
+                trigger={content}
+                onUploadSelect={uploadAvatar}
+                onRemoveSelect={removeAvatar}
+                menuOpen={menuOpen}
+                onOpenChange={onOpenChange}
+            />
             <input
                 type="file"
                 style={{ display: "none" }}
