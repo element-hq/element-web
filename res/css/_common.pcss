@@ -599,7 +599,7 @@ legend {
  */
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_ProfileSettings button
+        .mx_UserProfileSettings button
     ),
 .mx_Dialog input[type="submit"],
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
@@ -619,14 +619,14 @@ legend {
 
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_ProfileSettings button
+        .mx_UserProfileSettings button
     ):last-child {
     margin-right: 0px;
 }
 
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_ProfileSettings button
+        .mx_UserProfileSettings button
     ):focus,
 .mx_Dialog input[type="submit"]:focus,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
@@ -637,7 +637,9 @@ legend {
 .mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons
-    button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_ProfileSettings button),
+    button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-bg-action-primary-rest);
@@ -648,7 +650,7 @@ legend {
 .mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons
-    button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_ProfileSettings button),
+    button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_UserProfileSettings button),
 .mx_Dialog_buttons input[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
@@ -663,7 +665,7 @@ legend {
 
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_ProfileSettings button
+        .mx_UserProfileSettings button
     ):disabled,
 .mx_Dialog input[type="submit"]:disabled,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
