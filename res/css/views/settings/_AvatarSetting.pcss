@@ -21,36 +21,6 @@ limitations under the License.
     margin-top: 8px;
     position: relative;
 
-    .mx_AvatarSetting_hover {
-        transition: opacity var(--hover-transition);
-        opacity: 0;
-
-        /* position to place the hover bg over the entire thing */
-        position: absolute;
-        inset: 0;
-
-        pointer-events: none; /* let the pointer fall through the underlying thing */
-
-        line-height: 90px;
-        text-align: center;
-
-        > span {
-            color: $primary-content;
-            position: relative; /* tricks the layout engine into putting this on top of the bg */
-            font-weight: 500;
-        }
-
-        .mx_AvatarSetting_hoverBg {
-            /* absolute position to lazily fill the entire container */
-            position: absolute;
-            inset: 0;
-
-            opacity: 0.5;
-            background-color: $quinary-content;
-            border-radius: 90px;
-        }
-    }
-
     &.mx_AvatarSetting_avatarDisplay:hover .mx_AvatarSetting_hover {
         opacity: 1;
     }
@@ -77,25 +47,26 @@ limitations under the License.
     }
 
     .mx_AvatarSetting_uploadButton {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         border-radius: 32px;
-        background-color: $secondary-content;
+        border: 1px solid var(--cpd-color-bg-canvas-default);
+        background-color: var(--cpd-color-bg-subtle-primary);
 
         position: absolute;
         bottom: 0;
         right: 0;
-    }
+        text-align: center;
+        cursor: pointer;
 
-    .mx_AvatarSetting_uploadButton::before {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 100%;
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 55%;
-        background-color: $quinary-content;
-        mask-image: url("$(res)/img/feather-customised/edit.svg");
+        svg {
+            position: relative;
+            top: 3px;
+        }
     }
+}
+
+.mx_AvatarSetting_removeMenuItem svg,
+.mx_AvatarSetting_removeMenuItem span {
+    color: var(--cpd-color-text-critical-primary) !important;
 }

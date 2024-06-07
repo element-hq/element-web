@@ -85,7 +85,8 @@ describe("RoomProfileSetting", () => {
 
         render(<RoomProfileSettings roomId="!floob:itty" />);
 
-        await user.click(screen.getByRole("button", { name: "Remove" }));
+        await user.click(screen.getByRole("button", { name: "Room avatar" }));
+        await user.click(screen.getByRole("menuitem", { name: "Remove" }));
         await user.click(screen.getByRole("button", { name: "Save" }));
 
         await waitFor(() =>

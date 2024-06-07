@@ -151,7 +151,7 @@ const UserProfileSettings: React.FC = () => {
                     avatar={avatarURL ?? undefined}
                     avatarAltText={_t("common|user_avatar")}
                     onChange={onAvatarChange}
-                    removeAvatar={onAvatarRemove}
+                    removeAvatar={avatarURL ? onAvatarRemove : undefined}
                     placeholderName={displayName}
                     placeholderId={client.getUserId() ?? ""}
                 />

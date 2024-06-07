@@ -85,6 +85,7 @@ describe("ProfileSettings", () => {
     });
 
     it("removes avatar", async () => {
+        jest.spyOn(OwnProfileStore.instance, "avatarMxc", "get").mockReturnValue("mxc://example.org/my-avatar");
         renderProfileSettings(toastRack, client);
 
         expect(await screen.findByText("Mocked AvatarSetting")).toBeInTheDocument();
