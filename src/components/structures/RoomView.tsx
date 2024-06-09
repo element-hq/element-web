@@ -2632,66 +2632,71 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             !this.context.client.isGuest() &&
             (([KnownMembership.Leave, KnownMembership.Ban] as Array<string>).includes(myMembership) ||
                 myMember?.isKicked());
+
+        const CustomRoomView = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomView, CustomRoomView as CustomComponentOpts);
         const customRoomHeaderOpts = { CustomComponent: React.Fragment };
         ModuleRunner.instance.invoke(CustomComponentLifecycle.RoomHeader, customRoomHeaderOpts as CustomComponentOpts);
         return (
-            <RoomContext.Provider value={this.state}>
-                <div
-                    className={mainClasses}
-                    ref={this.roomView}
-                    onKeyDown={this.onReactKeyDown}
-                    data-room-header={roomHeaderType}
-                >
-                    {showChatEffects && this.roomView.current && (
-                        <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
-                    )}
-                    <ErrorBoundary>
-                        <MainSplit
-                            panel={rightPanel}
-                            resizeNotifier={this.props.resizeNotifier}
-                            // Override defaults when a thread is being shown to allow persisting a separate
-                            // right panel width for thread panels as they tend to want to be wider.
-                            sizeKey={this.state.threadRightPanel ? "thread" : undefined}
-                            defaultSize={this.state.threadRightPanel ? 500 : undefined}
-                        >
-                            <div
-                                className={mainSplitContentClasses}
-                                ref={this.roomViewBody}
-                                data-layout={this.state.layout}
+            <CustomRoomView.CustomComponent>
+                <RoomContext.Provider value={this.state}>
+                    <div
+                        className={mainClasses}
+                        ref={this.roomView}
+                        onKeyDown={this.onReactKeyDown}
+                        data-room-header={roomHeaderType}
+                    >
+                        {showChatEffects && this.roomView.current && (
+                            <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
+                        )}
+                        <ErrorBoundary>
+                            <MainSplit
+                                panel={rightPanel}
+                                resizeNotifier={this.props.resizeNotifier}
+                                // Override defaults when a thread is being shown to allow persisting a separate
+                                // right panel width for thread panels as they tend to want to be wider.
+                                sizeKey={this.state.threadRightPanel ? "thread" : undefined}
+                                defaultSize={this.state.threadRightPanel ? 500 : undefined}
                             >
-                                <customRoomHeaderOpts.CustomComponent>
-                                    {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                                        <RoomHeader
-                                            room={this.state.room}
-                                            additionalButtons={this.state.viewRoomOpts.buttons}
-                                        />
-                                    ) : (
-                                        <LegacyRoomHeader
-                                            room={this.state.room}
-                                            searchInfo={this.state.search}
-                                            oobData={this.props.oobData}
-                                            inRoom={myMembership === KnownMembership.Join}
-                                            onSearchClick={onSearchClick}
-                                            onInviteClick={onInviteClick}
-                                            onForgetClick={showForgetButton ? onForgetClick : null}
-                                            e2eStatus={this.state.e2eStatus}
-                                            onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
-                                            appsShown={this.state.showApps}
-                                            excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
-                                            showButtons={!this.viewsLocalRoom}
-                                            enableRoomOptionsMenu={!this.viewsLocalRoom}
-                                            viewingCall={viewingCall}
-                                            activeCall={this.state.activeCall}
-                                            additionalButtons={this.state.viewRoomOpts.buttons}
-                                        />
-                                    )}
-                                </customRoomHeaderOpts.CustomComponent>
-                                {mainSplitBody}
-                            </div>
-                        </MainSplit>
-                    </ErrorBoundary>
-                </div>
-            </RoomContext.Provider>
+                                <div
+                                    className={mainSplitContentClasses}
+                                    ref={this.roomViewBody}
+                                    data-layout={this.state.layout}
+                                >
+                                    <customRoomHeaderOpts.CustomComponent>
+                                        {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                                            <RoomHeader
+                                                room={this.state.room}
+                                                additionalButtons={this.state.viewRoomOpts.buttons}
+                                            />
+                                        ) : (
+                                            <LegacyRoomHeader
+                                                room={this.state.room}
+                                                searchInfo={this.state.search}
+                                                oobData={this.props.oobData}
+                                                inRoom={myMembership === KnownMembership.Join}
+                                                onSearchClick={onSearchClick}
+                                                onInviteClick={onInviteClick}
+                                                onForgetClick={showForgetButton ? onForgetClick : null}
+                                                e2eStatus={this.state.e2eStatus}
+                                                onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
+                                                appsShown={this.state.showApps}
+                                                excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
+                                                showButtons={!this.viewsLocalRoom}
+                                                enableRoomOptionsMenu={!this.viewsLocalRoom}
+                                                viewingCall={viewingCall}
+                                                activeCall={this.state.activeCall}
+                                                additionalButtons={this.state.viewRoomOpts.buttons}
+                                            />
+                                        )}
+                                    </customRoomHeaderOpts.CustomComponent>
+                                    {mainSplitBody}
+                                </div>
+                            </MainSplit>
+                        </ErrorBoundary>
+                    </div>
+                </RoomContext.Provider>
+            </CustomRoomView.CustomComponent>
         );
     }
 }

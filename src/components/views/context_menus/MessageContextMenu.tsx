@@ -29,6 +29,10 @@ import {
     M_POLL_START,
     EventTimeline,
 } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -61,6 +65,7 @@ import { getForwardableEvent } from "../../../events/forward/getForwardableEvent
 import { getShareableLocationEvent } from "../../../events/location/getShareableLocationEvent";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { CardContext } from "../right_panel/context";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 interface IReplyInThreadButton {
     mxEvent: MatrixEvent;
@@ -741,21 +746,29 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        const CustomMessageContextMenu = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.MessageContextMenu,
+            CustomMessageContextMenu as CustomComponentOpts,
+        );
+
         return (
-            <React.Fragment>
-                <IconizedContextMenu
-                    {...other}
-                    className="mx_MessageContextMenu"
-                    compact={true}
-                    data-testid="mx_MessageContextMenu"
-                >
-                    {nativeItemsList}
-                    {quickItemsList}
-                    {commonItemsList}
-                    {redactItemList}
-                </IconizedContextMenu>
-                {reactionPicker}
-            </React.Fragment>
+            <CustomMessageContextMenu.CustomComponent>
+                <React.Fragment>
+                    <IconizedContextMenu
+                        {...other}
+                        className="mx_MessageContextMenu"
+                        compact={true}
+                        data-testid="mx_MessageContextMenu"
+                    >
+                        {nativeItemsList}
+                        {quickItemsList}
+                        {commonItemsList}
+                        {redactItemList}
+                    </IconizedContextMenu>
+                    {reactionPicker}
+                </React.Fragment>
+            </CustomMessageContextMenu.CustomComponent>
         );
     }
 }

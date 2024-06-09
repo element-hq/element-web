@@ -757,4 +757,32 @@ describe("RoomView", () => {
             expect(container.querySelector(".mx_LegacyRoomHeader")).toBeNull();
         });
     });
+
+    describe("CustomComponentLifecycle.RoomView", () => {
+        it("should wrap RoomView with a custom RoomHeader", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RoomView) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        return (
+                            <>
+                                <div data-testid="wrapper-header">Header</div>
+                                <div data-testid="wrapper-RoomView">{children}</div>
+                                <div data-testid="wrapper-footer">Footer</div>
+                            </>
+                        );
+                    };
+                }
+            });
+
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            await renderRoomView();
+
+            expect(screen.getByTestId("wrapper-header")).toBeDefined();
+            expect(screen.getByTestId("wrapper-RoomView")).toBeDefined();
+            expect(screen.getByTestId("wrapper-footer")).toBeDefined();
+            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(screen.getByTestId("wrapper-RoomView"));
+            expect(screen.getByTestId("wrapper-RoomView").nextSibling).toBe(screen.getByTestId("wrapper-footer"));
+        });
+    });
 });
