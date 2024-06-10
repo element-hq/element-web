@@ -63,7 +63,7 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
         }
 
         const hasUnreadCount = level >= NotificationLevel.Notification && (!!count || !!symbol);
-        const hasGreen = level == NotificationColor.Green; // ROSBERG
+        const hasGreen = level == NotificationLevel.Notification; // Verji
 
         const isEmptyBadge = symbol === null && count === 0;
 
