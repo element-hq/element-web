@@ -22,7 +22,7 @@ import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../src/settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../test-utils";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
@@ -176,6 +176,24 @@ describe("<SpacePanel />", () => {
             render(<SpacePanel />);
             fireEvent.click(screen.getByTestId("create-space-button"));
             screen.getByTestId("create-space-button");
+        });
+        it("renders create space button when UIFeature is true", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.ShowCreateSpaceButton) return true;
+                return true;
+            });
+            mocked(shouldShowComponent).mockReturnValue(true);
+            render(<SpacePanel />);
+            expect(screen.queryByTestId("create-space-button")).not.toBeNull();
+        });
+        it("does not render create space button when UIFeature is false", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.ShowCreateSpaceButton) return false;
+                return true;
+            });
+            mocked(shouldShowComponent).mockReturnValue(true);
+            render(<SpacePanel />);
+            expect(screen.queryByTestId("create-space-button")).toBeNull();
         });
     });
 
