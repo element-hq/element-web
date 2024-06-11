@@ -108,7 +108,7 @@
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^2.7.1",
         "@svgr/webpack": "^8.0.0",
-        "@testing-library/react": "^12.1.5",
+        "@testing-library/react": "^16.0.0",
         "@types/commonmark": "^0.27.9",
         "@types/content-type": "^1.1.8",
         "@types/counterpart": "^0.18.4",
