@@ -332,7 +332,10 @@ legend {
 .mx_Dialog_border {
     z-index: var(--dialog-zIndex-standard);
     position: relative;
-    max-height: calc(100% - var(--cpd-space-12x));
+    width: 100%;
+    max-width: min-content;
+    box-sizing: border-box;
+    max-height: calc(100% - var(--cpd-space-6x));
     display: flex;
     flex-direction: column;
 
