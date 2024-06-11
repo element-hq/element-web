@@ -74,7 +74,7 @@
         "@matrix-org/olm": "3.2.15",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
-        "@sentry/browser": "^7.0.0",
+        "@sentry/browser": "^8.0.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@vector-im/compound-design-tokens": "^1.2.0",
         "@vector-im/compound-web": "^4.4.1",
