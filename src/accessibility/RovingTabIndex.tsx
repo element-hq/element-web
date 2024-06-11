@@ -18,7 +18,7 @@ import React, {
     createContext,
     useCallback,
     useContext,
-    useLayoutEffect,
+    useEffect,
     useMemo,
     useRef,
     useReducer,
@@ -144,7 +144,7 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
                 }
                 if (document.activeElement === document.body) {
                     // if the focus got reverted to the body then the user was likely focused on the unmounted element
-                    state.activeRef?.current?.focus();
+                    setTimeout(() => state.activeRef?.current?.focus(), 0);
                 }
             }
 
@@ -362,7 +362,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
     }
 
     // setup (after refs)
-    useLayoutEffect(() => {
+    useEffect(() => {
         context.dispatch({
             type: Type.Register,
             payload: { ref },

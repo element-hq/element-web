@@ -33,10 +33,7 @@ const Button = (props: HTMLAttributes<HTMLButtonElement>) => {
 };
 
 const checkTabIndexes = (buttons: NodeListOf<HTMLElement>, expectations: number[]) => {
-    expect(buttons.length).toBe(expectations.length);
-    for (let i = 0; i < buttons.length; i++) {
-        expect(buttons[i].tabIndex).toBe(expectations[i]);
-    }
+    expect([...buttons].map((b) => b.tabIndex)).toStrictEqual(expectations);
 };
 
 // give the buttons keys for the fibre reconciler to not treat them all as the same

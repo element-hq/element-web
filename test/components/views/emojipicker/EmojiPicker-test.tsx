@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import EmojiPicker from "../../../../src/components/views/emojipicker/EmojiPicker";
@@ -24,7 +24,7 @@ import { stubClient } from "../../../test-utils";
 describe("EmojiPicker", function () {
     stubClient();
 
-    it("should not mangle default order after filtering", () => {
+    it("should not mangle default order after filtering", async () => {
         const ref = createRef<EmojiPicker>();
         const { container } = render(
             <EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />,
@@ -41,7 +41,7 @@ describe("EmojiPicker", function () {
         // Clear the filter and assert that the HTML matches what it was before filtering
         //@ts-ignore private access
         ref.current!.onChangeFilter("");
-        expect(beforeHtml).toEqual(container.innerHTML);
+        await waitFor(() => expect(beforeHtml).toEqual(container.innerHTML));
     });
 
     it("sort emojis by shortcode and size", function () {
