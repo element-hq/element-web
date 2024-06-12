@@ -29,6 +29,10 @@ import React, {
 import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -72,6 +76,7 @@ import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { ThreadsActivityCentre } from "./threads-activity-centre/";
 import AccessibleButton from "../elements/AccessibleButton";
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -373,7 +378,8 @@ const SpacePanel: React.FC = () => {
             setPanelCollapsed(!isPanelCollapsed);
         }
     });
-
+    const customUserMenuOpts = { CustomComponent: React.Fragment };
+    ModuleRunner.instance.invoke(CustomComponentLifecycle.UserMenu, customUserMenuOpts as CustomComponentOpts);
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
             {({ onKeyDownHandler, onDragEndHandler }) => (
@@ -394,19 +400,23 @@ const SpacePanel: React.FC = () => {
                         ref={ref}
                         aria-label={_t("common|spaces")}
                     >
-                        <UserMenu isPanelCollapsed={isPanelCollapsed}>
-                            <AccessibleButton
-                                className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
-                                onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                                title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
-                                caption={
-                                    <KeyboardShortcut
-                                        value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
-                                        className="mx_SpacePanel_Tooltip_KeyboardShortcut"
-                                    />
-                                }
-                            />
-                        </UserMenu>
+                        <customUserMenuOpts.CustomComponent>
+                            <UserMenu isPanelCollapsed={isPanelCollapsed}>
+                                <AccessibleButton
+                                    className={classNames("mx_SpacePanel_toggleCollapse", {
+                                        expanded: !isPanelCollapsed,
+                                    })}
+                                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                                    title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
+                                    caption={
+                                        <KeyboardShortcut
+                                            value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
+                                            className="mx_SpacePanel_Tooltip_KeyboardShortcut"
+                                        />
+                                    }
+                                />
+                            </UserMenu>
+                        </customUserMenuOpts.CustomComponent>
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (
                                 <InnerSpacePanel

@@ -55,7 +55,7 @@ export interface ITooltipProps {
     role?: React.AriaRole;
 }
 
-type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "transform" | "left">>;
+type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "bottom" | "transform" | "left">>; //Verji added bottom
 
 export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
     private static container: HTMLElement;
@@ -115,64 +115,70 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
 
         const parentBox = this.parent.getBoundingClientRect();
         const width = UIStore.instance.windowWidth;
-        const spacing = 6;
+        // const spacing = 6;       //verji
         const parentWidth = this.props.maxParentWidth
             ? Math.min(parentBox.width, this.props.maxParentWidth)
             : parentBox.width;
         const baseTop = parentBox.top + window.scrollY;
-        const centerTop = parentBox.top + window.scrollY + parentBox.height / 2;
+        // const centerTop = parentBox.top + window.scrollY + parentBox.height / 2;  //Verji
         const right = width - parentBox.left - window.scrollX;
         const left = parentBox.right + window.scrollX;
         const horizontalCenter = parentBox.left - window.scrollX + parentWidth / 2;
 
         const style: State = {};
+        /* Verji start - changed entire scope */
+        const MIN_TOOLTIP_HEIGHT = 25;
+
+        let offset = 0;
+        if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
+            offset = Math.floor((parentBox.height - MIN_TOOLTIP_HEIGHT) / 2);
+        } else {
+            // The tooltip is larger than the parent height: figure out what offset
+            // we need so that we're still centered.
+            offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
+        }
+        const top = baseTop + offset;
+
+        const bottom = UIStore.instance.windowHeight - parentBox.top - parentBox.height; // Verji
+
         switch (this.props.alignment) {
             case Alignment.Natural:
                 if (parentBox.right > width / 2) {
-                    style.right = right + spacing;
-                    style.top = centerTop;
-                    style.transform = "translateY(-50%)";
+                    style.right = right;
+                    if (parentBox.top > UIStore.instance.windowHeight / 2) {
+                        style.bottom = bottom;
+                    } else {
+                        style.top = top;
+                    }
                     break;
                 }
             // fall through to Right
             case Alignment.Right:
-                style.left = left + spacing;
-                style.top = centerTop;
-                style.transform = "translateY(-50%)";
+                style.left = left;
+                if (parentBox.top > UIStore.instance.windowHeight / 2) {
+                    style.bottom = bottom;
+                } else {
+                    style.top = top;
+                }
                 break;
             case Alignment.Left:
-                style.right = right + spacing;
-                style.top = centerTop;
-                style.transform = "translateY(-50%)";
+                style.right = right;
+                if (parentBox.top > UIStore.instance.windowHeight / 2) {
+                    style.bottom = bottom;
+                } else {
+                    style.top = top;
+                }
                 break;
             case Alignment.Top:
-                style.top = baseTop - spacing;
-                // Attempt to center the tooltip on the element while clamping
-                // its horizontal translation to keep it on screen
-                // eslint-disable-next-line max-len
-                style.transform = `translate(max(10px, min(calc(${horizontalCenter}px - 50%), calc(100vw - 100% - 10px))), -100%)`;
+                style.top = baseTop - 16;
+                style.left = horizontalCenter;
                 break;
             case Alignment.Bottom:
-                style.top = baseTop + parentBox.height + spacing;
-                // Attempt to center the tooltip on the element while clamping
-                // its horizontal translation to keep it on screen
-                // eslint-disable-next-line max-len
-                style.transform = `translate(max(10px, min(calc(${horizontalCenter}px - 50%), calc(100vw - 100% - 10px))))`;
-                break;
-            case Alignment.InnerBottom:
-                style.top = baseTop + parentBox.height - 50;
-                // Attempt to center the tooltip on the element while clamping
-                // its horizontal translation to keep it on screen
-                // eslint-disable-next-line max-len
-                style.transform = `translate(max(10px, min(calc(${horizontalCenter}px - 50%), calc(100vw - 100% - 10px))))`;
-                break;
-            case Alignment.TopRight:
-                style.top = baseTop - spacing;
-                style.right = width - parentBox.right - window.scrollX;
-                style.transform = "translateY(-100%)";
+                style.top = baseTop + parentBox.height;
+                style.left = horizontalCenter;
                 break;
         }
-
+        /* Verji end */
         this.setState(style);
     };
 
