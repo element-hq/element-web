@@ -177,17 +177,17 @@ const setupCompleted = (async (): Promise<string | void> => {
                         }
                     }
 
-                    await widgetApi!.transport.reply(ev.detail, response);
+                    widgetApi!.transport.reply(ev.detail, response);
                 });
             };
 
             handleAction(ElementWidgetActions.JoinCall, async ({ audioInput, videoInput }) => {
-                joinConference(audioInput as string | null, videoInput as string | null);
+                void joinConference(audioInput as string | null, videoInput as string | null);
             });
             handleAction(ElementWidgetActions.HangupCall, async ({ force }) => {
                 if (force === true) {
                     meetApi?.dispose();
-                    notifyHangup();
+                    void notifyHangup();
                     meetApi = undefined;
                     closeConference();
                 } else {
@@ -297,7 +297,7 @@ function toggleConferenceVisibility(inConference: boolean): void {
 
 function skipToJitsiSplashScreen(): void {
     // really just a function alias for self-documenting code
-    joinConference();
+    void joinConference();
 }
 
 /**
@@ -500,8 +500,8 @@ const onVideoConferenceJoined = (): void => {
     if (widgetApi) {
         // ignored promise because we don't care if it works
         // noinspection JSIgnoredPromiseFromCall
-        widgetApi.setAlwaysOnScreen(true);
-        widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
+        void widgetApi.setAlwaysOnScreen(true);
+        void widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
     }
 
     // Video rooms should start in tile mode
@@ -509,7 +509,7 @@ const onVideoConferenceJoined = (): void => {
 };
 
 const onVideoConferenceLeft = (): void => {
-    notifyHangup();
+    void notifyHangup();
     meetApi = undefined;
 };
 
@@ -517,7 +517,7 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
     if (error.isFatal) {
         // We got disconnected. Since Jitsi Meet might send us back to the
         // prejoin screen, we're forced to act as if we hung up entirely.
-        notifyHangup(error.message);
+        void notifyHangup(error.message);
         meetApi = undefined;
         closeConference();
     }
@@ -525,7 +525,7 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
 
 const onAudioMuteStatusChanged = ({ muted }: AudioMuteStatusChangedEvent): void => {
     const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-    widgetApi?.transport.send(action, {});
+    void widgetApi?.transport.send(action, {});
 };
 
 const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void => {
@@ -535,15 +535,15 @@ const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void 
         // otherwise the React SDK will mistakenly think the user turned off
         // their video by hand
         setTimeout(() => {
-            if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
+            if (meetApi) void widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
         }, 200);
     } else {
-        widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        void widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
     }
 };
 
 const updateParticipants = (): void => {
-    widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
+    void widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
         participants: meetApi?.getParticipantsInfo(),
     });
 };

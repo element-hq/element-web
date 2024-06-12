@@ -120,4 +120,4 @@ async function initPage(): Promise<void> {
     }
 }
 
-initPage();
+void initPage();
