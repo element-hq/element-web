@@ -31,7 +31,8 @@ import {
 } from "../../../../src/utils/space";
 import { leaveSpace } from "../../../../src/utils/leave-behaviour";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../src/settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -221,6 +222,43 @@ describe("<SpaceContextMenu />", () => {
             await userEvent.click(screen.getByTestId("new-subspace-option"));
             expect(showCreateNewSubspace).toHaveBeenCalledWith(space);
             expect(onFinished).toHaveBeenCalled();
+        });
+    });
+
+    describe("UIFeature.AddSubSpace feature flag", () => {
+        const space = makeMockSpace();
+
+        beforeEach(() => {
+            // set space to allow adding children to space
+            mocked(space.currentState.maySendStateEvent).mockReturnValue(true);
+            mocked(shouldShowComponent).mockReturnValue(true);
+            jest.clearAllMocks();
+        });
+
+        it("UIFeature.AddSubSpace = true: renders create space button when UIFeature is true", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSubSpace) return true;
+                else return "default";
+            });
+            renderComponent({ space });
+
+            screen.debug();
+
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).toBeInTheDocument();
+        });
+
+        it("UIFeature.AddSubSpace = false: does not render create space button when UIFeature is false", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSubSpace) return false;
+                else return "default";
+            });
+            renderComponent({ space });
+
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
         });
     });
 });
