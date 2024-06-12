@@ -88,6 +88,7 @@ module.exports = {
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
                 "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/no-floating-promises": "off",
             },
         },
     ],

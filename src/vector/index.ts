@@ -180,7 +180,7 @@ async function start(): Promise<void> {
         // error handling begins here
         // ##########################
         if (!acceptBrowser) {
-            await new Promise<void>((resolve) => {
+            await new Promise<void>((resolve, reject) => {
                 logger.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {
@@ -189,7 +189,7 @@ async function start(): Promise<void> {
                     }
                     logger.log("User accepts the compatibility risks.");
                     resolve();
-                });
+                }).catch(reject);
             });
         }
 

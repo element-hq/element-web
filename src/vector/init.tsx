@@ -138,7 +138,7 @@ export async function loadLanguage(): Promise<void> {
 }
 
 export async function loadTheme(): Promise<void> {
-    setTheme();
+    return setTheme();
 }
 
 export async function loadApp(fragParams: {}): Promise<void> {
