@@ -35,6 +35,7 @@ export const enum UIFeature {
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
     ShowCreateSpaceButton = "UIFeature.showCreateSpaceButton",
     AddSubSpace = "UIFeature.addSubSpace",
+    AddSpace = "UIFeature.addSpace",
 }
 
 export enum UIComponent {

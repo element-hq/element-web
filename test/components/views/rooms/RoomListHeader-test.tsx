@@ -29,7 +29,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../src/settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
 
 const RoomListHeader = testUtils.wrapInMatrixClientContext(_RoomListHeader);
 
@@ -283,6 +283,32 @@ describe("RoomListHeader", () => {
             checkIsDisabled(items[2]);
             // "Add space" is disabled
             checkIsDisabled(items[3]);
+        });
+    });
+
+    describe("UIFeature.AddSpace", () => {
+        it("UIFeature.AddSpace = true: renders Add Space when user has permission to add spaces", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSpace) return true;
+                else return "default";
+            });
+
+            const testSpace = setupSpace(client);
+            await setupPlusMenu(client, testSpace);
+
+            expect(screen.getByText("Add space")).toBeInTheDocument();
+        });
+
+        it("UIFeature.AddSpace = false: does not render Add Space when user has permission to add spaces", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSpace) return false;
+                else return "default";
+            });
+
+            const testSpace = setupSpace(client);
+            await setupPlusMenu(client, testSpace);
+
+            expect(screen.queryByText("Add space")).not.toBeInTheDocument();
         });
     });
 });
