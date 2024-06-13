@@ -191,7 +191,6 @@
         "raw-loader": "^4.0.2",
         "rimraf": "^5.0.0",
         "semver": "^7.5.2",
-        "setimmediate": "^1.0.5",
         "string-replace-loader": "3",
         "style-loader": "4",
         "stylelint": "^16.1.0",
