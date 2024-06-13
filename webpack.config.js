@@ -657,8 +657,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -774,9 +774,9 @@ module.exports = (env, argv) => {
             // directory and symlink it into place - this allows users who loaded
             // an older version of the application to continue to access webpack
             // chunks even after the app is redeployed.
-            filename: "bundles/[hash]/[name].js",
-            chunkFilename: "bundles/[hash]/[name].js",
-            webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+            filename: "bundles/[fullhash]/[name].js",
+            chunkFilename: "bundles/[fullhash]/[name].js",
+            webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
         },
 
         // configuration for the webpack-dev-server
