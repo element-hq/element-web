@@ -1199,10 +1199,10 @@ test.describe("Timeline", () => {
 
                 // Install our mocks and preventative measures
                 await context.route("**/_matrix/client/versions", async (route) => {
-                    // Force enable MSC3916, which may require the service worker's internal cache to be cleared later.
+                    // Force enable MSC3916/Matrix 1.11, which may require the service worker's internal cache to be cleared later.
                     const json = await (await route.fetch()).json();
-                    if (!json["unstable_features"]) json["unstable_features"] = {};
-                    json["unstable_features"]["org.matrix.msc3916"] = true;
+                    if (!json["versions"]) json["versions"] = [];
+                    json["versions"].push("v1.11");
                     await route.fulfill({ json });
                 });
                 await context.route("**/_matrix/media/*/download/**", async (route) => {
@@ -1219,14 +1219,14 @@ test.describe("Timeline", () => {
                         json: { errcode: "M_UNKNOWN", error: "Unexpected route called." },
                     });
                 });
-                await context.route("**/_matrix/client/unstable/org.matrix.msc3916/download/**", async (route) => {
+                await context.route("**/_matrix/client/v1/download/**", async (route) => {
                     expect(route.request().headers()["Authorization"]).toBeDefined();
                     // we can't use route.continue() because no configured homeserver supports MSC3916 yet
                     await route.fulfill({
                         body: NEW_AVATAR,
                     });
                 });
-                await context.route("**/_matrix/client/unstable/org.matrix.msc3916/thumbnail/**", async (route) => {
+                await context.route("**/_matrix/client/v1/thumbnail/**", async (route) => {
                     expect(route.request().headers()["Authorization"]).toBeDefined();
                     // we can't use route.continue() because no configured homeserver supports MSC3916 yet
                     await route.fulfill({
