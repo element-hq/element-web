@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { linkify } from "./linkify-matrix";
 
-const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "u", "br", "br/"];
+const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "s", "u", "br", "br/"];
 
 // These types of node are definitely text
 const TEXT_NODES = ["text", "softbreak", "linebreak", "paragraph", "document"];

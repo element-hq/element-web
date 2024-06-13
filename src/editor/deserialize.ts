@@ -195,6 +195,8 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     return [pc.plain("**"), ...parseChildren(n, pc, opts), pc.plain("**")];
                 case "DEL":
                     return [pc.plain("<del>"), ...parseChildren(n, pc, opts), pc.plain("</del>")];
+                case "S":
+                    return [pc.plain("<s>"), ...parseChildren(n, pc, opts), pc.plain("</s>")];
                 case "SUB":
                     return [pc.plain("<sub>"), ...parseChildren(n, pc, opts), pc.plain("</sub>")];
                 case "SUP":
