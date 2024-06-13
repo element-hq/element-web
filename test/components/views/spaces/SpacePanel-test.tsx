@@ -190,6 +190,7 @@ describe("<SpacePanel />", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
             render(<SpacePanel />);
             expect(screen.queryByTestId("create-space-button")).not.toBeNull();
+            expect(screen.queryByTestId("create-space-button")).toBeInTheDocument();
         });
         it("does not render create space button when UIFeature is false", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
@@ -199,6 +200,7 @@ describe("<SpacePanel />", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
             render(<SpacePanel />);
             expect(screen.queryByTestId("create-space-button")).toBeNull();
+            expect(screen.queryByTestId("create-space-button")).not.toBeInTheDocument();
         });
     });
 

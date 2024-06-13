@@ -252,27 +252,31 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
           };
 
     return (
-        <li
-            className={classNames("mx_SpaceItem mx_SpaceItem_new", {
-                collapsed: isPanelCollapsed,
-            })}
-            role="treeitem"
-            aria-selected={false}
-        >
-            <SpaceButton
-                data-testid="create-space-button"
-                className={classNames("mx_SpaceButton_new", {
-                    mx_SpaceButton_newCancel: menuDisplayed,
-                })}
-                label={menuDisplayed ? _t("action|cancel") : _t("create_space|label")}
-                onClick={onNewClick}
-                isNarrow={isPanelCollapsed}
-                innerRef={handle}
-                size="32px"
-            />
+        SettingsStore.getValue(UIFeature.ShowCreateSpaceButton) && (
+            <>
+                <li
+                    className={classNames("mx_SpaceItem mx_SpaceItem_new", {
+                        collapsed: isPanelCollapsed,
+                    })}
+                    role="treeitem"
+                    aria-selected={false}
+                >
+                    <SpaceButton
+                        data-testid="create-space-button"
+                        className={classNames("mx_SpaceButton_new", {
+                            mx_SpaceButton_newCancel: menuDisplayed,
+                        })}
+                        label={menuDisplayed ? _t("action|cancel") : _t("create_space|label")}
+                        onClick={onNewClick}
+                        isNarrow={isPanelCollapsed}
+                        innerRef={handle}
+                        size="32px"
+                    />
 
-            {contextMenu}
-        </li>
+                    {contextMenu}
+                </li>
+            </>
+        )
     );
 };
 
