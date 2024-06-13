@@ -342,6 +342,10 @@ export const expect = baseExpect.extend({
                 .mx_ReplyChain {
                     border-left-color: var(--cpd-color-blue-1200) !important;
                 }
+                /* Avoid flakiness from hover styling */
+                .mx_ReplyChain_show {
+                    color: var(--cpd-color-text-secondary) !important;
+                }
                 /* Use monospace font for timestamp for consistent mask width */
                 .mx_MessageTimestamp {
                     font-family: Inconsolata !important;
