@@ -87,6 +87,7 @@ export const enum UIFeature {
     VideoConnectionSettings = "UIFeature.videoConnectionSettings",
     SpacesEnabled = "UIFeature.spacesEnabled",
     MultipleCallsInRoom = "UIFeature.multipleCallsInRoom",
+    ShowSpaceLandingPageDetails = "UIFeature.showSpaceLandingPageDetails",
 }
 
 export enum UIComponent {
