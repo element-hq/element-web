@@ -93,7 +93,7 @@
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
         "filesize": "10.1.2",
-        "gfm.css": "^1.1.2",
+        "github-markdown-css": "^5.5.1",
         "glob-to-regexp": "^0.4.1",
         "graphemer": "^1.4.0",
         "highlight.js": "^11.3.1",
