@@ -131,6 +131,7 @@ const UserProfileSettings: React.FC = () => {
             setInitialDisplayName(displayName);
         } catch (e) {
             setDisplayNameError(true);
+            throw e;
         }
     }, [displayName, client]);
 

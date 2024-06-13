@@ -167,6 +167,25 @@ describe("ProfileSettings", () => {
         expect(client.setDisplayName).toHaveBeenCalledWith("The Value");
     });
 
+    it("displays error if changing display name fails", async () => {
+        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
+        mocked(client).setDisplayName.mockRejectedValue(new Error("Failed to set display name"));
+
+        renderProfileSettings(toastRack, client);
+
+        expect(editInPlaceOnSave).toBeDefined();
+
+        act(() => {
+            editInPlaceOnChange({
+                target: { value: "Not Alice any more" } as HTMLInputElement,
+            } as ChangeEvent<HTMLInputElement>);
+        });
+
+        await act(async () => {
+            await expect(editInPlaceOnSave()).rejects.toEqual(expect.any(Error));
+        });
+    });
+
     it("resets on cancel", async () => {
         jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
 
