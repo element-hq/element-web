@@ -323,7 +323,6 @@ describe("RoomListStore", () => {
                 const algorithmSpy = jest.spyOn(store.algorithm, "handleRoomUpdate").mockReturnValue(undefined);
                 // @ts-ignore cheat and call protected fn
                 store.onAction({ action: "MatrixActions.accountData", event, previousEvent });
-                // flush setImmediate
                 await flushPromises();
 
                 expect(algorithmSpy).toHaveBeenCalledWith(normalRoom, RoomUpdateCause.PossibleMuteChange);
@@ -346,7 +345,6 @@ describe("RoomListStore", () => {
 
                 // @ts-ignore cheat and call protected fn
                 store.onAction({ action: "MatrixActions.accountData", event, previousEvent });
-                // flush setImmediate
                 await flushPromises();
 
                 // only one call to update made for normalRoom

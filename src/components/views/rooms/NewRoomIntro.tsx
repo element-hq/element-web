@@ -126,7 +126,7 @@ const NewRoomIntro: React.FC = () => {
                 true,
             );
             // focus the topic field to help the user find it as it'll gain an outline
-            setImmediate(() => {
+            setTimeout(() => {
                 window.document.getElementById("profileTopic")?.focus();
             });
         };

@@ -62,7 +62,7 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
             this.emit(FILTER_CHANGED);
             // XXX: Room List Store has a bug where updates to the pre-filter during a local echo of a
             // tags transition seem to be ignored, so refire in the next tick to work around it
-            setImmediate(() => {
+            setTimeout(() => {
                 this.emit(FILTER_CHANGED);
             });
         }

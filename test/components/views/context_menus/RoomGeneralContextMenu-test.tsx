@@ -20,6 +20,7 @@ import { ReceiptType, MatrixClient, PendingEventOrdering, Room } from "matrix-js
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { ChevronFace } from "../../../../src/components/structures/ContextMenu";
 import {
@@ -141,7 +142,7 @@ describe("RoomGeneralContextMenu", () => {
         const markAsReadBtn = getByLabelText(container, "Mark as read");
         fireEvent.click(markAsReadBtn);
 
-        await new Promise(setImmediate);
+        await sleep(0);
 
         expect(mockClient.sendReadReceipt).toHaveBeenCalledWith(event, ReceiptType.Read, true);
         expect(onFinished).toHaveBeenCalled();
@@ -155,7 +156,7 @@ describe("RoomGeneralContextMenu", () => {
         const markAsUnreadBtn = getByLabelText(container, "Mark as unread");
         fireEvent.click(markAsUnreadBtn);
 
-        await new Promise(setImmediate);
+        await sleep(0);
 
         expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
             unread: true,

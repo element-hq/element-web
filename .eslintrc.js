@@ -34,6 +34,14 @@ module.exports = {
                 ["*.mxcUrlToHttp", "*.getHttpUriForMxc"],
                 "Use Media helper instead to centralise access for customisation.",
             ),
+            ...buildRestrictedPropertiesOptions(["window.setImmediate"], "Use setTimeout instead."),
+        ],
+        "no-restricted-globals": [
+            "error",
+            {
+                name: "setImmediate",
+                message: "Use setTimeout instead.",
+            },
         ],
 
         "import/no-duplicates": ["error"],

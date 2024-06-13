@@ -183,7 +183,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
 
         // We do this to intentionally break out of the current event loop task, allowing
         // us to instead wait for a more convenient time to run our updates.
-        setImmediate(() => this.onDispatchAsync(payload));
+        setTimeout(() => this.onDispatchAsync(payload));
     }
 
     protected async onDispatchAsync(payload: ActionPayload): Promise<void> {

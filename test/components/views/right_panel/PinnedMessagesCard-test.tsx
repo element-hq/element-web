@@ -32,6 +32,7 @@ import {
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { stubClient, mkEvent, mkMessage, flushPromises } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -98,7 +99,7 @@ describe("<PinnedMessagesCard />", () => {
                 </MatrixClientContext.Provider>,
             );
             // Wait a tick for state updates
-            await new Promise((resolve) => setImmediate(resolve));
+            await sleep(0);
         });
 
         return pins;
@@ -114,7 +115,7 @@ describe("<PinnedMessagesCard />", () => {
             // @ts-ignore what is going on here?
             pinListener(room.currentState.getStateEvents());
             // Wait a tick for state updates
-            await new Promise((resolve) => setImmediate(resolve));
+            await sleep(0);
         });
     };
 

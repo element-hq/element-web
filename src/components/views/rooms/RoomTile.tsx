@@ -195,7 +195,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             payload.room_id === this.props.room.roomId &&
             payload.show_room_tile
         ) {
-            setImmediate(() => {
+            setTimeout(() => {
                 this.scrollIntoView();
             });
         }

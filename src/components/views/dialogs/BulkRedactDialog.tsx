@@ -126,7 +126,7 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
                     primaryButtonClass="danger"
                     primaryDisabled={count === 0}
                     onPrimaryButtonClick={() => {
-                        setImmediate(redact);
+                        setTimeout(redact, 0);
                         onFinished(true);
                     }}
                     onCancel={() => onFinished(false)}

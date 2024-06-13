@@ -18,11 +18,6 @@ import fetchMock from "fetch-mock-jest";
 import { TextDecoder, TextEncoder } from "util";
 import { Response } from "node-fetch";
 
-// jest 27 removes setImmediate from jsdom
-// polyfill until setImmediate use in client can be removed
-// @ts-ignore - we know the contract is wrong. That's why we're stubbing it.
-global.setImmediate = (callback) => window.setTimeout(callback, 0);
-
 // Stub ResizeObserver
 // @ts-ignore - we know it's a duplicate (that's why we're stubbing it)
 class ResizeObserver {

@@ -354,7 +354,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                     placeholder={_t("forward|filter_placeholder")}
                                     onSearch={(query: string): void => {
                                         setQuery(query);
-                                        setImmediate(() => {
+                                        setTimeout(() => {
                                             const ref = context.state.refs[0];
                                             if (ref) {
                                                 context.dispatch({

@@ -232,7 +232,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.mouseHeld = false;
         // Delaying this to the next event loop tick is necessary for click
         // event cancellation to work
-        setImmediate(() => (this.moving = false));
+        setTimeout(() => (this.moving = false));
         this.snap(true);
     };
 

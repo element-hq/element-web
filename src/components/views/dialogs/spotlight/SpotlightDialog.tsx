@@ -505,7 +505,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         _setQuery(newQuery);
     };
     useEffect(() => {
-        setImmediate(() => {
+        setTimeout(() => {
             const ref = rovingContext.state.refs[0];
             if (ref) {
                 rovingContext.dispatch({

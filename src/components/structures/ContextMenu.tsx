@@ -170,7 +170,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
 
             // XXX: This isn't pretty but the only way to allow opening a different context menu on right click whilst
             // a context menu and its click-guard are up without completely rewriting how the context menus work.
-            setImmediate(() => {
+            setTimeout(() => {
                 const clickEvent = new MouseEvent("contextmenu", {
                     clientX: x,
                     clientY: y,
@@ -180,7 +180,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
                     relatedTarget: null,
                 });
                 document.elementFromPoint(x, y)?.dispatchEvent(clickEvent);
-            });
+            }, 0);
         }
     };
 

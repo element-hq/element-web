@@ -422,7 +422,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </div>
             );
 
-            setImmediate(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()));
+            setTimeout(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()), 0);
         } else {
             // This is safe to call repeatedly if we happen to do that
             ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());

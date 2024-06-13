@@ -289,7 +289,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         if (payload.action === Action.ViewRoom && payload.show_room_tile && this.state.rooms) {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
-            setImmediate(() => {
+            setTimeout(() => {
                 const roomIndex = this.state.rooms.findIndex((r) => r.roomId === payload.room_id);
 
                 if (!this.state.isExpanded && roomIndex > -1) {
@@ -300,7 +300,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     this.layout.visibleTiles = this.layout.tilesWithPadding(roomIndex + 1, MAX_PADDING_HEIGHT);
                     this.forceUpdate(); // because the layout doesn't trigger a re-render
                 }
-            });
+            }, 0);
         }
     };
 
@@ -457,9 +457,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             this.toggleCollapsed();
             // if the bottom list is collapsed then scroll it in so it doesn't expand off screen
             if (!isExpanded && isStickyBottom) {
-                setImmediate(() => {
+                setTimeout(() => {
                     sublist.scrollIntoView({ behavior: "smooth" });
-                });
+                }, 0);
             }
         }
     };
