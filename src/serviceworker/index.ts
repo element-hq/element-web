@@ -20,7 +20,7 @@ import { buildAndEncodePickleKey } from "matrix-react-sdk/src/utils/tokens/pickl
 
 const serverSupportMap: {
     [serverUrl: string]: {
-        supportsMSC3916: boolean;
+        supportsAuthedMedia: boolean;
         cacheExpiryTimeMs: number;
     };
 } = {};
@@ -79,10 +79,8 @@ self.addEventListener("fetch", (event: FetchEvent) => {
                 await tryUpdateServerSupportMap(csApi, accessToken);
 
                 // If we have server support (and a means of authentication), rewrite the URL to use MSC3916 endpoints.
-                if (serverSupportMap[csApi].supportsMSC3916 && accessToken) {
-                    // Currently unstable only.
-                    // TODO: Support stable endpoints when available.
-                    url = url.replace(/\/media\/v3\/(.*)\//, "/client/unstable/org.matrix.msc3916/media/$1/");
+                if (serverSupportMap[csApi].supportsAuthedMedia && accessToken) {
+                    url = url.replace(/\/media\/v3\/(.*)\//, "/client/v1/media/$1/");
                 } // else by default we make no changes
             } catch (err) {
                 console.error("SW: Error in request rewrite.", err);
@@ -106,7 +104,7 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
     const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
 
     serverSupportMap[clientApiUrl] = {
-        supportsMSC3916: Boolean(versions?.unstable_features?.["org.matrix.msc3916"]),
+        supportsAuthedMedia: Boolean(versions?.versions?.includes("v1.11")),
         cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
 }
