@@ -194,9 +194,9 @@ export default class Favicon {
     }
 
     private setIcon(canvas: HTMLCanvasElement): void {
-        setImmediate(() => {
+        setTimeout(() => {
             this.setIconSrc(canvas.toDataURL("image/png"));
-        });
+        }, 0);
     }
 
     private setIconSrc(url: string): void {
