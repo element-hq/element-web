@@ -1757,11 +1757,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({
                 action: Action.ViewHomePage,
             });
-        } else if (screen === "start") {
-            this.showScreen("home");
-            dis.dispatch({
-                action: "require_registration",
-            });
         } else if (screen === "directory") {
             dis.fire(Action.ViewRoomDirectory);
         } else if (screen === "start_sso" || screen === "start_cas") {
