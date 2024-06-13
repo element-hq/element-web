@@ -400,6 +400,10 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
+    // We cache the latest computed e2eStatus per room to show as soon as we switch rooms otherwise defaulting to
+    // unencrypted causes a flicker which can yield confusion/concern in a larger room.
+    private static e2eStatusCache = new Map<string, E2EStatus>();
+
     private readonly askToJoinEnabled: boolean;
     private readonly dispatcherRef: string;
     private settingWatchers: string[];
@@ -1530,14 +1534,18 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // If crypto is not currently enabled, we aren't tracking devices at all,
         // so we don't know what the answer is. Let's error on the safe side and show
         // a warning for this case.
-        let e2eStatus = E2EStatus.Warning;
+        let e2eStatus = RoomView.e2eStatusCache.get(room.roomId) ?? E2EStatus.Warning;
+        // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
+        this.setState({ e2eStatus });
+
         if (this.context.client.isCryptoEnabled()) {
+            this.setState({ e2eStatus: E2EStatus.Normal });
             /* At this point, the user has encryption on and cross-signing on */
             e2eStatus = await shieldStatusForRoom(this.context.client, room);
+            RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
+            if (this.unmounted) return;
+            this.setState({ e2eStatus });
         }
-
-        if (this.unmounted) return;
-        this.setState({ e2eStatus });
     }
 
     private onUrlPreviewsEnabledChange = (): void => {
