@@ -997,6 +997,7 @@
             "qr_reciprocate_same_shield_device": "Almost there! Is your other device showing the same shield?",
             "qr_reciprocate_same_shield_user": "Almost there! Is %(displayName)s showing the same shield?",
             "request_toast_accept": "Verify Session",
+            "request_toast_accept_user": "Verify User",
             "request_toast_decline_counter": "Ignore (%(counter)s)",
             "request_toast_detail": "%(deviceId)s from %(ip)s",
             "reset_proceed_prompt": "Proceed with reset",
