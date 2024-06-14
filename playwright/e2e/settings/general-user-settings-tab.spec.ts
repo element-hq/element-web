@@ -120,6 +120,12 @@ test.describe("General user settings tab", () => {
         await expect(uut).toMatchScreenshot("general-smallscreen.png");
     });
 
+    test("should show tooltips on narrow screen", async ({ page, uut }) => {
+        await page.setViewportSize({ width: 700, height: 600 });
+        await page.getByRole("tab", { name: "General" }).hover();
+        await expect(page.getByRole("tooltip")).toHaveText("General");
+    });
+
     test("should support adding and removing a profile picture", async ({ uut, page }) => {
         const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
