@@ -420,7 +420,7 @@ export const Commands = [
                     return success(
                         prom
                             .then(() => {
-                                return inviter.invite([address], reason, true);
+                                return inviter.invite([address], reason);
                             })
                             .then(() => {
                                 if (inviter.getCompletionState(address) !== "invited") {

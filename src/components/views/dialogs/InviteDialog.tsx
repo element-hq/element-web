@@ -22,7 +22,6 @@ import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
 
-import { Icon as InfoIcon } from "../../../../res/img/element-icons/info.svg";
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -624,7 +623,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, true);
+            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds);
             if (!this.shouldAbortAfterInviteError(result, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
@@ -1279,7 +1278,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let consultConnectSection;
         let extraSection;
         let footer;
-        let keySharingWarning = <span />;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
@@ -1391,21 +1389,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("action|invite");
             goButtonFn = this.inviteUsers;
-
-            if (cli.isRoomEncrypted(this.props.roomId)) {
-                const room = cli.getRoom(this.props.roomId)!;
-                const visibilityEvent = room.currentState.getStateEvents("m.room.history_visibility", "");
-                const visibility =
-                    visibilityEvent && visibilityEvent.getContent() && visibilityEvent.getContent().history_visibility;
-                if (visibility === "world_readable" || visibility === "shared") {
-                    keySharingWarning = (
-                        <p className="mx_InviteDialog_helpText">
-                            <InfoIcon height={14} width={14} />
-                            {" " + _t("invite|key_share_warning")}
-                        </p>
-                    );
-                }
-            }
         } else if (this.props.kind === InviteKind.CallTransfer) {
             title = _t("action|transfer");
 
@@ -1471,7 +1454,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         {spinner}
                     </div>
                 </div>
-                {keySharingWarning}
                 {this.renderIdentityServerWarning()}
                 <div className="error">{this.state.errorText}</div>
                 {onlyOneThreepidNote}
