@@ -15,300 +15,213 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixClient, Room, EventType } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
-import { act, render, screen, fireEvent, RenderResult } from "@testing-library/react";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { Mocked, mocked } from "jest-mock";
+import { prettyDOM, render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
-import { MetaSpace } from "../../../../src/stores/spaces";
-import _RoomListHeader from "../../../../src/components/views/rooms/RoomListHeader";
-import * as testUtils from "../../../test-utils";
-import { stubClient, mkSpace } from "../../../test-utils";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import SpaceContextMenu from "../../../../src/components/views/context_menus/SpaceContextMenu";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import {
+    shouldShowSpaceSettings,
+    showCreateNewRoom,
+    showCreateNewSubspace,
+    showSpaceInvite,
+    showSpaceSettings,
+} from "../../../../src/utils/space";
+import { leaveSpace } from "../../../../src/utils/leave-behaviour";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
-
-const RoomListHeader = testUtils.wrapInMatrixClientContext(_RoomListHeader);
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-const blockUIComponent = (component: UIComponent): void => {
-    mocked(shouldShowComponent).mockImplementation((feature) => feature !== component);
-};
+jest.mock("../../../../src/utils/space", () => ({
+    shouldShowSpaceSettings: jest.fn(),
+    showCreateNewRoom: jest.fn(),
+    showCreateNewSubspace: jest.fn(),
+    showSpaceInvite: jest.fn(),
+    showSpacePreferences: jest.fn(),
+    showSpaceSettings: jest.fn(),
+}));
 
-const setupSpace = (client: MatrixClient): Room => {
-    const testSpace: Room = mkSpace(client, "!space:server");
-    testSpace.name = "Test Space";
-    client.getRoom = () => testSpace;
-    return testSpace;
-};
+jest.mock("../../../../src/utils/leave-behaviour", () => ({
+    leaveSpace: jest.fn(),
+}));
 
-const setupMainMenu = async (client: MatrixClient, testSpace: Room): Promise<RenderResult> => {
-    await testUtils.setupAsyncStoreWithClient(SpaceStore.instance, client);
-    act(() => {
-        SpaceStore.instance.setActiveSpace(testSpace.roomId);
-    });
+describe("<SpaceContextMenu />", () => {
+    const userId = "@test:server";
 
-    const wrapper = render(<RoomListHeader />);
+    const mockClient = {
+        getUserId: jest.fn().mockReturnValue(userId),
+        getSafeUserId: jest.fn().mockReturnValue(userId),
+    } as unknown as Mocked<MatrixClient>;
 
-    expect(wrapper.container.textContent).toBe("Test Space");
-    act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Test Space menu"]')?.click();
-    });
+    const makeMockSpace = (props = {}) =>
+        ({
+            name: "test space",
+            getJoinRule: jest.fn(),
+            canInvite: jest.fn(),
+            currentState: {
+                maySendStateEvent: jest.fn(),
+            },
+            client: mockClient,
+            getMyMembership: jest.fn(),
+            ...props,
+        }) as unknown as Room;
 
-    return wrapper;
-};
-
-const setupPlusMenu = async (client: MatrixClient, testSpace: Room): Promise<RenderResult> => {
-    await testUtils.setupAsyncStoreWithClient(SpaceStore.instance, client);
-    act(() => {
-        SpaceStore.instance.setActiveSpace(testSpace.roomId);
-    });
-
-    const wrapper = render(<RoomListHeader />);
-
-    expect(wrapper.container.textContent).toBe("Test Space");
-    act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Add"]')?.click();
-    });
-
-    return wrapper;
-};
-
-const checkIsDisabled = (menuItem: HTMLElement): void => {
-    expect(menuItem).toHaveAttribute("disabled");
-    expect(menuItem).toHaveAttribute("aria-disabled", "true");
-};
-
-const checkMenuLabels = (items: NodeListOf<Element>, labelArray: Array<string>) => {
-    expect(items).toHaveLength(labelArray.length);
-
-    const checkLabel = (item: Element, label: string) => {
-        expect(item.querySelector(".mx_IconizedContextMenu_label")?.textContent).toBe(label);
+    const defaultProps = {
+        space: makeMockSpace(),
+        onFinished: jest.fn(),
     };
 
-    labelArray.forEach((label, index) => {
-        console.log("index", index, "label", label);
-        checkLabel(items[index], label);
-    });
-};
-
-describe("RoomListHeader", () => {
-    let client: MatrixClient;
+    const renderComponent = (props = {}): RenderResult =>
+        render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <SpaceContextMenu {...defaultProps} {...props} />
+            </MatrixClientContext.Provider>,
+        );
 
     beforeEach(() => {
         jest.resetAllMocks();
-
-        const dmRoomMap = {
-            getUserIdForRoomId: jest.fn(),
-            getDMRoomsForUserId: jest.fn(),
-        } as unknown as DMRoomMap;
-        DMRoomMap.setShared(dmRoomMap);
-        stubClient();
-        client = MatrixClientPeg.safeGet();
-        mocked(shouldShowComponent).mockReturnValue(true); // show all UIComponents
+        mockClient.getUserId.mockReturnValue(userId);
+        mockClient.getSafeUserId.mockReturnValue(userId);
     });
 
-    it("renders a main menu for the home space", () => {
-        act(() => {
-            SpaceStore.instance.setActiveSpace(MetaSpace.Home);
-        });
-
-        const { container } = render(<RoomListHeader />);
-
-        expect(container.textContent).toBe("Home");
-        fireEvent.click(screen.getByLabelText("Home options"));
-
-        const menu = screen.getByRole("menu");
-        const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-        expect(items).toHaveLength(1);
-        expect(items[0].textContent).toBe("Show all rooms");
+    it("renders menu correctly", () => {
+        const { baseElement } = renderComponent();
+        expect(prettyDOM(baseElement)).toMatchSnapshot();
     });
 
-    it("renders a main menu for spaces", async () => {
-        const testSpace = setupSpace(client);
-        await setupMainMenu(client, testSpace);
-
-        const menu = screen.getByRole("menu");
-        const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-
-        checkMenuLabels(items, ["Space home", "Manage & explore rooms", "Preferences", "Settings", "Room", "Space"]);
+    it("renders invite option when space is public", () => {
+        const space = makeMockSpace({
+            getJoinRule: jest.fn().mockReturnValue("public"),
+        });
+        renderComponent({ space });
+        expect(screen.getByTestId("invite-option")).toBeInTheDocument();
     });
 
-    it("renders a plus menu for spaces", async () => {
-        const testSpace = setupSpace(client);
-        await setupPlusMenu(client, testSpace);
-
-        const menu = screen.getByRole("menu");
-        const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-
-        checkMenuLabels(items, ["New room", "Explore rooms", "Add existing room", "Add space"]);
+    it("renders invite option when user is has invite rights for space", () => {
+        const space = makeMockSpace({
+            canInvite: jest.fn().mockReturnValue(true),
+        });
+        renderComponent({ space });
+        expect(space.canInvite).toHaveBeenCalledWith(userId);
+        expect(screen.getByTestId("invite-option")).toBeInTheDocument();
     });
 
-    it("closes menu if space changes from under it", async () => {
-        await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
-            [MetaSpace.Home]: true,
-            [MetaSpace.Favourites]: true,
+    it("opens invite dialog when invite option is clicked", async () => {
+        const space = makeMockSpace({
+            getJoinRule: jest.fn().mockReturnValue("public"),
         });
+        const onFinished = jest.fn();
+        renderComponent({ space, onFinished });
 
-        const testSpace = setupSpace(client);
-        await setupMainMenu(client, testSpace);
+        await userEvent.click(screen.getByTestId("invite-option"));
 
-        act(() => {
-            SpaceStore.instance.setActiveSpace(MetaSpace.Favourites);
-        });
-
-        screen.getByText("Favourites");
-        expect(screen.queryByRole("menu")).toBeFalsy();
+        expect(showSpaceInvite).toHaveBeenCalledWith(space);
+        expect(onFinished).toHaveBeenCalled();
     });
 
-    describe("UIComponents", () => {
-        describe("Main menu", () => {
-            it("does not render Add Space when user does not have permission to add spaces", async () => {
-                // User does not have permission to add spaces, anywhere
-                blockUIComponent(UIComponent.CreateSpaces);
-
-                const testSpace = setupSpace(client);
-                await setupMainMenu(client, testSpace);
-
-                const menu = screen.getByRole("menu");
-                const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-                checkMenuLabels(items, [
-                    "Space home",
-                    "Manage & explore rooms",
-                    "Preferences",
-                    "Settings",
-                    "Room",
-                    // no add space
-                ]);
-            });
-
-            it("does not render Add Room when user does not have permission to add rooms", async () => {
-                // User does not have permission to add rooms
-                blockUIComponent(UIComponent.CreateRooms);
-
-                const testSpace = setupSpace(client);
-                await setupMainMenu(client, testSpace);
-
-                const menu = screen.getByRole("menu");
-                const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-                checkMenuLabels(items, [
-                    "Space home",
-                    "Explore rooms", // not Manage & explore rooms
-                    "Preferences",
-                    "Settings",
-                    // no add room
-                    "Space",
-                ]);
-            });
-        });
-
-        describe("Plus menu", () => {
-            it("does not render Add Space when user does not have permission to add spaces", async () => {
-                // User does not have permission to add spaces, anywhere
-                blockUIComponent(UIComponent.CreateSpaces);
-
-                const testSpace = setupSpace(client);
-                await setupPlusMenu(client, testSpace);
-
-                const menu = screen.getByRole("menu");
-                const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-
-                checkMenuLabels(items, [
-                    "New room",
-                    "Explore rooms",
-                    "Add existing room",
-                    // no Add space
-                ]);
-            });
-
-            it("disables Add Room when user does not have permission to add rooms", async () => {
-                // User does not have permission to add rooms
-                blockUIComponent(UIComponent.CreateRooms);
-
-                const testSpace = setupSpace(client);
-                await setupPlusMenu(client, testSpace);
-
-                const menu = screen.getByRole("menu");
-                const items = menu.querySelectorAll<HTMLElement>(".mx_IconizedContextMenu_item");
-
-                checkMenuLabels(items, ["New room", "Explore rooms", "Add existing room", "Add space"]);
-
-                // "Add existing room" is disabled
-                checkIsDisabled(items[2]);
-            });
-        });
+    it("renders space settings option when user has rights", () => {
+        mocked(shouldShowSpaceSettings).mockReturnValue(true);
+        renderComponent();
+        expect(shouldShowSpaceSettings).toHaveBeenCalledWith(defaultProps.space);
+        expect(screen.getByTestId("settings-option")).toBeInTheDocument();
     });
 
-    describe("adding children to space", () => {
-        it("if user cannot add children to space, MainMenu adding buttons are hidden", async () => {
-            const testSpace = setupSpace(client);
-            mocked(testSpace.currentState.maySendStateEvent).mockImplementation(
-                (stateEventType, userId) => stateEventType !== EventType.SpaceChild,
-            );
+    it("opens space settings when space settings option is clicked", async () => {
+        mocked(shouldShowSpaceSettings).mockReturnValue(true);
+        const onFinished = jest.fn();
+        renderComponent({ onFinished });
 
-            await setupMainMenu(client, testSpace);
+        await userEvent.click(screen.getByTestId("settings-option"));
 
-            const menu = screen.getByRole("menu");
-            const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-            checkMenuLabels(items, [
-                "Space home",
-                "Explore rooms", // not Manage & explore rooms
-                "Preferences",
-                "Settings",
-                // no add room
-                // no add space
-            ]);
-        });
-
-        it("if user cannot add children to space, PlusMenu add buttons are disabled", async () => {
-            const testSpace = setupSpace(client);
-            mocked(testSpace.currentState.maySendStateEvent).mockImplementation(
-                (stateEventType, userId) => stateEventType !== EventType.SpaceChild,
-            );
-
-            await setupPlusMenu(client, testSpace);
-
-            const menu = screen.getByRole("menu");
-            const items = menu.querySelectorAll<HTMLElement>(".mx_IconizedContextMenu_item");
-
-            checkMenuLabels(items, ["New room", "Explore rooms", "Add existing room", "Add space"]);
-
-            // "Add existing room" is disabled
-            checkIsDisabled(items[2]);
-            // "Add space" is disabled
-            checkIsDisabled(items[3]);
-        });
+        expect(showSpaceSettings).toHaveBeenCalledWith(defaultProps.space);
+        expect(onFinished).toHaveBeenCalled();
     });
 
-    describe("UIFeature.AddSpace", () => {
-        it("UIFeature.AddSpace = true: renders Add Space when user has permission to add spaces", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSpace) return true;
-                else return "default";
-            });
+    it("renders leave option when user does not have rights to see space settings", () => {
+        renderComponent();
+        expect(screen.getByTestId("leave-option")).toBeInTheDocument();
+    });
 
-            const testSpace = setupSpace(client);
-            await setupPlusMenu(client, testSpace);
+    it("leaves space when leave option is clicked", async () => {
+        const onFinished = jest.fn();
+        renderComponent({ onFinished });
+        await userEvent.click(screen.getByTestId("leave-option"));
+        expect(leaveSpace).toHaveBeenCalledWith(defaultProps.space);
+        expect(onFinished).toHaveBeenCalled();
+    });
 
-            expect(screen.getByText("Add space")).toBeInTheDocument();
+    describe("add children section", () => {
+        const space = makeMockSpace();
+
+        beforeEach(() => {
+            // set space to allow adding children to space
+            mocked(space.currentState.maySendStateEvent).mockReturnValue(true);
+            mocked(shouldShowComponent).mockReturnValue(true);
         });
 
-        it("UIFeature.AddSpace = false: does not render Add Space when user has permission to add spaces", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSpace) return false;
-                else return "default";
-            });
+        it("does not render section when user does not have permission to add children", () => {
+            mocked(space.currentState.maySendStateEvent).mockReturnValue(false);
+            renderComponent({ space });
 
-            const testSpace = setupSpace(client);
-            await setupPlusMenu(client, testSpace);
+            expect(screen.queryByTestId("add-to-space-header")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
+        });
 
-            expect(screen.queryByText("Add space")).not.toBeInTheDocument();
+        it("does not render section when UIComponent customisations disable room and space creation", () => {
+            mocked(shouldShowComponent).mockReturnValue(false);
+            renderComponent({ space });
+
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateRooms);
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateSpaces);
+
+            expect(screen.queryByTestId("add-to-space-header")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
+        });
+
+        it("renders section with add room button when UIComponent customisation allows CreateRoom", () => {
+            // only allow CreateRoom
+            mocked(shouldShowComponent).mockImplementation((feature) => feature === UIComponent.CreateRooms);
+            renderComponent({ space });
+
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
+        });
+
+        it("renders section with add space button when UIComponent customisation allows CreateSpace", () => {
+            // only allow CreateSpaces
+            mocked(shouldShowComponent).mockImplementation((feature) => feature === UIComponent.CreateSpaces);
+            renderComponent({ space });
+
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.getByTestId("new-subspace-option")).toBeInTheDocument();
+        });
+
+        it("opens create room dialog on add room button click", async () => {
+            const onFinished = jest.fn();
+            renderComponent({ space, onFinished });
+
+            await userEvent.click(screen.getByTestId("new-room-option"));
+            expect(showCreateNewRoom).toHaveBeenCalledWith(space);
+            expect(onFinished).toHaveBeenCalled();
+        });
+
+        it("opens create space dialog on add space button click", async () => {
+            const onFinished = jest.fn();
+            renderComponent({ space, onFinished });
+
+            await userEvent.click(screen.getByTestId("new-subspace-option"));
+            expect(showCreateNewSubspace).toHaveBeenCalledWith(space);
+            expect(onFinished).toHaveBeenCalled();
         });
     });
 
