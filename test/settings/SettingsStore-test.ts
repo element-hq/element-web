@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import BasePlatform from "../../src/BasePlatform";
+import SdkConfig from "../../src/SdkConfig";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { mockPlatformPeg } from "../test-utils";
@@ -26,6 +27,11 @@ const TEST_DATA = [
         value: true,
     },
 ];
+
+/**
+ * An existing setting that has {@link IBaseSetting#supportedLevelsAreOrdered} set to true.
+ */
+const SETTING_NAME_WITH_CONFIG_OVERRIDE = "feature_new_room_decoration_ui";
 
 describe("SettingsStore", () => {
     let platformSettings: Record<string, any>;
@@ -42,11 +48,16 @@ describe("SettingsStore", () => {
             getSettingValue: jest.fn().mockImplementation((settingName: string) => {
                 return platformSettings[settingName];
             }),
+            reload: jest.fn(),
         } as unknown as BasePlatform);
 
         TEST_DATA.forEach((d) => {
             SettingsStore.setValue(d.name, null, d.level, d.value);
         });
+    });
+
+    beforeEach(() => {
+        SdkConfig.reset();
     });
 
     describe("getValueAt", () => {
@@ -56,6 +67,21 @@ describe("SettingsStore", () => {
                 // regression test #22545
                 expect(SettingsStore.getValueAt(d.level, d.name)).toBe(d.value);
             });
+        });
+
+        it(`supportedLevelsAreOrdered correctly overrides setting`, async () => {
+            SdkConfig.put({
+                features: {
+                    [SETTING_NAME_WITH_CONFIG_OVERRIDE]: false,
+                },
+            });
+            await SettingsStore.setValue(SETTING_NAME_WITH_CONFIG_OVERRIDE, null, SettingLevel.DEVICE, true);
+            expect(SettingsStore.getValue(SETTING_NAME_WITH_CONFIG_OVERRIDE)).toBe(false);
+        });
+
+        it(`supportedLevelsAreOrdered doesn't incorrectly override setting`, async () => {
+            await SettingsStore.setValue(SETTING_NAME_WITH_CONFIG_OVERRIDE, null, SettingLevel.DEVICE, true);
+            expect(SettingsStore.getValueAt(SettingLevel.DEVICE, SETTING_NAME_WITH_CONFIG_OVERRIDE)).toBe(true);
         });
     });
 });

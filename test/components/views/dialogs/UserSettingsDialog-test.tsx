@@ -54,6 +54,7 @@ jest.mock("../../../../src/settings/SettingsStore", () => ({
     getDescription: jest.fn(),
     shouldHaveWarning: jest.fn(),
     disabledMessage: jest.fn(),
+    settingIsOveriddenAtConfigLevel: jest.fn(),
 }));
 
 jest.mock("../../../../src/SdkConfig", () => ({

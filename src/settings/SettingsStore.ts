@@ -505,8 +505,8 @@ export default class SettingsStore {
      * set for a particular room, otherwise it should be supplied.
      *
      * This takes into account both the value of {@link SettingController#settingDisabled} of the
-     * `SettingController`, if any; and, for settings where {@link IBaseSetting#configDisablesSetting} is true,
-     * whether the setting has been given a value in `config.json`.
+     * `SettingController`, if any; and, for settings where {@link IBaseSetting#supportedLevelsAreOrdered} is true,
+     * checks whether a level of higher precedence is set.
      *
      * Typically, if the user cannot set the setting, it should be hidden, to declutter the UI;
      * however some settings (typically, the labs flags) are exposed but greyed out, to unveil
@@ -514,30 +514,55 @@ export default class SettingsStore {
      *
      * @param {string} settingName The name of the setting to check.
      * @param {String} roomId The room ID to check in, may be null.
-     * @param {SettingLevel} level The level to
-     * check at.
+     * @param {SettingLevel} level The level to check at.
      * @return {boolean} True if the user may set the setting, false otherwise.
      */
     public static canSetValue(settingName: string, roomId: string | null, level: SettingLevel): boolean {
+        const setting = SETTINGS[settingName];
         // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
+        if (!setting) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        if (SETTINGS[settingName].controller?.settingDisabled) {
+        if (setting.controller?.settingDisabled) {
             return false;
         }
 
         // For some config settings (mostly: non-beta features), a value in config.json overrides the local setting
-        // (ie: we force them as enabled or disabled).
-        if (SETTINGS[settingName]?.configDisablesSetting) {
-            const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
-            if (configVal === true || configVal === false) return false;
+        // (ie: we force them as enabled or disabled). In this case we should not let the user change the setting.
+        if (
+            setting?.supportedLevelsAreOrdered &&
+            SettingsStore.settingIsOveriddenAtConfigLevel(settingName, roomId, level)
+        ) {
+            return false;
         }
 
         const handler = SettingsStore.getHandler(settingName, level);
         if (!handler) return false;
         return handler.canSetValue(settingName, roomId);
+    }
+
+    /**
+     * Determines if the setting at the specified level is overidden by one at a config level.
+     * @param settingName The name of the setting to check.
+     * @param roomId The room ID to check in, may be null.
+     * @param level The level to check at.
+     * @returns
+     */
+    public static settingIsOveriddenAtConfigLevel(
+        settingName: string,
+        roomId: string | null,
+        level: SettingLevel,
+    ): boolean {
+        const setting = SETTINGS[settingName];
+        const levelOrders = getLevelOrder(setting);
+        const configIndex = levelOrders.indexOf(SettingLevel.CONFIG);
+        const levelIndex = levelOrders.indexOf(level);
+        if (configIndex === -1 || levelIndex === -1 || configIndex >= levelIndex) {
+            return false;
+        }
+        const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
+        return configVal === true || configVal === false;
     }
 
     /**
