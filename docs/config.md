@@ -250,12 +250,14 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
    all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
-   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. As an example:
+   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
+   redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
     {
         "sso_redirect_options": {
             "immediate": false,
-            "on_welcome_page": true
+            "on_welcome_page": true,
+            "on_login_page": true
         }
     }
     ```
