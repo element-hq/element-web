@@ -123,10 +123,10 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
         data-orientation="horizontal"
         role="separator"
       />
-      <label
+      <div
+        aria-checked="false"
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
-        for=":r3:"
         role="menuitemcheckbox"
       >
         <div
@@ -135,11 +135,12 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
           height="24"
           width="24"
         />
-        <span
+        <label
           class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          for=":r3:"
         >
           Favourite
-        </span>
+        </label>
         <div
           class="_container_ik1u1_18"
         >
@@ -152,7 +153,7 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
             class="_ui_ik1u1_42"
           />
         </div>
-      </label>
+      </div>
       <button
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
@@ -520,10 +521,10 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         data-orientation="horizontal"
         role="separator"
       />
-      <label
+      <div
+        aria-checked="false"
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
-        for=":r1:"
         role="menuitemcheckbox"
       >
         <div
@@ -532,11 +533,12 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           height="24"
           width="24"
         />
-        <span
+        <label
           class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          for=":r1:"
         >
           Favourite
-        </span>
+        </label>
         <div
           class="_container_ik1u1_18"
         >
@@ -549,7 +551,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             class="_ui_ik1u1_42"
           />
         </div>
-      </label>
+      </div>
       <button
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
@@ -928,10 +930,10 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         data-orientation="horizontal"
         role="separator"
       />
-      <label
+      <div
+        aria-checked="false"
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
-        for=":r2:"
         role="menuitemcheckbox"
       >
         <div
@@ -940,11 +942,12 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           height="24"
           width="24"
         />
-        <span
+        <label
           class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          for=":r2:"
         >
           Favourite
-        </span>
+        </label>
         <div
           class="_container_ik1u1_18"
         >
@@ -957,7 +960,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             class="_ui_ik1u1_42"
           />
         </div>
-      </label>
+      </div>
       <button
         class="_item_1gwvj_17 _interactive_1gwvj_36"
         data-kind="primary"
