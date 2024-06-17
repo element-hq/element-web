@@ -807,7 +807,6 @@
         "failed_generic": "Operacija nepavyko",
         "failed_title": "Nepavyko pakviesti",
         "invalid_address": "Neatpažintas adresas",
-        "key_share_warning": "Pakviesti asmenys galės skaityti senus pranešimus.",
         "name_email_mxid_share_room": "Pakviesti ką nors, naudojant jų vardą, el. pašto adresą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>.",
         "name_mxid_share_room": "Pakviesti ką nors naudojant jų vardą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>.",
         "recents_section": "Pastarieji pokalbiai",

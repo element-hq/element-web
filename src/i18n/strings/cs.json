@@ -1261,7 +1261,6 @@
         "failed_generic": "Operace se nezdařila",
         "failed_title": "Pozvání se nezdařilo",
         "invalid_address": "Neznámá adresa",
-        "key_share_warning": "Pozvaní lidé budou moci číst staré zprávy.",
         "name_email_mxid_share_room": "Pozvěte někoho pomocí jeho jména, e-mailové adresy, uživatelského jména (například <userId/>) nebo <a>sdílejte tuto místnost</a>.",
         "name_email_mxid_share_space": "Pozvěte někoho pomocí jeho jména, e-mailové adresy, uživatelského jména (například <userId/>) nebo <a>sdílejte tento prostor</a>.",
         "name_mxid_share_room": "Pozvěte někoho pomocí svého jména, uživatelského jména (například <userId />) nebo <a>sdílejte tuto místnost</a>.",

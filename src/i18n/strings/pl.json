@@ -1295,7 +1295,6 @@
         "failed_generic": "Operacja nie udała się",
         "failed_title": "Wysłanie zaproszenia nie powiodło się",
         "invalid_address": "Nierozpoznany adres",
-        "key_share_warning": "Zaproszone osoby, będą mogły czytać historię wiadomości.",
         "name_email_mxid_share_room": "Zaproś kogoś za pomocą jego imienia, adresu e-mail, nazwy użytkownika (takiej jak <userId/>) lub <a>udostępnij ten pokój</a>.",
         "name_email_mxid_share_space": "Zaproś kogoś za pomocą jego imienia, adresu e-mail, nazwy użytkownika (takiej jak <userId/>) lub <a>udostępnij tą przestrzeń</a>.",
         "name_mxid_share_room": "Zaproś kogoś za pomocą jego imienia, nazwy użytkownika (takiej jak <userId/>) lub <a>udostępnij ten pokój</a>.",

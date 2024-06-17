@@ -1240,7 +1240,6 @@
         "failed_generic": "Operasi gagal",
         "failed_title": "Gagal untuk mengundang",
         "invalid_address": "Alamat tidak dikenal",
-        "key_share_warning": "Orang-orang yang diundang dapat membaca pesan-pesan lama.",
         "name_email_mxid_share_room": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",
         "name_email_mxid_share_space": "Undang seseorang menggunakan namanya, alamat email, nama pengguna (seperti <userId/>) atau <a>bagikan space ini</a>.",
         "name_mxid_share_room": "Undang seseorang menggunakan namanya, nama pengguna (seperti <userId/>) atau <a>bagikan ruangan ini</a>.",

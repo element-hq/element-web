@@ -1257,7 +1257,6 @@
         "failed_generic": "Toiming ei õnnestunud",
         "failed_title": "Kutse saatmine ei õnnestunud",
         "invalid_address": "Tundmatu aadress",
-        "key_share_warning": "Kutse saanud kasutajad saavad lugeda vanu sõnumeid.",
         "name_email_mxid_share_room": "Kutsu teist osapoolt tema nime, e-posti aadressi, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
         "name_email_mxid_share_space": "Kutsu teist osapoolt tema nime, e-posti aadressi, kasutajanime (nagu <userId/>) alusel või <a>jaga seda kogukonnakeskust</a>.",
         "name_mxid_share_room": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",

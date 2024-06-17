@@ -1028,7 +1028,6 @@
         "failed_generic": "Aðgerð tókst ekki",
         "failed_title": "Mistókst að bjóða",
         "invalid_address": "Óþekkjanlegt vistfang",
-        "key_share_warning": "Fólk sem er boðið mun geta lesið eldri skilaboð.",
         "name_email_mxid_share_room": "Bjóddu einhverjum með því að nota nafn, tölvupóstfang, notandanafn (eins og <userId/>) eða <a>deildu þessari spjallrás</a>.",
         "name_email_mxid_share_space": "Bjóddu einhverjum með því að nota nafn, tölvupóstfang, notandanafn (eins og <userId/>) eða <a>deildu þessu svæði</a>.",
         "name_mxid_share_room": "Bjóddu einhverjum með því að nota nafn, notandanafn (eins og <userId/>) eða <a>deildu þessari spjallrás</a>.",

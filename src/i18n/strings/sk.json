@@ -1255,7 +1255,6 @@
         "failed_generic": "Operácia zlyhala",
         "failed_title": "Pozvanie zlyhalo",
         "invalid_address": "Nerozpoznaná adresa",
-        "key_share_warning": "Pozvaní ľudia si budú môcť prečítať staré správy.",
         "name_email_mxid_share_room": "Pozvite niekoho pomocou jeho mena, e-mailovej adresy, používateľského mena (napríklad <userId/>) alebo <a>zdieľajte túto miestnosť</a>.",
         "name_email_mxid_share_space": "Pozvite niekoho pomocou jeho mena, e-mailovej adresy, používateľského mena (napríklad <userId/>) alebo <a>zdieľajte tento priestor</a>.",
         "name_mxid_share_room": "Pozvite niekoho pomocou jeho mena, používateľského mena (napríklad <userId/>) alebo <a>zdieľate túto miestnosť</a>.",

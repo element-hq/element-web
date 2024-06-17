@@ -1260,7 +1260,6 @@
         "failed_generic": "Handlingen misslyckades",
         "failed_title": "Inbjudan misslyckades",
         "invalid_address": "Okänd adress",
-        "key_share_warning": "Inbjudna personer kommer att kunna läsa gamla meddelanden.",
         "name_email_mxid_share_room": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
         "name_email_mxid_share_space": "Bjud in någon med deras namn, e-postadress eller användarnamn (som <userId/>), eller <a>dela det här rummet</a>.",
         "name_mxid_share_room": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",

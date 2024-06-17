@@ -1260,7 +1260,6 @@
         "failed_generic": "L’opération a échoué",
         "failed_title": "Échec de l’invitation",
         "invalid_address": "Adresse non reconnue",
-        "key_share_warning": "Les personnes invitées pourront lire les anciens messages.",
         "name_email_mxid_share_room": "Invitez quelqu’un via son nom, adresse e-mail ou pseudo (p. ex. <userId/>) ou <a>partagez ce salon</a>.",
         "name_email_mxid_share_space": "Invitez quelqu’un grâce à son nom, adresse e-mail, nom d’utilisateur (tel que <userId/>) ou <a>partagez cet espace</a>.",
         "name_mxid_share_room": "Invitez quelqu’un à partir de son nom, pseudo (comme <userId/>) ou <a>partagez ce salon</a>.",

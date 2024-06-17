@@ -1230,7 +1230,6 @@
         "failed_generic": "無法操作",
         "failed_title": "無法邀請",
         "invalid_address": "無法識別的位址",
-        "key_share_warning": "被邀請的人將能閱讀舊訊息。",
         "name_email_mxid_share_room": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
         "name_email_mxid_share_space": "使用某人的名字、電子郵件地址、使用者名稱（如 <userId/>）或<a>分享此聊天空間</a>來邀請人。",
         "name_mxid_share_room": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請人。",

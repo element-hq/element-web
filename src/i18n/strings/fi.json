@@ -1106,7 +1106,6 @@
         "failed_generic": "Toiminto epäonnistui",
         "failed_title": "Kutsu epäonnistui",
         "invalid_address": "Osoitetta ei tunnistettu",
-        "key_share_warning": "Kutsutut ihmiset voivat lukea vanhoja viestejä.",
         "name_email_mxid_share_room": "Kutsu käyttäen nimeä, sähköpostiosoitetta, käyttäjänimeä (kuten <userId/>) tai <a>jaa tämä huone</a>.",
         "name_email_mxid_share_space": "Kutsu käyttäen nimeä, sähköpostiosoitetta, käyttäjänimeä (kuten <userId/>) tai <a>jaa tämä avaruus</a>.",
         "recents_section": "Viimeaikaiset keskustelut",

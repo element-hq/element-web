@@ -1069,7 +1069,6 @@
         "failed_generic": "Handeling is mislukt",
         "failed_title": "Uitnodigen is mislukt",
         "invalid_address": "Adres niet herkend",
-        "key_share_warning": "Uitgenodigde personen kunnen de oude berichten lezen.",
         "name_email_mxid_share_room": "Nodig iemand uit door gebruik te maken van hun naam, e-mailadres, inlognaam (zoals <userId/>) of <a>deel deze kamer</a>.",
         "name_email_mxid_share_space": "Nodig iemand uit per naam, e-mail, inlognaam (zoals <userId/>) of <a>deel deze Space</a>.",
         "name_mxid_share_room": "Nodig iemand uit door gebruik te maken van hun naam, inlognaam (zoals <userId/>) of <a>deel deze kamer</a>.",

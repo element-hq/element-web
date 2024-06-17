@@ -1250,7 +1250,6 @@
         "failed_generic": "Aktion fehlgeschlagen",
         "failed_title": "Einladen fehlgeschlagen",
         "invalid_address": "Nicht erkannte Adresse",
-        "key_share_warning": "Eingeladene Leute werden ältere Nachrichten lesen können.",
         "name_email_mxid_share_room": "Lade jemanden mittels Name, E-Mail-Adresse oder Benutzername (wie <userId/>) ein, oder <a>teile diesen Raum</a>.",
         "name_email_mxid_share_space": "Lade Leute mittels Anzeigename, E-Mail-Adresse oder Benutzername (z. B. <userId/>) ein oder <a>teile diesen Space</a>.",
         "name_mxid_share_room": "Lade jemanden mittels Name oder Benutzername (z. B. <userId/>) ein oder <a>teile diesen Raum</a>.",

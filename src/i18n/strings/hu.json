@@ -1240,7 +1240,6 @@
         "failed_generic": "Sikertelen művelet",
         "failed_title": "Meghívás sikertelen",
         "invalid_address": "Ismeretlen cím",
-        "key_share_warning": "A meghívott személyek el tudják olvasni a régi üzeneteket.",
         "name_email_mxid_share_room": "Hívj meg valakit a nevét, e-mail címét, vagy felhasználónevét (például <userId/>) megadva, vagy <a>oszd meg ezt a szobát</a>.",
         "name_email_mxid_share_space": "Hívjon meg valakit a nevét, e-mail címét, vagy felhasználónevét (például <userId/>) megadva, vagy <a>oszd meg ezt a teret</a>.",
         "name_mxid_share_room": "Hívj meg valakit a nevét, vagy felhasználónevét (például <userId/>) megadva, vagy <a>oszd meg ezt a szobát</a>.",

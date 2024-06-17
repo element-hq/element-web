@@ -1143,7 +1143,6 @@
         "failed_generic": "Tác vụ thất bại",
         "failed_title": "Không thể mời",
         "invalid_address": "Không nhận ra địa chỉ",
-        "key_share_warning": "Những người được mời sẽ có thể đọc tin nhắn cũ.",
         "name_email_mxid_share_room": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc chia sẻ phòng này <a>share this room</a>.",
         "name_email_mxid_share_space": "Mời ai đó bằng tên, địa chỉ thư điện tử, tên người dùng của họ (như <userId/>) hoặc <a>chia sẻ space này</a>.",
         "name_mxid_share_room": "Mời ai đó thông qua tên hiển thị, tên người dùng của họ (ví dụ <userId/>) hoặc <a>chia sẻ phòng này</a>.",

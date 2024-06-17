@@ -1075,7 +1075,6 @@
         "failed_generic": "Fallou a operación",
         "failed_title": "Fallou o convite",
         "invalid_address": "Enderezo non recoñecible",
-        "key_share_warning": "As persoas convidadas poderán ler as mensaxes antigas.",
         "name_email_mxid_share_room": "Convida a persoas usando o seu nome, enderezo de email, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
         "name_email_mxid_share_space": "Convida a persoas usando o seu nome, enderezo de email, nome de usuaria (como <userId/>) ou <a>comparte este espazo</a>.",
         "name_mxid_share_room": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",

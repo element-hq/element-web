@@ -1260,7 +1260,6 @@
         "failed_generic": "Operazione fallita",
         "failed_title": "Invito fallito",
         "invalid_address": "Indirizzo non riconosciuto",
-        "key_share_warning": "Le persone invitate potranno leggere i vecchi messaggi.",
         "name_email_mxid_share_room": "Invita qualcuno usando il suo nome, indirizzo email, nome utente (come <userId/>) o <a>condividi questa stanza</a>.",
         "name_email_mxid_share_space": "Invita qualcuno usando il suo nome, indirizzo email, nome utente (come <userId/>) o <a>condividi questo spazio</a>.",
         "name_mxid_share_room": "Invita qualcuno usando il suo nome, nome utente (come <userId/>) o <a>condividi questa stanza</a>.",

@@ -1162,7 +1162,6 @@
         "failed_generic": "Falló la operación",
         "failed_title": "No se ha podido invitar",
         "invalid_address": "Dirección desconocida",
-        "key_share_warning": "Las personas que invites podrán leer los mensajes antiguos.",
         "name_email_mxid_share_room": "Invitar a alguien usando su nombre, dirección de correo, nombre de usuario (ej.: <userId/>) o <a>compartiendo la sala</a>.",
         "name_email_mxid_share_space": "Invita a más gente usando su nombre, correo electrónico, nombre de usuario (ej.: <userId/>) o <a>compartiendo el enlace a este espacio</a>.",
         "name_mxid_share_room": "Invita a alguien usando su nombre, nombre de usuario (ej.: <userId/>) o <a>compartiendo esta sala</a>.",

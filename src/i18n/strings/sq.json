@@ -1192,7 +1192,6 @@
         "failed_generic": "Veprimi dështoi",
         "failed_title": "S’u arrit të ftohej",
         "invalid_address": "Adresë jo e pranuar",
-        "key_share_warning": "Personat e ftuar do të jenë në gjendje të lexojnë mesazhe të vjetër.",
         "name_email_mxid_share_room": "Ftoni dikë duke përdorur emrin e tij, adresën email, emrin e përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë dhomë</a>.",
         "name_email_mxid_share_space": "Ftoni dikë duke përdorur emrin e tij, adresën email, emrin e përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë hapësirë</a>.",
         "name_mxid_share_room": "Ftoni dikë duke përdorur emrin e tij, emrin e tij të përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë dhomë</a>.",

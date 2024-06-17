@@ -1150,7 +1150,6 @@
         "failed_generic": "操作失败",
         "failed_title": "邀请失败",
         "invalid_address": "无法识别地址",
-        "key_share_warning": "被邀请的人将能够阅读过去的消息。",
         "name_email_mxid_share_room": "使用名字、电子邮件地址、用户名（如<userId/>）邀请某人或<a>分享此房间</a>。",
         "name_email_mxid_share_space": "使用某人的名字、电子邮箱地址或用户名（如 <userId/>）邀请他们，或<a>分享此空间</a>。",
         "name_mxid_share_room": "使用某人的名字、用户名（如 <userId/>）或<a>分享此房间</a>来邀请他们。",
