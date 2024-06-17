@@ -87,6 +87,7 @@ import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
 import { transformSearchTerm } from "../../../../utils/SearchInput";
 import { Filter } from "./Filter";
+import { UIFeature } from "../../../../settings/UIFeature";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -567,7 +568,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
 
     let otherSearchesSection: JSX.Element | undefined;
-    if (trimmedQuery || (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces)) {
+    if (
+        (SettingsStore.getValue(UIFeature.SpacesEnabled) && trimmedQuery) ||
+        (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces)
+    ) {
         otherSearchesSection = (
             <div
                 className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"

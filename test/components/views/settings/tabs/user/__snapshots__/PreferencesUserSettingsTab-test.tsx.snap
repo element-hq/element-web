@@ -57,6 +57,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   />
                 </div>
               </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_QgU2PomxwKpa"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show shortcut to welcome checklist above the room list
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show shortcut to welcome checklist above the room list"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_QgU2PomxwKpa"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -79,7 +106,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_QgU2PomxwKpa"
+                  for="mx_SettingsFlag_6hpi3YEetmBG"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -93,11 +120,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show all rooms in Home"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_QgU2PomxwKpa"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_6hpi3YEetmBG"
                   role="switch"
                   tabindex="0"
                 >
@@ -147,7 +174,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_6hpi3YEetmBG"
+                  for="mx_SettingsFlag_4yVCeEefiPqp"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -156,11 +183,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Use Ctrl + F to search timeline"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_6hpi3YEetmBG"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_4yVCeEefiPqp"
                   role="switch"
                   tabindex="0"
                 >
@@ -191,7 +218,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_4yVCeEefiPqp"
+                  for="mx_SettingsFlag_MRMwbPDmfGtm"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -200,11 +227,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show timestamps in 12 hour format (e.g. 2:30pm)"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_4yVCeEefiPqp"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_MRMwbPDmfGtm"
                   role="switch"
                   tabindex="0"
                 >
@@ -218,7 +245,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_MRMwbPDmfGtm"
+                  for="mx_SettingsFlag_GQvdMWe954DV"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -227,11 +254,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Always show message timestamps"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_MRMwbPDmfGtm"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_GQvdMWe954DV"
                   role="switch"
                   tabindex="0"
                 >
@@ -271,7 +298,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_GQvdMWe954DV"
+                  for="mx_SettingsFlag_IAu5CsiHRD7n"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -284,7 +311,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Send read receipts"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_GQvdMWe954DV"
+                  id="mx_SettingsFlag_IAu5CsiHRD7n"
                   role="switch"
                   tabindex="0"
                 >
@@ -298,7 +325,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_IAu5CsiHRD7n"
+                  for="mx_SettingsFlag_yrA2ohjWVJIP"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -311,7 +338,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Send typing notifications"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_IAu5CsiHRD7n"
+                  id="mx_SettingsFlag_yrA2ohjWVJIP"
                   role="switch"
                   tabindex="0"
                 >
@@ -342,7 +369,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_yrA2ohjWVJIP"
+                  for="mx_SettingsFlag_auy1OmnTidX4"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -351,11 +378,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Automatically replace plain text Emoji"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_yrA2ohjWVJIP"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_auy1OmnTidX4"
                   role="switch"
                   tabindex="0"
                 >
@@ -369,7 +396,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_auy1OmnTidX4"
+                  for="mx_SettingsFlag_ePDS0OpWwAHG"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -393,33 +420,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Enable Markdown"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_auy1OmnTidX4"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_ePDS0OpWwAHG"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Enable Emoji suggestions while typing
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Enable Emoji suggestions while typing"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_ePDS0OpWwAHG"
                   role="switch"
                   tabindex="0"
@@ -439,14 +439,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Use Ctrl + Enter to send a message
+                    Enable Emoji suggestions while typing
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Use Ctrl + Enter to send a message"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  aria-label="Enable Emoji suggestions while typing"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_75JNTNkNU64r"
                   role="switch"
                   tabindex="0"
@@ -466,14 +466,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Surround selected text when typing special characters
+                    Use Ctrl + Enter to send a message
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Surround selected text when typing special characters"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  aria-label="Use Ctrl + Enter to send a message"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_aTLcRsQRlYy7"
                   role="switch"
                   tabindex="0"
@@ -493,42 +493,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show stickers button
+                    Surround selected text when typing special characters
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show stickers button"
+                  aria-label="Surround selected text when typing special characters"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_5nfv5bOEPN1s"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_u1JYVtOyR5kb"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Insert a trailing colon after user mentions at the start of a message
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Insert a trailing colon after user mentions at the start of a message"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_u1JYVtOyR5kb"
                   role="switch"
                   tabindex="0"
                 >
@@ -559,7 +532,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_u3pEwuLn9Enn"
+                  for="mx_SettingsFlag_u1JYVtOyR5kb"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -568,10 +541,37 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Enable automatic language detection for syntax highlighting"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_u1JYVtOyR5kb"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_u3pEwuLn9Enn"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Expand code blocks by default
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Expand code blocks by default"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_u3pEwuLn9Enn"
                   role="switch"
                   tabindex="0"
@@ -591,33 +591,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Expand code blocks by default
-                  </span>
-                </label>
-                <div
-                  aria-checked="false"
-                  aria-disabled="true"
-                  aria-label="Expand code blocks by default"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_YuxfFEpOsztW"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_hQkBerF1ejc4"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
                     Show line numbers in code blocks
                   </span>
                 </label>
@@ -626,7 +599,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show line numbers in code blocks"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_hQkBerF1ejc4"
+                  id="mx_SettingsFlag_YuxfFEpOsztW"
                   role="switch"
                   tabindex="0"
                 >
@@ -657,7 +630,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_GFes1UFzOK2n"
+                  for="mx_SettingsFlag_hQkBerF1ejc4"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -669,6 +642,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-checked="true"
                   aria-disabled="true"
                   aria-label="Enable inline URL previews by default"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_hQkBerF1ejc4"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_GFes1UFzOK2n"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Autoplay GIFs
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Autoplay GIFs"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_GFes1UFzOK2n"
                   role="switch"
@@ -689,14 +689,14 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Autoplay GIFs
+                    Autoplay videos
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Autoplay GIFs"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  aria-label="Autoplay videos"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_vfGFMldL2r2v"
                   role="switch"
                   tabindex="0"
@@ -716,33 +716,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Autoplay videos
-                  </span>
-                </label>
-                <div
-                  aria-checked="false"
-                  aria-disabled="true"
-                  aria-label="Autoplay videos"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_bsSwicmKUiOB"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_dvqsxEaZtl3A"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
                     Show previews/thumbnails for images
                   </span>
                 </label>
@@ -751,7 +724,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show previews/thumbnails for images"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_dvqsxEaZtl3A"
+                  id="mx_SettingsFlag_bsSwicmKUiOB"
                   role="switch"
                   tabindex="0"
                 >
@@ -782,7 +755,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_NIiWzqsApP1c"
+                  for="mx_SettingsFlag_dvqsxEaZtl3A"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -794,6 +767,33 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show typing notifications"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_dvqsxEaZtl3A"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                  for="mx_SettingsFlag_NIiWzqsApP1c"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show a placeholder for removed messages
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show a placeholder for removed messages"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_NIiWzqsApP1c"
                   role="switch"
@@ -814,13 +814,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show a placeholder for removed messages
+                    Show read receipts sent by other users
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show a placeholder for removed messages"
+                  aria-label="Show read receipts sent by other users"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_q1SIAPqLMVXh"
                   role="switch"
@@ -841,13 +841,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show read receipts sent by other users
+                    Show display name changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show read receipts sent by other users"
+                  aria-label="Show display name changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_dXFDGgBsKXay"
                   role="switch"
@@ -868,13 +868,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show join/leave messages (invites/removes/bans unaffected)
+                    Show profile picture changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show join/leave messages (invites/removes/bans unaffected)"
+                  aria-label="Show profile picture changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_7Az0xw4Bs4Tt"
                   role="switch"
@@ -895,13 +895,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show display name changes
+                    Show avatars in user, room and event mentions
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show display name changes"
+                  aria-label="Show avatars in user, room and event mentions"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_8jmzPIlPoBCv"
                   role="switch"
@@ -922,13 +922,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show chat effects (animations when receiving e.g. confetti)
+                    Enable big emoji in chat
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
+                  aria-label="Enable big emoji in chat"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_enFRaTjdsFou"
                   role="switch"
@@ -949,13 +949,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show profile picture changes
+                    Jump to the bottom of the timeline when you send a message
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show profile picture changes"
+                  aria-label="Jump to the bottom of the timeline when you send a message"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   id="mx_SettingsFlag_bfwnd5rz4XNX"
                   role="switch"
@@ -976,96 +976,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show avatars in user, room and event mentions
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Show avatars in user, room and event mentions"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_gs5uWEzYzZrS"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_qWg7OgID1yRR"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Enable big emoji in chat
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Enable big emoji in chat"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_qWg7OgID1yRR"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_pOPewl7rtMbV"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Jump to the bottom of the timeline when you send a message
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Jump to the bottom of the timeline when you send a message"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_pOPewl7rtMbV"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_cmt3PZSyNp3v"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
                     Show current profile picture and name for users in message history
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show current profile picture and name for users in message history"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_cmt3PZSyNp3v"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_gs5uWEzYzZrS"
                   role="switch"
                   tabindex="0"
                 >
@@ -1096,7 +1015,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_dJJz3lHUv9XX"
+                  for="mx_SettingsFlag_qWg7OgID1yRR"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1105,11 +1024,11 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </span>
                 </label>
                 <div
-                  aria-checked="false"
+                  aria-checked="true"
                   aria-disabled="true"
                   aria-label="Show NSFW content"
-                  class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_dJJz3lHUv9XX"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  id="mx_SettingsFlag_qWg7OgID1yRR"
                   role="switch"
                   tabindex="0"
                 >
@@ -1140,7 +1059,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_SBSSOZDRlzlA"
+                  for="mx_SettingsFlag_pOPewl7rtMbV"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1153,7 +1072,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Prompt before sending invites to potentially invalid matrix IDs"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_SBSSOZDRlzlA"
+                  id="mx_SettingsFlag_pOPewl7rtMbV"
                   role="switch"
                   tabindex="0"
                 >
@@ -1170,7 +1089,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   label="Autocomplete delay (ms)"
                   placeholder="Autocomplete delay (ms)"
                   type="number"
-                  value="200"
+                  value="10"
                 />
                 <label
                   for="mx_Field_1"
@@ -1186,7 +1105,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   label="Read Marker lifetime (ms)"
                   placeholder="Read Marker lifetime (ms)"
                   type="number"
-                  value="3000"
+                  value="default"
                 />
                 <label
                   for="mx_Field_2"
@@ -1202,7 +1121,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   label="Read Marker off-screen lifetime (ms)"
                   placeholder="Read Marker off-screen lifetime (ms)"
                   type="number"
-                  value="30000"
+                  value="default"
                 />
                 <label
                   for="mx_Field_3"

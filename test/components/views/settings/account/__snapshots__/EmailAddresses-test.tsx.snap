@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ExistingEmailAddress/> do not render 'Add' button when UIFeature is false 1`] = `
+<div>
+  <div
+    class="mx_GeneralUserSettingsTab_section--discovery_existing"
+  >
+    <span
+      class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+    >
+      foo@bar.com
+    </span>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+      role="button"
+      tabindex="0"
+    >
+      Remove
+    </div>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_3"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_3"
+      >
+        Email Address
+      </label>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`<ExistingEmailAddress/> do not render 'remove' button when option UIFeature is false 1`] = `
+<div>
+  <div
+    class="mx_GeneralUserSettingsTab_section--discovery_existing"
+  >
+    <span
+      class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+    >
+      foo@bar.com
+    </span>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_1"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_1"
+      >
+        Email Address
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;
+
+exports[`<ExistingEmailAddress/> render 'Add' button when UIFeature is true 1`] = `
+<div>
+  <div
+    class="mx_GeneralUserSettingsTab_section--discovery_existing"
+  >
+    <span
+      class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+    >
+      foo@bar.com
+    </span>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+      role="button"
+      tabindex="0"
+    >
+      Remove
+    </div>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_4"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_4"
+      >
+        Email Address
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;
+
+exports[`<ExistingEmailAddress/> render 'remove' button when UIFeature is true and an existing email exists 1`] = `
+<div>
+  <div
+    class="mx_GeneralUserSettingsTab_section--discovery_existing"
+  >
+    <span
+      class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+    >
+      foo@bar.com
+    </span>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+      role="button"
+      tabindex="0"
+    >
+      Remove
+    </div>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_2"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_2"
+      >
+        Email Address
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;

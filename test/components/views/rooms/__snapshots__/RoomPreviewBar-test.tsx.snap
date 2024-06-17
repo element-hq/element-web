@@ -354,13 +354,6 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
     role="button"
     tabindex="0"
   >
-    Reject & Ignore user
-  </div>
-  <div
-    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-    role="button"
-    tabindex="0"
-  >
     Reject
   </div>
 </div>
