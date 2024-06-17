@@ -7,20 +7,21 @@
  * @todo This test is incomplete and needs to be finished.
  */
 
-import React from 'react';
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import SpaceRoomView from '../../../src/components/structures/SpaceRoomView';
-import { MatrixClient, Room } from 'matrix-js-sdk';
-import { mkSpace, stubClient } from '../../test-utils';
-import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
-import ResizeNotifier from '../../../src/utils/ResizeNotifier';
-import { RoomPermalinkCreator } from '../../../src/utils/permalinks/Permalinks';
-import { MockedObject, mocked } from 'jest-mock';
-import MatrixClientContext from '../../../src/contexts/MatrixClientContext';
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MockedObject, mocked } from "jest-mock";
 
-describe('SpaceRoomView', () => {
+import SpaceRoomView from "../../../src/components/structures/SpaceRoomView";
+import { mkSpace, stubClient } from "../../test-utils";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import ResizeNotifier from "../../../src/utils/ResizeNotifier";
+import { RoomPermalinkCreator } from "../../../src/utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+
+describe("SpaceRoomView", () => {
     stubClient();
-    let client: MockedObject<MatrixClient> = mocked(MatrixClientPeg.safeGet());
+    const client: MockedObject<MatrixClient> = mocked(MatrixClientPeg.safeGet());
     const sourceRoom = "!111111111111111111:example.org";
 
     const setupSpace = (client: MatrixClient): Room => {
@@ -34,7 +35,7 @@ describe('SpaceRoomView', () => {
 
     const context = {
         getSafeUserId: jest.fn().mockReturnValue("@guest:localhost"),
-    }
+    };
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
@@ -42,21 +43,22 @@ describe('SpaceRoomView', () => {
         jest.clearAllMocks();
     });
 
-    const renderComp = () => render(
-        <MatrixClientContext.Provider value={{...client, ...context} as unknown as MatrixClient}>
-            <SpaceRoomView
-                space={space}
-                resizeNotifier={new ResizeNotifier()}
-                permalinkCreator={new RoomPermalinkCreator(undefined!, sourceRoom)}
-                onJoinButtonClicked={():void => console.log('Function not implemented.')}
-                onRejectButtonClicked={(): void => console.log('Function not implemented.')}
-            />
-        </MatrixClientContext.Provider>
-    );
+    const renderComp = () =>
+        render(
+            <MatrixClientContext.Provider value={{ ...client, ...context } as unknown as MatrixClient}>
+                <SpaceRoomView
+                    space={space}
+                    resizeNotifier={new ResizeNotifier()}
+                    permalinkCreator={new RoomPermalinkCreator(undefined!, sourceRoom)}
+                    onJoinButtonClicked={(): void => console.log("Function not implemented.")}
+                    onRejectButtonClicked={(): void => console.log("Function not implemented.")}
+                />
+            </MatrixClientContext.Provider>,
+        );
 
-    it('should render a SpaceRoomView', () => {
+    it("should render a SpaceRoomView", () => {
         renderComp();
         screen.debug();
-        expect(screen.getByText('Something went wrong!')).toBeInTheDocument();
+        expect(screen.getByText("Something went wrong!")).toBeInTheDocument();
     });
 });
