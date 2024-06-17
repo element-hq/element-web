@@ -285,7 +285,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                         numShown={7}
                         onClick={isShowingMembers ? undefined : onMembersClick}
                     />
-                    {inviteButton}
+                    {SettingsStore.getValue(UIFeature.ShowAddMoreButtonForSpaces) && inviteButton}
                     {settingsButton}
                 </div>
             </div>
