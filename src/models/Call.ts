@@ -963,7 +963,7 @@ export class ElementCall extends Call {
 
     private onRTCSessionEnded = (roomId: string, session: MatrixRTCSession): void => {
         // Don't destroy the call on hangup for video call rooms.
-        if (roomId == this.roomId && !this.room.isCallRoom()) {
+        if (roomId === this.roomId && !this.room.isCallRoom()) {
             this.destroy();
         }
     };

@@ -70,8 +70,12 @@ export default class ActiveWidgetStore extends EventEmitter {
 
     public destroyPersistentWidget(widgetId: string, roomId: string | null): void {
         if (!this.getWidgetPersistence(widgetId, roomId)) return;
-        WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
+        // We first need to set the widget persistence to false
         this.setWidgetPersistence(widgetId, roomId, false);
+        // Then we can stop the messaging. Stopping the messaging emits - we might move the widget out of sight.
+        // If we would do this before setting the persistence to false, it would stay in the DOM (hidden) because
+        // its still persistent. We need to avoid this.
+        WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId ?? undefined));
     }
 
     public setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void {

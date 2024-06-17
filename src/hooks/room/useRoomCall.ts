@@ -176,13 +176,13 @@ export const useRoomCall = (
     // We only want to prompt to pin the widget if it's not element call based.
     const isECWidget = WidgetType.CALL.matches(widget?.type ?? "");
     const promptPinWidget = !isECWidget && canPinWidget && !widgetPinned;
-    const activeCalls = useEventEmitterState(CallStore.instance, CallStoreEvent.ActiveCalls, () =>
-        Array.from(CallStore.instance.activeCalls),
+    const connectedCalls = useEventEmitterState(CallStore.instance, CallStoreEvent.ConnectedCalls, () =>
+        Array.from(CallStore.instance.connectedCalls),
     );
     const { canInviteGuests } = useGuestAccessInformation(room);
 
     const state = useMemo((): State => {
-        if (activeCalls.find((call) => call.roomId != room.roomId)) {
+        if (connectedCalls.find((call) => call.roomId != room.roomId)) {
             return State.Ongoing;
         }
         if (hasGroupCall && (hasJitsiWidget || hasManagedHybridWidget)) {
@@ -200,7 +200,7 @@ export const useRoomCall = (
         }
         return State.NoCall;
     }, [
-        activeCalls,
+        connectedCalls,
         canInviteGuests,
         hasGroupCall,
         hasJitsiWidget,

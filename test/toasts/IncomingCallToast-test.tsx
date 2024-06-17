@@ -20,10 +20,6 @@ import { mocked, Mocked } from "jest-mock";
 import { Room, RoomStateEvent, MatrixEvent, MatrixEventEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
 // eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
-// eslint-disable-next-line no-restricted-imports
 import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
@@ -82,6 +78,7 @@ describe("IncomingCallEvent", () => {
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
+        MockedCall.create(room, "1");
 
         await Promise.all(
             [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
@@ -89,7 +86,6 @@ describe("IncomingCallEvent", () => {
             ),
         );
 
-        MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);
         if (!(maybeCall instanceof MockedCall)) throw new Error("Failed to create call");
         call = maybeCall;
@@ -179,7 +175,7 @@ describe("IncomingCallEvent", () => {
 
         defaultDispatcher.unregister(dispatcherRef);
     });
-    it("skips lobby when using shift key click", async () => {
+    it("Dismiss toast if user starts call and skips lobby when using shift key click", async () => {
         renderToast();
 
         const dispatcherSpy = jest.fn();
@@ -250,11 +246,7 @@ describe("IncomingCallEvent", () => {
 
     it("closes toast when the matrixRTC session has ended", async () => {
         renderToast();
-
-        client.matrixRTC.emit(MatrixRTCSessionManagerEvents.SessionEnded, room.roomId, {
-            callId: notifyContent.call_id,
-            room: room,
-        } as unknown as MatrixRTCSession);
+        call.destroy();
 
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(

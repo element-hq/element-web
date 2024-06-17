@@ -345,7 +345,6 @@ export class StopGapWidget extends EventEmitter {
             async (ev: CustomEvent<IStickyActionRequest>) => {
                 if (this.messaging?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                     ev.preventDefault();
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
                     if (ev.detail.data.value) {
                         // If the widget wants to become sticky we wait for the stickyPromise to resolve
                         if (this.stickyPromise) await this.stickyPromise();
@@ -356,6 +355,8 @@ export class StopGapWidget extends EventEmitter {
                         this.roomId ?? null,
                         ev.detail.data.value,
                     );
+                    // Send the ack after the widget actually has become sticky.
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
                 }
             },
         );

@@ -492,7 +492,7 @@ describe("RoomHeader", () => {
         it("buttons are disabled if there is an ongoing call", async () => {
             mockRoomMembers(room, 3);
 
-            jest.spyOn(CallStore.prototype, "activeCalls", "get").mockReturnValue(
+            jest.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
             );
             const { container } = render(<RoomHeader room={room} />, getWrapper());
@@ -514,7 +514,7 @@ describe("RoomHeader", () => {
         it("join button is disabled if there is an other ongoing call", async () => {
             mockRoomMembers(room, 3);
             jest.spyOn(UseCall, "useParticipantCount").mockReturnValue(3);
-            jest.spyOn(CallStore.prototype, "activeCalls", "get").mockReturnValue(
+            jest.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
             );
             const { container } = render(<RoomHeader room={room} />, getWrapper());

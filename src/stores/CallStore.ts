@@ -34,7 +34,7 @@ export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
     Call = "call",
     // Signals a change in the active calls
-    ActiveCalls = "active_calls",
+    ConnectedCalls = "connected_calls",
 }
 
 export class CallStore extends AsyncStoreWithClient<{}> {
@@ -66,8 +66,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         }
         this.matrixClient.on(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
         this.matrixClient.on(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
-        this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSession);
-        this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.onRTCSession);
+        this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
 
         // If the room ID of a previously connected call is still in settings at
@@ -95,28 +94,27 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         }
         this.callListeners.clear();
         this.calls.clear();
-        this._activeCalls.clear();
+        this._connectedCalls.clear();
 
         if (this.matrixClient) {
             this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
             this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
             this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
-            this.matrixClient.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSession);
-            this.matrixClient.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionEnded, this.onRTCSession);
+            this.matrixClient.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
         }
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
-    private _activeCalls: Set<Call> = new Set();
+    private _connectedCalls: Set<Call> = new Set();
     /**
      * The calls to which the user is currently connected.
      */
-    public get activeCalls(): Set<Call> {
-        return this._activeCalls;
+    public get connectedCalls(): Set<Call> {
+        return this._connectedCalls;
     }
-    private set activeCalls(value: Set<Call>) {
-        this._activeCalls = value;
-        this.emit(CallStoreEvent.ActiveCalls, value);
+    private set connectedCalls(value: Set<Call>) {
+        this._connectedCalls = value;
+        this.emit(CallStoreEvent.ConnectedCalls, value);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         SettingsStore.setValue(
@@ -137,9 +135,9 @@ export class CallStore extends AsyncStoreWithClient<{}> {
             if (call) {
                 const onConnectionState = (state: ConnectionState): void => {
                     if (state === ConnectionState.Connected) {
-                        this.activeCalls = new Set([...this.activeCalls, call]);
+                        this.connectedCalls = new Set([...this.connectedCalls, call]);
                     } else if (state === ConnectionState.Disconnected) {
-                        this.activeCalls = new Set([...this.activeCalls].filter((c) => c !== call));
+                        this.connectedCalls = new Set([...this.connectedCalls].filter((c) => c !== call));
                     }
                 };
                 const onDestroy = (): void => {
@@ -181,7 +179,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
      */
     public getActiveCall(roomId: string): Call | null {
         const call = this.getCall(roomId);
-        return call !== null && this.activeCalls.has(call) ? call : null;
+        return call !== null && this.connectedCalls.has(call) ? call : null;
     }
 
     private onWidgets = (roomId: string | null): void => {
@@ -200,7 +198,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
     };
 
     private onGroupCall = (groupCall: GroupCall): void => this.updateRoom(groupCall.room);
-    private onRTCSession = (roomId: string, session: MatrixRTCSession): void => {
+    private onRTCSessionStart = (roomId: string, session: MatrixRTCSession): void => {
         this.updateRoom(session.room);
     };
 }

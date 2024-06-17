@@ -60,7 +60,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
         // The stickyPromise has to resolve before the widget actually becomes sticky.
         // We only let the widget become sticky after disconnecting all other active calls.
-        const calls = [...CallStore.instance.activeCalls].filter(
+        const calls = [...CallStore.instance.connectedCalls].filter(
             (call) => SdkContextClass.instance.roomViewStore.getRoomId() !== call.roomId,
         );
         await Promise.all(calls.map(async (call) => await call.disconnect()));
