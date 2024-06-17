@@ -522,57 +522,68 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
 
             <Separator />
 
-            <ToggleMenuItem
-                Icon={FavouriteIcon}
-                label={_t("room|context_menu|favourite")}
-                checked={isFavorite}
-                onChange={() => tagRoom(room, DefaultTagID.Favourite)}
-                // XXX: https://github.com/element-hq/compound/issues/288
-                onSelect={() => {}}
-            />
-            <MenuItem
-                Icon={UserAddIcon}
-                label={_t("action|invite")}
-                disabled={!canInviteToState}
-                onSelect={() => inviteToRoom(room)}
-            />
-            <MenuItem Icon={LinkIcon} label={_t("action|copy_link")} onSelect={onShareRoomClick} />
-            <MenuItem Icon={SettingsIcon} label={_t("common|settings")} onSelect={onRoomSettingsClick} />
+            <div role="menubar" aria-orientation="vertical">
+                <ToggleMenuItem
+                    Icon={FavouriteIcon}
+                    label={_t("room|context_menu|favourite")}
+                    checked={isFavorite}
+                    onChange={() => tagRoom(room, DefaultTagID.Favourite)}
+                    // XXX: https://github.com/element-hq/compound/issues/288
+                    onSelect={() => {}}
+                />
+                <MenuItem
+                    Icon={UserAddIcon}
+                    label={_t("action|invite")}
+                    disabled={!canInviteToState}
+                    onSelect={() => inviteToRoom(room)}
+                />
+                <MenuItem Icon={LinkIcon} label={_t("action|copy_link")} onSelect={onShareRoomClick} />
+                <MenuItem Icon={SettingsIcon} label={_t("common|settings")} onSelect={onRoomSettingsClick} />
 
-            <Separator />
-            <MenuItem
-                // this icon matches the legacy implementation
-                // and is a short term solution until legacy room header is removed
-                Icon={UserProfileSolidIcon}
-                label={_t("common|people")}
-                onSelect={onRoomMembersClick}
-            />
-            {!isVideoRoom && (
-                <>
-                    <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
-                    <MenuItem
-                        Icon={PollsIcon}
-                        label={_t("right_panel|polls_button")}
-                        onSelect={onRoomPollHistoryClick}
-                    />
-                    {pinningEnabled && (
+                <Separator />
+                <MenuItem
+                    // this icon matches the legacy implementation
+                    // and is a short term solution until legacy room header is removed
+                    Icon={UserProfileSolidIcon}
+                    label={_t("common|people")}
+                    onSelect={onRoomMembersClick}
+                />
+                {!isVideoRoom && (
+                    <>
+                        <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
                         <MenuItem
-                            Icon={PinIcon}
-                            label={_t("right_panel|pinned_messages_button")}
-                            onSelect={onRoomPinsClick}
-                        >
-                            <Text as="span" size="sm">
-                                {pinCount}
-                            </Text>
-                        </MenuItem>
-                    )}
-                    <MenuItem Icon={ExportArchiveIcon} label={_t("export_chat|title")} onSelect={onRoomExportClick} />
-                </>
-            )}
+                            Icon={PollsIcon}
+                            label={_t("right_panel|polls_button")}
+                            onSelect={onRoomPollHistoryClick}
+                        />
+                        {pinningEnabled && (
+                            <MenuItem
+                                Icon={PinIcon}
+                                label={_t("right_panel|pinned_messages_button")}
+                                onSelect={onRoomPinsClick}
+                            >
+                                <Text as="span" size="sm">
+                                    {pinCount}
+                                </Text>
+                            </MenuItem>
+                        )}
+                        <MenuItem
+                            Icon={ExportArchiveIcon}
+                            label={_t("export_chat|title")}
+                            onSelect={onRoomExportClick}
+                        />
+                    </>
+                )}
 
-            <Separator />
+                <Separator />
 
-            <MenuItem Icon={LeaveIcon} kind="critical" label={_t("action|leave_room")} onSelect={onLeaveRoomClick} />
+                <MenuItem
+                    Icon={LeaveIcon}
+                    kind="critical"
+                    label={_t("action|leave_room")}
+                    onSelect={onLeaveRoomClick}
+                />
+            </div>
 
             {SettingsStore.getValue(UIFeature.Widgets) &&
                 !isVideoRoom &&

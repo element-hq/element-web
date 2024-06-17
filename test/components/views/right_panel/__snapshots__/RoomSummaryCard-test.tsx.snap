@@ -124,288 +124,293 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
         role="separator"
       />
       <div
-        aria-checked="false"
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitemcheckbox"
+        aria-orientation="vertical"
+        role="menubar"
       >
         <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <label
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          for=":r3:"
+          aria-checked="false"
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitemcheckbox"
         >
-          Favourite
-        </label>
-        <div
-          class="_container_ik1u1_18"
-        >
-          <input
-            class="_input_ik1u1_32"
-            id=":r3:"
-            type="checkbox"
-          />
           <div
-            class="_ui_ik1u1_42"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
           />
+          <label
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+            for=":r3:"
+          >
+            Favourite
+          </label>
+          <div
+            class="_container_ik1u1_18"
+          >
+            <input
+              class="_input_ik1u1_32"
+              id=":r3:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_ik1u1_42"
+            />
+          </div>
         </div>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Poll history
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Invite
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Copy link
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Settings
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          People
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Files
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Poll history
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Export Chat
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="critical"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Leave room
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
       >
@@ -522,288 +527,293 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         role="separator"
       />
       <div
-        aria-checked="false"
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitemcheckbox"
+        aria-orientation="vertical"
+        role="menubar"
       >
         <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <label
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          for=":r1:"
+          aria-checked="false"
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitemcheckbox"
         >
-          Favourite
-        </label>
-        <div
-          class="_container_ik1u1_18"
-        >
-          <input
-            class="_input_ik1u1_32"
-            id=":r1:"
-            type="checkbox"
-          />
           <div
-            class="_ui_ik1u1_42"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
           />
+          <label
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+            for=":r1:"
+          >
+            Favourite
+          </label>
+          <div
+            class="_container_ik1u1_18"
+          >
+            <input
+              class="_input_ik1u1_32"
+              id=":r1:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_ik1u1_42"
+            />
+          </div>
         </div>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Poll history
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Invite
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Copy link
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Settings
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          People
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Files
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Poll history
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Export Chat
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="critical"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Leave room
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
       >
@@ -931,288 +941,293 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         role="separator"
       />
       <div
-        aria-checked="false"
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitemcheckbox"
+        aria-orientation="vertical"
+        role="menubar"
       >
         <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <label
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          for=":r2:"
+          aria-checked="false"
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitemcheckbox"
         >
-          Favourite
-        </label>
-        <div
-          class="_container_ik1u1_18"
-        >
-          <input
-            class="_input_ik1u1_32"
-            id=":r2:"
-            type="checkbox"
-          />
           <div
-            class="_ui_ik1u1_42"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
           />
+          <label
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+            for=":r2:"
+          >
+            Favourite
+          </label>
+          <div
+            class="_container_ik1u1_18"
+          >
+            <input
+              class="_input_ik1u1_32"
+              id=":r2:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_ik1u1_42"
+            />
+          </div>
         </div>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Poll history
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Invite
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Copy link
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Settings
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          People
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Files
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Poll history
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="primary"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Export Chat
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
-      <div
-        class="_separator_144s5_17"
-        data-kind="primary"
-        data-orientation="horizontal"
-        role="separator"
-      />
-      <button
-        class="_item_1gwvj_17 _interactive_1gwvj_36"
-        data-kind="critical"
-        role="menuitem"
-      >
-        <div
-          aria-hidden="true"
-          class="_icon_1gwvj_44"
-          height="24"
-          width="24"
-        />
-        <span
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-        >
-          Leave room
-        </span>
-        <svg
-          aria-hidden="true"
-          class="_nav-hint_1gwvj_60"
-          fill="currentColor"
-          height="24"
-          viewBox="8 0 8 24"
-          width="8"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-          />
-        </svg>
-      </button>
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
       >
