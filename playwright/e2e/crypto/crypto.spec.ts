@@ -248,6 +248,10 @@ test.describe("Cryptography", function () {
         await page.getByPlaceholder("Security Key").fill(secretStorageKey);
         await page.getByRole("button", { name: "Continue" }).click();
 
+        // Enter the password
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
+        await page.getByRole("button", { name: "Continue" }).click();
+
         await expect(async () => {
             const masterKey2 = await fetchMasterKey();
             expect(masterKey1).not.toEqual(masterKey2);
