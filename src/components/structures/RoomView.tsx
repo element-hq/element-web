@@ -1539,7 +1539,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({ e2eStatus });
 
         if (this.context.client.isCryptoEnabled()) {
-            this.setState({ e2eStatus: E2EStatus.Normal });
             /* At this point, the user has encryption on and cross-signing on */
             e2eStatus = await shieldStatusForRoom(this.context.client, room);
             RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
