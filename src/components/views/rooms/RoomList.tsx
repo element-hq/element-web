@@ -326,7 +326,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         )}
                     </>
                 )}
-                {showExploreRooms ? (
+                {SettingsStore.getValue(UIFeature.UserInfoRedactButton) && showExploreRooms ? (
                     <IconizedContextMenuOption
                         label={_t("action|explore_public_rooms")}
                         iconClassName="mx_RoomList_iconExplore"
