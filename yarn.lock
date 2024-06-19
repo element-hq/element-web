@@ -2793,9 +2793,9 @@
   integrity sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==
 
 "@types/lodash@^4.14.168":
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.4.tgz#0303b64958ee070059e3a7184048a55159fe20b7"
-  integrity sha512-wYCP26ZLxaT3R39kiN2+HcJ4kTd3U1waI/cY7ivWYqFP6pW3ZNpvi6Wd6PHZx7T/t8z0vlkXMg3QYLa7DZ/IJQ==
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.5.tgz#e6c29b58e66995d57cd170ce3e2a61926d55ee04"
+  integrity sha512-MBIOHVZqVqgfro1euRDWX7OO0fBVUUMrN6Pwm8LQsz8cWhEpihlvR70ENj3f40j58TNxZaWv2ndSkInykNBBJw==
 
 "@types/mapbox__point-geometry@*", "@types/mapbox__point-geometry@^0.1.2":
   version "0.1.4"
@@ -2842,9 +2842,9 @@
     undici-types "~5.26.4"
 
 "@types/node@18":
-  version "18.19.33"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.33.tgz#98cd286a1b8a5e11aa06623210240bcc28e95c48"
-  integrity sha512-NR9+KrpSajr2qBVp/Yt5TU/rp+b5Mayi3+OlMlcg2cVCfRmcG5PWZ7S4+MG9PZ5gWBoc9Pd0BKSRViuBCRPu0A==
+  version "18.19.36"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.36.tgz#c9861e84727e07ecf79a5ff6d0e14f91bab2b478"
+  integrity sha512-tX1BNmYSWEvViftB26VLNxT6mEr37M7+ldUtq7rlKnv4/2fKYsJIOmqJAjT6h1DNuwQjIKgw3VJ/Dtw3yiTIQw==
   dependencies:
     undici-types "~5.26.4"
 
@@ -2952,10 +2952,10 @@
   resolved "https://registry.yarnpkg.com/@types/sdp-transform/-/sdp-transform-2.4.9.tgz#26ef39f487a6909b0512f580b80920a366b27f52"
   integrity sha512-bVr+/OoZZy7wrHlNcEAAa6PAgKA4BoXPYVN2EijMC5WnGgQ4ZEuixmKnVs2roiAvr7RhIFVH17QD27cojgIZCg==
 
-"@types/seedrandom@3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.4.tgz#e4a8d0fca0168cacc7dba2af0e4a4ea645d3a190"
-  integrity sha512-/rWdxeiuZenlawrHU+XV6ZHMTKOqrC2hMfeDfLTIWJhDZP5aVqXRysduYHBbhD7CeJO6FJr/D2uBVXB7GT6v7w==
+"@types/seedrandom@3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.8.tgz#61cc8ed88f93a3c31289c295e6df8ca40be42bdf"
+  integrity sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==
 
 "@types/send@*":
   version "0.17.4"
