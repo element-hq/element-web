@@ -34,6 +34,7 @@ import {
     getByRole,
     getByText,
     queryAllByLabelText,
+    queryByLabelText,
     render,
     RenderOptions,
     screen,
@@ -232,6 +233,28 @@ describe("RoomHeader", () => {
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.NotificationPanel });
     });
 
+    it("should show both call buttons in rooms smaller than 3 members", async () => {
+        mockRoomMembers(room, 2);
+        const { container } = render(<RoomHeader room={room} />, getWrapper());
+        expect(getByLabelText(container, "Video call")).toBeInTheDocument();
+        expect(getByLabelText(container, "Voice call")).toBeInTheDocument();
+    });
+
+    it("should not show voice call button in managed hybrid environments", async () => {
+        mockRoomMembers(room, 2);
+        jest.spyOn(SdkConfig, "get").mockReturnValue({ widget_build_url: "https://widget.build.url" });
+        const { container } = render(<RoomHeader room={room} />, getWrapper());
+        expect(getByLabelText(container, "Video call")).toBeInTheDocument();
+        expect(queryByLabelText(container, "Voice call")).not.toBeInTheDocument();
+    });
+
+    it("should not show voice call button in rooms larger than 2 members", async () => {
+        mockRoomMembers(room, 3);
+        const { container } = render(<RoomHeader room={room} />, getWrapper());
+        expect(getByLabelText(container, "Video call")).toBeInTheDocument();
+        expect(queryByLabelText(container, "Voice call")).not.toBeInTheDocument();
+    });
+
     describe("groups call disabled", () => {
         it("you can't call if you're alone", () => {
             mockRoomMembers(room, 1);
@@ -270,12 +293,11 @@ describe("RoomHeader", () => {
             }
         });
 
-        it("can calls in large rooms if able to edit widgets", () => {
+        it("can call in large rooms if able to edit widgets", () => {
             mockRoomMembers(room, 10);
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
-            expect(getByLabelText(container, "Voice call")).not.toHaveAttribute("aria-disabled", "true");
             expect(getByLabelText(container, "Video call")).not.toHaveAttribute("aria-disabled", "true");
         });
 
@@ -283,9 +305,6 @@ describe("RoomHeader", () => {
             mockRoomMembers(room, 10);
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
             const { container } = render(<RoomHeader room={room} />, getWrapper());
-            expect(
-                getByLabelText(container, "You do not have permission to start voice calls", { selector: "button" }),
-            ).toHaveAttribute("aria-disabled", "true");
             expect(
                 getByLabelText(container, "You do not have permission to start video calls", { selector: "button" }),
             ).toHaveAttribute("aria-disabled", "true");
@@ -456,15 +475,10 @@ describe("RoomHeader", () => {
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
-            const voiceButton = getByLabelText(container, "Voice call");
             const videoButton = getByLabelText(container, "Video call");
-            expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
             const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
-            fireEvent.click(voiceButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
-
             fireEvent.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
@@ -479,9 +493,7 @@ describe("RoomHeader", () => {
 
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
-            const voiceButton = getByLabelText(container, "Voice call");
             const videoButton = getByLabelText(container, "Video call");
-            expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
@@ -497,9 +509,8 @@ describe("RoomHeader", () => {
             );
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
-            const [videoButton, voiceButton] = getAllByLabelText(container, "Ongoing call");
+            const [videoButton] = getAllByLabelText(container, "Ongoing call");
 
-            expect(voiceButton).toHaveAttribute("aria-disabled", "true");
             expect(videoButton).toHaveAttribute("aria-disabled", "true");
         });
 
