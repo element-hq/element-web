@@ -59,7 +59,6 @@ interface IState {
     checkCode?: string;
     failureReason?: FailureReason;
     lastScannedCode?: Buffer;
-    homeserverBaseUrl?: string;
 }
 
 export enum LoginWithQRFailureReason {
@@ -312,7 +311,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             failureReason: undefined,
             userCode: undefined,
             checkCode: undefined,
-            homeserverBaseUrl: undefined,
             lastScannedCode: undefined,
             mediaPermissionError: false,
         });
