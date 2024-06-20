@@ -1,0 +1,16 @@
+name: Pull Request Base Branch
+on:
+    pull_request:
+        types: [opened, edited, synchronize]
+jobs:
+    check_base_branch:
+        name: Check PR base branch
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/github-script@v3
+              with:
+                  script: |
+                      const baseBranch = context.payload.pull_request.base.ref;
+                      if (!['develop', 'staging'].includes(baseBranch) && !baseBranch.startsWith('feat/')) {
+                          core.setFailed(`Invalid base branch: ${baseBranch}`);
+                      }
