@@ -146,15 +146,15 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
             Favourite
           </label>
           <div
-            class="_container_ik1u1_18"
+            class="_container_qnvru_18"
           >
             <input
-              class="_input_ik1u1_32"
+              class="_input_qnvru_32"
               id=":r3:"
               type="checkbox"
             />
             <div
-              class="_ui_ik1u1_42"
+              class="_ui_qnvru_42"
             />
           </div>
         </div>
@@ -549,15 +549,15 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             Favourite
           </label>
           <div
-            class="_container_ik1u1_18"
+            class="_container_qnvru_18"
           >
             <input
-              class="_input_ik1u1_32"
+              class="_input_qnvru_32"
               id=":r1:"
               type="checkbox"
             />
             <div
-              class="_ui_ik1u1_42"
+              class="_ui_qnvru_42"
             />
           </div>
         </div>
@@ -963,15 +963,15 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             Favourite
           </label>
           <div
-            class="_container_ik1u1_18"
+            class="_container_qnvru_18"
           >
             <input
-              class="_input_ik1u1_32"
+              class="_input_qnvru_32"
               id=":r2:"
               type="checkbox"
             />
             <div
-              class="_ui_ik1u1_42"
+              class="_ui_qnvru_42"
             />
           </div>
         </div>
