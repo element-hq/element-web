@@ -451,6 +451,7 @@ test.describe("Cryptography", function () {
             homeserver,
             user: aliceCredentials,
         }) => {
+            test.slow();
             const securityKey = await enableKeyBackup(app);
 
             // bob sends a valid event
@@ -468,6 +469,15 @@ test.describe("Cryptography", function () {
 
             /* log out, and back in */
             await logOutOfElement(page);
+            // Reload to work around a Rust crypto bug where it can hold onto the indexeddb even after logout
+            // https://github.com/element-hq/element-web/issues/25779
+            await page.addInitScript(() => {
+                // When we reload, the initScript created by the `user`/`pageWithCredentials` fixtures
+                // will re-inject the original credentials into localStorage, which we don't want.
+                // To work around, we add a second initScript which will clear localStorage again.
+                window.localStorage.clear();
+            });
+            await page.reload();
             await logIntoElement(page, homeserver, aliceCredentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
