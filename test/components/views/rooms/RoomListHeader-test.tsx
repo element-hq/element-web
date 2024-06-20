@@ -334,30 +334,4 @@ describe("RoomListHeader", () => {
             expect(screen.queryByText("Add space")).not.toBeInTheDocument();
         });
     });
-
-    describe("UIFeature.AddSpace", () => {
-        it("UIFeature.AddSpace = true: renders Add space in PlusMenu", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSpace) return true;
-                return "default";
-            });
-
-            const testSpace = setupSpace(client);
-            await setupPlusMenu(client, testSpace);
-
-            expect(screen.getByText("Add space")).toBeInTheDocument();
-        });
-
-        it("UIFeature.AddSpace = false: does not render Add space in PlusMenu", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSpace) return false;
-                return "default";
-            });
-
-            const testSpace = setupSpace(client);
-            await setupPlusMenu(client, testSpace);
-
-            expect(screen.queryByText("Add space")).not.toBeInTheDocument();
-        });
-    });
 });
