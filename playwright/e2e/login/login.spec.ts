@@ -14,20 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { test, expect } from "../../element-web-test";
+import { Page } from "@playwright/test";
+
+import { expect, test } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Login", () => {
-    test.describe("m.login.password", () => {
+    test.describe("Password login", () => {
         test.use({ startHomeserverOpts: "consent" });
 
         const username = "user1234";
         const password = "p4s5W0rD";
 
-        test.beforeEach(async ({ page, homeserver }) => {
+        test.beforeEach(async ({ homeserver }) => {
             await homeserver.registerUser(username, password);
-            await page.goto("/#/login");
         });
 
         test("logs in with an existing account and lands on the home screen", async ({
@@ -35,15 +36,10 @@ test.describe("Login", () => {
             homeserver,
             checkA11y,
         }) => {
-            // first pick the homeserver, as otherwise the user picker won't be visible
-            await page.getByRole("button", { name: "Edit" }).click();
-            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
-            await page.getByRole("button", { name: "Continue", exact: true }).click();
-            // wait for the dialog to go away
-            await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
+            await page.goto("/#/login");
 
-            await expect(page.locator(".mx_Spinner")).toHaveCount(0);
-            await expect(page.locator(".mx_ServerPicker_server")).toHaveText(homeserver.config.baseUrl);
+            // first pick the homeserver, as otherwise the user picker won't be visible
+            await selectHomeserver(page, homeserver.config.baseUrl);
 
             await page.getByRole("button", { name: "Edit" }).click();
 
@@ -56,14 +52,7 @@ test.describe("Login", () => {
             await expect(page.locator(".mx_ServerPicker_server")).toHaveText("server.invalid");
 
             // switch back to the custom homeserver
-            await page.getByRole("button", { name: "Edit" }).click();
-            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
-            await page.getByRole("button", { name: "Continue", exact: true }).click();
-            // wait for the dialog to go away
-            await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
-
-            await expect(page.locator(".mx_Spinner")).toHaveCount(0);
-            await expect(page.locator(".mx_ServerPicker_server")).toHaveText(homeserver.config.baseUrl);
+            await selectHomeserver(page, homeserver.config.baseUrl);
 
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
@@ -76,6 +65,31 @@ test.describe("Login", () => {
 
             await expect(page).toHaveURL(/\/#\/home$/);
         });
+
+        test("Follows the original link after login", async ({ page, homeserver }) => {
+            await page.goto("/#/room/!room:id"); // should redirect to the welcome page
+            await page.getByRole("link", { name: "Sign in" }).click();
+
+            await selectHomeserver(page, homeserver.config.baseUrl);
+
+            await page.getByRole("textbox", { name: "Username" }).fill(username);
+            await page.getByPlaceholder("Password").fill(password);
+            await page.getByRole("button", { name: "Sign in" }).click();
+
+            await expect(page).toHaveURL(/\/#\/room\/!room:id$/);
+            await expect(page.getByRole("button", { name: "Join the discussion" })).toBeVisible();
+        });
+
+        async function selectHomeserver(page: Page, homeserverUrl: string) {
+            await page.getByRole("button", { name: "Edit" }).click();
+            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserverUrl);
+            await page.getByRole("button", { name: "Continue", exact: true }).click();
+            // wait for the dialog to go away
+            await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
+
+            await expect(page.locator(".mx_Spinner")).toHaveCount(0);
+            await expect(page.locator(".mx_ServerPicker_server")).toHaveText(homeserverUrl);
+        }
     });
 
     // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
