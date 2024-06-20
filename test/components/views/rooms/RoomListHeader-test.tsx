@@ -131,10 +131,6 @@ describe("RoomListHeader", () => {
     });
 
     it("renders a main menu for spaces", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name === UIFeature.ShowCreateSpaceButton) return true;
-            return false;
-        });
         const testSpace = setupSpace(client);
         await setupMainMenu(client, testSpace);
 
@@ -145,10 +141,6 @@ describe("RoomListHeader", () => {
     });
 
     it("renders a plus menu for spaces", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name === UIFeature.ShowCreateSpaceButton) return true;
-            return false;
-        });
         const testSpace = setupSpace(client);
         await setupPlusMenu(client, testSpace);
 
@@ -169,47 +161,14 @@ describe("RoomListHeader", () => {
         act(() => {
             SpaceStore.instance.setActiveSpace(MetaSpace.Favourites);
         });
-        console.log("test");
 
         screen.getByText("Favourites");
         expect(screen.queryByRole("menu")).toBeFalsy();
     });
-    it("renders a plus menu for spaces, without Add Space if feature is false", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name === UIFeature.ShowCreateSpaceButton) return false;
-            return false;
-        });
-        const testSpace = setupSpace(client);
-        await setupPlusMenu(client, testSpace);
 
-        const menu = screen.getByRole("menu");
-        const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-
-        // console.log("EIK Test : check result ");
-        checkMenuLabels(items, ["New room", "Explore rooms", "Add existing room" /*, "Add space"*/]);
-    });
-    it("renders a plus menu for spaces, also with Add Space if feature is true", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name === UIFeature.ShowCreateSpaceButton) return true;
-            return false;
-        });
-
-        const testSpace = setupSpace(client);
-        await setupPlusMenu(client, testSpace);
-
-        const menu = screen.getByRole("menu");
-        const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
-
-        checkMenuLabels(items, ["New room", "Explore rooms", "Add existing room", "Add space"]);
-    });
     describe("UIComponents", () => {
         describe("Main menu", () => {
             it("does not render Add Space when user does not have permission to add spaces", async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                    if (name === UIFeature.ShowCreateSpaceButton) return true;
-                    return false;
-                });
-
                 // User does not have permission to add spaces, anywhere
                 blockUIComponent(UIComponent.CreateSpaces);
 
@@ -228,10 +187,6 @@ describe("RoomListHeader", () => {
                 ]);
             });
             it("does not render Add Room when user does not have permission to add rooms", async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                    if (name === UIFeature.ShowCreateSpaceButton) return true;
-                    return false;
-                });
                 // User does not have permission to add rooms
                 blockUIComponent(UIComponent.CreateRooms);
 
@@ -253,11 +208,6 @@ describe("RoomListHeader", () => {
 
         describe("Plus menu", () => {
             it("does not render Add Space when user does not have permission to add spaces", async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                    if (name === UIFeature.ShowCreateSpaceButton) return true;
-                    return false;
-                });
-
                 // User does not have permission to add spaces, anywhere
                 blockUIComponent(UIComponent.CreateSpaces);
 
@@ -275,10 +225,6 @@ describe("RoomListHeader", () => {
                 ]);
             });
             it("disables Add Room when user does not have permission to add rooms", async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                    if (name === UIFeature.ShowCreateSpaceButton) return true;
-                    return false;
-                });
                 // User does not have permission to add rooms
                 blockUIComponent(UIComponent.CreateRooms);
 
@@ -298,10 +244,6 @@ describe("RoomListHeader", () => {
 
     describe("adding children to space", () => {
         it("if user cannot add children to space, MainMenu adding buttons are hidden", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name === UIFeature.ShowCreateSpaceButton) return true;
-                return false;
-            });
             const testSpace = setupSpace(client);
             mocked(testSpace.currentState.maySendStateEvent).mockImplementation(
                 (stateEventType, userId) => stateEventType !== EventType.SpaceChild,
@@ -322,11 +264,6 @@ describe("RoomListHeader", () => {
         });
 
         it("if user cannot add children to space, PlusMenu add buttons are disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name === UIFeature.ShowCreateSpaceButton) return true;
-                return false;
-            });
-
             const testSpace = setupSpace(client);
             mocked(testSpace.currentState.maySendStateEvent).mockImplementation(
                 (stateEventType, userId) => stateEventType !== EventType.SpaceChild,
@@ -389,6 +326,32 @@ describe("RoomListHeader", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
                 if (name === UIFeature.AddSpace) return false;
                 else return "default";
+            });
+
+            const testSpace = setupSpace(client);
+            await setupPlusMenu(client, testSpace);
+
+            expect(screen.queryByText("Add space")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("UIFeature.AddSpace", () => {
+        it("UIFeature.AddSpace = true: renders Add space in PlusMenu", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSpace) return true;
+                return "default";
+            });
+
+            const testSpace = setupSpace(client);
+            await setupPlusMenu(client, testSpace);
+
+            expect(screen.getByText("Add space")).toBeInTheDocument();
+        });
+
+        it("UIFeature.AddSpace = false: does not render Add space in PlusMenu", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                if (name === UIFeature.AddSpace) return false;
+                return "default";
             });
 
             const testSpace = setupSpace(client);
