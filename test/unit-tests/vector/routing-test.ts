@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { onNewScreen } from "../../../src/vector/routing";
+import { getInitialScreenAfterLogin, onNewScreen } from "../../../src/vector/routing";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {
@@ -43,5 +43,63 @@ describe("onNewScreen", () => {
         onNewScreen("room/!room2:server");
         expect(window.location.assign).toHaveBeenCalled();
         expect(window.location.replace).not.toHaveBeenCalled();
+    });
+});
+
+describe("getInitialScreenAfterLogin", () => {
+    beforeEach(() => {
+        jest.spyOn(sessionStorage.__proto__, "getItem").mockClear().mockReturnValue(null);
+        jest.spyOn(sessionStorage.__proto__, "setItem").mockClear();
+    });
+
+    const makeMockLocation = (hash = "") => {
+        const url = new URL("https://test.org");
+        url.hash = hash;
+        return url as unknown as Location;
+    };
+
+    describe("when current url has no hash", () => {
+        it("does not set an initial screen in session storage", () => {
+            getInitialScreenAfterLogin(makeMockLocation());
+            expect(sessionStorage.setItem).not.toHaveBeenCalled();
+        });
+
+        it("returns undefined when there is no initial screen in session storage", () => {
+            expect(getInitialScreenAfterLogin(makeMockLocation())).toBeUndefined();
+        });
+
+        it("returns initial screen from session storage", () => {
+            const screen = {
+                screen: "/room/!test",
+            };
+            jest.spyOn(sessionStorage.__proto__, "getItem").mockReturnValue(JSON.stringify(screen));
+            expect(getInitialScreenAfterLogin(makeMockLocation())).toEqual(screen);
+        });
+    });
+
+    describe("when current url has a hash", () => {
+        it("sets an initial screen in session storage", () => {
+            const hash = "/room/!test";
+            getInitialScreenAfterLogin(makeMockLocation(hash));
+            expect(sessionStorage.setItem).toHaveBeenCalledWith(
+                "mx_screen_after_login",
+                JSON.stringify({
+                    screen: "room/!test",
+                    params: {},
+                }),
+            );
+        });
+
+        it("sets an initial screen in session storage with params", () => {
+            const hash = "/room/!test?param=test";
+            getInitialScreenAfterLogin(makeMockLocation(hash));
+            expect(sessionStorage.setItem).toHaveBeenCalledWith(
+                "mx_screen_after_login",
+                JSON.stringify({
+                    screen: "room/!test",
+                    params: { param: "test" },
+                }),
+            );
+        });
     });
 });

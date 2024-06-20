@@ -18,7 +18,7 @@ my $gh = Net::GitHub->new(
     login => 'ara4n', pass => read_password("github password: "),
 );
 
-$gh->set_default_user_repo('vector-im', 'element-web');
+$gh->set_default_user_repo('element-hq', 'element-web');
 
 #my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
 my @issues = $gh->issue->repos_issues({ state => 'all' });

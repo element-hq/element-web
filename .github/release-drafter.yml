@@ -1,0 +1,3 @@
+_extends: matrix-org/matrix-react-sdk
+version-resolver:
+    default: patch

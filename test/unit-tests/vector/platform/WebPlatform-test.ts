@@ -19,12 +19,14 @@ import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
 import WebPlatform from "../../../../src/vector/platform/WebPlatform";
+import { setupLanguageMock } from "../../../setup/setupLanguage";
 
 fetchMock.config.overwriteRoutes = true;
 
 describe("WebPlatform", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        setupLanguageMock();
     });
 
     it("returns human readable name", () => {

@@ -5,7 +5,7 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
 If a labs features gets more stable, it _may_ be promoted to a beta feature
-(see [Betas](https://github.com/vector-im/element-web/blob/develop/docs/betas.md)).
+(see [Betas](https://github.com/element-hq/element-web/blob/develop/docs/betas.md)).
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
@@ -37,29 +37,6 @@ date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
 
-## Render simple counters in room header (`feature_state_counters`)
-
-Allows rendering of labelled counters above the message list.
-
-Once enabled, send a custom state event to a room to set values:
-
-1. In a room, type `/devtools` to bring up the devtools interface
-2. Click "Send Custom Event"
-3. Toggle from "Event" to "State Event"
-4. Set the event type to: `re.jki.counter` and give it a unique key
-5. Specify the content in the following format:
-
-```
-{
-    "link": "",
-    "severity": "normal",
-    "title": "my counter",
-    "value": 0
-}
-```
-
-That's it. Now should see your new counter under the header.
-
 ## New ways to ignore people (`feature_mjolnir`)
 
 When enabled, a new settings tab appears for users to be able to manage their ban lists.
@@ -86,11 +63,6 @@ present in the room. The Bridge info tab pulls information from the `m.bridge` s
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
 
-## Presence indicator in room list (`feature_presence_in_room_list`)
-
-This adds a presence indicator in the room list next to DM rooms where the other
-person is online.
-
 ## Custom themes (`feature_custom_themes`)
 
 Custom themes are possible through Element's [theme support](./theming.md), though
@@ -104,35 +76,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Spotlight search (`feature_spotlight`) [In Development]
-
-Switches to a new room search experience.
-
-## Extensible events rendering (`feature_extensible_events`) [In Development]
-
-_Intended for developer use only at the moment._
-
-Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
-supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
-can define a series of other events which represent the event's information but in different ways. The
-base of these fallbacks being text.
-
-Turning this flag on indicates that, when possible, the extensible events structure should be parsed on
-supported event types. This should lead to zero perceptual change in the timeline except in cases where
-the sender is using unknown/unrecognised event types.
-
-Sending events with extensible events structure is always enabled - this should not affect any downstream
-client.
-
-## Right panel stays open (`feature_right_panel_default_open`)
-
-This is an experimental default open right panel mode as a quick fix for those
-who prefer to have the right panel open consistently across rooms.
-
-If no right panel state is known for the room or it was closed on the last room
-visit, it will default to the room member list. Otherwise, the saved card last
-used in that room is shown.
 
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
@@ -154,21 +97,50 @@ This feature allows users to place and join native [MSC3401](https://github.com/
 
 If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
+## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
+
+The default for embedded Element Call in Element Web is per-participant encryption.
+This labs flag disables encryption for embedded Element Call in encrypted rooms.
+
+Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
+
+This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
+
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
-
-## Exploring public spaces (`feature_exploring_public_spaces`)
-
-Enables exploring public spaces in the new search dialog. Requires the server to
-have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
-
-## Sign in another device by showing a QR code (`feature_qr_signin_reciprocate_show`)
-
-Add capability to the session/device manager screens to generate a QR code to sign in another device + set up E2EE. This requires the homeserver to have support for [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882) and [MSC3886](https://github.com/matrix-org/matrix-spec-proposals/pull/3886) enabled.
 
 ## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
 
 Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
 
-This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implemention will remain in use until users log out.
+This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implementation will remain in use until users log out.
+
+This configuration value is now set to `true` by default. This means that without any additional configuration
+every new login will use the new cryptography implementation.
+
+For administrators looking to transition existing users to the new stack, the `RustCrypto.staged_rollout_percent` configuration is available.
+This configuration allows for a phased migration of users, represented as an integer percentage (0 to 100). By default, this value is set to `0`,
+which means no existing users will be migrated to the new stack. If you wish to migrate all users, you can adjust this value to `100`.
+
+This configuration should be placed under the `setting_defaults` section as shown:
+
+```
+    "setting_defaults": {
+        "RustCrypto.staged_rollout_percent": 20
+    },
+```
+
+By adjusting the `RustCrypto.staged_rollout_percent` value, you can control the migration process according to your deployment strategy.
+
+## New room header & details (`feature_new_room_decoration_ui`) [In Development]
+
+Refactors visually the room header and room sidebar
+
+## Enable the notifications panel in the room header (`feature_notifications`)
+
+Unreliable in encrypted rooms.
+
+## Knock rooms (`feature_ask_to_join`) [In Development]
+
+Enables knock feature for rooms. This allows users to ask to join a room.

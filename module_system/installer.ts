@@ -185,9 +185,20 @@ function getModuleApiVersionFor(moduleName: string): string {
     return findDepVersionInPackageJson(moduleApiDepName, pkgJsonStr);
 }
 
+// A list of Module API versions that are supported in addition to the currently installed one
+// defined in the package.json. This is necessary because semantic versioning is applied to both
+// the Module-side surface of the API and the Client-side surface of the API. So breaking changes
+// in the Client-side surface lead to a major bump even though the Module-side surface stays
+// compatible. We aim to not break the Module-side surface so we maintain a list of compatible
+// older versions.
+const backwardsCompatibleMajorVersions = ["1.0.0"];
+
 function isModuleVersionCompatible(ourApiVersion: string, moduleApiVersion: string): boolean {
     if (!moduleApiVersion) return false;
-    return semver.satisfies(ourApiVersion, moduleApiVersion);
+    return (
+        semver.satisfies(ourApiVersion, moduleApiVersion) ||
+        backwardsCompatibleMajorVersions.some((version) => semver.satisfies(version, moduleApiVersion))
+    );
 }
 
 function writeModulesTs(content: string): void {

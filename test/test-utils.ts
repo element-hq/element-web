@@ -14,36 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function cleanLocalstorage(): void {
-    window.localStorage.clear();
+import { RenderResult, screen, waitFor } from "@testing-library/react";
+
+// wait for loading page
+export async function waitForLoadingSpinner(): Promise<void> {
+    await screen.findByRole("progressbar");
 }
 
-export function deleteIndexedDB(dbName: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        if (!window.indexedDB) {
-            resolve();
-            return;
-        }
-
-        const startTime = Date.now();
-        console.log(`${startTime}: Removing indexeddb instance: ${dbName}`);
-        const req = window.indexedDB.deleteDatabase(dbName);
-
-        req.onblocked = (): void => {
-            console.log(`${Date.now()}: can't yet delete indexeddb ${dbName} because it is open elsewhere`);
-        };
-
-        req.onerror = (ev): void => {
-            reject(new Error(`${Date.now()}: unable to delete indexeddb ${dbName}: ${req.error?.message}`));
-        };
-
-        req.onsuccess = (): void => {
-            const now = Date.now();
-            console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now - startTime} ms`);
-            resolve();
-        };
-    }).catch((e) => {
-        console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
-        throw e;
-    });
+export async function waitForWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
+    await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
 }

@@ -18,8 +18,13 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 
 import VectorAuthPage from "../../../../../src/components/views/auth/VectorAuthPage";
+import { setupLanguageMock } from "../../../../setup/setupLanguage";
 
 describe("<VectorAuthPage />", () => {
+    beforeEach(() => {
+        setupLanguageMock();
+    });
+
     it("should match snapshot", () => {
         const { asFragment } = render(<VectorAuthPage />);
         expect(asFragment()).toMatchSnapshot();

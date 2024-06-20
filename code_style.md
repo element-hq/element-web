@@ -113,15 +113,17 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-14. Explicitly cast to a boolean, rather than relying on implicit truthiness of non-boolean values:
+14. If a variable's type should be boolean, make sure it really is one.
 
     ```typescript
-    const isRealUser = !!userId && ...;
-    // ... or ...
-    const isRealUser = Boolean(userId) && ...;
+    const isRealUser = !!userId && ...; // good
+    const isRealUser = Boolean(userId) && Boolean(userName); // also good
+    const isRealUser = Boolean(userId) && isReal; // also good (where isReal is another boolean variable)
+    const isRealUser = Boolean(userId && userName); // also fine
+    const isRealUser = Boolean(userId || userName); // good: same as &&
+    const isRealUser = userId && ...;   // bad: isRealUser is userId's type, not a boolean
 
-    // but *not*:
-    const isRealUser = userId && ...;   // invalid implicit cast
+    if (userId) // fine: userId is evaluated for truthiness, not stored as a boolean
     ```
 
 15. Use `switch` statements when checking against more than a few enum-like values.
@@ -222,6 +224,12 @@ Unless otherwise specified, the following applies to all code:
         // ...
     }
     ```
+
+37. Avoid functions whose fundamental behaviour varies with different parameter types.
+    Multiple return types are fine, but if the function's behaviour is going to change significantly,
+    have two separate functions. For example, `SDKConfig.get()` with a string param which returns the
+    type according to the param given is ok, but `SDKConfig.get()` with no args returning the whole
+    config object would not be: this should just be a separate function.
 
 ## React
 

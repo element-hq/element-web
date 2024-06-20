@@ -1,5 +1,13 @@
 # Configuration
 
+### 🦖 Deprecation notice
+
+Configuration keys were previously a mix of camelCase and snake_case.
+We standardised to snake_case but added compatibility for camelCase to all settings.
+This backwards compatibility will be getting removed in a future release so please ensure you are using snake_case.
+
+---
+
 You can configure the app by copying `config.sample.json` to `config.json` or `config.$domain.json` and customising it.
 Element will attempt to load first `config.$domain.json` and if it fails `config.json`. This mechanism allows different
 configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed
@@ -45,8 +53,9 @@ One of the following options **must** be supplied:
    information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url`
    being optional.
 
-If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
-should be considered "first".
+If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
+information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+information.
 
 ## Labs flags
 
@@ -128,9 +137,9 @@ complete re-branding/private labeling, a more personalised experience can be ach
    This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
    at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
    configuration found in the well-known location is used instead.
-10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+10. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
 11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
-    `{"affected string": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
+    `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
 13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
 14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
@@ -241,16 +250,59 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
    all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
-   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. As an example:
+   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
+   redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
     {
         "sso_redirect_options": {
             "immediate": false,
-            "on_welcome_page": true
+            "on_welcome_page": true,
+            "on_login_page": true
         }
     }
     ```
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
+
+## Native OIDC
+
+Native OIDC support is currently in labs and is subject to change.
+
+Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
+Issuer must have a trailing forward slash. As an example:
+
+```json
+{
+    "oidc_static_clients": {
+        "https://auth.example.com/": {
+            "client_id": "example-client-id"
+        }
+    }
+}
+```
+
+If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.
+The app has sane defaults for the metadata properties below but on stricter policy identity providers they may not pass muster, e.g. `contacts` may be required.
+The following subproperties are available:
+
+1. `client_uri`: This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.
+2. `logo_uri`: Optional URI for the client logo.
+3. `tos_uri`: Optional URI for the client's terms of service.
+4. `policy_uri`: Optional URI for the client's privacy policy.
+5. `contacts`: Optional list of contact emails for the client.
+
+As an example:
+
+```json
+{
+    "oidc_metadata": {
+        "client_uri": "https://example.com",
+        "logo_uri": "https://example.com/logo.png",
+        "tos_uri": "https://example.com/tos",
+        "policy_uri": "https://example.com/policy",
+        "contacts": ["support@example.com"]
+    }
+}
+```
 
 ## VoIP / Jitsi calls
 
@@ -335,6 +387,12 @@ The VoIP and Jitsi options are:
       this number is exceeded, the user will not be able to join a given call.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
+    - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
+      for guest links. If this is set, Element Web will expose a "join" link
+      for public video rooms, which can then be shared to non-matrix users.
+      The target Element Call SPA is typically set up to use a homeserver that
+      allows users to register without email ("passwordless guest users") and to
+      federate.
 
 ## Bug reporting
 
@@ -346,6 +404,8 @@ If you run your own rageshake server to collect bug reports, the following optio
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
    alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
    (in contrast to other rageshakes submitted by the app, which use `element-web`).
+3. `existing_issues_url`: URL for where to find existing issues.
+4. `new_issue_url`: URL for where to submit new issues.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
@@ -469,7 +529,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/vector-im/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-desktop#user-specified-configjson
 
 ## UI Features
 

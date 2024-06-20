@@ -21,8 +21,12 @@ import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
 import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
 import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
+import Modal from "matrix-react-sdk/src/Modal";
+import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
+import { mocked } from "jest-mock";
 
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
+import { setupLanguageMock } from "../../../setup/setupLanguage";
 
 jest.mock("matrix-react-sdk/src/rageshake/rageshake", () => ({
     flush: jest.fn(),
@@ -48,6 +52,7 @@ describe("ElectronPlatform", () => {
         window.electron = mockElectron;
         jest.clearAllMocks();
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
+        setupLanguageMock();
     });
 
     const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
@@ -74,6 +79,35 @@ describe("ElectronPlatform", () => {
         handler();
 
         expect(dispatchFireSpy).toHaveBeenCalledWith(Action.ViewUserSettings);
+    });
+
+    it("creates a modal on openDesktopCapturerSourcePicker", async () => {
+        const plat = new ElectronPlatform();
+        Modal.createDialog = jest.fn();
+
+        // @ts-ignore mock
+        mocked(Modal.createDialog).mockReturnValue({
+            finished: new Promise((r) => r(["source"])),
+        });
+
+        let res: () => void;
+        const waitForIPCSend = new Promise<void>((r) => {
+            res = r;
+        });
+        // @ts-ignore mock
+        jest.spyOn(plat.ipc, "call").mockImplementation(() => {
+            res();
+        });
+
+        const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        handler();
+
+        await waitForIPCSend;
+
+        expect(event).toBeTruthy();
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
+        // @ts-ignore mock
+        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
     });
 
     describe("updates", () => {

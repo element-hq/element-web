@@ -49,19 +49,27 @@
         <% }
     } %>
 
-    <% for (var i=0; i < htmlWebpackPlugin.tags.headTags.length; i++) {
-        var tag = htmlWebpackPlugin.tags.headTags[i];
-        var path = tag.attributes && tag.attributes.href;
-        if (path.includes("/Inter/")) { %>
-            <link rel="preload" as="font" href=".<%= path %>" crossorigin="anonymous"/>
+    <% for (const tag of htmlWebpackPlugin.tags.headTags) {
+        let path = tag.attributes && tag.attributes.href;
+        if (path && path.includes("/Inter/")) { %>
+            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
         <% }
     } %>
 
   </head>
   <body style="height: 100%; margin: 0;">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
-    <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
+    <div id="matrixchat" style="height: 100%;" class="notranslate"></div>
+
+<%
+    // insert <script> tags for the JS entry points
+    for (let file of htmlWebpackPlugin.files.js) {
+        if (file.includes("bundle.js") || file.includes("unhomoglyph_data")) {
+%>    <script src="<%= file %>"></script>
+<%
+        }
+    }
+%>
 
     <!-- Legacy supporting Prefetch images -->
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
@@ -76,5 +84,11 @@
     <audio id="remoteAudio"></audio>
     <!-- let CSS themes pass constants to the app -->
     <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
+
+    <!-- We eagerly create these containers to ensure their CSS stacking context order is sensible -->
+    <div id="mx_PersistedElement_container"></div>
+    <div id="mx_Dialog_StaticContainer"></div>
+    <div id="mx_Dialog_Container"></div>
+    <div id="mx_ContextualMenu_Container"></div>
   </body>
 </html>

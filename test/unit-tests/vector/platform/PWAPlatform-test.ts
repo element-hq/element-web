@@ -45,6 +45,7 @@ describe("PWAPlatform", () => {
         });
 
         it("should fall back to WebPlatform::setNotificationCount if no Navigator::setAppBadge", () => {
+            // @ts-ignore
             navigator.setAppBadge = undefined;
             const platform = new PWAPlatform();
             const superMethod = mocked(WebPlatform.prototype.setNotificationCount);

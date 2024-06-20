@@ -30,7 +30,7 @@ to your [config](./config.md) the following:
 ```json
 {
     "jitsi": {
-        "preferredDomain": "your.jitsi.example.org"
+        "preferred_domain": "your.jitsi.example.org"
     }
 }
 ```
@@ -64,7 +64,7 @@ Element Android (1.0.5+) supports custom Jitsi domains, similar to Element Web a
 calls work directly between clients or via TURN servers configured on the respective
 homeservers.
 
-For rooms with more than 2 joined members, when creating a Jitsi conference via call/video buttons of the toolbar (not via integration manager), Element Android will create a widget using the [wrapper](https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md) hosted on `app.element.io`.
+For rooms with more than 2 joined members, when creating a Jitsi conference via call/video buttons of the toolbar (not via integration manager), Element Android will create a widget using the [wrapper](https://github.com/element-hq/element-web/blob/develop/docs/jitsi-dev.md) hosted on `app.element.io`.
 The domain used is the one specified by the `/.well-known/matrix/client` endpoint, and if not present it uses the fallback defined in `config.json` (meet.element.io)
 
 For active Jitsi widgets in the room, a native Jitsi widget UI is created and points to the instance specified in the `domain` key of the widget content data.

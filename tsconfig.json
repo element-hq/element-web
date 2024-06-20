@@ -4,29 +4,35 @@
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "module": "commonjs",
+        "module": "es2022",
         "moduleResolution": "node",
         "target": "es2016",
-        "noImplicitAny": false,
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
         "declaration": true,
         "jsx": "react",
-        "lib": ["es2020", "dom", "dom.iterable"],
-        "alwaysStrict": true,
-        "strictBindCallApply": true,
-        "noImplicitThis": true
+        "lib": ["es2021", "dom", "dom.iterable"],
+        "strict": true
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/react.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/diff-dom.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/opus-recorder.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/matrix-js-sdk.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",
-        "./test/**/*.tsx"
-    ]
+        "./test/**/*.tsx",
+        "./scripts/*.ts"
+    ],
+    "ts-node": {
+        "files": true,
+        "moduleTypes": {
+            "*": "cjs"
+        }
+    }
 }

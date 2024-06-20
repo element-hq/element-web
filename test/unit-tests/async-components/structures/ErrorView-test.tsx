@@ -18,8 +18,13 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 
 import ErrorView from "../../../../src/async-components/structures/ErrorView";
+import { setupLanguageMock } from "../../../setup/setupLanguage";
 
 describe("<ErrorView />", () => {
+    beforeEach(() => {
+        setupLanguageMock();
+    });
+
     it("should match snapshot", () => {
         const { asFragment } = render(<ErrorView title="TITLE" messages={["MSG1", "MSG2"]} />);
         expect(asFragment()).toMatchSnapshot();

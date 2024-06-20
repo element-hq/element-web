@@ -6,15 +6,9 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
-const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
-const crypto = require("crypto");
-
-// XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
-// of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
-const createHash = crypto.createHash;
-crypto.createHash = (algorithm, options) => createHash(algorithm === "md4" ? "sha256" : algorithm, options);
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -61,6 +55,15 @@ try {
     // stringify the output so it appears in logs correctly, as large files can sometimes get
     // represented as `<Object>` which is less than helpful.
     console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
+
+    process.on("exit", () => {
+        console.log(""); // blank line
+        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
+        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
+        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log(""); // blank line
+    });
 } catch (e) {
     // ignore - not important
 }
@@ -71,7 +74,15 @@ function parseOverridesToReplacements(overrides) {
             // because the input is effectively defined by the person running the build, we don't
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            path.resolve(__dirname, newPath),
+            function (resource) {
+                resource.request = path.resolve(__dirname, newPath);
+                resource.createData.resource = path.resolve(__dirname, newPath);
+                // Starting with Webpack 5 we also need to set the context as otherwise replacing
+                // files in e.g. matrix-react-sdk with files from element-web will try to resolve
+                // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
+                resource.context = path.dirname(resource.request);
+                resource.createData.context = path.dirname(resource.createData.resource);
+            },
         );
     });
 }
@@ -134,19 +145,18 @@ module.exports = (env, argv) => {
 
     return {
         ...development,
-        node: {
-            // Mock out the NodeFS module: The opus decoder imports this wrongly.
-            fs: "empty",
-            net: "empty",
-            tls: "empty",
-            crypto: "empty",
-        },
+
+        bail: true,
 
         entry: {
             bundle: "./src/vector/index.ts",
             mobileguide: "./src/vector/mobile_guide/index.ts",
             jitsi: "./src/vector/jitsi/index.ts",
             usercontent: "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
+            serviceworker: {
+                import: "./src/serviceworker/index.ts",
+                filename: "sw.js", // update WebPlatform if this changes
+            },
             ...(useHMR ? {} : cssThemes),
         },
 
@@ -162,20 +172,40 @@ module.exports = (env, argv) => {
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
+
+                    // put the unhomoglyph data in its own file. It contains
+                    // magic characters which mess up line numbers in the
+                    // javascript debugger.
+                    unhomoglyph_data: {
+                        name: "unhomoglyph_data",
+                        test: /unhomoglyph\/data\.json$/,
+                        enforce: true,
+                        chunks: "all",
+                    },
+
                     default: {
                         reuseExistingChunk: true,
                     },
                 },
             },
 
-            // This fixes duplicate files showing up in chrome with sourcemaps enabled.
-            // See https://github.com/webpack/webpack/issues/7128 for more info.
-            namedModules: false,
+            // Readable IDs for better debugging
+            moduleIds: "named",
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: enableMinification
+                ? [
+                      new TerserPlugin({
+                          // Already minified and includes an auto-generated license comment
+                          // that the plugin would otherwise pointlessly extract into a separate
+                          // file. We add the actual license using CopyWebpackPlugin below.
+                          exclude: "jitsi_external_api.min.js",
+                      }),
+                      new CssMinimizerPlugin(),
+                  ]
+                : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -207,13 +237,30 @@ module.exports = (env, argv) => {
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
                 "matrix-react-sdk": path.resolve(__dirname, "node_modules/matrix-react-sdk"),
-                // and sanitize-html & matrix-events-sdk & matrix-widget-api
-                "sanitize-html": path.resolve(__dirname, "node_modules/sanitize-html"),
+                "@matrix-org/react-sdk-module-api": path.resolve(
+                    __dirname,
+                    "node_modules/@matrix-org/react-sdk-module-api",
+                ),
+                // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
+            },
+            fallback: {
+                // Mock out the NodeFS module: The opus decoder imports this wrongly.
+                "fs": false,
+                "net": false,
+                "tls": false,
+                "crypto": false,
+
+                // Polyfill needed by counterpart
+                "util": require.resolve("util/"),
+                // Polyfill needed by matrix-js-sdk/src/crypto
+                "buffer": require.resolve("buffer/"),
+                // Polyfill needed by sentry
+                "process/browser": require.resolve("process/browser"),
             },
         },
 
@@ -242,15 +289,6 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.worker\.ts$/,
-                    loader: "worker-loader",
-                    options: {
-                        // Prevent bundling workers since CSP forbids loading them
-                        // from another origin.
-                        filename: "[hash].worker.js",
-                    },
-                },
-                {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
                         // our own source needs babel-ing
@@ -263,6 +301,12 @@ module.exports = (env, argv) => {
                         if (f.startsWith(reactSdkSrcDir)) return true;
                         if (f.startsWith(jsSdkSrcDir)) return true;
 
+                        // Some of the syntax in this package is not understood by
+                        // either webpack or our babel setup.
+                        // When we do get to upgrade our current setup, this should
+                        // probably be removed.
+                        if (f.includes(path.join("@vector-im", "compound-web"))) return true;
+
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
                         // polyfills: probably fixable but babeling all our dependencies is probably
@@ -272,6 +316,7 @@ module.exports = (env, argv) => {
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: true,
+                        plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
                     },
                 },
                 {
@@ -283,41 +328,44 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use significantly fewer plugins on the plain
-                                    // CSS parser. If we start to parse plain CSS, we end with all
-                                    // kinds of nasty problems (like stylesheets not loading).
-                                    //
-                                    // You might have noticed that we're also sending regular CSS
-                                    // through PostCSS. This looks weird, and in fact is probably
-                                    // not what you'd expect, however in order for our CSS build
-                                    // to work nicely we have to do this. Because down the line
-                                    // our SCSS stylesheets reference plain CSS we have to load
-                                    // the plain CSS through PostCSS so it can find it safely. This
-                                    // also acts like a babel-for-css by transpiling our (S)CSS
-                                    // down/up to the right browser support (prefixes, etc).
-                                    // Further, if we don't do this then PostCSS assumes that our
-                                    // plain CSS is SCSS and it really doesn't like that, even
-                                    // though plain CSS should be compatible. The chunking options
-                                    // at the top of this webpack config help group the SCSS and
-                                    // plain CSS together for the bundler.
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use significantly fewer plugins on the plain
+                                        // CSS parser. If we start to parse plain CSS, we end with all
+                                        // kinds of nasty problems (like stylesheets not loading).
+                                        //
+                                        // You might have noticed that we're also sending regular CSS
+                                        // through PostCSS. This looks weird, and in fact is probably
+                                        // not what you'd expect, however in order for our CSS build
+                                        // to work nicely we have to do this. Because down the line
+                                        // our SCSS stylesheets reference plain CSS we have to load
+                                        // the plain CSS through PostCSS so it can find it safely. This
+                                        // also acts like a babel-for-css by transpiling our (S)CSS
+                                        // down/up to the right browser support (prefixes, etc).
+                                        // Further, if we don't do this then PostCSS assumes that our
+                                        // plain CSS is SCSS and it really doesn't like that, even
+                                        // though plain CSS should be compatible. The chunking options
+                                        // at the top of this webpack config help group the SCSS and
+                                        // plain CSS together for the bundler.
 
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-hexrgba")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
@@ -366,28 +414,31 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use slightly different plugins for PostCSS.
-                                    require("postcss-import")(),
-                                    require("postcss-mixins")(),
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-nested")(),
-                                    require("postcss-easings")(),
-                                    require("postcss-hexrgba")(),
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use slightly different plugins for PostCSS.
+                                        require("postcss-import")(),
+                                        require("postcss-mixins")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-nested")(),
+                                        require("postcss-easings")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
@@ -419,22 +470,17 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
-                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
-                    // however it seems to work fine for our purposes.
+                    // Ideally we should use the built-in worklet support in Webpack 5 with the syntax
+                    // described in https://github.com/webpack/webpack.js.org/issues/6869. However, this
+                    // doesn't currently appear to work with our public path setup. So we handle this
+                    // with a custom loader instead.
                     test: /RecorderWorklet\.ts$/,
                     type: "javascript/auto",
                     use: [
-                        // executed last -> first, for some reason.
                         {
-                            loader: "worklet-loader",
-                            options: {
-                                // Override name so we know what it is in the output.
-                                name: "recorder-worklet.[hash:7].js",
-                            },
+                            loader: path.resolve("./recorder-worklet-loader.js"),
                         },
                         {
-                            // TS -> JS because the worklet-loader won't do this for us.
                             loader: "babel-loader",
                         },
                     ],
@@ -478,7 +524,7 @@ module.exports = (env, argv) => {
                 },
                 {
                     // cache-bust languages.json file placed in
-                    // element-web/webapp/i18n during build by copy-res.js
+                    // element-web/webapp/i18n during build by copy-res.ts
                     test: /\.*languages.json$/,
                     type: "javascript/auto",
                     loader: "file-loader",
@@ -501,11 +547,27 @@ module.exports = (env, argv) => {
                                 // props set on the svg will override defaults
                                 expandProps: "end",
                                 svgoConfig: {
-                                    plugins: {
+                                    plugins: [
+                                        {
+                                            name: "preset-default",
+                                            params: {
+                                                overrides: {
+                                                    removeViewBox: false,
+                                                },
+                                            },
+                                        },
                                         // generates a viewbox if missing
-                                        removeDimensions: true,
-                                    },
+                                        { name: "removeDimensions" },
+                                        // https://github.com/facebook/docusaurus/issues/8297
+                                        { name: "prefixIds" },
+                                    ],
                                 },
+                                /**
+                                 * Forwards the React ref to the root SVG element
+                                 * Useful when using things like `asChild` in
+                                 * radix-ui
+                                 */
+                                ref: true,
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
@@ -595,8 +657,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -608,7 +670,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi"],
+                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -658,9 +720,11 @@ module.exports = (env, argv) => {
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
 
-            // upload to sentry if sentry env is present
+            // Upload to sentry if sentry env is present
+            // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
+            // so we require it conditionally.
             process.env.SENTRY_DSN &&
-                sentryWebpackPlugin({
+                require("@sentry/webpack-plugin").sentryWebpackPlugin({
                     release: process.env.VERSION,
                     sourcemaps: {
                         paths: "./webapp/bundles/**",
@@ -670,7 +734,34 @@ module.exports = (env, argv) => {
                         console.log(`::warning title=Sentry error::${err.message}`);
                     },
                 }),
+
             new webpack.EnvironmentPlugin(["VERSION"]),
+
+            new CopyWebpackPlugin({
+                patterns: [
+                    "res/apple-app-site-association",
+                    { from: ".well-known/**", context: path.resolve(__dirname, "res") },
+                    "res/jitsi_external_api.min.js",
+                    "res/jitsi_external_api.min.js.LICENSE.txt",
+                    "res/manifest.json",
+                    "res/welcome.html",
+                    { from: "welcome/**", context: path.resolve(__dirname, "res") },
+                    { from: "themes/**", context: path.resolve(__dirname, "res") },
+                    { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
+                    { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
+                    { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
+                    "node_modules/@matrix-org/olm/olm_legacy.js",
+                    { from: "config.json", noErrorOnMissing: true },
+                    "contribute.json",
+                ],
+            }),
+
+            // Automatically load buffer & process modules as we use them without explicitly
+            // importing them
+            new webpack.ProvidePlugin({
+                Buffer: ["buffer", "Buffer"],
+                process: "process/browser",
+            }),
         ].filter(Boolean),
 
         output: {
@@ -683,21 +774,39 @@ module.exports = (env, argv) => {
             // directory and symlink it into place - this allows users who loaded
             // an older version of the application to continue to access webpack
             // chunks even after the app is redeployed.
-            filename: "bundles/[hash]/[name].js",
-            chunkFilename: "bundles/[hash]/[name].js",
-            webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+            filename: "bundles/[fullhash]/[name].js",
+            chunkFilename: "bundles/[fullhash]/[name].js",
+            webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
         },
 
         // configuration for the webpack-dev-server
         devServer: {
-            // serve unwebpacked assets from webapp.
-            contentBase: ["./webapp"],
+            client: {
+                overlay: {
+                    // Only show overlay on build errors as anything more can get annoying quickly
+                    errors: true,
+                    warnings: false,
+                    runtimeErrors: false,
+                },
+            },
 
-            // Only output errors, warnings, or new compilations.
-            // This hides the massive list of modules.
-            stats: "minimal",
-            hotOnly: true,
-            inline: true,
+            static: {
+                // Where to serve static assets from
+                directory: "./webapp",
+            },
+
+            devMiddleware: {
+                // Only output errors, warnings, or new compilations.
+                // This hides the massive list of modules.
+                stats: "minimal",
+            },
+
+            // Enable Hot Module Replacement without page refresh as a fallback in
+            // case of build failures
+            hot: "only",
+
+            // Disable host check
+            allowedHosts: "all",
         },
     };
 };
@@ -711,14 +820,36 @@ module.exports = (env, argv) => {
  * @return {string} The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url, resourcePath) {
+    const isKaTeX = resourcePath.includes("KaTeX");
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
     const prefix = /^.*[/\\](dist|res)[/\\]/;
-    if (!resourcePath.match(prefix)) {
+
+    /**
+     * Only needed for https://github.com/element-hq/element-web/pull/15939
+     * If keeping this, we are not able to load external assets such as SVG
+     * images coming from @vector-im/compound-web.
+     */
+    if (isKaTeX && !resourcePath.match(prefix)) {
         throw new Error(`Unexpected asset path: ${resourcePath}`);
     }
     let outputDir = path.dirname(resourcePath).replace(prefix, "");
-    if (resourcePath.includes("KaTeX")) {
+
+    /**
+     * Imports from Compound are "absolute", we need to strip out the prefix
+     * coming before the npm package name.
+     *
+     * This logic is scoped to compound packages for now as they are the only
+     * package that imports external assets. This might need to be made more
+     * generic in the future
+     */
+    const compoundImportsPrefix = /@vector-im(?:\\|\/)compound-(.*?)(?:\\|\/)/;
+    const compoundMatch = outputDir.match(compoundImportsPrefix);
+    if (compoundMatch) {
+        outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
+    }
+
+    if (isKaTeX) {
         // Add a clearly named directory segment, rather than leaving the KaTeX
         // assets loose in each asset type directory.
         outputDir = path.join(outputDir, "KaTeX");

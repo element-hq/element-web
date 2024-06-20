@@ -23,7 +23,6 @@ import "matrix-js-sdk/src/browser-index";
 
 import React, { ReactElement } from "react";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import { UserFriendlyError } from "matrix-react-sdk/src/languageHandler";
 import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import { AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
@@ -34,11 +33,13 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
-import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
+import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
-import { getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { UserFriendlyError } from "../languageHandler";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
@@ -48,44 +49,23 @@ logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
 
-// We use this to work out what URL the SDK should
-// pass through when registering to allow the user to
-// click back to the client having registered.
-// It's up to us to recognise if we're loaded with
-// this URL and tell MatrixClient to resume registration.
-//
-// If we're in electron, we should never pass through a file:// URL otherwise
-// the identity server will try to 302 the browser to it, which breaks horribly.
-// so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: QueryDict): string {
-    let url: string;
-    if (window.location.protocol === "vector:") {
-        url = "https://app.element.io/#/register";
-    } else {
-        url = window.location.protocol + "//" + window.location.host + window.location.pathname + "#/register";
-    }
-
-    const encodedParams = encodeParams(params);
-    if (encodedParams) {
-        url += "?" + encodedParams;
-    }
-
-    return url;
-}
-
 function onTokenLoginCompleted(): void {
     // if we did a token login, we're now left with the token, hs and is
-    // url as query params in the url; a little nasty but let's redirect to
-    // clear them.
+    // url as query params in the url;
+    // if we did an oidc authorization code flow login, we're left with the auth code and state
+    // as query params in the url;
+    // a little nasty but let's redirect to clear them.
     const url = new URL(window.location.href);
 
     url.searchParams.delete("loginToken");
+    url.searchParams.delete("state");
+    url.searchParams.delete("code");
 
-    logger.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
+    logger.log(`Redirecting to ${url.href} to drop delegated authentication params from queryparams`);
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}): Promise<ReactElement> {
+export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     initRouting();
     const platform = PlatformPeg.get();
 
@@ -109,7 +89,12 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
     const isWelcomeOrLanding =
         window.location.hash === "#/welcome" || window.location.hash === "#" || window.location.hash === "";
+    const isLoginPage = window.location.hash === "#/login";
+
     if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
+        autoRedirect = true;
+    }
+    if (!autoRedirect && ssoRedirects.on_login_page && isLoginPage) {
         autoRedirect = true;
     }
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
@@ -129,18 +114,25 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
+    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
+
+    const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
+    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
+
     return (
-        <MatrixChat
-            onNewScreen={onNewScreen}
-            makeRegistrationUrl={makeRegistrationUrl}
-            config={config}
-            realQueryParams={params}
-            startingFragmentQueryParams={fragParams}
-            enableGuest={!config.disable_guests}
-            onTokenLoginCompleted={onTokenLoginCompleted}
-            initialScreenAfterLogin={getScreenFromLocation(window.location)}
-            defaultDeviceDisplayName={defaultDeviceName}
-        />
+        <wrapperOpts.Wrapper>
+            <MatrixChat
+                ref={matrixChatRef}
+                onNewScreen={onNewScreen}
+                config={config}
+                realQueryParams={params}
+                startingFragmentQueryParams={fragParams}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={initialScreenAfterLogin}
+                defaultDeviceDisplayName={defaultDeviceName}
+            />
+        </wrapperOpts.Wrapper>
     );
 }
 
@@ -165,16 +157,13 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         const isUrl = config["default_is_url"];
 
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
-        if (incompatibleOptions.length > 1) {
+        if (hsUrl && (wkConfig || serverName)) {
             // noinspection ExceptionCaughtLocallyJS
-            throw new UserFriendlyError(
-                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                    "or default_hs_url.",
-            );
+            throw new UserFriendlyError("error|invalid_configuration_mixed_server");
         }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw new UserFriendlyError("Invalid configuration: no default server specified.");
+            throw new UserFriendlyError("error|invalid_configuration_no_server");
         }
 
         if (hsUrl) {
@@ -197,7 +186,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         }
 
         let discoveryResult: ClientConfig | undefined;
-        if (wkConfig) {
+        if (!serverName && wkConfig) {
             logger.log("Config uses a default_server_config - validating object");
             discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
         }
@@ -209,9 +198,13 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
                     "use default_server_config instead.",
             );
             discoveryResult = await AutoDiscovery.findClientConfig(serverName);
+            if (discoveryResult["m.homeserver"].base_url === null && wkConfig) {
+                logger.log("Finding base_url failed but a default_server_config was found - using it as a fallback");
+                discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
+            }
         }
 
-        validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
+        validatedConfig = await AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
     } catch (e) {
         const { hsUrl, isUrl, userId } = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {

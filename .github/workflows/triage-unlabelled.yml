@@ -35,7 +35,7 @@ jobs:
                     fi
                   fi
             - name: Move issue
-              uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
+              uses: alex-page/github-project-automation-plus@303f24a24c67ce7adf565a07e96720faf126fe36
               if: ${{ env.ALREADY_IN_BOARD == 'true' && env.SKIP_ACTION != 'true' }}
               with:
                   project: Issue triage
@@ -60,7 +60,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Element-Call')) &&
             contains(github.event.issue.labels.*.name, 'Z-Labs')
         steps:
-            - uses: actions/github-script@v6
+            - uses: actions/github-script@v7
               with:
                   script: |
                       github.rest.issues.removeLabel({

@@ -28,7 +28,6 @@ import "./modernizr";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require("gfm.css/gfm.css");
 require("katex/dist/katex.css");
 
 /**
@@ -99,7 +98,7 @@ const supportedBrowser = checkBrowserFeatures();
 // try in react but fallback to an `alert`
 // We start loading stuff but don't block on it until as late as possible to allow
 // the browser to use as much parallelism as it can.
-// Load parallelism is based on research in https://github.com/vector-im/element-web/issues/12253
+// Load parallelism is based on research in https://github.com/element-hq/element-web/issues/12253
 async function start(): Promise<void> {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
     const {
@@ -130,7 +129,7 @@ async function start(): Promise<void> {
         // don't try to redirect to the native apps if we're
         // verifying a 3pid (but after we've loaded the config)
         // or if the user is following a deep link
-        // (https://github.com/vector-im/element-web/issues/7378)
+        // (https://github.com/element-hq/element-web/issues/7378)
         const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
 
         if (!preventRedirect) {
@@ -177,7 +176,7 @@ async function start(): Promise<void> {
         // error handling begins here
         // ##########################
         if (!acceptBrowser) {
-            await new Promise<void>((resolve) => {
+            await new Promise<void>((resolve, reject) => {
                 logger.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {
@@ -186,7 +185,7 @@ async function start(): Promise<void> {
                     }
                     logger.log("User accepts the compatibility risks.");
                     resolve();
-                });
+                }).catch(reject);
             });
         }
 
@@ -197,17 +196,14 @@ async function start(): Promise<void> {
             // Now that we've loaded the theme (CSS), display the config syntax error if needed.
             if (error instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
-                return showError(_t("Your Element is misconfigured"), [
-                    _t(
-                        "Your Element configuration contains invalid JSON. " +
-                            "Please correct the problem and reload the page.",
-                    ),
-                    _t("The message from the parser is: %(message)s", {
-                        message: error.message || _t("Invalid JSON"),
+                return showError(_t("error|misconfigured"), [
+                    _t("error|invalid_json"),
+                    _t("error|invalid_json_detail", {
+                        message: error.message || _t("error|invalid_json_generic"),
                     }),
                 ]);
             }
-            return showError(_t("Unable to load config file: please refresh the page to try again."));
+            return showError(_t("error|cannot_load_config"));
         }
 
         // ##################################
@@ -231,8 +227,8 @@ async function start(): Promise<void> {
         logger.error(err);
         // Like the compatibility page, AWOOOOOGA at the user
         // This uses the default brand since the app config is unavailable.
-        await showError(_t("Your Element is misconfigured"), [
-            extractErrorMessageFromError(err, _t("Unexpected error preparing the app. See console for details.")),
+        await showError(_t("error|misconfigured"), [
+            extractErrorMessageFromError(err, _t("error|app_launch_unexpected_error")),
         ]);
     }
 }

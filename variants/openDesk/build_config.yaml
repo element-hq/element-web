@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+# The modules to install. See ./docs/modules.md for more information on
+# what modules are.
+#
+# The values of this are provided to `yarn add` for inclusion.
+modules:
+    - "@nordeck/element-web-guest-module@1.0.0"
+    - "@nordeck/element-web-opendesk-module@0.4.0"
+    - "@nordeck/element-web-widget-lifecycle-module@1.0.1"
+    - "@nordeck/element-web-widget-toggles-module@0.1.0"

@@ -76,3 +76,36 @@ export function onNewScreen(screen: string, replaceLast = false): void {
 export function init(): void {
     window.addEventListener("hashchange", onHashChange);
 }
+
+const ScreenAfterLoginStorageKey = "mx_screen_after_login";
+function getStoredInitialScreenAfterLogin(): ReturnType<typeof getScreenFromLocation> | undefined {
+    const screenAfterLogin = sessionStorage.getItem(ScreenAfterLoginStorageKey);
+
+    return screenAfterLogin ? JSON.parse(screenAfterLogin) : undefined;
+}
+
+function setInitialScreenAfterLogin(screenAfterLogin?: ReturnType<typeof getScreenFromLocation>): void {
+    if (screenAfterLogin?.screen) {
+        sessionStorage.setItem(ScreenAfterLoginStorageKey, JSON.stringify(screenAfterLogin));
+    }
+}
+
+/**
+ * Get the initial screen to be displayed after login,
+ * for example when trying to view a room via a link before logging in
+ *
+ * If the current URL has a screen set that in session storage
+ * Then retrieve the screen from session storage and return it
+ * Using session storage allows us to remember login fragments from when returning from OIDC login
+ * @returns screen and params or undefined
+ */
+export function getInitialScreenAfterLogin(location: Location): ReturnType<typeof getScreenFromLocation> | undefined {
+    const screenAfterLogin = getScreenFromLocation(location);
+
+    if (screenAfterLogin.screen || screenAfterLogin.params) {
+        setInitialScreenAfterLogin(screenAfterLogin);
+    }
+
+    const storedScreenAfterLogin = getStoredInitialScreenAfterLogin();
+    return storedScreenAfterLogin;
+}

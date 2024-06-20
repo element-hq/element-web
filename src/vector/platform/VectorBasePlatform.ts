@@ -18,11 +18,11 @@ limitations under the License.
 */
 
 import BasePlatform from "matrix-react-sdk/src/BasePlatform";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 
 import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
+import { _t } from "../../languageHandler";
 
 /**
  * Vector-specific extensions to the BasePlatform template
@@ -41,7 +41,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Delay creating the `Favicon` instance until first use (on the first notification) as
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
-     * See https://github.com/vector-im/element-web/issues/9605.
+     * See https://github.com/element-hq/element-web/issues/9605.
      */
     public get favicon(): Favicon {
         if (this._favicon) {
@@ -85,6 +85,6 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     public getDefaultDeviceDisplayName(): string {
-        return _t("Unknown device");
+        return _t("unknown_device");
     }
 }

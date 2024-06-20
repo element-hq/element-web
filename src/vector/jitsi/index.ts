@@ -37,8 +37,39 @@ import type {
     AudioMuteStatusChangedEvent,
     LogEvent,
     VideoMuteStatusChangedEvent,
+    ExternalAPIOptions as _ExternalAPIOptions,
+    Config as _Config,
+    InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
 import { getVectorConfig } from "../getconfig";
+
+interface Config extends _Config {
+    // Jitsi's types are missing these fields
+    prejoinConfig?: {
+        enabled: boolean;
+        hideDisplayName?: boolean;
+        hideExtraJoinButtons?: string[];
+    };
+    toolbarButtons?: string[];
+    conferenceInfo?: {
+        alwaysVIsible?: string[];
+        autoHide?: string[];
+    };
+    disableSelfViewSettings?: boolean;
+}
+
+interface InterfaceConfig extends _InterfaceConfig {
+    // XXX: It is unclear whether this is a typo of TOOLBAR_BUTTONS or if its just really undocumented,
+    // either way it is missing in types, yet we try and use it
+    MAIN_TOOLBAR_BUTTONS?: string[];
+}
+
+interface ExternalAPIOptions extends _ExternalAPIOptions {
+    configOverwrite?: Config;
+    interfaceConfigOverwrite?: InterfaceConfig;
+    // Jitsi's types are missing these fields
+    lang?: string;
+}
 
 // We have to trick webpack into loading our CSS for us.
 require("./index.pcss");
@@ -146,17 +177,17 @@ const setupCompleted = (async (): Promise<string | void> => {
                         }
                     }
 
-                    await widgetApi!.transport.reply(ev.detail, response);
+                    widgetApi!.transport.reply(ev.detail, response);
                 });
             };
 
             handleAction(ElementWidgetActions.JoinCall, async ({ audioInput, videoInput }) => {
-                joinConference(audioInput as string | null, videoInput as string | null);
+                void joinConference(audioInput as string | null, videoInput as string | null);
             });
             handleAction(ElementWidgetActions.HangupCall, async ({ force }) => {
                 if (force === true) {
                     meetApi?.dispose();
-                    notifyHangup();
+                    void notifyHangup();
                     meetApi = undefined;
                     closeConference();
                 } else {
@@ -261,14 +292,12 @@ function switchVisibleContainers(): void {
 
 function toggleConferenceVisibility(inConference: boolean): void {
     document.getElementById("jitsiContainer")!.style.visibility = inConference ? "unset" : "hidden";
-    // Video rooms have a separate UI for joining, so they should never show our join button
-    document.getElementById("joinButtonContainer")!.style.visibility =
-        inConference || isVideoChannel ? "hidden" : "unset";
+    document.getElementById("joinButtonContainer")!.style.visibility = inConference ? "hidden" : "unset";
 }
 
 function skipToJitsiSplashScreen(): void {
     // really just a function alias for self-documenting code
-    joinConference();
+    void joinConference();
 }
 
 /**
@@ -382,7 +411,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
             "our fragment values and not recognizing the options.",
     );
 
-    const options = {
+    const options: ExternalAPIOptions = {
         width: "100%",
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer") ?? undefined,
@@ -419,22 +448,21 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
-        // Ensure that we skip Jitsi Meet's native prejoin screen, for
-        // deployments that have it enabled
-        options.configOverwrite.prejoinConfig = { enabled: false };
+        // We don't skip jitsi's prejoin screen for video rooms.
+        options.configOverwrite!.prejoinConfig = { enabled: true };
         // Use a simplified set of toolbar buttons
-        options.configOverwrite.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
+        options.configOverwrite!.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
         // Note: We can hide the screenshare button in video rooms but not in
         // normal conference calls, since in video rooms we control exactly what
         // set of controls appear, but in normal calls we need to leave that up
         // to the deployment's configuration.
-        // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
-        if (supportsScreensharing) options.configOverwrite.toolbarButtons.splice(2, 0, "desktop");
+        // https://github.com/element-hq/element-web/issues/4880#issuecomment-940002464
+        if (supportsScreensharing) options.configOverwrite!.toolbarButtons.splice(2, 0, "desktop");
         // Hide all top bar elements
-        options.configOverwrite.conferenceInfo = { autoHide: [] };
+        options.configOverwrite!.conferenceInfo = { autoHide: [] };
         // Remove the ability to hide your own tile, since we're hiding the
         // settings button which would be the only way to get it back
-        options.configOverwrite.disableSelfViewSettings = true;
+        options.configOverwrite!.disableSelfViewSettings = true;
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
@@ -472,8 +500,8 @@ const onVideoConferenceJoined = (): void => {
     if (widgetApi) {
         // ignored promise because we don't care if it works
         // noinspection JSIgnoredPromiseFromCall
-        widgetApi.setAlwaysOnScreen(true);
-        widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
+        void widgetApi.setAlwaysOnScreen(true);
+        void widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
     }
 
     // Video rooms should start in tile mode
@@ -481,7 +509,7 @@ const onVideoConferenceJoined = (): void => {
 };
 
 const onVideoConferenceLeft = (): void => {
-    notifyHangup();
+    void notifyHangup();
     meetApi = undefined;
 };
 
@@ -489,7 +517,7 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
     if (error.isFatal) {
         // We got disconnected. Since Jitsi Meet might send us back to the
         // prejoin screen, we're forced to act as if we hung up entirely.
-        notifyHangup(error.message);
+        void notifyHangup(error.message);
         meetApi = undefined;
         closeConference();
     }
@@ -497,7 +525,7 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
 
 const onAudioMuteStatusChanged = ({ muted }: AudioMuteStatusChangedEvent): void => {
     const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-    widgetApi?.transport.send(action, {});
+    void widgetApi?.transport.send(action, {});
 };
 
 const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void => {
@@ -507,15 +535,15 @@ const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void 
         // otherwise the React SDK will mistakenly think the user turned off
         // their video by hand
         setTimeout(() => {
-            if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
+            if (meetApi) void widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
         }, 200);
     } else {
-        widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        void widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
     }
 };
 
 const updateParticipants = (): void => {
-    widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
+    void widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
         participants: meetApi?.getParticipantsInfo(),
     });
 };

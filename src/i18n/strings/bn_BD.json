@@ -1,3 +1,0 @@
-{
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "ভুল পছন্দসমূহ: এগয়লোর যেকোনো একটি কেবল নির্দিষ্ট করা যাবে default_server_config, default_server_name বা default_hs_url।"
-}

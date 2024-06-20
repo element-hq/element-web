@@ -30,6 +30,7 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import { setTheme } from "matrix-react-sdk/src/theme";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -137,7 +138,7 @@ export async function loadLanguage(): Promise<void> {
 }
 
 export async function loadTheme(): Promise<void> {
-    setTheme();
+    return setTheme();
 }
 
 export async function loadApp(fragParams: {}): Promise<void> {
@@ -147,7 +148,10 @@ export async function loadApp(fragParams: {}): Promise<void> {
         /* webpackPreload: true */
         "./app"
     );
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams), document.getElementById("matrixchat"));
+    function setWindowMatrixChat(matrixChat: MatrixChat): void {
+        window.matrixChat = matrixChat;
+    }
+    ReactDOM.render(await module.loadApp(fragParams, setWindowMatrixChat), document.getElementById("matrixchat"));
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
@@ -184,4 +188,4 @@ export async function loadModules(): Promise<void> {
     }
 }
 
-export const _t = languageHandler._t;
+export { _t } from "../languageHandler";
