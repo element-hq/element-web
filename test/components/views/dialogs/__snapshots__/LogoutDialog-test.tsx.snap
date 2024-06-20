@@ -24,12 +24,6 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
         You'll lose access to your encrypted messages
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <div>
       <div
         class="mx_Dialog_content"
@@ -78,6 +72,13 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
         </p>
       </details>
     </div>
+    <div
+      aria-describedby="floating-ui-22"
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -111,12 +112,6 @@ exports[`LogoutDialog Prompts user to set up backup if there is no backup on the
         You'll lose access to your encrypted messages
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <div>
       <div
         class="mx_Dialog_content"
@@ -165,6 +160,13 @@ exports[`LogoutDialog Prompts user to set up backup if there is no backup on the
         </p>
       </details>
     </div>
+    <div
+      aria-describedby="floating-ui-28"
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -199,12 +201,6 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"
     >
@@ -231,6 +227,12 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
         </button>
       </span>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"

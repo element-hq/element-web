@@ -24,12 +24,6 @@ exports[`AppDownloadDialog should allow disabling desktop build 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_AppDownloadDialog_mobile"
     >
       <div
@@ -139,6 +133,12 @@ exports[`AppDownloadDialog should allow disabling desktop build 1`] = `
         Google Play and the Google Play logo are trademarks of Google LLC.
       </p>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -172,12 +172,6 @@ exports[`AppDownloadDialog should allow disabling fdroid build 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_AppDownloadDialog_desktop"
     >
       <h3
@@ -295,6 +289,12 @@ exports[`AppDownloadDialog should allow disabling fdroid build 1`] = `
         Google Play and the Google Play logo are trademarks of Google LLC.
       </p>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -328,12 +328,6 @@ exports[`AppDownloadDialog should allow disabling mobile builds 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_AppDownloadDialog_desktop"
     >
       <h3
@@ -364,6 +358,12 @@ exports[`AppDownloadDialog should allow disabling mobile builds 1`] = `
         Google Play and the Google Play logo are trademarks of Google LLC.
       </p>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -396,12 +396,6 @@ exports[`AppDownloadDialog should render with desktop, ios, android, fdroid butt
         Download Element
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <div
       class="mx_AppDownloadDialog_desktop"
     >
@@ -530,6 +524,12 @@ exports[`AppDownloadDialog should render with desktop, ios, android, fdroid butt
         Google Play and the Google Play logo are trademarks of Google LLC.
       </p>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"

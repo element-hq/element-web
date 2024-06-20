@@ -23,12 +23,6 @@ exports[`ExportE2eKeysDialog renders 1`] = `
         Export room keys
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <form>
       <div
         class="mx_Dialog_content"
@@ -102,6 +96,12 @@ exports[`ExportE2eKeysDialog renders 1`] = `
         </button>
       </div>
     </form>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"

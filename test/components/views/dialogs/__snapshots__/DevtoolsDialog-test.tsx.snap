@@ -24,12 +24,6 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_DevTools_label_left"
     >
       Toolbox
@@ -39,6 +33,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Room ID: !id
       <div
+        aria-describedby="floating-ui-2"
         aria-label="Copy"
         class="mx_AccessibleButton mx_CopyableText_copyButton"
         role="button"
@@ -232,6 +227,12 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         Back
       </button>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"

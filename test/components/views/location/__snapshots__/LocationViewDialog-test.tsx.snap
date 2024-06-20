@@ -23,6 +23,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
     class="mx_ZoomButtons"
   >
     <div
+      aria-describedby="floating-ui-6"
       aria-label="Zoom in"
       class="mx_AccessibleButton mx_ZoomButtons_button"
       data-testid="map-zoom-in-button"

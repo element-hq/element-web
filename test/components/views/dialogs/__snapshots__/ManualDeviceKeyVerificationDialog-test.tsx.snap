@@ -25,12 +25,6 @@ exports[`ManualDeviceKeyVerificationDialog should display the device 1`] = `
       </h1>
     </div>
     <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
-    <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"
     >
@@ -106,6 +100,12 @@ exports[`ManualDeviceKeyVerificationDialog should display the device 1`] = `
         </button>
       </span>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
@@ -139,12 +139,6 @@ exports[`ManualDeviceKeyVerificationDialog should display the device of another 
         Verify session
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"
@@ -221,6 +215,12 @@ exports[`ManualDeviceKeyVerificationDialog should display the device of another 
         </button>
       </span>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"

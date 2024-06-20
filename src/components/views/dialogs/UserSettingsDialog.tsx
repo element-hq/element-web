@@ -50,7 +50,7 @@ interface IProps {
 
 function titleForTabID(tabId: UserTab): React.ReactNode {
     const subs = {
-        strong: (sub: string) => <strong>{sub}</strong>,
+        strong: (sub: string) => <span className="mx_UserSettingsDialog_title_strong">{sub}</span>,
     };
     switch (tabId) {
         case UserTab.General:
@@ -230,6 +230,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                     hasCancel={true}
                     onFinished={props.onFinished}
                     title={titleForTabID(activeTabId)}
+                    titleClass="mx_UserSettingsDialog_title"
                 >
                     <div className="mx_SettingsDialog_content">
                         <TabbedView

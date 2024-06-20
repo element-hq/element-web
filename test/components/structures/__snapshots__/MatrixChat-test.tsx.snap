@@ -335,12 +335,6 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
     </h1>
   </div>
   <div
-    aria-label="Close dialog"
-    class="mx_AccessibleButton mx_Dialog_cancelButton"
-    role="button"
-    tabindex="0"
-  />
-  <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"
   >
@@ -369,6 +363,12 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
       </button>
     </span>
   </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  />
 </div>
 `;
 
@@ -390,12 +390,6 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
       Leave space
     </h1>
   </div>
-  <div
-    aria-label="Close dialog"
-    class="mx_AccessibleButton mx_Dialog_cancelButton"
-    role="button"
-    tabindex="0"
-  />
   <div
     class="mx_Dialog_content"
     id="mx_Dialog_content"
@@ -425,5 +419,11 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
       </button>
     </span>
   </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  />
 </div>
 `;

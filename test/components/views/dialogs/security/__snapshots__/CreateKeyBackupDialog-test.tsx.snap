@@ -130,12 +130,6 @@ exports[`CreateKeyBackupDialog should display the success dialog when the key ba
         Success!
       </h1>
     </div>
-    <div
-      aria-label="Close dialog"
-      class="mx_AccessibleButton mx_Dialog_cancelButton"
-      role="button"
-      tabindex="0"
-    />
     <div>
       <div>
         <p>
@@ -158,6 +152,12 @@ exports[`CreateKeyBackupDialog should display the success dialog when the key ba
         </div>
       </div>
     </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
   </div>
   <div
     data-focus-guard="true"
