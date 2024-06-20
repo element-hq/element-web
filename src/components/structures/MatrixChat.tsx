@@ -32,9 +32,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
-
 // what-input helps improve keyboard accessibility
 import "what-input";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import type NewRecoveryMethodDialog from "../../async-components/views/dialogs/security/NewRecoveryMethodDialog";
 import type RecoveryMethodRemovedDialog from "../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog";
@@ -942,6 +945,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     true,
                 );
                 break;
+            // VERJI
+            case Action.OpenInviteExternalUsersDialog: {
+                const customOnboardingOpts = { CustomComponent: React.Fragment };
+                ModuleRunner.instance.invoke(
+                    CustomComponentLifecycle.Experimental,
+                    customOnboardingOpts as CustomComponentOpts,
+                );
+                const Props = (props: any): React.JSX.Element => <div>{props}</div>;
+                const customOnboardingDialog = (props: any): React.JSX.Element => (
+                    <customOnboardingOpts.CustomComponent>
+                        <Props props={props} />
+                    </customOnboardingOpts.CustomComponent>
+                );
+                console.log("[Verji.Onboarding - Action.OpenInviteExternalUsers]", payload.data);
+                Modal.createDialog(
+                    customOnboardingDialog,
+                    {
+                        initialText: payload.initialText,
+                        data: payload?.data,
+                    },
+                    "mx_RoomDirectory_dialogWrapper",
+                    false,
+                    true,
+                );
+            }
+            // END VERJI
         }
     };
 
