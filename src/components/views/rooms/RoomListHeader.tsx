@@ -258,18 +258,20 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
                         }}
                     />
-                    <IconizedContextMenuOption
-                        label={_t("action|add_existing_room")}
-                        iconClassName="mx_RoomListHeader_iconPlus"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showAddExistingRooms(activeSpace);
-                            closePlusMenu();
-                        }}
-                        disabled={!canAddSubRooms}
-                        title={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
-                    />
+                    {SettingsStore.getValue(UIFeature.AddExistingRoomToSpace) && (
+                        <IconizedContextMenuOption
+                            label={_t("action|add_existing_room")}
+                            iconClassName="mx_RoomListHeader_iconPlus"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                showAddExistingRooms(activeSpace);
+                                closePlusMenu();
+                            }}
+                            disabled={!canAddSubRooms}
+                            title={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
+                        />
+                    )}
                     {SettingsStore.getValue(UIFeature.AddSpace) && canCreateSpaces && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}

@@ -34,6 +34,8 @@ export const enum UIFeature {
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
     ShowCreateSpaceButton = "UIFeature.showCreateSpaceButton",
+    AddExistingRoomToSpace = "UIFeature.addExistingRoomToSpace",
+    ShowAddMoreButtonForSpaces = "UIFeature.showAddMoreButtonForSpaces",
     AddSubSpace = "UIFeature.addSubSpace",
     AddSpace = "UIFeature.addSpace",
     ShowStickersButtonSetting = "UIFeature.showStickersButtonSetting",

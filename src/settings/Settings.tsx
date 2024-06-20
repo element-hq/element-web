@@ -1243,6 +1243,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.AddExistingRoomToSpace]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShowAddMoreButtonForSpaces]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.AddSubSpace]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
