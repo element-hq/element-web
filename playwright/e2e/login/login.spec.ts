@@ -31,12 +31,18 @@ test.describe("Login", () => {
             await homeserver.registerUser(username, password);
         });
 
-        test("logs in with an existing account and lands on the home screen", async ({
+        test("Loads the welcome page by default; then logs in with an existing account and lands on the home screen", async ({
             page,
             homeserver,
             checkA11y,
         }) => {
-            await page.goto("/#/login");
+            await page.goto("/");
+
+            // Should give us the welcome page initially
+            await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+
+            // Start the login process
+            await page.getByRole("link", { name: "Sign in" }).click();
 
             // first pick the homeserver, as otherwise the user picker won't be visible
             await selectHomeserver(page, homeserver.config.baseUrl);
