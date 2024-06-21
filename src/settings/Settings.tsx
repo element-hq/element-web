@@ -1243,6 +1243,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.ShowExploreRoomsButton]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShowAddWidgetsInRoomInfo]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.AddExistingRoomToSpace]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,

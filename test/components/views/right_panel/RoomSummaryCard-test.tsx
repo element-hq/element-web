@@ -389,4 +389,22 @@ describe("<RoomSummaryCard />", () => {
             expect(screen.queryByText("Public room")).toBeInTheDocument();
         });
     });
+
+    describe("UIFeature.showAddWidgetsInRoomInfo", () => {
+        it("shows the add widgets button when enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                val === UIFeature.ShowAddWidgetsInRoomInfo ? true : "default",
+            );
+            const { baseElement } = getComponent();
+            expect(baseElement.innerHTML).toContain("Add widgets");
+        });
+
+        it("does not show the add widgets button when disabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                val === UIFeature.ShowAddWidgetsInRoomInfo ? false : "default",
+            );
+            const { baseElement } = getComponent();
+            expect(baseElement.innerHTML).not.toContain("Add widgets");
+        });
+    });
 });
