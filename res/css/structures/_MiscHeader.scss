@@ -1,0 +1,61 @@
+/*
+    ROSBERG FILE
+*/
+
+.mx_MiscHeaderButtons {
+    display: flex;
+    &::before {
+        content: unset;
+    }
+}
+
+.mx_MiscHeaderButtons::before {
+    content: "";
+    //background-color: $header-divider-color;
+    opacity: 0.5;
+    margin: 6px 8px;
+    border-radius: 1px;
+    width: 1px;
+}
+
+.mx_MiscHeader_miscButton {
+    cursor: pointer;
+    flex: 0 0 auto;
+    margin-left: 1px;
+    margin-right: 1px;
+    height: 32px;
+    width: 32px;
+    position: relative;
+    border-radius: 100%;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 4px; // center with parent of 32px
+        left: 4px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
+        background-color: $icon-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
+
+    &:hover {
+        //background: rgba($accent-color, 0.1);
+
+        &::before {
+            //background-color: $accent-color;
+        }
+    }
+}
+
+.mx_MiscHeader_miscButton_highlight {
+    &::before {
+        //background-color: $accent-color !important;
+    }
+}
+
+.mx_MiscHeader_roomSupportButton::before {
+    mask-image: url("$(res)/img/element-icons/settings/help.svg");
+    mask-position: center;
+}

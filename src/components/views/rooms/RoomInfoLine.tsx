@@ -26,6 +26,8 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { useRoomMemberCount, useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
 interface IProps {
     room: Room;
@@ -86,7 +88,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     return (
         <div className={`mx_RoomInfoLine ${iconClass}`}>
             {roomType}
-            {members}
+            {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && members}
         </div>
     );
 };
