@@ -113,6 +113,13 @@ export async function checkDeviceIsConnectedKeyBackup(
     expectedBackupVersion: string,
     checkBackupKeyInCache: boolean,
 ): Promise<void> {
+    // Sanity check the given backup version: if it's null, something went wrong earlier in the test.
+    if (!expectedBackupVersion) {
+        throw new Error(
+            `Invalid backup version passed to \`checkDeviceIsConnectedKeyBackup\`: ${expectedBackupVersion}`,
+        );
+    }
+
     await page.getByRole("button", { name: "User menu" }).click();
     await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Security & Privacy" }).click();
     await expect(page.locator(".mx_Dialog").getByRole("button", { name: "Restore from Backup" })).toBeVisible();
