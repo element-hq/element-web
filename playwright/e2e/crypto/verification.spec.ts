@@ -40,8 +40,6 @@ test.describe("Device verification", () => {
         // Visit the login page of the app, to load the matrix sdk
         await page.goto("/#/login");
 
-        await page.pause();
-
         // wait for the page to load
         await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
 
@@ -53,8 +51,6 @@ test.describe("Device verification", () => {
         });
         aliceBotClient.setCredentials(credentials);
         const mxClientHandle = await aliceBotClient.prepareClient();
-
-        await page.waitForTimeout(20000);
 
         expectedBackupVersion = await mxClientHandle.evaluate(async (mxClient) => {
             return await mxClient.getCrypto()!.getActiveSessionBackupVersion();
