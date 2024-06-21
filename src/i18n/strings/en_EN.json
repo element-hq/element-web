@@ -2471,7 +2471,6 @@
             "confirm_adding_email_body": "Click the button below to confirm adding this email address.",
             "confirm_adding_email_title": "Confirm adding email",
             "deactivate_confirm_body": "Are you sure you want to deactivate your account? This is irreversible.",
-            "deactivate_confirm_body_password": "To continue, please enter your account password:",
             "deactivate_confirm_body_sso": "Confirm your account deactivation by using Single Sign On to prove your identity.",
             "deactivate_confirm_content": "Confirm that you would like to deactivate your account. If you proceed:",
             "deactivate_confirm_content_1": "You will not be able to reactivate your account",

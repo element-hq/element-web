@@ -23,7 +23,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import InteractiveAuth, { ERROR_USER_CANCELLED, InteractiveAuthCallback } from "../../structures/InteractiveAuth";
-import { ContinueKind, DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import BaseDialog from "./BaseDialog";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -88,11 +88,6 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         const DEACTIVATE_AESTHETICS: DialogAesthetics = {
             [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
             [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-            [PasswordAuthEntry.LOGIN_TYPE]: {
-                [DEFAULT_PHASE]: {
-                    body: _t("settings|general|deactivate_confirm_body_password"),
-                },
-            },
         };
 
         const aesthetics = DEACTIVATE_AESTHETICS[stage];
