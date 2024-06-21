@@ -41,6 +41,8 @@ import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { useGuestAccessInformation } from "./useGuestAccessInformation";
+import SettingsStore from "../../settings/SettingsStore";
+import { UIFeature } from "../../settings/UIFeature";
 
 export enum PlatformCallType {
     ElementCall,
@@ -83,6 +85,7 @@ export const useRoomCall = (
     isConnectedToCall: boolean;
     hasActiveCallSession: boolean;
     callOptions: PlatformCallType[];
+    showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
     // settings
@@ -268,8 +271,14 @@ export const useRoomCall = (
     }, [isViewingCall, room.roomId]);
 
     // We hide the voice call button if it'd have the same effect as the video call button
-    const hideVoiceCallButton =
+    let hideVoiceCallButton =
         isManagedHybridWidgetEnabled(room.roomId) || !callOptions.includes(PlatformCallType.LegacyCall);
+    let hideVideoCallButton = false;
+    // We hide both buttons if they require widgets but widgets are disabled.
+    if (memberCount > 2 && !SettingsStore.getValue(UIFeature.Widgets)) {
+        hideVoiceCallButton = true;
+        hideVideoCallButton = true;
+    }
 
     /**
      * We've gone through all the steps
@@ -285,5 +294,6 @@ export const useRoomCall = (
         hasActiveCallSession: hasActiveCallSession,
         callOptions,
         showVoiceCallButton: !hideVoiceCallButton,
+        showVideoCallButton: !hideVideoCallButton,
     };
 };

@@ -83,6 +83,7 @@ export default function RoomHeader({
         hasActiveCallSession,
         callOptions,
         showVoiceCallButton,
+        showVideoCallButton,
     } = useRoomCall(room);
 
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
@@ -200,25 +201,20 @@ export default function RoomHeader({
             )}
         </>
     );
-
-    let voiceCallButton: JSX.Element | undefined;
-    if (showVoiceCallButton) {
-        voiceCallButton = (
-            <Tooltip label={voiceCallDisabledReason ?? _t("voip|voice_call")}>
-                <IconButton
-                    // We need both: isViewingCall and isConnectedToCall
-                    //  - in the Lobby we are viewing a call but are not connected to it.
-                    //  - in pip view we are connected to the call but not viewing it.
-                    disabled={!!voiceCallDisabledReason || isViewingCall || isConnectedToCall}
-                    aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
-                    onClick={(ev) => voiceCallClick(ev, callOptions[0])}
-                >
-                    <VoiceCallIcon />
-                </IconButton>
-            </Tooltip>
-        );
-    }
-
+    let voiceCallButton: JSX.Element | undefined = (
+        <Tooltip label={voiceCallDisabledReason ?? _t("voip|voice_call")}>
+            <IconButton
+                // We need both: isViewingCall and isConnectedToCall
+                //  - in the Lobby we are viewing a call but are not connected to it.
+                //  - in pip view we are connected to the call but not viewing it.
+                disabled={!!voiceCallDisabledReason || isViewingCall || isConnectedToCall}
+                aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
+                onClick={(ev) => voiceCallClick(ev, callOptions[0])}
+            >
+                <VoiceCallIcon />
+            </IconButton>
+        </Tooltip>
+    );
     const closeLobbyButton = (
         <Tooltip label={_t("voip|close_lobby")}>
             <IconButton onClick={toggleCall} aria-label={_t("voip|close_lobby")}>
@@ -226,11 +222,18 @@ export default function RoomHeader({
             </IconButton>
         </Tooltip>
     );
-    let videoCallButton = startVideoCallButton;
+    let videoCallButton: JSX.Element | undefined = startVideoCallButton;
     if (isConnectedToCall) {
         videoCallButton = toggleCallButton;
     } else if (isViewingCall) {
         videoCallButton = closeLobbyButton;
+    }
+
+    if (!showVideoCallButton) {
+        videoCallButton = undefined;
+    }
+    if (!showVoiceCallButton) {
+        voiceCallButton = undefined;
     }
 
     return (
