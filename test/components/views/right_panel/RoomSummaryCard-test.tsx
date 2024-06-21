@@ -37,6 +37,7 @@ import { _t } from "../../../../src/languageHandler";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
 jest.mock("../../../../src/utils/room/tagRoom");
 
@@ -315,6 +316,24 @@ describe("<RoomSummaryCard />", () => {
             await flushPromises();
 
             expect(screen.queryByText("Public room")).toBeInTheDocument();
+        });
+    });
+
+    describe("UIFeature.showAddWidgetsInRoomInfo", () => {
+        it("shows the add widgets button when enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                val === UIFeature.ShowAddWidgetsInRoomInfo ? true : "default",
+            );
+            const { baseElement } = getComponent();
+            expect(baseElement.innerHTML).toContain("Add widgets");
+        });
+
+        it("does not show the add widgets button when disabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                val === UIFeature.ShowAddWidgetsInRoomInfo ? false : "default",
+            );
+            const { baseElement } = getComponent();
+            expect(baseElement.innerHTML).not.toContain("Add widgets");
         });
     });
 });
