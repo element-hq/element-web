@@ -568,9 +568,9 @@ test.describe("Timeline", () => {
             );
         });
 
-        test("should set inline start padding to a hidden event line", async ({ page, app, room, cryptoBackend }) => {
+        test("should set inline start padding to a hidden event line", async ({ page, app, room }) => {
             test.skip(
-                cryptoBackend === "rust",
+                true,
                 "Disabled due to screenshot test being flaky - https://github.com/element-hq/element-web/issues/26890",
             );
             await sendEvent(app.client, room.roomId);

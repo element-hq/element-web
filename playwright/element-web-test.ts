@@ -63,84 +63,77 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
     },
 };
 
-export type TestOptions = {
-    cryptoBackend: "legacy" | "rust";
-};
-
 interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 
-export const test = base.extend<
-    TestOptions & {
-        axe: AxeBuilder;
-        checkA11y: () => Promise<void>;
+export const test = base.extend<{
+    axe: AxeBuilder;
+    checkA11y: () => Promise<void>;
 
-        /**
-         * The contents of the config.json to send when the client requests it.
-         */
-        config: typeof CONFIG_JSON;
+    /**
+     * The contents of the config.json to send when the client requests it.
+     */
+    config: typeof CONFIG_JSON;
 
-        /**
-         * The options with which to run the {@link #homeserver} fixture.
-         */
-        startHomeserverOpts: StartHomeserverOpts | string;
+    /**
+     * The options with which to run the {@link #homeserver} fixture.
+     */
+    startHomeserverOpts: StartHomeserverOpts | string;
 
-        homeserver: HomeserverInstance;
-        oAuthServer: { port: number };
+    homeserver: HomeserverInstance;
+    oAuthServer: { port: number };
 
-        /**
-         * The displayname to use for the user registered in {@link #credentials}.
-         *
-         * To set it, call `test.use({ displayName: "myDisplayName" })` in the test file or `describe` block.
-         * See {@link https://playwright.dev/docs/api/class-test#test-use}.
-         */
-        displayName?: string;
+    /**
+     * The displayname to use for the user registered in {@link #credentials}.
+     *
+     * To set it, call `test.use({ displayName: "myDisplayName" })` in the test file or `describe` block.
+     * See {@link https://playwright.dev/docs/api/class-test#test-use}.
+     */
+    displayName?: string;
 
-        /**
-         * A test fixture which registers a test user on the {@link #homeserver} and supplies the details
-         * of the registered user.
-         */
-        credentials: CredentialsWithDisplayName;
+    /**
+     * A test fixture which registers a test user on the {@link #homeserver} and supplies the details
+     * of the registered user.
+     */
+    credentials: CredentialsWithDisplayName;
 
-        /**
-         * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
-         * but adds an initScript which will populate localStorage with the user's details from
-         * {@link #credentials} and {@link #homeserver}.
-         *
-         * Similar to {@link #user}, but doesn't load the app.
-         */
-        pageWithCredentials: Page;
+    /**
+     * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
+     * but adds an initScript which will populate localStorage with the user's details from
+     * {@link #credentials} and {@link #homeserver}.
+     *
+     * Similar to {@link #user}, but doesn't load the app.
+     */
+    pageWithCredentials: Page;
 
-        /**
-         * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
-         * the credentials into localStorage per {@link #homeserver}, and then loads the front page of the
-         * app.
-         */
-        user: CredentialsWithDisplayName;
+    /**
+     * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
+     * the credentials into localStorage per {@link #homeserver}, and then loads the front page of the
+     * app.
+     */
+    user: CredentialsWithDisplayName;
 
-        /**
-         * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
-         * but wraps the returned `Page` in a class of utilities for interacting with the Element-Web UI,
-         * {@link ElementAppPage}.
-         */
-        app: ElementAppPage;
+    /**
+     * The same as {@link https://playwright.dev/docs/api/class-fixtures#fixtures-page|`page`},
+     * but wraps the returned `Page` in a class of utilities for interacting with the Element-Web UI,
+     * {@link ElementAppPage}.
+     */
+    app: ElementAppPage;
 
-        mailhog: { api: mailhog.API; instance: Instance };
-        crypto: Crypto;
-        room?: { roomId: string };
-        toasts: Toasts;
-        uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
-        botCreateOpts: CreateBotOpts;
-        bot: Bot;
-        slidingSyncProxy: ProxyInstance;
-        labsFlags: string[];
-        webserver: Webserver;
-    }
->({
-    cryptoBackend: ["legacy", { option: true }],
+    mailhog: { api: mailhog.API; instance: Instance };
+    crypto: Crypto;
+    room?: { roomId: string };
+    toasts: Toasts;
+    uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
+    botCreateOpts: CreateBotOpts;
+    bot: Bot;
+    slidingSyncProxy: ProxyInstance;
+    labsFlags: string[];
+    webserver: Webserver;
+}>({
     config: CONFIG_JSON,
-    page: async ({ context, page, config, cryptoBackend, labsFlags }, use) => {
+    page: async ({ context, page, config, labsFlags }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = { ...CONFIG_JSON, ...config };
             json["features"] = {
@@ -151,10 +144,6 @@ export const test = base.extend<
                     return obj;
                 }, {}),
             };
-            // the default is to use rust now, so set to `false` if on legacy backend
-            if (cryptoBackend === "legacy") {
-                json.features.feature_rust_crypto = false;
-            }
             await route.fulfill({ json });
         });
         await use(page);

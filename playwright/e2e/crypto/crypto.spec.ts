@@ -322,13 +322,7 @@ test.describe("Cryptography", function () {
             });
         });
 
-        test("should show the correct shield on e2e events", async ({
-            page,
-            app,
-            bot: bob,
-            homeserver,
-            cryptoBackend,
-        }) => {
+        test("should show the correct shield on e2e events", async ({ page, app, bot: bob, homeserver }) => {
             // Bob has a second, not cross-signed, device
             const bobSecondDevice = new Bot(page, homeserver, {
                 bootstrapSecretStorage: false,
@@ -432,16 +426,8 @@ test.describe("Cryptography", function () {
             await app.viewRoomByName("Bob");
             await app.viewRoomByName("TestRoom");
 
-            // some debate over whether this should have a red or a grey shield. Legacy crypto shows a grey shield,
-            // Rust crypto a red one.
             await expect(last).toContainText("test encrypted from unverified");
-            if (cryptoBackend === "rust") {
-                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            } else {
-                // skip this for now: the legacy option no longer actually gives us a legacy stack.
-                // We'll sort this out properly in https://github.com/matrix-org/matrix-react-sdk/pull/12662
-                // await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_normal/);
-            }
+            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
         });
@@ -561,9 +547,7 @@ test.describe("Cryptography", function () {
             app,
             credentials,
             user,
-            cryptoBackend,
         }) => {
-            test.skip(cryptoBackend === "legacy", "Not implemented for legacy crypto");
             test.setTimeout(60000);
 
             // Start with a logged-in session, without key backup, and send a message.
@@ -627,11 +611,8 @@ test.describe("Cryptography", function () {
                 app,
                 credentials: aliceCredentials,
                 user: alice,
-                cryptoBackend,
                 bot: bob,
             }) => {
-                test.skip(cryptoBackend === "legacy", "Not implemented for legacy crypto");
-
                 // Bob creates an encrypted room and sends a message to it. He then invites Alice
                 const roomId = await bob.evaluate(
                     async (client, { alice }) => {
@@ -735,15 +716,8 @@ test.describe("Cryptography", function () {
                 app,
                 credentials: aliceCredentials,
                 user: alice,
-                cryptoBackend,
                 bot: bob,
             }) => {
-                // The old pre-join UTD hiding code would hide events sent
-                // before our latest join event, even if the event that we're
-                // jumping to was decryptable.  We test that this no longer happens.
-
-                test.skip(cryptoBackend === "legacy", "Not implemented for legacy crypto");
-
                 // Bob:
                 // - creates an encrypted room,
                 // - invites Alice,

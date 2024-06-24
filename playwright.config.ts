@@ -16,11 +16,9 @@ limitations under the License.
 
 import { defineConfig } from "@playwright/test";
 
-import { TestOptions } from "./playwright/element-web-test";
-
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-export default defineConfig<TestOptions>({
+export default defineConfig({
     use: {
         viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
@@ -42,16 +40,6 @@ export default defineConfig<TestOptions>({
     workers: 1,
     retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
-    projects: [
-        {
-            name: "Legacy Crypto",
-            use: { cryptoBackend: "legacy" },
-        },
-        {
-            name: "Rust Crypto",
-            use: { cryptoBackend: "rust" },
-        },
-    ],
     snapshotDir: "playwright/snapshots",
     snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
 });

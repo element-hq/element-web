@@ -249,7 +249,6 @@ test.describe("Read receipts", () => {
         });
 
         test("Paging up to find old threads that were never read keeps the room unread", async ({
-            cryptoBackend,
             roomAlpha: room1,
             roomBeta: room2,
             util,
@@ -338,7 +337,6 @@ test.describe("Read receipts", () => {
         });
 
         test("After marking room as read, paging up to find old threads that were never read leaves the room read", async ({
-            cryptoBackend,
             roomAlpha: room1,
             roomBeta: room2,
             util,
