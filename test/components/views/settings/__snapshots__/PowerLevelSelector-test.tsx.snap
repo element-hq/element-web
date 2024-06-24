@@ -60,7 +60,7 @@ exports[`PowerLevelSelector should display only the current user 1`] = `
     <button
       aria-disabled="true"
       aria-label="Apply"
-      class="_button_dyfp8_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      class="_button_zt6rp_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
       data-kind="primary"
       data-size="sm"
       role="button"
@@ -222,7 +222,7 @@ exports[`PowerLevelSelector should render 1`] = `
     <button
       aria-disabled="true"
       aria-label="Apply"
-      class="_button_dyfp8_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      class="_button_zt6rp_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
       data-kind="primary"
       data-size="sm"
       role="button"

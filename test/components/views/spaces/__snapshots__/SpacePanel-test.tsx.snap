@@ -234,7 +234,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
-        class="_icon-button_16nk7_17 mx_ThreadsActivityCentreButton"
+        class="_icon-button_rijzz_17 mx_ThreadsActivityCentreButton"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"

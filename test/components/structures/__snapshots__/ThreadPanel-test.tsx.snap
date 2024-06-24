@@ -12,7 +12,7 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
     </h4>
     <button
       aria-label="Mark all as read"
-      class="_icon-button_16nk7_17"
+      class="_icon-button_rijzz_17"
       role="button"
       style="--cpd-icon-button-size: 24px;"
       tabindex="0"
@@ -52,7 +52,7 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
     </h4>
     <button
       aria-label="Mark all as read"
-      class="_icon-button_16nk7_17"
+      class="_icon-button_rijzz_17"
       role="button"
       style="--cpd-icon-button-size: 24px;"
       tabindex="0"
