@@ -2049,7 +2049,6 @@
             "confirm_adding_email_body": "Klik op de knop hieronder om dit e-mailadres toe te voegen.",
             "confirm_adding_email_title": "Bevestig toevoegen van het e-mailadres",
             "deactivate_confirm_body": "Weet je zeker dat je jouw account wil sluiten? Dit is onomkeerbaar.",
-            "deactivate_confirm_body_password": "Voer je wachtwoord in om verder te gaan:",
             "deactivate_confirm_body_sso": "Bevestig de deactivering van je account door gebruik te maken van eenmalige aanmelding om je identiteit te bewijzen.",
             "deactivate_confirm_content": "Bevestig dat je jouw account wil deactiveren. Als je doorgaat:",
             "deactivate_confirm_content_1": "Zal je jouw account niet kunnen heractiveren",

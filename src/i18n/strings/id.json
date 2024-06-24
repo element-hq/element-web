@@ -2377,7 +2377,6 @@
             "confirm_adding_email_body": "Klik tombol di bawah untuk mengkonfirmasi penambahan alamat email ini.",
             "confirm_adding_email_title": "Konfirmasi penambahan email",
             "deactivate_confirm_body": "Apakah Anda yakin ingin menonaktifkan akun Anda? Ini tidak dapat dibatalkan.",
-            "deactivate_confirm_body_password": "Untuk melanjutkan, mohon masukkan kata sandi akun Anda:",
             "deactivate_confirm_body_sso": "Konfirmasi penonaktifan akun Anda dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
             "deactivate_confirm_content": "Konfirmasi jika Anda ingin menonaktifkan akun Anda. Jika Anda lanjut:",
             "deactivate_confirm_content_1": "Anda tidak akan dapat mengaktifkan ulang akun Anda",

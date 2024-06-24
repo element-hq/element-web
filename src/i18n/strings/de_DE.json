@@ -2402,7 +2402,6 @@
             "confirm_adding_email_body": "Klicke unten auf den Knopf, um die hinzugefügte E-Mail-Adresse zu bestätigen.",
             "confirm_adding_email_title": "Hinzugefügte E-Mail-Addresse bestätigen",
             "deactivate_confirm_body": "Willst du dein Konto wirklich deaktivieren? Du kannst dies nicht rückgängig machen.",
-            "deactivate_confirm_body_password": "Um fortzufahren, gib bitte das Passwort deines Kontos ein:",
             "deactivate_confirm_body_sso": "Bestätige die Deaktivierung deines Kontos, indem du deine Identität mithilfe deines Single-Sign-On-Anbieters nachweist.",
             "deactivate_confirm_content": "Bestätige, dass du dein Konto deaktivieren möchtest. Wenn du fortfährst, tritt folgendes ein:",
             "deactivate_confirm_content_1": "Du wirst dein Konto nicht reaktivieren können",

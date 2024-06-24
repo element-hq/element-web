@@ -2344,7 +2344,6 @@
             "confirm_adding_email_body": "Az e-mail-cím hozzáadásának megerősítéséhez kattintson a lenti gombra.",
             "confirm_adding_email_title": "E-mail-cím hozzáadásának megerősítése",
             "deactivate_confirm_body": "Biztos, hogy felfüggeszted a fiókodat? Ezt nem lehet visszavonni.",
-            "deactivate_confirm_body_password": "A folytatáshoz adja meg a jelszavát:",
             "deactivate_confirm_body_sso": "Erősítsd meg egyszeri bejelentkezéssel, hogy felfüggeszted ezt a fiókot.",
             "deactivate_confirm_content": "Erősítse meg a fiók deaktiválását. Ha folytatja:",
             "deactivate_confirm_content_1": "A fiók többi nem aktiválható",

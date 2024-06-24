@@ -2415,7 +2415,6 @@
             "confirm_adding_email_body": "Cliquez sur le bouton ci-dessous pour confirmer l’ajout de l’adresse e-mail.",
             "confirm_adding_email_title": "Confirmer l’ajout de l’adresse e-mail",
             "deactivate_confirm_body": "Voulez-vous vraiment désactiver votre compte ? Ceci est irréversible.",
-            "deactivate_confirm_body_password": "Pour continuer, saisissez votre mot de passe de connexion :",
             "deactivate_confirm_body_sso": "Confirmez la désactivation de votre compte en utilisant l’authentification unique pour prouver votre identité.",
             "deactivate_confirm_content": "Confirmez la désactivation de votre compte. Si vous continuez :",
             "deactivate_confirm_content_1": "Vous ne pourrez plus réactiver votre compte",

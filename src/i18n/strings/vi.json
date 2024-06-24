@@ -2145,7 +2145,6 @@
             "confirm_adding_email_body": "Nhấn vào nút dưới đây để xác nhận thêm địa chỉ thư điện tử này.",
             "confirm_adding_email_title": "Xác nhận thêm địa chỉ thư điện tử",
             "deactivate_confirm_body": "Bạn có chắc chắn muốn hủy kích hoạt tài khoản của mình không? Điều này là không thể thay đổi.",
-            "deactivate_confirm_body_password": "Để tiếp tục, vui lòng nhập mật khẩu tài khoản của bạn:",
             "deactivate_confirm_body_sso": "Xác nhận việc hủy kích hoạt tài khoản của bạn bằng cách sử dụng Single Sign On để chứng minh danh tính của bạn.",
             "deactivate_confirm_content": "Xác nhận bạn muốn vô hiệu hóa tài khoản. Nếu bạn tiếp tục:",
             "deactivate_confirm_content_1": "Bạn sẽ không thể kích hoạt lại tài khoản của bạn",

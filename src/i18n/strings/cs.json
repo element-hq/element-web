@@ -2427,7 +2427,6 @@
             "confirm_adding_email_body": "Kliknutím na tlačítko potvrdíte přidání emailové adresy.",
             "confirm_adding_email_title": "Potvrdit přidání emailu",
             "deactivate_confirm_body": "Opravdu chcete deaktivovat účet? Je to nevratné.",
-            "deactivate_confirm_body_password": "Pro pokračování zadejte heslo k účtu:",
             "deactivate_confirm_body_sso": "Potvrďte deaktivaci účtu použtím Jednotného přihlášení.",
             "deactivate_confirm_content": "Potvrďte, že chcete deaktivovat svůj účet. Pokud budete pokračovat:",
             "deactivate_confirm_content_1": "Účet nebude možné znovu aktivovat",

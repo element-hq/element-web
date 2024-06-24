@@ -2219,7 +2219,6 @@
             "confirm_adding_email_body": "Haz clic en el botón de abajo para confirmar esta nueva dirección de correo electrónico.",
             "confirm_adding_email_title": "Confirmar un nuevo correo electrónico",
             "deactivate_confirm_body": "¿Estás seguro de que quieres desactivar su cuenta? No se puede deshacer.",
-            "deactivate_confirm_body_password": "Para continuar, escribe la contraseña de tu cuenta:",
             "deactivate_confirm_body_sso": "Confirme la desactivación de su cuenta, usando Registro Único para probar su identidad.",
             "deactivate_confirm_content": "Confirma que quieres desactivar tu cuenta. Si continúas:",
             "deactivate_confirm_content_1": "No podrás reactivarla",

@@ -2106,7 +2106,6 @@
             "confirm_adding_email_body": "Napsauta alapuolella olevaa painiketta lisätäksesi tämän sähköpostiosoitteen.",
             "confirm_adding_email_title": "Vahvista sähköpostin lisääminen",
             "deactivate_confirm_body": "Haluatko varmasti poistaa tilisi pysyvästi?",
-            "deactivate_confirm_body_password": "Jatka kirjoittamalla tilisi salasana:",
             "deactivate_confirm_body_sso": "Vahvista tilin deaktivointi todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
             "deactivate_confirm_content": "Vahvista, että haluat deaktivoida eli poistaa tilisi. Jos jatkat:",
             "deactivate_confirm_content_1": "Et voi ottaa tiliäsi uudelleen käyttöön",

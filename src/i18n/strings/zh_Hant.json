@@ -2345,7 +2345,6 @@
             "confirm_adding_email_body": "點擊下方按鈕以確認新增此電子郵件地址。",
             "confirm_adding_email_title": "確認新增電子郵件",
             "deactivate_confirm_body": "確定您想要停用您的帳號嗎？此為不可逆的操作。",
-            "deactivate_confirm_body_password": "請輸入您的 Matrix 帳號密碼繼續：",
             "deactivate_confirm_body_sso": "透過使用單一登入系統來證您的身分以確認停用您的帳號。",
             "deactivate_confirm_content": "確認您要停用您的帳號。若您繼續：",
             "deactivate_confirm_content_1": "您將無法重新啟用您的帳號",

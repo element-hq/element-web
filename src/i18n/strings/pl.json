@@ -2474,7 +2474,6 @@
             "confirm_adding_email_body": "Naciśnij przycisk poniżej aby zatwierdzić dodawanie adresu e-mail.",
             "confirm_adding_email_title": "Potwierdź dodanie e-maila",
             "deactivate_confirm_body": "Czy na pewno chcesz dezaktywować swoje konto? Nie można tego cofnąć.",
-            "deactivate_confirm_body_password": "Aby kontynuować, wpisz swoje hasło konta:",
             "deactivate_confirm_body_sso": "Potwierdź dezaktywację swojego konta za pomocą pojedynczego logowania, potwierdzając swoją tożsamość.",
             "deactivate_confirm_content": "Potwierdź, że chcesz dezaktywować swoje konto. Jeśli kontynuujesz:",
             "deactivate_confirm_content_1": "Nie będziesz mógł aktywować ponownie swojego konta",

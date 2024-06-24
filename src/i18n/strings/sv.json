@@ -2422,7 +2422,6 @@
             "confirm_adding_email_body": "Klicka på knappen nedan för att bekräfta tilläggning av e-postadressen.",
             "confirm_adding_email_title": "Bekräfta tilläggning av e-postadressen",
             "deactivate_confirm_body": "Är du säker på att du vill inaktivera ditt konto? Detta är oåterkalleligt.",
-            "deactivate_confirm_body_password": "För att fortsätta, vänligen ange ditt kontolösenord:",
             "deactivate_confirm_body_sso": "Bekräfta din kontoinaktivering genom att använda samlad inloggning för att bevisa din identitet.",
             "deactivate_confirm_content": "Bekräfta att du vill inaktivera ditt konto. Om du fortsätter så:",
             "deactivate_confirm_content_1": "Kommer du inte kunna återaktivera ditt konto",

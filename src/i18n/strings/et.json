@@ -2389,7 +2389,6 @@
             "confirm_adding_email_body": "Klõpsi järgnevat nuppu e-posti aadressi lisamise kinnitamiseks.",
             "confirm_adding_email_title": "Kinnita e-posti aadressi lisamine",
             "deactivate_confirm_body": "Kas sa oled kindel, et soovid oma konto sulgeda? Seda tegevust ei saa hiljem tagasi pöörata.",
-            "deactivate_confirm_body_password": "Jätkamiseks palun sisesta oma kasutajakonto salasõna:",
             "deactivate_confirm_body_sso": "Kinnitamaks seda, et soovid oma konto kasutusest eemaldada, kasuta oma isiku tuvastamiseks ühekordset sisselogimist.",
             "deactivate_confirm_content": "Palun kinnita, et sa soovid kasutajakonto kustutaada. Kui sa jätkad, siis:",
             "deactivate_confirm_content_1": "sa ei saa seda kasutajakontot hiljem uuesti tööle panna",

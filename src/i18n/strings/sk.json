@@ -2406,7 +2406,6 @@
             "confirm_adding_email_body": "Kliknutím na tlačidlo nižšie potvrdíte pridanie emailovej adresy.",
             "confirm_adding_email_title": "Potvrdiť pridanie emailu",
             "deactivate_confirm_body": "Ste si istí, že chcete deaktivovať svoje konto? Je to nezvratné.",
-            "deactivate_confirm_body_password": "Aby ste mohli pokračovať, prosím zadajte svoje heslo:",
             "deactivate_confirm_body_sso": "Potvrďte deaktiváciu konta pomocou jednotného prihlásenia SSO na preukázanie svojej totožnosti.",
             "deactivate_confirm_content": "Potvrďte, že chcete deaktivovať svoje konto. Ak budete pokračovať:",
             "deactivate_confirm_content_1": "Svoje konto nebudete môcť opätovne aktivovať",

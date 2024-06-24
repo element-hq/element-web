@@ -2423,7 +2423,6 @@
             "confirm_adding_email_body": "Clicca il pulsante sotto per confermare l'aggiunta di questa email.",
             "confirm_adding_email_title": "Conferma aggiungendo email",
             "deactivate_confirm_body": "Sei sicuro di volere disattivare il tuo account? È irreversibile.",
-            "deactivate_confirm_body_password": "Per continuare, inserisci la password del tuo account:",
             "deactivate_confirm_body_sso": "Conferma la disattivazione del tuo account usando Single Sign On per dare prova della tua identità.",
             "deactivate_confirm_content": "Conferma che vorresti disattivare il tuo account. Se procedi:",
             "deactivate_confirm_content_1": "Non potrai più riattivare il tuo account",

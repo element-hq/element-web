@@ -2213,7 +2213,6 @@
             "confirm_adding_email_body": "下のボタンをクリックすると、このメールアドレスを追加します。",
             "confirm_adding_email_title": "メールアドレスの追加を承認",
             "deactivate_confirm_body": "アカウントを無効化してよろしいですか？この操作は元に戻すことができません。",
-            "deactivate_confirm_body_password": "続行するには、アカウントのパスワードを入力してください：",
             "deactivate_confirm_body_sso": "シングルサインオンを使用して本人確認を行い、アカウントの無効化を承認してください。",
             "deactivate_confirm_content": "アカウントを無効化したいことを確認してください。継続すると、",
             "deactivate_confirm_content_1": "アカウントを再開できなくなります",
