@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LocalStorageCryptoStore, IndexedDBStore, IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
+import { IndexedDBStore, IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import SettingsStore from "../settings/SettingsStore";
-import { Features } from "../settings/Settings";
 import { getIDBFactory } from "./StorageAccess";
 
 const localStorage = window.localStorage;
@@ -141,55 +139,34 @@ async function checkSyncStore(): Promise<StoreCheck> {
 }
 
 async function checkCryptoStore(): Promise<StoreCheck> {
-    if (await SettingsStore.getValue(Features.RustCrypto)) {
-        // check first if there is a rust crypto store
-        try {
-            const rustDbExists = await IndexedDBCryptoStore.exists(getIDBFactory()!, RUST_CRYPTO_STORE_NAME);
-            log(`Rust Crypto store using IndexedDB contains data? ${rustDbExists}`);
+    // check first if there is a rust crypto store
+    try {
+        const rustDbExists = await IndexedDBCryptoStore.exists(getIDBFactory()!, RUST_CRYPTO_STORE_NAME);
+        log(`Rust Crypto store using IndexedDB contains data? ${rustDbExists}`);
 
-            if (rustDbExists) {
-                // There was an existing rust database, so consider it healthy.
-                return { exists: true, healthy: true };
-            } else {
-                // No rust store, so let's check if there is a legacy store not yet migrated.
-                try {
-                    const legacyIdbExists = await IndexedDBCryptoStore.existsAndIsNotMigrated(
-                        getIDBFactory()!,
-                        LEGACY_CRYPTO_STORE_NAME,
-                    );
-                    log(`Legacy Crypto store using IndexedDB contains non migrated data? ${legacyIdbExists}`);
-                    return { exists: legacyIdbExists, healthy: true };
-                } catch (e) {
-                    error("Legacy crypto store using IndexedDB inaccessible", e);
-                }
-
-                // No need to check local storage or memory as rust stack doesn't support them.
-                // Given that rust stack requires indexeddb, set healthy to false.
-                return { exists: false, healthy: false };
+        if (rustDbExists) {
+            // There was an existing rust database, so consider it healthy.
+            return { exists: true, healthy: true };
+        } else {
+            // No rust store, so let's check if there is a legacy store not yet migrated.
+            try {
+                const legacyIdbExists = await IndexedDBCryptoStore.existsAndIsNotMigrated(
+                    getIDBFactory()!,
+                    LEGACY_CRYPTO_STORE_NAME,
+                );
+                log(`Legacy Crypto store using IndexedDB contains non migrated data? ${legacyIdbExists}`);
+                return { exists: legacyIdbExists, healthy: true };
+            } catch (e) {
+                error("Legacy crypto store using IndexedDB inaccessible", e);
             }
-        } catch (e) {
-            error("Rust crypto store using IndexedDB inaccessible", e);
+
+            // No need to check local storage or memory as rust stack doesn't support them.
+            // Given that rust stack requires indexeddb, set healthy to false.
             return { exists: false, healthy: false };
         }
-    } else {
-        let exists = false;
-        // legacy checks
-        try {
-            exists = await IndexedDBCryptoStore.exists(getIDBFactory()!, LEGACY_CRYPTO_STORE_NAME);
-            log(`Crypto store using IndexedDB contains data? ${exists}`);
-            return { exists, healthy: true };
-        } catch (e) {
-            error("Crypto store using IndexedDB inaccessible", e);
-        }
-        try {
-            exists = LocalStorageCryptoStore.exists(localStorage);
-            log(`Crypto store using local storage contains data? ${exists}`);
-            return { exists, healthy: true };
-        } catch (e) {
-            error("Crypto store using local storage inaccessible", e);
-        }
-        log("Crypto store using memory only");
-        return { exists, healthy: false };
+    } catch (e) {
+        error("Rust crypto store using IndexedDB inaccessible", e);
+        return { exists: false, healthy: false };
     }
 }
 

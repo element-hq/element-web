@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Crypto, ICryptoCallbacks, MatrixClient, encodeBase64, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { Crypto, ICryptoCallbacks, encodeBase64, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -39,8 +39,6 @@ import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDia
 let secretStorageKeys: Record<string, Uint8Array> = {};
 let secretStorageKeyInfo: Record<string, SecretStorage.SecretStorageKeyDescription> = {};
 let secretStorageBeingAccessed = false;
-
-let nonInteractive = false;
 
 let dehydrationCache: {
     key?: Uint8Array;
@@ -136,10 +134,6 @@ async function getSecretStorageKey({
         logger.log("CryptoSetupExtension: Using key from extension (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
-    }
-
-    if (nonInteractive) {
-        throw new Error("Could not unlock non-interactively");
     }
 
     const inputToKey = makeInputToKey(keyInfo);
@@ -428,54 +422,5 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         logger.error(e);
         // Re-throw so that higher level logic can abort as needed
         throw e;
-    }
-}
-
-// FIXME: this function name is a bit of a mouthful
-export async function tryToUnlockSecretStorageWithDehydrationKey(client: MatrixClient): Promise<void> {
-    const key = dehydrationCache.key;
-    let restoringBackup = false;
-    if (key && (await client.isSecretStorageReady())) {
-        logger.log("Trying to set up cross-signing using dehydration key");
-        secretStorageBeingAccessed = true;
-        nonInteractive = true;
-        try {
-            await client.checkOwnCrossSigningTrust();
-
-            // we also need to set a new dehydrated device to replace the
-            // device we rehydrated
-            let dehydrationKeyInfo = {};
-            if (dehydrationCache.keyInfo && dehydrationCache.keyInfo.passphrase) {
-                dehydrationKeyInfo = { passphrase: dehydrationCache.keyInfo.passphrase };
-            }
-            await client.setDehydrationKey(key, dehydrationKeyInfo, "Backup device");
-
-            // and restore from backup
-            const backupInfo = await client.getKeyBackupVersion();
-            if (backupInfo) {
-                restoringBackup = true;
-                // don't await, because this can take a long time
-                client.restoreKeyBackupWithSecretStorage(backupInfo).finally(() => {
-                    secretStorageBeingAccessed = false;
-                    nonInteractive = false;
-                    if (!isCachingAllowed()) {
-                        secretStorageKeys = {};
-                        secretStorageKeyInfo = {};
-                    }
-                });
-            }
-        } finally {
-            dehydrationCache = {};
-            // the secret storage cache is needed for restoring from backup, so
-            // don't clear it yet if we're restoring from backup
-            if (!restoringBackup) {
-                secretStorageBeingAccessed = false;
-                nonInteractive = false;
-                if (!isCachingAllowed()) {
-                    secretStorageKeys = {};
-                    secretStorageKeyInfo = {};
-                }
-            }
-        }
     }
 }

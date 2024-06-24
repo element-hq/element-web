@@ -40,10 +40,9 @@ import Modal from "./Modal";
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from "./utils/StorageManager";
 import IdentityAuthClient from "./IdentityAuthClient";
-import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from "./SecurityManager";
+import { crossSigningCallbacks } from "./SecurityManager";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import { SlidingSyncManager } from "./SlidingSyncManager";
-import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t, UserFriendlyError } from "./languageHandler";
 import { SettingLevel } from "./settings/SettingLevel";
 import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
@@ -52,7 +51,6 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
-import { PhasedRolloutFeature } from "./utils/PhasedRolloutFeature";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -326,7 +324,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     /**
      * Attempt to initialize the crypto layer on a newly-created MatrixClient
      *
-     * @param rustCryptoStoreKey - If we are using Rust crypto, a key with which to encrypt the indexeddb.
+     * @param rustCryptoStoreKey - A key with which to encrypt the rust crypto indexeddb.
      *   If provided, it must be exactly 32 bytes of data. If both this and `rustCryptoStorePassword` are
      *   undefined, the store will be unencrypted.
      *
@@ -339,70 +337,23 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             throw new Error("createClient must be called first");
         }
 
-        let useRustCrypto = SettingsStore.getValue(Features.RustCrypto);
-
-        // We want the value that is set in the config.json for that web instance
-        const defaultUseRustCrypto = SettingsStore.getValueAt(SettingLevel.CONFIG, Features.RustCrypto);
-        const migrationPercent = SettingsStore.getValueAt(SettingLevel.CONFIG, "RustCrypto.staged_rollout_percent");
-
-        // If the default config is to use rust crypto, and the user is on legacy crypto,
-        // we want to check if we should migrate the current user.
-        if (!useRustCrypto && defaultUseRustCrypto && Number.isInteger(migrationPercent)) {
-            // The user is not on rust crypto, but the default stack is now rust; Let's check if we should migrate
-            // the current user to rust crypto.
-            try {
-                const stagedRollout = new PhasedRolloutFeature("RustCrypto.staged_rollout_percent", migrationPercent);
-                // Device id should not be null at that point, or init crypto will fail anyhow
-                const deviceId = this.matrixClient.getDeviceId()!;
-                // we use deviceId rather than userId because we don't particularly want all devices
-                // of a user to be migrated at the same time.
-                useRustCrypto = stagedRollout.isFeatureEnabled(deviceId);
-            } catch (e) {
-                logger.warn("Failed to create staged rollout feature for rust crypto migration", e);
-            }
+        if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
+            logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
 
-        // we want to make sure that the same crypto implementation is used throughout the lifetime of a device,
-        // so persist the setting at the device layer
-        // (At some point, we'll allow the user to *enable* the setting via labs, which will migrate their existing
-        // device to the rust-sdk implementation, but that won't change anything here).
-        await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, useRustCrypto);
+        // Record the fact that we used the Rust crypto stack with this client. This just guards against people
+        // rolling back to versions of EW that did not default to Rust crypto (which would lead to an error, since
+        // we cannot migrate from Rust to Legacy crypto).
+        await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, true);
 
-        // Now we can initialise the right crypto impl.
-        if (useRustCrypto) {
-            if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
-                logger.error("Warning! Not using an encryption key for rust crypto store.");
-            }
-            await this.matrixClient.initRustCrypto({
-                storageKey: rustCryptoStoreKey,
-                storagePassword: rustCryptoStorePassword,
-            });
+        await this.matrixClient.initRustCrypto({
+            storageKey: rustCryptoStoreKey,
+            storagePassword: rustCryptoStorePassword,
+        });
 
-            StorageManager.setCryptoInitialised(true);
-            // TODO: device dehydration and whathaveyou
-            return;
-        }
-
-        // fall back to the libolm layer.
-        try {
-            // check that we have a version of the js-sdk which includes initCrypto
-            if (this.matrixClient.initCrypto) {
-                await this.matrixClient.initCrypto();
-                this.matrixClient.setCryptoTrustCrossSignedDevices(
-                    !SettingsStore.getValue("e2ee.manuallyVerifyAllSessions"),
-                );
-                await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
-                StorageManager.setCryptoInitialised(true);
-            }
-        } catch (e) {
-            if (e instanceof Error && e.name === "InvalidCryptoStoreError") {
-                // The js-sdk found a crypto DB too new for it to use
-                Modal.createDialog(CryptoStoreTooNewDialog);
-            }
-            // this can happen for a number of reasons, the most likely being
-            // that the olm library was missing. It's not fatal.
-            logger.warn("Unable to initialise e2e", e);
-        }
+        StorageManager.setCryptoInitialised(true);
+        // TODO: device dehydration and whathaveyou
+        return;
     }
 
     /**
