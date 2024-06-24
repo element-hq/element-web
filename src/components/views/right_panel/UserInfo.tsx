@@ -562,7 +562,7 @@ export const UserOptionsSection: React.FC<{
         <div className="mx_UserInfo_container">
             <h3>{_t("common|options")}</h3>
             <div>
-                {directMessageButton}
+                {SettingsStore.getValue(UIFeature.ShowSendMessageToUserLink) && directMessageButton}
                 {readReceiptButton}
                 {/* If you donw want users to send a room link, disable flag in settings.tsx */}
                 {SettingsStore.getValue(UIFeature.UserInfoShareLinkToUserButton) && shareUserButton}
