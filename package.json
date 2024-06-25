@@ -188,7 +188,7 @@
         "@types/seedrandom": "3.0.8",
         "@types/tar-js": "^0.3.2",
         "@types/ua-parser-js": "^0.7.36",
-        "@types/uuid": "^9.0.2",
+        "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^7.0.0",
         "@typescript-eslint/parser": "^7.0.0",
         "axe-core": "4.9.1",
