@@ -20,7 +20,7 @@ jobs:
 
             - name: Create Pull Request
               id: cpr
-              uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5
+              uses: peter-evans/create-pull-request@4e1beaa7521e8b457b572c090b25bd3db56bf1c5 # v5
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/playwright-image-updates
