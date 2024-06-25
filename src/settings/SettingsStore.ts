@@ -263,13 +263,19 @@ export default class SettingsStore {
     public static getDisplayName(settingName: string, atLevel = SettingLevel.DEFAULT): string | null {
         if (!SETTINGS[settingName] || !SETTINGS[settingName].displayName) return null;
 
-        let displayName = SETTINGS[settingName].displayName;
-        if (displayName instanceof Object) {
-            if (displayName[atLevel]) displayName = displayName[atLevel];
-            else displayName = displayName["default"];
+        const displayName = SETTINGS[settingName].displayName;
+
+        if (typeof displayName === "string") {
+            return _t(displayName);
+        }
+        if (displayName?.[atLevel]) {
+            return _t(displayName[atLevel]);
+        }
+        if (displayName?.["default"]) {
+            return _t(displayName["default"]);
         }
 
-        return displayName ? _t(displayName) : null;
+        return null;
     }
 
     /**

@@ -15,18 +15,23 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import React, { ComponentProps, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonProps } from "../../elements/AccessibleButton";
 import { Ref } from "../../../../accessibility/roving/types";
 
-interface TooltipOptionProps extends ComponentProps<typeof AccessibleButton> {
+type TooltipOptionProps<T extends keyof JSX.IntrinsicElements> = ButtonProps<T> & {
     endAdornment?: ReactNode;
     inputRef?: Ref;
-}
+};
 
-export const TooltipOption: React.FC<TooltipOptionProps> = ({ inputRef, className, ...props }) => {
+export const TooltipOption = <T extends keyof JSX.IntrinsicElements>({
+    inputRef,
+    className,
+    element,
+    ...props
+}: TooltipOptionProps<T>): JSX.Element => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
     return (
         <AccessibleButton
@@ -37,6 +42,7 @@ export const TooltipOption: React.FC<TooltipOptionProps> = ({ inputRef, classNam
             tabIndex={-1}
             aria-selected={isActive}
             role="option"
+            element={element as keyof JSX.IntrinsicElements}
         />
     );
 };

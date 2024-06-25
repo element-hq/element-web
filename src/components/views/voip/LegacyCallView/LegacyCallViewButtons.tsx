@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef, useState, forwardRef } from "react";
+import React, { createRef, useState, forwardRef } from "react";
 import classNames from "classnames";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
@@ -32,7 +32,7 @@ import {
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent, ButtonProps as AccessibleButtonProps } from "../../elements/AccessibleButton";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
@@ -40,7 +40,7 @@ const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the butt
 
 const CONTROLS_HIDE_DELAY = 2000;
 
-type ButtonProps = Omit<ComponentProps<typeof AccessibleButton>, "title" | "element"> & {
+type ButtonProps = Omit<AccessibleButtonProps<"div">, "title" | "element"> & {
     state: boolean;
     onLabel?: string;
     offLabel?: string;

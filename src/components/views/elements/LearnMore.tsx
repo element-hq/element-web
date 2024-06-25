@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
-import AccessibleButton from "./AccessibleButton";
+import AccessibleButton, { ButtonProps } from "./AccessibleButton";
 
-type Props = Omit<ComponentProps<typeof AccessibleButton>, "kind" | "onClick" | "className"> & {
+type Props = Omit<ButtonProps<"div">, "element" | "kind" | "onClick" | "className"> & {
     title: string;
     description: string | React.ReactNode;
 };

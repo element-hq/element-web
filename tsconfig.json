@@ -6,7 +6,7 @@
         "esModuleInterop": true,
         "module": "es2022",
         "moduleResolution": "node",
-        "target": "es2016",
+        "target": "es2018",
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
