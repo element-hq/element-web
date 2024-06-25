@@ -1876,10 +1876,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-5.0.0.tgz#f45a7bccaad218c05bcf9e7c8ca783c9d9a07af4"
-  integrity sha512-37ASjCKSTU5ycGfkP+LUXG4Ok6OAf6vE+1qU6uwWhe6FwadCS3vVWzJYd/3d9BQFwsx4GhFTIAXrW4iLG85rmQ==
+"@matrix-org/matrix-sdk-crypto-wasm@^6.0.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-6.1.0.tgz#1cedf2bcbd6795e297fd45ea4a33f2c8c5204fdd"
+  integrity sha512-8Wn4TT9PEJswfE8+6mA60JHrxyiWYXfM4EM5800tLz+Rl9QRGk9JDF0o0cTb26v6bfXTa3/pCGWAkUVk0ROPEw==
 
 "@matrix-org/matrix-wysiwyg@2.37.3":
   version "2.37.3"
@@ -7020,12 +7020,13 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "33.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/987ec1e62fcdbd626d5abcba5e9dcdaa9eaaa758"
+matrix-js-sdk@34.0.0-rc.0:
+  version "34.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.0.0-rc.0.tgz#18582d596733f2025d34a851f5f4f3ea4a0c86b9"
+  integrity sha512-00jqXL4vaoG1T9LpufDo8VccWjKjVRTL4bPgzrN6UkCZNFS0TT9AO8UTNRtZiGx0KvfBnrZoKc11jonuaWbPuw==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^5.0.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^6.0.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
