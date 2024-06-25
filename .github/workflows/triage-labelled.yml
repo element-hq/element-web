@@ -148,7 +148,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Element-R')
         steps:
             - id: add_to_project
-              uses: actions/add-to-project@v1.0.1
+              uses: actions/add-to-project@v1.0.2
               with:
                   project-url: ${{ env.PROJECT_URL }}
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
