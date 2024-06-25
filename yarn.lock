@@ -9493,9 +9493,9 @@ postcss-minify-selectors@^7.0.0:
     postcss-selector-parser "^6.0.16"
 
 postcss-mixins@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-mixins/-/postcss-mixins-10.0.0.tgz#6dc0755ae085577dae2e0bae909cbe462248ca2e"
-  integrity sha512-CHw+Q8Y7Jz67lqyXbVezvWUsXPVEdPEVLKFb0u8hSRKWzdHMIGwwkZDf17tgAmFOYyoM529WyctZ1sNuVjZ9DQ==
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-mixins/-/postcss-mixins-10.0.1.tgz#895ddf323a5a87e70d3b4a85e04ba879b23a8801"
+  integrity sha512-5+cI9r8L5ChegVsLM9pXa53Ft03Mt9xAq+kvzqfrUHGPCArVGOfUvmQK2CLP3XWWP2dqxDLQI+lIcXG+GTqOBQ==
   dependencies:
     fast-glob "^3.3.2"
     postcss-js "^4.0.1"
