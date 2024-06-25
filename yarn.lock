@@ -3222,9 +3222,9 @@
     undici-types "~5.26.4"
 
 "@types/node@^16":
-  version "16.18.98"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.98.tgz#3554bb7911ea2bbc3a528be0776d6ab16b7674d2"
-  integrity sha512-fpiC20NvLpTLAzo3oVBKIqBGR6Fx/8oAK/SSf7G+fydnXMY1x4x9RZ6sBXhqKlCU21g2QapUsbLlhv3+a7wS+Q==
+  version "16.18.101"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.101.tgz#1e3065490c9ea01a05baf23eb4ac5be985eedc19"
+  integrity sha512-AAsx9Rgz2IzG8KJ6tXd6ndNkVcu+GYB6U/SnFAaokSPNx2N7dcIIfnighYUNumvj6YS2q39Dejz5tT0NCV7CWA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.4"
