@@ -505,7 +505,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             }
         },
         shouldWarn: true,
-        default: true,
+        default: false,
         controller: new RustCryptoSdkController(),
     },
     // Must be set under `setting_defaults` in config.json.

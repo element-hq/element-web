@@ -82,7 +82,7 @@ export const enum UIFeature {
     ExportAttatchmentsDefaultOff = "UIFeature.exportAttatchmentsDefaultOff",
     RoomSettingsSecurity = "UIFeature.roomSettingsSecurity",
     RoomPreviewRejectIgnoreButton = "UIFeature.roomPreviewRejectIgnoreButton",
-    BaseToolActionButton = "UIFeature.baseTo0oActionButton",
+    BaseToolActionButton = "UIFeature.baseToolActionButton",
     NetworkOptions = "UIFeature.networkOptions",
     SearchWarnings = "UIFeature.searchWarnings",
     PowerSelectorCustomValue = "UIFeature.powerSelectorCustomValue",
