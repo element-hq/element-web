@@ -1881,10 +1881,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-5.0.0.tgz#f45a7bccaad218c05bcf9e7c8ca783c9d9a07af4"
   integrity sha512-37ASjCKSTU5ycGfkP+LUXG4Ok6OAf6vE+1qU6uwWhe6FwadCS3vVWzJYd/3d9BQFwsx4GhFTIAXrW4iLG85rmQ==
 
-"@matrix-org/matrix-wysiwyg@2.37.3":
-  version "2.37.3"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.3.tgz#3f068252948f036b3d233828aecf856f74f9d7f1"
-  integrity sha512-WGDZi9ksgkEXS2WlOqGloc9vbgLYVNN/gBhXihAjFtPwix0qEhDSIfzplyQO24WrPpq//PSnXlEFShWhJH0OIg==
+"@matrix-org/matrix-wysiwyg@2.37.4":
+  version "2.37.4"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.4.tgz#bd9b46051a21c9986477e3a83a1417b1ee926d81"
+  integrity sha512-4OtBWAHNAOu9P5C6jOIeHlu4ChwV2YusxnbGuN20IceC4bT2h38flZQgm0x9/jgHfF0LwnKUwKXsxtRoq8xW0g==
 
 "@matrix-org/olm@3.2.15":
   version "3.2.15"
@@ -1899,9 +1899,9 @@
     "@babel/runtime" "^7.17.9"
 
 "@matrix-org/spec@^1.7.0":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.10.1.tgz#6c62a7ee4524224c29fe39e67b33983e70c99944"
-  integrity sha512-ryNSzJkaJi/fwp6AQ6ujS9oqJtw60e+/+llIzwJhbuWTr1V07B6KfUA44+bFrudIFmfghdOuxRfzUnWOQ2K6gw==
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.11.0.tgz#73864eab965c81a4c8c48ca0da8c9d94e8efd5dc"
+  integrity sha512-80000pCXpUnt3ue910uZY70kLo9b7pNfrUrlXY5smpDjfycEs1oztUAriPAnKxMp31gUqt9/tfjmBM2H/LNCZw==
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
