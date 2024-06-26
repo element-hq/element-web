@@ -36,6 +36,7 @@ export const enum UIFeature {
     ShowCreateSpaceButton = "UIFeature.showCreateSpaceButton",
     ShowPlusMenuForMetaSpace = "UIFeature.showPlusMenuForMetaSpace",
     ShowStartChatPlusMenuForMetaSpace = "UIFeature.showStartChatPlusMenuForMetaSpace",
+    ShowAddRoomPlusMenuForMetaSpace = "UIFeature.showAddRoomPlusMenuForMetaSpace",
 }
 
 export enum UIComponent {

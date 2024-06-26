@@ -364,7 +364,21 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
         );
     }
 
-    if (showCreateRoom || showExploreRooms) {
+    let ShowAddRoomPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowAddRoomPlusMenuForMetaSpace)) {
+        switch (SpaceStore.instance.activeSpace) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+                ShowAddRoomPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (ShowAddRoomPlusMenuForMetaSpace && (showCreateRoom || showExploreRooms)) {
         return (
             <>
                 <ContextMenuTooltipButton
