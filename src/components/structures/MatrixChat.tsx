@@ -964,6 +964,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {
                         initialText: payload.initialText,
                         data: payload?.data,
+                        onFinished: () => {
+                            Modal.toggleCurrentDialogVisibility();
+                        },
                     },
                     "mx_RoomDirectory_dialogWrapper",
                     false,
