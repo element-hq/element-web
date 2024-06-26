@@ -122,6 +122,20 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
         return SpaceStore.instance.activeSpaceRoom;
     });
 
+    let showStartChatPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowStartChatPlusMenuForMetaSpace)) {
+        switch (SpaceStore.instance.activeSpace) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+                showStartChatPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     const showCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
     const showInviteUsers = shouldShowComponent(UIComponent.InviteUsers);
 
@@ -183,7 +197,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                 {contextMenu}
             </>
         );
-    } else if (!activeSpace && showCreateRooms) {
+    } else if (showStartChatPlusMenuForMetaSpace && !activeSpace && showCreateRooms) {
         return (
             <AccessibleButton
                 tabIndex={tabIndex}
@@ -352,7 +366,21 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
         );
     }
 
-    if (showCreateRoom || showExploreRooms) {
+    let ShowAddRoomPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowAddRoomPlusMenuForMetaSpace)) {
+        switch (SpaceStore.instance.activeSpace) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+                ShowAddRoomPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (ShowAddRoomPlusMenuForMetaSpace && (showCreateRoom || showExploreRooms)) {
         return (
             <>
                 <ContextMenuTooltipButton

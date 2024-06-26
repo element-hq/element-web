@@ -411,6 +411,20 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         }
     }
 
+    let showPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowPlusMenuForMetaSpace)) {
+        switch (spaceKey) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+                showPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     return (
         <aside className="mx_RoomListHeader" aria-label={_t("room|context_menu|title")}>
             {contextMenuButton}
@@ -419,7 +433,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     <InlineSpinner />
                 </Tooltip>
             ) : null}
-            {canShowPlusMenu && (
+            {showPlusMenuForMetaSpace && canShowPlusMenu && (
                 <ContextMenuTooltipButton
                     ref={plusMenuHandle}
                     onClick={openPlusMenu}
