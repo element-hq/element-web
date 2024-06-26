@@ -1417,7 +1417,6 @@
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
         "report_to_moderators": "Пожаловаться модераторам",
         "report_to_moderators_description": "В поддерживающих модерирование комнатах, кнопка \"Пожаловаться\" позволит вам сообщить о нарушении модераторам комнаты.",
-        "rust_crypto": "Реализация криптографии Rust",
         "sliding_sync": "Режим Sliding Sync",
         "sliding_sync_description": "В активной разработке, нельзя отключить.",
         "sliding_sync_disabled_notice": "Выйдите из системы и снова войдите, чтобы отключить",

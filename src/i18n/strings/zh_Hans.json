@@ -1302,7 +1302,6 @@
         "pinning": "消息置顶",
         "report_to_moderators": "报告给协管员",
         "report_to_moderators_description": "在支持审核的房间中，“报告”按钮将让你向房间协管员举报滥用行为。",
-        "rust_crypto": "Rust加密实现",
         "sliding_sync": "滑动同步模式",
         "sliding_sync_description": "正在积极开发中，不能禁用。",
         "sliding_sync_server_no_support": "你的服务器缺少原生支持",

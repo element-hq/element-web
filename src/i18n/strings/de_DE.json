@@ -1418,7 +1418,6 @@
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Raummoderation melden",
         "report_to_moderators_description": "In Räumen, die Moderation unterstützen, lässt dich die Schaltfläche „Melden“ missbräuchliche Verwendung an die Raummoderation melden.",
-        "rust_crypto": "Rust-Verschlüsselungsumsetzung",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",

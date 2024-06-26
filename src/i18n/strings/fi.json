@@ -1241,7 +1241,6 @@
         "pinning": "Viestien kiinnittäminen",
         "report_to_moderators": "Ilmoita moderaattoreille",
         "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
-        "rust_crypto": "Rust-kryptografiatoteutus",
         "sliding_sync": "Liukuvan synkronoinnin tila",
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "sliding_sync_disabled_notice": "Poista käytöstä kirjautumalla ulos ja takaisin sisään",

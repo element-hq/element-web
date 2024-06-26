@@ -1428,11 +1428,6 @@
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
-        "rust_crypto": "Implémentation cryptographique en Rust",
-        "rust_crypto_in_config": "La cryptographie Rust ne peut être désactivée sur ce déploiement de %(brand)s",
-        "rust_crypto_in_config_description": "Si vous passez à la cryptographie Rust, cela démarrera un processus de migration qui peut durer plusieurs minutes. Il ne peut être arrêté; à utiliser prudemment !",
-        "rust_crypto_optin_warning": "Si vous passez à la cryptographie Rust, cela démarrera un processus de migration qui peut durer plusieurs minutes. Pour la désactiver, vous devrez vous déconnecter et vous reconnecter; à utiliser prudemment !",
-        "rust_crypto_requires_logout": "Une fois activée, la cryptographie Rust ne peut être désactivée qu'en se déconnectant et se reconnectant",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver",
@@ -1857,6 +1852,7 @@
             "forget": "Oublier le salon",
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
+            "mark_unread": "Marquer comme non lu",
             "mentions_only": "Seulement les mentions",
             "notifications_default": "Réglage par défaut",
             "notifications_mute": "Salon muet",
@@ -2803,6 +2799,7 @@
         "show_redaction_placeholder": "Afficher les messages supprimés",
         "show_stickers_button": "Afficher le bouton des autocollants",
         "show_typing_notifications": "Afficher les notifications de saisie",
+        "showbold": "Afficher toute l'activité dans la liste des salons (points ou nombre de messages non lus)",
         "sidebar": {
             "metaspaces_favourites_description": "Regroupez tous vos salons et personnes préférés au même endroit.",
             "metaspaces_home_all_rooms": "Afficher tous les salons",
@@ -2816,6 +2813,7 @@
             "title": "Barre latérale"
         },
         "start_automatically": "Démarrer automatiquement après la phase d'authentification du système",
+        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité du fil de discussion",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",
         "use_command_f_search": "Utilisez Commande + F pour rechercher dans le fil de discussion",
@@ -3103,11 +3101,17 @@
         "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion",
         "empty_tip": "<b>Conseil :</b> Utilisez « %(replyInThread)s » en survolant un message.",
         "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
+        "mark_all_read": "Tout marquer comme lu",
         "my_threads": "Mes fils de discussion",
         "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
         "open_thread": "Ouvrir le fil de discussion",
         "show_all_threads": "Afficher tous les fils de discussion",
         "show_thread_filter": "Affiche :"
+    },
+    "threads_activity_centre": {
+        "header": "Activité des fils de discussions",
+        "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
+        "release_announcement_header": "Centre d'activité des fils de discussions"
     },
     "time": {
         "about_day_ago": "il y a environ un jour",

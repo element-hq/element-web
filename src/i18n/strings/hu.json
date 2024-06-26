@@ -1399,7 +1399,6 @@
         "pinning": "Üzenet kitűzése",
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
-        "rust_crypto": "Rust titkosítási implementáció",
         "sliding_sync": "Csúszó szinkronizációs mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "sliding_sync_disabled_notice": "A kikapcsoláshoz ki-, és bejelentkezés szükséges",

@@ -1325,7 +1325,6 @@
         "pinning": "固定メッセージを有効にする",
         "report_to_moderators": "モデレーターに報告",
         "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
-        "rust_crypto": "Rustによる暗号の実装",
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",

@@ -1336,7 +1336,6 @@
         "pinning": "Fiksim Mesazhi",
         "report_to_moderators": "Raportojeni te moderatorët",
         "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
-        "rust_crypto": "Sendërtim kriptografie Rust",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
         "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari",
         "sliding_sync_server_no_support": "Shërbyesit tuaj i mungon mbulim i brendshëm për këtë",

@@ -1311,7 +1311,6 @@
         "pinning": "Mensajes anclados",
         "report_to_moderators": "Denunciar ante los moderadores",
         "report_to_moderators_description": "En las salas que sean compatible con la moderación, el botón de «Denunciar» avisará a los moderadores de la sala.",
-        "rust_crypto": "Implementación de la criptografía en Rust",
         "sliding_sync": "Modo de sincronización progresiva",
         "sliding_sync_description": "En desarrollo, no se puede desactivar.",
         "sliding_sync_disabled_notice": "Cierra sesión y vuélvela a abrir para desactivar",

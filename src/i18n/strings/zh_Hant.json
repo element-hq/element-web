@@ -1386,7 +1386,6 @@
         "pinning": "訊息釘選功能",
         "report_to_moderators": "回報給版主",
         "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
-        "rust_crypto": "Rust 密碼學實作",
         "sliding_sync": "滑動同步模式",
         "sliding_sync_description": "正在積極開發中，無法停用。",
         "sliding_sync_disabled_notice": "登出並重新登入以停用",
