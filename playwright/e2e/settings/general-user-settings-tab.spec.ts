@@ -91,11 +91,6 @@ test.describe("General user settings tab", () => {
         // Assert that the default value is rendered again
         await expect(languageInput.getByText("English")).toBeVisible();
 
-        const setIdServer = uut.locator(".mx_SetIdServer");
-        await setIdServer.scrollIntoViewIfNeeded();
-        // Assert that an input area for identity server exists
-        await expect(setIdServer.getByRole("textbox", { name: "Enter a new identity server" })).toBeVisible();
-
         const setIntegrationManager = uut.locator(".mx_SetIntegrationManager");
         await setIntegrationManager.scrollIntoViewIfNeeded();
         await expect(

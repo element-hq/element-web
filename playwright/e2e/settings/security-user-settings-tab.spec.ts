@@ -47,5 +47,14 @@ test.describe("Security user settings tab", () => {
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot();
             });
         });
+
+        test("should contain section to set ID server", async ({ app }) => {
+            const tab = await app.settings.openUserSettings("Security");
+
+            const setIdServer = tab.locator(".mx_SetIdServer");
+            await setIdServer.scrollIntoViewIfNeeded();
+            // Assert that an input area for identity server exists
+            await expect(setIdServer.getByRole("textbox", { name: "Enter a new identity server" })).toBeVisible();
+        });
     });
 });
