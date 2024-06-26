@@ -21,7 +21,6 @@ limitations under the License.
  * @param text the plaintext to put in the user's clipboard
  */
 import { logger } from "matrix-js-sdk/src/logger";
-import GraphemeSplitter from "graphemer";
 
 export async function copyPlaintext(text: string): Promise<boolean> {
     try {
@@ -85,6 +84,8 @@ export function getSelectedText(): string {
     return window.getSelection()!.toString();
 }
 
+export const graphemeSegmenter = new Intl.Segmenter();
+
 /**
  * Returns the first grapheme in the given string,
  * especially useful for strings containing emoji, will not break compound emoji up.
@@ -92,7 +93,6 @@ export function getSelectedText(): string {
  * @returns the first grapheme or an empty string if given an empty string
  */
 export function getFirstGrapheme(str: string): string {
-    const splitter = new GraphemeSplitter();
-    const result = splitter.iterateGraphemes(str).next();
-    return result.done ? "" : result.value;
+    const result = graphemeSegmenter.segment(str)[Symbol.iterator]().next();
+    return result.done ? "" : result.value.segment;
 }

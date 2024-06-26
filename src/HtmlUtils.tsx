@@ -26,7 +26,6 @@ import { decode } from "html-entities";
 import { IContent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
-import GraphemeSplitter from "graphemer";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import { IExtendedSanitizeOptions } from "./@types/sanitize-html";
@@ -34,6 +33,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 import { sanitizeHtmlParams, transformTags } from "./Linkify";
+import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyElement, linkifyAndSanitizeHtml } from "./Linkify";
 
@@ -265,17 +265,16 @@ export function formatEmojis(message: string | undefined, isHtmlMessage?: boolea
     let text = "";
     let key = 0;
 
-    const splitter = new GraphemeSplitter();
-    for (const char of splitter.iterateGraphemes(message)) {
-        if (EMOJIBASE_REGEX.test(char)) {
+    for (const data of graphemeSegmenter.segment(message)) {
+        if (EMOJIBASE_REGEX.test(data.segment)) {
             if (text) {
                 result.push(text);
                 text = "";
             }
-            result.push(emojiToSpan(char, key));
+            result.push(emojiToSpan(data.segment, key));
             key++;
         } else {
-            text += char;
+            text += data.segment;
         }
     }
     if (text) {
