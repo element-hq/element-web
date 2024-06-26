@@ -70,10 +70,10 @@ import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
-import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
+import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
-import LegacyRoomHeader, { ISearchInfo } from "../views/rooms/LegacyRoomHeader";
+import LegacyRoomHeader from "../views/rooms/LegacyRoomHeader";
 import RoomHeader from "../views/rooms/RoomHeader";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
@@ -121,7 +121,7 @@ import { SDKContext } from "../../contexts/SDKContext";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch from "../../Searching";
+import eventSearch, { SearchInfo, SearchScope } from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -190,7 +190,7 @@ export interface IRoomState {
     /**
      * The state of an ongoing search if there is one.
      */
-    search?: ISearchInfo;
+    search?: SearchInfo;
     callState?: CallState;
     activeCall: Call | null;
     canPeek: boolean;

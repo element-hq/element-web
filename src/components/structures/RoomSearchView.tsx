@@ -24,12 +24,11 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import ScrollPanel from "./ScrollPanel";
-import { SearchScope } from "../views/rooms/SearchBar";
 import Spinner from "../views/elements/Spinner";
 import { _t } from "../../languageHandler";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import SearchResultTile from "../views/rooms/SearchResultTile";
-import { searchPagination } from "../../Searching";
+import { searchPagination, SearchScope } from "../../Searching";
 import Modal from "../../Modal";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import ResizeNotifier from "../../utils/ResizeNotifier";

@@ -17,8 +17,9 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 
-import SearchBar, { SearchScope } from "../../../../src/components/views/rooms/SearchBar";
+import SearchBar from "../../../../src/components/views/rooms/SearchBar";
 import { KeyBindingAction } from "../../../../src/accessibility/KeyboardShortcuts";
+import { SearchScope } from "../../../../src/Searching";
 
 let mockCurrentEvent = KeyBindingAction.Enter;
 

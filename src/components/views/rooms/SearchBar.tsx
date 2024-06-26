@@ -24,6 +24,7 @@ import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
+import { SearchScope } from "../../../Searching";
 
 interface IProps {
     onCancelClick: () => void;
@@ -34,11 +35,6 @@ interface IProps {
 
 interface IState {
     scope: SearchScope;
-}
-
-export enum SearchScope {
-    Room = "Room",
-    All = "All",
 }
 
 export default class SearchBar extends React.Component<IProps, IState> {
