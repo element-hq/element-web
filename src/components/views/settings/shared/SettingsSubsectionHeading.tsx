@@ -20,14 +20,24 @@ import Heading from "../../typography/Heading";
 
 export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivElement> {
     heading: string;
+    legacy?: boolean;
     children?: React.ReactNode;
 }
 
-export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({ heading, children, ...rest }) => (
-    <div {...rest} className="mx_SettingsSubsectionHeading">
-        <Heading className="mx_SettingsSubsectionHeading_heading" size="4" as="h3">
-            {heading}
-        </Heading>
-        {children}
-    </div>
-);
+export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({
+    heading,
+    legacy = true,
+    children,
+    ...rest
+}) => {
+    const size = legacy ? "4" : "3";
+
+    return (
+        <div {...rest} className="mx_SettingsSubsectionHeading">
+            <Heading className="mx_SettingsSubsectionHeading_heading" size={size} as="h3">
+                {heading}
+            </Heading>
+            {children}
+        </div>
+    );
+};

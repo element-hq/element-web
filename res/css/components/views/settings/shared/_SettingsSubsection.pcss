@@ -17,6 +17,12 @@ limitations under the License.
 .mx_SettingsSubsection {
     width: 100%;
     box-sizing: border-box;
+
+    &.mx_SettingsSubsection_newUi {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-8x);
+    }
 }
 
 .mx_SettingsSubsection_description {
@@ -52,6 +58,10 @@ limitations under the License.
     }
 
     &.mx_SettingsSubsection_noHeading {
+        margin-top: 0;
+    }
+    &.mx_SettingsSubsection_content_newUi {
+        gap: var(--cpd-space-6x);
         margin-top: 0;
     }
 }

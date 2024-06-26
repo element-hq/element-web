@@ -1,73 +1,774 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
+exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
 <DocumentFragment>
   <div
-    class="mx_SettingsSubsection"
-    data-testid="mx_ThemeChoicePanel"
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
   >
     <div
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
       >
         Theme
       </h3>
     </div>
     <div
-      class="mx_SettingsSubsection_content"
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
-      <div
-        class="mx_ThemeChoicePanel_themeSelectors"
-        data-testid="theme-choice-panel-selectors"
+      <form
+        class="_root_148br_24"
       >
-        <label
-          class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+        <div
+          class="_inline-field_148br_40"
         >
-          <input
-            disabled=""
-            id="theme-light"
-            name="theme"
-            type="radio"
-            value="light"
-          />
-          <div>
-            <div />
-          </div>
           <div
-            class="mx_StyledRadioButton_content"
+            class="_inline-field-control_148br_52"
           >
-            Light
+            <div
+              class="_container_qnvru_18"
+            >
+              <input
+                class="_input_qnvru_32"
+                id="radix-42"
+                name="systemTheme"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui_qnvru_42"
+              />
+            </div>
           </div>
           <div
-            class="mx_StyledRadioButton_spacer"
-          />
-        </label>
-        <label
-          class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67"
+              for="radix-42"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root_148br_24 mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
-          <input
-            disabled=""
-            id="theme-dark"
-            name="theme"
-            type="radio"
-            value="dark"
-          />
-          <div>
-            <div />
-          </div>
           <div
-            class="mx_StyledRadioButton_content"
+            class="_inline-field-control_148br_52"
           >
-            Dark
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                checked=""
+                class="_input_1vw5h_26"
+                id="radix-43"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
           </div>
           <div
-            class="mx_StyledRadioButton_spacer"
-          />
-        </label>
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-43"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-44"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-44"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-45"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-45"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-46"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="custom-Alice theme"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-46"
+            >
+              Alice theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <div
+        class="mx_ThemeChoicePanel_CustomTheme"
+      >
+        <form
+          class="_container_zfn7i_17 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
+          id=":r7:"
+        >
+          <div
+            class="_label_zfn7i_21"
+            id=":r8:"
+          >
+            Add custom theme
+          </div>
+          <div
+            class="_controls_zfn7i_27"
+          >
+            <input
+              aria-invalid="false"
+              aria-labelledby=":r8:"
+              class="_control_9gon8_18 _control_zfn7i_27"
+              value=""
+            />
+            <div
+              class="_button-group_zfn7i_32"
+            >
+              <button
+                aria-controls=":r7:"
+                aria-label="Add custom theme"
+                class="_button_zfn7i_32 _primary-button_zfn7i_51"
+                type="submit"
+              >
+                <svg
+                  class="cpd-icon"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.878.878 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.712-.275s.53.092.713.275c.183.183.275.42.275.712s-.092.53-.275.713l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+                  />
+                </svg>
+              </button>
+              <button
+                aria-controls=":r7:"
+                class="_button_zfn7i_32"
+                role="button"
+                type="button"
+              >
+                <svg
+                  class="cpd-icon"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <span
+            class="_caption-line_zfn7i_92 _caption-text_zfn7i_130 _caption-text-help_zfn7i_147"
+          >
+            Enter the URL of a custom theme you want to apply.
+          </span>
+        </form>
+        <ul
+          class="mx_ThemeChoicePanel_CustomThemeList"
+        >
+          <li
+            aria-label="Alice theme"
+            class="mx_ThemeChoicePanel_CustomThemeList_theme"
+          >
+            <span
+              class="mx_ThemeChoicePanel_CustomThemeList_name"
+            >
+              Alice theme
+            </span>
+            <button
+              aria-label="Delete"
+              class="_icon-button_rijzz_17 _destructive_rijzz_78"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <div />
+              </div>
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
+    <div
+      class="_separator_144s5_17"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ThemeChoicePanel /> custom theme should render the custom theme section 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root_148br_24"
+      >
+        <div
+          class="_inline-field_148br_40"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_qnvru_18"
+            >
+              <input
+                class="_input_qnvru_32"
+                id="radix-32"
+                name="systemTheme"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui_qnvru_42"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67"
+              for="radix-32"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root_148br_24 mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                checked=""
+                class="_input_1vw5h_26"
+                id="radix-33"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-33"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-34"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-34"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-35"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-35"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-36"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="custom-Alice theme"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-36"
+            >
+              Alice theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <div
+        class="mx_ThemeChoicePanel_CustomTheme"
+      >
+        <form
+          class="_container_zfn7i_17 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
+          id=":r1:"
+        >
+          <div
+            class="_label_zfn7i_21"
+            id=":r2:"
+          >
+            Add custom theme
+          </div>
+          <div
+            class="_controls_zfn7i_27"
+          >
+            <input
+              aria-invalid="false"
+              aria-labelledby=":r2:"
+              class="_control_9gon8_18 _control_zfn7i_27"
+              value=""
+            />
+            <div
+              class="_button-group_zfn7i_32"
+            >
+              <button
+                aria-controls=":r1:"
+                aria-label="Add custom theme"
+                class="_button_zfn7i_32 _primary-button_zfn7i_51"
+                type="submit"
+              >
+                <svg
+                  class="cpd-icon"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.878.878 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.712-.275s.53.092.713.275c.183.183.275.42.275.712s-.092.53-.275.713l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+                  />
+                </svg>
+              </button>
+              <button
+                aria-controls=":r1:"
+                class="_button_zfn7i_32"
+                role="button"
+                type="button"
+              >
+                <svg
+                  class="cpd-icon"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <span
+            class="_caption-line_zfn7i_92 _caption-text_zfn7i_130 _caption-text-help_zfn7i_147"
+          >
+            Enter the URL of a custom theme you want to apply.
+          </span>
+        </form>
+        <ul
+          class="mx_ThemeChoicePanel_CustomThemeList"
+        >
+          <li
+            aria-label="Alice theme"
+            class="mx_ThemeChoicePanel_CustomThemeList_theme"
+          >
+            <span
+              class="mx_ThemeChoicePanel_CustomThemeList_name"
+            >
+              Alice theme
+            </span>
+            <button
+              aria-label="Delete"
+              class="_icon-button_rijzz_17 _destructive_rijzz_78"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <div />
+              </div>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="_separator_144s5_17"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="themePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root_148br_24"
+      >
+        <div
+          class="_inline-field_148br_40"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_qnvru_18"
+            >
+              <input
+                class="_input_qnvru_32"
+                id="radix-0"
+                name="systemTheme"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui_qnvru_42"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67"
+              for="radix-0"
+            >
+              Match system theme
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root_148br_24 mx_ThemeChoicePanel_ThemeSelectors"
+      >
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                checked=""
+                class="_input_1vw5h_26"
+                id="radix-1"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-1"
+            >
+              Light
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-2"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="dark"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-2"
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+        >
+          <div
+            class="_inline-field-control_148br_52"
+          >
+            <div
+              class="_container_1vw5h_18"
+            >
+              <input
+                class="_input_1vw5h_26"
+                id="radix-3"
+                name="themeSelector"
+                title=""
+                type="radio"
+                value="light-high-contrast"
+              />
+              <div
+                class="_ui_1vw5h_27"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_148br_46"
+          >
+            <label
+              class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+              for="radix-3"
+            >
+              High contrast
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator_144s5_17"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
   </div>
 </DocumentFragment>
 `;

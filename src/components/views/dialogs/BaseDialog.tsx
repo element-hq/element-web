@@ -128,7 +128,8 @@ export default class BaseDialog extends React.Component<IProps> {
                     onClick={this.onCancelClick}
                     className="mx_Dialog_cancelButton"
                     aria-label={_t("dialog_close_label")}
-                    title={_t("dialog_close_label")}
+                    title={_t("action|close")}
+                    placement="bottom"
                 />
             );
         }

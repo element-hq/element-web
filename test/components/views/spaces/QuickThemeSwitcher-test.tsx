@@ -21,17 +21,17 @@ import { mocked } from "jest-mock";
 
 import QuickThemeSwitcher from "../../../../src/components/views/spaces/QuickThemeSwitcher";
 import { getOrderedThemes } from "../../../../src/theme";
-import ThemeChoicePanel from "../../../../src/components/views/settings/ThemeChoicePanel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { mockPlatformPeg } from "../../../test-utils/platform";
+import { useTheme } from "../../../../src/hooks/useTheme";
 
-jest.mock("../../../../src/theme");
-jest.mock("../../../../src/components/views/settings/ThemeChoicePanel", () => ({
-    calculateThemeState: jest.fn(),
+jest.mock("../../../../src/hooks/useTheme", () => ({
+    useTheme: jest.fn(),
 }));
+jest.mock("../../../../src/theme");
 jest.mock("../../../../src/settings/SettingsStore", () => ({
     setValue: jest.fn(),
     getValue: jest.fn(),
@@ -59,9 +59,10 @@ describe("<QuickThemeSwitcher />", () => {
                 { id: "light", name: "Light" },
                 { id: "dark", name: "Dark" },
             ]);
-        mocked(ThemeChoicePanel).calculateThemeState.mockClear().mockReturnValue({
+
+        mocked(useTheme).mockClear().mockReturnValue({
             theme: "light",
-            useSystemTheme: false,
+            systemThemeActivated: false,
         });
         mocked(SettingsStore).setValue.mockClear().mockResolvedValue();
         mocked(dis).dispatch.mockClear();
@@ -85,9 +86,9 @@ describe("<QuickThemeSwitcher />", () => {
     });
 
     it("renders dropdown correctly when use system theme is truthy", () => {
-        mocked(ThemeChoicePanel).calculateThemeState.mockClear().mockReturnValue({
+        mocked(useTheme).mockClear().mockReturnValue({
             theme: "light",
-            useSystemTheme: true,
+            systemThemeActivated: true,
         });
         renderComponent();
         expect(screen.getByText("Match system")).toBeInTheDocument();

@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { test, expect } from "../../element-web-test";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { expect, test } from ".";
 
 test.describe("Appearance user settings tab", () => {
     test.use({
@@ -151,69 +150,68 @@ test.describe("Appearance user settings tab", () => {
     });
 
     test.describe("Theme Choice Panel", () => {
-        test.beforeEach(async ({ app, user }) => {
+        test.beforeEach(async ({ app, user, util }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
-            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await util.disableSystemTheme();
+            await util.openAppearanceTab();
         });
 
-        test("should be rendered with the light theme selected", async ({ page, app }) => {
-            await app.settings.openUserSettings("Appearance");
-            const themePanel = page.getByTestId("mx_ThemeChoicePanel");
-
-            const useSystemTheme = themePanel.getByTestId("checkbox-use-system-theme");
-            await expect(useSystemTheme.getByText("Match system theme")).toBeVisible();
+        test("should be rendered with the light theme selected", async ({ page, app, util }) => {
             // Assert that 'Match system theme' is not checked
-            // Note that mx_Checkbox_checkmark exists and is hidden by CSS if it is not checked
-            await expect(useSystemTheme.locator(".mx_Checkbox_checkmark")).not.toBeVisible();
+            await expect(util.getMatchSystemThemeCheckbox()).not.toBeChecked();
 
-            const selectors = themePanel.getByTestId("theme-choice-panel-selectors");
-            await expect(selectors.locator(".mx_ThemeSelector_light")).toBeVisible();
-            await expect(selectors.locator(".mx_ThemeSelector_dark")).toBeVisible();
             // Assert that the light theme is selected
-            await expect(selectors.locator(".mx_ThemeSelector_light.mx_StyledRadioButton_enabled")).toBeVisible();
-            // Assert that the buttons for the light and dark theme are not enabled
-            await expect(selectors.locator(".mx_ThemeSelector_light.mx_StyledRadioButton_disabled")).not.toBeVisible();
-            await expect(selectors.locator(".mx_ThemeSelector_dark.mx_StyledRadioButton_disabled")).not.toBeVisible();
+            await expect(util.getLightTheme()).toBeChecked();
+            // Assert that the dark and high contrast themes are not selected
+            await expect(util.getDarkTheme()).not.toBeChecked();
+            await expect(util.getHighContrastTheme()).not.toBeChecked();
 
-            // Assert that the checkbox for the high contrast theme is rendered
-            await expect(themePanel.locator(".mx_Checkbox", { hasText: "Use high contrast" })).toBeVisible();
+            await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-light.png");
         });
 
-        test("should disable the labels for themes and the checkbox for the high contrast theme if the checkbox for the system theme is clicked", async ({
-            page,
-            app,
-        }) => {
-            await app.settings.openUserSettings("Appearance");
-            const themePanel = page.getByTestId("mx_ThemeChoicePanel");
+        test("should disable the themes when the system theme is clicked", async ({ page, app, util }) => {
+            await util.getMatchSystemThemeCheckbox().click();
 
-            await themePanel.locator(".mx_Checkbox", { hasText: "Match system theme" }).click();
+            // Assert that the themes are disabled
+            await expect(util.getLightTheme()).toBeDisabled();
+            await expect(util.getDarkTheme()).toBeDisabled();
+            await expect(util.getHighContrastTheme()).toBeDisabled();
 
-            // Assert that the labels for the light theme and dark theme are disabled
-            await expect(themePanel.locator(".mx_ThemeSelector_light.mx_StyledRadioButton_disabled")).toBeVisible();
-            await expect(themePanel.locator(".mx_ThemeSelector_dark.mx_StyledRadioButton_disabled")).toBeVisible();
-
-            // Assert that there does not exist a label for an enabled theme
-            await expect(themePanel.locator("label.mx_StyledRadioButton_enabled")).not.toBeVisible();
-
-            // Assert that the checkbox and label to enable the high contrast theme should not exist
-            await expect(themePanel.locator(".mx_Checkbox", { hasText: "Use high contrast" })).not.toBeVisible();
+            await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-match-system-enabled.png");
         });
 
-        test("should not render the checkbox and the label for the high contrast theme if the dark theme is selected", async ({
-            page,
-            app,
-        }) => {
-            await app.settings.openUserSettings("Appearance");
-            const themePanel = page.getByTestId("mx_ThemeChoicePanel");
+        test("should change the theme to dark", async ({ page, app, util }) => {
+            // Assert that the light theme is selected
+            await expect(util.getLightTheme()).toBeChecked();
 
-            // Assert that the checkbox and the label to enable the high contrast theme should exist
-            await expect(themePanel.locator(".mx_Checkbox", { hasText: "Use high contrast" })).toBeVisible();
+            await util.getDarkTheme().click();
 
-            // Enable the dark theme
-            await themePanel.locator(".mx_ThemeSelector_dark").click();
+            // Assert that the light and high contrast themes are not selected
+            await expect(util.getLightTheme()).not.toBeChecked();
+            await expect(util.getDarkTheme()).toBeChecked();
+            await expect(util.getHighContrastTheme()).not.toBeChecked();
 
-            // Assert that the checkbox and the label should not exist
-            await expect(themePanel.locator(".mx_Checkbox", { hasText: "Use high contrast" })).not.toBeVisible();
+            await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-dark.png");
+        });
+
+        test.describe("custom theme", () => {
+            test.use({
+                labsFlags: ["feature_custom_themes"],
+            });
+
+            test("should render the custom theme section", async ({ page, app, util }) => {
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
+            });
+
+            test("should be able to add and remove a custom theme", async ({ page, app, util }) => {
+                await util.addCustomTheme();
+
+                await expect(util.getCustomTheme()).not.toBeChecked();
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
+
+                await util.removeCustomTheme();
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
+            });
         });
     });
 });

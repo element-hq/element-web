@@ -64,8 +64,13 @@ describe("PreferencesUserSettingsTab", () => {
         const mockGetValue = (val: boolean) => {
             const copyOfGetValueAt = SettingsStore.getValueAt;
 
-            SettingsStore.getValueAt = (level: SettingLevel, name: string, roomId?: string, isExplicit?: boolean) => {
-                if (name === "sendReadReceipts") return val;
+            SettingsStore.getValueAt = <T,>(
+                level: SettingLevel,
+                name: string,
+                roomId?: string,
+                isExplicit?: boolean,
+            ): T => {
+                if (name === "sendReadReceipts") return val as T;
                 return copyOfGetValueAt(level, name, roomId, isExplicit);
             };
         };

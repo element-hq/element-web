@@ -16,71 +16,134 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
           class="mx_SettingsSection_subSections"
         >
           <div
-            class="mx_SettingsSubsection"
-            data-testid="mx_ThemeChoicePanel"
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+            data-testid="themePanel"
           >
             <div
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
               >
                 Theme
               </h3>
             </div>
             <div
-              class="mx_SettingsSubsection_content"
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
-              <div
-                class="mx_ThemeChoicePanel_themeSelectors"
-                data-testid="theme-choice-panel-selectors"
+              <form
+                class="_root_148br_24 mx_ThemeChoicePanel_ThemeSelectors"
               >
-                <label
-                  class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+                <div
+                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
-                  <input
-                    disabled=""
-                    id="theme-light"
-                    name="theme"
-                    type="radio"
-                    value="light"
-                  />
-                  <div>
-                    <div />
-                  </div>
                   <div
-                    class="mx_StyledRadioButton_content"
+                    class="_inline-field-control_148br_52"
                   >
-                    Light
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-0"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="light"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
                   </div>
                   <div
-                    class="mx_StyledRadioButton_spacer"
-                  />
-                </label>
-                <label
-                  class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+                    class="_inline-field-body_148br_46"
+                  >
+                    <label
+                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-0"
+                    >
+                      Light
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
                 >
-                  <input
-                    disabled=""
-                    id="theme-dark"
-                    name="theme"
-                    type="radio"
-                    value="dark"
-                  />
-                  <div>
-                    <div />
-                  </div>
                   <div
-                    class="mx_StyledRadioButton_content"
+                    class="_inline-field-control_148br_52"
                   >
-                    Dark
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-1"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="dark"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
                   </div>
                   <div
-                    class="mx_StyledRadioButton_spacer"
-                  />
-                </label>
-              </div>
+                    class="_inline-field-body_148br_46"
+                  >
+                    <label
+                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-1"
+                    >
+                      Dark
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                >
+                  <div
+                    class="_inline-field-control_148br_52"
+                  >
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-2"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="light-high-contrast"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_148br_46"
+                  >
+                    <label
+                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-2"
+                    >
+                      High contrast
+                    </label>
+                  </div>
+                </div>
+              </form>
             </div>
+            <div
+              class="_separator_144s5_17"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
           </div>
           <div
             class="mx_SettingsSubsection"

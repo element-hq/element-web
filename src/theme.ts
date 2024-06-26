@@ -103,7 +103,7 @@ export function enumerateThemes(): { [key: string]: string } {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
-interface ITheme {
+export interface ITheme {
     id: string;
     name: string;
 }

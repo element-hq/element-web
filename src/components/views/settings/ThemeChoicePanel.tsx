@@ -1,285 +1,340 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2024 The Matrix.org Foundation C.I.C.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-import React from "react";
+import React, { ChangeEvent, JSX, useCallback, useMemo, useRef, useState } from "react";
+import {
+    InlineField,
+    ToggleControl,
+    Label,
+    Root,
+    RadioControl,
+    EditInPlace,
+    IconButton,
+} from "@vector-im/compound-web";
+import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
-import { findHighContrastTheme, findNonHighContrastTheme, getOrderedThemes, isHighContrastTheme } from "../../../theme";
+import SettingsSubsection from "./shared/SettingsSubsection";
 import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
-import AccessibleButton from "../elements/AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import { Action } from "../../../dispatcher/actions";
-import StyledCheckbox from "../elements/StyledCheckbox";
-import Field from "../elements/Field";
-import StyledRadioGroup from "../elements/StyledRadioGroup";
-import { SettingLevel } from "../../../settings/SettingLevel";
-import PosthogTrackers from "../../../PosthogTrackers";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { useTheme } from "../../../hooks/useTheme";
+import { findHighContrastTheme, getOrderedThemes, CustomTheme as CustomThemeType, ITheme } from "../../../theme";
+import { useSettingValue } from "../../../hooks/useSettings";
 
-interface IProps {}
+/**
+ * Panel to choose the theme
+ */
+export function ThemeChoicePanel(): JSX.Element {
+    const themeState = useTheme();
+    const themeWatcher = useRef(new ThemeWatcher());
+    const customThemeEnabled = useSettingValue<boolean>("feature_custom_themes");
 
-interface IThemeState {
+    return (
+        <SettingsSubsection heading={_t("common|theme")} legacy={false} data-testid="themePanel">
+            {themeWatcher.current.isSystemThemeSupported() && (
+                <SystemTheme systemThemeActivated={themeState.systemThemeActivated} />
+            )}
+            <ThemeSelectors theme={themeState.theme} disabled={themeState.systemThemeActivated} />
+            {customThemeEnabled && <CustomTheme theme={themeState.theme} />}
+        </SettingsSubsection>
+    );
+}
+
+/**
+ * Component to toggle the system theme
+ */
+interface SystemThemeProps {
+    /* Whether the system theme is activated */
+    systemThemeActivated: boolean;
+}
+
+/**
+ * Component to toggle the system theme
+ */
+function SystemTheme({ systemThemeActivated }: SystemThemeProps): JSX.Element {
+    return (
+        <Root
+            onChange={async (evt) => {
+                const checked = new FormData(evt.currentTarget).get("systemTheme") === "on";
+                await SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
+                dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
+            }}
+        >
+            <InlineField
+                name="systemTheme"
+                control={<ToggleControl name="systemTheme" defaultChecked={systemThemeActivated} />}
+            >
+                <Label>{SettingsStore.getDisplayName("use_system_theme")}</Label>
+            </InlineField>
+        </Root>
+    );
+}
+
+/**
+ * Component to select the theme
+ */
+interface ThemeSelectorProps {
+    /* The current theme */
     theme: string;
-    useSystemTheme: boolean;
+    /* The theme can't be selected */
+    disabled: boolean;
 }
 
-export interface CustomThemeMessage {
-    isError: boolean;
-    text: string;
-}
+/**
+ * Component to select the theme
+ */
+function ThemeSelectors({ theme, disabled }: ThemeSelectorProps): JSX.Element {
+    const themes = useThemes();
 
-interface IState extends IThemeState {
-    customThemeUrl: string;
-    customThemeMessage: CustomThemeMessage;
-}
+    return (
+        <Root
+            className="mx_ThemeChoicePanel_ThemeSelectors"
+            onChange={async (evt) => {
+                // We don't have any file in the form, we can cast it as string safely
+                const newTheme = new FormData(evt.currentTarget).get("themeSelector") as string | null;
 
-export default class ThemeChoicePanel extends React.Component<IProps, IState> {
-    private themeTimer?: number;
+                // Do nothing if the same theme is selected
+                if (!newTheme || theme === newTheme) return;
 
-    public constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            ...ThemeChoicePanel.calculateThemeState(),
-            customThemeUrl: "",
-            customThemeMessage: { isError: false, text: "" },
-        };
-    }
-
-    public static calculateThemeState(): IThemeState {
-        // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
-        // show the right values for things.
-
-        const themeChoice: string = SettingsStore.getValue("theme");
-        const systemThemeExplicit: boolean = SettingsStore.getValueAt(
-            SettingLevel.DEVICE,
-            "use_system_theme",
-            null,
-            false,
-            true,
-        );
-        const themeExplicit: string = SettingsStore.getValueAt(SettingLevel.DEVICE, "theme", null, false, true);
-
-        // If the user has enabled system theme matching, use that.
-        if (systemThemeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: true,
-            };
-        }
-
-        // If the user has set a theme explicitly, use that (no system theme matching)
-        if (themeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: false,
-            };
-        }
-
-        // Otherwise assume the defaults for the settings
-        return {
-            theme: themeChoice,
-            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
-        };
-    }
-
-    private onThemeChange = (newTheme: string): void => {
-        if (this.state.theme === newTheme) return;
-
-        PosthogTrackers.trackInteraction("WebSettingsAppearanceTabThemeSelector");
-
-        // doing getValue in the .catch will still return the value we failed to set,
-        // so remember what the value was before we tried to set it so we can revert
-        const oldTheme: string = SettingsStore.getValue("theme");
-        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
-            dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
-            this.setState({ theme: oldTheme });
-        });
-        this.setState({ theme: newTheme });
-        // The settings watcher doesn't fire until the echo comes back from the
-        // server, so to make the theme change immediately we need to manually
-        // do the dispatch now
-        // XXX: The local echoed value appears to be unreliable, in particular
-        // when settings custom themes(!) so adding forceTheme to override
-        // the value from settings.
-        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme, forceTheme: newTheme });
-    };
-
-    private onUseSystemThemeChanged = (checked: boolean): void => {
-        this.setState({ useSystemTheme: checked });
-        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
-    };
-
-    private onAddCustomTheme = async (): Promise<void> => {
-        let currentThemes: string[] = SettingsStore.getValue("custom_themes");
-        if (!currentThemes) currentThemes = [];
-        currentThemes = currentThemes.map((c) => c); // cheap clone
-
-        if (this.themeTimer) {
-            clearTimeout(this.themeTimer);
-        }
-
-        try {
-            const r = await fetch(this.state.customThemeUrl);
-            // XXX: need some schema for this
-            const themeInfo = await r.json();
-            if (!themeInfo || typeof themeInfo["name"] !== "string" || typeof themeInfo["colors"] !== "object") {
-                this.setState({
-                    customThemeMessage: { text: _t("settings|appearance|custom_theme_invalid"), isError: true },
+                // doing getValue in the .catch will still return the value we failed to set,
+                SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
+                    dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
                 });
-                return;
-            }
-            currentThemes.push(themeInfo);
-        } catch (e) {
-            logger.error(e);
-            this.setState({
-                customThemeMessage: { text: _t("settings|appearance|custom_theme_error_downloading"), isError: true },
-            });
-            return; // Don't continue on error
-        }
 
-        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({
-            customThemeUrl: "",
-            customThemeMessage: { text: _t("settings|appearance|custom_theme_success"), isError: false },
-        });
-
-        this.themeTimer = window.setTimeout(() => {
-            this.setState({ customThemeMessage: { text: "", isError: false } });
-        }, 3000);
-    };
-
-    private onCustomThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
-        this.setState({ customThemeUrl: e.target.value });
-    };
-
-    private renderHighContrastCheckbox(): React.ReactElement<HTMLDivElement> | undefined {
-        if (
-            !this.state.useSystemTheme &&
-            (findHighContrastTheme(this.state.theme) || isHighContrastTheme(this.state.theme))
-        ) {
-            return (
-                <div>
-                    <StyledCheckbox
-                        checked={isHighContrastTheme(this.state.theme)}
-                        onChange={(e) => this.highContrastThemeChanged(e.target.checked)}
+                // The settings watcher doesn't fire until the echo comes back from the
+                // server, so to make the theme change immediately we need to manually
+                // do the dispatch now
+                // XXX: The local echoed value appears to be unreliable, in particular
+                // when settings custom themes(!) so adding forceTheme to override
+                // the value from settings.
+                dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme, forceTheme: newTheme });
+            }}
+        >
+            {themes.map((_theme) => {
+                const isChecked = theme === _theme.id;
+                return (
+                    <InlineField
+                        className={classNames("mx_ThemeChoicePanel_themeSelector", {
+                            [`mx_ThemeChoicePanel_themeSelector_enabled`]: !disabled && theme === _theme.id,
+                            [`mx_ThemeChoicePanel_themeSelector_disabled`]: disabled,
+                            // We need to force the compound theme to be light or dark
+                            // The theme selection doesn't depend on the current theme
+                            // For example when the light theme is used, the dark theme selector should be dark
+                            "cpd-theme-light": !_theme.isDark,
+                            "cpd-theme-dark": _theme.isDark,
+                        })}
+                        name="themeSelector"
+                        key={_theme.id}
+                        control={
+                            <RadioControl
+                                name="themeSelector"
+                                checked={!disabled && isChecked}
+                                disabled={disabled}
+                                value={_theme.id}
+                            />
+                        }
                     >
-                        {_t("settings|appearance|use_high_contrast")}
-                    </StyledCheckbox>
-                </div>
-            );
-        }
-    }
+                        <Label className="mx_ThemeChoicePanel_themeSelector_Label">{_theme.name}</Label>
+                    </InlineField>
+                );
+            })}
+        </Root>
+    );
+}
 
-    private highContrastThemeChanged(checked: boolean): void {
-        let newTheme: string | undefined;
-        if (checked) {
-            newTheme = findHighContrastTheme(this.state.theme);
-        } else {
-            newTheme = findNonHighContrastTheme(this.state.theme);
-        }
-        if (newTheme) {
-            this.onThemeChange(newTheme);
-        }
-    }
-
-    public render(): React.ReactElement<HTMLDivElement> {
-        const themeWatcher = new ThemeWatcher();
-        let systemThemeSection: JSX.Element | undefined;
-        if (themeWatcher.isSystemThemeSupported()) {
-            systemThemeSection = (
-                <div data-testid="checkbox-use-system-theme">
-                    <StyledCheckbox
-                        checked={this.state.useSystemTheme}
-                        onChange={(e) => this.onUseSystemThemeChanged(e.target.checked)}
-                    >
-                        {SettingsStore.getDisplayName("use_system_theme")}
-                    </StyledCheckbox>
-                </div>
-            );
-        }
-
-        let customThemeForm: JSX.Element | undefined;
-        if (SettingsStore.getValue("feature_custom_themes")) {
-            let messageElement: JSX.Element | undefined;
-            if (this.state.customThemeMessage.text) {
-                if (this.state.customThemeMessage.isError) {
-                    messageElement = <div className="text-error">{this.state.customThemeMessage.text}</div>;
-                } else {
-                    messageElement = <div className="text-success">{this.state.customThemeMessage.text}</div>;
-                }
-            }
-            customThemeForm = (
-                <div className="mx_SettingsTab_section">
-                    <form onSubmit={this.onAddCustomTheme}>
-                        <Field
-                            label={_t("settings|appearance|custom_theme_url")}
-                            type="text"
-                            id="mx_GeneralUserSettingsTab_customThemeInput"
-                            autoComplete="off"
-                            onChange={this.onCustomThemeChange}
-                            value={this.state.customThemeUrl}
-                        />
-                        <AccessibleButton
-                            onClick={this.onAddCustomTheme}
-                            type="submit"
-                            kind="primary_sm"
-                            disabled={!this.state.customThemeUrl.trim()}
-                        >
-                            {_t("settings|appearance|custom_theme_add_button")}
-                        </AccessibleButton>
-                        {messageElement}
-                    </form>
-                </div>
-            );
-        }
-
-        const orderedThemes = getOrderedThemes();
-        return (
-            <SettingsSubsection heading={_t("common|theme")} data-testid="mx_ThemeChoicePanel">
-                {systemThemeSection}
-                <div className="mx_ThemeChoicePanel_themeSelectors" data-testid="theme-choice-panel-selectors">
-                    <StyledRadioGroup
-                        name="theme"
-                        definitions={orderedThemes.map((t) => ({
-                            value: t.id,
-                            label: t.name,
-                            disabled: this.state.useSystemTheme,
-                            className: "mx_ThemeSelector_" + t.id,
-                        }))}
-                        onChange={this.onThemeChange}
-                        value={this.apparentSelectedThemeId()}
-                        outlined
-                    />
-                </div>
-                {this.renderHighContrastCheckbox()}
-                {customThemeForm}
-            </SettingsSubsection>
+/**
+ * Return all the available themes
+ */
+function useThemes(): Array<ITheme & { isDark: boolean }> {
+    const customThemes = useSettingValue<CustomThemeType[] | undefined>("custom_themes");
+    return useMemo(() => {
+        // Put the custom theme into a map
+        // To easily find the theme by name when going through the themes list
+        const checkedCustomThemes = customThemes || [];
+        const customThemeMap = checkedCustomThemes.reduce(
+            (map, theme) => map.set(theme.name, theme),
+            new Map<string, CustomThemeType>(),
         );
-    }
 
-    public apparentSelectedThemeId(): string | undefined {
-        if (this.state.useSystemTheme) {
-            return undefined;
-        }
-        const nonHighContrast = findNonHighContrastTheme(this.state.theme);
-        return nonHighContrast ? nonHighContrast : this.state.theme;
+        const themes = getOrderedThemes();
+        // Separate the built-in themes from the custom themes
+        // To insert the high contrast theme between them
+        const builtInThemes = themes.filter((theme) => !customThemeMap.has(theme.name));
+        const otherThemes = themes.filter((theme) => customThemeMap.has(theme.name));
+
+        const highContrastTheme = makeHighContrastTheme();
+        if (highContrastTheme) builtInThemes.push(highContrastTheme);
+
+        const allThemes = builtInThemes.concat(otherThemes);
+
+        // Check if the themes are dark
+        return allThemes.map((theme) => {
+            const customTheme = customThemeMap.get(theme.name);
+            const isDark = (customTheme ? customTheme.is_dark : theme.id.includes("dark")) || false;
+            return { ...theme, isDark };
+        });
+    }, [customThemes]);
+}
+
+/**
+ * Create the light high contrast theme
+ */
+function makeHighContrastTheme(): ITheme | undefined {
+    const lightHighContrastId = findHighContrastTheme("light");
+    if (lightHighContrastId) {
+        return {
+            name: _t("settings|appearance|high_contrast"),
+            id: lightHighContrastId,
+        };
     }
+}
+
+interface CustomThemeProps {
+    /**
+     * The current theme
+     */
+    theme: string;
+}
+
+/**
+ * Add and manager custom themes
+ */
+function CustomTheme({ theme }: CustomThemeProps): JSX.Element {
+    const [customTheme, setCustomTheme] = useState<string>("");
+    const [error, setError] = useState<string>();
+    const clear = useCallback(() => {
+        setError(undefined);
+        setCustomTheme("");
+    }, [setError, setCustomTheme]);
+
+    return (
+        <div className="mx_ThemeChoicePanel_CustomTheme">
+            <EditInPlace
+                className="mx_ThemeChoicePanel_CustomTheme_EditInPlace"
+                label={_t("settings|appearance|custom_theme_add")}
+                saveButtonLabel={_t("settings|appearance|custom_theme_add")}
+                savingLabel={_t("settings|appearance|custom_theme_downloading")}
+                helpLabel={_t("settings|appearance|custom_theme_help")}
+                error={error}
+                value={customTheme}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setError(undefined);
+                    setCustomTheme(e.target.value);
+                }}
+                onSave={async () => {
+                    // The field empty is empty
+                    if (!customTheme) return;
+
+                    // Get the custom themes and do a cheap clone
+                    // To avoid to mutate the original array in the settings
+                    const currentThemes =
+                        SettingsStore.getValue<CustomThemeType[]>("custom_themes").map((t) => t) || [];
+
+                    try {
+                        const r = await fetch(customTheme);
+                        // XXX: need some schema for this
+                        const themeInfo = await r.json();
+                        if (
+                            !themeInfo ||
+                            typeof themeInfo["name"] !== "string" ||
+                            typeof themeInfo["colors"] !== "object"
+                        ) {
+                            setError(_t("settings|appearance|custom_theme_invalid"));
+                            return;
+                        }
+
+                        // Check if the theme is already existing
+                        const isAlreadyExisting = Boolean(currentThemes.find((t) => t.name === themeInfo.name));
+                        if (isAlreadyExisting) {
+                            clear();
+                            return;
+                        }
+
+                        currentThemes.push(themeInfo);
+                    } catch (e) {
+                        logger.error(e);
+                        setError(_t("settings|appearance|custom_theme_error_downloading"));
+                        return;
+                    }
+
+                    // Reset the error
+                    clear();
+                    await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
+                }}
+                onCancel={clear}
+            />
+            <CustomThemeList theme={theme} />
+        </div>
+    );
+}
+
+interface CustomThemeListProps {
+    /*
+     * The current theme
+     */
+    theme: string;
+}
+
+/**
+ * List of the custom themes
+ */
+function CustomThemeList({ theme: currentTheme }: CustomThemeListProps): JSX.Element {
+    const customThemes = useSettingValue<CustomThemeType[]>("custom_themes") || [];
+
+    return (
+        <ul className="mx_ThemeChoicePanel_CustomThemeList">
+            {customThemes.map((theme) => {
+                return (
+                    <li key={theme.name} className="mx_ThemeChoicePanel_CustomThemeList_theme" aria-label={theme.name}>
+                        <span className="mx_ThemeChoicePanel_CustomThemeList_name">{theme.name}</span>
+                        <IconButton
+                            destructive={true}
+                            aria-label={_t("action|delete")}
+                            tooltip={_t("action|delete")}
+                            onClick={async () => {
+                                // Get the custom themes and do a cheap clone
+                                // To avoid to mutate the original array in the settings
+                                const currentThemes =
+                                    SettingsStore.getValue<CustomThemeType[]>("custom_themes").map((t) => t) || [];
+
+                                // Remove the theme from the list
+                                const newThemes = currentThemes.filter((t) => t.name !== theme.name);
+                                await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, newThemes);
+
+                                // If the delete custom theme is the current theme, reset the theme to the default theme
+                                // By settings the theme at null at the device level, we are getting the default theme
+                                if (currentTheme === `custom-${theme.name}`) {
+                                    await SettingsStore.setValue("theme", null, SettingLevel.DEVICE, null);
+                                    dis.dispatch<RecheckThemePayload>({
+                                        action: Action.RecheckTheme,
+                                    });
+                                }
+                            }}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </li>
+                );
+            })}
+        </ul>
+    );
 }

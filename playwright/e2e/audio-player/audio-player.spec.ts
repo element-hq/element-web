@@ -160,7 +160,7 @@ test.describe("Audio player", () => {
 
         // Enable high contrast manually
         const settings = await app.settings.openUserSettings("Appearance");
-        await settings.getByTestId("mx_ThemeChoicePanel").getByText("Use high contrast").click();
+        await settings.getByRole("radio", { name: "High contrast" }).click();
 
         await app.closeDialog();
 
