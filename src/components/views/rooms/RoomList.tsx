@@ -31,7 +31,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PosthogTrackers from "../../../PosthogTrackers";
 import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -122,6 +122,20 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
         return SpaceStore.instance.activeSpaceRoom;
     });
 
+    let showStartChatPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowStartChatPlusMenuForMetaSpace)) {
+        switch (SpaceStore.instance.activeSpace) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+                showStartChatPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     const showCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
     const showInviteUsers = shouldShowComponent(UIComponent.InviteUsers);
 
@@ -183,7 +197,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                 {contextMenu}
             </>
         );
-    } else if (!activeSpace && showCreateRooms) {
+    } else if (showStartChatPlusMenuForMetaSpace && !activeSpace && showCreateRooms) {
         return (
             <AccessibleButton
                 tabIndex={tabIndex}

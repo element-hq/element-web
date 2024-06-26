@@ -36,6 +36,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
 import { ITagMap } from "../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -277,6 +278,30 @@ describe("RoomList", () => {
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomPublic })).toBeFalsy();
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomKnock })).toBeFalsy();
             });
+        });
+    });
+
+    describe("UIFeature.showStartChatPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = true: renders 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === "UIFeature.showStartChatPlusMenuForMetaSpace" ? true : "default";
+            });
+            render(getComponent());
+
+            expect(screen.getByLabelText("Start chat")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = false: does not render 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === "UIFeature.showStartChatPlusMenuForMetaSpace" ? false : "default";
+            });
+            render(getComponent());
+
+            expect(screen.queryByLabelText("Start chat")).not.toBeInTheDocument();
         });
     });
 });
