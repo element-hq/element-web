@@ -28,6 +28,8 @@ import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStor
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
+import { UIFeature } from "../../../settings/UIFeature";
+import SettingsStore from "../../../settings/SettingsStore";
 
 function keyHasPassphrase(keyInfo: SecretStorageKeyDescription): boolean {
     return Boolean(keyInfo.passphrase && keyInfo.passphrase.salt && keyInfo.passphrase.iterations);
@@ -203,19 +205,23 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                             {verifyButton}
                             {useRecoveryKeyButton}
                         </div>
-                        <div className="mx_SetupEncryptionBody_reset">
-                            {_t("encryption|reset_all_button", undefined, {
-                                a: (sub) => (
-                                    <AccessibleButton
-                                        kind="link_inline"
-                                        className="mx_SetupEncryptionBody_reset_link"
-                                        onClick={this.onResetClick}
-                                    >
-                                        {sub}
-                                    </AccessibleButton>
-                                ),
-                            })}
-                        </div>
+                        {SettingsStore.getValue(UIFeature.SetupEncryptionResetButton) && (
+                            <>
+                                <div className="mx_SetupEncryptionBody_reset">
+                                    {_t("encryption|reset_all_button", undefined, {
+                                        a: (sub) => (
+                                            <AccessibleButton
+                                                kind="link_inline"
+                                                className="mx_SetupEncryptionBody_reset_link"
+                                                onClick={this.onResetClick}
+                                            >
+                                                {sub}
+                                            </AccessibleButton>
+                                        ),
+                                    })}
+                                </div>
+                            </>
+                        )}
                     </div>
                 );
             }

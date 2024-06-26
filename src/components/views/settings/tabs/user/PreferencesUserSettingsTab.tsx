@@ -33,6 +33,7 @@ import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingP
 import SettingsSubsection from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import { UIFeature } from "../../../../../settings/UIFeature";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -59,8 +60,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "MessageComposerInput.suggestEmoji",
         "MessageComposerInput.ctrlEnterToSend",
         "MessageComposerInput.surroundWith",
-        "MessageComposerInput.showStickersButton",
-        "MessageComposerInput.insertTrailingColon",
+        // "MessageComposerInput.showStickersButton",
+        // "MessageComposerInput.insertTrailingColon",
     ];
 
     private static TIME_SETTINGS = ["showTwelveHourTimestamps", "alwaysShowTimestamps"];
@@ -77,14 +78,14 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "showTypingNotifications",
         "showRedactions",
         "showReadReceipts",
-        "showJoinLeaves",
         "showDisplaynameChanges",
-        "showChatEffects",
         "showAvatarChanges",
         "Pill.shouldShowPillAvatar",
         "TextualBody.enableBigEmoji",
         "scrollToBottomOnMessageSent",
         "useOnlyCurrentProfiles",
+        // "showJoinLeaves",
+        // "showChatEffects",
     ];
 
     private static ROOM_DIRECTORY_SETTINGS = ["SpotlightSearch.showNsfwPublicRooms"];
@@ -137,7 +138,39 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     };
 
+    private addFeatureFlagSettings(): void {
+        if (
+            SettingsStore.getValue(UIFeature.ShowStickersButtonSetting) &&
+            !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.showStickersButton")
+        ) {
+            PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.showStickersButton");
+        }
+
+        if (
+            SettingsStore.getValue(UIFeature.InsertTrailingColonSetting) &&
+            !PreferencesUserSettingsTab.COMPOSER_SETTINGS.includes("MessageComposerInput.insertTrailingColon")
+        ) {
+            PreferencesUserSettingsTab.COMPOSER_SETTINGS.push("MessageComposerInput.insertTrailingColon");
+        }
+
+        if (
+            SettingsStore.getValue(UIFeature.ShowJoinLeavesSetting) &&
+            !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showJoinLeaves")
+        ) {
+            PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showJoinLeaves");
+        }
+
+        if (
+            SettingsStore.getValue(UIFeature.ShowChatEffectSetting) &&
+            !PreferencesUserSettingsTab.TIMELINE_SETTINGS.includes("showChatEffects")
+        ) {
+            PreferencesUserSettingsTab.TIMELINE_SETTINGS.push("showChatEffects");
+        }
+    }
+
     public render(): React.ReactNode {
+        this.addFeatureFlagSettings();
+
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
             // Only show the user onboarding setting if the user should see the user onboarding page
@@ -170,7 +203,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             },
                         )}
                     >
-                        {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                        {SettingsStore.getValue(UIFeature.SearchShortcutPreferences) &&
+                            this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|time_heading")}>

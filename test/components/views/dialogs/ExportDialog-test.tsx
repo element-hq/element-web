@@ -26,6 +26,8 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import ChatExport from "../../../../src/customisations/ChatExport";
 import PlainTextExporter from "../../../../src/utils/exportUtils/PlainTextExport";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
 jest.useFakeTimers();
 
@@ -87,6 +89,8 @@ describe("<ExportDialog />", () => {
 
         // default setting value
         mocked(ChatExportMock.getForceChatExportParameters!).mockClear().mockReturnValue({});
+
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
     });
 
     it("renders export dialog", () => {
@@ -156,6 +160,10 @@ describe("<ExportDialog />", () => {
     });
 
     describe("export format", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        });
+
         it("renders export format with html selected by default", () => {
             const component = getComponent();
             expect(getExportFormatInput(component, ExportFormat.Html)).toBeChecked();
@@ -183,6 +191,10 @@ describe("<ExportDialog />", () => {
     });
 
     describe("export type", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        });
+
         it("renders export type with timeline selected by default", () => {
             const component = getComponent();
             expect(getExportTypeInput(component)).toHaveValue(ExportType.Timeline);
@@ -249,9 +261,33 @@ describe("<ExportDialog />", () => {
                 expect(htmlExporterInstance.export).toHaveBeenCalled();
             });
         });
+
+        //eik
+        it("renders export type when feature is on", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.AllExportTypes) return true;
+                return true;
+            });
+            const component = getComponent();
+            expect(getExportTypeInput(component)).not.toBeNull();
+        });
+        it("does not render export type when feature is off", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.AllExportTypes) return false;
+                return true;
+            });
+            const component = getComponent();
+            expect(getExportTypeInput(component)).toBeFalsy();
+        });
+
+        //eik end
     });
 
     describe("size limit", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        });
+
         it("renders size limit input with default value", () => {
             const component = getComponent();
             expect(getSizeInput(component)).toHaveValue(8);
@@ -309,9 +345,34 @@ describe("<ExportDialog />", () => {
 
             expect(htmlExporterInstance.export).toHaveBeenCalled();
         });
+        //Eik
+        it("renders size limit input when feature is on", () => {
+            console.log("Eik : feature is on");
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ExportDefaultSizeLimit) return true;
+                return true;
+            });
+            const component = getComponent();
+            expect(getSizeInput(component)).toHaveValue(8);
+        });
+        it("does not render size limit input when feature is off", () => {
+            console.log("Eik : feature is off");
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ExportDefaultSizeLimit) return false;
+                return true;
+            });
+            const component = getComponent();
+            expect(getSizeInput(component)).toBeFalsy();
+        });
+
+        //Eik end
     });
 
     describe("include attachments", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        });
+
         it("renders input with default value of false", () => {
             const component = getComponent();
             expect(getAttachmentsCheckbox(component)).not.toBeChecked();
@@ -330,5 +391,24 @@ describe("<ExportDialog />", () => {
             const component = getComponent();
             expect(getAttachmentsCheckbox(component)).toBeFalsy();
         });
+        //Eik
+        it("renders checkbox empty if feature is on", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ExportAttatchmentsDefaultOff) return true;
+                return true;
+            });
+            const component = getComponent();
+            expect(getAttachmentsCheckbox(component)).not.toBeChecked();
+        });
+        it("renders the checkbox checked when off", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ExportAttatchmentsDefaultOff) return false;
+                return true;
+            });
+            const component = getComponent();
+            expect(getAttachmentsCheckbox(component)).toBeChecked();
+        });
+
+        //Eik end
     });
 });

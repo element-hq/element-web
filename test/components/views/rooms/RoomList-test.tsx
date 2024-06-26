@@ -209,6 +209,34 @@ describe("RoomList", () => {
                     room_id: space1,
                 });
             });
+
+            it("UIFeature.addExistingRoomToSpace = true: should render 'Add existing room' context menu option", async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                    val === UIFeature.AddExistingRoomToSpace ? true : "default",
+                );
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
+
+                const menu = screen.getByRole("menu");
+                expect(within(menu).getByRole("menuitem", { name: "Add existing room" })).toBeInTheDocument();
+            });
+
+            it("UIFeature.addExistingRoomToSpace = false: should not render 'Add existing room' context menu option", async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                    val === UIFeature.AddExistingRoomToSpace ? false : "default",
+                );
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
+
+                const menu = screen.getByRole("menu");
+                expect(within(menu).queryByRole("menuitem", { name: "Add existing room" })).not.toBeInTheDocument();
+            });
         });
 
         describe("when video meta space is active", () => {

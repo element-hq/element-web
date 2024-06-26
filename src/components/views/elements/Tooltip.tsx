@@ -126,6 +126,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         const horizontalCenter = parentBox.left - window.scrollX + parentWidth / 2;
 
         const style: State = {};
+
         switch (this.props.alignment) {
             case Alignment.Natural:
                 if (parentBox.right > width / 2) {
@@ -172,7 +173,6 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
                 style.transform = "translateY(-100%)";
                 break;
         }
-
         this.setState(style);
     };
 

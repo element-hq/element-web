@@ -285,18 +285,20 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                 <BetaPill />
                             </IconizedContextMenuOption>
                         )}
-                        <IconizedContextMenuOption
-                            label={_t("action|add_existing_room")}
-                            iconClassName="mx_RoomList_iconAddExistingRoom"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                closeMenu();
-                                showAddExistingRooms(activeSpace);
-                            }}
-                            disabled={!canAddRooms}
-                            title={canAddRooms ? undefined : _t("spaces|error_no_permission_add_room")}
-                        />
+                        {SettingsStore.getValue(UIFeature.AddExistingRoomToSpace) && (
+                            <IconizedContextMenuOption
+                                label={_t("action|add_existing_room")}
+                                iconClassName="mx_RoomList_iconAddExistingRoom"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    closeMenu();
+                                    showAddExistingRooms(activeSpace);
+                                }}
+                                disabled={!canAddRooms}
+                                title={canAddRooms ? undefined : _t("spaces|error_no_permission_add_room")}
+                            />
+                        )}
                     </>
                 ) : null}
             </IconizedContextMenuOptionList>
@@ -338,7 +340,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         )}
                     </>
                 )}
-                {showExploreRooms ? (
+                {SettingsStore.getValue(UIFeature.UserInfoRedactButton) && showExploreRooms ? (
                     <IconizedContextMenuOption
                         label={_t("action|explore_public_rooms")}
                         iconClassName="mx_RoomList_iconExplore"
