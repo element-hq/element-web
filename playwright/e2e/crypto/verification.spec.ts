@@ -45,7 +45,6 @@ test.describe("Device verification", () => {
 
         // Create a new device for alice
         aliceBotClient = new Bot(page, homeserver, {
-            rustCrypto: true,
             bootstrapCrossSigning: true,
             bootstrapSecretStorage: true,
         });
