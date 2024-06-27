@@ -36,6 +36,7 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
+                  node-version: lts/* # Latest LTS
                   cache: "yarn"
 
             # Workaround for yarn install timeouts, especially on Windows

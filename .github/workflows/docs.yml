@@ -44,6 +44,7 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
+                  node-version: lts/* # Latest LTS
                   cache: "yarn"
                   cache-dependency-path: element-web/yarn.lock
 
