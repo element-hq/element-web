@@ -2372,19 +2372,15 @@
             "custom_font_description": "Définissez le nom d’une police de caractères installée sur votre système et %(brand)s essaiera de l’utiliser.",
             "custom_font_name": "Nom de la police du système",
             "custom_font_size": "Utiliser une taille personnalisée",
-            "custom_theme_add_button": "Ajouter le thème",
             "custom_theme_error_downloading": "Une erreur s’est produite en téléchargeant les informations du thème.",
             "custom_theme_invalid": "Schéma du thème invalide.",
-            "custom_theme_success": "Thème ajouté !",
-            "custom_theme_url": "URL personnalisée pour le thème",
             "font_size": "Taille de la police",
             "image_size_default": "Par défaut",
             "image_size_large": "Grande",
             "layout_bubbles": "Message en bulles",
             "layout_irc": "IRC (Expérimental)",
             "match_system_theme": "S’adapter au thème du système",
-            "timeline_image_size": "Taille d’image dans l’historique",
-            "use_high_contrast": "Utiliser un contraste élevé"
+            "timeline_image_size": "Taille d’image dans l’historique"
         },
         "automatic_language_detection_syntax_highlight": "Activer la détection automatique du langage pour la coloration syntaxique",
         "autoplay_gifs": "Jouer automatiquement les GIFs",
@@ -2427,7 +2423,6 @@
             "discovery_email_verification_instructions": "Vérifiez le lien dans votre boîte de réception",
             "discovery_msisdn_empty": "Les options de découverte apparaîtront quand vous aurez ajouté un numéro de téléphone ci-dessus.",
             "discovery_needs_terms": "Acceptez les conditions de service du serveur d’identité (%(serverName)s) pour vous permettre d’être découvrable par votre adresse e-mail ou votre numéro de téléphone.",
-            "discovery_section": "Découverte",
             "email_address_in_use": "Cette adresse e-mail est déjà utilisée",
             "email_address_label": "Adresse e-mail",
             "email_not_verified": "Votre adresse e-mail n’a pas encore été vérifiée",
@@ -2813,7 +2808,7 @@
             "title": "Barre latérale"
         },
         "start_automatically": "Démarrer automatiquement après la phase d'authentification du système",
-        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité du fil de discussion",
+        "tac_only_notifications": "Afficher uniquement les notifications dans le centre d'activité des fils de discussions",
         "use_12_hour_format": "Afficher l’heure au format am/pm (par ex. 2:30pm)",
         "use_command_enter_send_message": "Utilisez Ctrl + Entrée pour envoyer un message",
         "use_command_f_search": "Utilisez Commande + F pour rechercher dans le fil de discussion",
@@ -3154,6 +3149,9 @@
         },
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
+        "decryption_failure": {
+            "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil"
+        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
