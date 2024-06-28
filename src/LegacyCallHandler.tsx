@@ -991,7 +991,9 @@ export default class LegacyCallHandler extends EventEmitter {
             await this.placeMatrixCall(roomId, type, transferee);
         } else {
             // > 2
-            await this.placeJitsiCall(roomId, type);
+            if (SettingsStore.getValue(UIFeature.MultipleCallsInRoom)) {
+                await this.placeJitsiCall(roomId, type);
+            }
         }
     }
 

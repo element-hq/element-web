@@ -88,7 +88,8 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     return (
         <div className={`mx_RoomInfoLine ${iconClass}`}>
             {roomType}
-            {SettingsStore.getValue(UIFeature.ShowMembersListForSpaces) && members}
+            {SettingsStore.getValue(UIFeature.ShowMembersListForSpaces) &&
+            SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && members}
         </div>
     );
 };

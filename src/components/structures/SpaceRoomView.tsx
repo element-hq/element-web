@@ -287,13 +287,17 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                             onClick={isShowingMembers ? undefined : onMembersClick}
                         />
                     )}
-                    {inviteButton}
+                    {SettingsStore.getValue(UIFeature.ShowAddMoreButtonForSpaces) && inviteButton}
                     {settingsButton}
                 </div>
             </div>
             <RoomTopic room={space} className="mx_SpaceRoomView_landing_topic" />
 
-            <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+            {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && (
+                <>
+                    <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+                </>
+            )}
         </div>
     );
 };
