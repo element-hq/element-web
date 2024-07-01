@@ -1243,6 +1243,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.ShowMembersListForSpaces]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.ShowPlusMenuForMetaSpace]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
