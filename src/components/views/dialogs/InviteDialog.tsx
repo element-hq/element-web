@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room } from "matrix-js-sdk/src/matrix"; //VERJI remove: MatrixError, EventType
+import { RoomMember, Room, EventType } from "matrix-js-sdk/src/matrix"; //VERJI remove: MatrixError, EventType
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -618,21 +618,24 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ busy: true });
 
         let foundUser = false;
-        await MatrixClientPeg.get()
-            ?.searchUserDirectory({ term: this.state.filterText.trim().split(":")[0] ?? this.state.filterText })
-            .then(async (r) => {
-                this.setState({ busy: false });
+        try {
+            await MatrixClientPeg.get()
+                ?.searchUserDirectory({ term: this.state.filterText.trim().split(":")[0] ?? this.state.filterText })
+                .then(async (r) => {
+                    this.setState({ busy: false });
 
-                if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
-                    foundUser = true;
-                }
-            });
+                    if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
+                        foundUser = true;
+                    }
+                });
+        } catch (error) {
+            console.error("Failed to searchUserDirectory: ", error);
+        }
 
         const currentUserId: string | undefined = MatrixClientPeg.getCredentials()?.userId.trim();
-
         if (currentUserId && currentUserId == this.state.filterText.trim()) {
             this.setState({ busy: false });
-            return [] as Member[];
+            return [{ userId: currentUserId }] as Member[];
         }
 
         if (foundUser == false) {
@@ -643,7 +646,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 ...this.state.serverResultsMixin,
                 ...this.state.threepidResultsMixin,
             ];
-
+            console.log("Possible Members: ", possibleMembers);
             const toAdd = [];
             const potentialAddresses = this.state.filterText
                 .split(/[\s,]+/)
@@ -658,7 +661,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             if (!toAdd?.length || toAdd?.length == 0) {
-                return [] as Member[];
+                //return [] as Member[];
             }
         }
         // Check to see if there's anything to convert first
