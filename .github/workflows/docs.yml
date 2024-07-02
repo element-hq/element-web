@@ -2,7 +2,7 @@ name: Deploy documentation
 
 on:
     push:
-        branches: [florianduros/ci/mdbooks]
+        branches: [develop]
     workflow_dispatch: {}
 
 permissions:
@@ -103,13 +103,13 @@ jobs:
               with:
                   path: ./book
 
-#    deploy:
-#        environment:
-#            name: github-pages
-#            url: ${{ steps.deployment.outputs.page_url }}
-#        runs-on: ubuntu-latest
-#        needs: build
-#        steps:
-#            - name: Deploy to GitHub Pages
-#              id: deployment
-#              uses: actions/deploy-pages@v4
+    deploy:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
