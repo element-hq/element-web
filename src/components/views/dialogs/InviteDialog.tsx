@@ -646,7 +646,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 ...this.state.serverResultsMixin,
                 ...this.state.threepidResultsMixin,
             ];
-            console.log("Possible Members: ", possibleMembers);
             const toAdd = [];
             const potentialAddresses = this.state.filterText
                 .split(/[\s,]+/)
