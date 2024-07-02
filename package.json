@@ -65,7 +65,8 @@
         "@types/seedrandom": "3.0.8",
         "oidc-client-ts": "3.0.1",
         "jwt-decode": "4.0.0",
-        "@floating-ui/react": "0.26.11"
+        "@floating-ui/react": "0.26.11",
+        "@radix-ui/react-id": "1.1.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
