@@ -23,6 +23,8 @@ import {
     RadioControl,
     EditInPlace,
     IconButton,
+    ErrorMessage,
+    HelpMessage,
 } from "@vector-im/compound-web";
 import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
 import classNames from "classnames";
@@ -231,10 +233,9 @@ function CustomTheme({ theme }: CustomThemeProps): JSX.Element {
             <EditInPlace
                 className="mx_ThemeChoicePanel_CustomTheme_EditInPlace"
                 label={_t("settings|appearance|custom_theme_add")}
+                cancelButtonLabel={_t("action|cancel")}
                 saveButtonLabel={_t("settings|appearance|custom_theme_add")}
                 savingLabel={_t("settings|appearance|custom_theme_downloading")}
-                helpLabel={_t("settings|appearance|custom_theme_help")}
-                error={error}
                 value={customTheme}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     setError(undefined);
@@ -281,7 +282,10 @@ function CustomTheme({ theme }: CustomThemeProps): JSX.Element {
                     await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
                 }}
                 onCancel={clear}
-            />
+            >
+                <HelpMessage>{_t("settings|appearance|custom_theme_help")}</HelpMessage>
+                {error && <ErrorMessage>{error}</ErrorMessage>}
+            </EditInPlace>
             <CustomThemeList theme={theme} />
         </div>
     );

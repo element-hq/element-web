@@ -32,13 +32,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_148br_24 mx_ThemeChoicePanel_ThemeSelectors"
+                class="_root_dgy0u_24 mx_ThemeChoicePanel_ThemeSelectors"
               >
                 <div
-                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_148br_52"
+                    class="_inline-field-control_dgy0u_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -58,10 +58,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_148br_46"
+                    class="_inline-field-body_dgy0u_46"
                   >
                     <label
-                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-0"
                     >
                       Light
@@ -69,10 +69,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
+                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
                 >
                   <div
-                    class="_inline-field-control_148br_52"
+                    class="_inline-field-control_dgy0u_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -92,10 +92,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_148br_46"
+                    class="_inline-field-body_dgy0u_46"
                   >
                     <label
-                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-1"
                     >
                       Dark
@@ -103,10 +103,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_148br_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_148br_52"
+                    class="_inline-field-control_dgy0u_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -126,10 +126,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_148br_46"
+                    class="_inline-field-body_dgy0u_46"
                   >
                     <label
-                      class="_label_148br_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-2"
                     >
                       High contrast
