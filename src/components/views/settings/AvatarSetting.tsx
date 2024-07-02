@@ -170,6 +170,7 @@ const AvatarSetting: React.FC<IProps> = ({
             aria-labelledby={disabled ? undefined : a11yId}
             // Inhibit tab stop as we have explicit upload/remove buttons
             tabIndex={-1}
+            disabled={disabled}
         >
             <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
         </AccessibleButton>
@@ -184,6 +185,7 @@ const AvatarSetting: React.FC<IProps> = ({
                 onClick={uploadAvatar}
                 // Inhibit tab stop as we have explicit upload/remove buttons
                 tabIndex={-1}
+                disabled={disabled}
             />
         );
     }

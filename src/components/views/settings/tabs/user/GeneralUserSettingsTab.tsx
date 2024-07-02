@@ -56,6 +56,8 @@ interface IState {
     idServerName?: string;
     externalAccountManagementUrl?: string;
     canMake3pidChanges: boolean;
+    canSetDisplayName: boolean;
+    canSetAvatar: boolean;
 }
 
 export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
@@ -72,6 +74,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             spellCheckLanguages: [],
             canChangePassword: false,
             canMake3pidChanges: false,
+            canSetDisplayName: false,
+            canSetAvatar: false,
         };
 
         this.getCapabilities();
@@ -95,7 +99,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private async getCapabilities(): Promise<void> {
         const cli = this.context.client!;
 
-        const capabilities = await cli.getCapabilities(); // this is cached
+        const capabilities = (await cli.getCapabilities()) ?? {};
         const changePasswordCap = capabilities["m.change_password"];
 
         // You can change your password so long as the capability isn't explicitly disabled. The implicit
@@ -110,7 +114,17 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         // so the behaviour for when it is missing has to be assume true
         const canMake3pidChanges = !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
 
-        this.setState({ canChangePassword, externalAccountManagementUrl, canMake3pidChanges });
+        const canSetDisplayName =
+            !capabilities["m.set_displayname"] || capabilities["m.set_displayname"].enabled === true;
+        const canSetAvatar = !capabilities["m.set_avatar_url"] || capabilities["m.set_avatar_url"].enabled === true;
+
+        this.setState({
+            canChangePassword,
+            externalAccountManagementUrl,
+            canMake3pidChanges,
+            canSetDisplayName,
+            canSetAvatar,
+        });
     }
 
     private onLanguageChange = (newLanguage: string): void => {
@@ -309,7 +323,10 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <SettingsTab data-testid="mx_GeneralUserSettingsTab">
                 <SettingsSection>
-                    <UserProfileSettings />
+                    <UserProfileSettings
+                        canSetDisplayName={this.state.canSetDisplayName}
+                        canSetAvatar={this.state.canSetAvatar}
+                    />
                     <UserPersonalInfoSettings canMake3pidChanges={this.state.canMake3pidChanges} />
                     {this.renderAccountSection()}
                     {this.renderLanguageSection()}

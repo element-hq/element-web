@@ -2527,6 +2527,7 @@
             "password_change_success": "Your password was successfully changed.",
             "personal_info": "Personal info",
             "profile_subtitle": "This is how you appear to others on the app.",
+            "profile_subtitle_oidc": "Your account is managed separately by an identity provider and so some of your personal information can’t be changed here.",
             "remove_email_prompt": "Remove %(email)s?",
             "remove_msisdn_prompt": "Remove %(phone)s?",
             "spell_check_locale_placeholder": "Choose a locale",
