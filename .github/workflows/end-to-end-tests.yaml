@@ -145,10 +145,8 @@ jobs:
               run: yarn playwright install --with-deps
 
             - name: Run Playwright tests
-              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
-              with:
-                  run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
-                  working-directory: matrix-react-sdk
+              run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
+              working-directory: matrix-react-sdk
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
