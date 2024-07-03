@@ -120,7 +120,6 @@
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
         "posthog-js": "1.141.3",
-        "proposal-temporal": "^0.9.0",
         "qrcode": "1.5.3",
         "re-resizable": "^6.9.0",
         "react": "17.0.2",
@@ -133,6 +132,7 @@
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.13.0",
         "tar-js": "^0.3.0",
+        "temporal-polyfill": "^0.2.5",
         "ua-parser-js": "^1.0.2",
         "uuid": "^10.0.0",
         "what-input": "^5.2.10"
