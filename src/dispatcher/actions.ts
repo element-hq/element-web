@@ -388,4 +388,9 @@ export enum Action {
      * Opens right panel with 3pid invite information
      */
     View3pidInvite = "view_3pid_invite",
+
+    /**
+     * Opens right panel room summary and focuses the search input
+     */
+    FocusMessageSearch = "focus_search",
 }

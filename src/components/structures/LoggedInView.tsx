@@ -458,9 +458,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 handled = true;
                 break;
             case KeyBindingAction.SearchInRoom:
-                dis.dispatch({
-                    action: "focus_search",
-                });
+                dis.fire(Action.FocusMessageSearch);
                 handled = true;
                 break;
         }
