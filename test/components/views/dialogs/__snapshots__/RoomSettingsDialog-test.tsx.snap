@@ -21,6 +21,24 @@ NodeList [
     </span>
   </li>,
   <li
+    aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_SECURITY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_SECURITY_TAB_label"
+    >
+      Security & Privacy
+    </span>
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"

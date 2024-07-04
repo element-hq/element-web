@@ -39,12 +39,11 @@ import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
-import { UIComponent, UIFeature } from "../../settings/UIFeature";
+import { UIComponent } from "../../settings/UIFeature";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
 import PageType from "../../PageTypes";
 import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
-import SettingsStore from "../../settings/SettingsStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -342,11 +341,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
 
         let rightButton: JSX.Element | undefined;
-        if (
-            SettingsStore.getValue(UIFeature.ShowExploreRoomsButton) &&
-            this.state.activeSpace === MetaSpace.Home &&
-            shouldShowComponent(UIComponent.ExploreRooms)
-        ) {
+        if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
             rightButton = (
                 <AccessibleButton
                     className="mx_LeftPanel_exploreButton"

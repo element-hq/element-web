@@ -28,8 +28,6 @@ import CountryDropdown from "../../auth/CountryDropdown";
 import Modal from "../../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import { PhoneNumberCountryDefinition } from "../../../../phonenumber";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { UIFeature } from "../../../../settings/UIFeature";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -122,13 +120,9 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
                 <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">
                     +{this.props.msisdn.address}
                 </span>
-                {SettingsStore.getValue(UIFeature.PhoneNumerShowRemoveButton) && (
-                    <>
-                        <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
-                            {_t("action|remove")}
-                        </AccessibleButton>
-                    </>
-                )}
+                <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
+                    {_t("action|remove")}
+                </AccessibleButton>
             </div>
         );
     }
@@ -275,12 +269,10 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
             );
         });
 
-        let addVerifySection = SettingsStore.getValue(UIFeature.PhoneNumerShowAddButton) && (
-            <>
-                <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
-                    {_t("action|add")}
-                </AccessibleButton>
-            </>
+        let addVerifySection = (
+            <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
+                {_t("action|add")}
+            </AccessibleButton>
         );
         if (this.state.verifying) {
             const msisdn = this.state.verifyMsisdn;

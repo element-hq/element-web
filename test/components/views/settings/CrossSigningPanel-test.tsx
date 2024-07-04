@@ -28,8 +28,6 @@ import {
 } from "../../../test-utils";
 import Modal from "../../../../src/Modal";
 import ConfirmDestroyCrossSigningDialog from "../../../../src/components/views/dialogs/security/ConfirmDestroyCrossSigningDialog";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../../src/settings/UIFeature";
 
 describe("<CrossSigningPanel />", () => {
     const userId = "@alice:server.org";
@@ -65,32 +63,6 @@ describe("<CrossSigningPanel />", () => {
 
         expect(screen.getByText("Your homeserver does not support cross-signing.")).toBeInTheDocument();
     });
-    //eik
-    it("should not render when feature is off", async () => {
-        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsResetCrossSigning) return false;
-            return true;
-        });
-
-        getComponent();
-        await flushPromises();
-
-        expect(screen.queryByText("Reset")).toBeNull();
-    });
-    it("should render when feature is on", async () => {
-        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsResetCrossSigning) return true;
-            return true;
-        });
-
-        getComponent();
-        await flushPromises();
-
-        expect(screen.queryByText("Reset")).not.toBeNull();
-    });
-    //eik end
 
     describe("when cross signing is ready", () => {
         it("should render when keys are not backed up", async () => {

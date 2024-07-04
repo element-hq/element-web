@@ -246,41 +246,4 @@ describe("<SpaceContextMenu />", () => {
             expect(screen.queryByTestId("leave-option")).not.toBeInTheDocument();
         });
     });
-
-    describe("UIFeature.AddSubSpace feature flag", () => {
-        const space = makeMockSpace();
-
-        beforeEach(() => {
-            // set space to allow adding children to space
-            mocked(space.currentState.maySendStateEvent).mockReturnValue(true);
-            mocked(shouldShowComponent).mockReturnValue(true);
-            jest.clearAllMocks();
-        });
-
-        it("UIFeature.AddSubSpace = true: renders create space button when UIFeature is true", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSubSpace) return true;
-                else return "default";
-            });
-            renderComponent({ space });
-
-            screen.debug();
-
-            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
-            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
-            expect(screen.queryByTestId("new-subspace-option")).toBeInTheDocument();
-        });
-
-        it("UIFeature.AddSubSpace = false: does not render create space button when UIFeature is false", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
-                if (name === UIFeature.AddSubSpace) return false;
-                else return "default";
-            });
-            renderComponent({ space });
-
-            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
-            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
-            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
-        });
-    });
 });

@@ -16,10 +16,6 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { _t } from "../../../../../languageHandler";
@@ -34,7 +30,6 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import ExternalLink from "../../../elements/ExternalLink";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
-import { ModuleRunner } from "../../../../../modules/ModuleRunner";
 
 interface IProps {}
 
@@ -267,74 +262,66 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         const { appVersion, cryptoVersion } = this.getVersionInfo();
 
-        const CustomHelpUserSettingsTab = { CustomComponent: React.Fragment };
-        ModuleRunner.instance.invoke(
-            CustomComponentLifecycle.HelpUserSettingsTab,
-            CustomHelpUserSettingsTab as CustomComponentOpts,
-        );
-
         return (
-            <CustomHelpUserSettingsTab.CustomComponent>
-                <SettingsTab>
-                    <SettingsSection>
-                        {bugReportingSection}
-                        <SettingsSubsection heading={_t("common|faq")} description={faqText} />
-                        <SettingsSubsection heading={_t("setting|help_about|versions")}>
-                            <SettingsSubsectionText>
-                                <CopyableText getTextToCopy={this.getVersionTextToCopy}>
-                                    {appVersion}
-                                    <br />
-                                    {cryptoVersion}
-                                    <br />
-                                </CopyableText>
-                                {updateButton}
-                            </SettingsSubsectionText>
-                        </SettingsSubsection>
-                        {this.renderLegal()}
-                        {this.renderCredits()}
-                        <SettingsSubsection heading={_t("common|advanced")}>
+            <SettingsTab>
+                <SettingsSection>
+                    {bugReportingSection}
+                    <SettingsSubsection heading={_t("common|faq")} description={faqText} />
+                    <SettingsSubsection heading={_t("setting|help_about|versions")}>
+                        <SettingsSubsectionText>
+                            <CopyableText getTextToCopy={this.getVersionTextToCopy}>
+                                {appVersion}
+                                <br />
+                                {cryptoVersion}
+                                <br />
+                            </CopyableText>
+                            {updateButton}
+                        </SettingsSubsectionText>
+                    </SettingsSubsection>
+                    {this.renderLegal()}
+                    {this.renderCredits()}
+                    <SettingsSubsection heading={_t("common|advanced")}>
+                        <SettingsSubsectionText>
+                            {_t(
+                                "setting|help_about|homeserver",
+                                {
+                                    homeserverUrl: this.context.getHomeserverUrl(),
+                                },
+                                {
+                                    code: (sub) => <code>{sub}</code>,
+                                },
+                            )}
+                        </SettingsSubsectionText>
+                        {this.context.getIdentityServerUrl() && (
                             <SettingsSubsectionText>
                                 {_t(
-                                    "setting|help_about|homeserver",
+                                    "setting|help_about|identity_server",
                                     {
-                                        homeserverUrl: this.context.getHomeserverUrl(),
+                                        identityServerUrl: this.context.getIdentityServerUrl(),
                                     },
                                     {
                                         code: (sub) => <code>{sub}</code>,
                                     },
                                 )}
                             </SettingsSubsectionText>
-                            {this.context.getIdentityServerUrl() && (
-                                <SettingsSubsectionText>
-                                    {_t(
-                                        "setting|help_about|identity_server",
-                                        {
-                                            identityServerUrl: this.context.getIdentityServerUrl(),
-                                        },
-                                        {
-                                            code: (sub) => <code>{sub}</code>,
-                                        },
-                                    )}
-                                </SettingsSubsectionText>
-                            )}
-                            <SettingsSubsectionText>
-                                <details>
-                                    <summary className="mx_HelpUserSettingsTab_accessTokenDetails">
-                                        {_t("common|access_token")}
-                                    </summary>
-                                    <b>{_t("setting|help_about|access_token_detail")}</b>
-                                    <CopyableText getTextToCopy={() => this.context.getAccessToken()}>
-                                        {this.context.getAccessToken()}
-                                    </CopyableText>
-                                </details>
-                            </SettingsSubsectionText>
-                            <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger_outline">
-                                {_t("setting|help_about|clear_cache_reload")}
-                            </AccessibleButton>
-                        </SettingsSubsection>
-                    </SettingsSection>
-                </SettingsTab>
-            </CustomHelpUserSettingsTab.CustomComponent>
+                        )}
+                        <SettingsSubsectionText>
+                            <details>
+                                <summary className="mx_HelpUserSettingsTab_accessTokenDetails">
+                                    {_t("common|access_token")}
+                                </summary>
+                                <b>{_t("setting|help_about|access_token_detail")}</b>
+                                <CopyableText getTextToCopy={() => this.context.getAccessToken()}>
+                                    {this.context.getAccessToken()}
+                                </CopyableText>
+                            </details>
+                        </SettingsSubsectionText>
+                        <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger_outline">
+                            {_t("setting|help_about|clear_cache_reload")}
+                        </AccessibleButton>
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

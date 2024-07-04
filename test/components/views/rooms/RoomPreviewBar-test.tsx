@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { render, fireEvent, RenderResult, waitFor, screen } from "@testing-library/react";
+import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -24,8 +24,6 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomPreviewBar from "../../../../src/components/views/rooms/RoomPreviewBar";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../../src/settings/UIFeature";
 
 jest.mock("../../../../src/IdentityAuthClient", () => {
     return jest.fn().mockImplementation(() => {
@@ -310,28 +308,7 @@ describe("<RoomPreviewBar />", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick, canPreview: true });
                     expect(getActions(component)).toMatchSnapshot();
                 });
-                it("renders join and reject action buttons when feature is on", () => {
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                        if (name == UIFeature.RoomPreviewRejectIgnoreButton) return true;
-                        return true;
-                    });
-                    // when room is previewed action buttons are rendered left to right, with primary on the right
-                    const onRejectAndIgnoreClick = jest.fn();
-                    getComponent({ inviterName, room, onJoinClick, onRejectClick, onRejectAndIgnoreClick });
 
-                    expect(screen.queryByText("Reject & Ignore user")).toBeInTheDocument();
-                });
-                it("does not render join and reject action buttons when feature is off", () => {
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                        if (name == UIFeature.RoomPreviewRejectIgnoreButton) return false;
-                        return true;
-                    });
-                    // when room is previewed action buttons are rendered left to right, with primary on the right
-                    const onRejectAndIgnoreClick = jest.fn();
-                    getComponent({ inviterName, room, onJoinClick, onRejectClick, onRejectAndIgnoreClick });
-
-                    expect(screen.queryByText("Reject & Ignore user")).toBeNull();
-                });
                 it("joins room on primary button click", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
                     fireEvent.click(getPrimaryActionButton(component)!);

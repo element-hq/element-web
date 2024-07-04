@@ -27,8 +27,6 @@ import * as Email from "../../../../email";
 import AddThreepid, { ThirdPartyIdentifier } from "../../../../AddThreepid";
 import Modal from "../../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { UIFeature } from "../../../../settings/UIFeature";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -126,13 +124,9 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
                 <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">
                     {this.props.email.address}
                 </span>
-                {SettingsStore.getValue(UIFeature.EmailAddressShowRemoveButton) && (
-                    <>
-                        <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
-                            {_t("action|remove")}
-                        </AccessibleButton>
-                    </>
-                )}
+                <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
+                    {_t("action|remove")}
+                </AccessibleButton>
             </div>
         );
     }
@@ -269,12 +263,10 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             );
         });
 
-        let addButton = SettingsStore.getValue(UIFeature.EmailAddressShowAddButton) && (
-            <>
-                <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
-                    {_t("action|add")}
-                </AccessibleButton>
-            </>
+        let addButton = (
+            <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
+                {_t("action|add")}
+            </AccessibleButton>
         );
         if (this.state.verifying) {
             addButton = (

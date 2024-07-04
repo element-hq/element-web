@@ -181,8 +181,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private getInitialPhase(): void {
-        //const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.createSecretStorageKey();
+        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         if (keyFromCustomisations) {
             logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
             this.recoveryKey = {

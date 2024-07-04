@@ -176,7 +176,7 @@ describe("RoomKnocksBar", () => {
             it("renders a heading and a paragraph with name and user ID", () => {
                 getComponent(room);
                 expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");
-                // expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} (${bob.userId})`);
+                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} (${bob.userId})`);
             });
 
             describe("when a knock reason is not provided", () => {
@@ -305,7 +305,7 @@ describe("RoomKnocksBar", () => {
             it("renders a paragraph with two names", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
                 getComponent(room);
-                // expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} and ${jane.name}`);
+                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} and ${jane.name}`);
             });
         });
 
@@ -313,7 +313,7 @@ describe("RoomKnocksBar", () => {
             it("renders a paragraph with three names", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john]);
                 getComponent(room);
-                // expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and ${john.name}`);
+                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and ${john.name}`);
             });
         });
 
@@ -321,7 +321,7 @@ describe("RoomKnocksBar", () => {
             it("renders a paragraph with two names and a count", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john, other]);
                 getComponent(room);
-                // expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and 2 others`);
+                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and 2 others`);
             });
         });
     });

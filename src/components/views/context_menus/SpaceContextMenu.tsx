@@ -193,7 +193,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                         <BetaPill />
                     </IconizedContextMenuOption>
                 )}
-                {SettingsStore.getValue(UIFeature.AddSubSpace) && canAddSubSpaces && (
+                {canAddSubSpaces && (
                     <IconizedContextMenuOption
                         data-testid="new-subspace-option"
                         iconClassName="mx_SpacePanel_iconPlus"

@@ -26,8 +26,6 @@ import {
 } from "../../../test-utils";
 import SecureBackupPanel from "../../../../src/components/views/settings/SecureBackupPanel";
 import { accessSecretStorage } from "../../../../src/SecurityManager";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../../src/settings/UIFeature";
 
 jest.mock("../../../../src/SecurityManager", () => ({
     accessSecretStorage: jest.fn(),
@@ -181,62 +179,5 @@ describe("<SecureBackupPanel />", () => {
         // backup status refreshed
         expect(client.getKeyBackupVersion).toHaveBeenCalled();
         expect(client.getCrypto()!.isKeyBackupTrusted).toHaveBeenCalled();
-    });
-
-    it("does not display delete backup when feature is off", async () => {
-        mocked(client.getCrypto()!).getActiveSessionBackupVersion.mockResolvedValue("1");
-
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsDeleteBackup) return false;
-            return true;
-        });
-
-        getComponent();
-
-        await flushPromises();
-
-        expect(screen.queryByText("Delete Backup")).toBeNull();
-    });
-    it("displays delete backup if feature is on", async () => {
-        // mocked(client.getCrypto()!).getActiveSessionBackupVersion.mockResolvedValue("1");
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsDeleteBackup) return true;
-            return true;
-        });
-
-        getComponent();
-        // flush checkKeyBackup promise
-        await flushPromises();
-
-        expect(screen.queryByText("Delete Backup")).not.toBeNull();
-        // expect(screen.queryByText("Ståle")).toBeTruthy();
-    });
-    it("does show Reset when feature is on", async () => {
-        mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(true);
-
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsResetBackup) return true;
-            return true;
-        });
-
-        getComponent();
-
-        await flushPromises();
-
-        expect(screen.getByText("Reset")).toBeInTheDocument();
-    });
-    it("does not display reset backup when feature is off", async () => {
-        mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(true);
-        mocked(client.getCrypto()!).getActiveSessionBackupVersion.mockResolvedValue("1");
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsResetBackup) return false;
-            return true;
-        });
-
-        getComponent();
-        // flush checkKeyBackup promise
-        await flushPromises();
-
-        expect(screen.queryByText("Reset")).toBeNull();
     });
 });

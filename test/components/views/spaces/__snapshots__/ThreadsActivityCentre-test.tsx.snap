@@ -127,7 +127,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 
 exports[`ThreadsActivityCentre should close the release announcement when the TAC button is clicked 1`] = `
 <body
-  data-scroll-locked="1"
+  data-scroll-locked=""
   style="pointer-events: none;"
 >
   <span

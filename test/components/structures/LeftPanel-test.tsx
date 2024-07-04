@@ -23,8 +23,7 @@ import LeftPanel from "../../../src/components/structures/LeftPanel";
 import PageType from "../../../src/PageTypes";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { shouldShowComponent } from "../../../src/customisations/helpers/UIComponents";
-import { UIComponent, UIFeature } from "../../../src/settings/UIFeature";
-import SettingsStore from "../../../src/settings/SettingsStore";
+import { UIComponent } from "../../../src/settings/UIFeature";
 
 jest.mock("../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -51,23 +50,5 @@ describe("LeftPanel", () => {
         expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.FilterContainer);
         expect(screen.getByRole("button", { name: /search/i })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Explore rooms" })).toBeInTheDocument();
-    });
-
-    describe("UIFeature.showExploreRoomsButton", () => {
-        it("shows the explore rooms button when enabled", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
-                val === UIFeature.ShowExploreRoomsButton ? true : "default",
-            );
-            renderComponent();
-            expect(screen.getByRole("button", { name: "Explore rooms" })).toBeInTheDocument();
-        });
-
-        it("does not show the explore rooms button when disabled", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
-                val === UIFeature.ShowExploreRoomsButton ? false : "default",
-            );
-            renderComponent();
-            expect(screen.queryByRole("button", { name: "Explore rooms" })).not.toBeInTheDocument();
-        });
     });
 });

@@ -279,25 +279,19 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
             <div className="mx_SpaceRoomView_landing_infoBar">
                 <RoomInfoLine room={space} />
                 <div className="mx_SpaceRoomView_landing_infoBar_interactive">
-                    {SettingsStore.getValue(UIFeature.ShowMembersListForSpaces) && (
-                        <RoomFacePile
-                            room={space}
-                            onlyKnownUsers={false}
-                            numShown={7}
-                            onClick={isShowingMembers ? undefined : onMembersClick}
-                        />
-                    )}
-                    {SettingsStore.getValue(UIFeature.ShowAddMoreButtonForSpaces) && inviteButton}
+                    <RoomFacePile
+                        room={space}
+                        onlyKnownUsers={false}
+                        numShown={7}
+                        onClick={isShowingMembers ? undefined : onMembersClick}
+                    />
+                    {inviteButton}
                     {settingsButton}
                 </div>
             </div>
             <RoomTopic room={space} className="mx_SpaceRoomView_landing_topic" />
 
-            {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && (
-                <>
-                    <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
-                </>
-            )}
+            <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
         </div>
     );
 };

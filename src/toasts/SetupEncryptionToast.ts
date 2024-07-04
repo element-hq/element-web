@@ -80,12 +80,8 @@ const onReject = (): void => {
 };
 
 export const showToast = (kind: Kind): void => {
-    // if (SecurityCustomisations.setupEncryptionNeeded?.(kind)) {
-    //     return;
-    // }
-
     if (
-        ModuleRunner.instance.extensions.cryptoSetup?.setupEncryptionNeeded({
+        ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
             kind: kind as any,
             storeProvider: { getInstance: () => SetupEncryptionStore.sharedInstance() },
         })

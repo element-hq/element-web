@@ -16,10 +16,6 @@ limitations under the License.
 */
 
 import React from "react";
-import {
-    CustomComponentOpts,
-    CustomComponentLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -42,7 +38,7 @@ import { UserTab } from "./UserTab";
 import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
+
 interface IProps {
     initialTabId?: UserTab;
     sdkContext: SdkContextClass;
@@ -87,11 +83,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
-        const customSessionManagerTabOpts = { CustomComponent: React.Fragment };
-        ModuleRunner.instance.invoke(
-            CustomComponentLifecycle.SessionManagerTab,
-            customSessionManagerTabOpts as CustomComponentOpts,
-        );
+
         tabs.push(
             new Tab(
                 UserTab.General,
@@ -106,11 +98,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.SessionManager,
                 _td("settings|sessions|title"),
                 "mx_UserSettingsDialog_sessionsIcon",
-                (
-                    <customSessionManagerTabOpts.CustomComponent>
-                        <SessionManagerTab />
-                    </customSessionManagerTabOpts.CustomComponent>
-                ),
+                <SessionManagerTab />,
                 undefined,
             ),
         );
@@ -150,17 +138,15 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 "UserSettingsKeyboard",
             ),
         );
-        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
-            tabs.push(
-                new Tab(
-                    UserTab.Sidebar,
-                    _td("settings|sidebar|title"),
-                    "mx_UserSettingsDialog_sidebarIcon",
-                    <SidebarUserSettingsTab />,
-                    "UserSettingsSidebar",
-                ),
-            );
-        }
+        tabs.push(
+            new Tab(
+                UserTab.Sidebar,
+                _td("settings|sidebar|title"),
+                "mx_UserSettingsDialog_sidebarIcon",
+                <SidebarUserSettingsTab />,
+                "UserSettingsSidebar",
+            ),
+        );
 
         if (voipEnabled) {
             tabs.push(
@@ -174,17 +160,15 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
             );
         }
 
-        if (SettingsStore.getValue(UIFeature.SpacesEnabled)) {
-            tabs.push(
-                new Tab(
-                    UserTab.Security,
-                    _td("room_settings|security|title"),
-                    "mx_UserSettingsDialog_securityIcon",
-                    <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
-                    "UserSettingsSecurityPrivacy",
-                ),
-            );
-        }
+        tabs.push(
+            new Tab(
+                UserTab.Security,
+                _td("room_settings|security|title"),
+                "mx_UserSettingsDialog_securityIcon",
+                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
+                "UserSettingsSecurityPrivacy",
+            ),
+        );
 
         if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
             tabs.push(

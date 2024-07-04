@@ -91,7 +91,7 @@ export function enumerateThemes(): { [key: string]: string } {
 
     try {
         for (const { name } of customThemes) {
-            customThemeNames[`custom-${name}`] = name.includes("Verji") ? _t(name) : name; // Verji
+            customThemeNames[`custom-${name}`] = name;
         }
     } catch (err) {
         logger.warn("Error loading custom themes", {
@@ -113,13 +113,8 @@ export function getOrderedThemes(): ITheme[] {
         .map((p) => ({ id: p[0], name: p[1] })) // convert pairs to objects for code readability
         .filter((p) => !isHighContrastTheme(p.id));
     const builtInThemes = themes.filter((p) => !p.id.startsWith("custom-"));
-    const customThemes = themes.filter((p) => !builtInThemes.includes(p)).sort((a, b) => compare(a.name, b.name)); // Verji
-    //verji start
-    if (!customThemes) {
-        return [...builtInThemes];
-    }
-    return [...customThemes];
-    //verji end
+    const customThemes = themes.filter((p) => !builtInThemes.includes(p)).sort((a, b) => compare(a.name, b.name));
+    return [...builtInThemes, ...customThemes];
 }
 
 function clearCustomTheme(): void {

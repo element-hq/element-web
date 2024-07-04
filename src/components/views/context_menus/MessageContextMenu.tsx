@@ -27,12 +27,7 @@ import {
     Relations,
     Thread,
     M_POLL_START,
-    EventTimeline,
 } from "matrix-js-sdk/src/matrix";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -65,7 +60,6 @@ import { getForwardableEvent } from "../../../events/forward/getForwardableEvent
 import { getShareableLocationEvent } from "../../../events/location/getShareableLocationEvent";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { CardContext } from "../right_panel/context";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 interface IReplyInThreadButton {
     mxEvent: MatrixEvent;
@@ -174,36 +168,18 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private checkPermissions = (): void => {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        const roomState = room?.getLiveTimeline().getState(EventTimeline.FORWARDS); // Verji
 
         // We explicitly decline to show the redact option on ACL events as it has a potential
         // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
         // Similarly for encryption events, since redacting them "breaks everything"
-        // Verji start, adds more events to prevent redact
-        let redactable = true;
-        if (
-            this.props.mxEvent?.event?.type?.includes(".avatar") ||
-            this.props.mxEvent?.event?.type?.includes(".topic") ||
-            this.props.mxEvent.getType() === EventType.RoomMember ||
-            this.props.mxEvent.getType() === EventType.RoomJoinRules ||
-            this.props.mxEvent.getType() === EventType.RoomPowerLevels ||
-            this.props.mxEvent.getType() === EventType.RoomHistoryVisibility ||
-            this.props.mxEvent.getType() === EventType.RoomGuestAccess ||
-            this.props.mxEvent.getType() === EventType.RoomName ||
-            this.props.mxEvent.getType() === EventType.RoomTopic
-        ) {
-            redactable = false;
-        }
         const canRedact =
-            //!!roomState?.maySendRedactionForEvent(this.props.mxEvent, cli.getSafeUserId()) &&
             !!room?.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.getSafeUserId()) &&
             this.props.mxEvent.getType() !== EventType.RoomServerAcl &&
-            this.props.mxEvent.getType() !== EventType.RoomEncryption &&
-            redactable;
-        //Verji end
+            this.props.mxEvent.getType() !== EventType.RoomEncryption;
 
         let canPin =
-            !!roomState?.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) && canPinEvent(this.props.mxEvent);
+            !!room?.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) &&
+            canPinEvent(this.props.mxEvent);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
         if (!SettingsStore.getValue("feature_pinning")) canPin = false;
@@ -213,19 +189,16 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private isPinned(): boolean {
         const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-        const roomState = room?.getLiveTimeline().getState(EventTimeline.FORWARDS); // Verji
-        const pinnedEvent = roomState?.getStateEvents(EventType.RoomPinnedEvents, "");
+        const pinnedEvent = room?.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     }
 
     private canEndPoll(mxEvent: MatrixEvent): boolean {
-        // ROSBERG isMyEvent to overide verji strict canRedact rules - in case where ender of the poll is the owner of the poll
-        const isMyEvent = mxEvent.sender?.userId === MatrixClientPeg.safeGet().getSafeUserId();
         return (
             M_POLL_START.matches(mxEvent.getType()) &&
-            (this.state.canRedact || isMyEvent) && // Verji - evaluates to true if you are admin OR the event is yours
+            this.state.canRedact &&
             !isPollEnded(mxEvent, MatrixClientPeg.safeGet())
         );
     }
@@ -409,7 +382,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-        // const me = cli.getUserId(); //Verji
+        const me = cli.getUserId();
         const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
         delete other.getRelationsForEvent;
         delete other.permalinkCreator;
@@ -417,7 +390,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
         const contentActionable = isContentActionable(mxEvent);
-        // const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!); //Verji
+        const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!);
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
         const { timelineRenderingType, canReact, canSendMessages } = this.context;
@@ -510,27 +483,25 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        // Verji start
-        // let permalinkButton: JSX.Element | undefined;
-        // if (permalink) {
-        //     permalinkButton = (
-        //         <IconizedContextMenuOption
-        //             iconClassName="mx_MessageContextMenu_iconPermalink"
-        //             onClick={this.onShareClick}
-        //             label={_t("action|share")}
-        //             element="a"
-        //             {
-        //                 // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
-        //                 ...{
-        //                     href: permalink,
-        //                     target: "_blank",
-        //                     rel: "noreferrer noopener",
-        //                 }
-        //             }
-        //         />
-        //     );
-        // }
-        // Verji end
+        let permalinkButton: JSX.Element | undefined;
+        if (permalink) {
+            permalinkButton = (
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconPermalink"
+                    onClick={this.onShareClick}
+                    label={_t("action|share")}
+                    element="a"
+                    {
+                        // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
+                        ...{
+                            href: permalink,
+                            target: "_blank",
+                            rel: "noreferrer noopener",
+                        }
+                    }
+                />
+            );
+        }
 
         let endPollButton: JSX.Element | undefined;
         if (this.canEndPoll(mxEvent)) {
@@ -590,18 +561,16 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        // Verji start
-        // let reportEventButton: JSX.Element | undefined;
-        // if (mxEvent.getSender() !== me) {
-        //     reportEventButton = (
-        //         <IconizedContextMenuOption
-        //             iconClassName="mx_MessageContextMenu_iconReport"
-        //             label={_t("timeline|context_menu|report")}
-        //             onClick={this.onReportEventClick}
-        //         />
-        //     );
-        // }
-        // Verji end
+        let reportEventButton: JSX.Element | undefined;
+        if (mxEvent.getSender() !== me) {
+            reportEventButton = (
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconReport"
+                    label={_t("timeline|context_menu|report")}
+                    onClick={this.onReportEventClick}
+                />
+            );
+        }
 
         let copyLinkButton: JSX.Element | undefined;
         if (link) {
@@ -720,8 +689,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {endPollButton}
                 {forwardButton}
                 {pinButton}
-                {/*Verji removed {permalinkButton} */}
-                {/*Verji removed  {reportEventButton} */}
+                {permalinkButton}
+                {reportEventButton}
                 {externalURLButton}
                 {jumpToRelatedEventButton}
                 {unhidePreviewButton}
@@ -746,29 +715,21 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        const CustomMessageContextMenu = { CustomComponent: React.Fragment };
-        ModuleRunner.instance.invoke(
-            CustomComponentLifecycle.MessageContextMenu,
-            CustomMessageContextMenu as CustomComponentOpts,
-        );
-
         return (
-            <CustomMessageContextMenu.CustomComponent>
-                <React.Fragment>
-                    <IconizedContextMenu
-                        {...other}
-                        className="mx_MessageContextMenu"
-                        compact={true}
-                        data-testid="mx_MessageContextMenu"
-                    >
-                        {nativeItemsList}
-                        {quickItemsList}
-                        {commonItemsList}
-                        {redactItemList}
-                    </IconizedContextMenu>
-                    {reactionPicker}
-                </React.Fragment>
-            </CustomMessageContextMenu.CustomComponent>
+            <React.Fragment>
+                <IconizedContextMenu
+                    {...other}
+                    className="mx_MessageContextMenu"
+                    compact={true}
+                    data-testid="mx_MessageContextMenu"
+                >
+                    {nativeItemsList}
+                    {quickItemsList}
+                    {commonItemsList}
+                    {redactItemList}
+                </IconizedContextMenu>
+                {reactionPicker}
+            </React.Fragment>
         );
     }
 }

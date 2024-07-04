@@ -412,15 +412,12 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         return (
             <>
                 <SettingsSubsection
-                    heading={
-                        SettingsStore.getValue(UIFeature.UserSettingsExternalAccount) &&
-                        _t("settings|general|account_section")
-                    }
+                    heading={_t("settings|general|account_section")}
                     stretchContent
                     data-testid="accountSection"
                 >
-                    {SettingsStore.getValue(UIFeature.UserSettingsExternalAccount) && externalAccountManagement}
-                    {SettingsStore.getValue(UIFeature.UserSettingsChangePassword) && passwordChangeSection}
+                    {externalAccountManagement}
+                    {passwordChangeSection}
                 </SettingsSubsection>
                 {threepidSection}
             </>
@@ -498,12 +495,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             <>
                 {threepidSection}
                 {/* has its own heading as it includes the current identity server */}
-                {SettingsStore.getValue(UIFeature.UserSettingsSetIdServer) && (
-                    <>
-                        {" "}
-                        <SetIdServer missingTerms={false} />{" "}
-                    </>
-                )}
+                <SetIdServer missingTerms={false} />
             </>
         );
     }
@@ -574,9 +566,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     {this.renderLanguageSection()}
                     {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
                 </SettingsSection>
-                {SettingsStore.getValue(UIFeature.UserSettingsDiscovery) && <> {discoverySection} </>}
-                {SettingsStore.getValue(UIFeature.UserSettingsIntegrationManager) &&
-                    this.renderIntegrationManagerSection()}
+                {discoverySection}
+                {this.renderIntegrationManagerSection()}
                 {accountManagementSection}
             </SettingsTab>
         );

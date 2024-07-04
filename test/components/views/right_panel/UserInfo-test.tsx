@@ -63,8 +63,7 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/di
 import { clearAllModals, flushPromises } from "../../../test-utils";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
-import SettingsStore from "../../../../src/settings/SettingsStore";
+import { UIComponent } from "../../../../src/settings/UIFeature";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -177,7 +176,6 @@ beforeEach(() => {
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-    jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 });
 
 describe("<UserInfo />", () => {
@@ -342,18 +340,6 @@ describe("<UserInfo />", () => {
             );
 
             screen.getByRole("button", { name: "Message" });
-        });
-        it("does not renders the message button when feature is false", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name == UIFeature.ShowSendMessageToUserLink) return false;
-            });
-            render(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <UserInfo {...defaultProps} />
-                </MatrixClientContext.Provider>,
-            );
-
-            expect(screen.queryByText("button")).toBeNull();
         });
 
         it("hides the message button if the visibility customisation hides all create room features", () => {
@@ -845,15 +831,7 @@ describe("<UserOptionsSection />", () => {
         inviteSpy.mockRestore();
     });
 
-    it("does not show share user button when UIFeature is false", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        renderComponent();
-        expect(screen.queryByText("share link to user")).not.toBeInTheDocument();
-    });
-    it("shows share user button when UIFeature is true", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-
+    it("always shows share user button", () => {
         renderComponent();
         expect(screen.getByRole("button", { name: /share link to user/i })).toBeInTheDocument();
     });
@@ -1412,16 +1390,7 @@ describe("<RoomAdminToolsContainer />", () => {
         `);
     });
 
-    it("does not show redact button when UIFeature.UserInfoRedactButton is false", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        renderComponent();
-        expect(screen.queryByText("remove recent messages")).not.toBeInTheDocument();
-    });
-
     it("returns kick, redact messages, ban buttons if conditions met", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-
         const mockMeMember = new RoomMember(mockRoom.roomId, "arbitraryId");
         mockMeMember.powerLevel = 51; // defaults to 50
         mockRoom.getMember.mockReturnValueOnce(mockMeMember);

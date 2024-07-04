@@ -137,8 +137,7 @@ async function getSecretStorageKey({
         }
     }
 
-    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
     if (keyFromCustomisations) {
         logger.log("CryptoSetupExtension: Using key from extension (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
@@ -188,8 +187,7 @@ export async function getDehydrationKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
     checkFunc: (data: Uint8Array) => void,
 ): Promise<Uint8Array> {
-    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
     if (keyFromCustomisations) {
         logger.log("CryptoSetupExtension: Using key from extension (dehydration)");
         return keyFromCustomisations;
@@ -432,8 +430,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         // inner operation completes.
         return await func();
     } catch (e) {
-        // SecurityCustomisations.catchAccessSecretStorageError?.(e as Error);
-        ModuleRunner.instance.extensions.cryptoSetup?.catchAccessSecretStorageError(e as Error);
+        ModuleRunner.instance.extensions.cryptoSetup.catchAccessSecretStorageError(e as Error);
         logger.error(e);
         // Re-throw so that higher level logic can abort as needed
         throw e;

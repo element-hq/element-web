@@ -23,8 +23,6 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
 import { _td, TranslationKey } from "../../../../languageHandler";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { UIFeature } from "../../../../settings/UIFeature";
 
 export const AccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);
@@ -100,12 +98,9 @@ export const AccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
         <BaseAccountDataExplorer
             events={cli.store.accountData}
             Editor={AccountDataEventEditor}
-            actionLabel={
-                SettingsStore.getValue(UIFeature.AccountSendAccountEvent) &&
-                _td("devtools|send_custom_account_data_event")
-            }
+            actionLabel={_td("devtools|send_custom_account_data_event")}
             onBack={onBack}
-            setTool={SettingsStore.getValue(UIFeature.AccountSendAccountEvent) && setTool}
+            setTool={setTool}
         />
     );
 };
@@ -117,12 +112,9 @@ export const RoomAccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setT
         <BaseAccountDataExplorer
             events={context.room.accountData}
             Editor={RoomAccountDataEventEditor}
-            actionLabel={
-                SettingsStore.getValue(UIFeature.AccountSendRoomEvent) &&
-                _td("devtools|send_custom_room_account_data_event")
-            }
+            actionLabel={_td("devtools|send_custom_room_account_data_event")}
             onBack={onBack}
-            setTool={SettingsStore.getValue(UIFeature.AccountSendRoomEvent) && setTool}
+            setTool={setTool}
         />
     );
 };
