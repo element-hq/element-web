@@ -2511,7 +2511,6 @@
             "error_revoke_msisdn_discovery": "Unable to revoke sharing for phone number",
             "error_share_email_discovery": "Unable to share email address",
             "error_share_msisdn_discovery": "Unable to share phone number",
-            "external_account_management": "Your account details are managed separately at <code>%(hostname)s</code>.",
             "identity_server_no_token": "No identity access token found",
             "identity_server_not_set": "Identity server not set",
             "incorrect_msisdn_verification": "Incorrect verification code",
