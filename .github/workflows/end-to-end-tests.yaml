@@ -56,6 +56,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             - name: Fetch layered build
               id: layered_build
@@ -121,6 +122,7 @@ jobs:
               with:
                   cache: "yarn"
                   cache-dependency-path: matrix-react-sdk/yarn.lock
+                  node-version: "lts/*"
 
             - name: Install dependencies
               working-directory: matrix-react-sdk
@@ -172,6 +174,7 @@ jobs:
               if: inputs.skip != true
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             - name: Install dependencies
               if: inputs.skip != true

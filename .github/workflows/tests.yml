@@ -44,6 +44,7 @@ jobs:
             - name: Yarn cache
               uses: actions/setup-node@v4
               with:
+                  node-version: "lts/*"
                   cache: "yarn"
 
             - name: Install Deps
@@ -115,6 +116,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             - name: Run tests
               run: "./scripts/ci/app-tests.sh"
