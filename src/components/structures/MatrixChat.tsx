@@ -31,7 +31,7 @@ import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 // what-input helps improve keyboard accessibility
 import "what-input";
@@ -1614,7 +1614,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         cli.on(CryptoEvent.KeyBackupFailed, async (errcode): Promise<void> => {
             let haveNewVersion: boolean | undefined;
-            let newVersionInfo: IKeyBackupInfo | null = null;
+            let newVersionInfo: KeyBackupInfo | null = null;
             // if key backup is still enabled, there must be a new backup in place
             if (cli.getKeyBackupEnabled()) {
                 haveNewVersion = true;

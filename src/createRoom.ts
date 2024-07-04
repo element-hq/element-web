@@ -50,6 +50,7 @@ import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableE
 import { waitForMember } from "./utils/membership";
 import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -220,7 +221,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             type: "m.room.encryption",
             state_key: "",
             content: {
-                algorithm: "m.megolm.v1.aes-sha2",
+                algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
             },
         });
     }

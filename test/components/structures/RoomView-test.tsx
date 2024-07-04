@@ -30,7 +30,6 @@ import {
     IEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -71,6 +70,7 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../src/Searching";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../src/utils/crypto";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -351,7 +351,7 @@ describe("RoomView", () => {
                             event_id: `~${localRoom.roomId}:${cli.makeTxnId()}`,
                             type: EventType.RoomEncryption,
                             content: {
-                                algorithm: MEGOLM_ALGORITHM,
+                                algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
                             },
                             sender: cli.getUserId()!,
                             state_key: "",

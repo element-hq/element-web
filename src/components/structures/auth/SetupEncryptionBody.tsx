@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { KeyBackupInfo, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 
@@ -40,7 +39,7 @@ interface IProps {
 interface IState {
     phase?: Phase;
     verificationRequest: VerificationRequest | null;
-    backupInfo: IKeyBackupInfo | null;
+    backupInfo: KeyBackupInfo | null;
     lostKeys: boolean;
 }
 

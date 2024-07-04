@@ -19,7 +19,7 @@ import React from "react";
 import { RoomMember, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
+import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
@@ -103,7 +103,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         this.updateE2EStatus();
     };
 
-    private onUserTrustStatusChanged = (userId: string, trustStatus: UserTrustLevel): void => {
+    private onUserTrustStatusChanged = (userId: string, trustStatus: UserVerificationStatus): void => {
         if (userId !== this.props.member.userId) return;
         this.updateE2EStatus();
     };

@@ -16,8 +16,8 @@ limitations under the License.
 
 import React, { forwardRef, useContext } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { IRoomEncryption } from "matrix-js-sdk/src/crypto/RoomList";
 
+import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EventTileBubble from "./EventTileBubble";
@@ -25,30 +25,29 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { objectHasDiff } from "../../../utils/objects";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../utils/crypto";
 
 interface IProps {
     mxEvent: MatrixEvent;
     timestamp?: JSX.Element;
 }
 
-const ALGORITHM = "m.megolm.v1.aes-sha2";
-
 const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp }, ref) => {
     const cli = useContext(MatrixClientContext);
     const roomId = mxEvent.getRoomId()!;
     const isRoomEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
 
-    const prevContent = mxEvent.getPrevContent() as IRoomEncryption;
-    const content = mxEvent.getContent<IRoomEncryption>();
+    const prevContent = mxEvent.getPrevContent() as RoomEncryptionEventContent;
+    const content = mxEvent.getContent<RoomEncryptionEventContent>();
 
     // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
     if (!objectHasDiff(prevContent, content)) return null; // nop
 
-    if (content.algorithm === ALGORITHM && isRoomEncrypted) {
+    if (content.algorithm === MEGOLM_ENCRYPTION_ALGORITHM && isRoomEncrypted) {
         let subtitle: string;
         const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
         const room = cli?.getRoom(roomId);
-        if (prevContent.algorithm === ALGORITHM) {
+        if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
             subtitle = _t("timeline|m.room.encryption|parameters_changed");
         } else if (dmPartner) {
             const displayName = room?.getMember(dmPartner)?.rawDisplayName || dmPartner;

@@ -50,6 +50,7 @@ import SettingsTab from "../SettingsTab";
 import SdkConfig from "../../../../../SdkConfig";
 import { shouldForceDisableEncryption } from "../../../../../utils/crypto/shouldForceDisableEncryption";
 import { Caption } from "../../../typography/Caption";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../../utils/crypto";
 
 interface IProps {
     room: Room;
@@ -176,7 +177,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 this.setState({ encrypted: true });
                 this.context
                     .sendStateEvent(this.props.room.roomId, EventType.RoomEncryption, {
-                        algorithm: "m.megolm.v1.aes-sha2",
+                        algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
                     })
                     .catch((e) => {
                         logger.error(e);

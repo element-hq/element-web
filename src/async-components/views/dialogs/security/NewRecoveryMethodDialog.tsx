@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import dis from "../../../../dispatcher/dispatcher";
@@ -28,7 +28,7 @@ import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 
 interface IProps {
-    newVersionInfo: IKeyBackupInfo;
+    newVersionInfo: KeyBackupInfo;
     onFinished(): void;
 }
 

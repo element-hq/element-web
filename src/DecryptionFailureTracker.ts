@@ -20,6 +20,7 @@ import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescri
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 
 /** The key that we use to store the `reportedEvents` bloom filter in localstorage */
 const DECRYPTION_FAILURE_STORAGE_KEY = "mx_decryption_failure_event_ids";
@@ -207,7 +208,7 @@ export class DecryptionFailureTracker {
      */
     private eventDecrypted(e: MatrixEvent, nowTs: number): void {
         // for now we only track megolm decryption failures
-        if (e.getWireContent().algorithm != "m.megolm.v1.aes-sha2") {
+        if (e.getWireContent().algorithm != MEGOLM_ENCRYPTION_ALGORITHM) {
             return;
         }
         const errCode = e.decryptionFailureReason;

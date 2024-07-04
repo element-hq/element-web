@@ -34,7 +34,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -1323,7 +1322,7 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
             if (_userId !== userId) return;
             updateDevices();
         };
-        const onUserTrustStatusChanged = (_userId: string, trustLevel: UserTrustLevel): void => {
+        const onUserTrustStatusChanged = (_userId: string, trustLevel: UserVerificationStatus): void => {
             if (_userId !== userId) return;
             updateDevices();
         };
