@@ -25,7 +25,7 @@ import RoomList from "../../../../src/components/views/rooms/RoomList";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { MetaSpace } from "../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../src/settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import * as testUtils from "../../../test-utils";
@@ -36,6 +36,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
 import { ITagMap } from "../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -208,6 +209,34 @@ describe("RoomList", () => {
                     room_id: space1,
                 });
             });
+
+            it("UIFeature.addExistingRoomToSpace = true: should render 'Add existing room' context menu option", async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                    val === UIFeature.AddExistingRoomToSpace ? true : "default",
+                );
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
+
+                const menu = screen.getByRole("menu");
+                expect(within(menu).getByRole("menuitem", { name: "Add existing room" })).toBeInTheDocument();
+            });
+
+            it("UIFeature.addExistingRoomToSpace = false: should not render 'Add existing room' context menu option", async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((val) =>
+                    val === UIFeature.AddExistingRoomToSpace ? false : "default",
+                );
+                mocked(shouldShowComponent).mockReturnValue(true);
+                render(getComponent());
+
+                const roomsList = screen.getByRole("group", { name: "Rooms" });
+                await userEvent.click(within(roomsList).getByRole("button", { name: "Add room" }));
+
+                const menu = screen.getByRole("menu");
+                expect(within(menu).queryByRole("menuitem", { name: "Add existing room" })).not.toBeInTheDocument();
+            });
         });
 
         describe("when video meta space is active", () => {
@@ -277,6 +306,54 @@ describe("RoomList", () => {
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomPublic })).toBeFalsy();
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomKnock })).toBeFalsy();
             });
+        });
+    });
+
+    describe("UIFeature.showStartChatPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = true: renders 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? true : "default";
+            });
+            render(getComponent());
+
+            expect(screen.getByLabelText("Start chat")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = false: does not render 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? false : "default";
+            });
+            render(getComponent());
+
+            expect(screen.queryByLabelText("Start chat")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("UIFeature.showAddRoomPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);
+        });
+
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = true: renders 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? true : "default";
+            });
+            render(getComponent());
+
+            expect(screen.getByLabelText("Add room")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = false: does not render 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? false : "default";
+            });
+            render(getComponent());
+
+            expect(screen.queryByLabelText("Add room")).not.toBeInTheDocument();
         });
     });
 });
