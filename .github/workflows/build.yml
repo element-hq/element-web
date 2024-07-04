@@ -37,6 +37,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             # Workaround for yarn install timeouts, especially on Windows
             - run: yarn config set network-timeout 300000
