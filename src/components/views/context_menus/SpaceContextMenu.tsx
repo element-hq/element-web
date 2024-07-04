@@ -37,7 +37,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { Action } from "../../../dispatcher/actions";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
@@ -259,7 +259,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 />
                 {devtoolsOption}
                 {settingsOption}
-                {leaveOption}
+                {SettingsStore.getValue(UIFeature.ShowLeaveSpaceInContextMenu) && leaveOption}
                 {newRoomSection}
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>

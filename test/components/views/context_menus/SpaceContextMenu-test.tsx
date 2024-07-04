@@ -31,7 +31,8 @@ import {
 } from "../../../../src/utils/space";
 import { leaveSpace } from "../../../../src/utils/leave-behaviour";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../src/settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -221,6 +222,28 @@ describe("<SpaceContextMenu />", () => {
             await userEvent.click(screen.getByTestId("new-subspace-option"));
             expect(showCreateNewSubspace).toHaveBeenCalledWith(space);
             expect(onFinished).toHaveBeenCalled();
+        });
+    });
+
+    describe("UIFeature.ShowLeaveSpaceInContextMenu", () => {
+        it("ShowLeaveSpaceInContextMenu = true, renders 'leave space' option", () => {
+            mocked(shouldShowSpaceSettings).mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowLeaveSpaceInContextMenu ? true : "default";
+            });
+            renderComponent();
+
+            expect(screen.getByTestId("leave-option")).toBeInTheDocument();
+        });
+
+        it("ShowLeaveSpaceInContextMenu = false, does not render 'leave space' option", () => {
+            mocked(shouldShowSpaceSettings).mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowLeaveSpaceInContextMenu ? false : "default";
+            });
+            renderComponent();
+
+            expect(screen.queryByTestId("leave-option")).not.toBeInTheDocument();
         });
     });
 });
