@@ -53,7 +53,10 @@ class FlakyReporter implements Reporter {
 
         const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
         // Fetch all existing issues with the flaky-test label.
-        const issuesRequest = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues?labels=${LABEL}`, { headers });
+        const issuesRequest = await fetch(
+            `${GITHUB_API_URL}/repos/${REPO}/issues?labels=${LABEL}&state=all&per_page=100&sort=created`,
+            { headers },
+        );
         const issues = await issuesRequest.json();
         for (const flake of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
@@ -61,6 +64,12 @@ class FlakyReporter implements Reporter {
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
+                // Ensure that the test is open
+                await fetch(existingIssue.url, {
+                    method: "PATCH",
+                    headers,
+                    body: JSON.stringify({ state: "open" }),
+                });
                 await fetch(`${existingIssue.url}/comments`, {
                     method: "POST",
                     headers,
