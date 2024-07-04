@@ -47,6 +47,7 @@ import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { createReconnectedListener } from "../../utils/connection";
 import { localNotificationsAreSilenced } from "../../utils/notifications";
+import { BackgroundAudio } from "../../audio/BackgroundAudio";
 
 export enum VoiceBroadcastRecordingEvent {
     StateChanged = "liveness_changed",
@@ -75,6 +76,7 @@ export class VoiceBroadcastRecording
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
     private roomId: string;
     private infoEventId: string;
+    private backgroundAudio = new BackgroundAudio();
 
     /**
      * Broadcast chunks have a sequence number to bring them in the correct order and to know if a message is missing.
@@ -346,15 +348,7 @@ export class VoiceBroadcastRecording
             return;
         }
 
-        // Audio files are added to the document in Element Web.
-        // See <audio> elements in https://github.com/vector-im/element-web/blob/develop/src/vector/index.html
-        const audioElement = document.querySelector<HTMLAudioElement>("audio#errorAudio");
-
-        try {
-            await audioElement?.play();
-        } catch (e) {
-            logger.warn("error playing 'errorAudio'", e);
-        }
+        await this.backgroundAudio.pickFormatAndPlay("./media/error", ["mp3", "ogg"]);
     }
 
     private async uploadFile(chunk: ChunkRecordedPayload): ReturnType<typeof uploadFile> {

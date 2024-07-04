@@ -58,6 +58,7 @@ import ToastStore from "./stores/ToastStore";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType } from "./voice-broadcast";
 import { getSenderName } from "./utils/event/getSenderName";
 import { stripPlainReply } from "./utils/Reply";
+import { BackgroundAudio } from "./audio/BackgroundAudio";
 
 /*
  * Dispatches:
@@ -111,6 +112,8 @@ class NotifierClass {
 
     private toolbarHidden?: boolean;
     private isSyncing?: boolean;
+
+    private backgroundAudio = new BackgroundAudio();
 
     public notificationMessageForEvent(ev: MatrixEvent): string | null {
         const msgType = ev.getContent().msgtype;
@@ -226,28 +229,14 @@ class NotifierClass {
             return;
         }
 
+        // Play notification sound here
         const sound = this.getSoundForRoom(room.roomId);
         logger.log(`Got sound ${(sound && sound.name) || "default"} for ${room.roomId}`);
 
-        try {
-            const selector = document.querySelector<HTMLAudioElement>(
-                sound ? `audio[src='${sound.url}']` : "#messageAudio",
-            );
-            let audioElement = selector;
-            if (!audioElement) {
-                if (!sound) {
-                    logger.error("No audio element or sound to play for notification");
-                    return;
-                }
-                audioElement = new Audio(sound.url);
-                if (sound.type) {
-                    audioElement.type = sound.type;
-                }
-                document.body.appendChild(audioElement);
-            }
-            await audioElement.play();
-        } catch (ex) {
-            logger.warn("Caught error when trying to fetch room notification sound:", ex);
+        if (sound) {
+            await this.backgroundAudio.play(sound.url);
+        } else {
+            await this.backgroundAudio.pickFormatAndPlay("media/message", ["mp3", "ogg"]);
         }
     }
 

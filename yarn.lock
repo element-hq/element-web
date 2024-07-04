@@ -9230,6 +9230,11 @@ walker@^1.0.8:
   dependencies:
     makeerror "1.0.12"
 
+web-streams-polyfill@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-4.0.0.tgz#74cedf168339ee6e709532f76c49313a8c7acdac"
+  integrity sha512-0zJXHRAYEjM2tUfZ2DiSOHAa2aw1tisnnhU3ufD57R8iefL+DcdJyRBRyJpG+NUimDgbTI/lH+gAE1PAvV3Cgw==
+
 web-vitals@^4.0.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-4.2.0.tgz#008949ab79717a68ccaaa3c4371cbc7bbbd78a92"

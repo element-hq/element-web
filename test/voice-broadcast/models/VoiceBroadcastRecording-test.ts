@@ -30,6 +30,7 @@ import {
     SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { EncryptedFile } from "matrix-js-sdk/src/types";
+import fetchMock from "fetch-mock-jest";
 
 import { uploadFile } from "../../../src/ContentMessages";
 import { createVoiceMessageContent } from "../../../src/utils/createVoiceMessageContent";
@@ -49,6 +50,7 @@ import {
 import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import dis from "../../../src/dispatcher/dispatcher";
 import { VoiceRecording } from "../../../src/audio/VoiceRecording";
+import { createAudioContext } from "../../../src/audio/compat";
 
 jest.mock("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder", () => ({
     ...(jest.requireActual("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder") as object),
@@ -77,6 +79,11 @@ jest.mock("../../../src/ContentMessages", () => ({
 
 jest.mock("../../../src/utils/createVoiceMessageContent", () => ({
     createVoiceMessageContent: jest.fn(),
+}));
+
+jest.mock("../../../src/audio/compat", () => ({
+    ...jest.requireActual("../../../src/audio/compat"),
+    createAudioContext: jest.fn(),
 }));
 
 describe("VoiceBroadcastRecording", () => {
@@ -198,6 +205,19 @@ describe("VoiceBroadcastRecording", () => {
         });
     };
 
+    const mockAudioBufferSourceNode = {
+        addEventListener: jest.fn(),
+        connect: jest.fn(),
+        start: jest.fn(),
+    };
+    const mockAudioContext = {
+        decodeAudioData: jest.fn(),
+        suspend: jest.fn(),
+        resume: jest.fn(),
+        createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        currentTime: 1337,
+    };
+
     beforeEach(() => {
         client = stubClient();
         room = mkStubRoom(roomId, "Test Room", client);
@@ -265,6 +285,8 @@ describe("VoiceBroadcastRecording", () => {
 
             return null;
         });
+
+        mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
     afterEach(() => {
@@ -546,12 +568,13 @@ describe("VoiceBroadcastRecording", () => {
                 beforeEach(() => {
                     mocked(client.sendMessage).mockRejectedValue("Error");
                     emitFirsChunkRecorded();
+                    fetchMock.get("media/error.mp3", 200);
                 });
 
                 itShouldBeInState("connection_error");
 
                 it("should play a notification", () => {
-                    expect(audioElement.play).toHaveBeenCalled();
+                    expect(mockAudioBufferSourceNode.start).toHaveBeenCalled();
                 });
 
                 describe("and the connection is back", () => {

@@ -66,6 +66,7 @@ import { localNotificationsAreSilenced } from "./utils/notifications";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { showCantStartACallDialog } from "./voice-broadcast/utils/showCantStartACallDialog";
 import { isNotNull } from "./Typeguards";
+import { BackgroundAudio } from "./audio/BackgroundAudio";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
@@ -157,8 +158,6 @@ export default class LegacyCallHandler extends EventEmitter {
     // Calls started as an attended transfer, ie. with the intention of transferring another
     // call with a different party to this one.
     private transferees = new Map<string, MatrixCall>(); // callId (target) -> call (transferee)
-    private audioPromises = new Map<AudioID, Promise<void>>();
-    private audioElementsWithListeners = new Map<HTMLMediaElement, boolean>();
     private supportsPstnProtocol: boolean | null = null;
     private pstnSupportPrefixed: boolean | null = null; // True if the server only support the prefixed pstn protocol
     private supportsSipNativeVirtual: boolean | null = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
@@ -169,6 +168,9 @@ export default class LegacyCallHandler extends EventEmitter {
     private assertedIdentityNativeUsers = new Map<string, string>();
 
     private silencedCalls = new Set<string>(); // callIds
+
+    private backgroundAudio = new BackgroundAudio();
+    private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
     public static get instance(): LegacyCallHandler {
         if (!window.mxLegacyCallHandler) {
@@ -199,33 +201,11 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     public start(): void {
-        // add empty handlers for media actions, otherwise the media keys
-        // end up causing the audio elements with our ring/ringback etc
-        // audio clips in to play.
-        if (navigator.mediaSession) {
-            navigator.mediaSession.setActionHandler("play", function () {});
-            navigator.mediaSession.setActionHandler("pause", function () {});
-            navigator.mediaSession.setActionHandler("seekbackward", function () {});
-            navigator.mediaSession.setActionHandler("seekforward", function () {});
-            navigator.mediaSession.setActionHandler("previoustrack", function () {});
-            navigator.mediaSession.setActionHandler("nexttrack", function () {});
-        }
-
         if (SettingsStore.getValue(UIFeature.Voip)) {
             MatrixClientPeg.safeGet().on(CallEventHandlerEvent.Incoming, this.onCallIncoming);
         }
 
         this.checkProtocols(CHECK_PROTOCOLS_ATTEMPTS);
-
-        // Add event listeners for the <audio> elements
-        Object.values(AudioID).forEach((audioId) => {
-            const audioElement = document.getElementById(audioId) as HTMLMediaElement;
-            if (audioElement) {
-                this.addEventListenersForAudioElement(audioElement);
-            } else {
-                logger.warn(`LegacyCallHandler: missing <audio id="${audioId}"> from page`);
-            }
-        });
     }
 
     public stop(): void {
@@ -233,27 +213,6 @@ export default class LegacyCallHandler extends EventEmitter {
         if (cli) {
             cli.removeListener(CallEventHandlerEvent.Incoming, this.onCallIncoming);
         }
-
-        // Remove event listeners for the <audio> elements
-        Array.from(this.audioElementsWithListeners.keys()).forEach((audioElement) => {
-            this.removeEventListenersForAudioElement(audioElement);
-        });
-    }
-
-    private addEventListenersForAudioElement(audioElement: HTMLMediaElement): void {
-        // Only need to setup the listeners once
-        if (!this.audioElementsWithListeners.get(audioElement)) {
-            MEDIA_EVENT_TYPES.forEach((errorEventType) => {
-                audioElement.addEventListener(errorEventType, this);
-                this.audioElementsWithListeners.set(audioElement, true);
-            });
-        }
-    }
-
-    private removeEventListenersForAudioElement(audioElement: HTMLMediaElement): void {
-        MEDIA_EVENT_TYPES.forEach((errorEventType) => {
-            audioElement.removeEventListener(errorEventType, this);
-        });
     }
 
     /* istanbul ignore next (remove if we start using this function for things other than debug logging) */
@@ -465,74 +424,37 @@ export default class LegacyCallHandler extends EventEmitter {
         return this.transferees.get(callId);
     }
 
-    public play(audioId: AudioID): void {
+    public async play(audioId: AudioID): Promise<void> {
         const logPrefix = `LegacyCallHandler.play(${audioId}):`;
         logger.debug(`${logPrefix} beginning of function`);
-        // TODO: Attach an invisible element for this instead
-        // which listens?
-        const audio = document.getElementById(audioId) as HTMLMediaElement;
-        if (audio) {
-            this.addEventListenersForAudioElement(audio);
-            const playAudio = async (): Promise<void> => {
-                try {
-                    if (audio.muted) {
-                        logger.error(
-                            `${logPrefix} <audio> element was unexpectedly muted but we recovered ` +
-                                `gracefully by unmuting it`,
-                        );
-                        // Recover gracefully
-                        audio.muted = false;
-                    }
 
-                    // This still causes the chrome debugger to break on promise rejection if
-                    // the promise is rejected, even though we're catching the exception.
-                    logger.debug(`${logPrefix} attempting to play audio at volume=${audio.volume}`);
-                    await audio.play();
-                    logger.debug(`${logPrefix} playing audio successfully`);
-                } catch (e) {
-                    // This is usually because the user hasn't interacted with the document,
-                    // or chrome doesn't think so and is denying the request. Not sure what
-                    // we can really do here...
-                    // https://github.com/vector-im/element-web/issues/7657
-                    logger.warn(`${logPrefix} unable to play audio clip`, e);
-                }
-            };
-            if (this.audioPromises.has(audioId)) {
-                this.audioPromises.set(
-                    audioId,
-                    this.audioPromises.get(audioId)!.then(() => {
-                        audio.load();
-                        return playAudio();
-                    }),
-                );
-            } else {
-                this.audioPromises.set(audioId, playAudio());
-            }
-        } else {
-            logger.warn(`${logPrefix} unable to find <audio> element for ${audioId}`);
-        }
+        const audioInfo: Record<AudioID, [prefix: string, loop: boolean]> = {
+            [AudioID.Ring]: [`./media/ring`, true],
+            [AudioID.Ringback]: [`./media/ringback`, true],
+            [AudioID.CallEnd]: [`./media/callend`, false],
+            [AudioID.Busy]: [`./media/busy`, false],
+        };
+
+        const [urlPrefix, loop] = audioInfo[audioId];
+        const source = await this.backgroundAudio.pickFormatAndPlay(urlPrefix, ["mp3", "ogg"], loop);
+        this.playingSources[audioId] = source;
+        logger.debug(`${logPrefix} playing audio successfully`);
     }
 
     public pause(audioId: AudioID): void {
         const logPrefix = `LegacyCallHandler.pause(${audioId}):`;
         logger.debug(`${logPrefix} beginning of function`);
-        // TODO: Attach an invisible element for this instead
-        // which listens?
-        const audio = document.getElementById(audioId) as HTMLMediaElement;
-        const pauseAudio = (): void => {
-            logger.debug(`${logPrefix} pausing audio`);
-            // pause doesn't return a promise, so just do it
-            audio.pause();
-        };
-        if (audio) {
-            if (this.audioPromises.has(audioId)) {
-                this.audioPromises.set(audioId, this.audioPromises.get(audioId)!.then(pauseAudio));
-            } else {
-                pauseAudio();
-            }
-        } else {
-            logger.warn(`${logPrefix} unable to find <audio> element for ${audioId}`);
+
+        const source = this.playingSources[audioId];
+        if (!source) {
+            logger.debug(`${logPrefix} audio not playing`);
+            return;
         }
+
+        source.stop();
+        delete this.playingSources[audioId];
+
+        logger.debug(`${logPrefix} paused audio`);
     }
 
     private matchesCallForThisRoom(call: MatrixCall): boolean {
