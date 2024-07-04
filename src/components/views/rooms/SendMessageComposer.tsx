@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, { createRef, KeyboardEvent, SyntheticEvent } from "react";
-import EMOJI_REGEX from "emojibase-regex";
 import {
     IContent,
     MatrixEvent,
@@ -70,6 +69,7 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import { Caret } from "../../../editor/caret";
 import { IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
+import { EMOJI_REGEX } from "../../../HtmlUtils";
 
 /**
  * Build the mentions information based on the editor model (and any related events):

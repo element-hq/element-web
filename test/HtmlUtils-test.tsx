@@ -107,6 +107,12 @@ describe("bodyToHtml", () => {
         expect(html).toMatchInlineSnapshot(`"<span class="mx_EventTile_searchHighlight">test</span> foo &lt;b&gt;bar"`);
     });
 
+    it("generates big emoji for emoji made of multiple characters", () => {
+        const { asFragment } = render(bodyToHtml({ body: "👨‍👩‍👧‍👦 ↔️ 🇮🇸", msgtype: "m.text" }, [], {}) as ReactElement);
+
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     it("should generate big emoji for an emoji-only reply to a message", () => {
         const { asFragment } = render(
             bodyToHtml(
@@ -128,6 +134,12 @@ describe("bodyToHtml", () => {
                 },
             ) as ReactElement,
         );
+
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("does not mistake characters in text presentation mode for emoji", () => {
+        const { asFragment } = render(bodyToHtml({ body: "↔ ❗︎", msgtype: "m.text" }, [], {}) as ReactElement);
 
         expect(asFragment()).toMatchSnapshot();
     });
