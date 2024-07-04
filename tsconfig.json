@@ -6,13 +6,13 @@
         "esModuleInterop": true,
         "module": "es2022",
         "moduleResolution": "node",
-        "target": "es2016",
+        "target": "es2018",
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
         "declaration": true,
         "jsx": "react",
-        "lib": ["es2021", "dom", "dom.iterable"],
+        "lib": ["es2022", "dom", "dom.iterable"],
         "strict": true
     },
     "include": [
