@@ -73,24 +73,6 @@ test.describe("General user settings tab", () => {
         // Assert that the add button is rendered
         await expect(phoneNumbers.getByRole("button", { name: "Add" })).toBeVisible();
 
-        // Check language and region setting dropdown
-        const languageInput = uut.locator(".mx_GeneralUserSettingsTab_section_languageInput");
-        await languageInput.scrollIntoViewIfNeeded();
-        // Check the default value
-        await expect(languageInput.getByText("English")).toBeVisible();
-        // Click the button to display the dropdown menu
-        await languageInput.getByRole("button", { name: "Language Dropdown" }).click();
-        // Assert that the default option is rendered and highlighted
-        languageInput.getByRole("option", { name: /Albanian/ });
-        await expect(languageInput.getByRole("option", { name: /Albanian/ })).toHaveClass(
-            /mx_Dropdown_option_highlight/,
-        );
-        await expect(languageInput.getByRole("option", { name: /Deutsch/ })).toBeVisible();
-        // Click again to close the dropdown
-        await languageInput.getByRole("button", { name: "Language Dropdown" }).click();
-        // Assert that the default value is rendered again
-        await expect(languageInput.getByText("English")).toBeVisible();
-
         const setIntegrationManager = uut.locator(".mx_SetIntegrationManager");
         await setIntegrationManager.scrollIntoViewIfNeeded();
         await expect(

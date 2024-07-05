@@ -22,25 +22,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { UserFriendlyError, _t } from "../../../../../languageHandler";
 import UserProfileSettings from "../../UserProfileSettings";
-import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import LanguageDropdown from "../../../elements/LanguageDropdown";
-import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
-import PlatformPeg from "../../../../../PlatformPeg";
 import Modal from "../../../../../Modal";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/ErrorDialog";
 import ChangePassword from "../../ChangePassword";
 import SetIntegrationManager from "../../SetIntegrationManager";
-import ToggleSwitch from "../../../elements/ToggleSwitch";
-import { IS_MAC } from "../../../../../Keyboard";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
-import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import UserPersonalInfoSettings from "../../UserPersonalInfoSettings";
 
@@ -49,9 +41,6 @@ interface IProps {
 }
 
 interface IState {
-    language: string;
-    spellCheckEnabled?: boolean;
-    spellCheckLanguages: string[];
     canChangePassword: boolean;
     idServerName?: string;
     externalAccountManagementUrl?: string;
@@ -69,9 +58,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         this.context = context;
 
         this.state = {
-            language: languageHandler.getCurrentLanguage(),
-            spellCheckEnabled: false,
-            spellCheckLanguages: [],
             canChangePassword: false,
             canMake3pidChanges: false,
             canSetDisplayName: false,
@@ -79,21 +65,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         };
 
         this.getCapabilities();
-    }
-
-    public async componentDidMount(): Promise<void> {
-        const plat = PlatformPeg.get();
-        const [spellCheckEnabled, spellCheckLanguages] = await Promise.all([
-            plat?.getSpellCheckEnabled(),
-            plat?.getSpellCheckLanguages(),
-        ]);
-
-        if (spellCheckLanguages) {
-            this.setState({
-                spellCheckEnabled,
-                spellCheckLanguages,
-            });
-        }
     }
 
     private async getCapabilities(): Promise<void> {
@@ -126,28 +97,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             canSetAvatar,
         });
     }
-
-    private onLanguageChange = (newLanguage: string): void => {
-        if (this.state.language === newLanguage) return;
-
-        SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
-        this.setState({ language: newLanguage });
-        const platform = PlatformPeg.get();
-        if (platform) {
-            platform.setLanguage([newLanguage]);
-            platform.reload();
-        }
-    };
-
-    private onSpellCheckLanguagesChange = (languages: string[]): void => {
-        this.setState({ spellCheckLanguages: languages });
-        PlatformPeg.get()?.setSpellCheckLanguages(languages);
-    };
-
-    private onSpellCheckEnabledChange = (spellCheckEnabled: boolean): void => {
-        this.setState({ spellCheckEnabled });
-        PlatformPeg.get()?.setSpellCheckEnabled(spellCheckEnabled);
-    };
 
     private onPasswordChangeError = (err: Error): void => {
         logger.error("Failed to change password: " + err);
@@ -228,37 +177,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderLanguageSection(): JSX.Element {
-        // TODO: Convert to new-styled Field
-        return (
-            <SettingsSubsection heading={_t("settings|general|language_section")} stretchContent>
-                <LanguageDropdown
-                    className="mx_GeneralUserSettingsTab_section_languageInput"
-                    onOptionChange={this.onLanguageChange}
-                    value={this.state.language}
-                />
-            </SettingsSubsection>
-        );
-    }
-
-    private renderSpellCheckSection(): JSX.Element {
-        const heading = (
-            <SettingsSubsectionHeading heading={_t("settings|general|spell_check_section")}>
-                <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
-            </SettingsSubsectionHeading>
-        );
-        return (
-            <SettingsSubsection heading={heading} stretchContent>
-                {this.state.spellCheckEnabled && !IS_MAC && (
-                    <SpellCheckSettings
-                        languages={this.state.spellCheckLanguages}
-                        onLanguagesChange={this.onSpellCheckLanguagesChange}
-                    />
-                )}
-            </SettingsSubsection>
-        );
-    }
-
     private renderManagementSection(): JSX.Element {
         // TODO: Improve warning text for account deactivation
         return (
@@ -283,9 +201,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     public render(): React.ReactNode {
-        const plaf = PlatformPeg.get();
-        const supportsMultiLanguageSpellCheck = plaf?.supportsSpellCheckSettings();
-
         let accountManagementSection: JSX.Element | undefined;
         const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
         if (SettingsStore.getValue(UIFeature.Deactivate) && !isAccountManagedExternally) {
@@ -302,8 +217,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     />
                     <UserPersonalInfoSettings canMake3pidChanges={this.state.canMake3pidChanges} />
                     {this.renderAccountSection()}
-                    {this.renderLanguageSection()}
-                    {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
                 </SettingsSection>
                 {this.renderIntegrationManagerSection()}
                 {accountManagementSection}
