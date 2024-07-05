@@ -204,7 +204,7 @@ export const clearAllModals = async (): Promise<void> => {
     // Prevent modals from leaking and polluting other tests
     let keepClosingModals = true;
     while (keepClosingModals) {
-        keepClosingModals = Modal.closeCurrentModal("End of test (clean-up)");
+        keepClosingModals = Modal.closeCurrentModal();
 
         // Then wait for the screen to update (probably React rerender and async/await).
         // Important for tests using Jest fake timers to not get into an infinite loop

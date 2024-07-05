@@ -25,6 +25,7 @@ import { mocked, Mocked } from "jest-mock";
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import {
+    clearAllModals,
     filterConsole,
     flushPromises,
     getMockClientWithEventEmitter,
@@ -40,7 +41,6 @@ import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { IProfileInfo } from "../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import Modal from "../../../../src/Modal";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../src/IdentityAuthClient", () =>
@@ -178,8 +178,8 @@ describe("InviteDialog", () => {
         SdkContextClass.instance.client = mockClient;
     });
 
-    afterEach(() => {
-        Modal.closeCurrentModal();
+    afterEach(async () => {
+        await clearAllModals();
         SdkContextClass.instance.onLoggedOut();
         SdkContextClass.instance.client = undefined;
     });

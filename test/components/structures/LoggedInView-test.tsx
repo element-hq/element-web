@@ -31,6 +31,7 @@ import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
+import Modal from "../../../src/Modal";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -397,5 +398,23 @@ describe("<LoggedInView />", () => {
         getComponent();
         await userEvent.keyboard("{Control>}f{/Control}");
         expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusMessageSearch);
+    });
+
+    it("should go home on home shortcut", async () => {
+        jest.spyOn(defaultDispatcher, "dispatch");
+
+        getComponent();
+        await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ViewHomePage });
+    });
+
+    it("should ignore home shortcut if dialogs are open", async () => {
+        jest.spyOn(defaultDispatcher, "dispatch");
+        jest.spyOn(Modal, "hasDialogs").mockReturnValue(true);
+
+        getComponent();
+
+        await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
+        expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.ViewHomePage });
     });
 });
