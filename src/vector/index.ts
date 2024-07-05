@@ -56,7 +56,8 @@ function checkBrowserFeatures(): boolean {
         return false;
     }
 
-    // Custom checks atop Modernizr because it doesn't have modern checks in it for some features we depend on.
+    // Custom checks atop Modernizr because it doesn't have checks in it for
+    // some features we depend on.
     // Modernizr requires rules to be lowercase with no punctuation.
     // ES2018: http://262.ecma-international.org/9.0/#sec-promise.prototype.finally
     window.Modernizr.addTest("promiseprototypefinally", () => typeof window.Promise?.prototype?.finally === "function");
@@ -69,6 +70,11 @@ function checkBrowserFeatures(): boolean {
     );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
+    // ES2024: https://tc39.es/ecma262/2024/#sec-get-regexp.prototype.unicodesets
+    window.Modernizr.addTest(
+        "regexpunicodesets",
+        () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
+    );
     // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
     window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
 
