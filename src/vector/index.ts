@@ -75,6 +75,8 @@ function checkBrowserFeatures(): boolean {
         "regexpunicodesets",
         () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
     );
+    // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
+    window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
 
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 
