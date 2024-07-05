@@ -225,6 +225,28 @@ describe("<SpaceContextMenu />", () => {
         });
     });
 
+    describe("UIFeature.ShowLeaveSpaceInContextMenu", () => {
+        it("ShowLeaveSpaceInContextMenu = true, renders 'leave space' option", () => {
+            mocked(shouldShowSpaceSettings).mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowLeaveSpaceInContextMenu ? true : "default";
+            });
+            renderComponent();
+
+            expect(screen.getByTestId("leave-option")).toBeInTheDocument();
+        });
+
+        it("ShowLeaveSpaceInContextMenu = false, does not render 'leave space' option", () => {
+            mocked(shouldShowSpaceSettings).mockReturnValue(false);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowLeaveSpaceInContextMenu ? false : "default";
+            });
+            renderComponent();
+
+            expect(screen.queryByTestId("leave-option")).not.toBeInTheDocument();
+        });
+    });
+
     describe("UIFeature.AddSubSpace feature flag", () => {
         const space = makeMockSpace();
 

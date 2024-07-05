@@ -259,7 +259,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 />
                 {devtoolsOption}
                 {settingsOption}
-                {leaveOption}
+                {SettingsStore.getValue(UIFeature.ShowLeaveSpaceInContextMenu) && leaveOption}
                 {newRoomSection}
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>
