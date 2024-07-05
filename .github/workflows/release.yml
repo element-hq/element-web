@@ -20,7 +20,6 @@ jobs:
             GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         with:
             final: ${{ inputs.mode == 'final' }}
-            include-changes: matrix-react-sdk
             gpg-fingerprint: ${{ vars.GPG_FINGERPRINT }}
             asset-path: dist/*.tar.gz
             expected-asset-count: 3
@@ -31,11 +30,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Notify element-desktop repo that element-web release has completed to re-trigger release-drafter
-              uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3
+              uses: benc-uk/workflow-dispatch@25b02cc069be46d637e8fe2f1e8484008e9e9609 # v1
               with:
-                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  repository: element-hq/element-desktop
-                  event-type: upstream-release-notify
+                  workflow: release-drafter.yml
+                  repo: element-hq/element-desktop
+                  ref: staging
+                  # Required when using the `repo` option. Either a PAT or a token generated from the GitHub app or CLI
+                  token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
 
     check:
         name: Post release checks
