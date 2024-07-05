@@ -2377,7 +2377,6 @@
             "error_revoke_msisdn_discovery": "A telefonszám megosztást nem sikerült visszavonni",
             "error_share_email_discovery": "Az e-mail címet nem sikerült megosztani",
             "error_share_msisdn_discovery": "A telefonszámot nem sikerült megosztani",
-            "external_account_management": "A fiókadatok külön vannak kezelve itt: <code>%(hostname)s</code>.",
             "identity_server_no_token": "Nem található személyazonosság-hozzáférési kulcs",
             "identity_server_not_set": "Az azonosítási kiszolgáló nincs megadva",
             "incorrect_msisdn_verification": "Hibás azonosítási kód",

@@ -2418,7 +2418,6 @@
             "error_revoke_msisdn_discovery": "Telefoninumbri jagamist ei õnnestunud tühistada",
             "error_share_email_discovery": "Ei õnnestu jagada e-posti aadressi",
             "error_share_msisdn_discovery": "Telefoninumbri jagamine ei õnnestunud",
-            "external_account_management": "Sinu kasutajakonto lisateave on hallatav siin serveris - <code>%(hostname)s</code>.",
             "identity_server_no_token": "Ei leidu tunnusluba isikutuvastusserveri jaoks",
             "identity_server_not_set": "Isikutuvastusserver on määramata",
             "incorrect_msisdn_verification": "Vigane verifikatsioonikood",

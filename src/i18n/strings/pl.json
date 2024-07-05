@@ -2514,7 +2514,6 @@
             "error_revoke_msisdn_discovery": "Nie można odwołać udostępniania numeru telefonu",
             "error_share_email_discovery": "Nie udało się udostępnić adresu e-mail",
             "error_share_msisdn_discovery": "Nie udało się udostępnić numeru telefonu",
-            "external_account_management": "Twoje dane konta są zarządzane oddzielnie na <code>%(hostname)s</code>.",
             "identity_server_no_token": "Nie znaleziono tokena dostępu tożsamości",
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
             "incorrect_msisdn_verification": "Nieprawidłowy kod weryfikujący",

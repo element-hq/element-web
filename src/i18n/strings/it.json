@@ -2452,7 +2452,6 @@
             "error_revoke_msisdn_discovery": "Impossibile revocare la condivisione del numero di telefono",
             "error_share_email_discovery": "Impossibile condividere l'indirizzo email",
             "error_share_msisdn_discovery": "Impossibile condividere il numero di telefono",
-            "external_account_management": "I dettagli del tuo account sono gestiti separatamente su <code>%(hostname)s</code>.",
             "identity_server_no_token": "Nessun token di accesso d'identità trovato",
             "identity_server_not_set": "Server d'identità non impostato",
             "incorrect_msisdn_verification": "Codice di verifica sbagliato",

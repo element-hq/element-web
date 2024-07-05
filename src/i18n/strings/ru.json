@@ -2435,7 +2435,6 @@
             "error_revoke_msisdn_discovery": "Не удалось отменить общий доступ к номеру телефона",
             "error_share_email_discovery": "Невозможно поделиться адресом электронной почты",
             "error_share_msisdn_discovery": "Не удается предоставить общий доступ к номеру телефона",
-            "external_account_management": "Данные вашей учетной записи обрабатываются отдельно по адресу <code>%(hostname)s</code>.",
             "identity_server_no_token": "Не найден токен доступа для идентификации",
             "identity_server_not_set": "Сервер идентификации не установлен",
             "incorrect_msisdn_verification": "Неверный код подтверждения",

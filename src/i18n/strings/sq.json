@@ -2302,7 +2302,6 @@
             "error_revoke_msisdn_discovery": "S’arrihet të shfuqizohet ndarja për numrin e telefonit",
             "error_share_email_discovery": "S’arrihet të ndahet adresë email",
             "error_share_msisdn_discovery": "S’arrihet të ndahet numër telefoni",
-            "external_account_management": "Hollësitë e llogarisë tuaj administrohen ndarazi te <code>%(hostname)s</code>.",
             "identity_server_no_token": "S’u gjet token hyrjeje identiteti",
             "identity_server_not_set": "Shërbyes identitetesh i paujdisur",
             "incorrect_msisdn_verification": "Kod verifikimi i pasaktë",

@@ -2176,7 +2176,6 @@
             "error_revoke_msisdn_discovery": "Không thể thu hồi chia sẻ cho số điện thoại",
             "error_share_email_discovery": "Không thể chia sẻ địa chỉ thư điện tử",
             "error_share_msisdn_discovery": "Không thể chia sẻ số điện thoại",
-            "external_account_management": "Thông tin tài khoản bạn được quản lý riêng ở <code>%(hostname)s</code>.",
             "identity_server_no_token": "Không tìm thấy mã thông báo danh tính",
             "identity_server_not_set": "Máy chủ định danh chưa được đặt",
             "incorrect_msisdn_verification": "Mã xác minh không chính xác",

@@ -2251,7 +2251,6 @@
             "error_revoke_msisdn_discovery": "No se logró revocar el intercambio de un número de teléfono",
             "error_share_email_discovery": "No se logró compartir la dirección de correo electrónico",
             "error_share_msisdn_discovery": "No se logró compartir el número de teléfono",
-            "external_account_management": "Los detalles de tu cuenta los gestiona de forma separada <code>%(hostname)s</code>.",
             "identity_server_not_set": "Servidor de identidad no configurado",
             "incorrect_msisdn_verification": "Verificación de código incorrecta",
             "language_section": "Idioma y región",

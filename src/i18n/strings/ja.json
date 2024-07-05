@@ -2243,7 +2243,6 @@
             "error_revoke_msisdn_discovery": "電話番号の共有を取り消せません",
             "error_share_email_discovery": "メールアドレスを共有できません",
             "error_share_msisdn_discovery": "電話番号を共有できません",
-            "external_account_management": "あなたのアカウントの詳細は<code>%(hostname)s</code>で管理されています。",
             "incorrect_msisdn_verification": "認証コードが誤っています",
             "language_section": "言語と地域",
             "msisdn_in_use": "この電話番号は既に使用されています",

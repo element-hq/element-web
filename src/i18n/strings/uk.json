@@ -2376,7 +2376,6 @@
             "error_revoke_msisdn_discovery": "Не вдалось відкликати оприлюднювання телефонного номеру",
             "error_share_email_discovery": "Не вдалося надіслати адресу е-пошти",
             "error_share_msisdn_discovery": "Не вдалося надіслати телефонний номер",
-            "external_account_management": "Ваші дані облікового запису керуються окремо за адресою <code>%(hostname)s</code>.",
             "identity_server_no_token": "Токен доступу до ідентифікації не знайдено",
             "identity_server_not_set": "Сервер ідентифікації не налаштовано",
             "incorrect_msisdn_verification": "Неправильний код перевірки",

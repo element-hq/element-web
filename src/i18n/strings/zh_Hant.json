@@ -2378,7 +2378,6 @@
             "error_revoke_msisdn_discovery": "無法撤回電話號碼的分享",
             "error_share_email_discovery": "無法分享電子郵件",
             "error_share_msisdn_discovery": "無法分享電話號碼",
-            "external_account_management": "您的帳號詳細資訊在 <code>%(hostname)s</code> 中單獨管理。",
             "identity_server_no_token": "找不到身分存取權杖",
             "identity_server_not_set": "身分伺服器未設定",
             "incorrect_msisdn_verification": "驗證碼錯誤",

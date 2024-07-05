@@ -2439,7 +2439,6 @@
             "error_revoke_msisdn_discovery": "Nepodarilo sa zrušiť zdieľanie telefónneho čísla",
             "error_share_email_discovery": "Nepodarilo sa zdieľať emailovú adresu",
             "error_share_msisdn_discovery": "Nepodarilo sa zdieľanie telefónneho čísla",
-            "external_account_management": "Údaje o vašom účte sú spravované samostatne na adrese <code>%(hostname)s</code>.",
             "identity_server_no_token": "Nenašiel sa prístupový token totožnosti",
             "identity_server_not_set": "Server totožnosti nie je nastavený",
             "incorrect_msisdn_verification": "Nesprávny overovací kód",
