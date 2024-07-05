@@ -1,131 +1,170 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
-Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+ * Copyright 2024 The Matrix.org Foundation C.I.C.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+import React, { JSX, useEffect, useState } from "react";
+import { Field, HelpMessage, InlineField, Label, RadioControl, Root, ToggleControl } from "@vector-im/compound-web";
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-import React from "react";
-import classNames from "classnames";
-
-import SettingsStore from "../../../settings/SettingsStore";
-import EventTilePreview from "../elements/EventTilePreview";
-import StyledRadioButton from "../elements/StyledRadioButton";
-import { _t } from "../../../languageHandler";
-import { Layout } from "../../../settings/enums/Layout";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsSubsection from "./shared/SettingsSubsection";
+import { _t } from "../../../languageHandler";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { Layout } from "../../../settings/enums/Layout";
+import EventTilePreview from "../elements/EventTilePreview";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
-interface IProps {
-    userId?: string;
-    displayName?: string;
-    avatarUrl?: string;
-    messagePreviewText: string;
-    onLayoutChanged: (layout: Layout) => void;
+/**
+ * A section to switch between different message layouts.
+ */
+export function LayoutSwitcher(): JSX.Element {
+    return (
+        <SettingsSubsection heading={_t("common|message_layout")} legacy={false} data-testid="layoutPanel">
+            <LayoutSelector />
+            <ToggleCompactLayout />
+        </SettingsSubsection>
+    );
 }
 
-interface IState {
+/**
+ * A selector to choose the layout of the messages.
+ */
+function LayoutSelector(): JSX.Element {
+    return (
+        <Root
+            className="mx_LayoutSwitcher_LayoutSelector"
+            onChange={async (evt) => {
+                // We don't have any file in the form, we can cast it as string safely
+                const newLayout = new FormData(evt.currentTarget).get("layout") as string | null;
+                await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, newLayout);
+            }}
+        >
+            <LayoutRadio layout={Layout.Group} label={_t("common|modern")} />
+            <LayoutRadio layout={Layout.Bubble} label={_t("settings|appearance|layout_bubbles")} />
+            <LayoutRadio layout={Layout.IRC} label={_t("settings|appearance|layout_irc")} />
+        </Root>
+    );
+}
+
+/**
+ * A radio button to select a layout.
+ */
+interface LayoutRadioProps {
+    /**
+     * The value of the layout.
+     */
     layout: Layout;
+    /**
+     * The label to display for the layout.
+     */
+    label: string;
 }
 
-export default class LayoutSwitcher extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
-        super(props);
+/**
+ * A radio button to select a layout.
+ * @param layout
+ * @param label
+ */
+function LayoutRadio({ layout, label }: LayoutRadioProps): JSX.Element {
+    const currentLayout = useSettingValue<Layout>("layout");
+    const eventTileInfo = useEventTileInfo();
 
-        this.state = {
-            layout: SettingsStore.getValue("layout"),
-        };
-    }
-
-    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const layout = e.target.value as Layout;
-
-        this.setState({ layout: layout });
-        SettingsStore.setValue("layout", null, SettingLevel.DEVICE, layout);
-        this.props.onLayoutChanged(layout);
-    };
-
-    public render(): React.ReactNode {
-        const ircClasses = classNames("mx_LayoutSwitcher_RadioButton", {
-            mx_LayoutSwitcher_RadioButton_selected: this.state.layout == Layout.IRC,
-        });
-        const groupClasses = classNames("mx_LayoutSwitcher_RadioButton", {
-            mx_LayoutSwitcher_RadioButton_selected: this.state.layout == Layout.Group,
-        });
-        const bubbleClasses = classNames("mx_LayoutSwitcher_RadioButton", {
-            mx_LayoutSwitcher_RadioButton_selected: this.state.layout === Layout.Bubble,
-        });
-
-        return (
-            <SettingsSubsection heading={_t("common|message_layout")}>
-                <div className="mx_LayoutSwitcher_RadioButtons">
-                    <label className={ircClasses}>
-                        <EventTilePreview
-                            className="mx_LayoutSwitcher_RadioButton_preview"
-                            message={this.props.messagePreviewText}
-                            layout={Layout.IRC}
-                            userId={this.props.userId}
-                            displayName={this.props.displayName}
-                            avatarUrl={this.props.avatarUrl}
-                        />
-                        <StyledRadioButton
-                            name="layout"
-                            value={Layout.IRC}
-                            checked={this.state.layout === Layout.IRC}
-                            onChange={this.onLayoutChange}
-                        >
-                            {_t("settings|appearance|layout_irc")}
-                        </StyledRadioButton>
-                    </label>
-                    <label className={groupClasses}>
-                        <EventTilePreview
-                            className="mx_LayoutSwitcher_RadioButton_preview"
-                            message={this.props.messagePreviewText}
-                            layout={Layout.Group}
-                            userId={this.props.userId}
-                            displayName={this.props.displayName}
-                            avatarUrl={this.props.avatarUrl}
-                        />
-                        <StyledRadioButton
-                            name="layout"
-                            value={Layout.Group}
-                            checked={this.state.layout == Layout.Group}
-                            onChange={this.onLayoutChange}
-                        >
-                            {_t("common|modern")}
-                        </StyledRadioButton>
-                    </label>
-                    <label className={bubbleClasses}>
-                        <EventTilePreview
-                            className="mx_LayoutSwitcher_RadioButton_preview"
-                            message={this.props.messagePreviewText}
-                            layout={Layout.Bubble}
-                            userId={this.props.userId}
-                            displayName={this.props.displayName}
-                            avatarUrl={this.props.avatarUrl}
-                        />
-                        <StyledRadioButton
-                            name="layout"
-                            value={Layout.Bubble}
-                            checked={this.state.layout == Layout.Bubble}
-                            onChange={this.onLayoutChange}
-                        >
-                            {_t("settings|appearance|layout_bubbles")}
-                        </StyledRadioButton>
-                    </label>
+    return (
+        <Field name="layout" className="mxLayoutSwitcher_LayoutSelector_LayoutRadio">
+            <Label aria-label={label}>
+                <div className="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline">
+                    <RadioControl name="layout" value={layout} defaultChecked={currentLayout === layout} />
+                    <span>{label}</span>
                 </div>
-            </SettingsSubsection>
-        );
-    }
+                <hr className="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator" />
+                <EventTilePreview
+                    message={_t("common|preview_message")}
+                    layout={layout}
+                    className="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+                    {...eventTileInfo}
+                />
+            </Label>
+        </Field>
+    );
+}
+
+type EventTileInfo = {
+    /**
+     * The ID of the user to display.
+     */
+    userId: string;
+    /**
+     * The display name of the user to display.
+     */
+    displayName?: string;
+    /**
+     * The avatar URL of the user to display.
+     */
+    avatarUrl?: string;
+};
+
+/**
+ * Fetch the information to display in the event tile preview.
+ */
+function useEventTileInfo(): EventTileInfo {
+    const matrixClient = useMatrixClientContext();
+    const userId = matrixClient.getSafeUserId();
+    const [eventTileInfo, setEventTileInfo] = useState<EventTileInfo>({ userId });
+
+    useEffect(() => {
+        const run = async (): Promise<void> => {
+            const profileInfo = await matrixClient.getProfileInfo(userId);
+            setEventTileInfo({
+                userId,
+                displayName: profileInfo.displayname,
+                avatarUrl: profileInfo.avatar_url,
+            });
+        };
+
+        run();
+    }, [userId, matrixClient, setEventTileInfo]);
+    return eventTileInfo;
+}
+
+/**
+ * A toggleable setting to enable or disable the compact layout.
+ */
+function ToggleCompactLayout(): JSX.Element {
+    const compactLayoutEnabled = useSettingValue<boolean>("useCompactLayout");
+    const layout = useSettingValue<Layout>("layout");
+
+    return (
+        <Root
+            onChange={async (evt) => {
+                const checked = new FormData(evt.currentTarget).get("compactLayout") === "on";
+                await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, checked);
+            }}
+        >
+            <InlineField
+                name="compactLayout"
+                control={
+                    <ToggleControl
+                        disabled={layout !== Layout.Group}
+                        name="compactLayout"
+                        defaultChecked={compactLayoutEnabled}
+                    />
+                }
+            >
+                <Label>{_t("settings|appearance|compact_layout")}</Label>
+                <HelpMessage>{_t("settings|appearance|compact_layout_description")}</HelpMessage>
+            </InlineField>
+        </Root>
+    );
 }

@@ -33,43 +33,6 @@ test.describe("Appearance user settings tab", () => {
         await expect(tab).toMatchScreenshot("appearance-tab.png");
     });
 
-    test("should support switching layouts", async ({ page, user, app }) => {
-        // Create and view a room first
-        await app.client.createRoom({ name: "Test Room" });
-        await app.viewRoomByName("Test Room");
-
-        await app.settings.openUserSettings("Appearance");
-
-        const buttons = page.locator(".mx_LayoutSwitcher_RadioButton");
-
-        // Assert that the layout selected by default is "Modern"
-        await expect(
-            buttons.locator(".mx_StyledRadioButton_enabled", {
-                hasText: "Modern",
-            }),
-        ).toBeVisible();
-
-        // Assert that the room layout is set to group (modern) layout
-        await expect(page.locator(".mx_RoomView_body[data-layout='group']")).toBeVisible();
-
-        // Select the first layout
-        await buttons.first().click();
-        // Assert that the layout selected is "IRC (Experimental)"
-        await expect(buttons.locator(".mx_StyledRadioButton_enabled", { hasText: "IRC (Experimental)" })).toBeVisible();
-
-        // Assert that the room layout is set to IRC layout
-        await expect(page.locator(".mx_RoomView_body[data-layout='irc']")).toBeVisible();
-
-        // Select the last layout
-        await buttons.last().click();
-
-        // Assert that the layout selected is "Message bubbles"
-        await expect(buttons.locator(".mx_StyledRadioButton_enabled", { hasText: "Message bubbles" })).toBeVisible();
-
-        // Assert that the room layout is set to bubble layout
-        await expect(page.locator(".mx_RoomView_body[data-layout='bubble']")).toBeVisible();
-    });
-
     test("should support changing font size by using the font size dropdown", async ({ page, app, user }) => {
         await app.settings.openUserSettings("Appearance");
 
@@ -84,57 +47,6 @@ test.describe("Appearance user settings tab", () => {
         await expect(page).toMatchScreenshot("window-12px.png");
     });
 
-    test("should support enabling compact group (modern) layout", async ({ page, app, user }) => {
-        // Create and view a room first
-        await app.client.createRoom({ name: "Test Room" });
-        await app.viewRoomByName("Test Room");
-
-        await app.settings.openUserSettings("Appearance");
-
-        // Click "Show advanced" link button
-        const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
-        await tab.getByRole("button", { name: "Show advanced" }).click();
-
-        await tab.locator("label", { hasText: "Use a more compact 'Modern' layout" }).click();
-
-        // Assert that the room layout is set to compact group (modern) layout
-        await expect(page.locator("#matrixchat .mx_MatrixChat_wrapper.mx_MatrixChat_useCompactLayout")).toBeVisible();
-    });
-
-    test("should disable compact group (modern) layout option on IRC layout and bubble layout", async ({
-        page,
-        app,
-        user,
-    }) => {
-        await app.settings.openUserSettings("Appearance");
-        const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
-
-        const checkDisabled = async () => {
-            await expect(tab.getByRole("checkbox", { name: "Use a more compact 'Modern' layout" })).toBeDisabled();
-        };
-
-        // Click "Show advanced" link button
-        await tab.getByRole("button", { name: "Show advanced" }).click();
-
-        const buttons = page.locator(".mx_LayoutSwitcher_RadioButton");
-
-        // Enable IRC layout
-        await buttons.first().click();
-
-        // Assert that the layout selected is "IRC (Experimental)"
-        await expect(buttons.locator(".mx_StyledRadioButton_enabled", { hasText: "IRC (Experimental)" })).toBeVisible();
-
-        await checkDisabled();
-
-        // Enable bubble layout
-        await buttons.last().click();
-
-        // Assert that the layout selected is "IRC (Experimental)"
-        await expect(buttons.locator(".mx_StyledRadioButton_enabled", { hasText: "Message bubbles" })).toBeVisible();
-
-        await checkDisabled();
-    });
-
     test("should support enabling system font", async ({ page, app, user }) => {
         await app.settings.openUserSettings("Appearance");
         const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
@@ -147,6 +59,49 @@ test.describe("Appearance user settings tab", () => {
 
         // Assert that the font-family value was removed
         await expect(page.locator("body")).toHaveCSS("font-family", '""');
+    });
+
+    test.describe("Message Layout Panel", () => {
+        test.beforeEach(async ({ app, user, util }) => {
+            await util.createAndDisplayRoom();
+            await util.assertModernLayout();
+            await util.openAppearanceTab();
+        });
+
+        test("should change the message layout from modern to bubble", async ({ page, app, user, util }) => {
+            await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-modern.png");
+
+            await util.getBubbleLayout().click();
+
+            // Assert that modern are irc layout are not selected
+            await expect(util.getBubbleLayout()).toBeChecked();
+            await expect(util.getModernLayout()).not.toBeChecked();
+            await expect(util.getIRCLayout()).not.toBeChecked();
+
+            // Assert that the room layout is set to bubble layout
+            await util.assertBubbleLayout();
+            await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-bubble.png");
+        });
+
+        test("should enable compact layout when the modern layout is selected", async ({ page, app, user, util }) => {
+            await expect(util.getCompactLayoutCheckbox()).not.toBeChecked();
+
+            await util.getCompactLayoutCheckbox().click();
+            await util.assertCompactLayout();
+        });
+
+        test("should disable compact layout when the modern layout is not selected", async ({
+            page,
+            app,
+            user,
+            util,
+        }) => {
+            await expect(util.getCompactLayoutCheckbox()).not.toBeDisabled();
+
+            // Select the bubble layout, which should disable the compact layout checkbox
+            await util.getBubbleLayout().click();
+            await expect(util.getCompactLayoutCheckbox()).toBeDisabled();
+        });
     });
 
     test.describe("Theme Choice Panel", () => {
