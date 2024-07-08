@@ -2030,14 +2030,16 @@
         "rejecting": "Rejecting invite…",
         "rejoin_button": "Re-join",
         "search": {
-            "all_rooms": "All Rooms",
             "all_rooms_button": "Search all rooms",
-            "field_placeholder": "Search…",
+            "placeholder": "Search messages…",
             "result_count": {
                 "one": "(~%(count)s result)",
                 "other": "(~%(count)s results)"
             },
-            "this_room": "This Room",
+            "summary": {
+                "one": "1 result found for “<query/>”",
+                "other": "%(count)s results found for “<query/>”"
+            },
             "this_room_button": "Search this room"
         },
         "show_labs_settings": "Show Labs settings",

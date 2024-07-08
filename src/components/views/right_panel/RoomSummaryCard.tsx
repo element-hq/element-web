@@ -14,11 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+    ChangeEvent,
+    SyntheticEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import classNames from "classnames";
 import {
     MenuItem,
-    Tooltip,
     Separator,
     ToggleMenuItem,
     Text,
@@ -26,8 +34,9 @@ import {
     Heading,
     IconButton,
     Link,
+    Search,
+    Form,
 } from "@vector-im/compound-web";
-import { Icon as SearchIcon } from "@vector-im/compound-design-tokens/icons/search.svg";
 import { Icon as FavouriteIcon } from "@vector-im/compound-design-tokens/icons/favourite.svg";
 import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
 import { Icon as UserProfileSolidIcon } from "@vector-im/compound-design-tokens/icons/user-profile-solid.svg";
@@ -63,7 +72,7 @@ import WidgetAvatar from "../avatars/WidgetAvatar";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
@@ -89,12 +98,18 @@ import { useTopic } from "../../../hooks/room/useTopic";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { Box } from "../../utils/Box";
 import { onRoomTopicLinkClick } from "../elements/RoomTopic";
+import { useDispatcher } from "../../../hooks/useDispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { Key } from "../../../Keyboard";
+import { useTransition } from "../../../hooks/useTransition";
 
 interface IProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
     onClose(): void;
-    onSearchClick?: () => void;
+    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchCancel?: () => void;
+    focusRoomSearch?: boolean;
 }
 
 interface IAppsSectionProps {
@@ -364,7 +379,14 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
     );
 };
 
-const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, onSearchClick }) => {
+const RoomSummaryCard: React.FC<IProps> = ({
+    room,
+    permalinkCreator,
+    onClose,
+    onSearchChange,
+    onSearchCancel,
+    focusRoomSearch,
+}) => {
     const cli = useContext(MatrixClientContext);
 
     const onShareRoomClick = (): void => {
@@ -418,6 +440,26 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
             }
         }
     }, [room, directRoomsList]);
+
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    useDispatcher(defaultDispatcher, (payload) => {
+        if (payload.action === Action.FocusMessageSearch) {
+            searchInputRef.current?.focus();
+        }
+    });
+    // Clear the search field when the user leaves the search view
+    useTransition(
+        (prevTimelineRenderingType) => {
+            if (
+                prevTimelineRenderingType === TimelineRenderingType.Search &&
+                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
+                searchInputRef.current
+            ) {
+                searchInputRef.current.value = "";
+            }
+        },
+        [roomContext.timelineRenderingType],
+    );
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const header = (
@@ -498,18 +540,24 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
                 align="center"
                 justify="space-between"
             >
-                <Tooltip label={_t("action|search")} placement="right">
-                    <button
-                        className="mx_RoomSummaryCard_searchBtn"
-                        data-testid="summary-search"
-                        onClick={() => {
-                            onSearchClick?.();
-                        }}
-                        aria-label={_t("action|search")}
-                    >
-                        <SearchIcon width="100%" height="100%" />
-                    </button>
-                </Tooltip>
+                {onSearchChange && (
+                    <Form.Root className="mx_RoomSummaryCard_search" onSubmit={(e) => e.preventDefault()}>
+                        <Search
+                            placeholder={_t("room|search|placeholder")}
+                            name="room_message_search"
+                            onChange={onSearchChange}
+                            className="mx_no_textinput"
+                            ref={searchInputRef}
+                            autoFocus={focusRoomSearch}
+                            onKeyDown={(e) => {
+                                if (searchInputRef.current && e.key === Key.ESCAPE) {
+                                    searchInputRef.current.value = "";
+                                    onSearchCancel?.();
+                                }
+                            }}
+                        />
+                    </Form.Root>
+                )}
                 <AccessibleButton
                     data-testid="base-card-close-button"
                     className="mx_BaseCard_close"

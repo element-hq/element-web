@@ -177,9 +177,9 @@ a:visited {
     color: $accent-alt;
 }
 
-input[type="text"],
-input[type="search"],
-input[type="password"] {
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="text"],
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"],
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="password"] {
     padding: 9px;
     font: var(--cpd-font-body-md-semibold);
     font-weight: var(--cpd-font-weight-semibold);

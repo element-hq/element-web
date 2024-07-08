@@ -781,10 +781,10 @@ test.describe("Timeline", () => {
 
                 await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Search" }).click();
 
-                await expect(page.locator(".mx_SearchBar")).toMatchScreenshot("search-bar-on-timeline.png");
+                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill("Message");
+                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
 
-                await page.locator(".mx_SearchBar_input").getByRole("textbox").fill("Message");
-                await page.locator(".mx_SearchBar_input").getByRole("textbox").press("Enter");
+                await expect(page.locator(".mx_RoomSearchAuxPanel")).toMatchScreenshot("search-aux-panel.png");
 
                 for (const locator of await page
                     .locator(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight")
@@ -822,8 +822,8 @@ test.describe("Timeline", () => {
                 await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Search" }).click();
 
                 // Search the string to display both the message and TextualEvent on search results panel
-                await page.locator(".mx_SearchBar").getByRole("textbox").fill(stringToSearch);
-                await page.locator(".mx_SearchBar").getByRole("textbox").press("Enter");
+                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);
+                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
 
                 // On search results panel
                 const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");

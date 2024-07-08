@@ -77,10 +77,19 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected onDispatcherAction(payload: ActionPayload): void {
-        if (payload.action !== Action.ActiveRoomChanged) return;
+        switch (payload.action) {
+            case Action.ActiveRoomChanged: {
+                const changePayload = <ActiveRoomChangedPayload>payload;
+                this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
+                break;
+            }
 
-        const changePayload = <ActiveRoomChangedPayload>payload;
-        this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
+            case Action.FocusMessageSearch: {
+                if (this.currentCard.phase !== RightPanelPhases.RoomSummary) {
+                    this.setCard({ phase: RightPanelPhases.RoomSummary, state: { focusRoomSearch: true } });
+                }
+            }
+        }
     }
 
     // Getters

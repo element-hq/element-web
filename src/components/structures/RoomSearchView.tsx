@@ -48,6 +48,7 @@ if (DEBUG) {
 interface Props {
     term: string;
     scope: SearchScope;
+    inProgress: boolean;
     promise: Promise<ISearchResults>;
     abortController?: AbortController;
     resizeNotifier: ResizeNotifier;
@@ -58,10 +59,9 @@ interface Props {
 // XXX: todo: merge overlapping results somehow?
 // XXX: why doesn't searching on name work?
 export const RoomSearchView = forwardRef<ScrollPanel, Props>(
-    ({ term, scope, promise, abortController, resizeNotifier, className, onUpdate }: Props, ref) => {
+    ({ term, scope, promise, abortController, resizeNotifier, className, onUpdate, inProgress }: Props, ref) => {
         const client = useContext(MatrixClientContext);
         const roomContext = useContext(RoomContext);
-        const [inProgress, setInProgress] = useState(true);
         const [highlights, setHighlights] = useState<string[] | null>(null);
         const [results, setResults] = useState<ISearchResults | null>(null);
         const aborted = useRef(false);
@@ -78,73 +78,71 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
 
         const handleSearchResult = useCallback(
             (searchPromise: Promise<ISearchResults>): Promise<boolean> => {
-                setInProgress(true);
+                onUpdate(true, null);
 
-                return searchPromise
-                    .then(
-                        async (results): Promise<boolean> => {
-                            debuglog("search complete");
-                            if (aborted.current) {
-                                logger.error("Discarding stale search results");
-                                return false;
-                            }
+                return searchPromise.then(
+                    async (results): Promise<boolean> => {
+                        debuglog("search complete");
+                        if (aborted.current) {
+                            logger.error("Discarding stale search results");
+                            return false;
+                        }
 
-                            // postgres on synapse returns us precise details of the strings
-                            // which actually got matched for highlighting.
-                            //
-                            // In either case, we want to highlight the literal search term
-                            // whether it was used by the search engine or not.
+                        // postgres on synapse returns us precise details of the strings
+                        // which actually got matched for highlighting.
+                        //
+                        // In either case, we want to highlight the literal search term
+                        // whether it was used by the search engine or not.
 
-                            let highlights = results.highlights;
-                            if (!highlights.includes(term)) {
-                                highlights = highlights.concat(term);
-                            }
+                        let highlights = results.highlights;
+                        if (!highlights.includes(term)) {
+                            highlights = highlights.concat(term);
+                        }
 
-                            // For overlapping highlights,
-                            // favour longer (more specific) terms first
-                            highlights = highlights.sort(function (a, b) {
-                                return b.length - a.length;
-                            });
+                        // For overlapping highlights,
+                        // favour longer (more specific) terms first
+                        highlights = highlights.sort(function (a, b) {
+                            return b.length - a.length;
+                        });
 
-                            for (const result of results.results) {
-                                for (const event of result.context.getTimeline()) {
-                                    const bundledRelationship =
-                                        event.getServerAggregatedRelation<IThreadBundledRelationship>(
-                                            THREAD_RELATION_TYPE.name,
-                                        );
-                                    if (!bundledRelationship || event.getThread()) continue;
-                                    const room = client.getRoom(event.getRoomId());
-                                    const thread = room?.findThreadForEvent(event);
-                                    if (thread) {
-                                        event.setThread(thread);
-                                    } else {
-                                        room?.createThread(event.getId()!, event, [], true);
-                                    }
+                        for (const result of results.results) {
+                            for (const event of result.context.getTimeline()) {
+                                const bundledRelationship =
+                                    event.getServerAggregatedRelation<IThreadBundledRelationship>(
+                                        THREAD_RELATION_TYPE.name,
+                                    );
+                                if (!bundledRelationship || event.getThread()) continue;
+                                const room = client.getRoom(event.getRoomId());
+                                const thread = room?.findThreadForEvent(event);
+                                if (thread) {
+                                    event.setThread(thread);
+                                } else {
+                                    room?.createThread(event.getId()!, event, [], true);
                                 }
                             }
+                        }
 
-                            setHighlights(highlights);
-                            setResults({ ...results }); // copy to force a refresh
+                        setHighlights(highlights);
+                        setResults({ ...results }); // copy to force a refresh
+                        onUpdate(false, results);
+                        return false;
+                    },
+                    (error) => {
+                        if (aborted.current) {
+                            logger.error("Discarding stale search results");
                             return false;
-                        },
-                        (error) => {
-                            if (aborted.current) {
-                                logger.error("Discarding stale search results");
-                                return false;
-                            }
-                            logger.error("Search failed", error);
-                            Modal.createDialog(ErrorDialog, {
-                                title: _t("error_dialog|search_failed|title"),
-                                description: error?.message ?? _t("error_dialog|search_failed|server_unavailable"),
-                            });
-                            return false;
-                        },
-                    )
-                    .finally(() => {
-                        setInProgress(false);
-                    });
+                        }
+                        logger.error("Search failed", error);
+                        Modal.createDialog(ErrorDialog, {
+                            title: _t("error_dialog|search_failed|title"),
+                            description: error?.message ?? _t("error_dialog|search_failed|server_unavailable"),
+                        });
+                        onUpdate(false, null);
+                        return false;
+                    },
+                );
             },
-            [client, term],
+            [client, term, onUpdate],
         );
 
         // Mount & unmount effect

@@ -13,16 +13,6 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
       >
-        <button
-          aria-label="Search"
-          class="mx_RoomSummaryCard_searchBtn"
-          data-testid="summary-search"
-        >
-          <div
-            height="100%"
-            width="100%"
-          />
-        </button>
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_BaseCard_close"
@@ -443,16 +433,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
       >
-        <button
-          aria-label="Search"
-          class="mx_RoomSummaryCard_searchBtn"
-          data-testid="summary-search"
-        >
-          <div
-            height="100%"
-            width="100%"
-          />
-        </button>
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_BaseCard_close"
@@ -846,16 +826,6 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
       >
-        <button
-          aria-label="Search"
-          class="mx_RoomSummaryCard_searchBtn"
-          data-testid="summary-search"
-        >
-          <div
-            height="100%"
-            width="100%"
-          />
-        </button>
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_BaseCard_close"

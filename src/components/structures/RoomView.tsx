@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
+import React, { ChangeEvent, createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
@@ -41,7 +41,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { throttle } from "lodash";
+import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
@@ -70,7 +70,6 @@ import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
-import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import LegacyRoomHeader from "../views/rooms/LegacyRoomHeader";
@@ -133,6 +132,7 @@ import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoi
 import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
+import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1196,9 +1196,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     );
                 }
                 break;
-            case Action.FocusMessageSearch:
-                this.onSearchClick();
-                break;
 
             case "local_room_event":
                 this.onLocalRoomEvent(payload.roomId);
@@ -1725,13 +1722,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
     }
 
-    private onSearch = (term: string, scope: SearchScope): void => {
+    private onSearch = (term: string, scope = SearchScope.Room): void => {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
         const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
 
         this.setState({
+            timelineRenderingType: TimelineRenderingType.Search,
             search: {
                 // make sure that we don't end up showing results from
                 // an aborted search by keeping a unique id.
@@ -1743,6 +1741,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 abortController,
             },
         });
+    };
+
+    private onSearchScopeChange = (scope: SearchScope): void => {
+        this.onSearch(this.state.search?.term ?? "", scope);
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null): void => {
@@ -1839,14 +1841,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchClick = (): void => {
-        if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
-            this.onCancelSearchClick();
-        } else {
-            this.setState({
-                timelineRenderingType: TimelineRenderingType.Search,
-            });
-        }
+        dis.fire(Action.FocusMessageSearch);
     };
+
+    private onSearchChange = debounce((e: ChangeEvent): void => {
+        const term = (e.target as HTMLInputElement).value;
+        this.onSearch(term);
+    }, 300);
 
     private onCancelSearchClick = (): Promise<void> => {
         return new Promise<void>((resolve) => {
@@ -2328,10 +2329,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let previewBar;
         if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
             aux = (
-                <SearchBar
-                    searchInProgress={this.state.search?.inProgress}
+                <RoomSearchAuxPanel
+                    searchInfo={this.state.search}
                     onCancelClick={this.onCancelSearchClick}
-                    onSearch={this.onSearch}
+                    onSearchScopeChange={this.onSearchScopeChange}
                     isRoomEncrypted={this.context.client.isRoomEncrypted(this.state.room.roomId)}
                 />
             );
@@ -2438,6 +2439,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     scope={this.state.search.scope}
                     promise={this.state.search.promise}
                     abortController={this.state.search.abortController}
+                    inProgress={!!this.state.search.inProgress}
                     resizeNotifier={this.props.resizeNotifier}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}
@@ -2507,7 +2509,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 resizeNotifier={this.props.resizeNotifier}
                 permalinkCreator={this.permalinkCreator}
                 e2eStatus={this.state.e2eStatus}
-                onSearchClick={this.onSearchClick}
+                onSearchChange={this.onSearchChange}
+                onSearchCancel={this.onCancelSearchClick}
             />
         ) : undefined;
 
