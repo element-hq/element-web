@@ -2433,8 +2433,7 @@
             "password_change_success": "Sinu salasõna muutmine õnnestus.",
             "remove_email_prompt": "Eemalda %(email)s?",
             "remove_msisdn_prompt": "Eemalda %(phone)s?",
-            "spell_check_locale_placeholder": "Vali lokaat",
-            "spell_check_section": "Õigekirja kontroll"
+            "spell_check_locale_placeholder": "Vali lokaat"
         },
         "image_thumbnails": "Näita piltide eelvaateid või väikepilte",
         "inline_url_previews_default": "Luba URL'ide vaikimisi eelvaated",

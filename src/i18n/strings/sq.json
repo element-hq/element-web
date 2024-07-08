@@ -2317,8 +2317,7 @@
             "password_change_success": "Fjalëkalimi juaj u ndryshua me sukses.",
             "remove_email_prompt": "Të hiqet %(email)s?",
             "remove_msisdn_prompt": "Të hiqet %(phone)s?",
-            "spell_check_locale_placeholder": "Zgjidhni vendore",
-            "spell_check_section": "Kontroll drejtshkrimi"
+            "spell_check_locale_placeholder": "Zgjidhni vendore"
         },
         "image_thumbnails": "Shfaq për figurat paraparje/miniatura",
         "inline_url_previews_default": "Aktivizo, si parazgjedhje, paraparje URL-sh brendazi",

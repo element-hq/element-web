@@ -2501,8 +2501,7 @@
             "password_change_success": "Votre mot de passe a été mis à jour.",
             "remove_email_prompt": "Supprimer %(email)s ?",
             "remove_msisdn_prompt": "Supprimer %(phone)s ?",
-            "spell_check_locale_placeholder": "Choisir une langue",
-            "spell_check_section": "Vérificateur orthographique"
+            "spell_check_locale_placeholder": "Choisir une langue"
         },
         "image_thumbnails": "Afficher les aperçus/vignettes pour les images",
         "inline_url_previews_default": "Activer l’aperçu des URL par défaut",

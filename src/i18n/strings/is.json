@@ -1983,8 +1983,7 @@
             "password_change_success": "Það tókst að breyta lykilorðinu þínu.",
             "remove_email_prompt": "Fjarlægja %(email)s?",
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
-            "spell_check_locale_placeholder": "Veldu staðfærslu",
-            "spell_check_section": "Stafsetningaryfirferð"
+            "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
         "image_thumbnails": "Birta forskoðun/smámyndir fyrir myndir",
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",

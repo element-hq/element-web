@@ -2151,8 +2151,7 @@
             "password_change_success": "Salasanasi vaihtaminen onnistui.",
             "remove_email_prompt": "Poista %(email)s?",
             "remove_msisdn_prompt": "Poista %(phone)s?",
-            "spell_check_locale_placeholder": "Valitse maa-asetusto",
-            "spell_check_section": "Oikeinkirjoituksen tarkistus"
+            "spell_check_locale_placeholder": "Valitse maa-asetusto"
         },
         "image_thumbnails": "Näytä kuvien esikatselut/pienoiskuvat",
         "inline_url_previews_default": "Ota linkkien esikatselu käyttöön oletusarvoisesti",

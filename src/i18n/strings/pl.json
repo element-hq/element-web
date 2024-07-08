@@ -2532,7 +2532,6 @@
             "remove_email_prompt": "Usunąć %(email)s?",
             "remove_msisdn_prompt": "Usunąć %(phone)s?",
             "spell_check_locale_placeholder": "Wybierz język",
-            "spell_check_section": "Sprawdzanie pisowni",
             "unable_to_load_emails": "Nie można załadować adresów e-mail",
             "unable_to_load_msisdns": "Nie można załadować numerów telefonu",
             "username": "Nazwa użytkownika"

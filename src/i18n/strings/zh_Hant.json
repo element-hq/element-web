@@ -2393,8 +2393,7 @@
             "password_change_success": "您的密碼已成功變更。",
             "remove_email_prompt": "移除 %(email)s？",
             "remove_msisdn_prompt": "移除 %(phone)s？",
-            "spell_check_locale_placeholder": "選擇語系",
-            "spell_check_section": "拼字檢查"
+            "spell_check_locale_placeholder": "選擇語系"
         },
         "image_thumbnails": "顯示圖片的預覽／縮圖",
         "inline_url_previews_default": "預設啟用行內網址預覽",

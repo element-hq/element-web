@@ -2391,8 +2391,7 @@
             "password_change_success": "Ваш пароль успішно змінено.",
             "remove_email_prompt": "Вилучити %(email)s?",
             "remove_msisdn_prompt": "Вилучити %(phone)s?",
-            "spell_check_locale_placeholder": "Вибрати локаль",
-            "spell_check_section": "Перевірка правопису"
+            "spell_check_locale_placeholder": "Вибрати локаль"
         },
         "image_thumbnails": "Показувати попередній перегляд зображень",
         "inline_url_previews_default": "Увімкнути вбудований перегляд гіперпосилань за умовчанням",

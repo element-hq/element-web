@@ -2425,8 +2425,7 @@
             "password_change_success": "Kata sandi Anda berhasil diubah.",
             "remove_email_prompt": "Hapus %(email)s?",
             "remove_msisdn_prompt": "Hapus %(phone)s?",
-            "spell_check_locale_placeholder": "Pilih locale",
-            "spell_check_section": "Pemeriksa ejaan"
+            "spell_check_locale_placeholder": "Pilih locale"
         },
         "image_thumbnails": "Tampilkan gambar mini untuk gambar",
         "inline_url_previews_default": "Aktifkan tampilan URL secara bawaan",

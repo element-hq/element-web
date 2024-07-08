@@ -2466,8 +2466,7 @@
             "password_change_success": "Ditt lösenord byttes framgångsrikt.",
             "remove_email_prompt": "Ta bort %(email)s?",
             "remove_msisdn_prompt": "Ta bort %(phone)s?",
-            "spell_check_locale_placeholder": "Välj en lokalisering",
-            "spell_check_section": "Rättstavning"
+            "spell_check_locale_placeholder": "Välj en lokalisering"
         },
         "image_thumbnails": "Visa förhandsgranskning/miniatyr för bilder",
         "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",

@@ -2471,8 +2471,7 @@
             "password_change_success": "Vaše heslo bylo úspěšně změněno.",
             "remove_email_prompt": "Odstranit adresu %(email)s?",
             "remove_msisdn_prompt": "Odstranit %(phone)s?",
-            "spell_check_locale_placeholder": "Zvolte jazyk",
-            "spell_check_section": "Kontrola pravopisu"
+            "spell_check_locale_placeholder": "Zvolte jazyk"
         },
         "image_thumbnails": "Zobrazovat náhledy obrázků",
         "inline_url_previews_default": "Nastavit povolení náhledů URL adres jako výchozí",

@@ -2450,8 +2450,7 @@
             "password_change_success": "Dein Passwort wurde erfolgreich geändert.",
             "remove_email_prompt": "%(email)s entfernen?",
             "remove_msisdn_prompt": "%(phone)s entfernen?",
-            "spell_check_locale_placeholder": "Wähle ein Gebietsschema",
-            "spell_check_section": "Rechtschreibprüfung"
+            "spell_check_locale_placeholder": "Wähle ein Gebietsschema"
         },
         "image_thumbnails": "Vorschauen für Bilder",
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",

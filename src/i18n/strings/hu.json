@@ -2392,8 +2392,7 @@
             "password_change_success": "A jelszó sikeresen megváltozott.",
             "remove_email_prompt": "%(email)s törlése?",
             "remove_msisdn_prompt": "%(phone)s törlése?",
-            "spell_check_locale_placeholder": "Válasszon nyelvet",
-            "spell_check_section": "Helyesírás-ellenőrzés"
+            "spell_check_locale_placeholder": "Válasszon nyelvet"
         },
         "image_thumbnails": "Előnézet/bélyegkép megjelenítése a képekhez",
         "inline_url_previews_default": "Beágyazott webcím-előnézetek alapértelmezett engedélyezése",

@@ -2450,8 +2450,7 @@
             "password_change_success": "Ваш пароль успешно изменён.",
             "remove_email_prompt": "Удалить %(email)s?",
             "remove_msisdn_prompt": "Удалить %(phone)s?",
-            "spell_check_locale_placeholder": "Выберите регион",
-            "spell_check_section": "Проверка орфографии"
+            "spell_check_locale_placeholder": "Выберите регион"
         },
         "image_thumbnails": "Предпросмотр/миниатюры для изображений",
         "inline_url_previews_default": "Предпросмотр ссылок по умолчанию",

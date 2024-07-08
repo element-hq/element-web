@@ -1582,8 +1582,7 @@
             "name_placeholder": "Nėra rodomo vardo",
             "password_change_success": "Jūsų slaptažodis sėkmingai pakeistas.",
             "remove_email_prompt": "Pašalinti %(email)s?",
-            "remove_msisdn_prompt": "Pašalinti %(phone)s?",
-            "spell_check_section": "Rašybos tikrinimas"
+            "remove_msisdn_prompt": "Pašalinti %(phone)s?"
         },
         "image_thumbnails": "Rodyti vaizdų peržiūras/miniatiūras",
         "inline_url_previews_default": "Įjungti URL nuorodų peržiūras kaip numatytasias",

@@ -2218,8 +2218,7 @@
             "password_change_success": "你的密码已成功更改。",
             "remove_email_prompt": "删除 %(email)s 吗？",
             "remove_msisdn_prompt": "删除 %(phone)s 吗？",
-            "spell_check_locale_placeholder": "选择区域设置",
-            "spell_check_section": "拼写检查"
+            "spell_check_locale_placeholder": "选择区域设置"
         },
         "image_thumbnails": "显示图片的预览图",
         "inline_url_previews_default": "默认启用行内URL预览",

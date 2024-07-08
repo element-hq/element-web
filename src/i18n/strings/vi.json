@@ -2191,8 +2191,7 @@
             "password_change_success": "Đã đổi mật khẩu thành công.",
             "remove_email_prompt": "Xóa %(email)s?",
             "remove_msisdn_prompt": "Xóa %(phone)s?",
-            "spell_check_locale_placeholder": "Chọn vùng miền",
-            "spell_check_section": "Kiểm tra chính tả"
+            "spell_check_locale_placeholder": "Chọn vùng miền"
         },
         "image_thumbnails": "Hiển thị bản xem trước / hình thu nhỏ cho hình ảnh",
         "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",

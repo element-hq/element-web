@@ -2096,8 +2096,7 @@
             "password_change_success": "Cambiouse correctamente o contrasinal.",
             "remove_email_prompt": "Eliminar %(email)s?",
             "remove_msisdn_prompt": "Eliminar %(phone)s?",
-            "spell_check_locale_placeholder": "Elixe o idioma",
-            "spell_check_section": "Corrección"
+            "spell_check_locale_placeholder": "Elixe o idioma"
         },
         "image_thumbnails": "Mostrar miniaturas/vista previa das imaxes",
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",

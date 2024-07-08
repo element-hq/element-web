@@ -2265,8 +2265,7 @@
             "password_change_success": "Has cambiado tu contraseña.",
             "remove_email_prompt": "¿Eliminar %(email)s?",
             "remove_msisdn_prompt": "¿Eliminar %(phone)s?",
-            "spell_check_locale_placeholder": "Elige un idioma",
-            "spell_check_section": "Corrector ortográfico"
+            "spell_check_locale_placeholder": "Elige un idioma"
         },
         "image_thumbnails": "Mostrar vistas previas para las imágenes",
         "inline_url_previews_default": "Activar la vista previa de URLs en línea por defecto",

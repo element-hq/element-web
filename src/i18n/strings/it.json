@@ -2467,8 +2467,7 @@
             "password_change_success": "La tua password è stata cambiata correttamente.",
             "remove_email_prompt": "Rimuovere %(email)s?",
             "remove_msisdn_prompt": "Rimuovere %(phone)s?",
-            "spell_check_locale_placeholder": "Scegli una lingua",
-            "spell_check_section": "Controllo ortografico"
+            "spell_check_locale_placeholder": "Scegli una lingua"
         },
         "image_thumbnails": "Mostra anteprime/miniature per le immagini",
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",

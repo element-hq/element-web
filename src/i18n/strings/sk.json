@@ -2454,8 +2454,7 @@
             "password_change_success": "Vaše heslo bolo úspešne zmenené.",
             "remove_email_prompt": "Odstrániť adresu %(email)s?",
             "remove_msisdn_prompt": "Odstrániť číslo %(phone)s?",
-            "spell_check_locale_placeholder": "Vyberte si jazyk",
-            "spell_check_section": "Kontrola pravopisu"
+            "spell_check_locale_placeholder": "Vyberte si jazyk"
         },
         "image_thumbnails": "Zobrazovať ukážky/náhľady obrázkov",
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",

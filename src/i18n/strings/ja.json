@@ -2256,8 +2256,7 @@
             "password_change_success": "パスワードを変更しました。",
             "remove_email_prompt": "%(email)sを削除しますか？",
             "remove_msisdn_prompt": "%(phone)sを削除しますか？",
-            "spell_check_locale_placeholder": "ロケールを選択",
-            "spell_check_section": "スペルチェック"
+            "spell_check_locale_placeholder": "ロケールを選択"
         },
         "image_thumbnails": "画像のプレビューまたはサムネイルを表示",
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",

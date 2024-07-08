@@ -2091,8 +2091,7 @@
             "password_change_success": "Wachtwoord veranderen geslaagd.",
             "remove_email_prompt": "%(email)s verwijderen?",
             "remove_msisdn_prompt": "%(phone)s verwijderen?",
-            "spell_check_locale_placeholder": "Kies een landinstelling",
-            "spell_check_section": "Spellingscontrole"
+            "spell_check_locale_placeholder": "Kies een landinstelling"
         },
         "image_thumbnails": "Miniaturen voor afbeeldingen tonen",
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
