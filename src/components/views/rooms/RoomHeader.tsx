@@ -55,6 +55,7 @@ import { RoomKnocksBar } from "./RoomKnocksBar";
 import { isVideoRoom } from "../../../utils/video-rooms";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
 import { CallGuestLinkButton } from "./RoomHeader/CallGuestLinkButton";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 export default function RoomHeader({
     room,
@@ -364,16 +365,7 @@ export default function RoomHeader({
                     )}
                 </Flex>
                 {!isDirectMessage && (
-                    <BodyText
-                        as="div"
-                        size="sm"
-                        weight="medium"
-                        aria-label={_t("common|n_members", { count: memberCount })}
-                        onClick={(e: React.MouseEvent) => {
-                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
-                            e.stopPropagation();
-                        }}
-                    >
+                    <BodyText as="div" size="sm" weight="medium">
                         <FacePile
                             className="mx_RoomHeader_members"
                             members={members.slice(0, 3)}
@@ -381,6 +373,11 @@ export default function RoomHeader({
                             overflow={false}
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
+                            onClick={(e: ButtonEvent) => {
+                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                                e.stopPropagation();
+                            }}
+                            aria-label={_t("common|n_members", { count: memberCount })}
                         >
                             {formatCount(memberCount)}
                         </FacePile>
