@@ -143,3 +143,5 @@ export async function loadModules(): Promise<void> {
 }
 
 export { _t } from "../languageHandler";
+
+export { extractErrorMessageFromError } from "matrix-react-sdk/src/components/views/dialogs/ErrorDialog";
