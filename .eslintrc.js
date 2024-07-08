@@ -120,7 +120,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
                             "!matrix-js-sdk/src/crypto",
                             "!matrix-js-sdk/src/crypto/aes",
-                            "!matrix-js-sdk/src/crypto/crypto",
                             "!matrix-js-sdk/src/crypto/keybackup",
                             "!matrix-js-sdk/src/crypto/deviceinfo",
                             "!matrix-js-sdk/src/crypto/key_passphrase",

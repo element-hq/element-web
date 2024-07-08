@@ -18,7 +18,6 @@ import { Crypto } from "@peculiar/webcrypto";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
-import { setCrypto } from "matrix-js-sdk/src/crypto/crypto";
 import * as MatrixCryptoAes from "matrix-js-sdk/src/crypto/aes";
 import { mocked, MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
@@ -79,7 +78,6 @@ describe("Lifecycle", () => {
         delete global.localStorage;
         global.localStorage = realLocalStorage;
 
-        setCrypto(webCrypto);
         // @ts-ignore mocking
         delete window.crypto;
         window.crypto = webCrypto;
@@ -88,8 +86,6 @@ describe("Lifecycle", () => {
     });
 
     afterAll(() => {
-        setCrypto(windowCrypto);
-
         // @ts-ignore unmocking
         delete window.crypto;
         window.crypto = windowCrypto;
