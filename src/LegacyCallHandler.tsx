@@ -457,6 +457,15 @@ export default class LegacyCallHandler extends EventEmitter {
         logger.debug(`${logPrefix} paused audio`);
     }
 
+    /**
+     * Returns whether the given audio is currently playing
+     * Only supported for looping audio tracks
+     * @param audioId the ID of the audio to query for playing state
+     */
+    public isPlaying(audioId: AudioID.Ring | AudioID.Ringback): boolean {
+        return !!this.playingSources[audioId];
+    }
+
     private matchesCallForThisRoom(call: MatrixCall): boolean {
         // We don't allow placing more than one call per room, but that doesn't mean there
         // can't be more than one, eg. in a glare situation. This checks that the given call

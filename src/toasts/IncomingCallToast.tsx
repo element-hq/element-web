@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
@@ -36,7 +36,7 @@ import AccessibleButton, { ButtonEvent } from "../components/views/elements/Acce
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { Call } from "../models/Call";
-import { AudioID } from "../LegacyCallHandler";
+import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 
@@ -78,7 +78,6 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     const roomId = notifyEvent.getRoomId()!;
     const room = MatrixClientPeg.safeGet().getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
-    const audio = useMemo(() => document.getElementById(AudioID.Ring) as HTMLMediaElement, []);
     const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));
     useEventEmitter(CallStore.instance, CallStoreEvent.ConnectedCalls, () => {
         setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
@@ -87,18 +86,18 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     // Start ringing if not already.
     useEffect(() => {
         const isRingToast = (notifyEvent.getContent() as unknown as { notify_type: string })["notify_type"] == "ring";
-        if (isRingToast && audio.paused) {
-            audio.play();
+        if (isRingToast && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+            LegacyCallHandler.instance.play(AudioID.Ring);
         }
-    }, [audio, notifyEvent]);
+    }, [notifyEvent]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
         ToastStore.sharedInstance().dismissToast(
             getIncomingCallToastKey(notifyEvent.getContent().call_id ?? "", roomId),
         );
-        audio.pause();
-    }, [audio, notifyEvent, roomId]);
+        LegacyCallHandler.instance.pause(AudioID.Ring);
+    }, [notifyEvent, roomId]);
 
     // Dismiss if session got ended remotely.
     const onCall = useCallback(

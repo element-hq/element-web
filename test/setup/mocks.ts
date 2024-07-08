@@ -18,6 +18,7 @@ export const mocks = {
     AudioBufferSourceNode: {
         connect: jest.fn(),
         start: jest.fn(),
+        stop: jest.fn(),
     } as unknown as AudioBufferSourceNode,
     AudioContext: {
         close: jest.fn(),
