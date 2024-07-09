@@ -60,6 +60,11 @@ jest.mock("../src/utils/notifications", () => ({
     createLocalNotificationSettingsIfNeeded: jest.fn(),
 }));
 
+jest.mock("../src/audio/compat", () => ({
+    ...jest.requireActual("../src/audio/compat"),
+    createAudioContext: jest.fn(),
+}));
+
 describe("Notifier", () => {
     const roomId = "!room1:server";
     const testEvent = mkEvent({
@@ -103,6 +108,19 @@ describe("Notifier", () => {
         });
     };
 
+    const mockAudioBufferSourceNode = {
+        addEventListener: jest.fn(),
+        connect: jest.fn(),
+        start: jest.fn(),
+    };
+    const mockAudioContext = {
+        decodeAudioData: jest.fn(),
+        suspend: jest.fn(),
+        resume: jest.fn(),
+        createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        currentTime: 1337,
+    };
+
     beforeEach(() => {
         accountDataStore = {};
         mockClient = getMockClientWithEventEmitter({
@@ -144,6 +162,9 @@ describe("Notifier", () => {
             if (id) return new Room(id, mockClient, mockClient.getSafeUserId());
             return null;
         });
+
+        // @ts-ignore
+        Notifier.backgroundAudio.audioContext = mockAudioContext;
     });
 
     describe("triggering notification from events", () => {

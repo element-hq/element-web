@@ -37,7 +37,7 @@ interface IProps {
     /**
      * classnames to apply to the wrapper of the preview
      */
-    className: string;
+    className?: string;
 
     /**
      * The ID of the displayed user

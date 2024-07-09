@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Page } from "@playwright/test";
-
 import { expect, test } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { selectHomeserver } from "../utils";
 
 test.describe("Login", () => {
     test.describe("Password login", () => {
@@ -85,17 +84,6 @@ test.describe("Login", () => {
             await expect(page).toHaveURL(/\/#\/room\/!room:id$/);
             await expect(page.getByRole("button", { name: "Join the discussion" })).toBeVisible();
         });
-
-        async function selectHomeserver(page: Page, homeserverUrl: string) {
-            await page.getByRole("button", { name: "Edit" }).click();
-            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserverUrl);
-            await page.getByRole("button", { name: "Continue", exact: true }).click();
-            // wait for the dialog to go away
-            await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
-
-            await expect(page.locator(".mx_Spinner")).toHaveCount(0);
-            await expect(page.locator(".mx_ServerPicker_server")).toHaveText(homeserverUrl);
-        }
     });
 
     // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server

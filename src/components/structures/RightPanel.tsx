@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Room, RoomState, RoomStateEvent, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
@@ -42,6 +42,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
+import { RightPanelTabs } from "../views/right_panel/RightPanelTabs";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -57,7 +58,8 @@ interface RoomlessProps extends BaseProps {
 interface RoomProps extends BaseProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
-    onSearchClick?: () => void;
+    onSearchChange?: (e: ChangeEvent) => void;
+    onSearchCancel?: () => void;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -170,6 +172,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                         <MemberList
                             roomId={roomId}
                             key={roomId}
+                            hideHeaderButtons
                             onClose={this.onClose}
                             searchQuery={this.state.searchQuery}
                             onSearchQueryChanged={this.onSearchQueryChanged}
@@ -293,10 +296,11 @@ export default class RightPanel extends React.Component<Props, IState> {
                     card = (
                         <RoomSummaryCard
                             room={this.props.room}
-                            onClose={this.onClose}
                             // whenever RightPanel is passed a room it is passed a permalinkcreator
                             permalinkCreator={this.props.permalinkCreator!}
-                            onSearchClick={this.props.onSearchClick}
+                            onSearchChange={this.props.onSearchChange}
+                            onSearchCancel={this.props.onSearchCancel}
+                            focusRoomSearch={cardState?.focusRoomSearch}
                         />
                     );
                 }
@@ -311,6 +315,7 @@ export default class RightPanel extends React.Component<Props, IState> {
 
         return (
             <aside className="mx_RightPanel" id="mx_RightPanel">
+                {phase && <RightPanelTabs phase={phase} />}
                 {card}
             </aside>
         );

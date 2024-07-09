@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { _t } from "../../../../../languageHandler";
+import { _t, getCurrentLanguage } from "../../../../../languageHandler";
 import { UseCase } from "../../../../../settings/enums/UseCase";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
@@ -33,6 +33,11 @@ import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingP
 import SettingsSubsection from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import LanguageDropdown from "../../../elements/LanguageDropdown";
+import PlatformPeg from "../../../../../PlatformPeg";
+import { IS_MAC } from "../../../../../Keyboard";
+import SpellCheckSettings from "../../SpellCheckSettings";
+import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -43,6 +48,79 @@ interface IState {
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
 }
+
+const LanguageSection: React.FC = () => {
+    const [language, setLanguage] = useState(getCurrentLanguage());
+
+    const onLanguageChange = useCallback(
+        (newLanguage: string) => {
+            if (language === newLanguage) return;
+
+            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
+            setLanguage(newLanguage);
+            const platform = PlatformPeg.get();
+            if (platform) {
+                platform.setLanguage([newLanguage]);
+                platform.reload();
+            }
+        },
+        [language],
+    );
+
+    return (
+        <div className="mx_SettingsSubsection_contentStretch">
+            {_t("settings|general|application_language")}
+            <LanguageDropdown
+                className="mx_GeneralUserSettingsTab_section_languageInput"
+                onOptionChange={onLanguageChange}
+                value={language}
+            />
+            <div className="mx_GeneralUserSettingsTab_section_hint">
+                {_t("settings|general|application_language_reload_hint")}
+            </div>
+        </div>
+    );
+};
+
+const SpellCheckSection: React.FC = () => {
+    const [spellCheckEnabled, setSpellCheckEnabled] = useState<boolean | undefined>();
+    const [spellCheckLanguages, setSpellCheckLanguages] = useState<string[] | undefined>();
+
+    useEffect(() => {
+        (async () => {
+            const plaf = PlatformPeg.get();
+            const [enabled, langs] = await Promise.all([plaf?.getSpellCheckEnabled(), plaf?.getSpellCheckLanguages()]);
+
+            setSpellCheckEnabled(enabled);
+            setSpellCheckLanguages(langs || undefined);
+        })();
+    }, []);
+
+    const onSpellCheckEnabledChange = useCallback((enabled: boolean) => {
+        setSpellCheckEnabled(enabled);
+        PlatformPeg.get()?.setSpellCheckEnabled(enabled);
+    }, []);
+
+    const onSpellCheckLanguagesChange = useCallback((languages: string[]): void => {
+        setSpellCheckLanguages(languages);
+        PlatformPeg.get()?.setSpellCheckLanguages(languages);
+    }, []);
+
+    if (!PlatformPeg.get()?.supportsSpellCheckSettings()) return null;
+
+    return (
+        <>
+            <LabelledToggleSwitch
+                label={_t("settings|general|allow_spellcheck")}
+                value={Boolean(spellCheckEnabled)}
+                onChange={onSpellCheckEnabledChange}
+            />
+            {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (
+                <SpellCheckSettings languages={spellCheckLanguages} onLanguagesChange={onSpellCheckLanguagesChange} />
+            )}
+        </>
+    );
+};
 
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
     private static ROOM_LIST_SETTINGS = ["breadcrumbs", "FTUE.userOnboardingButton"];
@@ -146,6 +224,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         return (
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
                 <SettingsSection>
+                    {/* The heading string is still 'general' from where it was moved, but this section should become 'general' */}
+                    <SettingsSubsection heading={_t("settings|general|language_section")}>
+                        <LanguageSection />
+                        <SpellCheckSection />
+                    </SettingsSubsection>
+
                     {roomListSettings.length > 0 && (
                         <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                             {this.renderGroup(roomListSettings)}

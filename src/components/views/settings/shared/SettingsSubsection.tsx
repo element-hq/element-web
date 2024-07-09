@@ -16,6 +16,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import React, { HTMLAttributes } from "react";
+import { Separator } from "@vector-im/compound-web";
 
 import { SettingsSubsectionHeading } from "./SettingsSubsectionHeading";
 
@@ -25,6 +26,11 @@ export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> 
     children?: React.ReactNode;
     // when true content will be justify-items: stretch, which will make items within the section stretch to full width.
     stretchContent?: boolean;
+    /*
+     * When true, the legacy UI style will be applied to the subsection.
+     * @default true
+     */
+    legacy?: boolean;
 }
 
 export const SettingsSubsectionText: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
@@ -38,10 +44,16 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
     description,
     children,
     stretchContent,
+    legacy = true,
     ...rest
 }) => (
-    <div {...rest} className="mx_SettingsSubsection">
-        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
+    <div
+        {...rest}
+        className={classNames("mx_SettingsSubsection", {
+            mx_SettingsSubsection_newUi: !legacy,
+        })}
+    >
+        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} legacy={legacy} /> : <>{heading}</>}
         {!!description && (
             <div className="mx_SettingsSubsection_description">
                 <SettingsSubsectionText>{description}</SettingsSubsectionText>
@@ -52,11 +64,13 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
                 className={classNames("mx_SettingsSubsection_content", {
                     mx_SettingsSubsection_contentStretch: !!stretchContent,
                     mx_SettingsSubsection_noHeading: !heading && !description,
+                    mx_SettingsSubsection_content_newUi: !legacy,
                 })}
             >
                 {children}
             </div>
         )}
+        {!legacy && <Separator />}
     </div>
 );
 

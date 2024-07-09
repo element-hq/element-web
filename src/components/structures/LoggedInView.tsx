@@ -458,9 +458,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 handled = true;
                 break;
             case KeyBindingAction.SearchInRoom:
-                dis.dispatch({
-                    action: "focus_search",
-                });
+                dis.fire(Action.FocusMessageSearch);
                 handled = true;
                 break;
         }
@@ -490,11 +488,15 @@ class LoggedInView extends React.Component<IProps, IState> {
                 handled = true;
                 break;
             case KeyBindingAction.GoToHome:
+                // even if we cancel because there are modals open, we still
+                // handled it: nothing else should happen.
+                handled = true;
+                if (Modal.hasDialogs()) {
+                    return;
+                }
                 dis.dispatch({
                     action: Action.ViewHomePage,
                 });
-                Modal.closeCurrentModal("homeKeyboardShortcut");
-                handled = true;
                 break;
             case KeyBindingAction.ToggleSpacePanel:
                 dis.fire(Action.ToggleSpacePanel);

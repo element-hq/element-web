@@ -17,8 +17,8 @@ limitations under the License.
 */
 
 import { uniqueId } from "lodash";
+import { expect, type Page } from "@playwright/test";
 
-import type { Page } from "@playwright/test";
 import type { ClientEvent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { Client } from "../pages/client";
 
@@ -61,6 +61,17 @@ export async function waitForRoom(
         },
         { roomId, predicateId },
     );
+}
+
+export async function selectHomeserver(page: Page, homeserverUrl: string) {
+    await page.getByRole("button", { name: "Edit" }).click();
+    await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserverUrl);
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    // wait for the dialog to go away
+    await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
+
+    await expect(page.locator(".mx_Spinner")).toHaveCount(0);
+    await expect(page.locator(".mx_ServerPicker_server")).toHaveText(homeserverUrl);
 }
 
 export const CommandOrControl = process.platform === "darwin" ? "Meta" : "Control";

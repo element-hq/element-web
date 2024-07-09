@@ -83,7 +83,7 @@ exports[`<PhoneNumbers /> should handle no numbers 1`] = `
       <div
         class="mx_SettingsSubsection_text"
       >
-        Discovery options will appear once you have added a phone number above.
+        Discovery options will appear once you have added a phone number.
       </div>
     </div>
   </div>

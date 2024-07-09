@@ -681,3 +681,49 @@ export default function eventSearch(
         return eventIndexSearch(client, term, roomId, abortSignal);
     }
 }
+
+/**
+ * The scope for a message search, either in the current room or across all rooms.
+ */
+export enum SearchScope {
+    Room = "Room",
+    All = "All",
+}
+
+/**
+ * Information about a message search in progress.
+ */
+export interface SearchInfo {
+    /**
+     * Opaque ID for this search.
+     */
+    searchId: number;
+    /**
+     * The room ID being searched, or undefined if searching all rooms.
+     */
+    roomId?: string;
+    /**
+     * The search term.
+     */
+    term: string;
+    /**
+     * The scope of the search.
+     */
+    scope: SearchScope;
+    /**
+     * The promise for the search results.
+     */
+    promise: Promise<ISearchResults>;
+    /**
+     * Controller for aborting the search.
+     */
+    abortController?: AbortController;
+    /**
+     * Whether the search is currently awaiting data from the backend.
+     */
+    inProgress?: boolean;
+    /**
+     * The total count of matching results as returned by the backend.
+     */
+    count?: number;
+}

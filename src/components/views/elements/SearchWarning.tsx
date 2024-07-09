@@ -33,9 +33,10 @@ export enum WarningKind {
 interface IProps {
     isRoomEncrypted?: boolean;
     kind: WarningKind;
+    showLogo?: boolean;
 }
 
-export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.Element {
+export default function SearchWarning({ isRoomEncrypted, kind, showLogo = true }: IProps): JSX.Element {
     if (!isRoomEncrypted) return <></>;
     if (EventIndexPeg.get()) return <></>;
 
@@ -121,7 +122,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
 
     return (
         <div className="mx_SearchWarning">
-            {logo}
+            {showLogo ? logo : null}
             <span>{text}</span>
         </div>
     );

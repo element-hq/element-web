@@ -113,7 +113,7 @@ test.describe("RightPanel", () => {
         test("should handle viewing room member", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.getByRole("menuitem", { name: "People" }).click();
+            await page.locator(".mx_RightPanelTabs").getByText("People").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
@@ -123,7 +123,7 @@ test.describe("RightPanel", () => {
             await page.getByRole("button", { name: "Room members" }).click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
-            await page.getByRole("button", { name: "Room information" }).click();
+            await page.locator(".mx_RightPanelTabs").getByText("Info").click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
     });

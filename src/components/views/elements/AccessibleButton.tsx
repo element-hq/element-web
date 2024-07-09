@@ -113,6 +113,8 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
     disableTooltip?: TooltipProps["disabled"];
 };
 
+export type ButtonProps<T extends keyof JSX.IntrinsicElements> = Props<T>;
+
 /**
  * Type of the props passed to the element that is rendered by AccessibleButton.
  */

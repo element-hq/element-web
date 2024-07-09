@@ -22,7 +22,7 @@ const config: Config = {
     testEnvironment: "jsdom",
     testMatch: ["<rootDir>/test/**/*-test.[jt]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
-    setupFiles: ["jest-canvas-mock"],
+    setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
     moduleNameMapper: {
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",

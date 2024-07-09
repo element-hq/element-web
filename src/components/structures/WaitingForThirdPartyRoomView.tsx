@@ -55,7 +55,6 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                     <LegacyRoomHeader
                         room={context.room}
                         inRoom={true}
-                        onSearchClick={null}
                         onInviteClick={null}
                         onForgetClick={null}
                         e2eStatus={E2EStatus.Normal}

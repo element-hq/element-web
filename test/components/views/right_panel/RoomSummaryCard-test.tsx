@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../src/components/views/right_panel/RoomSummaryCard";
@@ -34,9 +35,10 @@ import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } f
 import { PollHistoryDialog } from "../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../src/languageHandler";
-import SettingsStore from "../../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { Action } from "../../../../src/dispatcher/actions";
+import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../src/utils/room/tagRoom");
 
@@ -141,15 +143,80 @@ describe("<RoomSummaryCard />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("opens the search", async () => {
-        const onSearchClick = jest.fn();
-        const { getByLabelText } = getComponent({
-            onSearchClick,
+    describe("search", () => {
+        it("has the search field", async () => {
+            const onSearchChange = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+            });
+            expect(getByPlaceholderText("Search messages…")).toBeVisible();
         });
 
-        const searchBtn = getByLabelText(_t("action|search"));
-        fireEvent.click(searchBtn);
-        expect(onSearchClick).toHaveBeenCalled();
+        it("should focus the search field if Action.FocusMessageSearch is fired", async () => {
+            const onSearchChange = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+            });
+            expect(getByPlaceholderText("Search messages…")).not.toHaveFocus();
+            defaultDispatcher.fire(Action.FocusMessageSearch);
+            await waitFor(() => {
+                expect(getByPlaceholderText("Search messages…")).toHaveFocus();
+            });
+        });
+
+        it("should focus the search field if focusRoomSearch=true", () => {
+            const onSearchChange = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+                focusRoomSearch: true,
+            });
+            expect(getByPlaceholderText("Search messages…")).toHaveFocus();
+        });
+
+        it("should cancel search on escape", () => {
+            const onSearchChange = jest.fn();
+            const onSearchCancel = jest.fn();
+            const { getByPlaceholderText } = getComponent({
+                onSearchChange,
+                onSearchCancel,
+                focusRoomSearch: true,
+            });
+            expect(getByPlaceholderText("Search messages…")).toHaveFocus();
+            fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
+            expect(onSearchCancel).toHaveBeenCalled();
+        });
+
+        it("should empty search field when the timeline rendering type changes away", async () => {
+            const onSearchChange = jest.fn();
+            const { rerender } = render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <RoomContext.Provider value={{ timelineRenderingType: TimelineRenderingType.Search } as any}>
+                        <RoomSummaryCard
+                            room={room}
+                            permalinkCreator={new RoomPermalinkCreator(room)}
+                            onSearchChange={onSearchChange}
+                            focusRoomSearch={true}
+                        />
+                    </RoomContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+
+            await userEvent.type(screen.getByPlaceholderText("Search messages…"), "test");
+            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("test");
+
+            rerender(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <RoomContext.Provider value={{ timelineRenderingType: TimelineRenderingType.Room } as any}>
+                        <RoomSummaryCard
+                            room={room}
+                            permalinkCreator={new RoomPermalinkCreator(room)}
+                            onSearchChange={onSearchChange}
+                        />
+                    </RoomContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+            expect(screen.getByPlaceholderText("Search messages…")).toHaveValue("");
+        });
     });
 
     it("opens room file panel on button click", () => {
@@ -198,18 +265,6 @@ describe("<RoomSummaryCard />", () => {
         fireEvent.click(getByText(_t("common|settings")));
 
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
-    });
-
-    it("renders room members options when new room UI is not enabled", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        const { getByText } = getComponent();
-
-        fireEvent.click(getByText(_t("common|people")));
-
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
-            { phase: RightPanelPhases.RoomMemberList },
-            true,
-        );
     });
 
     describe("pinning", () => {

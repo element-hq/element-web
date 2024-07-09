@@ -42,14 +42,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
       >
         <input
           autocomplete="email"
-          id="mx_Field_50"
+          id="mx_Field_41"
           label="Email Address"
           placeholder="Email Address"
           type="text"
           value=""
         />
         <label
-          for="mx_Field_50"
+          for="mx_Field_41"
         >
           Email Address
         </label>
@@ -150,14 +150,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
           </span>
           <input
             autocomplete="tel-national"
-            id="mx_Field_51"
+            id="mx_Field_42"
             label="Phone Number"
             placeholder="Phone Number"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_51"
+            for="mx_Field_42"
           >
             Phone Number
           </label>

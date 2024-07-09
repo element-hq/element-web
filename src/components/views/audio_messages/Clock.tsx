@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { HTMLProps } from "react";
-import { Temporal } from "proposal-temporal";
+import { Temporal } from "temporal-polyfill";
 
 import { formatSeconds } from "../../../DateUtils";
 
@@ -45,8 +45,9 @@ export default class Clock extends React.Component<Props> {
         return currentFloor !== nextFloor;
     }
 
-    private calculateDuration(seconds: number): string {
-        return new Temporal.Duration(0, 0, 0, 0, 0, 0, seconds)
+    private calculateDuration(seconds: number): string | undefined {
+        if (isNaN(seconds)) return undefined;
+        return new Temporal.Duration(0, 0, 0, 0, 0, 0, Math.round(seconds))
             .round({ smallestUnit: "seconds", largestUnit: "hours" })
             .toString();
     }

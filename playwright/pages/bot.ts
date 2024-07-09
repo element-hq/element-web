@@ -46,10 +46,6 @@ export interface CreateBotOpts {
      */
     bootstrapCrossSigning?: boolean;
     /**
-     * Whether to use the rust crypto impl. Defaults to false (for now!)
-     */
-    rustCrypto?: boolean;
-    /**
      * Whether to bootstrap the secret storage
      */
     bootstrapSecretStorage?: boolean;
@@ -188,11 +184,7 @@ export class Bot extends Client {
                     return cli;
                 }
 
-                if (opts.rustCrypto) {
-                    await cli.initRustCrypto({ useIndexedDB: false });
-                } else {
-                    await cli.initCrypto();
-                }
+                await cli.initRustCrypto({ useIndexedDB: false });
                 cli.setGlobalErrorOnUnknownDevices(false);
                 await cli.startClient();
 

@@ -29,15 +29,15 @@ import {
 import { defer } from "matrix-js-sdk/src/utils";
 
 import { RoomSearchView } from "../../../src/components/structures/RoomSearchView";
-import { SearchScope } from "../../../src/components/views/rooms/SearchBar";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { stubClient } from "../../test-utils";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { searchPagination } from "../../../src/Searching";
+import { searchPagination, SearchScope } from "../../../src/Searching";
 
 jest.mock("../../../src/Searching", () => ({
     searchPagination: jest.fn(),
+    SearchScope: jest.requireActual("../../../src/Searching").SearchScope,
 }));
 
 describe("<RoomSearchView/>", () => {
@@ -65,6 +65,7 @@ describe("<RoomSearchView/>", () => {
 
         render(
             <RoomSearchView
+                inProgress={true}
                 term="search term"
                 scope={SearchScope.All}
                 promise={deferred.promise}
@@ -81,6 +82,7 @@ describe("<RoomSearchView/>", () => {
         render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve<ISearchResults>({
@@ -142,6 +144,7 @@ describe("<RoomSearchView/>", () => {
         render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.Room}
                     promise={Promise.resolve<ISearchResults>({
@@ -234,10 +237,30 @@ describe("<RoomSearchView/>", () => {
             ],
             next_batch: undefined,
         });
+        const onUpdate = jest.fn();
 
-        render(
+        const { rerender } = render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={true}
+                    term="search term"
+                    scope={SearchScope.All}
+                    promise={Promise.resolve(searchResults)}
+                    resizeNotifier={resizeNotifier}
+                    className="someClass"
+                    onUpdate={onUpdate}
+                />
+            </MatrixClientContext.Provider>,
+        );
+
+        await screen.findByRole("progressbar");
+        await screen.findByText("Potato");
+        expect(onUpdate).toHaveBeenCalledWith(false, expect.objectContaining({}));
+
+        rerender(
+            <MatrixClientContext.Provider value={client}>
+                <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve(searchResults)}
@@ -248,8 +271,6 @@ describe("<RoomSearchView/>", () => {
             </MatrixClientContext.Provider>,
         );
 
-        await screen.findByRole("progressbar");
-        await screen.findByText("Potato");
         expect(screen.queryByRole("progressbar")).toBeFalsy();
     });
 
@@ -259,6 +280,7 @@ describe("<RoomSearchView/>", () => {
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
@@ -282,6 +304,7 @@ describe("<RoomSearchView/>", () => {
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
@@ -305,6 +328,7 @@ describe("<RoomSearchView/>", () => {
         render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={deferred.promise}
@@ -406,6 +430,7 @@ describe("<RoomSearchView/>", () => {
         render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve(searchResults)}
@@ -440,6 +465,7 @@ describe("<RoomSearchView/>", () => {
         render(
             <MatrixClientContext.Provider value={client}>
                 <RoomSearchView
+                    inProgress={false}
                     term="search term"
                     scope={SearchScope.All}
                     promise={Promise.resolve<ISearchResults>({

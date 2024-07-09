@@ -2019,18 +2019,14 @@
             "custom_font_description": "Escolle unha das tipografías instaladas no teu sistema e %(brand)s intentará utilizalas.",
             "custom_font_name": "Nome da letra do sistema",
             "custom_font_size": "Usar tamaño personalizado",
-            "custom_theme_add_button": "Engadir decorado",
             "custom_theme_error_downloading": "Erro ao descargar información do decorado.",
             "custom_theme_invalid": "Esquema do decorado incorrecto.",
-            "custom_theme_success": "Decorado engadido!",
-            "custom_theme_url": "URL do decorado personalizado",
             "font_size": "Tamaño da letra",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",
             "layout_bubbles": "Burbullas con mensaxes",
             "match_system_theme": "Imitar o aspecto do sistema",
-            "timeline_image_size": "Tamaño de imaxe na cronoloxía",
-            "use_high_contrast": "Usar alto contraste"
+            "timeline_image_size": "Tamaño de imaxe na cronoloxía"
         },
         "automatic_language_detection_syntax_highlight": "Activar a detección automática de idioma para o resalte da sintaxe",
         "autoplay_gifs": "Reprod. automática GIFs",
@@ -2070,7 +2066,6 @@
             "discovery_email_verification_instructions": "Verifica a ligazón na túa caixa de correo",
             "discovery_msisdn_empty": "As opción para atoparte aparecerán cando engadas un número de teléfono.",
             "discovery_needs_terms": "Acepta os Termos do Servizo do servidor (%(serverName)s) para permitir que te atopen polo enderezo de email ou número de teléfono.",
-            "discovery_section": "Descubrir",
             "email_address_in_use": "Xa se está a usar este email",
             "email_address_label": "Enderezo de Email",
             "email_not_verified": "O teu enderezo de email aínda non foi verificado",
@@ -2101,8 +2096,7 @@
             "password_change_success": "Cambiouse correctamente o contrasinal.",
             "remove_email_prompt": "Eliminar %(email)s?",
             "remove_msisdn_prompt": "Eliminar %(phone)s?",
-            "spell_check_locale_placeholder": "Elixe o idioma",
-            "spell_check_section": "Corrección"
+            "spell_check_locale_placeholder": "Elixe o idioma"
         },
         "image_thumbnails": "Mostrar miniaturas/vista previa das imaxes",
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",

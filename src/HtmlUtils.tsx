@@ -20,13 +20,11 @@ limitations under the License.
 import React, { LegacyRef, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
 import classNames from "classnames";
-import EMOJIBASE_REGEX from "emojibase-regex";
 import katex from "katex";
 import { decode } from "html-entities";
 import { IContent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
-import GraphemeSplitter from "graphemer";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import { IExtendedSanitizeOptions } from "./@types/sanitize-html";
@@ -34,6 +32,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 import { sanitizeHtmlParams, transformTags } from "./Linkify";
+import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyElement, linkifyAndSanitizeHtml } from "./Linkify";
 
@@ -46,10 +45,35 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
 // Regex pattern for non-emoji characters that can appear in an "all-emoji" message
-// (Zero-Width Joiner, Zero-Width Space, Emoji presentation character, other whitespace)
-const EMOJI_SEPARATOR_REGEX = /[\u200D\u200B\s]|\uFE0F/g;
+// (Zero-Width Space, other whitespace)
+const EMOJI_SEPARATOR_REGEX = /[\u200B\s]/g;
 
-const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, "i");
+// Regex for emoji. This includes any RGI_Emoji sequence followed by an optional
+// emoji presentation VS (U+FE0F), but not those sequences that are followed by
+// a text presentation VS (U+FE0E). We also count lone regional indicators
+// (U+1F1E6-U+1F1FF). Technically this regex produces false negatives for emoji
+// followed by U+FE0E when the emoji doesn't have a text variant, but in
+// practice this doesn't matter.
+export const EMOJI_REGEX = (() => {
+    try {
+        // Per our support policy, v mode is available to us, but we still don't
+        // want the app to completely crash on older platforms. We use the
+        // constructor here to avoid a syntax error on such platforms.
+        return new RegExp("\\p{RGI_Emoji}(?!\\uFE0E)(?:(?<!\\uFE0F)\\uFE0F)?|[\\u{1f1e6}-\\u{1f1ff}]", "v");
+    } catch (_e) {
+        // v mode not supported; fall back to matching nothing
+        return /(?!)/;
+    }
+})();
+
+const BIGEMOJI_REGEX = (() => {
+    try {
+        return new RegExp(`^(${EMOJI_REGEX.source})+$`, "iv");
+    } catch (_e) {
+        // Fall back, just like for EMOJI_REGEX
+        return /(?!)/;
+    }
+})();
 
 /*
  * Return true if the given string contains emoji
@@ -265,17 +289,16 @@ export function formatEmojis(message: string | undefined, isHtmlMessage?: boolea
     let text = "";
     let key = 0;
 
-    const splitter = new GraphemeSplitter();
-    for (const char of splitter.iterateGraphemes(message)) {
-        if (EMOJIBASE_REGEX.test(char)) {
+    for (const data of graphemeSegmenter.segment(message)) {
+        if (EMOJI_REGEX.test(data.segment)) {
             if (text) {
                 result.push(text);
                 text = "";
             }
-            result.push(emojiToSpan(char, key));
+            result.push(emojiToSpan(data.segment, key));
             key++;
         } else {
-            text += char;
+            text += data.segment;
         }
     }
     if (text) {

@@ -20,7 +20,7 @@ exports[`<EmailAddresses /> should handle no email addresses 1`] = `
       <div
         class="mx_SettingsSubsection_text"
       >
-        Discovery options will appear once you have added an email above.
+        Discovery options will appear once you have added an email.
       </div>
     </div>
   </div>

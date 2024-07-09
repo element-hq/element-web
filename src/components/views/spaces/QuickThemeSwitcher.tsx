@@ -20,13 +20,13 @@ import { _t } from "../../../languageHandler";
 import { Action } from "../../../dispatcher/actions";
 import { findNonHighContrastTheme, getOrderedThemes } from "../../../theme";
 import Dropdown from "../elements/Dropdown";
-import ThemeChoicePanel from "../settings/ThemeChoicePanel";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { NonEmptyArray } from "../../../@types/common";
+import { useTheme } from "../../../hooks/useTheme";
 
 type Props = {
     requestClose: () => void;
@@ -37,10 +37,10 @@ const MATCH_SYSTEM_THEME_ID = "MATCH_SYSTEM_THEME_ID";
 const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
     const orderedThemes = useMemo(getOrderedThemes, []);
 
-    const themeState = ThemeChoicePanel.calculateThemeState();
+    const themeState = useTheme();
     const nonHighContrast = findNonHighContrastTheme(themeState.theme);
     const theme = nonHighContrast ? nonHighContrast : themeState.theme;
-    const { useSystemTheme } = themeState;
+    const { systemThemeActivated } = themeState;
 
     const themeOptions = [
         {
@@ -50,7 +50,7 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
         ...orderedThemes,
     ];
 
-    const selectedTheme = useSystemTheme ? MATCH_SYSTEM_THEME_ID : theme;
+    const selectedTheme = systemThemeActivated ? MATCH_SYSTEM_THEME_ID : theme;
 
     const onOptionChange = async (newTheme: string): Promise<void> => {
         PosthogTrackers.trackInteraction("WebQuickSettingsThemeDropdown");

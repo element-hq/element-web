@@ -78,6 +78,11 @@ module.exports = {
                         name: "matrix-react-sdk/",
                         message: "Please use matrix-react-sdk/src/index instead",
                     },
+                    {
+                        name: "emojibase-regex",
+                        message:
+                            "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
+                    },
                 ],
                 patterns: [
                     {
@@ -115,13 +120,9 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
                             "!matrix-js-sdk/src/crypto",
                             "!matrix-js-sdk/src/crypto/aes",
-                            "!matrix-js-sdk/src/crypto/olmlib",
-                            "!matrix-js-sdk/src/crypto/crypto",
                             "!matrix-js-sdk/src/crypto/keybackup",
-                            "!matrix-js-sdk/src/crypto/RoomList",
                             "!matrix-js-sdk/src/crypto/deviceinfo",
                             "!matrix-js-sdk/src/crypto/key_passphrase",
-                            "!matrix-js-sdk/src/crypto/CrossSigning",
                             "!matrix-js-sdk/src/crypto/recoverykey",
                             "!matrix-js-sdk/src/crypto/dehydration",
                             "!matrix-js-sdk/src/oidc",
@@ -143,6 +144,11 @@ module.exports = {
                             "!matrix-js-sdk/src/models/related-relations",
                         ],
                         message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        group: ["emojibase-regex/emoji*"],
+                        message:
+                            "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
                     },
                 ],
             },

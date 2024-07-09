@@ -28,7 +28,7 @@ import { randB64Bytes } from "../../utils/rand";
 // Docker tag to use for `matrixdotorg/synapse` image.
 // We target a specific digest as every now and then a Synapse update will break our CI.
 // This digest is updated by the playwright-image-updates.yaml workflow periodically.
-const DOCKER_TAG = "develop@sha256:38bdd185e32dbfb40d11a69a26c5b04c0ccf1cb7d4078a14d6fdb16620bd4b3c";
+const DOCKER_TAG = "develop@sha256:db5f8e8ca4a903379ea18b010ac3360bd843c9ac7eb2e73ad89f5059d01f8104";
 
 async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Omit<HomeserverConfig, "dockerUrl">> {
     const templateDir = path.join(__dirname, "templates", opts.template);
@@ -94,6 +94,8 @@ export class Synapse implements Homeserver, HomeserverInstance {
     protected docker: Docker = new Docker();
     public config: HomeserverConfig & { serverId: string };
 
+    private adminToken?: string;
+
     public constructor(private readonly request: APIRequestContext) {}
 
     /**
@@ -152,12 +154,17 @@ export class Synapse implements Homeserver, HomeserverInstance {
         return [path.join(synapseLogsPath, "stdout.log"), path.join(synapseLogsPath, "stderr.log")];
     }
 
-    public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+    private async registerUserInternal(
+        username: string,
+        password: string,
+        displayName?: string,
+        admin = false,
+    ): Promise<Credentials> {
         const url = `${this.config.baseUrl}/_synapse/admin/v1/register`;
         const { nonce } = await this.request.get(url).then((r) => r.json());
         const mac = crypto
             .createHmac("sha1", this.config.registrationSecret)
-            .update(`${nonce}\0${username}\0${password}\0notadmin`)
+            .update(`${nonce}\0${username}\0${password}\0${admin ? "" : "not"}admin`)
             .digest("hex");
         const res = await this.request.post(url, {
             data: {
@@ -165,7 +172,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
                 username,
                 password,
                 mac,
-                admin: false,
+                admin,
                 displayname: displayName,
             },
         });
@@ -183,6 +190,10 @@ export class Synapse implements Homeserver, HomeserverInstance {
             password,
             displayName,
         };
+    }
+
+    public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        return this.registerUserInternal(username, password, displayName, false);
     }
 
     public async loginUser(userId: string, password: string): Promise<Credentials> {
@@ -206,5 +217,31 @@ export class Synapse implements Homeserver, HomeserverInstance {
             deviceId: json.device_id,
             homeServer: json.home_server,
         };
+    }
+
+    public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
+        if (this.adminToken === undefined) {
+            const result = await this.registerUserInternal("admin", "totalyinsecureadminpassword", undefined, true);
+            this.adminToken = result.accessToken;
+        }
+
+        const url = `${this.config.baseUrl}/_synapse/admin/v2/users/${userId}`;
+        const res = await this.request.put(url, {
+            data: {
+                threepids: [
+                    {
+                        medium,
+                        address,
+                    },
+                ],
+            },
+            headers: {
+                Authorization: `Bearer ${this.adminToken}`,
+            },
+        });
+
+        if (!res.ok()) {
+            throw await res.json();
+        }
     }
 }

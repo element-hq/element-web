@@ -15,8 +15,12 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import {
+    KeyBackupInfo,
+    VerificationPhase,
+    VerificationRequest,
+    VerificationRequestEvent,
+} from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
@@ -44,7 +48,7 @@ export class SetupEncryptionStore extends EventEmitter {
     private started?: boolean;
     public phase?: Phase;
     public verificationRequest: VerificationRequest | null = null;
-    public backupInfo: IKeyBackupInfo | null = null;
+    public backupInfo: KeyBackupInfo | null = null;
     // ID of the key that the secrets we want are encrypted with
     public keyId: string | null = null;
     // Descriptor of the key that the secrets we want are encrypted with

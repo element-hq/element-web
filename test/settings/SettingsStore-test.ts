@@ -31,7 +31,7 @@ const TEST_DATA = [
 /**
  * An existing setting that has {@link IBaseSetting#supportedLevelsAreOrdered} set to true.
  */
-const SETTING_NAME_WITH_CONFIG_OVERRIDE = "feature_new_room_decoration_ui";
+const SETTING_NAME_WITH_CONFIG_OVERRIDE = "feature_msc3531_hide_messages_pending_moderation";
 
 describe("SettingsStore", () => {
     let platformSettings: Record<string, any>;

@@ -22,16 +22,21 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import { useRoomName } from "../../../hooks/useRoomName";
 
 /**
+ * Returns a space scope header if needed
+ * @param room The room object
+ * @returns rendered component if the room is a space room, otherwise returns null
+ */
+export function createSpaceScopeHeader(room?: Room | null): React.JSX.Element | null {
+    if (room?.isSpaceRoom()) return <SpaceScopeHeader room={room} />;
+    else return null;
+}
+
+/**
  * Scope header used to decorate right panels that are scoped to a space.
- * When room is not a space renders nothing.
- * Otherwise renders room avatar and name.
+ * It renders room avatar and name.
  */
 export const SpaceScopeHeader: React.FC<{ room: Room }> = ({ room }) => {
     const roomName = useRoomName(room);
-
-    if (!room.isSpaceRoom()) {
-        return null;
-    }
 
     return (
         <Text

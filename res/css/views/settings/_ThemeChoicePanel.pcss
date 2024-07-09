@@ -14,48 +14,72 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ThemeChoicePanel_themeSelectors {
-    color: $primary-content;
+.mx_ThemeChoicePanel_ThemeSelectors {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
+    /* Override form default style */
+    flex-direction: row !important;
+    gap: var(--cpd-space-4x) !important;
 
-    > .mx_StyledRadioButton {
-        align-items: center;
-        padding: $font-16px;
-        box-sizing: border-box;
-        border-radius: 10px;
-        width: 180px;
+    .mx_ThemeChoicePanel_themeSelector {
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        border-radius: var(--cpd-space-1-5x);
+        padding: var(--cpd-space-3x) var(--cpd-space-5x) var(--cpd-space-3x) var(--cpd-space-3x);
+        gap: var(--cpd-space-2x);
+        background-color: var(--cpd-color-bg-canvas-default);
 
-        background: $accent-200;
-        opacity: 0.4;
+        &.mx_ThemeChoicePanel_themeSelector_enabled {
+            border-color: var(--cpd-color-border-interactive-primary);
+        }
 
-        flex-shrink: 1;
-        flex-grow: 0;
+        &.mx_ThemeChoicePanel_themeSelector_disabled {
+            border-color: var(--cpd-color-border-disabled);
+        }
 
-        margin-right: 15px;
-        margin-top: 10px;
-
-        font-weight: var(--cpd-font-weight-semibold);
-
-        > span {
-            justify-content: center;
+        .mx_ThemeChoicePanel_themeSelector_Label {
+            color: var(--cpd-color-text-primary);
+            font: var(--cpd-font-body-md-semibold);
         }
     }
+}
 
-    > .mx_StyledRadioButton_enabled {
-        opacity: 1;
+.mx_ThemeChoicePanel_CustomTheme {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-4x);
 
-        /* These colors need to be hardcoded because they don't change with the theme */
-        &.mx_ThemeSelector_light {
-            background-color: #f3f8fd;
-            color: #2e2f32;
-        }
+    .mx_ThemeChoicePanel_CustomTheme_EditInPlace input:focus {
+        /*
+         * When the input is focused, the border is growing
+         * We need to move it a bit to avoid the left border to be under the left panel
+         */
+        margin-left: var(--cpd-space-0-5x);
+    }
 
-        &.mx_ThemeSelector_dark {
-            /* 5% lightened version of 181b21 */
-            background-color: #25282e;
-            color: #f3f8fd;
+    .mx_ThemeChoicePanel_CustomThemeList {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-4x);
+        /*
+         * Override the default padding/margin of the list
+         */
+        padding: 0;
+        margin: 0;
+
+        .mx_ThemeChoicePanel_CustomThemeList_theme {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--cpd-color-gray-200);
+            padding: var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-4x);
+
+            .mx_ThemeChoicePanel_CustomThemeList_name {
+                font: var(--cpd-font-body-sm-semibold);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     }
 }

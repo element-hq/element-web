@@ -32,6 +32,8 @@ export interface IRightPanelCardState {
     initialEvent?: MatrixEvent;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
+    // room summary
+    focusRoomSearch?: boolean;
 }
 
 export interface IRightPanelCardStateStored {

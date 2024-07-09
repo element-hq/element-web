@@ -13,8 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-import { ICryptoCallbacks } from "matrix-js-sdk/src/crypto";
+import { CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
@@ -62,7 +61,7 @@ export interface ISecurityCustomisations {
     getSecretStorageKey?: typeof getSecretStorageKey;
     catchAccessSecretStorageError?: typeof catchAccessSecretStorageError;
     setupEncryptionNeeded?: typeof setupEncryptionNeeded;
-    getDehydrationKey?: ICryptoCallbacks["getDehydrationKey"];
+    getDehydrationKey?: CryptoCallbacks["getDehydrationKey"];
 
     /**
      * When false, disables the post-login UI from showing. If there's

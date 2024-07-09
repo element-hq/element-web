@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, useContext } from "react";
+import React, { useContext } from "react";
 import classNames from "classnames";
 
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonProps } from "../elements/AccessibleButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
 import { IconizedContextMenuOption } from "../context_menus/IconizedContextMenu";
 import { Ref } from "../../../accessibility/roving/types";
 
-interface Props extends Omit<ComponentProps<typeof AccessibleButton>, "element"> {
+interface Props extends Omit<ButtonProps<"div">, "element"> {
     inputRef?: Ref;
     title: string;
     iconClassName: string;

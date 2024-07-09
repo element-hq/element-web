@@ -399,11 +399,10 @@ class Helpers {
     }
 
     /**
-     * Close the threads panel. (Actually, close any right panel, but for these
-     * tests we only open the threads panel.)
+     * Close the threads panel.
      */
     async closeThreadsPanel() {
-        await this.page.locator(".mx_RightPanel").getByLabel("Close").click();
+        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
         await expect(this.page.locator(".mx_RightPanel")).not.toBeVisible();
     }
 
@@ -411,7 +410,7 @@ class Helpers {
      * Return to the list of threads, given we are viewing a single thread.
      */
     async backToThreadsList() {
-        await this.page.locator(".mx_RightPanel").getByLabel("Threads").click();
+        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
     }
 
     /**

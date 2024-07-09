@@ -103,7 +103,7 @@ const verify = async (page: Page, bob: Bot) => {
     const bobsVerificationRequestPromise = waitForVerificationRequest(bob);
 
     const roomInfo = await openRoomInfo(page);
-    await roomInfo.getByRole("menuitem", { name: "People" }).click();
+    await page.locator(".mx_RightPanelTabs").getByText("People").click();
     await roomInfo.getByText("Bob").click();
     await roomInfo.getByRole("button", { name: "Verify" }).click();
     await roomInfo.getByRole("button", { name: "Start Verification" }).click();
@@ -279,7 +279,7 @@ test.describe("Cryptography", function () {
 
         // Assert that verified icon is rendered
         await page.getByRole("button", { name: "Room members" }).click();
-        await page.getByRole("button", { name: "Room information" }).click();
+        await page.locator(".mx_RightPanelTabs").getByText("Info").click();
         await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="success"]')).toContainText("Encrypted");
 
         // Take a snapshot of RoomSummaryCard with a verified E2EE icon

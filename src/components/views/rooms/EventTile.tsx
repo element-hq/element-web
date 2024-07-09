@@ -35,8 +35,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import { EventShieldColour, EventShieldReason, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -577,7 +576,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     };
 
-    private onUserVerificationChanged = (userId: string, _trustStatus: UserTrustLevel): void => {
+    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
         if (userId === this.props.mxEvent.getSender()) {
             this.verifyEvent();
         }

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { Playback, PlaybackState } from "../../../audio/Playback";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonProps } from "../elements/AccessibleButton";
 
-type Props = Omit<ComponentProps<typeof AccessibleButton>, "title" | "onClick" | "disabled" | "element" | "ref"> & {
+type Props = Omit<ButtonProps<"div">, "title" | "onClick" | "disabled" | "element" | "ref"> & {
     // Playback instance to manipulate. Cannot change during the component lifecycle.
     playback: Playback;
 

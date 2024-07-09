@@ -99,6 +99,8 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
 
         onSelectionChange(newSelection);
         focusEditor();
+        setQuery("");
+        setSuggestions([]);
     };
 
     const removeSelection = (completion: ICompletion): void => {

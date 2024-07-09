@@ -26,8 +26,12 @@ import { CardContext } from "./context";
 
 interface IProps {
     header?: ReactNode | null;
+    hideHeaderButtons?: boolean;
     footer?: ReactNode;
     className?: string;
+    id?: string;
+    role?: "tabpanel";
+    ariaLabelledBy?: string;
     withoutScrollContainer?: boolean;
     closeLabel?: string;
     onClose?(ev: ButtonEvent): void;
@@ -62,6 +66,10 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
             onClose,
             onBack,
             className,
+            id,
+            ariaLabelledBy,
+            role,
+            hideHeaderButtons,
             header,
             footer,
             withoutScrollContainer,
@@ -100,13 +108,31 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
             children = <AutoHideScrollbar>{children}</AutoHideScrollbar>;
         }
 
+        let headerButtons: React.ReactElement | undefined;
+        if (!hideHeaderButtons) {
+            headerButtons = (
+                <>
+                    {backButton}
+                    {closeButton}
+                </>
+            );
+        }
+
+        const shouldRenderHeader = header || !hideHeaderButtons;
+
         return (
             <CardContext.Provider value={{ isCard: true }}>
-                <div className={classNames("mx_BaseCard", className)} ref={ref} onKeyDown={onKeyDown}>
-                    {header !== null && (
+                <div
+                    id={id}
+                    aria-labelledby={ariaLabelledBy}
+                    role={role}
+                    className={classNames("mx_BaseCard", className)}
+                    ref={ref}
+                    onKeyDown={onKeyDown}
+                >
+                    {shouldRenderHeader && (
                         <div className="mx_BaseCard_header">
-                            {backButton}
-                            {closeButton}
+                            {headerButtons}
                             <div className="mx_BaseCard_headerProp">{header}</div>
                         </div>
                     )}

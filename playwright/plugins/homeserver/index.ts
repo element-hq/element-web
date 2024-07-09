@@ -39,6 +39,15 @@ export interface HomeserverInstance {
      * @param password login password
      */
     loginUser(userId: string, password: string): Promise<Credentials>;
+
+    /**
+     * Sets a third party identifier for the given user. This only supports setting a single 3pid and will
+     * replace any others.
+     * @param userId The full ID of the user to edit (as returned from registerUser)
+     * @param medium The medium of the 3pid to set
+     * @param address The address of the 3pid to set
+     */
+    setThreepid(userId: string, medium: string, address: string): Promise<void>;
 }
 
 export interface StartHomeserverOpts {

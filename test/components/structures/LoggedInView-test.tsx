@@ -19,6 +19,7 @@ import { render, RenderResult } from "@testing-library/react";
 import { ConditionKind, EventType, IPushRule, MatrixEvent, ClientEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
+import userEvent from "@testing-library/user-event";
 
 import LoggedInView from "../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../src/contexts/SDKContext";
@@ -26,6 +27,11 @@ import { StandardActions } from "../../../src/notifications/StandardActions";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../test-utils";
 import { TestSdkContext } from "../../TestSdkContext";
+import defaultDispatcher from "../../../src/dispatcher/dispatcher";
+import SettingsStore from "../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Action } from "../../../src/dispatcher/actions";
+import Modal from "../../../src/Modal";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -383,5 +389,32 @@ describe("<LoggedInView />", () => {
                 expect(mockClient.setPushRuleActions).not.toHaveBeenCalled();
             });
         });
+    });
+
+    it("should fire FocusMessageSearch on Ctrl+F when enabled", async () => {
+        jest.spyOn(defaultDispatcher, "fire");
+        await SettingsStore.setValue("ctrlFForSearch", null, SettingLevel.DEVICE, true);
+
+        getComponent();
+        await userEvent.keyboard("{Control>}f{/Control}");
+        expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusMessageSearch);
+    });
+
+    it("should go home on home shortcut", async () => {
+        jest.spyOn(defaultDispatcher, "dispatch");
+
+        getComponent();
+        await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ViewHomePage });
+    });
+
+    it("should ignore home shortcut if dialogs are open", async () => {
+        jest.spyOn(defaultDispatcher, "dispatch");
+        jest.spyOn(Modal, "hasDialogs").mockReturnValue(true);
+
+        getComponent();
+
+        await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
+        expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.ViewHomePage });
     });
 });
