@@ -19,7 +19,6 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { extractErrorMessageFromError } from "matrix-react-sdk/src/components/views/dialogs/ErrorDialog";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
@@ -120,6 +119,7 @@ async function start(): Promise<void> {
         showError,
         showIncompatibleBrowser,
         _t,
+        extractErrorMessageFromError,
     } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
