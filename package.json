@@ -121,7 +121,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.141.3",
+        "posthog-js": "1.144.2",
         "qrcode": "1.5.3",
         "re-resizable": "^6.9.0",
         "react": "17.0.2",
