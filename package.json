@@ -209,5 +209,8 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
+    },
+    "engines": {
+        "node": ">=20.0.0"
     }
 }
