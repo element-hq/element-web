@@ -25,9 +25,6 @@
         "package.json",
         "contribute.json"
     ],
-    "engines": {
-        "node": ">=20.0.0"
-    },
     "style": "bundle.css",
     "matrix_i18n_extra_translation_funcs": [
         "UserFriendlyError"
@@ -78,8 +75,8 @@
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
         "lodash": "^4.17.21",
-        "matrix-js-sdk": "34.1.0-rc.2",
-        "matrix-react-sdk": "3.102.0",
+        "matrix-js-sdk": "34.1.0-rc.3",
+        "matrix-react-sdk": "3.103.0-rc.1",
         "matrix-widget-api": "^1.3.1",
         "react": "17.0.2",
         "react-dom": "17.0.2",
@@ -212,5 +209,8 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
+    },
+    "engines": {
+        "node": ">=20.0.0"
     }
 }
