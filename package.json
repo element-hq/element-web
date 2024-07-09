@@ -25,6 +25,9 @@
         "package.json",
         "contribute.json"
     ],
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "style": "bundle.css",
     "matrix_i18n_extra_translation_funcs": [
         "UserFriendlyError"
