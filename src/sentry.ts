@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as Sentry from "@sentry/browser";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type Integration } from "@sentry/types/types/integration";
+import { type Integration } from "@sentry/types/build/types/integration";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
