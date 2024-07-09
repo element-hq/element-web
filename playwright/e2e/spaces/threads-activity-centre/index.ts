@@ -337,12 +337,10 @@ export class Helpers {
     }
 
     /**
-     * Assert that the thread panel is focused (actually the 'close' button, specifically)
+     * Assert that the thread tab is focused
      */
-    assertThreadPanelFocused() {
-        return expect(
-            this.page.locator(".mx_ThreadPanel").locator(".mx_BaseCard_header").getByLabel("Close"),
-        ).toBeFocused();
+    assertThreadTabFocused() {
+        return expect(this.page.locator("#thread-panel-tab")).toBeFocused();
     }
 
     /**

@@ -35,7 +35,6 @@ import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } f
 import { PollHistoryDialog } from "../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../src/languageHandler";
-import SettingsStore from "../../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -195,7 +194,6 @@ describe("<RoomSummaryCard />", () => {
                         <RoomSummaryCard
                             room={room}
                             permalinkCreator={new RoomPermalinkCreator(room)}
-                            onClose={jest.fn()}
                             onSearchChange={onSearchChange}
                             focusRoomSearch={true}
                         />
@@ -212,7 +210,6 @@ describe("<RoomSummaryCard />", () => {
                         <RoomSummaryCard
                             room={room}
                             permalinkCreator={new RoomPermalinkCreator(room)}
-                            onClose={jest.fn()}
                             onSearchChange={onSearchChange}
                         />
                     </RoomContext.Provider>
@@ -268,18 +265,6 @@ describe("<RoomSummaryCard />", () => {
         fireEvent.click(getByText(_t("common|settings")));
 
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
-    });
-
-    it("renders room members options when new room UI is not enabled", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        const { getByText } = getComponent();
-
-        fireEvent.click(getByText(_t("common|people")));
-
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
-            { phase: RightPanelPhases.RoomMemberList },
-            true,
-        );
     });
 
     describe("pinning", () => {

@@ -20,6 +20,7 @@ import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/v
 import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
 import { Icon as CloseCallIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
+import { Icon as RoomInfoIcon } from "@vector-im/compound-design-tokens/icons/info-solid.svg";
 import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
 import { Icon as VerifiedIcon } from "@vector-im/compound-design-tokens/icons/verified.svg";
 import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
@@ -336,6 +337,17 @@ export default function RoomHeader({
                         </>
                     )}
 
+                    <Tooltip label={_t("right_panel|room_summary_card|title")}>
+                        <IconButton
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                            }}
+                            aria-label={_t("right_panel|room_summary_card|title")}
+                        >
+                            <RoomInfoIcon />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip label={_t("common|threads")}>
                         <IconButton
                             indicator={notificationLevelToIndicator(threadNotifications)}

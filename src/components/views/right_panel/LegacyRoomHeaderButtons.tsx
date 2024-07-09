@@ -214,27 +214,27 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
         const currentPhase = RightPanelStore.instance.currentCard.phase;
         if (currentPhase && ROOM_INFO_PHASES.includes(currentPhase)) {
             if (this.state.phase === currentPhase) {
-                RightPanelStore.instance.showOrHidePanel(currentPhase);
+                RightPanelStore.instance.showOrHidePhase(currentPhase);
             } else {
-                RightPanelStore.instance.showOrHidePanel(currentPhase, RightPanelStore.instance.currentCard.state);
+                RightPanelStore.instance.showOrHidePhase(currentPhase, RightPanelStore.instance.currentCard.state);
             }
         } else {
             // This toggles for us, if needed
-            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
         }
     };
 
     private onNotificationsClicked = (): void => {
         // This toggles for us, if needed
-        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+        RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
     };
 
     private onPinnedMessagesClicked = (): void => {
         // This toggles for us, if needed
-        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.PinnedMessages);
+        RightPanelStore.instance.showOrHidePhase(RightPanelPhases.PinnedMessages);
     };
     private onTimelineCardClicked = (): void => {
-        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.Timeline);
+        RightPanelStore.instance.showOrHidePhase(RightPanelPhases.Timeline);
     };
 
     private onThreadsPanelClicked = (ev: ButtonEvent): void => {

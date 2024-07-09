@@ -1287,7 +1287,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
                 }
                 break;
             case Action.View3pidInvite:

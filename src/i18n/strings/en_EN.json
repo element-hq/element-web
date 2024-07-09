@@ -1833,6 +1833,7 @@
         "edit_integrations": "Edit widgets, bridges & bots",
         "export_chat_button": "Export chat",
         "files_button": "Files",
+        "info": "Info",
         "pinned_messages": {
             "empty": "Nothing pinned, yet",
             "explainer": "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",

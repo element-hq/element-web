@@ -32,6 +32,6 @@ export const onView3pidInvite = (payload: ActionPayload, rightPanelStore: RightP
             state: { memberInfoEvent: payload.event },
         });
     } else {
-        rightPanelStore.showOrHidePanel(RightPanelPhases.RoomMemberList);
+        rightPanelStore.showOrHidePhase(RightPanelPhases.RoomMemberList);
     }
 };

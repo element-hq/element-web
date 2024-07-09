@@ -3,7 +3,10 @@
 exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
 <div>
   <div
+    aria-labelledby="room-summary-panel-tab"
     class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
   >
     <div
       class="mx_AutoHideScrollbar"
@@ -12,15 +15,7 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
       <header
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
-      >
-        <div
-          aria-label="Close"
-          class="mx_AccessibleButton mx_BaseCard_close"
-          data-testid="base-card-close-button"
-          role="button"
-          tabindex="0"
-        />
-      </header>
+      />
       <header
         class="mx_RoomSummaryCard_container"
       >
@@ -258,36 +253,6 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
           <span
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
-            People
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1gwvj_60"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-            />
-          </svg>
-        </button>
-        <button
-          class="_item_1gwvj_17 _interactive_1gwvj_36"
-          data-kind="primary"
-          role="menuitem"
-        >
-          <div
-            aria-hidden="true"
-            class="_icon_1gwvj_44"
-            height="24"
-            width="24"
-          />
-          <span
-            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          >
             Files
           </span>
           <svg
@@ -423,7 +388,10 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
 exports[`<RoomSummaryCard /> renders the room summary 1`] = `
 <div>
   <div
+    aria-labelledby="room-summary-panel-tab"
     class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
   >
     <div
       class="mx_AutoHideScrollbar"
@@ -432,15 +400,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       <header
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
-      >
-        <div
-          aria-label="Close"
-          class="mx_AccessibleButton mx_BaseCard_close"
-          data-testid="base-card-close-button"
-          role="button"
-          tabindex="0"
-        />
-      </header>
+      />
       <header
         class="mx_RoomSummaryCard_container"
       >
@@ -651,36 +611,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           <span
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
-            People
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1gwvj_60"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-            />
-          </svg>
-        </button>
-        <button
-          class="_item_1gwvj_17 _interactive_1gwvj_36"
-          data-kind="primary"
-          role="menuitem"
-        >
-          <div
-            aria-hidden="true"
-            class="_icon_1gwvj_44"
-            height="24"
-            width="24"
-          />
-          <span
-            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          >
             Files
           </span>
           <svg
@@ -816,7 +746,10 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
 exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
 <div>
   <div
+    aria-labelledby="room-summary-panel-tab"
     class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
   >
     <div
       class="mx_AutoHideScrollbar"
@@ -825,15 +758,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       <header
         class="mx_Flex mx_RoomSummaryCard_header"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
-      >
-        <div
-          aria-label="Close"
-          class="mx_AccessibleButton mx_BaseCard_close"
-          data-testid="base-card-close-button"
-          role="button"
-          tabindex="0"
-        />
-      </header>
+      />
       <header
         class="mx_RoomSummaryCard_container"
       >
@@ -1041,36 +966,6 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
-        <button
-          class="_item_1gwvj_17 _interactive_1gwvj_36"
-          data-kind="primary"
-          role="menuitem"
-        >
-          <div
-            aria-hidden="true"
-            class="_icon_1gwvj_44"
-            height="24"
-            width="24"
-          />
-          <span
-            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-          >
-            People
-          </span>
-          <svg
-            aria-hidden="true"
-            class="_nav-hint_1gwvj_60"
-            fill="currentColor"
-            height="24"
-            viewBox="8 0 8 24"
-            width="8"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
-            />
-          </svg>
-        </button>
         <button
           class="_item_1gwvj_17 _interactive_1gwvj_36"
           data-kind="primary"

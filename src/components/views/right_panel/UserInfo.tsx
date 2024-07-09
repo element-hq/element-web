@@ -80,7 +80,7 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-me
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 import UIStore from "../../../stores/UIStore";
-import { SpaceScopeHeader } from "../rooms/SpaceScopeHeader";
+import { createSpaceScopeHeader } from "../rooms/SpaceScopeHeader";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -1774,10 +1774,11 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room?.roomId} />
         </>
     );
+
     return (
         <BaseCard
             className={classes.join(" ")}
-            header={room ? <SpaceScopeHeader room={room} /> : undefined}
+            header={createSpaceScopeHeader(room)}
             onClose={onClose}
             closeLabel={closeLabel}
             cardState={cardState}

@@ -80,7 +80,7 @@ test.describe("Lazy Loading", () => {
 
     async function openMemberlist(page: Page): Promise<void> {
         await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Room info" }).click();
-        await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "People" }).click(); // \d represents the number of the room members
+        await page.locator(".mx_RightPanelTabs").getByText("People").click();
     }
 
     function getMemberInMemberlist(page: Page, name: string): Locator {

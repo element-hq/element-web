@@ -55,7 +55,7 @@ import { SDKContext } from "../../../contexts/SDKContext";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { Action } from "../../../dispatcher/actions";
-import { SpaceScopeHeader } from "./SpaceScopeHeader";
+import { createSpaceScopeHeader } from "./SpaceScopeHeader";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -64,6 +64,7 @@ const SHOW_MORE_INCREMENT = 100;
 interface IProps {
     roomId: string;
     searchQuery: string;
+    hideHeaderButtons?: boolean;
     onClose(): void;
     onSearchQueryChanged: (query: string) => void;
 }
@@ -358,7 +359,14 @@ export default class MemberList extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         if (this.state.loading) {
             return (
-                <BaseCard className="mx_MemberList" onClose={this.props.onClose}>
+                <BaseCard
+                    id="memberlist-panel"
+                    className="mx_MemberList"
+                    ariaLabelledBy="memberlist-panel-tab"
+                    role="tabpanel"
+                    hideHeaderButtons={this.props.hideHeaderButtons}
+                    onClose={this.props.onClose}
+                >
                     <Spinner />
                 </BaseCard>
             );
@@ -415,12 +423,14 @@ export default class MemberList extends React.Component<IProps, IState> {
             />
         );
 
-        const scopeHeader = room ? <SpaceScopeHeader room={room} /> : undefined;
-
         return (
             <BaseCard
+                id="memberlist-panel"
                 className="mx_MemberList"
-                header={<React.Fragment>{scopeHeader}</React.Fragment>}
+                ariaLabelledBy="memberlist-panel-tab"
+                role="tabpanel"
+                header={createSpaceScopeHeader(room)}
+                hideHeaderButtons={this.props.hideHeaderButtons}
                 footer={footer}
                 onClose={this.props.onClose}
             >

@@ -216,6 +216,13 @@ describe("RoomHeader", () => {
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomMemberList });
     });
 
+    it("has room info icon that opens the room info panel", async () => {
+        const { getAllByRole } = render(<RoomHeader room={room} />, getWrapper());
+        const infoButton = getAllByRole("button", { name: "Room info" })[1];
+        fireEvent.click(infoButton);
+        expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomSummary });
+    });
+
     it("opens the thread panel", async () => {
         const { container } = render(<RoomHeader room={room} />, getWrapper());
 
