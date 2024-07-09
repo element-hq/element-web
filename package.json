@@ -23,6 +23,9 @@
         "package.json",
         ".stylelintrc.js"
     ],
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "main": "./lib/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
