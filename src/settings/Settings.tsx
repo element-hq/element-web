@@ -589,11 +589,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         displayName: _td("labs|new_room_decoration_ui"),
-        description: _td("labs|under_active_development"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         controller: new ReloadOnChangeController(),
+        betaInfo: {
+            title: _td("labs|new_room_decoration_ui_beta_title"),
+            caption: () => <p>{_t("labs|new_room_decoration_ui_beta_caption")}</p>,
+        },
     },
     "feature_notifications": {
         isFeature: true,
