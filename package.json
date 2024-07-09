@@ -187,7 +187,7 @@
         "prettier": "3.3.2",
         "process": "^0.11.10",
         "raw-loader": "^4.0.2",
-        "rimraf": "^5.0.0",
+        "rimraf": "^6.0.0",
         "semver": "^7.5.2",
         "string-replace-loader": "3",
         "style-loader": "4",
