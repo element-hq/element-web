@@ -13,6 +13,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             - name: Install Deps
               run: "yarn install --frozen-lockfile"
@@ -21,7 +22,7 @@ jobs:
               run: "yarn update:jitsi"
 
             - name: Create Pull Request
-              uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e # v6
+              uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/jitsi-update
