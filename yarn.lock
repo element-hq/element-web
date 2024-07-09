@@ -4174,6 +4174,11 @@ base-x@^4.0.0:
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-4.0.0.tgz#d0e3b7753450c73f8ad2389b5c018a4af7b2224a"
   integrity sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==
 
+base-x@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-5.0.0.tgz#6d835ceae379130e1a4cb846a70ac4746f28ea9b"
+  integrity sha512-sMW3VGSX1QWVFA6l8U62MLKz29rRfpTlYdCqLdpLo1/Yd4zZwSbnUaDfciIAowAqvq7YFnWq9hrhdg1KYgc1lQ==
+
 base64-arraybuffer@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#1c37589a7c4b0746e34bd1feb951da2df01c1bdc"
@@ -4313,6 +4318,13 @@ bs58@^5.0.0:
   integrity sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==
   dependencies:
     base-x "^4.0.0"
+
+bs58@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/bs58/-/bs58-6.0.0.tgz#a2cda0130558535dd281a2f8697df79caaf425d8"
+  integrity sha512-PD0wEnEYg6ijszw/u8s+iI3H17cTymlrwkKhDhPZq+Sokl3AU4htyBFTjAeNAlCCmg0f53g6ih3jATyCKftTfw==
+  dependencies:
+    base-x "^5.0.0"
 
 bser@2.1.1:
   version "2.1.1"
@@ -8340,6 +8352,26 @@ matrix-js-sdk@34.0.0:
     "@matrix-org/matrix-sdk-crypto-wasm" "^6.0.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.6.0"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "10"
+
+matrix-js-sdk@34.1.0-rc.2:
+  version "34.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.1.0-rc.2.tgz#d8e015eb5baaa77b870fd69f27c31d7edc1098e1"
+  integrity sha512-OsmOc3C5mlnsdM9Bpm1jBgdUZBAAL3/ZMaZNOD3OzA9yxhw893NOX7Rx1Azm96cYGYdBJRJ9qQMAaQbkXz5NDA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^6.0.0"
+    another-json "^0.2.0"
+    bs58 "^6.0.0"
     content-type "^1.0.4"
     jwt-decode "^4.0.0"
     loglevel "^1.7.1"
