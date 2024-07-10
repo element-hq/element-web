@@ -56,13 +56,48 @@ jobs:
     move_needs_info_issues:
         name: X-Needs-Info issues to Need info column on triage board
         runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
-            - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
+            - id: add_to_project
+              uses: actions/add-to-project@v1.0.1
               with:
-                  action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-                  project-url: "https://github.com/orgs/element-hq/projects/120"
-                  column-name: "Needs info"
-                  label-name: "X-Needs-Info"
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - id: set_fields
+              uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
+                  field-keys: Status
+                  field-values: "Needs info"
+        env:
+            PROJECT_URL: https://github.com/orgs/element-hq/projects/120
+
+    move_flakey_test_issues:
+        name: Z-Flaky-Test issues to Sized for maintainer column on triage board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
+        steps:
+            - id: add_to_project
+              uses: actions/add-to-project@v1.0.1
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - id: set_fields
+              uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
+                  field-keys: Status
+                  field-values: "Sized for maintainer"
+        env:
+            PROJECT_URL: https://github.com/orgs/element-hq/projects/120
 
     add_priority_design_issues_to_project:
         name: P1 X-Needs-Design to Design project board
