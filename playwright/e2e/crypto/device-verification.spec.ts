@@ -15,19 +15,18 @@ limitations under the License.
 */
 
 import jsQR from "jsqr";
-import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
-import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
+import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { test, expect } from "../../element-web-test";
 import {
+    awaitVerifier,
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
     doTwoWaySasVerification,
     logIntoElement,
     waitForVerificationRequest,
 } from "./utils";
-import { Client } from "../../pages/client";
 import { Bot } from "../../pages/bot";
 
 test.describe("Device verification", () => {
@@ -235,112 +234,6 @@ test.describe("Device verification", () => {
     });
 });
 
-test.describe("User verification", () => {
-    // note that there are other tests that check user verification works in `crypto.spec.ts`.
-
-    test.use({
-        displayName: "Alice",
-        botCreateOpts: { displayName: "Bob", autoAcceptInvites: true, userIdPrefix: "bob_" },
-        room: async ({ page, app, bot: bob, user: aliceCredentials }, use) => {
-            await app.client.bootstrapCrossSigning(aliceCredentials);
-
-            // the other user creates a DM
-            const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
-
-            // accept the DM
-            await app.viewRoomByName("Bob");
-            await page.getByRole("button", { name: "Start chatting" }).click();
-            await use({ roomId: dmRoomId });
-        },
-    });
-
-    test("can receive a verification request when there is no existing DM", async ({
-        page,
-        bot: bob,
-        user: aliceCredentials,
-        toasts,
-        room: { roomId: dmRoomId },
-    }) => {
-        // once Alice has joined, Bob starts the verification
-        const bobVerificationRequest = await bob.evaluateHandle(
-            async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
-                    await new Promise((resolve) => {
-                        room.once(window.matrixcs.RoomStateEvent.Members, resolve);
-                    });
-                }
-
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
-            },
-            { dmRoomId, aliceCredentials },
-        );
-
-        // there should also be a toast
-        const toast = await toasts.getToast("Verification requested");
-        // it should contain the details of the requesting user
-        await expect(toast.getByText(`Bob (${bob.credentials.userId})`)).toBeVisible();
-        // Accept
-        await toast.getByRole("button", { name: "Verify User" }).click();
-
-        // request verification by emoji
-        await page.locator("#mx_RightPanel").getByRole("button", { name: "Verify by emoji" }).click();
-
-        /* on the bot side, wait for the verifier to exist ... */
-        const botVerifier = await awaitVerifier(bobVerificationRequest);
-        // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify());
-        // ... and then check the emoji match
-        await doTwoWaySasVerification(page, botVerifier);
-
-        await page.getByRole("button", { name: "They match" }).click();
-        await expect(page.getByText("You've successfully verified Bob!")).toBeVisible();
-        await page.getByRole("button", { name: "Got it" }).click();
-    });
-
-    test("can abort emoji verification when emoji mismatch", async ({
-        page,
-        bot: bob,
-        user: aliceCredentials,
-        toasts,
-        room: { roomId: dmRoomId },
-    }) => {
-        // once Alice has joined, Bob starts the verification
-        const bobVerificationRequest = await bob.evaluateHandle(
-            async (client, { dmRoomId, aliceCredentials }) => {
-                const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
-                    await new Promise((resolve) => {
-                        room.once(window.matrixcs.RoomStateEvent.Members, resolve);
-                    });
-                }
-
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
-            },
-            { dmRoomId, aliceCredentials },
-        );
-
-        // Accept verification via toast
-        const toast = await toasts.getToast("Verification requested");
-        await toast.getByRole("button", { name: "Verify User" }).click();
-
-        // request verification by emoji
-        await page.locator("#mx_RightPanel").getByRole("button", { name: "Verify by emoji" }).click();
-
-        /* on the bot side, wait for the verifier to exist ... */
-        const botVerifier = await awaitVerifier(bobVerificationRequest);
-        // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify()).catch(() => {});
-        // ... and abort the verification
-        await page.getByRole("button", { name: "They don't match" }).click();
-
-        const dialog = page.locator(".mx_Dialog");
-        await expect(dialog.getByText("Your messages are not secure")).toBeVisible();
-        await dialog.getByRole("button", { name: "OK" }).click();
-        await expect(dialog).not.toBeVisible();
-    });
-});
-
 /** Extract the qrcode out of an on-screen html element */
 async function readQrCode(base: Locator) {
     const qrCode = base.locator('[alt="QR Code"]');
@@ -371,36 +264,4 @@ async function readQrCode(base: Locator) {
     // now we can decode the QR code.
     const result = jsQR(new Uint8ClampedArray(imageData.buffer), imageData.width, imageData.height);
     return new Uint8Array(result.binaryData);
-}
-
-async function createDMRoom(client: Client, userId: string): Promise<string> {
-    return client.createRoom({
-        preset: "trusted_private_chat" as Preset,
-        visibility: "private" as Visibility,
-        invite: [userId],
-        is_direct: true,
-        initial_state: [
-            {
-                type: "m.room.encryption",
-                state_key: "",
-                content: {
-                    algorithm: "m.megolm.v1.aes-sha2",
-                },
-            },
-        ],
-    });
-}
-
-/**
- * Wait for a verifier to exist for a VerificationRequest
- *
- * @param botVerificationRequest
- */
-async function awaitVerifier(botVerificationRequest: JSHandle<VerificationRequest>): Promise<JSHandle<Verifier>> {
-    return botVerificationRequest.evaluateHandle(async (verificationRequest) => {
-        while (!verificationRequest.verifier) {
-            await new Promise((r) => verificationRequest.once("change" as any, r));
-        }
-        return verificationRequest.verifier;
-    });
 }
