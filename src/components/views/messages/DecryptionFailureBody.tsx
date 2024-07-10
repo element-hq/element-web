@@ -23,8 +23,10 @@ import { IBodyProps } from "./IBodyProps";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 
 function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string {
-    if (mxEvent.isEncryptedDisabledForUnverifiedDevices) return _t("timeline|decryption_failure|blocked");
     switch (mxEvent.decryptionFailureReason) {
+        case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
+            return _t("timeline|decryption_failure|blocked");
+
         case DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP:
             return _t("timeline|decryption_failure|historical_event_no_key_backup");
 

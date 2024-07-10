@@ -78,7 +78,10 @@ export class DecryptionFailureTracker {
             // Map JS-SDK error codes to tracker codes for aggregation
             switch (errorCode) {
                 case DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID:
+                case DecryptionFailureCode.MEGOLM_KEY_WITHHELD:
                     return "OlmKeysNotSentError";
+                case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
+                    return "RoomKeysWithheldForUnverifiedDevice";
                 case DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX:
                     return "OlmIndexError";
                 case DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP:

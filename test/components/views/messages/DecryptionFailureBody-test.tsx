@@ -50,18 +50,15 @@ describe("DecryptionFailureBody", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it(`Should display "The sender has blocked you from receiving this message"`, () => {
+    it(`Should display "The sender has blocked you from receiving this message"`, async () => {
         // When
-        const event = mkEvent({
-            type: "m.room.message",
-            room: "myfakeroom",
-            user: "myfakeuser",
-            content: {
-                msgtype: "m.bad.encrypted",
-            },
-            event: true,
+        const event = await mkDecryptionFailureMatrixEvent({
+            code: DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
+            msg: "withheld",
+            roomId: "myfakeroom",
+            sender: "myfakeuser",
         });
-        jest.spyOn(event, "isEncryptedDisabledForUnverifiedDevices", "get").mockReturnValue(true);
+
         const { container } = customRender(event);
 
         // Then
