@@ -29,7 +29,6 @@ import Modal from "../../../../../Modal";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/ErrorDialog";
 import ChangePassword from "../../ChangePassword";
-import SetIntegrationManager from "../../SetIntegrationManager";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -194,12 +193,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderIntegrationManagerSection(): ReactNode {
-        if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
-
-        return <SetIntegrationManager />;
-    }
-
     public render(): React.ReactNode {
         let accountManagementSection: JSX.Element | undefined;
         const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
@@ -218,7 +211,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     <UserPersonalInfoSettings canMake3pidChanges={this.state.canMake3pidChanges} />
                     {this.renderAccountSection()}
                 </SettingsSection>
-                {this.renderIntegrationManagerSection()}
                 {accountManagementSection}
             </SettingsTab>
         );
