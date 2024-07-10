@@ -71,7 +71,6 @@
         "@types/react": "17.0.80"
     },
     "dependencies": {
-        "@matrix-org/olm": "3.2.15",
         "@matrix-org/react-sdk-module-api": "^2.3.0",
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
@@ -135,7 +134,7 @@
         "@types/semver": "^7.5.8",
         "@types/tar-js": "^0.3.5",
         "@types/ua-parser-js": "^0.7.36",
-        "@types/uuid": "^9.0.7",
+        "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^7.0.0",
         "@typescript-eslint/parser": "^7.0.0",
         "babel-jest": "^29.0.0",
@@ -157,7 +156,7 @@
         "eslint-plugin-matrix-org": "^1.0.0",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
-        "eslint-plugin-unicorn": "^53.0.0",
+        "eslint-plugin-unicorn": "^54.0.0",
         "fake-indexeddb": "^6.0.0",
         "fetch-mock": "9.11.0",
         "fetch-mock-jest": "^1.5.1",
@@ -188,7 +187,7 @@
         "prettier": "3.3.2",
         "process": "^0.11.10",
         "raw-loader": "^4.0.2",
-        "rimraf": "^5.0.0",
+        "rimraf": "^6.0.0",
         "semver": "^7.5.2",
         "string-replace-loader": "3",
         "style-loader": "4",
@@ -198,7 +197,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
-        "typescript": "5.4.5",
+        "typescript": "5.5.3",
         "util": "^0.12.5",
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^4.8.0",
@@ -210,5 +209,8 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
+    },
+    "engines": {
+        "node": ">=20.0.0"
     }
 }

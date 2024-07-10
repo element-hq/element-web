@@ -110,29 +110,6 @@ This is useful while we experiment with encryption and to make calling compatibl
 
 Enables rendering of MD / HTML in room topics.
 
-## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
-
-Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
-
-This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implementation will remain in use until users log out.
-
-This configuration value is now set to `true` by default. This means that without any additional configuration
-every new login will use the new cryptography implementation.
-
-For administrators looking to transition existing users to the new stack, the `RustCrypto.staged_rollout_percent` configuration is available.
-This configuration allows for a phased migration of users, represented as an integer percentage (0 to 100). By default, this value is set to `0`,
-which means no existing users will be migrated to the new stack. If you wish to migrate all users, you can adjust this value to `100`.
-
-This configuration should be placed under the `setting_defaults` section as shown:
-
-```
-    "setting_defaults": {
-        "RustCrypto.staged_rollout_percent": 20
-    },
-```
-
-By adjusting the `RustCrypto.staged_rollout_percent` value, you can control the migration process according to your deployment strategy.
-
 ## New room header & details (`feature_new_room_decoration_ui`) [In Development]
 
 Refactors visually the room header and room sidebar

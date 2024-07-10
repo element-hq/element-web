@@ -44,6 +44,7 @@ import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
 import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
 import { OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
+import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
@@ -125,6 +126,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 action: Action.CheckUpdates,
                 ...getUpdateCheckStatus(status),
             });
+        });
+
+        // `userAccessToken` (IPC) is requested by the main process when appending authentication
+        // to media downloads. A reply is sent over the same channel.
+        window.electron.on("userAccessToken", () => {
+            window.electron!.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
+        });
+
+        // `serverSupportedVersions` is requested by the main process when it needs to know if the
+        // server supports a particular version. This is primarily used to detect authenticated media
+        // support. A reply is sent over the same channel.
+        window.electron.on("serverSupportedVersions", async () => {
+            window.electron!.send("serverSupportedVersions", await MatrixClientPeg.get()?.getVersions());
         });
 
         // try to flush the rageshake logs to indexeddb before quit.
