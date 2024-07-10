@@ -33,7 +33,9 @@ type ElectronChannel =
     | "update-downloaded"
     | "userDownloadCompleted"
     | "userDownloadAction"
-    | "openDesktopCapturerSourcePicker";
+    | "openDesktopCapturerSourcePicker"
+    | "userAccessToken"
+    | "serverSupportedVersions";
 
 declare global {
     interface Window {
