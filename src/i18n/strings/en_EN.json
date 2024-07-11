@@ -3254,7 +3254,7 @@
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
-            "blocked": "The sender has blocked you from receiving this message",
+            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",

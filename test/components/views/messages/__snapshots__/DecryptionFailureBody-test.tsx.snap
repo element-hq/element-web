@@ -5,7 +5,7 @@ exports[`DecryptionFailureBody Should display "The sender has blocked you from r
   <div
     class="mx_DecryptionFailureBody mx_EventTile_content"
   >
-    The sender has blocked you from receiving this message
+    The sender has blocked you from receiving this message because your device is unverified
   </div>
 </div>
 `;
