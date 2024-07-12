@@ -410,6 +410,7 @@ test.describe("Timeline", () => {
                 {
                     // Exclude timestamp from snapshot of mx_MainSplit
                     mask: [page.locator(".mx_MessageTimestamp")],
+                    hideTooltips: true,
                 },
             );
 
@@ -427,6 +428,7 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-and-messages-irc-layout.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
+                hideTooltips: true,
             });
 
             // 3. Alignment of expanded GELS and placeholder of deleted message
@@ -447,6 +449,7 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-redaction-placeholder.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
+                hideTooltips: true,
             });
 
             // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
@@ -469,6 +472,7 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-emote-irc-layout.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
+                hideTooltips: true,
             });
         });
 
@@ -481,6 +485,7 @@ test.describe("Timeline", () => {
                         display: none !important;
                     }
                 `,
+                hideTooltips: true,
             };
 
             await sendEvent(app.client, room.roomId);
