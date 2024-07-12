@@ -27,6 +27,78 @@ single directory tree.
 
 Themes derived from the built in themes may also be defined in settings.
 
+After enabling custom themes and devtools, go to the devtools panel, Explore account data then im.vector.web.settings and modify custom_themes. 
+
+e.g. 
+
+```
+"custom_themes": [
+    {
+      "name": "Coffee",
+      "is_dark": false,
+      "fonts": {
+        "faces": [
+          {
+            "font-family": "Inter",
+            "src": [
+              {
+                "url": "/fonts/Inter.ttf",
+                "format": "ttf"
+              }
+            ]
+          }
+        ],
+        "general": "Inter, sans",
+        "monospace": "'Courier New'"
+      },
+      "colors": {
+        "panels": "#303446",
+        "secondary-content": "#babbf1",
+        "accent-color": "#babbf1",
+        "primary-color": "#babbf1",
+        "warning-color": "#e78284",
+        "alert": "#faa81a",
+        "sidebar-color": "#232634",
+        "roomlist-background-color": "#292c3c",
+        "roomlist-text-color": "#c6d0f5",
+        "roomlist-text-secondary-color": "#303446",
+        "roomlist-highlights-color": "#51576d",
+        "roomlist-separator-color": "#838ba7",
+        "timeline-background-color": "#303446",
+        "timeline-text-color": "#c6d0f5",
+        "tertiary-content": "#c6d0f5",
+        "timeline-text-secondary-color": "#a5adce",
+        "timeline-highlights-color": "#292c3c",
+        "reaction-row-button-selected-bg-color": "#51576d",
+        "menu-selected-color": "#51576d",
+        "focus-bg-color": "#626880",
+        "room-highlight-color": "#99d1db",
+        "togglesw-off-color": "#949cbb",
+        "other-user-pill-bg-color": "#99d1db",
+        "cpd-color-text-primary": "#ebeef2",
+        "cpd-color-bg-canvas-default": "#51576c",
+        "cpd-color-text-secondary": "#aec0e8",
+        "cpd-color-bg-subtle-secondary": "#313447",
+        "cpd-color-bg-action-secondary-rest": "#51576c",
+        "cpd-color-icon-primary": "#717a89",
+        "cpd-color-text-critical-primary": "#ff5b55",
+        "cpd-color-text-decorative-1": "var(--cpd-color-yellow-300)",
+        "cpd-color-text-decorative-2": "var(--cpd-color-blue-700)",
+        "cpd-color-text-decorative-3": "var(--cpd-color-orange-700)",
+        "cpd-color-text-decorative-4": "var(--cpd-color-lime-400)",
+        "cpd-color-text-decorative-5": "var(--cpd-color-lime-500)",
+        "cpd-color-text-decorative-6": "var(--cpd-color-yellow-400)",
+        "cpd-color-bg-decorative-1": "var(--cpd-color-yellow-300)",
+        "cpd-color-bg-decorative-2": "var(--cpd-color-blue-700)",
+        "cpd-color-bg-decorative-3": "var(--cpd-color-orange-700)",
+        "cpd-color-bg-decorative-4": "var(--cpd-color-lime-400)",
+        "cpd-color-bg-decorative-5": "var(--cpd-color-lime-500)",
+        "cpd-color-bg-decorative-6": "var(--cpd-color-yellow-400)"
+      }
+    }
+  ]
+```
+
 To avoid name collisions, the internal name of a theme is
 `custom-${theme.name}`. So if you want to set the custom theme below as the
 default theme, you would use `default_theme: "custom-Electric Blue"`.
