@@ -71,7 +71,7 @@ exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_rijzz_17 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_bh2qc_17 mx_RoomSummaryCard_topic_chevron"
               role="button"
               style="--cpd-icon-button-size: 24px;"
               tabindex="0"
@@ -814,7 +814,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_rijzz_17 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_bh2qc_17 mx_RoomSummaryCard_topic_chevron"
               role="button"
               style="--cpd-icon-button-size: 24px;"
               tabindex="0"
