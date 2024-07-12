@@ -28,7 +28,6 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import E2eAdvancedPanel, { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
@@ -361,14 +360,12 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
             const ignoreUsersPanel = this.renderIgnoredUsers();
             const invitesPanel = this.renderManageInvites();
-            const e2ePanel = isE2eAdvancedPanelPossible() ? <E2eAdvancedPanel /> : null;
             // only show the section if there's something to show
-            if (ignoreUsersPanel || invitesPanel || e2ePanel) {
+            if (ignoreUsersPanel || invitesPanel) {
                 advancedSection = (
                     <SettingsSection heading={_t("common|advanced")}>
                         {ignoreUsersPanel}
                         {invitesPanel}
-                        {e2ePanel}
                     </SettingsSection>
                 );
             }
