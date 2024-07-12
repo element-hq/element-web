@@ -1924,14 +1924,11 @@
         "rejecting": "Відхилення запрошення…",
         "rejoin_button": "Перепід'єднатись",
         "search": {
-            "all_rooms": "Усі кімнати",
             "all_rooms_button": "Вибрати всі кімнати",
-            "field_placeholder": "Пошук…",
             "result_count": {
                 "one": "(~%(count)s результат)",
                 "other": "(~%(count)s результатів)"
             },
-            "this_room": "Ця кімната",
             "this_room_button": "Шукати цю кімнату"
         },
         "show_labs_settings": "Відкрити налаштування експериментальних функцій",

@@ -1814,13 +1814,10 @@
         "rejecting": "招待を拒否しています…",
         "rejoin_button": "再参加",
         "search": {
-            "all_rooms": "全てのルーム",
-            "field_placeholder": "検索…",
             "result_count": {
                 "other": "（〜%(count)s件）",
                 "one": "（〜%(count)s件）"
-            },
-            "this_room": "このルーム"
+            }
         },
         "show_labs_settings": "ラボの設定を表示",
         "status_bar": {

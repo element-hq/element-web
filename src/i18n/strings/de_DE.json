@@ -1974,14 +1974,11 @@
         "rejecting": "Lehne Einladung ab …",
         "rejoin_button": "Erneut betreten",
         "search": {
-            "all_rooms": "In allen Räumen",
             "all_rooms_button": "Alle Räume durchsuchen",
-            "field_placeholder": "Suchen…",
             "result_count": {
                 "one": "(~%(count)s Ergebnis)",
                 "other": "(~%(count)s Ergebnisse)"
             },
-            "this_room": "In diesem Raum",
             "this_room_button": "Diesen Raum durchsuchen"
         },
         "show_labs_settings": "Zeige die \"Labor\" Einstellungen",

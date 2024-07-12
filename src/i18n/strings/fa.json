@@ -1254,13 +1254,10 @@
         "peek_join_prompt": "شما در حال پیش نمایش %(roomName)s هستید. می خواهید به آن بپیوندید؟",
         "rejoin_button": "دوباره بپیوندید",
         "search": {
-            "all_rooms": "همه‌ی گپ‌ها",
-            "field_placeholder": "جستجو…",
             "result_count": {
                 "one": "(~%(count)s نتیجه)",
                 "other": "(~%(count)s نتیجه)"
-            },
-            "this_room": "این گپ"
+            }
         },
         "status_bar": {
             "delete_all": "حذف همه",

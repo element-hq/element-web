@@ -1927,14 +1927,11 @@
         "rejecting": "正在回絕邀請…",
         "rejoin_button": "重新加入",
         "search": {
-            "all_rooms": "所有聊天室",
             "all_rooms_button": "搜尋所有聊天室",
-            "field_placeholder": "搜尋…",
             "result_count": {
                 "one": "（~%(count)s 結果）",
                 "other": "（~%(count)s 結果）"
             },
-            "this_room": "這個聊天室",
             "this_room_button": "搜尋此聊天室"
         },
         "show_labs_settings": "顯示「實驗室」設定",

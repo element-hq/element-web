@@ -1655,13 +1655,10 @@
         "read_topic": "Klik om het onderwerp te lezen",
         "rejoin_button": "Opnieuw toetreden",
         "search": {
-            "all_rooms": "Alle kamers",
-            "field_placeholder": "Zoeken…",
             "result_count": {
                 "one": "(~%(count)s resultaat)",
                 "other": "(~%(count)s resultaten)"
-            },
-            "this_room": "Deze kamer"
+            }
         },
         "show_labs_settings": "Lab instellingen weergeven",
         "status_bar": {

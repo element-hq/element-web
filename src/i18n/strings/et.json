@@ -1964,14 +1964,11 @@
         "rejecting": "Hülgan kutset…",
         "rejoin_button": "Liitu uuesti",
         "search": {
-            "all_rooms": "Kõik jututoad",
             "all_rooms_button": "Otsi kõikidest jututubadest",
-            "field_placeholder": "Otsi…",
             "result_count": {
                 "other": "(~%(count)s tulemust)",
                 "one": "(~%(count)s tulemus)"
             },
-            "this_room": "See jututuba",
             "this_room_button": "Otsi sellest jututoast"
         },
         "show_labs_settings": "Näita seadistusi",

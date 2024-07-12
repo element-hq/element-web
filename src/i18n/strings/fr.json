@@ -2023,14 +2023,11 @@
         "rejecting": "Rejet de l’invitation…",
         "rejoin_button": "Revenir",
         "search": {
-            "all_rooms": "Tous les salons",
             "all_rooms_button": "Rechercher dans tous les salons",
-            "field_placeholder": "Rechercher…",
             "result_count": {
                 "one": "(~%(count)s résultat)",
                 "other": "(~%(count)s résultats)"
             },
-            "this_room": "Ce salon",
             "this_room_button": "Rechercher dans ce salon"
         },
         "show_labs_settings": "Afficher les réglages des expérimentations",

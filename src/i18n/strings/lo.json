@@ -1584,13 +1584,10 @@
         "read_topic": "ກົດເພື່ອອ່ານຫົວຂໍ້",
         "rejoin_button": "ເຂົ້າຮ່ວມອີກຄັ້ງ",
         "search": {
-            "all_rooms": "ຫ້ອງທັງໝົດ",
-            "field_placeholder": "ຊອກຫາ…",
             "result_count": {
                 "one": "(~%(count)sຜົນຮັບ)",
                 "other": "(~%(count)sຜົນຮັບ)"
-            },
-            "this_room": "ຫ້ອງນີ້"
+            }
         },
         "show_labs_settings": "ໂຊການຕັ້ງຄ່າສູນທົດລອງ",
         "status_bar": {

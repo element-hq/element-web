@@ -1735,14 +1735,11 @@
         "rejecting": "Từ chối lời mời…",
         "rejoin_button": "Tham gia lại",
         "search": {
-            "all_rooms": "Tất cả các phòng",
             "all_rooms_button": "Tìm tất cả phòng",
-            "field_placeholder": "Tìm kiếm…",
             "result_count": {
                 "one": "(~%(count)s kết quả)",
                 "other": "(~%(count)s kết quả)"
             },
-            "this_room": "phòng này",
             "this_room_button": "Tìm trong phòng này"
         },
         "show_labs_settings": "Hiện các cài đặt thử nghiệm",

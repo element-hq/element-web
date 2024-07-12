@@ -1715,13 +1715,10 @@
         "rejecting": "Hylätään kutsua…",
         "rejoin_button": "Liity uudelleen",
         "search": {
-            "all_rooms": "Kaikki huoneet",
-            "field_placeholder": "Haku…",
             "result_count": {
                 "one": "(~%(count)s tulos)",
                 "other": "(~%(count)s tulosta)"
-            },
-            "this_room": "Tämä huone"
+            }
         },
         "show_labs_settings": "Näytä laboratorion asetukset",
         "status_bar": {

@@ -1454,7 +1454,9 @@
         "location_share_live_description": "Implementacja tymczasowa. Lokalizacje są zapisywane w historii pokoju.",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
-        "new_room_decoration_ui": "W trakcie aktywnego rozwoju, nowy nagłówek pokoju & interfejs szczegółów",
+        "new_room_decoration_ui": "Nowy nagłówek pokoju",
+        "new_room_decoration_ui_beta_caption": "Nowy wygląd dla Twoich pokoi dzięki prostszemu i łatwiejszemu w użyciu nagłówkowi.",
+        "new_room_decoration_ui_beta_title": "Nagłówek pokoju",
         "notification_settings": "Ustawienia nowych powiadomień",
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
@@ -1833,6 +1835,7 @@
         "edit_integrations": "Edytuj widżety, mostki i boty",
         "export_chat_button": "Eksportuj czat",
         "files_button": "Pliki",
+        "info": "Info",
         "pinned_messages": {
             "empty": "Nie przypięto tu jeszcze niczego",
             "explainer": "Jeżeli masz uprawnienia, przejdź do menu dowolnej wiadomości i wybierz <b>Przypnij</b>, aby przyczepić ją tutaj.",
@@ -1958,7 +1961,7 @@
             "video_call_ec_layout_spotlight": "Centrum uwagi",
             "video_room_view_chat_button": "Wyświetl oś czasu czatu"
         },
-        "header_face_pile_tooltip": "Przełącz listę członków",
+        "header_face_pile_tooltip": "Osoby",
         "header_untrusted_label": "Niezaufany",
         "inaccessible": "Ten pokój lub przestrzeń nie jest dostępna w tym momencie.",
         "inaccessible_name": "%(roomName)s nie jest dostępny w tym momencie.",
@@ -2033,14 +2036,17 @@
         "rejecting": "Odrzucanie zaproszenia…",
         "rejoin_button": "Dołącz ponownie",
         "search": {
-            "all_rooms": "Wszystkie pokoje",
             "all_rooms_button": "Wyszukaj wszystkie pokoje",
-            "field_placeholder": "Szukaj…",
+            "placeholder": "Szukaj wiadomości...",
             "result_count": {
                 "one": "(~%(count)s wynik)",
                 "other": "(~%(count)s wyników)"
             },
-            "this_room": "Ten pokój",
+            "summary": {
+                "one": "Znaleziono 1 wynik dla \"<query/>\"",
+                "few": "Znaleziono %(count)s wyniki dla \"<query/>\"",
+                "many": "Znaleziono %(count)s wyników dla \"<query/>\""
+            },
             "this_room_button": "Wyszukaj ten pokój"
         },
         "show_labs_settings": "Pokaż ustawienia laboratoriów",
@@ -2419,6 +2425,8 @@
         "always_show_message_timestamps": "Zawsze pokazuj znaczniki czasu wiadomości",
         "appearance": {
             "bundled_emoji_font": "Użyj wbudowanej czcionki emoji",
+            "compact_layout": "Pokaż kompaktowy tekst i wiadomości",
+            "compact_layout_description": "Aby korzystać z tej funkcji, należy wybrać nowoczesny układ.",
             "custom_font": "Użyj czcionki systemowej",
             "custom_font_description": "Wybierz nazwę czcionki zainstalowanej w systemie, a %(brand)s spróbuje jej użyć.",
             "custom_font_name": "Nazwa czcionki systemowej",
@@ -2464,6 +2472,9 @@
             "add_msisdn_dialog_title": "Dodaj numer telefonu",
             "add_msisdn_instructions": "Wiadomość tekstowa wysłana do %(msisdn)s. Wprowadź kod weryfikacyjny w niej zawarty.",
             "add_msisdn_misconfigured": "Dodaj / binduj za pomocą MSISDN flow zostało nieprawidłowo skonfigurowane",
+            "allow_spellcheck": "Zezwól na sprawdzanie pisowni",
+            "application_language": "Język aplikacji",
+            "application_language_reload_hint": "Aplikacja włączy się ponownie po zmianie języka",
             "avatar_remove_progress": "Usuwanie obrazu...",
             "avatar_save_progress": "Przesyłanie obrazu...",
             "avatar_upload_error_text": "Format pliku nie jest obsługiwany lub obraz jest większy niż %(size)s.",
@@ -2517,7 +2528,7 @@
             "identity_server_no_token": "Nie znaleziono tokena dostępu tożsamości",
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
             "incorrect_msisdn_verification": "Nieprawidłowy kod weryfikujący",
-            "language_section": "Język i region",
+            "language_section": "Język",
             "msisdn_in_use": "Ten numer telefonu jest już zajęty",
             "msisdn_label": "Numer telefonu",
             "msisdn_verification_field_label": "Kod weryfikacyjny",
@@ -2529,6 +2540,7 @@
             "password_change_success": "Twoje hasło zostało pomyślnie zmienione.",
             "personal_info": "Dane osobowe",
             "profile_subtitle": "Tak widzą Cię inni w aplikacji.",
+            "profile_subtitle_oidc": "Twoje konto jest zarządzane oddzielnie przez dostawcę tożsamości, dlatego nie można tutaj zmienić niektórych danych osobowych.",
             "remove_email_prompt": "Usunąć %(email)s?",
             "remove_msisdn_prompt": "Usunąć %(phone)s?",
             "spell_check_locale_placeholder": "Wybierz język",
@@ -3875,7 +3887,7 @@
         "disable_camera": "Wyłącz kamerę",
         "disable_microphone": "Wycisz mikrofon",
         "disabled_no_one_here": "Nie ma tu nikogo, do kogo można zadzwonić",
-        "disabled_no_perms_start_video_call": "Nie posiadasz wymaganych uprawnień do rozpoczęcia rozmowy wideo",
+        "disabled_no_perms_start_video_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy wideo",
         "disabled_no_perms_start_voice_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",
         "element_call": "Element Call",

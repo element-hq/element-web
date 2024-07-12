@@ -1989,14 +1989,11 @@
         "rejecting": "Nekar inbjudan …",
         "rejoin_button": "Gå med igen",
         "search": {
-            "all_rooms": "Alla rum",
             "all_rooms_button": "Sök i alla rum",
-            "field_placeholder": "Sök…",
             "result_count": {
                 "other": "(~%(count)s resultat)",
                 "one": "(~%(count)s resultat)"
             },
-            "this_room": "Det här rummet",
             "this_room_button": "Sök i det här rummet"
         },
         "show_labs_settings": "Visa experimentinställningar",

@@ -1605,13 +1605,10 @@
         "read_topic": "Smelltu til að lesa umfjöllunarefni",
         "rejoin_button": "Taka þátt aftur",
         "search": {
-            "all_rooms": "Allar spjallrásir",
-            "field_placeholder": "Leita…",
             "result_count": {
                 "one": "(~%(count)s niðurstaða)",
                 "other": "(~%(count)s niðurstöður)"
-            },
-            "this_room": "Þessi spjallrás"
+            }
         },
         "show_labs_settings": "Sýna tilraunastillingar",
         "status_bar": {

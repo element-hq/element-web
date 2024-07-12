@@ -1811,14 +1811,11 @@
         "rejecting": "Rechazar invitación…",
         "rejoin_button": "Volver a entrar",
         "search": {
-            "all_rooms": "Todas las salas",
             "all_rooms_button": "Buscar en todas las salas",
-            "field_placeholder": "Buscar…",
             "result_count": {
                 "other": "(~%(count)s resultados)",
                 "one": "(~%(count)s resultado)"
             },
-            "this_room": "Esta sala",
             "this_room_button": "Buscar en esta sala"
         },
         "show_labs_settings": "Ver ajustes de los experimentos",

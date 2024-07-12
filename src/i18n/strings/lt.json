@@ -1194,13 +1194,10 @@
         "peek_join_prompt": "Jūs peržiūrite %(roomName)s. Norite prie jo prisijungti?",
         "rejoin_button": "Prisijungti iš naujo",
         "search": {
-            "all_rooms": "Visi pokalbių kambariai",
-            "field_placeholder": "Paieška…",
             "result_count": {
                 "other": "(~%(count)s rezultatų(-ai))",
                 "one": "(~%(count)s rezultatas)"
-            },
-            "this_room": "Šis pokalbių kambarys"
+            }
         },
         "show_labs_settings": "Rodyti laboratorijų nustatymus",
         "status_bar": {

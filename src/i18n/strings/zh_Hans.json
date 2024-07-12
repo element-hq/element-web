@@ -1772,13 +1772,10 @@
         "read_topic": "点击阅读话题",
         "rejoin_button": "重新加入",
         "search": {
-            "all_rooms": "全部房间",
-            "field_placeholder": "搜索…",
             "result_count": {
                 "one": "（~%(count)s 个结果）",
                 "other": "（~%(count)s 个结果）"
-            },
-            "this_room": "此房间"
+            }
         },
         "show_labs_settings": "显示实验室设置",
         "status_bar": {

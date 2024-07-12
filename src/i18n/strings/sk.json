@@ -1977,14 +1977,11 @@
         "rejecting": "Odmietnutie pozvania …",
         "rejoin_button": "Znovu sa pripojiť",
         "search": {
-            "all_rooms": "Vo všetkých miestnostiach",
             "all_rooms_button": "Vyhľadávať vo všetkých miestnostiach",
-            "field_placeholder": "Hľadať…",
             "result_count": {
                 "other": "(~%(count)s výsledkov)",
                 "one": "(~%(count)s výsledok)"
             },
-            "this_room": "V tejto miestnosti",
             "this_room_button": "Vyhľadávať v tejto miestnosti"
         },
         "show_labs_settings": "Zobraziť nastavenia laboratórií",

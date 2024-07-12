@@ -1933,14 +1933,11 @@
         "rejecting": "Meghívó elutasítása…",
         "rejoin_button": "Újra-csatlakozás",
         "search": {
-            "all_rooms": "Minden szobában",
             "all_rooms_button": "Keresés az összes szobában",
-            "field_placeholder": "Keresés…",
             "result_count": {
                 "one": "(~%(count)s db eredmény)",
                 "other": "(~%(count)s db eredmény)"
             },
-            "this_room": "Ebben a szobában",
             "this_room_button": "Keresés ebben a szobában"
         },
         "show_labs_settings": "Labor beállítások megjelenítése",

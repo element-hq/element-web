@@ -1952,14 +1952,11 @@
         "rejecting": "Menolak undangan…",
         "rejoin_button": "Bergabung Ulang",
         "search": {
-            "all_rooms": "Semua Ruangan",
             "all_rooms_button": "Cari semua ruangan",
-            "field_placeholder": "Cari…",
             "result_count": {
                 "one": "(~%(count)s hasil)",
                 "other": "(~%(count)s hasil)"
             },
-            "this_room": "Ruangan ini",
             "this_room_button": "Cari ruangan ini"
         },
         "show_labs_settings": "Tampilkan pengaturan Uji Coba",

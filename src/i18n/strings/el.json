@@ -1557,13 +1557,10 @@
         "peek_join_prompt": "Κάνετε προεπισκόπηση στο %(roomName)s. Θέλετε να συμμετάσχετε;",
         "rejoin_button": "Επανασύνδεση",
         "search": {
-            "all_rooms": "Όλα τα δωμάτια",
-            "field_placeholder": "Αναζήτηση…",
             "result_count": {
                 "one": "(~%(count)s αποτέλεσμα)",
                 "other": "(~%(count)s αποτελέσματα)"
-            },
-            "this_room": "Στο δωμάτιο"
+            }
         },
         "show_labs_settings": "Εμφάνιση ρυθμίσεων Labs",
         "status_bar": {

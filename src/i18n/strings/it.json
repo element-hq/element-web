@@ -1989,14 +1989,11 @@
         "rejecting": "Rifiuto dell'invito…",
         "rejoin_button": "Rientra",
         "search": {
-            "all_rooms": "Tutte le stanze",
             "all_rooms_button": "Cerca in tutte le stanze",
-            "field_placeholder": "Cerca…",
             "result_count": {
                 "other": "(~%(count)s risultati)",
                 "one": "(~%(count)s risultato)"
             },
-            "this_room": "Questa stanza",
             "this_room_button": "Cerca in questa stanza"
         },
         "show_labs_settings": "Mostra impostazioni Laboratori",

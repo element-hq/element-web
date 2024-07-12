@@ -1296,13 +1296,10 @@
         "peek_join_prompt": "Você está visualizando %(roomName)s. Deseja participar?",
         "rejoin_button": "Entrar novamente",
         "search": {
-            "all_rooms": "Todas as salas",
-            "field_placeholder": "Buscar…",
             "result_count": {
                 "one": "(~%(count)s resultado)",
                 "other": "(~%(count)s resultados)"
-            },
-            "this_room": "Esta sala"
+            }
         },
         "status_bar": {
             "exceeded_resource_limit": "Sua mensagem não foi enviada porque este servidor local excedeu o limite de recursos. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",

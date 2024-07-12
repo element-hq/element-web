@@ -1858,14 +1858,11 @@
         "rejecting": "Po hidhet poshtë ftesa…",
         "rejoin_button": "Rihyni",
         "search": {
-            "all_rooms": "Krejt Dhomat",
             "all_rooms_button": "Kërko në krejt dhomat",
-            "field_placeholder": "Kërkoni…",
             "result_count": {
                 "other": "(~%(count)s përfundime)",
                 "one": "(~%(count)s përfundim)"
             },
-            "this_room": "Këtë Dhomë",
             "this_room_button": "Kërko në këtë dhomë"
         },
         "show_labs_settings": "Shfaq rregullime për Labs",

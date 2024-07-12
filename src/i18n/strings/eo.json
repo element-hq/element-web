@@ -1379,13 +1379,10 @@
         "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
         "rejoin_button": "Re-aliĝi",
         "search": {
-            "all_rooms": "Ĉiuj ĉambroj",
-            "field_placeholder": "Serĉi…",
             "result_count": {
                 "other": "(~%(count)s rezultoj)",
                 "one": "(~%(count)s rezulto)"
-            },
-            "this_room": "Ĉi tiu ĉambro"
+            }
         },
         "status_bar": {
             "delete_all": "Forigi ĉiujn",

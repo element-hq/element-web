@@ -1666,13 +1666,10 @@
         "read_topic": "Preme para ler o tema",
         "rejoin_button": "Volta a unirte",
         "search": {
-            "all_rooms": "Todas as Salas",
-            "field_placeholder": "Buscar…",
             "result_count": {
                 "other": "(~%(count)s resultados)",
                 "one": "(~%(count)s resultado)"
-            },
-            "this_room": "Esta sala"
+            }
         },
         "show_labs_settings": "Mostrar axustes en Labs",
         "status_bar": {

@@ -1992,14 +1992,11 @@
         "rejecting": "Odmítání pozvánky…",
         "rejoin_button": "Znovu vstoupit",
         "search": {
-            "all_rooms": "Všechny místnosti",
             "all_rooms_button": "Vyhledávat ve všech místnostech",
-            "field_placeholder": "Hledat…",
             "result_count": {
                 "other": "(~%(count)s výsledků)",
                 "one": "(~%(count)s výsledek)"
             },
-            "this_room": "Tato místnost",
             "this_room_button": "Vyhledávat v této místnosti"
         },
         "show_labs_settings": "Zobrazit nastavení Experimentálních funkcí",

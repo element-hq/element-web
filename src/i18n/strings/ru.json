@@ -1972,14 +1972,11 @@
         "rejecting": "Отклонение приглашения…",
         "rejoin_button": "Пере-присоединение",
         "search": {
-            "all_rooms": "Везде",
             "all_rooms_button": "Поиск по всем комнатам",
-            "field_placeholder": "Поиск…",
             "result_count": {
                 "other": "(~%(count)s результатов)",
                 "one": "(~%(count)s результат)"
             },
-            "this_room": "В этой комнате",
             "this_room_button": "Поиск в этой комнате"
         },
         "show_labs_settings": "Показать настройки лаборатории",
