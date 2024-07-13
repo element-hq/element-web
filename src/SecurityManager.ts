@@ -25,7 +25,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
 import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
-import RestoreKeyBackupDialog from "./components/views/dialogs/security/RestoreKeyBackupDialog";
 import SettingsStore from "./settings/SettingsStore";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
@@ -44,10 +43,6 @@ let dehydrationCache: {
     key?: Uint8Array;
     keyInfo?: SecretStorage.SecretStorageKeyDescription;
 } = {};
-
-function isCachingAllowed(): boolean {
-    return secretStorageBeingAccessed;
-}
 
 /**
  * This can be used by other components to check if secret storage access is in
@@ -118,7 +113,7 @@ async function getSecretStorageKey({
     }
 
     // Check the in-memory cache
-    if (isCachingAllowed() && secretStorageKeys[keyId]) {
+    if (secretStorageBeingAccessed && secretStorageKeys[keyId]) {
         return [keyId, secretStorageKeys[keyId]];
     }
 
@@ -226,7 +221,7 @@ function cacheSecretStorageKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
     key: Uint8Array,
 ): void {
-    if (isCachingAllowed()) {
+    if (secretStorageBeingAccessed) {
         secretStorageKeys[keyId] = key;
         secretStorageKeyInfo[keyId] = keyInfo;
     }
@@ -278,26 +273,6 @@ export const crossSigningCallbacks: ICryptoCallbacks = {
     getDehydrationKey,
 };
 
-export async function promptForBackupPassphrase(): Promise<Uint8Array> {
-    let key!: Uint8Array;
-
-    const { finished } = Modal.createDialog(
-        RestoreKeyBackupDialog,
-        {
-            showSummary: false,
-            keyCallback: (k: Uint8Array) => (key = k),
-        },
-        undefined,
-        /* priority = */ false,
-        /* static = */ true,
-    );
-
-    const success = await finished;
-    if (!success) throw new Error("Key backup prompt cancelled");
-
-    return key;
-}
-
 /**
  * Carry out an operation that may require multiple accesses to secret storage, caching the key.
  *
@@ -313,10 +288,8 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
     } finally {
         // Clear secret storage key cache now that work is complete
         secretStorageBeingAccessed = false;
-        if (!isCachingAllowed()) {
-            secretStorageKeys = {};
-            secretStorageKeyInfo = {};
-        }
+        secretStorageKeys = {};
+        secretStorageKeyInfo = {};
     }
 }
 
@@ -395,9 +368,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
                     }
                 },
             });
-            await crypto.bootstrapSecretStorage({
-                getKeyBackupPassphrase: promptForBackupPassphrase,
-            });
+            await crypto.bootstrapSecretStorage({});
 
             const keyId = Object.keys(secretStorageKeys)[0];
             if (keyId && SettingsStore.getValue("feature_dehydration")) {

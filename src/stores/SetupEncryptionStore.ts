@@ -152,8 +152,6 @@ export class SetupEncryptionStore extends EventEmitter {
             // in the background.
             await new Promise((resolve: (value?: unknown) => void, reject: (reason?: any) => void) => {
                 accessSecretStorage(async (): Promise<void> => {
-                    await cli.checkOwnCrossSigningTrust();
-
                     // The remaining tasks (device dehydration and restoring
                     // key backup) may take some time due to processing many
                     // to-device messages in the case of device dehydration, or

@@ -26,7 +26,6 @@ import { BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matri
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t, _td } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import { promptForBackupPassphrase } from "../../../../SecurityManager";
 import { copyNode } from "../../../../utils/strings";
 import { SSOAuthEntry } from "../../../../components/views/auth/InteractiveAuthEntryComponents";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
@@ -123,7 +122,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         forceReset: false,
     };
     private recoveryKey?: GeneratedSecretStorageKey;
-    private backupKey?: Uint8Array;
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();
 
@@ -384,15 +382,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     createSecretStorageKey: async () => this.recoveryKey!,
                     keyBackupInfo: this.state.backupInfo!,
                     setupNewKeyBackup: !this.state.backupInfo,
-                    getKeyBackupPassphrase: async (): Promise<Uint8Array> => {
-                        // We may already have the backup key if we earlier went
-                        // through the restore backup path, so pass it along
-                        // rather than prompting again.
-                        if (this.backupKey) {
-                            return this.backupKey;
-                        }
-                        return promptForBackupPassphrase();
-                    },
                 });
             }
             await initialiseDehydration(true);
@@ -424,11 +413,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private restoreBackup = async (): Promise<void> => {
-        // It's possible we'll need the backup key later on for bootstrapping,
-        // so let's stash it here, rather than prompting for it twice.
-        const keyCallback = (k: Uint8Array): void => {
-            this.backupKey = k;
-        };
+        const keyCallback = (k: Uint8Array): void => {};
 
         const { finished } = Modal.createDialog(
             RestoreKeyBackupDialog,
