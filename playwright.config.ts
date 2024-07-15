@@ -42,4 +42,5 @@ export default defineConfig({
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
     snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
+    forbidOnly: !!process.env.CI,
 });
