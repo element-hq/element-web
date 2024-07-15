@@ -2479,6 +2479,11 @@
   resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.4.tgz#e3e331b7e0d5496873d417839f3b2bbcf555bb73"
   integrity sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==
 
+"@types/css-tree@^2.3.8":
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/@types/css-tree/-/css-tree-2.3.8.tgz#0eabc115e45051b2f7abe51ee1531074b234ed19"
+  integrity sha512-zABG3nI2UENsx7AQv63tI5/ptoAG/7kQR1H0OvG+WTWYHOR5pfAT3cGgC8SdyCrgX/TTxJBZNmx82IjCXs1juQ==
+
 "@types/diff-match-patch@^1.0.32":
   version "1.0.36"
   resolved "https://registry.yarnpkg.com/@types/diff-match-patch/-/diff-match-patch-1.0.36.tgz#dcef10a69d357fe9d43ac4ff2eca6b85dbf466af"

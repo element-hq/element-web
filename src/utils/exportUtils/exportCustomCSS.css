@@ -18,6 +18,11 @@ limitations under the License.
     This file is raw-imported (imported as plain text) for the export bundle, which is the reason for the .css format and the colours being hard-coded hard-coded.
 */
 
+html,
+body {
+    font-size: var(--cpd-font-size-root) !important;
+}
+
 #snackbar {
     display: flex;
     visibility: hidden;
