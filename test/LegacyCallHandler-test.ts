@@ -52,6 +52,7 @@ import { mkVoiceBroadcastInfoStateEvent } from "./voice-broadcast/utils/test-uti
 import { SdkContextClass } from "../src/contexts/SDKContext";
 import Modal from "../src/Modal";
 import { createAudioContext } from "../src/audio/compat";
+import * as ManagedHybrid from "../src/widgets/ManagedHybrid";
 
 jest.mock("../src/Modal");
 
@@ -315,6 +316,7 @@ describe("LegacyCallHandler", () => {
 
         document.body.removeChild(audioElement);
         SdkConfig.reset();
+        jest.restoreAllMocks();
     });
 
     it("should look up the correct user and start a call in the room when a phone number is dialled", async () => {
@@ -401,6 +403,13 @@ describe("LegacyCallHandler", () => {
         expect(callRoomChangeEventCount).toEqual(1);
         expect(callHandler.getCallForRoom(NATIVE_ROOM_BOB)).toBeNull();
         expect(callHandler.getCallForRoom(NATIVE_ROOM_CHARLIE)).toBe(fakeCall);
+    });
+
+    it("should place calls using managed hybrid widget if enabled", async () => {
+        const spy = jest.spyOn(ManagedHybrid, "addManagedHybridWidget");
+        jest.spyOn(ManagedHybrid, "isManagedHybridWidgetEnabled").mockReturnValue(true);
+        await callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
+        expect(spy).toHaveBeenCalledWith(MatrixClientPeg.safeGet().getRoom(NATIVE_ROOM_ALICE));
     });
 
     describe("when listening to a voice broadcast", () => {

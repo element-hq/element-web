@@ -861,6 +861,12 @@ export default class LegacyCallHandler extends EventEmitter {
 
     public async placeCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
+        const room = cli.getRoom(roomId);
+        if (!room) {
+            logger.error(`Room ${roomId} does not exist.`);
+            return;
+        }
+
         // Pause current broadcast, if any
         SdkContextClass.instance.voiceBroadcastPlaybacksStore.getCurrent()?.pause();
 
@@ -871,8 +877,8 @@ export default class LegacyCallHandler extends EventEmitter {
         }
 
         // We might be using managed hybrid widgets
-        if (isManagedHybridWidgetEnabled(roomId)) {
-            await addManagedHybridWidget(roomId);
+        if (isManagedHybridWidgetEnabled(room)) {
+            await addManagedHybridWidget(room);
             return;
         }
 
@@ -899,12 +905,6 @@ export default class LegacyCallHandler extends EventEmitter {
                 title: _t("voip|too_many_calls"),
                 description: _t("voip|too_many_calls_description"),
             });
-            return;
-        }
-
-        const room = cli.getRoom(roomId);
-        if (!room) {
-            logger.error(`Room ${roomId} does not exist.`);
             return;
         }
 
