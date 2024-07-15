@@ -47,7 +47,9 @@ test.describe("Security user settings tab", () => {
             test("should be rendered properly", async ({ app, page }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
-                await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot();
+                await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(
+                    "Security-user-settings-tab-with-posthog-enable-b5d89-csLearnMoreDialog-should-be-rendered-properly-1.png",
+                );
             });
         });
 

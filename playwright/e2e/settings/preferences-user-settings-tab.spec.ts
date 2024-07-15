@@ -31,7 +31,7 @@ test.describe("Preferences user settings tab", () => {
 
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
-        await expect(tab).toMatchScreenshot();
+        await expect(tab).toMatchScreenshot("Preferences-user-settings-tab-should-be-rendered-properly-1.png");
     });
 
     test("should be able to change the app language", async ({ uut, user }) => {

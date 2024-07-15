@@ -34,7 +34,7 @@ test.describe("General room settings tab", () => {
         // Assert that "Show less" details element is rendered
         await expect(settings.getByText("Show less")).toBeVisible();
 
-        await expect(settings).toMatchScreenshot();
+        await expect(settings).toMatchScreenshot("General-room-settings-tab-should-be-rendered-properly-1.png");
 
         // Click the "Show less" details element
         await settings.getByText("Show less").click();
