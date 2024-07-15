@@ -1801,7 +1801,6 @@
             "delete_backup_confirm_description": "Tem certeza? Você perderá suas mensagens criptografadas se não tiver feito o backup de suas chaves.",
             "e2ee_default_disabled_warning": "O administrador do servidor desativou a criptografia de ponta a ponta por padrão em salas privadas e em conversas.",
             "enable_message_search": "Ativar busca de mensagens em salas criptografadas",
-            "encryption_individual_verification_mode": "Verifique individualmente cada sessão usada por um usuário para marcá-la como confiável, em vez de confirmar em aparelhos autoverificados.",
             "encryption_section": "Criptografia",
             "error_loading_key_backup_status": "Não foi possível carregar o status do backup da chave",
             "export_megolm_keys": "Exportar chaves ponta-a-ponta da sala",
@@ -1815,7 +1814,6 @@
             "key_backup_connect_prompt": "Autorize esta sessão a fazer o backup de chaves antes de se desconectar, para evitar perder chaves que possam estar apenas nesta sessão.",
             "key_backup_inactive": "Esta sessão <b>não está fazendo backup de suas chaves</b>, mas você tem um backup existente que pode restaurar para continuar.",
             "key_backup_inactive_warning": "Suas chaves <b>não estão sendo copiadas desta sessão</b>.",
-            "manually_verify_all_sessions": "Verificar manualmente todas as sessões remotas",
             "message_search_disable_warning": "Se desativado, as mensagens de salas criptografadas não aparecerão em resultados de buscas.",
             "message_search_disabled": "Armazene mensagens criptografadas de forma segura localmente para que possam aparecer nos resultados das buscas.",
             "message_search_enabled": {

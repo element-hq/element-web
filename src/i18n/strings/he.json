@@ -1810,7 +1810,6 @@
             "delete_backup_confirm_description": "האם אתה בטוח? תאבד את ההודעות המוצפנות שלך אם המפתחות שלך לא מגובים כראוי.",
             "e2ee_default_disabled_warning": "מנהל השרת שלך השבית הצפנה מקצה לקצה כברירת מחדל בחדרים פרטיים ובהודעות ישירות.",
             "enable_message_search": "אפשר חיפוש הודעות בחדרים מוצפנים",
-            "encryption_individual_verification_mode": "אמת בנפרד כל מושב שמשתמש בו כדי לסמן אותו כאמצעי מהימן, ולא אמון על מכשירים חתומים צולבים.",
             "encryption_section": "הצפנה",
             "error_loading_key_backup_status": "לא ניתן לטעון את מצב גיבוי המפתח",
             "export_megolm_keys": "ייצא מפתחות חדר E2E",
@@ -1824,7 +1823,6 @@
             "key_backup_connect_prompt": "חבר את ההפעלה הזו לגיבוי המפתח לפני היציאה, כדי למנוע אובדן מפתחות שיכולים להיות רק בפגישה זו.",
             "key_backup_inactive": "הפעלה זו <b> אינה מגבה את המפתחות שלך </b>, אך יש לך גיבוי קיים ממנו תוכל לשחזר ולהוסיף להמשך.",
             "key_backup_inactive_warning": "המפתחות שלך <b> אינם מגובים מהתחברות זו </b>.",
-            "manually_verify_all_sessions": "אמת באופן ידני את כל ההתחברויות",
             "message_search_disable_warning": "אם מושבת, הודעות מחדרים מוצפנים לא יופיעו בתוצאות החיפוש.",
             "message_search_disabled": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
             "message_search_enabled": {

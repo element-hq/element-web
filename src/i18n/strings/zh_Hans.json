@@ -2353,7 +2353,6 @@
             "delete_backup_confirm_description": "你确定吗？如果密钥没有正确地备份你将失去你的加密消息。",
             "e2ee_default_disabled_warning": "你的服务器管理员默认关闭了私人房间和私聊中的端到端加密。",
             "enable_message_search": "在加密房间中启用消息搜索",
-            "encryption_individual_verification_mode": "逐一验证用户的每一个会话以将其标记为已信任，而不信任交叉签名的设备。",
             "encryption_section": "加密",
             "error_loading_key_backup_status": "无法载入密钥备份状态",
             "export_megolm_keys": "导出房间的端到端加密密钥",
@@ -2368,7 +2367,6 @@
             "key_backup_connect_prompt": "在登出前连接此会话到密钥备份以避免丢失可能仅在此会话上的密钥。",
             "key_backup_inactive": "此会话<b>未备份你的密钥</b>，但如果你已有现存备份，你可以继续并从中恢复和向其添加。",
             "key_backup_inactive_warning": "你的密钥<b>没有被此会话备份</b>。",
-            "manually_verify_all_sessions": "手动验证所有远程会话",
             "message_search_disable_warning": "如果被禁用，加密房间内的消息不会显示在搜索结果中。",
             "message_search_disabled": "在本地安全地缓存加密消息以使其出现在搜索结果中。",
             "message_search_enabled": {

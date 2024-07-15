@@ -2336,7 +2336,6 @@
             "delete_backup_confirm_description": "Bạn có chắc không? Bạn sẽ mất các tin nhắn được mã hóa nếu các khóa của bạn không được sao lưu đúng cách.",
             "e2ee_default_disabled_warning": "Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.",
             "enable_message_search": "Bật tính năng tìm kiếm tin nhắn trong các phòng được mã hóa",
-            "encryption_individual_verification_mode": "Xác thực riêng từng phiên được người dùng sử dụng để đánh dấu phiên đó là đáng tin cậy, không tin cậy vào các thiết bị được xác thực chéo.",
             "encryption_section": "Mã hóa",
             "error_loading_key_backup_status": "Không thể tải trạng thái sao lưu khóa",
             "export_megolm_keys": "Xuất các mã khoá phòng E2E",
@@ -2352,7 +2351,6 @@
             "key_backup_in_progress": "Đang sao lưu %(sessionsRemaining)s khóa…",
             "key_backup_inactive": "Phiên này đang <b>không sao lưu các khóa</b>, nhưng bạn có một bản sao lưu hiện có, bạn có thể khôi phục và thêm vào để về sau.",
             "key_backup_inactive_warning": "Các khóa của bạn <b>not being backed up from this session</b>.",
-            "manually_verify_all_sessions": "Xác thực thủ công tất cả các phiên từ xa",
             "message_search_disable_warning": "Nếu bị tắt, tin nhắn từ các phòng được mã hóa sẽ không xuất hiện trong kết quả tìm kiếm.",
             "message_search_disabled": "Bộ nhớ cache an toàn các tin nhắn được mã hóa cục bộ để chúng xuất hiện trong kết quả tìm kiếm.",
             "message_search_enabled": {

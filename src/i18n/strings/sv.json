@@ -2637,7 +2637,6 @@
             "delete_backup_confirm_description": "Är du säker? Du kommer att förlora dina krypterade meddelanden om dina nycklar inte säkerhetskopieras ordentligt.",
             "e2ee_default_disabled_warning": "Din serveradministratör har inaktiverat totalsträckskryptering som förval för privata rum och direktmeddelanden.",
             "enable_message_search": "Aktivera meddelandesökning i krypterade rum",
-            "encryption_individual_verification_mode": "Verifiera individuellt varje session som används av en användare för att markera den som betrodd, och lita inte på korssignerade enheter.",
             "encryption_section": "Kryptering",
             "error_loading_key_backup_status": "Kunde inte ladda status för nyckelsäkerhetskopiering",
             "export_megolm_keys": "Exportera krypteringsrumsnycklar",
@@ -2656,7 +2655,6 @@
             "key_backup_inactive": "Den här servern <b>säkerhetskopierar inte dina nycklar</b>, men du har en existerande säkerhetskopia du kan återställa ifrån och lägga till till i framtiden.",
             "key_backup_inactive_warning": "Dina nycklar <b>säkerhetskopieras inte från den här sessionen</b>.",
             "key_backup_latest_version": "Senaste säkerhetskopieringsversionen på servern:",
-            "manually_verify_all_sessions": "Verifiera alla fjärrsessioner manuellt",
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
             "message_search_enabled": {

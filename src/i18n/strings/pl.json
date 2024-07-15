@@ -1612,7 +1612,7 @@
         "all_messages_description": "Otrzymuj powiadomienie każdej wiadomości",
         "class_global": "Globalne",
         "class_other": "Inne",
-        "default": "Zwykły",
+        "default": "Domyślne",
         "email_pusher_app_display_name": "Powiadomienia e-mail",
         "enable_prompt_toast_description": "Włącz powiadomienia na pulpicie",
         "enable_prompt_toast_title": "Powiadomienia",
@@ -1742,7 +1742,7 @@
         "admin": "Administrator",
         "custom": "Własny (%(level)s)",
         "custom_level": "Własny poziom",
-        "default": "Zwykły",
+        "default": "Domyślne",
         "label": "Poziom uprawnień",
         "mod": "Moderator",
         "moderator": "Moderator",
@@ -1948,7 +1948,7 @@
             "hide_widgets_button": "Ukryj widżety",
             "n_people_asking_to_join": {
                 "one": "Prosi o dołączenie",
-                "few": "%(count)s osób prosi o dołączenie",
+                "few": "%(count)s osoby proszą o dołączenie",
                 "many": "%(count)s osób prosi o dołączenie"
             },
             "room_is_public": "Ten pokój jest publiczny",
@@ -2440,7 +2440,7 @@
             "font_size": "Rozmiar czcionki",
             "font_size_default": "%(fontSize)s (domyślny)",
             "high_contrast": "Wysoki kontrast",
-            "image_size_default": "Zwykły",
+            "image_size_default": "Domyślne",
             "image_size_large": "Duży",
             "layout_bubbles": "Dymki wiadomości",
             "layout_irc": "IRC (eksperymentalny)",
@@ -2732,7 +2732,6 @@
             "dialog_title": "<strong>Ustawienia:</strong> Bezpieczeństwo i prywatność",
             "e2ee_default_disabled_warning": "Twój administrator serwera wyłączył domyślne szyfrowanie end-to-end w pokojach i wiadomościach prywatnych.",
             "enable_message_search": "Włącz wyszukiwanie wiadomości w szyfrowanych pokojach",
-            "encryption_individual_verification_mode": "Indywidualnie weryfikuj każdą sesję używaną przez użytkownika, aby oznaczyć ją jako zaufaną, nie ufając urządzeniom weryfikowanym krzyżowo.",
             "encryption_section": "Szyfrowanie",
             "error_loading_key_backup_status": "Nie można załadować stanu kopii zapasowej klucza",
             "export_megolm_keys": "Eksportuj klucze E2E pokojów",
@@ -2751,7 +2750,6 @@
             "key_backup_inactive": "Ta sesja <b>nie wykonuje kopii zapasowej twoich kluczy</b>, ale masz istniejącą kopię którą możesz przywrócić i uzupełniać w przyszłości.",
             "key_backup_inactive_warning": "Twoje klucze <b>nie są zapisywanie na tej sesji</b>.",
             "key_backup_latest_version": "Najnowsza wersja kopii zapasowej na serwerze:",
-            "manually_verify_all_sessions": "Ręcznie weryfikuj wszystkie zdalne sesje",
             "message_search_disable_warning": "Jeśli wyłączone, wiadomości z szyfrowanych pokojów nie pojawią się w wynikach wyszukiwania.",
             "message_search_disabled": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania.",
             "message_search_enabled": {
@@ -3258,7 +3256,7 @@
         "creation_summary_dm": "%(creator)s utworzył tę wiadomość prywatną.",
         "creation_summary_room": "%(creator)s stworzył i skonfigurował pokój.",
         "decryption_failure": {
-            "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości",
+            "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości ponieważ twoje urządzenie nie zostało zweryfikowane",
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
@@ -3518,7 +3516,8 @@
         },
         "read_receipt_title": {
             "one": "Odczytane przez %(count)s osobę",
-            "other": "Odczytane przez %(count)s osób"
+            "few": "Odczytane przez %(count)s osoby",
+            "many": "Odczytane przez %(count)s osób"
         },
         "read_receipts_label": "Czytaj potwierdzenia",
         "redacted": {

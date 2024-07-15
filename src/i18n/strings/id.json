@@ -2596,7 +2596,6 @@
             "delete_backup_confirm_description": "Apakah Anda yakin? Anda akan kehilangan pesan terenkripsi jika kunci Anda tidak dicadangkan dengan benar.",
             "e2ee_default_disabled_warning": "Admin server Anda telah menonaktifkan enkripsi ujung ke ujung secara bawaan di ruangan privat & Pesan Langsung.",
             "enable_message_search": "Aktifkan pencarian pesan di ruangan terenkripsi",
-            "encryption_individual_verification_mode": "Verifikasi setiap sesi yang digunakan oleh pengguna satu per satu untuk menandainya sebagai tepercaya, dan tidak memercayai perangkat yang ditandatangani silang.",
             "encryption_section": "Enkripsi",
             "error_loading_key_backup_status": "Tidak dapat memuat status pencadangan kunci",
             "export_megolm_keys": "Ekspor kunci ruangan enkripsi ujung ke ujung",
@@ -2615,7 +2614,6 @@
             "key_backup_inactive": "Sesi ini <b>tidak mencadangkan kunci Anda</b>, tetapi Anda memiliki cadangan yang ada yang dapat Anda pulihkan dan tambahkan untuk selanjutnya.",
             "key_backup_inactive_warning": "Kunci Anda <b>tidak dicadangan dari sesi ini</b>.",
             "key_backup_latest_version": "Versi cadangan terbaru di server:",
-            "manually_verify_all_sessions": "Verifikasi semua sesi jarak jauh secara manual",
             "message_search_disable_warning": "Jika dinonaktifkan, pesan dari ruangan terenkripsi tidak akan muncul di hasil pencarian.",
             "message_search_disabled": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian.",
             "message_search_enabled": {

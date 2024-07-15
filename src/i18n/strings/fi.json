@@ -2278,7 +2278,6 @@
             "delete_backup_confirm_description": "Oletko varma? Et voi lukea salattuja viestejäsi, mikäli avaimesi eivät ole kunnolla varmuuskopioituna.",
             "e2ee_default_disabled_warning": "Palvelimesi ylläpitäjä on poistanut päästä päähän -salauksen oletuksena käytöstä yksityisissä huoneissa ja yksityisviesteissä.",
             "enable_message_search": "Ota viestihaku salausta käyttävissä huoneissa käyttöön",
-            "encryption_individual_verification_mode": "Varmenna jokainen istunto erikseen, äläkä luota ristiinvarmennettuihin laitteisiin.",
             "encryption_section": "Salaus",
             "error_loading_key_backup_status": "Avainten varmuuskopionnin tilan lukeminen epäonnistui",
             "export_megolm_keys": "Tallenna osapuolten välisen salauksen huoneavaimet",
@@ -2292,7 +2291,6 @@
             "key_backup_connect_prompt": "Yhdistä tämä istunto avainten varmuuskopiointiin ennen uloskirjautumista, jotta et menetä avaimia, jotka ovat vain tässä istunnossa.",
             "key_backup_inactive": "Tämä istunto <b>ei varmuuskopioi avaimiasi</b>, mutta sillä on olemassaoleva varmuuskopio, jonka voit palauttaa ja lisätä jatkaaksesi.",
             "key_backup_inactive_warning": "Avaimiasi <b>ei varmuuskopioida tästä istunnosta</b>.",
-            "manually_verify_all_sessions": "Varmenna kaikki etäistunnot käsin",
             "message_search_disable_warning": "Jos ei ole käytössä, salattujen huoneiden viestejä ei näytetä hakutuloksissa.",
             "message_search_disabled": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa.",
             "message_search_enabled": {

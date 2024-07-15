@@ -2563,7 +2563,6 @@
             "delete_backup_confirm_description": "Biztos benne? Ha a kulcsai nincsenek megfelelően mentve, akkor elveszíti a titkosított üzeneteit.",
             "e2ee_default_disabled_warning": "A kiszolgáló rendszergazdája alapértelmezetten kikapcsolta a végpontok közötti titkosítást a privát szobákban és a közvetlen beszélgetésekben.",
             "enable_message_search": "Üzenetek keresésének bekapcsolása a titkosított szobákban",
-            "encryption_individual_verification_mode": "A felhasználó által használt munkamenetek ellenőrzése egyenként, nem bízva az eszközök közti aláírással rendelkező eszközökben.",
             "encryption_section": "Titkosítás",
             "error_loading_key_backup_status": "A mentett kulcsok állapotát nem lehet betölteni",
             "export_megolm_keys": "E2E szobakulcsok exportálása",
@@ -2582,7 +2581,6 @@
             "key_backup_inactive": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből helyre tudja állítani, és amelyhez hozzá tudja adni a továbbiakban.",
             "key_backup_inactive_warning": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>.",
             "key_backup_latest_version": "A legújabb biztonsági mentés verziója a kiszolgálón:",
-            "manually_verify_all_sessions": "Az összes távoli munkamenet kézi ellenőrzése",
             "message_search_disable_warning": "Ha nincs engedélyezve akkor a titkosított szobák üzenetei nem jelennek meg a keresések között.",
             "message_search_disabled": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között.",
             "message_search_enabled": {

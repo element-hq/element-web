@@ -2621,7 +2621,6 @@
             "delete_backup_confirm_description": "Bist du sicher? Du wirst alle deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gut gesichert sind.",
             "e2ee_default_disabled_warning": "Deine Server-Administration hat die Ende-zu-Ende-Verschlüsselung für private Räume und Direktnachrichten standardmäßig deaktiviert.",
             "enable_message_search": "Nachrichtensuche in verschlüsselten Räumen aktivieren",
-            "encryption_individual_verification_mode": "Alle Sitzungen einzeln verifizieren, anstatt auch Sitzungen zu vertrauen, die durch Quersignierungen verifiziert sind.",
             "encryption_section": "Verschlüsselung",
             "error_loading_key_backup_status": "Konnte Status der Schlüsselsicherung nicht laden",
             "export_megolm_keys": "E2E-Raumschlüssel exportieren",
@@ -2640,7 +2639,6 @@
             "key_backup_inactive": "Diese Sitzung <b>sichert deine Schlüssel nicht</b>, aber du hast eine vorhandene Sicherung, die du wiederherstellen und in Zukunft hinzufügen kannst.",
             "key_backup_inactive_warning": "Deine Schlüssel werden von dieser Sitzung <b>nicht gesichert</b>.",
             "key_backup_latest_version": "Letzte Backup-Version auf diesen Server:",
-            "manually_verify_all_sessions": "Indirekte Sitzungen manuell verifizieren",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
             "message_search_enabled": {

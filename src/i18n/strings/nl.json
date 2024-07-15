@@ -2226,7 +2226,6 @@
             "delete_backup_confirm_description": "Weet je het zeker? Je zal je versleutelde berichten verliezen als je sleutels niet correct geback-upt zijn.",
             "e2ee_default_disabled_warning": "De beheerder van je server heeft eind-tot-eind-versleuteling standaard uitgeschakeld in alle privékamers en directe gesprekken.",
             "enable_message_search": "Zoeken in versleutelde kamers inschakelen",
-            "encryption_individual_verification_mode": "Verifieer elke sessie die door een persoon wordt gebruikt afzonderlijk. Dit markeert hen als vertrouwd zonder te vertrouwen op kruislings ondertekende apparaten.",
             "encryption_section": "Versleuteling",
             "error_loading_key_backup_status": "Kan sleutelback-upstatus niet laden",
             "export_megolm_keys": "E2E-kamersleutels exporteren",
@@ -2240,7 +2239,6 @@
             "key_backup_connect_prompt": "Verbind deze sessie met de sleutelback-up voordat je jezelf afmeldt. Dit voorkomt dat je sleutels verliest die alleen op deze sessie voorkomen.",
             "key_backup_inactive": "Deze sessie <b>maakt geen back-ups van je sleutels</b>, maar je beschikt over een reeds bestaande back-up waaruit je kan herstellen en waaraan je nieuwe sleutels vanaf nu kunt toevoegen.",
             "key_backup_inactive_warning": "Jouw sleutels worden <b>niet geback-upt van deze sessie</b>.",
-            "manually_verify_all_sessions": "Handmatig alle externe sessies verifiëren",
             "message_search_disable_warning": "Dit moet aan staan om te kunnen zoeken in versleutelde kamers.",
             "message_search_disabled": "Sla versleutelde berichten veilig lokaal op om ze doorzoekbaar te maken.",
             "message_search_enabled": {

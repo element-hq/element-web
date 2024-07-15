@@ -2642,7 +2642,6 @@
             "delete_backup_confirm_description": "Opravdu? Pokud klíče nejsou správně zálohované můžete přijít o šifrované zprávy.",
             "e2ee_default_disabled_warning": "Správce vašeho serveru vypnul ve výchozím nastavení koncové šifrování v soukromých místnostech a přímých zprávách.",
             "enable_message_search": "Povolit vyhledávání v šifrovaných místnostech",
-            "encryption_individual_verification_mode": "Individuálně ověřit každou uživatelovu relaci a označit jí za důvěryhodnou, bez důvěry v křížový podpis.",
             "encryption_section": "Šifrování",
             "error_loading_key_backup_status": "Nepovedlo se načíst stav zálohy",
             "export_megolm_keys": "Exportovat šifrovací klíče místností",
@@ -2661,7 +2660,6 @@
             "key_backup_inactive": "Tato relace <b>nezálohuje vaše klíče</b>, ale už máte zálohu ze které je můžete obnovit.",
             "key_backup_inactive_warning": "Vaše klíče <b>nejsou z této relace zálohovány</b>.",
             "key_backup_latest_version": "Nejnovější verze zálohy na serveru:",
-            "manually_verify_all_sessions": "Ručně ověřit všechny relace",
             "message_search_disable_warning": "Když je to zakázané, zprávy v šifrovaných místnostech se nebudou objevovat ve výsledcích vyhledávání.",
             "message_search_disabled": "Bezpečně uchovávat zprávy na tomto zařízení aby se v nich dalo vyhledávat.",
             "message_search_enabled": {

@@ -2402,7 +2402,6 @@
             "delete_backup_confirm_description": "¿Estás seguro? Perderás tus mensajes cifrados si las claves no se copian adecuadamente.",
             "e2ee_default_disabled_warning": "El administrador de tu servidor base ha desactivado el cifrado de extremo a extremo en salas privadas y mensajes directos.",
             "enable_message_search": "Activar la búsqueda de mensajes en salas cifradas",
-            "encryption_individual_verification_mode": "Verificar individualmente cada sesión utilizada por un usuario para marcarla como de confianza, no confiando en dispositivos de firma cruzada.",
             "encryption_section": "Cifrado",
             "error_loading_key_backup_status": "No se pudo cargar el estado de la copia de la clave",
             "export_megolm_keys": "Exportar claves de salas con cifrado de extremo a extremo",
@@ -2416,7 +2415,6 @@
             "key_backup_connect_prompt": "Conecte esta sesión a la copia de seguridad de las claves antes de firmar y así evitar perder las claves que sólo existen en esta sesión.",
             "key_backup_inactive": "Esta sesión no <b> ha creado una copia de seguridad de tus llaves</b>, pero tienes una copia de seguridad existente de la que puedes restaurar y añadir para proceder.",
             "key_backup_inactive_warning": "<b>No se está haciendo una copia de seguridad de tus claves en esta sesión</b>.",
-            "manually_verify_all_sessions": "Verificar manualmente todas las sesiones remotas",
             "message_search_disable_warning": "Si está desactivado, los mensajes de las salas cifradas no aparecerán en los resultados de búsqueda.",
             "message_search_disabled": "Almacenar localmente, de manera segura, a los mensajes cifrados localmente para que aparezcan en los resultados de búsqueda.",
             "message_search_enabled": {

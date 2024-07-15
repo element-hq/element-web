@@ -1892,7 +1892,6 @@
             "delete_backup_confirm_description": "Ĉu vi certas? Vi perdos ĉiujn viajn ĉifritajn mesaĝojn, se viaj ŝlosiloj ne estas savkopiitaj.",
             "e2ee_default_disabled_warning": "La administranto de via servilo malŝaltis implicitan tutvojan ĉifradon en privataj kaj individuaj ĉambroj.",
             "enable_message_search": "Ŝalti serĉon de mesaĝoj en ĉifritaj ĉambroj",
-            "encryption_individual_verification_mode": "Unuope kontroli ĉiun salutaĵon de uzanto por marki ĝin fidata, ne fidante delege subskribitajn aparatojn.",
             "encryption_section": "Ĉifrado",
             "error_loading_key_backup_status": "Ne povas enlegi staton de ŝlosila savkopio",
             "export_megolm_keys": "Elporti tutvoje ĉifrajn ŝlosilojn de la ĉambro",
@@ -1906,7 +1905,6 @@
             "key_backup_connect_prompt": "Konektu ĉi tiun salutaĵon al savkopiado de ŝlosiloj antaŭ ol vi adiaŭos, por ne perdi ŝlosilojn, kiuj povus troviĝi nur en ĉi tiu salutaĵo.",
             "key_backup_inactive": "Ĉi tiu salutaĵo <b>ne savkopias viajn ŝlosilojn</b>, sed vi jam havas savkopion, el kiu vi povas rehavi datumojn, kaj ilin kreskigi plue.",
             "key_backup_inactive_warning": "Viaj ŝlosiloj <b>ne estas savkopiataj el ĉi tiu salutaĵo</b>.",
-            "manually_verify_all_sessions": "Permane kontroli ĉiujn forajn salutaĵojn",
             "message_search_disable_warning": "Post malŝalto, mesaĝoj el ĉifritaj ĉambroj ne aperos en serĉorezultoj.",
             "message_search_disabled": "Sekure kaŝmemori ĉifritajn mesaĝojn loke, por aperigi ilin en serĉrezultoj.",
             "message_search_enabled": {

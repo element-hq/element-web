@@ -2228,7 +2228,6 @@
             "delete_backup_confirm_description": "Estás seguro? Perderás as mensaxes cifradas se non tes unha copia de apoio das chaves de cifrado.",
             "e2ee_default_disabled_warning": "A administración do servidor desactivou por defecto o cifrado extremo-a-extremo en salas privadas e Mensaxes Directas.",
             "enable_message_search": "Activar a busca de mensaxes en salas cifradas",
-            "encryption_individual_verification_mode": "Verificar individualmente cada sesión utilizada pola usuaria para marcala como confiable, non confiando en dispositivos con sinatura cruzada.",
             "encryption_section": "Cifrado",
             "error_loading_key_backup_status": "Non se puido cargar o estado das chaves de apoio",
             "export_megolm_keys": "Exportar chaves E2E da sala",
@@ -2242,7 +2241,6 @@
             "key_backup_connect_prompt": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
             "key_backup_inactive": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
             "key_backup_inactive_warning": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>.",
-            "manually_verify_all_sessions": "Verificar manualmente todas as sesións remotas",
             "message_search_disable_warning": "Se está desactivado, as mensaxes das salas cifradas non aparecerán nos resultados das buscas.",
             "message_search_disabled": "Gardar de xeito seguro mensaxes cifradas na caché local para que aparezan nos resultados de buscas.",
             "message_search_enabled": {

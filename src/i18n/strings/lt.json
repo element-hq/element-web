@@ -1703,7 +1703,6 @@
             "delete_backup_confirm_description": "Ar tikrai? Jūs prarasite savo šifruotas žinutes, jei jūsų raktams nebus tinkamai sukurtos atsarginės kopijos.",
             "e2ee_default_disabled_warning": "Serverio administratorius išjungė visapusį šifravimą, kaip numatytą, privačiuose kambariuose ir Tiesioginėse Žinutėse.",
             "enable_message_search": "Įjungti žinučių paiešką užšifruotuose kambariuose",
-            "encryption_individual_verification_mode": "Individualiai patikrinkite kiekvieną vartotojo naudojamą seansą, kad pažymėtumėte jį kaip patikimą, nepasitikint kryžminiu pasirašymu patvirtintais įrenginiais.",
             "encryption_section": "Šifravimas",
             "error_loading_key_backup_status": "Nepavyko įkelti atsarginės raktų kopijos būklės",
             "export_megolm_keys": "Eksportuoti E2E (visapusio šifravimo) kambarių raktus",
@@ -1717,7 +1716,6 @@
             "key_backup_connect_prompt": "Prieš atsijungdami prijunkite šį seansą prie atsarginės raktų kopijos, kad neprarastumėte raktų, kurie gali būti tik šiame seanse.",
             "key_backup_inactive": "Šis seansas <b>nekuria atsarginių raktų kopijų</b>, bet jūs jau turite atsarginę kopiją iš kurios galite atkurti ir pridėti.",
             "key_backup_inactive_warning": "Jūsų raktams <b>nėra daromos atsarginės kopijos iš šio seanso</b>.",
-            "manually_verify_all_sessions": "Rankiniu būdu patvirtinti visus nuotolinius seansus",
             "message_search_disabled": "Šifruotas žinutes saugiai talpinkite lokaliai, kad jos būtų rodomos paieškos rezultatuose.",
             "message_search_enabled": {
                 "one": "Saugiai talpinkite užšifruotas žinutes vietoje, kad jos būtų rodomos paieškos rezultatuose, naudojant %(size)s žinutėms iš %(rooms)s kambario saugoti.",

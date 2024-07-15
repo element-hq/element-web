@@ -2396,7 +2396,6 @@
             "delete_backup_confirm_description": "本当によろしいですか？ もし鍵が正常にバックアップされていない場合、暗号化されたメッセージにアクセスできなくなります。",
             "e2ee_default_disabled_warning": "サーバー管理者は、非公開のルームとダイレクトメッセージで既定でエンドツーエンド暗号化を無効にしています。",
             "enable_message_search": "暗号化されたルームでメッセージの検索を有効にする",
-            "encryption_individual_verification_mode": "クロス署名された端末を信頼せず、ユーザーが使用する各セッションを個別に認証し、信頼済に設定。",
             "encryption_section": "暗号化",
             "error_loading_key_backup_status": "鍵のバックアップの状態を読み込めません",
             "export_megolm_keys": "ルームのエンドツーエンド暗号鍵をエクスポート",
@@ -2412,7 +2411,6 @@
             "key_backup_in_progress": "%(sessionsRemaining)s個の鍵をバックアップしています…",
             "key_backup_inactive": "このセッションでは<b>鍵をバックアップしていません</b>が、復元に使用したり、今後鍵を追加したりできるバックアップがあります。",
             "key_backup_inactive_warning": "鍵は<b>このセッションからバックアップされていません</b>。",
-            "manually_verify_all_sessions": "全てのリモートセッションを手動で認証",
             "message_search_disable_warning": "無効にすると、暗号化されたルームのメッセージは検索結果に表示されません。",
             "message_search_disabled": "検索結果の表示用に、暗号化されたメッセージをローカルに安全にキャッシュしています。",
             "message_search_enabled": {
