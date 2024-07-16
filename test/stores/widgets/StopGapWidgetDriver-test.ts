@@ -99,6 +99,8 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#_@alice:example.org_${client.deviceId}`,
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org_${client.deviceId}`,
             "org.matrix.msc3819.send.to_device:m.call.invite",
             "org.matrix.msc3819.receive.to_device:m.call.invite",
             "org.matrix.msc3819.send.to_device:m.call.candidates",
