@@ -132,7 +132,7 @@ test.describe("Cryptography", function () {
             // wait for the logout to propagate. Workaround for https://github.com/vector-im/element-web/issues/26263 by repeatedly closing and reopening Bob's user info.
             async function awaitOneDevice(iterations = 1) {
                 const rightPanel = page.locator(".mx_RightPanel");
-                await rightPanel.getByRole("button", { name: "Room members" }).click();
+                await rightPanel.getByTestId("base-card-back-button").click();
                 await rightPanel.getByText("Bob").click();
                 const sessionCountText = await rightPanel
                     .locator(".mx_UserInfo_devices")

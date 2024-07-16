@@ -1778,7 +1778,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     return (
         <BaseCard
             className={classes.join(" ")}
-            header={createSpaceScopeHeader(room)}
+            header={createSpaceScopeHeader(room) ?? _t("common|profile")}
             onClose={onClose}
             closeLabel={closeLabel}
             cardState={cardState}

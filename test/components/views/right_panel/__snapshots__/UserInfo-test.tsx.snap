@@ -77,16 +77,25 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        aria-label="Close"
-        class="mx_AccessibleButton mx_BaseCard_close"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+      >
+        Profile
+      </p>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
+        style="--cpd-icon-button-size: 28px;"
         tabindex="0"
-      />
-      <div
-        class="mx_BaseCard_headerProp"
-      />
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div />
+        </div>
+      </button>
     </div>
     <div
       class="mx_AutoHideScrollbar"
@@ -232,16 +241,25 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        aria-label="Close"
-        class="mx_AccessibleButton mx_BaseCard_close"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+      >
+        Profile
+      </p>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
+        style="--cpd-icon-button-size: 28px;"
         tabindex="0"
-      />
-      <div
-        class="mx_BaseCard_headerProp"
-      />
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div />
+        </div>
+      </button>
     </div>
     <div
       class="mx_AutoHideScrollbar"

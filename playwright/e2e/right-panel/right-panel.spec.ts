@@ -106,7 +106,7 @@ test.describe("RightPanel", () => {
             await expect(page.locator(".mx_FilePanel")).toBeVisible();
             await expect(page.locator(".mx_FilePanel_empty")).toBeVisible();
 
-            await page.getByRole("button", { name: "Room information" }).click();
+            await page.getByTestId("base-card-back-button").click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
 
@@ -120,7 +120,7 @@ test.describe("RightPanel", () => {
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
 
-            await page.getByRole("button", { name: "Room members" }).click();
+            await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
             await page.locator(".mx_RightPanelTabs").getByText("Info").click();
@@ -145,7 +145,7 @@ test.describe("RightPanel", () => {
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
             await expect(page.locator(".mx_SpaceScopeHeader").getByText(SPACE_NAME)).toBeVisible();
 
-            await page.getByRole("button", { name: "Back" }).click();
+            await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
         });
     });

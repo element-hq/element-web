@@ -229,7 +229,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     const roomContext = useContext(RoomContext);
     const timelinePanel = useRef<TimelinePanel | null>(null);
     const card = useRef<HTMLDivElement | null>(null);
-    const closeButonRef = useRef<HTMLDivElement | null>(null);
+    const closeButonRef = useRef<HTMLButtonElement | null>(null);
 
     const [filterOption, setFilterOption] = useState<ThreadFilterType>(ThreadFilterType.All);
     const [room, setRoom] = useState<Room | null>(null);
