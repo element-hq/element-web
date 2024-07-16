@@ -172,6 +172,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call.member").raw,
             );
+            // for determining auth rules specific to the room version
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
+            );
 
             const sendRecvRoomEvents = ["io.element.call.encryption_keys"];
             for (const eventType of sendRecvRoomEvents) {
