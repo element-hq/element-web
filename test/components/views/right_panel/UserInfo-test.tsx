@@ -302,15 +302,6 @@ describe("<UserInfo />", () => {
             expect(screen.queryByTestId("space-header")).not.toBeInTheDocument();
         });
 
-        it("renders space header when room is a space room", () => {
-            const spaceRoom = {
-                ...mockRoom,
-                isSpaceRoom: jest.fn().mockReturnValue(true),
-            };
-            renderComponent({ room: spaceRoom });
-            expect(screen.getByTestId("space-header")).toBeInTheDocument();
-        });
-
         it("renders encryption info panel without pending verification", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, room: mockRoom });
             expect(screen.getByRole("heading", { name: /encryption/i })).toBeInTheDocument();

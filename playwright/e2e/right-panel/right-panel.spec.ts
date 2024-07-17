@@ -138,12 +138,10 @@ test.describe("RightPanel", () => {
                 .getByRole("button", { name: /\d member/ })
                 .click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
-            await expect(page.locator(".mx_SpaceScopeHeader").getByText(SPACE_NAME)).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
-            await expect(page.locator(".mx_SpaceScopeHeader").getByText(SPACE_NAME)).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
