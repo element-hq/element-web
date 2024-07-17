@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/matrix";
-import { compare } from "matrix-js-sdk/src/utils";
 
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
@@ -25,8 +24,9 @@ import { IAlgorithm } from "./IAlgorithm";
  */
 export class AlphabeticAlgorithm implements IAlgorithm {
     public sortRooms(rooms: Room[], tagId: TagID): Room[] {
+        const collator = new Intl.Collator();
         return rooms.sort((a, b) => {
-            return compare(a.name, b.name);
+            return collator.compare(a.name, b.name);
         });
     }
 }

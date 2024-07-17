@@ -25,25 +25,29 @@ import SettingsStore from "../../src/settings/SettingsStore";
 
 // setup test env values
 const roomId = "!room:server";
-const mockRoom = <Room>{
-    roomId: roomId,
-    currentState: {
-        getStateEvents: (_l, _x) => {
-            return {
-                getId: () => "$layoutEventId",
-                getContent: () => null,
-            };
-        },
-    },
-};
 
 describe("WidgetLayoutStore", () => {
     let client: MatrixClient;
     let store: WidgetLayoutStore;
     let roomUpdateListener: (event: string) => void;
     let mockApps: IApp[];
+    let mockRoom: Room;
+    let layoutEventContent: Record<string, any> | null;
 
     beforeEach(() => {
+        layoutEventContent = null;
+        mockRoom = <Room>{
+            roomId: roomId,
+            currentState: {
+                getStateEvents: (_l, _x) => {
+                    return {
+                        getId: () => "$layoutEventId",
+                        getContent: () => layoutEventContent,
+                    };
+                },
+            },
+        };
+
         mockApps = [
             <IApp>{ roomId: roomId, id: "1" },
             <IApp>{ roomId: roomId, id: "2" },
@@ -85,6 +89,22 @@ describe("WidgetLayoutStore", () => {
         store.moveToContainer(mockRoom, mockApps[0], Container.Top);
         expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([mockApps[0]]);
         expect(store.getContainerHeight(mockRoom, Container.Top)).toBeNull();
+    });
+
+    it("ordering of top container widgets should be consistent even if no index specified", async () => {
+        layoutEventContent = {
+            widgets: {
+                "1": {
+                    container: "top",
+                },
+                "2": {
+                    container: "top",
+                },
+            },
+        };
+
+        store.recalculateRoom(mockRoom);
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([mockApps[0], mockApps[1]]);
     });
 
     it("add three widgets to top container", async () => {

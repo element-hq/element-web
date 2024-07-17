@@ -19,7 +19,6 @@ import React from "react";
 import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { compare } from "matrix-js-sdk/src/utils";
 import { mocked, MockedObject } from "jest-mock";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -145,7 +144,8 @@ describe("MemberList", () => {
             if (!groupChange) {
                 const nameA = memberA.name[0] === "@" ? memberA.name.slice(1) : memberA.name;
                 const nameB = memberB.name[0] === "@" ? memberB.name.slice(1) : memberB.name;
-                const nameCompare = compare(nameB, nameA);
+                const collator = new Intl.Collator();
+                const nameCompare = collator.compare(nameB, nameA);
                 console.log("Comparing name");
                 expect(nameCompare).toBeGreaterThanOrEqual(0);
             } else {

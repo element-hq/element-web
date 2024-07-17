@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { compare } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "./languageHandler";
@@ -113,7 +112,10 @@ export function getOrderedThemes(): ITheme[] {
         .map((p) => ({ id: p[0], name: p[1] })) // convert pairs to objects for code readability
         .filter((p) => !isHighContrastTheme(p.id));
     const builtInThemes = themes.filter((p) => !p.id.startsWith("custom-"));
-    const customThemes = themes.filter((p) => !builtInThemes.includes(p)).sort((a, b) => compare(a.name, b.name));
+    const collator = new Intl.Collator();
+    const customThemes = themes
+        .filter((p) => !builtInThemes.includes(p))
+        .sort((a, b) => collator.compare(a.name, b.name));
     return [...builtInThemes, ...customThemes];
 }
 

@@ -16,7 +16,6 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { compare } from "matrix-js-sdk/src/utils";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../SdkConfig";
@@ -145,6 +144,7 @@ export class IntegrationManagers {
     }
 
     public getOrderedManagers(): IntegrationManagerInstance[] {
+        const collator = new Intl.Collator();
         const ordered: IntegrationManagerInstance[] = [];
         for (const kind of KIND_PREFERENCE) {
             const managers = this.managers.filter((m) => m.kind === kind);
@@ -152,7 +152,7 @@ export class IntegrationManagers {
 
             if (kind === Kind.Account) {
                 // Order by state_keys (IDs)
-                managers.sort((a, b) => compare(a.id ?? "", b.id ?? ""));
+                managers.sort((a, b) => collator.compare(a.id ?? "", b.id ?? ""));
             }
 
             ordered.push(...managers);
