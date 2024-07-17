@@ -75,6 +75,8 @@ function checkBrowserFeatures(): boolean {
         () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
     );
     // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
+    // The built-in modernizer 'intl' check only checks for te presence of the Intl object, not the Segmenter,
+    // and older Firefox has the former but not the latter, so we add our own.
     window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
 
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
