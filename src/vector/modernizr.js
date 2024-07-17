@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.13.0
- * Build https://modernizr.com/download?-cors-cryptography-cssanimations-cssfilters-displaytable-es5date-es5function-es5object-es5undefined-es6array-es6collections-es6string-fetch-flexbox-json-localstorage-objectfit-promises-resizeobserver-sandbox-svg-svgasimg-svgfilters-urlparser-urlsearchparams-dontmin
+ * Build https://modernizr.com/download?-cors-cryptography-cssanimations-cssfilters-displaytable-es5date-es5function-es5object-es5undefined-es6array-es6collections-es6string-fetch-flexbox-json-localstorage-objectfit-promises-resizeobserver-sandbox-svg-svgasimg-svgfilters-urlparser-urlsearchparams-webaudio-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -1946,6 +1946,35 @@ Detects support for ResizeObserver.
 */
 
   Modernizr.addTest('resizeobserver', 'ResizeObserver' in window);
+
+/*!
+{
+  "name": "Web Audio API",
+  "property": "webaudio",
+  "caniuse": "audio-api",
+  "polyfills": ["xaudiojs", "dynamicaudiojs", "audiolibjs"],
+  "tags": ["audio", "media"],
+  "builderAliases": ["audio_webaudio_api"],
+  "authors": ["Addy Osmani"],
+  "notes": [{
+    "name": "W3C Spec",
+    "href": "https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html"
+  }]
+}
+!*/
+/* DOC
+Detects the older non standard webaudio API, (as opposed to the standards based AudioContext API)
+*/
+
+  Modernizr.addTest('webaudio', function() {
+    var prefixed = 'webkitAudioContext' in window;
+    var unprefixed = 'AudioContext' in window;
+
+    if (Modernizr._config.usePrefixes) {
+      return prefixed || unprefixed;
+    }
+    return unprefixed;
+  });
 
 
   // Run each test
