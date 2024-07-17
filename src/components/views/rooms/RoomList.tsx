@@ -60,7 +60,10 @@ import IconizedContextMenu, {
 import ExtraTile from "./ExtraTile";
 import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import AccessibleButton from "../elements/AccessibleButton";
+import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -652,7 +655,22 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     <div
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
-                        onKeyDown={onKeyDownHandler}
+                        onKeyDown={(ev) => {
+                            const navAction = getKeyBindingsManager().getNavigationAction(ev);
+                            if (
+                                navAction === KeyBindingAction.NextLandmark ||
+                                navAction === KeyBindingAction.PreviousLandmark
+                            ) {
+                                LandmarkNavigation.findAndFocusNextLandmark(
+                                    Landmark.ROOM_LIST,
+                                    navAction === KeyBindingAction.PreviousLandmark,
+                                );
+                                ev.stopPropagation();
+                                ev.preventDefault();
+                                return;
+                            }
+                            onKeyDownHandler(ev);
+                        }}
                         className="mx_RoomList"
                         role="tree"
                         aria-label={_t("common|rooms")}

@@ -224,6 +224,14 @@ declare global {
         readonly port: MessagePort;
     }
 
+    /**
+     * In future, browsers will support focusVisible option.
+     * See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#focusvisible
+     */
+    interface FocusOptions {
+        focusVisible: boolean;
+    }
+
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
     function registerProcessor(
         name: string,
