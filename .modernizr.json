@@ -1,5 +1,5 @@
 {
-    "minify": true,
+    "minify": false,
     "enableClasses": false,
     "feature-detects": [
         "test/css/animations",
