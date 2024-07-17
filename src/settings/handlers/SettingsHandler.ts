@@ -61,4 +61,9 @@ export default abstract class SettingsHandler {
      * @returns {boolean} True if this level is supported on the current device.
      */
     public abstract isSupported(): boolean;
+
+    /**
+     * Resets the handler, clearing any caches or other stored data. Called on user logout.
+     */
+    public reset(): void {}
 }

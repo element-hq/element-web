@@ -57,6 +57,8 @@ describe("WidgetLayoutStore", () => {
             off: jest.fn(),
             getApps: () => mockApps,
         } as unknown as WidgetStore);
+
+        SettingsStore.reset();
     });
 
     beforeAll(() => {
@@ -156,9 +158,14 @@ describe("WidgetLayoutStore", () => {
         await store.start();
 
         expect(roomUpdateListener).toHaveBeenCalled();
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([mockApps[0]]);
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
         expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Right)).toEqual([mockApps[1], mockApps[2], mockApps[3]]);
+        expect(store.getContainerWidgets(mockRoom, Container.Right)).toEqual([
+            mockApps[0],
+            mockApps[1],
+            mockApps[2],
+            mockApps[3],
+        ]);
     });
 
     it("should clear the layout and emit an update if there are no longer apps in the room", () => {
@@ -238,21 +245,15 @@ describe("WidgetLayoutStore", () => {
                   "widgets": {
                     "1": {
                       "container": "top",
-                      "height": 23,
-                      "index": 2,
-                      "width": 64,
+                      "height": undefined,
+                      "index": 0,
+                      "width": 100,
                     },
                     "2": {
-                      "container": "top",
-                      "height": 23,
-                      "index": 0,
-                      "width": 10,
+                      "container": "right",
                     },
                     "3": {
-                      "container": "top",
-                      "height": 23,
-                      "index": 1,
-                      "width": 26,
+                      "container": "right",
                     },
                     "4": {
                       "container": "right",
