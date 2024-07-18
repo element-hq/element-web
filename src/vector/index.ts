@@ -79,6 +79,10 @@ function checkBrowserFeatures(): boolean {
     // and older Firefox has the former but not the latter, so we add our own.
     window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
 
+    // Basic test for WebAssembly support. We could also try instantiating a simple module,
+    // although this would start to make (more) assumptions about how rust-crypto loads its wasm.
+    window.Modernizr.addTest("wasm", () => typeof WebAssembly === "object" && typeof WebAssembly.Module === "function");
+
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 
     let featureComplete = true;
@@ -240,6 +244,10 @@ async function start(): Promise<void> {
 }
 
 start().catch((err) => {
+    // If we get here, things have gone terribly wrong and we cannot load the app javascript at all.
+    // Show a different, very simple iframed-static error page. Or actually, one of two different ones
+    // depending on whether the browser is supported (ie. we think we should be able to load but
+    // failed) or unsupported (where we tried anyway and, lo and behold, we failed).
     logger.error(err);
     // show the static error in an iframe to not lose any context / console data
     // with some basic styling to make the iframe full page
