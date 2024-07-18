@@ -56,6 +56,9 @@ import { clearAllModals, flushPromises } from "../../../test-utils";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../src/settings/UIFeature";
+import { Action } from "../../../../src/dispatcher/actions";
+import ShareDialog from "../../../../src/components/views/dialogs/ShareDialog";
+import BulkRedactDialog from "../../../../src/components/views/dialogs/BulkRedactDialog";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -323,7 +326,7 @@ describe("<UserInfo />", () => {
                 </MatrixClientContext.Provider>,
             );
 
-            screen.getByRole("button", { name: "Message" });
+            screen.getByRole("button", { name: "Send message" });
         });
 
         it("hides the message button if the visibility customisation hides all create room features", () => {
@@ -341,6 +344,64 @@ describe("<UserInfo />", () => {
                     expect(screen.queryByRole("button", { name: "Message" })).toBeNull();
                 },
             );
+        });
+
+        describe("Ignore", () => {
+            const member = new RoomMember(defaultRoomId, defaultUserId);
+
+            it("shows block button when member userId does not match client userId", () => {
+                // call to client.getUserId returns undefined, which will not match member.userId
+                renderComponent();
+
+                expect(screen.getByRole("button", { name: "Ignore" })).toBeInTheDocument();
+            });
+
+            it("shows a modal before ignoring the user", async () => {
+                const originalCreateDialog = Modal.createDialog;
+                const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+                    finished: Promise.resolve([true]),
+                    close: () => {},
+                }));
+
+                try {
+                    mockClient.getIgnoredUsers.mockReturnValue([]);
+                    renderComponent();
+
+                    await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+                    expect(modalSpy).toHaveBeenCalled();
+                    expect(mockClient.setIgnoredUsers).toHaveBeenLastCalledWith([member.userId]);
+                } finally {
+                    Modal.createDialog = originalCreateDialog;
+                }
+            });
+
+            it("cancels ignoring the user", async () => {
+                const originalCreateDialog = Modal.createDialog;
+                const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+                    finished: Promise.resolve([false]),
+                    close: () => {},
+                }));
+
+                try {
+                    mockClient.getIgnoredUsers.mockReturnValue([]);
+                    renderComponent();
+
+                    await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+                    expect(modalSpy).toHaveBeenCalled();
+                    expect(mockClient.setIgnoredUsers).not.toHaveBeenCalled();
+                } finally {
+                    Modal.createDialog = originalCreateDialog;
+                }
+            });
+
+            it("unignores the user", async () => {
+                mockClient.isUserIgnored.mockReturnValue(true);
+                mockClient.getIgnoredUsers.mockReturnValue([member.userId]);
+                renderComponent();
+
+                await userEvent.click(screen.getByRole("button", { name: "Unignore" }));
+                expect(mockClient.setIgnoredUsers).toHaveBeenCalledWith([]);
+            });
         });
     });
 
@@ -801,7 +862,7 @@ describe("<DeviceItem />", () => {
 
 describe("<UserOptionsSection />", () => {
     const member = new RoomMember(defaultRoomId, defaultUserId);
-    const defaultProps = { member, isIgnored: false, canInvite: false, isSpace: false };
+    const defaultProps = { member, canInvite: false, isSpace: false };
 
     const renderComponent = (props = {}) => {
         const Wrapper = (wrapperProps = {}) => {
@@ -828,9 +889,13 @@ describe("<UserOptionsSection />", () => {
         inviteSpy.mockRestore();
     });
 
-    it("always shows share user button", () => {
+    it("always shows share user button and clicking it should produce a ShareDialog", async () => {
+        const spy = jest.spyOn(Modal, "createDialog");
+
         renderComponent();
-        expect(screen.getByRole("button", { name: /share link to user/i })).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("button", { name: "Share profile" }));
+
+        expect(spy).toHaveBeenCalledWith(ShareDialog, { target: defaultProps.member });
     });
 
     it("does not show ignore or direct message buttons when member userId matches client userId", () => {
@@ -842,20 +907,31 @@ describe("<UserOptionsSection />", () => {
         expect(screen.queryByRole("button", { name: /message/i })).not.toBeInTheDocument();
     });
 
-    it("shows ignore, direct message and mention buttons when member userId does not match client userId", () => {
+    it("shows direct message and mention buttons when member userId does not match client userId", () => {
         // call to client.getUserId returns undefined, which will not match member.userId
         renderComponent();
 
-        expect(screen.getByRole("button", { name: /ignore/i })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /message/i })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /mention/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Send message" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Mention" })).toBeInTheDocument();
+    });
+
+    it("mention button fires ComposerInsert Action", async () => {
+        renderComponent();
+
+        const button = screen.getByRole("button", { name: "Mention" });
+        await userEvent.click(button);
+        expect(dis.dispatch).toHaveBeenCalledWith({
+            action: Action.ComposerInsert,
+            timelineRenderingType: "Room",
+            userId: "@user:example.com",
+        });
     });
 
     it("when call to client.getRoom is null, does not show read receipt button", () => {
         mockClient.getRoom.mockReturnValueOnce(null);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: /jump to read receipt/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
     });
 
     it("when call to client.getRoom is non-null and room.getEventReadUpTo is null, does not show read receipt button", () => {
@@ -863,7 +939,7 @@ describe("<UserOptionsSection />", () => {
         mockClient.getRoom.mockReturnValueOnce(mockRoom);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: /jump to read receipt/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
     });
 
     it("when calls to client.getRoom and room.getEventReadUpTo are non-null, shows read receipt button", () => {
@@ -871,7 +947,7 @@ describe("<UserOptionsSection />", () => {
         mockClient.getRoom.mockReturnValueOnce(mockRoom);
         renderComponent();
 
-        expect(screen.getByRole("button", { name: /jump to read receipt/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Jump to read receipt" })).toBeInTheDocument();
     });
 
     it("clicking the read receipt button calls dispatch with correct event_id", async () => {
@@ -880,7 +956,7 @@ describe("<UserOptionsSection />", () => {
         mockClient.getRoom.mockReturnValue(mockRoom);
         renderComponent();
 
-        const readReceiptButton = screen.getByRole("button", { name: /jump to read receipt/i });
+        const readReceiptButton = screen.getByRole("button", { name: "Jump to read receipt" });
 
         expect(readReceiptButton).toBeInTheDocument();
         await userEvent.click(readReceiptButton);
@@ -904,7 +980,7 @@ describe("<UserOptionsSection />", () => {
         mockClient.getRoom.mockReturnValue(mockRoom);
         renderComponent();
 
-        const readReceiptButton = screen.getByRole("button", { name: /jump to read receipt/i });
+        const readReceiptButton = screen.getByRole("button", { name: "Jump to read receipt" });
 
         expect(readReceiptButton).toBeInTheDocument();
         await userEvent.click(readReceiptButton);
@@ -964,52 +1040,6 @@ describe("<UserOptionsSection />", () => {
         });
     });
 
-    it("shows a modal before ignoring the user", async () => {
-        const originalCreateDialog = Modal.createDialog;
-        const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
-            finished: Promise.resolve([true]),
-            close: () => {},
-        }));
-
-        try {
-            mockClient.getIgnoredUsers.mockReturnValue([]);
-            renderComponent({ isIgnored: false });
-
-            await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
-            expect(modalSpy).toHaveBeenCalled();
-            expect(mockClient.setIgnoredUsers).toHaveBeenLastCalledWith([member.userId]);
-        } finally {
-            Modal.createDialog = originalCreateDialog;
-        }
-    });
-
-    it("cancels ignoring the user", async () => {
-        const originalCreateDialog = Modal.createDialog;
-        const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
-            finished: Promise.resolve([false]),
-            close: () => {},
-        }));
-
-        try {
-            mockClient.getIgnoredUsers.mockReturnValue([]);
-            renderComponent({ isIgnored: false });
-
-            await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
-            expect(modalSpy).toHaveBeenCalled();
-            expect(mockClient.setIgnoredUsers).not.toHaveBeenCalled();
-        } finally {
-            Modal.createDialog = originalCreateDialog;
-        }
-    });
-
-    it("unignores the user", async () => {
-        mockClient.getIgnoredUsers.mockReturnValue([member.userId]);
-        renderComponent({ isIgnored: true });
-
-        await userEvent.click(screen.getByRole("button", { name: "Unignore" }));
-        expect(mockClient.setIgnoredUsers).toHaveBeenCalledWith([]);
-    });
-
     it.each([
         ["for a RoomMember", member, member.getMxcAvatarUrl()],
         ["for a User", defaultUser, defaultUser.avatarUrl],
@@ -1020,10 +1050,10 @@ describe("<UserOptionsSection />", () => {
             mocked(startDmOnFirstMessage).mockReturnValue(deferred.promise);
 
             renderComponent({ member });
-            await userEvent.click(screen.getByText("Message"));
+            await userEvent.click(screen.getByRole("button", { name: "Send message" }));
 
             // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
-            expect(screen.getByText("Message")).toHaveAttribute("disabled");
+            expect(screen.getByRole("button", { name: "Send message" })).toBeDisabled();
 
             expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
                 new DirectoryMember({
@@ -1039,7 +1069,7 @@ describe("<UserOptionsSection />", () => {
             });
 
             // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
-            expect(screen.getByText("Message")).not.toHaveAttribute("disabled");
+            expect(screen.getByRole("button", { name: "Send message" })).not.toBeDisabled();
         },
     );
 });
@@ -1396,10 +1426,30 @@ describe("<RoomAdminToolsContainer />", () => {
 
         renderComponent({ member: defaultMemberWithPowerLevel });
 
-        expect(screen.getByRole("heading", { name: /admin tools/i })).toBeInTheDocument();
-        expect(screen.getByText(/disinvite from room/i)).toBeInTheDocument();
-        expect(screen.getByText(/ban from room/i)).toBeInTheDocument();
-        expect(screen.getByText(/remove recent messages/i)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Disinvite from room" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Ban from room" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Remove messages" })).toBeInTheDocument();
+    });
+
+    it("should show BulkRedactDialog upon clicking the Remove messages button", async () => {
+        const spy = jest.spyOn(Modal, "createDialog");
+
+        mockClient.getRoom.mockReturnValue(mockRoom);
+        mockClient.getUserId.mockReturnValue("@arbitraryId:server");
+        const mockMeMember = new RoomMember(mockRoom.roomId, mockClient.getUserId()!);
+        mockMeMember.powerLevel = 51; // defaults to 50
+        const defaultMemberWithPowerLevel = { ...defaultMember, powerLevel: 0 } as RoomMember;
+        mockRoom.getMember.mockImplementation((userId) =>
+            userId === mockClient.getUserId() ? mockMeMember : defaultMemberWithPowerLevel,
+        );
+
+        renderComponent({ member: defaultMemberWithPowerLevel });
+        await userEvent.click(screen.getByRole("button", { name: "Remove messages" }));
+
+        expect(spy).toHaveBeenCalledWith(
+            BulkRedactDialog,
+            expect.objectContaining({ member: defaultMemberWithPowerLevel }),
+        );
     });
 
     it("returns mute toggle button if conditions met", () => {
@@ -1441,10 +1491,9 @@ describe("<RoomAdminToolsContainer />", () => {
             isUpdating: true,
         });
 
-        const button = screen.getByText(/mute/i);
+        const button = screen.getByRole("button", { name: "Mute" });
         expect(button).toBeInTheDocument();
-        expect(button).toHaveAttribute("disabled");
-        expect(button).toHaveAttribute("aria-disabled", "true");
+        expect(button).toBeDisabled();
     });
 
     it("should not show mute button for one's own member", () => {

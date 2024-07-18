@@ -34,6 +34,18 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { Heading, MenuItem, Text } from "@vector-im/compound-web";
+import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat.svg";
+import { Icon as CheckIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
+import { Icon as ShareIcon } from "@vector-im/compound-design-tokens/icons/share.svg";
+import { Icon as MentionIcon } from "@vector-im/compound-design-tokens/icons/mention.svg";
+import { Icon as InviteIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
+import { Icon as BlockIcon } from "@vector-im/compound-design-tokens/icons/block.svg";
+import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import { Icon as ChatProblemIcon } from "@vector-im/compound-design-tokens/icons/chat-problem.svg";
+import { Icon as VisibilityOffIcon } from "@vector-im/compound-design-tokens/icons/visibility-off.svg";
+import { Icon as LeaveIcon } from "@vector-im/compound-design-tokens/icons/leave.svg";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -79,7 +91,8 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
-import UIStore from "../../../stores/UIStore";
+import { Flex } from "../../utils/Flex";
+import CopyableText from "../elements/CopyableText";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -391,31 +404,29 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
     const [busy, setBusy] = useState(false);
 
     return (
-        <AccessibleButton
-            kind="link"
-            onClick={async () => {
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
                 if (busy) return;
                 setBusy(true);
                 await openDmForUser(cli, member);
                 setBusy(false);
             }}
-            className="mx_UserInfo_field"
             disabled={busy}
-        >
-            {_t("common|message")}
-        </AccessibleButton>
+            label={_t("user_info|send_message")}
+            Icon={ChatIcon}
+        />
     );
 };
 
 export const UserOptionsSection: React.FC<{
     member: Member;
-    isIgnored: boolean;
     canInvite: boolean;
     isSpace?: boolean;
-}> = ({ member, isIgnored, canInvite, isSpace }) => {
+}> = ({ member, canInvite, isSpace, children }) => {
     const cli = useContext(MatrixClientContext);
 
-    let ignoreButton: JSX.Element | undefined;
     let insertPillButton: JSX.Element | undefined;
     let inviteUserButton: JSX.Element | undefined;
     let readReceiptButton: JSX.Element | undefined;
@@ -427,42 +438,9 @@ export const UserOptionsSection: React.FC<{
         });
     };
 
-    const unignore = useCallback(() => {
-        const ignoredUsers = cli.getIgnoredUsers();
-        const index = ignoredUsers.indexOf(member.userId);
-        if (index !== -1) ignoredUsers.splice(index, 1);
-        cli.setIgnoredUsers(ignoredUsers);
-    }, [cli, member]);
-
-    const ignore = useCallback(async () => {
-        const name = (member instanceof User ? member.displayName : member.name) || member.userId;
-        const { finished } = Modal.createDialog(QuestionDialog, {
-            title: _t("user_info|ignore_confirm_title", { user: name }),
-            description: <div>{_t("user_info|ignore_confirm_description")}</div>,
-            button: _t("action|ignore"),
-        });
-        const [confirmed] = await finished;
-
-        if (confirmed) {
-            const ignoredUsers = cli.getIgnoredUsers();
-            ignoredUsers.push(member.userId);
-            cli.setIgnoredUsers(ignoredUsers);
-        }
-    }, [cli, member]);
-
     // Only allow the user to ignore the user if its not ourselves
     // same goes for jumping to read receipt
     if (!isMe) {
-        ignoreButton = (
-            <AccessibleButton
-                onClick={isIgnored ? unignore : ignore}
-                kind="link"
-                className={classNames("mx_UserInfo_field", { mx_UserInfo_destructive: !isIgnored })}
-            >
-                {isIgnored ? _t("action|unignore") : _t("action|ignore")}
-            </AccessibleButton>
-        );
-
         if (member instanceof RoomMember && member.roomId && !isSpace) {
             const onReadReceiptButton = function (): void {
                 const room = cli.getRoom(member.roomId);
@@ -487,16 +465,28 @@ export const UserOptionsSection: React.FC<{
             const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : undefined;
             if (room?.getEventReadUpTo(member.userId)) {
                 readReceiptButton = (
-                    <AccessibleButton kind="link" onClick={onReadReceiptButton} className="mx_UserInfo_field">
-                        {_t("user_info|jump_to_rr_button")}
-                    </AccessibleButton>
+                    <MenuItem
+                        role="button"
+                        onSelect={async (ev) => {
+                            ev.preventDefault();
+                            onReadReceiptButton();
+                        }}
+                        label={_t("user_info|jump_to_rr_button")}
+                        Icon={CheckIcon}
+                    />
                 );
             }
 
             insertPillButton = (
-                <AccessibleButton kind="link" onClick={onInsertPillButton} className="mx_UserInfo_field">
-                    {_t("action|mention")}
-                </AccessibleButton>
+                <MenuItem
+                    role="button"
+                    onSelect={async (ev) => {
+                        ev.preventDefault();
+                        onInsertPillButton();
+                    }}
+                    label={_t("action|mention")}
+                    Icon={MentionIcon}
+                />
             );
         }
 
@@ -507,7 +497,7 @@ export const UserOptionsSection: React.FC<{
             shouldShowComponent(UIComponent.InviteUsers)
         ) {
             const roomId = member && member.roomId ? member.roomId : SdkContextClass.instance.roomViewStore.getRoomId();
-            const onInviteUserButton = async (ev: ButtonEvent): Promise<void> => {
+            const onInviteUserButton = async (ev: Event): Promise<void> => {
                 try {
                     // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.
                     const inviter = new MultiInviter(cli, roomId || "");
@@ -538,34 +528,43 @@ export const UserOptionsSection: React.FC<{
             };
 
             inviteUserButton = (
-                <AccessibleButton kind="link" onClick={onInviteUserButton} className="mx_UserInfo_field">
-                    {_t("action|invite")}
-                </AccessibleButton>
+                <MenuItem
+                    role="button"
+                    onSelect={async (ev) => {
+                        ev.preventDefault();
+                        onInviteUserButton(ev);
+                    }}
+                    label={_t("action|invite")}
+                    Icon={InviteIcon}
+                />
             );
         }
     }
 
     const shareUserButton = (
-        <AccessibleButton kind="link" onClick={onShareUserClick} className="mx_UserInfo_field">
-            {_t("user_info|share_button")}
-        </AccessibleButton>
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                onShareUserClick();
+            }}
+            label={_t("user_info|share_button")}
+            Icon={ShareIcon}
+        />
     );
 
     const directMessageButton =
         isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : <MessageButton member={member} />;
 
     return (
-        <div className="mx_UserInfo_container">
-            <h3>{_t("common|options")}</h3>
-            <div>
-                {directMessageButton}
-                {readReceiptButton}
-                {shareUserButton}
-                {insertPillButton}
-                {inviteUserButton}
-                {ignoreButton}
-            </div>
-        </div>
+        <Container>
+            {children}
+            {directMessageButton}
+            {inviteUserButton}
+            {readReceiptButton}
+            {shareUserButton}
+            {insertPillButton}
+        </Container>
     );
 };
 
@@ -586,15 +585,10 @@ export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
     return !!confirmed;
 };
 
-const GenericAdminToolsContainer: React.FC<{
+const Container: React.FC<{
     children: ReactNode;
 }> = ({ children }) => {
-    return (
-        <div className="mx_UserInfo_container">
-            <h3>{_t("user_info|admin_tools_section")}</h3>
-            <div className="mx_UserInfo_buttons">{children}</div>
-        </div>
-    );
+    return <div className="mx_UserInfo_container">{children}</div>;
 };
 
 interface IPowerLevelsContent {
@@ -756,14 +750,17 @@ export const RoomKickButton = ({
           : _t("user_info|kick_button_room");
 
     return (
-        <AccessibleButton
-            kind="link"
-            className="mx_UserInfo_field mx_UserInfo_destructive"
-            onClick={onKick}
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                onKick();
+            }}
             disabled={isUpdating}
-        >
-            {kickLabel}
-        </AccessibleButton>
+            label={kickLabel}
+            kind="critical"
+            Icon={LeaveIcon}
+        />
     );
 };
 
@@ -782,13 +779,16 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
     };
 
     return (
-        <AccessibleButton
-            kind="link"
-            className="mx_UserInfo_field mx_UserInfo_destructive"
-            onClick={onRedactAllMessages}
-        >
-            {_t("user_info|redact_button")}
-        </AccessibleButton>
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                onRedactAllMessages();
+            }}
+            label={_t("user_info|redact_button")}
+            kind="critical"
+            Icon={CloseIcon}
+        />
     );
 };
 
@@ -904,14 +904,18 @@ export const BanToggleButton = ({
         label = room.isSpaceRoom() ? _t("user_info|unban_button_space") : _t("user_info|unban_button_room");
     }
 
-    const classes = classNames("mx_UserInfo_field", {
-        mx_UserInfo_destructive: !isBanned,
-    });
-
     return (
-        <AccessibleButton kind="link" className={classes} onClick={onBanOrUnban} disabled={isUpdating}>
-            {label}
-        </AccessibleButton>
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                onBanOrUnban();
+            }}
+            disabled={isUpdating}
+            label={label}
+            kind="critical"
+            Icon={ChatProblemIcon}
+        />
     );
 };
 
@@ -981,15 +985,81 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
             });
     };
 
-    const classes = classNames("mx_UserInfo_field", {
-        mx_UserInfo_destructive: !muted,
-    });
-
     const muteLabel = muted ? _t("common|unmute") : _t("common|mute");
     return (
-        <AccessibleButton kind="link" className={classes} onClick={onMuteToggle} disabled={isUpdating}>
-            {muteLabel}
-        </AccessibleButton>
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                onMuteToggle();
+            }}
+            disabled={isUpdating}
+            label={muteLabel}
+            kind="critical"
+            Icon={VisibilityOffIcon}
+        />
+    );
+};
+
+const IgnoreToggleButton: React.FC<{
+    member: User | RoomMember;
+}> = ({ member }) => {
+    const cli = useContext(MatrixClientContext);
+    const unignore = useCallback(() => {
+        const ignoredUsers = cli.getIgnoredUsers();
+        const index = ignoredUsers.indexOf(member.userId);
+        if (index !== -1) ignoredUsers.splice(index, 1);
+        cli.setIgnoredUsers(ignoredUsers);
+    }, [cli, member]);
+
+    const ignore = useCallback(async () => {
+        const name = (member instanceof User ? member.displayName : member.name) || member.userId;
+        const { finished } = Modal.createDialog(QuestionDialog, {
+            title: _t("user_info|ignore_confirm_title", { user: name }),
+            description: <div>{_t("user_info|ignore_confirm_description")}</div>,
+            button: _t("action|ignore"),
+        });
+        const [confirmed] = await finished;
+
+        if (confirmed) {
+            const ignoredUsers = cli.getIgnoredUsers();
+            ignoredUsers.push(member.userId);
+            cli.setIgnoredUsers(ignoredUsers);
+        }
+    }, [cli, member]);
+
+    // Check whether the user is ignored
+    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(member.userId));
+    // Recheck if the user or client changes
+    useEffect(() => {
+        setIsIgnored(cli.isUserIgnored(member.userId));
+    }, [cli, member.userId]);
+    // Recheck also if we receive new accountData m.ignored_user_list
+    const accountDataHandler = useCallback(
+        (ev) => {
+            if (ev.getType() === "m.ignored_user_list") {
+                setIsIgnored(cli.isUserIgnored(member.userId));
+            }
+        },
+        [cli, member.userId],
+    );
+    useTypedEventEmitter(cli, ClientEvent.AccountData, accountDataHandler);
+
+    return (
+        <MenuItem
+            role="button"
+            onSelect={async (ev) => {
+                ev.preventDefault();
+                if (isIgnored) {
+                    unignore();
+                } else {
+                    ignore();
+                }
+            }}
+            label={isIgnored ? _t("user_info|unignore_button") : _t("user_info|ignore_button")}
+            kind="critical"
+            Icon={BlockIcon}
+        />
     );
 };
 
@@ -1070,13 +1140,13 @@ export const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
 
     if (kickButton || banButton || muteButton || redactButton || children) {
         return (
-            <GenericAdminToolsContainer>
+            <Container>
                 {muteButton}
+                {redactButton}
                 {kickButton}
                 {banButton}
-                {redactButton}
                 {children}
-            </GenericAdminToolsContainer>
+            </Container>
         );
     }
 
@@ -1352,23 +1422,6 @@ const BasicUserInfo: React.FC<{
     // Load whether or not we are a Synapse Admin
     const isSynapseAdmin = useIsSynapseAdmin(cli);
 
-    // Check whether the user is ignored
-    const [isIgnored, setIsIgnored] = useState(cli.isUserIgnored(member.userId));
-    // Recheck if the user or client changes
-    useEffect(() => {
-        setIsIgnored(cli.isUserIgnored(member.userId));
-    }, [cli, member.userId]);
-    // Recheck also if we receive new accountData m.ignored_user_list
-    const accountDataHandler = useCallback(
-        (ev) => {
-            if (ev.getType() === "m.ignored_user_list") {
-                setIsIgnored(cli.isUserIgnored(member.userId));
-            }
-        },
-        [cli, member.userId],
-    );
-    useTypedEventEmitter(cli, ClientEvent.AccountData, accountDataHandler);
-
     // Count of how many operations are currently in progress, if > 0 then show a Spinner
     const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
     const startUpdating = useCallback(() => {
@@ -1412,13 +1465,16 @@ const BasicUserInfo: React.FC<{
     // someone does figure out how to bypass this check the worst that happens is an error.
     if (isSynapseAdmin && member.userId.endsWith(`:${cli.getDomain()}`)) {
         synapseDeactivateButton = (
-            <AccessibleButton
-                kind="link"
-                className="mx_UserInfo_field mx_UserInfo_destructive"
-                onClick={onSynapseDeactivate}
-            >
-                {_t("user_info|deactivate_confirm_action")}
-            </AccessibleButton>
+            <MenuItem
+                role="button"
+                onSelect={async (ev) => {
+                    ev.preventDefault();
+                    onSynapseDeactivate();
+                }}
+                label={_t("user_info|deactivate_confirm_action")}
+                kind="critical"
+                Icon={DeleteIcon}
+            />
         );
     }
 
@@ -1428,23 +1484,12 @@ const BasicUserInfo: React.FC<{
         // hide the Roles section for DMs as it doesn't make sense there
         if (!DMRoomMap.shared().getUserIdForRoomId((member as RoomMember).roomId)) {
             memberDetails = (
-                <div className="mx_UserInfo_container">
-                    <h3>
-                        {_t(
-                            "user_info|role_label",
-                            {},
-                            {
-                                RoomName: () => <b>{room.name}</b>,
-                            },
-                        )}
-                    </h3>
-                    <PowerLevelSection
-                        powerLevels={powerLevels}
-                        user={member as RoomMember}
-                        room={room}
-                        roomPermissions={roomPermissions}
-                    />
-                </div>
+                <PowerLevelSection
+                    powerLevels={powerLevels}
+                    user={member as RoomMember}
+                    room={room}
+                    roomPermissions={roomPermissions}
+                />
             );
         }
 
@@ -1461,7 +1506,7 @@ const BasicUserInfo: React.FC<{
             </RoomAdminToolsContainer>
         );
     } else if (synapseDeactivateButton) {
-        adminToolsContainer = <GenericAdminToolsContainer>{synapseDeactivateButton}</GenericAdminToolsContainer>;
+        adminToolsContainer = <Container>{synapseDeactivateButton}</Container>;
     }
 
     if (pendingUpdateCount > 0) {
@@ -1559,8 +1604,8 @@ const BasicUserInfo: React.FC<{
     }
 
     const securitySection = (
-        <div className="mx_UserInfo_container">
-            <h3>{_t("common|security")}</h3>
+        <Container>
+            <h2>{_t("common|security")}</h2>
             <p>{text}</p>
             {verifyButton}
             {cryptoEnabled && (
@@ -1572,22 +1617,28 @@ const BasicUserInfo: React.FC<{
                 />
             )}
             {editDevices}
-        </div>
+        </Container>
     );
 
     return (
         <React.Fragment>
-            {memberDetails}
-
             {securitySection}
+
             <UserOptionsSection
                 canInvite={roomPermissions.canInvite}
-                isIgnored={isIgnored}
                 member={member as RoomMember}
                 isSpace={room?.isSpaceRoom()}
-            />
+            >
+                {memberDetails}
+            </UserOptionsSection>
 
             {adminToolsContainer}
+
+            {!isMe && (
+                <Container>
+                    <IgnoreToggleButton member={member} />
+                </Container>
+            )}
 
             {spinner}
         </React.Fragment>
@@ -1621,24 +1672,6 @@ export const UserInfoHeader: React.FC<{
 
     const avatarUrl = (member as User).avatarUrl;
 
-    const avatarElement = (
-        <div className="mx_UserInfo_avatar">
-            <div className="mx_UserInfo_avatar_transition">
-                <div className="mx_UserInfo_avatar_transition_child">
-                    <MemberAvatar
-                        key={member.userId} // to instantly blank the avatar when UserInfo changes members
-                        member={member as RoomMember}
-                        size={UIStore.instance.windowHeight * 0.3 + "px"}
-                        resizeMethod="scale"
-                        fallbackUserId={member.userId}
-                        onClick={onMemberAvatarClick}
-                        urls={avatarUrl ? [avatarUrl] : undefined}
-                    />
-                </div>
-            </div>
-        </div>
-    );
-
     let presenceState: string | undefined;
     let presenceLastActiveAgo: number | undefined;
     let presenceCurrentlyActive: boolean | undefined;
@@ -1661,36 +1694,52 @@ export const UserInfoHeader: React.FC<{
                 activeAgo={presenceLastActiveAgo}
                 currentlyActive={presenceCurrentlyActive}
                 presenceState={presenceState}
+                className="mx_UserInfo_profileStatus"
+                coloured
             />
         );
     }
 
     const e2eIcon = e2eStatus ? <E2EIcon size={18} status={e2eStatus} isUser={true} /> : null;
-
+    const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
+        roomId,
+        withDisplayName: true,
+    });
     const displayName = (member as RoomMember).rawDisplayName;
     return (
         <React.Fragment>
-            {avatarElement}
-
-            <div className="mx_UserInfo_container mx_UserInfo_separator">
-                <div className="mx_UserInfo_profile">
-                    <div>
-                        <h2>
-                            <span title={displayName} aria-label={displayName} dir="auto">
-                                {displayName}
-                            </span>
-                            {e2eIcon}
-                        </h2>
+            <div className="mx_UserInfo_avatar">
+                <div className="mx_UserInfo_avatar_transition">
+                    <div className="mx_UserInfo_avatar_transition_child">
+                        <MemberAvatar
+                            key={member.userId} // to instantly blank the avatar when UserInfo changes members
+                            member={member as RoomMember}
+                            size="120px"
+                            resizeMethod="scale"
+                            fallbackUserId={member.userId}
+                            onClick={onMemberAvatarClick}
+                            urls={avatarUrl ? [avatarUrl] : undefined}
+                        />
                     </div>
-                    <div className="mx_UserInfo_profile_mxid">
-                        {UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
-                            roomId,
-                            withDisplayName: true,
-                        })}
-                    </div>
-                    <div className="mx_UserInfo_profileStatus">{presenceLabel}</div>
                 </div>
             </div>
+
+            <Container>
+                <Flex direction="column" align="center" className="mx_UserInfo_profile">
+                    <Heading size="sm" weight="semibold" as="h1" dir="auto">
+                        <Flex direction="row-reverse" align="center">
+                            {displayName}
+                            {e2eIcon}
+                        </Flex>
+                    </Heading>
+                    {presenceLabel}
+                    <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
+                        <CopyableText getTextToCopy={() => userIdentifier} border={false}>
+                            {userIdentifier}
+                        </CopyableText>
+                    </Text>
+                </Flex>
+            </Container>
         </React.Fragment>
     );
 };
