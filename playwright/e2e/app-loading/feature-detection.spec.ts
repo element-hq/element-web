@@ -20,8 +20,23 @@ test(`shows error page if browser lacks Intl support`, async ({ page }) => {
     await page.addInitScript({ content: `delete window.Intl;` });
     await page.goto("/");
 
+    // Lack of Intl support causes the app bundle to fail to load, so we get the iframed
+    // static error page and need to explicitly look in the iframe becuse Playwright doesn't
+    // recurse into iframes when looking for elements
     const header = await page.frameLocator("iframe").getByText("Unsupported browser");
     await expect(header).toBeVisible();
 
     await expect(page).toMatchScreenshot("unsupported-browser.png");
+});
+
+test(`shows error page if browser lacks WebAssembly support`, async ({ page }) => {
+    await page.addInitScript({ content: `delete window.WebAssembly;` });
+    await page.goto("/");
+
+    // Lack of WebAssembly support doesn't cause the bundle to fail loading, so we get
+    // CompatibilityView, ie. no iframes.
+    const header = await page.getByText("Unsupported browser");
+    await expect(header).toBeVisible();
+
+    await expect(page).toMatchScreenshot("unsupported-browser-CompatibilityView.png");
 });
