@@ -2398,7 +2398,6 @@
         },
         "redact_button": "Pašalinti paskutines žinutes",
         "revoke_invite": "Atšaukti kvietimą",
-        "role_label": "Rolė <RoomName/>",
         "room_encrypted": "Žinutės šiame kambaryje yra visapusiškai užšifruotos.",
         "room_encrypted_detail": "Jūsų žinutės yra apsaugotos ir tik jūs ir gavėjas turite unikalius raktus joms atrakinti.",
         "room_unencrypted": "Žinutės šiame kambaryje nėra visapusiškai užšifruotos.",

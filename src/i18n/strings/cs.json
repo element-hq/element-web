@@ -3683,7 +3683,6 @@
         },
         "redact_button": "Odstranit nedávné zprávy",
         "revoke_invite": "Zrušit pozvání",
-        "role_label": "Role v <RoomName/>",
         "room_encrypted": "Zprávy jsou v této místnosti koncově šifrované.",
         "room_encrypted_detail": "Vaše zprávy jsou zabezpečené - pouze vy a jejich příjemci máte klíče potřebné k jejich přečtení.",
         "room_unencrypted": "Zprávy nejsou koncově šifrované.",

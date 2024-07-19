@@ -3689,7 +3689,6 @@
         },
         "redact_button": "Odstrániť posledné správy",
         "revoke_invite": "Odvolať pozvánku",
-        "role_label": "Rola v <RoomName/>",
         "room_encrypted": "Správy v tejto miestnosti sú šifrované od vás až k príjemcovi.",
         "room_encrypted_detail": "Vaše správy sú zabezpečené a jedinečné kľúče na ich odomknutie máte len vy a príjemca.",
         "room_unencrypted": "Správy v tejto miestnosti nie sú šifrované od vás až k príjemcovi.",

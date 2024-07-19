@@ -3675,7 +3675,6 @@
         },
         "redact_button": "Ta bort nyliga meddelanden",
         "revoke_invite": "Återkalla inbjudan",
-        "role_label": "Roll i <RoomName/>",
         "room_encrypted": "Meddelanden i det här rummet är totalsträckskrypterade.",
         "room_encrypted_detail": "Dina meddelanden är säkrade och endast du och mottagaren har de unika nycklarna för att låsa upp dem.",
         "room_unencrypted": "Meddelanden i detta rum är inte totalsträckskrypterade.",

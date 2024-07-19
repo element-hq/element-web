@@ -3451,7 +3451,6 @@
         },
         "redact_button": "Hiq mesazhe së fundi",
         "revoke_invite": "Shfuqizoje ftesën",
-        "role_label": "Rol në <RoomName/>",
         "room_encrypted": "Mesazhet në këtë dhomë janë të fshehtëzuara skaj-më-skaj.",
         "room_encrypted_detail": "Mesazhet tuaj janë të sigurt dhe vetëm ju dhe marrësi kanë kyçet unikë për t’i shkyçur.",
         "room_unencrypted": "Mesazhet në këtë dhomë nuk janë të fshehtëzuara skaj-më-skaj.",

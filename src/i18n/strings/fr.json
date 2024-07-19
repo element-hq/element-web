@@ -3717,7 +3717,6 @@
         },
         "redact_button": "Supprimer les messages récents",
         "revoke_invite": "Révoquer l’invitation",
-        "role_label": "Rôle dans <RoomName/>",
         "room_encrypted": "Les messages dans ce salon sont chiffrés de bout en bout.",
         "room_encrypted_detail": "Vos messages sont sécurisés et seuls vous et le destinataire avez les clés uniques pour les déchiffrer.",
         "room_unencrypted": "Les messages dans ce salon ne sont pas chiffrés de bout en bout.",

@@ -3156,7 +3156,6 @@
         },
         "redact_button": "Recente berichten verwijderen",
         "revoke_invite": "Uitnodiging intrekken",
-        "role_label": "Rol in <RoomName/>",
         "room_encrypted": "De berichten in deze kamer worden eind-tot-eind-versleuteld.",
         "room_encrypted_detail": "Jouw berichten zijn beveiligd, en enkel de ontvanger en jij hebben de unieke sleutels om ze te ontsleutelen.",
         "room_unencrypted": "De berichten in deze kamer worden niet eind-tot-eind-versleuteld.",

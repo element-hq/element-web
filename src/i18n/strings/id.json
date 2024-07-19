@@ -3626,7 +3626,6 @@
         },
         "redact_button": "Hapus pesan terkini",
         "revoke_invite": "Hapus undangan",
-        "role_label": "Peran di <RoomName/>",
         "room_encrypted": "Pesan di ruangan ini terenkripsi secara ujung ke ujung.",
         "room_encrypted_detail": "Pesan Anda diamankan dan hanya Anda dan penerimanya mempunyai kunci yang unik untuk mengaksesnya.",
         "room_unencrypted": "Pesan di ruangan ini tidak dienkripsi secara ujung ke ujung.",

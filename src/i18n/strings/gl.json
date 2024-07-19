@@ -3134,7 +3134,6 @@
         },
         "redact_button": "Eliminar mensaxes recentes",
         "revoke_invite": "Revogar convite",
-        "role_label": "Rol en <RoomName/>",
         "room_encrypted": "As mensaxes desta sala están cifradas de extremo-a-extremo.",
         "room_encrypted_detail": "As túas mensaxes están seguras e só ti e o correspondente tedes as únicas chaves que as desbloquean.",
         "room_unencrypted": "As mensaxes desta sala non están cifradas de extremo-a-extremo.",

@@ -3621,7 +3621,6 @@
         },
         "redact_button": "Eemalda hiljutised sõnumid",
         "revoke_invite": "Tühista kutse",
-        "role_label": "Roll jututoas <RoomName/>",
         "room_encrypted": "See jututuba on läbivalt krüptitud.",
         "room_encrypted_detail": "Sinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.",
         "room_unencrypted": "See jututuba ei ole läbivalt krüptitud.",

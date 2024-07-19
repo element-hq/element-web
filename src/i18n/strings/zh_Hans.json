@@ -3292,7 +3292,6 @@
         },
         "redact_button": "移除最近消息",
         "revoke_invite": "撤销邀请",
-        "role_label": "<RoomName/> 中的角色",
         "room_encrypted": "此房间内的消息端到端加密。",
         "room_encrypted_detail": "你的消息是安全的，只有你和接收者有解开它们的唯一密钥。",
         "room_unencrypted": "此房间内的消息未端到端加密。",

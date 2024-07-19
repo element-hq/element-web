@@ -3298,7 +3298,6 @@
         },
         "redact_button": "Bỏ các tin nhắn gần đây",
         "revoke_invite": "Thu hồi lời mời",
-        "role_label": "Vai trò trong <RoomName/>",
         "room_encrypted": "Tin nhắn trong phòng này đang được mã hóa đầu cuối.",
         "room_encrypted_detail": "Tin nhắn của bạn được bảo mật và chỉ bạn và người nhận mới có chìa khóa duy nhất để mở khóa.",
         "room_unencrypted": "Tin nhắn trong phòng này không được mã hóa đầu cuối.",

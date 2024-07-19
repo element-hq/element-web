@@ -3232,7 +3232,6 @@
         },
         "redact_button": "Poista viimeaikaiset viestit",
         "revoke_invite": "Kumoa kutsu",
-        "role_label": "Rooli huoneessa <RoomName/>",
         "room_encrypted": "Tämän huoneen viestit ovat päästä päähän -salattuja.",
         "room_encrypted_detail": "Viestisi ovat turvattu, ja vain sinulla ja vastaanottajalla on avaimet viestien lukemiseen.",
         "room_unencrypted": "Tämän huoneen viestit eivät ole päästä päähän -salattuja.",

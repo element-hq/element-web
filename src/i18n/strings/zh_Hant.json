@@ -3577,7 +3577,6 @@
         },
         "redact_button": "移除最近的訊息",
         "revoke_invite": "撤銷邀請",
-        "role_label": "<RoomName/> 中的角色",
         "room_encrypted": "此聊天室內的訊息有端對端加密。",
         "room_encrypted_detail": "您的訊息已受保護，只有您與收件人才有獨特的金鑰將其解鎖。",
         "room_unencrypted": "此聊天室內的訊息未經端到端加密。",

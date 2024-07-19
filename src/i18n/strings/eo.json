@@ -2642,7 +2642,6 @@
         },
         "redact_button": "Forigi freŝajn mesaĝojn",
         "revoke_invite": "Nuligi inviton",
-        "role_label": "Rolo en <RoomName/>",
         "room_encrypted": "Mesaĝoj en ĉi tiu ĉambro estas tutvoje ĉifrataj.",
         "room_encrypted_detail": "Viaj mesaĝoj estas sekurigitaj, kaj nur vi kaj la ricevanto posedas la unikan ŝlosilojn, kiuj ilin povas malĉifri.",
         "room_unencrypted": "Mesaĝoj en ĉi tiu ĉambro ne estas tutvoje ĉifrataj.",

@@ -3376,7 +3376,6 @@
         },
         "redact_button": "Eliminar mensajes recientes",
         "revoke_invite": "Revocar invitación",
-        "role_label": "Rol en <RoomName/>",
         "room_encrypted": "Los mensajes de esta sala están cifrados de extremo a extremo.",
         "room_encrypted_detail": "Los mensajes son seguros y sólo tú y el destinatario tienen las claves únicas para desbloquearlos.",
         "room_unencrypted": "Los mensajes en esta sala no están cifrados de extremo a extremo.",

@@ -3020,7 +3020,6 @@
         },
         "redact_button": "Fjarlægja nýleg skilaboð",
         "revoke_invite": "Afturkalla boð",
-        "role_label": "Hlutverk í <RoomName/>",
         "room_encrypted": "Skilaboð í þessari spjallrás eru enda-í-enda dulrituð.",
         "room_encrypted_detail": "Öryggi skilaboðanna þinna er tryggt og einungis þú og viðtakendurnir hafa dulritunarlyklana til að opna skilaboðin.",
         "room_unencrypted": "Skilaboð í þessari spjallrás eru ekki enda-í-enda dulrituð.",

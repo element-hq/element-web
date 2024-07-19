@@ -2550,7 +2550,6 @@
         },
         "redact_button": "Apagar mensagens desta pessoa na sala",
         "revoke_invite": "Revogar o convite",
-        "role_label": "Cargo em <RoomName/>",
         "room_encrypted": "As mensagens nesta sala estão criptografadas de ponta a ponta.",
         "room_encrypted_detail": "Suas mensagens são protegidas e somente você e o destinatário têm as chaves exclusivas para desbloqueá-las.",
         "room_unencrypted": "As mensagens nesta sala não estão criptografadas de ponta a ponta.",

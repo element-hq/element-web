@@ -3656,7 +3656,6 @@
         },
         "redact_button": "Kürzlich gesendete Nachrichten entfernen",
         "revoke_invite": "Einladung zurückziehen",
-        "role_label": "Rolle in <RoomName/>",
         "room_encrypted": "Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt.",
         "room_encrypted_detail": "Diese Nachricht ist verschlüsselt. Nur Sie und der Empfänger haben den Schlüssel, um die Nachricht zu entschlüsseln.",
         "room_unencrypted": "Nachrichten in diesem Raum sind nicht Ende-zu-Ende verschlüsselt.",

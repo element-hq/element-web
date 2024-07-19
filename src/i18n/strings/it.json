@@ -3676,7 +3676,6 @@
         },
         "redact_button": "Rimuovi i messaggi recenti",
         "revoke_invite": "Revoca invito",
-        "role_label": "Ruolo in <RoomName/>",
         "room_encrypted": "I messaggi in questa stanza sono cifrati end-to-end.",
         "room_encrypted_detail": "I tuoi messaggi sono protetti e solo tu ed il destinatario avete le chiavi univoche per sbloccarli.",
         "room_unencrypted": "I messaggi in questa stanza non sono cifrati end-to-end.",

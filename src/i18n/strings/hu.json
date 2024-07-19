@@ -3592,7 +3592,6 @@
         },
         "redact_button": "Friss üzenetek törlése",
         "revoke_invite": "Meghívó visszavonása",
-        "role_label": "Szerep itt: <RoomName/>",
         "room_encrypted": "Az üzenetek a szobában végponttól végpontig titkosítottak.",
         "room_encrypted_detail": "Az üzenete biztonságban van, és csak Ön és a címzettek rendelkeznek a visszafejtéshez szükséges egyedi kulcsokkal.",
         "room_unencrypted": "Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.",
