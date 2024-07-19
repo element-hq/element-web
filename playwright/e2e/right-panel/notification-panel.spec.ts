@@ -35,7 +35,7 @@ test.describe("NotificationPanel", () => {
         await page.getByRole("button", { name: "Notifications" }).click();
 
         // Wait until the information about the empty state is rendered
-        await expect(page.locator(".mx_NotificationPanel_empty")).toBeVisible();
+        await expect(page.locator(".mx_EmptyState")).toBeVisible();
 
         // Take a snapshot of RightPanel
         await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");

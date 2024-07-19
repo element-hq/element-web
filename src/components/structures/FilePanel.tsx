@@ -28,6 +28,7 @@ import {
     TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Icon as FilesIcon } from "@vector-im/compound-design-tokens/icons/files.svg";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -40,6 +41,7 @@ import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
+import EmptyState from "../views/right_panel/EmptyState";
 
 interface IProps {
     roomId: string;
@@ -255,10 +257,11 @@ class FilePanel extends React.Component<IProps, IState> {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
 
         const emptyState = (
-            <div className="mx_RightPanel_empty mx_FilePanel_empty">
-                <h2>{_t("file_panel|empty_heading")}</h2>
-                <p>{_t("file_panel|empty_description")}</p>
-            </div>
+            <EmptyState
+                Icon={FilesIcon}
+                title={_t("file_panel|empty_heading")}
+                description={_t("file_panel|empty_description")}
+            />
         );
 
         const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.safeGet().isRoomEncrypted(this.props.roomId);

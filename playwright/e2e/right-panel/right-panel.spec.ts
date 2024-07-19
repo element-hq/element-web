@@ -104,7 +104,7 @@ test.describe("RightPanel", () => {
 
             await page.getByRole("menuitem", { name: "Files" }).click();
             await expect(page.locator(".mx_FilePanel")).toBeVisible();
-            await expect(page.locator(".mx_FilePanel_empty")).toBeVisible();
+            await expect(page.locator(".mx_EmptyState")).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
             await checkRoomSummaryCard(page, ROOM_NAME);

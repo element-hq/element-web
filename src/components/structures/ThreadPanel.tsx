@@ -19,6 +19,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { EventTimelineSet, Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";
@@ -37,6 +38,7 @@ import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import Heading from "../views/typography/Heading";
 import { clearRoomNotification } from "../../utils/notifications";
+import EmptyState from "../views/right_panel/EmptyState";
 
 interface IProps {
     roomId: string;
@@ -73,8 +75,7 @@ export const ThreadPanelHeaderFilterOptionItem: React.FC<
 export const ThreadPanelHeader: React.FC<{
     filterOption: ThreadFilterType;
     setFilterOption: (filterOption: ThreadFilterType) => void;
-    empty: boolean;
-}> = ({ filterOption, setFilterOption, empty }) => {
+}> = ({ filterOption, setFilterOption }) => {
     const mxClient = useMatrixClientContext();
     const roomContext = useRoomContext();
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
@@ -140,86 +141,24 @@ export const ThreadPanelHeader: React.FC<{
             <Heading size="4" className="mx_BaseCard_header_title_heading">
                 {_t("common|threads")}
             </Heading>
-            {!empty && (
-                <>
-                    <Tooltip label={_t("threads|mark_all_read")}>
-                        <IconButton
-                            onClick={onMarkAllThreadsReadClick}
-                            aria-label={_t("threads|mark_all_read")}
-                            size="24px"
-                        >
-                            <MarkAllThreadsReadIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <div className="mx_ThreadPanel_vertical_separator" />
-                    <ContextMenuButton
-                        className="mx_ThreadPanel_dropdown"
-                        ref={button}
-                        isExpanded={menuDisplayed}
-                        onClick={(ev: ButtonEvent) => {
-                            openMenu();
-                            PosthogTrackers.trackInteraction("WebRightPanelThreadPanelFilterDropdown", ev);
-                        }}
-                    >
-                        {`${_t("threads|show_thread_filter")} ${value?.label}`}
-                    </ContextMenuButton>
-                    {contextMenu}
-                </>
-            )}
-        </div>
-    );
-};
-
-interface EmptyThreadIProps {
-    hasThreads: boolean;
-    filterOption: ThreadFilterType;
-    showAllThreadsCallback: () => void;
-}
-
-const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, showAllThreadsCallback }) => {
-    let body: JSX.Element;
-    if (hasThreads) {
-        body = (
-            <>
-                <p>
-                    {_t("threads|empty_has_threads_tip", {
-                        replyInThread: _t("action|reply_in_thread"),
-                    })}
-                </p>
-                <p>
-                    {/* Always display that paragraph to prevent layout shift when hiding the button */}
-                    {filterOption === ThreadFilterType.My ? (
-                        <button onClick={showAllThreadsCallback}>{_t("threads|show_all_threads")}</button>
-                    ) : (
-                        <>&nbsp;</>
-                    )}
-                </p>
-            </>
-        );
-    } else {
-        body = (
-            <>
-                <p>{_t("threads|empty_explainer")}</p>
-                <p className="mx_ThreadPanel_empty_tip">
-                    {_t(
-                        "threads|empty_tip",
-                        {
-                            replyInThread: _t("action|reply_in_thread"),
-                        },
-                        {
-                            b: (sub) => <b>{sub}</b>,
-                        },
-                    )}
-                </p>
-            </>
-        );
-    }
-
-    return (
-        <div className="mx_ThreadPanel_empty">
-            <div className="mx_ThreadPanel_largeIcon" />
-            <h2>{_t("threads|empty_heading")}</h2>
-            {body}
+            <Tooltip label={_t("threads|mark_all_read")}>
+                <IconButton onClick={onMarkAllThreadsReadClick} aria-label={_t("threads|mark_all_read")} size="24px">
+                    <MarkAllThreadsReadIcon />
+                </IconButton>
+            </Tooltip>
+            <div className="mx_ThreadPanel_vertical_separator" />
+            <ContextMenuButton
+                className="mx_ThreadPanel_dropdown"
+                ref={button}
+                isExpanded={menuDisplayed}
+                onClick={(ev: ButtonEvent) => {
+                    openMenu();
+                    PosthogTrackers.trackInteraction("WebRightPanelThreadPanelFilterDropdown", ev);
+                }}
+            >
+                {`${_t("threads|show_thread_filter")} ${value?.label}`}
+            </ContextMenuButton>
+            {contextMenu}
         </div>
     );
 };
@@ -268,11 +207,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
             <BaseCard
                 hideHeaderButtons
                 header={
-                    <ThreadPanelHeader
-                        filterOption={filterOption}
-                        setFilterOption={setFilterOption}
-                        empty={!hasThreads}
-                    />
+                    hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />
                 }
                 id="thread-panel"
                 className="mx_ThreadPanel"
@@ -295,10 +230,12 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         timelineSet={timelineSet}
                         showUrlPreview={false} // No URL previews at the threads list level
                         empty={
-                            <EmptyThread
-                                hasThreads={hasThreads}
-                                filterOption={filterOption}
-                                showAllThreadsCallback={() => setFilterOption(ThreadFilterType.All)}
+                            <EmptyState
+                                Icon={ThreadsIcon}
+                                title={_t("threads|empty_title")}
+                                description={_t("threads|empty_description", {
+                                    replyInThread: _t("action|reply_in_thread"),
+                                })}
                             />
                         }
                         alwaysShowTimestamps={true}

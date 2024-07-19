@@ -95,17 +95,3 @@ exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option
   </span>
 </div>
 `;
-
-exports[`ThreadPanel Header matches snapshot when no threads 1`] = `
-<DocumentFragment>
-  <div
-    class="mx_BaseCard_header_title"
-  >
-    <h4
-      class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-    >
-      Threads
-    </h4>
-  </div>
-</DocumentFragment>
-`;

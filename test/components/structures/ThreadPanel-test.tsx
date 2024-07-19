@@ -43,44 +43,21 @@ describe("ThreadPanel", () => {
     describe("Header", () => {
         it("expect that All filter for ThreadPanelHeader properly renders Show: All threads", () => {
             const { asFragment } = render(
-                <ThreadPanelHeader
-                    empty={false}
-                    filterOption={ThreadFilterType.All}
-                    setFilterOption={() => undefined}
-                />,
+                <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />,
             );
             expect(asFragment()).toMatchSnapshot();
         });
 
         it("expect that My filter for ThreadPanelHeader properly renders Show: My threads", () => {
             const { asFragment } = render(
-                <ThreadPanelHeader
-                    empty={false}
-                    filterOption={ThreadFilterType.My}
-                    setFilterOption={() => undefined}
-                />,
-            );
-            expect(asFragment()).toMatchSnapshot();
-        });
-
-        it("matches snapshot when no threads", () => {
-            const { asFragment } = render(
-                <ThreadPanelHeader
-                    empty={true}
-                    filterOption={ThreadFilterType.All}
-                    setFilterOption={() => undefined}
-                />,
+                <ThreadPanelHeader filterOption={ThreadFilterType.My} setFilterOption={() => undefined} />,
             );
             expect(asFragment()).toMatchSnapshot();
         });
 
         it("expect that ThreadPanelHeader properly opens a context menu when clicked on the button", () => {
             const { container } = render(
-                <ThreadPanelHeader
-                    empty={false}
-                    filterOption={ThreadFilterType.All}
-                    setFilterOption={() => undefined}
-                />,
+                <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />,
             );
             const found = container.querySelector(".mx_ThreadPanel_dropdown");
             expect(found).toBeTruthy();
@@ -91,11 +68,7 @@ describe("ThreadPanel", () => {
 
         it("expect that ThreadPanelHeader has the correct option selected in the context menu", () => {
             const { container } = render(
-                <ThreadPanelHeader
-                    empty={false}
-                    filterOption={ThreadFilterType.All}
-                    setFilterOption={() => undefined}
-                />,
+                <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />,
             );
             fireEvent.click(container.querySelector(".mx_ThreadPanel_dropdown")!);
             const found = screen.queryAllByRole("menuitemradio");
@@ -118,11 +91,7 @@ describe("ThreadPanel", () => {
             const { container } = render(
                 <RoomContext.Provider value={roomContextObject}>
                     <MatrixClientContext.Provider value={mockClient}>
-                        <ThreadPanelHeader
-                            empty={false}
-                            filterOption={ThreadFilterType.All}
-                            setFilterOption={() => undefined}
-                        />
+                        <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />
                     </MatrixClientContext.Provider>
                 </RoomContext.Provider>,
             );
@@ -136,11 +105,7 @@ describe("ThreadPanel", () => {
             const mockClient = createTestClient();
             const { container } = render(
                 <MatrixClientContext.Provider value={mockClient}>
-                    <ThreadPanelHeader
-                        empty={false}
-                        filterOption={ThreadFilterType.All}
-                        setFilterOption={() => undefined}
-                    />
+                    <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />
                 </MatrixClientContext.Provider>,
             );
             fireEvent.click(getByRole(container, "button", { name: "Mark all as read" }));
