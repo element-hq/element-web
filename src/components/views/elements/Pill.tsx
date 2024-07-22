@@ -19,6 +19,7 @@ import classNames from "classnames";
 import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { Icon as UserIcon } from "@vector-im/compound-design-tokens/icons/user-profile-solid.svg";
+import { Icon as LinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -26,7 +27,6 @@ import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
-import { Icon as LinkIcon } from "../../../../res/img/element-icons/room/composer/link.svg";
 
 export enum PillType {
     UserMention = "TYPE_USER_MENTION",

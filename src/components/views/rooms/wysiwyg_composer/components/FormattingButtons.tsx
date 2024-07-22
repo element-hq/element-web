@@ -28,8 +28,8 @@ import { Icon as NumberedListIcon } from "@vector-im/compound-design-tokens/icon
 import { Icon as QuoteIcon } from "@vector-im/compound-design-tokens/icons/quote.svg";
 import { Icon as StrikeThroughIcon } from "@vector-im/compound-design-tokens/icons/strikethrough.svg";
 import { Icon as UnderlineIcon } from "@vector-im/compound-design-tokens/icons/underline.svg";
+import { Icon as LinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
 
-import { Icon as LinkIcon } from "../../../../../../res/img/element-icons/room/composer/link.svg";
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import { openLinkModal } from "./LinkModal";
