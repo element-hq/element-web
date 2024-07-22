@@ -77,7 +77,7 @@ limitations under the License.
             &::before {
                 width: 14px;
                 height: 14px;
-                mask-image: url("$(res)/img/element-icons/message/chevron-up.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/chevron-up.svg");
             }
 
             &.mx_LegacyCallViewButtons_dropdownButton_collapsed::before {
@@ -95,19 +95,19 @@ limitations under the License.
 
             &.mx_LegacyCallViewButtons_button_mic::before {
                 height: 20px;
-                mask-image: url("$(res)/img/element-icons/mic.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/mic-on-solid.svg");
                 width: 20px;
             }
 
             &.mx_LegacyCallViewButtons_button_vid::before {
-                mask-image: url("$(res)/img/voip/call-view/cam-on.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
             }
 
             &.mx_LegacyCallViewButtons_button_screensharing {
                 background-color: $accent;
 
                 &::before {
-                    mask-image: url("$(res)/img/voip/call-view/screensharing.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/share-screen-solid.svg");
                     background-color: white; /* Same on both themes */
                 }
             }
@@ -126,19 +126,19 @@ limitations under the License.
 
             &.mx_LegacyCallViewButtons_button_mic::before {
                 height: 20px;
-                mask-image: url("$(res)/img/element-icons/Mic-off.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/mic-off-solid.svg");
                 width: 20px;
             }
 
             &.mx_LegacyCallViewButtons_button_vid::before {
-                mask-image: url("$(res)/img/voip/call-view/cam-off.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-off-solid.svg");
             }
 
             &.mx_LegacyCallViewButtons_button_screensharing {
                 background-color: $call-view-button-on-background;
 
                 &::before {
-                    mask-image: url("$(res)/img/voip/call-view/screensharing.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/share-screen-solid.svg");
                     background-color: $call-view-button-on-foreground;
                 }
             }
@@ -169,7 +169,7 @@ limitations under the License.
         }
 
         &.mx_LegacyCallViewButtons_button_more::before {
-            mask-image: url("$(res)/img/voip/call-view/more.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
         }
         /* Stateless buttons */
 

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-
-import { Icon as WarningIcon } from "../../../../res/img/compound/error-16px.svg";
+import { Icon as WarningIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
 
 interface Props {
     message: string;

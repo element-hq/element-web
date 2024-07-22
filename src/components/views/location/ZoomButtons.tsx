@@ -19,7 +19,7 @@ import * as maplibregl from "maplibre-gl";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import { Icon as PlusIcon } from "../../../../res/img/element-icons/plus-button.svg";
+import { Icon as PlusIcon } from "@vector-im/compound-design-tokens/icons/plus-button.svg";
 import { Icon as MinusIcon } from "../../../../res/img/element-icons/minus-button.svg";
 
 interface Props {

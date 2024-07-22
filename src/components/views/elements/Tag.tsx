@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React, { DetailedHTMLProps, HTMLAttributes } from "react";
+import { Icon as CancelRounded } from "@vector-im/compound-design-tokens/icons/close.svg";
 
 import AccessibleButton from "./AccessibleButton";
-import { Icon as CancelRounded } from "../../../../res/img/element-icons/cancel-rounded.svg";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     icon?: () => JSX.Element;

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-
-import { Icon as WarningBadgeIcon } from "../../../res/img/compound/error-16px.svg";
+import { Icon as WarningBadgeIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
 
 interface ErrorMessageProps {
     message: string | ReactNode | null;

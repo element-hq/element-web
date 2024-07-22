@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { HTMLAttributes, useContext } from "react";
+import { Icon as LocationIcon } from "@vector-im/compound-design-tokens/icons/location-pin-solid.svg";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
@@ -22,7 +23,6 @@ import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
-import { Icon as LocationIcon } from "../../../../res/img/element-icons/location.svg";
 import { LocationShareType } from "./shareLocation";
 import StyledLiveBeaconIcon from "../beacon/StyledLiveBeaconIcon";
 

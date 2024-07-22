@@ -16,10 +16,10 @@ limitations under the License.
 
 import React, { ChangeEvent, useMemo } from "react";
 import { Icon as CameraCircle } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
+import { Icon as MembersIcon } from "@vector-im/compound-design-tokens/icons/user-profile-solid.svg";
+import { Icon as FavoriteIcon } from "@vector-im/compound-design-tokens/icons/favourite-solid.svg";
+import { Icon as HomeIcon } from "@vector-im/compound-design-tokens/icons/home-solid.svg";
 
-import { Icon as HomeIcon } from "../../../../../../res/img/element-icons/home.svg";
-import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";
-import { Icon as MembersIcon } from "../../../../../../res/img/element-icons/room/members.svg";
 import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";

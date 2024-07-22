@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
+import { Icon as PauseIcon } from "@vector-im/compound-design-tokens/icons/pause-solid.svg";
+import { Icon as PlayIcon } from "@vector-im/compound-design-tokens/icons/play-solid.svg";
 
-import { Icon as PlayIcon } from "../../../../res/img/compound/play-16.svg";
-import { Icon as PauseIcon } from "../../../../res/img/compound/pause-12.svg";
 import { _t } from "../../../languageHandler";
 import { VoiceBroadcastControl, VoiceBroadcastPlaybackState } from "../..";
 

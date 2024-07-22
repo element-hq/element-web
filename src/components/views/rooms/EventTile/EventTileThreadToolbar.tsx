@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as LinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
 
 import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
-import { Icon as LinkIcon } from "../../../../../res/img/element-icons/link.svg";
 import { Icon as ViewInRoomIcon } from "../../../../../res/img/element-icons/view-in-room.svg";
 import { ButtonEvent } from "../../elements/AccessibleButton";
 

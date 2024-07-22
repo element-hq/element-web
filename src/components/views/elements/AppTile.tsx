@@ -24,6 +24,9 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import { Icon as MenuIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
+import { Icon as MaximiseIcon } from "@vector-im/compound-design-tokens/icons/expand.svg";
+import { Icon as CollapseIcon } from "@vector-im/compound-design-tokens/icons/collapse.svg";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -41,11 +44,8 @@ import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetConte
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Icon as CollapseIcon } from "../../../../res/img/element-icons/minimise-collapse.svg";
-import { Icon as MaximiseIcon } from "../../../../res/img/element-icons/maximise-expand.svg";
 import { Icon as MinimiseIcon } from "../../../../res/img/element-icons/minus-button.svg";
 import { Icon as PopoutIcon } from "../../../../res/img/feather-customised/widget/external-link.svg";
-import { Icon as MenuIcon } from "../../../../res/img/element-icons/room/ellipsis.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";

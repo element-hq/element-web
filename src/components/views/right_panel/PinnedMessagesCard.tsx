@@ -17,10 +17,10 @@ limitations under the License.
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Room, RoomEvent, RoomStateEvent, MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Icon as ReplyIcon } from "@vector-im/compound-design-tokens/icons/reply.svg";
+import { Icon as ContextMenuIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 
-import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
-import { Icon as ReplyIcon } from "../../../../res/img/element-icons/room/message-bar/reply.svg";
 import { _t } from "../../../languageHandler";
 import BaseCard from "./BaseCard";
 import Spinner from "../elements/Spinner";

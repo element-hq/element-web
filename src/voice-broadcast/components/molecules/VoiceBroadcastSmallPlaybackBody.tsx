@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as XIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 
 import {
     VoiceBroadcastHeader,
@@ -24,7 +25,6 @@ import {
 } from "../..";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
-import { Icon as XIcon } from "../../../../res/img/compound/close-8px.svg";
 
 interface VoiceBroadcastSmallPlaybackBodyProps {
     playback: VoiceBroadcastPlayback;

@@ -16,6 +16,9 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
+import { Icon as EllipsisIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
+import { Icon as MembersIcon } from "@vector-im/compound-design-tokens/icons/user-profile-solid.svg";
+import { Icon as FavoriteIcon } from "@vector-im/compound-design-tokens/icons/favourite-solid.svg";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -29,9 +32,6 @@ import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import { Icon as PinUprightIcon } from "../../../../res/img/element-icons/room/pin-upright.svg";
-import { Icon as EllipsisIcon } from "../../../../res/img/element-icons/room/ellipsis.svg";
-import { Icon as MembersIcon } from "../../../../res/img/element-icons/room/members.svg";
-import { Icon as FavoriteIcon } from "../../../../res/img/element-icons/roomlist/favorite.svg";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";

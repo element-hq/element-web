@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React, { useRef, useState } from "react";
+import { Icon as PauseIcon } from "@vector-im/compound-design-tokens/icons/pause-solid.svg";
+import { Icon as MicrophoneIcon } from "@vector-im/compound-design-tokens/icons/mic-on-solid.svg";
 
 import {
     VoiceBroadcastControl,
@@ -26,9 +28,7 @@ import {
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
 import { Icon as StopIcon } from "../../../../res/img/compound/stop-16.svg";
-import { Icon as PauseIcon } from "../../../../res/img/compound/pause-12.svg";
 import { Icon as RecordIcon } from "../../../../res/img/compound/record-10px.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
 import { _t } from "../../../languageHandler";
 import { useAudioDeviceSelection } from "../../../hooks/useAudioDeviceSelection";
 import { DevicesContextMenu } from "../../../components/views/audio_messages/DevicesContextMenu";

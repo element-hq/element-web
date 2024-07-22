@@ -17,8 +17,8 @@ limitations under the License.
 import React, { ReactNode, useState } from "react";
 import classNames from "classnames";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { Icon as LocationIcon } from "@vector-im/compound-design-tokens/icons/location-pin-solid.svg";
 
-import { Icon as LocationIcon } from "../../../../res/img/element-icons/location.svg";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import MemberAvatar from "../avatars/MemberAvatar";
 

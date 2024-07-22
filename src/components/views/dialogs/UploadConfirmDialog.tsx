@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as FileIcon } from "@vector-im/compound-design-tokens/icons/files.svg";
 
-import { Icon as FileIcon } from "../../../../res/img/feather-customised/files.svg";
 import { _t } from "../../../languageHandler";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";

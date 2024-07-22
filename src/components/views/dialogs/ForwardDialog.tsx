@@ -287,7 +287,11 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
+                    <BaseAvatar
+                        url={require("@vector-im/compound-design-tokens/overflow-horizontal.svg").default}
+                        name="..."
+                        size="36px"
+                    />
                 }
                 name={text}
                 showPresence={false}

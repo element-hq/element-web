@@ -14,12 +14,12 @@ limitations under the License.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { Icon as MicrophoneIcon } from "@vector-im/compound-design-tokens/icons/mic-on-solid.svg";
+import { Icon as XIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 
 import { LiveBadge, VoiceBroadcastLiveness } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/compound/live-16px.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
 import { Icon as TimerIcon } from "../../../../res/img/compound/timer-16px.svg";
-import { Icon as XIcon } from "../../../../res/img/compound/close-16px.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
 import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";

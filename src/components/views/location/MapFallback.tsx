@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
+import { Icon as LocationMarkerIcon } from "@vector-im/compound-design-tokens/icons/location-pin-solid.svg";
 
-import { Icon as LocationMarkerIcon } from "../../../../res/img/element-icons/location.svg";
 import { Icon as MapFallbackImage } from "../../../../res/img/location/map.svg";
 import Spinner from "../elements/Spinner";
 

@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode, useRef } from "react";
+import { Icon as EmailIcon } from "@vector-im/compound-design-tokens/icons/email-solid.svg";
 
-import { Icon as EmailIcon } from "../../../../../res/img/element-icons/Email-icon.svg";
 import { _t, _td } from "../../../../languageHandler";
 import EmailField from "../../../views/auth/EmailField";
 import { ErrorMessage } from "../../ErrorMessage";

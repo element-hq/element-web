@@ -17,9 +17,9 @@ limitations under the License.
 import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { useCallback, useState, VFC } from "react";
+import { Icon as CheckIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
+import { Icon as XIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 
-import { Icon as CheckIcon } from "../../../../../../res/img/feather-customised/check.svg";
-import { Icon as XIcon } from "../../../../../../res/img/feather-customised/x.svg";
 import { formatRelativeTime } from "../../../../../DateUtils";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { _t } from "../../../../../languageHandler";

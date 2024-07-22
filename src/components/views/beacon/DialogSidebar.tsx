@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 import { Beacon } from "matrix-js-sdk/src/matrix";
+import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 
-import { Icon as CloseIcon } from "../../../../res/img/image-view/close.svg";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";

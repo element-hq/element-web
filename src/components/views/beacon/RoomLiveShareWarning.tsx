@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
 
 import { _t } from "../../../languageHandler";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -24,7 +25,6 @@ import { useOwnLiveBeacons } from "../../../utils/beacon";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
-import { Icon as CloseIcon } from "../../../../res/img/image-view/close.svg";
 import LiveTimeRemaining from "./LiveTimeRemaining";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";

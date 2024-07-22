@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import { Icon as BackIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
 
 import AccessibleButton from "../elements/AccessibleButton";
-import { Icon as BackIcon } from "../../../../res/img/element-icons/caret-left.svg";
-import { Icon as CloseIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
 import { _t } from "../../../languageHandler";
 
 interface Props {

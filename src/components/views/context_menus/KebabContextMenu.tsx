@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as ContextMenuIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 
-import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
 import { ChevronFace, ContextMenuButton, MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import { ButtonProps } from "../elements/AccessibleButton";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "./IconizedContextMenu";

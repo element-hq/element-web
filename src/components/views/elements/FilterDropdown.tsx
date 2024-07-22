@@ -16,8 +16,8 @@ limitations under the License.
 
 import React, { ReactElement } from "react";
 import classNames from "classnames";
+import { Icon as CheckmarkIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
 
-import { Icon as CheckmarkIcon } from "../../../../res/img/element-icons/roomlist/checkmark.svg";
 import Dropdown, { DropdownProps } from "./Dropdown";
 import { NonEmptyArray } from "../../../@types/common";
 

@@ -19,6 +19,7 @@ limitations under the License.
 import React from "react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { Icon as HelpIcon } from "@vector-im/compound-design-tokens/icons/help.svg";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -29,7 +30,6 @@ import BaseAvatar from "../avatars/BaseAvatar";
 import Heading from "../typography/Heading";
 import AccessibleButton from "./AccessibleButton";
 import { parseUrl } from "../../../utils/UrlUtils";
-import { Icon as HelpIcon } from "../../../../res/img/feather-customised/help-circle.svg";
 
 interface IProps {
     url: string;

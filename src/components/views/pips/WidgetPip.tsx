@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { FC, MutableRefObject, useCallback, useMemo } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Icon as BackIcon } from "@vector-im/compound-design-tokens/icons/arrow-left.svg";
 
 import PersistentApp from "../elements/PersistentApp";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -27,7 +28,6 @@ import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayo
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
-import { Icon as BackIcon } from "../../../../res/img/element-icons/back.svg";
 import { Icon as HangupIcon } from "../../../../res/img/element-icons/call/hangup.svg";
 import { _t } from "../../../languageHandler";
 import { WidgetType } from "../../../widgets/WidgetType";

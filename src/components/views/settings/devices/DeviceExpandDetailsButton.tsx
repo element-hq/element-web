@@ -17,7 +17,7 @@ limitations under the License.
 import classNames from "classnames";
 import React, { ComponentProps } from "react";
 
-import { Icon as CaretIcon } from "../../../../../res/img/feather-customised/dropdown-arrow.svg";
+import { Icon as CaretIcon } from "@vector-im/compound-design-tokens/icons/chevron-down.svg";
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 

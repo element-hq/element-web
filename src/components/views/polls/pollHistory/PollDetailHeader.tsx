@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { Icon as LeftCaretIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
 
-import { Icon as LeftCaretIcon } from "../../../../../res/img/element-icons/caret-left.svg";
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 import { PollHistoryFilter } from "./types";
