@@ -3077,15 +3077,10 @@
             "one": "%(count)s odpoveď",
             "other": "%(count)s odpovedí"
         },
-        "empty_explainer": "Vlákna pomáhajú udržiavať konverzácie v téme a uľahčujú ich sledovanie.",
-        "empty_has_threads_tip": "Odpovedzte na prebiehajúce vlákno alebo použite \"%(replyInThread)s\", keď prejdete nad správu a začnete novú.",
-        "empty_heading": "Udržujte diskusie organizované pomocou vlákien",
-        "empty_tip": "<b>Tip:</b> Použite položku “%(replyInThread)s”, keď prejdete ponad správu.",
         "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
         "open_thread": "Otvoriť vlákno",
-        "show_all_threads": "Zobraziť všetky vlákna",
         "show_thread_filter": "Zobraziť:"
     },
     "time": {

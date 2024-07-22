@@ -2894,15 +2894,10 @@
             "one": "%(count)s përgjigje",
             "other": "%(count)s përgjigje"
         },
-        "empty_explainer": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
-        "empty_has_threads_tip": "Përgjigjuni te një rrjedhë në zhvillim e sipër, ose përdorni “%(replyInThread)s”, kur kalohet kursori sipër një mesazhi për të filluar një të re.",
-        "empty_heading": "Mbajini diskutimet të sistemuara në rrjedha",
-        "empty_tip": "<b>Ndihmëz:</b> Përdorni “%(replyInThread)s”, teksa kaloni kursorin sipër një mesazhi.",
         "error_start_thread_existing_relation": "S’mund të krijohet një rrjedhë prej një akti me një marrëdhënie ekzistuese",
         "my_threads": "Rrjedhat e mia",
         "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
         "open_thread": "Hape rrjedhën",
-        "show_all_threads": "Shfaqi krejt rrjedhat",
         "show_thread_filter": "Shfaq:"
     },
     "time": {

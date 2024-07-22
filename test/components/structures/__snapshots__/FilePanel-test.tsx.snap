@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilePanel renders empty state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_FilePanel"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_spacer"
+      />
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div />
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
+    >
+      <div
+        class="mx_RoomView_empty"
+      >
+        <div
+          class="mx_Flex mx_EmptyState"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
+        >
+          <div
+            height="32px"
+            width="32px"
+          />
+          <p
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+          >
+            No files visible in this room
+          </p>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+          >
+            Attach files from chat or just drag and drop them anywhere in a room.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

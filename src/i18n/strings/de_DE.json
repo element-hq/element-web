@@ -3073,15 +3073,10 @@
             "one": "%(count)s Antwort",
             "other": "%(count)s Antworten"
         },
-        "empty_explainer": "Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.",
-        "empty_has_threads_tip": "Antworte auf einen Thread oder klicke bei einer Nachricht auf „%(replyInThread)s“, um einen Thread zu starten.",
-        "empty_heading": "Organisiere Diskussionen mit Threads",
-        "empty_tip": "<b>Tipp:</b> Nutze “%(replyInThread)s” beim Schweben über eine Nachricht.",
         "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
         "open_thread": "Thread anzeigen",
-        "show_all_threads": "Alle Threads anzeigen",
         "show_thread_filter": "Zeige:"
     },
     "time": {

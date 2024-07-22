@@ -2076,15 +2076,10 @@
     "threads": {
         "all_threads": "כל הקישורים",
         "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "empty_explainer": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
-        "empty_has_threads_tip": "השיבו לשרשור מתמשך או השתמשו ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה כדי להתחיל הודעה חדשה.",
-        "empty_heading": "שימרו על דיונים מאורגנים בשרשורים",
-        "empty_tip": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
         "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
         "my_threads": "הקישורים שלי",
         "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
         "open_thread": "פתיחת שרשור",
-        "show_all_threads": "הצג את כל השרשורים",
         "show_thread_filter": "הצג:"
     },
     "time": {

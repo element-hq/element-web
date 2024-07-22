@@ -2598,15 +2598,10 @@
             "one": "%(count)s resposta",
             "other": "%(count)s respostas"
         },
-        "empty_explainer": "Os fíos axúdanche a manter as conversas no tema e facilitan o seguimento.",
-        "empty_has_threads_tip": "Responde a unha conversa en curso ou usa \"%(replyInThread)s\" cando pasas por enriba dunha mensaxe co rato para iniciar unha nova.",
-        "empty_heading": "Manter as conversas organizadas con fíos",
-        "empty_tip": "<b>Truco:</b> Usa \"%(replyInThread)s\" ao poñerte enriba dunha mensaxe.",
         "error_start_thread_existing_relation": "Non se pode crear un tema con unha relación existente desde un evento",
         "my_threads": "As miñas conversas",
         "my_threads_description": "Mostra tódalas conversas nas que participaches",
         "open_thread": "Abrir fío",
-        "show_all_threads": "Mostra tódolos temas",
         "show_thread_filter": "Mostrar:"
     },
     "time": {

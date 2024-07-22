@@ -3193,16 +3193,13 @@
             "one": "%(count)s reply",
             "other": "%(count)s replies"
         },
-        "empty_explainer": "Threads help keep your conversations on-topic and easy to track.",
-        "empty_has_threads_tip": "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.",
-        "empty_heading": "Keep discussions organised with threads",
-        "empty_tip": "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.",
+        "empty_description": "Use “%(replyInThread)s” when hovering over a message.",
+        "empty_title": "Threads help keep your conversations on-topic and easy to track.",
         "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
         "mark_all_read": "Mark all as read",
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
         "open_thread": "Open thread",
-        "show_all_threads": "Show all threads",
         "show_thread_filter": "Show:"
     },
     "threads_activity_centre": {

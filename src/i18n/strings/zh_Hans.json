@@ -2752,15 +2752,10 @@
             "one": "%(count)s 条回复",
             "other": "%(count)s 条回复"
         },
-        "empty_explainer": "消息列帮助保持你的对话切题并易于追踪。",
-        "empty_has_threads_tip": "回复进行中的消息列或当悬停在消息上时使用%(replyInThread)s来发起新的消息列。",
-        "empty_heading": "用消息列使讨论井然有序",
-        "empty_tip": "<b>实用提示：</b>悬停在消息上时使用“%(replyInThread)s”。",
         "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
         "my_threads": "我的消息列",
         "my_threads_description": "显示您参与的所有消息列",
         "open_thread": "打开消息列",
-        "show_all_threads": "显示所有消息列",
         "show_thread_filter": "显示："
     },
     "time": {

@@ -3197,16 +3197,11 @@
             "one": "%(count)s odpowiedź",
             "other": "%(count)s odpowiedzi"
         },
-        "empty_explainer": "Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.",
-        "empty_has_threads_tip": "Odpowiedz do trwającego już wątku lub użyj “%(replyInThread)s” najeżdżając na wiadomość, aby rozpocząć nową.",
-        "empty_heading": "Organizuj dyskusje za pomocą wątków",
-        "empty_tip": "<b>Tip:</b> Użyj “%(replyInThread)s” najeżdżając na wiadomość.",
         "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
         "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
         "open_thread": "Otwórz wątek",
-        "show_all_threads": "Pokaż wszystkie wątki",
         "show_thread_filter": "Pokaż:"
     },
     "threads_activity_centre": {

@@ -3012,15 +3012,10 @@
             "one": "%(count)s válasz",
             "other": "%(count)s válasz"
         },
-        "empty_explainer": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
-        "empty_has_threads_tip": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
-        "empty_heading": "Beszélgetések üzenetszálakba rendezése",
-        "empty_tip": "<b>Tipp:</b> Használja a „%(replyInThread)s” lehetőséget a szöveg fölé navigálva.",
         "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről ami már rendelkezik kapcsolattal",
         "my_threads": "Saját üzenetszálak",
         "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
         "open_thread": "Üzenetszál megnyitása",
-        "show_all_threads": "Minden üzenetszál megjelenítése",
         "show_thread_filter": "Megjelenítés:"
     },
     "time": {
