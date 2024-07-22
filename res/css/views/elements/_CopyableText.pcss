@@ -34,8 +34,8 @@ limitations under the License.
     .mx_CopyableText_copyButton {
         flex-shrink: 0;
         /* using em here to adapt to the local font size */
-        width: 1em;
-        height: 1em;
+        width: 20px;
+        height: 20px;
         cursor: pointer;
         padding-left: 12px;
         padding-right: 10px;
@@ -44,7 +44,7 @@ limitations under the License.
         position: sticky;
         right: 0;
         /* center to first line */
-        top: 0.15em;
+        top: 0;
         background-color: $background;
 
         &::before {
@@ -54,8 +54,8 @@ limitations under the License.
             mask-repeat: no-repeat;
             mask-size: contain;
             background-color: $message-action-bar-fg-color;
-            width: 1em;
-            height: 1em;
+            width: inherit;
+            height: inherit;
             display: block;
             background-repeat: no-repeat;
         }
