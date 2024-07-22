@@ -3044,15 +3044,10 @@
             "one": "%(count)s vastus",
             "other": "%(count)s vastust"
         },
-        "empty_explainer": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
-        "empty_has_threads_tip": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „%(replyInThread)s“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal.",
-        "empty_heading": "Halda vestlusi jutulõngadena",
-        "empty_tip": "<b>Soovitus:</b> Sõnumi kohal avanevast valikust kasuta „%(replyInThread)s“ võimalust.",
         "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
         "my_threads": "Minu jutulõngad",
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
         "open_thread": "Ava jutulõng",
-        "show_all_threads": "Näita kõiki jutulõngasid",
         "show_thread_filter": "Näita:"
     },
     "time": {

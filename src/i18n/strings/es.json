@@ -2822,15 +2822,10 @@
             "one": "%(count)s respuesta",
             "other": "%(count)s respuestas"
         },
-        "empty_explainer": "Los hilos ayudan a mantener tus conversaciones centradas y a que sean fáciles de seguir.",
-        "empty_has_threads_tip": "Responde a un hilo en curso o usa «%(replyInThread)s» al pasar el ratón por encima de un mensaje para iniciar uno nuevo.",
-        "empty_heading": "Organiza los temas de conversación en hilos",
-        "empty_tip": "<b>Consejo:</b> Usa «%(replyInThread)s» mientras pasas el ratón sobre un mensaje.",
         "error_start_thread_existing_relation": "No ha sido posible crear un hilo a partir de un evento con una relación existente",
         "my_threads": "Mis hilos",
         "my_threads_description": "Ver todos los hilos en los que has participado",
         "open_thread": "Abrir hilo",
-        "show_all_threads": "Ver todos los hilos",
         "show_thread_filter": "Mostrar:"
     },
     "time": {

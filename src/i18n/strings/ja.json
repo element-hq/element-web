@@ -2827,15 +2827,10 @@
             "other": "%(count)s件の返信",
             "one": "%(count)s件の返信"
         },
-        "empty_explainer": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
-        "empty_has_threads_tip": "既存のスレッドに返信するか、メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
-        "empty_heading": "スレッド機能を使って、会話をまとめましょう",
-        "empty_tip": "<b>ヒント：</b>メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
         "error_start_thread_existing_relation": "既存の関係のあるイベントからスレッドを作成することはできません",
         "my_threads": "自分のスレッド",
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
-        "show_all_threads": "全てのスレッドを表示",
         "show_thread_filter": "表示："
     },
     "time": {

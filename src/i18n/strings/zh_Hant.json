@@ -3004,15 +3004,10 @@
             "one": "%(count)s 回覆",
             "other": "%(count)s 回覆"
         },
-        "empty_explainer": "「討論串」功能可以協助您的對話不離題且易於追蹤。",
-        "empty_has_threads_tip": "將滑鼠游標停留在訊息上來開始新的討論串時，回覆正在進行的討論串或使用「%(replyInThread)s」。",
-        "empty_heading": "使用「討論串」功能，讓討論保持有條不紊",
-        "empty_tip": "<b>秘訣：</b>在滑鼠游標停於訊息上時使用「%(replyInThread)s」。",
         "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
         "my_threads": "我的討論串",
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
-        "show_all_threads": "顯示所有討論串",
         "show_thread_filter": "顯示："
     },
     "time": {

@@ -3089,15 +3089,10 @@
             "one": "%(count)s svar",
             "other": "%(count)s svar"
         },
-        "empty_explainer": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
-        "empty_has_threads_tip": "Svara i en pågående tråd eller använd \"%(replyInThread)s\" när du håller över ett meddelande för att starta en ny tråd.",
-        "empty_heading": "Håll diskussioner organiserade med trådar",
-        "empty_tip": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
         "error_start_thread_existing_relation": "Kan inte skapa tråd från en händelse med en existerande relation",
         "my_threads": "Mina trådar",
         "my_threads_description": "Visar alla trådar du har medverkat i",
         "open_thread": "Öppna tråd",
-        "show_all_threads": "Visa alla trådar",
         "show_thread_filter": "Visa:"
     },
     "threads_activity_centre": {

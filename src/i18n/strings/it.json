@@ -3090,15 +3090,10 @@
             "one": "%(count)s risposta",
             "other": "%(count)s risposte"
         },
-        "empty_explainer": "Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili.",
-        "empty_has_threads_tip": "Rispondi ad una conversazione in corso o usa \"%(replyInThread)s\" passando sopra ad un messaggio per iniziarne una nuova.",
-        "empty_heading": "Tieni le discussioni organizzate in conversazioni",
-        "empty_tip": "<b>Consiglio:</b> usa \"%(replyInThread)s\" passando sopra un messaggio.",
         "error_start_thread_existing_relation": "Impossibile creare una conversazione da un evento con una relazione esistente",
         "my_threads": "Le mie conversazioni",
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
-        "show_all_threads": "Mostra tutte le conversazioni",
         "show_thread_filter": "Mostra:"
     },
     "threads_activity_centre": {

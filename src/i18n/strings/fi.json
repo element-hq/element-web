@@ -2695,12 +2695,9 @@
             "one": "%(count)s vastaus",
             "other": "%(count)s vastausta"
         },
-        "empty_explainer": "Ketjut auttavat pitämään keskustelut asiayhteyteen sopivina ja helposti seurattavina.",
-        "empty_heading": "Pidä keskustelut järjestyksessä ketjuissa",
         "my_threads": "Omat ketjut",
         "my_threads_description": "Näyttää kaikki ketjut, joissa olet ollut osallinen",
         "open_thread": "Avaa ketju",
-        "show_all_threads": "Näytä kaikki ketjut",
         "show_thread_filter": "Näytä:"
     },
     "time": {

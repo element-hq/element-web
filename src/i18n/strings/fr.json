@@ -3125,16 +3125,11 @@
             "one": "%(count)s réponse",
             "other": "%(count)s réponses"
         },
-        "empty_explainer": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
-        "empty_has_threads_tip": "Répondez à un fil de discussion en cours ou utilisez \"%(replyInThread)s\" lorsque vous passez la souris sur un message pour en commencer un nouveau.",
-        "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion",
-        "empty_tip": "<b>Conseil :</b> Utilisez « %(replyInThread)s » en survolant un message.",
         "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
         "mark_all_read": "Tout marquer comme lu",
         "my_threads": "Mes fils de discussion",
         "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
         "open_thread": "Ouvrir le fil de discussion",
-        "show_all_threads": "Afficher tous les fils de discussion",
         "show_thread_filter": "Affiche :"
     },
     "threads_activity_centre": {
