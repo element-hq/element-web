@@ -71,6 +71,7 @@
         "@types/react": "17.0.80"
     },
     "dependencies": {
+        "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/react-sdk-module-api": "^2.3.0",
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
@@ -187,7 +188,7 @@
         "prettier": "3.3.2",
         "process": "^0.11.10",
         "raw-loader": "^4.0.2",
-        "rimraf": "^5.0.0",
+        "rimraf": "^6.0.0",
         "semver": "^7.5.2",
         "string-replace-loader": "3",
         "style-loader": "4",
@@ -197,7 +198,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
-        "typescript": "5.5.2",
+        "typescript": "5.5.3",
         "util": "^0.12.5",
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^4.8.0",
