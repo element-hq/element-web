@@ -114,7 +114,7 @@
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "34.1.0",
+        "matrix-js-sdk": "34.2.0-rc.0",
         "matrix-widget-api": "^1.5.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
