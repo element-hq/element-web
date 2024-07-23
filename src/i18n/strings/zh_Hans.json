@@ -1772,13 +1772,10 @@
         "read_topic": "点击阅读话题",
         "rejoin_button": "重新加入",
         "search": {
-            "all_rooms": "全部房间",
-            "field_placeholder": "搜索…",
             "result_count": {
                 "one": "（~%(count)s 个结果）",
                 "other": "（~%(count)s 个结果）"
-            },
-            "this_room": "此房间"
+            }
         },
         "show_labs_settings": "显示实验室设置",
         "status_bar": {
@@ -2356,7 +2353,6 @@
             "delete_backup_confirm_description": "你确定吗？如果密钥没有正确地备份你将失去你的加密消息。",
             "e2ee_default_disabled_warning": "你的服务器管理员默认关闭了私人房间和私聊中的端到端加密。",
             "enable_message_search": "在加密房间中启用消息搜索",
-            "encryption_individual_verification_mode": "逐一验证用户的每一个会话以将其标记为已信任，而不信任交叉签名的设备。",
             "encryption_section": "加密",
             "error_loading_key_backup_status": "无法载入密钥备份状态",
             "export_megolm_keys": "导出房间的端到端加密密钥",
@@ -2371,7 +2367,6 @@
             "key_backup_connect_prompt": "在登出前连接此会话到密钥备份以避免丢失可能仅在此会话上的密钥。",
             "key_backup_inactive": "此会话<b>未备份你的密钥</b>，但如果你已有现存备份，你可以继续并从中恢复和向其添加。",
             "key_backup_inactive_warning": "你的密钥<b>没有被此会话备份</b>。",
-            "manually_verify_all_sessions": "手动验证所有远程会话",
             "message_search_disable_warning": "如果被禁用，加密房间内的消息不会显示在搜索结果中。",
             "message_search_disabled": "在本地安全地缓存加密消息以使其出现在搜索结果中。",
             "message_search_enabled": {
@@ -2757,15 +2752,10 @@
             "one": "%(count)s 条回复",
             "other": "%(count)s 条回复"
         },
-        "empty_explainer": "消息列帮助保持你的对话切题并易于追踪。",
-        "empty_has_threads_tip": "回复进行中的消息列或当悬停在消息上时使用%(replyInThread)s来发起新的消息列。",
-        "empty_heading": "用消息列使讨论井然有序",
-        "empty_tip": "<b>实用提示：</b>悬停在消息上时使用“%(replyInThread)s”。",
         "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
         "my_threads": "我的消息列",
         "my_threads_description": "显示您参与的所有消息列",
         "open_thread": "打开消息列",
-        "show_all_threads": "显示所有消息列",
         "show_thread_filter": "显示："
     },
     "time": {
@@ -3297,7 +3287,6 @@
         },
         "redact_button": "移除最近消息",
         "revoke_invite": "撤销邀请",
-        "role_label": "<RoomName/> 中的角色",
         "room_encrypted": "此房间内的消息端到端加密。",
         "room_encrypted_detail": "你的消息是安全的，只有你和接收者有解开它们的唯一密钥。",
         "room_unencrypted": "此房间内的消息未端到端加密。",

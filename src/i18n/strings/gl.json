@@ -1666,13 +1666,10 @@
         "read_topic": "Preme para ler o tema",
         "rejoin_button": "Volta a unirte",
         "search": {
-            "all_rooms": "Todas as Salas",
-            "field_placeholder": "Buscar…",
             "result_count": {
                 "other": "(~%(count)s resultados)",
                 "one": "(~%(count)s resultado)"
-            },
-            "this_room": "Esta sala"
+            }
         },
         "show_labs_settings": "Mostrar axustes en Labs",
         "status_bar": {
@@ -2231,7 +2228,6 @@
             "delete_backup_confirm_description": "Estás seguro? Perderás as mensaxes cifradas se non tes unha copia de apoio das chaves de cifrado.",
             "e2ee_default_disabled_warning": "A administración do servidor desactivou por defecto o cifrado extremo-a-extremo en salas privadas e Mensaxes Directas.",
             "enable_message_search": "Activar a busca de mensaxes en salas cifradas",
-            "encryption_individual_verification_mode": "Verificar individualmente cada sesión utilizada pola usuaria para marcala como confiable, non confiando en dispositivos con sinatura cruzada.",
             "encryption_section": "Cifrado",
             "error_loading_key_backup_status": "Non se puido cargar o estado das chaves de apoio",
             "export_megolm_keys": "Exportar chaves E2E da sala",
@@ -2245,7 +2241,6 @@
             "key_backup_connect_prompt": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
             "key_backup_inactive": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
             "key_backup_inactive_warning": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>.",
-            "manually_verify_all_sessions": "Verificar manualmente todas as sesións remotas",
             "message_search_disable_warning": "Se está desactivado, as mensaxes das salas cifradas non aparecerán nos resultados das buscas.",
             "message_search_disabled": "Gardar de xeito seguro mensaxes cifradas na caché local para que aparezan nos resultados de buscas.",
             "message_search_enabled": {
@@ -2603,15 +2598,10 @@
             "one": "%(count)s resposta",
             "other": "%(count)s respostas"
         },
-        "empty_explainer": "Os fíos axúdanche a manter as conversas no tema e facilitan o seguimento.",
-        "empty_has_threads_tip": "Responde a unha conversa en curso ou usa \"%(replyInThread)s\" cando pasas por enriba dunha mensaxe co rato para iniciar unha nova.",
-        "empty_heading": "Manter as conversas organizadas con fíos",
-        "empty_tip": "<b>Truco:</b> Usa \"%(replyInThread)s\" ao poñerte enriba dunha mensaxe.",
         "error_start_thread_existing_relation": "Non se pode crear un tema con unha relación existente desde un evento",
         "my_threads": "As miñas conversas",
         "my_threads_description": "Mostra tódalas conversas nas que participaches",
         "open_thread": "Abrir fío",
-        "show_all_threads": "Mostra tódolos temas",
         "show_thread_filter": "Mostrar:"
     },
     "time": {
@@ -3139,7 +3129,6 @@
         },
         "redact_button": "Eliminar mensaxes recentes",
         "revoke_invite": "Revogar convite",
-        "role_label": "Rol en <RoomName/>",
         "room_encrypted": "As mensaxes desta sala están cifradas de extremo-a-extremo.",
         "room_encrypted_detail": "As túas mensaxes están seguras e só ti e o correspondente tedes as únicas chaves que as desbloquean.",
         "room_unencrypted": "As mensaxes desta sala non están cifradas de extremo-a-extremo.",

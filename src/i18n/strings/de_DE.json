@@ -1974,14 +1974,11 @@
         "rejecting": "Lehne Einladung ab …",
         "rejoin_button": "Erneut betreten",
         "search": {
-            "all_rooms": "In allen Räumen",
             "all_rooms_button": "Alle Räume durchsuchen",
-            "field_placeholder": "Suchen…",
             "result_count": {
                 "one": "(~%(count)s Ergebnis)",
                 "other": "(~%(count)s Ergebnisse)"
             },
-            "this_room": "In diesem Raum",
             "this_room_button": "Diesen Raum durchsuchen"
         },
         "show_labs_settings": "Zeige die \"Labor\" Einstellungen",
@@ -2624,7 +2621,6 @@
             "delete_backup_confirm_description": "Bist du sicher? Du wirst alle deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gut gesichert sind.",
             "e2ee_default_disabled_warning": "Deine Server-Administration hat die Ende-zu-Ende-Verschlüsselung für private Räume und Direktnachrichten standardmäßig deaktiviert.",
             "enable_message_search": "Nachrichtensuche in verschlüsselten Räumen aktivieren",
-            "encryption_individual_verification_mode": "Alle Sitzungen einzeln verifizieren, anstatt auch Sitzungen zu vertrauen, die durch Quersignierungen verifiziert sind.",
             "encryption_section": "Verschlüsselung",
             "error_loading_key_backup_status": "Konnte Status der Schlüsselsicherung nicht laden",
             "export_megolm_keys": "E2E-Raumschlüssel exportieren",
@@ -2643,7 +2639,6 @@
             "key_backup_inactive": "Diese Sitzung <b>sichert deine Schlüssel nicht</b>, aber du hast eine vorhandene Sicherung, die du wiederherstellen und in Zukunft hinzufügen kannst.",
             "key_backup_inactive_warning": "Deine Schlüssel werden von dieser Sitzung <b>nicht gesichert</b>.",
             "key_backup_latest_version": "Letzte Backup-Version auf diesen Server:",
-            "manually_verify_all_sessions": "Indirekte Sitzungen manuell verifizieren",
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_disabled": "Speichere verschlüsselte Nachrichten lokal, sodass sie deinen Suchergebnissen erscheinen können.",
             "message_search_enabled": {
@@ -3078,15 +3073,10 @@
             "one": "%(count)s Antwort",
             "other": "%(count)s Antworten"
         },
-        "empty_explainer": "Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.",
-        "empty_has_threads_tip": "Antworte auf einen Thread oder klicke bei einer Nachricht auf „%(replyInThread)s“, um einen Thread zu starten.",
-        "empty_heading": "Organisiere Diskussionen mit Threads",
-        "empty_tip": "<b>Tipp:</b> Nutze “%(replyInThread)s” beim Schweben über eine Nachricht.",
         "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
         "open_thread": "Thread anzeigen",
-        "show_all_threads": "Alle Threads anzeigen",
         "show_thread_filter": "Zeige:"
     },
     "time": {
@@ -3661,7 +3651,6 @@
         },
         "redact_button": "Kürzlich gesendete Nachrichten entfernen",
         "revoke_invite": "Einladung zurückziehen",
-        "role_label": "Rolle in <RoomName/>",
         "room_encrypted": "Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt.",
         "room_encrypted_detail": "Diese Nachricht ist verschlüsselt. Nur Sie und der Empfänger haben den Schlüssel, um die Nachricht zu entschlüsseln.",
         "room_unencrypted": "Nachrichten in diesem Raum sind nicht Ende-zu-Ende verschlüsselt.",

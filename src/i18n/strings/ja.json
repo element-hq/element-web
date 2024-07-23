@@ -1814,13 +1814,10 @@
         "rejecting": "招待を拒否しています…",
         "rejoin_button": "再参加",
         "search": {
-            "all_rooms": "全てのルーム",
-            "field_placeholder": "検索…",
             "result_count": {
                 "other": "（〜%(count)s件）",
                 "one": "（〜%(count)s件）"
-            },
-            "this_room": "このルーム"
+            }
         },
         "show_labs_settings": "ラボの設定を表示",
         "status_bar": {
@@ -2399,7 +2396,6 @@
             "delete_backup_confirm_description": "本当によろしいですか？ もし鍵が正常にバックアップされていない場合、暗号化されたメッセージにアクセスできなくなります。",
             "e2ee_default_disabled_warning": "サーバー管理者は、非公開のルームとダイレクトメッセージで既定でエンドツーエンド暗号化を無効にしています。",
             "enable_message_search": "暗号化されたルームでメッセージの検索を有効にする",
-            "encryption_individual_verification_mode": "クロス署名された端末を信頼せず、ユーザーが使用する各セッションを個別に認証し、信頼済に設定。",
             "encryption_section": "暗号化",
             "error_loading_key_backup_status": "鍵のバックアップの状態を読み込めません",
             "export_megolm_keys": "ルームのエンドツーエンド暗号鍵をエクスポート",
@@ -2415,7 +2411,6 @@
             "key_backup_in_progress": "%(sessionsRemaining)s個の鍵をバックアップしています…",
             "key_backup_inactive": "このセッションでは<b>鍵をバックアップしていません</b>が、復元に使用したり、今後鍵を追加したりできるバックアップがあります。",
             "key_backup_inactive_warning": "鍵は<b>このセッションからバックアップされていません</b>。",
-            "manually_verify_all_sessions": "全てのリモートセッションを手動で認証",
             "message_search_disable_warning": "無効にすると、暗号化されたルームのメッセージは検索結果に表示されません。",
             "message_search_disabled": "検索結果の表示用に、暗号化されたメッセージをローカルに安全にキャッシュしています。",
             "message_search_enabled": {
@@ -2832,15 +2827,10 @@
             "other": "%(count)s件の返信",
             "one": "%(count)s件の返信"
         },
-        "empty_explainer": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
-        "empty_has_threads_tip": "既存のスレッドに返信するか、メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
-        "empty_heading": "スレッド機能を使って、会話をまとめましょう",
-        "empty_tip": "<b>ヒント：</b>メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
         "error_start_thread_existing_relation": "既存の関係のあるイベントからスレッドを作成することはできません",
         "my_threads": "自分のスレッド",
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
-        "show_all_threads": "全てのスレッドを表示",
         "show_thread_filter": "表示："
     },
     "time": {
@@ -3393,7 +3383,6 @@
         },
         "redact_button": "最近のメッセージを削除",
         "revoke_invite": "招待を取り消す",
-        "role_label": "<RoomName/>での役割",
         "room_encrypted": "このルームのメッセージはエンドツーエンドで暗号化されています。",
         "room_encrypted_detail": "あなたのメッセージは保護されています。メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。",
         "room_unencrypted": "このルームのメッセージはエンドツーエンドで暗号化されていません。",

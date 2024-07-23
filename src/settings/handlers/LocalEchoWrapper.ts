@@ -83,4 +83,9 @@ export default class LocalEchoWrapper extends SettingsHandler {
     public isSupported(): boolean {
         return this.handler.isSupported();
     }
+
+    public reset(): void {
+        this.cache = {};
+        this.handler.reset();
+    }
 }

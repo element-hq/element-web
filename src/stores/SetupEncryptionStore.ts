@@ -135,6 +135,7 @@ export class SetupEncryptionStore extends EventEmitter {
     }
 
     public async usePassPhrase(): Promise<void> {
+        logger.debug("SetupEncryptionStore.usePassphrase");
         this.phase = Phase.Busy;
         this.emit("update");
         try {
@@ -142,23 +143,21 @@ export class SetupEncryptionStore extends EventEmitter {
             const backupInfo = await cli.getKeyBackupVersion();
             this.backupInfo = backupInfo;
             this.emit("update");
-            // The control flow is fairly twisted here...
-            // For the purposes of completing security, we only wait on getting
-            // as far as the trust check and then show a green shield.
-            // We also begin the key backup restore as well, which we're
-            // awaiting inside `accessSecretStorage` only so that it keeps your
-            // passphase cached for that work. This dialog itself will only wait
-            // on the first trust check, and the key backup restore will happen
-            // in the background.
+
             await new Promise((resolve: (value?: unknown) => void, reject: (reason?: any) => void) => {
                 accessSecretStorage(async (): Promise<void> => {
-                    await cli.checkOwnCrossSigningTrust();
-
-                    // The remaining tasks (device dehydration and restoring
-                    // key backup) may take some time due to processing many
-                    // to-device messages in the case of device dehydration, or
-                    // having many keys to restore in the case of key backups,
-                    // so we allow the dialog to advance before this.
+                    // `accessSecretStorage` will call `boostrapCrossSigning` and `bootstrapSecretStorage`, so that
+                    // should be enough to ensure that our device is correctly cross-signed.
+                    //
+                    // The remaining tasks (device dehydration and restoring key backup) may take some time due to
+                    // processing many to-device messages in the case of device dehydration, or having many keys to
+                    // restore in the case of key backups, so we allow the dialog to advance before this.
+                    //
+                    // However, we need to keep the 4S key cached, so we stay inside `accessSecretStorage`.
+                    logger.debug(
+                        "SetupEncryptionStore.usePassphrase: cross-signing and secret storage set up; checking " +
+                            "dehydration and backup in the background",
+                    );
                     resolve();
 
                     await initialiseDehydration();
@@ -170,14 +169,17 @@ export class SetupEncryptionStore extends EventEmitter {
             });
 
             if (await cli.getCrypto()?.getCrossSigningKeyId()) {
+                logger.debug("SetupEncryptionStore.usePassphrase: done");
                 this.phase = Phase.Done;
                 this.emit("update");
             }
         } catch (e) {
-            if (!(e instanceof AccessCancelledError)) {
-                logger.log(e);
+            if (e instanceof AccessCancelledError) {
+                logger.debug("SetupEncryptionStore.usePassphrase: user cancelled access to secret storage");
+            } else {
+                logger.log("SetupEncryptionStore.usePassphrase: error", e);
             }
-            // this will throw if the user hits cancel, so ignore
+
             this.phase = Phase.Intro;
             this.emit("update");
         }

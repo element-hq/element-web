@@ -9,7 +9,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
       class="mx_BaseCard_header"
     >
       <div
-        class="mx_BaseCard_headerProp"
+        class="mx_BaseCard_header_spacer"
       />
     </div>
     <div
@@ -51,7 +51,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
       class="mx_BaseCard_header"
     >
       <div
-        class="mx_BaseCard_headerProp"
+        class="mx_BaseCard_header_spacer"
       />
     </div>
     <div

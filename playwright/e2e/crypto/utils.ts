@@ -27,6 +27,7 @@ import type {
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { Bot } from "../../pages/bot";
 
 /**
  * wait for the given client to receive an incoming verification request, and automatically accept it
@@ -326,4 +327,61 @@ export async function createRoom(page: Page, roomName: string, isEncrypted: bool
     if (isEncrypted) {
         await expect(page.getByText("Encryption enabled")).toBeVisible();
     }
+}
+
+/**
+ * Configure the given MatrixClient to auto-accept any invites
+ * @param client - the client to configure
+ */
+export async function autoJoin(client: Client) {
+    await client.evaluate((cli) => {
+        cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
+            if (member.membership === "invite" && member.userId === cli.getUserId()) {
+                cli.joinRoom(member.roomId);
+            }
+        });
+    });
+}
+
+/**
+ * Verify a user by emoji
+ * @param page - the page to use
+ * @param bob - the user to verify
+ */
+export const verify = async (app: ElementAppPage, bob: Bot) => {
+    const page = app.page;
+    const bobsVerificationRequestPromise = waitForVerificationRequest(bob);
+
+    const roomInfo = await app.toggleRoomInfoPanel();
+    await page.locator(".mx_RightPanelTabs").getByText("People").click();
+    await roomInfo.getByText("Bob").click();
+    await roomInfo.getByRole("button", { name: "Verify" }).click();
+    await roomInfo.getByRole("button", { name: "Start Verification" }).click();
+
+    // this requires creating a DM, so can take a while. Give it a longer timeout.
+    await roomInfo.getByRole("button", { name: "Verify by emoji" }).click({ timeout: 30000 });
+
+    const request = await bobsVerificationRequestPromise;
+    // the bot user races with the Element user to hit the "verify by emoji" button
+    const verifier = await request.evaluateHandle((request) => request.startVerification("m.sas.v1"));
+    await doTwoWaySasVerification(page, verifier);
+    await roomInfo.getByRole("button", { name: "They match" }).click();
+    await expect(roomInfo.getByText("You've successfully verified Bob!")).toBeVisible();
+    await roomInfo.getByRole("button", { name: "Got it" }).click();
+};
+
+/**
+ * Wait for a verifier to exist for a VerificationRequest
+ *
+ * @param botVerificationRequest
+ */
+export async function awaitVerifier(
+    botVerificationRequest: JSHandle<VerificationRequest>,
+): Promise<JSHandle<Verifier>> {
+    return botVerificationRequest.evaluateHandle(async (verificationRequest) => {
+        while (!verificationRequest.verifier) {
+            await new Promise((r) => verificationRequest.once("change" as any, r));
+        }
+        return verificationRequest.verifier;
+    });
 }

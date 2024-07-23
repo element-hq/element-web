@@ -48,7 +48,7 @@ test("Shows the last known page on reload", async ({ pageWithCredentials: page }
 
     // Check that the room reloaded
     await expect(page).toHaveURL(/\/#\/room\//);
-    await expect(page.locator(".mx_LegacyRoomHeader")).toContainText("Test Room");
+    await expect(page.locator(".mx_RoomHeader")).toContainText("Test Room");
 });
 
 test("Room link correctly loads a room view", async ({ pageWithCredentials: page }) => {

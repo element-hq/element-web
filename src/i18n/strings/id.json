@@ -1952,14 +1952,11 @@
         "rejecting": "Menolak undangan…",
         "rejoin_button": "Bergabung Ulang",
         "search": {
-            "all_rooms": "Semua Ruangan",
             "all_rooms_button": "Cari semua ruangan",
-            "field_placeholder": "Cari…",
             "result_count": {
                 "one": "(~%(count)s hasil)",
                 "other": "(~%(count)s hasil)"
             },
-            "this_room": "Ruangan ini",
             "this_room_button": "Cari ruangan ini"
         },
         "show_labs_settings": "Tampilkan pengaturan Uji Coba",
@@ -2599,7 +2596,6 @@
             "delete_backup_confirm_description": "Apakah Anda yakin? Anda akan kehilangan pesan terenkripsi jika kunci Anda tidak dicadangkan dengan benar.",
             "e2ee_default_disabled_warning": "Admin server Anda telah menonaktifkan enkripsi ujung ke ujung secara bawaan di ruangan privat & Pesan Langsung.",
             "enable_message_search": "Aktifkan pencarian pesan di ruangan terenkripsi",
-            "encryption_individual_verification_mode": "Verifikasi setiap sesi yang digunakan oleh pengguna satu per satu untuk menandainya sebagai tepercaya, dan tidak memercayai perangkat yang ditandatangani silang.",
             "encryption_section": "Enkripsi",
             "error_loading_key_backup_status": "Tidak dapat memuat status pencadangan kunci",
             "export_megolm_keys": "Ekspor kunci ruangan enkripsi ujung ke ujung",
@@ -2618,7 +2614,6 @@
             "key_backup_inactive": "Sesi ini <b>tidak mencadangkan kunci Anda</b>, tetapi Anda memiliki cadangan yang ada yang dapat Anda pulihkan dan tambahkan untuk selanjutnya.",
             "key_backup_inactive_warning": "Kunci Anda <b>tidak dicadangan dari sesi ini</b>.",
             "key_backup_latest_version": "Versi cadangan terbaru di server:",
-            "manually_verify_all_sessions": "Verifikasi semua sesi jarak jauh secara manual",
             "message_search_disable_warning": "Jika dinonaktifkan, pesan dari ruangan terenkripsi tidak akan muncul di hasil pencarian.",
             "message_search_disabled": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian.",
             "message_search_enabled": {
@@ -3051,15 +3046,10 @@
             "one": "%(count)s balasan",
             "other": "%(count)s balasan"
         },
-        "empty_explainer": "Utasan membantu membuat obrolan sesuai topik dan mudah untuk dilacak.",
-        "empty_has_threads_tip": "Balas ke utasan yang sedang terjadi atau gunakan “%(replyInThread)s” ketika kursor diletakkan pada pesan untuk memulai yang baru.",
-        "empty_heading": "Buat diskusi tetap teratur dengan utasan",
-        "empty_tip": "<b>Tip:</b> Gunakan “%(replyInThread)s” ketika kursor di atas pesan.",
         "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
         "my_threads": "Utasan saya",
         "my_threads_description": "Menampilkan semua utasan yang Anda berpartisipasi",
         "open_thread": "Buka utasan",
-        "show_all_threads": "Tampilkan semua utasan",
         "show_thread_filter": "Tampilkan:"
     },
     "time": {
@@ -3631,7 +3621,6 @@
         },
         "redact_button": "Hapus pesan terkini",
         "revoke_invite": "Hapus undangan",
-        "role_label": "Peran di <RoomName/>",
         "room_encrypted": "Pesan di ruangan ini terenkripsi secara ujung ke ujung.",
         "room_encrypted_detail": "Pesan Anda diamankan dan hanya Anda dan penerimanya mempunyai kunci yang unik untuk mengaksesnya.",
         "room_unencrypted": "Pesan di ruangan ini tidak dienkripsi secara ujung ke ujung.",

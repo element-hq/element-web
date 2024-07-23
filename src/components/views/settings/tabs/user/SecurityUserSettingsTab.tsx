@@ -28,7 +28,6 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import E2eAdvancedPanel, { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
@@ -44,6 +43,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import DiscoverySettings from "../../discovery/DiscoverySettings";
+import SetIntegrationManager from "../../SetIntegrationManager";
 
 interface IIgnoredUserProps {
     userId: string;
@@ -360,14 +360,12 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
             const ignoreUsersPanel = this.renderIgnoredUsers();
             const invitesPanel = this.renderManageInvites();
-            const e2ePanel = isE2eAdvancedPanelPossible() ? <E2eAdvancedPanel /> : null;
             // only show the section if there's something to show
-            if (ignoreUsersPanel || invitesPanel || e2ePanel) {
+            if (ignoreUsersPanel || invitesPanel) {
                 advancedSection = (
                     <SettingsSection heading={_t("common|advanced")}>
                         {ignoreUsersPanel}
                         {invitesPanel}
-                        {e2ePanel}
                     </SettingsSection>
                 );
             }
@@ -376,6 +374,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         return (
             <SettingsTab>
                 {warning}
+                <SetIntegrationManager />
                 <SettingsSection heading={_t("settings|security|encryption_section")}>
                     {secureBackup}
                     {eventIndex}

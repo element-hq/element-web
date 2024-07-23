@@ -171,4 +171,13 @@ export class ElementAppPage {
         await spotlight.open();
         return spotlight;
     }
+
+    /**
+     * Opens/closes the room info panel
+     * @returns locator to the right panel
+     */
+    public async toggleRoomInfoPanel(): Promise<Locator> {
+        await this.page.getByRole("button", { name: "Room info" }).first().click();
+        return this.page.locator(".mx_RightPanel");
+    }
 }

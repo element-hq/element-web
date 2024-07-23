@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { formatDuration } from "../../../DateUtils";
@@ -31,6 +32,9 @@ interface IProps {
     currentlyActive?: boolean;
     // offline, online, etc
     presenceState?: string;
+    // whether to apply colouring to the label
+    coloured?: boolean;
+    className?: string;
 }
 
 export default class PresenceLabel extends React.Component<IProps> {
@@ -62,7 +66,11 @@ export default class PresenceLabel extends React.Component<IProps> {
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_PresenceLabel">
+            <div
+                className={classNames("mx_PresenceLabel", this.props.className, {
+                    mx_PresenceLabel_online: this.props.coloured && this.props.presenceState === "online",
+                })}
+            >
                 {this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive)}
             </div>
         );

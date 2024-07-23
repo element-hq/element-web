@@ -163,80 +163,76 @@ export default class HTMLExporter extends Exporter {
                 <script src="js/script.js"></script>
                 <title>${_t("export_chat|html_title")}</title>
             </head>
-            <body style="height: 100vh;">
-                <div
-                id="matrixchat"
-                style="height: 100%; overflow: auto"
-                class="notranslate"
-                >
-                <div class="mx_MatrixChat_wrapper" aria-hidden="false">
-                    <div class="mx_MatrixChat">
-                    <main class="mx_RoomView">
-                        <div class="mx_LegacyRoomHeader light-panel">
-                        <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
-                            <div class="mx_LegacyRoomHeader_avatar">
-                            <div class="mx_DecoratedRoomAvatar">
-                               ${roomAvatar}
-                            </div>
-                            </div>
-                            <div class="mx_LegacyRoomHeader_name">
-                            <div
-                                dir="auto"
-                                class="mx_LegacyRoomHeader_nametext"
-                                title="${safeRoomName}"
-                            >
-                                ${safeRoomName}
-                            </div>
-                            </div>
-                            <div class="mx_LegacyRoomHeader_topic" dir="auto"> ${safeTopic} </div>
-                        </div>
-                        </div>
-                        ${previousMessagesLink}
-                        <div class="mx_MainSplit">
-                        <div class="mx_RoomView_body">
-                            <div
-                            class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
-                            >
-                            <div
-                                class="
-                                mx_AutoHideScrollbar
-                                mx_ScrollPanel
-                                mx_RoomView_messagePanel
-                                "
-                            >
-                                <div class="mx_RoomView_messageListWrapper">
-                                <ol
-                                    class="mx_RoomView_MessageList"
-                                    aria-live="polite"
-                                    role="list"
+            <body style="height: 100vh;" class="cpd-theme-light">
+                <div id="matrixchat" style="height: 100%; overflow: auto">
+                    <div class="mx_MatrixChat_wrapper" aria-hidden="false">
+                        <div class="mx_MatrixChat">
+                        <main class="mx_RoomView">
+                            <div class="mx_LegacyRoomHeader light-panel">
+                            <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
+                                <div class="mx_LegacyRoomHeader_avatar">
+                                <div class="mx_DecoratedRoomAvatar">
+                                   ${roomAvatar}
+                                </div>
+                                </div>
+                                <div class="mx_LegacyRoomHeader_name">
+                                <div
+                                    dir="auto"
+                                    class="mx_LegacyRoomHeader_nametext"
+                                    title="${safeRoomName}"
                                 >
-                                ${
-                                    currentPage == 0
-                                        ? `<div class="mx_NewRoomIntro">
-                                        ${roomAvatar}
-                                        <h2> ${safeRoomName} </h2>
-                                        <p> ${safeCreatedText} <br/><br/> ${safeExportedText} </p>
-                                        <br/>
-                                        <p> ${safeTopicText} </p>
-                                    </div>`
-                                        : ""
-                                }
-                                ${content}
-                                </ol>
+                                    ${safeRoomName}
+                                </div>
+                                </div>
+                                <div class="mx_LegacyRoomHeader_topic" dir="auto"> ${safeTopic} </div>
+                            </div>
+                            </div>
+                            ${previousMessagesLink}
+                            <div class="mx_MainSplit">
+                            <div class="mx_RoomView_body">
+                                <div
+                                class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+                                >
+                                <div
+                                    class="
+                                    mx_AutoHideScrollbar
+                                    mx_ScrollPanel
+                                    mx_RoomView_messagePanel
+                                    "
+                                >
+                                    <div class="mx_RoomView_messageListWrapper">
+                                    <ol
+                                        class="mx_RoomView_MessageList"
+                                        aria-live="polite"
+                                        role="list"
+                                    >
+                                    ${
+                                        currentPage == 0
+                                            ? `<div class="mx_NewRoomIntro">
+                                            ${roomAvatar}
+                                            <h2> ${safeRoomName} </h2>
+                                            <p> ${safeCreatedText} <br/><br/> ${safeExportedText} </p>
+                                            <br/>
+                                            <p> ${safeTopicText} </p>
+                                        </div>`
+                                            : ""
+                                    }
+                                    ${content}
+                                    </ol>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="mx_RoomView_statusArea">
+                                <div class="mx_RoomView_statusAreaBox">
+                                    <div class="mx_RoomView_statusAreaBox_line"></div>
+                                </div>
                                 </div>
                             </div>
                             </div>
-                            <div class="mx_RoomView_statusArea">
-                            <div class="mx_RoomView_statusAreaBox">
-                                <div class="mx_RoomView_statusAreaBox_line"></div>
-                            </div>
-                            </div>
+                            ${nextMessagesLink}
+                        </main>
                         </div>
-                        </div>
-                        ${nextMessagesLink}
-                    </main>
                     </div>
-                </div>
                 </div>
                 <div id="snackbar"/>
             </body>

@@ -1811,14 +1811,11 @@
         "rejecting": "Rechazar invitación…",
         "rejoin_button": "Volver a entrar",
         "search": {
-            "all_rooms": "Todas las salas",
             "all_rooms_button": "Buscar en todas las salas",
-            "field_placeholder": "Buscar…",
             "result_count": {
                 "other": "(~%(count)s resultados)",
                 "one": "(~%(count)s resultado)"
             },
-            "this_room": "Esta sala",
             "this_room_button": "Buscar en esta sala"
         },
         "show_labs_settings": "Ver ajustes de los experimentos",
@@ -2405,7 +2402,6 @@
             "delete_backup_confirm_description": "¿Estás seguro? Perderás tus mensajes cifrados si las claves no se copian adecuadamente.",
             "e2ee_default_disabled_warning": "El administrador de tu servidor base ha desactivado el cifrado de extremo a extremo en salas privadas y mensajes directos.",
             "enable_message_search": "Activar la búsqueda de mensajes en salas cifradas",
-            "encryption_individual_verification_mode": "Verificar individualmente cada sesión utilizada por un usuario para marcarla como de confianza, no confiando en dispositivos de firma cruzada.",
             "encryption_section": "Cifrado",
             "error_loading_key_backup_status": "No se pudo cargar el estado de la copia de la clave",
             "export_megolm_keys": "Exportar claves de salas con cifrado de extremo a extremo",
@@ -2419,7 +2415,6 @@
             "key_backup_connect_prompt": "Conecte esta sesión a la copia de seguridad de las claves antes de firmar y así evitar perder las claves que sólo existen en esta sesión.",
             "key_backup_inactive": "Esta sesión no <b> ha creado una copia de seguridad de tus llaves</b>, pero tienes una copia de seguridad existente de la que puedes restaurar y añadir para proceder.",
             "key_backup_inactive_warning": "<b>No se está haciendo una copia de seguridad de tus claves en esta sesión</b>.",
-            "manually_verify_all_sessions": "Verificar manualmente todas las sesiones remotas",
             "message_search_disable_warning": "Si está desactivado, los mensajes de las salas cifradas no aparecerán en los resultados de búsqueda.",
             "message_search_disabled": "Almacenar localmente, de manera segura, a los mensajes cifrados localmente para que aparezcan en los resultados de búsqueda.",
             "message_search_enabled": {
@@ -2827,15 +2822,10 @@
             "one": "%(count)s respuesta",
             "other": "%(count)s respuestas"
         },
-        "empty_explainer": "Los hilos ayudan a mantener tus conversaciones centradas y a que sean fáciles de seguir.",
-        "empty_has_threads_tip": "Responde a un hilo en curso o usa «%(replyInThread)s» al pasar el ratón por encima de un mensaje para iniciar uno nuevo.",
-        "empty_heading": "Organiza los temas de conversación en hilos",
-        "empty_tip": "<b>Consejo:</b> Usa «%(replyInThread)s» mientras pasas el ratón sobre un mensaje.",
         "error_start_thread_existing_relation": "No ha sido posible crear un hilo a partir de un evento con una relación existente",
         "my_threads": "Mis hilos",
         "my_threads_description": "Ver todos los hilos en los que has participado",
         "open_thread": "Abrir hilo",
-        "show_all_threads": "Ver todos los hilos",
         "show_thread_filter": "Mostrar:"
     },
     "time": {
@@ -3381,7 +3371,6 @@
         },
         "redact_button": "Eliminar mensajes recientes",
         "revoke_invite": "Revocar invitación",
-        "role_label": "Rol en <RoomName/>",
         "room_encrypted": "Los mensajes de esta sala están cifrados de extremo a extremo.",
         "room_encrypted_detail": "Los mensajes son seguros y sólo tú y el destinatario tienen las claves únicas para desbloquearlos.",
         "room_unencrypted": "Los mensajes en esta sala no están cifrados de extremo a extremo.",

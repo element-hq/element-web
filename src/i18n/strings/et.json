@@ -1964,14 +1964,11 @@
         "rejecting": "Hülgan kutset…",
         "rejoin_button": "Liitu uuesti",
         "search": {
-            "all_rooms": "Kõik jututoad",
             "all_rooms_button": "Otsi kõikidest jututubadest",
-            "field_placeholder": "Otsi…",
             "result_count": {
                 "other": "(~%(count)s tulemust)",
                 "one": "(~%(count)s tulemus)"
             },
-            "this_room": "See jututuba",
             "this_room_button": "Otsi sellest jututoast"
         },
         "show_labs_settings": "Näita seadistusi",
@@ -2605,7 +2602,6 @@
             "delete_backup_confirm_description": "Kas sa oled kindel? Kui sul muud varundust pole, siis kaotad ligipääsu oma krüptitud sõnumitele.",
             "e2ee_default_disabled_warning": "Sinu serveri haldur on lülitanud läbiva krüptimise omavahelistes jututubades ja otsesõnumites välja.",
             "enable_message_search": "Võta kasutusele sõnumite otsing krüptitud jututubades",
-            "encryption_individual_verification_mode": "Ära usalda risttunnustamist ning verifitseeri kasutaja iga sessioon eraldi.",
             "encryption_section": "Krüptimine",
             "error_loading_key_backup_status": "Võtmete varunduse oleku laadimine ei õnnestunud",
             "export_megolm_keys": "Ekspordi jututubade läbiva krüptimise võtmed",
@@ -2621,7 +2617,6 @@
             "key_backup_in_progress": "Varundan %(sessionsRemaining)s krüptovõtmeid…",
             "key_backup_inactive": "See sessioon <b>ei varunda sinu krüptovõtmeid</b>, aga sul on olemas varundus, millest saad taastada ning millele saad võtmeid lisada.",
             "key_backup_inactive_warning": "Sinu selle sessiooni krüptovõtmeid <b>ei varundata</b>.",
-            "manually_verify_all_sessions": "Verifitseeri käsitsi kõik välised sessioonid",
             "message_search_disable_warning": "Kui see seadistus pole kasutusel, siis krüptitud jututubade sõnumeid otsing ei vaata.",
             "message_search_disabled": "Turvaliselt puhverda krüptitud sõnumid kohalikku arvutisse ja võimalda kasutada neid otsingus.",
             "message_search_enabled": {
@@ -3049,15 +3044,10 @@
             "one": "%(count)s vastus",
             "other": "%(count)s vastust"
         },
-        "empty_explainer": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
-        "empty_has_threads_tip": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „%(replyInThread)s“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal.",
-        "empty_heading": "Halda vestlusi jutulõngadena",
-        "empty_tip": "<b>Soovitus:</b> Sõnumi kohal avanevast valikust kasuta „%(replyInThread)s“ võimalust.",
         "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
         "my_threads": "Minu jutulõngad",
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
         "open_thread": "Ava jutulõng",
-        "show_all_threads": "Näita kõiki jutulõngasid",
         "show_thread_filter": "Näita:"
     },
     "time": {
@@ -3626,7 +3616,6 @@
         },
         "redact_button": "Eemalda hiljutised sõnumid",
         "revoke_invite": "Tühista kutse",
-        "role_label": "Roll jututoas <RoomName/>",
         "room_encrypted": "See jututuba on läbivalt krüptitud.",
         "room_encrypted_detail": "Sinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.",
         "room_unencrypted": "See jututuba ei ole läbivalt krüptitud.",

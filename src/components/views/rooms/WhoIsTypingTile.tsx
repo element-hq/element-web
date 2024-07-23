@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from "react";
 import { Room, RoomEvent, RoomMember, RoomMemberEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { compare } from "matrix-js-sdk/src/utils";
 
 import * as WhoIsTyping from "../../../WhoIsTyping";
 import Timer from "../../../utils/Timer";
@@ -208,7 +207,8 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
 
         // sort them so the typing members don't change order when
         // moved to delayedStopTypingTimers
-        usersTyping.sort((a, b) => compare(a.name, b.name));
+        const collator = new Intl.Collator();
+        usersTyping.sort((a, b) => collator.compare(a.name, b.name));
 
         const typingString = WhoIsTyping.whoIsTypingString(usersTyping, this.props.whoIsTypingLimit);
         if (!typingString) {

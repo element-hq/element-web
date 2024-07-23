@@ -21,7 +21,7 @@ import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 
 function roomHeaderName(page: Page): Locator {
-    return page.locator(".mx_LegacyRoomHeader_nametext");
+    return page.locator(".mx_RoomHeader_heading");
 }
 
 async function startDM(app: ElementAppPage, page: Page, name: string): Promise<void> {

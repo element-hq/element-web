@@ -190,13 +190,14 @@ jobs:
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts ./all-blob-reports
+              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
 
+            # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
-              if: inputs.skip != true
+              if: always() && inputs.skip != true
               uses: actions/upload-artifact@v4
               with:
                   name: html-report

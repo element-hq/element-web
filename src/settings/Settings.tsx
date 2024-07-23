@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import React, { ReactNode } from "react";
 
 import { _t, _td, TranslationKey } from "../languageHandler";
@@ -24,7 +23,6 @@ import {
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
 import ThemeController from "./controllers/ThemeController";
-import PushToMatrixClientController from "./controllers/PushToMatrixClientController";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
@@ -33,7 +31,6 @@ import SettingController from "./controllers/SettingController";
 import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
-import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./enums/Layout";
 import ReducedMotionController from "./controllers/ReducedMotionController";
 import IncompatibleController from "./controllers/IncompatibleController";
@@ -590,7 +587,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Rooms,
         displayName: _td("labs|new_room_decoration_ui"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("labs|new_room_decoration_ui_beta_title"),
@@ -1007,18 +1004,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
         controller: new UIFeatureController(UIFeature.Voip),
-    },
-    "e2ee.manuallyVerifyAllSessions": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("settings|security|manually_verify_all_sessions"),
-        default: false,
-        controller: new OrderedMultiController([
-            // Apply the feature controller first to ensure that the setting doesn't
-            // show up and can't be toggled. PushToMatrixClientController doesn't
-            // do any overrides anyways.
-            new UIFeatureController(UIFeature.AdvancedEncryption),
-            new PushToMatrixClientController(MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true),
-        ]),
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default

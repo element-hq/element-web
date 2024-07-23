@@ -18,7 +18,6 @@ import { test, expect } from "../../element-web-test";
 
 const USER_NAME = "Bob";
 const USER_NAME_NEW = "Alice";
-const IntegrationManager = "scalar.vector.im";
 
 test.describe("General user settings tab", () => {
     test.use({
@@ -72,17 +71,6 @@ test.describe("General user settings tab", () => {
         await expect(phoneNumbers.getByRole("textbox", { name: "Phone Number" })).toBeVisible();
         // Assert that the add button is rendered
         await expect(phoneNumbers.getByRole("button", { name: "Add" })).toBeVisible();
-
-        const setIntegrationManager = uut.locator(".mx_SetIntegrationManager");
-        await setIntegrationManager.scrollIntoViewIfNeeded();
-        await expect(
-            setIntegrationManager.locator(".mx_SetIntegrationManager_heading_manager", { hasText: IntegrationManager }),
-        ).toBeVisible();
-        // Make sure integration manager's toggle switch is enabled
-        await expect(setIntegrationManager.locator(".mx_ToggleSwitch_enabled")).toBeVisible();
-        await expect(setIntegrationManager.locator(".mx_SetIntegrationManager_heading_manager")).toHaveText(
-            "Manage integrations(scalar.vector.im)",
-        );
 
         // Assert the account deactivation button is displayed
         const accountManagementSection = uut.getByTestId("account-management-section");

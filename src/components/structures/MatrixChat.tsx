@@ -551,7 +551,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             .then((loadedSession) => {
                 if (!loadedSession) {
                     // fall back to showing the welcome screen... unless we have a 3pid invite pending
-                    if (ThreepidInviteStore.instance.pickBestInvite()) {
+                    if (
+                        ThreepidInviteStore.instance.pickBestInvite() &&
+                        SettingsStore.getValue(UIFeature.Registration)
+                    ) {
                         dis.dispatch({ action: "start_registration" });
                     } else {
                         dis.dispatch({ action: "view_welcome_page" });
@@ -951,6 +954,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async startRegistration(params: { [key: string]: string }): Promise<void> {
+        if (!SettingsStore.getValue(UIFeature.Registration)) {
+            this.showScreen("welcome");
+            return;
+        }
+
         const newState: Partial<IState> = {
             view: Views.REGISTER,
         };

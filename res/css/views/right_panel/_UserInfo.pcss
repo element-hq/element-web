@@ -41,35 +41,17 @@ limitations under the License.
         }
     }
 
-    h2 {
-        font-size: $font-18px;
-        font-weight: var(--cpd-font-weight-semibold);
-        margin: 18px 0 0 0;
-    }
-
     .mx_UserInfo_container {
-        padding: $spacing-8 $spacing-16;
-
-        &:not(.mx_UserInfo_separator) {
-            padding-top: $spacing-16;
-            padding-bottom: 0;
-
-            > :not(h3) {
-                margin-inline-start: $spacing-8;
-                display: flex;
-                flex-flow: column;
-                align-items: flex-start;
-                row-gap: $spacing-8;
-            }
-        }
+        padding: var(--cpd-space-4x) 0;
+        margin: 0 var(--cpd-space-4x);
 
         .mx_UserInfo_container_verifyButton {
             margin-top: $spacing-8;
         }
-    }
 
-    .mx_UserInfo_separator {
-        border-bottom: 1px solid $separator;
+        & + .mx_UserInfo_container {
+            border-top: 1px solid $separator;
+        }
     }
 
     .mx_UserInfo_memberDetailsContainer {
@@ -94,7 +76,7 @@ limitations under the License.
         margin: $spacing-24 $spacing-32 0 $spacing-32;
 
         .mx_UserInfo_avatar_transition {
-            max-width: 30vh;
+            max-width: 120px;
             aspect-ratio: 1 / 1;
             margin: 0 auto;
             transition: 0.5s;
@@ -112,7 +94,7 @@ limitations under the License.
         }
     }
 
-    h3 {
+    h2 {
         text-transform: uppercase;
         color: $tertiary-content;
         font: var(--cpd-font-heading-sm-semibold);
@@ -125,39 +107,34 @@ limitations under the License.
     }
 
     .mx_UserInfo_profile {
-        text-align: center;
-
-        h2 {
-            display: flex;
-            font-size: $font-17px;
+        h1 {
+            font-size: $font-20px;
             line-height: $font-25px;
-            flex: 1;
-            justify-content: center;
-            /* We reverse things here so for accessible technologies the name comes before the e2e shield */
-            flex-direction: row-reverse;
 
-            span {
-                /* limit to 2 lines, show an ellipsis if it overflows */
-                /* this looks webkit specific but is supported by Firefox 68+ */
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
+            /* limit to 2 lines, show an ellipsis if it overflows */
+            /* this looks webkit specific but is supported by Firefox 68+ */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
 
-                overflow: hidden;
-                word-break: break-all;
-                text-overflow: ellipsis;
-            }
+            overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
 
-            .mx_E2EIcon {
-                margin-top: 3px; /* visual vertical centering to the top line of text. */
-                margin-inline-end: $spacing-4; /* margin from displayName */
-                min-width: 18px; /* convince flexbox to not collapse it */
+            /* E2E icon wrapper */
+            .mx_Flex > span {
+                display: inline-block;
             }
         }
 
         .mx_UserInfo_profileStatus {
-            margin-top: $spacing-12;
+            margin: var(--cpd-space-1x) 0;
         }
+    }
+
+    .mx_PresenceLabel {
+        font: var(--cpd-font-body-sm-regular);
+        opacity: 1;
     }
 
     .mx_UserInfo_memberDetails {
@@ -184,10 +161,6 @@ limitations under the License.
 
     .mx_UserInfo_field {
         line-height: $font-16px;
-
-        &.mx_UserInfo_destructive {
-            color: $alert;
-        }
     }
 
     .mx_UserInfo_statusMessage {

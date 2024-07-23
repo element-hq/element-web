@@ -987,6 +987,52 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                     </kbd>
                   </div>
                 </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Go to next landmark
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      F6
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Go to previous landmark
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      F6
+                       
+                    </kbd>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>

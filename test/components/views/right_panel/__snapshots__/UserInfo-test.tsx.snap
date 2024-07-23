@@ -77,16 +77,25 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        aria-label="Close"
-        class="mx_AccessibleButton mx_BaseCard_close"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+      >
+        Profile
+      </p>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
+        style="--cpd-icon-button-size: 28px;"
         tabindex="0"
-      />
-      <div
-        class="mx_BaseCard_headerProp"
-      />
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div />
+        </div>
+      </button>
     </div>
     <div
       class="mx_AutoHideScrollbar"
@@ -109,7 +118,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
               data-testid="avatar-img"
               data-type="round"
               role="button"
-              style="--cpd-avatar-size: 230.39999999999998px;"
+              style="--cpd-avatar-size: 120px;"
             >
               u
             </button>
@@ -117,44 +126,51 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </div>
       </div>
       <div
-        class="mx_UserInfo_container mx_UserInfo_separator"
+        class="mx_UserInfo_container"
       >
         <div
-          class="mx_UserInfo_profile"
+          class="mx_Flex mx_UserInfo_profile"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
         >
-          <div>
-            <h2>
-              <span
-                aria-label="@user:example.com"
-                dir="auto"
-                title="@user:example.com"
-              >
-                @user:example.com
-              </span>
-            </h2>
-          </div>
-          <div
-            class="mx_UserInfo_profile_mxid"
-          >
-            customUserIdentifier
-          </div>
-          <div
-            class="mx_UserInfo_profileStatus"
+          <h1
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+            dir="auto"
           >
             <div
-              class="mx_PresenceLabel"
+              class="mx_Flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
             >
-              Unknown
+              @user:example.com
             </div>
+          </h1>
+          <div
+            class="mx_PresenceLabel mx_UserInfo_profileStatus"
+          >
+            Unknown
           </div>
+          <p
+            class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_UserInfo_profile_mxid"
+          >
+            <div
+              class="mx_CopyableText"
+            >
+              customUserIdentifier
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </p>
         </div>
       </div>
       <div
         class="mx_UserInfo_container"
       >
-        <h3>
+        <h2>
           Security
-        </h3>
+        </h2>
         <p>
           Messages in this room are not end-to-end encrypted.
         </p>
@@ -192,32 +208,100 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       <div
         class="mx_UserInfo_container"
       >
-        <h3>
-          Options
-        </h3>
-        <div>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="button"
+        >
           <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
-            Message
-          </div>
-          <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            Send message
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Share Link to User
-          </div>
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="button"
+        >
           <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Share profile
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="button"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
             Ignore
-          </div>
-        </div>
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -232,16 +316,25 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
     <div
       class="mx_BaseCard_header"
     >
-      <div
-        aria-label="Close"
-        class="mx_AccessibleButton mx_BaseCard_close"
+      <p
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title"
+      >
+        Profile
+      </p>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
+        style="--cpd-icon-button-size: 28px;"
         tabindex="0"
-      />
-      <div
-        class="mx_BaseCard_headerProp"
-      />
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <div />
+        </div>
+      </button>
     </div>
     <div
       class="mx_AutoHideScrollbar"
@@ -264,7 +357,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
               data-testid="avatar-img"
               data-type="round"
               role="button"
-              style="--cpd-avatar-size: 230.39999999999998px;"
+              style="--cpd-avatar-size: 120px;"
             >
               u
             </button>
@@ -272,44 +365,51 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </div>
       </div>
       <div
-        class="mx_UserInfo_container mx_UserInfo_separator"
+        class="mx_UserInfo_container"
       >
         <div
-          class="mx_UserInfo_profile"
+          class="mx_Flex mx_UserInfo_profile"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
         >
-          <div>
-            <h2>
-              <span
-                aria-label="@user:example.com"
-                dir="auto"
-                title="@user:example.com"
-              >
-                @user:example.com
-              </span>
-            </h2>
-          </div>
-          <div
-            class="mx_UserInfo_profile_mxid"
-          >
-            customUserIdentifier
-          </div>
-          <div
-            class="mx_UserInfo_profileStatus"
+          <h1
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+            dir="auto"
           >
             <div
-              class="mx_PresenceLabel"
+              class="mx_Flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
             >
-              Unknown
+              @user:example.com
             </div>
+          </h1>
+          <div
+            class="mx_PresenceLabel mx_UserInfo_profileStatus"
+          >
+            Unknown
           </div>
+          <p
+            class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_UserInfo_profile_mxid"
+          >
+            <div
+              class="mx_CopyableText"
+            >
+              customUserIdentifier
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </p>
         </div>
       </div>
       <div
         class="mx_UserInfo_container"
       >
-        <h3>
+        <h2>
           Security
-        </h3>
+        </h2>
         <p>
           Messages in this room are not end-to-end encrypted.
         </p>
@@ -347,50 +447,134 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
       <div
         class="mx_UserInfo_container"
       >
-        <h3>
-          Options
-        </h3>
-        <div>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="button"
+        >
           <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
-            Message
-          </div>
+            Send message
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="button"
+        >
           <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
-            Share Link to User
-          </div>
-          <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            Share profile
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Ignore
-          </div>
-        </div>
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
       <div
         class="mx_UserInfo_container"
       >
-        <h3>
-          Admin Tools
-        </h3>
-        <div
-          class="mx_UserInfo_buttons"
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="button"
         >
           <div
-            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-            role="button"
-            tabindex="0"
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
             Deactivate user
-          </div>
-        </div>
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="critical"
+          role="button"
+        >
+          <div
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            height="24"
+            width="24"
+          />
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Ignore
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </div>

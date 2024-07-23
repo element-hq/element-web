@@ -36,7 +36,7 @@ test.describe("Invite dialog", function () {
         await expect(page.getByText("Hanako created and configured the room.")).toBeVisible();
 
         // Open the room info panel
-        await page.getByRole("button", { name: "Room info" }).click();
+        await app.toggleRoomInfoPanel();
 
         await page.locator(".mx_BaseCard").getByRole("menuitem", { name: "Invite" }).click();
 
@@ -114,12 +114,9 @@ test.describe("Invite dialog", function () {
 
         // Assert that the hovered user name on invitation UI does not have background color
         // TODO: implement the test on room-header.spec.ts
-        const roomHeader = page.locator(".mx_LegacyRoomHeader");
-        await roomHeader.locator(".mx_LegacyRoomHeader_name--textonly").hover();
-        await expect(roomHeader.locator(".mx_LegacyRoomHeader_name--textonly")).toHaveCSS(
-            "background-color",
-            "rgba(0, 0, 0, 0)",
-        );
+        const roomHeader = page.locator(".mx_RoomHeader");
+        await roomHeader.locator(".mx_RoomHeader_heading").hover();
+        await expect(roomHeader.locator(".mx_RoomHeader_heading")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 
         // Send a message to invite the bots
         const composer = app.getComposer().locator("[contenteditable]");

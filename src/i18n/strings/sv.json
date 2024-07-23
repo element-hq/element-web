@@ -1989,14 +1989,11 @@
         "rejecting": "Nekar inbjudan …",
         "rejoin_button": "Gå med igen",
         "search": {
-            "all_rooms": "Alla rum",
             "all_rooms_button": "Sök i alla rum",
-            "field_placeholder": "Sök…",
             "result_count": {
                 "other": "(~%(count)s resultat)",
                 "one": "(~%(count)s resultat)"
             },
-            "this_room": "Det här rummet",
             "this_room_button": "Sök i det här rummet"
         },
         "show_labs_settings": "Visa experimentinställningar",
@@ -2640,7 +2637,6 @@
             "delete_backup_confirm_description": "Är du säker? Du kommer att förlora dina krypterade meddelanden om dina nycklar inte säkerhetskopieras ordentligt.",
             "e2ee_default_disabled_warning": "Din serveradministratör har inaktiverat totalsträckskryptering som förval för privata rum och direktmeddelanden.",
             "enable_message_search": "Aktivera meddelandesökning i krypterade rum",
-            "encryption_individual_verification_mode": "Verifiera individuellt varje session som används av en användare för att markera den som betrodd, och lita inte på korssignerade enheter.",
             "encryption_section": "Kryptering",
             "error_loading_key_backup_status": "Kunde inte ladda status för nyckelsäkerhetskopiering",
             "export_megolm_keys": "Exportera krypteringsrumsnycklar",
@@ -2659,7 +2655,6 @@
             "key_backup_inactive": "Den här servern <b>säkerhetskopierar inte dina nycklar</b>, men du har en existerande säkerhetskopia du kan återställa ifrån och lägga till till i framtiden.",
             "key_backup_inactive_warning": "Dina nycklar <b>säkerhetskopieras inte från den här sessionen</b>.",
             "key_backup_latest_version": "Senaste säkerhetskopieringsversionen på servern:",
-            "manually_verify_all_sessions": "Verifiera alla fjärrsessioner manuellt",
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_disabled": "Cachar krypterade meddelanden säkert lokalt för att de ska visas i sökresultat.",
             "message_search_enabled": {
@@ -3094,15 +3089,10 @@
             "one": "%(count)s svar",
             "other": "%(count)s svar"
         },
-        "empty_explainer": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
-        "empty_has_threads_tip": "Svara i en pågående tråd eller använd \"%(replyInThread)s\" när du håller över ett meddelande för att starta en ny tråd.",
-        "empty_heading": "Håll diskussioner organiserade med trådar",
-        "empty_tip": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
         "error_start_thread_existing_relation": "Kan inte skapa tråd från en händelse med en existerande relation",
         "my_threads": "Mina trådar",
         "my_threads_description": "Visar alla trådar du har medverkat i",
         "open_thread": "Öppna tråd",
-        "show_all_threads": "Visa alla trådar",
         "show_thread_filter": "Visa:"
     },
     "threads_activity_centre": {
@@ -3680,7 +3670,6 @@
         },
         "redact_button": "Ta bort nyliga meddelanden",
         "revoke_invite": "Återkalla inbjudan",
-        "role_label": "Roll i <RoomName/>",
         "room_encrypted": "Meddelanden i det här rummet är totalsträckskrypterade.",
         "room_encrypted_detail": "Dina meddelanden är säkrade och endast du och mottagaren har de unika nycklarna för att låsa upp dem.",
         "room_unencrypted": "Meddelanden i detta rum är inte totalsträckskrypterade.",

@@ -16,6 +16,7 @@ limitations under the License.
 
 import Modal from "../src/Modal";
 import QuestionDialog from "../src/components/views/dialogs/QuestionDialog";
+import defaultDispatcher from "../src/dispatcher/dispatcher";
 
 describe("Modal", () => {
     test("forceCloseAllModals should close all open modals", () => {
@@ -28,5 +29,29 @@ describe("Modal", () => {
         expect(Modal.hasDialogs()).toBe(true);
         Modal.forceCloseAllModals();
         expect(Modal.hasDialogs()).toBe(false);
+    });
+
+    test("open modals should be closed on logout", () => {
+        const modal1OnFinished = jest.fn();
+        const modal2OnFinished = jest.fn();
+
+        Modal.createDialog(QuestionDialog, {
+            title: "Test dialog 1",
+            description: "This is a test dialog",
+            button: "Word",
+            onFinished: modal1OnFinished,
+        });
+
+        Modal.createDialog(QuestionDialog, {
+            title: "Test dialog 2",
+            description: "This is a test dialog",
+            button: "Word",
+            onFinished: modal2OnFinished,
+        });
+
+        defaultDispatcher.dispatch({ action: "logout" }, true);
+
+        expect(modal1OnFinished).toHaveBeenCalled();
+        expect(modal2OnFinished).toHaveBeenCalled();
     });
 });

@@ -2023,14 +2023,11 @@
         "rejecting": "Rejet de l’invitation…",
         "rejoin_button": "Revenir",
         "search": {
-            "all_rooms": "Tous les salons",
             "all_rooms_button": "Rechercher dans tous les salons",
-            "field_placeholder": "Rechercher…",
             "result_count": {
                 "one": "(~%(count)s résultat)",
                 "other": "(~%(count)s résultats)"
             },
-            "this_room": "Ce salon",
             "this_room_button": "Rechercher dans ce salon"
         },
         "show_labs_settings": "Afficher les réglages des expérimentations",
@@ -2675,7 +2672,6 @@
             "delete_backup_confirm_description": "En êtes-vous sûr ? Vous perdrez vos messages chiffrés si vos clés ne sont pas sauvegardées correctement.",
             "e2ee_default_disabled_warning": "L’administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons privés et les conversations privées.",
             "enable_message_search": "Activer la recherche de messages dans les salons chiffrés",
-            "encryption_individual_verification_mode": "Vérifiez individuellement chaque session utilisée par un utilisateur pour la marquer comme fiable, sans faire confiance aux appareils signés avec la signature croisée.",
             "encryption_section": "Chiffrement",
             "error_loading_key_backup_status": "Impossible de charger l’état de sauvegarde des clés",
             "export_megolm_keys": "Exporter les clés de chiffrement de salon",
@@ -2694,7 +2690,6 @@
             "key_backup_inactive": "Cette session <b>ne sauvegarde pas vos clés</b>, mais vous n’avez pas de sauvegarde existante que vous pouvez restaurer ou compléter à l’avenir.",
             "key_backup_inactive_warning": "Vos clés <b>ne sont pas sauvegardées sur cette session</b>.",
             "key_backup_latest_version": "Dernière version de la sauvegarde sur le serveur :",
-            "manually_verify_all_sessions": "Vérifier manuellement toutes les sessions à distance",
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
             "message_search_enabled": {
@@ -3130,16 +3125,11 @@
             "one": "%(count)s réponse",
             "other": "%(count)s réponses"
         },
-        "empty_explainer": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
-        "empty_has_threads_tip": "Répondez à un fil de discussion en cours ou utilisez \"%(replyInThread)s\" lorsque vous passez la souris sur un message pour en commencer un nouveau.",
-        "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion",
-        "empty_tip": "<b>Conseil :</b> Utilisez « %(replyInThread)s » en survolant un message.",
         "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
         "mark_all_read": "Tout marquer comme lu",
         "my_threads": "Mes fils de discussion",
         "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
         "open_thread": "Ouvrir le fil de discussion",
-        "show_all_threads": "Afficher tous les fils de discussion",
         "show_thread_filter": "Affiche :"
     },
     "threads_activity_centre": {
@@ -3722,7 +3712,6 @@
         },
         "redact_button": "Supprimer les messages récents",
         "revoke_invite": "Révoquer l’invitation",
-        "role_label": "Rôle dans <RoomName/>",
         "room_encrypted": "Les messages dans ce salon sont chiffrés de bout en bout.",
         "room_encrypted_detail": "Vos messages sont sécurisés et seuls vous et le destinataire avez les clés uniques pour les déchiffrer.",
         "room_unencrypted": "Les messages dans ce salon ne sont pas chiffrés de bout en bout.",

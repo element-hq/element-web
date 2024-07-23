@@ -1655,13 +1655,10 @@
         "read_topic": "Klik om het onderwerp te lezen",
         "rejoin_button": "Opnieuw toetreden",
         "search": {
-            "all_rooms": "Alle kamers",
-            "field_placeholder": "Zoeken…",
             "result_count": {
                 "one": "(~%(count)s resultaat)",
                 "other": "(~%(count)s resultaten)"
-            },
-            "this_room": "Deze kamer"
+            }
         },
         "show_labs_settings": "Lab instellingen weergeven",
         "status_bar": {
@@ -2229,7 +2226,6 @@
             "delete_backup_confirm_description": "Weet je het zeker? Je zal je versleutelde berichten verliezen als je sleutels niet correct geback-upt zijn.",
             "e2ee_default_disabled_warning": "De beheerder van je server heeft eind-tot-eind-versleuteling standaard uitgeschakeld in alle privékamers en directe gesprekken.",
             "enable_message_search": "Zoeken in versleutelde kamers inschakelen",
-            "encryption_individual_verification_mode": "Verifieer elke sessie die door een persoon wordt gebruikt afzonderlijk. Dit markeert hen als vertrouwd zonder te vertrouwen op kruislings ondertekende apparaten.",
             "encryption_section": "Versleuteling",
             "error_loading_key_backup_status": "Kan sleutelback-upstatus niet laden",
             "export_megolm_keys": "E2E-kamersleutels exporteren",
@@ -2243,7 +2239,6 @@
             "key_backup_connect_prompt": "Verbind deze sessie met de sleutelback-up voordat je jezelf afmeldt. Dit voorkomt dat je sleutels verliest die alleen op deze sessie voorkomen.",
             "key_backup_inactive": "Deze sessie <b>maakt geen back-ups van je sleutels</b>, maar je beschikt over een reeds bestaande back-up waaruit je kan herstellen en waaraan je nieuwe sleutels vanaf nu kunt toevoegen.",
             "key_backup_inactive_warning": "Jouw sleutels worden <b>niet geback-upt van deze sessie</b>.",
-            "manually_verify_all_sessions": "Handmatig alle externe sessies verifiëren",
             "message_search_disable_warning": "Dit moet aan staan om te kunnen zoeken in versleutelde kamers.",
             "message_search_disabled": "Sla versleutelde berichten veilig lokaal op om ze doorzoekbaar te maken.",
             "message_search_enabled": {
@@ -2625,15 +2620,10 @@
             "one": "%(count)s reactie",
             "other": "%(count)s reacties"
         },
-        "empty_explainer": "Threads helpen jou gesprekken on-topic te houden en gemakkelijk bij te houden.",
-        "empty_has_threads_tip": "Reageer op een lopende thread of gebruik \"%(replyInThread)s\" wanneer je de muisaanwijzer op een bericht plaatst om een nieuwe te starten.",
-        "empty_heading": "Houd threads georganiseerd",
-        "empty_tip": "<b>Tip:</b> Gebruik “%(replyInThread)s” met de muiscursor boven een bericht.",
         "error_start_thread_existing_relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie",
         "my_threads": "Mijn discussies",
         "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
         "open_thread": "Open discussie",
-        "show_all_threads": "Threads weergeven",
         "show_thread_filter": "Toon:"
     },
     "time": {
@@ -3161,7 +3151,6 @@
         },
         "redact_button": "Recente berichten verwijderen",
         "revoke_invite": "Uitnodiging intrekken",
-        "role_label": "Rol in <RoomName/>",
         "room_encrypted": "De berichten in deze kamer worden eind-tot-eind-versleuteld.",
         "room_encrypted_detail": "Jouw berichten zijn beveiligd, en enkel de ontvanger en jij hebben de unieke sleutels om ze te ontsleutelen.",
         "room_unencrypted": "De berichten in deze kamer worden niet eind-tot-eind-versleuteld.",

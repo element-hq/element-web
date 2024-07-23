@@ -1858,14 +1858,11 @@
         "rejecting": "Po hidhet poshtë ftesa…",
         "rejoin_button": "Rihyni",
         "search": {
-            "all_rooms": "Krejt Dhomat",
             "all_rooms_button": "Kërko në krejt dhomat",
-            "field_placeholder": "Kërkoni…",
             "result_count": {
                 "other": "(~%(count)s përfundime)",
                 "one": "(~%(count)s përfundim)"
             },
-            "this_room": "Këtë Dhomë",
             "this_room_button": "Kërko në këtë dhomë"
         },
         "show_labs_settings": "Shfaq rregullime për Labs",
@@ -2462,7 +2459,6 @@
             "delete_backup_confirm_description": "Jeni i sigurt? Do të humbni mesazhet tuaj të fshehtëzuar, nëse kopjeruajtja për kyçet tuaj nuk bëhet si duhet.",
             "e2ee_default_disabled_warning": "Përgjegjësi i shërbyesit tuaj ka çaktivizuar fshehtëzimin skaj-më-skaj, si parazgjedhje, në dhoma private & Mesazhe të Drejtpërdrejtë.",
             "enable_message_search": "Aktivizo kërkim mesazhesh në dhoma të fshehtëzuara",
-            "encryption_individual_verification_mode": "Verifikoni individualisht çdo sesion të përdorur nga një përdorues, për t’i vënë shenjë si i besuar, duke mos besuar pajisje <em>cross-signed</em>.",
             "encryption_section": "Fshehtëzim",
             "error_loading_key_backup_status": "S’arrihet të ngarkohet gjendje kopjeruajtjeje kyçesh",
             "export_megolm_keys": "Eksporto kyçe dhome E2E",
@@ -2478,7 +2474,6 @@
             "key_backup_in_progress": "Po kopjeruhen kyçet për %(sessionsRemaining)s…",
             "key_backup_inactive": "Ky sesion <b>nuk po bën kopjeruajtje të kyçeve tuaja</b>, por keni një kopjeruajtje ekzistuese që mund ta përdorni për rimarrje dhe ta shtoni më tej.",
             "key_backup_inactive_warning": "Kyçet tuaj <b>nuk po kopjeruhen nga ky sesion</b>.",
-            "manually_verify_all_sessions": "Verifikoni dorazi krejt sesionet e largët",
             "message_search_disable_warning": "Në u çaktivizoftë, mesazhet prej dhomash të fshehtëzuara s’do të duken në përfundime kërkimi.",
             "message_search_disabled": "Ruaj lokalisht në mënyrë të sigurt në fshehtinë mesazhet që të shfaqen në përfundime kërkimi.",
             "message_search_enabled": {
@@ -2899,15 +2894,10 @@
             "one": "%(count)s përgjigje",
             "other": "%(count)s përgjigje"
         },
-        "empty_explainer": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
-        "empty_has_threads_tip": "Përgjigjuni te një rrjedhë në zhvillim e sipër, ose përdorni “%(replyInThread)s”, kur kalohet kursori sipër një mesazhi për të filluar një të re.",
-        "empty_heading": "Mbajini diskutimet të sistemuara në rrjedha",
-        "empty_tip": "<b>Ndihmëz:</b> Përdorni “%(replyInThread)s”, teksa kaloni kursorin sipër një mesazhi.",
         "error_start_thread_existing_relation": "S’mund të krijohet një rrjedhë prej një akti me një marrëdhënie ekzistuese",
         "my_threads": "Rrjedhat e mia",
         "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
         "open_thread": "Hape rrjedhën",
-        "show_all_threads": "Shfaqi krejt rrjedhat",
         "show_thread_filter": "Shfaq:"
     },
     "time": {
@@ -3456,7 +3446,6 @@
         },
         "redact_button": "Hiq mesazhe së fundi",
         "revoke_invite": "Shfuqizoje ftesën",
-        "role_label": "Rol në <RoomName/>",
         "room_encrypted": "Mesazhet në këtë dhomë janë të fshehtëzuara skaj-më-skaj.",
         "room_encrypted_detail": "Mesazhet tuaj janë të sigurt dhe vetëm ju dhe marrësi kanë kyçet unikë për t’i shkyçur.",
         "room_unencrypted": "Mesazhet në këtë dhomë nuk janë të fshehtëzuara skaj-më-skaj.",

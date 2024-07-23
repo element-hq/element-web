@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, ReactNode, KeyboardEvent, Ref } from "react";
+import React, { forwardRef, ReactNode, KeyboardEvent, Ref, MouseEvent } from "react";
 import classNames from "classnames";
+import { IconButton, Text } from "@vector-im/compound-web";
+import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePhases";
 import { CardContext } from "./context";
@@ -34,13 +36,13 @@ interface IProps {
     ariaLabelledBy?: string;
     withoutScrollContainer?: boolean;
     closeLabel?: string;
-    onClose?(ev: ButtonEvent): void;
-    onBack?(ev: ButtonEvent): void;
+    onClose?(ev: MouseEvent<HTMLButtonElement>): void;
+    onBack?(ev: MouseEvent<HTMLButtonElement>): void;
     onKeyDown?(ev: KeyboardEvent): void;
     cardState?: any;
     ref?: Ref<HTMLDivElement>;
     // Ref for the 'close' button the the card
-    closeButtonRef?: Ref<HTMLDivElement>;
+    closeButtonRef?: Ref<HTMLButtonElement>;
     children: ReactNode;
 }
 
@@ -81,41 +83,44 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
     ) => {
         let backButton;
         const cardHistory = RightPanelStore.instance.roomPhaseHistory;
-        if (cardHistory.length > 1) {
+        if (cardHistory.length > 1 && !hideHeaderButtons) {
             const prevCard = cardHistory[cardHistory.length - 2];
-            const onBackClick = (ev: ButtonEvent): void => {
+            const onBackClick = (ev: MouseEvent<HTMLButtonElement>): void => {
                 onBack?.(ev);
                 RightPanelStore.instance.popCard();
             };
             const label = backLabelForPhase(prevCard.phase) ?? _t("action|back");
-            backButton = <AccessibleButton className="mx_BaseCard_back" onClick={onBackClick} title={label} />;
+            backButton = (
+                <IconButton
+                    size="28px"
+                    data-testid="base-card-back-button"
+                    onClick={onBackClick}
+                    tooltip={label}
+                    subtleBackground
+                >
+                    <ChevronLeftIcon />
+                </IconButton>
+            );
         }
 
         let closeButton;
-        if (onClose) {
+        if (onClose && !hideHeaderButtons) {
             closeButton = (
-                <AccessibleButton
+                <IconButton
+                    size="28px"
                     data-testid="base-card-close-button"
-                    className="mx_BaseCard_close"
                     onClick={onClose}
-                    title={closeLabel || _t("action|close")}
                     ref={closeButtonRef}
-                />
+                    tooltip={closeLabel ?? _t("action|close")}
+                    subtleBackground
+                >
+                    <CloseIcon />
+                </IconButton>
             );
         }
 
         if (!withoutScrollContainer) {
             children = <AutoHideScrollbar>{children}</AutoHideScrollbar>;
-        }
-
-        let headerButtons: React.ReactElement | undefined;
-        if (!hideHeaderButtons) {
-            headerButtons = (
-                <>
-                    {backButton}
-                    {closeButton}
-                </>
-            );
         }
 
         const shouldRenderHeader = header || !hideHeaderButtons;
@@ -132,8 +137,15 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                 >
                     {shouldRenderHeader && (
                         <div className="mx_BaseCard_header">
-                            {headerButtons}
-                            <div className="mx_BaseCard_headerProp">{header}</div>
+                            {backButton}
+                            {typeof header === "string" ? (
+                                <Text size="md" weight="medium" className="mx_BaseCard_header_title">
+                                    {header}
+                                </Text>
+                            ) : (
+                                header ?? <div className="mx_BaseCard_header_spacer" />
+                            )}
+                            {closeButton}
                         </div>
                     )}
                     {children}

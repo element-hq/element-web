@@ -18,12 +18,13 @@ limitations under the License.
     height: 100px;
     overflow: visible;
 
+    /* Unset flex on the thread list, but not the thread view */
+    &:not(.mx_ThreadView) .mx_BaseCard_header .mx_BaseCard_header_title {
+        flex: unset;
+    }
+
     .mx_BaseCard_header {
         .mx_BaseCard_header_title {
-            .mx_BaseCard_header_title_heading {
-                margin-right: auto;
-            }
-
             .mx_AccessibleButton {
                 font-size: 12px;
                 color: $secondary-content;
@@ -106,9 +107,16 @@ limitations under the License.
     }
 
     .mx_RoomView_messagePanel {
-        /* To avoid the rule from being applied to .mx_ThreadPanel_empty */
+        &.mx_RoomView_messageListWrapper {
+            position: initial;
+        }
+
         .mx_RoomView_messageListWrapper {
             width: calc(100% + 6px); /* 8px - 2px */
+        }
+
+        .mx_RoomView_empty {
+            display: contents;
         }
     }
 
@@ -166,72 +174,6 @@ limitations under the License.
 
 .mx_ThreadPanel_copyLinkToThread::before {
     mask-image: url("$(res)/img/element-icons/link.svg");
-}
-
-.mx_ThreadPanel_empty {
-    border-radius: 8px;
-    background: $background;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    padding: 20px;
-    box-sizing: border-box; /* Include padding and border */
-    width: 100%;
-
-    h2 {
-        color: $primary-content;
-        font-weight: var(--cpd-font-weight-semibold);
-        font-size: $font-18px;
-        margin-top: 24px;
-        margin-bottom: 10px;
-    }
-
-    p {
-        font-size: $font-15px;
-        color: $secondary-content;
-        margin: 10px 0;
-    }
-
-    button {
-        border: none;
-        background: none;
-        color: $accent;
-        font-size: $font-15px;
-
-        &:hover,
-        &:active {
-            text-decoration: underline;
-            cursor: pointer;
-        }
-    }
-
-    .mx_ThreadPanel_empty_tip {
-        font-size: $font-12px;
-        line-height: $font-15px;
-
-        > b {
-            font-weight: var(--cpd-font-weight-semibold);
-        }
-    }
-}
-
-.mx_ThreadPanel_largeIcon {
-    width: 28px;
-    height: 28px;
-    padding: 18px;
-    background: $system;
-    border-radius: 50%;
-
-    &::after {
-        @mixin ThreadSummaryIcon;
-        width: inherit;
-        height: inherit;
-    }
 }
 
 .mx_ContextualMenu_wrapper {

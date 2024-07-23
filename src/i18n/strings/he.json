@@ -1321,13 +1321,10 @@
         "peek_join_prompt": "אתם צופים ב־%(roomName)s. האם תרצו להצטרף?",
         "rejoin_button": "הצטרפות מחדש",
         "search": {
-            "all_rooms": "כל החדרים",
-            "field_placeholder": "חפש…",
             "result_count": {
                 "one": "(תוצאת %(count)s)",
                 "other": "(תוצאת %(count)s)"
-            },
-            "this_room": "החדר הזה"
+            }
         },
         "show_labs_settings": "הצג את אופציית מעבדת הפיתוח",
         "status_bar": {
@@ -1813,7 +1810,6 @@
             "delete_backup_confirm_description": "האם אתה בטוח? תאבד את ההודעות המוצפנות שלך אם המפתחות שלך לא מגובים כראוי.",
             "e2ee_default_disabled_warning": "מנהל השרת שלך השבית הצפנה מקצה לקצה כברירת מחדל בחדרים פרטיים ובהודעות ישירות.",
             "enable_message_search": "אפשר חיפוש הודעות בחדרים מוצפנים",
-            "encryption_individual_verification_mode": "אמת בנפרד כל מושב שמשתמש בו כדי לסמן אותו כאמצעי מהימן, ולא אמון על מכשירים חתומים צולבים.",
             "encryption_section": "הצפנה",
             "error_loading_key_backup_status": "לא ניתן לטעון את מצב גיבוי המפתח",
             "export_megolm_keys": "ייצא מפתחות חדר E2E",
@@ -1827,7 +1823,6 @@
             "key_backup_connect_prompt": "חבר את ההפעלה הזו לגיבוי המפתח לפני היציאה, כדי למנוע אובדן מפתחות שיכולים להיות רק בפגישה זו.",
             "key_backup_inactive": "הפעלה זו <b> אינה מגבה את המפתחות שלך </b>, אך יש לך גיבוי קיים ממנו תוכל לשחזר ולהוסיף להמשך.",
             "key_backup_inactive_warning": "המפתחות שלך <b> אינם מגובים מהתחברות זו </b>.",
-            "manually_verify_all_sessions": "אמת באופן ידני את כל ההתחברויות",
             "message_search_disable_warning": "אם מושבת, הודעות מחדרים מוצפנים לא יופיעו בתוצאות החיפוש.",
             "message_search_disabled": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
             "message_search_enabled": {
@@ -2081,15 +2076,10 @@
     "threads": {
         "all_threads": "כל הקישורים",
         "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "empty_explainer": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
-        "empty_has_threads_tip": "השיבו לשרשור מתמשך או השתמשו ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה כדי להתחיל הודעה חדשה.",
-        "empty_heading": "שימרו על דיונים מאורגנים בשרשורים",
-        "empty_tip": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
         "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
         "my_threads": "הקישורים שלי",
         "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
         "open_thread": "פתיחת שרשור",
-        "show_all_threads": "הצג את כל השרשורים",
         "show_thread_filter": "הצג:"
     },
     "time": {
@@ -2513,7 +2503,6 @@
         },
         "redact_button": "הסר הודעות אחרונות",
         "revoke_invite": "שלול הזמנה",
-        "role_label": "תפקיד בחדר <RoomName/>",
         "room_encrypted": "ההודעות בחדר זה מוצפנות מקצה לקצה.",
         "room_encrypted_detail": "ההודעות שלך מאובטחות ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתן.",
         "room_unencrypted": "הודעות בחדר זה אינן מוצפנות מקצה לקצה.",

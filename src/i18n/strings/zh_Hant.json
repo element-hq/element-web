@@ -1927,14 +1927,11 @@
         "rejecting": "正在回絕邀請…",
         "rejoin_button": "重新加入",
         "search": {
-            "all_rooms": "所有聊天室",
             "all_rooms_button": "搜尋所有聊天室",
-            "field_placeholder": "搜尋…",
             "result_count": {
                 "one": "（~%(count)s 結果）",
                 "other": "（~%(count)s 結果）"
             },
-            "this_room": "這個聊天室",
             "this_room_button": "搜尋此聊天室"
         },
         "show_labs_settings": "顯示「實驗室」設定",
@@ -2565,7 +2562,6 @@
             "delete_backup_confirm_description": "您確定嗎？如果沒有正確備份金鑰的話，將會遺失所有加密訊息。",
             "e2ee_default_disabled_warning": "您的伺服器管理員已停用在私密聊天室與私人訊息中預設的端對端加密。",
             "enable_message_search": "在已加密的聊天室中啟用訊息搜尋",
-            "encryption_individual_verification_mode": "逐一手動驗證使用者的工作階段，將其標記為受信任階段，不透過裝置的交叉簽署機制來信任。",
             "encryption_section": "加密",
             "error_loading_key_backup_status": "無法載入金鑰備份狀態",
             "export_megolm_keys": "匯出聊天室的端對端加密金鑰",
@@ -2581,7 +2577,6 @@
             "key_backup_in_progress": "正在備份 %(sessionsRemaining)s 把金鑰…",
             "key_backup_inactive": "此工作階段<b>並未備份您的金鑰</b>，您可還原先前的備份後再繼續新增金鑰到備份內容中。",
             "key_backup_inactive_warning": "您<b>並未備份此裝置的金鑰</b>。",
-            "manually_verify_all_sessions": "手動驗證所有遠端工作階段",
             "message_search_disable_warning": "若停用，從加密聊天室傳來的訊息將不會出現在搜尋結果中。",
             "message_search_disabled": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
             "message_search_enabled": {
@@ -3009,15 +3004,10 @@
             "one": "%(count)s 回覆",
             "other": "%(count)s 回覆"
         },
-        "empty_explainer": "「討論串」功能可以協助您的對話不離題且易於追蹤。",
-        "empty_has_threads_tip": "將滑鼠游標停留在訊息上來開始新的討論串時，回覆正在進行的討論串或使用「%(replyInThread)s」。",
-        "empty_heading": "使用「討論串」功能，讓討論保持有條不紊",
-        "empty_tip": "<b>秘訣：</b>在滑鼠游標停於訊息上時使用「%(replyInThread)s」。",
         "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
         "my_threads": "我的討論串",
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
-        "show_all_threads": "顯示所有討論串",
         "show_thread_filter": "顯示："
     },
     "time": {
@@ -3582,7 +3572,6 @@
         },
         "redact_button": "移除最近的訊息",
         "revoke_invite": "撤銷邀請",
-        "role_label": "<RoomName/> 中的角色",
         "room_encrypted": "此聊天室內的訊息有端對端加密。",
         "room_encrypted_detail": "您的訊息已受保護，只有您與收件人才有獨特的金鑰將其解鎖。",
         "room_unencrypted": "此聊天室內的訊息未經端到端加密。",

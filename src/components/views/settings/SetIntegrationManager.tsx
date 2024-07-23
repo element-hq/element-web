@@ -25,6 +25,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import ToggleSwitch from "../elements/ToggleSwitch";
 import Heading from "../typography/Heading";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {}
 
@@ -71,6 +72,8 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
             bodyText = _t("integration_manager|use_im");
         }
 
+        if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
+
         return (
             <label
                 className="mx_SetIntegrationManager"
@@ -79,8 +82,8 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
             >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
-                        <Heading size="2">{_t("integration_manager|manage_title")}</Heading>
-                        <Heading size="3">{managerName}</Heading>
+                        <Heading size="3">{_t("integration_manager|manage_title")}</Heading>
+                        <Heading size="4">{managerName}</Heading>
                     </div>
                     <ToggleSwitch
                         id="toggle_integration"

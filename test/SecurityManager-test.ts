@@ -31,7 +31,7 @@ describe("SecurityManager", () => {
                 bootstrapSecretStorage: () => {},
             } as unknown as CryptoApi;
             const client = stubClient();
-            mocked(client.hasSecretStorageKey).mockResolvedValue(true);
+            client.secretStorage.hasKey = jest.fn().mockResolvedValue(true);
             mocked(client.getCrypto).mockReturnValue(crypto);
 
             // When I run accessSecretStorage
@@ -48,7 +48,7 @@ describe("SecurityManager", () => {
             it("throws if crypto is unavailable", async () => {
                 // Given a client with no crypto
                 const client = stubClient();
-                mocked(client.hasSecretStorageKey).mockResolvedValue(true);
+                client.secretStorage.hasKey = jest.fn().mockResolvedValue(true);
                 mocked(client.getCrypto).mockReturnValue(undefined);
 
                 // When I run accessSecretStorage

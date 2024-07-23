@@ -18,7 +18,6 @@
 
 import React, { useState, JSX, PropsWithChildren } from "react";
 import { Button } from "@vector-im/compound-web";
-import { compare } from "matrix-js-sdk/src/utils";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import PowerSelector from "../elements/PowerSelector";
@@ -78,9 +77,11 @@ export function PowerLevelSelector({
         currentPowerLevel && currentPowerLevel.value !== userLevels[currentPowerLevel?.userId],
     );
 
+    const collator = new Intl.Collator();
+
     // We sort the users by power level, then we filter them
     const users = Object.keys(userLevels)
-        .sort((userA, userB) => sortUser(userA, userB, userLevels))
+        .sort((userA, userB) => sortUser(collator, userA, userB, userLevels))
         .filter(filter);
 
     // No user to display, we return the children into fragment to convert it to JSX.Element type
@@ -136,7 +137,14 @@ export function PowerLevelSelector({
  * @param userB
  * @param userLevels
  */
-function sortUser(userA: string, userB: string, userLevels: PowerLevelSelectorProps["userLevels"]): number {
+function sortUser(
+    collator: Intl.Collator,
+    userA: string,
+    userB: string,
+    userLevels: PowerLevelSelectorProps["userLevels"],
+): number {
     const powerLevelDiff = userLevels[userA] - userLevels[userB];
-    return powerLevelDiff !== 0 ? powerLevelDiff : compare(userA.toLocaleLowerCase(), userB.toLocaleLowerCase());
+    return powerLevelDiff !== 0
+        ? powerLevelDiff
+        : collator.compare(userA.toLocaleLowerCase(), userB.toLocaleLowerCase());
 }

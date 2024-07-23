@@ -7,6 +7,8 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
   >
     <button
+      aria-expanded="false"
+      aria-haspopup="dialog"
       aria-label="Room info"
       class="mx_RoomHeader_infoWrapper"
       tabindex="0"
@@ -46,7 +48,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       <button
         aria-disabled="true"
         aria-label="There's no one here to call"
-        class="_icon-button_rijzz_17"
+        class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -61,7 +63,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       <button
         aria-disabled="true"
         aria-label="There's no one here to call"
-        class="_icon-button_rijzz_17"
+        class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -75,7 +77,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Room info"
-        class="_icon-button_rijzz_17"
+        class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -89,7 +91,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Threads"
-        class="_icon-button_rijzz_17"
+        class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"

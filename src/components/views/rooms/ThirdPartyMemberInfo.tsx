@@ -28,7 +28,6 @@ import { Action } from "../../../dispatcher/actions";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BaseCard from "../right_panel/BaseCard";
 import { Flex } from "../../utils/Flex";
-import { createSpaceScopeHeader } from "./SpaceScopeHeader";
 
 interface IProps {
     event: MatrixEvent;
@@ -134,7 +133,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         }
 
         return (
-            <BaseCard header={createSpaceScopeHeader(this.room)} onClose={this.props.onClose}>
+            <BaseCard onClose={this.props.onClose}>
                 <Flex className="mx_ThirdPartyMemberInfo" direction="column" gap="var(--cpd-space-4x)">
                     <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
                         {/* same as userinfo name style */}

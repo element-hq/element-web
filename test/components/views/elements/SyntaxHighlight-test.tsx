@@ -35,6 +35,6 @@ describe("<SyntaxHighlight />", () => {
         await waitFor(() => expect(container.querySelector(`.language-${lang}`)).toBeTruthy());
 
         const [_lang, opts] = mock.mock.lastCall!;
-        expect((opts as HighlightOptions)["language"]).toBe(lang);
+        expect((opts as unknown as HighlightOptions)["language"]).toBe(lang);
     });
 });

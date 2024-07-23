@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import { test as base, expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
+import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import AxeBuilder from "@axe-core/playwright";
 import _ from "lodash";
-import { basename } from "node:path";
+import { basename, extname } from "node:path";
 
 import type mailhog from "mailhog";
 import type { IConfigOptions } from "../src/IConfigOptions";
@@ -298,19 +299,39 @@ export const test = base.extend<{
     },
 });
 
+// Based on https://github.com/microsoft/playwright/blob/2b77ed4d7aafa85a600caa0b0d101b72c8437eeb/packages/playwright/src/util.ts#L206C8-L210C2
+function sanitizeFilePathBeforeExtension(filePath: string): string {
+    const ext = extname(filePath);
+    const base = filePath.substring(0, filePath.length - ext.length);
+    return sanitizeForFilePath(base) + ext;
+}
+
 export const expect = baseExpect.extend({
     async toMatchScreenshot(
         this: ExpectMatcherState,
         receiver: Page | Locator,
-        name?: `${string}.png`,
+        name: `${string}.png`,
         options?: {
             mask?: Array<Locator>;
             omitBackground?: boolean;
+            hideTooltips?: boolean;
             timeout?: number;
             css?: string;
         },
     ) {
+        const testInfo = test.info();
+        if (!testInfo) throw new Error(`toMatchScreenshot() must be called during the test`);
+
         const page = "page" in receiver ? receiver.page() : receiver;
+
+        let hideTooltipsCss: string | undefined;
+        if (options?.hideTooltips) {
+            hideTooltipsCss = `
+                .mx_Tooltip_visible {
+                    visibility: hidden !important;
+                }
+            `;
+        }
 
         // We add a custom style tag before taking screenshots
         const style = (await page.addStyleTag({
@@ -339,13 +360,23 @@ export const expect = baseExpect.extend({
                 .mx_MessageTimestamp {
                     font-family: Inconsolata !important;
                 }
+                ${hideTooltipsCss ?? ""}
                 ${options?.css ?? ""}
             `,
         })) as ElementHandle<Element>;
 
-        await baseExpect(receiver).toHaveScreenshot(name, options);
+        const screenshotName = sanitizeFilePathBeforeExtension(name);
+        await baseExpect(receiver).toHaveScreenshot(screenshotName, options);
 
         await style.evaluate((tag) => tag.remove());
+
+        testInfo.annotations.push({
+            // `_` prefix hides it from the HTML reporter
+            type: "_screenshot",
+            // include a path relative to `playwright/snapshots/`
+            description: testInfo.snapshotPath(screenshotName).split("/playwright/snapshots/", 2)[1],
+        });
+
         return { pass: true, message: () => "", name: "toMatchScreenshot" };
     },
 });

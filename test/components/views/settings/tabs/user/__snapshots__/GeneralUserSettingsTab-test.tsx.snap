@@ -42,14 +42,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
       >
         <input
           autocomplete="email"
-          id="mx_Field_41"
+          id="mx_Field_27"
           label="Email Address"
           placeholder="Email Address"
           type="text"
           value=""
         />
         <label
-          for="mx_Field_41"
+          for="mx_Field_27"
         >
           Email Address
         </label>
@@ -150,14 +150,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
           </span>
           <input
             autocomplete="tel-national"
-            id="mx_Field_42"
+            id="mx_Field_28"
             label="Phone Number"
             placeholder="Phone Number"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_42"
+            for="mx_Field_28"
           >
             Phone Number
           </label>
@@ -173,61 +173,6 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
     </div>
   </div>
 </div>
-`;
-
-exports[`<GeneralUserSettingsTab /> Manage integrations should render manage integrations sections 1`] = `
-<label
-  class="mx_SetIntegrationManager"
-  data-testid="mx_SetIntegrationManager"
-  for="toggle_integration"
->
-  <div
-    class="mx_SettingsFlag"
-  >
-    <div
-      class="mx_SetIntegrationManager_heading_manager"
-    >
-      <h2
-        class="mx_Heading_h2"
-      >
-        Manage integrations
-      </h2>
-      <h3
-        class="mx_Heading_h3"
-      >
-        (scalar.vector.im)
-      </h3>
-    </div>
-    <div
-      aria-checked="false"
-      aria-disabled="false"
-      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-      id="toggle_integration"
-      role="switch"
-      tabindex="0"
-    >
-      <div
-        class="mx_ToggleSwitch_ball"
-      />
-    </div>
-  </div>
-  <div
-    class="mx_SettingsSubsection_text"
-  >
-    <span>
-      Use an integration manager 
-      <b>
-        (scalar.vector.im)
-      </b>
-       to manage bots, widgets, and sticker packs.
-    </span>
-  </div>
-  <div
-    class="mx_SettingsSubsection_text"
-  >
-    Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
-  </div>
-</label>
 `;
 
 exports[`<GeneralUserSettingsTab /> deactive account should render section when account deactivation feature is enabled 1`] = `

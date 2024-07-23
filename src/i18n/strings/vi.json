@@ -1735,14 +1735,11 @@
         "rejecting": "Từ chối lời mời…",
         "rejoin_button": "Tham gia lại",
         "search": {
-            "all_rooms": "Tất cả các phòng",
             "all_rooms_button": "Tìm tất cả phòng",
-            "field_placeholder": "Tìm kiếm…",
             "result_count": {
                 "one": "(~%(count)s kết quả)",
                 "other": "(~%(count)s kết quả)"
             },
-            "this_room": "phòng này",
             "this_room_button": "Tìm trong phòng này"
         },
         "show_labs_settings": "Hiện các cài đặt thử nghiệm",
@@ -2339,7 +2336,6 @@
             "delete_backup_confirm_description": "Bạn có chắc không? Bạn sẽ mất các tin nhắn được mã hóa nếu các khóa của bạn không được sao lưu đúng cách.",
             "e2ee_default_disabled_warning": "Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.",
             "enable_message_search": "Bật tính năng tìm kiếm tin nhắn trong các phòng được mã hóa",
-            "encryption_individual_verification_mode": "Xác thực riêng từng phiên được người dùng sử dụng để đánh dấu phiên đó là đáng tin cậy, không tin cậy vào các thiết bị được xác thực chéo.",
             "encryption_section": "Mã hóa",
             "error_loading_key_backup_status": "Không thể tải trạng thái sao lưu khóa",
             "export_megolm_keys": "Xuất các mã khoá phòng E2E",
@@ -2355,7 +2351,6 @@
             "key_backup_in_progress": "Đang sao lưu %(sessionsRemaining)s khóa…",
             "key_backup_inactive": "Phiên này đang <b>không sao lưu các khóa</b>, nhưng bạn có một bản sao lưu hiện có, bạn có thể khôi phục và thêm vào để về sau.",
             "key_backup_inactive_warning": "Các khóa của bạn <b>not being backed up from this session</b>.",
-            "manually_verify_all_sessions": "Xác thực thủ công tất cả các phiên từ xa",
             "message_search_disable_warning": "Nếu bị tắt, tin nhắn từ các phòng được mã hóa sẽ không xuất hiện trong kết quả tìm kiếm.",
             "message_search_disabled": "Bộ nhớ cache an toàn các tin nhắn được mã hóa cục bộ để chúng xuất hiện trong kết quả tìm kiếm.",
             "message_search_enabled": {
@@ -2773,10 +2768,8 @@
             "one": "%(count)s trả lời",
             "other": "%(count)s trả lời"
         },
-        "empty_heading": "Giữ các cuộc thảo luận được tổ chức với các chủ đề này",
         "my_threads": "Các chủ đề của tôi",
         "my_threads_description": "Hiển thị tất cả các chủ đề bạn đã tham gia",
-        "show_all_threads": "Hiển thị tất cả chủ đề",
         "show_thread_filter": "Hiển thị:"
     },
     "time": {
@@ -3303,7 +3296,6 @@
         },
         "redact_button": "Bỏ các tin nhắn gần đây",
         "revoke_invite": "Thu hồi lời mời",
-        "role_label": "Vai trò trong <RoomName/>",
         "room_encrypted": "Tin nhắn trong phòng này đang được mã hóa đầu cuối.",
         "room_encrypted_detail": "Tin nhắn của bạn được bảo mật và chỉ bạn và người nhận mới có chìa khóa duy nhất để mở khóa.",
         "room_unencrypted": "Tin nhắn trong phòng này không được mã hóa đầu cuối.",

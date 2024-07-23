@@ -1933,14 +1933,11 @@
         "rejecting": "Meghívó elutasítása…",
         "rejoin_button": "Újra-csatlakozás",
         "search": {
-            "all_rooms": "Minden szobában",
             "all_rooms_button": "Keresés az összes szobában",
-            "field_placeholder": "Keresés…",
             "result_count": {
                 "one": "(~%(count)s db eredmény)",
                 "other": "(~%(count)s db eredmény)"
             },
-            "this_room": "Ebben a szobában",
             "this_room_button": "Keresés ebben a szobában"
         },
         "show_labs_settings": "Labor beállítások megjelenítése",
@@ -2566,7 +2563,6 @@
             "delete_backup_confirm_description": "Biztos benne? Ha a kulcsai nincsenek megfelelően mentve, akkor elveszíti a titkosított üzeneteit.",
             "e2ee_default_disabled_warning": "A kiszolgáló rendszergazdája alapértelmezetten kikapcsolta a végpontok közötti titkosítást a privát szobákban és a közvetlen beszélgetésekben.",
             "enable_message_search": "Üzenetek keresésének bekapcsolása a titkosított szobákban",
-            "encryption_individual_verification_mode": "A felhasználó által használt munkamenetek ellenőrzése egyenként, nem bízva az eszközök közti aláírással rendelkező eszközökben.",
             "encryption_section": "Titkosítás",
             "error_loading_key_backup_status": "A mentett kulcsok állapotát nem lehet betölteni",
             "export_megolm_keys": "E2E szobakulcsok exportálása",
@@ -2585,7 +2581,6 @@
             "key_backup_inactive": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből helyre tudja állítani, és amelyhez hozzá tudja adni a továbbiakban.",
             "key_backup_inactive_warning": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>.",
             "key_backup_latest_version": "A legújabb biztonsági mentés verziója a kiszolgálón:",
-            "manually_verify_all_sessions": "Az összes távoli munkamenet kézi ellenőrzése",
             "message_search_disable_warning": "Ha nincs engedélyezve akkor a titkosított szobák üzenetei nem jelennek meg a keresések között.",
             "message_search_disabled": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között.",
             "message_search_enabled": {
@@ -3017,15 +3012,10 @@
             "one": "%(count)s válasz",
             "other": "%(count)s válasz"
         },
-        "empty_explainer": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
-        "empty_has_threads_tip": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
-        "empty_heading": "Beszélgetések üzenetszálakba rendezése",
-        "empty_tip": "<b>Tipp:</b> Használja a „%(replyInThread)s” lehetőséget a szöveg fölé navigálva.",
         "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről ami már rendelkezik kapcsolattal",
         "my_threads": "Saját üzenetszálak",
         "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
         "open_thread": "Üzenetszál megnyitása",
-        "show_all_threads": "Minden üzenetszál megjelenítése",
         "show_thread_filter": "Megjelenítés:"
     },
     "time": {
@@ -3597,7 +3587,6 @@
         },
         "redact_button": "Friss üzenetek törlése",
         "revoke_invite": "Meghívó visszavonása",
-        "role_label": "Szerep itt: <RoomName/>",
         "room_encrypted": "Az üzenetek a szobában végponttól végpontig titkosítottak.",
         "room_encrypted_detail": "Az üzenete biztonságban van, és csak Ön és a címzettek rendelkeznek a visszafejtéshez szükséges egyedi kulcsokkal.",
         "room_unencrypted": "Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.",

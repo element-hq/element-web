@@ -1605,13 +1605,10 @@
         "read_topic": "Smelltu til að lesa umfjöllunarefni",
         "rejoin_button": "Taka þátt aftur",
         "search": {
-            "all_rooms": "Allar spjallrásir",
-            "field_placeholder": "Leita…",
             "result_count": {
                 "one": "(~%(count)s niðurstaða)",
                 "other": "(~%(count)s niðurstöður)"
-            },
-            "this_room": "Þessi spjallrás"
+            }
         },
         "show_labs_settings": "Sýna tilraunastillingar",
         "status_bar": {
@@ -2114,7 +2111,6 @@
             "delete_backup_confirm_description": "Ertu viss? Þú munt tapa dulrituðu skilaboðunum þínum ef dulritunarlyklarnir þínir eru ekki rétt öryggisafritaðir.",
             "e2ee_default_disabled_warning": "Kerfisstjóri netþjónsins þíns hefur lokað á sjálfvirka dulritun í einkaspjallrásum og beinum skilaboðum.",
             "enable_message_search": "Virka skilaboðleit í dulrituðum spjallrásum",
-            "encryption_individual_verification_mode": "Sannreyndu hverja setu sem notandinn notar til að merkja hana sem treysta, án þess að treyta kross-undirrituðum tækjum.",
             "encryption_section": "Dulritun",
             "error_loading_key_backup_status": "Tókst ekki að hlaða inn stöðu öryggisafritunar dulritunarlykla",
             "export_megolm_keys": "Flytja út E2E dulritunarlykla spjallrásar",
@@ -2127,7 +2123,6 @@
             "key_backup_connect": "Tengja þessa setu við öryggisafrit af lykli",
             "key_backup_inactive": "Þessi seta er <b>ekki að öryggisafrita dulritunarlyklana þína</b>, en þú ert með fyrirliggjandi öryggisafrit sem þú getur endurheimt úr og notað til að halda áfram.",
             "key_backup_inactive_warning": "Dulritunarlyklarnir þínir eru <b>ekki öryggisafritaðir úr þessari setu</b>.",
-            "manually_verify_all_sessions": "Sannreyna handvirkt allar fjartengdar setur",
             "message_search_disable_warning": "Ef þetta er óvirkt, munu skilaboð frá dulrituðum spjallrásum ekki birtast í leitarniðurstöðum.",
             "message_search_disabled": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum.",
             "message_search_enabled": {
@@ -2510,12 +2505,9 @@
             "one": "%(count)s svar",
             "other": "%(count)s svör"
         },
-        "empty_explainer": "Spjallþræðir hjálpa til við að halda samræðum við efnið og gerir auðveldara að rekja þær.",
-        "empty_heading": "Haltu umræðum skipulögðum með spjallþráðum",
         "my_threads": "Spjallþræðirnir mínir",
         "my_threads_description": "Birtir alla spjallþræði sem þú hefur tekið þátt í",
         "open_thread": "Opna spjallþráð",
-        "show_all_threads": "Birta alla spjallþræði",
         "show_thread_filter": "Sýna:"
     },
     "time": {
@@ -3025,7 +3017,6 @@
         },
         "redact_button": "Fjarlægja nýleg skilaboð",
         "revoke_invite": "Afturkalla boð",
-        "role_label": "Hlutverk í <RoomName/>",
         "room_encrypted": "Skilaboð í þessari spjallrás eru enda-í-enda dulrituð.",
         "room_encrypted_detail": "Öryggi skilaboðanna þinna er tryggt og einungis þú og viðtakendurnir hafa dulritunarlyklana til að opna skilaboðin.",
         "room_unencrypted": "Skilaboð í þessari spjallrás eru ekki enda-í-enda dulrituð.",

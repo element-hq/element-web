@@ -18,7 +18,6 @@ import { Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
-import type { Container } from "../../../src/stores/widgets/types";
 
 test.describe("Room Header", () => {
     test.use({
@@ -33,24 +32,28 @@ test.describe("Room Header", () => {
             await app.client.createRoom({ name: "Test Room" });
             await app.viewRoomByName("Test Room");
 
-            const header = page.locator(".mx_LegacyRoomHeader");
-            // Names (aria-label) of every button rendered on mx_LegacyRoomHeader by default
-            const expectedButtonNames = [
-                "Room options", // The room name button next to the room avatar, which renders dropdown menu on click
-                "Voice call",
-                "Video call",
-                "Search",
-                "Threads",
-                "Notifications",
-                "Room info",
-            ];
+            const header = page.locator(".mx_RoomHeader");
 
-            // Assert they are found and visible
-            for (const name of expectedButtonNames) {
-                await expect(header.getByRole("button", { name })).toBeVisible();
-            }
+            // There's two room info button - the header itself and the i button
+            const infoButtons = header.getByRole("button", { name: "Room info" });
+            await expect(infoButtons).toHaveCount(2);
+            await expect(infoButtons.first()).toBeVisible();
+            await expect(infoButtons.last()).toBeVisible();
 
-            // Assert that just those seven buttons exist on mx_LegacyRoomHeader by default
+            // Memberlist button
+            await expect(header.locator(".mx_FacePile")).toBeVisible();
+
+            // There should be both a voice and a video call button
+            // but they'll be disabled
+            const callButtons = header.getByRole("button", { name: "There's no one here to call" });
+            await expect(callButtons).toHaveCount(2);
+            await expect(callButtons.first()).toBeVisible();
+            await expect(callButtons.last()).toBeVisible();
+
+            await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
+            await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
+
+            // Assert that there are six buttons in total
             await expect(header.getByRole("button")).toHaveCount(7);
 
             await expect(header).toMatchScreenshot("room-header.png");
@@ -67,14 +70,15 @@ test.describe("Room Header", () => {
             await app.client.createRoom({ name: LONG_ROOM_NAME });
             await app.viewRoomByName(LONG_ROOM_NAME);
 
-            const header = page.locator(".mx_LegacyRoomHeader");
+            const header = page.locator(".mx_RoomHeader");
             // Wait until the room name is set
-            await expect(page.locator(".mx_LegacyRoomHeader_nametext").getByText(LONG_ROOM_NAME)).toBeVisible();
+            await expect(page.locator(".mx_RoomHeader_heading").getByText(LONG_ROOM_NAME)).toBeVisible();
 
             // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
             // Note these assertions do not check the size of mx_LegacyRoomHeader_name button
-            const buttons = page.locator(".mx_LegacyRoomHeader_button");
-            await expect(buttons).toHaveCount(6);
+            const buttons = header.locator(".mx_Flex").getByRole("button");
+            await expect(buttons).toHaveCount(5);
+
             for (const button of await buttons.all()) {
                 await expect(button).toBeVisible();
                 await expect(button).toHaveCSS("height", "32px");
@@ -82,44 +86,6 @@ test.describe("Room Header", () => {
             }
 
             await expect(header).toMatchScreenshot("room-header-long-name.png");
-        });
-
-        test("should have buttons highlighted by being clicked", async ({ page, app, user }) => {
-            await app.client.createRoom({ name: "Test Room" });
-            await app.viewRoomByName("Test Room");
-
-            const header = page.locator(".mx_LegacyRoomHeader");
-            // Check these buttons
-            const buttonsHighlighted = ["Threads", "Notifications", "Room info"];
-
-            for (const name of buttonsHighlighted) {
-                await header.getByRole("button", { name: name }).click(); // Highlight the button
-            }
-
-            await expect(header).toMatchScreenshot("room-header-highlighted.png");
-        });
-    });
-
-    test.describe("with feature_pinning enabled", () => {
-        test.use({ labsFlags: ["feature_pinning"] });
-
-        test("should render the pin button for pinned messages card", async ({ page, app, user }) => {
-            await app.client.createRoom({ name: "Test Room" });
-            await app.viewRoomByName("Test Room");
-
-            const composer = app.getComposer().locator("[contenteditable]");
-            await composer.fill("Test message");
-            await composer.press("Enter");
-
-            const lastTile = page.locator(".mx_EventTile_last");
-            await lastTile.hover();
-            await lastTile.getByRole("button", { name: "Options" }).click();
-
-            await page.getByRole("menuitem", { name: "Pin" }).click();
-
-            await expect(
-                page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Pinned messages" }),
-            ).toBeVisible();
         });
     });
 
@@ -141,30 +107,27 @@ test.describe("Room Header", () => {
         test.describe("and with feature_notifications enabled", () => {
             test.use({ labsFlags: ["feature_video_rooms", "feature_notifications"] });
 
-            test("should render buttons for room options, beta pill, invite, chat, and room info", async ({
-                page,
-                app,
-                user,
-            }) => {
+            test("should render buttons for chat, room info, threads and facepile", async ({ page, app, user }) => {
                 await createVideoRoom(page, app);
 
-                const header = page.locator(".mx_LegacyRoomHeader");
-                // Names (aria-label) of the buttons on the video room header
-                const expectedButtonNames = [
-                    "Room options",
-                    "Video rooms are a beta feature Click for more info", // Beta pill
-                    "Invite",
-                    "Chat",
-                    "Room info",
-                ];
+                const header = page.locator(".mx_RoomHeader");
 
-                // Assert they are found and visible
-                for (const name of expectedButtonNames) {
-                    await expect(header.getByRole("button", { name })).toBeVisible();
-                }
+                // There's two room info button - the header itself and the i button
+                const infoButtons = header.getByRole("button", { name: "Room info" });
+                await expect(infoButtons).toHaveCount(2);
+                await expect(infoButtons.first()).toBeVisible();
+                await expect(infoButtons.last()).toBeVisible();
+
+                // Facepile
+                await expect(header.locator(".mx_FacePile")).toBeVisible();
+
+                // Chat, Threads and Notification buttons
+                await expect(header.getByRole("button", { name: "Chat" })).toBeVisible();
+                await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
+                await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
 
                 // Assert that there is not a button except those buttons
-                await expect(header.getByRole("button")).toHaveCount(7);
+                await expect(header.getByRole("button")).toHaveCount(6);
 
                 await expect(header).toMatchScreenshot("room-header-video-room.png");
             });
@@ -177,7 +140,7 @@ test.describe("Room Header", () => {
         }) => {
             await createVideoRoom(page, app);
 
-            await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Chat" }).click();
+            await page.locator(".mx_RoomHeader").getByRole("button", { name: "Chat" }).click();
 
             // Assert that the call view is still visible
             await expect(page.locator(".mx_CallView")).toBeVisible();
@@ -186,116 +149,6 @@ test.describe("Room Header", () => {
             await expect(
                 page.locator(".mx_RightPanel .mx_TimelineCard").getByText("Sakura created and configured the room."),
             ).toBeVisible();
-        });
-    });
-
-    test.describe("with a widget", () => {
-        const ROOM_NAME = "Test Room with a widget";
-        const WIDGET_ID = "fake-widget";
-        const WIDGET_HTML = `
-            <html lang="en">
-                <head>
-                    <title>Fake Widget</title>
-                </head>
-                <body>
-                    Hello World
-                </body>
-            </html>
-        `;
-
-        test.beforeEach(async ({ page, app, user, webserver }) => {
-            const widgetUrl = webserver.start(WIDGET_HTML);
-            const roomId = await app.client.createRoom({ name: ROOM_NAME });
-
-            // setup widget via state event
-            await app.client.evaluate(
-                async (matrixClient, { roomId, widgetUrl, id }) => {
-                    await matrixClient.sendStateEvent(
-                        roomId,
-                        "im.vector.modular.widgets",
-                        {
-                            id,
-                            creatorUserId: "somebody",
-                            type: "widget",
-                            name: "widget",
-                            url: widgetUrl,
-                        },
-                        id,
-                    );
-                    await matrixClient.sendStateEvent(
-                        roomId,
-                        "io.element.widgets.layout",
-                        {
-                            widgets: {
-                                [id]: {
-                                    container: "top" as Container,
-                                    index: 1,
-                                    width: 100,
-                                    height: 0,
-                                },
-                            },
-                        },
-                        "",
-                    );
-                },
-                {
-                    roomId,
-                    widgetUrl,
-                    id: WIDGET_ID,
-                },
-            );
-
-            // open the room
-            await app.viewRoomByName(ROOM_NAME);
-        });
-
-        test("should highlight the apps button", async ({ page, app, user }) => {
-            // Assert that AppsDrawer is rendered
-            await expect(page.locator(".mx_AppsDrawer")).toBeVisible();
-
-            const header = page.locator(".mx_LegacyRoomHeader");
-            // Assert that "Hide Widgets" button is rendered and aria-checked is set to true
-            await expect(header.getByRole("button", { name: "Hide Widgets" })).toHaveAttribute("aria-checked", "true");
-
-            await expect(header).toMatchScreenshot("room-header-with-apps-button-highlighted.png");
-        });
-
-        test("should support hiding a widget", async ({ page, app, user }) => {
-            await expect(page.locator(".mx_AppsDrawer")).toBeVisible();
-
-            const header = page.locator(".mx_LegacyRoomHeader");
-            // Click the apps button to hide AppsDrawer
-            await header.getByRole("button", { name: "Hide Widgets" }).click();
-
-            // Assert that "Show widgets" button is rendered and aria-checked is set to false
-            await expect(header.getByRole("button", { name: "Show Widgets" })).toHaveAttribute("aria-checked", "false");
-
-            // Assert that AppsDrawer is not rendered
-            await expect(page.locator(".mx_AppsDrawer")).not.toBeVisible();
-
-            await expect(header).toMatchScreenshot("room-header-with-apps-button-not-highlighted.png");
-        });
-    });
-
-    test.describe("with encryption", () => {
-        test("should render the E2E icon and the buttons", async ({ page, app, user }) => {
-            // Create an encrypted room
-            await app.client.createRoom({
-                name: "Test Encrypted Room",
-                initial_state: [
-                    {
-                        type: "m.room.encryption",
-                        state_key: "",
-                        content: {
-                            algorithm: "m.megolm.v1.aes-sha2",
-                        },
-                    },
-                ],
-            });
-            await app.viewRoomByName("Test Encrypted Room");
-
-            const header = page.locator(".mx_LegacyRoomHeader");
-            await expect(header).toMatchScreenshot("encrypted-room-header.png");
         });
     });
 });

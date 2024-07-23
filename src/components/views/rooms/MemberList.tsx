@@ -55,7 +55,6 @@ import { SDKContext } from "../../../contexts/SDKContext";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { Action } from "../../../dispatcher/actions";
-import { createSpaceScopeHeader } from "./SpaceScopeHeader";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -429,7 +428,6 @@ export default class MemberList extends React.Component<IProps, IState> {
                 className="mx_MemberList"
                 ariaLabelledBy="memberlist-panel-tab"
                 role="tabpanel"
-                header={createSpaceScopeHeader(room)}
                 hideHeaderButtons={this.props.hideHeaderButtons}
                 footer={footer}
                 onClose={this.props.onClose}

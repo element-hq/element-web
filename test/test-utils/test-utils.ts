@@ -116,7 +116,6 @@ export function createTestClient(): MatrixClient {
         bootstrapCrossSigning: jest.fn(),
         hasSecretStorageKey: jest.fn(),
         getKeyBackupVersion: jest.fn(),
-        checkOwnCrossSigningTrust: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),
@@ -275,6 +274,7 @@ export function createTestClient(): MatrixClient {
         matrixRTC: createStubMatrixRTC(),
         isFallbackICEServerAllowed: jest.fn().mockReturnValue(false),
         getAuthIssuer: jest.fn(),
+        getOrCreateFilter: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

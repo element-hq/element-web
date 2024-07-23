@@ -35,10 +35,10 @@ test.describe("1:1 chat room", () => {
         await page.goto(`/#/user/${user2.userId}?action=chat`);
     });
 
-    test("should open new 1:1 chat room after leaving the old one", async ({ page, user2 }) => {
+    test("should open new 1:1 chat room after leaving the old one", async ({ page, app, user2 }) => {
         // leave 1:1 chat room
-        await page.locator(".mx_LegacyRoomHeader_nametext").getByText(user2.displayName).click();
-        await page.getByRole("menuitem", { name: "Leave" }).click();
+        await app.toggleRoomInfoPanel();
+        await page.getByRole("menuitem", { name: "Leave room" }).click();
         await page.getByRole("button", { name: "Leave" }).click();
 
         // wait till the room was left
@@ -49,6 +49,6 @@ test.describe("1:1 chat room", () => {
 
         // open new 1:1 chat room
         await page.goto(`/#/user/${user2.userId}?action=chat`);
-        await expect(page.locator(".mx_LegacyRoomHeader_nametext").getByText(user2.displayName)).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader_heading").getByText(user2.displayName)).toBeVisible();
     });
 });

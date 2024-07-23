@@ -134,6 +134,12 @@ export default class SettingsStore {
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
 
+    public static reset(): void {
+        for (const handler of Object.values(LEVEL_HANDLERS)) {
+            handler.reset();
+        }
+    }
+
     /**
      * Gets all the feature-style setting names.
      * @returns {string[]} The names of the feature settings.

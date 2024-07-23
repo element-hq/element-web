@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -29,7 +29,6 @@ import Modal from "../../../../../Modal";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/ErrorDialog";
 import ChangePassword from "../../ChangePassword";
-import SetIntegrationManager from "../../SetIntegrationManager";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -147,22 +146,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         });
     };
 
-    private renderAccountSection(): JSX.Element {
-        let passwordChangeSection: ReactNode = null;
-        if (this.state.canChangePassword) {
-            passwordChangeSection = (
-                <>
-                    <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
-                    <ChangePassword
-                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
-                        rowClassName=""
-                        buttonKind="primary"
-                        onError={this.onPasswordChangeError}
-                        onFinished={this.onPasswordChanged}
-                    />
-                </>
-            );
-        }
+    private renderAccountSection(): JSX.Element | undefined {
+        if (!this.state.canChangePassword) return undefined;
 
         return (
             <>
@@ -171,7 +156,14 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     stretchContent
                     data-testid="accountSection"
                 >
-                    {passwordChangeSection}
+                    <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
+                    <ChangePassword
+                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
+                        rowClassName=""
+                        buttonKind="primary"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged}
+                    />
                 </SettingsSubsection>
             </>
         );
@@ -194,12 +186,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderIntegrationManagerSection(): ReactNode {
-        if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
-
-        return <SetIntegrationManager />;
-    }
-
     public render(): React.ReactNode {
         let accountManagementSection: JSX.Element | undefined;
         const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
@@ -218,7 +204,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     <UserPersonalInfoSettings canMake3pidChanges={this.state.canMake3pidChanges} />
                     {this.renderAccountSection()}
                 </SettingsSection>
-                {this.renderIntegrationManagerSection()}
                 {accountManagementSection}
             </SettingsTab>
         );

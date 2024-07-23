@@ -16,7 +16,7 @@
 
 import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
-import { compare, MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
+import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { IWidget } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -200,6 +200,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const runoff = topWidgets.slice(MAX_PINNED);
         rightWidgets.push(...runoff);
 
+        const collator = new Intl.Collator();
+
         // Order the widgets in the top container, putting autopinned Jitsi widgets first
         // unless they have a specific order in mind
         topWidgets.sort((a, b) => {
@@ -219,7 +221,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
             if (orderA === orderB) {
                 // We just need a tiebreak
-                return compare(a.id, b.id);
+                return collator.compare(a.id, b.id);
             }
 
             return orderA - orderB;

@@ -50,7 +50,7 @@ test.describe("FilePanel", () => {
     test.describe("render", () => {
         test("should render empty state", async ({ page }) => {
             // Wait until the information about the empty state is rendered
-            await expect(page.locator(".mx_FilePanel_empty")).toBeVisible();
+            await expect(page.locator(".mx_EmptyState")).toBeVisible();
 
             // Take a snapshot of RightPanel - fix https://github.com/vector-im/element-web/issues/25332
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");

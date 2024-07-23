@@ -1715,13 +1715,10 @@
         "rejecting": "Hylätään kutsua…",
         "rejoin_button": "Liity uudelleen",
         "search": {
-            "all_rooms": "Kaikki huoneet",
-            "field_placeholder": "Haku…",
             "result_count": {
                 "one": "(~%(count)s tulos)",
                 "other": "(~%(count)s tulosta)"
-            },
-            "this_room": "Tämä huone"
+            }
         },
         "show_labs_settings": "Näytä laboratorion asetukset",
         "status_bar": {
@@ -2281,7 +2278,6 @@
             "delete_backup_confirm_description": "Oletko varma? Et voi lukea salattuja viestejäsi, mikäli avaimesi eivät ole kunnolla varmuuskopioituna.",
             "e2ee_default_disabled_warning": "Palvelimesi ylläpitäjä on poistanut päästä päähän -salauksen oletuksena käytöstä yksityisissä huoneissa ja yksityisviesteissä.",
             "enable_message_search": "Ota viestihaku salausta käyttävissä huoneissa käyttöön",
-            "encryption_individual_verification_mode": "Varmenna jokainen istunto erikseen, äläkä luota ristiinvarmennettuihin laitteisiin.",
             "encryption_section": "Salaus",
             "error_loading_key_backup_status": "Avainten varmuuskopionnin tilan lukeminen epäonnistui",
             "export_megolm_keys": "Tallenna osapuolten välisen salauksen huoneavaimet",
@@ -2295,7 +2291,6 @@
             "key_backup_connect_prompt": "Yhdistä tämä istunto avainten varmuuskopiointiin ennen uloskirjautumista, jotta et menetä avaimia, jotka ovat vain tässä istunnossa.",
             "key_backup_inactive": "Tämä istunto <b>ei varmuuskopioi avaimiasi</b>, mutta sillä on olemassaoleva varmuuskopio, jonka voit palauttaa ja lisätä jatkaaksesi.",
             "key_backup_inactive_warning": "Avaimiasi <b>ei varmuuskopioida tästä istunnosta</b>.",
-            "manually_verify_all_sessions": "Varmenna kaikki etäistunnot käsin",
             "message_search_disable_warning": "Jos ei ole käytössä, salattujen huoneiden viestejä ei näytetä hakutuloksissa.",
             "message_search_disabled": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa.",
             "message_search_enabled": {
@@ -2700,12 +2695,9 @@
             "one": "%(count)s vastaus",
             "other": "%(count)s vastausta"
         },
-        "empty_explainer": "Ketjut auttavat pitämään keskustelut asiayhteyteen sopivina ja helposti seurattavina.",
-        "empty_heading": "Pidä keskustelut järjestyksessä ketjuissa",
         "my_threads": "Omat ketjut",
         "my_threads_description": "Näyttää kaikki ketjut, joissa olet ollut osallinen",
         "open_thread": "Avaa ketju",
-        "show_all_threads": "Näytä kaikki ketjut",
         "show_thread_filter": "Näytä:"
     },
     "time": {
@@ -3237,7 +3229,6 @@
         },
         "redact_button": "Poista viimeaikaiset viestit",
         "revoke_invite": "Kumoa kutsu",
-        "role_label": "Rooli huoneessa <RoomName/>",
         "room_encrypted": "Tämän huoneen viestit ovat päästä päähän -salattuja.",
         "room_encrypted_detail": "Viestisi ovat turvattu, ja vain sinulla ja vastaanottajalla on avaimet viestien lukemiseen.",
         "room_unencrypted": "Tämän huoneen viestit eivät ole päästä päähän -salattuja.",

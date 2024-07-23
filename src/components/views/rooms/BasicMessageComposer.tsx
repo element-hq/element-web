@@ -51,6 +51,7 @@ import { _t } from "../../../languageHandler";
 import { linkify } from "../../../linkify-matrix";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -534,6 +535,16 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 toggleInlineFormat(selectionRange, event.key, SURROUND_WITH_DOUBLE_CHARACTERS.get(event.key));
                 handled = true;
             }
+        }
+
+        const navAction = getKeyBindingsManager().getNavigationAction(event);
+
+        if (navAction === KeyBindingAction.NextLandmark || navAction === KeyBindingAction.PreviousLandmark) {
+            LandmarkNavigation.findAndFocusNextLandmark(
+                Landmark.MESSAGE_COMPOSER_OR_HOME,
+                navAction === KeyBindingAction.PreviousLandmark,
+            );
+            handled = true;
         }
 
         const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);

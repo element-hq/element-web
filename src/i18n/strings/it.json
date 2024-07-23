@@ -1989,14 +1989,11 @@
         "rejecting": "Rifiuto dell'invito…",
         "rejoin_button": "Rientra",
         "search": {
-            "all_rooms": "Tutte le stanze",
             "all_rooms_button": "Cerca in tutte le stanze",
-            "field_placeholder": "Cerca…",
             "result_count": {
                 "other": "(~%(count)s risultati)",
                 "one": "(~%(count)s risultato)"
             },
-            "this_room": "Questa stanza",
             "this_room_button": "Cerca in questa stanza"
         },
         "show_labs_settings": "Mostra impostazioni Laboratori",
@@ -2641,7 +2638,6 @@
             "delete_backup_confirm_description": "Sei sicuro? Perderai i tuoi messaggi cifrati se non hai salvato adeguatamente le tue chiavi.",
             "e2ee_default_disabled_warning": "L'amministratore del server ha disattivato la crittografia end-to-end in modo predefinito nelle stanze private e nei messaggi diretti.",
             "enable_message_search": "Attiva la ricerca messaggi nelle stanze cifrate",
-            "encryption_individual_verification_mode": "Verifica individualmente ogni sessione usata da un utente per segnarla come fidata, senza fidarsi dei dispositivi a firma incrociata.",
             "encryption_section": "Crittografia",
             "error_loading_key_backup_status": "Impossibile caricare lo stato del backup delle chiavi",
             "export_megolm_keys": "Esporta chiavi E2E della stanza",
@@ -2660,7 +2656,6 @@
             "key_backup_inactive": "Questa sessione <b>non sta facendo il backup delle tue chiavi</b>, ma hai un backup esistente dal quale puoi ripristinare e che puoi usare da ora in poi.",
             "key_backup_inactive_warning": "Il backup chiavi <b>non viene fatto per questa sessione</b>.",
             "key_backup_latest_version": "Ultima versione del backup sul server:",
-            "manually_verify_all_sessions": "Verifica manualmente tutte le sessioni remote",
             "message_search_disable_warning": "Se disattivato, i messaggi delle stanze cifrate non appariranno nei risultati di ricerca.",
             "message_search_disabled": "Tieni in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca.",
             "message_search_enabled": {
@@ -3095,15 +3090,10 @@
             "one": "%(count)s risposta",
             "other": "%(count)s risposte"
         },
-        "empty_explainer": "Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili.",
-        "empty_has_threads_tip": "Rispondi ad una conversazione in corso o usa \"%(replyInThread)s\" passando sopra ad un messaggio per iniziarne una nuova.",
-        "empty_heading": "Tieni le discussioni organizzate in conversazioni",
-        "empty_tip": "<b>Consiglio:</b> usa \"%(replyInThread)s\" passando sopra un messaggio.",
         "error_start_thread_existing_relation": "Impossibile creare una conversazione da un evento con una relazione esistente",
         "my_threads": "Le mie conversazioni",
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
-        "show_all_threads": "Mostra tutte le conversazioni",
         "show_thread_filter": "Mostra:"
     },
     "threads_activity_centre": {
@@ -3681,7 +3671,6 @@
         },
         "redact_button": "Rimuovi i messaggi recenti",
         "revoke_invite": "Revoca invito",
-        "role_label": "Ruolo in <RoomName/>",
         "room_encrypted": "I messaggi in questa stanza sono cifrati end-to-end.",
         "room_encrypted_detail": "I tuoi messaggi sono protetti e solo tu ed il destinatario avete le chiavi univoche per sbloccarli.",
         "room_unencrypted": "I messaggi in questa stanza non sono cifrati end-to-end.",

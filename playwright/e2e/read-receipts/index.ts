@@ -402,7 +402,7 @@ class Helpers {
      * Close the threads panel.
      */
     async closeThreadsPanel() {
-        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
+        await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
         await expect(this.page.locator(".mx_RightPanel")).not.toBeVisible();
     }
 
@@ -410,7 +410,7 @@ class Helpers {
      * Return to the list of threads, given we are viewing a single thread.
      */
     async backToThreadsList() {
-        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
+        await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
     }
 
     /**
@@ -530,15 +530,14 @@ class Helpers {
         // whether it's open or not - wait here to give it a chance to settle.
         await this.page.waitForTimeout(200);
 
-        const ariaCurrent = await this.page.getByTestId("threadsButton").getAttribute("aria-current");
-        if (ariaCurrent !== "true") {
-            await this.page.getByTestId("threadsButton").click();
-        }
-
         const threadPanel = this.page.locator(".mx_ThreadPanel");
+        const isThreadPanelOpen = (await threadPanel.count()) !== 0;
+        if (!isThreadPanelOpen) {
+            await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
+        }
         await expect(threadPanel).toBeVisible();
         await threadPanel.evaluate(($panel) => {
-            const $button = $panel.querySelector<HTMLElement>('.mx_BaseCard_back[aria-label="Threads"]');
+            const $button = $panel.querySelector<HTMLElement>('[data-testid="base-card-back-button"]');
             // If the Threads back button is present then click it - the
             // threads button can open either threads list or thread panel
             if ($button) {

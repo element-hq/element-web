@@ -490,47 +490,22 @@ describe("DecryptionFailureTracker", function () {
 
         const now = Date.now();
 
-        const event1 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID,
-        });
-        tracker.addVisibleEvent(event1);
-        eventDecrypted(tracker, event1, now);
+        async function createAndTrackEventWithError(code: DecryptionFailureCode) {
+            const event = await createFailedDecryptionEvent({ code });
+            tracker.addVisibleEvent(event);
+            eventDecrypted(tracker, event, now);
+            return event;
+        }
 
-        const event2 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX,
-        });
-        tracker.addVisibleEvent(event2);
-        eventDecrypted(tracker, event2, now);
-
-        const event3 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP,
-        });
-        tracker.addVisibleEvent(event3);
-        eventDecrypted(tracker, event3, now);
-
-        const event4 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-        });
-        tracker.addVisibleEvent(event4);
-        eventDecrypted(tracker, event4, now);
-
-        const event5 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP,
-        });
-        tracker.addVisibleEvent(event5);
-        eventDecrypted(tracker, event5, now);
-
-        const event6 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED,
-        });
-        tracker.addVisibleEvent(event6);
-        eventDecrypted(tracker, event6, now);
-
-        const event7 = await createFailedDecryptionEvent({
-            code: DecryptionFailureCode.UNKNOWN_ERROR,
-        });
-        tracker.addVisibleEvent(event7);
-        eventDecrypted(tracker, event7, now);
+        await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID);
+        await createAndTrackEventWithError(DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX);
+        await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP);
+        await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED);
+        await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_WORKING_BACKUP);
+        await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED);
+        await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD);
+        await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE);
+        await createAndTrackEventWithError(DecryptionFailureCode.UNKNOWN_ERROR);
 
         // Pretend "now" is Infinity
         tracker.checkFailures(Infinity);
@@ -542,6 +517,8 @@ describe("DecryptionFailureTracker", function () {
             "HistoricalMessage",
             "HistoricalMessage",
             "ExpectedDueToMembership",
+            "OlmKeysNotSentError",
+            "RoomKeysWithheldForUnverifiedDevice",
             "UnknownError",
         ]);
     });
