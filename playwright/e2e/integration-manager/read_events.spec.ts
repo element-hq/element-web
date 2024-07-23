@@ -142,7 +142,7 @@ test.describe("Integration Manager: Read Events", () => {
 
         // Send a state event
         const sendEventResponse = await app.client.sendStateEvent(room.roomId, eventType, eventContent, stateKey);
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);
@@ -162,7 +162,7 @@ test.describe("Integration Manager: Read Events", () => {
 
         // Send a state event
         const sendEventResponse = await app.client.sendStateEvent(room.roomId, eventType, eventContent, stateKey);
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);
@@ -196,7 +196,7 @@ test.describe("Integration Manager: Read Events", () => {
             app.client.sendStateEvent(room.roomId, eventType, eventContent3, stateKey3),
         ]);
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(
@@ -217,11 +217,11 @@ test.describe("Integration Manager: Read Events", () => {
         await expect(iframe.locator("#message-response")).toContainText(`"content":${JSON.stringify(eventContent3)}`);
     });
 
-    test("should fail to read an event type which is not allowed", async ({ page, room }) => {
+    test("should fail to read an event type which is not allowed", async ({ page, app, room }) => {
         const eventType = "com.example.event";
         const stateKey = "";
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);

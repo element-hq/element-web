@@ -63,9 +63,9 @@ test.describe("RightPanel", () => {
             await app.closeDialog();
 
             // Close and reopen the right panel to render the room address
-            await page.getByRole("button", { name: "Room info" }).click();
+            await app.toggleRoomInfoPanel();
             await expect(page.locator(".mx_RightPanel")).not.toBeVisible();
-            await page.getByRole("button", { name: "Room info" }).click();
+            await app.toggleRoomInfoPanel();
 
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-name-and-address.png");
         });

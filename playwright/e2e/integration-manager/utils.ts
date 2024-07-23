@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { Page } from "@playwright/test";
+import type { ElementAppPage } from "../../pages/ElementAppPage";
 
-export async function openIntegrationManager(page: Page) {
-    await page.getByRole("button", { name: "Room info" }).click();
+export async function openIntegrationManager(app: ElementAppPage) {
+    const { page } = app;
+    await app.toggleRoomInfoPanel();
     await page
         .locator(".mx_RoomSummaryCard_appsGroup")
         .getByRole("button", { name: "Add widgets, bridges & bots" })

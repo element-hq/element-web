@@ -78,8 +78,9 @@ test.describe("Lazy Loading", () => {
         }
     }
 
-    async function openMemberlist(page: Page): Promise<void> {
-        await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Room info" }).click();
+    async function openMemberlist(app: ElementAppPage): Promise<void> {
+        await app.toggleRoomInfoPanel();
+        const { page } = app;
         await page.locator(".mx_RightPanelTabs").getByText("People").click();
     }
 
@@ -123,7 +124,7 @@ test.describe("Lazy Loading", () => {
         // Alice should see 2 messages from every charly with the correct display name
         await checkPaginatedDisplayNames(app, charly1to5);
 
-        await openMemberlist(page);
+        await openMemberlist(app);
         await checkMemberList(page, charly1to5);
         await joinCharliesWhileAliceIsOffline(page, app, charly6to10);
         await checkMemberList(page, charly6to10);

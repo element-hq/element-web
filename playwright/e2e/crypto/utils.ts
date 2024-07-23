@@ -330,15 +330,6 @@ export async function createRoom(page: Page, roomName: string, isEncrypted: bool
 }
 
 /**
- * Open the room info panel and return the panel element
- * @param page - the page to use
- */
-export const openRoomInfo = async (page: Page) => {
-    await page.getByRole("button", { name: "Room info" }).click();
-    return page.locator(".mx_RightPanel");
-};
-
-/**
  * Configure the given MatrixClient to auto-accept any invites
  * @param client - the client to configure
  */
@@ -357,10 +348,11 @@ export async function autoJoin(client: Client) {
  * @param page - the page to use
  * @param bob - the user to verify
  */
-export const verify = async (page: Page, bob: Bot) => {
+export const verify = async (app: ElementAppPage, bob: Bot) => {
+    const page = app.page;
     const bobsVerificationRequestPromise = waitForVerificationRequest(bob);
 
-    const roomInfo = await openRoomInfo(page);
+    const roomInfo = await app.toggleRoomInfoPanel();
     await page.locator(".mx_RightPanelTabs").getByText("People").click();
     await roomInfo.getByText("Bob").click();
     await roomInfo.getByRole("button", { name: "Verify" }).click();

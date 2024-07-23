@@ -224,7 +224,7 @@ test.describe("Cryptography", function () {
         await checkDMRoom(page);
         const bobRoomId = await bobJoin(page, bob);
         await testMessages(page, bob, bobRoomId);
-        await verify(page, bob);
+        await verify(app, bob);
 
         // Assert that verified icon is rendered
         await page.getByTestId("base-card-back-button").click();
@@ -246,6 +246,6 @@ test.describe("Cryptography", function () {
 
         // we need to have a room with the other user present, so we can open the verification panel
         await createSharedRoomWithUser(app, bob.credentials.userId);
-        await verify(page, bob);
+        await verify(app, bob);
     });
 });

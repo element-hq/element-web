@@ -118,8 +118,8 @@ test.describe("Integration Manager: Get OpenID Token", () => {
         await app.viewRoomByName(ROOM_NAME);
     });
 
-    test("should successfully obtain an openID token", async ({ page }) => {
-        await openIntegrationManager(page);
+    test("should successfully obtain an openID token", async ({ page, app }) => {
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl);
 
         const iframe = page.frameLocator(`iframe[src*="${integrationManagerUrl}"]`);

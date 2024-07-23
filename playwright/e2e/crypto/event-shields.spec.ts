@@ -104,7 +104,7 @@ test.describe("Cryptography", function () {
             await expect(lastTileE2eIcon).not.toBeVisible();
 
             /* Now verify Bob */
-            await verify(page, bob);
+            await verify(app, bob);
 
             /* Existing message should be updated when user is verified. */
             await expect(last).toContainText("test encrypted 1");
@@ -222,7 +222,7 @@ test.describe("Cryptography", function () {
             await bobSecondDevice.prepareClient();
 
             // verify Bob
-            await verify(page, bob);
+            await verify(app, bob);
 
             // bob sends a valid event
             const testEvent = await bob.sendMessage(testRoomId, "Hoo!");

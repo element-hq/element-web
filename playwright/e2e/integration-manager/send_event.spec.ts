@@ -137,7 +137,7 @@ test.describe("Integration Manager: Send Event", () => {
         );
 
         await app.viewRoomByName(ROOM_NAME);
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
     });
 
     test("should send a state event", async ({ page, app, room }) => {

@@ -31,7 +31,7 @@ test.describe("Create Knock Room", () => {
         await dialog.getByRole("option", { name: "Ask to join" }).click();
         await dialog.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page.locator(".mx_LegacyRoomHeader").getByText("Cybersecurity")).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
         const urlHash = await page.evaluate(() => window.location.hash);
         const roomId = urlHash.replace("#/room/", "");
@@ -48,7 +48,7 @@ test.describe("Create Knock Room", () => {
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page.locator(".mx_LegacyRoomHeader").getByText("Cybersecurity")).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
         const urlHash = await page.evaluate(() => window.location.hash);
         const roomId = urlHash.replace("#/room/", "");
@@ -74,7 +74,7 @@ test.describe("Create Knock Room", () => {
         await dialog.getByText("Make this room visible in the public room directory.").click();
         await dialog.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page.locator(".mx_LegacyRoomHeader").getByText("Cybersecurity")).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader").getByText("Cybersecurity")).toBeVisible();
 
         const urlHash = await page.evaluate(() => window.location.hash);
         const roomId = urlHash.replace("#/room/", "");

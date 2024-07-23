@@ -38,8 +38,8 @@ test.describe("Image Upload", () => {
             .locator(".mx_MessageComposer_actions input[type='file']")
             .setInputFiles("playwright/sample-files/riot.png");
 
-        expect(page.getByRole("button", { name: "Upload" })).toBeEnabled();
-        expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();
-        expect(page).toMatchScreenshot("image-upload-preview.png");
+        await expect(page.getByRole("button", { name: "Upload" })).toBeEnabled();
+        await expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();
+        await expect(page).toMatchScreenshot("image-upload-preview.png");
     });
 });

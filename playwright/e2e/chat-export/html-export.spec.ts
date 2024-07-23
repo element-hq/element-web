@@ -108,7 +108,7 @@ test.describe("HTML Export", () => {
             page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("Testing 9"),
         ).toBeVisible();
 
-        await page.getByRole("button", { name: "Room info" }).click();
+        await app.toggleRoomInfoPanel();
         await page.getByRole("menuitem", { name: "Export Chat" }).click();
 
         const downloadPromise = page.waitForEvent("download");

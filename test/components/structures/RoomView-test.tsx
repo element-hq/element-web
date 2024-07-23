@@ -524,35 +524,6 @@ describe("RoomView", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    describe("Peeking", () => {
-        beforeEach(() => {
-            // Make room peekable
-            room.currentState.setStateEvents([
-                new MatrixEvent({
-                    type: "m.room.history_visibility",
-                    state_key: "",
-                    content: {
-                        history_visibility: "world_readable",
-                    },
-                    room_id: room.roomId,
-                }),
-            ]);
-        });
-
-        it("should show forget room button for non-guests", async () => {
-            mocked(cli.isGuest).mockReturnValue(false);
-            await mountRoomView();
-
-            expect(screen.getByLabelText("Forget room")).toBeInTheDocument();
-        });
-
-        it("should not show forget room button for guests", async () => {
-            mocked(cli.isGuest).mockReturnValue(true);
-            await mountRoomView();
-            expect(screen.queryByLabelText("Forget room")).not.toBeInTheDocument();
-        });
-    });
-
     describe("knock rooms", () => {
         const client = createTestClient();
 

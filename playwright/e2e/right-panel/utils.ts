@@ -20,7 +20,7 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 
 export async function viewRoomSummaryByName(page: Page, app: ElementAppPage, name: string): Promise<void> {
     await app.viewRoomByName(name);
-    await page.getByRole("button", { name: "Room info" }).click();
+    await app.toggleRoomInfoPanel();
     return checkRoomSummaryCard(page, name);
 }
 

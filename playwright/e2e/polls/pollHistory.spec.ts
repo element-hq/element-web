@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { test, expect } from "../../element-web-test";
-import type { Page } from "@playwright/test";
 import type { Bot } from "../../pages/bot";
 import type { Client } from "../../pages/client";
+import { ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Poll history", () => {
     type CreatePollOptions = {
@@ -66,8 +66,9 @@ test.describe("Poll history", () => {
         });
     };
 
-    async function openPollHistory(page: Page): Promise<void> {
-        await page.getByRole("button", { name: "Room info" }).click();
+    async function openPollHistory(app: ElementAppPage): Promise<void> {
+        const { page } = app;
+        await app.toggleRoomInfoPanel();
         await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "Poll history" }).click();
     }
 
@@ -116,7 +117,7 @@ test.describe("Poll history", () => {
         await botVoteForOption(bot, roomId, pollId2, pollParams1.options[1].id);
         await endPoll(bot, roomId, pollId2);
 
-        await openPollHistory(page);
+        await openPollHistory(app);
 
         // these polls are also in the timeline
         // focus on the poll history dialog

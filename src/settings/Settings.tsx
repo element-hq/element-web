@@ -587,7 +587,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Rooms,
         displayName: _td("labs|new_room_decoration_ui"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("labs|new_room_decoration_ui_beta_title"),

@@ -252,7 +252,8 @@ test.describe("Threads", () => {
         await expect(locator.locator(".mx_ThreadSummary_content").getByText("How are things?")).toBeAttached();
 
         locator = page.getByRole("button", { name: "Threads" });
-        await expect(locator).toHaveClass(/mx_LegacyRoomHeader_button--unread/); // User asserts thread list unread indicator
+        await expect(locator).toHaveAttribute("data-indicator", "default"); // User asserts thread list unread indicator
+        // await expect(locator).toHaveClass(/mx_LegacyRoomHeader_button--unread/);
         await locator.click(); // User opens thread list
 
         // User asserts thread with correct root & latest events & unread dot
@@ -495,14 +496,12 @@ test.describe("Threads", () => {
         await createThread("Hello again Mr. Bot", "Hello again Mr. User in a thread");
 
         // Open thread panel
-        await page.getByTestId("threadsButton").click();
+        await page.locator(".mx_RoomHeader").getByRole("button", { name: "Threads" }).click();
         const threadPanel = page.locator(".mx_ThreadPanel");
         await expect(
             threadPanel.locator(".mx_EventTile_last").getByText("Hello again Mr. User in a thread"),
         ).toBeVisible();
 
-        // Open threads list
-        await page.getByTestId("base-card-back-button").click();
         const rightPanel = page.locator(".mx_RightPanel");
         // Check that the threads are listed
         await expect(rightPanel.locator(".mx_EventTile").getByText("Hello Mr. User in a thread")).toBeVisible();
