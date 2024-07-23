@@ -25,15 +25,15 @@ Element has several tiers of support for different environments:
     -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
         that are actively supported by the OS vendor and receive security updates
 -   Best effort
-    -   Definition: 
-        - Issues **accepted**, regressions **do not block** the release
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
         -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
         -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
-    - Last major release of Firefox ESR and Chrome/Edge Extended Stable
+    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
 -   Community Supported
-    -   Definition: 
-        - Issues **accepted**, regressions **do not block** the release
-        - Community contributions are welcome to support these issues
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
+        -   Community contributions are welcome to support these issues
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
     -   Definition: Issues only affecting unsupported environments are **closed**
