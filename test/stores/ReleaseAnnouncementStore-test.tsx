@@ -99,14 +99,18 @@ describe("ReleaseAnnouncementStore", () => {
         // Sanity check
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
 
-        const promise = listenReleaseAnnouncementChanged();
+        let promise = listenReleaseAnnouncementChanged();
         await releaseAnnouncementStore.nextReleaseAnnouncement();
-        // Currently there is only one feature, so the next feature should be null
+
+        expect(await promise).toBe("newRoomHeader");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomHeader");
+
+        promise = listenReleaseAnnouncementChanged();
+        await releaseAnnouncementStore.nextReleaseAnnouncement();
         expect(await promise).toBeNull();
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
 
         const secondStore = new ReleaseAnnouncementStore();
-        // The TAC release announcement has been viewed, so it should be updated in the store account
+        // All the release announcements have been viewed, so it should be updated in the store account
         // The release announcement viewing states should be share among all instances (devices in the same account)
         expect(secondStore.getReleaseAnnouncement()).toBeNull();
     });
@@ -118,8 +122,7 @@ describe("ReleaseAnnouncementStore", () => {
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        // Currently there is only one feature, so the next feature should be null
-        expect(await promise).toBeNull();
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
+        expect(await promise).toBe("newRoomHeader");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomHeader");
     });
 });
