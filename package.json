@@ -71,6 +71,7 @@
         "@types/react": "17.0.80"
     },
     "dependencies": {
+        "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/react-sdk-module-api": "^2.3.0",
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
