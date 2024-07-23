@@ -1024,7 +1024,7 @@ $left-gutter: 64px;
     $notification-dot-size: 8px; /* notification dot next to the timestamp */
 
     margin: calc(var(--topOffset) + $hrHeight) 0 var(--topOffset); /* include the height of horizontal line */
-    padding: $padding $spacing-24 $padding $padding;
+    padding: $padding;
     border-radius: $borderRadius;
 
     display: flex;
@@ -1039,7 +1039,7 @@ $left-gutter: 64px;
 
     &::after {
         $inset-block-start: auto;
-        $inset-inline-end: calc(32px - $padding);
+        $inset-inline-end: calc(-1 * var(--cpd-space-2x));
         $inset-block-end: calc(-1 * var(--topOffset) - $hrHeight); /* exclude the height of horizontal line */
         $inset-inline-start: calc(var(--leftOffset) + $padding);
         inset: $inset-block-start $inset-inline-end $inset-block-end $inset-inline-start;

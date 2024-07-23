@@ -36,7 +36,6 @@ import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
-import Heading from "../views/typography/Heading";
 import { clearRoomNotification } from "../../utils/notifications";
 import EmptyState from "../views/right_panel/EmptyState";
 
@@ -138,9 +137,6 @@ export const ThreadPanelHeader: React.FC<{
 
     return (
         <div className="mx_BaseCard_header_title">
-            <Heading size="4" className="mx_BaseCard_header_title_heading">
-                {_t("common|threads")}
-            </Heading>
             <Tooltip label={_t("threads|mark_all_read")}>
                 <IconButton onClick={onMarkAllThreadsReadClick} aria-label={_t("threads|mark_all_read")} size="24px">
                     <MarkAllThreadsReadIcon />
