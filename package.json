@@ -175,7 +175,7 @@
         "mkdirp": "^3.0.0",
         "modernizr": "^3.12.0",
         "node-fetch": "^2.6.7",
-        "postcss": "8.4.39",
+        "postcss": "8.4.38",
         "postcss-easings": "^4.0.0",
         "postcss-hexrgba": "2.1.0",
         "postcss-import": "16.1.0",
