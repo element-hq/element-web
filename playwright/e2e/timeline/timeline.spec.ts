@@ -1108,6 +1108,7 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 mask: [page.locator(".mx_MessageTimestamp")],
+                hideTooltips: true,
                 css: `
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
