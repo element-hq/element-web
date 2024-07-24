@@ -17,19 +17,29 @@ React SDK](https://github.com/matrix-org/matrix-react-sdk).
 Element has several tiers of support for different environments:
 
 -   Supported
-    -   Definition: Issues **actively triaged**, regressions **block** the release
+    -   Definition:
+        -   Issues **actively triaged**, regressions **block** the release
     -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
     -   Last 2 versions of Safari
     -   Latest release of official Element Desktop app on desktop OSes
     -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
         that are actively supported by the OS vendor and receive security updates
--   Experimental
-    -   Definition: Issues **accepted**, regressions **do not block** the release
-    -   Element as an installed PWA via current stable version of Chrome
+-   Best effort
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
+        -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
+    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
+-   Community Supported
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
+        -   Community contributions are welcome to support these issues
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
     -   Definition: Issues only affecting unsupported environments are **closed**
     -   Everything else
+
+The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
 
 For accessing Element on an Android or iOS device, we currently recommend the
 native apps [element-android](https://github.com/element-hq/element-android)
