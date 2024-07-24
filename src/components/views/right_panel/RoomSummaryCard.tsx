@@ -37,19 +37,19 @@ import {
     Search,
     Form,
 } from "@vector-im/compound-web";
-import { Icon as FavouriteIcon } from "@vector-im/compound-design-tokens/icons/favourite.svg";
+import FavouriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite";
 import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
-import { Icon as LinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
-import { Icon as SettingsIcon } from "@vector-im/compound-design-tokens/icons/settings.svg";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
+import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import { Icon as ExportArchiveIcon } from "@vector-im/compound-design-tokens/icons/export-archive.svg";
-import { Icon as LeaveIcon } from "@vector-im/compound-design-tokens/icons/leave.svg";
-import { Icon as FilesIcon } from "@vector-im/compound-design-tokens/icons/files.svg";
-import { Icon as PollsIcon } from "@vector-im/compound-design-tokens/icons/polls.svg";
-import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin.svg";
+import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
+import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
+import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import { Icon as LockIcon } from "@vector-im/compound-design-tokens/icons/lock-solid.svg";
 import { Icon as LockOffIcon } from "@vector-im/compound-design-tokens/icons/lock-off.svg";
-import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
-import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
+import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import { Icon as ChevronDownIcon } from "@vector-im/compound-design-tokens/icons/chevron-down.svg";
 import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 

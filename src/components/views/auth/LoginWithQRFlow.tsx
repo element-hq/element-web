@@ -22,7 +22,7 @@ import {
 } from "matrix-js-sdk/src/rendezvous";
 import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
 import { Icon as CheckCircleSolidIcon } from "@vector-im/compound-design-tokens/icons/check-circle-solid.svg";
-import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 

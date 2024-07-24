@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactNode, createRef, useCallback, useEffect, useState } from "react";
-import { Icon as EditIcon } from "@vector-im/compound-design-tokens/icons/edit.svg";
-import { Icon as UploadIcon } from "@vector-im/compound-design-tokens/icons/share.svg";
-import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import EditIcon from "@vector-im/compound-design-tokens/assets/web/icons/edit";
+import UploadIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import { Menu, MenuItem } from "@vector-im/compound-web";
 import classNames from "classnames";
 
