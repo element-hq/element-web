@@ -197,7 +197,7 @@
         "@typescript-eslint/parser": "^7.0.0",
         "axe-core": "4.9.1",
         "babel-jest": "^29.0.0",
-        "blob-polyfill": "^7.0.0",
+        "blob-polyfill": "^9.0.0",
         "eslint": "8.57.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",
