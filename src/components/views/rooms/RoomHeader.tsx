@@ -18,13 +18,13 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Body as BodyText, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
-import { Icon as CloseCallIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
 import { Icon as RoomInfoIcon } from "@vector-im/compound-design-tokens/icons/info-solid.svg";
 import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
-import { Icon as VerifiedIcon } from "@vector-im/compound-design-tokens/icons/verified.svg";
-import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
-import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
+import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 

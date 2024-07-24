@@ -28,7 +28,7 @@ import {
     TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Icon as FilesIcon } from "@vector-im/compound-design-tokens/icons/files.svg";
+import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";

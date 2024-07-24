@@ -35,17 +35,17 @@ import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/c
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { Heading, MenuItem, Text } from "@vector-im/compound-web";
-import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat.svg";
-import { Icon as CheckIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
-import { Icon as ShareIcon } from "@vector-im/compound-design-tokens/icons/share.svg";
-import { Icon as MentionIcon } from "@vector-im/compound-design-tokens/icons/mention.svg";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
+import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
 import { Icon as InviteIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
-import { Icon as BlockIcon } from "@vector-im/compound-design-tokens/icons/block.svg";
-import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
-import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { Icon as ChatProblemIcon } from "@vector-im/compound-design-tokens/icons/chat-problem.svg";
 import { Icon as VisibilityOffIcon } from "@vector-im/compound-design-tokens/icons/visibility-off.svg";
-import { Icon as LeaveIcon } from "@vector-im/compound-design-tokens/icons/leave.svg";
+import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";

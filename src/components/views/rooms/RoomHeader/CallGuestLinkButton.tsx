@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Icon as ExternalLinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
+import ExternalLinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import React, { useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";

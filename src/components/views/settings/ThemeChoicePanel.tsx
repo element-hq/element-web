@@ -26,7 +26,7 @@ import {
     ErrorMessage,
     HelpMessage,
 } from "@vector-im/compound-web";
-import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 

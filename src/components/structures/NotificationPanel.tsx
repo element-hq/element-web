@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications.svg";
+import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications";
 
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";

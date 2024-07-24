@@ -19,7 +19,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { EventTimelineSet, Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
+import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";

@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { Icon as SearchIcon } from "@vector-im/compound-design-tokens/icons/search.svg";
-import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { IconButton, Link } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
