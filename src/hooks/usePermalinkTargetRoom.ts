@@ -62,9 +62,9 @@ const findRoom = (roomIdOrAlias: string): Room | null => {
     const client = MatrixClientPeg.safeGet();
 
     return roomIdOrAlias[0] === "#"
-        ? client.getRooms().find((r) => {
+        ? (client.getRooms().find((r) => {
               return r.getCanonicalAlias() === roomIdOrAlias || r.getAltAliases().includes(roomIdOrAlias);
-          }) ?? null
+          }) ?? null)
         : client.getRoom(roomIdOrAlias);
 };
 

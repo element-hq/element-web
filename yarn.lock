@@ -3311,16 +3311,6 @@ array.prototype.flatmap@^1.3.2:
     es-abstract "^1.22.1"
     es-shim-unscopables "^1.0.0"
 
-array.prototype.toreversed@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/array.prototype.toreversed/-/array.prototype.toreversed-1.1.2.tgz#b989a6bf35c4c5051e1dc0325151bf8088954eba"
-  integrity sha512-wwDCoT4Ck4Cz7sLtgUmzR5UV3YF5mFHUlbChCzZBQZ+0m2cl/DH3tKgvphv1nKgFsJ48oCSg6p91q2Vm0I/ZMA==
-  dependencies:
-    call-bind "^1.0.2"
-    define-properties "^1.2.0"
-    es-abstract "^1.22.1"
-    es-shim-unscopables "^1.0.0"
-
 array.prototype.tosorted@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/array.prototype.tosorted/-/array.prototype.tosorted-1.1.4.tgz#fe954678ff53034e717ea3352a03f0b0b86f7ffc"
@@ -4627,28 +4617,28 @@ eslint-plugin-react-hooks@^4.3.0:
   integrity sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==
 
 eslint-plugin-react@^7.28.0:
-  version "7.34.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.34.3.tgz#9965f27bd1250a787b5d4cfcc765e5a5d58dcb7b"
-  integrity sha512-aoW4MV891jkUulwDApQbPYTVZmeuSyFrudpbTAQuj5Fv8VL+o6df2xIGpw8B0hPjAaih1/Fb0om9grCdyFYemA==
+  version "7.35.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.35.0.tgz#00b1e4559896710e58af6358898f2ff917ea4c41"
+  integrity sha512-v501SSMOWv8gerHkk+IIQBkcGRGrO2nfybfj5pLxuJNFTPxxA3PSryhXTK+9pNbtkggheDdsC0E9Q8CuPk6JKA==
   dependencies:
     array-includes "^3.1.8"
     array.prototype.findlast "^1.2.5"
     array.prototype.flatmap "^1.3.2"
-    array.prototype.toreversed "^1.1.2"
     array.prototype.tosorted "^1.1.4"
     doctrine "^2.1.0"
     es-iterator-helpers "^1.0.19"
     estraverse "^5.3.0"
+    hasown "^2.0.2"
     jsx-ast-utils "^2.4.1 || ^3.0.0"
     minimatch "^3.1.2"
     object.entries "^1.1.8"
     object.fromentries "^2.0.8"
-    object.hasown "^1.1.4"
     object.values "^1.2.0"
     prop-types "^15.8.1"
     resolve "^2.0.0-next.5"
     semver "^6.3.1"
     string.prototype.matchall "^4.0.11"
+    string.prototype.repeat "^1.0.0"
 
 eslint-plugin-unicorn@^54.0.0:
   version "54.0.0"
@@ -6793,9 +6783,9 @@ matrix-web-i18n@^3.2.1:
     walk "^2.3.15"
 
 matrix-widget-api@^1.5.0, matrix-widget-api@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.6.0.tgz#f0075411edffc6de339580ade7e6e6e6edb01af4"
-  integrity sha512-VXIJyAZ/WnBmT4C7ePqevgMYGneKMCP/0JuCOqntSsaNlCRHJvwvTxmqUU+ufOpzIF5gYNyIrAjbgrEbK3iqJQ==
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.7.0.tgz#ae3b44380f11bb03519d0bf0373dfc3341634667"
+  integrity sha512-dzSnA5Va6CeIkyWs89xZty/uv38HLyfjOrHGbbEikCa2ZV0HTkUNtrBMKlrn4CRYyDJ6yoO/3ssRwiR0jJvOkQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
@@ -7098,15 +7088,6 @@ object.groupby@^1.0.1:
     define-properties "^1.2.0"
     es-abstract "^1.22.1"
     get-intrinsic "^1.2.1"
-
-object.hasown@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/object.hasown/-/object.hasown-1.1.4.tgz#e270ae377e4c120cdcb7656ce66884a6218283dc"
-  integrity sha512-FZ9LZt9/RHzGySlBARE3VF+gE26TxR38SdmqOqliuTnl9wrKulaQs+4dee1V+Io8VfxqzAfHu6YuRgUy8OHoTg==
-  dependencies:
-    define-properties "^1.2.1"
-    es-abstract "^1.23.2"
-    es-object-atoms "^1.0.0"
 
 object.values@^1.1.6, object.values@^1.1.7, object.values@^1.2.0:
   version "1.2.0"
@@ -7441,10 +7422,10 @@ postcss@^8.4.39:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
-posthog-js@1.145.0:
-  version "1.145.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.145.0.tgz#5159459f02988b74407a1dd2b19469c422b31feb"
-  integrity sha512-LQdH6S2Ks3mnCI0q9aD5SZS0Uujc/90nuJuEeGDeGkWkVkYOSQJt4n0UHrIWEsZdmIKZf0a6OIBhTmO+yUiY3w==
+posthog-js@1.148.0:
+  version "1.148.0"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.148.0.tgz#c9a70dfc679d5fcb512c902b06044af72337f8eb"
+  integrity sha512-nydf+aret26YViDBwH7DdN/c8dmCzQGNQ1yredeE47UlbpJ3J/iTgskNdmGJIofFcdSagcwAE/FF7s++YfTtvg==
   dependencies:
     fflate "^0.4.8"
     preact "^10.19.3"
@@ -7465,10 +7446,10 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.2.tgz#03ff86dc7c835f2d2559ee76876a3914cec4a90a"
-  integrity sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==
+prettier@3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
+  integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
 
 pretty-format@^27.0.2:
   version "27.5.1"
@@ -7996,11 +7977,12 @@ rimraf@^3.0.2:
     glob "^7.1.3"
 
 rimraf@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-6.0.0.tgz#503bb3d9283272384c121792d40e7ee3ab763cde"
-  integrity sha512-u+yqhM92LW+89cxUQK0SRyvXYQmyuKHx0jkx4W7KfwLGLqJnQM5031Uv1trE4gB9XEXBM/s6MxKlfW95IidqaA==
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-6.0.1.tgz#ffb8ad8844dd60332ab15f52bc104bc3ed71ea4e"
+  integrity sha512-9dkvaxAsk/xNXSJzMgFqqMCuFgt2+KsOFek3TMLfo8NCPfWpBmqwyNn5Y+NX56QUYfCtsyhF3ayiboEoUmJk/A==
   dependencies:
     glob "^11.0.0"
+    package-json-from-dist "^1.0.0"
 
 run-parallel@^1.1.9:
   version "1.2.0"

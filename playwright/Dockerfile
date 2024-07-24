@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.45.1-jammy
+FROM mcr.microsoft.com/playwright:v1.45.3-jammy
 
 WORKDIR /work/matrix-react-sdk
 VOLUME ["/work/element-web/node_modules"]

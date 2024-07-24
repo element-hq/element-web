@@ -969,8 +969,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number | null): number {
         return readMarkerPosition === 0
-            ? this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs
-            : this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
+            ? (this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs)
+            : (this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs);
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {

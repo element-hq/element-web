@@ -143,7 +143,7 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                                     {header}
                                 </Text>
                             ) : (
-                                header ?? <div className="mx_BaseCard_header_spacer" />
+                                (header ?? <div className="mx_BaseCard_header_spacer" />)
                             )}
                             {closeButton}
                         </div>

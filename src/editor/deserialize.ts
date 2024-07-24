@@ -242,9 +242,11 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     if ((n as Element).hasAttribute("data-mx-maths")) {
                         const delims = SdkConfig.get().latex_maths_delims;
                         const delimLeft =
-                            n.nodeName === "SPAN" ? delims?.inline?.left ?? "\\(" : delims?.display?.left ?? "\\[";
+                            n.nodeName === "SPAN" ? (delims?.inline?.left ?? "\\(") : (delims?.display?.left ?? "\\[");
                         const delimRight =
-                            n.nodeName === "SPAN" ? delims?.inline?.right ?? "\\)" : delims?.display?.right ?? "\\]";
+                            n.nodeName === "SPAN"
+                                ? (delims?.inline?.right ?? "\\)")
+                                : (delims?.display?.right ?? "\\]");
                         const tex = (n as Element).getAttribute("data-mx-maths");
 
                         return pc.plainWithEmoji(`${delimLeft}${tex}${delimRight}`);
