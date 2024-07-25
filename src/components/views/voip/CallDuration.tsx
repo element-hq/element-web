@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, useState, useEffect, memo } from "react";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { formatPreciseDuration } from "../../../DateUtils";
 

@@ -30,14 +30,13 @@ import { randomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { IWidgetApiRequest } from "matrix-widget-api";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
-// eslint-disable-next-line no-restricted-imports
-import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
+import {
+    MatrixRTCSession,
+    MatrixRTCSessionEvent,
+    CallMembership,
+    MatrixRTCSessionManagerEvents,
+    ICallNotifyContent,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import type EventEmitter from "events";
 import type { ClientWidgetApi, IWidgetData } from "matrix-widget-api";

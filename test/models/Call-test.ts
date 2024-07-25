@@ -28,12 +28,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import {
+    CallMembership,
+    MatrixRTCSessionManagerEvents,
+    MatrixRTCSession,
+    MatrixRTCSessionEvent,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice, RoomMember } from "matrix-js-sdk/src/matrix";

@@ -26,10 +26,7 @@ import {
     SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/react";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
-// eslint-disable-next-line no-restricted-imports
-import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
+import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import BasePlatform from "../src/BasePlatform";
 import Notifier from "../src/Notifier";

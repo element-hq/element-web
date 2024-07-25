@@ -16,10 +16,7 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
 import type { GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";

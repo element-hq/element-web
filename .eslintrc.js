@@ -142,6 +142,7 @@ module.exports = {
                             "!matrix-js-sdk/src/models/read-receipt",
                             "!matrix-js-sdk/src/models/relations-container",
                             "!matrix-js-sdk/src/models/related-relations",
+                            "!matrix-js-sdk/src/matrixrtc",
                         ],
                         message: "Please use matrix-js-sdk/src/matrix instead",
                     },

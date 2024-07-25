@@ -32,10 +32,7 @@ import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";
 import { setupJestCanvasMock } from "jest-canvas-mock";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
 import type { MatrixClient, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { MatrixCall } from "matrix-js-sdk/src/webrtc/call";

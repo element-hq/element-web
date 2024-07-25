@@ -44,10 +44,7 @@ import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { MapperOpts } from "matrix-js-sdk/src/event-mapper";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManager } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { MatrixRTCSessionManager, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type { GroupCall } from "matrix-js-sdk/src/matrix";
 import type { Membership } from "matrix-js-sdk/src/types";
