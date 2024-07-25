@@ -3,63 +3,32 @@
 exports[`<ErrorView /> should match snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="mx_ErrorView"
+    class="mx_ErrorView cpd-theme-light"
   >
+    <img
+      alt="Element"
+      class="mx_ErrorView_logo"
+      height="160"
+      src="themes/element/img/logos/element-app-logo.png"
+    />
     <div
       class="mx_ErrorView_container"
     >
-      <div
-        class="mx_HomePage_header"
+      <h1
+        class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121"
       >
-        <span
-          class="mx_HomePage_logo"
-        >
-          <img
-            alt="Element"
-            height="42"
-            src="themes/element/img/logos/element-logo.svg"
-          />
-        </span>
-        <h1>
-          Failed to start
-        </h1>
-      </div>
-      <div
-        class="mx_HomePage_col"
+        TITLE
+      </h1>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
       >
-        <div
-          class="mx_HomePage_row"
-        >
-          <div>
-            <h2
-              id="step1_heading"
-            >
-              TITLE
-            </h2>
-            <p>
-              MSG1
-            </p>
-            <p>
-              MSG2
-            </p>
-          </div>
-        </div>
-      </div>
-      <div
-        class="mx_HomePage_row mx_Center mx_Spacer"
+        MSG1
+      </p>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
       >
-        <p
-          class="mx_Spacer"
-        >
-          <a
-            class="mx_FooterLink"
-            href="https://element.io"
-            target="_blank"
-          >
-            Go to element.io
-          </a>
-        </p>
-      </div>
+        MSG2
+      </p>
     </div>
   </div>
 </DocumentFragment>
