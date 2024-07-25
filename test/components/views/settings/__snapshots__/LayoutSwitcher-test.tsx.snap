@@ -102,7 +102,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     class="mx_MTextBody mx_EventTile_content"
                   >
                     <span
-                      class="mx_EventTile_body"
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!
@@ -218,7 +218,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     class="mx_MTextBody mx_EventTile_content"
                   >
                     <span
-                      class="mx_EventTile_body"
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!
@@ -334,7 +334,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                     class="mx_MTextBody mx_EventTile_content"
                   >
                     <span
-                      class="mx_EventTile_body"
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!

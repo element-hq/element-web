@@ -423,6 +423,8 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
         "mx_EventTile_body": true,
         "mx_EventTile_bigEmoji": emojiBody,
         "markdown-body": isHtmlMessage && !emojiBody,
+        // Override the global `notranslate` class set by the top-level `matrixchat` div.
+        "translate": true,
     });
 
     let emojiBodyElements: JSX.Element[] | undefined;
