@@ -37,7 +37,7 @@ export default defineConfig({
     },
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",
-    workers: process.env.CI ? "50%" : 1,
+    workers: 1,
     retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
