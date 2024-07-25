@@ -66,7 +66,7 @@ const MobileApps: React.FC<{
     let appleAppStoreButton: JSX.Element | undefined;
     if (appleAppStoreUrl) {
         appleAppStoreButton = (
-            <a href={appleAppStoreUrl} target="_blank" rel="noreferrer noopener" className="mx_ClearDecoration">
+            <a href={appleAppStoreUrl} target="_blank" rel="noreferrer noopener">
                 <img height="64" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
             </a>
         );
@@ -75,13 +75,7 @@ const MobileApps: React.FC<{
     let googlePlayButton: JSX.Element | undefined;
     if (googlePlayUrl) {
         googlePlayButton = (
-            <a
-                href={googlePlayUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="mx_ClearDecoration"
-                key="android"
-            >
+            <a href={googlePlayUrl} target="_blank" rel="noreferrer noopener" key="android">
                 <img height="64" src="themes/element/img/download/google.svg" alt="Google Play Store" />
             </a>
         );
@@ -90,7 +84,7 @@ const MobileApps: React.FC<{
     let fdroidButton: JSX.Element | undefined;
     if (fdroidUrl) {
         fdroidButton = (
-            <a href={fdroidUrl} target="_blank" rel="noreferrer noopener" className="mx_ClearDecoration" key="fdroid">
+            <a href={fdroidUrl} target="_blank" rel="noreferrer noopener" key="fdroid">
                 <img height="64" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
             </a>
         );
@@ -104,6 +98,14 @@ const MobileApps: React.FC<{
         </Flex>
     );
 };
+
+const linkFactory =
+    (link: string) =>
+    (text: string): JSX.Element => (
+        <a href={link} target="_blank" rel="noreferrer noopener">
+            {text}
+        </a>
+    );
 
 export const UnsupportedBrowserView: React.FC<{
     onAccept?(): void;
@@ -138,10 +140,10 @@ export const UnsupportedBrowserView: React.FC<{
                     "incompatible_browser|supported_browsers",
                     {},
                     {
-                        Chrome: (sub) => <a href="https://google.com/chrome">{sub}</a>,
-                        Firefox: (sub) => <a href="https://firefox.com">{sub}</a>,
-                        Edge: (sub) => <a href="https://microsoft.com/edge">{sub}</a>,
-                        Safari: (sub) => <a href="https://apple.com/safari">{sub}</a>,
+                        Chrome: linkFactory("https://google.com/chrome"),
+                        Firefox: linkFactory("https://firefox.com"),
+                        Edge: linkFactory("https://microsoft.com/edge"),
+                        Safari: linkFactory("https://apple.com/safari"),
                     },
                 )}
             </Text>
