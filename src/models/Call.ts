@@ -892,6 +892,10 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, async (ev) => {
+            ev.preventDefault();
+            await this.messaging!.transport.reply(ev.detail, {}); // ack
+        });
 
         if (!this.widget.data?.skipLobby) {
             // If we do not skip the lobby we need to wait until the widget has

@@ -965,6 +965,18 @@ describe("ElementCall", () => {
             expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
         });
 
+        it("acknowledges mute_device widget action", async () => {
+            await callConnectProcedure(call);
+            const preventDefault = jest.fn();
+            const mockEv = {
+                preventDefault,
+                detail: { video_enabled: false },
+            };
+            messaging.emit(`action:${ElementWidgetActions.DeviceMute}`, mockEv);
+            expect(messaging.transport.reply).toHaveBeenCalledWith({ video_enabled: false }, {});
+            expect(preventDefault).toHaveBeenCalled();
+        });
+
         it("emits events when connection state changes", async () => {
             // const wait = jest.spyOn(CallModule, "waitForEvent");
             const onConnectionState = jest.fn();
