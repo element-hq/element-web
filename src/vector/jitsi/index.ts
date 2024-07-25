@@ -195,18 +195,22 @@ const setupCompleted = (async (): Promise<string | void> => {
             handleAction(ElementWidgetActions.DeviceMute, async (params) => {
                 if (!meetApi) return;
 
+                const [audioEnabled, videoEnabled] = (
+                    await Promise.all([meetApi.isAudioMuted(), meetApi.isVideoMuted()])
+                ).map((muted) => !muted);
+
                 if (Object.keys(params).length === 0) {
                     // Handle query
                     return {
-                        audio_enabled: !(await meetApi.isAudioMuted()),
-                        video_enabled: !(await meetApi.isVideoMuted()),
+                        audio_enabled: audioEnabled,
+                        video_enabled: videoEnabled,
                     };
                 }
 
-                if (params.audio_enabled !== !(await meetApi.isAudioMuted())) {
+                if (params.audio_enabled !== audioEnabled) {
                     meetApi.executeCommand("toggleAudio");
                 }
-                if (params.video_enabled !== !(await meetApi.isVideoMuted())) {
+                if (params.video_enabled !== videoEnabled) {
                     meetApi.executeCommand("toggleVideo");
                 }
                 return params;
