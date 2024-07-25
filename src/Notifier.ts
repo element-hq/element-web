@@ -32,6 +32,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+// eslint-disable-next-line no-restricted-imports
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -505,10 +507,16 @@ class NotifierClass {
      * Some events require special handling such as showing in-app toasts
      */
     private performCustomEventHandling(ev: MatrixEvent): void {
+        const cli = MatrixClientPeg.safeGet();
+        const room = cli.getRoom(ev.getRoomId());
+        const thisUserHasConnectedDevice =
+            room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
+
         if (
             EventType.CallNotify === ev.getType() &&
             SettingsStore.getValue("feature_group_calls") &&
-            (ev.getAge() ?? 0) < 10000
+            (ev.getAge() ?? 0) < 10000 &&
+            !thisUserHasConnectedDevice
         ) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
