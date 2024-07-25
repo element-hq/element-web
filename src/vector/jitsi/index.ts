@@ -102,6 +102,14 @@ let widgetApi: WidgetApi | undefined;
 let meetApi: _JitsiMeetExternalAPI | undefined;
 let skipOurWelcomeScreen = false;
 
+async function checkAudioVideoEnabled(): Promise<[audioEnabled: boolean, videoEnabled: boolean]> {
+    if (!meetApi) return [false, false];
+    const [audioEnabled, videoEnabled] = (await Promise.all([meetApi.isAudioMuted(), meetApi.isVideoMuted()])).map(
+        (muted) => !muted,
+    );
+    return [audioEnabled, videoEnabled];
+}
+
 const setupCompleted = (async (): Promise<string | void> => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
@@ -195,9 +203,7 @@ const setupCompleted = (async (): Promise<string | void> => {
             handleAction(ElementWidgetActions.DeviceMute, async (params) => {
                 if (!meetApi) return;
 
-                const [audioEnabled, videoEnabled] = (
-                    await Promise.all([meetApi.isAudioMuted(), meetApi.isVideoMuted()])
-                ).map((muted) => !muted);
+                const [audioEnabled, videoEnabled] = await checkAudioVideoEnabled();
 
                 if (Object.keys(params).length === 0) {
                     // Handle query
@@ -526,9 +532,10 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
 
 const onMuteStatusChanged = async (): Promise<void> => {
     if (!meetApi) return;
+    const [audioEnabled, videoEnabled] = await checkAudioVideoEnabled();
     void widgetApi?.transport.send(ElementWidgetActions.DeviceMute, {
-        audio_enabled: !(await meetApi.isAudioMuted()),
-        video_enabled: !(await meetApi.isVideoMuted()),
+        audio_enabled: audioEnabled,
+        video_enabled: videoEnabled,
     });
 };
 
