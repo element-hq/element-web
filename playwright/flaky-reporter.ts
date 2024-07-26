@@ -25,6 +25,13 @@ const REPO = "element-hq/element-web";
 const LABEL = "Z-Flaky-Test";
 const ISSUE_TITLE_PREFIX = "Flaky playwright test: ";
 
+type PaginationLinks = {
+    prev?: string;
+    next?: string;
+    last?: string;
+    first?: string;
+};
+
 class FlakyReporter implements Reporter {
     private flakes = new Set<string>();
 
@@ -33,6 +40,54 @@ class FlakyReporter implements Reporter {
         if (test.outcome() === "flaky") {
             this.flakes.add(title);
         }
+    }
+
+    /**
+     * Parse link header to retrieve pagination links
+     * @see https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28#using-link-headers
+     * @param link link header from response or undefined
+     * @returns an empty object if link is undefined otherwise returns a map from type to link
+     */
+    private parseLinkHeader(link: string): PaginationLinks {
+        /**
+         * link looks like:
+         * <https://api.github.com/repositories/1300192/issues?page=2>; rel="prev", <https://api.github.com/repositories/1300192/issues?page=4>;
+         */
+        const map: PaginationLinks = {};
+        if (!link) return map;
+        const matches = link.matchAll(/(<(?<link>.+?)>; rel="(?<type>.+?)")/g);
+        for (const match of matches) {
+            const { link, type } = match.groups;
+            map[type] = link;
+        }
+        return map;
+    }
+
+    /**
+     * Fetch all flaky test issues that were updated since Jan-1-2024
+     * @returns A promise that resolves to a list of issues
+     */
+    async getAllIssues(): Promise<any[]> {
+        const issues = [];
+        const { GITHUB_TOKEN, GITHUB_API_URL } = process.env;
+        // See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-repository-issues
+        let url = `${GITHUB_API_URL}/repos/${REPO}/issues?labels=${LABEL}&state=all&per_page=100&sort=updated&since=2024-01-01`;
+        const headers = {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            Accept: "application / vnd.github + json",
+        };
+        while (url) {
+            // Fetch issues and add to list
+            const issuesResponse = await fetch(url, { headers });
+            const fetchedIssues = await issuesResponse.json();
+            issues.push(...fetchedIssues);
+
+            // Get the next link for fetching more results
+            const linkHeader = issuesResponse.headers.get("Link");
+            const parsed = this.parseLinkHeader(linkHeader);
+            url = parsed.next;
+        }
+        return issues;
     }
 
     public async onExit(): Promise<void> {
@@ -49,18 +104,12 @@ class FlakyReporter implements Reporter {
         const { GITHUB_TOKEN, GITHUB_API_URL, GITHUB_SERVER_URL, GITHUB_REPOSITORY, GITHUB_RUN_ID } = process.env;
         if (!GITHUB_TOKEN) return;
 
-        const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
-
-        const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
-        // Fetch all existing issues with the flaky-test label.
-        const issuesRequest = await fetch(
-            `${GITHUB_API_URL}/repos/${REPO}/issues?labels=${LABEL}&state=all&per_page=100&sort=created`,
-            { headers },
-        );
-        const issues = await issuesRequest.json();
+        const issues = await this.getAllIssues();
         for (const flake of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
+            const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
+            const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);

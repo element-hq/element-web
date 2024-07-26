@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2016",
+        "target": "es2018",
         "jsx": "react",
         "lib": ["ESNext", "es2021", "dom", "dom.iterable"],
         "resolveJsonModule": true,
