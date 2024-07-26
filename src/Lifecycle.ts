@@ -586,7 +586,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 
         const pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
         if (pickleKey) {
-            logger.log("Got pickle key");
+            logger.log("Got pickle key for ${userId}|${deviceId}");
         } else {
             logger.log("No pickle key available");
         }
@@ -658,7 +658,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
             : null;
 
     if (pickleKey) {
-        logger.log("Created pickle key");
+        logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
     } else {
         logger.log("Pickle key not created");
     }
