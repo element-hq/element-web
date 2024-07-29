@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
 import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
@@ -56,6 +57,25 @@ enum BackupStatus {
 
 interface IState {
     backupStatus: BackupStatus;
+}
+
+/**
+ * Checks if the `LogoutDialog` should be shown instead of the simple logout flow.
+ * The `LogoutDialog` will check the crypto recovery status of the account and
+ * help the user setup recovery properly if needed.
+ */
+export async function shouldShowLogoutDialog(cli: MatrixClient): Promise<boolean> {
+    const crypto = cli?.getCrypto();
+    if (!crypto) return false;
+
+    // If any room is encrypted, we need to show the advanced logout flow
+    const allRooms = cli!.getRooms();
+    for (const room of allRooms) {
+        const isE2e = await crypto.isEncryptionEnabledInRoom(room.roomId);
+        if (isE2e) return true;
+    }
+
+    return false;
 }
 
 export default class LogoutDialog extends React.Component<IProps, IState> {

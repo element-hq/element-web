@@ -18,6 +18,7 @@ import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "r
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import { Icon as PopOutIcon } from "@vector-im/compound-design-tokens/icons/pop-out.svg";
+import { Icon as SignOutIcon } from "@vector-im/compound-design-tokens/icons/sign-out.svg";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -31,6 +32,10 @@ import { useId } from "../../../utils/useId";
 import CopyableText from "../elements/CopyableText";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "../elements/AccessibleButton";
+import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
+import Modal from "../../../Modal";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Flex } from "../../utils/Flex";
 
 const SpinnerToast: React.FC = ({ children }) => (
     <>
@@ -75,6 +80,25 @@ const ManageAccountButton: React.FC<ManageAccountButtonProps> = ({ externalAccou
         {_t("settings|general|oidc_manage_button")}
     </AccessibleButton>
 );
+
+const SignOutButton: React.FC = () => {
+    const client = useMatrixClientContext();
+
+    const onClick = useCallback(async () => {
+        if (await shouldShowLogoutDialog(client)) {
+            Modal.createDialog(LogoutDialog);
+        } else {
+            defaultDispatcher.dispatch({ action: "logout" });
+        }
+    }, [client]);
+
+    return (
+        <AccessibleButton onClick={onClick} kind="danger_outline">
+            <SignOutIcon className="mx_UserProfileSettings_accountmanageIcon" width="24" height="24" />
+            {_t("action|sign_out")}
+        </AccessibleButton>
+    );
+};
 
 interface UserProfileSettingsProps {
     // The URL to redirect the user to in order to manage their account.
@@ -219,11 +243,12 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                 </Alert>
             )}
             {userIdentifier && <UsernameBox username={userIdentifier} />}
-            {externalAccountManagementUrl && (
-                <div className="mx_UserProfileSettings_profile_buttons">
+            <Flex gap="var(--cpd-space-4x)" className="mx_UserProfileSettings_profile_buttons">
+                {externalAccountManagementUrl && (
                     <ManageAccountButton externalAccountManagementUrl={externalAccountManagementUrl} />
-                </div>
-            )}
+                )}
+                <SignOutButton />
+            </Flex>
         </div>
     );
 };

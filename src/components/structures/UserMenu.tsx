@@ -27,7 +27,7 @@ import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
-import LogoutDialog from "../views/dialogs/LogoutDialog";
+import LogoutDialog, { shouldShowLogoutDialog } from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import { findHighContrastTheme, getCustomTheme, isHighContrastTheme } from "../../theme";
 import { RovingAccessibleButton } from "../../accessibility/RovingTabIndex";
@@ -288,7 +288,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (await this.shouldShowLogoutDialog()) {
+        if (await shouldShowLogoutDialog(MatrixClientPeg.safeGet())) {
             Modal.createDialog(LogoutDialog);
         } else {
             defaultDispatcher.dispatch({ action: "logout" });
@@ -296,27 +296,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
-
-    /**
-     * Checks if the `LogoutDialog` should be shown instead of the simple logout flow.
-     * The `LogoutDialog` will check the crypto recovery status of the account and
-     * help the user setup recovery properly if needed.
-     * @private
-     */
-    private async shouldShowLogoutDialog(): Promise<boolean> {
-        const cli = MatrixClientPeg.get();
-        const crypto = cli?.getCrypto();
-        if (!crypto) return false;
-
-        // If any room is encrypted, we need to show the advanced logout flow
-        const allRooms = cli!.getRooms();
-        for (const room of allRooms) {
-            const isE2e = await crypto.isEncryptionEnabledInRoom(room.roomId);
-            if (isE2e) return true;
-        }
-
-        return false;
-    }
 
     private onSignInClick = (): void => {
         defaultDispatcher.dispatch({ action: "start_login" });

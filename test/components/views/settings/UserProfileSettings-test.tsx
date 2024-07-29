@@ -18,12 +18,15 @@ import React, { ChangeEvent } from "react";
 import { act, render, screen } from "@testing-library/react";
 import { MatrixClient, UploadResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import UserProfileSettings from "../../../../src/components/views/settings/UserProfileSettings";
-import { stubClient } from "../../../test-utils";
+import { mkStubRoom, stubClient } from "../../../test-utils";
 import { ToastContext, ToastRack } from "../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import dis from "../../../../src/dispatcher/dispatcher";
+import Modal from "../../../../src/Modal";
 
 interface MockedAvatarSettingProps {
     removeAvatar: () => void;
@@ -42,6 +45,11 @@ jest.mock(
             return <div>Mocked AvatarSetting</div>;
         }) as React.FC<MockedAvatarSettingProps>,
 );
+
+jest.mock("../../../../src/dispatcher/dispatcher", () => ({
+    dispatch: jest.fn(),
+    register: jest.fn(),
+}));
 
 let editInPlaceOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
 let editInPlaceOnSave: () => void;
@@ -208,5 +216,31 @@ describe("ProfileSettings", () => {
         });
 
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
+    });
+
+    it("signs out directly if no rooms are encrypted", async () => {
+        renderProfileSettings(toastRack, client);
+
+        const signOutButton = await screen.findByText("Sign out");
+        await userEvent.click(signOutButton);
+
+        expect(dis.dispatch).toHaveBeenCalledWith({ action: "logout" });
+    });
+
+    it("displays confirmation dialog if rooms are encrypted", async () => {
+        jest.spyOn(Modal, "createDialog");
+
+        const mockRoom = mkStubRoom("!test:room", "Test Room", client);
+        client.getRooms = jest.fn().mockReturnValue([mockRoom]);
+        client.getCrypto = jest.fn().mockReturnValue({
+            isEncryptionEnabledInRoom: jest.fn().mockReturnValue(true),
+        });
+
+        renderProfileSettings(toastRack, client);
+
+        const signOutButton = await screen.findByText("Sign out");
+        await userEvent.click(signOutButton);
+
+        expect(Modal.createDialog).toHaveBeenCalled();
     });
 });
