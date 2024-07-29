@@ -83,6 +83,7 @@ import {
     tryDecryptToken,
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
+import { checkBrowserSupport } from "./SupportedBrowser";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -1001,6 +1002,7 @@ async function startMatrixClient(
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
     LegacyCallHandler.instance.start();
+    checkBrowserSupport();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
     // the thing just wastes CPU cycles, but should result in no actual functionality

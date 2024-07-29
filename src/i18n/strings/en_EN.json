@@ -3694,6 +3694,10 @@
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
     },
+    "unsupported_browser": {
+        "description": "If you continue, some features may stop working and there is a risk that you may lose data in the future. Update your browser to continue using %(brand)s.",
+        "title": "%(brand)s does not support this browser"
+    },
     "unsupported_server_description": "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.",
     "unsupported_server_title": "Your server is unsupported",
     "update": {

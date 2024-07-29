@@ -42,14 +42,14 @@ const getDeviceType = (
     browser: UAParser.IBrowser,
     operatingSystem: UAParser.IOS,
 ): DeviceType => {
+    if (device.type === "mobile" || operatingSystem.name?.includes("Android") || userAgent.indexOf(IOS_KEYWORD) > -1) {
+        return DeviceType.Mobile;
+    }
     if (browser.name === "Electron") {
         return DeviceType.Desktop;
     }
     if (!!browser.name) {
         return DeviceType.Web;
-    }
-    if (device.type === "mobile" || operatingSystem.name?.includes("Android") || userAgent.indexOf(IOS_KEYWORD) > -1) {
-        return DeviceType.Mobile;
     }
     return DeviceType.Unknown;
 };
