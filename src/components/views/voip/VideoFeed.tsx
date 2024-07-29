@@ -193,7 +193,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         });
 
         let micIcon;
-        if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !primary && !pipMode) {
+        if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !pipMode) {
             micIcon = <div className={micIconClasses} />;
         }
 
