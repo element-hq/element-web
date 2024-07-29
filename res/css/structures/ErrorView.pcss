@@ -30,7 +30,7 @@ limitations under the License.
     padding: var(--cpd-space-20x);
 
     background-color: var(--cpd-color-theme-bg);
-    background-image: url("../../themes/element/img/backgrounds/compound-fade-arc-light.png");
+    background-image: url("../../themes/element/img/compound/fade-arc-light.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
@@ -49,13 +49,23 @@ limitations under the License.
         color: var(--cpd-color-text-primary);
     }
 
+    h2 {
+        margin: var(--cpd-space-8x) 0;
+        /* Workaround for heading sm being broken in Compound design tokens */
+        font-size: var(--cpd-font-size-heading-sm);
+        line-height: var(--cpd-font-line-height-tight);
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+
     p {
         color: var(--cpd-color-text-secondary);
     }
 
     .mx_Flex {
         margin: 0 auto;
-        width: max-content;
+        max-width: max-content;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
     }
 
     .mx_ErrorView_buttons {

@@ -27,9 +27,14 @@
         "detail_can_continue": "If you continue, some features may stop working and there is a risk that you may lose data in the future.",
         "detail_no_continue": "Try updating this browser if you're not using the latest version and try again.",
         "learn_more": "Learn more",
+        "linux": "Linux",
+        "macos": "Mac",
         "supported_browsers": "For the best experience, use <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge>, or <Safari>Safari</Safari>.",
         "title": "%(brand)s does not support this browser",
-        "use_mobile_heading": "Use %(brand)s on mobile instead"
+        "use_desktop_heading": "Use %(brand)s Desktop instead",
+        "use_mobile_heading": "Use %(brand)s on mobile instead",
+        "use_mobile_heading_after_desktop": "Or use our mobile app",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "powered_by_matrix": "Powered by Matrix",
     "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
