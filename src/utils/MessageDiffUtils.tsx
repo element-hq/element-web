@@ -22,7 +22,7 @@ import { IContent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { unescape } from "lodash";
 
-import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
+import { bodyToHtml, checkBlockNode, EventRenderOpts } from "../HtmlUtils";
 
 function textToHtml(text: string): string {
     const container = document.createElement("div");
@@ -31,9 +31,8 @@ function textToHtml(text: string): string {
 }
 
 function getSanitizedHtmlBody(content: IContent): string {
-    const opts: IOptsReturnString = {
+    const opts: EventRenderOpts = {
         stripReplyFallback: true,
-        returnString: true,
     };
     if (content.format === "org.matrix.custom.html") {
         return bodyToHtml(content, null, opts);

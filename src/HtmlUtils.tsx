@@ -246,23 +246,6 @@ class HtmlHighlighter extends BaseHighlighter<string> {
     }
 }
 
-interface IOpts {
-    highlightLink?: string;
-    disableBigEmoji?: boolean;
-    stripReplyFallback?: boolean;
-    returnString?: boolean;
-    forComposerQuote?: boolean;
-    ref?: React.Ref<HTMLSpanElement>;
-}
-
-export interface IOptsReturnNode extends IOpts {
-    returnString?: false | undefined;
-}
-
-export interface IOptsReturnString extends IOpts {
-    returnString: true;
-}
-
 const emojiToHtmlSpan = (emoji: string): string =>
     `<span class='mx_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
 const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
@@ -307,35 +290,36 @@ export function formatEmojis(message: string | undefined, isHtmlMessage?: boolea
     return result;
 }
 
-/* turn a matrix event body into html
- *
- * content: 'content' of the MatrixEvent
- *
- * highlights: optional list of words to highlight, ordered by longest word first
- *
- * opts.highlightLink: optional href to add to highlighted words
- * opts.disableBigEmoji: optional argument to disable the big emoji class.
- * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
- * opts.returnString: return an HTML string rather than JSX elements
- * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
- * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
- */
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnString): string;
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnNode): ReactNode;
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}): ReactNode | string {
-    const isFormattedBody = content.format === "org.matrix.custom.html" && typeof content.formatted_body === "string";
-    let bodyHasEmoji = false;
-    let isHtmlMessage = false;
+interface EventAnalysis {
+    bodyHasEmoji: boolean;
+    isHtmlMessage: boolean;
+    strippedBody: string;
+    safeBody?: string; // safe, sanitised HTML, preferred over `strippedBody` which is fully plaintext
+    isFormattedBody: boolean;
+}
 
+export interface EventRenderOpts {
+    highlightLink?: string;
+    disableBigEmoji?: boolean;
+    stripReplyFallback?: boolean;
+    forComposerQuote?: boolean;
+    ref?: React.Ref<HTMLSpanElement>;
+}
+
+function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
     let sanitizeParams = sanitizeHtmlParams;
     if (opts.forComposerQuote) {
         sanitizeParams = composerSanitizeHtmlParams;
     }
 
-    let strippedBody: string;
-    let safeBody: string | undefined; // safe, sanitised HTML, preferred over `strippedBody` which is fully plaintext
-
     try {
+        const isFormattedBody =
+            content.format === "org.matrix.custom.html" && typeof content.formatted_body === "string";
+        let bodyHasEmoji = false;
+        let isHtmlMessage = false;
+
+        let safeBody: string | undefined; // safe, sanitised HTML, preferred over `strippedBody` which is fully plaintext
+
         // sanitizeHtml can hang if an unclosed HTML tag is thrown at it
         // A search for `<foo` will make the browser crash an alternative would be to escape HTML special characters
         // but that would bring no additional benefit as the highlighter does not work with those special chars
@@ -347,7 +331,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
         const plainBody = typeof content.body === "string" ? content.body : "";
 
         if (opts.stripReplyFallback && formattedBody) formattedBody = stripHTMLReply(formattedBody);
-        strippedBody = opts.stripReplyFallback ? stripPlainReply(plainBody) : plainBody;
+        const strippedBody = opts.stripReplyFallback ? stripPlainReply(plainBody) : plainBody;
         bodyHasEmoji = mightContainEmoji(isFormattedBody ? formattedBody! : plainBody);
 
         const highlighter = safeHighlights?.length
@@ -384,13 +368,19 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
         } else if (highlighter) {
             safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
+
+        return { bodyHasEmoji, isHtmlMessage, strippedBody, safeBody, isFormattedBody };
     } finally {
         delete sanitizeParams.textFilter;
     }
+}
+
+export function bodyToNode(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): ReactNode {
+    const eventInfo = analyseEvent(content, highlights, opts);
 
     let emojiBody = false;
-    if (!opts.disableBigEmoji && bodyHasEmoji) {
-        const contentBody = safeBody ?? strippedBody;
+    if (!opts.disableBigEmoji && eventInfo.bodyHasEmoji) {
+        const contentBody = eventInfo.safeBody ?? eventInfo.strippedBody;
         let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : "";
 
         // Remove zero width joiner, zero width spaces and other spaces in body
@@ -405,46 +395,68 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
             // Prevent user pills expanding for users with only emoji in
             // their username. Permalinks (links in pills) can be any URL
             // now, so we just check for an HTTP-looking thing.
-            (strippedBody === safeBody || // replies have the html fallbacks, account for that here
+            (eventInfo.strippedBody === eventInfo.safeBody || // replies have the html fallbacks, account for that here
                 content.formatted_body === undefined ||
                 (!content.formatted_body.includes("http:") && !content.formatted_body.includes("https:")));
-    }
-
-    if (isFormattedBody && bodyHasEmoji && safeBody) {
-        // This has to be done after the emojiBody check above as to not break big emoji on replies
-        safeBody = formatEmojis(safeBody, true).join("");
-    }
-
-    if (opts.returnString) {
-        return safeBody ?? strippedBody;
     }
 
     const className = classNames({
         "mx_EventTile_body": true,
         "mx_EventTile_bigEmoji": emojiBody,
-        "markdown-body": isHtmlMessage && !emojiBody,
+        "markdown-body": eventInfo.isHtmlMessage && !emojiBody,
         // Override the global `notranslate` class set by the top-level `matrixchat` div.
         "translate": true,
     });
 
-    let emojiBodyElements: JSX.Element[] | undefined;
-    if (!safeBody && bodyHasEmoji) {
-        emojiBodyElements = formatEmojis(strippedBody, false) as JSX.Element[];
+    let formattedBody = eventInfo.safeBody;
+    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && eventInfo.safeBody) {
+        // This has to be done after the emojiBody check as to not break big emoji on replies
+        formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
     }
 
-    return safeBody ? (
+    let emojiBodyElements: JSX.Element[] | undefined;
+    if (!eventInfo.safeBody && eventInfo.bodyHasEmoji) {
+        emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
+    }
+
+    return formattedBody ? (
         <span
             key="body"
             ref={opts.ref}
             className={className}
-            dangerouslySetInnerHTML={{ __html: safeBody }}
+            dangerouslySetInnerHTML={{ __html: formattedBody }}
             dir="auto"
         />
     ) : (
         <span key="body" ref={opts.ref} className={className} dir="auto">
-            {emojiBodyElements || strippedBody}
+            {emojiBodyElements || eventInfo.strippedBody}
         </span>
     );
+}
+
+/**
+ * Turn a matrix event body into html
+ *
+ * content: 'content' of the MatrixEvent
+ *
+ * highlights: optional list of words to highlight, ordered by longest word first
+ *
+ * opts.highlightLink: optional href to add to highlighted words
+ * opts.disableBigEmoji: optional argument to disable the big emoji class.
+ * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
+ * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
+ * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
+ */
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): string {
+    const eventInfo = analyseEvent(content, highlights, opts);
+
+    let formattedBody = eventInfo.safeBody;
+    if (eventInfo.isFormattedBody && eventInfo.bodyHasEmoji && formattedBody) {
+        // This has to be done after the emojiBody check above as to not break big emoji on replies
+        formattedBody = formatEmojis(eventInfo.safeBody, true).join("");
+    }
+
+    return formattedBody ?? eventInfo.strippedBody;
 }
 
 /**

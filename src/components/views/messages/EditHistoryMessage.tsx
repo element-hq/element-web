@@ -172,9 +172,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToHtml(content, null, {
+                contentElements = HtmlUtils.bodyToNode(content, null, {
                     stripReplyFallback: true,
-                    returnString: false,
                 });
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
