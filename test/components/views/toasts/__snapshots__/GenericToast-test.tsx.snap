@@ -14,20 +14,24 @@ exports[`GenericToast should render as expected with detail content 1`] = `
       aria-live="off"
       class="mx_Toast_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+      <button
+        class="_button_zt6rp_17"
+        data-kind="secondary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Reject
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      </button>
+      <button
+        class="_button_zt6rp_17"
+        data-kind="primary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Accept
-      </div>
+      </button>
     </div>
   </div>
 </DocumentFragment>
@@ -52,20 +56,24 @@ exports[`GenericToast should render as expected without detail content 1`] = `
       aria-live="off"
       class="mx_Toast_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+      <button
+        class="_button_zt6rp_17"
+        data-kind="secondary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Reject
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      </button>
+      <button
+        class="_button_zt6rp_17"
+        data-kind="primary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Accept
-      </div>
+      </button>
     </div>
   </div>
 </DocumentFragment>

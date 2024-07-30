@@ -1390,8 +1390,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     title: userNotice.title,
                     props: {
                         description: <Linkify>{userNotice.description}</Linkify>,
-                        acceptLabel: _t("action|ok"),
-                        onAccept: () => {
+                        primaryLabel: _t("action|ok"),
+                        onPrimaryClick: () => {
                             ToastStore.sharedInstance().dismissToast(key);
                             localStorage.setItem(key, "1");
                         },

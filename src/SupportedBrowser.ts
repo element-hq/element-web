@@ -17,6 +17,7 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 import browserlist from "browserslist";
 import electronToChromium from "electron-to-chromium/versions";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import { DeviceType, parseUserAgent } from "./utils/device/parseUserAgent";
 import ToastStore from "./stores/ToastStore";
@@ -112,10 +113,11 @@ export function checkBrowserSupport(): void {
         title: _t("unsupported_browser|title", { brand }),
         props: {
             description: _t("unsupported_browser|description", { brand }),
-            acceptLabel: _t("action|learn_more"),
-            onAccept: onLearnMoreClick,
-            rejectLabel: _t("action|dismiss"),
-            onReject: onDismissClick,
+            secondaryLabel: _t("action|learn_more"),
+            SecondaryIcon: PopOutIcon,
+            onSecondaryClick: onLearnMoreClick,
+            primaryLabel: _t("action|dismiss"),
+            onPrimaryClick: onDismissClick,
         },
         component: GenericToast,
         priority: 40,

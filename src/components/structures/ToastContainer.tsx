@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import classNames from "classnames";
+import { Text } from "@vector-im/compound-web";
 
 import ToastStore, { IToast } from "../../stores/ToastStore";
 
@@ -78,7 +79,9 @@ export default class ToastContainer extends React.Component<{}, IState> {
             if (title) {
                 titleElement = (
                     <div className="mx_Toast_title">
-                        <h2>{title}</h2>
+                        <Text size="lg" weight="semibold" as="h2">
+                            {title}
+                        </Text>
                         <span className="mx_Toast_title_countIndicator">{countIndicator}</span>
                     </div>
                 );

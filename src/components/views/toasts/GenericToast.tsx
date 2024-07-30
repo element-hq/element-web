@@ -14,31 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ComponentType, ReactNode } from "react";
+import { Button } from "@vector-im/compound-web";
 
-import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 
 export interface IProps {
     description: ReactNode;
     detail?: ReactNode;
-    acceptLabel: string;
+    primaryLabel: string;
+    PrimaryIcon?: ComponentType<React.SVGAttributes<SVGElement>>;
 
-    onAccept(): void;
+    onPrimaryClick(): void;
 }
 
 interface IPropsExtended extends IProps {
-    rejectLabel: string;
-    onReject(): void;
+    secondaryLabel: string;
+    SecondaryIcon?: ComponentType<React.SVGAttributes<SVGElement>>;
+    destructive?: "primary" | "secondary";
+    onSecondaryClick(): void;
 }
 
 const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     description,
     detail,
-    acceptLabel,
-    rejectLabel,
-    onAccept,
-    onReject,
+    primaryLabel,
+    PrimaryIcon,
+    secondaryLabel,
+    SecondaryIcon,
+    destructive,
+    onPrimaryClick,
+    onSecondaryClick,
 }) => {
     const detailContent = detail ? <div className="mx_Toast_detail">{detail}</div> : null;
 
@@ -49,14 +55,24 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
                 {detailContent}
             </div>
             <div className="mx_Toast_buttons" aria-live="off">
-                {onReject && rejectLabel && (
-                    <AccessibleButton kind="danger_outline" onClick={onReject}>
-                        {rejectLabel}
-                    </AccessibleButton>
+                {onSecondaryClick && secondaryLabel && (
+                    <Button
+                        onClick={onSecondaryClick}
+                        kind={destructive === "secondary" ? "destructive" : "secondary"}
+                        Icon={SecondaryIcon}
+                        size="sm"
+                    >
+                        {secondaryLabel}
+                    </Button>
                 )}
-                <AccessibleButton onClick={onAccept} kind="primary">
-                    {acceptLabel}
-                </AccessibleButton>
+                <Button
+                    onClick={onPrimaryClick}
+                    kind={destructive === "primary" ? "destructive" : "primary"}
+                    Icon={PrimaryIcon}
+                    size="sm"
+                >
+                    {primaryLabel}
+                </Button>
             </div>
         </div>
     );

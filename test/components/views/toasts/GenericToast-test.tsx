@@ -21,11 +21,11 @@ import GenericToast from "../../../../src/components/views/toasts/GenericToast";
 
 const renderGenericToast = (props: Partial<ComponentProps<typeof GenericToast>> = {}): RenderResult => {
     const propsWithDefaults = {
-        acceptLabel: "Accept",
+        primaryLabel: "Accept",
         description: <div>Description</div>,
-        onAccept: () => {},
-        onReject: () => {},
-        rejectLabel: "Reject",
+        onPrimaryClick: () => {},
+        onSecondaryClick: () => {},
+        secondaryLabel: "Reject",
         ...props,
     };
 

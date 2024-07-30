@@ -114,8 +114,8 @@ async function checkServerVersions(): Promise<void> {
                     version: MINIMUM_MATRIX_VERSION,
                     brand: SdkConfig.get().brand,
                 }),
-                acceptLabel: _t("action|ok"),
-                onAccept: () => {
+                primaryLabel: _t("action|ok"),
+                onPrimaryClick: () => {
                     ToastStore.sharedInstance().dismissToast(toastKey);
                 },
             },

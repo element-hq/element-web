@@ -13,7 +13,9 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
         <div
           class="mx_Toast_title"
         >
-          <h2>
+          <h2
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+          >
             New login. Was this you?
           </h2>
           <span
@@ -47,20 +49,24 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
               aria-live="off"
               class="mx_Toast_buttons"
             >
-              <div
-                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+              <button
+                class="_button_zt6rp_17 _destructive_zt6rp_111"
+                data-kind="secondary"
+                data-size="sm"
                 role="button"
                 tabindex="0"
               >
                 No
-              </div>
-              <div
-                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              </button>
+              <button
+                class="_button_zt6rp_17"
+                data-kind="primary"
+                data-size="sm"
                 role="button"
                 tabindex="0"
               >
                 Yes, it was me
-              </div>
+              </button>
             </div>
           </div>
         </div>

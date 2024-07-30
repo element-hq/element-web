@@ -87,10 +87,10 @@ export const showToast = (): void => {
         // them to opt in again.
         props = {
             description: _t("analytics|consent_migration"),
-            acceptLabel: _t("analytics|accept_button"),
-            onAccept,
-            rejectLabel: _t("action|learn_more"),
-            onReject: onLearnMorePreviouslyOptedIn,
+            primaryLabel: _t("analytics|accept_button"),
+            onPrimaryClick: onAccept,
+            secondaryLabel: _t("action|learn_more"),
+            onSecondaryClick: onLearnMorePreviouslyOptedIn,
         };
     } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
@@ -102,10 +102,10 @@ export const showToast = (): void => {
         );
         props = {
             description: _t("analytics|learn_more", {}, { LearnMoreLink: learnMoreLink }),
-            acceptLabel: _t("action|yes"),
-            onAccept,
-            rejectLabel: _t("action|no"),
-            onReject,
+            primaryLabel: _t("action|yes"),
+            onPrimaryClick: onAccept,
+            secondaryLabel: _t("action|no"),
+            onSecondaryClick: onReject,
         };
     } else {
         // false

@@ -45,7 +45,7 @@ export class Toasts {
      */
     public async acceptToast(expectedTitle: string): Promise<void> {
         const toast = await this.getToast(expectedTitle);
-        await toast.locator(".mx_Toast_buttons .mx_AccessibleButton_kind_primary").click();
+        await toast.locator('.mx_Toast_buttons button[data-kind="primary"]').click();
     }
 
     /**
@@ -55,6 +55,6 @@ export class Toasts {
      */
     public async rejectToast(expectedTitle: string): Promise<void> {
         const toast = await this.getToast(expectedTitle);
-        await toast.locator(".mx_Toast_buttons .mx_AccessibleButton_kind_danger_outline").click();
+        await toast.locator('.mx_Toast_buttons button[data-kind="secondary"]').click();
     }
 }

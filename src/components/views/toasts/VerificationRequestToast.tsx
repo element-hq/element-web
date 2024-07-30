@@ -185,14 +185,14 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             <GenericToast
                 description={description}
                 detail={detail}
-                acceptLabel={
+                primaryLabel={
                     request.isSelfVerification || !request.roomId
                         ? _t("encryption|verification|request_toast_accept")
                         : _t("encryption|verification|request_toast_accept_user")
                 }
-                onAccept={this.accept}
-                rejectLabel={declineLabel}
-                onReject={this.cancel}
+                onPrimaryClick={this.accept}
+                secondaryLabel={declineLabel}
+                onSecondaryClick={this.cancel}
             />
         );
     }

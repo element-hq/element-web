@@ -31,9 +31,9 @@ const SECOND = 1000;
 
 const GenericExpiringToast: React.FC<IProps> = ({
     description,
-    acceptLabel,
+    primaryLabel,
     dismissLabel,
-    onAccept,
+    onPrimaryClick,
     onDismiss,
     toastKey,
     numSeconds,
@@ -52,10 +52,10 @@ const GenericExpiringToast: React.FC<IProps> = ({
     return (
         <GenericToast
             description={description}
-            acceptLabel={acceptLabel}
-            onAccept={onAccept}
-            rejectLabel={rejectLabel}
-            onReject={onReject}
+            primaryLabel={primaryLabel}
+            onPrimaryClick={onPrimaryClick}
+            secondaryLabel={rejectLabel}
+            onSecondaryClick={onReject}
         />
     );
 };

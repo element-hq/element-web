@@ -80,7 +80,7 @@ describe("LifecycleStore", () => {
 
         await sleep(0);
 
-        addOrReplaceToast.mock.calls[0][0].props.onAccept();
+        addOrReplaceToast.mock.calls[0][0].props.onPrimaryClick();
 
         expect(dismissToast).toHaveBeenCalledWith(addOrReplaceToast.mock.calls[0][0].key);
     });

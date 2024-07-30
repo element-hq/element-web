@@ -3017,7 +3017,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.6.1.tgz#3f1bb5b2b9f8aff10144aab19dfa11165c3c927b"
   integrity sha512-u5xG/8AN7QkPPWhugj0ZrQtWsAjuKHzuOoP0s3bbDg7ZkKTE9l5tM29bdOHnSv9mEYKO+KVMMfsl0W1rlaTmAw==
 
-"@vector-im/compound-web@^5.4.0":
+"@vector-im/compound-web@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-5.5.0.tgz#c646cd8c59aa7e5df527d843ad3b7b7c064d5224"
   integrity sha512-Z+QSXOkJE4/LYk9j9FMVE2m5noz3gEA4yRxetjSJyXB5mDpyIJ1OYAweuZJXS3foxqygVDeB82YgTw1JgDtUvg==

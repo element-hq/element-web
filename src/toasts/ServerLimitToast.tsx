@@ -47,8 +47,8 @@ export const showToast = (
                     {errorText} {contactText}
                 </React.Fragment>
             ),
-            acceptLabel: _t("action|ok"),
-            onAccept: () => {
+            primaryLabel: _t("action|ok"),
+            onPrimaryClick: () => {
                 hideToast();
                 if (onHideToast) onHideToast();
             },

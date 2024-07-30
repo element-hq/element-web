@@ -12,20 +12,24 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
       aria-live="off"
       class="mx_Toast_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+      <button
+        class="_button_zt6rp_17"
+        data-kind="secondary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Ignore
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      </button>
+      <button
+        class="_button_zt6rp_17"
+        data-kind="primary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Verify Session
-      </div>
+      </button>
     </div>
   </div>
 </div>
@@ -48,20 +52,24 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
       aria-live="off"
       class="mx_Toast_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+      <button
+        class="_button_zt6rp_17"
+        data-kind="secondary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Ignore
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      </button>
+      <button
+        class="_button_zt6rp_17"
+        data-kind="primary"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
         Verify Session
-      </div>
+      </button>
     </div>
   </div>
 </div>
