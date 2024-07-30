@@ -167,6 +167,10 @@ Starting with `desktop_builds`, the following subproperties are available:
 1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
 2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
 3. `url`: Required. The download URL for the app. This is used as a hyperlink.
+4. `url_macos`: Optional. Direct link to download macOS desktop app.
+5. `url_win32`: Optional. Direct link to download Windows 32-bit desktop app.
+6. `url_win64`: Optional. Direct link to download Windows 64-bit desktop app.
+7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
 

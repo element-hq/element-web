@@ -16,8 +16,9 @@ limitations under the License.
 
 import * as React from "react";
 import { render } from "@testing-library/react";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
-import ErrorView from "../../../../src/async-components/structures/ErrorView";
+import { ErrorView, UnsupportedBrowserView } from "../../../../src/async-components/structures/ErrorView";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 
 describe("<ErrorView />", () => {
@@ -27,6 +28,18 @@ describe("<ErrorView />", () => {
 
     it("should match snapshot", () => {
         const { asFragment } = render(<ErrorView title="TITLE" messages={["MSG1", "MSG2"]} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe("<UnsupportedBrowserView />", () => {
+    beforeEach(() => {
+        setupLanguageMock();
+        SdkConfig.put({});
+    });
+
+    it("should match snapshot", () => {
+        const { asFragment } = render(<UnsupportedBrowserView />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

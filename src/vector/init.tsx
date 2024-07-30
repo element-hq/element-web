@@ -109,12 +109,10 @@ export async function loadApp(fragParams: {}): Promise<void> {
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
-    const ErrorView = (
-        await import(
-            /* webpackChunkName: "error-view" */
-            "../async-components/structures/ErrorView"
-        )
-    ).default;
+    const { ErrorView } = await import(
+        /* webpackChunkName: "error-view" */
+        "../async-components/structures/ErrorView"
+    );
     window.matrixChat = ReactDOM.render(
         <ErrorView title={title} messages={messages} />,
         document.getElementById("matrixchat"),
@@ -122,14 +120,12 @@ export async function showError(title: string, messages?: string[]): Promise<voi
 }
 
 export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
-    const CompatibilityView = (
-        await import(
-            /* webpackChunkName: "compatibility-view" */
-            "../async-components/structures/CompatibilityView"
-        )
-    ).default;
+    const { UnsupportedBrowserView } = await import(
+        /* webpackChunkName: "error-view" */
+        "../async-components/structures/ErrorView"
+    );
     window.matrixChat = ReactDOM.render(
-        <CompatibilityView onAccept={onAccept} />,
+        <UnsupportedBrowserView onAccept={onAccept} />,
         document.getElementById("matrixchat"),
     );
 }
