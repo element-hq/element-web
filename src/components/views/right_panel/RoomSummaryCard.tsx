@@ -101,6 +101,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
 import { useTransition } from "../../../hooks/useTransition";
+import { useIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps {
     room: Room;
@@ -416,10 +417,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useContext(RoomContext);
     const e2eStatus = roomContext.e2eStatus;
-    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
-    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const isVideoRoom =
-        videoRoomsEnabled && (room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom()));
+    const isVideoRoom = useIsVideoRoom(room);
 
     const roomState = useRoomState(room);
     const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);

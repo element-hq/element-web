@@ -23,9 +23,9 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { useRoomState } from "../../../hooks/useRoomState";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { useRoomMemberCount, useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
+import { useIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps {
     room: Room;
@@ -45,8 +45,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     const membership = useMyRoomMembership(room);
     const memberCount = useRoomMemberCount(room);
 
-    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const isVideoRoom = room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom());
+    const isVideoRoom = useIsVideoRoom(room, true);
 
     let iconClass: string;
     let roomType: string;

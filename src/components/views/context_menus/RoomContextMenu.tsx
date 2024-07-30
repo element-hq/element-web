@@ -52,6 +52,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { tagRoom } from "../../../utils/room/tagRoom";
+import { useIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -113,10 +114,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     }
 
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
-    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const isVideoRoom =
-        videoRoomsEnabled && (room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom()));
+    const isVideoRoom = useIsVideoRoom(room);
     const canInvite = useEventEmitterState(cli, RoomMemberEvent.PowerLevel, () => room.canInvite(cli.getUserId()!));
     let inviteOption: JSX.Element | undefined;
     if (canInvite && !isDm && shouldShowComponent(UIComponent.InviteUsers)) {
