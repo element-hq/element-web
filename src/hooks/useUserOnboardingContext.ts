@@ -18,15 +18,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Notifier } from "../Notifier";
+import { Notifier, NotifierEvent } from "../Notifier";
 import DMRoomMap from "../utils/DMRoomMap";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
+import { useSettingValue } from "./useSettings";
+import { useEventEmitter } from "./useEventEmitter";
 
 export interface UserOnboardingContext {
     hasAvatar: boolean;
     hasDevices: boolean;
     hasDmRooms: boolean;
-    hasNotificationsEnabled: boolean;
+    showNotificationsPrompt: boolean;
 }
 
 const USER_ONBOARDING_CONTEXT_INTERVAL = 5000;
@@ -82,6 +84,18 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
     return value;
 }
 
+function useShowNotificationsPrompt(): boolean {
+    const [value, setValue] = useState<boolean>(Notifier.shouldShowPrompt());
+    useEventEmitter(Notifier, NotifierEvent.NotificationHiddenChange, () => {
+        setValue(Notifier.shouldShowPrompt());
+    });
+    const setting = useSettingValue("notificationsEnabled");
+    useEffect(() => {
+        setValue(Notifier.shouldShowPrompt());
+    }, [setting]);
+    return value;
+}
+
 export function useUserOnboardingContext(): UserOnboardingContext {
     const hasAvatar = useUserOnboardingContextValue(false, async (cli) => {
         const profile = await cli.getProfileInfo(cli.getUserId()!);
@@ -96,12 +110,10 @@ export function useUserOnboardingContext(): UserOnboardingContext {
         const dmRooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals() ?? {};
         return Boolean(Object.keys(dmRooms).length);
     });
-    const hasNotificationsEnabled = useUserOnboardingContextValue(false, async () => {
-        return Notifier.isPossible();
-    });
+    const showNotificationsPrompt = useShowNotificationsPrompt();
 
     return useMemo(
-        () => ({ hasAvatar, hasDevices, hasDmRooms, hasNotificationsEnabled }),
-        [hasAvatar, hasDevices, hasDmRooms, hasNotificationsEnabled],
+        () => ({ hasAvatar, hasDevices, hasDmRooms, showNotificationsPrompt }),
+        [hasAvatar, hasDevices, hasDmRooms, showNotificationsPrompt],
     );
 }

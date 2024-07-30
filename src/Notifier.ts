@@ -29,6 +29,7 @@ import {
     IRoomTimelineData,
     M_LOCATION,
     EventType,
+    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
@@ -103,7 +104,15 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     },
 };
 
-class NotifierClass {
+export const enum NotifierEvent {
+    NotificationHiddenChange = "notification_hidden_change",
+}
+
+interface EmittedEvents {
+    [NotifierEvent.NotificationHiddenChange]: (hidden: boolean) => void;
+}
+
+class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
     // A list of event IDs that we've received but need to wait until
@@ -357,6 +366,7 @@ class NotifierClass {
         if (persistent && global.localStorage) {
             global.localStorage.setItem("notifications_hidden", String(hidden));
         }
+        this.emit(NotifierEvent.NotificationHiddenChange, hidden);
     }
 
     public shouldShowPrompt(): boolean {
