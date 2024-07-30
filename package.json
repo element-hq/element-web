@@ -74,7 +74,7 @@
         "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/react-sdk-module-api": "^2.3.0",
         "@vector-im/compound-design-tokens": "^1.6.1",
-        "@vector-im/compound-web": "^5.4.0",
+        "@vector-im/compound-web": "^5.5.0",
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
         "lodash": "^4.17.21",
