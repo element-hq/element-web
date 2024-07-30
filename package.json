@@ -68,7 +68,11 @@
     },
     "resolutions": {
         "@types/react-dom": "17.0.25",
-        "@types/react": "17.0.80"
+        "@types/react": "17.0.80",
+        "@vector-im/compound-design-tokens": "1.7.0",
+        "@vector-im/compound-web": "5.5.0",
+        "@floating-ui/react": "0.26.11",
+        "@radix-ui/react-id": "1.1.0"
     },
     "dependencies": {
         "@formatjs/intl-segmenter": "^11.5.7",
