@@ -37,7 +37,7 @@ test.describe("Registration", () => {
 
         await expect(page.getByRole("textbox", { name: "Username", exact: true })).toBeVisible();
         // Hide the server text as it contains the randomly allocated Homeserver port
-        const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
+        const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")], includeDialogBackground: true };
         await expect(page).toMatchScreenshot("registration.png", screenshotOptions);
         await checkA11y();
 

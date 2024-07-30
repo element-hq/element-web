@@ -40,6 +40,6 @@ test.describe("Image Upload", () => {
 
         await expect(page.getByRole("button", { name: "Upload" })).toBeEnabled();
         await expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();
-        await expect(page).toMatchScreenshot("image-upload-preview.png");
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("image-upload-preview.png");
     });
 });

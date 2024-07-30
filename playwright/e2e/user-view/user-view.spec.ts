@@ -30,6 +30,12 @@ test.describe("UserView", () => {
         await expect(rightPanel.getByText("1 session")).toBeVisible();
         await expect(rightPanel).toMatchScreenshot("user-info.png", {
             mask: [page.locator(".mx_UserInfo_profile_mxid")],
+            css: `
+                /* Use monospace font for consistent mask width */
+                .mx_UserInfo_profile_mxid {
+                    font-family: Inconsolata !important;
+                }
+            `,
         });
     });
 });

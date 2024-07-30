@@ -44,7 +44,7 @@ test.describe("Appearance user settings tab", () => {
         // -4 value is 12px
         await fontDropdown.getByLabel("Font size").selectOption({ value: "-4" });
 
-        await expect(page).toMatchScreenshot("window-12px.png");
+        await expect(page).toMatchScreenshot("window-12px.png", { includeDialogBackground: true });
     });
 
     test("should support enabling system font", async ({ page, app, user }) => {
