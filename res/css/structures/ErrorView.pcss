@@ -14,94 +14,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* import font-size variables manually,
-   ideally this file would get loaded by the theme which has all variables in context */
-@import "../../../node_modules/matrix-react-sdk/res/css/_font-sizes.pcss";
-
 .mx_ErrorView {
-    background: #c5e0f7;
-    background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
-    background: -webkit-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
-    background: linear-gradient(to bottom, #c5e0f7 0%, #ffffff 100%);
-    /* stylelint-disable-next-line function-no-unknown */
-    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#c5e0f7', endColorstr='#ffffff', GradientType=0);
+    --width: 520px;
+    --cpd-separator-inset: calc(50% - (var(--width) / 2));
+    --cpd-separator-spacing: var(--cpd-space-8x);
+
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    color: #000;
+    text-align: center;
+    color: var(--cpd-color-text-primary);
     width: 100%;
     height: 100%;
-    overflow: auto;
-    padding: 0 20px;
     box-sizing: border-box;
+    overflow: auto;
+    padding: var(--cpd-space-20x);
+
+    background-color: var(--cpd-color-theme-bg);
+    background-image: url("../../themes/element/img/compound/fade-arc-light.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    .mx_ErrorView_logo {
+        display: block;
+        margin: 0 auto;
+    }
 
     .mx_ErrorView_container {
-        max-width: 680px;
-        margin: auto;
-    }
-
-    .mx_Button {
-        border: 0;
-        border-radius: 4px;
-        font-size: $font-18px;
-        margin-left: 4px;
-        margin-right: 4px;
-        min-width: 80px;
-        background-color: #03b381;
-        color: #fff;
-        cursor: pointer;
-        padding: 12px 22px;
-        word-break: break-word;
-        text-decoration: none;
-    }
-
-    .mx_Center {
-        justify-content: center;
-    }
-
-    .mx_HomePage_header {
-        color: #2e2f32;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    font-size: $font-16px;
-    h1 {
-        font-size: $font-32px;
-    }
-    h2 {
-        font-size: $font-24px;
-        color: #000;
-    }
-
-    .mx_HomePage_col {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .mx_HomePage_row {
-        flex: 1 1 0;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .mx_HomePage_logo {
-        margin: auto 20px auto 0;
+        max-width: var(--width);
+        margin: 0 auto var(--cpd-space-8x);
     }
 
     h1,
     h2 {
-        font-weight: 600;
-        margin-bottom: 32px;
+        color: var(--cpd-color-text-primary);
     }
 
-    .mx_Spacer {
-        margin-top: 24px;
+    h2 {
+        margin: var(--cpd-space-8x) 0;
+        /* Workaround for heading sm being broken in Compound design tokens */
+        font-size: var(--cpd-font-size-heading-sm);
+        line-height: var(--cpd-font-line-height-tight);
+        font-weight: var(--cpd-font-weight-semibold);
     }
 
-    .mx_FooterLink {
-        color: #368bd6;
-        text-decoration: none;
+    p {
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_Flex {
+        margin: 0 auto;
+        max-width: max-content;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .mx_ErrorView_buttons {
+        margin-top: var(--cpd-space-6x);
     }
 }

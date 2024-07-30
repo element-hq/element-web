@@ -21,20 +21,24 @@
         "invalid_json_generic": "Invalid JSON",
         "misconfigured": "Your Element is misconfigured"
     },
-    "failed_to_start": "Failed to start",
-    "go_to_element_io": "Go to element.io",
     "incompatible_browser": {
-        "browser_links": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
-        "continue_warning": "I understand the risks and wish to continue",
-        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-        "summary": "Your browser can't run %(brand)s",
-        "title": "Unsupported browser"
+        "continue": "Continue anyway",
+        "description": "%(brand)s uses some browser features which are not available in your current browser. %(detail)s",
+        "detail_can_continue": "If you continue, some features may stop working and there is a risk that you may lose data in the future.",
+        "detail_no_continue": "Try updating this browser if you're not using the latest version and try again.",
+        "learn_more": "Learn more",
+        "linux": "Linux",
+        "macos": "Mac",
+        "supported_browsers": "For the best experience, use <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge>, or <Safari>Safari</Safari>.",
+        "title": "%(brand)s does not support this browser",
+        "use_desktop_heading": "Use %(brand)s Desktop instead",
+        "use_mobile_heading": "Use %(brand)s on mobile instead",
+        "use_mobile_heading_after_desktop": "Or use our mobile app",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "powered_by_matrix": "Powered by Matrix",
     "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Unknown device",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Welcome to Element"
 }
