@@ -75,6 +75,10 @@ export interface IConfigOptions {
         available: boolean;
         logo: string; // url
         url: string; // download url
+        url_macos?: string;
+        url_win64?: string;
+        url_win32?: string;
+        url_linux?: string;
     };
     mobile_builds: {
         ios: string | null; // download url

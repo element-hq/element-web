@@ -35,7 +35,7 @@ test(`shows error page if browser lacks WebAssembly support`, async ({ page }) =
 
     // Lack of WebAssembly support doesn't cause the bundle to fail loading, so we get
     // CompatibilityView, i.e. no iframes.
-    const header = page.getByText("Unsupported browser");
+    const header = page.getByText("Element does not support this browser");
     await expect(header).toBeVisible();
 
     await expect(page).toMatchScreenshot("unsupported-browser-CompatibilityView.png");
