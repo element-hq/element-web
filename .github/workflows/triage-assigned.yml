@@ -14,5 +14,5 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/orgs/vector-im/projects/67
+                  project-url: https://github.com/orgs/element-hq/projects/67
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

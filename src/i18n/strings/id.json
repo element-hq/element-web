@@ -9,6 +9,7 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Buka peramban Anda untuk menyelesaikan Sign In"
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Unduhan Selesai",
     "error": {
         "app_launch_unexpected_error": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",

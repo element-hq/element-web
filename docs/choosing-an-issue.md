@@ -18,12 +18,12 @@ If you're looking for inspiration on where to start, keep reading!
 ## Finding a good first issue
 
 All the issues for Element Web live in the
-[element-web](https://github.com/vector-im/element-web) repository, including
+[element-web](https://github.com/element-hq/element-web) repository, including
 issues that actually need fixing in `matrix-react-sdk` or one of the related
 repos.
 
 The first place to look is for
-[issues tagged with "good first issue"](https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+[issues tagged with "good first issue"](https://github.com/element-hq/element-web/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 Look through that list and find something that catches your interest. If there
 is nothing, there, try gently asking in
@@ -38,8 +38,8 @@ issue a **GOOD** choice:
 -   You think you can understand what's needed.
 -   It already has approval from Element Web's designers (look for comments from
     members of the
-    [Product](https://github.com/orgs/vector-im/teams/product/members) or
-    [Design](https://github.com/orgs/vector-im/teams/design/members) teams).
+    [Product](https://github.com/orgs/element-hq/teams/product/members) or
+    [Design](https://github.com/orgs/element-hq/teams/design/members) teams).
 
 Here are some things that might make it a **BAD** choice:
 
@@ -57,7 +57,7 @@ way the product works, or how it looks in a specific area.
 Once you've fixed a few small things, you can consider taking on something a
 little larger. This should mostly be driven by what you find interesting, but
 you may also find the
-[Help Wanted](https://github.com/vector-im/element-web/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22Help+Wanted%22)
+[Help Wanted](https://github.com/element-hq/element-web/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22Help+Wanted%22)
 label useful.
 
 Note that the same comment applies as in the previous section: if you want to

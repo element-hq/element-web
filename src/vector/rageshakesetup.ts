@@ -35,7 +35,7 @@ export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
     const prom = rageshake.init(/*setUpPersistence=*/ false);
     prom.then(
-        () => {
+        async () => {
             logger.log("Initialised rageshake.");
             logger.log(
                 "To fix line numbers in Chrome: " +
@@ -48,7 +48,7 @@ export function initRageshake(): Promise<void> {
                 rageshake.flush();
             });
 
-            rageshake.cleanup();
+            await rageshake.cleanup();
         },
         (err) => {
             logger.error("Failed to initialise rageshake: " + err);

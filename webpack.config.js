@@ -8,14 +8,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
-const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
-const crypto = require("crypto");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-
-// XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
-// of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
-const createHash = crypto.createHash;
-crypto.createHash = (algorithm, options) => createHash(algorithm === "md4" ? "sha256" : algorithm, options);
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -67,7 +60,7 @@ try {
         console.log(""); // blank line
         console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
-        console.warn("!! See https://github.com/vector-im/element-web/blob/develop/docs/customisations.md !!");
+        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
         console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(""); // blank line
     });
@@ -160,6 +153,10 @@ module.exports = (env, argv) => {
             mobileguide: "./src/vector/mobile_guide/index.ts",
             jitsi: "./src/vector/jitsi/index.ts",
             usercontent: "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
+            serviceworker: {
+                import: "./src/serviceworker/index.ts",
+                filename: "sw.js", // update WebPlatform if this changes
+            },
             ...(useHMR ? {} : cssThemes),
         },
 
@@ -198,7 +195,17 @@ module.exports = (env, argv) => {
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new CssMinimizerPlugin()] : [],
+            minimizer: enableMinification
+                ? [
+                      new TerserPlugin({
+                          // Already minified and includes an auto-generated license comment
+                          // that the plugin would otherwise pointlessly extract into a separate
+                          // file. We add the actual license using CopyWebpackPlugin below.
+                          exclude: "jitsi_external_api.min.js",
+                      }),
+                      new CssMinimizerPlugin(),
+                  ]
+                : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -267,10 +274,6 @@ module.exports = (env, argv) => {
                 // there is no need for webpack to parse them - they can just be
                 // included as-is.
                 /highlight\.js[\\/]lib[\\/]languages/,
-
-                // olm takes ages for webpack to process, and it's already heavily
-                // optimised, so there is little to gain by us uglifying it.
-                /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
                 useHMR && {
@@ -309,6 +312,7 @@ module.exports = (env, argv) => {
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: true,
+                        plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
                     },
                 },
                 {
@@ -320,41 +324,44 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use significantly fewer plugins on the plain
-                                    // CSS parser. If we start to parse plain CSS, we end with all
-                                    // kinds of nasty problems (like stylesheets not loading).
-                                    //
-                                    // You might have noticed that we're also sending regular CSS
-                                    // through PostCSS. This looks weird, and in fact is probably
-                                    // not what you'd expect, however in order for our CSS build
-                                    // to work nicely we have to do this. Because down the line
-                                    // our SCSS stylesheets reference plain CSS we have to load
-                                    // the plain CSS through PostCSS so it can find it safely. This
-                                    // also acts like a babel-for-css by transpiling our (S)CSS
-                                    // down/up to the right browser support (prefixes, etc).
-                                    // Further, if we don't do this then PostCSS assumes that our
-                                    // plain CSS is SCSS and it really doesn't like that, even
-                                    // though plain CSS should be compatible. The chunking options
-                                    // at the top of this webpack config help group the SCSS and
-                                    // plain CSS together for the bundler.
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use significantly fewer plugins on the plain
+                                        // CSS parser. If we start to parse plain CSS, we end with all
+                                        // kinds of nasty problems (like stylesheets not loading).
+                                        //
+                                        // You might have noticed that we're also sending regular CSS
+                                        // through PostCSS. This looks weird, and in fact is probably
+                                        // not what you'd expect, however in order for our CSS build
+                                        // to work nicely we have to do this. Because down the line
+                                        // our SCSS stylesheets reference plain CSS we have to load
+                                        // the plain CSS through PostCSS so it can find it safely. This
+                                        // also acts like a babel-for-css by transpiling our (S)CSS
+                                        // down/up to the right browser support (prefixes, etc).
+                                        // Further, if we don't do this then PostCSS assumes that our
+                                        // plain CSS is SCSS and it really doesn't like that, even
+                                        // though plain CSS should be compatible. The chunking options
+                                        // at the top of this webpack config help group the SCSS and
+                                        // plain CSS together for the bundler.
 
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-hexrgba")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
@@ -403,45 +410,34 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
+                                esModule: false,
                             },
                         },
                         {
                             loader: "postcss-loader",
                             ident: "postcss",
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
-                                    // Note that we use slightly different plugins for PostCSS.
-                                    require("postcss-import")(),
-                                    require("postcss-mixins")(),
-                                    require("postcss-simple-vars")(),
-                                    require("postcss-nested")(),
-                                    require("postcss-easings")(),
-                                    require("postcss-hexrgba")(),
+                                sourceMap: true,
+                                postcssOptions: () => ({
+                                    "plugins": [
+                                        // Note that we use slightly different plugins for PostCSS.
+                                        require("postcss-import")(),
+                                        require("postcss-mixins")(),
+                                        require("postcss-simple-vars")(),
+                                        require("postcss-nested")(),
+                                        require("postcss-easings")(),
+                                        require("postcss-hexrgba")(),
 
-                                    // It's important that this plugin is last otherwise we end
-                                    // up with broken CSS.
-                                    require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
-                                ],
-                                "parser": "postcss-scss",
-                                "local-plugins": true,
+                                        // It's important that this plugin is last otherwise we end
+                                        // up with broken CSS.
+                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                    ],
+                                    "parser": "postcss-scss",
+                                    "local-plugins": true,
+                                }),
                             },
                         },
                     ],
-                },
-                {
-                    // the olm library wants to load its own wasm, rather than have webpack do it.
-                    // We therefore use the `file-loader` to tell webpack to dump the contents to
-                    // a separate file and return the name, and override the default `type` for `.wasm` files
-                    // (which is `webassembly/experimental` under webpack 4) to stop webpack trying to interpret
-                    // the filename as webassembly. (see also https://github.com/webpack/webpack/issues/6725)
-                    test: /olm\.wasm$/,
-                    loader: "file-loader",
-                    type: "javascript/auto",
-                    options: {
-                        name: "[name].[hash:7].[ext]",
-                        outputPath: ".",
-                    },
                 },
                 {
                     // Fix up the name of the opus-recorder worker (react-sdk dependency).
@@ -484,8 +480,11 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // Same deal as olm.wasm: the decoderWorker wants to load the wasm artifact
-                    // itself.
+                    // The decoderWorker wants to load its own wasm, rather than have webpack do it.
+                    // We therefore use the `file-loader` to tell webpack to dump the contents to
+                    // a separate file and return the name, and override the default `type` for `.wasm` files
+                    // (which is `webassembly/experimental` under webpack 4) to stop webpack trying to interpret
+                    // the filename as webassembly. (see also https://github.com/webpack/webpack/issues/6725)
                     test: /decoderWorker\.min\.wasm$/,
                     loader: "file-loader",
                     type: "javascript/auto",
@@ -533,10 +532,20 @@ module.exports = (env, argv) => {
                                 // props set on the svg will override defaults
                                 expandProps: "end",
                                 svgoConfig: {
-                                    plugins: {
+                                    plugins: [
+                                        {
+                                            name: "preset-default",
+                                            params: {
+                                                overrides: {
+                                                    removeViewBox: false,
+                                                },
+                                            },
+                                        },
                                         // generates a viewbox if missing
-                                        removeDimensions: true,
-                                    },
+                                        { name: "removeDimensions" },
+                                        // https://github.com/facebook/docusaurus/issues/8297
+                                        { name: "prefixIds" },
+                                    ],
                                 },
                                 /**
                                  * Forwards the React ref to the root SVG element
@@ -633,8 +642,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
-                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                filename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -646,7 +655,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ["mobileguide", "usercontent", "jitsi"],
+                excludeChunks: ["mobileguide", "usercontent", "jitsi", "serviceworker"],
                 minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
@@ -696,9 +705,11 @@ module.exports = (env, argv) => {
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
 
-            // upload to sentry if sentry env is present
+            // Upload to sentry if sentry env is present
+            // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
+            // so we require it conditionally.
             process.env.SENTRY_DSN &&
-                sentryWebpackPlugin({
+                require("@sentry/webpack-plugin").sentryWebpackPlugin({
                     release: process.env.VERSION,
                     sourcemaps: {
                         paths: "./webapp/bundles/**",
@@ -714,15 +725,16 @@ module.exports = (env, argv) => {
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
+                    { from: ".well-known/**", context: path.resolve(__dirname, "res") },
+                    "res/jitsi_external_api.min.js",
+                    "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
-                    "res/sw.js",
                     "res/welcome.html",
                     { from: "welcome/**", context: path.resolve(__dirname, "res") },
                     { from: "themes/**", context: path.resolve(__dirname, "res") },
                     { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
                     { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
-                    "node_modules/@matrix-org/olm/olm_legacy.js",
                     { from: "config.json", noErrorOnMissing: true },
                     "contribute.json",
                 ],
@@ -746,9 +758,9 @@ module.exports = (env, argv) => {
             // directory and symlink it into place - this allows users who loaded
             // an older version of the application to continue to access webpack
             // chunks even after the app is redeployed.
-            filename: "bundles/[hash]/[name].js",
-            chunkFilename: "bundles/[hash]/[name].js",
-            webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+            filename: "bundles/[fullhash]/[name].js",
+            chunkFilename: "bundles/[fullhash]/[name].js",
+            webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
         },
 
         // configuration for the webpack-dev-server
@@ -798,7 +810,7 @@ function getAssetOutputPath(url, resourcePath) {
     const prefix = /^.*[/\\](dist|res)[/\\]/;
 
     /**
-     * Only needed for https://github.com/vector-im/element-web/pull/15939
+     * Only needed for https://github.com/element-hq/element-web/pull/15939
      * If keeping this, we are not able to load external assets such as SVG
      * images coming from @vector-im/compound-web.
      */

@@ -1,6 +1,6 @@
 [![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
-![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
-![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
+![Tests](https://github.com/element-hq/element-web/actions/workflows/tests.yaml/badge.svg)
+![Static Analysis](https://github.com/element-hq/element-web/actions/workflows/static_analysis.yaml/badge.svg)
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
@@ -17,23 +17,33 @@ React SDK](https://github.com/matrix-org/matrix-react-sdk).
 Element has several tiers of support for different environments:
 
 -   Supported
-    -   Definition: Issues **actively triaged**, regressions **block** the release
+    -   Definition:
+        -   Issues **actively triaged**, regressions **block** the release
     -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
     -   Last 2 versions of Safari
     -   Latest release of official Element Desktop app on desktop OSes
     -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
         that are actively supported by the OS vendor and receive security updates
--   Experimental
-    -   Definition: Issues **accepted**, regressions **do not block** the release
-    -   Element as an installed PWA via current stable version of Chrome
+-   Best effort
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
+        -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
+    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
+-   Community Supported
+    -   Definition:
+        -   Issues **accepted**, regressions **do not block** the release
+        -   Community contributions are welcome to support these issues
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
     -   Definition: Issues only affecting unsupported environments are **closed**
     -   Everything else
 
+The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
+
 For accessing Element on an Android or iOS device, we currently recommend the
-native apps [element-android](https://github.com/vector-im/element-android)
-and [element-ios](https://github.com/vector-im/element-ios).
+native apps [element-android](https://github.com/element-hq/element-android)
+and [element-ios](https://github.com/element-hq/element-ios).
 
 # Getting Started
 
@@ -57,7 +67,7 @@ access to Element (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place. See
-<https://github.com/vector-im/element-web/issues/1977> for more details.
+<https://github.com/element-hq/element-web/issues/1977> for more details.
 
 ## Configuration best practices
 
@@ -111,7 +121,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 
 1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
 1. Install `yarn` if not present already.
-1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
+1. Clone the repo: `git clone https://github.com/element-hq/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
 1. Install the prerequisites: `yarn install`.
     - If you're using the `develop` branch, then it is recommended to set up a
@@ -137,7 +147,7 @@ Element can also be run as a desktop app, wrapped in Electron. You can download 
 pre-built version from <https://element.io/get-started> or, if you prefer,
 build it yourself.
 
-To build it yourself, follow the instructions at <https://github.com/vector-im/element-desktop>.
+To build it yourself, follow the instructions at <https://github.com/element-hq/element-desktop>.
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
@@ -151,7 +161,7 @@ See the [configuration docs](docs/config.md) for more details.
 # Labs Features
 
 Some features of Element may be enabled by flags in the `Labs` section of the settings.
-Some of these features are described in [labs.md](https://github.com/vector-im/element-web/blob/develop/docs/labs.md).
+Some of these features are described in [labs.md](https://github.com/element-hq/element-web/blob/develop/docs/labs.md).
 
 # Caching requirements
 
@@ -231,7 +241,7 @@ popd
 Clone the repo and switch to the `element-web` directory:
 
 ```bash
-git clone https://github.com/vector-im/element-web.git
+git clone https://github.com/element-hq/element-web.git
 cd element-web
 ```
 
@@ -267,8 +277,8 @@ for changes. If the inotify limits are too low your build will fail silently or 
 `Error: EMFILE: too many open files`. To avoid these issues, we recommend a watch limit
 of at least `128M` and instance limit around `512`.
 
-You may be interested in issues [#15750](https://github.com/vector-im/element-web/issues/15750) and
-[#15774](https://github.com/vector-im/element-web/issues/15774) for further details.
+You may be interested in issues [#15750](https://github.com/element-hq/element-web/issues/15750) and
+[#15774](https://github.com/element-hq/element-web/issues/15774) for further details.
 
 To set a new inotify watch and instance limit, execute:
 
@@ -316,6 +326,6 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
 # Triaging issues
 
-Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
+Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).
 
-We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+We use [issue labels](https://github.com/element-hq/element-meta/wiki/Issue-labelling) to sort all incoming issues.

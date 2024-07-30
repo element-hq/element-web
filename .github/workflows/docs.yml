@@ -22,7 +22,7 @@ jobs:
             - name: Fetch element-desktop
               uses: actions/checkout@v4
               with:
-                  repository: vector-im/element-desktop
+                  repository: element-hq/element-desktop
                   path: element-desktop
 
             - name: Fetch element-web
@@ -46,6 +46,7 @@ jobs:
               with:
                   cache: "yarn"
                   cache-dependency-path: element-web/yarn.lock
+                  node-version: "lts/*"
 
             - name: Generate automations docs
               working-directory: element-web
@@ -55,7 +56,7 @@ jobs:
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@v1
+              uses: peaceiris/actions-mdbook@v2
               with:
                   mdbook-version: "0.4.10"
 
@@ -99,7 +100,7 @@ jobs:
               run: mdbook build
 
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v2
+              uses: actions/upload-pages-artifact@v3
               with:
                   path: ./book
 
@@ -112,4 +113,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@v2
+              uses: actions/deploy-pages@v4

@@ -124,7 +124,7 @@ must include:
 
 1. Comprehensive unit tests written in Jest. These are located in `/test`.
 2. "happy path" end-to-end tests.
-   These are located in `/cypress/e2e` in `matrix-react-sdk`, and
+   These are located in `/playwright/e2e` in `matrix-react-sdk`, and
    are run using `element-web`. Ideally, you would also include tests for edge
    and error cases.
 
@@ -271,9 +271,20 @@ on Git 2.17+ you can mass signoff using rebase:
 git rebase --signoff origin/develop
 ```
 
+## Private sign off
+
+If you would like to provide your legal name privately to the Matrix.org
+Foundation (instead of in a public commit or comment), you can do so by emailing
+your legal name and a link to the pull request to dco@matrix.org. It helps to
+include "sign off" or similar in the subject line. You will then be instructed
+further.
+
+Once private sign off is complete, doing so for future contributions will not
+be required.
+
 # Review expectations
 
-See https://github.com/vector-im/element-meta/wiki/Review-process
+See https://github.com/element-hq/element-meta/wiki/Review-process
 
 # Merge Strategy
 

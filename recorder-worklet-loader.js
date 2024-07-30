@@ -38,7 +38,7 @@ module.exports.pitch = function pitch(request) {
             return cb(err);
         }
         if (entries[0]) {
-            return cb(null, `module.exports = __webpack_public_path__ + ${JSON.stringify(entries[0].files[0])};`);
+            return cb(null, `module.exports = __webpack_public_path__ + ${JSON.stringify([...entries[0].files][0])};`);
         }
         return cb(null, null);
     });

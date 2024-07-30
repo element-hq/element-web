@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2017-2020 New Vector Ltd
+Copyright 2017-2020, 2024 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,9 +44,41 @@ export default class WebPlatform extends VectorBasePlatform {
 
     public constructor() {
         super();
-        // Register service worker if available on this platform
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js");
+
+        // Register the service worker in the background
+        this.tryRegisterServiceWorker().catch((e) => console.error("Error registering/updating service worker:", e));
+    }
+
+    private async tryRegisterServiceWorker(): Promise<void> {
+        if (!("serviceWorker" in navigator)) {
+            return; // not available on this platform - don't try to register the service worker
+        }
+
+        // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+        const registration = await navigator.serviceWorker.register("sw.js");
+        if (!registration) {
+            // Registration didn't work for some reason - assume failed and ignore.
+            // This typically happens in Jest.
+            return;
+        }
+
+        await registration.update();
+        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+    }
+
+    private onServiceWorkerPostMessage(event: MessageEvent): void {
+        try {
+            if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
+                const userId = localStorage.getItem("mx_user_id");
+                const deviceId = localStorage.getItem("mx_device_id");
+                event.source!.postMessage({
+                    responseKey: event.data["responseKey"],
+                    userId,
+                    deviceId,
+                });
+            }
+        } catch (e) {
+            console.error("Error responding to service worker: ", e);
         }
     }
 
@@ -81,10 +113,10 @@ export default class WebPlatform extends VectorBasePlatform {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
             window.Notification.requestPermission((result) => {
                 resolve(result);
-            });
+            }).catch(reject);
         });
     }
 
@@ -116,7 +148,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // Ideally, loading an old copy would be impossible with the
         // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
         console.log("startUpdater, current version is " + getNormalizedAppVersion(WebPlatform.VERSION));
-        this.pollForUpdate((version: string, newVersion: string) => {
+        void this.pollForUpdate((version: string, newVersion: string) => {
             const query = parseQs(location);
             if (query.updated) {
                 console.log("Update reloaded but still on an old version, stopping");
@@ -175,7 +207,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     public startUpdateCheck(): void {
         super.startUpdateCheck();
-        this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
+        void this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...updateState,

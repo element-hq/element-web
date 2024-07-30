@@ -19,19 +19,15 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { extractErrorMessageFromError } from "matrix-react-sdk/src/components/views/dialogs/ErrorDialog";
+import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-segmenter/should-polyfill";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
 import "./modernizr";
 
-// Make setImmediate available in bundle
-import "setimmediate";
-
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require("gfm.css/gfm.css");
 require("katex/dist/katex.css");
 
 /**
@@ -60,8 +56,8 @@ function checkBrowserFeatures(): boolean {
         return false;
     }
 
-    // Custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks
-    // in it for some features we depend on.
+    // Custom checks atop Modernizr because it doesn't have checks in it for
+    // some features we depend on.
     // Modernizr requires rules to be lowercase with no punctuation.
     // ES2018: http://262.ecma-international.org/9.0/#sec-promise.prototype.finally
     window.Modernizr.addTest("promiseprototypefinally", () => typeof window.Promise?.prototype?.finally === "function");
@@ -74,6 +70,21 @@ function checkBrowserFeatures(): boolean {
     );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
+    // ES2024: https://tc39.es/ecma262/2024/#sec-get-regexp.prototype.unicodesets
+    window.Modernizr.addTest(
+        "regexpunicodesets",
+        () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
+    );
+    // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
+    // The built-in modernizer 'intl' check only checks for the presence of the Intl object, not the Segmenter,
+    // and older Firefox has the former but not the latter, so we add our own.
+    // This is polyfilled now, but we still want to show the warning because we want to remove the polyfill
+    // at some point.
+    window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
+
+    // Basic test for WebAssembly support. We could also try instantiating a simple module,
+    // although this would start to make (more) assumptions about how rust-crypto loads its wasm.
+    window.Modernizr.addTest("wasm", () => typeof WebAssembly === "object" && typeof WebAssembly.Module === "function");
 
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 
@@ -102,14 +113,17 @@ const supportedBrowser = checkBrowserFeatures();
 // try in react but fallback to an `alert`
 // We start loading stuff but don't block on it until as late as possible to allow
 // the browser to use as much parallelism as it can.
-// Load parallelism is based on research in https://github.com/vector-im/element-web/issues/12253
+// Load parallelism is based on research in https://github.com/element-hq/element-web/issues/12253
 async function start(): Promise<void> {
+    if (shouldPolyFillIntlSegmenter()) {
+        await import(/* webpackChunkName: "intl-segmenter-polyfill" */ "@formatjs/intl-segmenter/polyfill-force");
+    }
+
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
     const {
         rageshakePromise,
         setupLogStorage,
         preparePlatform,
-        loadOlm,
         loadConfig,
         loadLanguage,
         loadTheme,
@@ -118,12 +132,15 @@ async function start(): Promise<void> {
         showError,
         showIncompatibleBrowser,
         _t,
+        extractErrorMessageFromError,
     } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init"
     );
 
+    // Now perform the next stage of initialisation. This has its own try/catch in which we render
+    // a react error page on failure.
     try {
         // give rageshake a chance to load/fail, we don't actually assert rageshake loads, we allow it to fail if no IDB
         await settled(rageshakePromise);
@@ -133,7 +150,7 @@ async function start(): Promise<void> {
         // don't try to redirect to the native apps if we're
         // verifying a 3pid (but after we've loaded the config)
         // or if the user is following a deep link
-        // (https://github.com/vector-im/element-web/issues/7378)
+        // (https://github.com/element-hq/element-web/issues/7378)
         const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
 
         if (!preventRedirect) {
@@ -147,7 +164,6 @@ async function start(): Promise<void> {
             }
         }
 
-        const loadOlmPromise = loadOlm();
         // set the platform for react sdk
         preparePlatform();
         // load config requires the platform to be ready
@@ -180,7 +196,7 @@ async function start(): Promise<void> {
         // error handling begins here
         // ##########################
         if (!acceptBrowser) {
-            await new Promise<void>((resolve) => {
+            await new Promise<void>((resolve, reject) => {
                 logger.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {
@@ -189,7 +205,7 @@ async function start(): Promise<void> {
                     }
                     logger.log("User accepts the compatibility risks.");
                     resolve();
-                });
+                }).catch(reject);
             });
         }
 
@@ -214,7 +230,6 @@ async function start(): Promise<void> {
         // app load critical path starts here
         // assert things started successfully
         // ##################################
-        await loadOlmPromise;
         await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
@@ -238,6 +253,10 @@ async function start(): Promise<void> {
 }
 
 start().catch((err) => {
+    // If we get here, things have gone terribly wrong and we cannot load the app javascript at all.
+    // Show a different, very simple iframed-static error page. Or actually, one of two different ones
+    // depending on whether the browser is supported (ie. we think we should be able to load but
+    // failed) or unsupported (where we tried anyway and, lo and behold, we failed).
     logger.error(err);
     // show the static error in an iframe to not lose any context / console data
     // with some basic styling to make the iframe full page

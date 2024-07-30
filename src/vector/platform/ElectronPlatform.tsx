@@ -43,6 +43,8 @@ import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
 import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
+import { OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
+import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
@@ -55,6 +57,8 @@ interface SquirrelUpdate {
     releaseDate: Date;
     updateURL: string;
 }
+
+const SSO_ID_KEY = "element-desktop-ssoid";
 
 const isMac = navigator.platform.toUpperCase().includes("MAC");
 
@@ -124,6 +128,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
+        // `userAccessToken` (IPC) is requested by the main process when appending authentication
+        // to media downloads. A reply is sent over the same channel.
+        window.electron.on("userAccessToken", () => {
+            window.electron!.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
+        });
+
+        // `serverSupportedVersions` is requested by the main process when it needs to know if the
+        // server supports a particular version. This is primarily used to detect authenticated media
+        // support. A reply is sent over the same channel.
+        window.electron.on("serverSupportedVersions", async () => {
+            window.electron!.send("serverSupportedVersions", await MatrixClientPeg.get()?.getVersions());
+        });
+
         // try to flush the rageshake logs to indexeddb before quit.
         window.electron.on("before-quit", function () {
             logger.log("element-desktop closing");
@@ -164,15 +181,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
-        window.electron.on("openDesktopCapturerSourcePicker", () => {
+        window.electron.on("openDesktopCapturerSourcePicker", async () => {
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-            finished.then(([source]) => {
-                if (!source) return;
-                this.ipc.call("callDisplayMediaCallback", source);
-            });
+            const [source] = await finished;
+            // getDisplayMedia promise does not return if no dummy is passed here as source
+            await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        this.ipc.call("startSSOFlow", this.ssoID);
+        void this.ipc.call("startSSOFlow", this.ssoID);
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
@@ -192,7 +208,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             ),
             initial: getInitialLetter(r.name),
         }));
-        this.ipc.call("breadcrumbs", rooms);
+        void this.ipc.call("breadcrumbs", rooms);
     };
 
     private onUpdateDownloaded = async (ev: Event, { releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
@@ -258,7 +274,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const handler = notification.onclick as Function;
         notification.onclick = (): void => {
             handler?.();
-            this.ipc.call("focusWindow");
+            void this.ipc.call("focusWindow");
         };
 
         return notification;
@@ -366,7 +382,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public supportsJitsiScreensharing(): boolean {
-        // See https://github.com/vector-im/element-web/issues/4880
+        // See https://github.com/element-hq/element-web/issues/4880
         return false;
     }
 
@@ -374,10 +390,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call("getAvailableSpellCheckLanguages");
     }
 
-    public getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
-        url.searchParams.set("element-desktop-ssoid", this.ssoID);
+        url.searchParams.set(SSO_ID_KEY, this.ssoID);
         return url;
     }
 
@@ -396,7 +412,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public navigateForwardBack(back: boolean): void {
-        this.ipc.call(back ? "navigateBack" : "navigateForward");
+        void this.ipc.call(back ? "navigateBack" : "navigateForward");
     }
 
     public overrideBrowserShortcuts(): boolean {
@@ -434,5 +450,36 @@ export default class ElectronPlatform extends VectorBasePlatform {
             await super.clearStorage();
             await this.ipc.call("clearStorage");
         } catch (e) {}
+    }
+
+    public get baseUrl(): string {
+        // This configuration is element-desktop specific so the types here do not know about it
+        return (SdkConfig.get() as unknown as Record<string, string>)["web_base_url"] ?? "https://app.element.io";
+    }
+
+    public get defaultOidcClientUri(): string {
+        // Default to element.io as our scheme `io.element.desktop` is within its scope on default MAS policies
+        return "https://element.io";
+    }
+
+    public async getOidcClientMetadata(): Promise<OidcRegistrationClientMetadata> {
+        const baseMetadata = await super.getOidcClientMetadata();
+        return {
+            ...baseMetadata,
+            applicationType: "native",
+        };
+    }
+
+    public getOidcClientState(): string {
+        return `:${SSO_ID_KEY}:${this.ssoID}`;
+    }
+
+    /**
+     * The URL to return to after a successful OIDC authentication
+     */
+    public getOidcCallbackUrl(): URL {
+        const url = super.getOidcCallbackUrl();
+        url.protocol = "io.element.desktop";
+        return url;
     }
 }

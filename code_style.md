@@ -225,6 +225,12 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
+37. Avoid functions whose fundamental behaviour varies with different parameter types.
+    Multiple return types are fine, but if the function's behaviour is going to change significantly,
+    have two separate functions. For example, `SDKConfig.get()` with a string param which returns the
+    type according to the param given is ok, but `SDKConfig.get()` with no args returning the whole
+    config object would not be: this should just be a separate function.
+
 ## React
 
 Inheriting all the rules of TypeScript, the following additionally apply:

@@ -5,7 +5,7 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
 If a labs features gets more stable, it _may_ be promoted to a beta feature
-(see [Betas](https://github.com/vector-im/element-web/blob/develop/docs/betas.md)).
+(see [Betas](https://github.com/element-hq/element-web/blob/develop/docs/betas.md)).
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
@@ -36,29 +36,6 @@ you to jump to last week, last month, the beginning of the room, or choose a
 date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
-
-## Render simple counters in room header (`feature_state_counters`)
-
-Allows rendering of labelled counters above the message list.
-
-Once enabled, send a custom state event to a room to set values:
-
-1. In a room, type `/devtools` to bring up the devtools interface
-2. Click "Send Custom Event"
-3. Toggle from "Event" to "State Event"
-4. Set the event type to: `re.jki.counter` and give it a unique key
-5. Specify the content in the following format:
-
-```
-{
-    "link": "",
-    "severity": "normal",
-    "title": "my counter",
-    "value": 0
-}
-```
-
-That's it. Now should see your new counter under the header.
 
 ## New ways to ignore people (`feature_mjolnir`)
 
@@ -132,12 +109,6 @@ This is useful while we experiment with encryption and to make calling compatibl
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
-
-## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
-
-Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
-
-This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implementation will remain in use until users log out.
 
 ## New room header & details (`feature_new_room_decoration_ui`) [In Development]
 

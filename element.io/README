@@ -6,7 +6,7 @@ official element.io distribution, but these files may be useful if you want to
 inspect the configuration used there.
 
 Element Desktop uses a separate config (see
-https://github.com/vector-im/element-desktop/tree/develop/element.io).
+https://github.com/element-hq/element-desktop/tree/develop/element.io).
 
 Deployment scripts (such as app/deploy.py) are meant to be run on the web server
 hosting the Element installation.

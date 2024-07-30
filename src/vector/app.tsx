@@ -89,7 +89,12 @@ export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixCha
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
     const isWelcomeOrLanding =
         window.location.hash === "#/welcome" || window.location.hash === "#" || window.location.hash === "";
+    const isLoginPage = window.location.hash === "#/login";
+
     if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
+        autoRedirect = true;
+    }
+    if (!autoRedirect && ssoRedirects.on_login_page && isLoginPage) {
         autoRedirect = true;
     }
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
@@ -199,7 +204,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
             }
         }
 
-        validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
+        validatedConfig = await AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
     } catch (e) {
         const { hsUrl, isUrl, userId } = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
