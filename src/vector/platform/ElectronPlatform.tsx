@@ -170,8 +170,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 title: _t("download_completed"),
                 props: {
                     description: name,
-                    acceptLabel: _t("action|open"),
-                    onAccept,
+                    primaryLabel: _t("action|open"),
+                    onPrimaryClick: onAccept,
                     dismissLabel: _t("action|dismiss"),
                     onDismiss,
                     numSeconds: 10,
