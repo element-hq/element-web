@@ -1654,8 +1654,8 @@
         "download_brand_desktop": "Pobierz %(brand)s Desktop",
         "download_f_droid": "Pobierz w F-Droid",
         "download_google_play": "Pobierz w Google Play",
-        "enable_notifications": "Włącz powiadomienia",
-        "enable_notifications_action": "Włącz powiadomienia",
+        "enable_notifications": "Włącz powiadomienia na pulpicie",
+        "enable_notifications_action": "Otwórz ustawienia",
         "enable_notifications_description": "Nie przegap odpowiedzi lub ważnej wiadomości",
         "explore_rooms": "Przeglądaj pokoje publiczne",
         "find_community_members": "Znajdź i zaproś członków swojej społeczności",
@@ -1953,6 +1953,8 @@
                 "few": "%(count)s osoby proszą o dołączenie",
                 "many": "%(count)s osób prosi o dołączenie"
             },
+            "release_announcement_description": "Ciesz się prostszym, bardziej przystosowanym nagłówkiem pokoju.",
+            "release_announcement_header": "Nowy design!",
             "room_is_public": "Ten pokój jest publiczny",
             "show_widgets_button": "Pokaż widżety",
             "video_call_button_ec": "Rozmowa wideo (%(brand)s)",
@@ -3197,6 +3199,8 @@
             "one": "%(count)s odpowiedź",
             "other": "%(count)s odpowiedzi"
         },
+        "empty_description": "Użyj „%(replyInThread)s” po najechaniu kursorem na wiadomość",
+        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo za nimi podążyć.",
         "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
@@ -3693,6 +3697,10 @@
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
+    "unsupported_browser": {
+        "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
+        "title": "%(brand)s nie wspiera tej przeglądarki"
+    },
     "unsupported_server_description": "Ten serwer używa starszej wersji Matrix. Zaktualizuj do Matrix%(version)s, aby używać %(brand)s bez błędów.",
     "unsupported_server_title": "Twój serwer nie jest wspierany",
     "update": {
@@ -3768,6 +3776,7 @@
         "error_revoke_3pid_invite_title": "Nie udało się odwołać zaproszenia",
         "hide_sessions": "Ukryj sesje",
         "hide_verified_sessions": "Ukryj zweryfikowane sesje",
+        "ignore_button": "Ignoruj",
         "ignore_confirm_description": "Wszystkie wiadomości i zaproszenia od tego użytkownika zostaną ukryte. Czy na pewno chcesz zignorować?",
         "ignore_confirm_title": "Ignoruj %(user)s",
         "invited_by": "Zaproszony przez %(sender)s",
@@ -3795,19 +3804,21 @@
             "no_recent_messages_description": "Spróbuj przewinąć się w górę na osi czasu, aby sprawdzić, czy nie ma wcześniejszych.",
             "no_recent_messages_title": "Nie znaleziono ostatnich wiadomości od %(user)s"
         },
-        "redact_button": "Usuń ostatnie wiadomości",
+        "redact_button": "Usuń wiadomości",
         "revoke_invite": "Odwołaj zaproszenie",
         "room_encrypted": "Wiadomości w tym pokoju są szyfrowane end-to-end.",
         "room_encrypted_detail": "Twoje wiadomości są zabezpieczone i tylko Ty i Twój odbiorca posiadacie unikalne klucze, aby je odblokować.",
         "room_unencrypted": "Wiadomości w tym pokoju nie są szyfrowane end-to-end.",
         "room_unencrypted_detail": "W pokojach szyfrowanych Twoje wiadomości są zabezpieczone i tylko Ty i Twój odbiorca posiadacie unikalne klucze, aby je odblokować.",
-        "share_button": "Udostępnij link użytkownika",
+        "send_message": "Wyślij wiadomość",
+        "share_button": "Udostępnij profil",
         "unban_button_room": "Odbanuj z przestrzeni",
         "unban_button_space": "Odbanuj z przestrzeni",
         "unban_room_confirm_title": "Odbanuj z %(roomName)s",
         "unban_space_everything": "Odbanuj ich z wszystkiego co mogę",
         "unban_space_specific": "Odbanuj ich z określonych rzeczy, które mogę",
         "unban_space_warning": "Nie będą w stanie uzyskać dostępu gdziekolwiek, gdzie nie jesteś administratorem.",
+        "unignore_button": "Przestań ignorować",
         "verify_button": "Weryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
     },
