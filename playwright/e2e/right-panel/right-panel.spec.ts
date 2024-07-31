@@ -73,7 +73,8 @@ test.describe("RightPanel", () => {
         test("should handle clicking add widgets", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.getByRole("button", { name: "Add widgets, bridges & bots" }).click();
+            await page.getByRole("tab", { name: "Extensions" }).click();
+            await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
         });
 

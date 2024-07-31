@@ -28,6 +28,7 @@ export enum RightPanelPhases {
     Widget = "Widget",
     PinnedMessages = "PinnedMessages",
     Timeline = "Timeline",
+    Extensions = "Extensions",
 
     Room3pidMemberInfo = "Room3pidMemberInfo",
 

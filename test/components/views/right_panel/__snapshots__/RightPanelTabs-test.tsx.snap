@@ -54,6 +54,20 @@ exports[`<RightPanelTabs /> Component renders the correct tabs 1`] = `
           Threads
         </button>
       </li>
+      <li
+        class="_nav-tab_135dy_33"
+        role="presentation"
+      >
+        <button
+          aria-controls="thread-panel"
+          aria-selected="false"
+          class="_nav-item_135dy_55"
+          id="extensions-panel-tab"
+          role="tab"
+        >
+          Extensions
+        </button>
+      </li>
     </ul>
   </nav>
 </div>
@@ -111,6 +125,20 @@ exports[`<RightPanelTabs /> Correct tab is active 1`] = `
           role="tab"
         >
           Threads
+        </button>
+      </li>
+      <li
+        class="_nav-tab_135dy_33"
+        role="presentation"
+      >
+        <button
+          aria-controls="thread-panel"
+          aria-selected="false"
+          class="_nav-item_135dy_55"
+          id="extensions-panel-tab"
+          role="tab"
+        >
+          Extensions
         </button>
       </li>
     </ul>

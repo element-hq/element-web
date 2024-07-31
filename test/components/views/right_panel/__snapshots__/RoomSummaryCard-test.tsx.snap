@@ -414,20 +414,6 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
       </div>
-      <div
-        class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
-      >
-        <h2>
-          Widgets
-        </h2>
-        <div
-          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-          role="button"
-          tabindex="0"
-        >
-          Add widgets, bridges & bots
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -819,20 +805,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             />
           </svg>
         </button>
-      </div>
-      <div
-        class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
-      >
-        <h2>
-          Widgets
-        </h2>
-        <div
-          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-          role="button"
-          tabindex="0"
-        >
-          Add widgets, bridges & bots
-        </div>
       </div>
     </div>
   </div>
@@ -1252,20 +1224,6 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             />
           </svg>
         </button>
-      </div>
-      <div
-        class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
-      >
-        <h2>
-          Widgets
-        </h2>
-        <div
-          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-          role="button"
-          tabindex="0"
-        >
-          Add widgets, bridges & bots
-        </div>
       </div>
     </div>
   </div>

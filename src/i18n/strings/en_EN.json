@@ -474,6 +474,7 @@
         "encrypted": "Encrypted",
         "encryption_enabled": "Encryption enabled",
         "error": "Error",
+        "extensions": "Extensions",
         "faq": "FAQ",
         "favourites": "Favourites",
         "feedback": "Feedback",
@@ -1830,10 +1831,11 @@
         "restore_failed_error": "Unable to restore backup"
     },
     "right_panel": {
-        "add_integrations": "Add widgets, bridges & bots",
+        "add_integrations": "Add extensions",
         "add_topic": "Add topic",
-        "edit_integrations": "Edit widgets, bridges & bots",
         "export_chat_button": "Export chat",
+        "extensions_empty_description": "Select “%(addIntegrations)s” to browse and add extensions to this room",
+        "extensions_empty_title": "Boost productivity with more tools, widgets and bots",
         "files_button": "Files",
         "info": "Info",
         "pinned_messages": {
@@ -4067,7 +4069,7 @@
             "title": "Allow this widget to verify your identity"
         },
         "popout": "Popout widget",
-        "set_room_layout": "Set my room layout for everyone",
+        "set_room_layout": "Set layout for everyone",
         "shared_data_avatar": "Your profile picture URL",
         "shared_data_device_id": "Your device ID",
         "shared_data_lang": "Your language",

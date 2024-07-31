@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
 import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -32,8 +33,10 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import { IApp, isAppWidget } from "../stores/WidgetStore";
+import WidgetStore, { IApp, isAppWidget } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
+import { useEventEmitter } from "../hooks/useEventEmitter";
+import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -562,3 +565,22 @@ export default class WidgetUtils {
         return false;
     }
 }
+
+/**
+ * Hook to get the widgets for a room and update when they change
+ * @param room the room to get widgets for
+ */
+export const useWidgets = (room: Room): IApp[] => {
+    const [apps, setApps] = useState<IApp[]>(() => WidgetStore.instance.getApps(room.roomId));
+
+    const updateApps = useCallback(() => {
+        // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
+        setApps([...WidgetStore.instance.getApps(room.roomId)]);
+    }, [room]);
+
+    useEffect(updateApps, [room, updateApps]);
+    useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
+    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
+
+    return apps;
+};

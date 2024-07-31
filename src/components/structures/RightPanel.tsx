@@ -43,6 +43,7 @@ import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
 import { RightPanelTabs } from "../views/right_panel/RightPanelTabs";
+import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -306,6 +307,12 @@ export default class RightPanel extends React.Component<Props, IState> {
                 }
                 break;
 
+            case RightPanelPhases.Extensions:
+                if (!!this.props.room) {
+                    card = <ExtensionsCard room={this.props.room} onClose={this.onClose} />;
+                }
+                break;
+
             case RightPanelPhases.Widget:
                 if (!!this.props.room && !!cardState?.widgetId) {
                     card = <WidgetCard room={this.props.room} widgetId={cardState.widgetId} onClose={this.onClose} />;
@@ -315,7 +322,7 @@ export default class RightPanel extends React.Component<Props, IState> {
 
         return (
             <aside className="mx_RightPanel" id="mx_RightPanel">
-                {phase && <RightPanelTabs phase={phase} />}
+                {phase && <RightPanelTabs room={this.props.room} phase={phase} />}
                 {card}
             </aside>
         );

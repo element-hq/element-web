@@ -38,8 +38,8 @@ describe("<RightPanelTabs />", () => {
         const { container } = render(<RightPanelTabs phase={RightPanelPhases.RoomMemberList} />);
         expect(container).toMatchSnapshot();
         // Assert that the active tab is Info
-        expect(container.querySelectorAll("[aria-selected='true'").length).toEqual(1);
-        expect(container.querySelector("[aria-selected='true'")).toHaveAccessibleName("People");
+        expect(container.querySelectorAll("[aria-selected='true']").length).toEqual(1);
+        expect(container.querySelector("[aria-selected='true']")).toHaveAccessibleName("People");
     });
 
     it("Renders nothing for some phases, eg: FilePanel", () => {

@@ -22,7 +22,7 @@ import { useFeatureEnabled } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
-import { useWidgets } from "../../components/views/right_panel/RoomSummaryCard";
+import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";

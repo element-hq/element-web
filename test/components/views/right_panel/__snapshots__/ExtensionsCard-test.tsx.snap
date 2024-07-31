@@ -1,0 +1,194 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ExtensionsCard /> should render empty state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_ExtensionsCard"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <button
+        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Add extensions
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_Flex mx_EmptyState"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
+      >
+        <div
+          height="32px"
+          width="32px"
+        />
+        <p
+          class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+        >
+          Boost productivity with more tools, widgets and bots
+        </p>
+        <p
+          class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+        >
+          Select “Add extensions” to browse and add extensions to this room
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ExtensionsCard /> should render widgets 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_ExtensionsCard"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <button
+        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Add extensions
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="_separator_144s5_17"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <div
+        class="mx_BaseCard_Button mx_ExtensionsCard_Button"
+      >
+        <div
+          class="mx_AccessibleButton mx_ExtensionsCard_icon_app"
+          role="button"
+          tabindex="0"
+        >
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 24px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="24px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="24px"
+            />
+          </span>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_lineClamp"
+          >
+            Custom Widget
+          </p>
+        </div>
+        <div
+          aria-label="Pin"
+          class="mx_AccessibleButton mx_ExtensionsCard_app_pinToggle"
+          role="button"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="mx_BaseCard_Button mx_ExtensionsCard_Button"
+      >
+        <div
+          class="mx_AccessibleButton mx_ExtensionsCard_icon_app"
+          role="button"
+          tabindex="0"
+        >
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 24px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="24px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="24px"
+            />
+          </span>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_lineClamp"
+          >
+            Jitsi
+          </p>
+        </div>
+        <div
+          aria-label="Pin"
+          class="mx_AccessibleButton mx_ExtensionsCard_app_pinToggle"
+          role="button"
+          tabindex="0"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ExtensionsCard /> should show context menu on widget row 1`] = `
+<ul
+  class="mx_IconizedContextMenu"
+  role="none"
+>
+  <div
+    class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
+  >
+    <li
+      aria-label="Remove for everyone"
+      class="mx_AccessibleButton mx_IconizedContextMenu_item"
+      role="menuitem"
+      tabindex="0"
+    >
+      <span
+        class="mx_IconizedContextMenu_label"
+      >
+        Remove for everyone
+      </span>
+    </li>
+  </div>
+</ul>
+`;

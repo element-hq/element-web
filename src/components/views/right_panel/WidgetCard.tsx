@@ -19,10 +19,9 @@ import { Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
-import WidgetUtils from "../../../utils/WidgetUtils";
+import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
-import { useWidgets } from "./RoomSummaryCard";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";

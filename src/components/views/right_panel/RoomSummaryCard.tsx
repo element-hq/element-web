@@ -14,16 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {
-    ChangeEvent,
-    SyntheticEvent,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import React, { ChangeEvent, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -55,35 +46,23 @@ import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/mat
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
-import BaseCard, { Group } from "./BaseCard";
+import BaseCard from "./BaseCard";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
-import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../Modal";
 import ShareDialog from "../dialogs/ShareDialog";
-import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
-import WidgetUtils from "../../../utils/WidgetUtils";
-import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import SettingsStore from "../../../settings/SettingsStore";
-import WidgetAvatar from "../avatars/WidgetAvatar";
-import WidgetStore, { IApp } from "../../../stores/WidgetStore";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { UIComponent, UIFeature } from "../../../settings/UIFeature";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "./PinnedMessagesCard";
-import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RoomName from "../elements/RoomName";
-import UIStore from "../../../stores/UIStore";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { PollHistoryDialog } from "../dialogs/PollHistoryDialog";
 import { Flex } from "../../utils/Flex";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
@@ -110,182 +89,6 @@ interface IProps {
     onSearchCancel?: () => void;
     focusRoomSearch?: boolean;
 }
-
-interface IAppsSectionProps {
-    room: Room;
-}
-
-export const useWidgets = (room: Room): IApp[] => {
-    const [apps, setApps] = useState<IApp[]>(() => WidgetStore.instance.getApps(room.roomId));
-
-    const updateApps = useCallback(() => {
-        // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
-        setApps([...WidgetStore.instance.getApps(room.roomId)]);
-    }, [room]);
-
-    useEffect(updateApps, [room, updateApps]);
-    useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
-    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
-
-    return apps;
-};
-
-interface IAppRowProps {
-    app: IApp;
-    room: Room;
-}
-
-const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
-    const name = WidgetUtils.getWidgetName(app);
-    const dataTitle = WidgetUtils.getWidgetDataTitle(app);
-    const subtitle = dataTitle && " - " + dataTitle;
-    const [canModifyWidget, setCanModifyWidget] = useState<boolean>();
-
-    useEffect(() => {
-        setCanModifyWidget(WidgetUtils.canUserModifyWidgets(room.client, room.roomId));
-    }, [room.client, room.roomId]);
-
-    const onOpenWidgetClick = (): void => {
-        RightPanelStore.instance.pushCard({
-            phase: RightPanelPhases.Widget,
-            state: { widgetId: app.id },
-        });
-    };
-
-    const isPinned = WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
-    const togglePin = isPinned
-        ? () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right);
-          }
-        : () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, Container.Top);
-          };
-
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    let contextMenu;
-    if (menuDisplayed) {
-        const rect = handle.current?.getBoundingClientRect();
-        const rightMargin = rect?.right ?? 0;
-        const topMargin = rect?.top ?? 0;
-        contextMenu = (
-            <WidgetContextMenu
-                chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rightMargin}
-                bottom={UIStore.instance.windowHeight - topMargin}
-                onFinished={closeMenu}
-                app={app}
-            />
-        );
-    }
-
-    const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
-
-    let pinTitle: string;
-    if (cannotPin) {
-        pinTitle = _t("right_panel|pinned_messages|limits", { count: MAX_PINNED });
-    } else {
-        pinTitle = isPinned ? _t("action|unpin") : _t("action|pin");
-    }
-
-    const isMaximised = WidgetLayoutStore.instance.isInContainer(room, app, Container.Center);
-    const toggleMaximised = isMaximised
-        ? () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right);
-          }
-        : () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, Container.Center);
-          };
-
-    const maximiseTitle = isMaximised ? _t("action|close") : _t("action|maximise");
-
-    let openTitle = "";
-    if (isPinned) {
-        openTitle = _t("widget|unpin_to_view_right_panel");
-    } else if (isMaximised) {
-        openTitle = _t("widget|close_to_view_right_panel");
-    }
-
-    const classes = classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", {
-        mx_RoomSummaryCard_Button_pinned: isPinned,
-        mx_RoomSummaryCard_Button_maximised: isMaximised,
-    });
-
-    return (
-        <div className={classes} ref={handle}>
-            <AccessibleButton
-                className="mx_RoomSummaryCard_icon_app"
-                onClick={onOpenWidgetClick}
-                // only show a tooltip if the widget is pinned
-                title={!(isPinned || isMaximised) ? undefined : openTitle}
-                disabled={isPinned || isMaximised}
-            >
-                <WidgetAvatar app={app} size="20px" />
-                <span>{name}</span>
-                {subtitle}
-            </AccessibleButton>
-
-            {canModifyWidget && (
-                <ContextMenuTooltipButton
-                    className="mx_RoomSummaryCard_app_options"
-                    isExpanded={menuDisplayed}
-                    onClick={openMenu}
-                    title={_t("common|options")}
-                />
-            )}
-
-            <AccessibleButton
-                className="mx_RoomSummaryCard_app_pinToggle"
-                onClick={togglePin}
-                title={pinTitle}
-                disabled={cannotPin}
-            />
-            <AccessibleButton
-                className="mx_RoomSummaryCard_app_maximiseToggle"
-                onClick={toggleMaximised}
-                title={maximiseTitle}
-            />
-
-            {contextMenu}
-        </div>
-    );
-};
-
-const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
-    const apps = useWidgets(room);
-    // Filter out virtual widgets
-    const realApps = useMemo(() => apps.filter((app) => app.eventId !== undefined), [apps]);
-
-    const onManageIntegrations = (): void => {
-        const managers = IntegrationManagers.sharedInstance();
-        if (!managers.hasManager()) {
-            managers.openNoManagerDialog();
-        } else {
-            // noinspection JSIgnoredPromiseFromCall
-            managers.getPrimaryManager()?.open(room);
-        }
-    };
-
-    let copyLayoutBtn: JSX.Element | null = null;
-    if (realApps.length > 0 && WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
-        copyLayoutBtn = (
-            <AccessibleButton kind="link" onClick={() => WidgetLayoutStore.instance.copyLayoutToRoom(room)}>
-                {_t("widget|set_room_layout")}
-            </AccessibleButton>
-        );
-    }
-
-    return (
-        <Group className="mx_RoomSummaryCard_appsGroup" title={_t("right_panel|widgets_section")}>
-            {realApps.map((app) => (
-                <AppRow key={app.id} app={app} room={room} />
-            ))}
-            {copyLayoutBtn}
-            <AccessibleButton kind="link" onClick={onManageIntegrations}>
-                {realApps.length > 0 ? _t("right_panel|edit_integrations") : _t("right_panel|add_integrations")}
-            </AccessibleButton>
-        </Group>
-    );
-};
 
 const onRoomFilesClick = (): void => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
@@ -622,10 +425,6 @@ const RoomSummaryCard: React.FC<IProps> = ({
                     onSelect={onLeaveRoomClick}
                 />
             </div>
-
-            {SettingsStore.getValue(UIFeature.Widgets) &&
-                !isVideoRoom &&
-                shouldShowComponent(UIComponent.AddIntegrations) && <AppsSection room={room} />}
         </BaseCard>
     );
 };

@@ -54,7 +54,7 @@ import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHa
 import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
 import SdkConfig from "../../../SdkConfig";
 import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
-import { useWidgets } from "../right_panel/RoomSummaryCard";
+import { useWidgets } from "../../../utils/WidgetUtils";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { useCall, useLayout } from "../../../hooks/useCall";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
