@@ -19,19 +19,11 @@
         "invalid_json_generic": "JSON ບໍ່ຖືກຕ້ອງ",
         "misconfigured": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານບໍ່ຖືກຕ້ອງ"
     },
-    "failed_to_start": "ບໍ່ສາມາດເປີດໄດ້",
-    "go_to_element_io": "ໄປຫາ element.io",
     "incompatible_browser": {
-        "browser_links": "ກະລຸນາຕິດຕັ້ງ <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> ສຳລັບປະສົບການທີ່ດີທີ່ສຸດ.",
-        "continue_warning": "ຂ້າພະເຈົ້າເຂົ້າໃຈຄວາມສ່ຽງ ແລະຢາກສືບຕໍ່",
-        "feature_warning": "ທ່ານສາມາດສືບຕໍ່ນຳໃຊ້ບຣາວເຊີປັດຈຸບັນຂອງເຈົ້າໄດ້, ແຕ່ບາງຄຸນສົມບັດ ຫຼື ທັງໝົດອາດຈະບໍ່ເຮັດວຽກ ແລະ ລັກສະນະ ແລະ ຄວາມຮູ້ສຶກຂອງແອັບພລິເຄຊັນອາດບໍ່ຖືກຕ້ອງ.",
-        "features": "%(brand)s ໃຊ້ຄຸນສົມບັດຂອງບຣາວເຊີຂັ້ນສູງທີ່ບຼາວເຊີປັດຈຸບັນຂອງທ່ານຍັງບໍ່ຮອງຮັບ.",
-        "summary": "ບຣາວເຊີຂອງທ່ານບໍ່ສາມາດແລ່ນ %(brand)s ໄດ້",
         "title": "ບໍ່ຮັບຮອງເວັບບຣາວເຊີນີ້"
     },
     "powered_by_matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
     "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "unknown_device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
-    "use_brand_on_mobile": "ໃຊ້ມືຖື %(brand)s",
     "welcome_to_element": "ຍິນດີຕ້ອນຮັບ"
 }

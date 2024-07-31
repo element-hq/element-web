@@ -20,19 +20,11 @@
         "invalid_json_generic": "不正なJSON",
         "misconfigured": "Elementの設定が誤っています"
     },
-    "failed_to_start": "起動に失敗しました",
-    "go_to_element_io": "element.ioへ移動",
     "incompatible_browser": {
-        "browser_links": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>か<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
-        "continue_warning": "リスクを理解して続行",
-        "feature_warning": "現在のブラウザーを使い続けることもできますが、いくつか（もしくは全ての）機能が動作しなかったり、外観が崩れたりする可能性があります。",
-        "features": "%(brand)sはブラウザーの高度な機能を使う必要がありますが、このブラウザーではその機能がサポートされていないようです。",
-        "summary": "このブラウザーでは%(brand)sが動きません",
         "title": "サポートされていないブラウザー"
     },
     "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "unknown_device": "不明な端末",
-    "use_brand_on_mobile": "携帯端末で%(brand)sを使用できます",
     "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
     "welcome_to_element": "Elementにようこそ"
 }

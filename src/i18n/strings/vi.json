@@ -21,20 +21,12 @@
         "invalid_json_generic": "JSON không hợp lệ",
         "misconfigured": "Element đang bị thiết lập sai"
     },
-    "failed_to_start": "Không khởi động được",
-    "go_to_element_io": "Qua element.io",
     "incompatible_browser": {
-        "browser_links": "Hãy cài đặt <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, hoặc <safariLink>Safari</safariLink> để có trải nghiệm tốt nhất.",
-        "continue_warning": "Tôi hiểu rủi ro và muốn tiếp tục",
-        "feature_warning": "Bạn có thể tiếp tục sử dụng trình duyệt hiện tại, tuy nhiên các tính năng có thể sẽ không hoạt động và trải nghiệm ứng dụng có thể sẽ không được tốt.",
-        "features": "%(brand)s sử dụng một số tính năng nâng cao mà trình duyệt của bạn không thể đáp ứng.",
-        "summary": "Trình duyệt của bạn không thể chạy %(brand)s",
         "title": "Trình duyệt không được hỗ trợ"
     },
     "powered_by_matrix": "Chạy trên giao thức Matrix",
     "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "unknown_device": "Thiết bị không xác định",
-    "use_brand_on_mobile": "Sử dụng %(brand)s trên di động",
     "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
     "welcome_to_element": "Chào mừng tới Element"
 }

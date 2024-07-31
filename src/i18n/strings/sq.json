@@ -21,20 +21,12 @@
         "invalid_json_generic": "JSON i pavlefshëm",
         "misconfigured": "Element-i juaj është i keqformësuar"
     },
-    "failed_to_start": "S’u arrit të nisej",
-    "go_to_element_io": "Shko te element.io",
     "incompatible_browser": {
-        "browser_links": "Ju lutemi, për funksionimin më të mirë, instaloni <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ose <safariLink>Safari</safariLink>.",
-        "continue_warning": "I kuptoj rreziqet dhe dëshiroj të vazhdoj",
-        "feature_warning": "Mund të vazhdoni të përdorni shfletuesin tuaj të tanishëm, por disa ose krejt veçoritë mund të mos funksionojnë dhe pamja dhe ndjesitë prej aplikacionit të mos jenë të sakta.",
-        "features": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
-        "summary": "Shfletuesi juaj s’mund të xhirojë %(brand)s",
         "title": "Shfletues i pambuluar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
     "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "unknown_device": "Pajisje e panjohur",
-    "use_brand_on_mobile": "Përdor %(brand)s në celular",
     "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
     "welcome_to_element": "Mirë se vini te Element"
 }

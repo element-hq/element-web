@@ -20,19 +20,11 @@
         "invalid_json_generic": "Klaidingas JSON",
         "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas"
     },
-    "failed_to_start": "Nepavyko paleisti",
-    "go_to_element_io": "Eiti į element.io",
     "incompatible_browser": {
-        "browser_links": "Geriausiam veikimui suinstaliuokite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink>.",
-        "continue_warning": "Suprantu šią riziką ir noriu tęsti",
-        "feature_warning": "Jūs galite toliau naudotis savo dabartine naršykle, bet kai kurios arba visos funkcijos gali neveikti ir programos išvaizda bei sąsaja gali būti neteisingai rodoma.",
-        "features": "%(brand)s naudoja išplėstines naršyklės funkcijas, kurių jūsų dabartinė naršyklė nepalaiko.",
-        "summary": "Jūsų naršyklė negali paleisti %(brand)s",
         "title": "Nepalaikoma naršyklė"
     },
     "powered_by_matrix": "Veikia su Matrix",
     "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
     "unknown_device": "Nežinomas įrenginys",
-    "use_brand_on_mobile": "Naudoti %(brand)s mobiliajame telefone",
     "welcome_to_element": "Sveiki atvykę į Element"
 }

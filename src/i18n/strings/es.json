@@ -20,20 +20,12 @@
         "invalid_json_generic": "JSON inválido",
         "misconfigured": "Tu aplicación Element está mal configurada"
     },
-    "failed_to_start": "Fallo al iniciar",
-    "go_to_element_io": "Ir a element.io",
     "incompatible_browser": {
-        "browser_links": "Por favor, instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> para la mejor experiencia.",
-        "continue_warning": "Entiendo los riesgos y quiero continuar",
-        "feature_warning": "Puedes seguir utilizando tu navegador actual, pero puede que algunas funcionalidades no estén disponibles o que algunas partes de la aplicación se muestren de forma incorrecta.",
-        "features": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
-        "summary": "Tu navegador no es compatible con %(brand)s",
         "title": "Navegador no compatible"
     },
     "powered_by_matrix": "Funciona con Matrix",
     "powered_by_matrix_with_logo": "Conversaciones y colaboración descentralizadas y cifradas gracias a $matrixLogo",
     "unknown_device": "Dispositivo desconocido",
-    "use_brand_on_mobile": "Usar %(brand)s en modo móvil",
     "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
     "welcome_to_element": "Te damos la bienvenida a Element"
 }

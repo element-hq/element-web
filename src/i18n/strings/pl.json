@@ -21,20 +21,24 @@
         "invalid_json_generic": "Błędny JSON",
         "misconfigured": "Twój Element jest nieprawidłowo skonfigurowany"
     },
-    "failed_to_start": "Nie udało się wystartować",
-    "go_to_element_io": "Przejdź do element.io",
     "incompatible_browser": {
-        "browser_links": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
-        "continue_warning": "Rozumiem ryzyko i chcę kontynuować",
-        "feature_warning": "Możesz kontynuować używając obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
-        "features": "%(brand)s używa funkcji zaawansowanych, które nie są dostępne w Twojej przeglądarce.",
-        "summary": "Twoja przeglądarka nie obsługuje %(brand)s",
-        "title": "Niewspierana przeglądarka"
+        "continue": "Kontynuuj mimo to",
+        "description": "%(brand)s korzysta z niektórych funkcji, które nie są obecnie dostępne w Twojej przeglądarce. %(detail)s",
+        "detail_can_continue": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości.",
+        "detail_no_continue": "Zaktualizuj przeglądarkę, jeśli jeszcze tego nie zrobiłeś i spróbuj ponownie.",
+        "learn_more": "Dowiedz się więcej",
+        "linux": "Linux",
+        "macos": "Mac",
+        "supported_browsers": "Dla najlepszego doświadczenia korzystaj z <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> lub <Safari>Safari</Safari>.",
+        "title": "%(brand)s nie wspiera tej przeglądarki",
+        "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
+        "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
+        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "powered_by_matrix": "Zasilane przez Matrix",
     "powered_by_matrix_with_logo": "Zdecentralizowany czat szyfrowany i współpraca oparta na $matrixLogo",
     "unknown_device": "Nieznane urządzenie",
-    "use_brand_on_mobile": "Użyj %(brand)s w telefonie",
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
     "welcome_to_element": "Witamy w Element"
 }

@@ -21,20 +21,12 @@
         "invalid_json_generic": "Неверный JSON",
         "misconfigured": "Ваш Element неверно настроен"
     },
-    "failed_to_start": "Старт не удался",
-    "go_to_element_io": "К element.io",
     "incompatible_browser": {
-        "browser_links": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",
-        "continue_warning": "Я понимаю риск и хочу продолжить",
-        "feature_warning": "Вы можете продолжать пользоваться этим браузером, но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
-        "features": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
-        "summary": "Ваш браузер не может запустить %(brand)s",
         "title": "Неподдерживаемый браузер"
     },
     "powered_by_matrix": "На технологии Matrix",
     "powered_by_matrix_with_logo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo",
     "unknown_device": "Неизвестное устройство",
-    "use_brand_on_mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
     "welcome_to_element": "Добро пожаловать в Element"
 }
