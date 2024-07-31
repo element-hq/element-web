@@ -70,7 +70,7 @@ async function initPage(): Promise<void> {
         try {
             const result = await fetch(`https://${serverName}/.well-known/matrix/client`);
             const wkConfig = await result.json();
-            if (wkConfig && wkConfig["m.homeserver"]) {
+            if (wkConfig?.["m.homeserver"]) {
                 hsUrl = wkConfig["m.homeserver"]["base_url"];
 
                 if (wkConfig["m.identity_server"]) {
@@ -78,7 +78,7 @@ async function initPage(): Promise<void> {
                 }
             }
         } catch (e) {
-            if (wkConfig && wkConfig["m.homeserver"]) {
+            if (wkConfig?.["m.homeserver"]) {
                 hsUrl = wkConfig["m.homeserver"]["base_url"] || undefined;
 
                 if (wkConfig["m.identity_server"]) {

@@ -23,7 +23,7 @@ export async function getVectorConfig(relativeLocation = ""): Promise<IConfigOpt
 
     // Handle trailing dot FQDNs
     let domain = window.location.hostname.trimEnd();
-    if (domain[domain.length - 1] === ".") {
+    if (domain.endsWith(".")) {
         domain = domain.slice(0, -1);
     }
 
