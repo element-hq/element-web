@@ -24,6 +24,8 @@ import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -53,6 +55,23 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
     }
 
     private onDownloadClick = async (): Promise<void> => {
+        try {
+            await this.doDownload();
+        } catch (e) {
+            Modal.createDialog(ErrorDialog, {
+                title: _t("timeline|download_failed"),
+                description: (
+                    <>
+                        <div>{_t("timeline|download_failed_description")}</div>
+                        <div>{e instanceof Error ? e.toString() : ""}</div>
+                    </>
+                ),
+            });
+            this.setState({ loading: false });
+        }
+    };
+
+    private async doDownload(): Promise<void> {
         const mediaEventHelper = this.props.mediaEventHelperGet();
         if (this.state.loading || !mediaEventHelper) return;
 
@@ -64,15 +83,15 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         if (this.state.blob) {
             // Cheat and trigger a download, again.
-            return this.doDownload(this.state.blob);
+            return this.downloadBlob(this.state.blob);
         }
 
         const blob = await mediaEventHelper.sourceBlob.value;
         this.setState({ blob });
-        await this.doDownload(blob);
-    };
+        await this.downloadBlob(blob);
+    }
 
-    private async doDownload(blob: Blob): Promise<void> {
+    private async downloadBlob(blob: Blob): Promise<void> {
         await this.downloader.download({
             blob,
             name: this.props.mediaEventHelperGet()!.fileName,
