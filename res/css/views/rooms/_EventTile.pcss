@@ -43,6 +43,7 @@ $left-gutter: 64px;
 
     .mx_EventTile_body {
         overflow-y: hidden;
+        text-align: start;
     }
 
     .mx_EventTile_receiptSent,
@@ -676,7 +677,7 @@ $left-gutter: 64px;
         font-size: $font-12px;
         color: $secondary-content;
         display: inline-block;
-        margin-left: 9px;
+        margin-inline-start: 9px;
     }
 
     .mx_EventTile_edited {
@@ -1441,6 +1442,10 @@ $left-gutter: 64px;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+.mx_EventTile_annotated {
+    display: flex;
 }
 
 /* Media query for mobile UI */

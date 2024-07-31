@@ -26,12 +26,12 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
       <div
         class="mx_MTextBody mx_EventTile_content"
       >
-        <span
+        <div
           class="mx_EventTile_body translate"
           dir="auto"
         >
           First pinned message
-        </span>
+        </div>
       </div>
     </div>
     <div

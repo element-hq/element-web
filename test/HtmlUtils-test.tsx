@@ -19,7 +19,7 @@ import { mocked } from "jest-mock";
 import { render, screen } from "@testing-library/react";
 import { IContent } from "matrix-js-sdk/src/matrix";
 
-import { bodyToNode, formatEmojis, topicToHtml } from "../src/HtmlUtils";
+import { bodyToSpan, formatEmojis, topicToHtml } from "../src/HtmlUtils";
 import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("../src/settings/SettingsStore");
@@ -66,7 +66,7 @@ describe("topicToHtml", () => {
 
 describe("bodyToHtml", () => {
     function getHtml(content: IContent, highlights?: string[]): string {
-        return (bodyToNode(content, highlights, {}) as ReactElement).props.dangerouslySetInnerHTML.__html;
+        return (bodyToSpan(content, highlights, {}) as ReactElement).props.dangerouslySetInnerHTML.__html;
     }
 
     it("should apply highlights to HTML messages", () => {
@@ -108,14 +108,14 @@ describe("bodyToHtml", () => {
     });
 
     it("generates big emoji for emoji made of multiple characters", () => {
-        const { asFragment } = render(bodyToNode({ body: "👨‍👩‍👧‍👦 ↔️ 🇮🇸", msgtype: "m.text" }, [], {}) as ReactElement);
+        const { asFragment } = render(bodyToSpan({ body: "👨‍👩‍👧‍👦 ↔️ 🇮🇸", msgtype: "m.text" }, [], {}) as ReactElement);
 
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should generate big emoji for an emoji-only reply to a message", () => {
         const { asFragment } = render(
-            bodyToNode(
+            bodyToSpan(
                 {
                     "body": "> <@sender1:server> Test\n\n🥰",
                     "format": "org.matrix.custom.html",
@@ -139,7 +139,7 @@ describe("bodyToHtml", () => {
     });
 
     it("does not mistake characters in text presentation mode for emoji", () => {
-        const { asFragment } = render(bodyToNode({ body: "↔ ❗︎", msgtype: "m.text" }, [], {}) as ReactElement);
+        const { asFragment } = render(bodyToSpan({ body: "↔ ❗︎", msgtype: "m.text" }, [], {}) as ReactElement);
 
         expect(asFragment()).toMatchSnapshot();
     });
