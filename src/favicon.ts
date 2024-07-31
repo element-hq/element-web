@@ -101,7 +101,7 @@ export default class Favicon {
         h: number;
     } {
         const opt = {
-            n: typeof n === "number" ? Math.abs(n as number | 0) : n,
+            n: typeof n === "number" ? Math.abs(n | 0) : n,
             len: ("" + n).length,
             // badge positioning constants as percentages
             x: 0.4,
@@ -178,7 +178,7 @@ export default class Favicon {
         this.context.fillStyle = params.textColor;
 
         if (typeof opt.n === "number" && opt.n > 999) {
-            const count = (opt.n > 9999 ? 9 : Math.floor((opt.n as number) / 1000)) + "k+";
+            const count = (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+";
             this.context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
         } else {
             this.context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
