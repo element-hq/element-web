@@ -21,20 +21,12 @@
         "invalid_json_generic": "Хибний JSON",
         "misconfigured": "Ваш Element налаштовано неправильно"
     },
-    "failed_to_start": "Не вдалося запустити",
-    "go_to_element_io": "Перейти на element.io",
     "incompatible_browser": {
-        "browser_links": "Для найкращих вражень від користування встановіть, будь ласка, <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, або <safariLink>Safari</safariLink>.",
-        "continue_warning": "Я усвідомлюю ризик і бажаю продовжити",
-        "feature_warning": "Ви можете продовжити, користуючись вашим поточним браузером, але деякі функції можуть не працювати, а застосунок може виглядати неправильно.",
-        "features": "%(brand)s використовує передові властивості, які ваш браузер не підтримує.",
-        "summary": "Ваш браузер не може запустити %(brand)s",
         "title": "Непідтримуваний браузер"
     },
     "powered_by_matrix": "Працює на Matrix",
     "powered_by_matrix_with_logo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo",
     "unknown_device": "Невідомий пристрій",
-    "use_brand_on_mobile": "Користуйтеся %(brand)s на мобільному",
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
     "welcome_to_element": "Ласкаво просимо до Element"
 }

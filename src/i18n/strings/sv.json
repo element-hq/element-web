@@ -21,20 +21,12 @@
         "invalid_json_generic": "Ogiltig JSON",
         "misconfigured": "Din Element är felkonfigurerad"
     },
-    "failed_to_start": "Misslyckade att starta",
-    "go_to_element_io": "Gå till element.io",
     "incompatible_browser": {
-        "browser_links": "Installera <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> för den bästa upplevelsen.",
-        "continue_warning": "Jag förstår riskerna och vill fortsätta",
-        "feature_warning": "Du kan fortsätta använda din nuvarande webbläsare, men vissa eller alla funktioner kanske inte fungerar och utseendet och känslan av applikationen kan var felaktig.",
-        "features": "%(brand)s använder avancerade webbläsarfunktioner som inte stöds av din aktuella webbläsare.",
-        "summary": "Din webbläsare kan inte köra %(brand)s",
         "title": "Webbläsaren stöds ej"
     },
     "powered_by_matrix": "Drivs av Matrix",
     "powered_by_matrix_with_logo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
     "unknown_device": "Okänd enhet",
-    "use_brand_on_mobile": "Använd %(brand)s på mobilen",
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
     "welcome_to_element": "Välkommen till Element"
 }

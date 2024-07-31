@@ -19,19 +19,11 @@
         "invalid_json_generic": "JSON inválido",
         "misconfigured": "Seu Element está mal configurado"
     },
-    "failed_to_start": "Falha para iniciar",
-    "go_to_element_io": "Ir para element.io",
     "incompatible_browser": {
-        "browser_links": "Por favor instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para a melhor experiência.",
-        "continue_warning": "Eu entendo os riscos e desejo continuar",
-        "feature_warning": "Você pode continuar usando seu browser atual, mas alguma ou toda funcionalidade pode não funcionar e a aparência e sensação do aplicativo pode estar incorretas.",
-        "features": "%(brand)s usa funcionalidade de browser avançada que não é suportada por seu browser atual.",
-        "summary": "Seu browser não consegue rodar %(brand)s",
         "title": "Browser insuportado"
     },
     "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "unknown_device": "Dispositivo desconhecido",
-    "use_brand_on_mobile": "Usar %(brand)s em celular",
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
     "welcome_to_element": "Boas-vindas a Element"
 }

@@ -21,20 +21,12 @@
         "invalid_json_generic": "Vigane JSON",
         "misconfigured": "Sinu Element on valesti seadistatud"
     },
-    "failed_to_start": "Käivitamine ei õnnestunud",
-    "go_to_element_io": "Mine element.io lehele",
     "incompatible_browser": {
-        "browser_links": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",
-        "continue_warning": "Ma mõistan riske ja soovin jätkata",
-        "feature_warning": "Sa võid jätkata praeguse brauseri kasutamist, kuid mõned või kõik funktsionaalsused ei pruugi toimida ning rakenduse välimus võib vigane olla.",
-        "features": "%(brand)s kasutab mitmeid uusi brauseri-põhiseid tehnoloogiaid, mis ei ole veel sinu veebibrauseris toetatud.",
-        "summary": "%(brand)s ei toimi sinu brauseris",
         "title": "Sellele brauserile puudub tugi"
     },
     "powered_by_matrix": "Põhineb Matrix'il",
     "powered_by_matrix_with_logo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
     "unknown_device": "Tundmatu seade",
-    "use_brand_on_mobile": "Kasuta rakendust %(brand)s nutiseadmes",
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
     "welcome_to_element": "Tere tulemast kasutama suhtlusrakendust Element"
 }

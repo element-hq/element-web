@@ -21,20 +21,12 @@
         "invalid_json_generic": "无效的 JSON",
         "misconfigured": "Element 配置错误"
     },
-    "failed_to_start": "启动失败",
-    "go_to_element_io": "前往 element.io",
     "incompatible_browser": {
-        "browser_links": "请安装 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以获得最佳体验。",
-        "continue_warning": "我了解风险并希望继续",
-        "feature_warning": "您可以继续使用您目前的浏览器，但部分或全部功能可能无法正常工作，应用程序的外观可能也看起来不正确。",
-        "features": "当前浏览器不支持 %(brand)s 所需的高级浏览器特性。",
-        "summary": "你的浏览器无法运行 %(brand)s",
         "title": "不支持的浏览器"
     },
     "powered_by_matrix": "由 Matrix 驱动",
     "powered_by_matrix_with_logo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
     "unknown_device": "未知设备",
-    "use_brand_on_mobile": "在移动设备上使用 %(brand)s",
     "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
     "welcome_to_element": "欢迎来到 Element"
 }

@@ -20,20 +20,12 @@
         "invalid_json_generic": "Ógilt JSON",
         "misconfigured": "Element-tilvikið þitt er rangt stillt"
     },
-    "failed_to_start": "Mistókst að ræsa",
-    "go_to_element_io": "Fara á element.io",
     "incompatible_browser": {
-        "browser_links": "Þú ættir að setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> til að fá sem besta útkomu.",
-        "continue_warning": "Ég skil áhættuna og óska að halda áfram",
-        "feature_warning": "Þú getur haldið áfram að nota núverandi vafra, en sumir eða allir eiginleikar virka mögulega ekki rétt, auk þess sem útlit og hegðun forritsins geta verið röng.",
-        "features": "%(brand)s notar háþróaða vafraeiginleika sem eru ekki studdir af vafranum þínum.",
-        "summary": "Vafrinn þinn getur ekki keyrt %(brand)s",
         "title": "Óstuddur vafri"
     },
     "powered_by_matrix": "Keyrt með Matrix",
     "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "unknown_device": "Óþekkt tæki",
-    "use_brand_on_mobile": "Nota %(brand)s í síma",
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
     "welcome_to_element": "Velkomin í Element"
 }

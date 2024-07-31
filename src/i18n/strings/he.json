@@ -21,20 +21,12 @@
         "invalid_json_generic": "JSON לא חוקי",
         "misconfigured": "Element אינו מוגדר תקין"
     },
-    "failed_to_start": "כשל בהעלאת התוכנה",
-    "go_to_element_io": "חזור לאתר הראשי: element.io",
     "incompatible_browser": {
-        "browser_links": "נא התקן את דפדפן <chromeLink>כרום</chromeLink>, <firefoxLink>פיירפוקס</firefoxLink> או <safariLink>סאפרי</safariLink> בשביל החוויה הטובה ביותר.",
-        "continue_warning": "הסיכונים מובנים לי ואני מעוניינ/ת להמשיך",
-        "feature_warning": "ניתן להמשיך ולהשתמש בדפדפן זה, אך ייתכן שחלק מן התכונות והמאפיינים לא יעבדו כשורה או ייראו כשגויים.",
-        "features": "%(brand)s משתמש בתכונות דפדפן מתקדמות שאינן נתמכות בדפדפן הנוכחי שלך.",
-        "summary": "הדפדפן שלך לא יכול להריץ %(brand)s",
         "title": "דפדפן לא נתמך"
     },
     "powered_by_matrix": "מופעל על ידי מטריקס",
     "powered_by_matrix_with_logo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
     "unknown_device": "מכשיר לא ידוע",
-    "use_brand_on_mobile": "השתמש ב-%(brand)s במכשיר הנייד",
     "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
     "welcome_to_element": "ברוכים הבאים ל Element"
 }
