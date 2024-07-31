@@ -30,7 +30,6 @@ import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/Ro
 
 import { useRoomName } from "../../../hooks/useRoomName";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { useTopic } from "../../../hooks/room/useTopic";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useRoomMemberCount, useRoomMembers } from "../../../hooks/useRoomMembers";
@@ -49,7 +48,6 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { formatCount } from "../../../utils/FormattingUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { VideoRoomChatButton } from "./RoomHeader/VideoRoomChatButton";
 import { RoomKnocksBar } from "./RoomKnocksBar";
@@ -71,7 +69,6 @@ export default function RoomHeader({
     const client = useMatrixClientContext();
 
     const roomName = useRoomName(room);
-    const roomTopic = useTopic(room);
     const roomState = useRoomState(room);
 
     const members = useRoomMembers(room, 2500);
@@ -116,11 +113,6 @@ export default function RoomHeader({
     const e2eStatus = useEncryptionStatus(client, room);
 
     const notificationsEnabled = useFeatureEnabled("feature_notifications");
-
-    const roomTopicBody = useMemo(
-        () => topicToHtml(roomTopic?.text, roomTopic?.html),
-        [roomTopic?.html, roomTopic?.text],
-    );
 
     const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
 
@@ -310,15 +302,6 @@ export default function RoomHeader({
                                     </Tooltip>
                                 )}
                             </BodyText>
-                            {roomTopic && (
-                                <BodyText
-                                    as="div"
-                                    size="sm"
-                                    className="mx_RoomHeader_topic mx_RoomHeader_truncated mx_lineClamp"
-                                >
-                                    <Linkify>{roomTopicBody}</Linkify>
-                                </BodyText>
-                            )}
                         </Box>
                     </button>
                 </ReleaseAnnouncement>

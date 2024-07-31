@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomSummaryCard /> has button to edit topic when expanded 1`] = `
+exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
 <div>
   <div
     aria-labelledby="room-summary-panel-tab"
@@ -893,7 +893,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </span>
         </section>
         <section
-          class="mx_Flex mx_RoomSummaryCard_topic mx_RoomSummaryCard_topic_collapsed"
+          class="mx_Flex mx_RoomSummaryCard_topic"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
         >
           <div
@@ -922,6 +922,22 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
                 <div />
               </div>
             </button>
+          </div>
+          <div
+            class="mx_Box mx_RoomSummaryCard_topic_edit mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <a
+              class="_link_1mzip_17"
+              data-kind="primary"
+              rel="noreferrer noopener"
+            >
+              <p
+                class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+              >
+                Edit
+              </p>
+            </a>
           </div>
         </section>
       </header>

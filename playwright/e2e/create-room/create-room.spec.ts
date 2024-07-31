@@ -38,6 +38,5 @@ test.describe("Create Room", () => {
         await expect(page).toHaveURL(/\/#\/room\/#test-room-1:localhost/);
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
-        await expect(header).toContainText(topic);
     });
 });

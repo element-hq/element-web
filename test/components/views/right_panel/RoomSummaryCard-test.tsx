@@ -125,7 +125,7 @@ describe("<RoomSummaryCard />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("has button to edit topic when expanded", () => {
+    it("has button to edit topic", () => {
         room.currentState.setStateEvents([
             new MatrixEvent({
                 type: "m.room.topic",
@@ -138,7 +138,6 @@ describe("<RoomSummaryCard />", () => {
             }),
         ]);
         const { container, getByText } = getComponent();
-        fireEvent.click(screen.getByText("This is the room's topic."));
         expect(getByText("Edit")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });

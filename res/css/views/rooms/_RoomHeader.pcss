@@ -63,31 +63,6 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_RoomHeader_topic {
-    height: 0;
-    opacity: 0;
-    transition: all var(--transition-standard) ease 0.1s;
-    /* Emojis are rendered a bit bigger than text in the timeline
-        Make them compact/the same size as text here */
-    .mx_Emoji {
-        font-size: inherit;
-    }
-}
-
-.mx_RoomHeader:hover,
-.mx_RoomHeader:focus-within {
-    .mx_RoomHeader_topic {
-        /* height needed to compute the transition, it equals to the `line-height`
-        value in pixels */
-        height: calc($font-13px * 1.5);
-        opacity: 1;
-
-        a:hover {
-            text-decoration: underline;
-        }
-    }
-}
-
 .mx_RoomHeader_icon {
     flex-shrink: 0;
 }
