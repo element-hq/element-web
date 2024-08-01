@@ -39,7 +39,7 @@ interface IProps {
 
 export default class ReplyPreview extends React.Component<IProps> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public render(): JSX.Element | null {
         if (!this.props.replyToEvent) return null;

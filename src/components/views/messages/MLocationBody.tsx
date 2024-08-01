@@ -38,7 +38,7 @@ interface IState {
 
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     private unmounted = false;
     private mapId: string;

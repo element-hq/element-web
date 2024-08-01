@@ -38,7 +38,7 @@ interface IState {
 
 export default class MAudioBody extends React.PureComponent<IBodyProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public state: IState = {};
 

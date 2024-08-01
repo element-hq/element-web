@@ -33,7 +33,7 @@ interface IState {
 
 export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);

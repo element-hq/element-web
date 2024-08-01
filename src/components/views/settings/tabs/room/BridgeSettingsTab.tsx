@@ -36,7 +36,7 @@ interface IProps {
 
 export default class BridgeSettingsTab extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     private renderBridgeCard(event: MatrixEvent, room: Room | null): ReactNode {
         const content = event.getContent();

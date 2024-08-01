@@ -66,7 +66,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private tooltips: Element[] = [];
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public state = {
         links: [],

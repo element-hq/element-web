@@ -41,7 +41,7 @@ interface IState {
 // Controlled form component wrapping Field for inputting a room alias scoped to a given domain
 export default class RoomAliasField extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     private fieldRef = createRef<Field>();
 

@@ -40,7 +40,7 @@ const AVATAR_SIZE = "24px";
 
 export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     private onTileClicked = (): void => {
         dis.dispatch<ViewRoomPayload>({

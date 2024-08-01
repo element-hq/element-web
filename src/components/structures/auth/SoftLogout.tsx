@@ -72,12 +72,10 @@ interface IState {
 
 export default class SoftLogout extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    public context!: React.ContextType<typeof SDKContext>;
+    public declare context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
-
-        this.context = context;
 
         this.state = {
             loginView: LoginView.Loading,

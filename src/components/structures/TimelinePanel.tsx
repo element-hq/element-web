@@ -241,7 +241,7 @@ interface IEventIndexOpts {
  */
 class TimelinePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     // a map from room id to read marker event timestamp
     public static roomReadMarkerTsMap: Record<string, number> = {};
@@ -273,7 +273,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
-        this.context = context;
 
         debuglog("mounting");
 

@@ -43,6 +43,7 @@ export class MockedCall extends Call {
             },
             room.client,
         );
+        this.groupCall = { creationTs: this.event.getTs() } as unknown as GroupCall;
     }
 
     public static get(room: Room): MockedCall | null {
@@ -67,7 +68,7 @@ export class MockedCall extends Call {
         CallStore.instance.updateRoom(room);
     }
 
-    public readonly groupCall = { creationTs: this.event.getTs() } as unknown as GroupCall;
+    public readonly groupCall: GroupCall;
 
     public get participants(): Map<RoomMember, Set<string>> {
         return super.participants;
