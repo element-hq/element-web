@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { mocked } from "jest-mock";
+
 import EditorModel from "../../src/editor/model";
 import { htmlSerializeIfNeeded } from "../../src/editor/serialize";
 import { createPartCreator } from "./mock";
+import { IConfigOptions } from "../../src/IConfigOptions";
 import SettingsStore from "../../src/settings/SettingsStore";
+import SdkConfig from "../../src/SdkConfig";
 
 describe("editor/serialize", function () {
     describe("with markdown", function () {
@@ -103,6 +107,32 @@ describe("editor/serialize", function () {
             const model = new EditorModel([pc.plain("2021. foo")], pc);
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe('<ol start="2021">\n<li>foo</li>\n</ol>\n');
+        });
+        describe("with permalink_prefix set", function () {
+            const sdkConfigGet = SdkConfig.get;
+            beforeEach(() => {
+                jest.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+                    if (key === "permalink_prefix") {
+                        return "https://element.fs.tld";
+                    } else return sdkConfigGet(key, altCaseName);
+                });
+            });
+
+            it("user pill uses matrix.to", function () {
+                const pc = createPartCreator();
+                const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+                const html = htmlSerializeIfNeeded(model, {});
+                expect(html).toBe('<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>');
+            });
+            it("room pill uses matrix.to", function () {
+                const pc = createPartCreator();
+                const model = new EditorModel([pc.roomPill("#room:hs.tld")], pc);
+                const html = htmlSerializeIfNeeded(model, {});
+                expect(html).toBe('<a href="https://matrix.to/#/#room:hs.tld">#room:hs.tld</a>');
+            });
+            afterEach(() => {
+                mocked(SdkConfig.get).mockRestore();
+            });
         });
     });
 
