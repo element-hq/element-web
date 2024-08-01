@@ -264,12 +264,12 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
   </p>
   <p>
     <span>
+      Invited by 
       <span
         class="mx_RoomPreviewBar_inviter"
       >
         @inviter:test.com
       </span>
-       invited you
     </span>
   </p>
 </div>
@@ -322,17 +322,18 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
   </p>
   <p>
     <span>
-      <span>
-        <span
-          class="mx_RoomPreviewBar_inviter"
-        >
-          @inviter:test.com name
-        </span>
-         (
-        @inviter:test.com
-        )
+      <span
+        class="mx_RoomPreviewBar_inviter"
+      >
+        @inviter:test.com name
       </span>
        wants to chat
+    </span>
+    <br />
+    <span
+      class="mx_RoomPreviewBar_inviter_mxid"
+    >
+      @inviter:test.com
     </span>
   </p>
 </div>
@@ -387,17 +388,18 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
   </p>
   <p>
     <span>
-      <span>
-        <span
-          class="mx_RoomPreviewBar_inviter"
-        >
-          @inviter:test.com name
-        </span>
-         (
-        @inviter:test.com
-        )
+      Invited by 
+      <span
+        class="mx_RoomPreviewBar_inviter"
+      >
+        @inviter:test.com name
       </span>
-       invited you
+    </span>
+    <br />
+    <span
+      class="mx_RoomPreviewBar_inviter_mxid"
+    >
+      @inviter:test.com
     </span>
   </p>
 </div>

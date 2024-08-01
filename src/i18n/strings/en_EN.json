@@ -1846,7 +1846,7 @@
             },
             "title": "Pinned messages"
         },
-        "pinned_messages_button": "Pinned",
+        "pinned_messages_button": "Pinned messages",
         "poll": {
             "active_heading": "Active polls",
             "empty_active": "There are no active polls in this room",
@@ -1871,7 +1871,7 @@
             "view_in_timeline": "View poll in timeline",
             "view_poll": "View poll"
         },
-        "polls_button": "Poll history",
+        "polls_button": "Polls",
         "room_summary_card": {
             "title": "Room info"
         },
@@ -1991,7 +1991,7 @@
         "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
-        "invite_subtitle": "<userName/> invited you",
+        "invite_subtitle": "Invited by <userName/>",
         "invite_this_room": "Invite to this room",
         "invite_title": "Do you want to join %(roomName)s?",
         "inviter_unknown": "Unknown",

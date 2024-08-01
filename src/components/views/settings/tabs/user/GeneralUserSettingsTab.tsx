@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -34,69 +34,106 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import UserPersonalInfoSettings from "../../UserPersonalInfoSettings";
+import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {
     closeSettingsFn: () => void;
 }
 
-interface IState {
+interface AccountSectionProps {
     canChangePassword: boolean;
-    idServerName?: string;
-    externalAccountManagementUrl?: string;
-    canMake3pidChanges: boolean;
-    canSetDisplayName: boolean;
-    canSetAvatar: boolean;
+    onPasswordChangeError: (e: Error) => void;
+    onPasswordChanged: () => void;
 }
 
-export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
-    public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+const AccountSection: React.FC<AccountSectionProps> = ({
+    canChangePassword,
+    onPasswordChangeError,
+    onPasswordChanged,
+}) => {
+    if (!canChangePassword) return <></>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    return (
+        <>
+            <SettingsSubsection
+                heading={_t("settings|general|account_section")}
+                stretchContent
+                data-testid="accountSection"
+            >
+                <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
+                <ChangePassword
+                    className="mx_GeneralUserSettingsTab_section--account_changePassword"
+                    rowClassName=""
+                    buttonKind="primary"
+                    onError={onPasswordChangeError}
+                    onFinished={onPasswordChanged}
+                />
+            </SettingsSubsection>
+        </>
+    );
+};
 
-        this.state = {
-            canChangePassword: false,
-            canMake3pidChanges: false,
-            canSetDisplayName: false,
-            canSetAvatar: false,
-        };
+interface ManagementSectionProps {
+    onDeactivateClicked: () => void;
+}
 
-        this.getCapabilities();
-    }
+const ManagementSection: React.FC<ManagementSectionProps> = ({ onDeactivateClicked }) => {
+    return (
+        <SettingsSection heading={_t("settings|general|deactivate_section")}>
+            <SettingsSubsection
+                heading={_t("settings|general|account_management_section")}
+                data-testid="account-management-section"
+                description={_t("settings|general|deactivate_warning")}
+            >
+                <AccessibleButton onClick={onDeactivateClicked} kind="danger">
+                    {_t("settings|general|deactivate_section")}
+                </AccessibleButton>
+            </SettingsSubsection>
+        </SettingsSection>
+    );
+};
 
-    private async getCapabilities(): Promise<void> {
-        const cli = this.context.client!;
+const GeneralUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
+    const [externalAccountManagementUrl, setExternalAccountManagementUrl] = React.useState<string | undefined>();
+    const [canMake3pidChanges, setCanMake3pidChanges] = React.useState<boolean>(false);
+    const [canSetDisplayName, setCanSetDisplayName] = React.useState<boolean>(false);
+    const [canSetAvatar, setCanSetAvatar] = React.useState<boolean>(false);
+    const [canChangePassword, setCanChangePassword] = React.useState<boolean>(false);
 
-        const capabilities = (await cli.getCapabilities()) ?? {};
-        const changePasswordCap = capabilities["m.change_password"];
+    const cli = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
 
-        // You can change your password so long as the capability isn't explicitly disabled. The implicit
-        // behaviour is you can change your password when the capability is missing or has not-false as
-        // the enabled flag value.
-        const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
+    useEffect(() => {
+        (async () => {
+            const capabilities = (await cli.getCapabilities()) ?? {};
+            const changePasswordCap = capabilities["m.change_password"];
 
-        await this.context.oidcClientStore.readyPromise; // wait for the store to be ready
-        const externalAccountManagementUrl = this.context.oidcClientStore.accountManagementEndpoint;
-        // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
-        // We support as far back as v1.1 which doesn't have m.3pid_changes
-        // so the behaviour for when it is missing has to be assume true
-        const canMake3pidChanges = !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
+            // You can change your password so long as the capability isn't explicitly disabled. The implicit
+            // behaviour is you can change your password when the capability is missing or has not-false as
+            // the enabled flag value.
+            const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
 
-        const canSetDisplayName =
-            !capabilities["m.set_displayname"] || capabilities["m.set_displayname"].enabled === true;
-        const canSetAvatar = !capabilities["m.set_avatar_url"] || capabilities["m.set_avatar_url"].enabled === true;
+            await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
+            const externalAccountManagementUrl = sdkContext.oidcClientStore.accountManagementEndpoint;
+            // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
+            // We support as far back as v1.1 which doesn't have m.3pid_changes
+            // so the behaviour for when it is missing has to be assume true
+            const canMake3pidChanges =
+                !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
 
-        this.setState({
-            canChangePassword,
-            externalAccountManagementUrl,
-            canMake3pidChanges,
-            canSetDisplayName,
-            canSetAvatar,
-        });
-    }
+            const canSetDisplayName =
+                !capabilities["m.set_displayname"] || capabilities["m.set_displayname"].enabled === true;
+            const canSetAvatar = !capabilities["m.set_avatar_url"] || capabilities["m.set_avatar_url"].enabled === true;
 
-    private onPasswordChangeError = (err: Error): void => {
+            setCanMake3pidChanges(canMake3pidChanges);
+            setCanSetDisplayName(canSetDisplayName);
+            setCanSetAvatar(canSetAvatar);
+            setExternalAccountManagementUrl(externalAccountManagementUrl);
+            setCanChangePassword(canChangePassword);
+        })();
+    }, [cli, sdkContext.oidcClientStore]);
+
+    const onPasswordChangeError = useCallback((err: Error): void => {
         logger.error("Failed to change password: " + err);
 
         let underlyingError = err;
@@ -126,85 +163,49 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             title: _t("settings|general|error_password_change_title"),
             description: errorMessageToDisplay,
         });
-    };
+    }, []);
 
-    private onPasswordChanged = (): void => {
+    const onPasswordChanged = useCallback((): void => {
         const description = _t("settings|general|password_change_success");
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
             title: _t("common|success"),
             description,
         });
-    };
+    }, []);
 
-    private onDeactivateClicked = (): void => {
+    const onDeactivateClicked = useCallback((): void => {
         Modal.createDialog(DeactivateAccountDialog, {
             onFinished: (success) => {
-                if (success) this.props.closeSettingsFn();
+                if (success) closeSettingsFn();
             },
         });
-    };
+    }, [closeSettingsFn]);
 
-    private renderAccountSection(): JSX.Element | undefined {
-        if (!this.state.canChangePassword) return undefined;
-
-        return (
-            <>
-                <SettingsSubsection
-                    heading={_t("settings|general|account_section")}
-                    stretchContent
-                    data-testid="accountSection"
-                >
-                    <SettingsSubsectionText>{_t("settings|general|password_change_section")}</SettingsSubsectionText>
-                    <ChangePassword
-                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
-                        rowClassName=""
-                        buttonKind="primary"
-                        onError={this.onPasswordChangeError}
-                        onFinished={this.onPasswordChanged}
-                    />
-                </SettingsSubsection>
-            </>
-        );
+    let accountManagementSection: JSX.Element | undefined;
+    const isAccountManagedExternally = Boolean(externalAccountManagementUrl);
+    if (SettingsStore.getValue(UIFeature.Deactivate) && !isAccountManagedExternally) {
+        accountManagementSection = <ManagementSection onDeactivateClicked={onDeactivateClicked} />;
     }
 
-    private renderManagementSection(): JSX.Element {
-        // TODO: Improve warning text for account deactivation
-        return (
-            <SettingsSection heading={_t("settings|general|deactivate_section")}>
-                <SettingsSubsection
-                    heading={_t("settings|general|account_management_section")}
-                    data-testid="account-management-section"
-                    description={_t("settings|general|deactivate_warning")}
-                >
-                    <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
-                        {_t("settings|general|deactivate_section")}
-                    </AccessibleButton>
-                </SettingsSubsection>
+    return (
+        <SettingsTab data-testid="mx_GeneralUserSettingsTab">
+            <SettingsSection>
+                <UserProfileSettings
+                    externalAccountManagementUrl={externalAccountManagementUrl}
+                    canSetDisplayName={canSetDisplayName}
+                    canSetAvatar={canSetAvatar}
+                />
+                <UserPersonalInfoSettings canMake3pidChanges={canMake3pidChanges} />
+                <AccountSection
+                    canChangePassword={canChangePassword}
+                    onPasswordChanged={onPasswordChanged}
+                    onPasswordChangeError={onPasswordChangeError}
+                />
             </SettingsSection>
-        );
-    }
+            {accountManagementSection}
+        </SettingsTab>
+    );
+};
 
-    public render(): React.ReactNode {
-        let accountManagementSection: JSX.Element | undefined;
-        const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
-        if (SettingsStore.getValue(UIFeature.Deactivate) && !isAccountManagedExternally) {
-            accountManagementSection = this.renderManagementSection();
-        }
-
-        return (
-            <SettingsTab data-testid="mx_GeneralUserSettingsTab">
-                <SettingsSection>
-                    <UserProfileSettings
-                        externalAccountManagementUrl={this.state.externalAccountManagementUrl}
-                        canSetDisplayName={this.state.canSetDisplayName}
-                        canSetAvatar={this.state.canSetAvatar}
-                    />
-                    <UserPersonalInfoSettings canMake3pidChanges={this.state.canMake3pidChanges} />
-                    {this.renderAccountSection()}
-                </SettingsSection>
-                {accountManagementSection}
-            </SettingsTab>
-        );
-    }
-}
+export default GeneralUserSettingsTab;
