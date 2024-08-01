@@ -70,12 +70,8 @@ const LanguageSection: React.FC = () => {
     return (
         <div className="mx_SettingsSubsection_contentStretch">
             {_t("settings|general|application_language")}
-            <LanguageDropdown
-                className="mx_GeneralUserSettingsTab_section_languageInput"
-                onOptionChange={onLanguageChange}
-                value={language}
-            />
-            <div className="mx_GeneralUserSettingsTab_section_hint">
+            <LanguageDropdown onOptionChange={onLanguageChange} value={language} />
+            <div className="mx_PreferencesUserSettingsTab_section_hint">
                 {_t("settings|general|application_language_reload_hint")}
             </div>
         </div>
