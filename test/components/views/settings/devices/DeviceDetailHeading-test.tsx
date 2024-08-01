@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 
 import { DeviceDetailHeading } from "../../../../../src/components/views/settings/devices/DeviceDetailHeading";
 import { flushPromisesWithFakeTimers } from "../../../../test-utils";
@@ -118,7 +118,7 @@ describe("<DeviceDetailHeading />", () => {
         await flushPromisesWithFakeTimers();
 
         // read mode displayed
-        expect(getByTestId("device-detail-heading")).toBeTruthy();
+        await waitFor(() => expect(getByTestId("device-detail-heading")).toBeTruthy());
     });
 
     it("displays error when device name fails to save", async () => {
@@ -136,7 +136,7 @@ describe("<DeviceDetailHeading />", () => {
         await flushPromisesWithFakeTimers();
 
         // error message displayed
-        expect(queryByText("Failed to set session name")).toBeTruthy();
+        await waitFor(() => expect(queryByText("Failed to set session name")).toBeTruthy());
         // spinner removed
         expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
 

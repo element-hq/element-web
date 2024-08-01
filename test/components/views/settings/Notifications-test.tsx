@@ -30,7 +30,16 @@ import {
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
+import {
+    act,
+    fireEvent,
+    getByTestId,
+    render,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
+    within,
+} from "@testing-library/react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -244,7 +253,7 @@ describe("<Notifications />", () => {
     // get component, wait for async data and force a render
     const getComponentAndWait = async () => {
         const component = getComponent();
-        await flushPromises();
+        await waitForElementToBeRemoved(() => component.queryAllByRole("progressbar"));
         return component;
     };
 

@@ -27,7 +27,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import sanitizeHtml from "sanitize-html";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import SpotlightDialog from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { Filter } from "../../../../src/components/views/dialogs/spotlight/Filter";
@@ -201,10 +201,12 @@ describe("Spotlight Dialog", () => {
             expect(filterChip).toBeInTheDocument();
             expect(filterChip.innerHTML).toContain("Public rooms");
 
-            const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-            expect(options.length).toBe(1);
-            expect(options[0].innerHTML).toContain(testPublicRoom.name);
+            await waitFor(() => {
+                const content = document.querySelector("#mx_SpotlightDialog_content")!;
+                const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+                expect(options.length).toBe(1);
+                expect(options[0].innerHTML).toContain(testPublicRoom.name);
+            });
         });
 
         it("with people filter", async () => {
@@ -223,10 +225,12 @@ describe("Spotlight Dialog", () => {
             expect(filterChip).toBeInTheDocument();
             expect(filterChip.innerHTML).toContain("People");
 
-            const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-            expect(options.length).toBeGreaterThanOrEqual(1);
-            expect(options[0]!.innerHTML).toContain(testPerson.display_name);
+            await waitFor(() => {
+                const content = document.querySelector("#mx_SpotlightDialog_content")!;
+                const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+                expect(options.length).toBeGreaterThanOrEqual(1);
+                expect(options[0]!.innerHTML).toContain(testPerson.display_name);
+            });
         });
     });
 
@@ -269,10 +273,12 @@ describe("Spotlight Dialog", () => {
             expect(filterChip).toBeInTheDocument();
             expect(filterChip.innerHTML).toContain("Public rooms");
 
-            const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-            expect(options.length).toBe(1);
-            expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
+            await waitFor(() => {
+                const content = document.querySelector("#mx_SpotlightDialog_content")!;
+                const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+                expect(options.length).toBe(1);
+                expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
+            });
 
             // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
@@ -292,10 +298,12 @@ describe("Spotlight Dialog", () => {
             expect(filterChip).toBeInTheDocument();
             expect(filterChip.innerHTML).toContain("People");
 
-            const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-            expect(options.length).toBeGreaterThanOrEqual(1);
-            expect(options[0]!.innerHTML).toContain(testPerson.display_name);
+            await waitFor(() => {
+                const content = document.querySelector("#mx_SpotlightDialog_content")!;
+                const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+                expect(options.length).toBeGreaterThanOrEqual(1);
+                expect(options[0]!.innerHTML).toContain(testPerson.display_name);
+            });
         });
     });
 
@@ -380,11 +388,13 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBeGreaterThanOrEqual(2);
-        expect(options[0]).toHaveTextContent("User Alpha");
-        expect(options[1]).toHaveTextContent("User Beta");
+        await waitFor(() => {
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBeGreaterThanOrEqual(2);
+            expect(options[0]).toHaveTextContent("User Alpha");
+            expect(options[1]).toHaveTextContent("User Beta");
+        });
     });
 
     it("should not filter out users sent by the server even if a local suggestion gets filtered out", async () => {
@@ -405,11 +415,13 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBeGreaterThanOrEqual(2);
-        expect(options[0]).toHaveTextContent(testPerson.display_name!);
-        expect(options[1]).toHaveTextContent("User Beta");
+        await waitFor(() => {
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBeGreaterThanOrEqual(2);
+            expect(options[0]).toHaveTextContent(testPerson.display_name!);
+            expect(options[1]).toHaveTextContent("User Beta");
+        });
     });
 
     it("show non-matching query members with DMs if they are present in the server search results", async () => {
@@ -427,11 +439,13 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBeGreaterThanOrEqual(2);
-        expect(options[0]).toHaveTextContent(testDMUserId);
-        expect(options[1]).toHaveTextContent("Bob Wonder");
+        await waitFor(() => {
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBeGreaterThanOrEqual(2);
+            expect(options[0]).toHaveTextContent(testDMUserId);
+            expect(options[1]).toHaveTextContent("Bob Wonder");
+        });
     });
 
     it("don't sort the order of users sent by the server", async () => {
@@ -449,11 +463,13 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBeGreaterThanOrEqual(2);
-        expect(options[0]).toHaveTextContent("User Beta");
-        expect(options[1]).toHaveTextContent("User Alpha");
+        await waitFor(() => {
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBeGreaterThanOrEqual(2);
+            expect(options[0]).toHaveTextContent("User Beta");
+            expect(options[1]).toHaveTextContent("User Alpha");
+        });
     });
 
     it("should start a DM when clicking a person", async () => {
@@ -468,12 +484,13 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const options = document.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBeGreaterThanOrEqual(1);
-        expect(options[0]!.innerHTML).toContain(testPerson.display_name);
-
-        fireEvent.click(options[0]!);
-        expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
+        await waitFor(() => {
+            const options = document.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBeGreaterThanOrEqual(1);
+            expect(options[0]!.innerHTML).toContain(testPerson.display_name);
+            fireEvent.click(options[0]!);
+            expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
+        });
     });
 
     it("should pass via of the server being explored when joining room from directory", async () => {
@@ -489,20 +506,22 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
-        expect(options.length).toBe(1);
-        expect(options[0].innerHTML).toContain(testPublicRoom.name);
+        await waitFor(() => {
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+            expect(options.length).toBe(1);
+            expect(options[0].innerHTML).toContain(testPublicRoom.name);
 
-        fireEvent.click(options[0].querySelector("[role='button']")!);
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledTimes(1);
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
-            expect.objectContaining({
-                action: "view_room",
-                room_id: testPublicRoom.room_id,
-                via_servers: ["example.tld"],
-            }),
-        );
+            fireEvent.click(options[0].querySelector("[role='button']")!);
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledTimes(1);
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: testPublicRoom.room_id,
+                    via_servers: ["example.tld"],
+                }),
+            );
+        });
     });
 
     describe("nsfw public rooms filter", () => {
@@ -549,9 +568,11 @@ describe("Spotlight Dialog", () => {
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
-            expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
-            expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
-            expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
+                expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
+                expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
+            });
         });
 
         it("displays rooms with nsfw keywords in results when showNsfwPublicRooms is truthy", async () => {
@@ -562,9 +583,11 @@ describe("Spotlight Dialog", () => {
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
-            expect(screen.getByText(nsfwTopicRoom.name!)).toBeInTheDocument();
-            expect(screen.getByText(nsfwNameRoom.name!)).toBeInTheDocument();
-            expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByText(nsfwTopicRoom.name!)).toBeInTheDocument();
+                expect(screen.getByText(nsfwNameRoom.name!)).toBeInTheDocument();
+                expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
+            });
         });
     });
 
@@ -575,7 +598,7 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        expect(screen.getByText("Failed to query public rooms")).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText("Failed to query public rooms")).toBeInTheDocument());
     });
 
     describe("knock rooms", () => {

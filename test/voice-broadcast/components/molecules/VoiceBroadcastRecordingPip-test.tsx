@@ -16,7 +16,7 @@ limitations under the License.
 //
 
 import React from "react";
-import { act, render, RenderResult, screen } from "@testing-library/react";
+import { act, render, RenderResult, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ClientEvent, MatrixClient, MatrixEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -117,10 +117,8 @@ describe("VoiceBroadcastRecordingPip", () => {
 
         describe("and selecting another input device", () => {
             beforeEach(async () => {
-                await act(async () => {
-                    await userEvent.click(screen.getByLabelText("Change input device"));
-                    await userEvent.click(screen.getByText("Device 1"));
-                });
+                await userEvent.click(screen.getByLabelText("Change input device"));
+                await userEvent.click(screen.getByText("Device 1"));
             });
 
             it("should select the device and pause and resume the broadcast", () => {
@@ -199,8 +197,8 @@ describe("VoiceBroadcastRecordingPip", () => {
                     client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
                 });
 
-                it("should render a paused recording", () => {
-                    expect(screen.getByLabelText("resume voice broadcast")).toBeInTheDocument();
+                it("should render a paused recording", async () => {
+                    await waitFor(() => expect(screen.getByLabelText("resume voice broadcast")).toBeInTheDocument());
                 });
             });
         });

@@ -375,6 +375,7 @@ describe("RoomHeader", () => {
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue({
                 widget,
                 on: () => {},
+                off: () => {},
             } as unknown as Call);
             jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
             const { container } = render(<RoomHeader room={room} />, getWrapper());
@@ -393,6 +394,7 @@ describe("RoomHeader", () => {
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue({
                 widget,
                 on: () => {},
+                off: () => {},
             } as unknown as Call);
             jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
 

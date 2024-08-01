@@ -22,6 +22,7 @@ import { mocked } from "jest-mock";
 import { PredictableRandom } from "./predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
 
 declare global {
+    // eslint-disable-next-line no-var
     var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
 
