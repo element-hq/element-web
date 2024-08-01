@@ -18,10 +18,10 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
     class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
   >
     <div
-      class="mx_GeneralUserSettingsTab_section--discovery_existing"
+      class="mx_EmailAddressesPhoneNumbers_discovery_existing"
     >
       <span
-        class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+        class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
       >
         test@test.io
       </span>
@@ -84,10 +84,10 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
     class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
   >
     <div
-      class="mx_GeneralUserSettingsTab_section--discovery_existing"
+      class="mx_EmailAddressesPhoneNumbers_discovery_existing"
     >
       <span
-        class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+        class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
       >
         +
         123456789
