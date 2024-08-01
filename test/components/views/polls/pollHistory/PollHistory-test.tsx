@@ -24,6 +24,7 @@ import {
     getMockClientWithEventEmitter,
     makePollEndEvent,
     makePollStartEvent,
+    mockClientMethodsRooms,
     mockClientMethodsUser,
     mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
@@ -41,7 +42,7 @@ describe("<PollHistory />", () => {
     const roomId = "!room:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        ...mockClientMethodsRooms([]),
         relations: jest.fn(),
         decryptEventIfNeeded: jest.fn(),
         getOrCreateFilter: jest.fn(),

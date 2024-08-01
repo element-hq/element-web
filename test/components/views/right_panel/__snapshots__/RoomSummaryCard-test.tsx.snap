@@ -133,7 +133,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
           <label
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-            for=":r3:"
+            for=":r2:"
           >
             Favourite
           </label>
@@ -142,7 +142,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           >
             <input
               class="_input_qnvru_32"
-              id=":r3:"
+              id=":r2:"
               type="checkbox"
             />
             <div
@@ -525,7 +525,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
           <label
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-            for=":r1:"
+            for=":r0:"
           >
             Favourite
           </label>
@@ -534,7 +534,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           >
             <input
               class="_input_qnvru_32"
-              id=":r1:"
+              id=":r0:"
               type="checkbox"
             />
             <div
@@ -944,7 +944,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
           <label
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
-            for=":r2:"
+            for=":r1:"
           >
             Favourite
           </label>
@@ -953,7 +953,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           >
             <input
               class="_input_qnvru_32"
-              id=":r2:"
+              id=":r1:"
               type="checkbox"
             />
             <div

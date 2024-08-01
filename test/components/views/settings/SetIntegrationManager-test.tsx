@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -99,6 +99,6 @@ describe("SetIntegrationManager", () => {
 
         expect(logger.error).toHaveBeenCalledWith("Error changing integration manager provisioning");
         expect(logger.error).toHaveBeenCalledWith("oups");
-        expect(within(integrationSection).getByRole("switch")).not.toBeChecked();
+        await waitFor(() => expect(within(integrationSection).getByRole("switch")).not.toBeChecked());
     });
 });

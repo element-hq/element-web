@@ -21,6 +21,12 @@ import { mocked } from "jest-mock";
 
 import { PredictableRandom } from "./predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
 
+declare global {
+    var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 // Fake random strings to give a predictable snapshot for IDs
 jest.mock("matrix-js-sdk/src/randomstring");
 beforeEach(() => {
