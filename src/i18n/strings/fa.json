@@ -20,20 +20,12 @@
         "invalid_json_generic": "JSON اشتباه",
         "misconfigured": "Element شما پیکربندی نشده است"
     },
-    "failed_to_start": "خطا در شروع",
-    "go_to_element_io": "برو به element.io",
     "incompatible_browser": {
-        "browser_links": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید.",
-        "continue_warning": "از خطرات این کار آگاهم و مایلم که ادامه بدهم",
-        "feature_warning": "شما می توانید با مرورگر فعلی خود ادامه دهید، اما ممکن است عملکرد تمامی یا برخی از قابلیت ها با اشکال روبرو شود و نمایش برنامه صحیح نباشد.",
-        "features": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده می کند که در مرورگر فعلی شما پشتیبانی نمی شوند.",
-        "summary": "مرورگر شما نمی تواند %(brand)s را اجرا کند",
         "title": "مرورگر پش‬تبانی نمی شود"
     },
     "powered_by_matrix": "راه اندازی شده با استفاده از ماتریکس",
     "powered_by_matrix_with_logo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo",
     "unknown_device": "دستگاه ناشناخته",
-    "use_brand_on_mobile": "از %(brand)s گوشی استفاده کنید",
     "web_default_device_name": "%(appName)s: %(browserName)s: روی %(osName)s",
     "welcome_to_element": "به Element خوش‌آمدید"
 }

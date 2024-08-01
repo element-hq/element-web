@@ -20,20 +20,12 @@
         "invalid_json_generic": "Nevalida JSON",
         "misconfigured": "Via Elemento estas misagordita"
     },
-    "failed_to_start": "Malsukcesis starti",
-    "go_to_element_io": "Iri al element.io",
     "incompatible_browser": {
-        "browser_links": "Bonvolu instali retumilon <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, aŭ <safariLink>Safari</safariLink>, por la plej bona sperto.",
-        "continue_warning": "Mi komprenas la riskon kaj volas pluiĝi",
-        "feature_warning": "Vi povas daŭre uzi vian nunan foliumilon, sed iuj (eĉ ĉiuj) funkcioj eble ne funkciu, kaj la aspekto de la aplikaĵo eble ne estu ĝusta.",
-        "features": "%(brand)s uzas specialajn funkciojn de retumilo, kiujn via nuna retumilo ne subtenas.",
-        "summary": "Via retumilo ne povas ruli %(brand)s",
         "title": "Nesubtenata retumilo"
     },
     "powered_by_matrix": "Povigata de Matrix",
     "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
     "unknown_device": "Nekonata aparato",
-    "use_brand_on_mobile": "Uzi %(brand)s poŝtelefone",
     "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
     "welcome_to_element": "Bonvenon al Element"
 }

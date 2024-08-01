@@ -19,19 +19,11 @@
         "invalid_json_generic": "Μη έγκυρο JSON",
         "misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά"
     },
-    "failed_to_start": "Αποτυχία έναρξης",
-    "go_to_element_io": "Πήγαινε στο element.io",
     "incompatible_browser": {
-        "browser_links": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
-        "continue_warning": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
-        "feature_warning": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
-        "features": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
-        "summary": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
         "title": "Μη υποστηριζόμενο πρόγραμμα περιήγησης"
     },
     "powered_by_matrix": "Με την υποστήριξη του Matrix",
     "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "unknown_device": "Άγνωστη συσκευή",
-    "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
     "welcome_to_element": "Καλώς ήλθατε στο Element"
 }

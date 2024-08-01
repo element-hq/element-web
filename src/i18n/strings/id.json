@@ -21,20 +21,12 @@
         "invalid_json_generic": "JSON tidak absah",
         "misconfigured": "Anda salah mengatur Element"
     },
-    "failed_to_start": "Gagal untuk memulai",
-    "go_to_element_io": "Buka element.io",
     "incompatible_browser": {
-        "browser_links": "Silakan instal <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, atau <safariLink>Safari</safariLink> untuk pengalaman yang terbaik.",
-        "continue_warning": "Saya memahami risikonya dan ingin melanjutkan",
-        "feature_warning": "Anda dapat melanjutkan menggunakan peramban Anda saat ini, tetapi beberapa atau semua fitur mungkin tidak berfungsi dan tampilan serta nuansa aplikasi mungkin tidak benar.",
-        "features": "%(brand)s menggunakan fitur peramban tingkat lanjut yang tidak didukung oleh peramban Anda saat ini.",
-        "summary": "Peramban Anda tidak dapat menjalankan %(brand)s",
         "title": "Peramban tidak didukung"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
     "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "unknown_device": "Perangkat tidak diketahui",
-    "use_brand_on_mobile": "Gunakan %(brand)s di ponsel",
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
     "welcome_to_element": "Selamat datang di Element"
 }
