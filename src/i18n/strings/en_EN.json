@@ -1991,7 +1991,7 @@
         "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
-        "invite_subtitle": "<userName/> invited you",
+        "invite_subtitle": "Invited by <userName/>",
         "invite_this_room": "Invite to this room",
         "invite_title": "Do you want to join %(roomName)s?",
         "inviter_unknown": "Unknown",
