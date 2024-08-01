@@ -10,9 +10,10 @@ module.exports = {
                     "last 2 Safari versions",
                     "last 2 Edge versions",
                 ],
+                include: ["@babel/plugin-transform-class-properties"],
             },
         ],
-        "@babel/preset-typescript",
+        ["@babel/preset-typescript", { allowDeclareFields: true }],
         "@babel/preset-react",
     ],
     plugins: [
