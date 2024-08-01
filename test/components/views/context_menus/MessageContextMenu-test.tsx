@@ -535,7 +535,7 @@ function createRightClickMenu(mxEvent: MatrixEvent, context?: Partial<IRoomState
 
 function createMenuWithContent(
     eventContent: object,
-    props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
+    props?: Partial<MessageContextMenu["props"]>,
     context?: Partial<IRoomState>,
 ): RenderResult {
     // XXX: We probably shouldn't be assuming all events are going to be message events, but considering this
@@ -552,7 +552,7 @@ function makeDefaultRoom(): Room {
 
 function createMenu(
     mxEvent: MatrixEvent,
-    props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
+    props?: Partial<MessageContextMenu["props"]>,
     context: Partial<IRoomState> = {},
     beacons: Map<BeaconIdentifier, Beacon> = new Map(),
     room: Room = makeDefaultRoom(),

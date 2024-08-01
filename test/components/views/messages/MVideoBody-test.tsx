@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 import { EventType, getHttpUriForMxc, IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
@@ -117,7 +117,7 @@ function makeMVideoBody(w: number, h: number): RenderResult {
         content,
     });
 
-    const defaultProps: ComponentProps<typeof MVideoBody> = {
+    const defaultProps: MVideoBody["props"] = {
         mxEvent: event,
         highlights: [],
         highlightLink: "",
