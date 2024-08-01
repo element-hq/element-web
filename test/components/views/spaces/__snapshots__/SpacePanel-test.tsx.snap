@@ -229,8 +229,8 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls=":r39:"
-        aria-describedby=":r39:"
+        aria-controls=":r12:"
+        aria-describedby=":r12:"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
@@ -256,7 +256,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         tabindex="0"
       />
       <span
-        aria-owns="undefined"
+        aria-owns=":r18:"
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
       />
       <span

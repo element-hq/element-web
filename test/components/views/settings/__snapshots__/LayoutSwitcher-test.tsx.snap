@@ -27,7 +27,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="Modern"
             class="_label_dgy0u_67"
-            for="radix-0"
+            for="radix-:r0:"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -38,7 +38,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 <input
                   checked=""
                   class="_input_1vw5h_26"
-                  id="radix-0"
+                  id="radix-:r0:"
                   name="layout"
                   title=""
                   type="radio"
@@ -144,7 +144,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="Message bubbles"
             class="_label_dgy0u_67"
-            for="radix-1"
+            for="radix-:r9:"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -154,7 +154,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1vw5h_26"
-                  id="radix-1"
+                  id="radix-:r9:"
                   name="layout"
                   title=""
                   type="radio"
@@ -260,7 +260,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="IRC (experimental)"
             class="_label_dgy0u_67"
-            for="radix-2"
+            for="radix-:ri:"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -270,7 +270,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1vw5h_26"
-                  id="radix-2"
+                  id="radix-:ri:"
                   name="layout"
                   title=""
                   type="radio"
@@ -384,9 +384,9 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="_container_qnvru_18"
             >
               <input
-                aria-describedby="radix-3"
+                aria-describedby="radix-:rs:"
                 class="_input_qnvru_32"
-                id="radix-4"
+                id="radix-:rr:"
                 name="compactLayout"
                 title=""
                 type="checkbox"
@@ -401,13 +401,13 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           >
             <label
               class="_label_dgy0u_67"
-              for="radix-4"
+              for="radix-:rr:"
             >
               Show compact text and messages
             </label>
             <span
               class="_message_dgy0u_98 _help-message_dgy0u_104"
-              id="radix-3"
+              id="radix-:rs:"
             >
               Modern layout must be selected to use this feature.
             </span>
