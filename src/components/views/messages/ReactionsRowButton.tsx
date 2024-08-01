@@ -46,7 +46,7 @@ export interface IProps {
 
 export default class ReactionsRowButton extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public onClick = (): void => {
         const { mxEvent, myReactionEvent, content } = this.props;

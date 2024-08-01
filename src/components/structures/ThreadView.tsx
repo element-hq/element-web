@@ -83,7 +83,7 @@ interface IState {
 
 export default class ThreadView extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef: string | null = null;
     private readonly layoutWatcherRef: string;

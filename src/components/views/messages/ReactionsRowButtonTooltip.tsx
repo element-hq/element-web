@@ -36,7 +36,7 @@ interface IProps {
 
 export default class ReactionsRowButtonTooltip extends React.PureComponent<PropsWithChildren<IProps>> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public render(): React.ReactNode {
         const { content, reactionEvents, mxEvent, children } = this.props;

@@ -205,7 +205,7 @@ interface IReadReceiptForUser {
  */
 export default class MessagePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         disableGrouping: false,

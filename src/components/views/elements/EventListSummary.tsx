@@ -81,7 +81,7 @@ export default class EventListSummary extends React.Component<
     IProps & Required<Pick<IProps, "summaryLength" | "threshold" | "avatarsMaxLength" | "layout">>
 > {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         summaryLength: 1,

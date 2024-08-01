@@ -129,7 +129,7 @@ interface IState {
 
 class EditMessageComposer extends React.Component<IEditMessageComposerProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
@@ -138,7 +138,6 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
-        this.context = context; // otherwise React will only set it prior to render due to type def above
 
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();

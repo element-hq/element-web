@@ -90,7 +90,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     private evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
 
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);

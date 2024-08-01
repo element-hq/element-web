@@ -493,7 +493,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     };
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
     private readonly client = this.props.room.client;
     private readonly featureAskToJoinWatcher: string;
 

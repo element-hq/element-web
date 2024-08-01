@@ -120,7 +120,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: ContextType<typeof MatrixClientContext>;
+    public declare context: ContextType<typeof MatrixClientContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
@@ -144,7 +144,6 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
-        this.context = context; // XXX: workaround for lack of `declare` support on `public context!:` definition
 
         // Tiles in miniMode are floating, and therefore not docked
         if (!this.props.miniMode) {
