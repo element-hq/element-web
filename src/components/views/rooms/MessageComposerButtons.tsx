@@ -298,7 +298,7 @@ interface IPollButtonProps {
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
     public static contextType = OverflowMenuContext;
-    public context!: React.ContextType<typeof OverflowMenuContext>;
+    public declare context: React.ContextType<typeof OverflowMenuContext>;
 
     private onCreateClick = (): void => {
         this.context?.(); // close overflow menu

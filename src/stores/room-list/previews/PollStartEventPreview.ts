@@ -26,7 +26,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export class PollStartEventPreview implements IPreview {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();

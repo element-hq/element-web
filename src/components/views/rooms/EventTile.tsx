@@ -297,7 +297,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
 

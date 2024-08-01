@@ -90,7 +90,7 @@ const below = (rect: PartialDOMRect): MenuProps => {
 
 export default class UserMenu extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    public context!: React.ContextType<typeof SDKContext>;
+    public declare context: React.ContextType<typeof SDKContext>;
 
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
@@ -100,7 +100,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
-        this.context = context;
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
