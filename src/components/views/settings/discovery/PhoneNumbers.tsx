@@ -179,7 +179,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         let status;
         if (verifying) {
             status = (
-                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_verification">
+                <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_verification">
                     <span>
                         {_t("settings|general|msisdn_verification_instructions")}
                         <br />
@@ -200,7 +200,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         } else if (bound) {
             status = (
                 <AccessibleButton
-                    className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                    className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     kind="danger_sm"
                     onClick={this.onRevokeClick}
                     disabled={this.props.disabled}
@@ -211,7 +211,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         } else {
             status = (
                 <AccessibleButton
-                    className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                    className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     kind="primary_sm"
                     onClick={this.onShareClick}
                     disabled={this.props.disabled}
@@ -222,8 +222,8 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
 
         return (
-            <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">+{address}</span>
+            <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_address">+{address}</span>
                 {status}
             </div>
         );

@@ -178,7 +178,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 <span>
                     {_t("settings|general|discovery_email_verification_instructions")}
                     <AccessibleButton
-                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                        className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                         kind="primary_sm"
                         onClick={this.onContinueClick}
                         disabled={this.state.continueDisabled}
@@ -190,7 +190,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         } else if (bound) {
             status = (
                 <AccessibleButton
-                    className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                    className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     kind="danger_sm"
                     onClick={this.onRevokeClick}
                     disabled={this.props.disabled}
@@ -201,7 +201,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         } else {
             status = (
                 <AccessibleButton
-                    className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                    className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     kind="primary_sm"
                     onClick={this.onShareClick}
                     disabled={this.props.disabled}
@@ -212,8 +212,8 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
 
         return (
-            <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">{address}</span>
+            <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_address">{address}</span>
                 {status}
             </div>
         );
