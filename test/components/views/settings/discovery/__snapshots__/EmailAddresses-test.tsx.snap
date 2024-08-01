@@ -76,15 +76,15 @@ exports[`<EmailAddresses /> should render email addresses 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
     >
       <div
-        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+        class="mx_EmailAddressesPhoneNumbers_discovery_existing"
       >
         <span
-          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+          class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
         >
           foo@bar.com
         </span>
         <div
-          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+          class="mx_AccessibleButton mx_EmailAddressesPhoneNumbers_discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
           role="button"
           tabindex="0"
         >
