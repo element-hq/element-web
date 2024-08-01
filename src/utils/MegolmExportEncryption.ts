@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 
-const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
+const subtleCrypto = window.crypto.subtle;
 
 /**
  * Make an Error object which has a friendlyText property which is already

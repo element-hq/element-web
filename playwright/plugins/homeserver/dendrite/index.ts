@@ -29,7 +29,6 @@ const dendriteConfigFile = "dendrite.yaml";
 
 // Surprisingly, Dendrite implements the same register user Admin API Synapse, so we can just extend it
 export class Dendrite extends Synapse implements Homeserver, HomeserverInstance {
-    public config: HomeserverConfig & { serverId: string };
     protected image = "matrixdotorg/dendrite-monolith:main";
     protected entrypoint = "/usr/bin/dendrite";
 
