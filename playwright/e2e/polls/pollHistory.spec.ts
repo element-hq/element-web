@@ -69,7 +69,7 @@ test.describe("Poll history", () => {
     async function openPollHistory(app: ElementAppPage): Promise<void> {
         const { page } = app;
         await app.toggleRoomInfoPanel();
-        await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "Poll history" }).click();
+        await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "Polls" }).click();
     }
 
     test.use({

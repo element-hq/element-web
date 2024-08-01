@@ -320,7 +320,7 @@ describe("<PollHistory />", () => {
 
             fireEvent.click(getByText("Question?"));
 
-            expect(queryByText("Poll history")).not.toBeInTheDocument();
+            expect(queryByText("Polls")).not.toBeInTheDocument();
             // elements from MPollBody
             expect(getByText("Question?")).toMatchSnapshot();
             expect(getByText("Socks")).toBeInTheDocument();
@@ -396,13 +396,13 @@ describe("<PollHistory />", () => {
             expect(getByText("Question?")).toBeInTheDocument();
 
             // header not shown
-            expect(queryByText("Poll history")).not.toBeInTheDocument();
+            expect(queryByText("Polls")).not.toBeInTheDocument();
 
             expect(getByText("Active polls")).toMatchSnapshot();
             fireEvent.click(getByText("Active polls"));
 
             // main list header displayed again
-            expect(getByText("Poll history")).toBeInTheDocument();
+            expect(getByText("Polls")).toBeInTheDocument();
             // active filter still active
             expect(getByTestId("filter-tab-PollHistory_filter-ACTIVE").firstElementChild).toBeChecked();
             // list displayed

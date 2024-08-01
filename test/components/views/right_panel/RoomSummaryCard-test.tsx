@@ -271,7 +271,7 @@ describe("<RoomSummaryCard />", () => {
             mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_pinning");
             const { getByText } = getComponent();
 
-            expect(getByText("Pinned")).toBeInTheDocument();
+            expect(getByText("Pinned messages")).toBeInTheDocument();
         });
     });
 
@@ -279,14 +279,14 @@ describe("<RoomSummaryCard />", () => {
         it("renders poll history option", () => {
             const { getByText } = getComponent();
 
-            expect(getByText("Poll history")).toBeInTheDocument();
+            expect(getByText("Polls")).toBeInTheDocument();
         });
 
         it("opens poll history dialog on button click", () => {
             const permalinkCreator = new RoomPermalinkCreator(room);
             const { getByText } = getComponent({ permalinkCreator });
 
-            fireEvent.click(getByText("Poll history"));
+            fireEvent.click(getByText("Polls"));
 
             expect(Modal.createDialog).toHaveBeenCalledWith(PollHistoryDialog, {
                 room,
