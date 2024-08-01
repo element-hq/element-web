@@ -43,8 +43,8 @@ export default class UserView extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
         this.state = {
             loading: true,
         };

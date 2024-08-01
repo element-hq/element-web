@@ -59,7 +59,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private tooltips: Element[] = [];
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props);
+        super(props, context);
         this.context = context;
 
         const cli = this.context;

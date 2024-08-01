@@ -93,8 +93,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
     // Set by setEventId in ctor.
     private eventId!: string;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
 
         this.setEventId(this.props.mxEvent);
         const thread = this.props.room.getThread(this.eventId) ?? undefined;

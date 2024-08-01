@@ -497,7 +497,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     private readonly client = this.props.room.client;
     private readonly featureAskToJoinWatcher: string;
 
-    public constructor(props: IProps, context: IState) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
         const notiStore = RoomNotificationStateStore.instance.getRoomState(props.room);
         notiStore.on(NotificationStateEvents.Update, this.onNotificationUpdate);

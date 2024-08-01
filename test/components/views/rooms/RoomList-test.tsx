@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 import { cleanup, queryByRole, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
@@ -53,7 +53,7 @@ describe("RoomList", () => {
     const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
-    function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
+    function getComponent(props: Partial<RoomList["props"]> = {}): JSX.Element {
         return (
             <RoomList
                 onKeyDown={jest.fn()}

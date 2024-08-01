@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
@@ -42,7 +42,7 @@ describe("MLocationBody", () => {
             isGuest: jest.fn().mockReturnValue(false),
         });
         const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
-        const defaultProps: ComponentProps<typeof MLocationBody> = {
+        const defaultProps: MLocationBody["props"] = {
             mxEvent: defaultEvent,
             highlights: [],
             highlightLink: "",

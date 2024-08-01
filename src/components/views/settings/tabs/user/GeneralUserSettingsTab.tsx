@@ -53,7 +53,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     public context!: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props);
+        super(props, context);
         this.context = context;
 
         this.state = {

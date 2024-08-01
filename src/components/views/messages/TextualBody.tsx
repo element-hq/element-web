@@ -68,14 +68,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    public constructor(props: IBodyProps) {
-        super(props);
-
-        this.state = {
-            links: [],
-            widgetHidden: false,
-        };
-    }
+    public state = {
+        links: [],
+        widgetHidden: false,
+    };
 
     public componentDidMount(): void {
         if (!this.props.editState) {

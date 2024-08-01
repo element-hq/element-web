@@ -55,8 +55,8 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     private geolocate?: maplibregl.GeolocateControl;
     private marker?: maplibregl.Marker;
 
-    public constructor(props: ILocationPickerProps) {
-        super(props);
+    public constructor(props: ILocationPickerProps, context: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
 
         this.state = {
             position: undefined,
