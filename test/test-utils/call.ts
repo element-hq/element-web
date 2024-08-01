@@ -68,7 +68,7 @@ export class MockedCall extends Call {
         CallStore.instance.updateRoom(room);
     }
 
-    public readonly groupCall;
+    public readonly groupCall: GroupCall;
 
     public get participants(): Map<RoomMember, Set<string>> {
         return super.participants;

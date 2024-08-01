@@ -126,8 +126,8 @@ interface CallEventHandlerMap {
  * A group call accessed through a widget.
  */
 export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandlerMap> {
-    protected readonly widgetUid;
-    protected readonly room;
+    protected readonly widgetUid: string;
+    protected readonly room: Room;
 
     /**
      * The time after which device member state should be considered expired.
