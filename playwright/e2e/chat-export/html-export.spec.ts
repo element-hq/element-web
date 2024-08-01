@@ -98,6 +98,10 @@ test.describe("HTML Export", () => {
     });
 
     test("should export html successfully and match screenshot", async ({ page, app, room }) => {
+        // Set a fixed time rather than masking off the line with the time in it: we don't need to worry
+        // about the width changing and we can actually test this line looks correct.
+        page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
+
         // Send a bunch of messages to populate the room
         for (let i = 1; i < 10; i++) {
             await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
@@ -123,7 +127,6 @@ test.describe("HTML Export", () => {
         await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
         await expect(page).toMatchScreenshot("html-export.png", {
             mask: [
-                page.getByText("This is the start of export", { exact: false }),
                 // We need to mask the whole thing because the width of the time part changes
                 page.locator(".mx_TimelineSeparator"),
                 page.locator(".mx_MessageTimestamp"),
