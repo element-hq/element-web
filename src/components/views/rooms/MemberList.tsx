@@ -86,7 +86,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     private tiles: Map<string, MemberTile> = new Map();
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props);
+        super(props, context);
         this.state = this.getMembersState([], []);
         this.showPresence = context?.memberListStore.isPresenceEnabled() ?? true;
         this.mounted = true;

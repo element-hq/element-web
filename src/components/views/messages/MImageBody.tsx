@@ -73,8 +73,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private sizeWatcher?: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
-    public constructor(props: IBodyProps) {
-        super(props);
+    public constructor(props: IBodyProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
 
         this.reconnectedListener = createReconnectedListener(this.clearError);
 

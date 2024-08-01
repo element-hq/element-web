@@ -47,8 +47,8 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher?: string;
 
-    public constructor(props: IBodyProps) {
-        super(props);
+    public constructor(props: IBodyProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
 
         this.state = {
             fetchingData: false,

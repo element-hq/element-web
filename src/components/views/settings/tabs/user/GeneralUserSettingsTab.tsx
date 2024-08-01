@@ -53,7 +53,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     public declare context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props);
+        super(props, context);
 
         this.state = {
             canChangePassword: false,

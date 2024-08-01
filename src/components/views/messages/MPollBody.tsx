@@ -150,8 +150,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     public declare context: React.ContextType<typeof MatrixClientContext>;
     private seenEventIds: string[] = []; // Events we have already seen
 
-    public constructor(props: IBodyProps) {
-        super(props);
+    public constructor(props: IBodyProps, context: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
 
         this.state = {
             selected: null,

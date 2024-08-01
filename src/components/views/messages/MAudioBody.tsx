@@ -40,12 +40,6 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    public constructor(props: IBodyProps) {
-        super(props);
-
-        this.state = {};
-    }
-
     public async componentDidMount(): Promise<void> {
         let buffer: ArrayBuffer;
 

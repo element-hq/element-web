@@ -117,12 +117,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
     private userDidClick = false;
     private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
-    public constructor(props: IProps) {
-        super(props);
-
-        this.state = {};
-    }
-
     private getContentUrl(): string | null {
         if (this.props.forExport) return null;
         const media = mediaFromContent(this.props.mxEvent.getContent());

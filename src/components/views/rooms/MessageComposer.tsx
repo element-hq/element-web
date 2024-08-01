@@ -127,8 +127,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
         isRichTextEnabled: true,
     };
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
 
         this.state = {

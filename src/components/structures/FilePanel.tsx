@@ -59,6 +59,7 @@ interface IState {
  */
 class FilePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.

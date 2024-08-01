@@ -137,7 +137,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private model!: EditorModel;
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
-        super(props);
+        super(props, context);
 
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();
