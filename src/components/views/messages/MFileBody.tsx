@@ -110,6 +110,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
     public state: IState = {};
 
+    public state: IState = {};
+
     public static defaultProps = {
         showGenericPlaceholder: true,
     };

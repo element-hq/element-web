@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MatrixClient, ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, parseErrorResponse, ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { Optional } from "matrix-events-sdk";
 
@@ -144,12 +144,16 @@ export class Media {
      * Downloads the source media.
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
-    public downloadSource(): Promise<Response> {
+    public async downloadSource(): Promise<Response> {
         const src = this.srcHttp;
         if (!src) {
             throw new UserFriendlyError("error|download_media");
         }
-        return fetch(src);
+        const res = await fetch(src);
+        if (!res.ok) {
+            throw parseErrorResponse(res, await res.text());
+        }
+        return res;
     }
 }
 

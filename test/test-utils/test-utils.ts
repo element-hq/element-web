@@ -172,7 +172,7 @@ export function createTestClient(): MatrixClient {
                 content: {},
             });
         }),
-        mxcUrlToHttp: (mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`,
+        mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         scheduleAllGroupSessionsForBackup: jest.fn().mockResolvedValue(undefined),
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),

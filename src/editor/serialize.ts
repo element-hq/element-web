@@ -37,7 +37,7 @@ export function mdSerialize(model: EditorModel): string {
             case Type.AtRoomPill:
                 return html + part.text;
             case Type.RoomPill: {
-                const url = makeGenericPermalink(part.resourceId);
+                const url = makeGenericPermalink(part.resourceId, true);
                 // Escape square brackets and backslashes
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
@@ -45,7 +45,7 @@ export function mdSerialize(model: EditorModel): string {
                 return html + `[${title}](${url})`;
             }
             case Type.UserPill: {
-                const url = makeGenericPermalink(part.resourceId);
+                const url = makeGenericPermalink(part.resourceId, true);
                 // Escape square brackets and backslashes; convert newlines to HTML
                 const title = part.text.replace(/[[\\\]]/g, (c) => "\\" + c).replace(/\n/g, "<br>");
                 return html + `[${title}](${url})`;

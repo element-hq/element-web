@@ -274,26 +274,48 @@ export class RoomPermalinkCreator {
     };
 }
 
-export function makeGenericPermalink(entityId: string): string {
-    return getPermalinkConstructor().forEntity(entityId);
+/**
+ * Creates a permalink for an Entity. If isPill is set it uses a spec-compliant
+ * prefix for the permalink, instead of permalink_prefix
+ * @param {string} entityId The entity to link to.
+ * @param {boolean} isPill Link should be pillifyable.
+ * @returns {string|null} The transformed permalink or null if unable.
+ */
+export function makeGenericPermalink(entityId: string, isPill = false): string {
+    return getPermalinkConstructor(isPill).forEntity(entityId);
 }
 
-export function makeUserPermalink(userId: string): string {
-    return getPermalinkConstructor().forUser(userId);
+/**
+ * Creates a permalink for a User. If isPill is set it uses a spec-compliant
+ * prefix for the permalink, instead of permalink_prefix
+ * @param {string} userId The user to link to.
+ * @param {boolean} isPill Link should be pillifyable.
+ * @returns {string|null} The transformed permalink or null if unable.
+ */
+export function makeUserPermalink(userId: string, isPill = false): string {
+    return getPermalinkConstructor(isPill).forUser(userId);
 }
 
-export function makeRoomPermalink(matrixClient: MatrixClient, roomId: string): string {
+/**
+ * Creates a permalink for a room. If isPill is set it uses a spec-compliant
+ * prefix for the permalink, instead of permalink_prefix
+ * @param {MatrixClient} matrixClient The MatrixClient to use
+ * @param {string} roomId The user to link to.
+ * @param {boolean} isPill Link should be pillifyable.
+ * @returns {string|null} The transformed permalink or null if unable.
+ */
+export function makeRoomPermalink(matrixClient: MatrixClient, roomId: string, isPill = false): string {
     if (!roomId) {
         throw new Error("can't permalink a falsy roomId");
     }
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
-    if (roomId[0] !== "!") return getPermalinkConstructor().forRoom(roomId, []);
+    if (roomId[0] !== "!") return getPermalinkConstructor(isPill).forRoom(roomId, []);
 
     const room = matrixClient.getRoom(roomId);
     if (!room) {
-        return getPermalinkConstructor().forRoom(roomId, []);
+        return getPermalinkConstructor(isPill).forRoom(roomId, []);
     }
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
@@ -414,9 +436,15 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
     return null;
 }
 
-function getPermalinkConstructor(): PermalinkConstructor {
+/**
+ * Returns the correct PermalinkConstructor based on permalink_prefix
+ * and isPill
+ * @param {boolean} isPill Should constructed links be pillifyable.
+ * @returns {string|null} The transformed permalink or null if unable.
+ */
+function getPermalinkConstructor(isPill = false): PermalinkConstructor {
     const elementPrefix = SdkConfig.get("permalink_prefix");
-    if (elementPrefix && elementPrefix !== matrixtoBaseUrl) {
+    if (elementPrefix && elementPrefix !== matrixtoBaseUrl && !isPill) {
         return new ElementPermalinkConstructor(elementPrefix);
     }
 

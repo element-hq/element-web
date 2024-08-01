@@ -99,7 +99,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
     public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: typeof MatrixClientContext) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {

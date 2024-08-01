@@ -303,7 +303,6 @@ export interface EventRenderOpts {
     disableBigEmoji?: boolean;
     stripReplyFallback?: boolean;
     forComposerQuote?: boolean;
-    ref?: React.Ref<HTMLSpanElement>;
 }
 
 function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
@@ -375,7 +374,61 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
     }
 }
 
-export function bodyToNode(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): ReactNode {
+export function bodyToDiv(
+    content: IContent,
+    highlights: Optional<string[]>,
+    opts: EventRenderOpts = {},
+    ref?: React.Ref<HTMLDivElement>,
+): ReactNode {
+    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
+
+    return formattedBody ? (
+        <div
+            key="body"
+            ref={ref}
+            className={className}
+            dangerouslySetInnerHTML={{ __html: formattedBody }}
+            dir="auto"
+        />
+    ) : (
+        <div key="body" ref={ref} className={className} dir="auto">
+            {emojiBodyElements || strippedBody}
+        </div>
+    );
+}
+
+export function bodyToSpan(
+    content: IContent,
+    highlights: Optional<string[]>,
+    opts: EventRenderOpts = {},
+    ref?: React.Ref<HTMLSpanElement>,
+    includeDir = true,
+): ReactNode {
+    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
+
+    return formattedBody ? (
+        <span
+            key="body"
+            ref={ref}
+            className={className}
+            dangerouslySetInnerHTML={{ __html: formattedBody }}
+            dir={includeDir ? "auto" : undefined}
+        />
+    ) : (
+        <span key="body" ref={ref} className={className} dir={includeDir ? "auto" : undefined}>
+            {emojiBodyElements || strippedBody}
+        </span>
+    );
+}
+
+interface BodyToNodeReturn {
+    strippedBody: string;
+    formattedBody?: string;
+    emojiBodyElements: JSX.Element[] | undefined;
+    className: string;
+}
+
+function bodyToNode(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): BodyToNodeReturn {
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let emojiBody = false;
@@ -419,19 +472,7 @@ export function bodyToNode(content: IContent, highlights: Optional<string[]>, op
         emojiBodyElements = formatEmojis(eventInfo.strippedBody, false) as JSX.Element[];
     }
 
-    return formattedBody ? (
-        <span
-            key="body"
-            ref={opts.ref}
-            className={className}
-            dangerouslySetInnerHTML={{ __html: formattedBody }}
-            dir="auto"
-        />
-    ) : (
-        <span key="body" ref={opts.ref} className={className} dir="auto">
-            {emojiBodyElements || eventInfo.strippedBody}
-        </span>
-    );
+    return { strippedBody: eventInfo.strippedBody, formattedBody, emojiBodyElements, className };
 }
 
 /**

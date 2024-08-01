@@ -38,7 +38,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
@@ -198,13 +197,10 @@ interface IItemState {
 }
 
 export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
-    public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
-
     private buttonRef = createRef<HTMLDivElement>();
 
-    public constructor(props: IItemProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IItemProps) {
+        super(props);
 
         const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(
             props.space.roomId,
