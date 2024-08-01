@@ -73,7 +73,7 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
       </details>
     </div>
     <div
-      aria-describedby="floating-ui-22"
+      aria-describedby=":r22:"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -161,7 +161,7 @@ exports[`LogoutDialog Prompts user to set up backup if there is no backup on the
       </details>
     </div>
     <div
-      aria-describedby="floating-ui-28"
+      aria-describedby=":r28:"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

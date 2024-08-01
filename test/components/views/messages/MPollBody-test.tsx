@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitForElementToBeRemoved } from "@testing-library/react";
 import {
     MatrixEvent,
     Relations,
@@ -895,9 +895,11 @@ async function newMPollBody(
         content: newPollStart(answers, undefined, disclosed),
     });
     const result = newMPollBodyFromEvent(mxEvent, relationEvents, endEvents);
-    // flush promises from loading relations
     if (waitForResponsesLoad) {
+        // flush promises from loading relations
         await flushPromises();
+        const renderResult = await result;
+        await waitForElementToBeRemoved(() => renderResult.getByTestId("spinner"));
     }
     return result;
 }
