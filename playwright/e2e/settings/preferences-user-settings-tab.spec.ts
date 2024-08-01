@@ -36,7 +36,7 @@ test.describe("Preferences user settings tab", () => {
 
     test("should be able to change the app language", async ({ uut, user }) => {
         // Check language and region setting dropdown
-        const languageInput = uut.locator(".mx_GeneralUserSettingsTab_section_languageInput");
+        const languageInput = uut.locator(".mx_PreferencesUserSettingsTab_section_languageInput");
         await languageInput.scrollIntoViewIfNeeded();
         // Check the default value
         await expect(languageInput.getByText("English")).toBeVisible();
