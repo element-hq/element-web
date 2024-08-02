@@ -118,7 +118,7 @@ describe("<PollHistory />", () => {
         expect(getByText("Loading polls")).toBeInTheDocument();
 
         // flush filter creation request
-        await flushPromises();
+        await act(flushPromises);
 
         expect(liveTimeline.getPaginationToken).toHaveBeenCalledWith(EventTimeline.BACKWARDS);
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledWith(liveTimeline, { backwards: true });
@@ -148,7 +148,7 @@ describe("<PollHistory />", () => {
         );
 
         // flush filter creation request
-        await flushPromises();
+        await act(flushPromises);
         // once per page
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(3);
 
@@ -183,7 +183,7 @@ describe("<PollHistory />", () => {
 
     it("renders a no polls message when there are no active polls in the room", async () => {
         const { getByText } = getComponent();
-        await flushPromises();
+        await act(flushPromises);
 
         expect(getByText("There are no active polls in this room")).toBeTruthy();
     });

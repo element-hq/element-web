@@ -381,7 +381,7 @@ describe("<SendMessageComposer/>", () => {
             </MatrixClientContext.Provider>
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
-            return render(getRawComponent(props, roomContext, client));
+            return render(getRawComponent(props, roomContext, client), { legacyRoot: true });
         };
 
         it("renders text and placeholder correctly", () => {

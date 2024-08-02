@@ -536,7 +536,7 @@ describe("<Notifications />", () => {
             // oneToOneRule is set to 'on'
             // and is kind: 'underride'
             const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
-            fireEvent.click(offToggle);
+            await act(() => fireEvent.click(offToggle));
 
             await flushPromises();
 
@@ -561,7 +561,7 @@ describe("<Notifications />", () => {
             // oneToOneRule is set to 'on'
             // and is kind: 'underride'
             const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
-            fireEvent.click(offToggle);
+            await act(() => fireEvent.click(offToggle));
 
             await flushPromises();
 
@@ -725,7 +725,7 @@ describe("<Notifications />", () => {
                 mockClient.setPushRuleActions.mockRejectedValue("oups");
 
                 const offToggle = oneToOneRuleElement.querySelector('input[type="radio"]')!;
-                fireEvent.click(offToggle);
+                await act(() => fireEvent.click(offToggle));
 
                 await flushPromises();
 
@@ -823,7 +823,9 @@ describe("<Notifications />", () => {
 
             mockClient.setPushRuleEnabled.mockRejectedValueOnce("oups");
 
-            fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off"));
+            await act(() =>
+                fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off")),
+            );
 
             await flushPromises();
 

@@ -287,10 +287,10 @@ describe("<UserInfo />", () => {
             expect(spy).not.toHaveBeenCalled();
         });
 
-        it("renders close button correctly when encryption panel with a pending verification request", () => {
+        it("renders close button correctly when encryption panel with a pending verification request", async () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
             screen.getByTestId("base-card-close-button").focus();
-            expect(screen.getByRole("tooltip")).toHaveTextContent("Cancel");
+            await waitFor(() => expect(screen.getByRole("tooltip")).toHaveTextContent("Cancel"));
         });
     });
 

@@ -513,6 +513,7 @@ function wrapAndRender(
                     <MessageComposer {...defaultProps} {...props} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
+            { legacyRoot: true },
         ),
         roomContext,
     };

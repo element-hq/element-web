@@ -169,6 +169,7 @@ describe("AppTile", () => {
                     permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
                 />
             </MatrixClientContext.Provider>,
+            { legacyRoot: true },
         );
         // Wait for RPS room 1 updates to fire
         const rpsUpdated = waitForRps("r1");
@@ -242,6 +243,7 @@ describe("AppTile", () => {
                     permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
                 />
             </MatrixClientContext.Provider>,
+            { legacyRoot: true },
         );
         // Wait for RPS room 1 updates to fire
         const rpsUpdated1 = waitForRps("r1");
@@ -360,6 +362,7 @@ describe("AppTile", () => {
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} room={r1} />
                 </MatrixClientContext.Provider>,
+                { legacyRoot: true },
             );
 
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
@@ -474,6 +477,7 @@ describe("AppTile", () => {
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} fullWidth={true} room={r1} miniMode={true} showMenubar={false} />
                 </MatrixClientContext.Provider>,
+                { legacyRoot: true },
             );
         });
 
