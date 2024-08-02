@@ -19,7 +19,7 @@ import { env } from "process";
 import type { Config } from "jest";
 
 const config: Config = {
-    testEnvironment: "jsdom",
+    testEnvironment: "./test/jsdom.ts",
     testMatch: ["<rootDir>/test/**/*-test.[jt]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],

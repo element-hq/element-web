@@ -80,9 +80,11 @@ describe("useUserOnboardingTasks", () => {
         });
         const { result, rerender } = renderHook(() => useUserOnboardingTasks(context.result.current));
         expect(result.current[4].id).toBe("permission-notifications");
-        await waitFor(() => expect(result.current[4].completed).toBe(false));
+        expect(result.current[4].completed).toBe(false);
         result.current[4].action!.onClick!({ type: "click" } as any);
-        rerender();
-        await waitFor(() => expect(result.current[4].completed).toBe(true));
+        await waitFor(() => {
+            rerender();
+            expect(result.current[4].completed).toBe(true);
+        });
     });
 });

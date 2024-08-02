@@ -87,8 +87,7 @@ describe("<PinnedMessagesCard />", () => {
     };
 
     const mountPins = async (room: Room): Promise<RenderResult> => {
-        let pins!: RenderResult;
-        pins = render(
+        const pins = render(
             <MatrixClientContext.Provider value={cli}>
                 <PinnedMessagesCard
                     room={room}

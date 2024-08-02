@@ -32,10 +32,10 @@ describe("<SearchWarning />", () => {
         });
 
         it("renders with a logo by default", () => {
-            const { asFragment, queryByRole } = render(
+            const { asFragment, getByRole } = render(
                 <SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} />,
             );
-            expect(queryByRole("img")).toBeInTheDocument();
+            expect(getByRole("presentation")).toHaveAttribute("src", "https://logo");
             expect(asFragment()).toMatchSnapshot();
         });
 

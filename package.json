@@ -162,6 +162,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/register": "^7.12.10",
         "@casualbot/jest-sonar-reporter": "2.2.7",
+        "@jest/environment-jsdom-abstract": "^30.0.0-alpha.3",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.40.1",
         "@testing-library/dom": "^10.4.0",
@@ -220,9 +221,9 @@
         "husky": "^8.0.3",
         "jest": "^29.6.2",
         "jest-canvas-mock": "^2.5.2",
-        "jest-environment-jsdom": "^29.6.2",
         "jest-mock": "^29.6.2",
         "jest-raw-loader": "^1.0.1",
+        "jsdom": "^24.1.1",
         "jsqr": "^1.4.0",
         "lint-staged": "^15.0.2",
         "mailhog": "^4.16.0",
@@ -240,10 +241,6 @@
         "ts-node": "^10.9.1",
         "typescript": "5.5.4",
         "web-streams-polyfill": "^4.0.0"
-    },
-    "peerDependencies": {
-        "postcss": "^8.4.19",
-        "webpack": "^4.0.0 || ^5.0.0"
     },
     "peerDependencies": {
         "postcss": "^8.4.19",
