@@ -1168,7 +1168,6 @@
     },
     "right_panel": {
         "add_integrations": "افزودن ابزارک‌ها، پل‌ها و ربات‌ها",
-        "edit_integrations": "ویرایش ابزارک ها ، پل ها و ربات ها",
         "pinned_messages": {
             "limits": {
                 "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"

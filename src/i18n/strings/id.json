@@ -1754,7 +1754,6 @@
     },
     "right_panel": {
         "add_integrations": "Tambahkan widget, jembatan & bot",
-        "edit_integrations": "Edit widget, jembatan & bot",
         "export_chat_button": "Ekspor obrolan",
         "files_button": "File",
         "pinned_messages": {

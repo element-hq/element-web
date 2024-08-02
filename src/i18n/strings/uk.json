@@ -1732,7 +1732,6 @@
     },
     "right_panel": {
         "add_integrations": "Додати віджети, мости та ботів",
-        "edit_integrations": "Редагувати віджети, мости та ботів",
         "export_chat_button": "Експортувати бесіду",
         "files_button": "Файли",
         "pinned_messages": {

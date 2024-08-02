@@ -1772,7 +1772,6 @@
     },
     "right_panel": {
         "add_integrations": "Lisa vidinaid, võrgusildu ja roboteid",
-        "edit_integrations": "Muuda vidinaid, võrgusildu ja roboteid",
         "export_chat_button": "Ekspordi vestlus",
         "files_button": "Failid",
         "pinned_messages": {

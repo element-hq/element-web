@@ -1789,7 +1789,6 @@
     },
     "right_panel": {
         "add_integrations": "Přidat widgety, propojení a boty",
-        "edit_integrations": "Upravujte widgety, propojení a boty",
         "export_chat_button": "Exportovat chat",
         "files_button": "Soubory",
         "pinned_messages": {

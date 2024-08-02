@@ -1287,7 +1287,6 @@
     },
     "right_panel": {
         "add_integrations": "Aldonu fenestraĵojn, pontojn, kaj robotojn",
-        "edit_integrations": "Redakti fenestraĵojn, pontojn, kaj robotojn",
         "export_chat_button": "Eksporti babilejon",
         "files_button": "Dosieroj",
         "pinned_messages": {

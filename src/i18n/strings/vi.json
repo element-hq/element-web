@@ -1581,7 +1581,6 @@
     },
     "right_panel": {
         "add_integrations": "Thêm các widget, bridge và bot",
-        "edit_integrations": "Chỉnh sửa tiện ích widget, cầu nối và bot",
         "export_chat_button": "Xuất trò chuyện",
         "pinned_messages": {
             "empty": "Chưa có gì được ghim",

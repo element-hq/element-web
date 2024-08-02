@@ -1648,7 +1648,6 @@
     },
     "right_panel": {
         "add_integrations": "Añadir accesorios, puentes y bots",
-        "edit_integrations": "Editar accesorios, puentes y bots",
         "export_chat_button": "Exportar conversación",
         "files_button": "Archivos",
         "pinned_messages": {

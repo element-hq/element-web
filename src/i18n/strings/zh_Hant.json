@@ -1735,7 +1735,6 @@
     },
     "right_panel": {
         "add_integrations": "新增小工具、橋接與聊天機器人",
-        "edit_integrations": "編輯小工具、橋接與聊天機器人",
         "export_chat_button": "匯出聊天",
         "files_button": "檔案",
         "pinned_messages": {

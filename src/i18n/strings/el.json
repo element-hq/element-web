@@ -1424,7 +1424,6 @@
     },
     "right_panel": {
         "add_integrations": "Προσθήκη μικροεφαρμογών, γεφυρών & bots",
-        "edit_integrations": "Επεξεργασία μικροεφαρμογών, γεφυρών & bots",
         "export_chat_button": "Εξαγωγή συνομιλίας",
         "files_button": "Αρχεία",
         "pinned_messages": {

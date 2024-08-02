@@ -1661,7 +1661,6 @@
     },
     "right_panel": {
         "add_integrations": "ウィジェット、ブリッジ、ボットの追加",
-        "edit_integrations": "ウィジェット、ブリッジ、ボットを編集",
         "export_chat_button": "チャットをエクスポート",
         "files_button": "ファイル",
         "pinned_messages": {

@@ -1450,7 +1450,6 @@
     },
     "right_panel": {
         "add_integrations": "ເພີ່ມວິດເຈັດ, ຂົວ ແລະບັອດ",
-        "edit_integrations": "ແກ້ໄຂວິດເຈັດ, ຂົວ ແລະບັອດ",
         "export_chat_button": "ສົ່ງການສົນທະນາອອກ",
         "files_button": "ໄຟລ໌",
         "pinned_messages": {

@@ -1081,7 +1081,6 @@
     },
     "right_panel": {
         "add_integrations": "Pridėti valdiklius, tiltus ir botus",
-        "edit_integrations": "Redaguoti valdiklius, tiltus ir botus",
         "export_chat_button": "Eksportuoti pokalbį",
         "files_button": "Failai",
         "pinned_messages": {
