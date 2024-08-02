@@ -156,7 +156,7 @@ describe("<MatrixChat />", () => {
         realQueryParams: {},
     };
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />);
+        render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
 
     // make test results readable
     filterConsole(
@@ -1380,7 +1380,6 @@ describe("<MatrixChat />", () => {
 
             it("while we are checking the sync store", async () => {
                 const rendered = getComponent({});
-                await flushPromises();
                 expect(rendered.getByTestId("spinner")).toBeInTheDocument();
 
                 // now a third session starts

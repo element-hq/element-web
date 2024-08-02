@@ -85,6 +85,9 @@ describe("SendWysiwygComposer", () => {
                     />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
+            {
+                legacyRoot: true,
+            },
         );
     };
 

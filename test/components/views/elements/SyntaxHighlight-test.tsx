@@ -23,7 +23,9 @@ import SyntaxHighlight from "../../../../src/components/views/elements/SyntaxHig
 
 describe("<SyntaxHighlight />", () => {
     it("renders", async () => {
-        const { container } = render(<SyntaxHighlight>console.log("Hello, World!");</SyntaxHighlight>);
+        const { container } = render(<SyntaxHighlight>console.log("Hello, World!");</SyntaxHighlight>, {
+            legacyRoot: true,
+        });
         await waitFor(() => expect(container.querySelector(".language-arcade")).toBeTruthy());
         expect(container).toMatchSnapshot();
     });
@@ -31,7 +33,9 @@ describe("<SyntaxHighlight />", () => {
     it.each(["json", "javascript", "css"])("uses the provided language", async (lang) => {
         const mock = jest.spyOn(hljs, "highlight");
 
-        const { container } = render(<SyntaxHighlight language={lang}>// Hello, World</SyntaxHighlight>);
+        const { container } = render(<SyntaxHighlight language={lang}>// Hello, World</SyntaxHighlight>, {
+            legacyRoot: true,
+        });
         await waitFor(() => expect(container.querySelector(`.language-${lang}`)).toBeTruthy());
 
         const [_lang, opts] = mock.mock.lastCall!;

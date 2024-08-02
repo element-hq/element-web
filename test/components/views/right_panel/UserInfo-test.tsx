@@ -206,6 +206,7 @@ describe("<UserInfo />", () => {
 
         return render(<UserInfo {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -324,6 +325,9 @@ describe("<UserInfo />", () => {
                 <MatrixClientContext.Provider value={mockClient}>
                     <UserInfo {...defaultProps} />
                 </MatrixClientContext.Provider>,
+                {
+                    legacyRoot: true,
+                },
             );
 
             screen.getByRole("button", { name: "Send message" });
@@ -339,6 +343,9 @@ describe("<UserInfo />", () => {
                         <MatrixClientContext.Provider value={mockClient}>
                             <UserInfo {...defaultProps} />
                         </MatrixClientContext.Provider>,
+                        {
+                            legacyRoot: true,
+                        },
                     );
 
                     expect(screen.queryByRole("button", { name: "Message" })).toBeNull();
@@ -689,6 +696,7 @@ describe("<UserInfoHeader />", () => {
 
         return render(<UserInfoHeader {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -728,6 +736,7 @@ describe("<DeviceItem />", () => {
 
         return render(<DeviceItem {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -871,6 +880,7 @@ describe("<UserOptionsSection />", () => {
 
         return render(<UserOptionsSection {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -1097,6 +1107,7 @@ describe("<PowerLevelEditor />", () => {
 
         return render(<PowerLevelEditor {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -1156,6 +1167,7 @@ describe("<RoomKickButton />", () => {
 
         return render(<RoomKickButton {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -1263,6 +1275,7 @@ describe("<BanToggleButton />", () => {
 
         return render(<BanToggleButton {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 
@@ -1395,6 +1408,7 @@ describe("<RoomAdminToolsContainer />", () => {
 
         return render(<RoomAdminToolsContainer {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 

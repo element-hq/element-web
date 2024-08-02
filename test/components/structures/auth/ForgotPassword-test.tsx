@@ -102,6 +102,7 @@ describe("<ForgotPassword>", () => {
         beforeEach(() => {
             renderResult = render(
                 <ForgotPassword serverConfig={serverConfig} onComplete={onComplete} onLoginClick={onLoginClick} />,
+                { legacyRoot: true },
             );
         });
 
