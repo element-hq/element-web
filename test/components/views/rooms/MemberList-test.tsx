@@ -441,11 +441,11 @@ describe("MemberList", () => {
                 jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(true);
 
-                const { getByRole, getAllByRole } = renderComponent();
+                const { getByRole } = renderComponent();
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
 
                 await waitFor(() =>
-                    expect(getAllByRole("button", { name: "Invite to this room" })).not.toHaveAttribute(
+                    expect(getByRole("button", { name: "Invite to this room" })).not.toHaveAttribute(
                         "aria-disabled",
                         "true",
                     ),
