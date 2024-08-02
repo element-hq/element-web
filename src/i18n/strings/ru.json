@@ -1770,7 +1770,6 @@
     },
     "right_panel": {
         "add_integrations": "Добавить виджеты, мосты и ботов",
-        "edit_integrations": "Редактировать виджеты, мосты и ботов",
         "export_chat_button": "Экспорт чата",
         "files_button": "Файлы",
         "pinned_messages": {

@@ -1628,7 +1628,6 @@
     },
     "right_panel": {
         "add_integrations": "添加挂件、桥接和机器人",
-        "edit_integrations": "编辑挂件、桥接和机器人",
         "export_chat_button": "导出聊天",
         "files_button": "文件",
         "pinned_messages": {

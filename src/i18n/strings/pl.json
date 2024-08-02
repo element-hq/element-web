@@ -474,6 +474,7 @@
         "encrypted": "Szyfrowane",
         "encryption_enabled": "Włączono szyfrowanie",
         "error": "Błąd",
+        "extensions": "Rozszerzenia",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
         "feedback": "Opinia użytkownika",
@@ -1832,10 +1833,11 @@
         "restore_failed_error": "Przywrócenie kopii zapasowej jest niemożliwe"
     },
     "right_panel": {
-        "add_integrations": "Dodaj widżety, mostki i boty",
+        "add_integrations": "Dodaj rozszerzenia",
         "add_topic": "Dodaj temat",
-        "edit_integrations": "Edytuj widżety, mostki i boty",
         "export_chat_button": "Eksportuj czat",
+        "extensions_empty_description": "Wybierz “%(addIntegrations)s”, aby przeglądać i dodawać rozszerzenia do tego pokoju",
+        "extensions_empty_title": "Zwiększ produktywność dzięki większej liczbie narzędzi, widżetów i botów",
         "files_button": "Pliki",
         "info": "Info",
         "pinned_messages": {
@@ -1846,7 +1848,7 @@
             },
             "title": "Przypięte wiadomości"
         },
-        "pinned_messages_button": "Przypięte",
+        "pinned_messages_button": "Przypięte wiadomości",
         "poll": {
             "active_heading": "Aktywne ankiety",
             "empty_active": "Brak aktywnych ankiet w tym pokoju",
@@ -1871,7 +1873,7 @@
             "view_in_timeline": "Wyświetl ankietę na osi czasu",
             "view_poll": "Wyświetl ankietę"
         },
-        "polls_button": "Historia ankiet",
+        "polls_button": "Ankiety",
         "room_summary_card": {
             "title": "Informacje pokoju"
         },
@@ -1992,7 +1994,7 @@
         "invite_reject_ignore": "Odrzuć i zignoruj użytkownika",
         "invite_sent_to_email": "To zaproszenie zostało wysłane do %(email)s",
         "invite_sent_to_email_room": "To zaproszenie do %(roomName)s zostało wysłane do %(email)s",
-        "invite_subtitle": "<userName/> zaprosił Cię",
+        "invite_subtitle": "Zaproszony przez <userName/>",
         "invite_this_room": "Zaproś do tego pokoju",
         "invite_title": "Czy chcesz dołączyć do %(roomName)s?",
         "inviter_unknown": "Nieznany",
@@ -3266,6 +3268,8 @@
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
+        "download_failed": "Błąd pobierania",
+        "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
         "edits": {
             "tooltip_label": "Edytowano w %(date)s. Kliknij, aby zobaczyć zmiany.",
             "tooltip_sub": "Kliknij, aby wyświetlić edycje",
@@ -4070,7 +4074,7 @@
             "title": "Zezwól temu widżetowi na weryfikacje Twojej tożsamości"
         },
         "popout": "Wyskakujący widżet",
-        "set_room_layout": "Ustaw mój układ pokoju dla wszystkich",
+        "set_room_layout": "Ustaw układ dla wszystkich",
         "shared_data_avatar": "URL Twojego zdjęcia profilowego",
         "shared_data_device_id": "Twoje ID urządzenia",
         "shared_data_lang": "Twój język",

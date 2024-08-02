@@ -1513,7 +1513,6 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, bruggen & bots toevoegen",
-        "edit_integrations": "Widgets, bruggen & bots bewerken",
         "export_chat_button": "Chat exporteren",
         "files_button": "Bestanden",
         "pinned_messages": {

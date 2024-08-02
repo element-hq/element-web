@@ -1533,7 +1533,6 @@
     },
     "right_panel": {
         "add_integrations": "Engade widgets, pontes e bots",
-        "edit_integrations": "Editar widgets, pontes e bots",
         "export_chat_button": "Exportar chat",
         "files_button": "Ficheiros",
         "pinned_messages": {

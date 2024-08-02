@@ -1788,7 +1788,6 @@
     },
     "right_panel": {
         "add_integrations": "Aggiungi widget, bridge e bot",
-        "edit_integrations": "Modifica widget, bridge e bot",
         "export_chat_button": "Esporta conversazione",
         "files_button": "File",
         "pinned_messages": {

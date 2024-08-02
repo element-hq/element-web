@@ -1788,7 +1788,6 @@
     },
     "right_panel": {
         "add_integrations": "Lägg till widgets, bryggor och bottar",
-        "edit_integrations": "Redigera widgets, bryggor och bottar",
         "export_chat_button": "Exportera chatt",
         "files_button": "Filer",
         "pinned_messages": {

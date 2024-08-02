@@ -1776,7 +1776,6 @@
     },
     "right_panel": {
         "add_integrations": "Pridať widgety, premostenia a boty",
-        "edit_integrations": "Upraviť widgety, premostenia a boty",
         "export_chat_button": "Exportovať konverzáciu",
         "files_button": "Súbory",
         "pinned_messages": {

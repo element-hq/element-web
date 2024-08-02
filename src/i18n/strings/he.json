@@ -1230,7 +1230,6 @@
     },
     "right_panel": {
         "add_integrations": "הוסף יישומונים, גשרים ובוטים",
-        "edit_integrations": "ערוך ישומונים, גשרים ובוטים",
         "export_chat_button": "ייצוא צ'אט",
         "files_button": "קבצים",
         "pinned_messages": {

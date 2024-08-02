@@ -1742,7 +1742,6 @@
     },
     "right_panel": {
         "add_integrations": "Kisalkalmazások, hidak, és botok hozzáadása",
-        "edit_integrations": "Kisalkalmazások, hidak és botok szerkesztése",
         "export_chat_button": "Beszélgetés exportálása",
         "files_button": "Fájlok",
         "pinned_messages": {

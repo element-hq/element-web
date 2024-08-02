@@ -1677,7 +1677,6 @@
     },
     "right_panel": {
         "add_integrations": "Shtoni widget-e, ura & robotë",
-        "edit_integrations": "Përpunoni widget-e, ura & robotë",
         "export_chat_button": "Eksportoni fjalosje",
         "files_button": "Kartela",
         "pinned_messages": {

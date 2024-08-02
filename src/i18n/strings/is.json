@@ -1467,7 +1467,6 @@
     },
     "right_panel": {
         "add_integrations": "Bæta við viðmótshlutum, brúm og vélmennum",
-        "edit_integrations": "Breyta viðmótshlutum, brúm og vélmennum",
         "export_chat_button": "Flytja út spjall",
         "files_button": "Skrár",
         "pinned_messages": {

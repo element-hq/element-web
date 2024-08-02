@@ -1544,7 +1544,6 @@
     },
     "right_panel": {
         "add_integrations": "Lisää sovelmia, siltoja ja botteja",
-        "edit_integrations": "Muokkaa sovelmia, siltoja ja botteja",
         "export_chat_button": "Vie keskustelu",
         "files_button": "Tiedostot",
         "pinned_messages": {

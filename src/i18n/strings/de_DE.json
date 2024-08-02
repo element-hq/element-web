@@ -1775,7 +1775,6 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, Brücken und Bots hinzufügen",
-        "edit_integrations": "Widgets, Brücken und Bots bearbeiten",
         "export_chat_button": "Unterhaltung exportieren",
         "files_button": "Dateien",
         "pinned_messages": {

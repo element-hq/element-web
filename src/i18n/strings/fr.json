@@ -1826,7 +1826,6 @@
     },
     "right_panel": {
         "add_integrations": "Ajouter des widgets, passerelles et robots",
-        "edit_integrations": "Modifier les widgets, passerelles et robots",
         "export_chat_button": "Exporter la conversation",
         "files_button": "Fichiers",
         "pinned_messages": {

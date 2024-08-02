@@ -1193,7 +1193,6 @@
     },
     "right_panel": {
         "add_integrations": "Adicionar widgets, integrações e bots",
-        "edit_integrations": "Editar widgets, integrações e bots",
         "export_chat_button": "Exportar conversa",
         "files_button": "Arquivos",
         "pinned_messages": {
