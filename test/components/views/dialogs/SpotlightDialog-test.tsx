@@ -32,7 +32,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import SpotlightDialog from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { Filter } from "../../../../src/components/views/dialogs/spotlight/Filter";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
+import { LOCAL_ROOM_ID_PREFIX, LocalRoom } from "../../../../src/models/LocalRoom";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../test-utils";
@@ -157,6 +157,9 @@ describe("Spotlight Dialog", () => {
     let mockedClient: MatrixClient;
 
     beforeEach(() => {
+        SdkConfig.reset();
+        localStorage.clear();
+        SettingsStore.reset();
         mockedClient = mockClient({ rooms: [testPublicRoom], users: [testPerson] });
         testRoom = mkRoom(mockedClient, "!test23:example.com");
         mocked(testRoom.getMyMembership).mockReturnValue(KnownMembership.Join);
@@ -235,14 +238,8 @@ describe("Spotlight Dialog", () => {
     });
 
     describe("when MSC3946 dynamic room predecessors is enabled", () => {
-        beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, excludeDefault) => {
-                if (settingName === "feature_dynamic_room_predecessors") {
-                    return true;
-                } else {
-                    return []; // SpotlightSearch.recentSearches
-                }
-            });
+        beforeEach(async () => {
+            await SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
         });
 
         afterEach(() => {
@@ -552,13 +549,9 @@ describe("Spotlight Dialog", () => {
             guest_can_join: false,
         };
 
-        beforeEach(() => {
+        beforeEach(async () => {
             mockedClient = mockClient({ rooms: [nsfwNameRoom, nsfwTopicRoom, potatoRoom], users: [testPerson] });
-            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
-        });
-
-        afterAll(() => {
-            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
+            await SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
         });
 
         it("does not display rooms with nsfw keywords in results when showNsfwPublicRooms is falsy", async () => {
@@ -576,7 +569,7 @@ describe("Spotlight Dialog", () => {
         });
 
         it("displays rooms with nsfw keywords in results when showNsfwPublicRooms is truthy", async () => {
-            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, true);
+            await SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, true);
             render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
             // search is debounced
@@ -624,9 +617,7 @@ describe("Spotlight Dialog", () => {
 
         describe("when disabling feature", () => {
             beforeEach(async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
-                    setting === "feature_ask_to_join" ? false : [],
-                );
+                await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, false);
 
                 render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
 
@@ -634,7 +625,7 @@ describe("Spotlight Dialog", () => {
                 jest.advanceTimersByTime(200);
                 await flushPromisesWithFakeTimers();
 
-                fireEvent.click(screen.getByRole("button", { name: "View" }));
+                fireEvent.click(await screen.findByRole("button", { name: "View" }));
             });
 
             it("should not skip to auto join", async () => {
@@ -648,18 +639,12 @@ describe("Spotlight Dialog", () => {
 
         describe("when enabling feature", () => {
             beforeEach(async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
-                    setting === "feature_ask_to_join" ? true : [],
-                );
+                await SettingsStore.setValue("feature_ask_to_join", null, SettingLevel.DEVICE, true);
                 jest.spyOn(mockedClient, "getRoom").mockReturnValue(null);
 
                 render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
 
-                // search is debounced
-                jest.advanceTimersByTime(200);
-                await flushPromisesWithFakeTimers();
-
-                fireEvent.click(screen.getByRole("button", { name: "Ask to join" }));
+                await waitFor(() => fireEvent.click(screen.getByRole("button", { name: "Ask to join" })));
             });
 
             it("should skip to auto join", async () => {

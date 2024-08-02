@@ -88,19 +88,17 @@ describe("<PinnedMessagesCard />", () => {
 
     const mountPins = async (room: Room): Promise<RenderResult> => {
         let pins!: RenderResult;
-        await act(async () => {
-            pins = render(
-                <MatrixClientContext.Provider value={cli}>
-                    <PinnedMessagesCard
-                        room={room}
-                        onClose={jest.fn()}
-                        permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-                    />
-                </MatrixClientContext.Provider>,
-            );
-            // Wait a tick for state updates
-            await sleep(0);
-        });
+        pins = render(
+            <MatrixClientContext.Provider value={cli}>
+                <PinnedMessagesCard
+                    room={room}
+                    onClose={jest.fn()}
+                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                />
+            </MatrixClientContext.Provider>,
+        );
+        // Wait a tick for state updates
+        await sleep(0);
 
         return pins;
     };
@@ -156,7 +154,7 @@ describe("<PinnedMessagesCard />", () => {
         const localPins = [pin1];
         const nonLocalPins = [pin2];
         const room = mkRoom(localPins, nonLocalPins);
-        const pins = await mountPins(room);
+        const pins = await act(() => mountPins(room));
         expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(2);
 
         // Unpin the first message
@@ -224,7 +222,7 @@ describe("<PinnedMessagesCard />", () => {
             events: [messageEvent],
         });
 
-        const pins = await mountPins(mkRoom([], [pin1]));
+        const pins = await act(() => mountPins(mkRoom([], [pin1])));
         const pinTile = pins.container.querySelectorAll(".mx_PinnedEventTile");
         expect(pinTile.length).toBe(1);
         expect(pinTile[0].querySelector(".mx_EventTile_body")!).toHaveTextContent("First pinned message, edited");
@@ -299,7 +297,7 @@ describe("<PinnedMessagesCard />", () => {
         jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
         const sendStateEvent = jest.spyOn(cli, "sendStateEvent");
 
-        const pins = await mountPins(room);
+        const pins = await act(() => mountPins(room));
         const pinTile = pins.container.querySelectorAll(".mx_PinnedEventTile");
         expect(pinTile).toHaveLength(1);
 
@@ -313,7 +311,7 @@ describe("<PinnedMessagesCard />", () => {
     it("should show spinner whilst loading", async () => {
         const room = mkRoom([], [pin1]);
         mountPins(room);
-        const spinner = await screen.findByTestId("spinner");
+        const spinner = await screen.getByTestId("spinner");
         await waitForElementToBeRemoved(spinner);
     });
 });
