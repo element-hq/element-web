@@ -93,21 +93,21 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
     public render(): React.ReactNode {
         if (this.state.verifyRemove) {
             return (
-                <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                    <span className="mx_GeneralUserSettingsTab_section--discovery_existing_promptText">
+                <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                    <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_promptText">
                         {_t("settings|general|remove_msisdn_prompt", { phone: this.props.msisdn.address })}
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="danger_sm"
-                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                        className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     >
                         {_t("action|remove")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="link_sm"
-                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                        className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     >
                         {_t("action|cancel")}
                     </AccessibleButton>
@@ -116,8 +116,8 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
         }
 
         return (
-            <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">
+            <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_address">
                     +{this.props.msisdn.address}
                 </span>
                 <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>

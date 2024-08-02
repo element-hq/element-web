@@ -36,12 +36,12 @@ test.describe("Preferences user settings tab", () => {
 
     test("should be able to change the app language", async ({ uut, user }) => {
         // Check language and region setting dropdown
-        const languageInput = uut.locator(".mx_GeneralUserSettingsTab_section_languageInput");
+        const languageInput = uut.getByRole("button", { name: "Language Dropdown" });
         await languageInput.scrollIntoViewIfNeeded();
         // Check the default value
         await expect(languageInput.getByText("English")).toBeVisible();
         // Click the button to display the dropdown menu
-        await languageInput.getByRole("button", { name: "Language Dropdown" }).click();
+        await languageInput.click();
         // Assert that the default option is rendered and highlighted
         languageInput.getByRole("option", { name: /Albanian/ });
         await expect(languageInput.getByRole("option", { name: /Albanian/ })).toHaveClass(
@@ -49,7 +49,7 @@ test.describe("Preferences user settings tab", () => {
         );
         await expect(languageInput.getByRole("option", { name: /Deutsch/ })).toBeVisible();
         // Click again to close the dropdown
-        await languageInput.getByRole("button", { name: "Language Dropdown" }).click();
+        await languageInput.click();
         // Assert that the default value is rendered again
         await expect(languageInput.getByText("English")).toBeVisible();
     });

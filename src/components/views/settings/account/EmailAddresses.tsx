@@ -97,21 +97,21 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
     public render(): React.ReactNode {
         if (this.state.verifyRemove) {
             return (
-                <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                    <span className="mx_GeneralUserSettingsTab_section--discovery_existing_promptText">
+                <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                    <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_promptText">
                         {_t("settings|general|remove_email_prompt", { email: this.props.email.address })}
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="danger_sm"
-                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                        className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     >
                         {_t("action|remove")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="link_sm"
-                        className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
+                        className="mx_EmailAddressesPhoneNumbers_discovery_existing_button"
                     >
                         {_t("action|cancel")}
                     </AccessibleButton>
@@ -120,8 +120,8 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         }
 
         return (
-            <div className="mx_GeneralUserSettingsTab_section--discovery_existing">
-                <span className="mx_GeneralUserSettingsTab_section--discovery_existing_address">
+            <div className="mx_EmailAddressesPhoneNumbers_discovery_existing">
+                <span className="mx_EmailAddressesPhoneNumbers_discovery_existing_address">
                     {this.props.email.address}
                 </span>
                 <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>

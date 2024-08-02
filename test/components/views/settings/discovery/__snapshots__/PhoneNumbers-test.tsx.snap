@@ -19,15 +19,15 @@ exports[`<PhoneNumbers /> should allow binding msisdn 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
     >
       <div
-        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+        class="mx_EmailAddressesPhoneNumbers_discovery_existing"
       >
         <span
-          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+          class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
         >
           +441111111111
         </span>
         <span
-          class="mx_GeneralUserSettingsTab_section--discovery_existing_verification"
+          class="mx_EmailAddressesPhoneNumbers_discovery_existing_verification"
         >
           <span>
             Please enter verification code sent via text.
@@ -141,16 +141,16 @@ exports[`<PhoneNumbers /> should render phone numbers 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
     >
       <div
-        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+        class="mx_EmailAddressesPhoneNumbers_discovery_existing"
       >
         <span
-          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+          class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
         >
           +
           441111111111
         </span>
         <div
-          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+          class="mx_AccessibleButton mx_EmailAddressesPhoneNumbers_discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
           role="button"
           tabindex="0"
         >

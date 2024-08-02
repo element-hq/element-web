@@ -46,7 +46,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   />
                 </div>
                 <div
-                  class="mx_GeneralUserSettingsTab_section_hint"
+                  class="mx_PreferencesUserSettingsTab_section_hint"
                 >
                   The app will reload after selecting another language
                 </div>
