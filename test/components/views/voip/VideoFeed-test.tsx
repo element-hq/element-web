@@ -62,7 +62,7 @@ describe("VideoFeed", () => {
             removeListener: jest.fn(),
         };
         render(<VideoFeed feed={feed as unknown as CallFeed} call={mockCall as unknown as MatrixCall} />);
-        const avatarImg = screen.getByRole("img");
+        const avatarImg = screen.getByRole("presentation");
         expect(avatarImg).toHaveAttribute("src", FAKE_AVATAR_URL);
     });
 });
