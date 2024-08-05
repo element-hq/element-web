@@ -26,9 +26,9 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
     const [value, setValue] = useState<T | undefined>(() => tryGetContent<T>(cli.getAccountData(eventType)));
 
     const handler = useCallback(
-        (event) => {
+        (event: MatrixEvent) => {
             if (event.getType() !== eventType) return;
-            setValue(event.getContent());
+            setValue(event.getContent<T>());
         },
         [eventType],
     );

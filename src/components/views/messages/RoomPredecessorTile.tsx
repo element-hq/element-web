@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { useCallback, useContext } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomState } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -52,7 +52,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
     const predecessor = useRoomState(
         roomContext.room,
         useCallback(
-            (state) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
+            (state: RoomState) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
             [msc3946ProcessDynamicPredecessor],
         ),
     );
@@ -63,9 +63,9 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                event_id: predecessor.eventId,
+                event_id: predecessor?.eventId,
                 highlighted: true,
-                room_id: predecessor.roomId,
+                room_id: predecessor?.roomId,
                 metricsTrigger: "Predecessor",
                 metricsViaKeyboard: e.type !== "click",
             });
@@ -126,7 +126,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
     const predecessorPermalink = prevRoom
         ? createLinkWithRoom(prevRoom, predecessor.roomId, predecessor.eventId)
-        : createLinkWithoutRoom(predecessor.roomId, predecessor.viaServers, predecessor.eventId);
+        : createLinkWithoutRoom(predecessor.roomId, predecessor?.viaServers ?? [], predecessor.eventId);
 
     const link = (
         <a href={predecessorPermalink} onClick={onLinkClicked}>

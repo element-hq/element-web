@@ -26,7 +26,11 @@ import SdkConfig from "../../../SdkConfig";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Protocols } from "../../../utils/DirectoryUtils";
-import { GenericDropdownMenu, GenericDropdownMenuItem } from "../../structures/GenericDropdownMenu";
+import {
+    AdditionalOptionsProps,
+    GenericDropdownMenu,
+    GenericDropdownMenuItem,
+} from "../../structures/GenericDropdownMenu";
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
@@ -181,7 +185,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
     }));
 
     const addNewServer = useCallback(
-        ({ closeMenu }) => (
+        ({ closeMenu }: AdditionalOptionsProps) => (
             <>
                 <span className="mx_GenericDropdownMenu_divider" />
                 <MenuItemRadio

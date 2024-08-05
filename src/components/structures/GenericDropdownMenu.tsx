@@ -97,6 +97,12 @@ type WithKeyFunction<T> = T extends Key
           toKey: (key: T) => Key;
       };
 
+export interface AdditionalOptionsProps {
+    menuDisplayed: boolean;
+    closeMenu: () => void;
+    openMenu: () => void;
+}
+
 type IProps<T> = WithKeyFunction<T> & {
     value: T;
     options: readonly GenericDropdownMenuOption<T>[] | readonly GenericDropdownMenuGroup<T>[];
@@ -105,11 +111,7 @@ type IProps<T> = WithKeyFunction<T> & {
     onOpen?: (ev: ButtonEvent) => void;
     onClose?: (ev: ButtonEvent) => void;
     className?: string;
-    AdditionalOptions?: FunctionComponent<{
-        menuDisplayed: boolean;
-        closeMenu: () => void;
-        openMenu: () => void;
-    }>;
+    AdditionalOptions?: FunctionComponent<AdditionalOptionsProps>;
 };
 
 export function GenericDropdownMenu<T>({

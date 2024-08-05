@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import { Icon as PopOutIcon } from "@vector-im/compound-design-tokens/icons/pop-out.svg";
@@ -37,7 +37,7 @@ import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Flex } from "../../utils/Flex";
 
-const SpinnerToast: React.FC = ({ children }) => (
+const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
         <InlineSpinner />
         {children}

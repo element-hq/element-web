@@ -53,7 +53,7 @@ const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
 export interface ErrorOptions {
-    // Because we're mixing the subsitution variables and `cause` into the same object
+    // Because we're mixing the substitution variables and `cause` into the same object
     // below, we want them to always explicitly say whether there is an underlying error
     // or not to avoid typos of "cause" slipping through unnoticed.
     cause: unknown | undefined;
@@ -78,16 +78,15 @@ export interface ErrorOptions {
 export class UserFriendlyError extends Error {
     public readonly translatedMessage: string;
 
-    public constructor(message: TranslationKey, substitutionVariablesAndCause?: IVariables & ErrorOptions) {
-        const errorOptions = {
-            cause: substitutionVariablesAndCause?.cause,
-        };
+    public constructor(
+        message: TranslationKey,
+        substitutionVariablesAndCause?: Omit<IVariables, keyof ErrorOptions> | ErrorOptions,
+    ) {
         // Prevent "Could not find /%\(cause\)s/g in x" logs to the console by removing it from the list
-        const substitutionVariables = { ...substitutionVariablesAndCause };
-        delete substitutionVariables["cause"];
+        const { cause, ...substitutionVariables } = substitutionVariablesAndCause ?? {};
+        const errorOptions = { cause };
 
-        // Create the error with the English version of the message that we want to show
-        // up in the logs
+        // Create the error with the English version of the message that we want to show up in the logs
         const englishTranslatedMessage = _t(message, { ...substitutionVariables, locale: "en" });
         super(englishTranslatedMessage, errorOptions);
 
