@@ -787,6 +787,17 @@ $left-gutter: 64px;
         ul {
             list-style-type: disc;
         }
+
+        /* override styles from the base markdown CSS that put markdown content on its own line,
+           as this isn't what we want for richtext emote content.
+         */
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            display: none;
+        }
     }
 }
 

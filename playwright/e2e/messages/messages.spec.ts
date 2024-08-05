@@ -69,6 +69,13 @@ test.describe("Message rendering", () => {
                 await expect(msgTile).toMatchScreenshot(`emote-ltr-${direction}displayname.png`);
             });
 
+            test("should render an LTR rich text emote", async ({ page, user, app, room }) => {
+                await page.goto(`#/room/${room.roomId}`);
+
+                const msgTile = await sendMessage(page, "/me lays a *free range* egg");
+                await expect(msgTile).toMatchScreenshot(`emote-rich-ltr-${direction}displayname.png`);
+            });
+
             test("should render an edited LTR message", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
@@ -95,6 +102,13 @@ test.describe("Message rendering", () => {
 
                 const msgTile = await sendMessage(page, "/me يضع بيضة");
                 await expect(msgTile).toMatchScreenshot(`emote-rtl-${direction}displayname.png`);
+            });
+
+            test("should render a richtext RTL emote", async ({ page, user, app, room }) => {
+                await page.goto(`#/room/${room.roomId}`);
+
+                const msgTile = await sendMessage(page, "/me أضع بيضة *حرة النطاق*");
+                await expect(msgTile).toMatchScreenshot(`emote-rich-rtl-${direction}displayname.png`);
             });
 
             test("should render an edited RTL message", async ({ page, user, app, room }) => {
