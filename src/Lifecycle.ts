@@ -58,7 +58,6 @@ import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
-import AbstractLocalStorageSettingsHandler from "./settings/handlers/AbstractLocalStorageSettingsHandler";
 import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
@@ -1087,7 +1086,6 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         const registrationTime = window.localStorage.getItem("mx_registration_time");
 
         window.localStorage.clear();
-        AbstractLocalStorageSettingsHandler.clear();
 
         try {
             await StorageAccess.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
