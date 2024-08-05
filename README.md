@@ -36,7 +36,7 @@ Element has several tiers of support for different environments:
         -   Community contributions are welcome to support these issues
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
-    -   Definition: Issues only affecting unsupported environments are **closed**
+    -   Definition: Issues asking for support of unsupported environments are **closed**
     -   Everything else
 
 The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
