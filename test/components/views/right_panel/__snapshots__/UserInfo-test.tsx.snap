@@ -256,6 +256,44 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           </svg>
         </button>
         <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36 _disabled_1gwvj_119"
+          data-kind="primary"
+          disabled=""
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.878.878 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.712-.275s.53.092.713.275c.183.183.275.42.275.712s-.092.53-.275.713l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Jump to read receipt
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
           class="_item_1gwvj_17 _interactive_1gwvj_36"
           data-kind="primary"
           role="button"
@@ -510,6 +548,44 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
           >
             Send message
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.876.876 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36 _disabled_1gwvj_119"
+          data-kind="primary"
+          disabled=""
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.878.878 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.712-.275s.53.092.713.275c.183.183.275.42.275.712s-.092.53-.275.713l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Jump to read receipt
           </span>
           <svg
             aria-hidden="true"

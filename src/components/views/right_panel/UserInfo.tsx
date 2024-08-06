@@ -442,19 +442,35 @@ export const UserOptionsSection: React.FC<{
     // Only allow the user to ignore the user if its not ourselves
     // same goes for jumping to read receipt
     if (!isMe) {
-        if (member instanceof RoomMember && member.roomId && !isSpace) {
-            const onReadReceiptButton = function (): void {
-                const room = cli.getRoom(member.roomId);
-                dis.dispatch<ViewRoomPayload>({
-                    action: Action.ViewRoom,
-                    highlighted: true,
-                    // this could return null, the default prevents a type error
-                    event_id: room?.getEventReadUpTo(member.userId) || undefined,
-                    room_id: member.roomId,
-                    metricsTrigger: undefined, // room doesn't change
-                });
-            };
+        const onReadReceiptButton = function (room: Room): void {
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                highlighted: true,
+                // this could return null, the default prevents a type error
+                event_id: room.getEventReadUpTo(member.userId) || undefined,
+                room_id: room.roomId,
+                metricsTrigger: undefined, // room doesn't change
+            });
+        };
 
+        const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : null;
+        const readReceiptButtonDisabled = isSpace || !room?.getEventReadUpTo(member.userId);
+        readReceiptButton = (
+            <MenuItem
+                role="button"
+                onSelect={async (ev) => {
+                    ev.preventDefault();
+                    if (room && !readReceiptButtonDisabled) {
+                        onReadReceiptButton(room);
+                    }
+                }}
+                label={_t("user_info|jump_to_rr_button")}
+                disabled={readReceiptButtonDisabled}
+                Icon={CheckIcon}
+            />
+        );
+
+        if (member instanceof RoomMember && member.roomId && !isSpace) {
             const onInsertPillButton = function (): void {
                 dis.dispatch<ComposerInsertPayload>({
                     action: Action.ComposerInsert,
@@ -462,21 +478,6 @@ export const UserOptionsSection: React.FC<{
                     timelineRenderingType: TimelineRenderingType.Room,
                 });
             };
-
-            const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : undefined;
-            if (room?.getEventReadUpTo(member.userId)) {
-                readReceiptButton = (
-                    <MenuItem
-                        role="button"
-                        onSelect={async (ev) => {
-                            ev.preventDefault();
-                            onReadReceiptButton();
-                        }}
-                        label={_t("user_info|jump_to_rr_button")}
-                        Icon={CheckIcon}
-                    />
-                );
-            }
 
             insertPillButton = (
                 <MenuItem

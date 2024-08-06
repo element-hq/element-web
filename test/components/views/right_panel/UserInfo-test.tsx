@@ -927,19 +927,19 @@ describe("<UserOptionsSection />", () => {
         });
     });
 
-    it("when call to client.getRoom is null, does not show read receipt button", () => {
+    it("when call to client.getRoom is null, shows disabled read receipt button", () => {
         mockClient.getRoom.mockReturnValueOnce(null);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).toBeDisabled();
     });
 
-    it("when call to client.getRoom is non-null and room.getEventReadUpTo is null, does not show read receipt button", () => {
+    it("when call to client.getRoom is non-null and room.getEventReadUpTo is null, shows disabled read receipt button", () => {
         mockRoom.getEventReadUpTo.mockReturnValueOnce(null);
         mockClient.getRoom.mockReturnValueOnce(mockRoom);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).toBeDisabled();
     });
 
     it("when calls to client.getRoom and room.getEventReadUpTo are non-null, shows read receipt button", () => {
