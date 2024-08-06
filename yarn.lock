@@ -2025,6 +2025,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
   integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
 
+"@matrix-org/olm@3.2.15":
+  version "3.2.15"
+  resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
+  integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
+
 "@matrix-org/react-sdk-module-api@^2.3.0", "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.4.0.tgz#5e4552acbe728141f42c1d54d75dcb4efea9301c"
@@ -8110,12 +8115,14 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "34.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/94e393c9a619b5d7427ff4103128521229ad4f6c"
+matrix-js-sdk@34.2.0:
+  version "34.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.2.0.tgz#5e7eff9b4c15689d7f07ad3686373f821e2f06bf"
+  integrity sha512-dygfH/a0C/Q+a5dSfudxxwA0g9peLsBbalC6LaxPa7AEFb4Gg9d8kiGnlqaFb1U9bGUapk8duBsAC526BjXbdA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^6.0.0"
+    "@matrix-org/olm" "3.2.15"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"
@@ -8136,9 +8143,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.101.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/19f9f9856451a8e4cce6d313d19ca8aed4b5d6b4"
+matrix-react-sdk@3.105.1:
+  version "3.105.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.105.1.tgz#813ece3c0016f4824a3e398c8cf5ca73abacd601"
+  integrity sha512-IcsE+Dntq9oIpDG3wR3XR2qBmtAqdCU+vLjJuB5mJFwpuCHlBTU0BIJ0yKSEwlpV5no2Ajlfp9a+2nXhXd3CwA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.23.0"
@@ -8160,6 +8168,7 @@ matrix-mock-request@^2.5.0:
     classnames "^2.2.6"
     commonmark "^0.31.0"
     counterpart "^0.18.6"
+    css-tree "^2.3.1"
     diff-dom "^5.0.0"
     diff-match-patch "^1.0.5"
     emojibase-regex "15.3.0"
@@ -8183,7 +8192,7 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "34.2.0"
     matrix-widget-api "^1.5.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
