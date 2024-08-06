@@ -1,3 +1,96 @@
+Changes in [3.105.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.105.1) (2024-08-06)
+=======================================================================================================
+Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
+
+Changes in [3.105.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.105.0) (2024-08-06)
+=======================================================================================================
+Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
+
+Changes in [3.104.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.104.0) (2024-07-30)
+=======================================================================================================
+## ✨ Features
+
+* Add release announcement for the new room header ([#12802](https://github.com/matrix-org/matrix-react-sdk/pull/12802)). Contributed by @MidhunSureshR.
+* Default the room header to on ([#12803](https://github.com/matrix-org/matrix-react-sdk/pull/12803)). Contributed by @MidhunSureshR.
+* Update Thread Panel to match latest designs ([#12797](https://github.com/matrix-org/matrix-react-sdk/pull/12797)). Contributed by @t3chguy.
+* Close any open modals on logout ([#12777](https://github.com/matrix-org/matrix-react-sdk/pull/12777)). Contributed by @dbkr.
+* Iterate design of right panel empty state ([#12796](https://github.com/matrix-org/matrix-react-sdk/pull/12796)). Contributed by @t3chguy.
+* Update styling of UserInfo right panel card ([#12788](https://github.com/matrix-org/matrix-react-sdk/pull/12788)). Contributed by @t3chguy.
+* Accessibility: Add Landmark navigation ([#12190](https://github.com/matrix-org/matrix-react-sdk/pull/12190)). Contributed by @akirk.
+* Let Element Call widget receive m.room.create ([#12710](https://github.com/matrix-org/matrix-react-sdk/pull/12710)). Contributed by @AndrewFerr.
+* Let Element Call widget set session memberships ([#12713](https://github.com/matrix-org/matrix-react-sdk/pull/12713)). Contributed by @AndrewFerr.
+* Update right panel base card styling to match Compound ([#12768](https://github.com/matrix-org/matrix-react-sdk/pull/12768)). Contributed by @t3chguy.
+* Align `widget_build_url_ignore_dm` with call behaviour switch between 1:1 and Widget ([#12760](https://github.com/matrix-org/matrix-react-sdk/pull/12760)). Contributed by @t3chguy.
+* Move integrations switch ([#12733](https://github.com/matrix-org/matrix-react-sdk/pull/12733)). Contributed by @dbkr.
+* Element-R: Report events with withheld keys separately to Posthog. ([#12755](https://github.com/matrix-org/matrix-react-sdk/pull/12755)). Contributed by @richvdh.
+
+## 🐛 Bug Fixes
+
+* Test for lack of WebAssembly support ([#12792](https://github.com/matrix-org/matrix-react-sdk/pull/12792)). Contributed by @dbkr.
+* Fix stray 'account' heading ([#12791](https://github.com/matrix-org/matrix-react-sdk/pull/12791)). Contributed by @dbkr.
+* Add test for the unsupported browser screen ([#12787](https://github.com/matrix-org/matrix-react-sdk/pull/12787)). Contributed by @dbkr.
+* Fix HTML export test ([#12778](https://github.com/matrix-org/matrix-react-sdk/pull/12778)). Contributed by @dbkr.
+* Fix HTML export missing a bunch of Compound variables ([#12774](https://github.com/matrix-org/matrix-react-sdk/pull/12774)). Contributed by @t3chguy.
+* Fix inability to change accent colour consistently in custom theming ([#12772](https://github.com/matrix-org/matrix-react-sdk/pull/12772)). Contributed by @t3chguy.
+* Fix edge case of landing on 3pid email link with registration disabled ([#12771](https://github.com/matrix-org/matrix-react-sdk/pull/12771)). Contributed by @t3chguy.
+
+
+Changes in [3.103.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.103.0) (2024-07-16)
+=======================================================================================================
+## ✨ Features
+
+* Add tabs to the right panel ([#12672](https://github.com/matrix-org/matrix-react-sdk/pull/12672)). Contributed by @MidhunSureshR.
+* Promote new room header from labs to Beta ([#12739](https://github.com/matrix-org/matrix-react-sdk/pull/12739)). Contributed by @t3chguy.
+* Redesign room search interface ([#12677](https://github.com/matrix-org/matrix-react-sdk/pull/12677)). Contributed by @t3chguy.
+* Move language settings to 'preferences' ([#12723](https://github.com/matrix-org/matrix-react-sdk/pull/12723)). Contributed by @dbkr.
+* New layout selector ui in user settings ([#12676](https://github.com/matrix-org/matrix-react-sdk/pull/12676)). Contributed by @florianduros.
+* Prevent Element appearing in system media controls  ([#10995](https://github.com/matrix-org/matrix-react-sdk/pull/10995)). Contributed by @SuperKenVery.
+* Move the account management button ([#12663](https://github.com/matrix-org/matrix-react-sdk/pull/12663)). Contributed by @dbkr.
+* Disable profile controls if the HS doesn't allow them to be set ([#12652](https://github.com/matrix-org/matrix-react-sdk/pull/12652)). Contributed by @dbkr.
+* New theme ui in user settings ([#12576](https://github.com/matrix-org/matrix-react-sdk/pull/12576)). Contributed by @florianduros.
+* Adjust room header hover transition from 300ms to 200ms ([#12703](https://github.com/matrix-org/matrix-react-sdk/pull/12703)). Contributed by @t3chguy.
+* Split out email \& phone number settings to separate components \& move discovery to privacy tab ([#12670](https://github.com/matrix-org/matrix-react-sdk/pull/12670)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Fix incoming call toast crash due to audio refactor ([#12737](https://github.com/matrix-org/matrix-react-sdk/pull/12737)). Contributed by @t3chguy.
+* Improve new room header accessibility ([#12725](https://github.com/matrix-org/matrix-react-sdk/pull/12725)). Contributed by @t3chguy.
+* Fix closing all modals ([#12728](https://github.com/matrix-org/matrix-react-sdk/pull/12728)). Contributed by @dbkr.
+* Fix close button on forgot password flow ([#12732](https://github.com/matrix-org/matrix-react-sdk/pull/12732)). Contributed by @dbkr.
+* Don't consider textual characters to be emoji ([#12582](https://github.com/matrix-org/matrix-react-sdk/pull/12582)). Contributed by @robintown.
+* Clear autocomplete input on selection accept ([#12709](https://github.com/matrix-org/matrix-react-sdk/pull/12709)). Contributed by @dbkr.
+* Fix `Match system theme` toggle ([#12719](https://github.com/matrix-org/matrix-react-sdk/pull/12719)). Contributed by @florianduros.
+
+
+Changes in [3.102.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.102.0) (2024-07-08)
+=======================================================================================================
+## ✨ Features
+
+* Switch to Rust crypto stack for all logins ([#12630](https://github.com/matrix-org/matrix-react-sdk/pull/12630)). Contributed by @richvdh.
+* Hide voip buttons in group rooms in environments with widgets disabled ([#12664](https://github.com/matrix-org/matrix-react-sdk/pull/12664)). Contributed by @t3chguy.
+* Minor tweaks to UserSettings dialog ([#12651](https://github.com/matrix-org/matrix-react-sdk/pull/12651)). Contributed by @florianduros.
+* Hide voice call button when redundant ([#12639](https://github.com/matrix-org/matrix-react-sdk/pull/12639)). Contributed by @t3chguy.
+* Improve accessibility of the room summary card ([#12586](https://github.com/matrix-org/matrix-react-sdk/pull/12586)). Contributed by @t3chguy.
+* Show tooltips on narrow tabbed views ([#12624](https://github.com/matrix-org/matrix-react-sdk/pull/12624)). Contributed by @dbkr.
+* Update gfm.css to github-markdown-css ([#12613](https://github.com/matrix-org/matrix-react-sdk/pull/12613)). Contributed by @t3chguy.
+* Cache e2eStatus to avoid concerning unencrypted flicker when changing rooms ([#12606](https://github.com/matrix-org/matrix-react-sdk/pull/12606)). Contributed by @t3chguy.
+* Tweak copy for user verification toast ([#12605](https://github.com/matrix-org/matrix-react-sdk/pull/12605)). Contributed by @t3chguy.
+* Support s tags for strikethrough for Matrix v1.10 ([#12604](https://github.com/matrix-org/matrix-react-sdk/pull/12604)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Remove redundant copy in deactive uia modal ([#12668](https://github.com/matrix-org/matrix-react-sdk/pull/12668)). Contributed by @t3chguy.
+* Fix high contrast theme in settings ([#12649](https://github.com/matrix-org/matrix-react-sdk/pull/12649)). Contributed by @florianduros.
+* Fix background on live location sharing footer ([#12629](https://github.com/matrix-org/matrix-react-sdk/pull/12629)). Contributed by @t3chguy.
+* Remove outdated iframe sandbox attribute ([#12633](https://github.com/matrix-org/matrix-react-sdk/pull/12633)). Contributed by @t3chguy.
+* Remove stray setState which caused encryption state shields to flicker ([#12632](https://github.com/matrix-org/matrix-react-sdk/pull/12632)). Contributed by @t3chguy.
+* Fix stray background colour on markdown body ([#12628](https://github.com/matrix-org/matrix-react-sdk/pull/12628)). Contributed by @t3chguy.
+* Fix widgets not being cleaned up correctly. ([#12616](https://github.com/matrix-org/matrix-react-sdk/pull/12616)). Contributed by @toger5.
+* Add in-progress view to display name EditInPlace ([#12609](https://github.com/matrix-org/matrix-react-sdk/pull/12609)). Contributed by @dbkr.
+* Fix config override of other settings levels ([#12593](https://github.com/matrix-org/matrix-react-sdk/pull/12593)). Contributed by @langleyd.
+* Don't show 'saved' on display name save error ([#12600](https://github.com/matrix-org/matrix-react-sdk/pull/12600)). Contributed by @dbkr.
+
+
 Changes in [3.101.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.101.0) (2024-06-18)
 =======================================================================================================
 ## ✨ Features
