@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 1`] = `
+exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 1`] = `
 <div
   class="mx_SettingsSubsection"
   data-testid="mx_AccountEmailAddresses"
@@ -42,14 +42,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
       >
         <input
           autocomplete="email"
-          id="mx_Field_27"
+          id="mx_Field_9"
           label="Email Address"
           placeholder="Email Address"
           type="text"
           value=""
         />
         <label
-          for="mx_Field_27"
+          for="mx_Field_9"
         >
           Email Address
         </label>
@@ -66,7 +66,7 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
 </div>
 `;
 
-exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 2`] = `
+exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 2`] = `
 <div
   class="mx_SettingsSubsection"
   data-testid="mx_AccountPhoneNumbers"
@@ -150,14 +150,14 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
           </span>
           <input
             autocomplete="tel-national"
-            id="mx_Field_28"
+            id="mx_Field_10"
             label="Phone Number"
             placeholder="Phone Number"
             type="text"
             value=""
           />
           <label
-            for="mx_Field_28"
+            for="mx_Field_10"
           >
             Phone Number
           </label>
@@ -175,7 +175,7 @@ exports[`<GeneralUserSettingsTab /> 3pids should display 3pid email addresses an
 </div>
 `;
 
-exports[`<GeneralUserSettingsTab /> deactive account should render section when account deactivation feature is enabled 1`] = `
+exports[`<AccountUserSettingsTab /> deactive account should render section when account deactivation feature is enabled 1`] = `
 <div
   class="mx_SettingsSection"
 >

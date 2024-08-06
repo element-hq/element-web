@@ -3,10 +3,10 @@
 exports[`<UserSettingsDialog /> renders tabs correctly 1`] = `
 NodeList [
   <li
-    aria-controls="mx_tabpanel_USER_GENERAL_TAB"
+    aria-controls="mx_tabpanel_USER_ACCOUNT_TAB"
     aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
-    data-testid="settings-tab-USER_GENERAL_TAB"
+    data-testid="settings-tab-USER_ACCOUNT_TAB"
     role="tab"
     tabindex="0"
   >
@@ -29,9 +29,9 @@ NodeList [
     </svg>
     <span
       class="mx_TabbedView_tabLabel_text"
-      id="mx_tabpanel_USER_GENERAL_TAB_label"
+      id="mx_tabpanel_USER_ACCOUNT_TAB_label"
     >
-      General
+      Account
     </span>
   </li>,
   <li

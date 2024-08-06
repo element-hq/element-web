@@ -13,10 +13,12 @@ limitations under the License.
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import React from "react";
-import { ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import userEvent from "@testing-library/user-event";
+import { MockedObject } from "jest-mock";
 
-import GeneralUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/GeneralUserSettingsTab";
+import AccountUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SdkContextClass, SDKContext } from "../../../../../../src/contexts/SDKContext";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import {
@@ -29,28 +31,35 @@ import {
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { OidcClientStore } from "../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import Modal from "../../../../../../src/Modal";
 
-describe("<GeneralUserSettingsTab />", () => {
+let changePasswordOnError: (e: Error) => void;
+let changePasswordOnFinished: () => void;
+
+jest.mock(
+    "../../../../../../src/components/views/settings/ChangePassword",
+    () =>
+        ({ onError, onFinished }: { onError: (e: Error) => void; onFinished: () => void }) => {
+            changePasswordOnError = onError;
+            changePasswordOnFinished = onFinished;
+            return <button>Mock change password</button>;
+        },
+);
+
+describe("<AccountUserSettingsTab />", () => {
     const defaultProps = {
         closeSettingsFn: jest.fn(),
     };
 
     const userId = "@alice:server.org";
-    const mockClient = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        ...mockClientMethodsServer(),
-        getCapabilities: jest.fn(),
-        getThreePids: jest.fn(),
-        getIdentityServerUrl: jest.fn(),
-        deleteThreePid: jest.fn(),
-    });
+    let mockClient: MockedObject<MatrixClient>;
 
     let stores: SdkContextClass;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
             <SDKContext.Provider value={stores}>
-                <GeneralUserSettingsTab {...defaultProps} />
+                <AccountUserSettingsTab {...defaultProps} />
             </SDKContext.Provider>
         </MatrixClientContext.Provider>
     );
@@ -61,6 +70,15 @@ describe("<GeneralUserSettingsTab />", () => {
         jest.clearAllMocks();
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         jest.spyOn(logger, "error").mockRestore();
+
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            ...mockClientMethodsServer(),
+            getCapabilities: jest.fn(),
+            getThreePids: jest.fn(),
+            getIdentityServerUrl: jest.fn(),
+            deleteThreePid: jest.fn(),
+        });
 
         mockClient.getCapabilities.mockResolvedValue({});
         mockClient.getThreePids.mockResolvedValue({
@@ -75,6 +93,10 @@ describe("<GeneralUserSettingsTab />", () => {
         // stub out this store completely to avoid mocking initialisation
         const mockOidcClientStore = {} as unknown as OidcClientStore;
         jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     it("does not show account management link when not available", () => {
@@ -130,6 +152,52 @@ describe("<GeneralUserSettingsTab />", () => {
             render(getComponent());
 
             expect(screen.getByText("Deactivate Account", { selector: "h2" }).parentElement!).toMatchSnapshot();
+        });
+        it("should display the deactivate account dialog when clicked", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === UIFeature.Deactivate,
+            );
+
+            const createDialogFn = jest.fn();
+            jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
+
+            render(getComponent());
+
+            await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
+
+            expect(createDialogFn).toHaveBeenCalled();
+        });
+        it("should close settings if account deactivated", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === UIFeature.Deactivate,
+            );
+
+            const createDialogFn = jest.fn();
+            jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
+
+            render(getComponent());
+
+            await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
+
+            createDialogFn.mock.calls[0][1].onFinished(true);
+
+            expect(defaultProps.closeSettingsFn).toHaveBeenCalled();
+        });
+        it("should not close settings if account not deactivated", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === UIFeature.Deactivate,
+            );
+
+            const createDialogFn = jest.fn();
+            jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
+
+            render(getComponent());
+
+            await userEvent.click(screen.getByRole("button", { name: "Deactivate Account" }));
+
+            createDialogFn.mock.calls[0][1].onFinished(false);
+
+            expect(defaultProps.closeSettingsFn).not.toHaveBeenCalled();
         });
     });
 
@@ -299,6 +367,55 @@ describe("<GeneralUserSettingsTab />", () => {
                 const section = screen.getByTestId("mx_AccountPhoneNumbers");
 
                 expect(within(section).getByLabelText("Phone Number")).toBeDisabled();
+            });
+        });
+    });
+
+    describe("Password change", () => {
+        beforeEach(() => {
+            mockClient.getCapabilities.mockResolvedValue({
+                "m.change_password": {
+                    enabled: true,
+                },
+            });
+        });
+
+        it("should display a dialog if password change succeeded", async () => {
+            const createDialogFn = jest.fn();
+            jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
+
+            render(getComponent());
+
+            const changeButton = await screen.findByRole("button", { name: "Mock change password" });
+            userEvent.click(changeButton);
+
+            expect(changePasswordOnFinished).toBeDefined();
+            changePasswordOnFinished();
+
+            expect(createDialogFn).toHaveBeenCalledWith(expect.anything(), {
+                title: "Success",
+                description: "Your password was successfully changed.",
+            });
+        });
+
+        it("should display an error if password change failed", async () => {
+            const ERROR_STRING =
+                "Your password must contain exactly 5 lowercase letters, a box drawing character and the badger emoji.";
+
+            const createDialogFn = jest.fn();
+            jest.spyOn(Modal, "createDialog").mockImplementation(createDialogFn);
+
+            render(getComponent());
+
+            const changeButton = await screen.findByRole("button", { name: "Mock change password" });
+            userEvent.click(changeButton);
+
+            expect(changePasswordOnError).toBeDefined();
+            changePasswordOnError(new Error(ERROR_STRING));
+
+            expect(createDialogFn).toHaveBeenCalledWith(expect.anything(), {
+                title: "Error changing password",
+                description: ERROR_STRING,
             });
         });
     });

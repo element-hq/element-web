@@ -44,7 +44,7 @@ test.describe("OIDC Native", () => {
 
         const deviceId = await page.evaluate<string>(() => window.localStorage.mx_device_id);
 
-        await app.settings.openUserSettings("General");
+        await app.settings.openUserSettings("Account");
         const newPagePromise = context.waitForEvent("page");
         await page.getByRole("button", { name: "Manage account" }).click();
         await app.settings.closeDialog();

@@ -2422,6 +2422,10 @@
         }
     },
     "settings": {
+        "account": {
+            "dialog_title": "<strong>Settings:</strong> Account",
+            "title": "Account"
+        },
         "all_rooms_home": "Show all rooms in Home",
         "all_rooms_home_description": "All rooms you're in will appear in Home.",
         "always_show_message_timestamps": "Always show message timestamps",
@@ -2497,7 +2501,6 @@
             "deactivate_confirm_erase_label": "Hide my messages from new joiners",
             "deactivate_section": "Deactivate Account",
             "deactivate_warning": "Deactivating your account is a permanent action — be careful!",
-            "dialog_title": "<strong>Settings:</strong> General",
             "discovery_email_empty": "Discovery options will appear once you have added an email.",
             "discovery_email_verification_instructions": "Verify the link in your inbox",
             "discovery_msisdn_empty": "Discovery options will appear once you have added a phone number.",

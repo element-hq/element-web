@@ -127,7 +127,7 @@ const tasks: UserOnboardingTask[] = [
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskSetupProfile", ev);
                 defaultDispatcher.dispatch({
                     action: Action.ViewUserSettings,
-                    initialTabId: UserTab.General,
+                    initialTabId: UserTab.Account,
                 });
             },
         },

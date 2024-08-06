@@ -98,7 +98,7 @@ describe("<UserSettingsDialog />", () => {
     it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());
 
-        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabLabel(container)).toEqual("Account");
     });
 
     it("should render initial tab when initialTabId is set", () => {
@@ -111,7 +111,7 @@ describe("<UserSettingsDialog />", () => {
         // mjolnir tab is only rendered in some configs
         const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
 
-        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabLabel(container)).toEqual("Account");
     });
 
     it("renders tabs correctly", () => {

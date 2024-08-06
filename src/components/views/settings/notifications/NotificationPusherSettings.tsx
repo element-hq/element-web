@@ -37,7 +37,7 @@ function generalTabButton(content: string): JSX.Element {
             onClick={() => {
                 dispatcher.dispatch({
                     action: Action.ViewUserSettings,
-                    initialTabId: UserTab.General,
+                    initialTabId: UserTab.Account,
                 });
             }}
         >

@@ -31,7 +31,7 @@ test.describe("OIDC Aware", () => {
         await expect(page.getByRole("heading", { name: "Welcome alice", exact: true })).toBeVisible();
 
         // Open settings and navigate to account management
-        await app.settings.openUserSettings("General");
+        await app.settings.openUserSettings("Account");
         const newPagePromise = context.waitForEvent("page");
         await page.getByRole("button", { name: "Manage account" }).click();
 
