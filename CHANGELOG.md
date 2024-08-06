@@ -1,3 +1,9 @@
+Changes in [1.11.73](https://github.com/element-hq/element-web/releases/tag/v1.11.73) (2024-08-06)
+==================================================================================================
+Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
+
+
+
 Changes in [1.11.72](https://github.com/element-hq/element-web/releases/tag/v1.11.72) (2024-07-30)
 ==================================================================================================
 ## ✨ Features
