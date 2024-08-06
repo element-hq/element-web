@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixClient, Room, SyncState } from "matrix-js-sdk";
-import { localstorage } from "modernizr";
+import { ClientEvent, MatrixClient, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import BasePlatform from "../../src/BasePlatform";
 import SdkConfig from "../../src/SdkConfig";
