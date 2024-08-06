@@ -34,14 +34,14 @@ export class Tab<T extends string> {
      * Creates a new tab.
      * @param {string} id The tab's ID.
      * @param {string} label The untranslated tab label.
-     * @param {string} icon The class for the tab icon. This should be a simple mask.
+     * @param {string|JSX.Element} icon An SVG element to use for the tab icon. Can also be a string for legacy icons, in which case it is the class for the tab icon. This should be a simple mask.
      * @param {React.ReactNode} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
      */
     public constructor(
         public readonly id: T,
         public readonly label: TranslationKey,
-        public readonly icon: string | null,
+        public readonly icon: string | JSX.Element | null,
         public readonly body: React.ReactNode,
         public readonly screenName?: ScreenName,
     ) {}
@@ -99,7 +99,11 @@ function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITab
 
     let tabIcon: JSX.Element | undefined;
     if (tab.icon) {
-        tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
+        if (typeof tab.icon === "object") {
+            tabIcon = tab.icon;
+        } else if (typeof tab.icon === "string") {
+            tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
+        }
     }
 
     const id = domIDForTabID(tab.id);

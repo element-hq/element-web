@@ -136,6 +136,12 @@ limitations under the License.
     transition:
         color 0.1s,
         background-color 0.1s;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        margin-right: var(--cpd-space-3x);
+    }
 }
 
 .mx_TabbedView_maskedIcon {
@@ -184,6 +190,10 @@ limitations under the License.
         }
         .mx_TabbedView_tabLabel {
             padding-inline: 0 0;
+            justify-content: center;
+            svg {
+                margin-right: 0;
+            }
         }
     }
 }
