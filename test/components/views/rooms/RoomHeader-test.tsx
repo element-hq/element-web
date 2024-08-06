@@ -40,8 +40,9 @@ import {
     waitFor,
 } from "@testing-library/react";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { mocked } from "jest-mock";
 
-import { filterConsole, mkEvent, stubClient } from "../../../test-utils";
+import { filterConsole, stubClient } from "../../../test-utils";
 import RoomHeader from "../../../../src/components/views/rooms/RoomHeader";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -109,37 +110,6 @@ describe("RoomHeader", () => {
 
         fireEvent.click(getByText(container, ROOM_ID));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomSummary });
-    });
-
-    it("does not show the face pile for DMs", () => {
-        const client = MatrixClientPeg.get()!;
-
-        jest.spyOn(client, "getAccountData").mockReturnValue(
-            mkEvent({
-                event: true,
-                type: EventType.Direct,
-                user: client.getSafeUserId(),
-                content: {
-                    "user@example.com": [room.roomId],
-                },
-            }),
-        );
-
-        room.getJoinedMembers = jest.fn().mockReturnValue([
-            {
-                userId: "@me:example.org",
-                name: "Member",
-                rawDisplayName: "Member",
-                roomId: room.roomId,
-                membership: KnownMembership.Join,
-                getAvatarUrl: () => "mxc://avatar.url/image.png",
-                getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
-            },
-        ]);
-
-        const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
-
-        expect(asFragment()).toMatchSnapshot();
     });
 
     it("shows a face pile for rooms", async () => {
@@ -620,20 +590,30 @@ describe("RoomHeader", () => {
             client = MatrixClientPeg.get()!;
 
             // Make the mocked room a DM
-            jest.spyOn(client, "getAccountData").mockImplementation((eventType: string): MatrixEvent | undefined => {
-                if (eventType === EventType.Direct) {
-                    return mkEvent({
-                        event: true,
-                        content: {
-                            [client.getUserId()!]: [room.roomId],
-                        },
-                        type: EventType.Direct,
-                        user: client.getSafeUserId(),
-                    });
-                }
-
-                return undefined;
+            mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId) => {
+                if (roomId === room.roomId) return "@user:example.com";
             });
+            room.getMember = jest.fn((userId) => new RoomMember(room.roomId, userId));
+            room.getJoinedMembers = jest.fn().mockReturnValue([
+                {
+                    userId: "@me:example.org",
+                    name: "Member",
+                    rawDisplayName: "Member",
+                    roomId: room.roomId,
+                    membership: KnownMembership.Join,
+                    getAvatarUrl: () => "mxc://avatar.url/image.png",
+                    getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
+                },
+                {
+                    userId: "@bob:example.org",
+                    name: "Other Member",
+                    rawDisplayName: "Other Member",
+                    roomId: room.roomId,
+                    membership: KnownMembership.Join,
+                    getAvatarUrl: () => "mxc://avatar.url/image.png",
+                    getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
+                },
+            ]);
             jest.spyOn(client, "isCryptoEnabled").mockReturnValue(true);
         });
 
@@ -646,6 +626,12 @@ describe("RoomHeader", () => {
             const { container } = render(<RoomHeader room={room} />, getWrapper());
 
             await waitFor(() => expect(getByLabelText(container, expectedLabel)).toBeInTheDocument());
+        });
+
+        it("does not show the face pile for DMs", () => {
+            const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
+
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 

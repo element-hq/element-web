@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RoomHeader does not show the face pile for DMs 1`] = `
+exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
 <DocumentFragment>
   <header
     class="mx_Flex mx_RoomHeader light-panel"
@@ -46,8 +46,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
     >
       <button
-        aria-disabled="true"
-        aria-label="There's no one here to call"
+        aria-label="Close lobby"
         class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -55,9 +54,19 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       >
         <div
           class="_indicator-icon_133tf_26"
-          style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+          style="--cpd-icon-button-size: 100%;"
         >
-          <div />
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
         </div>
       </button>
       <button

@@ -21,7 +21,7 @@ import classNames from "classnames";
 import { _t } from "../../../languageHandler";
 import { formatDuration } from "../../../DateUtils";
 
-const BUSY_PRESENCE_NAME = new UnstableValue("busy", "org.matrix.msc3026.busy");
+export const BUSY_PRESENCE_NAME = new UnstableValue("busy", "org.matrix.msc3026.busy");
 
 interface IProps {
     // number of milliseconds ago this user was last active.
