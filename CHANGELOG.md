@@ -1,3 +1,7 @@
+Changes in [3.105.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.105.1) (2024-08-06)
+=======================================================================================================
+Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
+
 Changes in [3.105.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.105.0) (2024-08-06)
 =======================================================================================================
 Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
