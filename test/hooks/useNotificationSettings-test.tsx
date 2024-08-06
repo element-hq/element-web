@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks/dom";
+import { waitFor } from "@testing-library/react";
 import { IPushRules, MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
 
 import { useNotificationSettings } from "../../src/hooks/useNotificationSettings";
@@ -68,99 +68,87 @@ describe("useNotificationSettings", () => {
     });
 
     it("correctly parses model", async () => {
-        await act(async () => {
-            const { result, waitForNextUpdate } = renderHook(() => useNotificationSettings(cli));
-            expect(result.current.model).toEqual(null);
-            await waitForNextUpdate();
-            expect(result.current.model).toEqual(expectedModel);
-            expect(result.current.hasPendingChanges).toBeFalsy();
-        });
+        const { result } = renderHook(() => useNotificationSettings(cli));
+        expect(result.current.model).toEqual(null);
+        await waitFor(() => expect(result.current.model).toEqual(expectedModel));
+        expect(result.current.hasPendingChanges).toBeFalsy();
     });
 
     it("correctly generates change calls", async () => {
-        await act(async () => {
-            const addPushRule = jest.fn(cli.addPushRule);
-            cli.addPushRule = addPushRule;
-            const deletePushRule = jest.fn(cli.deletePushRule);
-            cli.deletePushRule = deletePushRule;
-            const setPushRuleEnabled = jest.fn(cli.setPushRuleEnabled);
-            cli.setPushRuleEnabled = setPushRuleEnabled;
-            const setPushRuleActions = jest.fn(cli.setPushRuleActions);
-            cli.setPushRuleActions = setPushRuleActions;
+        const addPushRule = jest.fn(cli.addPushRule);
+        cli.addPushRule = addPushRule;
+        const deletePushRule = jest.fn(cli.deletePushRule);
+        cli.deletePushRule = deletePushRule;
+        const setPushRuleEnabled = jest.fn(cli.setPushRuleEnabled);
+        cli.setPushRuleEnabled = setPushRuleEnabled;
+        const setPushRuleActions = jest.fn(cli.setPushRuleActions);
+        cli.setPushRuleActions = setPushRuleActions;
 
-            const { result, waitForNextUpdate } = renderHook(() => useNotificationSettings(cli));
-            expect(result.current.model).toEqual(null);
-            await waitForNextUpdate();
-            expect(result.current.model).toEqual(expectedModel);
-            expect(result.current.hasPendingChanges).toBeFalsy();
-            await result.current.reconcile(DefaultNotificationSettings);
-            await waitForNextUpdate();
-            expect(result.current.hasPendingChanges).toBeFalsy();
-            expect(addPushRule).toHaveBeenCalledTimes(0);
-            expect(deletePushRule).toHaveBeenCalledTimes(9);
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justjann3");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justj4nn3");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justj4nne");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "Janne");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "J4nne");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "Jann3");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "jann3");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "j4nne");
-            expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "janne");
-            expect(setPushRuleEnabled).toHaveBeenCalledTimes(6);
-            expect(setPushRuleEnabled).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Underride,
-                RuleId.EncryptedMessage,
-                true,
-            );
-            expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.Message, true);
-            expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.EncryptedDM, true);
-            expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.DM, true);
-            expect(setPushRuleEnabled).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Override,
-                RuleId.SuppressNotices,
-                false,
-            );
-            expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Override, RuleId.InviteToSelf, true);
-            expect(setPushRuleActions).toHaveBeenCalledTimes(6);
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Underride,
-                RuleId.EncryptedMessage,
-                StandardActions.ACTION_NOTIFY,
-            );
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Underride,
-                RuleId.Message,
-                StandardActions.ACTION_NOTIFY,
-            );
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Underride,
-                RuleId.EncryptedDM,
-                StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            );
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Underride,
-                RuleId.DM,
-                StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            );
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Override,
-                RuleId.SuppressNotices,
-                StandardActions.ACTION_DONT_NOTIFY,
-            );
-            expect(setPushRuleActions).toHaveBeenCalledWith(
-                "global",
-                PushRuleKind.Override,
-                RuleId.InviteToSelf,
-                StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
-            );
-        });
+        const { result } = renderHook(() => useNotificationSettings(cli));
+        expect(result.current.model).toEqual(null);
+        await waitFor(() => expect(result.current.model).toEqual(expectedModel));
+        expect(result.current.hasPendingChanges).toBeFalsy();
+        await result.current.reconcile(DefaultNotificationSettings);
+        await waitFor(() => expect(result.current.hasPendingChanges).toBeFalsy());
+        expect(addPushRule).toHaveBeenCalledTimes(0);
+        expect(deletePushRule).toHaveBeenCalledTimes(9);
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justjann3");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justj4nn3");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justj4nne");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "Janne");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "J4nne");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "Jann3");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "jann3");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "j4nne");
+        expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "janne");
+        expect(setPushRuleEnabled).toHaveBeenCalledTimes(6);
+        expect(setPushRuleEnabled).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Underride,
+            RuleId.EncryptedMessage,
+            true,
+        );
+        expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.Message, true);
+        expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.EncryptedDM, true);
+        expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Underride, RuleId.DM, true);
+        expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Override, RuleId.SuppressNotices, false);
+        expect(setPushRuleEnabled).toHaveBeenCalledWith("global", PushRuleKind.Override, RuleId.InviteToSelf, true);
+        expect(setPushRuleActions).toHaveBeenCalledTimes(6);
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Underride,
+            RuleId.EncryptedMessage,
+            StandardActions.ACTION_NOTIFY,
+        );
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Underride,
+            RuleId.Message,
+            StandardActions.ACTION_NOTIFY,
+        );
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Underride,
+            RuleId.EncryptedDM,
+            StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+        );
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Underride,
+            RuleId.DM,
+            StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+        );
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Override,
+            RuleId.SuppressNotices,
+            StandardActions.ACTION_DONT_NOTIFY,
+        );
+        expect(setPushRuleActions).toHaveBeenCalledWith(
+            "global",
+            PushRuleKind.Override,
+            RuleId.InviteToSelf,
+            StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
+        );
     });
 });

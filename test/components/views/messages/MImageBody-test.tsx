@@ -211,7 +211,7 @@ describe("<MImageBody/>", () => {
     it("should generate a thumbnail if one isn't included for animated media", async () => {
         Object.defineProperty(global.Image.prototype, "src", {
             set(src) {
-                window.setTimeout(() => this.onload());
+                window.setTimeout(() => this.onload?.());
             },
         });
         Object.defineProperty(global.Image.prototype, "height", {

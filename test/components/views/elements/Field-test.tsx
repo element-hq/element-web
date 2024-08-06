@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import Field from "../../../../src/components/views/elements/Field";
 
@@ -63,12 +63,10 @@ describe("Field", () => {
             );
 
             // When invalid
-            await act(async () => {
-                fireEvent.focus(screen.getByRole("textbox"));
-            });
+            fireEvent.focus(screen.getByRole("textbox"));
 
             // Expect 'alert' role
-            expect(screen.queryByRole("alert")).toBeInTheDocument();
+            await expect(screen.findByRole("alert")).resolves.toBeInTheDocument();
 
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
@@ -85,12 +83,10 @@ describe("Field", () => {
             );
 
             // When valid
-            await act(async () => {
-                fireEvent.focus(screen.getByRole("textbox"));
-            });
+            fireEvent.focus(screen.getByRole("textbox"));
 
             // Expect 'status' role
-            expect(screen.queryByRole("status")).toBeInTheDocument();
+            await expect(screen.findByRole("status")).resolves.toBeInTheDocument();
 
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
@@ -108,12 +104,10 @@ describe("Field", () => {
             );
 
             // When valid or invalid and 'tooltipContent' set
-            await act(async () => {
-                fireEvent.focus(screen.getByRole("textbox"));
-            });
+            fireEvent.focus(screen.getByRole("textbox"));
 
             // Expect 'tooltip' role
-            expect(screen.queryByRole("tooltip")).toBeInTheDocument();
+            await expect(screen.findByRole("tooltip")).resolves.toBeInTheDocument();
 
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });

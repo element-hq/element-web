@@ -32,6 +32,8 @@ import {
     TranslatedString,
     UserFriendlyError,
     TranslationKey,
+    IVariables,
+    Tags,
 } from "../src/languageHandler";
 import { stubClient } from "./test-utils";
 import { setupLanguageMock } from "./setup/setupLanguage";
@@ -214,13 +216,7 @@ describe("languageHandler JSX", function () {
     const plurals = "common|and_n_others";
     const variableSub = "slash_command|ignore_dialog_description";
 
-    type TestCase = [
-        string,
-        TranslationKey,
-        Record<string, unknown>,
-        Record<string, unknown> | undefined,
-        TranslatedString,
-    ];
+    type TestCase = [string, TranslationKey, IVariables, Tags | undefined, TranslatedString];
     const testCasesEn: TestCase[] = [
         // description of the test case, translationString, variables, tags, expected result
         ["translates a basic string", basicString, {}, undefined, "Rooms"],

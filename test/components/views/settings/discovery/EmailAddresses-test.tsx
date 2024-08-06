@@ -104,6 +104,7 @@ describe("<EmailAddress/>", () => {
                     "https://fake-url/",
                 ),
             );
+            await expect(screen.findByText("Complete")).resolves.not.toHaveAttribute("aria-disabled", "true");
             fireEvent.click(screen.getByText("Complete"));
 
             // Expect error dialog/modal to be shown. We have to wait for the UI to transition.
@@ -120,6 +121,7 @@ describe("<EmailAddress/>", () => {
         it("Shows error dialog when share completion fails (UserFriendlyError)", async () => {
             const fakeErrorText = "Fake UserFriendlyError error in test" as TranslationKey;
             mockClient.bindThreePid.mockRejectedValue(new UserFriendlyError(fakeErrorText));
+            await expect(screen.findByText("Complete")).resolves.not.toHaveAttribute("aria-disabled", "true");
             fireEvent.click(screen.getByText("Complete"));
 
             // Expect error dialog/modal to be shown. We have to wait for the UI to transition.
@@ -132,6 +134,7 @@ describe("<EmailAddress/>", () => {
         it("Shows error dialog when share completion fails (generic error)", async () => {
             const fakeErrorText = "Fake plain error in test";
             mockClient.bindThreePid.mockRejectedValue(new Error(fakeErrorText));
+            await expect(screen.findByText("Complete")).resolves.not.toHaveAttribute("aria-disabled", "true");
             fireEvent.click(screen.getByText("Complete"));
 
             // Expect error dialog/modal to be shown. We have to wait for the UI to transition.

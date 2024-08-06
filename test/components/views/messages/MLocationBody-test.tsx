@@ -19,6 +19,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -64,9 +65,11 @@ describe("MLocationBody", () => {
             });
             const component = getComponent();
 
-            // simulate error initialising map in maplibregl
-            // @ts-ignore
-            mockMap.emit("error", { status: 404 });
+            sleep(10).then(() => {
+                // simulate error initialising map in maplibregl
+                // @ts-ignore
+                mockMap.emit("error", { status: 404 });
+            });
 
             return component;
         };
@@ -100,9 +103,10 @@ describe("MLocationBody", () => {
                 expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 
-            it("displays correct fallback content when map_style_url is misconfigured", () => {
+            it("displays correct fallback content when map_style_url is misconfigured", async () => {
                 const component = getMapErrorComponent();
-                expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
+                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toBeTruthy());
+                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot());
             });
 
             it("should clear the error on reconnect", () => {

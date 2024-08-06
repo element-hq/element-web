@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult, waitForElementToBeRemoved } from "@testing-library/react";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -39,6 +39,7 @@ describe("<MessageEditHistory />", () => {
 
     async function renderComponent(): Promise<RenderResult> {
         const result = render(<MessageEditHistoryDialog mxEvent={event} onFinished={jest.fn()} />);
+        await waitForElementToBeRemoved(() => result.queryByRole("progressbar"));
         await flushPromises();
         return result;
     }

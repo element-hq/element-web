@@ -120,16 +120,15 @@ describe("<FilteredDeviceList />", () => {
     });
 
     describe("filtering", () => {
-        const setFilter = async (container: HTMLElement, option: DeviceSecurityVariation | string) =>
-            await act(async () => {
-                const dropdown = container.querySelector('[aria-label="Filter devices"]');
+        const setFilter = async (container: HTMLElement, option: DeviceSecurityVariation | string) => {
+            const dropdown = container.querySelector('[aria-label="Filter devices"]');
 
-                fireEvent.click(dropdown as Element);
-                // tick to let dropdown render
-                await flushPromises();
+            fireEvent.click(dropdown as Element);
+            // tick to let dropdown render
+            await flushPromises();
 
-                fireEvent.click(container.querySelector(`#device-list-filter__${option}`) as Element);
-            });
+            fireEvent.click(container.querySelector(`#device-list-filter__${option}`) as Element);
+        };
 
         it("does not display filter description when filter is falsy", () => {
             const { container } = render(getComponent({ filter: undefined }));

@@ -109,10 +109,8 @@ describe("VoiceBroadcastPreRecordingPip", () => {
 
         describe("and double clicking »Go live«", () => {
             beforeEach(async () => {
-                await act(async () => {
-                    await userEvent.click(screen.getByText("Go live"));
-                    await userEvent.click(screen.getByText("Go live"));
-                });
+                await userEvent.click(screen.getByText("Go live"));
+                await userEvent.click(screen.getByText("Go live"));
             });
 
             it("should call start once", () => {

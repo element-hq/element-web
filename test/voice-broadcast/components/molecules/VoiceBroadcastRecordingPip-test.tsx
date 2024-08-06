@@ -117,10 +117,8 @@ describe("VoiceBroadcastRecordingPip", () => {
 
         describe("and selecting another input device", () => {
             beforeEach(async () => {
-                await act(async () => {
-                    await userEvent.click(screen.getByLabelText("Change input device"));
-                    await userEvent.click(screen.getByText("Device 1"));
-                });
+                await userEvent.click(screen.getByLabelText("Change input device"));
+                await userEvent.click(screen.getByText("Device 1"));
             });
 
             it("should select the device and pause and resume the broadcast", () => {
@@ -199,8 +197,8 @@ describe("VoiceBroadcastRecordingPip", () => {
                     client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
                 });
 
-                it("should render a paused recording", () => {
-                    expect(screen.getByLabelText("resume voice broadcast")).toBeInTheDocument();
+                it("should render a paused recording", async () => {
+                    await expect(screen.findByLabelText("resume voice broadcast")).resolves.toBeInTheDocument();
                 });
             });
         });

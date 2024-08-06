@@ -87,20 +87,17 @@ describe("<PinnedMessagesCard />", () => {
     };
 
     const mountPins = async (room: Room): Promise<RenderResult> => {
-        let pins!: RenderResult;
-        await act(async () => {
-            pins = render(
-                <MatrixClientContext.Provider value={cli}>
-                    <PinnedMessagesCard
-                        room={room}
-                        onClose={jest.fn()}
-                        permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-                    />
-                </MatrixClientContext.Provider>,
-            );
-            // Wait a tick for state updates
-            await sleep(0);
-        });
+        const pins = render(
+            <MatrixClientContext.Provider value={cli}>
+                <PinnedMessagesCard
+                    room={room}
+                    onClose={jest.fn()}
+                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                />
+            </MatrixClientContext.Provider>,
+        );
+        // Wait a tick for state updates
+        await act(() => sleep(0));
 
         return pins;
     };
@@ -313,7 +310,6 @@ describe("<PinnedMessagesCard />", () => {
     it("should show spinner whilst loading", async () => {
         const room = mkRoom([], [pin1]);
         mountPins(room);
-        const spinner = await screen.findByTestId("spinner");
-        await waitForElementToBeRemoved(spinner);
+        await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
     });
 });

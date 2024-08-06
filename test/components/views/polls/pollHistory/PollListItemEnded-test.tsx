@@ -163,7 +163,7 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText, queryByText } = getComponent({ event: pollStartEvent, poll });
+        const { getByText, queryByText, findByText } = getComponent({ event: pollStartEvent, poll });
         // fetch relations
         await flushPromises();
 
@@ -174,7 +174,7 @@ describe("<PollListItemEnded />", () => {
         ]);
 
         // updated with more responses
-        expect(getByText("Final result based on 3 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 3 votes")).resolves.toBeInTheDocument();
         expect(getByText("Nissan Silvia S15")).toBeInTheDocument();
         expect(queryByText("Mitsubishi Lancer Evolution IX")).not.toBeInTheDocument();
     });

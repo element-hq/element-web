@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
     EventTimeline,
     EventType,
@@ -129,7 +129,7 @@ describe("<RoomSettingsDialog />", () => {
                 expect(screen.getByTestId("settings-tab-ROOM_PEOPLE_TAB")).toBeInTheDocument();
             });
 
-            it("re-renders on room join rule changes", () => {
+            it("re-renders on room join rule changes", async () => {
                 jest.spyOn(SettingsStore, "getValue").mockImplementation(
                     (setting) => setting === "feature_ask_to_join",
                 );
@@ -142,7 +142,9 @@ describe("<RoomSettingsDialog />", () => {
                     room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                     null,
                 );
-                expect(screen.queryByTestId("settings-tab-ROOM_PEOPLE_TAB")).not.toBeInTheDocument();
+                await waitFor(() =>
+                    expect(screen.queryByTestId("settings-tab-ROOM_PEOPLE_TAB")).not.toBeInTheDocument(),
+                );
             });
         });
 

@@ -108,7 +108,7 @@ describe("<DeviceDetailHeading />", () => {
     });
 
     it("toggles out of editing mode when device name is saved successfully", async () => {
-        const { getByTestId } = render(getComponent());
+        const { getByTestId, findByTestId } = render(getComponent());
 
         // start editing
         fireEvent.click(getByTestId("device-heading-rename-cta"));
@@ -118,12 +118,12 @@ describe("<DeviceDetailHeading />", () => {
         await flushPromisesWithFakeTimers();
 
         // read mode displayed
-        expect(getByTestId("device-detail-heading")).toBeTruthy();
+        await expect(findByTestId("device-detail-heading")).resolves.toBeTruthy();
     });
 
     it("displays error when device name fails to save", async () => {
         const saveDeviceName = jest.fn().mockRejectedValueOnce("oups").mockResolvedValue({});
-        const { getByTestId, queryByText, container } = render(getComponent({ saveDeviceName }));
+        const { getByTestId, queryByText, findByText, container } = render(getComponent({ saveDeviceName }));
 
         // start editing
         fireEvent.click(getByTestId("device-heading-rename-cta"));
@@ -136,7 +136,7 @@ describe("<DeviceDetailHeading />", () => {
         await flushPromisesWithFakeTimers();
 
         // error message displayed
-        expect(queryByText("Failed to set session name")).toBeTruthy();
+        await expect(findByText("Failed to set session name")).resolves.toBeTruthy();
         // spinner removed
         expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
 

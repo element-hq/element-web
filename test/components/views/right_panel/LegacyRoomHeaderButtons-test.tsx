@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import {
     MatrixEvent,
     MsgType,
@@ -79,21 +79,23 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
         expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
     });
 
-    it("thread notification does change the thread button", () => {
+    it("thread notification does change the thread button", async () => {
         const { container } = getComponent(room);
         expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeFalsy();
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Total, 1);
-        expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeTruthy();
-        expect(isIndicatorOfType(container, "notification")).toBe(true);
+        await waitFor(() => {
+            expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeTruthy();
+            expect(isIndicatorOfType(container, "notification")).toBe(true);
+        });
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Highlight, 1);
-        expect(isIndicatorOfType(container, "highlight")).toBe(true);
+        await waitFor(() => expect(isIndicatorOfType(container, "highlight")).toBe(true));
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Total, 0);
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Highlight, 0);
 
-        expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
+        await waitFor(() => expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull());
     });
 
     it("thread activity does change the thread button", async () => {
@@ -122,7 +124,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addReceipt(receipt);
-        expect(isIndicatorOfType(container, "activity")).toBe(true);
+        await waitFor(() => expect(isIndicatorOfType(container, "activity")).toBe(true));
 
         // Sending the last event should clear the notification.
         let event = mkEvent({
@@ -140,7 +142,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addLiveEvents([event]);
-        expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
+        await waitFor(() => expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull());
 
         // Mark it as unread again.
         event = mkEvent({
@@ -158,7 +160,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addLiveEvents([event]);
-        expect(isIndicatorOfType(container, "activity")).toBe(true);
+        await waitFor(() => expect(isIndicatorOfType(container, "activity")).toBe(true));
 
         // Sending a read receipt on an earlier event shouldn't do anything.
         receipt = new MatrixEvent({
@@ -173,7 +175,7 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addReceipt(receipt);
-        expect(isIndicatorOfType(container, "activity")).toBe(true);
+        await waitFor(() => expect(isIndicatorOfType(container, "activity")).toBe(true));
 
         // Sending a receipt on the latest event should clear the notification.
         receipt = new MatrixEvent({
@@ -188,6 +190,6 @@ describe("LegacyRoomHeaderButtons-test.tsx", function () {
             },
         });
         room.addReceipt(receipt);
-        expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
+        await waitFor(() => expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull());
     });
 });
