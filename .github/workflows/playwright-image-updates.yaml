@@ -9,14 +9,14 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Update matrixdotorg/synapse image
+            - name: Update synapse image
               run: |
                   docker pull "$IMAGE"
                   INSPECT=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")
                   DIGEST=${INSPECT#*@}
                   sed -i "s/const DOCKER_TAG.*/const DOCKER_TAG = \"develop@$DIGEST\";/" playwright/plugins/homeserver/synapse/index.ts
               env:
-                  IMAGE: matrixdotorg/synapse:develop
+                  IMAGE: ghcr.io/element-hq/synapse:develop
 
             - name: Create Pull Request
               id: cpr

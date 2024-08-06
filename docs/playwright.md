@@ -29,7 +29,7 @@ need to have Docker installed and working in order to run the Playwright tests.
 There are a few different ways to run the tests yourself. The simplest is to run:
 
 ```shell
-docker pull matrixdotorg/synapse:develop
+docker pull ghcr.io/element-hq/synapse:develop
 yarn run test:playwright
 ```
 

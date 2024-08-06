@@ -25,10 +25,10 @@ import { Docker } from "../../docker";
 import { HomeserverConfig, HomeserverInstance, Homeserver, StartHomeserverOpts, Credentials } from "..";
 import { randB64Bytes } from "../../utils/rand";
 
-// Docker tag to use for `matrixdotorg/synapse` image.
+// Docker tag to use for synapse docker image.
 // We target a specific digest as every now and then a Synapse update will break our CI.
 // This digest is updated by the playwright-image-updates.yaml workflow periodically.
-const DOCKER_TAG = "develop@sha256:37e50604408ec07e1add96a38c3c97559e321a9f2764bd4d132bc2fb172c73e6";
+const DOCKER_TAG = "develop@sha256:f8613aeda996b6e9c2235c8141cc8e9a65eb25ed7bcd932505e5dd3c9231b748";
 
 async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Omit<HomeserverConfig, "dockerUrl">> {
     const templateDir = path.join(__dirname, "templates", opts.template);
@@ -110,7 +110,7 @@ export class Synapse implements Homeserver, HomeserverInstance {
         console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
         const dockerSynapseParams = ["-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`];
         const synapseId = await this.docker.run({
-            image: `matrixdotorg/synapse:${DOCKER_TAG}`,
+            image: `ghcr.io/element-hq/synapse:${DOCKER_TAG}`,
             containerName: `react-sdk-playwright-synapse`,
             params: dockerSynapseParams,
             cmd: ["run"],
