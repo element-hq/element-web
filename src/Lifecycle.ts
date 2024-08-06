@@ -102,7 +102,7 @@ dis.register((payload) => {
         // If we unset the client and the component is updated,  the render will fail and unmount everything.
         // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
         stopMatrixClient(false);
-        doSetLoggedIn(typed.credentials, true).catch((e) => {
+        doSetLoggedIn(typed.credentials, true, true).catch((e) => {
             // XXX we might want to fire a new event here to let the app know that the login failed ?
             // The module api could use it to display a message to the user.
             logger.warn("Failed to overwrite login", e);
@@ -208,6 +208,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                     guest: true,
                 },
                 true,
+                false,
             ).then(() => true);
         }
         const success = await restoreFromLocalStorage({
@@ -465,6 +466,7 @@ function registerAsGuest(hsUrl: string, isUrl?: string, defaultDeviceDisplayName
                         guest: true,
                     },
                     true,
+                    true,
                 ).then(() => true);
             },
             (err) => {
@@ -610,6 +612,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
                 freshLogin: freshLogin,
             },
             false,
+            false,
         );
         return true;
     } else {
@@ -663,7 +666,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
         logger.log("Pickle key not created");
     }
 
-    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true);
+    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true, true);
 }
 
 /**
@@ -700,7 +703,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
             (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
     }
 
-    return doSetLoggedIn(credentials, overwrite);
+    return doSetLoggedIn(credentials, overwrite, false);
 }
 
 /**
@@ -746,12 +749,17 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
  * optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
  *
- * @param {IMatrixClientCreds} credentials
- * @param {Boolean} clearStorageEnabled
+ * @param {IMatrixClientCreds} credentials The credentials to use
+ * @param {Boolean} clearStorageEnabled True to clear storage before starting the new client
+ * @param {Boolean} isFreshLogin True if this is a fresh login, false if it is previous session being restored
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnabled: boolean): Promise<MatrixClient> {
+async function doSetLoggedIn(
+    credentials: IMatrixClientCreds,
+    clearStorageEnabled: boolean,
+    isFreshLogin: boolean,
+): Promise<MatrixClient> {
     checkSessionLock();
     credentials.guest = Boolean(credentials.guest);
 
@@ -839,6 +847,9 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     } finally {
         clientPegOpts.rustCryptoStoreKey?.fill(0);
     }
+
+    // Run the migrations after the MatrixClientPeg has been assigned
+    SettingsStore.runMigrations(isFreshLogin);
 
     return client;
 }
@@ -1020,9 +1031,6 @@ async function startMatrixClient(
 
     checkSessionLock();
 
-    // Run the migrations after the MatrixClientPeg has been assigned
-    SettingsStore.runMigrations();
-
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start(client);
     // Similarly, don't start sending presence updates until we've started
@@ -1165,5 +1173,6 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
             userId,
         },
         true,
+        false,
     );
 };

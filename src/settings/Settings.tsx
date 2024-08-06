@@ -900,7 +900,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "urlPreviewsEnabled_e2ee": {
-        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_DEVICE],
         displayName: {
             "room-account": _td("settings|inline_url_previews_room_account"),
         },

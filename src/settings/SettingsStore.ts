@@ -17,6 +17,7 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { ReactNode } from "react";
+import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
@@ -36,6 +37,7 @@ import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayl
 import { Action } from "../dispatcher/actions";
 import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings: Record<string, any> = {};
@@ -638,9 +640,60 @@ export default class SettingsStore {
     }
 
     /**
+     * Migrate the setting for URL previews in e2e rooms from room account
+     * data to the room device level.
+     *
+     * @param isFreshLogin True if the user has just logged in, false if a previous session is being restored.
+     */
+    private static async migrateURLPreviewsE2EE(isFreshLogin: boolean): Promise<void> {
+        const MIGRATION_DONE_FLAG = "url_previews_e2ee_migration_done";
+        if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
+        if (isFreshLogin) return;
+
+        const client = MatrixClientPeg.safeGet();
+
+        const doMigration = async (): Promise<void> => {
+            logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
+
+            const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
+
+            for (const room of client.getRooms()) {
+                // We need to use the handler directly because this setting is no longer supported
+                // at this level at all
+                const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
+
+                if (val !== undefined) {
+                    await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
+                }
+            }
+
+            localStorage.setItem(MIGRATION_DONE_FLAG, "true");
+        };
+
+        const onSync = (state: SyncState): void => {
+            if (state === SyncState.Prepared) {
+                client.removeListener(ClientEvent.Sync, onSync);
+
+                doMigration().catch((e) => {
+                    logger.error("Failed to migrate URL previews in E2EE rooms:", e);
+                });
+            }
+        };
+
+        client.on(ClientEvent.Sync, onSync);
+    }
+
+    /**
      * Runs or queues any setting migrations needed.
      */
-    public static runMigrations(): void {
+    public static runMigrations(isFreshLogin: boolean): void {
+        // This can be removed once enough users have run a version of Element with
+        // this migration. A couple of months after its release should be sufficient
+        // (so around October 2024).
+        // The consequences of missing the migration are only that URL previews will
+        // be disabled in E2EE rooms.
+        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin);
+
         // Dev notes: to add your migration, just add a new `migrateMyFeature` function, call it, and
         // add a comment to note when it can be removed.
         return;

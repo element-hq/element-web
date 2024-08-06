@@ -101,7 +101,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             (
                 <SettingsFlag
                     name={isEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled"}
-                    level={SettingLevel.ROOM_ACCOUNT}
+                    level={SettingLevel.ROOM_DEVICE}
                     roomId={roomId}
                 />
             );
