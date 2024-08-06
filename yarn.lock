@@ -2015,15 +2015,15 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-6.2.1.tgz#94cd1263656e2b4f3b1dc6f728856efab8920aca"
   integrity sha512-5mav0EKog0w9NWRRxFzZ+ZcT5Il/KlLh1bsQXgxfhzfJq1RgWLLu+OsvHSZau5NSbPxfOd4ZTWc2ZLAf+V/8mg==
 
+"@matrix-org/matrix-sdk-crypto-wasm@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
+  integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
+
 "@matrix-org/matrix-wysiwyg@2.37.3":
   version "2.37.3"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.3.tgz#3f068252948f036b3d233828aecf856f74f9d7f1"
   integrity sha512-WGDZi9ksgkEXS2WlOqGloc9vbgLYVNN/gBhXihAjFtPwix0qEhDSIfzplyQO24WrPpq//PSnXlEFShWhJH0OIg==
-
-"@matrix-org/olm@3.2.15":
-  version "3.2.15"
-  resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
-  integrity sha512-S7lOrndAK9/8qOtaTq/WhttJC/o4GAzdfK0MUPpo8ApzsJEC0QjtwrkC3KBXdFP1cD1MXi/mlKR7aaoVMKgs6Q==
 
 "@matrix-org/olm@3.2.15":
   version "3.2.15"
@@ -8136,6 +8136,25 @@ matrix-js-sdk@34.2.0:
     unhomoglyph "^1.0.6"
     uuid "10"
 
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "34.2.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8e40ad2a8c26b0cb96def2f95fe16b088530e77"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
+    another-json "^0.2.0"
+    bs58 "^6.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.8.2"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "10"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8149,16 +8168,15 @@ matrix-react-sdk@3.105.1:
   integrity sha512-IcsE+Dntq9oIpDG3wR3XR2qBmtAqdCU+vLjJuB5mJFwpuCHlBTU0BIJ0yKSEwlpV5no2Ajlfp9a+2nXhXd3CwA==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.23.0"
+    "@matrix-org/analytics-events" "^0.24.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
-    "@matrix-org/matrix-wysiwyg" "2.37.3"
-    "@matrix-org/olm" "3.2.15"
+    "@matrix-org/matrix-wysiwyg" "2.37.4"
     "@matrix-org/react-sdk-module-api" "^2.4.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^8.0.0"
     "@testing-library/react-hooks" "^8.0.1"
-    "@vector-im/compound-design-tokens" "^1.2.0"
-    "@vector-im/compound-web" "^4.6.0"
+    "@vector-im/compound-design-tokens" "^1.6.1"
+    "@vector-im/compound-web" "^5.4.0"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
     "@zxcvbn-ts/language-en" "^3.0.2"
@@ -8171,17 +8189,16 @@ matrix-react-sdk@3.105.1:
     css-tree "^2.3.1"
     diff-dom "^5.0.0"
     diff-match-patch "^1.0.5"
-    emojibase-regex "15.3.0"
+    emojibase-regex "15.3.2"
     escape-html "^1.0.3"
     file-saver "^2.0.5"
-    filesize "10.1.2"
+    filesize "10.1.4"
     github-markdown-css "^5.5.1"
     glob-to-regexp "^0.4.1"
-    graphemer "^1.4.0"
     highlight.js "^11.3.1"
     html-entities "^2.0.0"
     is-ip "^3.1.0"
-    js-xxhash "^3.0.1"
+    js-xxhash "^4.0.0"
     jszip "^3.7.0"
     katex "^0.16.0"
     linkify-element "4.1.3"
@@ -8200,8 +8217,7 @@ matrix-react-sdk@3.105.1:
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.138.1"
-    proposal-temporal "^0.9.0"
+    posthog-js "1.145.0"
     qrcode "1.5.3"
     re-resizable "^6.9.0"
     react "17.0.2"
@@ -8214,6 +8230,7 @@ matrix-react-sdk@3.105.1:
     sanitize-filename "^1.6.3"
     sanitize-html "2.13.0"
     tar-js "^0.3.0"
+    temporal-polyfill "^0.2.5"
     ua-parser-js "^1.0.2"
     uuid "^10.0.0"
     what-input "^5.2.10"
@@ -8233,6 +8250,14 @@ matrix-widget-api@^1.3.1, matrix-widget-api@^1.5.0, matrix-widget-api@^1.6.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.7.0.tgz#ae3b44380f11bb03519d0bf0373dfc3341634667"
   integrity sha512-dzSnA5Va6CeIkyWs89xZty/uv38HLyfjOrHGbbEikCa2ZV0HTkUNtrBMKlrn4CRYyDJ6yoO/3ssRwiR0jJvOkQ==
+  dependencies:
+    "@types/events" "^3.0.0"
+    events "^3.2.0"
+
+matrix-widget-api@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.8.2.tgz#28d344502a85593740f560b0f8120e474a054505"
+  integrity sha512-kdmks3CvFNPIYN669Y4rO13KrazDvX8KHC7i6jOzJs8uZ8s54FNkuRVVyiQHeVCSZG5ixUqW9UuCj9lf03qxTQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
