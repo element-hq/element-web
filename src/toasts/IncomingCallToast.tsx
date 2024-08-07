@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
 
@@ -35,7 +35,7 @@ import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
 import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import { Call } from "../models/Call";
+import { Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
@@ -111,6 +111,16 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
         [dismissToast, notifyEvent],
     );
 
+    // Dismiss if antother device from this user joins.
+    const onParticipantChange = useCallback(
+        (participants: Map<RoomMember, Set<string>>, prevParticipants: Map<RoomMember, Set<string>>) => {
+            if (Array.from(participants.keys()).some((p) => p.userId == room?.client.getUserId())) {
+                dismissToast();
+            }
+        },
+        [dismissToast, room?.client],
+    );
+
     // Dismiss on timeout.
     useEffect(() => {
         const timeout = setTimeout(dismissToast, MAX_RING_TIME_MS);
@@ -158,6 +168,7 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     );
 
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
+    useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
 
     return (
         <>
