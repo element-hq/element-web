@@ -2015,10 +2015,12 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
   integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
 
-"@matrix-org/matrix-wysiwyg@2.37.4":
-  version "2.37.4"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.4.tgz#bd9b46051a21c9986477e3a83a1417b1ee926d81"
-  integrity sha512-4OtBWAHNAOu9P5C6jOIeHlu4ChwV2YusxnbGuN20IceC4bT2h38flZQgm0x9/jgHfF0LwnKUwKXsxtRoq8xW0g==
+"@matrix-org/matrix-wysiwyg@2.37.8":
+  version "2.37.8"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.8.tgz#0b61e9023e3c73ca8789e97c80d7282e8c823c6b"
+  integrity sha512-fx8KGpztmJvwiY1OvE9A7r08kNcUZQIZXPbWcXNtQ61GwV5VyKvMxCmxfRlZ6Ac8oagVxRPu4WySCRX44Y9Ylw==
+  dependencies:
+    eslint-plugin-unicorn "^54.0.0"
 
 "@matrix-org/react-sdk-module-api@^2.3.0", "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.4.0"
@@ -8122,7 +8124,7 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "34.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8e40ad2a8c26b0cb96def2f95fe16b088530e77"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9176d3a671114be97ee7a42155a6d40a233384f1"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
@@ -8148,12 +8150,12 @@ matrix-mock-request@^2.5.0:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.105.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/3fff7bfeca731fc4024bda40a8a5c39d614a91db"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/a437c677bb5bfbe373aa45e1c799bf05729567d2"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.24.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
-    "@matrix-org/matrix-wysiwyg" "2.37.4"
+    "@matrix-org/matrix-wysiwyg" "2.37.8"
     "@matrix-org/react-sdk-module-api" "^2.4.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^8.0.0"
@@ -8195,7 +8197,7 @@ matrix-mock-request@^2.5.0:
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-    matrix-widget-api "^1.5.0"
+    matrix-widget-api "^1.8.2"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
     oidc-client-ts "^3.0.1"
@@ -8230,14 +8232,6 @@ matrix-web-i18n@^3.2.1:
     lodash "^4.17.21"
     minimist "^1.2.8"
     walk "^2.3.15"
-
-matrix-widget-api@^1.3.1, matrix-widget-api@^1.5.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.7.0.tgz#ae3b44380f11bb03519d0bf0373dfc3341634667"
-  integrity sha512-dzSnA5Va6CeIkyWs89xZty/uv38HLyfjOrHGbbEikCa2ZV0HTkUNtrBMKlrn4CRYyDJ6yoO/3ssRwiR0jJvOkQ==
-  dependencies:
-    "@types/events" "^3.0.0"
-    events "^3.2.0"
 
 matrix-widget-api@^1.8.2:
   version "1.8.2"
