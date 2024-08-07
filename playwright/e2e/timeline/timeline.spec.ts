@@ -720,11 +720,16 @@ test.describe("Timeline", () => {
             ).toBeVisible();
         });
 
-        test("should render url previews", async ({ page, app, room, axe, checkA11y }) => {
+        test("should render url previews", async ({ page, app, room, axe, checkA11y, context }) => {
             axe.disableRules("color-contrast");
 
-            await page.route(
-                "**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
+            // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
+            // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
+            // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
+            // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
+            // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
+            await context.route(
+                "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
                 async (route) => {
                     await route.fulfill({
                         path: "playwright/sample-files/riot.png",
@@ -750,6 +755,7 @@ test.describe("Timeline", () => {
 
             const requestPromises: Promise<any>[] = [
                 page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
+                // see context.route above for why we listen for the unauthenticated endpoint
                 page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
             ];
 
