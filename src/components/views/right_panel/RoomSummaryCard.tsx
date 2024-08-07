@@ -162,7 +162,6 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
                             onRoomTopicLinkClick(ev);
                             return;
                         }
-                        setExpanded(!expanded);
                     }}
                 >
                     {content}
