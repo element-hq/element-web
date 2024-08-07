@@ -71,6 +71,9 @@ import { IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 
+// The prefix used when persisting editor drafts to localstorage.
+export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
+
 /**
  * Build the mentions information based on the editor model (and any related events):
  *
@@ -604,7 +607,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 
     private get editorStateKey(): string {
-        let key = `mx_cider_state_${this.props.room.roomId}`;
+        let key = EDITOR_STATE_STORAGE_PREFIX + this.props.room.roomId;
         if (this.props.relation?.rel_type === THREAD_RELATION_TYPE.name) {
             key += `_${this.props.relation.event_id}`;
         }

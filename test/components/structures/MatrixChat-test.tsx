@@ -62,6 +62,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
+import { DRAFT_LAST_CLEANUP_KEY } from "../../../src/DraftCleaner";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -596,6 +597,41 @@ describe("<MatrixChat />", () => {
             await flushPromises();
             expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
             expect(screen.getByText(`Welcome ${userId}`)).toBeInTheDocument();
+        });
+
+        describe("clean up drafts", () => {
+            const roomId = "!room:server.org";
+            const unknownRoomId = "!room2:server.org";
+            const room = new Room(roomId, mockClient, userId);
+            const timestamp = 2345678901234;
+            beforeEach(() => {
+                localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
+                localStorage.setItem(`mx_cider_state_${roomId}`, "fake_content");
+                mockClient.getRoom.mockImplementation((id) => [room].find((room) => room.roomId === id) || null);
+            });
+            afterEach(() => {
+                jest.restoreAllMocks();
+            });
+            it("should clean up drafts", async () => {
+                Date.now = jest.fn(() => timestamp);
+                localStorage.setItem(`mx_cider_state_${roomId}`, "fake_content");
+                localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
+                await getComponentAndWaitForReady();
+                mockClient.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+                // let things settle
+                await flushPromises();
+                expect(localStorage.getItem(`mx_cider_state_${roomId}`)).not.toBeNull();
+                expect(localStorage.getItem(`mx_cider_state_${unknownRoomId}`)).toBeNull();
+            });
+
+            it("should not clean up drafts before expiry", async () => {
+                // Set the last cleanup to the recent past
+                localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
+                localStorage.setItem(DRAFT_LAST_CLEANUP_KEY, String(timestamp - 100));
+                await getComponentAndWaitForReady();
+                mockClient.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+                expect(localStorage.getItem(`mx_cider_state_${unknownRoomId}`)).not.toBeNull();
+            });
         });
 
         describe("onAction()", () => {
