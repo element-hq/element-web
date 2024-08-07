@@ -252,6 +252,10 @@ export function createTestClient(): MatrixClient {
             });
         }),
 
+        _unstable_sendDelayedEvent: jest.fn(),
+        _unstable_sendDelayedStateEvent: jest.fn(),
+        _unstable_updateDelayedEvent: jest.fn(),
+
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
         joinRoom: jest.fn(),

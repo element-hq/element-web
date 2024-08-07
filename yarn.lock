@@ -6938,10 +6938,10 @@ matrix-web-i18n@^3.2.1:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.5.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.7.0.tgz#ae3b44380f11bb03519d0bf0373dfc3341634667"
-  integrity sha512-dzSnA5Va6CeIkyWs89xZty/uv38HLyfjOrHGbbEikCa2ZV0HTkUNtrBMKlrn4CRYyDJ6yoO/3ssRwiR0jJvOkQ==
+matrix-widget-api@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.8.2.tgz#28d344502a85593740f560b0f8120e474a054505"
+  integrity sha512-kdmks3CvFNPIYN669Y4rO13KrazDvX8KHC7i6jOzJs8uZ8s54FNkuRVVyiQHeVCSZG5ixUqW9UuCj9lf03qxTQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"

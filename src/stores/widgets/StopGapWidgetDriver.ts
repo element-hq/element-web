@@ -19,6 +19,7 @@ import {
     EventDirection,
     IOpenIDCredentials,
     IOpenIDUpdate,
+    ISendDelayedEventDetails,
     ISendEventDetails,
     ITurnServer,
     IReadEventRelationsResult,
@@ -33,6 +34,7 @@ import {
     WidgetKind,
     ISearchUserDirectoryResult,
     IGetMediaConfigResult,
+    UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -43,6 +45,7 @@ import {
     Room,
     Direction,
     THREAD_RELATION_TYPE,
+    SendDelayedEventResponse,
     StateEvents,
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
@@ -128,6 +131,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
                 WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
@@ -160,7 +165,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         `_${clientUserId}_${clientDeviceId}`,
                     ).raw,
                 );
-                // MSC3779 version, with no leading underscore
+                // Version with no leading underscore, for room versions whose auth rules allow it
                 this.allowedCapabilities.add(
                     WidgetEventCapability.forStateEvent(
                         EventDirection.Send,
@@ -271,20 +276,20 @@ export class StopGapWidgetDriver extends WidgetDriver {
     public async sendEvent<K extends keyof StateEvents>(
         eventType: K,
         content: StateEvents[K],
-        stateKey?: string,
-        targetRoomId?: string,
+        stateKey: string | null,
+        targetRoomId: string | null,
     ): Promise<ISendEventDetails>;
     public async sendEvent<K extends keyof TimelineEvents>(
         eventType: K,
         content: TimelineEvents[K],
         stateKey: null,
-        targetRoomId?: string,
+        targetRoomId: string | null,
     ): Promise<ISendEventDetails>;
     public async sendEvent(
         eventType: string,
         content: IContent,
-        stateKey?: string | null,
-        targetRoomId?: string,
+        stateKey: string | null = null,
+        targetRoomId: string | null = null,
     ): Promise<ISendEventDetails> {
         const client = MatrixClientPeg.get();
         const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
@@ -326,6 +331,94 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
 
         return { roomId, eventId: r.event_id };
+    }
+
+    /**
+     * @experimental Part of MSC4140 & MSC4157
+     * @see {@link WidgetDriver#sendDelayedEvent}
+     */
+    public async sendDelayedEvent<K extends keyof StateEvents>(
+        delay: number | null,
+        parentDelayId: string | null,
+        eventType: K,
+        content: StateEvents[K],
+        stateKey: string | null,
+        targetRoomId: string | null,
+    ): Promise<ISendDelayedEventDetails>;
+    /**
+     * @experimental Part of MSC4140 & MSC4157
+     */
+    public async sendDelayedEvent<K extends keyof TimelineEvents>(
+        delay: number | null,
+        parentDelayId: string | null,
+        eventType: K,
+        content: TimelineEvents[K],
+        stateKey: null,
+        targetRoomId: string | null,
+    ): Promise<ISendDelayedEventDetails>;
+    public async sendDelayedEvent(
+        delay: number | null,
+        parentDelayId: string | null,
+        eventType: string,
+        content: IContent,
+        stateKey: string | null = null,
+        targetRoomId: string | null = null,
+    ): Promise<ISendDelayedEventDetails> {
+        const client = MatrixClientPeg.get();
+        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
+
+        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+
+        let delayOpts;
+        if (delay !== null) {
+            delayOpts = {
+                delay,
+                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
+            };
+        } else if (parentDelayId !== null) {
+            delayOpts = {
+                parent_delay_id: parentDelayId,
+            };
+        } else {
+            throw new Error("Must provide at least one of delay or parentDelayId");
+        }
+
+        let r: SendDelayedEventResponse | null;
+        if (stateKey !== null) {
+            // state event
+            r = await client._unstable_sendDelayedStateEvent(
+                roomId,
+                delayOpts,
+                eventType as keyof StateEvents,
+                content as StateEvents[keyof StateEvents],
+                stateKey,
+            );
+        } else {
+            // message event
+            r = await client._unstable_sendDelayedEvent(
+                roomId,
+                delayOpts,
+                null,
+                eventType as keyof TimelineEvents,
+                content as TimelineEvents[keyof TimelineEvents],
+            );
+        }
+
+        return {
+            roomId,
+            delayId: r.delay_id,
+        };
+    }
+
+    /**
+     * @experimental Part of MSC4140 & MSC4157
+     */
+    public async updateDelayedEvent(delayId: string, action: UpdateDelayedEventAction): Promise<void> {
+        const client = MatrixClientPeg.get();
+
+        if (!client) throw new Error("Not in a room or not attached to a client");
+
+        await client._unstable_updateDelayedEvent(delayId, action);
     }
 
     public async sendToDevice(
