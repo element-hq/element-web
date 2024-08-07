@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { memo, MutableRefObject, ReactNode, useEffect, useRef } from "react";
+import React, { memo, MutableRefObject, ReactNode, useEffect, useMemo, useRef } from "react";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
@@ -31,6 +32,7 @@ import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { isNotNull } from "../../../../../Typeguards";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -43,6 +45,11 @@ interface WysiwygComposerProps {
     rightComponent?: ReactNode;
     children?: (ref: MutableRefObject<HTMLDivElement | null>, wysiwyg: FormattingFunctions) => ReactNode;
     eventRelation?: IEventRelation;
+}
+
+function getEmojiSuggestions(enabled: boolean): Map<string, string> {
+    const emojiSuggestions = new Map(Array.from(EMOTICON_TO_EMOJI, ([key, value]) => [key, value.unicode]));
+    return enabled ? emojiSuggestions : new Map();
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer({
@@ -61,9 +68,14 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
+
+    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
+    const emojiSuggestions = useMemo(() => getEmojiSuggestions(isAutoReplaceEmojiEnabled), [isAutoReplaceEmojiEnabled]);
+
     const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion, messageContent } = useWysiwyg({
         initialContent,
         inputEventProcessor,
+        emojiSuggestions,
     });
 
     const { isFocused, onFocus } = useIsFocused();

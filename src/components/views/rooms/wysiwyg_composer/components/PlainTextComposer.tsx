@@ -26,6 +26,7 @@ import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
 import { ComposerFunctions } from "../types";
 import { Editor } from "./Editor";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface PlainTextComposerProps {
     disabled?: boolean;
@@ -52,6 +53,7 @@ export function PlainTextComposer({
     rightComponent,
     eventRelation,
 }: PlainTextComposerProps): JSX.Element {
+    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
     const {
         ref: editorRef,
         autocompleteRef,
@@ -66,14 +68,12 @@ export function PlainTextComposer({
         handleCommand,
         handleMention,
         handleAtRoomMention,
-    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation);
-
+    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation, isAutoReplaceEmojiEnabled);
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
     useSetCursorPosition(disabled, editorRef);
     const { isFocused, onFocus } = useIsFocused();
     const computedPlaceholder = (!content && placeholder) || undefined;
-
     return (
         <div
             data-testid="PlainTextComposer"

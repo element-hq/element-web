@@ -20,6 +20,7 @@ import {
     findSuggestionInText,
     getMappedSuggestion,
     processCommand,
+    processEmojiReplacement,
     processMention,
     processSelectionChange,
 } from "../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useSuggestion";
@@ -30,6 +31,16 @@ function createMockPlainTextSuggestionPattern(props: Partial<Suggestion> = {}): 
         node: document.createTextNode(""),
         startOffset: 0,
         endOffset: 0,
+        ...props,
+    };
+}
+
+function createMockCustomSuggestionPattern(props: Partial<Suggestion> = {}): Suggestion {
+    return {
+        mappedSuggestion: { keyChar: "", type: "custom", text: "🙂", ...props.mappedSuggestion },
+        node: document.createTextNode(":)"),
+        startOffset: 0,
+        endOffset: 2,
         ...props,
     };
 }
@@ -64,6 +75,39 @@ describe("processCommand", () => {
 
         // check that the text has changed and includes a trailing space
         expect(mockSetText).toHaveBeenCalledWith(`${replacementText} `);
+    });
+});
+
+describe("processEmojiReplacement", () => {
+    it("does not change parent hook state if suggestion is null", () => {
+        // create a mockSuggestion using the text node above
+        const mockSetSuggestion = jest.fn();
+        const mockSetText = jest.fn();
+
+        // call the function with a null suggestion
+        processEmojiReplacement(null, mockSetSuggestion, mockSetText);
+
+        // check that the parent state setter has not been called
+        expect(mockSetText).not.toHaveBeenCalled();
+    });
+
+    it("can change the parent hook state when required", () => {
+        // create a div and append a text node to it with some initial text
+        const editorDiv = document.createElement("div");
+        const initialText = ":)";
+        const textNode = document.createTextNode(initialText);
+        editorDiv.appendChild(textNode);
+
+        // create a mockSuggestion using the text node above
+        const mockSuggestion = createMockCustomSuggestionPattern({ node: textNode });
+        const mockSetSuggestion = jest.fn();
+        const mockSetText = jest.fn();
+        const replacementText = "🙂";
+
+        processEmojiReplacement(mockSuggestion, mockSetSuggestion, mockSetText);
+
+        // check that the text has changed and includes a trailing space
+        expect(mockSetText).toHaveBeenCalledWith(replacementText);
     });
 });
 
@@ -334,6 +378,17 @@ describe("findSuggestionInText", () => {
         const mentionWithSpaceAfter = "@ somebody";
         expect(findSuggestionInText(mentionWithSpaceAfter, 2, true)).toBeNull();
     });
+
+    it("returns an object for an emoji suggestion", () => {
+        const emoiticon = ":)";
+        const precedingText = "hello ";
+        const mentionInput = precedingText + emoiticon;
+        expect(findSuggestionInText(mentionInput, precedingText.length, true, true)).toEqual({
+            mappedSuggestion: getMappedSuggestion(emoiticon, true),
+            startOffset: precedingText.length,
+            endOffset: precedingText.length + emoiticon.length,
+        });
+    });
 });
 
 describe("getMappedSuggestion", () => {
@@ -359,6 +414,14 @@ describe("getMappedSuggestion", () => {
             type: "command",
             keyChar: "/",
             text: "command",
+        });
+    });
+
+    it("returns the expected mapped suggestion when the text is a plain text emoiticon", () => {
+        expect(getMappedSuggestion(":)", true)).toEqual({
+            type: "custom",
+            keyChar: "",
+            text: "🙂",
         });
     });
 });

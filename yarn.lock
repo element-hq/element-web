@@ -1850,10 +1850,12 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
   integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
 
-"@matrix-org/matrix-wysiwyg@2.37.4":
-  version "2.37.4"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.4.tgz#bd9b46051a21c9986477e3a83a1417b1ee926d81"
-  integrity sha512-4OtBWAHNAOu9P5C6jOIeHlu4ChwV2YusxnbGuN20IceC4bT2h38flZQgm0x9/jgHfF0LwnKUwKXsxtRoq8xW0g==
+"@matrix-org/matrix-wysiwyg@2.37.8":
+  version "2.37.8"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.8.tgz#0b61e9023e3c73ca8789e97c80d7282e8c823c6b"
+  integrity sha512-fx8KGpztmJvwiY1OvE9A7r08kNcUZQIZXPbWcXNtQ61GwV5VyKvMxCmxfRlZ6Ac8oagVxRPu4WySCRX44Y9Ylw==
+  dependencies:
+    eslint-plugin-unicorn "^54.0.0"
 
 "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.4.0"

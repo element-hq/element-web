@@ -423,6 +423,30 @@ describe("WysiwygComposer", () => {
         });
     });
 
+    describe("When emoticons should be replaced by emojis", () => {
+        const onChange = jest.fn();
+        const onSend = jest.fn();
+        beforeEach(async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name === "MessageComposerInput.autoReplaceEmoji") return true;
+            });
+            customRender(onChange, onSend);
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+        });
+        it("typing a space to trigger an emoji replacement", async () => {
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: ":P",
+                inputType: "insertText",
+            });
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: " ",
+                inputType: "insertText",
+            });
+
+            await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(3, expect.stringContaining("😛")));
+        });
+    });
+
     describe("When settings require Ctrl+Enter to send", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();

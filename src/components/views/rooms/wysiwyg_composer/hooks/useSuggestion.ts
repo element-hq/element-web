@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { AllowedMentionAttributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
 import { SyntheticEvent, useState, SetStateAction } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -41,6 +42,7 @@ type SuggestionState = Suggestion | null;
  *
  * @param editorRef - a ref to the div that is the composer textbox
  * @param setText - setter function to set the content of the composer
+ * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  * @returns
  * - `handleMention`: a function that will insert @ or # mentions which are selected from
  * the autocomplete into the composer, given an href, the text to display, and any additional attributes
@@ -53,10 +55,12 @@ type SuggestionState = Suggestion | null;
 export function useSuggestion(
     editorRef: React.RefObject<HTMLDivElement>,
     setText: (text?: string) => void,
+    isAutoReplaceEmojiEnabled?: boolean,
 ): {
     handleMention: (href: string, displayName: string, attributes: AllowedMentionAttributes) => void;
     handleAtRoomMention: (attributes: AllowedMentionAttributes) => void;
     handleCommand: (text: string) => void;
+    handleEmojiReplacement: () => void;
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
@@ -77,7 +81,7 @@ export function useSuggestion(
 
     // We create a `selectionchange` handler here because we need to know when the user has moved the cursor,
     // we can not depend on input events only
-    const onSelect = (): void => processSelectionChange(editorRef, setSuggestionData);
+    const onSelect = (): void => processSelectionChange(editorRef, setSuggestionData, isAutoReplaceEmojiEnabled);
 
     const handleMention = (href: string, displayName: string, attributes: AllowedMentionAttributes): void =>
         processMention(href, displayName, attributes, suggestionData, setSuggestionData, setText);
@@ -88,11 +92,14 @@ export function useSuggestion(
     const handleCommand = (replacementText: string): void =>
         processCommand(replacementText, suggestionData, setSuggestionData, setText);
 
+    const handleEmojiReplacement = (): void => processEmojiReplacement(suggestionData, setSuggestionData, setText);
+
     return {
         suggestion: suggestionData?.mappedSuggestion ?? null,
         handleCommand,
         handleMention,
         handleAtRoomMention,
+        handleEmojiReplacement,
         onSelect,
     };
 }
@@ -103,10 +110,12 @@ export function useSuggestion(
  *
  * @param editorRef - ref to the composer
  * @param setSuggestionData - the setter for the suggestion state
+ * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  */
 export function processSelectionChange(
     editorRef: React.RefObject<HTMLDivElement>,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
+    isAutoReplaceEmojiEnabled?: boolean,
 ): void {
     const selection = document.getSelection();
 
@@ -132,7 +141,12 @@ export function processSelectionChange(
 
     const firstTextNode = document.createNodeIterator(editorRef.current, NodeFilter.SHOW_TEXT).nextNode();
     const isFirstTextNode = currentNode === firstTextNode;
-    const foundSuggestion = findSuggestionInText(currentNode.textContent, currentOffset, isFirstTextNode);
+    const foundSuggestion = findSuggestionInText(
+        currentNode.textContent,
+        currentOffset,
+        isFirstTextNode,
+        isAutoReplaceEmojiEnabled,
+    );
 
     // if we have not found a suggestion, return, clearing the suggestion state
     if (foundSuggestion === null) {
@@ -242,6 +256,42 @@ export function processCommand(
 }
 
 /**
+ * Replaces the relevant part of the editor text, replacing the plain text emoitcon with the suggested emoji.
+ *
+ * @param suggestionData - representation of the part of the DOM that will be replaced
+ * @param setSuggestionData - setter function to set the suggestion state
+ * @param setText - setter function to set the content of the composer
+ */
+export function processEmojiReplacement(
+    suggestionData: SuggestionState,
+    setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
+    setText: (text?: string) => void,
+): void {
+    // if we do not have a suggestion of the correct type, return early
+    if (suggestionData === null || suggestionData.mappedSuggestion.type !== `custom`) {
+        return;
+    }
+    const { node, mappedSuggestion } = suggestionData;
+    const existingContent = node.textContent;
+
+    if (existingContent == null) {
+        return;
+    }
+
+    // replace the emoticon with the suggesed emoji
+    const newContent =
+        existingContent.slice(0, suggestionData.startOffset) +
+        mappedSuggestion.text +
+        existingContent.slice(suggestionData.endOffset);
+
+    node.textContent = newContent;
+
+    document.getSelection()?.setBaseAndExtent(node, newContent.length, node, newContent.length);
+    setText(newContent);
+    setSuggestionData(null);
+}
+
+/**
  * Given some text content from a node and the cursor position, find the word that the cursor is currently inside
  * and then test that word to see if it is a suggestion. Return the `MappedSuggestion` with start and end offsets if
  * the cursor is inside a valid suggestion, null otherwise.
@@ -250,12 +300,14 @@ export function processCommand(
  * @param offset - the current cursor offset position within the node
  * @param isFirstTextNode - whether or not the node is the first text node in the editor. Used to determine
  * if a command suggestion is found or not
+ * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  * @returns the `MappedSuggestion` along with its start and end offsets if found, otherwise null
  */
 export function findSuggestionInText(
     text: string,
     offset: number,
     isFirstTextNode: boolean,
+    isAutoReplaceEmojiEnabled?: boolean,
 ): { mappedSuggestion: MappedSuggestion; startOffset: number; endOffset: number } | null {
     // Return null early if the offset is outside the content
     if (offset < 0 || offset > text.length) {
@@ -281,7 +333,7 @@ export function findSuggestionInText(
 
     // Get the word at the cursor then check if it contains a suggestion or not
     const wordAtCursor = text.slice(startSliceIndex, endSliceIndex);
-    const mappedSuggestion = getMappedSuggestion(wordAtCursor);
+    const mappedSuggestion = getMappedSuggestion(wordAtCursor, isAutoReplaceEmojiEnabled);
 
     /**
      * If we have a word that could be a command, it is not a valid command if:
@@ -339,9 +391,17 @@ function shouldIncrementEndIndex(text: string, index: number): boolean {
  * Given a string, return a `MappedSuggestion` if the string contains a suggestion. Otherwise return null.
  *
  * @param text - string to check for a suggestion
+ * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  * @returns a `MappedSuggestion` if a suggestion is present, null otherwise
  */
-export function getMappedSuggestion(text: string): MappedSuggestion | null {
+export function getMappedSuggestion(text: string, isAutoReplaceEmojiEnabled?: boolean): MappedSuggestion | null {
+    if (isAutoReplaceEmojiEnabled) {
+        const emoji = EMOTICON_TO_EMOJI.get(text.toLocaleLowerCase());
+        if (emoji?.unicode) {
+            return { keyChar: "", text: emoji.unicode, type: "custom" };
+        }
+    }
+
     const firstChar = text.charAt(0);
     const restOfString = text.slice(1);
 
