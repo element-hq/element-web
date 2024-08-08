@@ -49,6 +49,7 @@ import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDr
 import { stubClient } from "../../test-utils";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import dis from "../../../src/dispatcher/dispatcher";
+import Modal from "../../../src/Modal";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("StopGapWidgetDriver", () => {
@@ -67,6 +68,10 @@ describe("StopGapWidgetDriver", () => {
             false,
             "!1:example.org",
         );
+
+    jest.spyOn(Modal, "createDialog").mockImplementation(() => {
+        throw new Error("Should not have to create a dialog");
+    });
 
     beforeEach(() => {
         stubClient();
@@ -127,7 +132,6 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc4157.update_delayed_event",
         ]);
 
-        // As long as this resolves, we'll know that it didn't try to pop up a modal
         const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
