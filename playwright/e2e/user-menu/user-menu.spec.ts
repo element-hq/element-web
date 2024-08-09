@@ -25,5 +25,6 @@ test.describe("User Menu", () => {
 
         await expect(menu.locator(".mx_UserMenu_contextMenu_displayName", { hasText: user.displayName })).toBeVisible();
         await expect(menu.locator(".mx_UserMenu_contextMenu_userId", { hasText: user.userId })).toBeVisible();
+        await expect(menu).toMatchScreenshot("user-menu.png");
     });
 });
