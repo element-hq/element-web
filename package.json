@@ -82,7 +82,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
         "@testing-library/react-hooks": "^8.0.1",
-        "@vector-im/compound-design-tokens": "^1.6.1",
+        "@vector-im/compound-design-tokens": "^1.8.0",
         "@vector-im/compound-web": "^5.5.0",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
