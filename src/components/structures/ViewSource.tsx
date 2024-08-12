@@ -22,7 +22,7 @@ import SyntaxHighlight from "../views/elements/SyntaxHighlight";
 import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 // import { canEditContent } from "../../utils/EventUtils"; //Verji
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+// import { MatrixClientPeg } from "../../MatrixClientPeg"; //Verji
 import BaseDialog from "../views/dialogs/BaseDialog";
 import { DevtoolsContext } from "../views/dialogs/devtools/BaseTool";
 import { StateEventEditor } from "../views/dialogs/devtools/RoomState";
@@ -143,11 +143,12 @@ export default class ViewSource extends React.Component<IProps, IState> {
         );
     }
 
-    private canSendStateEvent(mxEvent: MatrixEvent): boolean {
-        const cli = MatrixClientPeg.safeGet();
-        const room = cli.getRoom(mxEvent.getRoomId());
-        return !!room?.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
-    }
+    // VERJI comment method out, (not in use as: canEdit also commented out)
+    // private canSendStateEvent(mxEvent: MatrixEvent): boolean {
+    //     const cli = MatrixClientPeg.safeGet();
+    //     const room = cli.getRoom(mxEvent.getRoomId());
+    //     return !!room?.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
+    // }
 
     public render(): React.ReactNode {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
