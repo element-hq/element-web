@@ -174,7 +174,6 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with sidebar tab selected", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Sidebar }));
 
         expect(getActiveTabLabel(container)).toEqual("Sidebar");
@@ -191,7 +190,6 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with secutity tab selected", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
         const { container } = render(getComponent({ initialTabId: UserTab.Security }));
 
         expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
@@ -273,59 +271,46 @@ describe("<UserSettingsDialog />", () => {
 
         // unwatches settings on unmount
         expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
-        describe("on CustomComponentLifecycle.SessionManageTab", () => {
-            it("should invoke CustomComponentLifecycle.SessionsManagerTab on rendering when Sessions-tab component renders", () => {
-                jest.spyOn(ModuleRunner.instance, "invoke");
-                render(getComponent());
-                fireEvent.click(screen.getByText("Sessions"));
-                screen.debug(undefined, 300000);
-                expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.SessionManagerTab, {
-                    CustomComponent: expect.any(Symbol),
-                });
-            });
-
-            it("should render standard SessionManagerTab if if there are no module-implementations using the lifecycle", () => {
-                const { container } = render(getComponent());
-                fireEvent.click(screen.getByText("Sessions"));
-
-                expect(container.querySelector("#mx_tabpanel_USER_SESSION_MANAGER_TAB")).toBeVisible();
-                // Expect that element unique to SessionsManagerTab is rendered.
-                expect(screen.getByTestId("current-session-section")).toBeVisible();
-            });
-
-            it("should replace the default SessionManagerTab and return <div data-testid='custom-user-sessions-manager-tab'> instead", () => {
-                jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
-                    if (lifecycleEvent === CustomComponentLifecycle.SessionManagerTab) {
-                        (opts as CustomComponentOpts).CustomComponent = () => {
-                            return (
-                                <>
-                                    <div data-testid="custom-user-sessions-manager-tab" />
-                                </>
-                            );
-                        };
-                    }
-                });
-                render(getComponent());
-                fireEvent.click(screen.getByText("Sessions"));
-                const customRolesTab = screen.queryByTestId("custom-user-sessions-manager-tab");
-                expect(customRolesTab).toBeVisible();
-
-                // Expect that element unique to RolesRoomSettingsTab is NOT-rendered, as proof of default RolesRoomSettingsTab not being in the document.
-                expect(screen.queryByTestId("current-session-section")).toBeFalsy();
+    });
+    describe("on CustomComponentLifecycle.SessionManageTab", () => {
+        it("should invoke CustomComponentLifecycle.SessionsManagerTab on rendering when Sessions-tab component renders", () => {
+            jest.spyOn(ModuleRunner.instance, "invoke");
+            render(getComponent());
+            fireEvent.click(screen.getByText("Sessions"));
+            screen.debug(undefined, 300000);
+            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.SessionManagerTab, {
+                CustomComponent: expect.any(Symbol),
             });
         });
-    });
-    it("renders sidebar and access tab when feature is on", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.SpacesEnabled);
 
-        const { getByTestId } = render(getComponent());
-        expect(getByTestId(`settings-tab-${UserTab.Sidebar}`)).toBeTruthy();
-        expect(getByTestId(`settings-tab-${UserTab.Security}`)).toBeTruthy();
-    });
-    it("does not render sidebar and security/access tab when feature is off", () => {
-        render(getComponent());
+        it("should render standard SessionManagerTab if if there are no module-implementations using the lifecycle", () => {
+            const { container } = render(getComponent());
+            fireEvent.click(screen.getByText("Sessions"));
 
-        expect(screen.queryByText("Sidebar")).toBeNull();
-        expect(screen.queryByText("Access")).toBeNull();
+            expect(container.querySelector("#mx_tabpanel_USER_SESSION_MANAGER_TAB")).toBeVisible();
+            // Expect that element unique to SessionsManagerTab is rendered.
+            expect(screen.getByTestId("current-session-section")).toBeVisible();
+        });
+
+        it("should replace the default SessionManagerTab and return <div data-testid='custom-user-sessions-manager-tab'> instead", () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.SessionManagerTab) {
+                    (opts as CustomComponentOpts).CustomComponent = () => {
+                        return (
+                            <>
+                                <div data-testid="custom-user-sessions-manager-tab" />
+                            </>
+                        );
+                    };
+                }
+            });
+            render(getComponent());
+            fireEvent.click(screen.getByText("Sessions"));
+            const customRolesTab = screen.queryByTestId("custom-user-sessions-manager-tab");
+            expect(customRolesTab).toBeVisible();
+
+            // Expect that element unique to RolesRoomSettingsTab is NOT-rendered, as proof of default RolesRoomSettingsTab not being in the document.
+            expect(screen.queryByTestId("current-session-section")).toBeFalsy();
+        });
     });
 });
