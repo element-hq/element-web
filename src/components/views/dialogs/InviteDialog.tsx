@@ -1098,7 +1098,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
     /* VERJI END */
     private removeMember = (member: Member): void => {
-        if(this.state.busy) return;
+        if (this.state.busy) return;
         const targets = this.state.targets.map((t) => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
         if (idx >= 0) {
@@ -1396,22 +1396,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             } else {
                 targets = this.state.targets.map((t) =>
                     t?.userId && t?.name ? (
-                        <DMUserTile
-                            member={t}
-                            onRemove={this.removeMember}
-                            key={t?.userId ?? t?.name ?? null}
-                        />
+                        <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                     ) : null,
                 );
             }
         } else {
             targets = this.state.targets.map((t) =>
                 t?.userId && t?.name ? (
-                    <DMUserTile
-                        member={t}
-                        onRemove={this.removeMember}
-                        key={t?.userId ?? t?.name ?? null}
-                    />
+                    <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                 ) : null,
             );
         }
