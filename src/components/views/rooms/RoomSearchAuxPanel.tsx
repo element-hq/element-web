@@ -23,6 +23,7 @@ import { _t } from "../../../languageHandler";
 import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 import { SearchInfo, SearchScope } from "../../../Searching";
+import InlineSpinner from "../elements/InlineSpinner";
 
 interface Props {
     searchInfo?: SearchInfo;
@@ -41,13 +42,15 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                 <div className="mx_RoomSearchAuxPanel_summary">
                     <SearchIcon width="24px" height="24px" />
                     <div className="mx_RoomSearchAuxPanel_summary_text">
-                        {searchInfo
-                            ? _t(
-                                  "room|search|summary",
-                                  { count: searchInfo.count ?? 0 },
-                                  { query: () => <b>{searchInfo.term}</b> },
-                              )
-                            : undefined}
+                        {searchInfo?.count !== undefined ? (
+                            _t(
+                                "room|search|summary",
+                                { count: searchInfo.count },
+                                { query: () => <b>{searchInfo.term}</b> },
+                            )
+                        ) : (
+                            <InlineSpinner />
+                        )}
                         <SearchWarning kind={WarningKind.Search} isRoomEncrypted={isRoomEncrypted} showLogo={false} />
                     </div>
                 </div>
