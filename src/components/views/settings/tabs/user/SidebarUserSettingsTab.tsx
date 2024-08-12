@@ -32,7 +32,6 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
-import { UIFeature } from "../../../../../settings/UIFeature";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
 
@@ -78,8 +77,6 @@ const SidebarUserSettingsTab: React.FC = () => {
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
         PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", event, 1);
     };
-
-    if (!SettingsStore.getValue(UIFeature.SpacesEnabled)) return <></>;
 
     return (
         <SettingsTab>
