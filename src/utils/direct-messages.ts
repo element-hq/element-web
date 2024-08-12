@@ -180,7 +180,7 @@ export class ThreepidMember extends Member {
 
 export interface IDMUserTileProps {
     member: Member; // VERJI
-    email: string; // VERJI
+    email?: string; // VERJI
     onRemove?(member: Member | string): void; // VERJI
 }
 

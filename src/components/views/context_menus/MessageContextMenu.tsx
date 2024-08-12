@@ -52,14 +52,14 @@ import ContextMenu, { toRightOf, MenuProps } from "../../structures/ContextMenu"
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
-import ShareDialog from "../dialogs/ShareDialog";
+// import ShareDialog from "../dialogs/ShareDialog"; //Verji
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import EndPollDialog from "../dialogs/EndPollDialog";
 import { isPollEnded } from "../messages/MPollBody";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
-import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
+// import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload"; //VERJI
 import { createMapSiteLinkFromEvent } from "../../../utils/location";
 import { getForwardableEvent } from "../../../events/forward/getForwardableEvent";
 import { getShareableLocationEvent } from "../../../events/location/getShareableLocationEvent";
@@ -246,13 +246,14 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         });
     };
 
-    private onReportEventClick = (): void => {
-        dis.dispatch<OpenReportEventDialogPayload>({
-            action: Action.OpenReportEventDialog,
-            event: this.props.mxEvent,
-        });
-        this.closeMenu();
-    };
+    // VERJI method no longer in use, as we commented out reportEventButton
+    // private onReportEventClick = (): void => {
+    //     dis.dispatch<OpenReportEventDialogPayload>({
+    //         action: Action.OpenReportEventDialog,
+    //         event: this.props.mxEvent,
+    //     });
+    //     this.closeMenu();
+    // };
 
     private onViewSourceClick = (): void => {
         Modal.createDialog(
@@ -312,14 +313,15 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onShareClick = (e: ButtonEvent): void => {
-        e.preventDefault();
-        Modal.createDialog(ShareDialog, {
-            target: this.props.mxEvent,
-            permalinkCreator: this.props.permalinkCreator,
-        });
-        this.closeMenu();
-    };
+    // VERJI commented out as share has been removed
+    // private onShareClick = (e: ButtonEvent): void => {
+    //     e.preventDefault();
+    //     Modal.createDialog(ShareDialog, {
+    //         target: this.props.mxEvent,
+    //         permalinkCreator: this.props.permalinkCreator,
+    //     });
+    //     this.closeMenu();
+    // };
 
     private onCopyLinkClick = (e: ButtonEvent): void => {
         e.preventDefault(); // So that we don't open the permalink

@@ -164,8 +164,8 @@ class DMEmailTile extends React.PureComponent<IDMUserTileProps> {
         e.stopPropagation();
         console.log(e);
         const asMember: Member = {
-            name: this.props.email,
-            userId: this.props.email,
+            name: this.props.email ?? "",
+            userId: this.props.email ?? "",
             getMxcAvatarUrl: () => {
                 return "";
             },
@@ -1082,6 +1082,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     /* VERJI START */
     private removeEmailInvite = (email: string | Member): void => {
+        if (this.state.busy) return;
         const _email = (email as Member)?.name ?? (email as string);
 
         const targets = this.state.targetEmails.map((t) => t); // cheap clone for mutation
@@ -1097,6 +1098,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
     /* VERJI END */
     private removeMember = (member: Member): void => {
+        if (this.state.busy) return;
         const targets = this.state.targets.map((t) => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
         if (idx >= 0) {
@@ -1389,27 +1391,19 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.allowOnboardingFlag) {
             if (this.state.targetEmails?.length > 0) {
                 targets = this.state.targetEmails.map((t) => (
-                    <DMEmailTile email={t} onRemove={!this.state.busy && this.removeEmailInvite} key={t ?? null} /> // ROSBERG
+                    <DMEmailTile member={{} as Member} email={t} onRemove={this.removeEmailInvite} key={t ?? null} /> // ROSBERG
                 ));
             } else {
                 targets = this.state.targets.map((t) =>
                     t?.userId && t?.name ? (
-                        <DMUserTile
-                            member={t}
-                            onRemove={!this.state.busy && this.removeMember}
-                            key={t?.userId ?? t?.name ?? null}
-                        />
+                        <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                     ) : null,
                 );
             }
         } else {
             targets = this.state.targets.map((t) =>
                 t?.userId && t?.name ? (
-                    <DMUserTile
-                        member={t}
-                        onRemove={!this.state.busy && this.removeMember}
-                        key={t?.userId ?? t?.name ?? null}
-                    />
+                    <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                 ) : null,
             );
         }
