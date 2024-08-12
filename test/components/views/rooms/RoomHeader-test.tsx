@@ -617,6 +617,7 @@ describe("RoomHeader", () => {
                 },
             ]);
             jest.spyOn(client, "isCryptoEnabled").mockReturnValue(true);
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
         });
 
         it.each([

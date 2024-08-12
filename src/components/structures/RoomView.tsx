@@ -161,7 +161,7 @@ interface IRoomProps {
 
 // This defines the content of the mainSplit.
 // If the mainSplit does not contain the Timeline, the chat is shown in the right panel.
-enum MainSplitContentType {
+export enum MainSplitContentType {
     Timeline,
     MaximisedWidget,
     Call,
