@@ -1,3 +1,36 @@
+Changes in [1.11.74](https://github.com/element-hq/element-web/releases/tag/v1.11.74) (2024-08-13)
+==================================================================================================
+## ✨ Features
+
+* Update unsupported browser react component to new designs ([#27857](https://github.com/element-hq/element-web/pull/27857)). Contributed by @t3chguy.
+* Invite dialog: display MXID on its own line ([#11756](https://github.com/matrix-org/matrix-react-sdk/pull/11756)). Contributed by @AndrewFerr.
+* Align RoomSummaryCard styles with Figma ([#12793](https://github.com/matrix-org/matrix-react-sdk/pull/12793)). Contributed by @t3chguy.
+* Extract Extensions into their own right panel tab ([#12844](https://github.com/matrix-org/matrix-react-sdk/pull/12844)). Contributed by @t3chguy.
+* Remove topic from new room header and expand right panel topic ([#12842](https://github.com/matrix-org/matrix-react-sdk/pull/12842)). Contributed by @t3chguy.
+* Rework how the onboarding notifications task works ([#12839](https://github.com/matrix-org/matrix-react-sdk/pull/12839)). Contributed by @t3chguy.
+* Update toast styles to match Figma ([#12833](https://github.com/matrix-org/matrix-react-sdk/pull/12833)). Contributed by @t3chguy.
+* Warn users on unsupported browsers before they lack features ([#12830](https://github.com/matrix-org/matrix-react-sdk/pull/12830)). Contributed by @t3chguy.
+* Add sign out button to settings profile section ([#12666](https://github.com/matrix-org/matrix-react-sdk/pull/12666)). Contributed by @dbkr.
+* Remove MatrixRTC realted import ES lint exceptions using a index.ts for matrixrtc ([#12780](https://github.com/matrix-org/matrix-react-sdk/pull/12780)). Contributed by @toger5.
+* Fix unwanted ringing of other devices even though the user is already connected to the call. ([#12742](https://github.com/matrix-org/matrix-react-sdk/pull/12742)). Contributed by @toger5.
+* Acknowledge `DeviceMute` widget actions ([#12790](https://github.com/matrix-org/matrix-react-sdk/pull/12790)). Contributed by @toger5.
+
+## 🐛 Bug Fixes
+
+* Update Element icons ([#27900](https://github.com/element-hq/element-web/pull/27900)). Contributed by @t3chguy.
+* Fix Jitsi by updating device mute updates over postMessage API ([#27858](https://github.com/element-hq/element-web/pull/27858)). Contributed by @t3chguy.
+* Fix formatting of rich text emotes ([#12862](https://github.com/matrix-org/matrix-react-sdk/pull/12862)). Contributed by @dbkr.
+* Fixed custom emotes background color #27745 ([#12798](https://github.com/matrix-org/matrix-react-sdk/pull/12798)). Contributed by @asimdelvi.
+* Ignore permalink\_prefix when serializing pills ([#11726](https://github.com/matrix-org/matrix-react-sdk/pull/11726)). Contributed by @herkulessi.
+* Deflake the chat export test ([#12854](https://github.com/matrix-org/matrix-react-sdk/pull/12854)). Contributed by @dbkr.
+* Fix alignment of RTL messages ([#12837](https://github.com/matrix-org/matrix-react-sdk/pull/12837)). Contributed by @dbkr.
+* Handle media download errors better ([#12848](https://github.com/matrix-org/matrix-react-sdk/pull/12848)). Contributed by @t3chguy.
+* Make micIcon display on primary ([#11908](https://github.com/matrix-org/matrix-react-sdk/pull/11908)). Contributed by @kdanielm.
+* Fix compound typography font component issues ([#12826](https://github.com/matrix-org/matrix-react-sdk/pull/12826)). Contributed by @t3chguy.
+* Allow Chrome page translator to translate messages in rooms ([#11113](https://github.com/matrix-org/matrix-react-sdk/pull/11113)). Contributed by @lukaszpolowczyk.
+
+
+
 Changes in [1.11.73](https://github.com/element-hq/element-web/releases/tag/v1.11.73) (2024-08-06)
 ==================================================================================================
 Fixes for CVE-2024-42347 / GHSA-f83w-wqhc-cfp4
