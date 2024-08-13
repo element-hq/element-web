@@ -3364,7 +3364,7 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@1.8.0", "@vector-im/compound-design-tokens@^1.6.1", "@vector-im/compound-design-tokens@^1.8.0":
+"@vector-im/compound-design-tokens@1.8.0", "@vector-im/compound-design-tokens@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-1.8.0.tgz#bc844cb6b9842c1eb8e5c42f5cedcaf51a49b86f"
   integrity sha512-PtQMG7kDzwtjw/fLKD63uWP5rJ8cgWc/aXarfEzxYUf9ceWxBajnYOBI2jDqtE3WIUe9uTVBzNEvmOBG/VIgTA==
@@ -8133,7 +8133,6 @@ matrix-events-sdk@0.0.1:
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
-    "@matrix-org/olm" "3.2.15"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"
@@ -8155,8 +8154,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.105.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/a437c677bb5bfbe373aa45e1c799bf05729567d2"
+  version "3.106.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/ad8da830796483e15e219ca4098cd448faa4fc41"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.24.0"
@@ -8166,7 +8165,7 @@ matrix-mock-request@^2.5.0:
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^8.0.0"
     "@testing-library/react-hooks" "^8.0.1"
-    "@vector-im/compound-design-tokens" "^1.6.1"
+    "@vector-im/compound-design-tokens" "^1.8.0"
     "@vector-im/compound-web" "^5.5.0"
     "@zxcvbn-ts/core" "^3.0.4"
     "@zxcvbn-ts/language-common" "^3.0.4"
