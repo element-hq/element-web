@@ -2532,7 +2532,6 @@
             "error_share_msisdn_discovery": "Unable to share phone number",
             "identity_server_no_token": "No identity access token found",
             "identity_server_not_set": "Identity server not set",
-            "incorrect_msisdn_verification": "Incorrect verification code",
             "language_section": "Language",
             "msisdn_in_use": "This phone number is already in use",
             "msisdn_label": "Phone Number",

@@ -18,10 +18,10 @@ exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses an
     class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
   >
     <div
-      class="mx_EmailAddressesPhoneNumbers_discovery_existing"
+      class="mx_AddRemoveThreepids_existing"
     >
       <span
-        class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
+        class="mx_AddRemoveThreepids_existing_address"
       >
         test@test.io
       </span>
@@ -84,12 +84,11 @@ exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses an
     class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
   >
     <div
-      class="mx_EmailAddressesPhoneNumbers_discovery_existing"
+      class="mx_AddRemoveThreepids_existing"
     >
       <span
-        class="mx_EmailAddressesPhoneNumbers_discovery_existing_address"
+        class="mx_AddRemoveThreepids_existing_address"
       >
-        +
         123456789
       </span>
       <div
@@ -102,75 +101,70 @@ exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses an
     </div>
     <form
       autocomplete="off"
-      class="mx_PhoneNumbers_new"
       novalidate=""
     >
       <div
-        class="mx_PhoneNumbers_input"
+        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft"
       >
-        <div
-          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft"
+        <span
+          class="mx_Field_prefix"
         >
-          <span
-            class="mx_Field_prefix"
+          <div
+            class="mx_Dropdown mx_PhoneNumbers_country mx_CountryDropdown"
           >
             <div
-              class="mx_Dropdown mx_PhoneNumbers_country mx_CountryDropdown"
+              aria-describedby="mx_CountryDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Country Dropdown"
+              aria-owns="mx_CountryDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
             >
               <div
-                aria-describedby="mx_CountryDropdown_value"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-label="Country Dropdown"
-                aria-owns="mx_CountryDropdown_input"
-                class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-                role="button"
-                tabindex="0"
+                class="mx_Dropdown_option"
+                id="mx_CountryDropdown_value"
               >
-                <div
-                  class="mx_Dropdown_option"
-                  id="mx_CountryDropdown_value"
-                >
-                  <span
-                    class="mx_CountryDropdown_shortOption"
-                  >
-                    <div
-                      class="mx_Dropdown_option_emoji"
-                    >
-                      🇺🇸
-                    </div>
-                    +1
-                  </span>
-                </div>
                 <span
-                  class="mx_Dropdown_arrow"
-                />
+                  class="mx_CountryDropdown_shortOption"
+                >
+                  <div
+                    class="mx_Dropdown_option_emoji"
+                  >
+                    🇺🇸
+                  </div>
+                  +1
+                </span>
               </div>
+              <span
+                class="mx_Dropdown_arrow"
+              />
             </div>
-          </span>
-          <input
-            autocomplete="tel-national"
-            id="mx_Field_10"
-            label="Phone Number"
-            placeholder="Phone Number"
-            type="text"
-            value=""
-          />
-          <label
-            for="mx_Field_10"
-          >
-            Phone Number
-          </label>
-        </div>
+          </div>
+        </span>
+        <input
+          autocomplete="tel-national"
+          id="mx_Field_10"
+          label="Phone Number"
+          placeholder="Phone Number"
+          type="text"
+          value=""
+        />
+        <label
+          for="mx_Field_10"
+        >
+          Phone Number
+        </label>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Add
       </div>
     </form>
-    <div
-      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-      role="button"
-      tabindex="0"
-    >
-      Add
-    </div>
   </div>
 </div>
 `;

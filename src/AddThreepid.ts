@@ -271,9 +271,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(
-        msisdnToken: string,
-    ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
+    public async haveMsisdnToken(msisdnToken: string): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {
@@ -301,13 +299,14 @@ export default class AddThreepid {
                 id_server: getIdServerDomain(this.matrixClient),
                 id_access_token: await authClient.getAccessToken(),
             });
+            return [true];
         } else {
             try {
                 await this.makeAddThreepidOnlyRequest();
 
                 // The spec has always required this to use UI auth but synapse briefly
                 // implemented it without, so this may just succeed and that's OK.
-                return;
+                return [true];
             } catch (err) {
                 if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
                     // doesn't look like an interactive-auth failure
