@@ -26,6 +26,7 @@ import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
 import { SeparatorKind } from "../../views/messages/TimelineSeparator";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -97,6 +98,12 @@ export class MainGrouper extends BaseGrouper {
             // absorb hidden events to not split the summary
             return;
         }
+
+        if (ev.getType() === EventType.RoomPinnedEvents && !SettingsStore.getValue("feature_pinning")) {
+            // If pinned messages are disabled, don't show the summary
+            return;
+        }
+
         this.events.push(wrappedEvent);
     }
 
