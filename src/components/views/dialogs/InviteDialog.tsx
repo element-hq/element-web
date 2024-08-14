@@ -608,7 +608,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
         if (!recents) logger.warn("[Invite:Recents] No recents to suggest!");
 
-        // Sort the recents by last active to save us time latery
+        // Sort the recents by last active to save us time later
         recents.sort((a, b) => b.lastActive - a.lastActive);
 
         return recents;
