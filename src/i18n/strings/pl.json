@@ -1629,7 +1629,7 @@
         "level_none": "Brak",
         "level_notification": "Powiadomienie",
         "level_unsent": "Niewysłane",
-        "mark_all_read": "Oznacz wszystko jako przeczytane",
+        "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "mentions_and_keywords": "@wzmianki & słowa kluczowe",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko z wzmiankami i słowami kluczowymi zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
@@ -2008,7 +2008,7 @@
         "joining": "Dołączanie…",
         "joining_room": "Dołączanie do pokoju…",
         "joining_space": "Dołączanie do przestrzeni…",
-        "jump_read_marker": "Przeskocz do pierwszej nieprzeczytanej wiadomości.",
+        "jump_read_marker": "Skocz do pierwszej nieprzeczytanej wiadomości.",
         "jump_to_bottom_button": "Przewiń do najnowszych wiadomości",
         "jump_to_date": "Przeskocz do daty",
         "jump_to_date_beginning": "Początek pokoju",
@@ -2426,6 +2426,10 @@
         }
     },
     "settings": {
+        "account": {
+            "dialog_title": "<strong>Ustawienia:</strong> Konto",
+            "title": "Konto"
+        },
         "all_rooms_home": "Pokaż wszystkie pokoje na ekranie głównym",
         "all_rooms_home_description": "Wszystkie pokoje w których jesteś zostaną pokazane na ekranie głównym.",
         "always_show_message_timestamps": "Zawsze pokazuj znaczniki czasu wiadomości",
@@ -3896,8 +3900,8 @@
         "disable_camera": "Wyłącz kamerę",
         "disable_microphone": "Wycisz mikrofon",
         "disabled_no_one_here": "Nie ma tu nikogo, do kogo można zadzwonić",
-        "disabled_no_perms_start_video_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy wideo",
-        "disabled_no_perms_start_voice_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
+        "disabled_no_perms_start_video_call": "Nie masz uprawnień do rozpoczęcia rozmowy wideo",
+        "disabled_no_perms_start_voice_call": "Nie masz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",
         "element_call": "Element Call",
         "enable_camera": "Włącz kamerę",
