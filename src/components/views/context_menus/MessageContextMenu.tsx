@@ -384,7 +384,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-        const me = cli.getUserId();
+         // const me = cli.getUserId(); //Verji
         const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
         delete other.getRelationsForEvent;
         delete other.permalinkCreator;
@@ -392,7 +392,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
         const contentActionable = isContentActionable(mxEvent);
-        const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!);
+        // const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!); //Verji
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
         const { timelineRenderingType, canReact, canSendMessages } = this.context;
@@ -485,25 +485,27 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let permalinkButton: JSX.Element | undefined;
-        if (permalink) {
-            permalinkButton = (
-                <IconizedContextMenuOption
-                    iconClassName="mx_MessageContextMenu_iconPermalink"
-                    onClick={this.onShareClick}
-                    label={_t("action|share")}
-                    element="a"
-                    {
-                        // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
-                        ...{
-                            href: permalink,
-                            target: "_blank",
-                            rel: "noreferrer noopener",
-                        }
-                    }
-                />
-            );
-        }
+        // Verji start
+        // let permalinkButton: JSX.Element | undefined;
+        // if (permalink) {
+        //     permalinkButton = (
+        //         <IconizedContextMenuOption
+        //             iconClassName="mx_MessageContextMenu_iconPermalink"
+        //             onClick={this.onShareClick}
+        //             label={_t("action|share")}
+        //             element="a"
+        //             {
+        //                 // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
+        //                 ...{
+        //                     href: permalink,
+        //                     target: "_blank",
+        //                     rel: "noreferrer noopener",
+        //                 }
+        //             }
+        //         />
+        //     );
+        // }
+        // Verji end
 
         let endPollButton: JSX.Element | undefined;
         if (this.canEndPoll(mxEvent)) {
@@ -563,16 +565,18 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let reportEventButton: JSX.Element | undefined;
-        if (mxEvent.getSender() !== me) {
-            reportEventButton = (
-                <IconizedContextMenuOption
-                    iconClassName="mx_MessageContextMenu_iconReport"
-                    label={_t("timeline|context_menu|report")}
-                    onClick={this.onReportEventClick}
-                />
-            );
-        }
+        // Verji start
+        // let reportEventButton: JSX.Element | undefined;
+        // if (mxEvent.getSender() !== me) {
+        //     reportEventButton = (
+        //         <IconizedContextMenuOption
+        //             iconClassName="mx_MessageContextMenu_iconReport"
+        //             label={_t("timeline|context_menu|report")}
+        //             onClick={this.onReportEventClick}
+        //         />
+        //     );
+        // }
+        // Verji end
 
         let copyLinkButton: JSX.Element | undefined;
         if (link) {
@@ -691,8 +695,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {endPollButton}
                 {forwardButton}
                 {pinButton}
-                {permalinkButton}
-                {reportEventButton}
+                {/*Verji removed {permalinkButton} */}
+                {/*Verji removed  {reportEventButton} */}
                 {externalURLButton}
                 {jumpToRelatedEventButton}
                 {unhidePreviewButton}

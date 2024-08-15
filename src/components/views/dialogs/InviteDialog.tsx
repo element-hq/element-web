@@ -391,6 +391,7 @@ type Props = InviteDMProps | InviteRoomProps | InviteCallProps;
 
 interface IInviteDialogState {
     targets: Member[]; // array of Member objects (see interface above)
+    targetEmails: string[]; // Verji
     filterText: string;
     recents: Result[];
     numRecentsShown: number;
@@ -421,6 +422,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private unmounted = false;
     private encryptionByDefault = false;
     private profilesStore: UserProfilesStore;
+    private allowOnboardingFlag = false;
+
 
     public constructor(props: Props) {
         super(props);
@@ -451,6 +454,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
+            targetEmails: [], // Verji
             filterText: this.props.initialText || "",
             // Mutates alreadyInvited set so that buildSuggestions doesn't duplicate any users
             recents: InviteDialog.buildRecents(excludedIds),

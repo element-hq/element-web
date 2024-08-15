@@ -157,8 +157,9 @@ export default class ViewSource extends React.Component<IProps, IState> {
         const roomId = mxEvent.getRoomId()!;
         const eventId = mxEvent.getId()!;
         const canEdit = mxEvent.isState()
-            ? this.canSendStateEvent(mxEvent)
-            : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        // const canEdit = mxEvent.isState()    //Verji
+        //     ? this.canSendStateEvent(mxEvent)
+        //     : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("action|view_source")}>
                 <div className="mx_ViewSource_header">
