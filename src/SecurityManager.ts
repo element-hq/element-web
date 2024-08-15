@@ -14,13 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    DeviceVerificationStatus,
-    ICryptoCallbacks,
-    MatrixClient,
-    encodeBase64,
-    SecretStorage,
-} from "matrix-js-sdk/src/matrix";
+import { Crypto, ICryptoCallbacks, MatrixClient, encodeBase64, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -137,8 +131,7 @@ async function getSecretStorageKey({
         }
     }
 
-    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
     if (keyFromCustomisations) {
         logger.log("CryptoSetupExtension: Using key from extension (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
@@ -188,8 +181,7 @@ export async function getDehydrationKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
     checkFunc: (data: Uint8Array) => void,
 ): Promise<Uint8Array> {
-    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
     if (keyFromCustomisations) {
         logger.log("CryptoSetupExtension: Using key from extension (dehydration)");
         return keyFromCustomisations;
@@ -251,7 +243,7 @@ async function onSecretRequested(
     deviceId: string,
     requestId: string,
     name: string,
-    deviceTrust: DeviceVerificationStatus,
+    deviceTrust: Crypto.DeviceVerificationStatus,
 ): Promise<string | undefined> {
     logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.safeGet();
@@ -432,8 +424,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         // inner operation completes.
         return await func();
     } catch (e) {
-        // SecurityCustomisations.catchAccessSecretStorageError?.(e as Error);
-        ModuleRunner.instance.extensions.cryptoSetup?.catchAccessSecretStorageError(e as Error);
+        ModuleRunner.instance.extensions.cryptoSetup.catchAccessSecretStorageError(e as Error);
         logger.error(e);
         // Re-throw so that higher level logic can abort as needed
         throw e;

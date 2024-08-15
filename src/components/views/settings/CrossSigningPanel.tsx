@@ -29,8 +29,6 @@ import SetupEncryptionDialog from "../dialogs/security/SetupEncryptionDialog";
 import { accessSecretStorage, withSecretStorageKeyCache } from "../../../SecurityManager";
 import AccessibleButton from "../elements/AccessibleButton";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
-import SettingsStore from "../../../settings/SettingsStore";
-import { UIFeature } from "../../../settings/UIFeature";
 
 interface IState {
     error: boolean;
@@ -243,7 +241,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             );
         }
 
-        if (SettingsStore.getValue(UIFeature.UserSettingsResetCrossSigning) && keysExistAnywhere) {
+        if (keysExistAnywhere) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger_outline" onClick={this.onResetCrossSigningClick}>
                     {_t("action|reset")}

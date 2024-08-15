@@ -41,7 +41,6 @@ import { IProfileInfo } from "../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import Modal from "../../../../src/Modal";
-import HomePage from "../../../../src/components/structures/HomePage";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../src/IdentityAuthClient", () =>
@@ -493,11 +492,5 @@ describe("InviteDialog", () => {
         );
         await flushPromises();
         expect(screen.queryByText("@localpart:server.tld")).not.toBeInTheDocument();
-    });
-    it("does not show buttons on HomePage when UIFeature is false", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        render(<HomePage justRegistered={true} />);
-        expect(screen.queryByText("Explore")).not.toBeInTheDocument();
     });
 });

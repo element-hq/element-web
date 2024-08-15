@@ -69,6 +69,10 @@ describe("Field", () => {
 
             // Expect 'alert' role
             expect(screen.queryByRole("alert")).toBeInTheDocument();
+
+            // Close the feedback is Escape is pressed
+            fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
+            expect(screen.queryByRole("alert")).toBeNull();
         });
 
         it("Should mark the feedback as status if valid", async () => {
@@ -87,6 +91,10 @@ describe("Field", () => {
 
             // Expect 'status' role
             expect(screen.queryByRole("status")).toBeInTheDocument();
+
+            // Close the feedback is Escape is pressed
+            fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
+            expect(screen.queryByRole("status")).toBeNull();
         });
 
         it("Should mark the feedback as tooltip if custom tooltip set", async () => {
@@ -106,6 +114,10 @@ describe("Field", () => {
 
             // Expect 'tooltip' role
             expect(screen.queryByRole("tooltip")).toBeInTheDocument();
+
+            // Close the feedback is Escape is pressed
+            fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
+            expect(screen.queryByRole("tooltip")).toBeNull();
         });
     });
 });

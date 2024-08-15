@@ -18,17 +18,7 @@ import React from "react";
 import { fireEvent, render, screen, waitFor, cleanup, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
-import {
-    Room,
-    User,
-    MatrixClient,
-    RoomMember,
-    MatrixEvent,
-    EventType,
-    CryptoApi,
-    DeviceVerificationStatus,
-    Device,
-} from "matrix-js-sdk/src/matrix";
+import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
@@ -37,6 +27,8 @@ import {
     VerificationRequest,
     VerificationPhase as Phase,
     VerificationRequestEvent,
+    CryptoApi,
+    DeviceVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 
 import UserInfo, {
@@ -63,8 +55,7 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/di
 import { clearAllModals, flushPromises } from "../../../test-utils";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
-import { UIComponent, UIFeature } from "../../../../src/settings/UIFeature";
-import SettingsStore from "../../../../src/settings/SettingsStore";
+import { UIComponent } from "../../../../src/settings/UIFeature";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -158,6 +149,7 @@ beforeEach(() => {
         isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         getSafeUserId: jest.fn(),
+        getDomain: jest.fn(),
         on: jest.fn(),
         off: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
@@ -177,7 +169,6 @@ beforeEach(() => {
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-    jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 });
 
 describe("<UserInfo />", () => {
@@ -342,18 +333,6 @@ describe("<UserInfo />", () => {
             );
 
             screen.getByRole("button", { name: "Message" });
-        });
-        it("does not renders the message button when feature is false", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name == UIFeature.ShowSendMessageToUserLink) return false;
-            });
-            render(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <UserInfo {...defaultProps} />
-                </MatrixClientContext.Provider>,
-            );
-
-            expect(screen.queryByText("button")).toBeNull();
         });
 
         it("hides the message button if the visibility customisation hides all create room features", () => {
@@ -597,6 +576,19 @@ describe("<UserInfo />", () => {
                 // ... which should contain the device name
                 expect(within(device2Button).getByText("dehydrated device 2")).toBeInTheDocument();
             });
+        });
+
+        it("should render a deactivate button for users of the same server if we are a server admin", async () => {
+            mockClient.isSynapseAdministrator.mockResolvedValue(true);
+            mockClient.getDomain.mockReturnValue("example.com");
+
+            const { container } = renderComponent({
+                phase: RightPanelPhases.RoomMemberInfo,
+                room: mockRoom,
+            });
+
+            await waitFor(() => expect(screen.getByRole("button", { name: "Deactivate user" })).toBeInTheDocument());
+            expect(container).toMatchSnapshot();
         });
     });
 
@@ -845,15 +837,7 @@ describe("<UserOptionsSection />", () => {
         inviteSpy.mockRestore();
     });
 
-    it("does not show share user button when UIFeature is false", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        renderComponent();
-        expect(screen.queryByText("share link to user")).not.toBeInTheDocument();
-    });
-    it("shows share user button when UIFeature is true", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-
+    it("always shows share user button", () => {
         renderComponent();
         expect(screen.getByRole("button", { name: /share link to user/i })).toBeInTheDocument();
     });
@@ -1412,16 +1396,7 @@ describe("<RoomAdminToolsContainer />", () => {
         `);
     });
 
-    it("does not show redact button when UIFeature.UserInfoRedactButton is false", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-        renderComponent();
-        expect(screen.queryByText("remove recent messages")).not.toBeInTheDocument();
-    });
-
     it("returns kick, redact messages, ban buttons if conditions met", () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-
         const mockMeMember = new RoomMember(mockRoom.roomId, "arbitraryId");
         mockMeMember.powerLevel = 51; // defaults to 50
         mockRoom.getMember.mockReturnValueOnce(mockMeMember);

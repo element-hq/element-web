@@ -15,13 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -39,7 +35,6 @@ import {
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
-import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -119,10 +114,6 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders tabs correctly", () => {
-        // jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
-        //     if (name == UIFeature.SpacesEnabled) return true;
-        //     return true;
-        // });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act, fireEvent, render, screen /*, within*/ } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import {
     EventTimeline,
     EventType,
@@ -54,11 +54,11 @@ describe("PeopleRoomSettingsTab", () => {
             </MatrixClientContext.Provider>,
         );
     const getGroup = () => screen.getByRole("group", { name: "Asking to join" });
-    // const getParagraph = () => screen.getByRole("paragraph"); //removed temporarily by Eik 23.5.24, because of element troubles
+    const getParagraph = () => screen.getByRole("paragraph");
 
     it("renders a heading", () => {
         getComponent(room);
-        // expect(screen.getByRole("heading")).toHaveTextContent("People");
+        expect(screen.getByRole("heading")).toHaveTextContent("People");
     });
 
     it('renders a group "asking to join"', () => {
@@ -69,7 +69,7 @@ describe("PeopleRoomSettingsTab", () => {
     describe("without requests to join", () => {
         it('renders a paragraph "no requests"', () => {
             getComponent(room);
-            // expect(getParagraph()).toHaveTextContent("No requests");
+            expect(getParagraph()).toHaveTextContent("No requests");
         });
     });
 
@@ -123,14 +123,14 @@ describe("PeopleRoomSettingsTab", () => {
         it("allows to expand a reason", () => {
             getComponent(room);
             fireEvent.click(getButton("See more"));
-            // expect(within(getGroup()).getByRole("paragraph")).toHaveTextContent(reason);
+            expect(within(getGroup()).getByRole("paragraph")).toHaveTextContent(reason);
         });
 
         it("allows to collapse a reason", () => {
             getComponent(room);
             fireEvent.click(getButton("See more"));
             fireEvent.click(getButton("See less"));
-            // expect(getParagraph()).toHaveTextContent(`${reason.substring(0, 120)}…`);
+            expect(getParagraph()).toHaveTextContent(`${reason.substring(0, 120)}…`);
         });
 
         it("does not truncate a reason unnecessarily", () => {
@@ -146,7 +146,7 @@ describe("PeopleRoomSettingsTab", () => {
                 }),
             );
             getComponent(room);
-            // expect(getParagraph()).toHaveTextContent(reason);
+            expect(getParagraph()).toHaveTextContent(reason);
         });
 
         it("disables the deny button if the power level is insufficient", () => {
@@ -179,7 +179,7 @@ describe("PeopleRoomSettingsTab", () => {
             act(() => {
                 room.emit(RoomStateEvent.Update, state);
             });
-            // expect(getParagraph()).toHaveTextContent("No requests");
+            expect(getParagraph()).toHaveTextContent("No requests");
         });
 
         it("disables the approve button if the power level is insufficient", () => {
@@ -212,7 +212,7 @@ describe("PeopleRoomSettingsTab", () => {
             act(() => {
                 room.emit(RoomStateEvent.Update, state);
             });
-            // expect(getParagraph()).toHaveTextContent("No requests");
+            expect(getParagraph()).toHaveTextContent("No requests");
         });
     });
 });

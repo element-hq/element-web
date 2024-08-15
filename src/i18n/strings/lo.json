@@ -2736,8 +2736,7 @@
         "pending_moderation_reason": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "ເພີ່ມການຕອບໂຕ້",
-            "label": "%(reactors)sປະຕິກິລິຍາກັບ %(content)s",
-            "tooltip": "<reactors/><reactedWith>ປະຕິກິລິຍາດ້ວຍ %(shortName)s</reactedWith>"
+            "label": "%(reactors)sປະຕິກິລິຍາກັບ %(content)s"
         },
         "read_receipt_title": {
             "one": "ເຫັນໂດຍ %(count)s ຄົນ",

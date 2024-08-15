@@ -46,7 +46,6 @@ exports[`ReactionsRowButton renders reaction row button custom image reactions c
     >
       2
     </span>
-    <div />
   </div>
 </DocumentFragment>
 `;
@@ -95,7 +94,27 @@ exports[`ReactionsRowButton renders reaction row button emojis correctly 2`] = `
     >
       2
     </span>
-    <div />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ReactionsRowButton renders without a room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    />
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
   </div>
 </DocumentFragment>
 `;

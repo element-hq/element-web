@@ -14,14 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { render, screen, fireEvent, act, cleanup } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
@@ -34,7 +30,6 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SpaceNotificationState } from "../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import UnwrappedSpacePanel from "../../../../src/components/views/spaces/SpacePanel";
-import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -190,7 +185,6 @@ describe("<SpacePanel />", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
             render(<SpacePanel />);
             expect(screen.queryByTestId("create-space-button")).not.toBeNull();
-            expect(screen.queryByTestId("create-space-button")).toBeInTheDocument();
         });
         it("does not render create space button when UIFeature is false", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
@@ -200,7 +194,6 @@ describe("<SpacePanel />", () => {
             mocked(shouldShowComponent).mockReturnValue(true);
             render(<SpacePanel />);
             expect(screen.queryByTestId("create-space-button")).toBeNull();
-            expect(screen.queryByTestId("create-space-button")).not.toBeInTheDocument();
         });
     });
 
@@ -221,47 +214,5 @@ describe("<SpacePanel />", () => {
         await drop(room1);
 
         expect(SpaceStore.instance.moveRootSpace).toHaveBeenCalledWith(0, 1);
-    });
-    describe("CustomComponentLifecycle.UserMenu", () => {
-        it("should invoke CustomComponentLifecycle.UserMenu on render", () => {
-            jest.spyOn(ModuleRunner.instance, "invoke");
-            render(<SpacePanel />);
-            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.UserMenu, {
-                CustomComponent: expect.any(Symbol),
-            });
-        });
-
-        it("should render the standard <UserMenu> if if there are no module-implementations using the lifecycle", () => {
-            render(<SpacePanel />);
-            const userMenu = screen.getByLabelText("User menu");
-            expect(userMenu).toBeTruthy();
-        });
-
-        it("should replace the <UserMenu> and return <div data-testid='custom-user-menu'> instead", () => {
-            let userMenuChildren: ReactNode;
-            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
-                if (lifecycleEvent === CustomComponentLifecycle.UserMenu) {
-                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
-                        // Get the UserMenu passed in by the wrapper
-                        const userMenu = React.Children.toArray(children)[0] as React.Component;
-                        userMenuChildren = userMenu.props.children;
-                        return (
-                            <>
-                                <div data-testid="custom-user-menu">
-                                    {/* We wish to keep the original children of the usermenu as children of our custom-user-menu*/}
-                                    {userMenuChildren}
-                                </div>
-                            </>
-                        );
-                    };
-                }
-            });
-
-            render(<SpacePanel />);
-
-            const customUserMenu = screen.queryByTestId("custom-user-menu");
-            expect(customUserMenu?.children.length).toBe(React.Children.count(userMenuChildren));
-            expect(customUserMenu).toBeInTheDocument();
-        });
     });
 });

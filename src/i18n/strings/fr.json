@@ -3404,8 +3404,7 @@
         "reactions": {
             "add_reaction_prompt": "Ajouter une réaction",
             "custom_reaction_fallback_label": "Réaction personnalisée",
-            "label": "%(reactors)s ont réagi avec %(content)s",
-            "tooltip": "<reactors/><reactedWith>ont réagi avec %(shortName)s</reactedWith>"
+            "label": "%(reactors)s ont réagi avec %(content)s"
         },
         "read_receipt_title": {
             "one": "Vu par %(count)s personne",

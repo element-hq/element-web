@@ -16,10 +16,6 @@ limitations under the License.
 
 import React, { ErrorInfo, ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -28,7 +24,6 @@ import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import BugReportDialog from "../dialogs/BugReportDialog";
 import AccessibleButton from "./AccessibleButton";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 interface Props {
     children: ReactNode;
@@ -81,12 +76,6 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
     };
 
     public render(): ReactNode {
-        const CustomErrorBoundary = { CustomComponent: React.Fragment };
-        ModuleRunner.instance.invoke(
-            CustomComponentLifecycle.ErrorBoundary,
-            CustomErrorBoundary as CustomComponentOpts,
-        );
-
         if (this.state.error) {
             const newIssueUrl = SdkConfig.get().feedback.new_issue_url;
 
@@ -132,18 +121,16 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             }
 
             return (
-                <CustomErrorBoundary.CustomComponent>
-                    <div className="mx_ErrorBoundary">
-                        <div className="mx_ErrorBoundary_body">
-                            <h1>{_t("error|something_went_wrong")}</h1>
-                            {bugReportSection}
-                            {clearCacheButton}
-                        </div>
+                <div className="mx_ErrorBoundary">
+                    <div className="mx_ErrorBoundary_body">
+                        <h1>{_t("error|something_went_wrong")}</h1>
+                        {bugReportSection}
+                        {clearCacheButton}
                     </div>
-                </CustomErrorBoundary.CustomComponent>
+                </div>
             );
         }
 
-        return <CustomErrorBoundary.CustomComponent>{this.props.children}</CustomErrorBoundary.CustomComponent>;
+        return this.props.children;
     }
 }

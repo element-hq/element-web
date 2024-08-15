@@ -21,8 +21,6 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { Action } from "../dispatcher/actions";
 import { snoozeBulkUnverifiedDeviceReminder } from "../utils/device/snoozeBulkUnverifiedDeviceReminder";
-import SettingsStore from "../settings/SettingsStore";
-import { UIFeature } from "../settings/UIFeature";
 
 const TOAST_KEY = "reviewsessions";
 
@@ -40,22 +38,20 @@ export const showToast = (deviceIds: Set<string>): void => {
         snoozeBulkUnverifiedDeviceReminder();
     };
 
-    if (SettingsStore.getValue(UIFeature.UnverifiedSessionsToast)) {
-        ToastStore.sharedInstance().addOrReplaceToast({
-            key: TOAST_KEY,
-            title: _t("encryption|verification|unverified_sessions_toast_title"),
-            icon: "verification_warning",
-            props: {
-                description: _t("encryption|verification|unverified_sessions_toast_description"),
-                acceptLabel: _t("action|review"),
-                onAccept,
-                rejectLabel: _t("encryption|verification|unverified_sessions_toast_reject"),
-                onReject,
-            },
-            component: GenericToast,
-            priority: 50,
-        });
-    }
+    ToastStore.sharedInstance().addOrReplaceToast({
+        key: TOAST_KEY,
+        title: _t("encryption|verification|unverified_sessions_toast_title"),
+        icon: "verification_warning",
+        props: {
+            description: _t("encryption|verification|unverified_sessions_toast_description"),
+            acceptLabel: _t("action|review"),
+            onAccept,
+            rejectLabel: _t("encryption|verification|unverified_sessions_toast_reject"),
+            onReject,
+        },
+        component: GenericToast,
+        priority: 50,
+    });
 };
 
 export const hideToast = (): void => {

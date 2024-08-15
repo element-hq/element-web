@@ -3417,8 +3417,7 @@
         "reactions": {
             "add_reaction_prompt": "Aggiungi reazione",
             "custom_reaction_fallback_label": "Reazione personalizzata",
-            "label": "%(reactors)s ha reagito con %(content)s",
-            "tooltip": "<reactors/><reactedWith>ha reagito con %(shortName)s</reactedWith>"
+            "label": "%(reactors)s ha reagito con %(content)s"
         },
         "read_receipt_title": {
             "one": "Visto da %(count)s persona",

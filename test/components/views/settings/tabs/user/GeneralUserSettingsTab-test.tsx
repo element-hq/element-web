@@ -97,96 +97,7 @@ describe("<GeneralUserSettingsTab />", () => {
         expect(getByTestId("external-account-management-outer").textContent).toMatch(/.*id\.server\.org/);
         expect(getByTestId("external-account-management-link").getAttribute("href")).toMatch(accountManagementLink);
     });
-    it("does not show account management when feature is off", async () => {
-        const accountManagementLink = "https://id.server.org/my-account";
-        const mockOidcClientStore = {
-            accountManagementEndpoint: accountManagementLink,
-        } as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
 
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if ((name = UIFeature.UserSettingsExternalAccount)) return false;
-            return true;
-        });
-
-        render(getComponent());
-        expect(screen.queryByText("Account")).toBeFalsy();
-    });
-    it("does show account management when feature is on", async () => {
-        const accountManagementLink = "https://id.server.org/my-account";
-        const mockOidcClientStore = {
-            accountManagementEndpoint: accountManagementLink,
-        } as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
-
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsExternalAccount) return true;
-            return true;
-        });
-
-        render(getComponent());
-        expect(screen.queryByText("Account")).not.toBeNull();
-    });
-    it("does not show SetIdServer when feature is off", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsSetIdServer) return false;
-            return true;
-        });
-
-        render(getComponent());
-
-        expect(screen.queryByText("Account")).toBeTruthy();
-    });
-    it("does show SetIdServer when feature is on", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsSetIdServer) return true;
-            return true;
-        });
-
-        render(getComponent());
-
-        expect(screen.queryByText("Identity server")).not.toBeNull();
-    });
-    it("does not show Discovery section when feature is off", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsDiscovery) return false;
-            return true;
-        });
-
-        const { queryByText } = render(getComponent());
-
-        expect(queryByText("Identity server")).toBeNull();
-    });
-    it("do show Discovery section when feature is on", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsDiscovery) return true;
-            return true;
-        });
-
-        const { queryByText } = render(getComponent());
-
-        expect(queryByText("Discovery")).not.toBeNull();
-    });
-    it("does not show Integrations section when feature is off", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsIntegrationManager) return false;
-            return true;
-        });
-
-        const { queryByText } = render(getComponent());
-
-        expect(queryByText("Manage integrations")).toBeNull();
-    });
-    it("do show Integrations section when feature is on", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name == UIFeature.UserSettingsIntegrationManager) return true;
-            return true;
-        });
-
-        const { queryByText } = render(getComponent());
-
-        expect(queryByText("Manage integrations")).not.toBeNull();
-    });
     describe("Manage integrations", () => {
         it("should not render manage integrations section when widgets feature is disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
@@ -199,8 +110,7 @@ describe("<GeneralUserSettingsTab />", () => {
         });
         it("should render manage integrations sections", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) =>
-                    settingName === UIFeature.Widgets || settingName === UIFeature.UserSettingsIntegrationManager,
+                (settingName) => settingName === UIFeature.Widgets,
             );
 
             render(getComponent());
@@ -209,8 +119,7 @@ describe("<GeneralUserSettingsTab />", () => {
         });
         it("should update integrations provisioning on toggle", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) =>
-                    settingName === UIFeature.Widgets || settingName === UIFeature.UserSettingsIntegrationManager,
+                (settingName) => settingName === UIFeature.Widgets,
             );
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
@@ -229,8 +138,7 @@ describe("<GeneralUserSettingsTab />", () => {
         });
         it("handles error when updating setting fails", async () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) =>
-                    settingName === UIFeature.Widgets || settingName === UIFeature.UserSettingsIntegrationManager,
+                (settingName) => settingName === UIFeature.Widgets,
             );
             jest.spyOn(logger, "error").mockImplementation(() => {});
 

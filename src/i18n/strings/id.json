@@ -3363,8 +3363,7 @@
         "reactions": {
             "add_reaction_prompt": "Tambahkan reaksi",
             "custom_reaction_fallback_label": "Reaksi khusus",
-            "label": "%(reactors)s berekasi dengan %(content)s",
-            "tooltip": "<reactors/><reactedWith>bereaksi dengan %(shortName)s</reactedWith>"
+            "label": "%(reactors)s berekasi dengan %(content)s"
         },
         "read_receipt_title": {
             "one": "Dilihat oleh %(count)s orang",

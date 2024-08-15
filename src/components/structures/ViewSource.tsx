@@ -156,9 +156,9 @@ export default class ViewSource extends React.Component<IProps, IState> {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId()!;
         const eventId = mxEvent.getId()!;
-        // const canEdit = mxEvent.isState()    //Verji
-        //     ? this.canSendStateEvent(mxEvent)
-        //     : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        const canEdit = mxEvent.isState()
+            ? this.canSendStateEvent(mxEvent)
+            : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("action|view_source")}>
                 <div className="mx_ViewSource_header">
@@ -177,17 +177,11 @@ export default class ViewSource extends React.Component<IProps, IState> {
                     )}
                 </div>
                 {isEditing ? this.editSourceContent() : this.viewSourceContent()}
-                {/* NOTE: Verji - Removed the Edit button as we have no use for it at the moment. */}
-                {/* {!isEditing && canEdit && (
+                {!isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.onEdit()}>{_t("Edit")}</button>
+                        <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
                     </div>
-                )} */}
-
-                <div className="mx_Dialog_buttons">
-                    <button onClick={() => this.onEdit()}>{_t("action|edit")}</button>
-                </div>
-                {/* Verji end */}
+                )}
             </BaseDialog>
         );
     }

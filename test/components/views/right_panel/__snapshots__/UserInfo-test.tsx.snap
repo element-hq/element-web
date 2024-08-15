@@ -223,3 +223,176 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
   </div>
 </div>
 `;
+
+exports[`<UserInfo /> with crypto enabled should render a deactivate button for users of the same server if we are a server admin 1`] = `
+<div>
+  <div
+    class="mx_BaseCard mx_UserInfo"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        aria-label="Close"
+        class="mx_AccessibleButton mx_BaseCard_close"
+        data-testid="base-card-close-button"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        class="mx_BaseCard_headerProp"
+      />
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_UserInfo_avatar"
+      >
+        <div
+          class="mx_UserInfo_avatar_transition"
+        >
+          <div
+            class="mx_UserInfo_avatar_transition_child"
+          >
+            <button
+              aria-label="Profile picture"
+              aria-live="off"
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="button"
+              style="--cpd-avatar-size: 230.39999999999998px;"
+            >
+              u
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container mx_UserInfo_separator"
+      >
+        <div
+          class="mx_UserInfo_profile"
+        >
+          <div>
+            <h2>
+              <span
+                aria-label="@user:example.com"
+                dir="auto"
+                title="@user:example.com"
+              >
+                @user:example.com
+              </span>
+            </h2>
+          </div>
+          <div
+            class="mx_UserInfo_profile_mxid"
+          >
+            customUserIdentifier
+          </div>
+          <div
+            class="mx_UserInfo_profileStatus"
+          >
+            <div
+              class="mx_PresenceLabel"
+            >
+              Unknown
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h3>
+          Security
+        </h3>
+        <p>
+          Messages in this room are not end-to-end encrypted.
+        </p>
+        <div
+          class="mx_UserInfo_container_verifyButton"
+        >
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_verifyButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Verify
+          </div>
+        </div>
+        <div
+          class="mx_UserInfo_devices"
+        >
+          <div />
+          <div>
+            <div
+              class="mx_AccessibleButton mx_UserInfo_expand mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_E2EIcon mx_E2EIcon_normal"
+              />
+              <div>
+                1 session
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h3>
+          Options
+        </h3>
+        <div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Message
+          </div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Share Link to User
+          </div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Ignore
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h3>
+          Admin Tools
+        </h3>
+        <div
+          class="mx_UserInfo_buttons"
+        >
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Deactivate user
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

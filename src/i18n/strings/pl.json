@@ -3445,8 +3445,7 @@
         "reactions": {
             "add_reaction_prompt": "Dodaj reakcje",
             "custom_reaction_fallback_label": "Reakcja niestandardowa",
-            "label": "%(reactors)s zareagował z %(content)s",
-            "tooltip": "<reactors/><reactedWith> zareagował z %(shortName)s</reactedWith>"
+            "label": "%(reactors)s zareagował z %(content)s"
         },
         "read_receipt_title": {
             "one": "Odczytane przez %(count)s osobę",

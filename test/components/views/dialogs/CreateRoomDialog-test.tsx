@@ -21,7 +21,6 @@ import { JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/mat
 import CreateRoomDialog from "../../../../src/components/views/dialogs/CreateRoomDialog";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../../src/settings/UIFeature";
 
 describe("<CreateRoomDialog />", () => {
     const userId = "@alice:server.org";
@@ -208,60 +207,12 @@ describe("<CreateRoomDialog />", () => {
                 roomType: undefined,
             });
         });
-        //Eik
-        it("should not show rule dropdown, when UIFeature.CreateRoomShowJoinRuleDropdown is set to false", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === UIFeature.CreateRoomShowJoinRuleDropdown) return false;
-                return true;
-            });
-            getComponent();
-            await flushPromises();
-
-            expect(
-                screen.queryByRole("LabelledCheckbox", {
-                    name: "Make this room visible in the public room directory.",
-                }),
-            ).not.toBeInTheDocument();
-            expect(screen.queryByRole("option", { name: "Ask to join" })).not.toBeInTheDocument();
-        });
-        it("should not show end-to-end encryption option, when UIFeature.CreateRoomE2eeSection is set to false", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === UIFeature.CreateRoomE2eeSection) return false;
-                return true;
-            });
-            getComponent();
-            await flushPromises();
-
-            expect(
-                screen.queryByRole("LabelledToggleSwitch", { name: "Enable end-to-end encryption" }),
-            ).not.toBeInTheDocument();
-        });
-        it("should not display 'Show Advanced', when UIFeature.CreateRoomShowAdvancedSettings is set to false", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === UIFeature.CreateRoomShowAdvancedSettings) return false;
-                return true;
-            });
-            getComponent();
-            await flushPromises();
-
-            expect(
-                screen.queryByRole("LabelledToggleSwitch", {
-                    name: "Block anyone not part of %(serverName)s from ever joining this room.",
-                }),
-            ).not.toBeInTheDocument();
-        });
-        //eik end
     });
 
     describe("for a knock room", () => {
         describe("when feature is disabled", () => {
             it("should not have the option to create a knock room", async () => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                    if (setting === UIFeature.CreateRoomShowJoinRuleDropdown) return true;
-                    if (setting === UIFeature.CreateRoomE2eeSection) return true;
-                    if (setting === UIFeature.CreateRoomShowAdvancedSettings) return true;
-                    return false;
-                });
+                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
                 getComponent();
                 fireEvent.click(screen.getByLabelText("Room visibility"));
                 expect(screen.queryByRole("option", { name: "Ask to join" })).not.toBeInTheDocument();
@@ -274,14 +225,9 @@ describe("<CreateRoomDialog />", () => {
 
             beforeEach(async () => {
                 onFinished.mockReset();
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                    if (setting === "feature_ask_to_join") return true;
-                    if (setting === UIFeature.CreateRoomShowJoinRuleDropdown) return true;
-                    if (setting === UIFeature.CreateRoomE2eeSection) return true;
-                    if (setting === UIFeature.CreateRoomShowAdvancedSettings) return true;
-
-                    return false;
-                });
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (setting) => setting === "feature_ask_to_join",
+                );
                 getComponent({ onFinished });
                 fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
                 fireEvent.click(screen.getByLabelText("Room visibility"));
