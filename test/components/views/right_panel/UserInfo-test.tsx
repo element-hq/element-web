@@ -18,17 +18,7 @@ import React from "react";
 import { fireEvent, render, screen, waitFor, cleanup, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
-import {
-    Room,
-    User,
-    MatrixClient,
-    RoomMember,
-    MatrixEvent,
-    EventType,
-    CryptoApi,
-    DeviceVerificationStatus,
-    Device,
-} from "matrix-js-sdk/src/matrix";
+import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
@@ -37,6 +27,8 @@ import {
     VerificationRequest,
     VerificationPhase as Phase,
     VerificationRequestEvent,
+    CryptoApi,
+    DeviceVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 
 import UserInfo, {
@@ -157,6 +149,7 @@ beforeEach(() => {
         isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         getSafeUserId: jest.fn(),
+        getDomain: jest.fn(),
         on: jest.fn(),
         off: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
@@ -583,6 +576,19 @@ describe("<UserInfo />", () => {
                 // ... which should contain the device name
                 expect(within(device2Button).getByText("dehydrated device 2")).toBeInTheDocument();
             });
+        });
+
+        it("should render a deactivate button for users of the same server if we are a server admin", async () => {
+            mockClient.isSynapseAdministrator.mockResolvedValue(true);
+            mockClient.getDomain.mockReturnValue("example.com");
+
+            const { container } = renderComponent({
+                phase: RightPanelPhases.RoomMemberInfo,
+                room: mockRoom,
+            });
+
+            await waitFor(() => expect(screen.getByRole("button", { name: "Deactivate user" })).toBeInTheDocument());
+            expect(container).toMatchSnapshot();
         });
     });
 

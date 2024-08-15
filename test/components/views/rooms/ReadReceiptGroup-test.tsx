@@ -14,8 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { determineAvatarPosition, readReceiptTooltip } from "../../../../src/components/views/rooms/ReadReceiptGroup";
+import React, { ComponentProps } from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
+import userEvent from "@testing-library/user-event";
+
+import {
+    determineAvatarPosition,
+    ReadReceiptPerson,
+    readReceiptTooltip,
+} from "../../../../src/components/views/rooms/ReadReceiptGroup";
 import * as languageHandler from "../../../../src/languageHandler";
+import { stubClient } from "../../../test-utils";
+import dispatcher from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
@@ -77,6 +89,57 @@ describe("ReadReceiptGroup", () => {
             expect(determineAvatarPosition(3, 4)).toEqual({ hidden: false, position: 3 });
             expect(determineAvatarPosition(4, 4)).toEqual({ hidden: true, position: 0 });
             expect(determineAvatarPosition(5, 4)).toEqual({ hidden: true, position: 0 });
+        });
+    });
+
+    describe("<ReadReceiptPerson />", () => {
+        stubClient();
+
+        const ROOM_ID = "roomId";
+        const USER_ID = "@alice:example.org";
+
+        const member = new RoomMember(ROOM_ID, USER_ID);
+        member.rawDisplayName = "Alice";
+        member.getMxcAvatarUrl = () => "http://placekitten.com/400/400";
+
+        const renderReadReceipt = (props?: Partial<ComponentProps<typeof ReadReceiptPerson>>) => {
+            const currentDate = new Date(2024, 4, 15).getTime();
+            return render(<ReadReceiptPerson userId={USER_ID} roomMember={member} ts={currentDate} {...props} />);
+        };
+
+        beforeEach(() => {
+            jest.spyOn(dispatcher, "dispatch");
+        });
+
+        it("should render", () => {
+            const { container } = renderReadReceipt();
+            expect(container).toMatchSnapshot();
+        });
+
+        it("should display a tooltip", async () => {
+            renderReadReceipt();
+
+            await userEvent.hover(screen.getByRole("menuitem"));
+            await waitFor(() => {
+                const tooltip = screen.getByRole("tooltip", { name: member.rawDisplayName });
+                expect(tooltip).toMatchSnapshot();
+            });
+        });
+
+        it("should send an event when clicked", async () => {
+            const onAfterClick = jest.fn();
+            renderReadReceipt({ onAfterClick });
+
+            screen.getByRole("menuitem").click();
+
+            expect(onAfterClick).toHaveBeenCalled();
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewUser,
+                    member,
+                    push: false,
+                }),
+            );
         });
     });
 });

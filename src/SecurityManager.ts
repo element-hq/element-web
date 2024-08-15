@@ -14,13 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    DeviceVerificationStatus,
-    ICryptoCallbacks,
-    MatrixClient,
-    encodeBase64,
-    SecretStorage,
-} from "matrix-js-sdk/src/matrix";
+import { Crypto, ICryptoCallbacks, MatrixClient, encodeBase64, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -249,7 +243,7 @@ async function onSecretRequested(
     deviceId: string,
     requestId: string,
     name: string,
-    deviceTrust: DeviceVerificationStatus,
+    deviceTrust: Crypto.DeviceVerificationStatus,
 ): Promise<string | undefined> {
     logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.safeGet();

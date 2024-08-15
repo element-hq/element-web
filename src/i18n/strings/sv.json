@@ -3416,8 +3416,7 @@
         "reactions": {
             "add_reaction_prompt": "Lägg till reaktion",
             "custom_reaction_fallback_label": "Anpassad reaktion",
-            "label": "%(reactors)s reagerade med %(content)s",
-            "tooltip": "<reactors/><reactedWith>reagerade med %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagerade med %(content)s"
         },
         "read_receipt_title": {
             "one": "Sedd av %(count)s person",

@@ -364,10 +364,12 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
         room_id: opts.room,
         sender: opts.user,
         content: opts.content,
-        prev_content: opts.prev_content,
         event_id: opts.id ?? "$" + Math.random() + "-" + Math.random(),
         origin_server_ts: opts.ts ?? 0,
-        unsigned: opts.unsigned,
+        unsigned: {
+            ...opts.unsigned,
+            prev_content: opts.prev_content,
+        },
         redacts: opts.redacts,
     };
     if (opts.skey !== undefined) {

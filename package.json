@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.99.0",
+    "version": "3.100.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -23,7 +23,7 @@
         "package.json",
         ".stylelintrc.js"
     ],
-    "main": "./src/index.ts",
+    "main": "./lib/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
     "matrix_lib_typings": "./lib/index.d.ts",
@@ -62,12 +62,13 @@
     "resolutions": {
         "@types/react-dom": "17.0.25",
         "@types/react": "17.0.80",
+        "@types/seedrandom": "3.0.4",
         "oidc-client-ts": "3.0.1",
         "jwt-decode": "4.0.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@matrix-org/analytics-events": "^0.20.0",
+        "@matrix-org/analytics-events": "^0.21.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "2.17.0",
         "@matrix-org/olm": "3.2.15",
@@ -109,7 +110,7 @@
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+        "matrix-js-sdk": "33.0.0",
         "matrix-widget-api": "^1.5.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
@@ -183,7 +184,7 @@
         "@types/react-transition-group": "^4.4.0",
         "@types/sanitize-html": "2.11.0",
         "@types/sdp-transform": "^2.4.6",
-        "@types/seedrandom": "<3.0.5",
+        "@types/seedrandom": "3.0.4",
         "@types/tar-js": "^0.3.2",
         "@types/ua-parser-js": "^0.7.36",
         "@types/uuid": "^9.0.2",
@@ -235,5 +236,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "typings": "./lib/index.d.ts"
 }

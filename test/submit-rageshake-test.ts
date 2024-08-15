@@ -27,7 +27,6 @@ import fetchMock from "fetch-mock-jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "./test-utils";
 import { collectBugReport } from "../src/rageshake/submit-rageshake";
-import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import SettingsStore from "../src/settings/SettingsStore";
 import { ConsoleLogger } from "../src/rageshake/rageshake";
 
@@ -45,13 +44,12 @@ describe("Rageshakes", () => {
     );
 
     beforeEach(() => {
-        jest.spyOn(MatrixClientPeg, "getHomeserverName").mockReturnValue("alice-server.com");
-
         mockClient = getMockClientWithEventEmitter({
             credentials: { userId: "@test:example.com" },
             deviceId: "AAAAAAAAAA",
             baseUrl: "https://alice-server.com",
             getHomeserverUrl: jest.fn().mockReturnValue("https://alice-server.com"),
+            getDomain: jest.fn().mockReturnValue("alice-server.com"),
             ...mockClientMethodsCrypto(),
             http: mockHttpAPI,
         });
