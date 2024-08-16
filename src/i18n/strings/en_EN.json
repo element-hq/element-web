@@ -3488,7 +3488,7 @@
             "add_reaction_prompt": "Add reaction",
             "custom_reaction_fallback_label": "Custom reaction",
             "label": "%(reactors)s reacted with %(content)s",
-            "tooltip": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>"
+            "tooltip_caption": "reacted with %(shortName)s"
         },
         "read_receipt_title": {
             "one": "Seen by %(count)s person",

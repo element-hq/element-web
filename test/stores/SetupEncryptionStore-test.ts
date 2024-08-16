@@ -16,9 +16,10 @@ limitations under the License.
 
 import { mocked, Mocked } from "jest-mock";
 import { IBootstrapCrossSigningOpts } from "matrix-js-sdk/src/crypto";
-import { CryptoApi, DeviceVerificationStatus, MatrixClient, Device } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
 import { IDehydratedDevice } from "matrix-js-sdk/src/crypto/dehydration";
+import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { SdkContextClass } from "../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../src/SecurityManager";

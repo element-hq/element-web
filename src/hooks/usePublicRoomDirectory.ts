@@ -90,7 +90,7 @@ export const usePublicRoomDirectory = (): {
         async ({ limit = 20, query, roomTypes }: IPublicRoomsOpts): Promise<boolean> => {
             const opts: IRoomDirectoryOptions = { limit };
 
-            if (config?.roomServer != MatrixClientPeg.getHomeserverName()) {
+            if (config?.roomServer != MatrixClientPeg.safeGet().getDomain()) {
                 opts.server = config?.roomServer;
             }
 
@@ -139,7 +139,7 @@ export const usePublicRoomDirectory = (): {
             return;
         }
 
-        const myHomeserver = MatrixClientPeg.getHomeserverName();
+        const myHomeserver = MatrixClientPeg.safeGet().getDomain()!;
         const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
         const lsInstanceId: string | undefined = localStorage.getItem(LAST_INSTANCE_KEY) ?? undefined;
 

@@ -2308,9 +2308,6 @@
             "updated_rule_servers": "%(senderName)s עדכן את הכללים המאפשרים חסימת שרתים התואמים ל%(glob)s עבור %(reason)s",
             "updated_rule_users": "%(senderName)s עדכן את הכלל שמאפשר חסימת משתמשים התואמים ל%(glob)s עבור %(reason)s"
         },
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith> הגיבו עם %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "הודעה נמחקה בתאריך %(date)s"
         },

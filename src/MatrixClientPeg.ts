@@ -79,15 +79,6 @@ export interface IMatrixClientPeg {
     opts: IStartClientOpts;
 
     /**
-     * Return the server name of the user's homeserver
-     * Throws an error if unable to deduce the homeserver name
-     * (e.g. if the user is not logged in)
-     *
-     * @returns {string} The homeserver name, if present.
-     */
-    getHomeserverName(): string;
-
-    /**
      * Get the current MatrixClient, if any
      */
     get(): MatrixClient | null;
@@ -386,14 +377,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         logger.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.matrixClient!.startClient(opts);
         logger.log(`MatrixClientPeg: MatrixClient started`);
-    }
-
-    public getHomeserverName(): string {
-        const matches = /^@[^:]+:(.+)$/.exec(this.safeGet().getSafeUserId());
-        if (matches === null || matches.length < 1) {
-            throw new Error("Failed to derive homeserver name from user ID!");
-        }
-        return matches[1];
     }
 
     private namesToRoomName(names: string[], count: number): string | undefined {

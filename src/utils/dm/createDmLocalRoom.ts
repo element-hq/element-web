@@ -46,7 +46,6 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 room_version: KNOWN_SAFE_ROOM_VERSION,
             },
             state_key: "",
-            user_id: userId,
             sender: userId,
             room_id: localRoom.roomId,
             origin_server_ts: Date.now(),
@@ -62,7 +61,6 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 content: {
                     algorithm: MEGOLM_ALGORITHM,
                 },
-                user_id: userId,
                 sender: userId,
                 state_key: "",
                 room_id: localRoom.roomId,
@@ -80,7 +78,6 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 membership: KnownMembership.Join,
             },
             state_key: userId,
-            user_id: userId,
             sender: userId,
             room_id: localRoom.roomId,
         }),

@@ -2908,8 +2908,7 @@
         "pending_moderation_reason": "Bericht in afwachting van moderatie: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Reactie toevoegen",
-            "label": "%(reactors)s reageerde met %(content)s",
-            "tooltip": "<reactors/><reactedWith>heeft gereageerd met %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reageerde met %(content)s"
         },
         "read_receipt_title": {
             "one": "Gezien door %(count)s persoon",

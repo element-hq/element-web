@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useRef } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Room, EventType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { useTopic } from "../../../hooks/room/useTopic";
-import { Alignment } from "./Tooltip";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -28,7 +28,6 @@ import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
-import TooltipTarget from "./TooltipTarget";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
@@ -49,10 +48,10 @@ export function onRoomTopicLinkClick(e: React.MouseEvent): void {
 
 export default function RoomTopic({ room, className, ...props }: IProps): JSX.Element {
     const client = useContext(MatrixClientContext);
-    const ref = useRef<HTMLDivElement>(null);
+    const [disableTooltip, setDisableTooltip] = useState(false);
 
     const topic = useTopic(room);
-    const body = topicToHtml(topic?.text, topic?.html, ref);
+    const body = topicToHtml(topic?.text, topic?.html);
 
     const onClick = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
@@ -70,14 +69,14 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
         [props],
     );
 
-    const ignoreHover = (ev: React.MouseEvent): boolean => {
-        return (ev.target as HTMLElement).tagName.toUpperCase() === "A";
+    const onHover = (ev: React.MouseEvent | React.FocusEvent): void => {
+        setDisableTooltip((ev.target as HTMLElement).tagName.toUpperCase() === "A");
     };
 
     useDispatcher(dis, (payload) => {
         if (payload.action === Action.ShowRoomTopic) {
             const canSetTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, client.getSafeUserId());
-            const body = topicToHtml(topic?.text, topic?.html, ref, true);
+            const body = topicToHtml(topic?.text, topic?.html, undefined, true);
 
             const modal = Modal.createDialog(InfoDialog, {
                 title: room.name,
@@ -115,18 +114,24 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
         }
     });
 
+    // Do not render the tooltip if the topic is empty
+    // We still need to have a div for the header buttons to be displayed correctly
+    if (!body) return <div className={classNames(className, "mx_RoomTopic")} />;
+
     return (
-        <TooltipTarget
-            {...props}
-            ref={ref}
-            onClick={onClick}
-            dir="auto"
-            tooltipTargetClassName={classNames(className, "mx_RoomTopic")}
-            label={_t("room|read_topic")}
-            alignment={Alignment.Bottom}
-            ignoreHover={ignoreHover}
-        >
-            <Linkify>{body}</Linkify>
-        </TooltipTarget>
+        <Tooltip label={_t("room|read_topic")} disabled={disableTooltip}>
+            <div
+                {...props}
+                tabIndex={0}
+                role="button"
+                onClick={onClick}
+                className={classNames(className, "mx_RoomTopic")}
+                onMouseOver={onHover}
+                onFocus={onHover}
+                aria-label={_t("room|read_topic")}
+            >
+                <Linkify>{body}</Linkify>
+            </div>
+        </Tooltip>
     );
 }

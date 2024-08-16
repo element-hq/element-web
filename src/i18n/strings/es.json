@@ -3125,8 +3125,7 @@
         "pending_moderation_reason": "Mensaje esperando revisión: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Reaccionar",
-            "label": "%(reactors)s han reaccionado con %(content)s",
-            "tooltip": "<reactors/><reactedWith> reaccionó con %(shortName)s</reactedWith>"
+            "label": "%(reactors)s han reaccionado con %(content)s"
         },
         "read_receipt_title": {
             "one": "%(count)s persona lo ha visto",

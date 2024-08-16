@@ -82,8 +82,8 @@ function mockClient({
 }: MockClientOptions = {}): MatrixClient {
     stubClient();
     const cli = MatrixClientPeg.safeGet();
-    MatrixClientPeg.getHomeserverName = jest.fn(() => homeserver);
     cli.getUserId = jest.fn(() => userId);
+    cli.getDomain = jest.fn(() => homeserver);
     cli.getHomeserverUrl = jest.fn(() => homeserver);
     cli.getThirdpartyProtocols = jest.fn(() => Promise.resolve(thirdPartyProtocols));
     cli.publicRooms = jest.fn((options) => {

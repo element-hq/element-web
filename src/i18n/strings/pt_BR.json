@@ -2349,8 +2349,7 @@
         },
         "reactions": {
             "add_reaction_prompt": "Adicionar reação",
-            "label": "%(reactors)s reagiram com %(content)s",
-            "tooltip": "<reactors/><reactedWith>reagiu com %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagiram com %(content)s"
         },
         "read_receipt_title": {
             "one": "Visto por %(count)s pessoa",

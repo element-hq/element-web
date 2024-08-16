@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { screen, fireEvent, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { CryptoApi, IMegolmSessionData } from "matrix-js-sdk/src/matrix";
+import { Crypto, IMegolmSessionData } from "matrix-js-sdk/src/matrix";
 
 import * as MegolmExportEncryption from "../../../../../src/utils/MegolmExportEncryption";
 import ExportE2eKeysDialog from "../../../../../src/async-components/views/dialogs/security/ExportE2eKeysDialog";
@@ -70,7 +70,7 @@ describe("ExportE2eKeysDialog", () => {
         cli.getCrypto = () => {
             return {
                 exportRoomKeysAsJson,
-            } as unknown as CryptoApi;
+            } as unknown as Crypto.CryptoApi;
         };
 
         // Mock the result of encrypting the sessions. If we don't do this, the
