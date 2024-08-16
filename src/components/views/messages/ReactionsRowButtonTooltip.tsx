@@ -21,6 +21,8 @@ import {
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
+import { Tooltip } from "@vector-im/compound-web";
+
 import { unicodeToShortcode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
@@ -60,42 +62,25 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
             }
             const shortName = unicodeToShortcode(content) || customReactionName;
 
+            // Line 👇is Verji specific. If we wish to use upstream only we must implement CustomComponentLifecycle.ReactionsRowButtonTooltip
+            const formattedSenders = formatList(senders, 50);
+            
+            const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
+
             const customReactionButtonTooltip = { CustomComponent: React.Fragment };
             ModuleRunner.instance.invoke(
                 CustomComponentLifecycle.ReactionsRowButtonTooltip,
                 customReactionButtonTooltip as CustomComponentOpts,
             );
 
-            tooltipLabel = (
+            return (
                 <customReactionButtonTooltip.CustomComponent>
-                    <div>
-                        {_t(
-                            "timeline|reactions|tooltip",
-                            {
-                                shortName,
-                            },
-                            {
-                                reactors: () => {
-                                    return (
-                                        <div className="mx_Tooltip_title">{formatCommaSeparatedList(senders, 50)}</div>
-                                    ); //Verji
-                                },
-                                reactedWith: (sub) => {
-                                    if (!shortName) {
-                                        return null;
-                                    }
-                                    return <div className="mx_Tooltip_sub">{sub}</div>;
-                                },
-                            },
-                        )}
-                    </div>
-                </customReactionButtonTooltip.CustomComponent>
-            );
-        }
 
-        let tooltip: JSX.Element | undefined;
-        if (tooltipLabel) {
-            tooltip = <Tooltip visible={visible} label={tooltipLabel} />;
+                    <Tooltip label={formattedSenders} caption={caption} placement="right">
+                            {children}
+                    </Tooltip>
+                </customReactionButtonTooltip.CustomComponent>  
+            );
         }
 
         return children;
