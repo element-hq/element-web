@@ -33,7 +33,7 @@ popd
 scripts/fetchdep.sh verji matrix-react-sdk-module-api verji-main # VERJI HARDCODE PARAMS
 pushd matrix-react-sdk-module-api
 yarn link
-yarn install --frozen-lockfile $@
+yarn install ## TRY WITHOUT FROZEN --frozen-lockfile $@
 yarn build
 popd
 
