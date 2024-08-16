@@ -36,6 +36,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
 import { ITagMap } from "../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -279,4 +280,52 @@ describe("RoomList", () => {
             });
         });
     });
+
+    describe("UIFeature.showStartChatPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = true: renders 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? true : "default";
+            });
+            render(getComponent());
+
+            expect(screen.getByLabelText("Start chat")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = false: does not render 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? false : "default";
+            });
+            render(getComponent());
+
+            expect(screen.queryByLabelText("Start chat")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("UIFeature.showAddRoomPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);
+        });
+
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = true: renders 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? true : "default";
+            });
+            render(getComponent());
+
+            expect(screen.getByLabelText("Add room")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = false: does not render 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
+                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? false : "default";
+            });
+            render(getComponent());
+
+            expect(screen.queryByLabelText("Add room")).not.toBeInTheDocument();
+        });
+    });    
 });

@@ -82,6 +82,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 import UIStore from "../../../stores/UIStore";
 import { SpaceScopeHeader } from "../rooms/SpaceScopeHeader";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -563,6 +564,8 @@ export const UserOptionsSection: React.FC<{
                 {directMessageButton}
                 {readReceiptButton}
                 {shareUserButton}
+                {/* If you donw want users to send a room link, disable flag in settings.tsx */}
+                {SettingsStore.getValue(UIFeature.UserInfoShareLinkToUserButton) && shareUserButton}
                 {insertPillButton}
                 {inviteUserButton}
                 {ignoreButton}
