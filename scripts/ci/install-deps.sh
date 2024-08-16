@@ -14,6 +14,7 @@ pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile $@
+yarn build
 popd
 
 #VERJI COMMENT remove matrix-analytics-event
