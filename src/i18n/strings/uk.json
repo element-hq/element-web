@@ -2374,7 +2374,6 @@
             "error_share_msisdn_discovery": "Не вдалося надіслати телефонний номер",
             "identity_server_no_token": "Токен доступу до ідентифікації не знайдено",
             "identity_server_not_set": "Сервер ідентифікації не налаштовано",
-            "incorrect_msisdn_verification": "Неправильний код перевірки",
             "language_section": "Мова та регіон",
             "msisdn_in_use": "Цей телефонний номер вже використовується",
             "msisdn_label": "Телефонний номер",

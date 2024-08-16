@@ -2454,7 +2454,6 @@
             "error_share_msisdn_discovery": "Nepovedlo se nasdílet telefonní číslo",
             "identity_server_no_token": "Nebyl nalezen žádný přístupový token identity",
             "identity_server_not_set": "Server identit není nastaven",
-            "incorrect_msisdn_verification": "Nesprávný ověřovací kód",
             "language_section": "Jazyk a region",
             "msisdn_in_use": "Toto telefonní číslo je již používáno",
             "msisdn_label": "Telefonní číslo",

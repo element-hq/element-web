@@ -1664,7 +1664,6 @@
             "error_revoke_msisdn_discovery": "Não foi possível revogar o compartilhamento do número de celular",
             "error_share_email_discovery": "Não foi possível compartilhar o endereço de e-mail",
             "error_share_msisdn_discovery": "Não foi possível compartilhar o número de celular",
-            "incorrect_msisdn_verification": "Código de confirmação incorreto",
             "language_section": "Idioma e região",
             "msisdn_in_use": "Este número de telefone já está em uso",
             "msisdn_label": "Número de telefone",

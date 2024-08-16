@@ -2484,7 +2484,6 @@
             "error_share_msisdn_discovery": "Impossible de partager le numéro de téléphone",
             "identity_server_no_token": "Aucun jeton d’accès d’identité trouvé",
             "identity_server_not_set": "Serveur d'identité non défini",
-            "incorrect_msisdn_verification": "Code de vérification incorrect",
             "language_section": "Langue et région",
             "msisdn_in_use": "Ce numéro de téléphone est déjà utilisé",
             "msisdn_label": "Numéro de téléphone",

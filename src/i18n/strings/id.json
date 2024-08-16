@@ -2408,7 +2408,6 @@
             "error_share_msisdn_discovery": "Tidak dapat membagikan nomor telepon",
             "identity_server_no_token": "Tidak ada token akses identitas yang ditemukan",
             "identity_server_not_set": "Server identitas tidak diatur",
-            "incorrect_msisdn_verification": "Kode verifikasi tidak benar",
             "language_section": "Bahasa dan wilayah",
             "msisdn_in_use": "Nomor telepon ini telah dipakai",
             "msisdn_label": "Nomor Telepon",

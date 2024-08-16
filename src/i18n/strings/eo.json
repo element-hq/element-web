@@ -1754,7 +1754,6 @@
             "error_revoke_msisdn_discovery": "Ne povas senvalidigi havigadon je telefonnumero",
             "error_share_email_discovery": "Ne povas havigi vian retpoŝtadreson",
             "error_share_msisdn_discovery": "Ne povas havigi telefonnumeron",
-            "incorrect_msisdn_verification": "Malĝusta kontrola kodo",
             "language_section": "Lingvo kaj regiono",
             "msisdn_in_use": "Tiu ĉi telefonnumero jam estas uzata",
             "msisdn_label": "Telefonnumero",

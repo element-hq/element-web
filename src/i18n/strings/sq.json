@@ -2300,7 +2300,6 @@
             "error_share_msisdn_discovery": "S’arrihet të ndahet numër telefoni",
             "identity_server_no_token": "S’u gjet token hyrjeje identiteti",
             "identity_server_not_set": "Shërbyes identitetesh i paujdisur",
-            "incorrect_msisdn_verification": "Kod verifikimi i pasaktë",
             "language_section": "Gjuhë dhe rajon",
             "msisdn_in_use": "Ky numër telefoni është tashmë në përdorim",
             "msisdn_label": "Numër Telefoni",

@@ -2376,7 +2376,6 @@
             "error_share_msisdn_discovery": "無法分享電話號碼",
             "identity_server_no_token": "找不到身分存取權杖",
             "identity_server_not_set": "身分伺服器未設定",
-            "incorrect_msisdn_verification": "驗證碼錯誤",
             "language_section": "語言與區域",
             "msisdn_in_use": "這個電話號碼已被使用",
             "msisdn_label": "電話號碼",

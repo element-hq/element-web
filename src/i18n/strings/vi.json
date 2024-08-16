@@ -2174,7 +2174,6 @@
             "error_share_msisdn_discovery": "Không thể chia sẻ số điện thoại",
             "identity_server_no_token": "Không tìm thấy mã thông báo danh tính",
             "identity_server_not_set": "Máy chủ định danh chưa được đặt",
-            "incorrect_msisdn_verification": "Mã xác minh không chính xác",
             "language_section": "Ngôn ngữ và khu vực",
             "msisdn_in_use": "Số điện thoại này đã được sử dụng",
             "msisdn_label": "Số điện thoại",

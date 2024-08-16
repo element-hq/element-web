@@ -1568,7 +1568,6 @@
             "error_revoke_msisdn_discovery": "Neina atšaukti telefono numerio bendrinimo",
             "error_share_email_discovery": "Nepavyko pasidalinti el. pašto adresu",
             "error_share_msisdn_discovery": "Neina bendrinti telefono numerio",
-            "incorrect_msisdn_verification": "Neteisingas patvirtinimo kodas",
             "language_section": "Kalba ir regionas",
             "msisdn_in_use": "Šis telefono numeris jau naudojamas",
             "msisdn_label": "Telefono Numeris",

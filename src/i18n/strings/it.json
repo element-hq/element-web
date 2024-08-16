@@ -2450,7 +2450,6 @@
             "error_share_msisdn_discovery": "Impossibile condividere il numero di telefono",
             "identity_server_no_token": "Nessun token di accesso d'identità trovato",
             "identity_server_not_set": "Server d'identità non impostato",
-            "incorrect_msisdn_verification": "Codice di verifica sbagliato",
             "language_section": "Lingua e regione",
             "msisdn_in_use": "Questo numero di telefono è già in uso",
             "msisdn_label": "Numero di telefono",

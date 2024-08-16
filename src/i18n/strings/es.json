@@ -2248,7 +2248,6 @@
             "error_share_email_discovery": "No se logró compartir la dirección de correo electrónico",
             "error_share_msisdn_discovery": "No se logró compartir el número de teléfono",
             "identity_server_not_set": "Servidor de identidad no configurado",
-            "incorrect_msisdn_verification": "Verificación de código incorrecta",
             "language_section": "Idioma y región",
             "msisdn_in_use": "Este número de teléfono ya está en uso",
             "msisdn_label": "Número de teléfono",

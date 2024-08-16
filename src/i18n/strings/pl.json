@@ -2536,7 +2536,6 @@
             "error_share_msisdn_discovery": "Nie udało się udostępnić numeru telefonu",
             "identity_server_no_token": "Nie znaleziono tokena dostępu tożsamości",
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
-            "incorrect_msisdn_verification": "Nieprawidłowy kod weryfikujący",
             "language_section": "Język",
             "msisdn_in_use": "Ten numer telefonu jest już zajęty",
             "msisdn_label": "Numer telefonu",

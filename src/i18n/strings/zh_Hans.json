@@ -2202,7 +2202,6 @@
             "error_share_msisdn_discovery": "无法共享电话号码",
             "identity_server_no_token": "找不到身份访问令牌",
             "identity_server_not_set": "身份服务器未设置",
-            "incorrect_msisdn_verification": "验证码错误",
             "language_section": "语言与地区",
             "msisdn_in_use": "此电话号码已被使用",
             "msisdn_label": "电话号码",

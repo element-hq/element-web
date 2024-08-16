@@ -2433,7 +2433,6 @@
             "error_share_msisdn_discovery": "Teilen der Telefonnummer nicht möglich",
             "identity_server_no_token": "Kein Identitäts-Zugangs-Token gefunden",
             "identity_server_not_set": "Kein Identitäts-Server festgelegt",
-            "incorrect_msisdn_verification": "Falscher Verifizierungscode",
             "language_section": "Sprache und Region",
             "msisdn_in_use": "Diese Telefonnummer wird bereits verwendet",
             "msisdn_label": "Telefonnummer",

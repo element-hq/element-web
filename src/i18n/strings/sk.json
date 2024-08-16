@@ -2437,7 +2437,6 @@
             "error_share_msisdn_discovery": "Nepodarilo sa zdieľanie telefónneho čísla",
             "identity_server_no_token": "Nenašiel sa prístupový token totožnosti",
             "identity_server_not_set": "Server totožnosti nie je nastavený",
-            "incorrect_msisdn_verification": "Nesprávny overovací kód",
             "language_section": "Jazyk a región",
             "msisdn_in_use": "Toto telefónne číslo sa už používa",
             "msisdn_label": "Telefónne číslo",

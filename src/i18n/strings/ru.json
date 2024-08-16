@@ -2433,7 +2433,6 @@
             "error_share_msisdn_discovery": "Не удается предоставить общий доступ к номеру телефона",
             "identity_server_no_token": "Не найден токен доступа для идентификации",
             "identity_server_not_set": "Сервер идентификации не установлен",
-            "incorrect_msisdn_verification": "Неверный код подтверждения",
             "language_section": "Язык и регион",
             "msisdn_in_use": "Этот номер телефона уже используется",
             "msisdn_label": "Номер телефона",

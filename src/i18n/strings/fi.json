@@ -2134,7 +2134,6 @@
             "error_share_email_discovery": "Sähköpostiosoitetta ei voi jakaa",
             "error_share_msisdn_discovery": "Puhelinnumeroa ei voi jakaa",
             "identity_server_not_set": "Identiteettipalvelinta ei ole asetettu",
-            "incorrect_msisdn_verification": "Virheellinen varmennuskoodi",
             "language_section": "Kieli ja alue",
             "msisdn_in_use": "Puhelinnumero on jo käytössä",
             "msisdn_label": "Puhelinnumero",

@@ -2449,7 +2449,6 @@
             "error_share_msisdn_discovery": "Kunde inte dela telefonnummer",
             "identity_server_no_token": "Ingen identitetsåtkomsttoken hittades",
             "identity_server_not_set": "Identitetsserver inte inställd",
-            "incorrect_msisdn_verification": "Fel verifieringskod",
             "language_section": "Språk och region",
             "msisdn_in_use": "Detta telefonnummer används redan",
             "msisdn_label": "Telefonnummer",

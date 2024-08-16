@@ -1672,7 +1672,6 @@
             "error_revoke_msisdn_discovery": "לא ניתן לבטל את השיתוף למספר טלפון",
             "error_share_email_discovery": "לא ניתן לשתף את כתובת הדוא\"ל",
             "error_share_msisdn_discovery": "לא ניתן לשתף מספר טלפון",
-            "incorrect_msisdn_verification": "קוד אימות שגוי",
             "language_section": "שפה ואיזור",
             "msisdn_in_use": "מספר הטלפון הזה כבר בשימוש",
             "msisdn_label": "מספר טלפון",
