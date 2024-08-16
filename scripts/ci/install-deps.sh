@@ -31,7 +31,7 @@ popd
 
 # VERJI ADD custom module-api
 scripts/fetchdep.sh verji matrix-react-sdk-module-api verji-main # VERJI HARDCODE PARAMS
-pushd matrix-js-sdk
+pushd matrix-react-sdk-module-api
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile $@
