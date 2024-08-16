@@ -833,7 +833,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     };
 
     private onReceiveMessage = (event: MessageEvent): void => {
-        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+        if (event.data === "authDone" && event.source === this.popupWindow) {
             if (this.popupWindow) {
                 this.popupWindow.close();
                 this.popupWindow = null;
@@ -950,7 +950,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     };
 
     private onReceiveMessage = (event: MessageEvent): void => {
-        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+        if (event.data === "authDone" && event.source === this.popupWindow) {
             this.props.submitAuthDict({});
         }
     };
