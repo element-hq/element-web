@@ -14,7 +14,6 @@ pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile $@
-yarn build
 popd
 
 #VERJI COMMENT remove matrix-analytics-event
@@ -33,9 +32,9 @@ popd
 # VERJI ADD custom module-api
 scripts/fetchdep.sh verji matrix-react-sdk-module-api verji-main # VERJI HARDCODE PARAMS
 pushd matrix-react-sdk-module-api
-[ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile $@
+yarn build
 popd
 
 yarn link @matrix-org/react-sdk-module-api
