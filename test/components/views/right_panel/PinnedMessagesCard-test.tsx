@@ -15,37 +15,44 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, act, RenderResult, fireEvent, waitForElementToBeRemoved, screen } from "@testing-library/react";
-import { mocked } from "jest-mock";
+import { render, act, RenderResult, waitForElementToBeRemoved, screen } from "@testing-library/react";
+import { mocked, MockedObject } from "jest-mock";
 import {
     MatrixEvent,
     RoomStateEvent,
     IEvent,
     Room,
-    EventTimelineSet,
     IMinimalEvent,
     EventType,
     RelationType,
     MsgType,
     M_POLL_KIND_DISCLOSED,
+    EventTimeline,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 import { sleep } from "matrix-js-sdk/src/utils";
+import userEvent from "@testing-library/user-event";
 
 import { stubClient, mkEvent, mkMessage, flushPromises } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import PinnedMessagesCard from "../../../../src/components/views/right_panel/PinnedMessagesCard";
+import { PinnedMessagesCard } from "../../../../src/components/views/right_panel/PinnedMessagesCard";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
+import Modal from "../../../../src/Modal";
+import { UnpinAllDialog } from "../../../../src/components/views/dialogs/UnpinAllDialog";
 
 describe("<PinnedMessagesCard />", () => {
-    stubClient();
-    const cli = mocked(MatrixClientPeg.safeGet());
-    cli.getUserId.mockReturnValue("@alice:example.org");
-    cli.setRoomAccountData.mockResolvedValue({});
-    cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
+    let cli: MockedObject<MatrixClient>;
+    beforeEach(() => {
+        stubClient();
+        cli = mocked(MatrixClientPeg.safeGet());
+        cli.getUserId.mockReturnValue("@alice:example.org");
+        cli.setRoomAccountData.mockResolvedValue({});
+        cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
+    });
 
     const mkRoom = (localPins: MatrixEvent[], nonLocalPins: MatrixEvent[]): Room => {
         const room = new Room("!room:example.org", cli, "@me:example.org");
@@ -53,27 +60,27 @@ describe("<PinnedMessagesCard />", () => {
         const pins = () => [...localPins, ...nonLocalPins];
 
         // Insert pin IDs into room state
-        jest.spyOn(room.currentState, "getStateEvents").mockImplementation((): any =>
-            mkEvent({
-                event: true,
-                type: EventType.RoomPinnedEvents,
-                content: {
-                    pinned: pins().map((e) => e.getId()),
-                },
-                user: "@user:example.org",
-                room: "!room:example.org",
-            }),
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "getStateEvents").mockImplementation(
+            (): any =>
+                mkEvent({
+                    event: true,
+                    type: EventType.RoomPinnedEvents,
+                    content: {
+                        pinned: pins().map((e) => e.getId()),
+                    },
+                    user: "@user:example.org",
+                    room: "!room:example.org",
+                }),
         );
 
-        jest.spyOn(room.currentState, "on");
-
-        // Insert local pins into local timeline set
-        room.getUnfilteredTimelineSet = () =>
-            ({
-                getTimelineForEvent: () => ({
-                    getEvents: () => localPins,
-                }),
-            }) as unknown as EventTimelineSet;
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
+            true,
+        );
+        // poll end event validates against this
+        jest.spyOn(
+            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+            "maySendRedactionForEvent",
+        ).mockReturnValue(true);
 
         // Return all pins over fetchRoomEvent
         cli.fetchRoomEvent.mockImplementation((roomId, eventId) => {
@@ -86,8 +93,8 @@ describe("<PinnedMessagesCard />", () => {
         return room;
     };
 
-    const mountPins = async (room: Room): Promise<RenderResult> => {
-        const pins = render(
+    async function renderMessagePinList(room: Room): Promise<RenderResult> {
+        const renderResult = render(
             <MatrixClientContext.Provider value={cli}>
                 <PinnedMessagesCard
                     room={room}
@@ -99,22 +106,60 @@ describe("<PinnedMessagesCard />", () => {
         // Wait a tick for state updates
         await act(() => sleep(0));
 
-        return pins;
-    };
+        return renderResult;
+    }
 
-    const emitPinUpdates = async (room: Room) => {
-        const pinListener = mocked(room.currentState).on.mock.calls.find(
-            ([eventName, listener]) => eventName === RoomStateEvent.Events,
-        )![1];
-
+    /**
+     *
+     * @param room
+     */
+    async function emitPinUpdate(room: Room) {
         await act(async () => {
-            // Emit the update
-            // @ts-ignore what is going on here?
-            pinListener(room.currentState.getStateEvents());
-            // Wait a tick for state updates
-            await sleep(0);
+            const roomState = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
+            roomState.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({ type: EventType.RoomPinnedEvents }),
+                roomState,
+                null,
+            );
         });
-    };
+    }
+
+    /**
+     * Initialize the pinned messages card with the given pinned messages.
+     * Return the room, testing library helpers and functions to add and remove pinned messages.
+     * @param localPins
+     * @param nonLocalPins
+     */
+    async function initPinnedMessagesCard(localPins: MatrixEvent[], nonLocalPins: MatrixEvent[]) {
+        const room = mkRoom(localPins, nonLocalPins);
+        const addLocalPinEvent = async (event: MatrixEvent) => {
+            localPins.push(event);
+            await emitPinUpdate(room);
+        };
+        const removeLastLocalPinEvent = async () => {
+            localPins.pop();
+            await emitPinUpdate(room);
+        };
+        const addNonLocalPinEvent = async (event: MatrixEvent) => {
+            nonLocalPins.push(event);
+            await emitPinUpdate(room);
+        };
+        const removeLastNonLocalPinEvent = async () => {
+            nonLocalPins.pop();
+            await emitPinUpdate(room);
+        };
+        const renderResult = await renderMessagePinList(room);
+
+        return {
+            ...renderResult,
+            addLocalPinEvent,
+            removeLastLocalPinEvent,
+            addNonLocalPinEvent,
+            removeLastNonLocalPinEvent,
+            room,
+        };
+    }
 
     const pin1 = mkMessage({
         event: true,
@@ -129,75 +174,66 @@ describe("<PinnedMessagesCard />", () => {
         msg: "The second one",
     });
 
-    it("updates when messages are pinned", async () => {
+    it("should show spinner whilst loading", async () => {
+        const room = mkRoom([], [pin1]);
+        render(
+            <MatrixClientContext.Provider value={cli}>
+                <PinnedMessagesCard
+                    room={room}
+                    onClose={jest.fn()}
+                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                />
+            </MatrixClientContext.Provider>,
+        );
+
+        await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
+    });
+
+    it("should show the empty state when there are no pins", async () => {
+        const { asFragment } = await initPinnedMessagesCard([], []);
+
+        expect(screen.getByText("Pin important messages so that they can be easily discovered")).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should show two pinned messages", async () => {
+        //const room = mkRoom([pin1], [pin2]);
+        const { asFragment } = await initPinnedMessagesCard([pin1], [pin2]);
+
+        expect(screen.queryAllByRole("listitem")).toHaveLength(2);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should updates when messages are pinned", async () => {
         // Start with nothing pinned
-        const localPins: MatrixEvent[] = [];
-        const nonLocalPins: MatrixEvent[] = [];
-        const room = mkRoom(localPins, nonLocalPins);
-        const pins = await mountPins(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(0);
+        const { addLocalPinEvent, addNonLocalPinEvent } = await initPinnedMessagesCard([], []);
+
+        expect(screen.queryAllByRole("listitem")).toHaveLength(0);
 
         // Pin the first message
-        localPins.push(pin1);
-        await emitPinUpdates(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(1);
+        await addLocalPinEvent(pin1);
+        expect(screen.getAllByRole("listitem")).toHaveLength(1);
 
         // Pin the second message
-        nonLocalPins.push(pin2);
-        await emitPinUpdates(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(2);
+        await addNonLocalPinEvent(pin2);
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
     });
 
-    it("updates when messages are unpinned", async () => {
+    it("should updates when messages are unpinned", async () => {
         // Start with two pins
-        const localPins = [pin1];
-        const nonLocalPins = [pin2];
-        const room = mkRoom(localPins, nonLocalPins);
-        const pins = await mountPins(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(2);
+        const { removeLastLocalPinEvent, removeLastNonLocalPinEvent } = await initPinnedMessagesCard([pin1], [pin2]);
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
 
         // Unpin the first message
-        localPins.pop();
-        await emitPinUpdates(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(1);
+        await removeLastLocalPinEvent();
+        expect(screen.getAllByRole("listitem")).toHaveLength(1);
 
         // Unpin the second message
-        nonLocalPins.pop();
-        await emitPinUpdates(room);
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(0);
+        await removeLastNonLocalPinEvent();
+        expect(screen.queryAllByRole("listitem")).toHaveLength(0);
     });
 
-    it("hides unpinnable events found in local timeline", async () => {
-        // Redacted messages are unpinnable
-        const pin = mkEvent({
-            event: true,
-            type: EventType.RoomMessage,
-            content: {},
-            unsigned: { redacted_because: {} as unknown as IEvent },
-            room: "!room:example.org",
-            user: "@alice:example.org",
-        });
-
-        const pins = await mountPins(mkRoom([pin], []));
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(0);
-    });
-
-    it("hides unpinnable events not found in local timeline", async () => {
-        // Redacted messages are unpinnable
-        const pin = mkEvent({
-            event: true,
-            type: EventType.RoomMessage,
-            content: {},
-            unsigned: { redacted_because: {} as unknown as IEvent },
-            room: "!room:example.org",
-            user: "@alice:example.org",
-        });
-
-        const pins = await mountPins(mkRoom([], [pin]));
-        expect(pins.container.querySelectorAll(".mx_PinnedEventTile")).toHaveLength(0);
-    });
-
-    it("accounts for edits", async () => {
+    it("should display an edited pinned event", async () => {
         const messageEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
@@ -221,13 +257,78 @@ describe("<PinnedMessagesCard />", () => {
             events: [messageEvent],
         });
 
-        const pins = await mountPins(mkRoom([], [pin1]));
-        const pinTile = pins.container.querySelectorAll(".mx_PinnedEventTile");
-        expect(pinTile.length).toBe(1);
-        expect(pinTile[0].querySelector(".mx_EventTile_body")!).toHaveTextContent("First pinned message, edited");
+        await initPinnedMessagesCard([], [pin1]);
+        expect(screen.getByText("First pinned message, edited")).toBeInTheDocument();
     });
 
-    it("displays votes on polls not found in local timeline", async () => {
+    describe("unpinnable event", () => {
+        it("should hide unpinnable events found in local timeline", async () => {
+            // Redacted messages are unpinnable
+            const pin = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                content: {},
+                unsigned: { redacted_because: {} as unknown as IEvent },
+                room: "!room:example.org",
+                user: "@alice:example.org",
+            });
+            await initPinnedMessagesCard([pin], []);
+            expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+        });
+
+        it("hides unpinnable events not found in local timeline", async () => {
+            // Redacted messages are unpinnable
+            const pin = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                content: {},
+                unsigned: { redacted_because: {} as unknown as IEvent },
+                room: "!room:example.org",
+                user: "@alice:example.org",
+            });
+            await initPinnedMessagesCard([], [pin]);
+            expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+        });
+    });
+
+    describe("unpin all", () => {
+        it("should not allow to unpinall", async () => {
+            const room = mkRoom([pin1], [pin2]);
+            jest.spyOn(
+                room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockReturnValue(false);
+
+            const { asFragment } = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <PinnedMessagesCard
+                        room={room}
+                        onClose={jest.fn()}
+                        permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                    />
+                </MatrixClientContext.Provider>,
+            );
+
+            // Wait a tick for state updates
+            await act(() => sleep(0));
+
+            expect(screen.queryByText("Unpin all messages")).toBeNull();
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("should allow unpinning all messages", async () => {
+            jest.spyOn(Modal, "createDialog");
+
+            const { room } = await initPinnedMessagesCard([pin1], [pin2]);
+            expect(screen.getByText("Unpin all messages")).toBeInTheDocument();
+
+            await userEvent.click(screen.getByText("Unpin all messages"));
+            // Should open the UnpinAllDialog dialog
+            expect(Modal.createDialog).toHaveBeenCalledWith(UnpinAllDialog, { roomId: room.roomId, matrixClient: cli });
+        });
+    });
+
+    it("should displays votes on polls not found in local timeline", async () => {
         const poll = mkEvent({
             ...PollStartEvent.from("A poll", ["Option 1", "Option 2"], M_POLL_KIND_DISCLOSED).serialize(),
             event: true,
@@ -270,11 +371,8 @@ describe("<PinnedMessagesCard />", () => {
             return { originalEvent: undefined as unknown as MatrixEvent, events: [] };
         });
 
-        const room = mkRoom([], [poll]);
-        // poll end event validates against this
-        jest.spyOn(room.currentState, "maySendRedactionForEvent").mockReturnValue(true);
+        const { room } = await initPinnedMessagesCard([], [poll]);
 
-        const pins = await mountPins(room);
         // two pages of results
         await flushPromises();
         await flushPromises();
@@ -282,34 +380,12 @@ describe("<PinnedMessagesCard />", () => {
         const pollInstance = room.polls.get(poll.getId()!);
         expect(pollInstance).toBeTruthy();
 
-        const pinTile = pins.container.querySelectorAll(".mx_MPollBody");
+        expect(screen.getByText("A poll")).toBeInTheDocument();
 
-        expect(pinTile).toHaveLength(1);
-        expect(pinTile[0].querySelectorAll(".mx_PollOption_ended")).toHaveLength(2);
-        expect(pinTile[0].querySelectorAll(".mx_PollOption_optionVoteCount")[0]).toHaveTextContent("2 votes");
-        expect([...pinTile[0].querySelectorAll(".mx_PollOption_optionVoteCount")].at(-1)).toHaveTextContent("1 vote");
-    });
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+        expect(screen.getByText("2 votes")).toBeInTheDocument();
 
-    it("should allow admins to unpin messages", async () => {
-        const nonLocalPins = [pin1];
-        const room = mkRoom([], nonLocalPins);
-        jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
-        const sendStateEvent = jest.spyOn(cli, "sendStateEvent");
-
-        const pins = await mountPins(room);
-        const pinTile = pins.container.querySelectorAll(".mx_PinnedEventTile");
-        expect(pinTile).toHaveLength(1);
-
-        fireEvent.click(pinTile[0].querySelector(".mx_PinnedEventTile_unpinButton")!);
-        expect(sendStateEvent).toHaveBeenCalledWith(room.roomId, "m.room.pinned_events", { pinned: [] }, "");
-
-        nonLocalPins.pop();
-        await Promise.all([waitForElementToBeRemoved(pinTile[0]), emitPinUpdates(room)]);
-    });
-
-    it("should show spinner whilst loading", async () => {
-        const room = mkRoom([], [pin1]);
-        mountPins(room);
-        await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
+        expect(screen.getByText("Option 2")).toBeInTheDocument();
+        expect(screen.getByText("1 vote")).toBeInTheDocument();
     });
 });

@@ -1839,12 +1839,24 @@
         "files_button": "Files",
         "info": "Info",
         "pinned_messages": {
-            "empty": "Nothing pinned, yet",
-            "explainer": "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
+            "empty_description": "Select a message and choose “%(pinAction)s” to it include here.",
+            "empty_title": "Pin important messages so that they can be easily discovered",
+            "header": {
+                "one": "1 Pinned message",
+                "other": "%(count)s Pinned messages",
+                "zero": "Pinned message"
+            },
             "limits": {
                 "other": "You can only pin up to %(count)s widgets"
             },
-            "title": "Pinned messages"
+            "menu": "Open menu",
+            "title": "Pinned messages",
+            "unpin_all": {
+                "button": "Unpin all messages",
+                "content": "Make sure that you really want to remove all pinned messages. This action can’t be undone.",
+                "title": "Unpin all messages?"
+            },
+            "view": "View in timeline"
         },
         "pinned_messages_button": "Pinned messages",
         "poll": {

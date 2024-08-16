@@ -15,95 +15,27 @@ limitations under the License.
 */
 
 .mx_PinnedEventTile {
-    min-height: 40px;
-    width: 100%;
-    padding: 0 4px 12px;
+    display: flex;
+    gap: var(--cpd-space-4x);
+    align-items: flex-start;
 
-    display: grid;
-    grid-template-areas:
-        "avatar name remove"
-        "content content content"
-        "footer footer footer";
-    grid-template-rows: max-content auto max-content;
-    grid-template-columns: 24px auto 24px;
-    grid-row-gap: 12px;
-    grid-column-gap: 8px;
+    .mx_PinnedEventTile_wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
+        width: 100%;
 
-    & + .mx_PinnedEventTile {
-        padding: 12px 4px;
-        border-top: 1px solid $menu-border-color;
-    }
+        .mx_PinnedEventTile_top {
+            display: flex;
+            gap: var(--cpd-space-1x);
+            justify-content: space-between;
+            align-items: center;
 
-    .mx_PinnedEventTile_senderAvatar,
-    .mx_PinnedEventTile_sender,
-    .mx_PinnedEventTile_unpinButton,
-    .mx_PinnedEventTile_message,
-    .mx_PinnedEventTile_footer {
-        min-width: 0; /* Prevent a grid blowout */
-    }
-
-    .mx_PinnedEventTile_senderAvatar {
-        grid-area: avatar;
-    }
-
-    .mx_PinnedEventTile_sender {
-        grid-area: name;
-        font-weight: var(--cpd-font-weight-semibold);
-        font-size: $font-15px;
-        line-height: $font-24px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    .mx_PinnedEventTile_unpinButton {
-        visibility: hidden;
-        grid-area: remove;
-        position: relative;
-        width: 24px;
-        height: 24px;
-        border-radius: 8px;
-
-        &:hover {
-            background-color: $roomheader-addroom-bg-color;
-        }
-
-        &::before {
-            content: "";
-            position: absolute;
-            height: inherit;
-            width: inherit;
-            background: $secondary-content;
-            mask-position: center;
-            mask-size: 8px;
-            mask-repeat: no-repeat;
-            mask-image: url("$(res)/img/image-view/close.svg");
-        }
-    }
-
-    .mx_PinnedEventTile_message {
-        grid-area: content;
-    }
-
-    .mx_PinnedEventTile_footer {
-        grid-area: footer;
-        font-size: $font-10px;
-        line-height: 12px;
-
-        .mx_PinnedEventTile_timestamp {
-            color: $secondary-content;
-            display: unset;
-            width: unset; /* Cancel the default width value */
-        }
-
-        .mx_AccessibleButton_kind_link {
-            margin-left: 12px;
-        }
-    }
-
-    &:hover {
-        .mx_PinnedEventTile_unpinButton {
-            visibility: visible;
+            .mx_PinnedEventTile_sender {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
         }
     }
 }

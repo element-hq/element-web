@@ -15,48 +15,38 @@ limitations under the License.
 */
 
 .mx_PinnedMessagesCard {
-    .mx_PinnedMessagesCard_empty_wrapper {
+    --unpin-height: 76px;
+
+    .mx_PinnedMessagesCard_wrapper {
         display: flex;
-        height: 100%;
+        flex-direction: column;
+        padding: var(--cpd-space-4x);
+        gap: var(--cpd-space-6x);
+        overflow-y: auto;
 
-        .mx_PinnedMessagesCard_empty {
-            height: max-content;
-            text-align: center;
-            margin: auto 40px;
-
-            .mx_PinnedMessagesCard_MessageActionBar {
-                pointer-events: none;
-                width: max-content;
-                margin: 0 auto;
-
-                /* Cancel the default values for non-interactivity */
-                position: unset;
-                visibility: visible;
-                cursor: unset;
-
-                &::before {
-                    content: unset;
-                }
-
-                .mx_MessageActionBar_optionsButton {
-                    background: var(--MessageActionBar-item-hover-background);
-                    border-radius: var(--MessageActionBar-item-hover-borderRadius);
-                    z-index: var(--MessageActionBar-item-hover-zIndex);
-                    color: var(--cpd-color-icon-primary);
-                }
-            }
-
-            .mx_PinnedMessagesCard_empty_header {
-                color: $primary-content;
-                margin-block: $spacing-24 $spacing-20;
-            }
-
-            > span {
-                font-size: $font-12px;
-                line-height: $font-15px;
-                color: $secondary-content;
-            }
+        .mx_PinnedMessagesCard_Separator {
+            min-height: 1px;
+            /* Override default compound value */
+            margin-block: 0;
         }
+    }
+
+    .mx_PinnedMessagesCard_wrapper_unpin_all {
+        /* Remove the unpin all button height and the top and bottom padding  */
+        height: calc(100% - var(--unpin-height) - calc(var(--cpd-space-4x) * 2));
+    }
+
+    .mx_PinnedMessagesCard_unpin {
+        /* Make it float at the bottom of the unpin panel */
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: var(--unpin-height);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 24px 0 rgba(27, 29, 34, 0.1);
+        background: var(--cpd-color-bg-canvas-default);
     }
 
     .mx_EventTile_body {

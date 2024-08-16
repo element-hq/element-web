@@ -15,32 +15,44 @@ limitations under the License.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { render, screen, waitFor } from "@testing-library/react";
+import { EventTimeline, EventType, IEvent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import userEvent from "@testing-library/user-event";
 
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import PinnedEventTile from "../../../../src/components/views/rooms/PinnedEventTile";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
+import { PinnedEventTile } from "../../../../src/components/views/rooms/PinnedEventTile";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { stubClient } from "../../../test-utils";
+import dis from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
+import { getForwardableEvent } from "../../../../src/events";
+import { createRedactEventDialog } from "../../../../src/components/views/dialogs/ConfirmRedactDialog";
+
+jest.mock("../../../../src/components/views/dialogs/ConfirmRedactDialog", () => ({
+    createRedactEventDialog: jest.fn(),
+}));
 
 describe("<PinnedEventTile />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
-    const mockClient = getMockClientWithEventEmitter({
-        getRoom: jest.fn(),
-    });
-    const room = new Room(roomId, mockClient, userId);
-    const permalinkCreator = new RoomPermalinkCreator(room);
 
-    const getComponent = (event: MatrixEvent) =>
-        render(<PinnedEventTile permalinkCreator={permalinkCreator} event={event} />);
-
+    let mockClient: MatrixClient;
+    let room: Room;
+    let permalinkCreator: RoomPermalinkCreator;
     beforeEach(() => {
-        mockClient.getRoom.mockReturnValue(room);
+        mockClient = stubClient();
+        room = new Room(roomId, mockClient, userId);
+        permalinkCreator = new RoomPermalinkCreator(room);
+        jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 
-    it("should render pinned event", () => {
-        const pin1 = new MatrixEvent({
-            type: "m.room.message",
+    /**
+     * Create a pinned event with the given content.
+     * @param content
+     */
+    function makePinEvent(content?: Partial<IEvent>) {
+        return new MatrixEvent({
+            type: EventType.RoomMessage,
             sender: userId,
             content: {
                 body: "First pinned message",
@@ -48,25 +60,150 @@ describe("<PinnedEventTile />", () => {
             },
             room_id: roomId,
             origin_server_ts: 0,
+            event_id: "$eventId",
+            ...content,
         });
+    }
 
-        const { container } = getComponent(pin1);
+    /**
+     * Render the component with the given event.
+     * @param event - pinned event
+     */
+    function renderComponent(event: MatrixEvent) {
+        return render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <PinnedEventTile permalinkCreator={permalinkCreator} event={event} room={room} />
+            </MatrixClientContext.Provider>,
+        );
+    }
 
+    /**
+     * Render the component and open the menu.
+     */
+    async function renderAndOpenMenu() {
+        const pinEvent = makePinEvent();
+        const renderResult = renderComponent(pinEvent);
+        await userEvent.click(screen.getByRole("button", { name: "Open menu" }));
+        return { pinEvent, renderResult };
+    }
+
+    it("should throw when pinned event has no sender", () => {
+        const pinEventWithoutSender = makePinEvent({ sender: undefined });
+        expect(() => renderComponent(pinEventWithoutSender)).toThrow("Pinned event unexpectedly has no sender");
+    });
+
+    it("should render pinned event", () => {
+        const { container } = renderComponent(makePinEvent());
         expect(container).toMatchSnapshot();
     });
 
-    it("should throw when pinned event has no sender", () => {
-        const pin1 = new MatrixEvent({
-            type: "m.room.message",
-            sender: undefined,
-            content: {
-                body: "First pinned message",
-                msgtype: "m.text",
-            },
-            room_id: roomId,
-            origin_server_ts: 0,
-        });
+    it("should render the menu without unpin and delete", async () => {
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
+            false,
+        );
+        jest.spyOn(
+            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+            "maySendRedactionForEvent",
+        ).mockReturnValue(false);
 
-        expect(() => getComponent(pin1)).toThrow("Pinned event unexpectedly has no sender");
+        await renderAndOpenMenu();
+
+        // Unpin and delete should not be present
+        await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
+        expect(screen.getByRole("menuitem", { name: "View in timeline" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Forward" })).toBeInTheDocument();
+        expect(screen.queryByRole("menuitem", { name: "Unpin" })).toBeNull();
+        expect(screen.queryByRole("menuitem", { name: "Delete" })).toBeNull();
+        expect(screen.getByRole("menu")).toMatchSnapshot();
+    });
+
+    it("should render the menu with all the options", async () => {
+        // Enable unpin
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
+            true,
+        );
+        // Enable redaction
+        jest.spyOn(
+            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+            "maySendRedactionForEvent",
+        ).mockReturnValue(true);
+
+        await renderAndOpenMenu();
+
+        await waitFor(() => expect(screen.getByRole("menu")).toBeInTheDocument());
+        ["View in timeline", "Forward", "Unpin", "Delete"].forEach((name) =>
+            expect(screen.getByRole("menuitem", { name })).toBeInTheDocument(),
+        );
+        expect(screen.getByRole("menu")).toMatchSnapshot();
+    });
+
+    it("should view in the timeline", async () => {
+        const { pinEvent } = await renderAndOpenMenu();
+
+        // Test view in timeline button
+        await userEvent.click(screen.getByRole("menuitem", { name: "View in timeline" }));
+        expect(dis.dispatch).toHaveBeenCalledWith({
+            action: Action.ViewRoom,
+            event_id: pinEvent.getId(),
+            highlighted: true,
+            room_id: pinEvent.getRoomId(),
+            metricsTrigger: undefined, // room doesn't change
+        });
+    });
+
+    it("should open forward dialog", async () => {
+        const { pinEvent } = await renderAndOpenMenu();
+
+        // Test forward button
+        await userEvent.click(screen.getByRole("menuitem", { name: "Forward" }));
+        expect(dis.dispatch).toHaveBeenCalledWith({
+            action: Action.OpenForwardDialog,
+            event: getForwardableEvent(pinEvent, mockClient),
+            permalinkCreator: permalinkCreator,
+        });
+    });
+
+    it("should unpin the event", async () => {
+        const { pinEvent } = await renderAndOpenMenu();
+        const pinEvent2 = makePinEvent({ event_id: "$eventId2" });
+
+        const stateEvent = {
+            getContent: jest.fn().mockReturnValue({ pinned: [pinEvent.getId(), pinEvent2.getId()] }),
+        } as unknown as MatrixEvent;
+
+        // Enable unpin
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
+            true,
+        );
+        // Mock the state event
+        jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "getStateEvents").mockReturnValue(
+            stateEvent,
+        );
+
+        // Test unpin button
+        await userEvent.click(screen.getByRole("menuitem", { name: "Unpin" }));
+        expect(mockClient.sendStateEvent).toHaveBeenCalledWith(
+            room.roomId,
+            EventType.RoomPinnedEvents,
+            {
+                pinned: [pinEvent2.getId()],
+            },
+            "",
+        );
+    });
+
+    it("should delete the event", async () => {
+        // Enable redaction
+        jest.spyOn(
+            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+            "maySendRedactionForEvent",
+        ).mockReturnValue(true);
+
+        const { pinEvent } = await renderAndOpenMenu();
+
+        await userEvent.click(screen.getByRole("menuitem", { name: "Delete" }));
+        expect(createRedactEventDialog).toHaveBeenCalledWith({
+            mxEvent: pinEvent,
+        });
     });
 });

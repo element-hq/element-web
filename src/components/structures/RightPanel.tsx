@@ -34,7 +34,7 @@ import ThreadView from "./ThreadView";
 import ThreadPanel from "./ThreadPanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
+import { PinnedMessagesCard } from "../views/right_panel/PinnedMessagesCard";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { E2EStatus } from "../../utils/ShieldUtils";
 import TimelineCard from "../views/right_panel/TimelineCard";
