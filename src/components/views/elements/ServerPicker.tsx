@@ -29,6 +29,7 @@ interface IProps {
     title?: string;
     dialogTitle?: string;
     serverConfig: ValidatedServerConfig;
+    disabled?: boolean;
     onServerConfigChange?(config: ValidatedServerConfig): void;
 }
 
@@ -55,7 +56,7 @@ const onHelpClick = (): void => {
     );
 };
 
-const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onServerConfigChange }) => {
+const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onServerConfigChange, disabled }) => {
     const disableCustomUrls = SdkConfig.get("disable_custom_urls");
 
     let editBtn;
@@ -68,7 +69,7 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
             });
         };
         editBtn = (
-            <AccessibleButton className="mx_ServerPicker_change" kind="link" onClick={onClick}>
+            <AccessibleButton className="mx_ServerPicker_change" kind="link" onClick={onClick} disabled={disabled}>
                 {_t("action|edit")}
             </AccessibleButton>
         );

@@ -151,11 +151,20 @@ interface IProps {
     fragmentAfterLogin?: string;
     primary?: boolean;
     action?: SSOAction;
+    disabled?: boolean;
 }
 
 const MAX_PER_ROW = 6;
 
-const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentAfterLogin, primary, action }) => {
+const SSOButtons: React.FC<IProps> = ({
+    matrixClient,
+    flow,
+    loginType,
+    fragmentAfterLogin,
+    primary,
+    action,
+    disabled,
+}) => {
     const providers = flow.identity_providers || [];
     if (providers.length < 2) {
         return (
@@ -168,6 +177,7 @@ const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentA
                     primary={primary}
                     action={action}
                     flow={flow}
+                    disabled={disabled}
                 />
             </div>
         );
