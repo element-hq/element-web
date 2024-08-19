@@ -1,0 +1,210 @@
+/* ROSBERG style module */
+/* NOTE: This code (and any other Rosberg .pcss files) has to be imported in here: res\css\_components.pcss */
+
+.vmx_main_dialog {
+    @at-root .mx_Dialog & {
+        height: auto !important;
+    }
+}
+
+.vmx_no_external_user_found {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+
+    padding: 8px;
+    border: 1px solid #dec802;
+    border-radius: 4px;
+
+    .vmx_no_external_user_found_warning_icon {
+        margin-right: 20px;
+    }
+
+    .vmx_no_external_user_found_close_btn {
+        right: 10px;
+        display: none;
+        scale: 0.8;
+    }
+    &:hover {
+        .vmx_no_external_user_found_close_btn {
+            display: block !important;
+        }
+    }
+}
+
+.vmx_invite_external_user {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    // border-bottom: 1px solid var(--quinary-content, #6F7882)
+
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    // margin-bottom: 8px;
+
+    .vmx_invite_external_user_close_btn {
+        right: 10px;
+        display: none;
+        scale: 0.8;
+    }
+    &:hover {
+        .vmx_invite_external_user_close_btn {
+            display: block !important;
+        }
+    }
+}
+
+.vmx_invite_external_user_tenant_info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    :last-child {
+        margin-left: 20px;
+        scale: 0.8;
+    }
+}
+
+.vmx_invite_external_user_field {
+    flex: 1 1 0;
+    /* min-width: 300px;     */
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+@media (max-width: 960px) {
+    .vmx_invite_external_user_field {
+        flex-basis: 100%;
+    }
+}
+
+.vmx_phone_nr_invalid {
+    border-color: red !important;
+}
+
+.vmx_phone_input_flag > :first-child {
+    margin-left: 10px;
+}
+
+.vmx_input {
+    margin: 0 !important;
+}
+
+.vmx_infoText {
+    margin-bottom: 40px !important;
+}
+
+.vmx_input_readonly {
+    background-color: var(--quinary-content, #6f7882);
+    color: var(--primary-content, #ffffff);
+}
+
+.vmx_dialog_footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    margin-top: 40px;
+    padding: 0 !important;
+    width: 100%;
+}
+
+.vmx_divider {
+    height: 1em;
+    display: block;
+}
+
+.vmx_InviteDialog_roomTile {
+    cursor: pointer;
+    padding: 5px 10px;
+
+    &:hover {
+        background-color: $header-panel-bg-color;
+        border-radius: 4px;
+    }
+
+    * {
+        vertical-align: middle;
+    }
+
+    .vmx_InviteDialog_roomTile_avatarStack {
+        display: inline-block;
+        position: relative;
+        width: 36px;
+        height: 36px;
+
+        & > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .vmx_InviteDialog_roomTile_selected {
+        width: 36px;
+        height: 36px;
+        border-radius: 36px;
+        background-color: $username-variant1-color;
+        display: inline-block;
+        position: relative;
+
+        &::before {
+            content: "";
+            width: 24px;
+            height: 24px;
+            grid-column: 1;
+            grid-row: 1;
+            mask-image: url("$(res)/img/feather-customised/check.svg");
+            mask-size: 100%;
+            mask-repeat: no-repeat;
+            position: absolute;
+            top: 6px; // 50%
+            left: 6px; // 50%
+            background-color: #ffffff; // this is fine without a var because it's for both themes
+        }
+    }
+
+    .vmx_InviteDialog_roomTile_nameStack {
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    .vmx_InviteDialog_roomTile_name {
+        font-weight: 600;
+        font-size: $font-14px;
+        color: $primary-content;
+        margin-left: 7px;
+    }
+
+    .vmx_InviteDialog_roomTile_userId {
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        margin-left: 7px;
+    }
+
+    .vmx_InviteDialog_roomTile_name,
+    .vmx_InviteDialog_roomTile_userId {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .vmx_InviteDialog_roomTile_time {
+        text-align: right;
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        float: right;
+        line-height: 3.6rem; // Height of the avatar to keep the time vertically aligned
+    }
+
+    .vmx_InviteDialog_roomTile_highlight {
+        font-weight: 900;
+    }
+}

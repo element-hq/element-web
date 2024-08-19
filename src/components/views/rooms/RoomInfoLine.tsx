@@ -84,6 +84,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
             </AccessibleButton>
         );
     }
+
     return (
         <div className={`mx_RoomInfoLine ${iconClass}`}>
             {roomType}

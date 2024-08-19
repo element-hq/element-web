@@ -70,7 +70,7 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
 import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
@@ -209,7 +209,7 @@ export function DeviceItem({
 
     const onDeviceClick = (): void => {
         const user = cli.getUser(userId);
-        if (user) {
+        if (user && SettingsStore.getValue(UIFeature.UserInfoVerifyDevice)) {
             verifyDevice(cli, user, device);
         }
     };
@@ -561,9 +561,8 @@ export const UserOptionsSection: React.FC<{
         <div className="mx_UserInfo_container">
             <h3>{_t("common|options")}</h3>
             <div>
-                {directMessageButton}
+                {SettingsStore.getValue(UIFeature.ShowSendMessageToUserLink) && directMessageButton}
                 {readReceiptButton}
-                {shareUserButton}
                 {/* If you donw want users to send a room link, disable flag in settings.tsx */}
                 {SettingsStore.getValue(UIFeature.UserInfoShareLinkToUserButton) && shareUserButton}
                 {insertPillButton}
@@ -1079,7 +1078,8 @@ export const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
                 {muteButton}
                 {kickButton}
                 {banButton}
-                {redactButton}
+                {/* If you dont want users to be able to delete messages, set the flag to false in settings.tsx */}
+                {SettingsStore.getValue(UIFeature.UserInfoRedactButton) && redactButton}
                 {children}
             </GenericAdminToolsContainer>
         );

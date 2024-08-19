@@ -16,6 +16,11 @@ limitations under the License.
 
 import React, { PropsWithChildren } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+
 import { Tooltip } from "@vector-im/compound-web";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
@@ -23,6 +28,7 @@ import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -55,13 +61,25 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
                     undefined;
             }
             const shortName = unicodeToShortcode(content) || customReactionName;
-            const formattedSenders = formatList(senders, 6);
+
+            // Line 👇is Verji specific. If we wish to use upstream only we must implement CustomComponentLifecycle.ReactionsRowButtonTooltip
+            const formattedSenders = formatList(senders, 50);
+            
             const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
 
+            const customReactionButtonTooltip = { CustomComponent: React.Fragment };
+            ModuleRunner.instance.invoke(
+                CustomComponentLifecycle.ReactionsRowButtonTooltip,
+                customReactionButtonTooltip as CustomComponentOpts,
+            );
+
             return (
-                <Tooltip label={formattedSenders} caption={caption} placement="right">
-                    {children}
-                </Tooltip>
+                <customReactionButtonTooltip.CustomComponent>
+
+                    <Tooltip label={formattedSenders} caption={caption} placement="right">
+                            {children}
+                    </Tooltip>
+                </customReactionButtonTooltip.CustomComponent>  
             );
         }
 

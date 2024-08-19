@@ -276,7 +276,6 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                     }}
                 </RoomName>
             </div>
-
             <div className="mx_SpaceRoomView_landing_infoBar">
                 <RoomInfoLine room={space} />
                 <div className="mx_SpaceRoomView_landing_infoBar_interactive">
@@ -292,10 +291,13 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                     {settingsButton}
                 </div>
             </div>
-
             <RoomTopic room={space} className="mx_SpaceRoomView_landing_topic" />
 
-            <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+            {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && (
+                <>
+                    <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+                </>
+            )}
         </div>
     );
 };
