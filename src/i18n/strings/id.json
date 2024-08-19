@@ -1757,8 +1757,6 @@
         "export_chat_button": "Ekspor obrolan",
         "files_button": "File",
         "pinned_messages": {
-            "empty": "Belum ada yang dipasangi pin",
-            "explainer": "Jika Anda memiliki izin, buka menunya di pesan apa saja dan pilih <b>Pin</b> untuk menempelkannya di sini.",
             "limits": {
                 "other": "Anda hanya dapat memasang pin sampai %(count)s widget"
             },

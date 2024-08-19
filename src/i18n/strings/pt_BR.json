@@ -1196,8 +1196,6 @@
         "export_chat_button": "Exportar conversa",
         "files_button": "Arquivos",
         "pinned_messages": {
-            "empty": "Nada fixado ainda",
-            "explainer": "Caso você tenha a permissão para isso, abra o menu em qualquer mensagem e selecione <b>Fixar</b> para fixá-la aqui.",
             "limits": {
                 "other": "Você pode fixar até %(count)s widgets"
             },

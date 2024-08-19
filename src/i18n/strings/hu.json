@@ -1745,8 +1745,6 @@
         "export_chat_button": "Beszélgetés exportálása",
         "files_button": "Fájlok",
         "pinned_messages": {
-            "empty": "Még semmi sincs kitűzve",
-            "explainer": "Ha van hozzá jogosultsága, nyissa meg a menüt bármelyik üzenetben és válassza a <b>Kitűzés</b> menüpontot a kitűzéshez.",
             "limits": {
                 "other": "Csak %(count)s kisalkalmazást tud kitűzni"
             },

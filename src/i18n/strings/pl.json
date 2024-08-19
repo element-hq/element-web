@@ -1841,8 +1841,6 @@
         "files_button": "Pliki",
         "info": "Info",
         "pinned_messages": {
-            "empty": "Nie przypięto tu jeszcze niczego",
-            "explainer": "Jeżeli masz uprawnienia, przejdź do menu dowolnej wiadomości i wybierz <b>Przypnij</b>, aby przyczepić ją tutaj.",
             "limits": {
                 "other": "Możesz przypiąć do %(count)s widżetów"
             },

@@ -1233,7 +1233,6 @@
         "export_chat_button": "ייצוא צ'אט",
         "files_button": "קבצים",
         "pinned_messages": {
-            "empty": "אין הודעות נעוצות, לבינתיים",
             "limits": {
                 "other": "אתה יכול להצמיד עד%(count)s ווידג'טים בלבד"
             },

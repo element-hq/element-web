@@ -1583,8 +1583,6 @@
         "add_integrations": "Thêm các widget, bridge và bot",
         "export_chat_button": "Xuất trò chuyện",
         "pinned_messages": {
-            "empty": "Chưa có gì được ghim",
-            "explainer": "Nếu bạn có quyền, hãy mở menu trên bất kỳ tin nhắn nào và chọn Ghim <b>Pin</b> để dán chúng vào đây.",
             "limits": {
                 "other": "Bạn chỉ có thể ghim tối đa %(count)s widget"
             },

@@ -1651,8 +1651,6 @@
         "export_chat_button": "Exportar conversación",
         "files_button": "Archivos",
         "pinned_messages": {
-            "empty": "Ningún mensaje fijado… todavía",
-            "explainer": "Si tienes permisos, abre el menú de cualquier mensaje y selecciona <b>Fijar</b> para colocarlo aquí.",
             "limits": {
                 "other": "Solo puedes anclar hasta %(count)s accesorios"
             },

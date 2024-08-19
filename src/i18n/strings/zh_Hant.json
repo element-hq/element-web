@@ -1738,8 +1738,6 @@
         "export_chat_button": "匯出聊天",
         "files_button": "檔案",
         "pinned_messages": {
-            "empty": "尚未釘選任何東西",
-            "explainer": "如果您有權限，請開啟任何訊息的選單，並選取<b>釘選</b>以將它們固定到這裡。",
             "limits": {
                 "other": "您最多只能釘選 %(count)s 個小工具"
             },

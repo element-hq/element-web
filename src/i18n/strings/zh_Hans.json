@@ -1631,8 +1631,6 @@
         "export_chat_button": "导出聊天",
         "files_button": "文件",
         "pinned_messages": {
-            "empty": "尚无固定任何东西",
-            "explainer": "如果你拥有权限，请打开任何消息的菜单并选择<b>固定</b>将它们粘贴至此。",
             "limits": {
                 "other": "你仅能固定 %(count)s 个挂件"
             },

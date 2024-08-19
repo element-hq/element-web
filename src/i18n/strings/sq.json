@@ -1680,8 +1680,6 @@
         "export_chat_button": "Eksportoni fjalosje",
         "files_button": "Kartela",
         "pinned_messages": {
-            "empty": "Ende pa fiksuar gjë",
-            "explainer": "Nëse keni leje, hapni menunë për çfarëdo mesazhi dhe përzgjidhni <b>Fiksoje</b>, për ta ngjitur këtu.",
             "limits": {
                 "other": "Mundeni të fiksoni deri në %(count)s widget-e"
             },

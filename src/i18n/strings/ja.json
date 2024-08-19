@@ -1664,8 +1664,6 @@
         "export_chat_button": "チャットをエクスポート",
         "files_button": "ファイル",
         "pinned_messages": {
-            "empty": "固定メッセージはありません",
-            "explainer": "権限がある場合は、メッセージのメニューを開いて<b>固定</b>を選択すると、ここにメッセージが表示されます。",
             "limits": {
                 "other": "ウィジェットのピン留めは%(count)s件までです"
             },

@@ -1547,7 +1547,6 @@
         "export_chat_button": "Vie keskustelu",
         "files_button": "Tiedostot",
         "pinned_messages": {
-            "empty": "Ei mitään kiinnitetty, ei vielä",
             "limits": {
                 "other": "Voit kiinnittää enintään %(count)s sovelmaa"
             },

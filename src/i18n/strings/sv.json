@@ -1791,8 +1791,6 @@
         "export_chat_button": "Exportera chatt",
         "files_button": "Filer",
         "pinned_messages": {
-            "empty": "Inget fäst än",
-            "explainer": "Om du har behörighet, öppna menyn på ett meddelande och välj <b>Fäst</b> för att fösta dem här.",
             "limits": {
                 "other": "Du kan bara fästa upp till %(count)s widgets"
             },

@@ -1084,8 +1084,6 @@
         "export_chat_button": "Eksportuoti pokalbį",
         "files_button": "Failai",
         "pinned_messages": {
-            "empty": "Kol kas nieko neprisegta",
-            "explainer": "Jei turite leidimus, atidarykite bet kurios žinutės meniu ir pasirinkite <b>Prisegti</b>, kad juos čia priklijuotumėte.",
             "limits": {
                 "other": "Galite prisegti tik iki %(count)s valdiklių"
             },

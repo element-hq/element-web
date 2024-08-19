@@ -1516,8 +1516,6 @@
         "export_chat_button": "Chat exporteren",
         "files_button": "Bestanden",
         "pinned_messages": {
-            "empty": "Nog niks vastgeprikt",
-            "explainer": "Als je de rechten hebt, open dan het menu op elk bericht en selecteer <b>Vastprikken</b> om ze hier te zetten.",
             "limits": {
                 "other": "Je kunt maar %(count)s widgets vastzetten"
             },

@@ -1470,7 +1470,6 @@
         "export_chat_button": "Flytja út spjall",
         "files_button": "Skrár",
         "pinned_messages": {
-            "empty": "Ekkert fest, ennþá",
             "limits": {
                 "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
             },

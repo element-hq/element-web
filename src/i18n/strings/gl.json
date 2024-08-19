@@ -1536,8 +1536,6 @@
         "export_chat_button": "Exportar chat",
         "files_button": "Ficheiros",
         "pinned_messages": {
-            "empty": "Nada fixado, por agora",
-            "explainer": "Se tes permisos, abre o menú en calquera mensaxe e elixe <b>Fixar</b> para pegalos aquí.",
             "limits": {
                 "other": "Só podes fixar ata %(count)s widgets"
             },

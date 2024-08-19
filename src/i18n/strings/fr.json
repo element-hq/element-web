@@ -1829,8 +1829,6 @@
         "export_chat_button": "Exporter la conversation",
         "files_button": "Fichiers",
         "pinned_messages": {
-            "empty": "Rien d’épinglé, pour l’instant",
-            "explainer": "Si vous avez les permissions, ouvrez le menu de n’importe quel message et sélectionnez <b>Épingler</b> pour les afficher ici.",
             "limits": {
                 "other": "Vous ne pouvez épingler que jusqu’à %(count)s widgets"
             },

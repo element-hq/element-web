@@ -1779,8 +1779,6 @@
         "export_chat_button": "Exportovať konverzáciu",
         "files_button": "Súbory",
         "pinned_messages": {
-            "empty": "Zatiaľ nie je nič pripnuté",
-            "explainer": "Ak máte oprávnenia, otvorte ponuku pri ľubovoľnej správe a výberom položky <b>Pripnúť</b> ich sem prilepíte.",
             "limits": {
                 "other": "Môžete pripnúť iba %(count)s widgetov"
             },

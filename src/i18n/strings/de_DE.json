@@ -1778,8 +1778,6 @@
         "export_chat_button": "Unterhaltung exportieren",
         "files_button": "Dateien",
         "pinned_messages": {
-            "empty": "Es ist nichts angepinnt. Noch nicht.",
-            "explainer": "Sofern du die Berechtigung hast, öffne das Menü einer Nachricht und wähle <b>Anheften</b>, ⁣ um sie hier aufzubewahren.",
             "limits": {
                 "other": "Du kannst nur %(count)s Widgets anheften"
             },

@@ -1775,8 +1775,6 @@
         "export_chat_button": "Ekspordi vestlus",
         "files_button": "Failid",
         "pinned_messages": {
-            "empty": "Klammerdatud sõnumeid veel pole",
-            "explainer": "Kui sul on vastavad õigused olemas, siis ava sõnumi juuresolev menüü ning püsisõnumi tekitamiseks vali <b>Klammerda</b>.",
             "limits": {
                 "other": "Sa saad kinnitada kuni %(count)s vidinat"
             },
