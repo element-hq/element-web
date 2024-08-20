@@ -18,7 +18,6 @@ import React, { ReactElement } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-
 import {
     CustomComponentLifecycle,
     CustomComponentOpts,
