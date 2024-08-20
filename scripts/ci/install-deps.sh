@@ -39,6 +39,7 @@ popd
 
 yarn link @matrix-org/react-sdk-module-api
 # VERJI END - custom module-api
+
 yarn link matrix-js-sdk
 [ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
 yarn install --frozen-lockfile $@
