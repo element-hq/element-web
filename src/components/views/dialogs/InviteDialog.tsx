@@ -424,7 +424,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private profilesStore: UserProfilesStore;
     private allowOnboardingFlag = false;
 
-
     public constructor(props: Props) {
         super(props);
 

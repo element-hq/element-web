@@ -23,7 +23,6 @@ import {
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
-
 import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../src/SdkConfig";
 import { UserTab } from "../../../../src/components/views/dialogs/UserTab";

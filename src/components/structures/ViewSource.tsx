@@ -156,7 +156,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId()!;
         const eventId = mxEvent.getId()!;
-        const canEdit = mxEvent.isState()
+        const canEdit = mxEvent.isState();
         // const canEdit = mxEvent.isState()    //Verji
         //     ? this.canSendStateEvent(mxEvent)
         //     : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);

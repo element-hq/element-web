@@ -384,7 +384,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
-         // const me = cli.getUserId(); //Verji
+        // const me = cli.getUserId(); //Verji
         const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
         delete other.getRelationsForEvent;
         delete other.permalinkCreator;
