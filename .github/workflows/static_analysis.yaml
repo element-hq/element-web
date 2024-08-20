@@ -55,6 +55,7 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
+        # VERJI skip i18n by setting false
         if: ${{false}}
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         with:

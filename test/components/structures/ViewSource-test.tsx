@@ -57,8 +57,8 @@ describe("ViewSource", () => {
 
         expect(() => render(<ViewSource mxEvent={redactedMessageEvent} onFinished={() => {}} />)).not.toThrow();
     });
-
-    it("should show edit button if we are the sender and can post an edit", () => {
+    // VERJI SKIP this test because we have disabled the "edit" option
+    it.skip("should show edit button if we are the sender and can post an edit", () => {
         const event = mkMessage({
             msg: "Test",
             user: MatrixClientPeg.get()!.getSafeUserId(),
