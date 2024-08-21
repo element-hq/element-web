@@ -1850,6 +1850,7 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
+            "reply_thread": "Reply to a <link>thread message</link>",
             "title": "Pinned messages",
             "unpin_all": {
                 "button": "Unpin all messages",

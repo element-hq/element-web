@@ -65,10 +65,88 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
 </div>
 `;
 
+exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
+<div>
+  <div
+    class="mx_PinnedEventTile"
+    role="listitem"
+  >
+    <div>
+      <span
+        class="_avatar_mcap2_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_mcap2_61"
+        data-color="2"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 32px;"
+      >
+        a
+      </span>
+    </div>
+    <div
+      class="mx_PinnedEventTile_wrapper"
+    >
+      <div
+        class="mx_PinnedEventTile_top"
+      >
+        <span
+          class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color2"
+        >
+          @alice:server.org
+        </span>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Open menu"
+          class="_icon-button_bh2qc_17"
+          data-state="closed"
+          id="radix-2"
+          role="button"
+          style="--cpd-icon-button-size: 24px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+      </div>
+      <div
+        class="mx_MTextBody mx_EventTile_content"
+      >
+        <div
+          class="mx_EventTile_body translate"
+          dir="auto"
+        >
+          First pinned message
+        </div>
+      </div>
+      <div
+        class="mx_PinnedEventTile_thread"
+      >
+        <div />
+        <span>
+          Reply to a 
+          <button
+            type="button"
+          >
+            thread message
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-6"
+  aria-labelledby="radix-8"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
   data-align="start"
@@ -77,7 +155,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-7"
+  id="radix-9"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
@@ -226,7 +304,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-2"
+  aria-labelledby="radix-4"
   aria-orientation="vertical"
   class="_menu_1x5h1_17"
   data-align="start"
@@ -235,7 +313,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-3"
+  id="radix-5"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"

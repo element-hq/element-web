@@ -23,6 +23,7 @@ import { Icon as UnpinIcon } from "@vector-im/compound-design-tokens/icons/unpin
 import { Icon as ForwardIcon } from "@vector-im/compound-design-tokens/icons/forward.svg";
 import { Icon as TriggerIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import { Icon as ThreadIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
 import classNames from "classnames";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -39,6 +40,7 @@ import { isContentActionable } from "../../../utils/EventUtils";
 import { getForwardableEvent } from "../../../events";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
+import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 
 const AVATAR_SIZE = "32px";
 
@@ -69,6 +71,9 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
         throw new Error("Pinned event unexpectedly has no sender");
     }
 
+    const isInThread = Boolean(event.threadRootId);
+    const displayThreadInfo = !event.isThreadRoot && isInThread;
+
     return (
         <div className="mx_PinnedEventTile" role="listitem">
             <div>
@@ -97,6 +102,36 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
                     permalinkCreator={permalinkCreator}
                     replacingEventId={event.replacingEventId()}
                 />
+                {displayThreadInfo && (
+                    <div className="mx_PinnedEventTile_thread">
+                        <ThreadIcon />
+                        {_t(
+                            "right_panel|pinned_messages|reply_thread",
+                            {},
+                            {
+                                link: (sub) => (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (!event.threadRootId) return;
+
+                                            const rootEvent = room.findEventById(event.threadRootId);
+                                            if (!rootEvent) return;
+
+                                            dis.dispatch<ShowThreadPayload>({
+                                                action: Action.ShowThread,
+                                                rootEvent: rootEvent,
+                                                push: true,
+                                            });
+                                        }}
+                                    >
+                                        {sub}
+                                    </button>
+                                ),
+                            },
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

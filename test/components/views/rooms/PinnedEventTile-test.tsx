@@ -97,6 +97,36 @@ describe("<PinnedEventTile />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("should render pinned event with thread info", async () => {
+        const event = makePinEvent({
+            content: {
+                "body": "First pinned message",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "event_id": "$threadRootEventId",
+                    "is_falling_back": true,
+                    "m.in_reply_to": {
+                        event_id: "$$threadRootEventId",
+                    },
+                    "rel_type": "m.thread",
+                },
+            },
+        });
+        const threadRootEvent = makePinEvent({ event_id: "$threadRootEventId" });
+        jest.spyOn(room, "findEventById").mockReturnValue(threadRootEvent);
+
+        const { container } = renderComponent(event);
+        expect(container).toMatchSnapshot();
+
+        await userEvent.click(screen.getByRole("button", { name: "thread message" }));
+        // Check that the thread is opened
+        expect(dis.dispatch).toHaveBeenCalledWith({
+            action: Action.ShowThread,
+            rootEvent: threadRootEvent,
+            push: true,
+        });
+    });
+
     it("should render the menu without unpin and delete", async () => {
         jest.spyOn(room.getLiveTimeline().getState(EventTimeline.FORWARDS)!, "mayClientSendStateEvent").mockReturnValue(
             false,

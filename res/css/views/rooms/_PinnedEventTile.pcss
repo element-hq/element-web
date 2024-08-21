@@ -37,5 +37,28 @@ limitations under the License.
                 white-space: nowrap;
             }
         }
+
+        .mx_PinnedEventTile_thread {
+            display: flex;
+            gap: var(--cpd-space-2x);
+            font: var(--cpd-font-body-sm-regular);
+
+            svg {
+                width: 20px;
+                fill: var(--cpd-color-icon-tertiary);
+            }
+
+            span {
+                display: flex;
+                color: var(--cpd-color-text-secondary);
+            }
+
+            button {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
     }
 }
