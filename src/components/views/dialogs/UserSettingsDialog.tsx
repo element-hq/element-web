@@ -16,6 +16,10 @@ limitations under the License.
 */
 
 import React from "react";
+import {
+    CustomComponentOpts,
+    CustomComponentLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -38,7 +42,7 @@ import { UserTab } from "./UserTab";
 import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
-
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 interface IProps {
     initialTabId?: UserTab;
     sdkContext: SdkContextClass;
@@ -83,7 +87,11 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
-
+        const customSessionManagerTabOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.SessionManagerTab,
+            customSessionManagerTabOpts as CustomComponentOpts,
+        );
         tabs.push(
             new Tab(
                 UserTab.General,
@@ -98,7 +106,11 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.SessionManager,
                 _td("settings|sessions|title"),
                 "mx_UserSettingsDialog_sessionsIcon",
-                <SessionManagerTab />,
+                (
+                    <customSessionManagerTabOpts.CustomComponent>
+                        <SessionManagerTab />
+                    </customSessionManagerTabOpts.CustomComponent>
+                ),
                 undefined,
             ),
         );

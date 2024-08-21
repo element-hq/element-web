@@ -419,11 +419,44 @@ describe("DeviceListener", () => {
                 // all devices verified by default
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === UIFeature.BulkUnverifiedSessionsReminder,
-                );
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+                    if (
+                        settingName === UIFeature.BulkUnverifiedSessionsReminder ||
+                        settingName === UIFeature.UnverifiedSessionsToast
+                    ) {
+                        return true;
+                    }
+                    return false;
+                });
             });
+
             describe("bulk unverified sessions toasts", () => {
+                it("shows toast with unverified devices at app start with UIFeature.UnverifiedSessionsToast returning true", async () => {
+                    jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+                    // currentDevice, device2 are verified, device3 is unverified
+                    mockCrypto!.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
+                        switch (deviceId) {
+                            case currentDevice.deviceId:
+                            case device2.deviceId:
+                                return deviceTrustVerified;
+                            default:
+                                return deviceTrustUnverified;
+                        }
+                    });
+                    await createAndStart();
+                    expect(BulkUnverifiedSessionsToast.showToast).toHaveBeenCalledWith(
+                        new Set<string>([device3.deviceId]),
+                    );
+                    expect(BulkUnverifiedSessionsToast.hideToast).not.toHaveBeenCalled();
+                });
+
+                it("hide toast with UIFeature.UnverifiedSessionsToast returning false", async () => {
+                    jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+                    await createAndStart();
+                    expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
+                    expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
+                });
+
                 it("hides toast when cross signing is not ready", async () => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
                     await createAndStart();

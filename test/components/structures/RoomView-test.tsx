@@ -33,7 +33,12 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import {
     stubClient,
     mockPlatformPeg,
@@ -713,5 +718,70 @@ describe("RoomView", () => {
         jest.spyOn(dis, "dispatch");
         await mountRoomView();
         expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
+
+    describe("CustomComponentLifecycle.RoomHeader", () => {
+        it("should invoke CustomComponentLifecycle.RoomHeader when you are joined (not previewing)", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke");
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            await renderRoomView();
+            expect(ModuleRunner.instance.invoke).toHaveBeenCalledWith(CustomComponentLifecycle.RoomHeader, {
+                CustomComponent: expect.any(Symbol),
+            });
+        });
+
+        it("should render LegacyRoomHeader if if there are no module-implementations using the lifecycle", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            const { container } = await renderRoomView();
+            expect(container.querySelector(".mx_LegacyRoomHeader")).toBeVisible();
+        });
+
+        it("should replace the default RoomHeader and return <div data-testid='custom-room-header'> instead", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RoomHeader) {
+                    (opts as CustomComponentOpts).CustomComponent = () => {
+                        return (
+                            <>
+                                <header data-testid="custom-room-header" />
+                            </>
+                        );
+                    };
+                }
+            });
+
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+            const { container } = await renderRoomView();
+            const customRoomHeader = screen.queryByTestId("custom-room-header");
+            expect(customRoomHeader).toBeVisible();
+            expect(container.querySelector(".mx_LegacyRoomHeader")).toBeNull();
+        });
+    });
+
+    describe("CustomComponentLifecycle.RoomView", () => {
+        it("should wrap RoomView with a custom RoomHeader", async () => {
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
+                if (lifecycleEvent === CustomComponentLifecycle.RoomView) {
+                    (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
+                        return (
+                            <>
+                                <div data-testid="wrapper-header">Header</div>
+                                <div data-testid="wrapper-RoomView">{children}</div>
+                                <div data-testid="wrapper-footer">Footer</div>
+                            </>
+                        );
+                    };
+                }
+            });
+
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            await renderRoomView();
+
+            expect(screen.getByTestId("wrapper-header")).toBeDefined();
+            expect(screen.getByTestId("wrapper-RoomView")).toBeDefined();
+            expect(screen.getByTestId("wrapper-footer")).toBeDefined();
+            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(screen.getByTestId("wrapper-RoomView"));
+            expect(screen.getByTestId("wrapper-RoomView").nextSibling).toBe(screen.getByTestId("wrapper-footer"));
+        });
     });
 });

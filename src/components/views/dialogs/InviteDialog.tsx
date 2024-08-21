@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
+import { RoomMember, Room, EventType } from "matrix-js-sdk/src/matrix"; //VERJI remove: MatrixError, EventType
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -70,37 +70,40 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { NonEmptyArray } from "../../../@types/common";
-import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
-import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
+// VERJI Remove: import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
+// VERJI Remove: import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { UserProfilesStore } from "../../../stores/UserProfilesStore";
+import { Key } from "../../../Keyboard";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
-const extractTargetUnknownProfiles = async (
-    targets: Member[],
-    profilesStores: UserProfilesStore,
-): Promise<UnknownProfiles> => {
-    const directoryMembers = targets.filter((t): t is DirectoryMember => t instanceof DirectoryMember);
-    await Promise.all(directoryMembers.map((t) => profilesStores.getOrFetchProfile(t.userId)));
-    return directoryMembers.reduce<UnknownProfiles>((unknownProfiles: UnknownProfiles, target: DirectoryMember) => {
-        const lookupError = profilesStores.getProfileLookupError(target.userId);
+// const extractTargetUnknownProfiles = async (
+//     targets: Member[],
+//     targetEmails: string[], // Verji
+//     profilesStores: UserProfilesStore,
+// ): Promise<UnknownProfiles> => {
+//     const directoryMembers = targets.filter((t): t is DirectoryMember => t instanceof DirectoryMember);
+//     await Promise.all(directoryMembers.map((t) => profilesStores.getOrFetchProfile(t.userId)));
+//     return directoryMembers.reduce<UnknownProfiles>((unknownProfiles: UnknownProfiles, target: DirectoryMember) => {
+//         const lookupError = profilesStores.getProfileLookupError(target.userId);
 
-        if (
-            lookupError instanceof MatrixError &&
-            lookupError.errcode &&
-            UNKNOWN_PROFILE_ERRORS.includes(lookupError.errcode)
-        ) {
-            unknownProfiles.push({
-                userId: target.userId,
-                errorText: lookupError.data.error || "",
-            });
-        }
+//         if (
+//             lookupError instanceof MatrixError &&
+//             lookupError.errcode &&
+//             UNKNOWN_PROFILE_ERRORS.includes(lookupError.errcode)
+//         ) {
+//             unknownProfiles.push({
+//                 userId: target.userId,
+//                 errorText: lookupError.data.error || "",
+//             });
+//         }
 
-        return unknownProfiles;
-    }, []);
-};
+//         return unknownProfiles;
+//     }, []);
+// };
 
 interface Result {
     userId: string;
@@ -423,10 +426,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private encryptionByDefault = false;
     private profilesStore: UserProfilesStore;
     private allowOnboardingFlag = false;
+    // Verji
+    private spaceMembers = [] as RoomMember[];
+    private spaceMemberIds = [] as string[];
+    // Verji End
+
 
     public constructor(props: Props) {
         super(props);
-
+        // Verji Start - generate a list of userId's which are members in currently active space
+        this.spaceMembers = SpaceStore.instance.activeSpaceRoom?.getJoinedMembers() ?? ([] as RoomMember[]);
+        this.spaceMembers.forEach((m) => {
+            console.log(m);
+            this.spaceMemberIds.push(m.userId);
+        });
+        // Verji end
         if (props.kind === InviteKind.Invite && !props.roomId) {
             throw new Error("When using InviteKind.Invite a roomId is required for an InviteDialog");
         } else if (props.kind === InviteKind.CallTransfer && !props.call) {
@@ -456,7 +470,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             targetEmails: [], // Verji
             filterText: this.props.initialText || "",
             // Mutates alreadyInvited set so that buildSuggestions doesn't duplicate any users
-            recents: InviteDialog.buildRecents(excludedIds),
+            recents: InviteDialog.buildRecents(excludedIds, this.spaceMemberIds), //VERJI add param spaceMemberIds
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this.buildSuggestions(excludedIds),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
@@ -474,6 +488,26 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     public componentDidMount(): void {
+        /* VERJI START */
+
+        // Get singleton VerjiGrowthBook - if not available, one will be created.
+        // const verjiGrowthbook: VerjiGrowthBook = VerjiGrowthBook.getInstance();
+
+        // await verjiGrowthbook.loadFeatures( { autoRefresh: true } );
+
+        // Check if feature flag for onboarding is enabled
+        //const featureFlagEmailInvite = verjiGrowthbook.isOn( GrowthbookFeatureFlags.OnboardingFlag );
+        // Check kind of  invite dialog i.e its is required that the dialog is of type "dm" to initiate the email invitation
+        const isDmInvite = Boolean(this.props.kind === InviteKind.Dm);
+
+        // allowOnboarding in this context should only be allowed if both featureFlagEmailInvite AND isDMInvite are true
+        this.allowOnboardingFlag = isDmInvite; // VERJI: && featureFlagEmailInvite
+        //console.log("[featureFlagEmailInvite] " + featureFlagEmailInvite );
+        console.log("[isDmInvite] " + isDmInvite);
+        //console.log('[allowOnboardingFlag] ' + this.allowOnboardingFlag );
+
+        /* VERJI END */
+
         this.encryptionByDefault = privateShouldBeEncrypted(MatrixClientPeg.safeGet());
 
         if (this.props.initialText) {
@@ -501,7 +535,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         externals.forEach((id) => excludedTargetIds.add(id));
     }
 
-    public static buildRecents(excludedTargetIds: Set<string>): Result[] {
+    // VERJI added param activeSpaceMembers - used to fileter the recents based on membership in space
+    public static buildRecents(excludedTargetIds: Set<string>, activeSpaceMembers: string[]): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -530,6 +565,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 logger.warn(`[Invite:Recents] Excluding ${userId} from recents`);
                 continue;
             }
+
+            // Verji Start - filter out users not in space
+            if (!activeSpaceMembers.includes(userId)) {
+                logger.warn(
+                    `[Invite:Recents] Excluding ${userId} from recents because, the user is not a space member`,
+                );
+                continue;
+            }
+            // Verji End
 
             const room = rooms[userId];
             const roomMember = room.getMember(userId);
@@ -581,6 +625,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return Object.values(memberScores)
             .map(({ member }) => member)
             .filter((member) => !excludedTargetIds.has(member.userId))
+            .filter((member) => this.spaceMemberIds.includes(member.userId)) // Verji - add another layer of filtering, to only include members which are a member of space
             .sort(memberComparator)
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
@@ -591,7 +636,56 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
     }
 
-    private convertFilter(): Member[] {
+    private async convertFilter(): Promise<Member[]> {
+        // rosberg start
+        this.setState({ busy: true });
+
+        let foundUser = false;
+        try {
+            await MatrixClientPeg.get()
+                ?.searchUserDirectory({ term: this.state.filterText.trim().split(":")[0] ?? this.state.filterText })
+                .then(async (r) => {
+                    this.setState({ busy: false });
+
+                    if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
+                        foundUser = true;
+                    }
+                });
+        } catch (error) {
+            console.error("Failed to searchUserDirectory: ", error);
+        }
+
+        const currentUserId: string | undefined = MatrixClientPeg.getCredentials()?.userId.trim();
+        if (currentUserId && currentUserId == this.state.filterText.trim()) {
+            this.setState({ busy: false });
+            return [{ userId: currentUserId }] as Member[];
+        }
+
+        if (foundUser == false) {
+            // Look in other stores for user if search might have failed unexpectedly
+            const possibleMembers = [
+                ...this.state.recents,
+                ...this.state.suggestions,
+                ...this.state.serverResultsMixin,
+                ...this.state.threepidResultsMixin,
+            ];
+            const toAdd = [];
+            const potentialAddresses = this.state.filterText
+                .split(/[\s,]+/)
+                .map((p) => p.trim())
+                .filter((p) => !!p); // filter empty strings
+            for (const address of potentialAddresses) {
+                const member = possibleMembers.find((m) => m.userId === address);
+                if (member) {
+                    toAdd.push(member.user);
+                    continue;
+                }
+            }
+
+            if (!toAdd?.length || toAdd?.length == 0) {
+                //return [] as Member[];
+            }
+        }
         // Check to see if there's anything to convert first
         if (!this.state.filterText || !this.state.filterText.includes("@")) return this.state.targets || [];
 
@@ -604,45 +698,80 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.state.filterText.startsWith("@")) {
             // Assume mxid
             newMember = new DirectoryMember({ user_id: this.state.filterText });
-        } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
-            // Assume email
-            if (this.canInviteThirdParty()) {
-                newMember = new ThreepidMember(this.state.filterText);
-            }
         }
+        // VERJI Comment elseif (disallow regular threepid invite)
+        // else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
+        //     // Assume email
+        //     if (this.canInviteThirdParty()) {
+        //         newMember = new ThreepidMember(this.state.filterText);
+        //     }
+        // }
         if (!newMember) return this.state.targets;
 
         const newTargets = [...(this.state.targets || []), newMember];
         this.setState({ targets: newTargets, filterText: "" });
         return newTargets;
     }
+    /* VERJI START */
+    private convertFilterOnboarding(text?: string): string[] {
+        const newEmail = text ?? this.state.filterText;
+        this.state.targetEmails.forEach((_email) => {
+            if (_email == newEmail) {
+                this.setState({ filterText: text ? this.state.filterText : "" });
+                return this.state.targetEmails;
+            }
+        });
+        const newTargetsToInvite = [...(this.state.targetEmails || []), newEmail];
 
+        this.setState({ targets: [], targetEmails: newTargetsToInvite, filterText: text ? this.state.filterText : "" });
+
+        console.log("[Verji.InviteDialog] - Onboarding: " + newTargetsToInvite);
+        return newTargetsToInvite;
+    }
+    private startInviteByEmail = async (): Promise<void> => {
+        this.props.onFinished(false);
+
+        let _externals = this.state.targetEmails;
+        if (_externals == null) _externals = [];
+        if (Email.looksValid(this.state.filterText)) {
+            _externals.push(this.state.filterText);
+        }
+
+        dis.dispatch({
+            action: Action.OpenInviteExternalUsersDialog,
+            data: {
+                externals: _externals,
+            },
+        });
+    };
+    /* VERJI END */
     /**
      * Check if there are unknown profiles if promptBeforeInviteUnknownUsers setting is enabled.
      * If so show the "invite anyway?" dialog. Otherwise directly create the DM local room.
      */
-    private checkProfileAndStartDm = async (): Promise<void> => {
-        this.setBusy(true);
-        const targets = this.convertFilter();
+    // VERJI COMMENT OUT CheckProfileAndStartDM
+    // private checkProfileAndStartDm = async (): Promise<void> => {
+    //     this.setBusy(true);
+    //     const targets = this.convertFilter();
 
-        if (SettingsStore.getValue("promptBeforeInviteUnknownUsers")) {
-            const unknownProfileUsers = await extractTargetUnknownProfiles(targets, this.profilesStore);
+    //     if (SettingsStore.getValue("promptBeforeInviteUnknownUsers")) {
+    //         const unknownProfileUsers = await extractTargetUnknownProfiles(targets, this.profilesStore);
 
-            if (unknownProfileUsers.length) {
-                this.showAskInviteAnywayDialog(unknownProfileUsers);
-                return;
-            }
-        }
+    //         if (unknownProfileUsers.length) {
+    //             this.showAskInviteAnywayDialog(unknownProfileUsers);
+    //             return;
+    //         }
+    //     }
 
-        await this.startDm();
-    };
+    //     await this.startDm();
+    // };
 
     private startDm = async (): Promise<void> => {
         this.setBusy(true);
 
         try {
             const cli = MatrixClientPeg.safeGet();
-            const targets = this.convertFilter();
+            const targets = await this.convertFilter(); // Verji: convert now async, await response
             await startDmOnFirstMessage(cli, targets);
             this.props.onFinished(true);
         } catch (err) {
@@ -659,25 +788,25 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             busy,
         });
     }
-
-    private showAskInviteAnywayDialog(unknownProfileUsers: { userId: string; errorText: string }[]): void {
-        Modal.createDialog(AskInviteAnywayDialog, {
-            unknownProfileUsers,
-            onInviteAnyways: () => this.startDm(),
-            onGiveUp: () => {
-                this.setBusy(false);
-            },
-            description: _t("invite|ask_anyway_description"),
-            inviteNeverWarnLabel: _t("invite|ask_anyway_never_warn_label"),
-            inviteLabel: _t("invite|ask_anyway_label"),
-        });
-    }
+    // VERJI COMMENT OUT showAskInviteAnywayDialog
+    // private showAskInviteAnywayDialog(unknownProfileUsers: { userId: string; errorText: string }[]): void {
+    //     Modal.createDialog(AskInviteAnywayDialog, {
+    //         unknownProfileUsers,
+    //         onInviteAnyways: () => this.startDm(),
+    //         onGiveUp: () => {
+    //             this.setBusy(false);
+    //         },
+    //         description: _t("invite|ask_anyway_description"),
+    //         inviteNeverWarnLabel: _t("invite|ask_anyway_never_warn_label"),
+    //         inviteLabel: _t("invite|ask_anyway_label"),
+    //     });
+    // }
 
     private inviteUsers = async (): Promise<void> => {
         if (this.props.kind !== InviteKind.Invite) return;
         this.setState({ busy: true });
         this.convertFilter();
-        const targets = this.convertFilter();
+        const targets = await this.convertFilter(); // Verji: convert now async, await response
         const targetIds = targets.map((t) => t.userId);
 
         const cli = MatrixClientPeg.safeGet();
@@ -710,7 +839,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.props.kind !== InviteKind.CallTransfer) return;
         if (this.state.currentTabId == TabId.UserDirectory) {
             this.convertFilter();
-            const targets = this.convertFilter();
+            const targets = await this.convertFilter(); // Verji: convert now async, await response
             const targetIds = targets.map((t) => t.userId);
             if (targetIds.length > 1) {
                 this.setState({
@@ -730,33 +859,81 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(true);
     };
 
-    private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    private onKeyDown = async (e: React.KeyboardEvent<HTMLInputElement> | any): Promise<void> => {
         if (this.state.busy) return;
 
         let handled = false;
         const value = e.currentTarget.value.trim();
         const action = getKeyBindingsManager().getAccessibilityAction(e);
-
+        console.log("[Verji.inviteDialog.tsx] - onKeyDown, allowOndboardingFlag: ", this.allowOnboardingFlag);
+        // VERJI START
+        if (!this.allowOnboardingFlag) {
+            if (this.state.busy) return;
+            const value = e.target.value.trim();
+            const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
+            if (!value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !hasModifiers) {
+                // when the field is empty and the user hits backspace remove the right-most target
+                e.preventDefault();
+                this.removeMember(this.state.targets[this.state.targets.length - 1]);
+            } else if (value && e.key === Key.ENTER && !hasModifiers) {
+                // when the user hits enter with something in their field try to convert it
+                e.preventDefault();
+                await this.convertFilter();
+            } else if (value && e.key === Key.SPACE && !hasModifiers && value.includes("@") && !value.includes(" ")) {
+                // when the user hits space and their input looks like an e-mail/MXID then try to convert it
+                e.preventDefault();
+                await this.convertFilter();
+            }
+            return;
+        }
+        // VERJI END
         switch (action) {
             case KeyBindingAction.Backspace:
-                if (value || this.state.targets.length <= 0) break;
-
+                /* ROSBERG VERJI */
+                if (value || (this.state.targets.length <= 0 && this.state.targetEmails?.length <= 0)) break;
+                if (this.allowOnboardingFlag) {
+                    if (this.state.targetEmails?.length > 0) {
+                        this.removeEmailInvite(this.state.targetEmails[this.state.targetEmails.length - 1]);
+                        return;
+                    }
+                }
+                /* VERJI END*/
                 // when the field is empty and the user hits backspace remove the right-most target
                 this.removeMember(this.state.targets[this.state.targets.length - 1]);
                 handled = true;
                 break;
             case KeyBindingAction.Space:
+                /* VERJI START */
+                if (this.allowOnboardingFlag) {
+                    if (value && Email.looksValid(value)) {
+                        this.convertFilterOnboarding();
+                        break;
+                    } else {
+                        this.setState({ targetEmails: [] }); // dont allow combination of members
+                    }
+                }
+                /* VERJI END*/
                 if (!value || !value.includes("@") || value.includes(" ")) break;
 
                 // when the user hits space and their input looks like an e-mail/MXID then try to convert it
-                this.convertFilter();
+                await this.convertFilter(); // VERJI ADD await
                 handled = true;
                 break;
             case KeyBindingAction.Enter:
                 if (!value) break;
 
+                /* VERJI START */
+                if (this.allowOnboardingFlag) {
+                    if (value && Email.looksValid(value)) {
+                        this.convertFilterOnboarding();
+                        break;
+                    } else {
+                        this.setState({ targetEmails: [] }); // dont allow combination of members
+                    }
+                }
+                /* VERJI END*/
                 // when the user hits enter with something in their field try to convert it
-                this.convertFilter();
+                await this.convertFilter(); // VERJI add await
                 handled = true;
                 break;
         }
@@ -900,6 +1077,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
 
     private toggleMember = (member: Member): void => {
+        // VERJI START
+        if (this.allowOnboardingFlag) {
+            this.setState({ targetEmails: [] });
+        }
+        // VERJI END
         if (!this.state.busy) {
             let filterText = this.state.filterText;
             let targets = this.state.targets.map((t) => t); // cheap clone for mutation
@@ -960,6 +1142,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     private onPaste = async (e: React.ClipboardEvent): Promise<void> => {
+        // VERJI START
+        if (this.allowOnboardingFlag) {
+            return;
+        }
+        // VERJI END
         if (this.state.filterText) {
             // if the user has already typed something, just let them
             // paste normally.
@@ -967,6 +1154,26 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         const text = e.clipboardData.getData("text");
+        // ROSBERG START
+        this.setState({ busy: true });
+
+        let directoryUsers: any[] = [];
+        await MatrixClientPeg.get()
+            ?.searchUserDirectory({ term: text })
+            .then(async (r) => {
+                this.setState({ busy: false });
+
+                if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
+                    directoryUsers = r.results.map((u) => {
+                        return {
+                            userId: u.user_id,
+                            user: null,
+                        };
+                    });
+                }
+            });
+
+        // ROSBERG END
         const potentialAddresses = this.parseFilter(text);
         // one search term which is not a mxid or email address
         if (potentialAddresses.length === 1 && !potentialAddresses[0].includes("@")) {
@@ -983,6 +1190,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             ...this.state.suggestions,
             ...this.state.serverResultsMixin,
             ...this.state.threepidResultsMixin,
+            ...directoryUsers, // VERJI
         ];
         const toAdd: Member[] = [];
         const failed: string[] = [];
@@ -992,8 +1200,20 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const unableToAddMore: string[] = [];
 
         for (const address of potentialAddresses) {
+            // VERJI START
+            if (address.trim() == MatrixClientPeg.getCredentials()?.userId.trim()) {
+                failed.push(text); // VERJI
+                continue;
+            }
+            //VERJI END
             const member = possibleMembers.find((m) => m.userId === address);
             if (member) {
+                // ROSBERG start
+                if (member.userId.trim() == MatrixClientPeg.getCredentials()?.userId.trim()) {
+                    failed.push(text); // ROSBERG
+                    continue;
+                }
+                //ROSBERG END
                 if (this.canInviteMore([...this.state.targets, ...toAdd])) {
                     toAdd.push(member.user);
                 } else {
@@ -1005,7 +1225,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             if (Email.looksValid(address)) {
                 if (this.canInviteThirdParty([...this.state.targets, ...toAdd])) {
-                    toAdd.push(new ThreepidMember(address));
+                    //toAdd.push(new ThreepidMember(address)); //VERJI
                 } else {
                     // Third-party invite not possible for current targets and pasted targets.
                     unableToAddMore.push(address);
@@ -1391,9 +1611,18 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
-        const hasSelection =
-            this.state.targets.length > 0 || (this.state.filterText && this.state.filterText.includes("@"));
+        //const hasSelection = this.state.targets.length > 0 || (this.state.filterText && this.state.filterText.includes("@"));
 
+        // VERJI HACK (&& !Email.looksValid(this.state.filterText))
+        let hasSelection = false;
+        //let emailInvite = false;
+        if (this.allowOnboardingFlag) {
+            hasSelection = this.state.targets.length > 0 || this.state.targetEmails?.length > 0;
+            // emailInvite = (this.state.filterText && this.state.filterText.includes('@') && Email.looksValid(this.state.filterText));
+        } else {
+            hasSelection = this.state.targets.length > 0;
+        }
+        // VERJI END
         const cli = MatrixClientPeg.safeGet();
         const userId = cli.getUserId()!;
         if (this.props.kind === InviteKind.Dm) {
@@ -1428,9 +1657,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     },
                 );
             }
-
+            /* VERJI START */
+            if (this.allowOnboardingFlag && this.state.targetEmails?.length > 0) {
+                buttonText = _t("action|go");
+            } else {
+                buttonText = _t("action|go");
+            }
+            /* VERJI END */
             buttonText = _t("action|go");
-            goButtonFn = this.checkProfileAndStartDm;
+            goButtonFn = this.startDm; //this.checkProfileAndStartDm;
             extraSection = (
                 <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
                     <span>{_t("invite|suggestions_disclaimer")}</span>
@@ -1541,7 +1776,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
         }
 
-        const goButton =
+        let goButton =
             this.props.kind == InviteKind.CallTransfer ? null : (
                 <AccessibleButton
                     kind="primary"
@@ -1568,6 +1803,42 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 </div>
             );
         }
+        /* VERJI start */
+        if (this.allowOnboardingFlag) {
+            goButton =
+                this.props.kind == InviteKind.CallTransfer ? null : (
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={
+                            this.allowOnboardingFlag &&
+                            (this.state.targetEmails?.length > 0 || Email.looksValid(this.state.filterText))
+                                ? this.startInviteByEmail
+                                : goButtonFn
+                        }
+                        className="mx_InviteDialog_goButton"
+                        disabled={
+                            (this.state.busy || !hasSelection) &&
+                            this.state.targetEmails?.length <= 0 &&
+                            !Email.looksValid(this.state.filterText)
+                        }
+                    >
+                        {buttonText}
+                    </AccessibleButton>
+                );
+        } else {
+            goButton =
+                this.props.kind == InviteKind.CallTransfer ? null : (
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={goButtonFn}
+                        className="mx_InviteDialog_goButton"
+                        disabled={this.state.busy || !hasSelection}
+                    >
+                        {buttonText}
+                    </AccessibleButton>
+                );
+        }
+        /* VERJI END */
 
         const usersSection = (
             <React.Fragment>

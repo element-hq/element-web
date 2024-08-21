@@ -119,6 +119,10 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders tabs correctly", () => {
+        // jest.spyOn(SettingsStore, "getValue").mockImplementation((name:string) => {
+        //     if (name == UIFeature.SpacesEnabled) return true;
+        //     return true;
+        // });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });

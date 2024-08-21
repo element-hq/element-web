@@ -38,6 +38,7 @@ import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayo
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {
     app: IWidget;
@@ -272,7 +273,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                 {streamAudioStreamButton}
                 {editButton}
                 {revokeButton}
-                {deleteButton}
+                {SettingsStore.getValue(UIFeature.WidgetContextDeleteButton) && deleteButton}
                 {snapshotButton}
                 {moveLeftButton}
                 {moveRightButton}

@@ -193,7 +193,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                         <BetaPill />
                     </IconizedContextMenuOption>
                 )}
-                {canAddSubSpaces && (
+                {SettingsStore.getValue(UIFeature.AddSubSpace) && canAddSubSpaces && (
                     <IconizedContextMenuOption
                         data-testid="new-subspace-option"
                         iconClassName="mx_SpacePanel_iconPlus"
@@ -263,7 +263,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 />
                 {devtoolsOption}
                 {settingsOption}
-                {leaveOption}
+                {SettingsStore.getValue(UIFeature.ShowLeaveSpaceInContextMenu) && leaveOption}
                 {newRoomSection}
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>
