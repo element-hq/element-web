@@ -76,4 +76,15 @@ test.describe("Pinned messages", () => {
         await util.backPinnedMessagesList();
         await util.assertPinnedCountInRoomInfo(0);
     });
+
+    test("should be able to pin and unpin from the quick actions", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);
+        await util.pinMessagesFromQuickActions(["Msg1"]);
+        await util.openRoomInfo();
+        await util.assertPinnedCountInRoomInfo(1);
+
+        await util.pinMessagesFromQuickActions(["Msg1"], true);
+        await util.assertPinnedCountInRoomInfo(0);
+    });
 });

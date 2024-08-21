@@ -100,13 +100,35 @@ export class Helpers {
     }
 
     /**
-     * Pin the given message
+     * Pin the given message from the quick actions
+     * @param message
+     * @param unpin
+     */
+    async pinMessageFromQuickActions(message: string, unpin = false) {
+        const timelineMessage = this.page.locator(".mx_MTextBody", { hasText: message });
+        await timelineMessage.hover();
+        await this.page.getByRole("button", { name: unpin ? "Unpin" : "Pin", exact: true }).click();
+    }
+
+    /**
+     * Pin the given messages from the quick actions
+     * @param messages
+     * @param unpin
+     */
+    async pinMessagesFromQuickActions(messages: string[], unpin = false) {
+        for (const message of messages) {
+            await this.pinMessageFromQuickActions(message, unpin);
+        }
+    }
+
+    /**
+     * Pin the given message from the contextual menu
      * @param message
      */
     async pinMessage(message: string) {
         const timelineMessage = this.page.locator(".mx_MTextBody", { hasText: message });
         await timelineMessage.click({ button: "right" });
-        await this.page.getByRole("menuitem", { name: "Pin" }).click();
+        await this.page.getByRole("menuitem", { name: "Pin", exact: true }).click();
     }
 
     /**

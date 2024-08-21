@@ -25,6 +25,7 @@ import {
     Room,
     FeatureSupport,
     Thread,
+    EventTimeline,
 } from "matrix-js-sdk/src/matrix";
 
 import MessageActionBar from "../../../../src/components/views/messages/MessageActionBar";
@@ -51,6 +52,8 @@ describe("<MessageActionBar />", () => {
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsEvents(),
         getRoom: jest.fn(),
+        setRoomAccountData: jest.fn(),
+        sendStateEvent: jest.fn(),
     });
     const room = new Room(roomId, client, userId);
 
@@ -442,10 +445,10 @@ describe("<MessageActionBar />", () => {
         });
     });
 
-    it.each([["React"], ["Reply"], ["Reply in thread"], ["Edit"]])(
+    it.each([["React"], ["Reply"], ["Reply in thread"], ["Edit"], ["Pin"]])(
         "does not show context menu when right-clicking",
         (buttonLabel: string) => {
-            // For favourite button
+            // For favourite and pin buttons
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 
             const event = new MouseEvent("contextmenu", {
@@ -467,5 +470,34 @@ describe("<MessageActionBar />", () => {
         const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
         fireEvent.contextMenu(queryByLabelText("Options")!);
         expect(queryByTestId("mx_MessageContextMenu")).toBeTruthy();
+    });
+
+    describe("pin button", () => {
+        beforeEach(() => {
+            // enable pin button
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        });
+
+        afterEach(() => {
+            jest.spyOn(
+                room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockRestore();
+        });
+
+        it("should not render pin button when user can't send state event", () => {
+            jest.spyOn(
+                room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockReturnValue(false);
+
+            const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+            expect(queryByLabelText("Pin")).toBeFalsy();
+        });
+
+        it("should render pin button", () => {
+            const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+            expect(queryByLabelText("Pin")).toBeTruthy();
+        });
     });
 });

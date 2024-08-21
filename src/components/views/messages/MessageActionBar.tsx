@@ -26,6 +26,8 @@ import {
     M_BEACON_INFO,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin.svg";
+import { Icon as UnpinIcon } from "@vector-im/compound-design-tokens/icons/unpin.svg";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
@@ -61,6 +63,7 @@ import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayloa
 import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import PinningUtils from "../../../utils/PinningUtils";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -384,6 +387,17 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         );
     };
 
+    /**
+     * Pin or unpin the event.
+     */
+    private onPinClick = async (event: ButtonEvent): Promise<void> => {
+        // Don't open the regular browser or our context menu on right-click
+        event.preventDefault();
+        event.stopPropagation();
+
+        await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+    };
+
     public render(): React.ReactNode {
         const toolbarOpts: JSX.Element[] = [];
         if (canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
@@ -397,6 +411,22 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     placement="left"
                 >
                     <EditIcon />
+                </RovingAccessibleButton>,
+            );
+        }
+
+        if (PinningUtils.canPinOrUnpin(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+            const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
+            toolbarOpts.push(
+                <RovingAccessibleButton
+                    className="mx_MessageActionBar_iconButton"
+                    title={isPinned ? _t("action|unpin") : _t("action|pin")}
+                    onClick={this.onPinClick}
+                    onContextMenu={this.onPinClick}
+                    key="pin"
+                    placement="left"
+                >
+                    {isPinned ? <UnpinIcon /> : <PinIcon />}
                 </RovingAccessibleButton>,
             );
         }

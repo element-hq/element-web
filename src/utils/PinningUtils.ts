@@ -14,13 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent, EventType, M_POLL_START } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, M_POLL_START, MatrixClient, EventTimeline } from "matrix-js-sdk/src/matrix";
+
+import { canPinEvent, isContentActionable } from "./EventUtils";
+import SettingsStore from "../settings/SettingsStore";
+import { ReadPinsEventId } from "../components/views/right_panel/types";
 
 export default class PinningUtils {
     /**
      * Event types that may be pinned.
      */
-    public static pinnableEventTypes: (EventType | string)[] = [
+    public static readonly PINNABLE_EVENT_TYPES: (EventType | string)[] = [
         EventType.RoomMessage,
         M_POLL_START.name,
         M_POLL_START.altName,
@@ -33,9 +37,80 @@ export default class PinningUtils {
      */
     public static isPinnable(event: MatrixEvent): boolean {
         if (!event) return false;
-        if (!this.pinnableEventTypes.includes(event.getType())) return false;
+        if (!this.PINNABLE_EVENT_TYPES.includes(event.getType())) return false;
         if (event.isRedacted()) return false;
 
         return true;
+    }
+
+    /**
+     * Determines if the given event is pinned.
+     * @param matrixClient
+     * @param mxEvent
+     */
+    public static isPinned(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
+        const room = matrixClient.getRoom(mxEvent.getRoomId());
+        if (!room) return false;
+
+        const pinnedEvent = room
+            .getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.getStateEvents(EventType.RoomPinnedEvents, "");
+        if (!pinnedEvent) return false;
+        const content = pinnedEvent.getContent();
+        return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(mxEvent.getId());
+    }
+
+    /**
+     * Determines if the given event may be pinned or unpinned.
+     * @param matrixClient
+     * @param mxEvent
+     */
+    public static canPinOrUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
+        if (!SettingsStore.getValue("feature_pinning")) return false;
+        if (!isContentActionable(mxEvent)) return false;
+
+        const room = matrixClient.getRoom(mxEvent.getRoomId());
+        if (!room) return false;
+
+        return Boolean(
+            room
+                .getLiveTimeline()
+                .getState(EventTimeline.FORWARDS)
+                ?.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient) && canPinEvent(mxEvent),
+        );
+    }
+
+    /**
+     * Pin or unpin the given event.
+     * @param matrixClient
+     * @param mxEvent
+     */
+    public static async pinOrUnpinEvent(matrixClient: MatrixClient, mxEvent: MatrixEvent): Promise<void> {
+        const room = matrixClient.getRoom(mxEvent.getRoomId());
+        if (!room) return;
+
+        const eventId = mxEvent.getId();
+        if (!eventId) return;
+
+        // Get the current pinned events of the room
+        const pinnedIds: Array<string> =
+            room
+                .getLiveTimeline()
+                .getState(EventTimeline.FORWARDS)
+                ?.getStateEvents(EventType.RoomPinnedEvents, "")
+                ?.getContent().pinned || [];
+
+        // If the event is already pinned, unpin it
+        if (pinnedIds.includes(eventId)) {
+            pinnedIds.splice(pinnedIds.indexOf(eventId), 1);
+        } else {
+            // Otherwise, pin it
+            pinnedIds.push(eventId);
+            await matrixClient.setRoomAccountData(room.roomId, ReadPinsEventId, {
+                event_ids: [...(room.getAccountData(ReadPinsEventId)?.getContent()?.event_ids || []), eventId],
+            });
+        }
+        await matrixClient.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned: pinnedIds }, "");
     }
 }
