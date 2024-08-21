@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.107.0",
+    "version": "3.108.0-rc.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -26,7 +26,7 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "main": "./src/index.ts",
+    "main": "./lib/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
     "matrix_lib_typings": "./lib/index.d.ts",
@@ -250,5 +250,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "typings": "./lib/index.d.ts"
 }
