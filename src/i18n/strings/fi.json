@@ -2995,8 +2995,7 @@
         "pending_moderation": "Viesti odottaa moderointia",
         "pending_moderation_reason": "Viesti odottaa moderointia: %(reason)s",
         "reactions": {
-            "add_reaction_prompt": "Lisää reaktio",
-            "tooltip": "<reactors/><reactedWith>reagoi(vat) emojilla %(shortName)s</reactedWith>"
+            "add_reaction_prompt": "Lisää reaktio"
         },
         "read_receipt_title": {
             "one": "Nähnyt yksi ihminen",

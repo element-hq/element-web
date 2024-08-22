@@ -18,7 +18,7 @@ import { render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { mocked, MockedObject } from "jest-mock";
-import { CryptoApi, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { Crypto, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { defer, IDeferred, sleep } from "matrix-js-sdk/src/utils";
 import { BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
@@ -35,7 +35,7 @@ import RestoreKeyBackupDialog from "../../../../../src/components/views/dialogs/
 
 describe("CreateSecretStorageDialog", () => {
     let mockClient: MockedObject<MatrixClient>;
-    let mockCrypto: MockedObject<CryptoApi>;
+    let mockCrypto: MockedObject<Crypto.CryptoApi>;
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({

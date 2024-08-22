@@ -3363,8 +3363,7 @@
         "pending_moderation_reason": "Sõnum on modereerimise ootel: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Lisa reaktsioon",
-            "label": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s",
-            "tooltip": "<reactors/><reactedWith>reageeris(id) %(shortName)s</reactedWith>"
+            "label": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s"
         },
         "read_receipt_title": {
             "one": "Seda nägi %(count)s lugeja",

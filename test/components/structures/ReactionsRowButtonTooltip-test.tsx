@@ -16,10 +16,12 @@ import { getMockClientWithEventEmitter } from "../../test-utils";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 
+import { Tooltip } from "@vector-im/compound-web";
+
+
 describe("ReactionsRowButtonTooltip", () => {
     const content = "Hello world!";
     const reactionEvents = [] as any;
-    const visible = true;
     const roomId = "myRoomId";
     const mockClient = getMockClientWithEventEmitter({
         mxcUrlToHttp: jest.fn().mockReturnValue("https://not.a.real.url"),
@@ -47,7 +49,6 @@ describe("ReactionsRowButtonTooltip", () => {
                     mxEvent={mxEvent}
                     content={content}
                     reactionEvents={reactionEvents}
-                    visible={visible}
                     customReactionImagesEnabled={customReactionImagesEnabled}
                 />
             </MatrixClientContext.Provider>,
@@ -69,26 +70,18 @@ describe("ReactionsRowButtonTooltip", () => {
                 if (lifecycleEvent === CustomComponentLifecycle.ReactionsRowButtonTooltip) {
                     (opts as CustomComponentOpts).CustomComponent = ({ children }) => {
                         return (
-                            <>
-                                <div data-testid="wrapper-header">Header</div>
-                                <div data-testid="wrapper-ReactionsRowButtonTooltip">{children}</div>
-                                <div data-testid="wrapper-footer">Footer</div>
-                            </>
+                            <Tooltip label={"r1, r2"} caption={"caption"} placement="right">
+                                <React.Fragment>
+                                    <div data-testid="test-header">Header</div>
+                                </React.Fragment>
+                            </Tooltip>
                         );
                     };
                 }
             });
 
             getComp();
-            expect(screen.getByTestId("wrapper-header")).toBeDefined();
-            expect(screen.getByTestId("wrapper-ReactionsRowButtonTooltip")).toBeDefined();
-            expect(screen.getByTestId("wrapper-footer")).toBeDefined();
-            expect(screen.getByTestId("wrapper-header").nextSibling).toBe(
-                screen.getByTestId("wrapper-ReactionsRowButtonTooltip"),
-            );
-            expect(screen.getByTestId("wrapper-ReactionsRowButtonTooltip").nextSibling).toBe(
-                screen.getByTestId("wrapper-footer"),
-            );
+            expect(screen.getByTestId("test-header")).toBeDefined();
         });
     });
 });

@@ -2451,8 +2451,7 @@
         },
         "reactions": {
             "add_reaction_prompt": "Aldoni reagon",
-            "label": "%(reactors)s reagis per %(content)s",
-            "tooltip": "<reactors/><reactedWith>reagis per %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagis per %(content)s"
         },
         "redacted": {
             "tooltip": "Mesaĝo forigita je %(date)s"

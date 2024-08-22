@@ -94,7 +94,7 @@ export const enum UIFeature {
     CustomThemePanel = "UIFeature.customThemePanel",
     VideoMirrorLocalVideo = "UIFeature.videoMirrorLocalVideo",
     VideoConnectionSettings = "UIFeature.videoConnectionSettings",
-    SpacesEnabled = "UIFeature.spacesEnabled",
+    SpotlightDialogShowOtherSearches = "UIFeature.spotlightDialogShowOtherSearches",
     MultipleCallsInRoom = "UIFeature.multipleCallsInRoom",
     ShowSpaceLandingPageDetails = "UIFeature.showSpaceLandingPageDetails",
     ShowSendMessageToUserLink = "UIFeature.showSendMessageToUserLink",

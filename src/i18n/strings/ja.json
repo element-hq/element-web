@@ -3135,8 +3135,7 @@
         "pending_moderation_reason": "メッセージはモデレートの保留中です：%(reason)s",
         "reactions": {
             "add_reaction_prompt": "リアクションを追加",
-            "label": "%(reactors)sは%(content)sでリアクションしました",
-            "tooltip": "<reactors/><reactedWith>%(shortName)sでリアクションしました</reactedWith>"
+            "label": "%(reactors)sは%(content)sでリアクションしました"
         },
         "read_receipt_title": {
             "one": "%(count)s人が閲覧済",

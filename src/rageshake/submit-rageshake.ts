@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Method, MatrixClient, CryptoApi } from "matrix-js-sdk/src/matrix";
+import { Method, MatrixClient, Crypto } from "matrix-js-sdk/src/matrix";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -177,7 +177,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
 /**
  * Collects crypto related information.
  */
-async function collectCryptoInfo(cryptoApi: CryptoApi, body: FormData): Promise<void> {
+async function collectCryptoInfo(cryptoApi: Crypto.CryptoApi, body: FormData): Promise<void> {
     body.append("crypto_version", cryptoApi.getVersion());
 
     const ownDeviceKeys = await cryptoApi.getOwnDeviceKeys();
@@ -206,7 +206,7 @@ async function collectCryptoInfo(cryptoApi: CryptoApi, body: FormData): Promise<
 /**
  * Collects information about secret storage and backup.
  */
-async function collectRecoveryInfo(client: MatrixClient, cryptoApi: CryptoApi, body: FormData): Promise<void> {
+async function collectRecoveryInfo(client: MatrixClient, cryptoApi: Crypto.CryptoApi, body: FormData): Promise<void> {
     const secretStorage = client.secretStorage;
     body.append("secret_storage_ready", String(await cryptoApi.isSecretStorageReady()));
     body.append("secret_storage_key_in_account", String(await secretStorage.hasKey()));

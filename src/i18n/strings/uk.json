@@ -3324,8 +3324,7 @@
         "pending_moderation_reason": "Повідомлення очікує модерування: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Додати реакцію",
-            "label": "%(reactors)s додає реакцію %(content)s",
-            "tooltip": "<reactors/><reactedWith>додає реакцію %(shortName)s</reactedWith>"
+            "label": "%(reactors)s додає реакцію %(content)s"
         },
         "read_receipt_title": {
             "one": "Переглянули %(count)s осіб",

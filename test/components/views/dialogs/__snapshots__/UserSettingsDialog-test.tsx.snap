@@ -111,6 +111,42 @@ NodeList [
     </span>
   </li>,
   <li
+    aria-controls="mx_tabpanel_USER_SIDEBAR_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SIDEBAR_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_sidebarIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SIDEBAR_TAB_label"
+    >
+      Sidebar
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SECURITY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_securityIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SECURITY_TAB_label"
+    >
+      Security & Privacy
+    </span>
+  </li>,
+  <li
     aria-controls="mx_tabpanel_USER_LABS_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"

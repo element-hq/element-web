@@ -18,7 +18,7 @@ import React from "react";
 import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 import {
     ClientEvent,
@@ -30,8 +30,6 @@ import {
     PUSHER_ENABLED,
     IAuthData,
     GET_LOGIN_TOKEN_CAPABILITY,
-    CryptoApi,
-    DeviceVerificationStatus,
     MatrixError,
     MatrixClient,
 } from "matrix-js-sdk/src/matrix";

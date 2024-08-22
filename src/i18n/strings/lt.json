@@ -2201,8 +2201,7 @@
         "pending_moderation": "Žinutė laukia moderavimo",
         "pending_moderation_reason": "Žinutė laukia moderavimo: %(reason)s",
         "reactions": {
-            "add_reaction_prompt": "Pridėti reakciją",
-            "tooltip": "<reactors/><reactedWith>reagavo su %(shortName)s</reactedWith>"
+            "add_reaction_prompt": "Pridėti reakciją"
         },
         "read_receipt_title": {
             "one": "Matė %(count)s žmogus",

@@ -75,6 +75,7 @@ import { NonEmptyArray } from "../../../@types/common";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { UserProfilesStore } from "../../../stores/UserProfilesStore";
 import { Key } from "../../../Keyboard";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -164,8 +165,8 @@ class DMEmailTile extends React.PureComponent<IDMUserTileProps> {
         e.stopPropagation();
         console.log(e);
         const asMember: Member = {
-            name: this.props.email,
-            userId: this.props.email,
+            name: this.props.email ?? "",
+            userId: this.props.email ?? "",
             getMxcAvatarUrl: () => {
                 return "";
             },
@@ -425,10 +426,20 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private encryptionByDefault = false;
     private profilesStore: UserProfilesStore;
     private allowOnboardingFlag = false;
+    // Verji
+    private spaceMembers = [] as RoomMember[];
+    private spaceMemberIds = [] as string[];
+    // Verji End
 
     public constructor(props: Props) {
         super(props);
-
+        // Verji Start - generate a list of userId's which are members in currently active space
+        this.spaceMembers = SpaceStore.instance.activeSpaceRoom?.getJoinedMembers() ?? ([] as RoomMember[]);
+        this.spaceMembers.forEach((m) => {
+            console.log(m);
+            this.spaceMemberIds.push(m.userId);
+        });
+        // Verji end
         if (props.kind === InviteKind.Invite && !props.roomId) {
             throw new Error("When using InviteKind.Invite a roomId is required for an InviteDialog");
         } else if (props.kind === InviteKind.CallTransfer && !props.call) {
@@ -458,7 +469,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             targetEmails: [], // Verji
             filterText: this.props.initialText || "",
             // Mutates alreadyInvited set so that buildSuggestions doesn't duplicate any users
-            recents: InviteDialog.buildRecents(excludedIds),
+            recents: InviteDialog.buildRecents(excludedIds, this.spaceMemberIds), //VERJI add param spaceMemberIds
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this.buildSuggestions(excludedIds),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
@@ -523,7 +534,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         externals.forEach((id) => excludedTargetIds.add(id));
     }
 
-    public static buildRecents(excludedTargetIds: Set<string>): Result[] {
+    // VERJI added param activeSpaceMembers - used to fileter the recents based on membership in space
+    public static buildRecents(excludedTargetIds: Set<string>, activeSpaceMembers: string[]): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -552,6 +564,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 logger.warn(`[Invite:Recents] Excluding ${userId} from recents`);
                 continue;
             }
+
+            // Verji Start - filter out users not in space
+            if (!activeSpaceMembers.includes(userId)) {
+                logger.warn(
+                    `[Invite:Recents] Excluding ${userId} from recents because, the user is not a space member`,
+                );
+                continue;
+            }
+            // Verji End
 
             const room = rooms[userId];
             const roomMember = room.getMember(userId);
@@ -603,6 +624,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return Object.values(memberScores)
             .map(({ member }) => member)
             .filter((member) => !excludedTargetIds.has(member.userId))
+            .filter((member) => this.spaceMemberIds.includes(member.userId)) // Verji - add another layer of filtering, to only include members which are a member of space
             .sort(memberComparator)
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
@@ -1082,6 +1104,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     /* VERJI START */
     private removeEmailInvite = (email: string | Member): void => {
+        if (this.state.busy) return;
         const _email = (email as Member)?.name ?? (email as string);
 
         const targets = this.state.targetEmails.map((t) => t); // cheap clone for mutation
@@ -1097,6 +1120,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
     /* VERJI END */
     private removeMember = (member: Member): void => {
+        if (this.state.busy) return;
         const targets = this.state.targets.map((t) => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
         if (idx >= 0) {
@@ -1389,27 +1413,19 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.allowOnboardingFlag) {
             if (this.state.targetEmails?.length > 0) {
                 targets = this.state.targetEmails.map((t) => (
-                    <DMEmailTile email={t} onRemove={!this.state.busy && this.removeEmailInvite} key={t ?? null} /> // ROSBERG
+                    <DMEmailTile member={{} as Member} email={t} onRemove={this.removeEmailInvite} key={t ?? null} /> // ROSBERG
                 ));
             } else {
                 targets = this.state.targets.map((t) =>
                     t?.userId && t?.name ? (
-                        <DMUserTile
-                            member={t}
-                            onRemove={!this.state.busy && this.removeMember}
-                            key={t?.userId ?? t?.name ?? null}
-                        />
+                        <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                     ) : null,
                 );
             }
         } else {
             targets = this.state.targets.map((t) =>
                 t?.userId && t?.name ? (
-                    <DMUserTile
-                        member={t}
-                        onRemove={!this.state.busy && this.removeMember}
-                        key={t?.userId ?? t?.name ?? null}
-                    />
+                    <DMUserTile member={t} onRemove={this.removeMember} key={t?.userId ?? t?.name ?? null} />
                 ) : null,
             );
         }

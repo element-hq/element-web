@@ -569,8 +569,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     let otherSearchesSection: JSX.Element | undefined;
     if (
-        (SettingsStore.getValue(UIFeature.SpacesEnabled) && trimmedQuery) ||
-        (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces)
+        SettingsStore.getValue(UIFeature.SpotlightDialogShowOtherSearches) &&
+        (trimmedQuery || (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces))
     ) {
         otherSearchesSection = (
             <div
