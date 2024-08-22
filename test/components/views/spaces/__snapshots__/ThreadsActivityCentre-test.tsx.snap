@@ -114,7 +114,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         />
       </svg>
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_dot"
+        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_green mx_NotificationBadge_level_notification mx_NotificationBadge_dot"
       >
         <span
           class="mx_NotificationBadge_count"

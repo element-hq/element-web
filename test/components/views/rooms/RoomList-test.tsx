@@ -49,6 +49,83 @@ const getDMRoomsForUserId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
+describe("UIFeature tests ", () => {
+    stubClient();
+    //const client = MatrixClientPeg.safeGet();
+    const store = SpaceStore.instance;
+
+    function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
+        return (
+            <RoomList
+                onKeyDown={jest.fn()}
+                onFocus={jest.fn()}
+                onBlur={jest.fn()}
+                onResize={jest.fn()}
+                resizeNotifier={new ResizeNotifier()}
+                isMinimized={false}
+                activeSpace={MetaSpace.Home}
+                {...props}
+            />
+        );
+    }
+    beforeEach(() => {
+        store.setActiveSpace(MetaSpace.Home);
+        mocked(shouldShowComponent).mockImplementation((feature) =>  true);
+
+    });
+    describe("UIFeature.showStartChatPlusMenuForMetaSpace", () => {
+    
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = true: renders 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowStartChatPlusMenuForMetaSpace) return true;
+                return false;
+            });
+            render(getComponent())
+    
+            expect(screen.getByLabelText("Start chat")).toBeInTheDocument();
+        });
+    
+        it("UIFeature.showStartChatPlusMenuForMetaSpace = false: does not render 'Start Chat' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowStartChatPlusMenuForMetaSpace) return false;
+                return false;
+            });
+            render(getComponent())
+            expect(screen.queryByLabelText("Start chat")).not.toBeInTheDocument();
+        });
+    
+    });
+    
+    describe("UIFeature.showAddRoomPlusMenuForMetaSpace", () => {
+        beforeEach(() => {
+            store.setActiveSpace(MetaSpace.Home);         
+        });
+    
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = true: renders 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowAddRoomPlusMenuForMetaSpace) return true;
+                return false;
+            });
+            render(getComponent());
+            expect(screen.getByLabelText("Add room")).toBeInTheDocument();
+        });
+    
+        it("UIFeature.showAddRoomPlusMenuForMetaSpace = false: does not render 'Add room' plus-button", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowAddRoomPlusMenuForMetaSpace) return false;
+                return false;
+            });
+    
+            render(getComponent());
+    
+            expect(screen.queryByLabelText("Add room")).not.toBeInTheDocument();
+        });
+    });
+    afterEach( () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => true);
+    })
+})
+
 describe("RoomList", () => {
     stubClient();
     const client = MatrixClientPeg.safeGet();
@@ -309,51 +386,5 @@ describe("RoomList", () => {
         });
     });
 
-    describe("UIFeature.showStartChatPlusMenuForMetaSpace", () => {
-        beforeEach(() => {
-            store.setActiveSpace(MetaSpace.Home);
-        });
 
-        it("UIFeature.showStartChatPlusMenuForMetaSpace = true: renders 'Start Chat' plus-button", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
-                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? true : "default";
-            });
-            render(getComponent());
-
-            expect(screen.getByLabelText("Start chat")).toBeInTheDocument();
-        });
-
-        it("UIFeature.showStartChatPlusMenuForMetaSpace = false: does not render 'Start Chat' plus-button", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
-                return val === UIFeature.ShowStartChatPlusMenuForMetaSpace ? false : "default";
-            });
-            render(getComponent());
-
-            expect(screen.queryByLabelText("Start chat")).not.toBeInTheDocument();
-        });
-    });
-
-    describe("UIFeature.showAddRoomPlusMenuForMetaSpace", () => {
-        beforeEach(() => {
-            store.setActiveSpace(MetaSpace.Home);
-        });
-
-        it("UIFeature.showAddRoomPlusMenuForMetaSpace = true: renders 'Add room' plus-button", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
-                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? true : "default";
-            });
-            render(getComponent());
-
-            expect(screen.getByLabelText("Add room")).toBeInTheDocument();
-        });
-
-        it("UIFeature.showAddRoomPlusMenuForMetaSpace = false: does not render 'Add room' plus-button", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((val) => {
-                return val === UIFeature.ShowAddRoomPlusMenuForMetaSpace ? false : "default";
-            });
-            render(getComponent());
-
-            expect(screen.queryByLabelText("Add room")).not.toBeInTheDocument();
-        });
-    });
 });

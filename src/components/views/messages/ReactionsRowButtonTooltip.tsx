@@ -75,7 +75,6 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
 
             return (
                 <customReactionButtonTooltip.CustomComponent>
-
                     <Tooltip label={formattedSenders} caption={caption} placement="right">
                             {children}
                     </Tooltip>
