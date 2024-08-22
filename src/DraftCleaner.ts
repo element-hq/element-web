@@ -18,6 +18,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { EDITOR_STATE_STORAGE_PREFIX } from "./components/views/rooms/SendMessageComposer";
+import { WYSIWYG_EDITOR_STATE_STORAGE_PREFIX } from "./components/views/rooms/MessageComposer";
 
 // The key used to persist the the timestamp we last cleaned up drafts
 export const DRAFT_LAST_CLEANUP_KEY = "mx_draft_cleanup";
@@ -61,14 +62,21 @@ function shouldCleanupDrafts(): boolean {
 }
 
 /**
- * Clear all drafts for the CIDER editor if the room does not exist in the known rooms.
+ * Clear all drafts for the CIDER and WYSIWYG editors if the room does not exist in the known rooms.
  */
 function cleaupDrafts(): void {
     for (let i = 0; i < localStorage.length; i++) {
         const keyName = localStorage.key(i);
-        if (!keyName?.startsWith(EDITOR_STATE_STORAGE_PREFIX)) continue;
+        if (!keyName) continue;
+        let roomId: string | undefined = undefined;
+        if (keyName.startsWith(EDITOR_STATE_STORAGE_PREFIX)) {
+            roomId = keyName.slice(EDITOR_STATE_STORAGE_PREFIX.length).split("_$")[0];
+        }
+        if (keyName.startsWith(WYSIWYG_EDITOR_STATE_STORAGE_PREFIX)) {
+            roomId = keyName.slice(WYSIWYG_EDITOR_STATE_STORAGE_PREFIX.length).split("_$")[0];
+        }
+        if (!roomId) continue;
         // Remove the prefix and the optional event id suffix to leave the room id
-        const roomId = keyName.slice(EDITOR_STATE_STORAGE_PREFIX.length).split("_$")[0];
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) {
             logger.debug(`Removing draft for unknown room with key ${keyName}`);

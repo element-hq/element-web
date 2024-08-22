@@ -624,6 +624,18 @@ describe("<MatrixChat />", () => {
                 expect(localStorage.getItem(`mx_cider_state_${unknownRoomId}`)).toBeNull();
             });
 
+            it("should clean up wysiwyg drafts", async () => {
+                Date.now = jest.fn(() => timestamp);
+                localStorage.setItem(`mx_wysiwyg_state_${roomId}`, "fake_content");
+                localStorage.setItem(`mx_wysiwyg_state_${unknownRoomId}`, "fake_content");
+                await getComponentAndWaitForReady();
+                mockClient.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+                // let things settle
+                await flushPromises();
+                expect(localStorage.getItem(`mx_wysiwyg_state_${roomId}`)).not.toBeNull();
+                expect(localStorage.getItem(`mx_wysiwyg_state_${unknownRoomId}`)).toBeNull();
+            });
+
             it("should not clean up drafts before expiry", async () => {
                 // Set the last cleanup to the recent past
                 localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
