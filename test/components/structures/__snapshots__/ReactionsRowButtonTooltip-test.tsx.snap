@@ -2,6 +2,8 @@
 
 exports[`ReactionsRowButtonTooltip should render 1`] = `
 <DocumentFragment>
-  <div />
+  <div>
+    Test tooltip
+  </div>
 </DocumentFragment>
 `;

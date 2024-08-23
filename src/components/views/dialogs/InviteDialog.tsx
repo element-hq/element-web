@@ -431,7 +431,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private spaceMemberIds = [] as string[];
     // Verji End
 
-
     public constructor(props: Props) {
         super(props);
         // Verji Start - generate a list of userId's which are members in currently active space
@@ -733,7 +732,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         let _externals = this.state.targetEmails;
         if (_externals == null) _externals = [];
-        if (Email.looksValid(this.state.filterText)) {
+        if (Email.looksValid(this.state.filterText) && !_externals.includes(this.state.filterText)) {
             _externals.push(this.state.filterText);
         }
 

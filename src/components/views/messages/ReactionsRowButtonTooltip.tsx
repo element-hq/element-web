@@ -20,7 +20,6 @@ import {
     CustomComponentLifecycle,
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
-
 import { Tooltip } from "@vector-im/compound-web";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
@@ -64,7 +63,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
 
             // Line 👇is Verji specific. If we wish to use upstream only we must implement CustomComponentLifecycle.ReactionsRowButtonTooltip
             const formattedSenders = formatList(senders, 50);
-            
+
             const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
 
             const customReactionButtonTooltip = { CustomComponent: React.Fragment };
@@ -75,11 +74,10 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
 
             return (
                 <customReactionButtonTooltip.CustomComponent>
-
                     <Tooltip label={formattedSenders} caption={caption} placement="right">
-                            {children}
+                        {children}
                     </Tooltip>
-                </customReactionButtonTooltip.CustomComponent>  
+                </customReactionButtonTooltip.CustomComponent>
             );
         }
 
