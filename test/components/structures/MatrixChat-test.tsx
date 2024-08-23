@@ -62,6 +62,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
+import { Features } from "../../../src/settings/Settings";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -1391,7 +1392,10 @@ describe("<MatrixChat />", () => {
 
             it("during crypto init", async () => {
                 await populateStorageForSession();
-
+                // VERJI - mock settingstore to return true on feature... Not sure why default doesent work...
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                    if (name == Features.RustCrypto) return true;
+                });                
                 const client = new MockClientWithEventEmitter({
                     ...getMockClientMethods(),
                 }) as unknown as Mocked<MatrixClient>;
@@ -1420,7 +1424,7 @@ describe("<MatrixChat />", () => {
                 initCryptoCompleteDefer.resolve();
                 await sleep(10); // Modals take a few ms to appear
                 expect(document.body).toMatchSnapshot();
-            }, 200000);
+            });
         });
     });
 });
