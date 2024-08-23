@@ -41,7 +41,6 @@ import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientB
 import * as StorageManager from "./utils/StorageManager";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { crossSigningCallbacks } from "./SecurityManager";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import { _t, UserFriendlyError } from "./languageHandler";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -451,11 +450,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
                 }
             },
         };
-
-        const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup.getDehydrationKeyCallback();
-        if (dehydrationKeyCallback) {
-            opts.cryptoCallbacks!.getDehydrationKey = dehydrationKeyCallback;
-        }
 
         this.matrixClient = createMatrixClient(opts);
         this.matrixClient.setGuest(Boolean(creds.guest));
