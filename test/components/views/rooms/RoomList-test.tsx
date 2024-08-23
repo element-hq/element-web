@@ -49,7 +49,7 @@ const getDMRoomsForUserId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
-describe("UIFeature tests ", () => {
+describe("UIFeature tests", () => {
     stubClient();
     //const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
