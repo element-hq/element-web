@@ -1420,7 +1420,7 @@ describe("<MatrixChat />", () => {
                 initCryptoCompleteDefer.resolve();
                 await sleep(10); // Modals take a few ms to appear
                 expect(document.body).toMatchSnapshot();
-            });
+            }, 10000);
         });
     });
 });

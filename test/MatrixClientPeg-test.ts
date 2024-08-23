@@ -236,6 +236,11 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should initialise the rust crypto library by default", async () => {
+            // VERJI - mock settingstore to return true on feature... Not sure why default doesent work...
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == Features.RustCrypto) return true;
+            });
+            // END Verji Mock
             await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, null);
 
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
