@@ -40,6 +40,8 @@ import { SummarizedNotificationState } from "../../../stores/notifications/Summa
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../Unread";
+// @ts-ignore
+import toggleWidget from "../../structures/scripts/freshworks.js";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -223,6 +225,9 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
             RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
         }
     };
+    private onSupportClicked = (): void => {
+        toggleWidget();
+    };
 
     private onNotificationsClicked = (): void => {
         // This toggles for us, if needed
@@ -312,6 +317,17 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t("right_panel|room_summary_card|title")}
                 isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
                 onClick={this.onRoomSummaryClicked}
+            />,
+        );
+        rightPanelPhaseButtons.set(
+            RightPanelPhases.Support,
+            <HeaderButton
+                key="supportButton"
+                name="supportButton"
+                title={_t("common|support")}
+                isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
+                onClick={this.onSupportClicked}
+                // onClick={() => toggleWidget()}
             />,
         );
 

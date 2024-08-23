@@ -32,6 +32,8 @@ import DialogButtons from "../elements/DialogButtons";
 import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -226,21 +228,22 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     <p>{_t("bug_reporting|description")}</p>
                     <p>
                         <b>
-                            {_t(
-                                "bug_reporting|before_submitting",
-                                {},
-                                {
-                                    a: (sub) => (
-                                        <a
-                                            target="_blank"
-                                            href={SdkConfig.get().feedback.new_issue_url}
-                                            rel="noreferrer noopener"
-                                        >
-                                            {sub}
-                                        </a>
-                                    ),
-                                },
-                            )}
+                            {SettingsStore.getValue(UIFeature.HelpShowMatrixDisclosurePolicyAndLinks) &&
+                                _t(
+                                    "bug_reporting|before_submitting",
+                                    {},
+                                    {
+                                        a: (sub) => (
+                                            <a
+                                                target="_blank"
+                                                href={SdkConfig.get().feedback.new_issue_url}
+                                                rel="noreferrer noopener"
+                                            >
+                                                {sub}
+                                            </a>
+                                        ),
+                                    },
+                                )}
                         </b>
                     </p>
 
@@ -250,16 +253,24 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                         </AccessibleButton>
                         {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
                     </div>
+                    {console.log(
+                        "Eik bugrep: HelpShowMatrixDisclosurePolicyAndLinks " +
+                            SettingsStore.getValue(UIFeature.HelpShowMatrixDisclosurePolicyAndLinks),
+                    )}
 
-                    <Field
-                        type="text"
-                        className="mx_BugReportDialog_field_input"
-                        label={_t("bug_reporting|github_issue")}
-                        onChange={this.onIssueUrlChange}
-                        value={this.state.issueUrl}
-                        placeholder="https://github.com/vector-im/element-web/issues/..."
-                        ref={this.issueRef}
-                    />
+                    {SettingsStore.getValue(UIFeature.HelpShowMatrixDisclosurePolicyAndLinks) && (
+                        <>
+                            <Field
+                                type="text"
+                                className="mx_BugReportDialog_field_input"
+                                label={_t("bug_reporting|github_issue")}
+                                onChange={this.onIssueUrlChange}
+                                value={this.state.issueUrl}
+                                placeholder="https://github.com/vector-im/element-web/issues/..."
+                                ref={this.issueRef}
+                            />
+                        </>
+                    )}
                     <Field
                         className="mx_BugReportDialog_field_input"
                         element="textarea"

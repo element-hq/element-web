@@ -1854,7 +1854,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 <div className="error">{this.state.errorText}</div>
                 {onlyOneThreepidNote}
                 {results}
-                {footer}
+                {SettingsStore.getValue(UIFeature.SendInviteLinkPrompt) && footer}
             </React.Fragment>
         );
 

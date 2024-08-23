@@ -48,6 +48,11 @@ exports[`MemberTile should display an verified E2EIcon when the e2E status = Ver
           Offline
         </div>
       </div>
+      <div
+        class="mx_EntityTile_power"
+      >
+        Standard
+      </div>
     </div>
   </div>
 </div>
@@ -101,6 +106,11 @@ exports[`MemberTile should display an warning E2EIcon when the e2E status = Warn
           Offline
         </div>
       </div>
+      <div
+        class="mx_EntityTile_power"
+      >
+        Standard
+      </div>
     </div>
   </div>
 </div>
@@ -153,6 +163,11 @@ exports[`MemberTile should not display an E2EIcon when the e2E status = normal 1
         >
           Offline
         </div>
+      </div>
+      <div
+        class="mx_EntityTile_power"
+      >
+        Standard
       </div>
     </div>
   </div>
