@@ -1395,7 +1395,7 @@ describe("<MatrixChat />", () => {
                 // VERJI - mock settingstore to return true on feature... Not sure why default doesent work...
                 jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
                     if (name == Features.RustCrypto) return true;
-                });                
+                });
                 const client = new MockClientWithEventEmitter({
                     ...getMockClientMethods(),
                 }) as unknown as Mocked<MatrixClient>;
