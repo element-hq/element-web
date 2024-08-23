@@ -98,8 +98,6 @@ export const enum UIFeature {
     MultipleCallsInRoom = "UIFeature.multipleCallsInRoom",
     ShowSpaceLandingPageDetails = "UIFeature.showSpaceLandingPageDetails",
     ShowSendMessageToUserLink = "UIFeature.showSendMessageToUserLink",
-    SendInviteLinkPrompt = "UIFeature.SendInviteLinkPrompt",
-    HelpShowMatrixDisclosurePolicyAndLinks = "UIFeature.helpShowMatrixDisclosurePolicyAndLinks",
 }
 
 export enum UIComponent {
