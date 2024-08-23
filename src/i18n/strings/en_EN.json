@@ -73,16 +73,8 @@
         "confirm_button": "Confirm",
         "existing_guest_instructions": "Following guest(s) %(users)s are already Verji users. Follow the instructions below to invite existing users.",
         "invite_process_error": "Oops, something went wrong during the invitation process. You can track your invitation(s) by opening your %(path)s.",
-        "invite_new_users": "Invite new users to %(tenant)s",
-        "user_settings_help_about": {
-            "bug_report" : "Bugreporting",
-            "experience_errors": "If you encounter errors in Verji,contact  Verji Support",
-            "mailto_support": "mailto:support@verji.com",
-            "monday_friday": "Monday - Friday",
-            "opening_hours": "08.00 - 16.00",
-            "support_phone": "Phone +4790532454"
-        }
-   },
+        "invite_new_users": "Invite new users to %(tenant)s"
+    },
     "a11y": {
         "emoji_picker": "Emoji picker",
         "jump_first_invite": "Jump to first invite.",

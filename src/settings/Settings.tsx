@@ -208,8 +208,8 @@ export type ISetting = IBaseSetting | IFeature;
 
 export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_video_rooms": {
-        isFeature: false, //Verji
-        // labsGroup: LabGroup.VoiceAndVideo,
+        isFeature: true,
+        labsGroup: LabGroup.VoiceAndVideo,
         displayName: _td("labs|video_rooms"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
@@ -324,7 +324,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         configDisablesSetting: true,
         displayName: _td("labs|custom_themes"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true, //Verji
+        default: false,
     },
     "feature_dehydration": {
         isFeature: true,
@@ -569,7 +569,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "MessageComposerInput.showStickersButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_stickers_button"),
-        default: false, //Verji
+        default: true,
         controller: new UIFeatureController(UIFeature.Widgets, false),
     },
     "MessageComposerInput.showPollsButton": {
@@ -660,7 +660,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "showDisplaynameChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("settings|show_displayname_changes"),
-        default: false, //Verji
+        default: true,
         invertedSettingName: "hideDisplaynameChanges",
     },
     "showReadReceipts": {
@@ -750,7 +750,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: IS_MAC
             ? _td("settings|use_command_enter_send_message")
             : _td("settings|use_control_enter_send_message"),
-        default: true, //Verji
+        default: false,
     },
     "MessageComposerInput.surroundWith": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -760,7 +760,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|replace_plain_emoji"),
-        default: true, //Verji
+        default: false,
     },
     "MessageComposerInput.useMarkdown": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1492,14 +1492,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: true,
     },
     [UIFeature.ShowSendMessageToUserLink]: {
-        supportedLevels: LEVELS_UI_FEATURE,
-        default: true,
-    },
-    [UIFeature.SendInviteLinkPrompt]: {
-        supportedLevels: LEVELS_UI_FEATURE,
-        default: true,
-    },
-    [UIFeature.HelpShowMatrixDisclosurePolicyAndLinks]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
