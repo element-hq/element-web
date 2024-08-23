@@ -20,7 +20,6 @@ import {
     CustomComponentLifecycle,
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
-
 import { Tooltip } from "@vector-im/compound-web";
 
 import { unicodeToShortcode } from "../../../HtmlUtils";
