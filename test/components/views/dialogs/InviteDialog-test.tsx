@@ -293,10 +293,9 @@ describe("InviteDialog", () => {
         //await userEvent.paste(`${bobId} ${aliceEmail}`);
         await userEvent.paste(`${bobId}`);
         await userEvent.keyboard("[Enter]");
-        
+
         await userEvent.paste(`${aliceEmail}`);
         await userEvent.keyboard("[Enter]");
-
 
         await screen.findAllByText(bobId);
         await screen.findByText(aliceEmail);
@@ -411,7 +410,6 @@ describe("InviteDialog", () => {
 
         await userEvent.paste(`${bobId}`);
         await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
-
 
         expect(input).toHaveValue("");
         await expect(screen.findAllByText(bobId, { selector: "a" })).resolves.toHaveLength(1);

@@ -17,8 +17,6 @@ import { getMockClientWithEventEmitter } from "../../test-utils";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 
-
-
 describe("ReactionsRowButtonTooltip", () => {
     const content = "Hello world!";
     const reactionEvents = [] as any;

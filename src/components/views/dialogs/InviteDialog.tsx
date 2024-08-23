@@ -431,7 +431,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private spaceMemberIds = [] as string[];
     // Verji End
 
-
     public constructor(props: Props) {
         super(props);
         // Verji Start - generate a list of userId's which are members in currently active space
