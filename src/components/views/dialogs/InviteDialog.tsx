@@ -733,7 +733,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         let _externals = this.state.targetEmails;
         if (_externals == null) _externals = [];
-        if (Email.looksValid(this.state.filterText)) {
+        if (Email.looksValid(this.state.filterText) && !_externals.includes(this.state.filterText)) {
             _externals.push(this.state.filterText);
         }
 
