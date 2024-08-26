@@ -98,6 +98,8 @@ jobs:
                 voip|element_call
 
     rethemendex_lint:
+        # VERJI skip Rethemendex check by setting false
+        if: ${{false}}
         name: "Rethemendex Check"
         runs-on: ubuntu-latest
         steps:

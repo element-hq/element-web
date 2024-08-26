@@ -40,12 +40,21 @@ yarn link matrix-js-sdk
 yarn link
 yarn install --frozen-lockfile
 
+# VERJI ADD custom module-api
+scripts/fetchdep.sh verji matrix-react-sdk-module-api verji-main # VERJI HARDCODE PARAMS.
+pushd matrix-react-sdk-module-api
+yarn link
+yarn install ## TRY WITHOUT FROZEN --frozen-lockfile $@
+yarn build
+popd
+
 # Finally, set up element-web
 scripts/fetchdep.sh verji element-web verji-develop
 pushd element-web
 [ -n "$ELEMENT_WEB_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $ELEMENT_WEB_GITHUB_BASE_REF && git checkout $ELEMENT_WEB_GITHUB_BASE_REF
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
+yarn link @matrix-org/react-sdk-module-api
 yarn install --frozen-lockfile
 yarn build:res
 popd
