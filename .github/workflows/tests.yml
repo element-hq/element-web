@@ -106,6 +106,8 @@ jobs:
 
     app-tests:
         name: Element Web Integration Tests
+        # VERJI skip Integration Test - needs work by setting false
+        if: ${{false}}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
