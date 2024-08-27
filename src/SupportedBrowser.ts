@@ -16,7 +16,6 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import browserlist from "browserslist";
-import electronToChromium from "electron-to-chromium/versions";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import { DeviceType, parseUserAgent } from "./utils/device/parseUserAgent";
@@ -46,14 +45,6 @@ function onDismissClick(): void {
 function getBrowserNameVersion(browser: string): [name: string, version: number] {
     const [browserName, browserVersion] = browser.split(" ");
     const browserNameLc = browserName.toLowerCase();
-    if (browserNameLc === "electron") {
-        // The electron-to-chromium map is keyed by the major and minor version of Electron
-        const chromiumVersion = electronToChromium[browserVersion.split(".").slice(0, 2).join(".")];
-        if (chromiumVersion) {
-            return ["chrome", parseInt(chromiumVersion, 10)];
-        }
-    }
-
     return [browserNameLc, parseInt(browserVersion, 10)];
 }
 
@@ -80,6 +71,12 @@ export function getBrowserSupport(): boolean {
     }
 
     if (details.client) {
+        // We don't care about the browser version for desktop devices
+        // We ship our own browser (electron) for desktop devices
+        if (details.deviceType === DeviceType.Desktop) {
+            return supported;
+        }
+
         const [browserName, browserVersion] = getBrowserNameVersion(details.client);
         const minimumVersion = minimumBrowserVersions.get(browserName);
         // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari

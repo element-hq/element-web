@@ -68,8 +68,7 @@
         "jwt-decode": "4.0.0",
         "@floating-ui/react": "0.26.11",
         "@radix-ui/react-id": "1.1.0",
-        "caniuse-lite": "1.0.30001643",
-        "electron-to-chromium": "1.5.2"
+        "caniuse-lite": "1.0.30001643"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
@@ -95,7 +94,6 @@
         "css-tree": "^2.3.1",
         "diff-dom": "^5.0.0",
         "diff-match-patch": "^1.0.5",
-        "electron-to-chromium": "^1.5.2",
         "emojibase-regex": "15.3.2",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
