@@ -17,8 +17,12 @@ limitations under the License.
 import { RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
 import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
 import { AllExtensions } from "@matrix-org/react-sdk-module-api/lib/types/extensions";
-import { ProvideCryptoSetupExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
-import { ProvideExperimentalExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
+import { ProvideCryptoSetupExtensions } from "@matrix-org/react-sdk-module-api/lib/extensions/CryptoSetupExtensions";
+import {
+    ProvideUserSearchExtensions,
+    SearchContext,
+} from "@matrix-org/react-sdk-module-api/lib/extensions/UserSearchExtensions";
+import { ProvideExperimentalExtensions } from "@matrix-org/react-sdk-module-api/lib/extensions/ExperimentalExtensions";
 
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 
@@ -95,6 +99,27 @@ class MockModuleWithExperimentalExtension extends RuntimeModule {
     }
 }
 
+class MockModuleWithUserSearchExtension extends RuntimeModule {
+    public get apiInstance(): ModuleApi {
+        return this.moduleApi;
+    }
+
+    moduleName: string = MockModuleWithUserSearchExtension.name;
+
+    extensions: AllExtensions = {
+        userSearch: {
+            getSearchContext: jest.fn().mockReturnValue(<SearchContext>{
+                extraBodyArgs: {},
+                extraRequestOptions: {},
+            }),
+        } as ProvideUserSearchExtensions,
+    };
+
+    public constructor(moduleApi: ModuleApi) {
+        super(moduleApi);
+    }
+}
+
 /**
  * Register a mock module which implements the cryptoSetup extension.
  *
@@ -129,6 +154,27 @@ export function registerMockModuleWithExperimentalExtension(): MockModuleWithExp
             throw new Error("State machine error: ModuleRunner created the module twice");
         }
         module = new MockModuleWithExperimentalExtension(api);
+        return module;
+    });
+    if (!module) {
+        throw new Error("State machine error: ModuleRunner did not create module");
+    }
+    return module;
+}
+
+/**
+ * Register a mock module which implements the user search extension.
+ *
+ * @returns The registered module.
+ */
+export function registerMockModuleWithUserSearchExtension(): MockModuleWithUserSearchExtension {
+    let module: MockModuleWithUserSearchExtension | undefined;
+
+    ModuleRunner.instance.registerModule((api) => {
+        if (module) {
+            throw new Error("State machine error: ModuleRunner created the module twice");
+        }
+        module = new MockModuleWithUserSearchExtension(api);
         return module;
     });
     if (!module) {

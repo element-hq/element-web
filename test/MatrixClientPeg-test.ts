@@ -20,7 +20,7 @@ import EventEmitter from "events";
 import {
     ProvideCryptoSetupExtensions,
     SecretStorageKeyDescription,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
+} from "@matrix-org/react-sdk-module-api/lib/extensions/CryptoSetupExtensions";
 
 import { advanceDateAndTime, stubClient } from "./test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../src/MatrixClientPeg";
