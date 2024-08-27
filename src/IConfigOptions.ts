@@ -98,6 +98,7 @@ export interface IConfigOptions {
     integrations_ui_url?: string;
     integrations_rest_url?: string;
     integrations_widgets_urls?: string[];
+    default_widget_container_height?: number; // height in pixels
 
     show_labs_settings: boolean;
     features?: Record<string, boolean>; // <FeatureName, EnabledBool>

@@ -35,6 +35,7 @@ import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import UIStore from "../../../stores/UIStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
+import SdkConfig from "../../../SdkConfig";
 
 interface IProps {
     userId: string;
@@ -335,7 +336,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
         defaultHeight = clamp(defaultHeight, 0, 100);
         defaultHeight = percentageWithin(defaultHeight / 100, minHeight, maxHeight);
     } else {
-        defaultHeight = 280;
+        defaultHeight = SdkConfig.get().default_widget_container_height ?? 280;
     }
 
     return (
