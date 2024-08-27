@@ -452,6 +452,12 @@ If you would like to use Scalar, the integration manager maintained by Element, 
 }
 ```
 
+For widgets in general (from an integration manager or not) there is also:
+
+-   `default_widget_container_height`
+
+This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.
+
 ## Administrative options
 
 If you would like to include a custom message when someone is reporting an event, set the following Markdown-capable field:
