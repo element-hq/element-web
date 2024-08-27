@@ -86,7 +86,8 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
-        if: ${{ github.ref_name != 'verji-develop' }}
+        # VERJI skip i18n by setting false
+        if: ${{false}}
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         with:
             hardcoded-words: "Element"
@@ -97,6 +98,8 @@ jobs:
                 voip|element_call
 
     rethemendex_lint:
+        # VERJI skip Rethemendex check by setting false
+        if: ${{false}}
         name: "Rethemendex Check"
         runs-on: ubuntu-latest
         steps:

@@ -3329,8 +3329,7 @@
         "reactions": {
             "add_reaction_prompt": "Reakció hozzáadása",
             "custom_reaction_fallback_label": "Egyéni reakció",
-            "label": "%(reactors)s reagált: %(content)s",
-            "tooltip": "<reactors/><reactedWith>ezzel reagált: %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagált: %(content)s"
         },
         "read_receipt_title": {
             "one": "%(count)s ember látta",

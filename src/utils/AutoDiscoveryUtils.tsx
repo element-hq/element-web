@@ -68,7 +68,7 @@ const mapAutoDiscoveryErrorTranslation = (err: AutoDiscoveryError): TranslationK
             return _td("auth|autodiscovery_no_well_known");
         case AutoDiscoveryError.InvalidJson:
             return _td("auth|autodiscovery_invalid_json");
-        case AutoDiscoveryError.HomeserverTooOld:
+        case AutoDiscoveryError.UnsupportedHomeserverSpecVersion:
             return _td("auth|autodiscovery_hs_incompatible");
     }
 };

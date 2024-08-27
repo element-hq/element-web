@@ -38,6 +38,12 @@ exports[`PowerLevelSelector should display only the current user 1`] = `
             Moderator
           </option>
           <option
+            data-testid="power-level-option-95"
+            value="95"
+          >
+            VerjiAdmin
+          </option>
+          <option
             data-testid="power-level-option-100"
             value="100"
           >
@@ -110,6 +116,12 @@ exports[`PowerLevelSelector should render 1`] = `
             Moderator
           </option>
           <option
+            data-testid="power-level-option-95"
+            value="95"
+          >
+            VerjiAdmin
+          </option>
+          <option
             data-testid="power-level-option-100"
             value="100"
           >
@@ -155,6 +167,12 @@ exports[`PowerLevelSelector should render 1`] = `
             Moderator
           </option>
           <option
+            data-testid="power-level-option-95"
+            value="95"
+          >
+            VerjiAdmin
+          </option>
+          <option
             data-testid="power-level-option-100"
             value="100"
           >
@@ -198,6 +216,12 @@ exports[`PowerLevelSelector should render 1`] = `
             value="50"
           >
             Moderator
+          </option>
+          <option
+            data-testid="power-level-option-95"
+            value="95"
+          >
+            VerjiAdmin
           </option>
           <option
             data-testid="power-level-option-100"

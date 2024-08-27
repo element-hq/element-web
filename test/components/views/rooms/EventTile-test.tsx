@@ -18,7 +18,6 @@ import * as React from "react";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import {
-    CryptoApi,
     EventType,
     IEventDecryptionResult,
     MatrixClient,
@@ -28,7 +27,7 @@ import {
     Room,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
-import { EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import { CryptoApi, EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";

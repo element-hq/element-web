@@ -3397,8 +3397,7 @@
         "reactions": {
             "add_reaction_prompt": "Pridať reakciu",
             "custom_reaction_fallback_label": "Vlastná reakcia",
-            "label": "%(reactors)s reagovali %(content)s",
-            "tooltip": "<reactors/><reactedWith>reagoval %(shortName)s</reactedWith>"
+            "label": "%(reactors)s reagovali %(content)s"
         },
         "read_receipt_title": {
             "one": "Videl %(count)s človek",

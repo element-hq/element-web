@@ -2800,8 +2800,7 @@
         "pending_moderation_reason": "Efni sem bíður yfirferðar: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Bæta við viðbrögðum",
-            "label": "%(reactors)s brást við með %(content)s",
-            "tooltip": "<reactors/><reactedWith>brást við %(shortName)s</reactedWith>"
+            "label": "%(reactors)s brást við með %(content)s"
         },
         "read_receipt_title": {
             "one": "Séð af %(count)s aðila",

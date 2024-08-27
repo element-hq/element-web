@@ -14,12 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, RefObject, createRef } from "react";
+import React, {
+    InputHTMLAttributes,
+    SelectHTMLAttributes,
+    TextareaHTMLAttributes,
+    RefObject,
+    createRef,
+    KeyboardEvent,
+} from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
 
 import { IFieldState, IValidationResult } from "./Validation";
 import Tooltip from "./Tooltip";
+import { Key } from "../../../Keyboard";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -232,6 +240,18 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return this.props.inputRef ?? this._inputRef;
     }
 
+    private onKeyDown = (evt: KeyboardEvent<HTMLDivElement>): void => {
+        // If the tooltip is displayed to show a feedback and Escape is pressed
+        // The tooltip is hided
+        if (this.state.feedbackVisible && evt.key === Key.ESCAPE) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            this.setState({
+                feedbackVisible: false,
+            });
+        }
+    };
+
     public render(): React.ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {
@@ -318,7 +338,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         return (
-            <div className={fieldClasses}>
+            <div className={fieldClasses} onKeyDown={this.onKeyDown}>
                 {prefixContainer}
                 {fieldInput}
                 <label htmlFor={this.id}>{this.props.label}</label>

@@ -33,7 +33,7 @@ describe("useUserDirectory", () => {
         stubClient();
         cli = MatrixClientPeg.safeGet();
 
-        MatrixClientPeg.getHomeserverName = () => "matrix.org";
+        cli.getDomain = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.searchUserDirectory = ({ term: query }) =>
             Promise.resolve({

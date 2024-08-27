@@ -9,7 +9,8 @@ import {
     CustomComponentLifecycle,
     CustomComponentOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
-import { CryptoApi, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import HelpUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/HelpUserSettingsTab";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";

@@ -16,18 +16,17 @@ limitations under the License.
 
 import React, { PropsWithChildren } from "react";
 import { User } from "matrix-js-sdk/src/matrix";
+import { Tooltip } from "@vector-im/compound-web";
 
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import { IReadReceiptProps } from "./EventTile";
 import AccessibleButton from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import { Alignment } from "../elements/Tooltip";
 import { formatDate } from "../../../DateUtils";
 import { Action } from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
 import ContextMenu, { aboveLeftOf, MenuItem, useContextMenu } from "../../structures/ContextMenu";
-import { useTooltip } from "../../../utils/useTooltip";
 import { _t } from "../../../languageHandler";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { formatList } from "../../../utils/FormattingUtils";
@@ -86,18 +85,6 @@ export function ReadReceiptGroup({
 
     const tooltipMembers: string[] = readReceipts.map((it) => it.roomMember?.name ?? it.userId);
     const tooltipText = readReceiptTooltip(tooltipMembers, maxAvatars);
-
-    const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
-        label: (
-            <>
-                <div className="mx_Tooltip_title">
-                    {_t("timeline|read_receipt_title", { count: readReceipts.length })}
-                </div>
-                <div className="mx_Tooltip_sub">{tooltipText}</div>
-            </>
-        ),
-        alignment: Alignment.TopRight,
-    });
 
     // return early if there are no read receipts
     if (readReceipts.length === 0) {
@@ -185,34 +172,35 @@ export function ReadReceiptGroup({
 
     return (
         <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
-                <AccessibleButton
-                    className="mx_ReadReceiptGroup_button"
-                    ref={button}
-                    aria-label={tooltipText}
-                    aria-haspopup="true"
-                    onClick={openMenu}
-                    onMouseOver={showTooltip}
-                    onMouseLeave={hideTooltip}
-                    onFocus={showTooltip}
-                    onBlur={hideTooltip}
-                >
-                    {remText}
-                    <span
-                        className="mx_ReadReceiptGroup_container"
-                        style={{
-                            width:
-                                Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
-                                READ_AVATAR_SIZE -
-                                READ_AVATAR_OFFSET,
-                        }}
+            <Tooltip
+                label={_t("timeline|read_receipt_title", { count: readReceipts.length })}
+                caption={tooltipText}
+                placement="top-end"
+            >
+                <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("timeline|read_receipts_label")}>
+                    <AccessibleButton
+                        className="mx_ReadReceiptGroup_button"
+                        ref={button}
+                        aria-label={tooltipText}
+                        aria-haspopup="true"
+                        onClick={openMenu}
                     >
-                        {avatars}
-                    </span>
-                </AccessibleButton>
-                {tooltip}
-                {contextMenu}
-            </div>
+                        {remText}
+                        <span
+                            className="mx_ReadReceiptGroup_container"
+                            style={{
+                                width:
+                                    Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
+                                    READ_AVATAR_SIZE -
+                                    READ_AVATAR_OFFSET,
+                            }}
+                        >
+                            {avatars}
+                        </span>
+                    </AccessibleButton>
+                    {contextMenu}
+                </div>
+            </Tooltip>
         </div>
     );
 }
@@ -222,60 +210,48 @@ interface ReadReceiptPersonProps extends IReadReceiptProps {
     onAfterClick?: () => void;
 }
 
-function ReadReceiptPerson({
+// Export for testing
+export function ReadReceiptPerson({
     userId,
     roomMember,
     ts,
     isTwelveHour,
     onAfterClick,
 }: ReadReceiptPersonProps): JSX.Element {
-    const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
-        alignment: Alignment.Top,
-        tooltipClassName: "mx_ReadReceiptGroup_person--tooltip",
-        label: (
-            <>
-                <div className="mx_Tooltip_title">{roomMember?.rawDisplayName ?? userId}</div>
-                <div className="mx_Tooltip_sub">{userId}</div>
-            </>
-        ),
-    });
-
     return (
-        <MenuItem
-            className="mx_ReadReceiptGroup_person"
-            onClick={() => {
-                dis.dispatch({
-                    action: Action.ViewUser,
-                    // XXX: We should be using a real member object and not assuming what the receiver wants.
-                    // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
-                    // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
-                    // should definitely clean this up later
-                    member: roomMember ?? ({ userId } as User),
-                    push: false,
-                });
-                onAfterClick?.();
-            }}
-            onMouseOver={showTooltip}
-            onMouseLeave={hideTooltip}
-            onFocus={showTooltip}
-            onBlur={hideTooltip}
-            onWheel={hideTooltip}
-        >
-            <MemberAvatar
-                member={roomMember}
-                fallbackUserId={userId}
-                size="24px"
-                aria-hidden="true"
-                aria-live="off"
-                resizeMethod="crop"
-                hideTitle
-            />
-            <div className="mx_ReadReceiptGroup_name">
-                <p>{roomMember?.name ?? userId}</p>
-                <p className="mx_ReadReceiptGroup_secondary">{formatDate(new Date(ts), isTwelveHour)}</p>
+        <Tooltip label={roomMember?.rawDisplayName ?? userId} caption={userId} placement="top">
+            <div>
+                <MenuItem
+                    className="mx_ReadReceiptGroup_person"
+                    onClick={() => {
+                        dis.dispatch({
+                            action: Action.ViewUser,
+                            // XXX: We should be using a real member object and not assuming what the receiver wants.
+                            // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
+                            // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
+                            // should definitely clean this up later
+                            member: roomMember ?? ({ userId } as User),
+                            push: false,
+                        });
+                        onAfterClick?.();
+                    }}
+                >
+                    <MemberAvatar
+                        member={roomMember}
+                        fallbackUserId={userId}
+                        size="24px"
+                        aria-hidden="true"
+                        aria-live="off"
+                        resizeMethod="crop"
+                        hideTitle
+                    />
+                    <div className="mx_ReadReceiptGroup_name">
+                        <p>{roomMember?.name ?? userId}</p>
+                        <p className="mx_ReadReceiptGroup_secondary">{formatDate(new Date(ts), isTwelveHour)}</p>
+                    </div>
+                </MenuItem>
             </div>
-            {tooltip}
-        </MenuItem>
+        </Tooltip>
     );
 }
 

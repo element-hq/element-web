@@ -21,6 +21,7 @@ import {
     registerMockModule,
     registerMockModuleWithCryptoSetupExtension,
     registerMockModuleWithExperimentalExtension,
+    registerMockModuleWithUserSearchExtension,
 } from "./MockModule";
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 
@@ -95,6 +96,15 @@ describe("ModuleRunner", () => {
             expect(t).toThrow(Error);
             expect(t).toThrow(
                 "adding experimental extension implementation from module MockModuleWithExperimentalExtension but an implementation was already provided",
+            );
+        });
+
+        it("must not allow multiple modules to provide user search extension", async () => {
+            registerMockModuleWithUserSearchExtension();
+            const t = () => registerMockModuleWithUserSearchExtension();
+            expect(t).toThrow(Error);
+            expect(t).toThrow(
+                "adding userSearch extension implementation from module MockModuleWithUserSearchExtension but an implementation was already provided",
             );
         });
     });

@@ -3393,8 +3393,7 @@
         "reactions": {
             "add_reaction_prompt": "Reaktion hinzufügen",
             "custom_reaction_fallback_label": "Benutzerdefinierte Reaktion",
-            "label": "%(reactors)s hat mit %(content)s reagiert",
-            "tooltip": "<reactors/><reactedWith>hat mit %(shortName)s reagiert</reactedWith>"
+            "label": "%(reactors)s hat mit %(content)s reagiert"
         },
         "read_receipt_title": {
             "one": "Von %(count)s Person gesehen",

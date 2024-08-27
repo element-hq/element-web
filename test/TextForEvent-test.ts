@@ -49,8 +49,10 @@ function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: str
         content: {
             pinned: pinnedMessageIds,
         },
-        prev_content: {
-            pinned: prevPinnedMessageIds,
+        unsigned: {
+            prev_content: {
+                pinned: prevPinnedMessageIds,
+            },
         },
     });
 }
@@ -183,9 +185,11 @@ describe("TextForEvent", () => {
                     users_default: usersDefault,
                     users,
                 },
-                prev_content: {
-                    users: prevUsers,
-                    users_default: prevDefault,
+                unsigned: {
+                    prev_content: {
+                        users: prevUsers,
+                        users_default: prevDefault,
+                    },
                 },
             });
             mxEvent.sender = { name: userA.name } as RoomMember;
@@ -315,9 +319,11 @@ describe("TextForEvent", () => {
                     alias,
                     alt_aliases: altAliases,
                 },
-                prev_content: {
-                    alias: prevAlias,
-                    alt_aliases: prevAltAliases,
+                unsigned: {
+                    prev_content: {
+                        alias: prevAlias,
+                        alt_aliases: prevAltAliases,
+                    },
                 },
             });
 
@@ -512,10 +518,12 @@ describe("TextForEvent", () => {
                             avatar_url: "b",
                             displayname: "Bob",
                         },
-                        prev_content: {
-                            membership: KnownMembership.Join,
-                            avatar_url: "a",
-                            displayname: "Andy",
+                        unsigned: {
+                            prev_content: {
+                                membership: KnownMembership.Join,
+                                avatar_url: "a",
+                                displayname: "Andy",
+                            },
                         },
                         state_key: "@a:foo",
                     }),

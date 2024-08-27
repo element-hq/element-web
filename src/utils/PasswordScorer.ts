@@ -20,7 +20,6 @@ import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import SdkConfig from "../SdkConfig";
 
 zxcvbnOptions.setOptions({
@@ -96,13 +95,13 @@ export function scorePassword(
 
     if (matrixClient) {
         inputs.push(matrixClient.getUserIdLocalpart()!);
-    }
 
-    try {
-        const domain = MatrixClientPeg.getHomeserverName();
-        inputs.push(domain);
-    } catch {
-        // This is fine
+        try {
+            const domain = matrixClient.getDomain()!;
+            inputs.push(domain);
+        } catch {
+            // This is fine
+        }
     }
 
     zxcvbnOptions.setTranslations(getTranslations());
