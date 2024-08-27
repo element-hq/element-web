@@ -5298,11 +5298,6 @@ electron-to-chromium@^1.4.820, electron-to-chromium@^1.5.4:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.13.tgz#1abf0410c5344b2b829b7247e031f02810d442e6"
   integrity sha512-lbBcvtIJ4J6sS4tb5TLp1b4LyfCdMkwStzXPyAgVgTRAsep4bvrAGaBOP7ZJtQMNJpSQ9SqG4brWOroNaQtm7Q==
 
-electron-to-chromium@^1.5.2:
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.5.tgz#03bfdf422bdd2c05ee2657efedde21264a1a566b"
-  integrity sha512-QR7/A7ZkMS8tZuoftC/jfqNkZLQO779SSW3YuZHP4eXpj3EffGLFcB/Xu9AAZQzLccTiCV+EmUo3ha4mQ9wnlA==
-
 emittery@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.13.1.tgz#c04b8c3457490e0847ae51fced3af52d338e3dad"
@@ -8220,6 +8215,26 @@ matrix-js-sdk@34.4.0:
     unhomoglyph "^1.0.6"
     uuid "10"
 
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "34.4.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a6612c73aa7ae8d7f10f426239b2850c86a1ea5"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
+    "@matrix-org/olm" "3.2.15"
+    another-json "^0.2.0"
+    bs58 "^6.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.8.2"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "10"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8227,10 +8242,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.108.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.108.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.108.0.tgz#01d1c3f12d9388cfd72d273c30a69083b263566e"
-  integrity sha512-d1XdtW/FthXjCSyYRlVXue3BBbrR5Zx98dS8nnNtjmuYgPYYGSh+PA0qjl9qNjeF2Z6G1FA/dr2epsQyelfyPg==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/5b91dd88e1dee6b7a72f97cef77051663ece0894"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.24.0"
@@ -8255,7 +8269,6 @@ matrix-react-sdk@3.108.0:
     css-tree "^2.3.1"
     diff-dom "^5.0.0"
     diff-match-patch "^1.0.5"
-    electron-to-chromium "^1.5.2"
     emojibase-regex "15.3.2"
     escape-html "^1.0.3"
     file-saver "^2.0.5"
@@ -8276,7 +8289,7 @@ matrix-react-sdk@3.108.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "34.4.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.8.2"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
