@@ -1,6 +1,6 @@
 {
     "name": "matrix-react-sdk",
-    "version": "3.107.0",
+    "version": "3.108.0",
     "description": "SDK for matrix.org using React",
     "author": "matrix.org",
     "repository": {
@@ -114,7 +114,7 @@
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+        "matrix-js-sdk": "34.4.0",
         "matrix-widget-api": "^1.8.2",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
@@ -246,5 +246,6 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    }
+    },
+    "typings": "./lib/index.d.ts"
 }
