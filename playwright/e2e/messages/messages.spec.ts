@@ -24,7 +24,34 @@ async function sendMessage(page: Page, message: string): Promise<Locator> {
     await page.getByRole("textbox", { name: "Send a message…" }).fill(message);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    const msgTile = await page.locator(".mx_EventTile_last");
+    const msgTile = page.locator(".mx_EventTile_last");
+    await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
+    return msgTile;
+}
+
+async function sendMultilineMessages(page: Page, messages: string[]) {
+    await page.getByRole("textbox", { name: "Send a message…" }).focus();
+    for (let i = 0; i < messages.length; i++) {
+        await page.keyboard.type(messages[i]);
+        if (i < messages.length - 1) await page.keyboard.press("Shift+Enter");
+    }
+
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    const msgTile = page.locator(".mx_EventTile_last");
+    await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
+    return msgTile;
+}
+
+async function replyMessage(page: Page, message: Locator, replyMessage: string): Promise<Locator> {
+    const line = message.locator(".mx_EventTile_line");
+    await line.hover();
+    await line.getByRole("button", { name: "Reply", exact: true }).click();
+
+    await page.getByRole("textbox", { name: "Send a reply…" }).fill(replyMessage);
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    const msgTile = page.locator(".mx_EventTile_last");
     await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
     return msgTile;
 }
@@ -88,6 +115,22 @@ test.describe("Message rendering", () => {
                 });
             });
 
+            test("should render a reply of a LTR message", async ({ page, user, app, room }) => {
+                await page.goto(`#/room/${room.roomId}`);
+
+                const msgTile = await sendMultilineMessages(page, [
+                    "Fist line",
+                    "Second line",
+                    "Third line",
+                    "Fourth line",
+                ]);
+
+                await replyMessage(page, msgTile, "response to multiline message");
+                await expect(msgTile).toMatchScreenshot(`reply-message-ltr-${direction}displayname.png`, {
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                });
+            });
+
             test("should render a basic RTL text message", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
@@ -119,6 +162,22 @@ test.describe("Message rendering", () => {
                 await editMessage(page, msgTile, "مرحبا بالكون!");
 
                 await expect(msgTile).toMatchScreenshot(`edited-message-rtl-${direction}displayname.png`, {
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                });
+            });
+
+            test("should render a reply of a RTL message", async ({ page, user, app, room }) => {
+                await page.goto(`#/room/${room.roomId}`);
+
+                const msgTile = await sendMultilineMessages(page, [
+                    "مرحبا بالعالم!",
+                    "مرحبا بالعالم!",
+                    "مرحبا بالعالم!",
+                    "مرحبا بالعالم!",
+                ]);
+
+                await replyMessage(page, msgTile, "مرحبا بالعالم!");
+                await expect(msgTile).toMatchScreenshot(`reply-message-trl-${direction}displayname.png`, {
                     mask: [page.locator(".mx_MessageTimestamp")],
                 });
             });

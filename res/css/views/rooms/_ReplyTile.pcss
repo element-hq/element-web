@@ -77,6 +77,11 @@ limitations under the License.
             font-size: $font-14px !important; /* Override the big emoji override */
         }
 
+        // in order to keep the message on two lines, we need to make the body inline
+        .mx_EventTile_body {
+            display: inline;
+        }
+
         // Hide line numbers and edited indicator
         .mx_EventTile_lineNumbers,
         .mx_EventTile_edited {

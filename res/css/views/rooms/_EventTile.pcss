@@ -126,7 +126,8 @@ $left-gutter: 64px;
 
     .mx_ReplyChain--expanded {
         .mx_EventTile_body {
-            display: block;
+            /* !important needed to override .mx_ReplyTile .mx_EventTile_content .mx_EventTile_body */
+            display: block !important;
             overflow-y: scroll;
         }
 
@@ -899,7 +900,7 @@ $left-gutter: 64px;
         object-fit: contain;
         object-position: left top;
 
-        /* Override the default colors of the 'github-markdown-css' library 
+        /* Override the default colors of the 'github-markdown-css' library
         (#fff for light theme, #000 for dark theme) to match the inherited theme */
         background-color: inherit !important;
     }
