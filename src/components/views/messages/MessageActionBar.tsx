@@ -24,6 +24,9 @@ import {
     MsgType,
     RelationType,
     M_BEACON_INFO,
+    EventTimeline,
+    RoomStateEvent,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin.svg";
@@ -278,12 +281,20 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             this.props.mxEvent.once(MatrixEventEvent.Decrypted, this.onDecrypted);
         }
         this.props.mxEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
+        this.context.room
+            ?.getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.on(RoomStateEvent.Events, this.onRoomEvent);
     }
 
     public componentWillUnmount(): void {
         this.props.mxEvent.off(MatrixEventEvent.Status, this.onSent);
         this.props.mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.props.mxEvent.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
+        this.context.room
+            ?.getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.off(RoomStateEvent.Events, this.onRoomEvent);
     }
 
     private onDecrypted = (): void => {
@@ -294,6 +305,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     private onBeforeRedaction = (): void => {
         // When an event is redacted, we can't edit it so update the available actions.
+        this.forceUpdate();
+    };
+
+    private onRoomEvent = (event?: MatrixEvent): void => {
+        // If the event is pinned or unpinned, rerender the component.
+        if (!event || event.getType() !== EventType.RoomPinnedEvents) return;
         this.forceUpdate();
     };
 

@@ -20,7 +20,7 @@ import { mocked } from "jest-mock";
 import { createTestClient } from "../test-utils";
 import PinningUtils from "../../src/utils/PinningUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
-import { canPinEvent, isContentActionable } from "../../src/utils/EventUtils";
+import { isContentActionable } from "../../src/utils/EventUtils";
 import { ReadPinsEventId } from "../../src/components/views/right_panel/types";
 
 jest.mock("../../src/utils/EventUtils", () => {
@@ -35,7 +35,6 @@ describe("PinningUtils", () => {
     const userId = "@alice:example.org";
 
     const mockedIsContentActionable = mocked(isContentActionable);
-    const mockedCanPinEvent = mocked(canPinEvent);
 
     let matrixClient: MatrixClient;
     let room: Room;
@@ -63,7 +62,6 @@ describe("PinningUtils", () => {
         // Enable feature pinning
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
         mockedIsContentActionable.mockImplementation(() => true);
-        mockedCanPinEvent.mockImplementation(() => true);
 
         matrixClient = createTestClient();
         room = new Room(roomId, matrixClient, userId);
@@ -171,8 +169,7 @@ describe("PinningUtils", () => {
         });
 
         test("should return false if event is not pinnable", () => {
-            mockedCanPinEvent.mockReturnValue(false);
-            const event = makePinEvent();
+            const event = makePinEvent({ type: EventType.RoomCreate });
 
             expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
         });

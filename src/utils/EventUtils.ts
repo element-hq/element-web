@@ -286,10 +286,6 @@ export function hasThreadSummary(event: MatrixEvent): boolean {
     return event.isThreadRoot && !!event.getThread()?.length && !!event.getThread()!.replyToEvent;
 }
 
-export function canPinEvent(event: MatrixEvent): boolean {
-    return !M_BEACON_INFO.matches(event.getType());
-}
-
 export const highlightEvent = (roomId: string, eventId: string): void => {
     defaultDispatcher.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
