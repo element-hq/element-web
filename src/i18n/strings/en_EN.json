@@ -81,6 +81,11 @@
             "monday_friday": "Monday - Friday",
             "opening_hours": "08.00 - 16.00",
             "support_phone": "Phone +4790532454"
+        },
+        "user_menu" : {
+            "administration_portal": "Administration portal",
+            "signing_order": "Signing orders",
+            "login_account": "Account & Login"
         }
    },
     "a11y": {

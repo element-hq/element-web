@@ -81,6 +81,11 @@
           "support_phone": "Telefon",
           "monday_friday": "Mandag - Fredag",
           "08.00_16.00": "08.00 - 16.00"
+        },
+        "user_menu" : {
+            "administration_portal": "Administrasjonsportal",
+            "signing_order": "Signeringsordre",
+            "login_account": "Konto og innlogging"
         }
     },
   "%(duration)sd": "%(duration)sd",
