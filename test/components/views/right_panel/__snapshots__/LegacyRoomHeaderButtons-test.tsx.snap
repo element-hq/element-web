@@ -24,5 +24,12 @@ exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
     role="button"
     tabindex="0"
   />
+  <div
+    aria-current="false"
+    aria-label="Support"
+    class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_supportButton"
+    role="button"
+    tabindex="0"
+  />
 </DocumentFragment>
 `;

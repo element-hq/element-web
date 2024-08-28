@@ -41,6 +41,12 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   >
                     <kbd>
                        
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
                       Enter
                        
                     </kbd>
@@ -53,12 +59,6 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   <div
                     class="mx_KeyboardShortcut"
                   >
-                    <kbd>
-                       
-                      Shift
-                       
-                    </kbd>
-                    +
                     <kbd>
                        
                       Enter

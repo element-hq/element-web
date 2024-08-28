@@ -44,14 +44,16 @@ describe("HelpUserSettingsTab", () => {
         jest.clearAllMocks();
     });
 
-    it("should render", () => {
+    // Verji removed/hidden sourcecode
+    it.skip("should render", () => {
         renderComp();
         screen.debug();
         expect(screen.getByText("Clear cache and reload")).toBeDefined();
     });
 
     describe("wrap the HelpUserSettingsTab with a React.Fragment", () => {
-        it("should wrap the HelpUserSettingsTab with a React.Fragment", () => {
+        // Verji removed/hidden sourcecode
+        it.skip("should wrap the HelpUserSettingsTab with a React.Fragment", () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts) => {
                 if (lifecycleEvent === CustomComponentLifecycle.HelpUserSettingsTab) {
                     (opts as CustomComponentOpts).CustomComponent = ({ children }) => {

@@ -25,6 +25,7 @@ export enum RightPanelPhases {
     RoomMemberInfo = "RoomMemberInfo",
     EncryptionPanel = "EncryptionPanel",
     RoomSummary = "RoomSummary",
+    Support = "Support", //Verji
     Widget = "Widget",
     PinnedMessages = "PinnedMessages",
     Timeline = "Timeline",

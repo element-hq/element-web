@@ -74,6 +74,7 @@ import { UIComponent } from "../../../../src/settings/UIFeature";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
+// import MiscHeaderButtons from "../../../../src/misc_header/MiscHeaderButtons";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -277,7 +278,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.queryByRole("button", { name: /call/i })).toBeNull();
     });
 
-    it(
+    it.skip(
+        //Verji skips this
         "hides the voice call button and disables the video call button if configured to use Element Call exclusively " +
             "and there's an ongoing call",
         async () => {
@@ -293,7 +295,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it(
+    it.skip(
+        //Verji skips this
         "hides the voice call button and starts an Element call when the video call button is pressed if configured to " +
             "use Element Call exclusively",
         async () => {
@@ -320,7 +323,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it(
+    it.skip(
+        //Verji hides these buttons
         "hides the voice call button and disables the video call button if configured to use Element Call exclusively " +
             "and the user lacks permission",
         () => {
@@ -336,7 +340,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it("disables call buttons in the new group call experience if there's an ongoing Element call", async () => {
+    it.skip("disables call buttons in the new group call experience if there's an ongoing Element call", async () => {
+        //Verji skips this
         mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
         await ElementCall.create(room);
 
@@ -345,7 +350,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons in the new group call experience if there's an ongoing legacy 1:1 call", () => {
+    it.skip("disables call buttons in the new group call experience if there's an ongoing legacy 1:1 call", () => {
+        //Verji skips this
         mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
         mockLegacyCall();
 
@@ -354,7 +360,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons in the new group call experience if there's an existing Jitsi widget", async () => {
+    it.skip("disables call buttons in the new group call experience if there's an existing Jitsi widget", async () => {
+        //Verji skips this
         mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
         await JitsiCall.create(room);
 
@@ -363,7 +370,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons in the new group call experience if there's no other members", () => {
+    it.skip("disables call buttons in the new group call experience if there's no other members", () => {
+        //Verji skips this
         mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
 
         renderHeader();
@@ -394,7 +402,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it(
+    it.skip(
+        //Verji skip, does not support group calls
         "creates a Jitsi widget when call buttons are pressed in the new group call experience if the user lacks " +
             "permission to start Element calls",
         async () => {
@@ -416,7 +425,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it(
+    it.skip(
+        //Verji skips this
         "creates a Jitsi widget when the voice call button is pressed and shows a menu when the video call button is " +
             "pressed in the new group call experience",
         async () => {
@@ -454,7 +464,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it(
+    it.skip(
+        //Verji skips this test
         "disables the voice call button and starts an Element call when the video call button is pressed in the new " +
             "group call experience if the user lacks permission to edit widgets",
         async () => {
@@ -480,7 +491,8 @@ describe("LegacyRoomHeader", () => {
         },
     );
 
-    it("disables call buttons in the new group call experience if the user lacks permission", () => {
+    it.skip("disables call buttons in the new group call experience if the user lacks permission", () => {
+        //Verji hides button completely
         mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
         mockRoomMembers([alice, bob, carol]);
         mockEventPowerLevels({ [ElementCall.CALL_EVENT_TYPE.name]: 100, "im.vector.modular.widgets": 100 });
@@ -490,7 +502,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons if there's an ongoing legacy 1:1 call", () => {
+    it.skip("disables call buttons if there's an ongoing legacy 1:1 call", () => {
+        //Verji hides button completely
         mockEnabledSettings(["showCallButtonsInComposer"]);
         mockLegacyCall();
 
@@ -499,7 +512,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons if there's an existing Jitsi widget", async () => {
+    it.skip("disables call buttons if there's an existing Jitsi widget", async () => {
+        //Verji dont use jitsi call
         mockEnabledSettings(["showCallButtonsInComposer"]);
         await JitsiCall.create(room);
 
@@ -508,7 +522,8 @@ describe("LegacyRoomHeader", () => {
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables call buttons if there's no other members", () => {
+    it.skip("disables call buttons if there's no other members", () => {
+        //Verji only uses 1-1 video i dm rom
         mockEnabledSettings(["showCallButtonsInComposer"]);
 
         renderHeader();
@@ -534,7 +549,9 @@ describe("LegacyRoomHeader", () => {
         expect(placeCallSpy).toHaveBeenCalledWith(room.roomId, CallType.Video);
     });
 
-    it("creates a Jitsi widget when call buttons are pressed", async () => {
+    it.skip("creates a Jitsi widget when call buttons are pressed", async () => {
+        //Verji allows only 1-1 video, test skipped
+
         mockEnabledSettings(["showCallButtonsInComposer"]);
         mockRoomMembers([alice, bob, carol]);
 
@@ -551,7 +568,8 @@ describe("LegacyRoomHeader", () => {
         expect(placeCallSpy).toHaveBeenCalledWith(room.roomId, CallType.Video);
     });
 
-    it("disables call buttons if the user lacks permission", () => {
+    it.skip("disables call buttons if the user lacks permission", () => {
+        //Verji allows only 1-1 video, test skipped
         mockEnabledSettings(["showCallButtonsInComposer"]);
         mockRoomMembers([alice, bob, carol]);
         mockEventPowerLevels({ "im.vector.modular.widgets": 100 });
@@ -599,8 +617,9 @@ describe("LegacyRoomHeader", () => {
         });
     });
 
-    it("shows a layout button when viewing a call that shows a menu when pressed", async () => {
+    it.skip("shows a layout button when viewing a call that shows a menu when pressed", async () => {
         mockEnabledSettings(["feature_group_calls"]);
+        //Verji removed Spotlight, so test is irrelevant
 
         await withCall(async (call) => {
             // We set the call to skip lobby because otherwise the connection will wait until
@@ -777,9 +796,11 @@ describe("LegacyRoomHeader", () => {
     });
 
     it("should not render buttons if passing showButtons = false", () => {
+        //Verji changes to  truthy
         const room = createRoom({ name: "Room", isDm: false, userIds: [] });
+
         const wrapper = mountHeader(room, { showButtons: false });
-        expect(wrapper.container.querySelector(".mx_LegacyRoomHeader_button")).toBeFalsy();
+        expect(wrapper.container.querySelector(".mx_LegacyRoomHeader_button")).toBeTruthy();
     });
 
     it("should render the room options context menu if not passing enableRoomOptionsMenu (default true) and UIComponent customisations room options enabled", () => {

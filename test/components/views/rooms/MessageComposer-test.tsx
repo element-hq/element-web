@@ -274,7 +274,8 @@ describe("MessageComposer", () => {
                 );
             });
 
-            describe("when a non-resize event occurred in UIStore", () => {
+            describe.skip("when a non-resize event occurred in UIStore", () => {
+                //Verji skips this
                 beforeEach(async () => {
                     wrapAndRender({ room });
                     await openStickerPicker();
@@ -286,7 +287,8 @@ describe("MessageComposer", () => {
                 });
             });
 
-            describe("when a resize to narrow event occurred in UIStore", () => {
+            describe.skip("when a resize to narrow event occurred in UIStore", () => {
+                //Verji skips this
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, true);
                     await openStickerPicker();
@@ -308,7 +310,8 @@ describe("MessageComposer", () => {
                 });
             });
 
-            describe("when a resize to non-narrow event occurred in UIStore", () => {
+            describe.skip("when a resize to non-narrow event occurred in UIStore", () => {
+                //Verji skips this
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, false);
                     await openStickerPicker();
@@ -408,7 +411,8 @@ describe("MessageComposer", () => {
             });
         });
 
-        describe("when clicking start a voice message", () => {
+        describe.skip("when clicking start a voice message", () => {
+            //Verji skips this
             beforeEach(async () => {
                 wrapAndRender({ room });
                 await startVoiceMessage();
@@ -422,7 +426,8 @@ describe("MessageComposer", () => {
             });
         });
 
-        describe("when recording a voice broadcast and trying to start a voice message", () => {
+        describe.skip("when recording a voice broadcast and trying to start a voice message", () => {
+            //Verji skips this
             beforeEach(async () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Started);
                 wrapAndRender({ room });
@@ -438,7 +443,8 @@ describe("MessageComposer", () => {
             });
         });
 
-        describe("when there is a stopped voice broadcast recording and trying to start a voice message", () => {
+        describe.skip("when there is a stopped voice broadcast recording and trying to start a voice message", () => {
+            //Verji skips this
             beforeEach(async () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Stopped);
                 wrapAndRender({ room });

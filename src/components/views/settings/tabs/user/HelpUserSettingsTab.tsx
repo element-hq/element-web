@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+// import React, { ReactNode } from "react";
+import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     CustomComponentLifecycle,
@@ -35,6 +36,8 @@ import SettingsSubsection, { SettingsSubsectionText } from "../../shared/Setting
 import ExternalLink from "../../../elements/ExternalLink";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { ModuleRunner } from "../../../../../modules/ModuleRunner";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { UIFeature } from "../../../../../settings/UIFeature";
 
 interface IProps {}
 
@@ -82,151 +85,161 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         };
     }
 
-    private onClearCacheAndReload = (): void => {
-        if (!PlatformPeg.get()) return;
+    //Verji
+    // private onClearCacheAndReload = (): void => {
+    //     if (!PlatformPeg.get()) return;
 
-        // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
-        // stopping in the middle of the logs.
-        logger.log("Clear cache & reload clicked");
-        this.context.stopClient();
-        this.context.store.deleteAllData().then(() => {
-            PlatformPeg.get()?.reload();
-        });
-    };
+    //     // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
+    //     // stopping in the middle of the logs.
+    //     logger.log("Clear cache & reload clicked");
+    //     this.context.stopClient();
+    //     this.context.store.deleteAllData().then(() => {
+    //         PlatformPeg.get()?.reload();
+    //     });
+    // };
 
     private onBugReport = (): void => {
         Modal.createDialog(BugReportDialog, {});
     };
 
-    private renderLegal(): ReactNode {
-        const tocLinks = SdkConfig.get().terms_and_conditions_links;
-        if (!tocLinks) return null;
+    //Verji
+    // private renderLegal(): ReactNode {
+    //     const tocLinks = SdkConfig.get().terms_and_conditions_links;
+    //     if (!tocLinks) return null;
 
-        const legalLinks: JSX.Element[] = [];
-        for (const tocEntry of tocLinks) {
-            legalLinks.push(
-                <div key={tocEntry.url}>
-                    <ExternalLink href={tocEntry.url}>{tocEntry.text}</ExternalLink>
-                </div>,
-            );
-        }
+    //     const legalLinks: JSX.Element[] = [];
+    //     for (const tocEntry of tocLinks) {
+    //         legalLinks.push(
+    //             <div key={tocEntry.url}>
+    //                 <ExternalLink href={tocEntry.url}>{tocEntry.text}</ExternalLink>
+    //             </div>,
+    //         );
+    //     }
 
-        return (
-            <SettingsSubsection heading={_t("common|legal")}>
-                <SettingsSubsectionText>{legalLinks}</SettingsSubsectionText>
-            </SettingsSubsection>
-        );
-    }
+    //     return (
+    //         <SettingsSubsection heading={_t("common|legal")}>
+    //             <SettingsSubsectionText>{legalLinks}</SettingsSubsectionText>
+    //         </SettingsSubsection>
+    //     );
+    // }
 
-    private renderCredits(): JSX.Element {
-        // Note: This is not translated because it is legal text.
-        // Also, &nbsp; is ugly but necessary.
-        return (
-            <SettingsSubsection heading={_t("common|credits")}>
-                <SettingsSubsectionText>
-                    <ul>
-                        <li>
-                            {_t(
-                                "credits|default_cover_photo",
-                                {},
-                                {
-                                    photo: (sub) => (
-                                        <ExternalLink
-                                            href="themes/element/img/backgrounds/lake.jpg"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                    author: (sub) => (
-                                        <ExternalLink href="https://www.flickr.com/golan">{sub}</ExternalLink>
-                                    ),
-                                    terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://creativecommons.org/licenses/by-sa/4.0/"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                },
-                            )}
-                        </li>
-                        <li>
-                            {_t(
-                                "credits|twemoji_colr",
-                                {},
-                                {
-                                    colr: (sub) => (
-                                        <ExternalLink
-                                            href="https://github.com/matrix-org/twemoji-colr"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                    author: (sub) => <ExternalLink href="https://mozilla.org">{sub}</ExternalLink>,
-                                    terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://www.apache.org/licenses/LICENSE-2.0"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                },
-                            )}
-                        </li>
-                        <li>
-                            {_t(
-                                "credits|twemoji",
-                                {},
-                                {
-                                    twemoji: (sub) => (
-                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
-                                    ),
-                                    author: (sub) => (
-                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
-                                    ),
-                                    terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://creativecommons.org/licenses/by/4.0/"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                },
-                            )}
-                        </li>
-                    </ul>
-                </SettingsSubsectionText>
-            </SettingsSubsection>
-        );
-    }
+    //Verji
+    // private renderCredits(): JSX.Element {
+    //     // Note: This is not translated because it is legal text.
+    //     // Also, &nbsp; is ugly but necessary.
+    //     return (
+    //         <SettingsSubsection heading={_t("common|credits")}>
+    //             <SettingsSubsectionText>
+    //                 <ul>
+    //                     <li>
+    //                         {_t(
+    //                             "credits|default_cover_photo",
+    //                             {},
+    //                             {
+    //                                 photo: (sub) => (
+    //                                     <ExternalLink
+    //                                         href="themes/element/img/backgrounds/lake.jpg"
+    //                                         rel="noreferrer noopener"
+    //                                         target="_blank"
+    //                                     >
+    //                                         {sub}
+    //                                     </ExternalLink>
+    //                                 ),
+    //                                 author: (sub) => (
+    //                                     <ExternalLink href="https://www.flickr.com/golan">{sub}</ExternalLink>
+    //                                 ),
+    //                                 terms: (sub) => (
+    //                                     <ExternalLink
+    //                                         href="https://creativecommons.org/licenses/by-sa/4.0/"
+    //                                         rel="noreferrer noopener"
+    //                                         target="_blank"
+    //                                     >
+    //                                         {sub}
+    //                                     </ExternalLink>
+    //                                 ),
+    //                             },
+    //                         )}
+    //                     </li>
+    //                     <li>
+    //                         {_t(
+    //                             "credits|twemoji_colr",
+    //                             {},
+    //                             {
+    //                                 colr: (sub) => (
+    //                                     <ExternalLink
+    //                                         href="https://github.com/matrix-org/twemoji-colr"
+    //                                         rel="noreferrer noopener"
+    //                                         target="_blank"
+    //                                     >
+    //                                         {sub}
+    //                                     </ExternalLink>
+    //                                 ),
+    //                                 author: (sub) => <ExternalLink href="https://mozilla.org">{sub}</ExternalLink>,
+    //                                 terms: (sub) => (
+    //                                     <ExternalLink
+    //                                         href="https://www.apache.org/licenses/LICENSE-2.0"
+    //                                         rel="noreferrer noopener"
+    //                                         target="_blank"
+    //                                     >
+    //                                         {sub}
+    //                                     </ExternalLink>
+    //                                 ),
+    //                             },
+    //                         )}
+    //                     </li>
+    //                     <li>
+    //                         {_t(
+    //                             "credits|twemoji",
+    //                             {},
+    //                             {
+    //                                 twemoji: (sub) => (
+    //                                     <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+    //                                 ),
+    //                                 author: (sub) => (
+    //                                     <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+    //                                 ),
+    //                                 terms: (sub) => (
+    //                                     <ExternalLink
+    //                                         href="https://creativecommons.org/licenses/by/4.0/"
+    //                                         rel="noreferrer noopener"
+    //                                         target="_blank"
+    //                                     >
+    //                                         {sub}
+    //                                     </ExternalLink>
+    //                                 ),
+    //                             },
+    //                         )}
+    //                     </li>
+    //                 </ul>
+    //             </SettingsSubsectionText>
+    //         </SettingsSubsection>
+    //     );
+    // }
 
     private getVersionTextToCopy = (): string => {
         const { appVersion, cryptoVersion } = this.getVersionInfo();
         return `${appVersion}\n${cryptoVersion}`;
     };
 
-    public render(): React.ReactNode {
-        const brand = SdkConfig.get().brand;
+    // Verji start
+    private verjiHelp(): void {
+        const newWindow = window.open("https://rosberg.no/hjelp", "_blank", "noopener,noreferrer");
+        if (newWindow) newWindow.opener = null;
+    }
+    // Verji end
 
-        const faqText = _t(
-            "setting|help_about|help_link",
-            {
-                brand,
-            },
-            {
-                a: (sub) => <ExternalLink href={SdkConfig.get("help_url")}>{sub}</ExternalLink>,
-            },
-        );
+    public render(): React.ReactNode {
+        //Verji start
+        // const brand = SdkConfig.get().brand;
+        // const faqText = _t(
+        //     "setting|help_about|help_link",
+        //     {
+        //         brand,
+        //     },
+        //     {
+        //         a: (sub) => <ExternalLink href={SdkConfig.get("help_url")}>{sub}</ExternalLink>,
+        //     },
+        // ); Verji end
 
         let updateButton: JSX.Element | undefined;
         if (this.state.canUpdate) {
@@ -248,19 +261,27 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <AccessibleButton onClick={this.onBugReport} kind="primary_outline">
                         {_t("bug_reporting|submit_debug_logs")}
                     </AccessibleButton>
-                    <SettingsSubsectionText>
-                        {_t(
-                            "bug_reporting|matrix_security_issue",
-                            {},
-                            {
-                                a: (sub) => (
-                                    <ExternalLink href="https://matrix.org/security-disclosure-policy/">
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                            },
-                        )}
-                    </SettingsSubsectionText>
+                    {console.log(
+                        "Eik hjelp: HelpShowMatrixDisclosurePolicyAndLinks " +
+                            SettingsStore.getValue(UIFeature.HelpShowMatrixDisclosurePolicyAndLinks),
+                    )}
+                    {SettingsStore.getValue(UIFeature.HelpShowMatrixDisclosurePolicyAndLinks) && (
+                        <>
+                            <SettingsSubsectionText>
+                                {_t(
+                                    "bug_reporting|matrix_security_issue",
+                                    {},
+                                    {
+                                        a: (sub) => (
+                                            <ExternalLink href="https://matrix.org/security-disclosure-policy/">
+                                                {sub}
+                                            </ExternalLink>
+                                        ),
+                                    },
+                                )}
+                            </SettingsSubsectionText>
+                        </>
+                    )}
                 </SettingsSubsection>
             );
         }
@@ -278,7 +299,31 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 <SettingsTab>
                     <SettingsSection>
                         {bugReportingSection}
-                        <SettingsSubsection heading={_t("common|faq")} description={faqText} />
+                        <SettingsSubsection heading={_t("common|faq")} />
+                        <div className="mx_SettingsTab_subsectionText">
+                            {/* ROSBERG START */}
+                            <AccessibleButton kind="primary" onClick={this.verjiHelp}>
+                                {_t("common|help", { brand: SdkConfig.get().brand })}
+                            </AccessibleButton>
+                            {/* ROSBERG END */}
+                        </div>
+
+                        {/* Verji start */}
+                        {/* <b><span className='mx_SettingsTab_subheading'>{_t("verji|user_settings_help_about|bug_report")}</span></b> */}
+                        <div className="mx_SettingsTab_subsectionText">
+                            <p>{_t("verji|user_settings_help_about|experience_errors")}</p>
+                            <a href={_t("verji|user_settings_help_about|mailto_support")}>
+                                {_t("verji|user_settings_help_about|mailto_support")}
+                            </a>
+                            <p>{_t("verji|user_settings_help_about|support_phone")}</p>
+                            <p>
+                                <b>{_t("verji|user_settings_help_about|monday_friday")}</b>
+                            </p>
+                            <p>
+                                <b>{_t("verji|user_settings_help_about|opening_hours")}</b>
+                            </p>
+                        </div>
+                        {/* Verji end */}
                         <SettingsSubsection heading={_t("setting|help_about|versions")}>
                             <SettingsSubsectionText>
                                 <CopyableText getTextToCopy={this.getVersionTextToCopy}>
@@ -290,6 +335,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 {updateButton}
                             </SettingsSubsectionText>
                         </SettingsSubsection>
+                        {/* Verji start
                         {this.renderLegal()}
                         {this.renderCredits()}
                         <SettingsSubsection heading={_t("common|advanced")}>
@@ -306,10 +352,23 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             </SettingsSubsectionText>
                             {this.context.getIdentityServerUrl() && (
                                 <SettingsSubsectionText>
+                                    <CopyableText getTextToCopy={this.getVersionTextToCopy}>
+                                        {appVersion}
+                                        <br />
+                                        {cryptoVersion}
+                                        <br />
+                                    </CopyableText>
+                                    {updateButton}
+                                </SettingsSubsectionText>
+                            </SettingsSubsection>
+                            {this.renderLegal()}
+                            {this.renderCredits()}
+                            <SettingsSubsection heading={_t("common|advanced")}>
+                                <SettingsSubsectionText>
                                     {_t(
-                                        "setting|help_about|identity_server",
+                                        "setting|help_about|homeserver",
                                         {
-                                            identityServerUrl: this.context.getIdentityServerUrl(),
+                                            homeserverUrl: this.context.getHomeserverUrl(),
                                         },
                                         {
                                             code: (sub) => <code>{sub}</code>,
@@ -332,6 +391,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 {_t("setting|help_about|clear_cache_reload")}
                             </AccessibleButton>
                         </SettingsSubsection>
+                        Verji end */}
                     </SettingsSection>
                 </SettingsTab>
             </CustomHelpUserSettingsTab.CustomComponent>

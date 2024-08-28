@@ -75,6 +75,8 @@ import RoomCallBanner from "../beacon/RoomCallBanner";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import MiscHeaderButtons from "../misc_header/MiscHeaderButtons";
 
 class DisabledWithReason {
     public constructor(public readonly reason: string) {}
@@ -593,13 +595,22 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     private renderButtons(isVideoRoom: boolean): React.ReactNode {
         const startButtons: JSX.Element[] = [];
 
+        // Verji start
+        const isDm = this.props.room
+            ? DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId) &&
+              this.props.room.getJoinedMembers().length === 2
+            : null;
+
+        // const isDm = true;  //for test
+
         if (!this.props.viewingCall && this.props.inRoom && !this.context.tombstone) {
-            startButtons.push(<CallButtons key="calls" room={this.props.room} />);
+            if (isDm) startButtons.push(<CallButtons key="calls" room={this.props.room} />);
         }
 
         if (this.props.viewingCall && this.props.activeCall instanceof ElementCall) {
-            startButtons.push(<CallLayoutSelector key="layout" call={this.props.activeCall} />);
+            if (isDm) startButtons.push(<CallLayoutSelector key="layout" call={this.props.activeCall} />);
         }
+        // Verji end
 
         if (!this.props.viewingCall && this.props.onForgetClick) {
             startButtons.push(
@@ -868,6 +879,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                         {topicElement}
                         {betaPill}
                         {buttons}
+                        <MiscHeaderButtons />
                     </div>
                     {!isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} />}
                     <RoomLiveShareWarning roomId={this.props.room.roomId} />

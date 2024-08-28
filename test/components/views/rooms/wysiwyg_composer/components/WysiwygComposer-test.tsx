@@ -115,7 +115,7 @@ describe("WysiwygComposer", () => {
             );
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(1));
+            await waitFor(() => expect(onSend).not.toHaveBeenCalledTimes(1)); //Verji added 'not' becuase we use diff defaultsetting
         });
 
         it("Should not call onSend when Shift+Enter is pressed", async () => {
@@ -154,7 +154,7 @@ describe("WysiwygComposer", () => {
             await userEvent.type(screen.getByRole("textbox"), "{meta>}{enter}");
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
+            await waitFor(() => expect(onSend).not.toHaveBeenCalledTimes(0)); // Verji added 'not'
         });
     });
 

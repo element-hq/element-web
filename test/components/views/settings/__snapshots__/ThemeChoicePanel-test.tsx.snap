@@ -22,6 +22,39 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
         class="mx_ThemeChoicePanel_themeSelectors"
         data-testid="theme-choice-panel-selectors"
       />
+      <div
+        class="mx_SettingsTab_section"
+      >
+        <form>
+          <div
+            class="mx_Field mx_Field_input"
+          >
+            <input
+              autocomplete="off"
+              id="mx_GeneralUserSettingsTab_customThemeInput"
+              label="Custom theme URL"
+              placeholder="Custom theme URL"
+              type="text"
+              value=""
+            />
+            <label
+              for="mx_GeneralUserSettingsTab_customThemeInput"
+            >
+              Custom theme URL
+            </label>
+          </div>
+          <div
+            aria-disabled="true"
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm mx_AccessibleButton_disabled"
+            disabled=""
+            role="button"
+            tabindex="0"
+            type="submit"
+          >
+            Add theme
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </DocumentFragment>
