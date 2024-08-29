@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 
 import SecurityUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/SecurityUserSettingsTab";
@@ -27,6 +27,7 @@ import {
     mockPlatformPeg,
 } from "../../../../../test-utils";
 import { SDKContext, SdkContextClass } from "../../../../../../src/contexts/SDKContext";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
 
 describe("<SecurityUserSettingsTab />", () => {
     const defaultProps = {
@@ -65,5 +66,14 @@ describe("<SecurityUserSettingsTab />", () => {
         const { container } = render(getComponent());
 
         expect(container).toMatchSnapshot();
+    });
+    it("renders eventIndex when feature is true", () => {
+        render(getComponent());
+        expect(screen.queryByText("Message search")).not.toBeNull();
+    });
+    it("does not render eventIndex when feature is false", () => {
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        render(getComponent());
+        expect(screen.queryByText("Message search")).toBeNull();
     });
 });
