@@ -1822,7 +1822,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 <div className="mx_InviteDialog_userSections">
                     {this.renderSection("recents")}
                     {this.renderSection("suggestions")}
-                    {extraSection}
+                    {SettingsStore.getValue(UIFeature.SendInviteLinkPrompt) && extraSection}
                 </div>
             );
         }
