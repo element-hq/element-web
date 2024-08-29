@@ -1503,6 +1503,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.SettingShowMessageSearch]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.ShowInviteToSpaceFromPeoplePlus]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
