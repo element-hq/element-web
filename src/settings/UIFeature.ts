@@ -100,6 +100,7 @@ export const enum UIFeature {
     ShowSendMessageToUserLink = "UIFeature.showSendMessageToUserLink",
     SendInviteLinkPrompt = "UIFeature.sendInviteLinkPrompt",
     HelpShowMatrixDisclosurePolicyAndLinks = "UIFeature.helpShowMatrixDisclosurePolicyAndLinks",
+    ShowInviteToSpaceFromPeoplePlus = "UIFeature.showInviteToSpaceFromPeoplePlus",
     SettingShowMessageSearch = "UIFeature.settingShowMessageSearch",
 }
 

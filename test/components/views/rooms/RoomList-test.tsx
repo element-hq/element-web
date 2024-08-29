@@ -51,7 +51,6 @@ DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
 describe("UIFeature tests", () => {
     stubClient();
-    //const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
     function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
@@ -380,6 +379,71 @@ describe("RoomList", () => {
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomPublic })).toBeFalsy();
                 expect(queryByRole(roomsList, "treeitem", { name: videoRoomKnock })).toBeFalsy();
             });
+        });
+    });
+});
+
+describe("UIFeature tests part 2", () => {
+    stubClient();
+    const store = SpaceStore.instance;
+
+    function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
+        return (
+            <RoomList
+                onKeyDown={jest.fn()}
+                onFocus={jest.fn()}
+                onBlur={jest.fn()}
+                onResize={jest.fn()}
+                resizeNotifier={new ResizeNotifier()}
+                isMinimized={false}
+                activeSpace={MetaSpace.Home}
+                {...props}
+            />
+        );
+    }
+    beforeEach(() => {
+        store.setActiveSpace(MetaSpace.Home);
+        mocked(shouldShowComponent).mockImplementation((feature) => true);
+    });
+    describe("UIFeature.showInviteToSpaceFromPeoplePlus", () => {
+        stubClient();
+        const client = MatrixClientPeg.safeGet();
+        const store = SpaceStore.instance;
+        let rooms: Room[];
+        const mkSpaceForRooms = (spaceId: string, children: string[] = []) => mkSpace(client, spaceId, rooms, children);
+
+        const space1 = "!verjispace1:server";
+
+        beforeEach(async () => {
+            rooms = [];
+            mkSpaceForRooms(space1);
+            mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
+            await testUtils.setupAsyncStoreWithClient(store, client);
+
+            store.setActiveSpace(space1);
+        });
+        it("UIFeature.showInviteToSpaceFromPeoplePlus = true: renders 'Invite to space'-button", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowInviteToSpaceFromPeoplePlus) return true;
+                return false;
+            });
+            render(getComponent());
+            const peoplePlusButton = screen.getByLabelText("Add people");
+            await userEvent.click(peoplePlusButton);
+
+            expect(screen.getByLabelText("Invite to space")).toBeInTheDocument();
+        });
+
+        it("UIFeature.showInviteToSpaceFromPeoplePlus = false: does not render 'Invite to space'-button", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowInviteToSpaceFromPeoplePlus) return false;
+                return false;
+            });
+            render(getComponent());
+            const peoplePlusButton = screen.getByLabelText("Add people");
+            await userEvent.click(peoplePlusButton);
+
+            expect(screen.queryByLabelText("Invite to space")).not.toBeInTheDocument();
         });
     });
 });
