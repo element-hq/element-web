@@ -73,15 +73,27 @@ describe("PinningUtils", () => {
         ).mockReturnValue(true);
     });
 
-    describe("isPinnable", () => {
+    describe("isUnpinnable", () => {
         test.each(PinningUtils.PINNABLE_EVENT_TYPES)("should return true for pinnable event types", (eventType) => {
             const event = makePinEvent({ type: eventType });
-            expect(PinningUtils.isPinnable(event)).toBe(true);
+            expect(PinningUtils.isUnpinnable(event)).toBe(true);
         });
 
         test("should return false for a non pinnable event type", () => {
             const event = makePinEvent({ type: EventType.RoomCreate });
-            expect(PinningUtils.isPinnable(event)).toBe(false);
+            expect(PinningUtils.isUnpinnable(event)).toBe(false);
+        });
+
+        test("should return true for a redacted event", () => {
+            const event = makePinEvent({ unsigned: { redacted_because: "because" as unknown as IEvent } });
+            expect(PinningUtils.isUnpinnable(event)).toBe(true);
+        });
+    });
+
+    describe("isPinnable", () => {
+        test.each(PinningUtils.PINNABLE_EVENT_TYPES)("should return true for pinnable event types", (eventType) => {
+            const event = makePinEvent({ type: eventType });
+            expect(PinningUtils.isPinnable(event)).toBe(true);
         });
 
         test("should return false for a redacted event", () => {

@@ -20,7 +20,6 @@ import { mocked, MockedObject } from "jest-mock";
 import {
     MatrixEvent,
     RoomStateEvent,
-    IEvent,
     Room,
     IMinimalEvent,
     EventType,
@@ -266,9 +265,8 @@ describe("<PinnedMessagesCard />", () => {
             // Redacted messages are unpinnable
             const pin = mkEvent({
                 event: true,
-                type: EventType.RoomMessage,
+                type: EventType.RoomCreate,
                 content: {},
-                unsigned: { redacted_because: {} as unknown as IEvent },
                 room: "!room:example.org",
                 user: "@alice:example.org",
             });
@@ -280,9 +278,8 @@ describe("<PinnedMessagesCard />", () => {
             // Redacted messages are unpinnable
             const pin = mkEvent({
                 event: true,
-                type: EventType.RoomMessage,
+                type: EventType.RoomCreate,
                 content: {},
-                unsigned: { redacted_because: {} as unknown as IEvent },
                 room: "!room:example.org",
                 user: "@alice:example.org",
             });

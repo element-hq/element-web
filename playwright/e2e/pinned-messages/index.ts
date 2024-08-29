@@ -168,9 +168,8 @@ export class Helpers {
 
     /**
      * Return the right panel
-     * @private
      */
-    private getRightPanel() {
+    public getRightPanel() {
         return this.page.locator("#mx_RightPanel");
     }
 
@@ -183,7 +182,6 @@ export class Helpers {
         await expect(rightPanel.getByRole("heading", { name: "Pinned messages" })).toHaveText(
             `${messages.length} Pinned messages`,
         );
-        await expect(rightPanel).toMatchScreenshot(`pinned-messages-list-messages-${messages.length}.png`);
 
         const list = rightPanel.getByRole("list");
         await expect(list.getByRole("listitem")).toHaveCount(messages.length);
@@ -242,6 +240,36 @@ export class Helpers {
 
         await item.getByRole("button").click();
         await this.page.getByRole("menu", { name: "Open menu" }).getByRole("menuitem", { name: "Unpin" }).click();
+    }
+
+    /**
+     * Return the banner
+     * @private
+     */
+    public getBanner() {
+        return this.page.getByTestId("pinned-message-banner");
+    }
+
+    /**
+     * Assert that the banner contains the given message
+     * @param msg
+     */
+    async assertMessageInBanner(msg: string) {
+        await expect(this.getBanner().getByText(msg)).toBeVisible();
+    }
+
+    /**
+     * Return the view all button
+     */
+    public getViewAllButton() {
+        return this.page.getByRole("button", { name: "View all" });
+    }
+
+    /**
+     * Return the close list button
+     */
+    public getCloseListButton() {
+        return this.page.getByRole("button", { name: "Close list" });
     }
 }
 

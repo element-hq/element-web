@@ -133,6 +133,7 @@ import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoi
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
+import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -2409,6 +2410,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
+        const isPinningEnabled = SettingsStore.getValue<boolean>("feature_pinning");
+        let pinnedMessageBanner;
+        if (isPinningEnabled) {
+            pinnedMessageBanner = (
+                <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
+            );
+        }
+
         let messageComposer;
         const showComposer =
             // joined and not showing search results
@@ -2537,6 +2546,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             <Measured sensor={this.roomViewBody.current} onMeasurement={this.onMeasurement} />
                         )}
                         {auxPanel}
+                        {pinnedMessageBanner}
                         <main className={timelineClasses}>
                             <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
                             {topUnreadMessagesBar}

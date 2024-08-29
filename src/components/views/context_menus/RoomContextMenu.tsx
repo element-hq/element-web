@@ -35,7 +35,6 @@ import { RoomNotifState } from "../../../RoomNotifs";
 import Modal from "../../../Modal";
 import ExportDialog from "../dialogs/ExportDialog";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { usePinnedEvents } from "../right_panel/PinnedMessagesCard";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -53,6 +52,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 
 interface IProps extends IContextMenuProps {
     room: Room;

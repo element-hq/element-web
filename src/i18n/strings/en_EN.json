@@ -2048,6 +2048,13 @@
         "not_found_title": "This room or space does not exist.",
         "not_found_title_name": "%(roomName)s does not exist.",
         "peek_join_prompt": "You're previewing %(roomName)s. Want to join it?",
+        "pinned_message_banner": {
+            "button_close_list": "Close list",
+            "button_view_all": "View all",
+            "description": "This room has pinned messages. Click to view them.",
+            "go_to_message": "View the pinned message in the timeline.",
+            "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
+        },
         "read_topic": "Click to read topic",
         "rejecting": "Rejecting invite…",
         "rejoin_button": "Re-join",

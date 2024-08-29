@@ -58,7 +58,6 @@ import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { usePinnedEvents } from "./PinnedMessagesCard";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -81,6 +80,7 @@ import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
 import { useTransition } from "../../../hooks/useTransition";
 import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 
 interface IProps {
     room: Room;

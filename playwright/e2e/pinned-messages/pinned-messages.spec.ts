@@ -48,6 +48,7 @@ test.describe("Pinned messages", () => {
         await util.openRoomInfo();
         await util.openPinnedMessagesList();
         await util.assertPinnedMessagesList(["Msg1", "Msg2", "Msg4"]);
+        await expect(util.getRightPanel()).toMatchScreenshot(`pinned-messages-list-pin-3.png`);
     });
 
     test("should unpin one message", async ({ page, app, room1, util }) => {
@@ -59,6 +60,7 @@ test.describe("Pinned messages", () => {
         await util.openPinnedMessagesList();
         await util.unpinMessageFromMessageList("Msg2");
         await util.assertPinnedMessagesList(["Msg1", "Msg4"]);
+        await expect(util.getRightPanel()).toMatchScreenshot(`pinned-messages-list-unpin-2.png`);
         await util.backPinnedMessagesList();
         await util.assertPinnedCountInRoomInfo(2);
     });
@@ -86,5 +88,66 @@ test.describe("Pinned messages", () => {
 
         await util.pinMessagesFromQuickActions(["Msg1"], true);
         await util.assertPinnedCountInRoomInfo(0);
+    });
+
+    test("should display one message in the banner", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1"]);
+        await util.pinMessages(["Msg1"]);
+        await util.assertMessageInBanner("Msg1");
+        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-1-Msg1.png");
+    });
+
+    test("should display 2 messages in the banner", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1", "Msg2"]);
+        await util.pinMessages(["Msg1", "Msg2"]);
+
+        await util.assertMessageInBanner("Msg1");
+        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg1.png");
+
+        await util.getBanner().click();
+        await util.assertMessageInBanner("Msg2");
+        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg2.png");
+
+        await util.getBanner().click();
+        await util.assertMessageInBanner("Msg1");
+        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg1.png");
+    });
+
+    test("should display 4 messages in the banner", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);
+        await util.pinMessages(["Msg1", "Msg2", "Msg3", "Msg4"]);
+
+        for (const msg of ["Msg1", "Msg4", "Msg3", "Msg2"]) {
+            await util.assertMessageInBanner(msg);
+            await expect(util.getBanner()).toMatchScreenshot(`pinned-message-banner-4-${msg}.png`);
+            await util.getBanner().click();
+        }
+    });
+
+    test("should open the pinned messages list from the banner", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1", "Msg2"]);
+        await util.pinMessages(["Msg1", "Msg2"]);
+
+        await util.getViewAllButton().click();
+        await util.assertPinnedMessagesList(["Msg1", "Msg2"]);
+        await expect(util.getRightPanel()).toMatchScreenshot("pinned-message-banner-2.png");
+
+        await expect(util.getCloseListButton()).toBeVisible();
+    });
+
+    test("banner should listen to pinned message list", async ({ page, app, room1, util }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1", "Msg2"]);
+        await util.pinMessages(["Msg1", "Msg2"]);
+
+        await expect(util.getViewAllButton()).toBeVisible();
+
+        await util.openRoomInfo();
+        await util.openPinnedMessagesList();
+        await expect(util.getCloseListButton()).toBeVisible();
     });
 });

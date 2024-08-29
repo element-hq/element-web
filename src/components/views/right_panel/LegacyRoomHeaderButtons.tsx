@@ -28,7 +28,6 @@ import HeaderButtons, { HeaderKind } from "./HeaderButtons";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { useReadPinnedEvents, usePinnedEvents } from "./PinnedMessagesCard";
 import { showThreadPanel } from "../../../dispatcher/dispatch-actions/threads";
 import SettingsStore from "../../../settings/SettingsStore";
 import {
@@ -40,6 +39,7 @@ import { SummarizedNotificationState } from "../../../stores/notifications/Summa
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../Unread";
+import { usePinnedEvents, useReadPinnedEvents } from "../../../hooks/usePinnedEvents";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
