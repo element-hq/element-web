@@ -163,7 +163,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                                 }}
                             />
                         )}
-                        {showInviteUsers && (
+                        {showInviteUsers && SettingsStore.getValue(UIFeature.ShowInviteToSpaceFromPeoplePlus) && (
                             <IconizedContextMenuOption
                                 label={_t("action|invite_to_space")}
                                 iconClassName="mx_RoomList_iconInvite"
@@ -193,7 +193,6 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     isExpanded={menuDisplayed}
                     ref={handle}
                 />
-
                 {contextMenu}
             </>
         );
