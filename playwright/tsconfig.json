@@ -6,7 +6,8 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "module": "es2022"
+        "module": "es2022",
+        "allowImportingTsExtensions": true
     },
     "include": [
         "**/*.ts",
