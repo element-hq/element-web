@@ -34,7 +34,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import Modal from "../../../Modal";
 import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
 import EmptyState from "./EmptyState";
-import { useFetchedPinnedEvents, usePinnedEvents, useReadPinnedEvents } from "../../../hooks/usePinnedEvents";
+import { usePinnedEvents, useReadPinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
 
 /**
  * List the pinned messages in a room inside a Card.
@@ -59,7 +59,7 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
     const roomContext = useRoomContext();
     const pinnedEventIds = usePinnedEvents(room);
     const readPinnedEvents = useReadPinnedEvents(room);
-    const pinnedEvents = useFetchedPinnedEvents(room, pinnedEventIds);
+    const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
 
     useEffect(() => {
         if (!cli || cli.isGuest()) return; // nothing to do
