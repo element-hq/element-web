@@ -73,6 +73,7 @@ import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
+import { Media } from "../../customisations/Media";
 
 // TODO: Purge this from the universe
 
@@ -678,5 +679,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const uploadResult = await client.uploadContent(file);
 
         return { contentUri: uploadResult.content_uri };
+    }
+
+    /**
+     * Download a file from the media repository on the homeserver.
+     *
+     * @param contentUri - the MXC URI of the file to download
+     * @returns an object with: file - response contents as Blob
+     */
+    public async downloadFile(contentUri: string): Promise<{ file: XMLHttpRequestBodyInit }> {
+        const client = MatrixClientPeg.safeGet();
+        const media = new Media({ mxc: contentUri }, client);
+        const response = await media.downloadSource();
+        const blob = await response.blob();
+        return { file: blob };
     }
 }

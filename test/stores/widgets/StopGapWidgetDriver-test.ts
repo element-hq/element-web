@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
+import fetchMockJest from "fetch-mock-jest";
 import {
     MatrixClient,
     ClientEvent,
@@ -614,6 +615,34 @@ describe("StopGapWidgetDriver", () => {
             });
 
             expect(client.uploadContent).toHaveBeenCalledWith("data");
+        });
+    });
+
+    describe("downloadFile", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("should download a file and return the blob", async () => {
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockImplementation((mxcUrl) => {
+                if (mxcUrl === "mxc://example.com/test_file") {
+                    return "https://example.com/_matrix/media/v3/download/example.com/test_file";
+                }
+
+                return null;
+            });
+
+            fetchMockJest.get("https://example.com/_matrix/media/v3/download/example.com/test_file", "test contents");
+
+            const result = await driver.downloadFile("mxc://example.com/test_file");
+            // A type test is impossible here because of
+            // https://github.com/jefflau/jest-fetch-mock/issues/209
+            // Tell TypeScript that file is a blob.
+            const file = result.file as Blob;
+            await expect(file.text()).resolves.toEqual("test contents");
         });
     });
 });
