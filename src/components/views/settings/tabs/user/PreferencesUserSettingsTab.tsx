@@ -15,12 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 
+import { NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
 import { UseCase } from "../../../../../settings/enums/UseCase";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
+import Dropdown from "../../../elements/Dropdown";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -38,12 +40,16 @@ import PlatformPeg from "../../../../../PlatformPeg";
 import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+import * as TimezoneHandler from "../../../../../TimezoneHandler";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
 }
 
 interface IState {
+    timezone: string | undefined;
+    timezones: string[];
+    timezoneSearch: string | undefined;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
@@ -68,7 +74,7 @@ const LanguageSection: React.FC = () => {
     );
 
     return (
-        <div className="mx_SettingsSubsection_contentStretch">
+        <div className="mx_SettingsSubsection_dropdown">
             {_t("settings|general|application_language")}
             <LanguageDropdown onOptionChange={onLanguageChange} value={language} />
             <div className="mx_PreferencesUserSettingsTab_section_hint">
@@ -173,6 +179,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         super(props);
 
         this.state = {
+            timezone: TimezoneHandler.getUserTimezone(),
+            timezones: TimezoneHandler.getAllTimezones(),
+            timezoneSearch: undefined,
             autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay").toString(10),
             readMarkerInViewThresholdMs: SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
@@ -184,6 +193,25 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             ).toString(10),
         };
     }
+
+    private onTimezoneChange = (tz: string): void => {
+        this.setState({ timezone: tz });
+        TimezoneHandler.setUserTimezone(tz);
+    };
+
+    /**
+     * If present filter the time zones matching the search term
+     */
+    private onTimezoneSearchChange = (search: string): void => {
+        const timezoneSearch = search.toLowerCase();
+        const timezones = timezoneSearch
+            ? TimezoneHandler.getAllTimezones().filter((tz) => {
+                  return tz.toLowerCase().includes(timezoneSearch);
+              })
+            : TimezoneHandler.getAllTimezones();
+
+        this.setState({ timezones, timezoneSearch });
+    };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ autocompleteDelay: e.target.value });
@@ -216,6 +244,16 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
             // Only show the user onboarding setting if the user should see the user onboarding page
             .filter((it) => it !== "FTUE.userOnboardingButton" || showUserOnboardingPage(useCase));
+
+        const browserTimezoneLabel: string = _t("settings|preferences|default_timezone", {
+            timezone: TimezoneHandler.shortBrowserTimezone(),
+        });
+
+        // Always Preprend the default option
+        const timezones = this.state.timezones.map((tz) => {
+            return <div key={tz}>{tz}</div>;
+        });
+        timezones.unshift(<div key="">{browserTimezoneLabel}</div>);
 
         return (
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
@@ -254,6 +292,23 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
+                        <div className="mx_SettingsSubsection_dropdown">
+                            {_t("settings|preferences|user_timezone")}
+                            <Dropdown
+                                id="mx_dropdownUserTimezone"
+                                className="mx_dropdownUserTimezone"
+                                data-testid="mx_dropdownUserTimezone"
+                                searchEnabled={true}
+                                value={this.state.timezone}
+                                label={_t("settings|preferences|user_timezone")}
+                                placeholder={browserTimezoneLabel}
+                                onOptionChange={this.onTimezoneChange}
+                                onSearchChange={this.onTimezoneSearchChange}
+                            >
+                                {timezones as NonEmptyArray<ReactElement & { key: string }>}
+                            </Dropdown>
+                        </div>
+
                         {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
                     </SettingsSubsection>
 

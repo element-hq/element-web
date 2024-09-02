@@ -2703,6 +2703,7 @@
             "code_blocks_heading": "Code blocks",
             "compact_modern": "Use a more compact 'Modern' layout",
             "composer_heading": "Composer",
+            "default_timezone": "Browser default (%(timezone)s)",
             "dialog_title": "<strong>Settings:</strong> Preferences",
             "enable_hardware_acceleration": "Enable hardware acceleration",
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
@@ -2718,7 +2719,8 @@
             "show_checklist_shortcuts": "Show shortcut to welcome checklist above the room list",
             "show_polls_button": "Show polls button",
             "surround_text": "Surround selected text when typing special characters",
-            "time_heading": "Displaying time"
+            "time_heading": "Displaying time",
+            "user_timezone": "Set timezone"
         },
         "prompt_invite": "Prompt before sending invites to potentially invalid matrix IDs",
         "replace_plain_emoji": "Automatically replace plain text Emoji",

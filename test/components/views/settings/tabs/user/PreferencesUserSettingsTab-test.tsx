@@ -55,6 +55,32 @@ describe("PreferencesUserSettingsTab", () => {
         expect(reloadStub).toHaveBeenCalled();
     });
 
+    it("should search and select a user timezone", async () => {
+        renderTab();
+
+        expect(await screen.findByText(/Browser default/)).toBeInTheDocument();
+        const timezoneDropdown = await screen.findByRole("button", { name: "Set timezone" });
+        await userEvent.click(timezoneDropdown);
+
+        // Without filtering `expect(screen.queryByRole("option" ...` take over 1s.
+        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+            target: { value: "Africa/Abidjan" },
+        });
+
+        expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).toBeInTheDocument();
+        expect(screen.queryByRole("option", { name: "Europe/Paris" })).not.toBeInTheDocument();
+
+        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+            target: { value: "Europe/Paris" },
+        });
+
+        expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).not.toBeInTheDocument();
+        const option = await screen.getByRole("option", { name: "Europe/Paris" });
+        await userEvent.click(option);
+
+        expect(await screen.findByText("Europe/Paris")).toBeInTheDocument();
+    });
+
     it("should not show spell check setting if unsupported", async () => {
         PlatformPeg.get()!.supportsSpellCheckSettings = jest.fn().mockReturnValue(false);
 

@@ -66,6 +66,7 @@ describe("<SendMessageComposer/>", () => {
         lowBandwidth: false,
         alwaysShowTimestamps: false,
         showTwelveHourTimestamps: false,
+        userTimezone: undefined,
         readMarkerInViewThresholdMs: 3000,
         readMarkerOutOfViewThresholdMs: 30000,
         showHiddenEvents: false,

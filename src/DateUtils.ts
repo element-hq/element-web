@@ -19,6 +19,7 @@ limitations under the License.
 import { Optional } from "matrix-events-sdk";
 
 import { _t, getUserLanguage } from "./languageHandler";
+import { getUserTimezone } from "./TimezoneHandler";
 
 export const MINUTE_MS = 60000;
 export const HOUR_MS = MINUTE_MS * 60;
@@ -77,6 +78,7 @@ export function formatDate(date: Date, showTwelveHour = false, locale?: string):
             weekday: "short",
             hour: "numeric",
             minute: "2-digit",
+            timeZone: getUserTimezone(),
         }).format(date);
     } else if (now.getFullYear() === date.getFullYear()) {
         return new Intl.DateTimeFormat(_locale, {
@@ -86,6 +88,7 @@ export function formatDate(date: Date, showTwelveHour = false, locale?: string):
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
+            timeZone: getUserTimezone(),
         }).format(date);
     }
     return formatFullDate(date, showTwelveHour, false, _locale);
@@ -104,6 +107,7 @@ export function formatFullDateNoTime(date: Date, locale?: string): string {
         month: "short",
         day: "numeric",
         year: "numeric",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -127,6 +131,7 @@ export function formatFullDate(date: Date, showTwelveHour = false, showSeconds =
         hour: "numeric",
         minute: "2-digit",
         second: showSeconds ? "2-digit" : undefined,
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -160,6 +165,7 @@ export function formatFullTime(date: Date, showTwelveHour = false, locale?: stri
         hour: "numeric",
         minute: "2-digit",
         second: "2-digit",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -178,6 +184,7 @@ export function formatTime(date: Date, showTwelveHour = false, locale?: string):
         ...getTwelveHourOptions(showTwelveHour),
         hour: "numeric",
         minute: "2-digit",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -285,6 +292,7 @@ export function formatFullDateNoDayNoTime(date: Date, locale?: string): string {
         year: "numeric",
         month: "numeric",
         day: "numeric",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -354,6 +362,9 @@ export function formatPreciseDuration(durationMs: number): string {
  * @returns {string} formattedDate
  */
 export const formatLocalDateShort = (timestamp: number, locale?: string): string =>
-    new Intl.DateTimeFormat(locale ?? getUserLanguage(), { day: "2-digit", month: "2-digit", year: "2-digit" }).format(
-        timestamp,
-    );
+    new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        timeZone: getUserTimezone(),
+    }).format(timestamp);

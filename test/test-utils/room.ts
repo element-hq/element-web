@@ -72,6 +72,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         layout: Layout.Group,
         lowBandwidth: false,
         alwaysShowTimestamps: false,
+        userTimezone: undefined,
         showTwelveHourTimestamps: false,
         readMarkerInViewThresholdMs: 3000,
         readMarkerOutOfViewThresholdMs: 30000,

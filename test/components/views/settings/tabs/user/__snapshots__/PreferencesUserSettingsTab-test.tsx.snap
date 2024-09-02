@@ -31,7 +31,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content"
             >
               <div
-                class="mx_SettingsSubsection_contentStretch"
+                class="mx_SettingsSubsection_dropdown"
               >
                 Application language
                 <div
@@ -224,6 +224,35 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             <div
               class="mx_SettingsSubsection_content"
             >
+              <div
+                class="mx_SettingsSubsection_dropdown"
+              >
+                Set timezone
+                <div
+                  class="mx_Dropdown mx_dropdownUserTimezone"
+                >
+                  <div
+                    aria-describedby="mx_dropdownUserTimezone_value"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-label="Set timezone"
+                    aria-owns="mx_dropdownUserTimezone_input"
+                    class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="mx_Dropdown_option"
+                      id="mx_dropdownUserTimezone_value"
+                    >
+                      Browser default (UTC)
+                    </div>
+                    <span
+                      class="mx_Dropdown_arrow"
+                    />
+                  </div>
+                </div>
+              </div>
               <div
                 class="mx_SettingsFlag"
               >
