@@ -136,6 +136,25 @@ describe("<PinnedMessageBanner />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should display the last message when the pinned event array changed", async () => {
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
+
+        const { asFragment, rerender } = renderBanner();
+        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        expect(screen.getByText("First pinned message")).toBeVisible();
+
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
+            event1.getId()!,
+            event2.getId()!,
+            event3.getId()!,
+        ]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3]);
+        rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
+        expect(screen.getByText("Third pinned message")).toBeVisible();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     it("should rotate the pinned events when the banner is clicked", async () => {
         jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);

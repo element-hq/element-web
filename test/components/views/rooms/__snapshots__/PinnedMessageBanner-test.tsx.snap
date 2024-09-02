@@ -1,5 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<PinnedMessageBanner /> should display the last message when the pinned event array changed 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="false"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <div
+          class="mx_PinnedMessageBanner_title"
+          data-testid="banner-counter"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_title_counter"
+            >
+              3 of 3
+            </span>
+             Pinned messages
+          </span>
+        </div>
+        <span
+          class="mx_PinnedMessageBanner_message"
+        >
+          Third pinned message
+        </span>
+      </div>
+    </button>
+    <button
+      class="_button_zt6rp_17 mx_PinnedMessageBanner_actions"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      View all
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
 <DocumentFragment>
   <div

@@ -103,16 +103,16 @@ test.describe("Pinned messages", () => {
         await util.receiveMessages(room1, ["Msg1", "Msg2"]);
         await util.pinMessages(["Msg1", "Msg2"]);
 
-        await util.assertMessageInBanner("Msg1");
-        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg1.png");
-
-        await util.getBanner().click();
         await util.assertMessageInBanner("Msg2");
         await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg2.png");
 
         await util.getBanner().click();
         await util.assertMessageInBanner("Msg1");
         await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg1.png");
+
+        await util.getBanner().click();
+        await util.assertMessageInBanner("Msg2");
+        await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg2.png");
     });
 
     test("should display 4 messages in the banner", async ({ page, app, room1, util }) => {
@@ -120,7 +120,7 @@ test.describe("Pinned messages", () => {
         await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);
         await util.pinMessages(["Msg1", "Msg2", "Msg3", "Msg4"]);
 
-        for (const msg of ["Msg1", "Msg4", "Msg3", "Msg2"]) {
+        for (const msg of ["Msg4", "Msg3", "Msg2", "Msg1"]) {
             await util.assertMessageInBanner(msg);
             await expect(util.getBanner()).toMatchScreenshot(`pinned-message-banner-4-${msg}.png`);
             await util.getBanner().click();

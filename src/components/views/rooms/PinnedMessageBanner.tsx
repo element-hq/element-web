@@ -57,13 +57,9 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     const isSinglePinnedEvent = eventCount === 1;
 
     const [currentEventIndex, setCurrentEventIndex] = useState(eventCount - 1);
-    // If the list of pinned events changes, we need to make sure the current index isn't out of bound
+    // When the number of pinned messages changes, we want to display the last message
     useEffect(() => {
-        setCurrentEventIndex((currentEventIndex) => {
-            // If the current index is out of bound, we set it to the last index
-            if (currentEventIndex < 0 || currentEventIndex >= eventCount) return eventCount - 1;
-            return currentEventIndex;
-        });
+        setCurrentEventIndex((currentEventIndex) => eventCount - 1);
     }, [eventCount]);
 
     const pinnedEvent = pinnedEvents[currentEventIndex];
