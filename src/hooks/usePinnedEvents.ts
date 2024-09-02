@@ -126,7 +126,7 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
     // Decrypt the event if it's encrypted
     // Can happen when the tab is refreshed and the pinned events card is opened directly
     if (localEvent?.isEncrypted()) {
-        await cli.decryptEventIfNeeded(localEvent);
+        await cli.decryptEventIfNeeded(localEvent, { emit: false });
     }
 
     // If the event is available locally, return it if it's pinnable
@@ -150,7 +150,7 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
 
         // Decrypt the event if it's encrypted
         if (event.isEncrypted()) {
-            await cli.decryptEventIfNeeded(event);
+            await cli.decryptEventIfNeeded(event, { emit: false });
         }
 
         // Handle poll events
