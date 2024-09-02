@@ -220,6 +220,14 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
         class="mx_PinnedMessageBanner_content"
       >
         <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
           class="mx_PinnedMessageBanner_PinIcon"
           width="20"
         />

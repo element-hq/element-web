@@ -80,7 +80,7 @@
             grid-area: title;
             font: var(--cpd-font-body-sm-regular);
             color: var(--cpd-color-text-action-accent);
-            height: 20px;
+            line-height: 20px;
 
             .mx_PinnedMessageBanner_title_counter {
                 font: var(--cpd-font-body-sm-semibold);
@@ -90,7 +90,7 @@
         .mx_PinnedMessageBanner_message {
             grid-area: message;
             font: var(--cpd-font-body-sm-regular);
-            height: 20px;
+            line-height: 20px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -114,6 +114,10 @@
     height: 63px;
 
     .mx_PinnedMessageBanner_content {
-        grid-template: "pinIcon message" auto;
+        grid-template: "indicators pinIcon message" auto;
+
+        .mx_PinnedMessageBanner_message {
+            line-height: 40px;
+        }
     }
 }
