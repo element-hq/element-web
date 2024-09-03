@@ -60,7 +60,7 @@ import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import MessageTimestamp from "../messages/MessageTimestamp";
-import { IReadReceiptInfo } from "./ReadReceiptMarker";
+import { IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
@@ -167,7 +167,7 @@ export interface EventTileProps {
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
-    readReceiptMap?: { [userId: string]: IReadReceiptInfo };
+    readReceiptMap?: { [userId: string]: IReadReceiptPosition };
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we

@@ -24,10 +24,10 @@ import { toPx } from "../../../utils/units";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
-export interface IReadReceiptInfo {
+// The top & right from the bounding client rect of each read receipt
+export interface IReadReceiptPosition {
     top?: number;
     right?: number;
-    parent?: Element;
 }
 
 interface IProps {
@@ -48,7 +48,7 @@ interface IProps {
     suppressAnimation?: boolean;
 
     // an opaque object for storing information about this user's RR in this room
-    readReceiptInfo?: IReadReceiptInfo;
+    readReceiptPosition?: IReadReceiptPosition;
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
@@ -90,7 +90,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
     public componentWillUnmount(): void {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
-        const rrInfo = this.props.readReceiptInfo;
+        const rrInfo = this.props.readReceiptPosition;
         if (!rrInfo) {
             return;
         }
@@ -121,11 +121,11 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         }
     }
 
-    private buildReadReceiptInfo(target: IReadReceiptInfo = {}): IReadReceiptInfo {
+    private buildReadReceiptInfo(target: IReadReceiptPosition = {}): IReadReceiptPosition {
         const element = this.avatar.current;
         // this is the mx_ReadReceiptsGroup_container
         const horizontalContainer = element?.offsetParent;
-        if (!horizontalContainer || !(horizontalContainer instanceof HTMLElement)) {
+        if (!horizontalContainer || !horizontalContainer.getBoundingClientRect) {
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
@@ -133,51 +133,27 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
             target.top = 0;
             target.right = 0;
-            target.parent = undefined;
-            return target;
-        }
-        // this is the mx_ReadReceiptsGroup
-        const verticalContainer = horizontalContainer.offsetParent;
-        if (!verticalContainer || !(verticalContainer instanceof HTMLElement)) {
-            // this seems to happen sometimes for reasons I don't understand
-            // the docs for `offsetParent` say it may be null if `display` is
-            // `none`, but I can't see why that would happen.
-            logger.warn(`ReadReceiptMarker for ${this.props.fallbackUserId} has no valid verticalContainer`);
-
-            target.top = 0;
-            target.right = 0;
-            target.parent = undefined;
             return target;
         }
 
-        target.top = element.offsetTop;
-        target.right = element.getBoundingClientRect().right - horizontalContainer.getBoundingClientRect().right;
-        target.parent = verticalContainer;
+        const elementRect = element.getBoundingClientRect();
+
+        target.top = elementRect.top;
+        target.right = elementRect.right - horizontalContainer.getBoundingClientRect().right;
         return target;
     }
 
-    private readReceiptPosition(info: IReadReceiptInfo): number {
-        if (!info.parent) {
-            // this seems to happen sometimes for reasons I don't understand
-            // the docs for `offsetParent` say it may be null if `display` is
-            // `none`, but I can't see why that would happen.
-            logger.warn(`ReadReceiptMarker for ${this.props.fallbackUserId} has no offsetParent`);
-            return 0;
-        }
-
-        return (info.top ?? 0) + info.parent.getBoundingClientRect().top;
-    }
-
     private animateMarker(): void {
-        const oldInfo = this.props.readReceiptInfo;
+        const oldInfo = this.props.readReceiptPosition;
         const newInfo = this.buildReadReceiptInfo();
 
-        const newPosition = this.readReceiptPosition(newInfo);
-        const oldPosition = oldInfo
-            ? // start at the old height and in the old h pos
-              this.readReceiptPosition(oldInfo)
-            : // treat new RRs as though they were off the top of the screen
-              -READ_AVATAR_SIZE;
+        const newPosition = newInfo.top ?? 0;
+        const oldPosition =
+            oldInfo && oldInfo.top !== undefined
+                ? // start at the old height and in the old h pos
+                  oldInfo.top
+                : // treat new RRs as though they were off the top of the screen
+                  -READ_AVATAR_SIZE;
 
         const startStyles: IReadReceiptMarkerStyle[] = [];
         if (oldInfo?.right) {
