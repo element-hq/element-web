@@ -2072,10 +2072,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
   integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
 
-"@matrix-org/matrix-wysiwyg@2.37.8":
-  version "2.37.8"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.8.tgz#0b61e9023e3c73ca8789e97c80d7282e8c823c6b"
-  integrity sha512-fx8KGpztmJvwiY1OvE9A7r08kNcUZQIZXPbWcXNtQ61GwV5VyKvMxCmxfRlZ6Ac8oagVxRPu4WySCRX44Y9Ylw==
+"@matrix-org/matrix-wysiwyg@2.37.9":
+  version "2.37.9"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.9.tgz#4d5667df3c74e11fd01c4b5be920caff72bf2f48"
+  integrity sha512-Jn2ug6ySX5es5/SV5BVgSBhVPS7GXggwZ/GGWmnJvhnp/IArit4kgUAsNRhQeKebuVvNphwQykCGwyBOn2PLBA==
   dependencies:
     eslint-plugin-unicorn "^54.0.0"
 
@@ -5338,11 +5338,6 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-encode-utf8@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/encode-utf8/-/encode-utf8-1.0.3.tgz#f30fdd31da07fb596f281beb2f6b027851994cda"
-  integrity sha512-ucAnuBEhUK4boH2HjVYG5Q2mQyPorvv0u/ocS+zhdw0S8AlHYY+GOFhP1Gio5z4icpP2ivFSvhtFjQi8+T9ppw==
-
 encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
@@ -8215,26 +8210,6 @@ matrix-js-sdk@34.5.0-rc.0:
     unhomoglyph "^1.0.6"
     uuid "10"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "34.4.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a6612c73aa7ae8d7f10f426239b2850c86a1ea5"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
-    "@matrix-org/olm" "3.2.15"
-    another-json "^0.2.0"
-    bs58 "^6.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.8.2"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "10"
-
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8242,14 +8217,15 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.108.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/5b91dd88e1dee6b7a72f97cef77051663ece0894"
+matrix-react-sdk@3.109.0-rc.0:
+  version "3.109.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.109.0-rc.0.tgz#05e72ce441debef4f12e2678d2b2aae2f3c53ba9"
+  integrity sha512-26Dz4GgzKSJ4yuHepa2K+kDNtUuM55zRvNFYmXxxExSma/k9up/8VyWxWYLbSUrtIij6p2K0S+yA3MaFYAaMkw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.24.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
-    "@matrix-org/matrix-wysiwyg" "2.37.8"
+    "@matrix-org/matrix-wysiwyg" "2.37.9"
     "@matrix-org/react-sdk-module-api" "^2.4.0"
     "@matrix-org/spec" "^1.7.0"
     "@sentry/browser" "^8.0.0"
@@ -8289,16 +8265,16 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-    matrix-widget-api "^1.8.2"
+    matrix-js-sdk "34.5.0-rc.0"
+    matrix-widget-api "^1.9.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
     oidc-client-ts "^3.0.1"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.149.1"
-    qrcode "1.5.3"
+    posthog-js "1.157.2"
+    qrcode "1.5.4"
     re-resizable "^6.9.0"
     react "17.0.2"
     react-beautiful-dnd "^13.1.0"
@@ -8326,7 +8302,7 @@ matrix-web-i18n@^3.2.1:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.8.2:
+matrix-widget-api@^1.8.2, matrix-widget-api@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.9.0.tgz#884136b405bd3c56e4ea285095c9e01ec52b6b1f"
   integrity sha512-au8mqralNDqrEvaVAkU37bXOb8I9SCe+ACdPk11QWw58FKstVq31q2wRz+qWA6J+42KJ6s1DggWbG/S3fEs3jw==
@@ -9739,10 +9715,10 @@ postcss@^8.4.41:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
-posthog-js@1.149.1:
-  version "1.149.1"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.149.1.tgz#8c15ca4fa2b9261abbfd4977921b42cc68ffe585"
-  integrity sha512-n3mkDlV0vJ1QhkDkWwUzY9RIFTPbzDzbKRyjzRE4D6H2PoH3vsrR05DNujoCr3t0hqgsaO4RLXO3VlctpdkGKQ==
+posthog-js@1.157.2:
+  version "1.157.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.157.2.tgz#dc2515818ead408aefb900e90c535fb57beb1f59"
+  integrity sha512-ATYKGs+Q51u26nHHhrhWNh1whqFm7j/rwQQYw+y6/YzNmRlo+YsqrGZji9nqXb9/4fo0ModDr+ZmuOI3hKkUXA==
   dependencies:
     fflate "^0.4.8"
     preact "^10.19.3"
@@ -9869,13 +9845,12 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.1.0.tgz#d173cf23258231976ccbdb05247c9787957604f2"
   integrity sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==
 
-qrcode@1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.3.tgz#03afa80912c0dccf12bc93f615a535aad1066170"
-  integrity sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==
+qrcode@1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.4.tgz#5cb81d86eb57c675febb08cf007fff963405da88"
+  integrity sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==
   dependencies:
     dijkstrajs "^1.0.1"
-    encode-utf8 "^1.0.3"
     pngjs "^5.0.0"
     yargs "^15.3.1"
 
