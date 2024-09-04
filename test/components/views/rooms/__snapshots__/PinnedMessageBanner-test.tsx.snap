@@ -1,5 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <span
+          class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_prefix"
+            >
+              Poll:
+            </span>
+             Alice?
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<PinnedMessageBanner /> should display the last message when the pinned event array changed 1`] = `
 <DocumentFragment>
   <div
@@ -51,6 +98,7 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
         </div>
         <span
           class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
         >
           Third pinned message
         </span>
@@ -64,6 +112,194 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
       tabindex="0"
     >
       View all
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <span
+          class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_prefix"
+            >
+              Audio:
+            </span>
+             Message with m.audio type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <span
+          class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_prefix"
+            >
+              File:
+            </span>
+             Message with m.file type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <span
+          class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_prefix"
+            >
+              Image:
+            </span>
+             Message with m.image type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <div
+          class="mx_PinnedMessageBanner_PinIcon"
+          width="20"
+        />
+        <span
+          class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_prefix"
+            >
+              Video:
+            </span>
+             Message with m.video type
+          </span>
+        </span>
+      </div>
     </button>
   </div>
 </DocumentFragment>
@@ -116,6 +352,7 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
         </div>
         <span
           class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
         >
           Second pinned message
         </span>
@@ -185,6 +422,7 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
         </div>
         <span
           class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
         >
           Fourth pinned message
         </span>
@@ -233,6 +471,7 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
         />
         <span
           class="mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
         >
           First pinned message
         </span>

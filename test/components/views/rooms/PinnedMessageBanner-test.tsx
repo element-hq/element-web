@@ -22,7 +22,7 @@ import userEvent from "@testing-library/user-event";
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { PinnedMessageBanner } from "../../../../src/components/views/rooms/PinnedMessageBanner";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import { stubClient } from "../../../test-utils";
+import { makePollStartEvent, stubClient } from "../../../test-utils";
 import dis from "../../../../src/dispatcher/dispatcher";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
@@ -183,6 +183,32 @@ describe("<PinnedMessageBanner />", () => {
             room_id: room.roomId,
             metricsTrigger: undefined, // room doesn't change
         });
+    });
+
+    it.each([
+        ["m.file", "File"],
+        ["m.audio", "Audio"],
+        ["m.video", "Video"],
+        ["m.image", "Image"],
+    ])("should display the %s event type", (msgType, label) => {
+        const body = `Message with ${msgType} type`;
+        const event = makePinEvent({ content: { body, msgtype: msgType } });
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+
+        const { asFragment } = renderBanner();
+        expect(screen.getByTestId("banner-message")).toHaveTextContent(`${label}: ${body}`);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should display display a poll event", async () => {
+        const event = makePollStartEvent("Alice?", userId);
+        jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
+        jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
+
+        const { asFragment } = renderBanner();
+        expect(screen.getByTestId("banner-message")).toHaveTextContent("Poll: Alice?");
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("Right button", () => {

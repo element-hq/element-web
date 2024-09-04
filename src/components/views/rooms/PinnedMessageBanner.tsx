@@ -17,7 +17,7 @@
 import React, { JSX, useEffect, useMemo, useState } from "react";
 import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin-solid.svg";
 import { Button } from "@vector-im/compound-web";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { M_POLL_START, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -59,16 +59,10 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     const [currentEventIndex, setCurrentEventIndex] = useState(eventCount - 1);
     // When the number of pinned messages changes, we want to display the last message
     useEffect(() => {
-        setCurrentEventIndex((currentEventIndex) => eventCount - 1);
+        setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
     const pinnedEvent = pinnedEvents[currentEventIndex];
-    // Generate a preview for the pinned event
-    const eventPreview = useMemo(() => {
-        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
-        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
-    }, [pinnedEvent]);
-
     if (!pinnedEvent) return null;
 
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
@@ -116,7 +110,7 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
                             )}
                         </div>
                     )}
-                    {eventPreview && <span className="mx_PinnedMessageBanner_message">{eventPreview}</span>}
+                    <EventPreview pinnedEvent={pinnedEvent} />
                     {/* In case of redacted event, we want to display the nice sentence of the message event like in the timeline or in the pinned message list */}
                     {shouldUseMessageEvent && (
                         <div className="mx_PinnedMessageBanner_redactedMessage">
@@ -133,6 +127,84 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             {!isSinglePinnedEvent && <BannerButton room={room} />}
         </div>
     );
+}
+
+/**
+ * The props for the {@link EventPreview} component.
+ */
+interface EventPreviewProps {
+    /**
+     * The pinned event to display the preview for
+     */
+    pinnedEvent: MatrixEvent;
+}
+
+/**
+ * A component that displays a preview for the pinned event.
+ */
+function EventPreview({ pinnedEvent }: EventPreviewProps): JSX.Element | null {
+    const preview = useEventPreview(pinnedEvent);
+    if (!preview) return null;
+
+    const prefix = getPreviewPrefix(pinnedEvent.getType(), pinnedEvent.getContent().msgtype as MsgType);
+    if (!prefix)
+        return (
+            <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
+                {preview}
+            </span>
+        );
+
+    return (
+        <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
+            {_t(
+                "room|pinned_message_banner|preview",
+                {
+                    prefix,
+                    preview,
+                },
+                {
+                    bold: (sub) => <span className="mx_PinnedMessageBanner_prefix">{sub}</span>,
+                },
+            )}
+        </span>
+    );
+}
+
+/**
+ * Hooks to generate a preview for the pinned event.
+ * @param pinnedEvent
+ */
+function useEventPreview(pinnedEvent: MatrixEvent | null): string | null {
+    return useMemo(() => {
+        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
+        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
+    }, [pinnedEvent]);
+}
+
+/**
+ * Get the prefix for the preview based on the type and the message type.
+ * @param type
+ * @param msgType
+ */
+function getPreviewPrefix(type: string, msgType: MsgType): string | null {
+    switch (type) {
+        case M_POLL_START.name:
+            return _t("room|pinned_message_banner|prefix|poll");
+        default:
+    }
+
+    switch (msgType) {
+        case MsgType.Audio:
+            return _t("room|pinned_message_banner|prefix|audio");
+        case MsgType.Image:
+            return _t("room|pinned_message_banner|prefix|image");
+        case MsgType.Video:
+            return _t("room|pinned_message_banner|prefix|video");
+        case MsgType.File:
+            return _t("room|pinned_message_banner|prefix|file");
+        default:
+            return null;
+    }
 }
 
 const MAX_INDICATORS = 3;
