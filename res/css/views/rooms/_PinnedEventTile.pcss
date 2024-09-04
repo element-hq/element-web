@@ -23,7 +23,9 @@ limitations under the License.
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-1x);
-        width: 100%;
+        /* Remove avatar width and space between the avatar and the wrapper */
+        /* We need it to make the location fit */
+        width: calc(100% - var(--cpd-space-4x) - 32px);
 
         .mx_PinnedEventTile_top {
             display: flex;
