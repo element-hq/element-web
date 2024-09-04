@@ -25,7 +25,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color2"
+          class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>
@@ -90,7 +90,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color2"
+          class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>

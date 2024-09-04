@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { JSX, useCallback, useState } from "react";
 import { EventTimeline, EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { IconButton, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
+import { IconButton, Menu, MenuItem, Separator, Tooltip } from "@vector-im/compound-web";
 import { Icon as ViewIcon } from "@vector-im/compound-design-tokens/icons/visibility-on.svg";
 import { Icon as UnpinIcon } from "@vector-im/compound-design-tokens/icons/unpin.svg";
 import { Icon as ForwardIcon } from "@vector-im/compound-design-tokens/icons/forward.svg";
@@ -86,13 +86,11 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
             </div>
             <div className="mx_PinnedEventTile_wrapper">
                 <div className="mx_PinnedEventTile_top">
-                    <Text
-                        weight="semibold"
-                        className={classNames("mx_PinnedEventTile_sender", getUserNameColorClass(sender))}
-                        as="span"
-                    >
-                        {event.sender?.name || sender}
-                    </Text>
+                    <Tooltip label={event.sender?.name || sender}>
+                        <span className={classNames("mx_PinnedEventTile_sender", getUserNameColorClass(sender))}>
+                            {event.sender?.name || sender}
+                        </span>
+                    </Tooltip>
                     <PinMenu event={event} room={room} permalinkCreator={permalinkCreator} />
                 </div>
                 <MessageEvent

@@ -152,7 +152,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color3"
+                class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
@@ -218,7 +218,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color3"
+                class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
@@ -347,7 +347,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color3"
+                class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
@@ -413,7 +413,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                class="_typography_yh5dq_162 _font-body-md-semibold_yh5dq_64 mx_PinnedEventTile_sender mx_Username_color3"
+                class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>

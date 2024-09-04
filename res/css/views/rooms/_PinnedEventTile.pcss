@@ -26,6 +26,8 @@ limitations under the License.
         /* Remove avatar width and space between the avatar and the wrapper */
         /* We need it to make the location fit */
         width: calc(100% - var(--cpd-space-4x) - 32px);
+        /* Prevent a long sender name to overflow the tile */
+        overflow: hidden;
 
         .mx_PinnedEventTile_top {
             display: flex;
@@ -37,6 +39,7 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
+                font: var(--cpd-font-body-md-semibold);
             }
         }
 
