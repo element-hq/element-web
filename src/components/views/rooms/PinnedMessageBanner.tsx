@@ -32,6 +32,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -68,6 +69,8 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
 
     const onBannerClick = (): void => {
+        PosthogTrackers.trackInteraction("PinnedMessageBannerClick");
+
         // Scroll to the pinned message
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -309,6 +312,9 @@ function BannerButton({ room }: BannerButtonProps): JSX.Element {
             className="mx_PinnedMessageBanner_actions"
             kind="tertiary"
             onClick={() => {
+                if (isPinnedMessagesPhase) PosthogTrackers.trackInteraction("PinnedMessageBannerCloseListButton");
+                else PosthogTrackers.trackInteraction("PinnedMessageBannerViewAllButton");
+
                 RightPanelStore.instance.showOrHidePhase(RightPanelPhases.PinnedMessages);
             }}
         >

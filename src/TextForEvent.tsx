@@ -40,12 +40,13 @@ import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
 import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
-import AccessibleButton, { ButtonEvent } from "./components/views/elements/AccessibleButton";
+import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { ElementCall } from "./models/Call";
 import { textForVoiceBroadcastStoppedEvent, VoiceBroadcastInfoEventType } from "./voice-broadcast";
 import { getSenderName } from "./utils/event/getSenderName";
+import PosthogTrackers from "./PosthogTrackers.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -563,6 +564,7 @@ function textForPowerEvent(event: MatrixEvent, client: MatrixClient): (() => str
 }
 
 const onPinnedMessagesClick = (): void => {
+    PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
 
@@ -590,7 +592,10 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
                             a: (sub) => (
                                 <AccessibleButton
                                     kind="link_inline"
-                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                    onClick={() => {
+                                        PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
+                                        highlightEvent(roomId, messageId);
+                                    }}
                                 >
                                     {sub}
                                 </AccessibleButton>
@@ -623,7 +628,10 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
                             a: (sub) => (
                                 <AccessibleButton
                                     kind="link_inline"
-                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                    onClick={() => {
+                                        PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
+                                        highlightEvent(roomId, messageId);
+                                    }}
                                 >
                                     {sub}
                                 </AccessibleButton>

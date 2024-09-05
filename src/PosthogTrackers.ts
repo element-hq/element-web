@@ -17,6 +17,7 @@ limitations under the License.
 import { PureComponent, SyntheticEvent } from "react";
 import { WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
 import { Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
+import { PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
@@ -104,6 +105,19 @@ export default class PosthogTrackers {
             interactionType,
             index,
             name,
+        });
+    }
+
+    /**
+     * Track a pin or unpin action on a message.
+     * @param kind - Is pin or unpin.
+     * @param from - From where the action is triggered.
+     */
+    public static trackPinUnpinMessage(kind: PinUnpinAction["kind"], from: PinUnpinAction["from"]): void {
+        PosthogAnalytics.instance.trackEvent<PinUnpinAction>({
+            eventName: "PinUnpinAction",
+            kind,
+            from,
         });
     }
 }

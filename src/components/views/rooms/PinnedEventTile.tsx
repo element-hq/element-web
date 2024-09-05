@@ -42,6 +42,7 @@ import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwa
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import PinningUtils from "../../../utils/PinningUtils.ts";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 const AVATAR_SIZE = "32px";
 
@@ -152,6 +153,8 @@ function PinMenu({ event, room, permalinkCreator }: PinMenuProps): JSX.Element {
      * View the event in the timeline.
      */
     const onViewInTimeline = useCallback(() => {
+        PosthogTrackers.trackInteraction("PinnedMessageListViewTimeline");
+
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: event.getId(),
@@ -173,6 +176,7 @@ function PinMenu({ event, room, permalinkCreator }: PinMenuProps): JSX.Element {
      */
     const onUnpin = useCallback(async (): Promise<void> => {
         await PinningUtils.pinOrUnpinEvent(matrixClient, event);
+        PosthogTrackers.trackPinUnpinMessage("Unpin", "MessagePinningList");
     }, [event, matrixClient]);
 
     const contentActionable = isContentActionable(event);

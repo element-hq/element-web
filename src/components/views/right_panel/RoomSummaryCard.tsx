@@ -95,6 +95,7 @@ const onRoomFilesClick = (): void => {
 };
 
 const onRoomPinsClick = (): void => {
+    PosthogTrackers.trackInteraction("PinnedMessageRoomInfoButton");
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
 };
 
