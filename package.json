@@ -68,7 +68,7 @@
         "jwt-decode": "4.0.0",
         "@floating-ui/react": "0.26.11",
         "@radix-ui/react-id": "1.1.0",
-        "caniuse-lite": "1.0.30001643"
+        "caniuse-lite": "1.0.30001655"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
