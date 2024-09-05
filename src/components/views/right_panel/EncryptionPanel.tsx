@@ -17,6 +17,7 @@ limitations under the License.
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
@@ -48,7 +49,12 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
     const [isRequesting, setRequesting] = useState(false);
-    const [phase, setPhase] = useState(request?.phase);
+    const [phase, doSetPhase] = useState(request?.phase);
+    const setPhase = (phase: VerificationPhase | undefined): void => {
+        logger.debug(`EncryptionPanel: phase now ${phase === undefined ? phase : VerificationPhase[phase]}`);
+        doSetPhase(phase);
+    };
+
     useEffect(() => {
         setRequest(verificationRequest);
         if (verificationRequest) {
