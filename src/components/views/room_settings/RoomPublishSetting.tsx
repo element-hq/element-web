@@ -21,6 +21,8 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 interface IProps {
     roomId: string;
@@ -41,6 +43,13 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         };
     }
 
+    private showError(): void {
+        Modal.createDialog(ErrorDialog, {
+            title: _t("room_settings|general|error_publishing"),
+            description: _t("room_settings|general|error_publishing_detail"),
+        });
+    }
+
     private onRoomPublishChange = (): void => {
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
@@ -50,6 +59,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         client
             .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private)
             .catch(() => {
+                this.showError();
                 // Roll back the local echo on the change
                 this.setState({ isRoomPublished: valueBefore });
             });

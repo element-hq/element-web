@@ -2214,6 +2214,8 @@
             "error_deleting_alias_description": "There was an error removing that address. It may no longer exist or a temporary error occurred.",
             "error_deleting_alias_description_forbidden": "You don't have permission to delete the address.",
             "error_deleting_alias_title": "Error removing address",
+            "error_publishing": "Unable to publish room",
+            "error_publishing_detail": "There was an error publishing this room",
             "error_save_space_settings": "Failed to save space settings.",
             "error_updating_alias_description": "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.",
             "error_updating_canonical_alias_description": "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.",
