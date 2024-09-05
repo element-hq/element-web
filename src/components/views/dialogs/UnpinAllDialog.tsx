@@ -22,6 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import BaseDialog from "../dialogs/BaseDialog";
 import { _t } from "../../../languageHandler";
 import PinningUtils from "../../../utils/PinningUtils.ts";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 /**
  * Properties for {@link UnpinAllDialog}.
@@ -61,6 +62,7 @@ export function UnpinAllDialog({ matrixClient, roomId, onFinished }: UnpinAllDia
                     onClick={async () => {
                         try {
                             await PinningUtils.unpinAllEvents(matrixClient, roomId);
+                            PosthogTrackers.trackPinUnpinMessage("Unpin", "UnpinAll");
                         } catch (e) {
                             logger.error("Failed to unpin all events:", e);
                         }
