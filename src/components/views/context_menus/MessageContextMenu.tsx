@@ -177,7 +177,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             this.props.mxEvent.getType() !== EventType.RoomServerAcl &&
             this.props.mxEvent.getType() !== EventType.RoomEncryption;
 
-        const canPin = PinningUtils.canPinOrUnpin(cli, this.props.mxEvent);
+        const canPin = PinningUtils.canPin(cli, this.props.mxEvent) || PinningUtils.canUnpin(cli, this.props.mxEvent);
 
         this.setState({ canRedact, canPin });
     };

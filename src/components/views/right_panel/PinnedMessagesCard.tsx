@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect, JSX } from "react";
-import { Room, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Button, Separator } from "@vector-im/compound-web";
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
@@ -35,6 +35,7 @@ import Modal from "../../../Modal";
 import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
 import EmptyState from "./EmptyState";
 import { usePinnedEvents, useReadPinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
+import PinningUtils from "../../../utils/PinningUtils.ts";
 
 /**
  * List the pinned messages in a room inside a Card.
@@ -141,10 +142,9 @@ function PinnedMessages({ events, room, permalinkCreator }: PinnedMessagesProps)
 
     /**
      * Whether the client can unpin events from the room.
+     * Listen to room state to update this value.
      */
-    const canUnpin = useRoomState(room, (state) =>
-        state.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient),
-    );
+    const canUnpin = useRoomState(room, () => PinningUtils.userHasPinOrUnpinPermission(matrixClient, room));
 
     /**
      * Opens the unpin all dialog.

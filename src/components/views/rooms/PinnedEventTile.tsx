@@ -41,6 +41,7 @@ import { getForwardableEvent } from "../../../events";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import PinningUtils from "../../../utils/PinningUtils.ts";
 
 const AVATAR_SIZE = "32px";
 
@@ -162,30 +163,17 @@ function PinMenu({ event, room, permalinkCreator }: PinMenuProps): JSX.Element {
 
     /**
      * Whether the client can unpin the event.
-     * Pin and unpin are using the same permission.
+     * If the room state change, we want to check again the permission
      */
-    const canUnpin = useRoomState(room, (state) =>
-        state.mayClientSendStateEvent(EventType.RoomPinnedEvents, matrixClient),
-    );
+    const canUnpin = useRoomState(room, () => PinningUtils.canUnpin(matrixClient, event));
 
     /**
      * Unpin the event.
      * @param event
      */
     const onUnpin = useCallback(async (): Promise<void> => {
-        const pinnedEvents = room
-            .getLiveTimeline()
-            .getState(EventTimeline.FORWARDS)
-            ?.getStateEvents(EventType.RoomPinnedEvents, "");
-        if (pinnedEvents?.getContent()?.pinned) {
-            const pinned = pinnedEvents.getContent().pinned;
-            const index = pinned.indexOf(event.getId());
-            if (index !== -1) {
-                pinned.splice(index, 1);
-                await matrixClient.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned }, "");
-            }
-        }
-    }, [event, room, matrixClient]);
+        await PinningUtils.pinOrUnpinEvent(matrixClient, event);
+    }, [event, matrixClient]);
 
     const contentActionable = isContentActionable(event);
     // Get the forwardable event for the given event

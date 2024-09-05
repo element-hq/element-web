@@ -27,6 +27,7 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { getForwardableEvent } from "../../../../src/events";
 import { createRedactEventDialog } from "../../../../src/components/views/dialogs/ConfirmRedactDialog";
+import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 
 jest.mock("../../../../src/components/views/dialogs/ConfirmRedactDialog", () => ({
     createRedactEventDialog: jest.fn(),
@@ -43,7 +44,10 @@ describe("<PinnedEventTile />", () => {
         mockClient = stubClient();
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
+        mockClient.getRoom = jest.fn().mockReturnValue(room);
         jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
+        // Enable feature_pinning
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
     });
 
     /**

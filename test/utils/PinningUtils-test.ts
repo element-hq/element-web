@@ -147,49 +147,65 @@ describe("PinningUtils", () => {
         });
     });
 
-    describe("canPinOrUnpin", () => {
-        test("should return false if pinning is disabled", () => {
-            // Disable feature pinning
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-            const event = makePinEvent();
+    describe("canPin & canUnpin", () => {
+        describe("canPin", () => {
+            test("should return false if pinning is disabled", () => {
+                // Disable feature pinning
+                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+                const event = makePinEvent();
 
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
+            });
+
+            test("should return false if event is not actionable", () => {
+                mockedIsContentActionable.mockImplementation(() => false);
+                const event = makePinEvent();
+
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
+            });
+
+            test("should return false if no room", () => {
+                matrixClient.getRoom = jest.fn().mockReturnValue(undefined);
+                const event = makePinEvent();
+
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
+            });
+
+            test("should return false if client cannot send state event", () => {
+                jest.spyOn(
+                    matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                    "mayClientSendStateEvent",
+                ).mockReturnValue(false);
+                const event = makePinEvent();
+
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
+            });
+
+            test("should return false if event is not pinnable", () => {
+                const event = makePinEvent({ type: EventType.RoomCreate });
+
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
+            });
+
+            test("should return true if all conditions are met", () => {
+                const event = makePinEvent();
+
+                expect(PinningUtils.canPin(matrixClient, event)).toBe(true);
+            });
         });
 
-        test("should return false if event is not actionable", () => {
-            mockedIsContentActionable.mockImplementation(() => false);
-            const event = makePinEvent();
+        describe("canUnpin", () => {
+            test("should return false if event is not unpinnable", () => {
+                const event = makePinEvent({ type: EventType.RoomCreate });
 
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
-        });
+                expect(PinningUtils.canUnpin(matrixClient, event)).toBe(false);
+            });
 
-        test("should return false if no room", () => {
-            matrixClient.getRoom = jest.fn().mockReturnValue(undefined);
-            const event = makePinEvent();
+            test("should return true if all conditions are met", () => {
+                const event = makePinEvent();
 
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
-        });
-
-        test("should return false if client cannot send state event", () => {
-            jest.spyOn(
-                matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
-                "mayClientSendStateEvent",
-            ).mockReturnValue(false);
-            const event = makePinEvent();
-
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
-        });
-
-        test("should return false if event is not pinnable", () => {
-            const event = makePinEvent({ type: EventType.RoomCreate });
-
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(false);
-        });
-
-        test("should return true if all conditions are met", () => {
-            const event = makePinEvent();
-
-            expect(PinningUtils.canPinOrUnpin(matrixClient, event)).toBe(true);
+                expect(PinningUtils.canUnpin(matrixClient, event)).toBe(true);
+            });
         });
     });
 
@@ -254,6 +270,34 @@ describe("PinningUtils", () => {
                 roomId,
                 EventType.RoomPinnedEvents,
                 { pinned: ["$otherEventId"] },
+                "",
+            );
+        });
+    });
+
+    describe("userHasPinOrUnpinPermission", () => {
+        test("should return true if user can pin or unpin", () => {
+            expect(PinningUtils.userHasPinOrUnpinPermission(matrixClient, room)).toBe(true);
+        });
+
+        test("should return false if client cannot send state event", () => {
+            jest.spyOn(
+                matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockReturnValue(false);
+
+            expect(PinningUtils.userHasPinOrUnpinPermission(matrixClient, room)).toBe(false);
+        });
+    });
+
+    describe("unpinAllEvents", () => {
+        it("should unpin all events in the given room", async () => {
+            await PinningUtils.unpinAllEvents(matrixClient, roomId);
+
+            expect(matrixClient.sendStateEvent).toHaveBeenCalledWith(
+                roomId,
+                EventType.RoomPinnedEvents,
+                { pinned: [] },
                 "",
             );
         });
