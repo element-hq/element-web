@@ -83,7 +83,7 @@
         "katex": "^0.16.0",
         "lodash": "^4.17.21",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-        "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+        "matrix-react-sdk": "github:element-hq/matrix-react-sdk#develop",
         "matrix-widget-api": "^1.8.2",
         "react": "17.0.2",
         "react-dom": "17.0.2",
