@@ -40,7 +40,7 @@ if [ -d matrix-analytics-events ]; then
 fi
 
 # Now set up the react-sdk
-node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-react-sdk develop
+node_modules/matrix-react-sdk/scripts/fetchdep.sh element-hq matrix-react-sdk develop
 pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk

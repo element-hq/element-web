@@ -86,7 +86,7 @@ yarn link matrix-js-sdk
 
 echo 'Setting up matrix-react-sdk'
 
-dodep matrix-org matrix-react-sdk
+dodep element-hq matrix-react-sdk
 
 pushd matrix-react-sdk
 yarn link
