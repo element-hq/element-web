@@ -22,13 +22,13 @@ import ChangelogDialog from "../../../../src/components/views/dialogs/ChangelogD
 
 describe("<ChangelogDialog />", () => {
     it("should fetch github proxy url for each repo with old and new version strings", async () => {
-        const webUrl = "https://riot.im/github/repos/vector-im/element-web/compare/oldsha1...newsha1";
+        const webUrl = "https://riot.im/github/repos/element-hq/element-web/compare/oldsha1...newsha1";
         fetchMock.get(webUrl, {
-            url: "https://api.github.com/repos/vector-im/element-web/compare/master...develop",
-            html_url: "https://github.com/vector-im/element-web/compare/master...develop",
-            permalink_url: "https://github.com/vector-im/element-web/compare/vector-im:72ca95e...vector-im:8891698",
-            diff_url: "https://github.com/vector-im/element-web/compare/master...develop.diff",
-            patch_url: "https://github.com/vector-im/element-web/compare/master...develop.patch",
+            url: "https://api.github.com/repos/element-hq/element-web/compare/master...develop",
+            html_url: "https://github.com/element-hq/element-web/compare/master...develop",
+            permalink_url: "https://github.com/element-hq/element-web/compare/vector-im:72ca95e...vector-im:8891698",
+            diff_url: "https://github.com/element-hq/element-web/compare/master...develop.diff",
+            patch_url: "https://github.com/element-hq/element-web/compare/master...develop.patch",
             base_commit: {},
             merge_base_commit: {},
             status: "ahead",
@@ -38,19 +38,19 @@ describe("<ChangelogDialog />", () => {
             commits: [
                 {
                     sha: "commit-sha",
-                    html_url: "https://api.github.com/repos/vector-im/element-web/commit/commit-sha",
+                    html_url: "https://api.github.com/repos/element-hq/element-web/commit/commit-sha",
                     commit: { message: "This is the first commit message" },
                 },
             ],
             files: [],
         });
-        const reactUrl = "https://riot.im/github/repos/matrix-org/matrix-react-sdk/compare/oldsha2...newsha2";
+        const reactUrl = "https://riot.im/github/repos/element-hq/matrix-react-sdk/compare/oldsha2...newsha2";
         fetchMock.get(reactUrl, {
-            url: "https://api.github.com/repos/matrix-org/matrix-react-sdk/compare/master...develop",
-            html_url: "https://github.com/matrix-org/matrix-react-sdk/compare/master...develop",
-            permalink_url: "https://github.com/matrix-org/matrix-react-sdk/compare/matrix-org:cdb00...matrix-org:4a926",
-            diff_url: "https://github.com/matrix-org/matrix-react-sdk/compare/master...develop.diff",
-            patch_url: "https://github.com/matrix-org/matrix-react-sdk/compare/master...develop.patch",
+            url: "https://api.github.com/repos/element-hq/matrix-react-sdk/compare/master...develop",
+            html_url: "https://github.com/element-hq/matrix-react-sdk/compare/master...develop",
+            permalink_url: "https://github.com/element-hq/matrix-react-sdk/compare/matrix-org:cdb00...matrix-org:4a926",
+            diff_url: "https://github.com/element-hq/matrix-react-sdk/compare/master...develop.diff",
+            patch_url: "https://github.com/element-hq/matrix-react-sdk/compare/master...develop.patch",
             base_commit: {},
             merge_base_commit: {},
             status: "ahead",
@@ -60,7 +60,7 @@ describe("<ChangelogDialog />", () => {
             commits: [
                 {
                     sha: "commit-sha0",
-                    html_url: "https://api.github.com/repos/matrix-org/matrix-react-sdk/commit/commit-sha",
+                    html_url: "https://api.github.com/repos/element-hq/matrix-react-sdk/commit/commit-sha",
                     commit: { message: "This is a commit message" },
                 },
             ],
