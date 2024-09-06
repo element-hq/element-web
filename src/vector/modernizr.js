@@ -1,7 +1,18 @@
-/Copyright 2024 New Vector Ltd.
+/*!
+ * modernizr v3.13.0
+ * Build https://modernizr.com/download?-cors-cryptography-cssanimations-cssfilters-displaytable-es5date-es5function-es5object-es5undefined-es6array-es6collections-es6string-fetch-flexbox-json-localstorage-objectfit-promises-resizeobserver-sandbox-svg-svgasimg-svgfilters-urlparser-urlsearchparams-webaudio-dontmin
+ *
+ * Copyright (c)
+ *  Faruk Ates
+ *  Paul Irish
+ *  Alex Sexton
+ *  Ryan Seddon
+ *  Patrick Kettner
+ *  Stu Cox
+ *  Richard Herrera
+ *  Veeck
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
-Please see LICENSE files in the repository root for full details.
+ * MIT License
  */
 
 /*
