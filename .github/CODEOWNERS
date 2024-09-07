@@ -15,3 +15,5 @@
 /src/i18n/strings
 # Ignore the synapse plugin as this is updated by GHA for docker image updating
 /playwright/plugins/homeserver/synapse/index.ts
+
+# meaningless change to prod CI
