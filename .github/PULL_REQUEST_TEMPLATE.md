@@ -5,4 +5,4 @@
 -   [ ] Tests written for new code (and old code if feasible).
 -   [ ] New or updated `public`/`exported` symbols have accurate [TSDoc](https://tsdoc.org/) documentation.
 -   [ ] Linter and other CI checks pass.
--   [ ] Sign-off given on the changes (see [CONTRIBUTING.md](https://github.com/matrix-org/matrix-react-sdk/blob/develop/CONTRIBUTING.md)).
+-   [ ] I have licensed the changes to Element by completing the [Contributor License Agreement (CLA)](https://cla-assistant.io/element-hq/matrix-react-sdk)
