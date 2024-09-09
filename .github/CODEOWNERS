@@ -1,17 +1,18 @@
-*                         @matrix-org/element-web-reviewers
-/.github/workflows/**     @matrix-org/element-web-team
-/package.json             @matrix-org/element-web-team
-/yarn.lock                @matrix-org/element-web-team
+*                         @element-hq/element-web-reviewers
+/.github/workflows/**     @element-hq/element-web-team
+/package.json             @element-hq/element-web-team
+/yarn.lock                @element-hq/element-web-team
 
-/src/SecurityManager.ts                           @matrix-org/element-crypto-web-reviewers
-/test/SecurityManager-test.ts                     @matrix-org/element-crypto-web-reviewers
-/src/async-components/views/dialogs/security/     @matrix-org/element-crypto-web-reviewers
-/src/components/views/dialogs/security/           @matrix-org/element-crypto-web-reviewers
-/test/components/views/dialogs/security/          @matrix-org/element-crypto-web-reviewers
-/src/stores/SetupEncryptionStore.ts               @matrix-org/element-crypto-web-reviewers
-/test/stores/SetupEncryptionStore-test.ts         @matrix-org/element-crypto-web-reviewers
+/src/SecurityManager.ts                           @element-hq/element-crypto-web-reviewers
+/test/SecurityManager-test.ts                     @element-hq/element-crypto-web-reviewers
+/src/async-components/views/dialogs/security/     @element-hq/element-crypto-web-reviewers
+/src/components/views/dialogs/security/           @element-hq/element-crypto-web-reviewers
+/test/components/views/dialogs/security/          @element-hq/element-crypto-web-reviewers
+/src/stores/SetupEncryptionStore.ts               @element-hq/element-crypto-web-reviewers
+/test/stores/SetupEncryptionStore-test.ts         @element-hq/element-crypto-web-reviewers
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /src/i18n/strings
 # Ignore the synapse plugin as this is updated by GHA for docker image updating
 /playwright/plugins/homeserver/synapse/index.ts
+
