@@ -2,10 +2,10 @@
     "name": "matrix-react-sdk",
     "version": "3.108.0",
     "description": "SDK for matrix.org using React",
-    "author": "matrix.org",
+    "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
-        "url": "https://github.com/matrix-org/matrix-react-sdk"
+        "url": "https://github.com/element-hq/matrix-react-sdk"
     },
     "license": "Apache-2.0",
     "files": [
