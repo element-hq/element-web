@@ -1841,10 +1841,25 @@
         "files_button": "Pliki",
         "info": "Info",
         "pinned_messages": {
+            "empty_description": "Znajdź wiadomość i wybierz „%(pinAction)s”, aby załączyć ją tutaj.",
+            "empty_title": "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć",
+            "header": {
+                "one": "Przypięto 1 wiadomość",
+                "few": "Przypięto %(count)s wiadomości",
+                "many": "Przypięto %(count)s wiadomości"
+            },
             "limits": {
                 "other": "Możesz przypiąć do %(count)s widżetów"
             },
-            "title": "Przypięte wiadomości"
+            "menu": "Otwórz menu",
+            "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
+            "title": "Przypięte wiadomości",
+            "unpin_all": {
+                "button": "Odepnij wszystkie wiadomości",
+                "content": "Upewnij się, czy naprawdę chcesz usunąć wszystkie przypięte wiadomości. Tej akcji nie można cofnąć.",
+                "title": "Odpiąć wszystkie wiadomości?"
+            },
+            "view": "Wyświetl na osi czasu"
         },
         "pinned_messages_button": "Przypięte wiadomości",
         "poll": {
@@ -2036,6 +2051,21 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
+        "pinned_message_banner": {
+            "button_close_list": "Zamknij listę",
+            "button_view_all": "Pokaż wszystkie",
+            "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
+            "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
+            "prefix": {
+                "audio": "Audio",
+                "file": "Plik",
+                "image": "Obraz",
+                "poll": "Ankieta",
+                "video": "Wideo"
+            },
+            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
+            "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
+        },
         "read_topic": "Kliknij, aby przeczytać temat",
         "rejecting": "Odrzucanie zaproszenia…",
         "rejoin_button": "Dołącz ponownie",
@@ -2685,6 +2715,7 @@
             "code_blocks_heading": "Bloki kodu",
             "compact_modern": "Użyj bardziej kompaktowego, \"nowoczesnego\" wyglądu",
             "composer_heading": "Kompozytor",
+            "default_timezone": "Ustawienie przeglądarki (%(timezone)s)",
             "dialog_title": "<strong>Ustawienia:</strong> Preferencje",
             "enable_hardware_acceleration": "Włącz przyspieszenie sprzętowe",
             "enable_tray_icon": "Pokaż ikonę w zasobniku systemowym i zminimalizuj okno do niej zamiast zamknięcia",
@@ -2700,7 +2731,8 @@
             "show_checklist_shortcuts": "Pokaż skrót do listy powitalnej nad listą pokojów",
             "show_polls_button": "Pokaż przycisk ankiet",
             "surround_text": "Otocz zaznaczony tekst podczas wpisywania specjalnych znaków",
-            "time_heading": "Wyświetlanie czasu"
+            "time_heading": "Wyświetlanie czasu",
+            "user_timezone": "Ustaw strefę czasową"
         },
         "prompt_invite": "Powiadamiaj przed wysłaniem zaproszenia do potencjalnie nieprawidłowych ID matrix",
         "replace_plain_emoji": "Automatycznie zastępuj tekstowe emotikony",
