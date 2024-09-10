@@ -8210,27 +8210,6 @@ matrix-js-sdk@34.5.0:
     unhomoglyph "^1.0.6"
     uuid "10"
 
-matrix-js-sdk@34.5.0-rc.0:
-  version "34.5.0-rc.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.5.0-rc.0.tgz#198f72383483661cc693c1b256f4bc30e238eaa9"
-  integrity sha512-6yrxDR3uMaLNp42nVLMQLbFx0qJn35I/Xp3BXH3nRUc5OWSklVvCAJb8p7TFh6089gMR46BjaoVftR2mpqRh1A==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
-    "@matrix-org/olm" "3.2.15"
-    another-json "^0.2.0"
-    bs58 "^6.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.8.2"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "10"
-
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8238,10 +8217,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.109.0-rc.0:
-  version "3.109.0-rc.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.109.0-rc.0.tgz#05e72ce441debef4f12e2678d2b2aae2f3c53ba9"
-  integrity sha512-26Dz4GgzKSJ4yuHepa2K+kDNtUuM55zRvNFYmXxxExSma/k9up/8VyWxWYLbSUrtIij6p2K0S+yA3MaFYAaMkw==
+matrix-react-sdk@3.109.0:
+  version "3.109.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.109.0.tgz#25025f841ee90c25e26a5057464c1fd7ad637061"
+  integrity sha512-0M+iomIZxhzLp/zUnsd+VbNJYkFQuPGJD5Gi2mjO1N4vGikv2xpIZsPS3VamjUc9NZ6jN29urZo8YX946MmRyA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.24.0"
@@ -8286,7 +8265,7 @@ matrix-react-sdk@3.109.0-rc.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "34.5.0-rc.0"
+    matrix-js-sdk "34.5.0"
     matrix-widget-api "^1.9.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
