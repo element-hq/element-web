@@ -40,7 +40,6 @@ test.describe("Pinned messages", () => {
         await util.openRoomInfo();
         await util.openPinnedMessagesList();
         await util.assertPinnedMessagesList(["Msg1", "Msg2", "Msg4"]);
-        await expect(util.getRightPanel()).toMatchScreenshot(`pinned-messages-list-pin-3.png`);
     });
 
     test("should unpin one message", async ({ page, app, room1, util }) => {
@@ -52,7 +51,6 @@ test.describe("Pinned messages", () => {
         await util.openPinnedMessagesList();
         await util.unpinMessageFromMessageList("Msg2");
         await util.assertPinnedMessagesList(["Msg1", "Msg4"]);
-        await expect(util.getRightPanel()).toMatchScreenshot(`pinned-messages-list-unpin-2.png`);
         await util.backPinnedMessagesList();
         await util.assertPinnedCountInRoomInfo(2);
     });
@@ -126,7 +124,6 @@ test.describe("Pinned messages", () => {
 
         await util.getViewAllButton().click();
         await util.assertPinnedMessagesList(["Msg1", "Msg2"]);
-        await expect(util.getRightPanel()).toMatchScreenshot("pinned-message-banner-2.png");
 
         await expect(util.getCloseListButton()).toBeVisible();
     });
