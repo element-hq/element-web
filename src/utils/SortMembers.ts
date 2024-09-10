@@ -20,6 +20,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
+import SpaceStore from "../stores/spaces/SpaceStore";
 
 export const compareMembers =
     (
@@ -58,6 +59,28 @@ function joinedRooms(cli: MatrixClient): Room[] {
             .filter((r) => !DMRoomMap.shared().getUserIdForRoomId(r.roomId))
             .filter((r) => !Object.keys(r.tags).includes("m.lowpriority"))
     );
+}
+
+//joined rooms in tenant
+async function joinedRoomsInCurrentTenant(cli: MatrixClient){
+
+    const space = SpaceStore.instance.activeSpaceRoom
+    const roomHierarchy = await cli.getRoomHierarchy(space?.roomId ?? "") 
+    const activeSpaceRooms = roomHierarchy.rooms.flatMap( (room) => {return room.room_id})
+    const activeTenantInfo = await cli.getStateEvent(space?.roomId ?? "", "app.verji.tenant_info", "app.verji.tenant_info")
+    const activeTenantId = activeTenantInfo.tenant_id
+    
+    return (
+        cli
+        .getRooms()
+        .filter((r) => r.getMyMembership() === KnownMembership.Join)
+        .filter( (r) => r.getType() === "m.space.child")
+        .filter( (r) => activeSpaceRooms.includes(r.roomId))
+        .filter( async (r) => { 
+            const stateEvent = await cli.getStateEvent(r.roomId, "app.verji.tenant_info", "app.verji.tenant_info")
+            return stateEvent.tenant_id === activeTenantId ? true: false
+        })
+    )
 }
 
 interface IActivityScore {
@@ -102,10 +125,25 @@ interface IMemberScore {
 export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMemberScore } {
     const maxConsideredMembers = 200;
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
-    const memberPeerEntries = consideredRooms.flatMap((room) =>
-        room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() })),
-    );
+    joinedRoomsInCurrentTenant(cli)
+    //console.log("[VERJI INVESTIGATION] - roomsToConsider: ", roomsToConsider)
+    const memberPeerEntries = consideredRooms.flatMap((room) => {
+        // Log the roomId here
+        console.log("[VERJI INVESTIGATION] - Processing room:", room.roomId);
+        console.log("[VERJI INVESTIGATION] - is this a space room?:", room.isSpaceRoom());
+        if(room.isSpaceRoom()){
+            console.log("[VERJI INVESTIGATION] - skipping the room", room.roomId);
+            console.log("[VERJI INVESTIGATION] - number of members excluded: ", room.getJoinedMemberCount());
+            return []
+        }
+
+        return room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() }));
+    });
+
+    console.log("[VERJI INVESTIGATION] - Building member scores...");
+
     const userMeta = groupBy(memberPeerEntries, ({ member }) => member.userId);
+
     // If the iteratee in mapValues returns undefined that key will be removed from the resultant object
     return mapValues(userMeta, (roomMemberships) => {
         if (!roomMemberships.length) return;

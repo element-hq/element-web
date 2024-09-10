@@ -430,6 +430,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     // Verji
     private spaceMembers = [] as RoomMember[];
     private spaceMemberIds = [] as string[];
+    private searchResults = [] as any
     // Verji End
 
     public constructor(props: Props) {
@@ -489,7 +490,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     public componentDidMount(): void {
         /* VERJI START */
-
+        
         // Get singleton VerjiGrowthBook - if not available, one will be created.
         // const verjiGrowthbook: VerjiGrowthBook = VerjiGrowthBook.getInstance();
 
@@ -620,6 +621,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const activityScores = buildActivityScores(cli);
         const memberScores = buildMemberScores(cli);
 
+        console.log("[VERJI INVESTIGATION] - Buildings suggestions....")
         const memberComparator = compareMembers(activityScores, memberScores);
 
         return Object.values(memberScores)
@@ -657,7 +659,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 )
                 .then(async (r) => {
                     this.setState({ busy: false });
-
+                    this.searchResults = r.results
                     if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
                         foundUser = true;
                     }
@@ -674,11 +676,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (foundUser == false) {
             // Look in other stores for user if search might have failed unexpectedly
+            // VERJI HIDE ALL RESULTS
             const possibleMembers = [
                 ...this.state.recents,
                 ...this.state.suggestions,
                 ...this.state.serverResultsMixin,
                 ...this.state.threepidResultsMixin,
+               ...this.searchResults
             ];
             const toAdd = [];
             const potentialAddresses = this.state.filterText
@@ -1004,6 +1008,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         user: new DirectoryMember(u),
                     })),
                 });
+                console.log("[VERJI INVESTIGATION] - serverResultsMixin: ", this.state.serverResultsMixin)
             })
             .catch((e) => {
                 logger.error("Error searching user directory:");
@@ -1207,6 +1212,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         e.preventDefault();
 
         // Process it as a list of addresses to add instead
+        // VERJI HIDE RESULTS HER
         const possibleMembers = [
             // If we can avoid hitting the profile endpoint, we should.
             ...this.state.recents,
@@ -1340,6 +1346,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let priorityAdditionalMembers: Result[] = []; // Shows up before our own suggestions, higher quality
         let otherAdditionalMembers: Result[] = []; // Shows up after our own suggestions, lower quality
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
+        console.log("[VERJI INVESTIGATION] - hasMixins: ", hasMixins)
         if (this.state.filterText && hasMixins && kind === "suggestions") {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
             // The type of u is a pain to define but members of both mixins have the 'userId' property
@@ -1349,6 +1356,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     !sourceMembers.some((m) => m.userId === u.userId) &&
                     !priorityAdditionalMembers.some((m) => m.userId === u.userId) &&
                     !otherAdditionalMembers.some((m) => m.userId === u.userId)
+                    //HERE
                 );
             };
 
@@ -1384,6 +1392,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
+        console.log("[VERJI INVESTIGATION] - priorityAdditionalMembers: ", priorityAdditionalMembers)
+        console.log("[VERJI INVESTIGATION] - sourceMembers: ", sourceMembers)
+        console.log("[VERJI INVESTIGATION] - otherAdditionalMembers: ", otherAdditionalMembers)
+        console.log("[VERJI INVESTIGATION] - serverResultsMixin: ", this.state.serverResultsMixin)
+
+
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
