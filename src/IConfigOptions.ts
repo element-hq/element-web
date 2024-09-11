@@ -52,6 +52,8 @@ export interface IConfigOptions {
         auth_footer_links?: { text: string; url: string }[];
     };
 
+    force_verification?: boolean; // if true, users must verify new logins
+
     map_style_url?: string; // for location-shared maps
 
     embedded_pages?: {

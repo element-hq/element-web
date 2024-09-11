@@ -108,6 +108,7 @@ export function createTestClient(): MatrixClient {
 
         secretStorage: {
             get: jest.fn(),
+            isStored: jest.fn().mockReturnValue(false),
         },
 
         store: {
@@ -128,6 +129,7 @@ export function createTestClient(): MatrixClient {
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
             isEncryptionEnabledInRoom: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
         }),
 
         getPushActionsForEvent: jest.fn(),

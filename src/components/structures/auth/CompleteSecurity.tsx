@@ -14,6 +14,7 @@ import SetupEncryptionBody from "./SetupEncryptionBody";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
 import AuthPage from "../../views/auth/AuthPage";
+import SdkConfig from "../../../SdkConfig";
 
 interface IProps {
     onFinished: () => void;
@@ -82,8 +83,10 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
             throw new Error(`Unknown phase ${phase}`);
         }
 
+        const forceVerification = SdkConfig.get("force_verification") ?? false;
+
         let skipButton;
-        if (phase === Phase.Intro || phase === Phase.ConfirmReset) {
+        if (!forceVerification && (phase === Phase.Intro || phase === Phase.ConfirmReset)) {
             skipButton = (
                 <AccessibleButton
                     onClick={this.onSkipClick}
