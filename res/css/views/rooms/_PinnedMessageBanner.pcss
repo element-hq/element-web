@@ -11,8 +11,8 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--cpd-space-4x);
-    /* 80px = 79px + 1px from the bottom border */
-    height: 79px;
+    /* 64px = 63px + 1px from the bottom border */
+    height: 63px;
     padding: 0 var(--cpd-space-4x);
 
     background-color: var(--cpd-color-bg-canvas-default);
@@ -106,9 +106,6 @@
 }
 
 .mx_PinnedMessageBanner[data-single-message="true"] {
-    /* 64px = 63px + 1px from the bottom border */
-    height: 63px;
-
     .mx_PinnedMessageBanner_content {
         grid-template: "indicators pinIcon message" auto;
 
