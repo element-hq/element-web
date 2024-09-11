@@ -571,7 +571,10 @@ export function mkStubRoom(
     name: string | undefined,
     client: MatrixClient | undefined,
 ): Room {
-    const stubTimeline = { getEvents: (): MatrixEvent[] => [] } as unknown as EventTimeline;
+    const stubTimeline = {
+        getEvents: (): MatrixEvent[] => [],
+        getState: (): RoomState | undefined => undefined,
+    } as unknown as EventTimeline;
     return {
         canInvite: jest.fn(),
         client,

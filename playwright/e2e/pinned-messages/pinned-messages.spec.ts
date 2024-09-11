@@ -10,10 +10,6 @@ import { test } from "./index";
 import { expect } from "../../element-web-test";
 
 test.describe("Pinned messages", () => {
-    test.use({
-        labsFlags: ["feature_pinning"],
-    });
-
     test("should show the empty state when there are no pinned messages", async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.openRoomInfo();
