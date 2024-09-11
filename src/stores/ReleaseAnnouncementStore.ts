@@ -17,7 +17,7 @@ import { Features } from "../settings/Settings";
 /**
  * The features are shown in the array order.
  */
-const FEATURES = ["threadsActivityCentre", "newRoomHeader"] as const;
+const FEATURES = ["threadsActivityCentre"] as const;
 /**
  * All the features that can be shown in the release announcements.
  */

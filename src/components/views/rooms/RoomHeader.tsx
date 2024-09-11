@@ -46,9 +46,6 @@ import { useIsVideoRoom } from "../../../utils/video-rooms";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
 import { CallGuestLinkButton } from "./RoomHeader/CallGuestLinkButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
-import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
-import { useIsReleaseAnnouncementOpen } from "../../../hooks/useIsReleaseAnnouncementOpen";
-import { ReleaseAnnouncementStore } from "../../../stores/ReleaseAnnouncementStore";
 import WithPresenceIndicator, { useDmMember } from "../avatars/WithPresenceIndicator";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import RoomContext from "../../../contexts/RoomContext";
@@ -225,8 +222,6 @@ export default function RoomHeader({
         voiceCallButton = undefined;
     }
 
-    const isReleaseAnnouncementOpen = useIsReleaseAnnouncementOpen("newRoomHeader");
-
     const roomContext = useContext(RoomContext);
     const isVideoRoom = useIsVideoRoom(room);
     const showChatButton =
@@ -237,75 +232,62 @@ export default function RoomHeader({
     return (
         <>
             <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
-                <ReleaseAnnouncement
-                    feature="newRoomHeader"
-                    header={_t("room|header|release_announcement_header")}
-                    description={_t("room|header|release_announcement_description")}
-                    closeLabel={_t("action|ok")}
-                    placement="bottom"
+                <button
+                    aria-label={_t("right_panel|room_summary_card|title")}
+                    tabIndex={0}
+                    onClick={() => RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary)}
+                    className="mx_RoomHeader_infoWrapper"
                 >
-                    <button
-                        aria-label={_t("right_panel|room_summary_card|title")}
-                        tabIndex={0}
-                        onClick={() => {
-                            if (isReleaseAnnouncementOpen) {
-                                ReleaseAnnouncementStore.instance.nextReleaseAnnouncement();
-                            }
-                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
-                        }}
-                        className="mx_RoomHeader_infoWrapper"
-                    >
-                        <WithPresenceIndicator room={room} size="8px">
-                            <RoomAvatar room={room} size="40px" oobData={oobData} />
-                        </WithPresenceIndicator>
-                        <Box flex="1" className="mx_RoomHeader_info">
-                            <BodyText
-                                as="div"
-                                size="lg"
-                                weight="semibold"
-                                dir="auto"
-                                role="heading"
-                                aria-level={1}
-                                className="mx_RoomHeader_heading"
-                            >
-                                <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
+                    <WithPresenceIndicator room={room} size="8px">
+                        <RoomAvatar room={room} size="40px" oobData={oobData} />
+                    </WithPresenceIndicator>
+                    <Box flex="1" className="mx_RoomHeader_info">
+                        <BodyText
+                            as="div"
+                            size="lg"
+                            weight="semibold"
+                            dir="auto"
+                            role="heading"
+                            aria-level={1}
+                            className="mx_RoomHeader_heading"
+                        >
+                            <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
-                                {!isDirectMessage && joinRule === JoinRule.Public && (
-                                    <Tooltip label={_t("common|public_room")} placement="right">
-                                        <PublicIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon text-secondary"
-                                            aria-label={_t("common|public_room")}
-                                        />
-                                    </Tooltip>
-                                )}
+                            {!isDirectMessage && joinRule === JoinRule.Public && (
+                                <Tooltip label={_t("common|public_room")} placement="right">
+                                    <PublicIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon text-secondary"
+                                        aria-label={_t("common|public_room")}
+                                    />
+                                </Tooltip>
+                            )}
 
-                                {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                                    <Tooltip label={_t("common|verified")} placement="right">
-                                        <VerifiedIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon mx_Verified"
-                                            aria-label={_t("common|verified")}
-                                        />
-                                    </Tooltip>
-                                )}
+                            {isDirectMessage && e2eStatus === E2EStatus.Verified && (
+                                <Tooltip label={_t("common|verified")} placement="right">
+                                    <VerifiedIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Verified"
+                                        aria-label={_t("common|verified")}
+                                    />
+                                </Tooltip>
+                            )}
 
-                                {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                                    <Tooltip label={_t("room|header_untrusted_label")} placement="right">
-                                        <ErrorIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon mx_Untrusted"
-                                            aria-label={_t("room|header_untrusted_label")}
-                                        />
-                                    </Tooltip>
-                                )}
-                            </BodyText>
-                        </Box>
-                    </button>
-                </ReleaseAnnouncement>
+                            {isDirectMessage && e2eStatus === E2EStatus.Warning && (
+                                <Tooltip label={_t("room|header_untrusted_label")} placement="right">
+                                    <ErrorIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Untrusted"
+                                        aria-label={_t("room|header_untrusted_label")}
+                                    />
+                                </Tooltip>
+                            )}
+                        </BodyText>
+                    </Box>
+                </button>
                 <Flex align="center" gap="var(--cpd-space-2x)">
                     {additionalButtons?.map((props) => {
                         const label = props.label();

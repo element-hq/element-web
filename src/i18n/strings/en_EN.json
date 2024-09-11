@@ -1965,8 +1965,6 @@
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "release_announcement_description": "Enjoy a simpler, more accessible room header.",
-            "release_announcement_header": "New design!",
             "room_is_public": "This room is public",
             "show_widgets_button": "Show Widgets",
             "video_call_button_ec": "Video call (%(brand)s)",

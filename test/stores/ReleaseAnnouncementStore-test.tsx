@@ -89,15 +89,11 @@ describe("ReleaseAnnouncementStore", () => {
         // Sanity check
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
 
-        let promise = listenReleaseAnnouncementChanged();
+        const promise = listenReleaseAnnouncementChanged();
         await releaseAnnouncementStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe("newRoomHeader");
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomHeader");
-
-        promise = listenReleaseAnnouncementChanged();
-        await releaseAnnouncementStore.nextReleaseAnnouncement();
         expect(await promise).toBeNull();
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
 
         const secondStore = new ReleaseAnnouncementStore();
         // All the release announcements have been viewed, so it should be updated in the store account
@@ -112,7 +108,7 @@ describe("ReleaseAnnouncementStore", () => {
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe("newRoomHeader");
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomHeader");
+        expect(await promise).toBeNull();
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
     });
 });

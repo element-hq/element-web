@@ -7,8 +7,6 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
   >
     <button
-      aria-expanded="false"
-      aria-haspopup="dialog"
       aria-label="Room info"
       class="mx_RoomHeader_infoWrapper"
       tabindex="0"
