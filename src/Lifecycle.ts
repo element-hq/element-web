@@ -203,7 +203,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                 false,
             ).then(() => true);
         }
-        const success = await restoreFromLocalStorage({
+        const success = await restoreSessionFromStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
         });
         if (success) {
@@ -548,17 +548,19 @@ async function abortLogin(): Promise<void> {
     }
 }
 
-// returns a promise which resolves to true if a session is found in
-// localstorage
-//
-// N.B. Lifecycle.js should not maintain any further localStorage state, we
-//      are moving towards using SessionStore to keep track of state related
-//      to the current session (which is typically backed by localStorage).
-//
-//      The plan is to gradually move the localStorage access done here into
-//      SessionStore to avoid bugs where the view becomes out-of-sync with
-//      localStorage (e.g. isGuest etc.)
-export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+/** Attempt to restore the session from localStorage or indexeddb.
+ *
+ * @returns true if a session was found; false if no existing session was found.
+ *
+ * N.B. Lifecycle.js should not maintain any further localStorage state, we
+ *      are moving towards using SessionStore to keep track of state related
+ *      to the current session (which is typically backed by localStorage).
+ *
+ *      The plan is to gradually move the localStorage access done here into
+ *      SessionStore to avoid bugs where the view becomes out-of-sync with
+ *      localStorage (e.g. isGuest etc.)
+ */
+export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
@@ -582,10 +584,11 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
         if (pickleKey) {
             logger.log(`Got pickle key for ${userId}|${deviceId}`);
         } else {
-            logger.log("No pickle key available");
+            logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
         const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
-        const decryptedRefreshToken = await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV);
+        const decryptedRefreshToken =
+            refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
@@ -595,7 +598,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             {
                 userId: userId,
                 deviceId: deviceId,
-                accessToken: decryptedAccessToken!,
+                accessToken: decryptedAccessToken,
                 refreshToken: decryptedRefreshToken,
                 homeserverUrl: hsUrl,
                 identityServerUrl: isUrl,
