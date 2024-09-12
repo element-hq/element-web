@@ -214,9 +214,9 @@ export class SlidingSyncManager {
         try {
             // if we only have range changes then call a different function so we don't nuke the list from before
             if (updateArgs.ranges && Object.keys(updateArgs).length === 1) {
-                await this.slidingSync!.setListRanges(listKey, updateArgs.ranges);
+                this.slidingSync!.setListRanges(listKey, updateArgs.ranges);
             } else {
-                await this.slidingSync!.setList(listKey, list);
+                this.slidingSync!.setList(listKey, list);
             }
         } catch (err) {
             logger.debug("ensureListRegistered: update failed txn_id=", err);
@@ -266,21 +266,14 @@ export class SlidingSyncManager {
      */
     public async startSpidering(batchSize: number, gapBetweenRequestsMs: number): Promise<void> {
         await sleep(gapBetweenRequestsMs); // wait a bit as this is called on first render so let's let things load
-        let startIndex = batchSize;
+        let windowSize = batchSize;
         let hasMore = true;
         let firstTime = true;
         while (hasMore) {
-            const endIndex = startIndex + batchSize - 1;
             try {
-                const ranges = [
-                    [0, batchSize - 1],
-                    [startIndex, endIndex],
-                ];
                 if (firstTime) {
                     await this.slidingSync!.setList(SlidingSyncManager.ListSearch, {
-                        // e.g [0,19] [20,39] then [0,19] [40,59]. We keep [0,20] constantly to ensure
-                        // any changes to the list whilst spidering are caught.
-                        ranges: ranges,
+                        ranges: [[0, windowSize]],
                         sort: [
                             "by_recency", // this list isn't shown on the UI so just sorting by timestamp is enough
                         ],
@@ -313,8 +306,8 @@ export class SlidingSyncManager {
                 await sleep(gapBetweenRequestsMs);
             }
             const listData = this.slidingSync!.getListData(SlidingSyncManager.ListSearch)!;
-            hasMore = endIndex + 1 < listData.joinedCount;
-            startIndex += batchSize;
+            hasMore = windowSize < listData.joinedCount;
+            windowSize += batchSize;
             firstTime = false;
         }
     }
@@ -375,7 +368,7 @@ export class SlidingSyncManager {
     public async nativeSlidingSyncSupport(client: MatrixClient): Promise<boolean> {
         // Per https://github.com/matrix-org/matrix-spec-proposals/pull/3575/files#r1589542561
         // `client` can be undefined/null in tests for some reason.
-        const support = await client?.doesServerSupportUnstableFeature("org.matrix.msc3575");
+        const support = await client?.doesServerSupportUnstableFeature("org.matrix.simplified_msc3575");
         if (support) {
             logger.log("nativeSlidingSyncSupport: sliding sync advertised as unstable");
         }
