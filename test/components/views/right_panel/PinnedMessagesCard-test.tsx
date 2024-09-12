@@ -190,7 +190,6 @@ describe("<PinnedMessagesCard />", () => {
     });
 
     it("should show two pinned messages", async () => {
-        //const room = mkRoom([pin1], [pin2]);
         const { asFragment } = await initPinnedMessagesCard([pin1], [pin2]);
 
         expect(screen.queryAllByRole("listitem")).toHaveLength(2);

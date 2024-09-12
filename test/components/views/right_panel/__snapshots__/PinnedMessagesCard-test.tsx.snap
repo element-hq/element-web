@@ -184,7 +184,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                First pinned message
+                The second one
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                The second one
+                First pinned message
               </div>
             </div>
           </div>
@@ -379,7 +379,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                First pinned message
+                The second one
               </div>
             </div>
           </div>
@@ -445,7 +445,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="mx_EventTile_body translate"
                 dir="auto"
               >
-                The second one
+                First pinned message
               </div>
             </div>
           </div>

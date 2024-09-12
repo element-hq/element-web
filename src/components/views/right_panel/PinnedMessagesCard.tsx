@@ -156,7 +156,7 @@ function PinnedMessages({ events, room, permalinkCreator }: PinnedMessagesProps)
                 })}
                 role="list"
             >
-                {events.reverse().map((event, i) => (
+                {events.map((event, i) => (
                     <>
                         <PinnedEventTile
                             key={event.getId()}
