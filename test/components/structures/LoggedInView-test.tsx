@@ -24,6 +24,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
 import Modal from "../../../src/Modal";
+import { SETTINGS } from "../../../src/settings/Settings";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -37,6 +38,9 @@ describe("<LoggedInView />", () => {
         setPushRuleEnabled: jest.fn(),
         setPushRuleActions: jest.fn(),
         getCrypto: jest.fn().mockReturnValue(undefined),
+        setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
+        deleteExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
+        doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSdkContext();
@@ -408,5 +412,49 @@ describe("<LoggedInView />", () => {
 
         await userEvent.keyboard("{Control>}{Alt>}h</Alt>{/Control}");
         expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.ViewHomePage });
+    });
+
+    describe("timezone updates", () => {
+        const userTimezone = "Europe/London";
+        const originalController = SETTINGS["userTimezonePublish"].controller;
+
+        beforeEach(async () => {
+            SETTINGS["userTimezonePublish"].controller = undefined;
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
+            await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, userTimezone);
+        });
+
+        afterEach(() => {
+            SETTINGS["userTimezonePublish"].controller = originalController;
+        });
+
+        it("does not update the timezone when userTimezonePublish is off", async () => {
+            getComponent();
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+            expect(mockClient.setExtendedProfileProperty).not.toHaveBeenCalled();
+        });
+        it("should set the user timezone when userTimezonePublish is enabled", async () => {
+            getComponent();
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+        });
+
+        it("should set the user timezone when the timezone is changed", async () => {
+            const newTimezone = "Europe/Paris";
+            getComponent();
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            await SettingsStore.setValue("userTimezone", null, SettingLevel.DEVICE, newTimezone);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", newTimezone);
+        });
+
+        it("should clear the timezone when the publish feature is turned off", async () => {
+            getComponent();
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, true);
+            expect(mockClient.setExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz", userTimezone);
+            await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
+            expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith("us.cloke.msc4175.tz");
+        });
     });
 });
