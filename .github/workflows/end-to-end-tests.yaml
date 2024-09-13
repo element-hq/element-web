@@ -16,14 +16,14 @@ concurrency:
 jobs:
     playwright:
         name: Playwright
-        uses: matrix-org/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml@develop
+        uses: element-hq/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml@develop
         permissions:
             actions: read
             issues: read
             pull-requests: read
         with:
             element-web-sha: ${{ github.sha }}
-            react-sdk-repository: matrix-org/matrix-react-sdk
+            react-sdk-repository: element-hq/matrix-react-sdk
             # We only want to run the playwright tests on merge queue to prevent regressions
             # from creeping in. They take a long time to run and consume multiple concurrent runners.
             skip: ${{ github.event_name != 'merge_group' }}
