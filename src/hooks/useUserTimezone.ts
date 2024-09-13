@@ -29,7 +29,7 @@ import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
  */
 export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: string; friendly: string } | null => {
     const [timezone, setTimezone] = useState<string>();
-    const [updateInterval, setUpdateInterval] = useState<number>();
+    const [updateInterval, setUpdateInterval] = useState<ReturnType<typeof setTimeout>>();
     const [friendly, setFriendly] = useState<string>();
     const [supported, setSupported] = useState<boolean>();
 
