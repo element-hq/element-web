@@ -41,7 +41,12 @@ test.describe("Cryptography", function () {
             });
         });
 
-        test("should show the correct shield on e2e events", async ({ page, app, bot: bob, homeserver }) => {
+        test("should show the correct shield on e2e events", async ({
+            page,
+            app,
+            bot: bob,
+            homeserver,
+        }, workerInfo) => {
             // Bob has a second, not cross-signed, device
             const bobSecondDevice = new Bot(page, homeserver, {
                 bootstrapSecretStorage: false,
@@ -117,7 +122,10 @@ test.describe("Cryptography", function () {
             await lastTileE2eIcon.focus();
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
 
-            /* Should show a grey padlock for a message from an unknown device */
+            /* In legacy crypto: should show a grey padlock for a message from a deleted device.
+             * In rust crypto: should show a red padlock for a message from an unverified device.
+             * Rust crypto remembers the verification state of the sending device, so it will know that the device was
+             * unverified, even if it gets deleted. */
             // bob deletes his second device
             await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
@@ -148,7 +156,11 @@ test.describe("Cryptography", function () {
             await expect(last).toContainText("test encrypted from unverified");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
+            await expect(page.getByRole("tooltip")).toContainText(
+                workerInfo.project.name === "Legacy Crypto"
+                    ? "Encrypted by an unknown or deleted device."
+                    : "Encrypted by a device not verified by its owner.",
+            );
         });
 
         test("Should show a grey padlock for a key restored from backup", async ({
