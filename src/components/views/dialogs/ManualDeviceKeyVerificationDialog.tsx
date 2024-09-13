@@ -69,7 +69,7 @@ export function ManualDeviceKeyVerificationDialog({
                         <label>{_t("encryption|verification|manual_device_verification_device_key_label")}:</label>{" "}
                         <span>
                             <code>
-                                <b>{key}</b>
+                                <strong>{key}</strong>
                             </code>
                         </span>
                     </li>

@@ -145,7 +145,7 @@ export function showAnyInviteErrors(
                             "invite|room_failed_partial",
                             {},
                             {
-                                RoomName: () => <b>{room.name}</b>,
+                                RoomName: () => <strong>{room.name}</strong>,
                             },
                         )}
                     </h4>

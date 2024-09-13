@@ -154,14 +154,14 @@ export class CapabilityText {
                                 if (room) {
                                     return (
                                         <TextWithTooltip tooltip={room.getCanonicalAlias() ?? roomId}>
-                                            <b>{room.name}</b>
+                                            <strong>{room.name}</strong>
                                         </TextWithTooltip>
                                     );
                                 } else {
                                     return (
-                                        <b>
+                                        <strong>
                                             <code>{roomId}</code>
-                                        </b>
+                                        </strong>
                                     );
                                 }
                             },
@@ -209,7 +209,7 @@ export class CapabilityText {
                                 eventType: eventCap.eventType,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         ),
                         byline: CapabilityText.bylineFor(eventCap),
@@ -222,7 +222,7 @@ export class CapabilityText {
                                 eventType: eventCap.eventType,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         ),
                         byline: CapabilityText.bylineFor(eventCap),
@@ -238,7 +238,7 @@ export class CapabilityText {
                                 eventType: eventCap.eventType,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         ),
                         byline: CapabilityText.bylineFor(eventCap),
@@ -251,7 +251,7 @@ export class CapabilityText {
                                 eventType: eventCap.eventType,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         ),
                         byline: CapabilityText.bylineFor(eventCap),
@@ -266,7 +266,7 @@ export class CapabilityText {
                 "widget|capability|capability",
                 { capability },
                 {
-                    b: (sub) => <b>{sub}</b>,
+                    b: (sub) => <strong>{sub}</strong>,
                 },
             ),
         };
@@ -390,7 +390,7 @@ export class CapabilityText {
                                 msgtype: eventCap.keyStr,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         );
                     } else {
@@ -400,7 +400,7 @@ export class CapabilityText {
                                 msgtype: eventCap.keyStr,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         );
                     }
@@ -412,7 +412,7 @@ export class CapabilityText {
                                 msgtype: eventCap.keyStr,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         );
                     } else {
@@ -422,7 +422,7 @@ export class CapabilityText {
                                 msgtype: eventCap.keyStr,
                             },
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         );
                     }

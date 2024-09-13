@@ -205,7 +205,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         ) {
             warning = (
                 <p>
-                    <b>{_t("bug_reporting|unsupported_browser")}</b>
+                    <strong>{_t("bug_reporting|unsupported_browser")}</strong>
                 </p>
             );
         }
@@ -221,7 +221,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     {warning}
                     <p>{_t("bug_reporting|description")}</p>
                     <p>
-                        <b>
+                        <strong>
                             {_t(
                                 "bug_reporting|before_submitting",
                                 {},
@@ -237,7 +237,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                                     ),
                                 },
                             )}
-                        </b>
+                        </strong>
                     </p>
 
                     <div className="mx_BugReportDialog_download">

@@ -302,7 +302,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 <summary className="mx_HelpUserSettingsTab_accessTokenDetails">
                                     {_t("common|access_token")}
                                 </summary>
-                                <b>{_t("setting|help_about|access_token_detail")}</b>
+                                <strong>{_t("setting|help_about|access_token_detail")}</strong>
                                 <CopyableText getTextToCopy={() => this.context.getAccessToken()}>
                                     {this.context.getAccessToken()}
                                 </CopyableText>

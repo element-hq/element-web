@@ -57,7 +57,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
             <EmailIcon className="mx_AuthBody_icon" />
             <h1>{_t("auth|enter_email_heading")}</h1>
             <p className="mx_AuthBody_text">
-                {_t("auth|enter_email_explainer", { homeserver }, { b: (t) => <b>{t}</b> })}
+                {_t("auth|enter_email_explainer", { homeserver }, { b: (t) => <strong>{t}</strong> })}
             </p>
             <form onSubmit={onSubmit}>
                 <fieldset disabled={loading}>

@@ -46,7 +46,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
             <EMailPromptIcon className="mx_AuthBody_emailPromptIcon--shifted" />
             <h1>{_t("auth|uia|email_auth_header")}</h1>
             <div className="mx_AuthBody_text">
-                <p>{_t("auth|check_email_explainer", { email: email }, { b: (t) => <b>{t}</b> })}</p>
+                <p>{_t("auth|check_email_explainer", { email: email }, { b: (t) => <strong>{t}</strong> })}</p>
                 <div className="mx_AuthBody_did-not-receive">
                     <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_wrong_email_prompt")}</span>
                     <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onReEnterEmailClick}>

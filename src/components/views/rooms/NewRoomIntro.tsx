@@ -97,7 +97,7 @@ const NewRoomIntro: React.FC = () => {
                         introMessage,
                         {},
                         {
-                            displayName: () => <b>{displayName}</b>,
+                            displayName: () => <strong>{displayName}</strong>,
                         },
                     )}
                 </p>
@@ -241,7 +241,7 @@ const NewRoomIntro: React.FC = () => {
                         "room|intro|start_of_room",
                         {},
                         {
-                            roomName: () => <b>{room.name}</b>,
+                            roomName: () => <strong>{room.name}</strong>,
                         },
                     )}
                 </p>

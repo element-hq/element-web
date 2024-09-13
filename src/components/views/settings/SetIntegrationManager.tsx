@@ -58,7 +58,7 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
             bodyText = _t(
                 "integration_manager|use_im_default",
                 { serverName: currentManager.name },
-                { b: (sub) => <b>{sub}</b> },
+                { b: (sub) => <strong>{sub}</strong> },
             );
         } else {
             bodyText = _t("integration_manager|use_im");

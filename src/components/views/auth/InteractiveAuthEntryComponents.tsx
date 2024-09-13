@@ -465,7 +465,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                     />
                     <p>
                         {_t("auth|uia|email", {
-                            emailAddress: <b>{this.props.inputs.emailAddress}</b>,
+                            emailAddress: <strong>{this.props.inputs.emailAddress}</strong>,
                         })}
                     </p>
                     {this.state.requesting ? (

@@ -38,7 +38,7 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                             _t(
                                 "room|search|summary",
                                 { count: searchInfo.count },
-                                { query: () => <b>{searchInfo.term}</b> },
+                                { query: () => <strong>{searchInfo.term}</strong> },
                             )
                         ) : (
                             <InlineSpinner />

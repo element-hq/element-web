@@ -128,7 +128,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
             </h3>
 
             <div className="mx_DevTools_SettingsExplorer_warning">
-                <b>{_t("devtools|caution_colon")}</b> {_t("devtools|use_at_own_risk")}
+                <strong>{_t("devtools|caution_colon")}</strong> {_t("devtools|use_at_own_risk")}
             </div>
 
             <div>

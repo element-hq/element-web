@@ -144,7 +144,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     "room_settings|security|join_rule_restricted_dialog_description",
                     {},
                     {
-                        RoomName: () => <b>{room.name}</b>,
+                        RoomName: () => <strong>{room.name}</strong>,
                     },
                 )}
             </p>

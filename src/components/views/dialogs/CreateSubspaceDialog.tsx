@@ -95,7 +95,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                     "create_space|subspace_join_rule_restricted_description",
                     {},
                     {
-                        SpaceName: () => <b>{parentSpace.name}</b>,
+                        SpaceName: () => <strong>{parentSpace.name}</strong>,
                     },
                 )}
             </p>
@@ -107,7 +107,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
                     "create_space|subspace_join_rule_public_description",
                     {},
                     {
-                        SpaceName: () => <b>{parentSpace.name}</b>,
+                        SpaceName: () => <strong>{parentSpace.name}</strong>,
                     },
                 )}
             </p>

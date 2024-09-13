@@ -391,7 +391,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             title = _t("restore_key_backup_dialog|enter_phrase_title");
             content = (
                 <div>
-                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>
+                        {_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <strong>{sub}</strong> })}
+                    </p>
                     <p>{_t("restore_key_backup_dialog|enter_phrase_description")}</p>
 
                     <form className="mx_RestoreKeyBackupDialog_primaryContainer">
@@ -453,7 +455,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
             content = (
                 <div>
-                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>
+                        {_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <strong>{sub}</strong> })}
+                    </p>
                     <p>{_t("restore_key_backup_dialog|enter_key_description")}</p>
 
                     <div className="mx_RestoreKeyBackupDialog_primaryContainer">

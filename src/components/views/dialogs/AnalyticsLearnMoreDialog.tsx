@@ -72,8 +72,8 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
                     {_t("analytics|pseudonymous_usage_data", { analyticsOwner })}
                 </div>
                 <ul className="mx_AnalyticsLearnMore_bullets">
-                    <li>{_t("analytics|bullet_1", {}, { Bold: (sub) => <b>{sub}</b> })}</li>
-                    <li>{_t("analytics|bullet_2", {}, { Bold: (sub) => <b>{sub}</b> })}</li>
+                    <li>{_t("analytics|bullet_1", {}, { Bold: (sub) => <strong>{sub}</strong> })}</li>
+                    <li>{_t("analytics|bullet_2", {}, { Bold: (sub) => <strong>{sub}</strong> })}</li>
                     <li>{_t("analytics|disable_prompt")}</li>
                 </ul>
                 {privacyPolicyLink}

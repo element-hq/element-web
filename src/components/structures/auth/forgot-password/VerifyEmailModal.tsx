@@ -50,7 +50,7 @@ export const VerifyEmailModal: React.FC<Props> = ({
                         email,
                     },
                     {
-                        b: (sub) => <b>{sub}</b>,
+                        b: (sub) => <strong>{sub}</strong>,
                     },
                 )}
             </p>

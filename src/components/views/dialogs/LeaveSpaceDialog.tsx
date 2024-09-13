@@ -77,7 +77,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                         "space|leave_dialog_description",
                         {},
                         {
-                            spaceName: () => <b>{space.name}</b>,
+                            spaceName: () => <strong>{space.name}</strong>,
                         },
                     )}
                     &nbsp;
