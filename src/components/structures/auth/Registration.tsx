@@ -53,6 +53,13 @@ const debuglog = (...args: any[]): void => {
     }
 };
 
+export interface MobileRegistrationResponse {
+    user_id: string;
+    home_server: string;
+    access_token: string;
+    device_id: string;
+}
+
 interface IProps {
     serverConfig: ValidatedServerConfig;
     defaultDeviceDisplayName?: string;
@@ -62,7 +69,7 @@ interface IProps {
     sessionId?: string;
     idSid?: string;
     fragmentAfterLogin?: string;
-
+    mobileRegister?: boolean;
     // Called when the user has logged in. Params:
     // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
     // - The user's password, if available and applicable (may be cached in memory
@@ -410,18 +417,33 @@ export default class Registration extends React.Component<IProps, IState> {
         debuglog("Registration: ui auth finished:", { hasEmail, hasAccessToken });
         // don’t log in if we found a session for a different user
         if (hasAccessToken && !newState.differentLoggedInUserId) {
-            await this.props.onLoggedIn(
-                {
-                    userId,
-                    deviceId: (response as RegisterResponse).device_id!,
-                    homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
-                    identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
-                    accessToken,
-                },
-                this.state.formVals.password!,
-            );
+            if (this.props.mobileRegister) {
+                const mobileResponse: MobileRegistrationResponse = {
+                    user_id: userId,
+                    home_server: this.state.matrixClient.getHomeserverUrl(),
+                    access_token: accessToken,
+                    device_id: (response as RegisterResponse).device_id!,
+                };
+                const event = new CustomEvent<MobileRegistrationResponse>("mobileregistrationresponse", {
+                    detail: mobileResponse,
+                });
+                document.dispatchEvent(event);
+                newState.busy = false;
+                newState.completedNoSignin = true;
+            } else {
+                await this.props.onLoggedIn(
+                    {
+                        userId,
+                        deviceId: (response as RegisterResponse).device_id!,
+                        homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                        identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                        accessToken,
+                    },
+                    this.state.formVals.password!,
+                );
 
-            this.setupPushers();
+                this.setupPushers();
+            }
         } else {
             newState.busy = false;
             newState.completedNoSignin = true;
@@ -558,7 +580,7 @@ export default class Registration extends React.Component<IProps, IState> {
             );
         } else if (this.state.matrixClient && this.state.flows.length) {
             let ssoSection: JSX.Element | undefined;
-            if (this.state.ssoFlow) {
+            if (!this.props.mobileRegister && this.state.ssoFlow) {
                 let continueWithSection;
                 const providers = this.state.ssoFlow.identity_providers || [];
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
@@ -591,7 +613,6 @@ export default class Registration extends React.Component<IProps, IState> {
                     </React.Fragment>
                 );
             }
-
             return (
                 <React.Fragment>
                     {ssoSection}
@@ -660,7 +681,9 @@ export default class Registration extends React.Component<IProps, IState> {
         let body;
         if (this.state.completedNoSignin) {
             let regDoneText;
-            if (this.state.differentLoggedInUserId) {
+            if (this.props.mobileRegister) {
+                regDoneText = undefined;
+            } else if (this.state.differentLoggedInUserId) {
                 regDoneText = (
                     <div>
                         <p>
@@ -717,6 +740,8 @@ export default class Registration extends React.Component<IProps, IState> {
                     {regDoneText}
                 </div>
             );
+        } else if (this.props.mobileRegister) {
+            body = this.renderRegisterComponent();
         } else {
             body = (
                 <Fragment>
@@ -746,7 +771,13 @@ export default class Registration extends React.Component<IProps, IState> {
                 </Fragment>
             );
         }
-
+        if (this.props.mobileRegister) {
+            return (
+                <Fragment>
+                    <div className="mx_MobileRegister_body">{body}</div>
+                </Fragment>
+            );
+        }
         return (
             <AuthPage>
                 <AuthHeader />
