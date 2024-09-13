@@ -427,7 +427,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 const event = new CustomEvent<MobileRegistrationResponse>("mobileregistrationresponse", {
                     detail: mobileResponse,
                 });
-                document.dispatchEvent(event);
+                window.dispatchEvent(event);
                 newState.busy = false;
                 newState.completedNoSignin = true;
             } else {
