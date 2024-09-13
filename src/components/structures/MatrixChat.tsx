@@ -988,7 +988,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             newState.register_client_secret = params.client_secret;
             newState.register_session_id = params.session_id;
             newState.register_id_sid = params.sid;
-            newState.register_id_sid = params.sid;
         }
 
         newState.isMobileRegistration = isMobileRegistration; //&& SettingsStore.getValue("Registration.mobileRegistrationHelper");
