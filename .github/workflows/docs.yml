@@ -33,7 +33,7 @@ jobs:
             - name: Fetch matrix-react-sdk
               uses: actions/checkout@v4
               with:
-                  repository: matrix-org/matrix-react-sdk
+                  repository: element-hq/matrix-react-sdk
                   path: matrix-react-sdk
 
             - name: Fetch matrix-js-sdk

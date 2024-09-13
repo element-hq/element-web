@@ -53,7 +53,7 @@ jobs:
               uses: actions/checkout@v4
               if: inputs.matrix-react-sdk
               with:
-                  repository: matrix-org/matrix-react-sdk
+                  repository: element-hq/matrix-react-sdk
                   path: matrix-react-sdk
                   ref: staging
                   fetch-depth: 0
@@ -95,7 +95,7 @@ jobs:
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: staging
-                  repo: matrix-org/matrix-react-sdk
+                  repo: element-hq/matrix-react-sdk
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
                   check-name: draft
