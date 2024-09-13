@@ -961,9 +961,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.REGISTER,
         };
 
-        // Only honour params if they are all present, otherwise we reset
-        // HS and IS URLs when switching to registration.
-        if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+        if (isMobileRegistration && params.hs_url) {
+            try {
+                const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
+                newState.serverConfig = config;
+            } catch (err) {
+                logger.warn("Failed to load hs_url param:", params.hs_url);
+            }
+        } else if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+            // Only honour params if they are all present, otherwise we reset
+            // HS and IS URLs when switching to registration.
             newState.serverConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                 params.hs_url,
                 params.is_url,
