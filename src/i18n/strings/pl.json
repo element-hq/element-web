@@ -1968,8 +1968,6 @@
                 "few": "%(count)s osoby proszą o dołączenie",
                 "many": "%(count)s osób prosi o dołączenie"
             },
-            "release_announcement_description": "Ciesz się prostszym, bardziej przystosowanym nagłówkiem pokoju.",
-            "release_announcement_header": "Nowy design!",
             "room_is_public": "Ten pokój jest publiczny",
             "show_widgets_button": "Pokaż widżety",
             "video_call_button_ec": "Rozmowa wideo (%(brand)s)",
