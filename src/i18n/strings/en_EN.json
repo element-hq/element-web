@@ -229,6 +229,7 @@
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
         "misconfigured_title": "Your %(brand)s is misconfigured",
+        "mobile_create_account_title": "You're about to create an account on %(hsName)s",
         "msisdn_field_description": "Other users can invite you to rooms using your contact details",
         "msisdn_field_label": "Phone",
         "msisdn_field_number_invalid": "That phone number doesn't look quite right, please check and try again",

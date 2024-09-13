@@ -741,7 +741,14 @@ export default class Registration extends React.Component<IProps, IState> {
                 </div>
             );
         } else if (this.props.mobileRegister) {
-            body = this.renderRegisterComponent();
+            body = (
+                <Fragment>
+                    <h1>{_t("auth|mobile_create_account_title", { hsName: this.props.serverConfig.hsName })}</h1>
+                    {errorText}
+                    {serverDeadSection}
+                    {this.renderRegisterComponent()}
+                </Fragment>
+            );
         } else {
             body = (
                 <Fragment>
@@ -772,11 +779,7 @@ export default class Registration extends React.Component<IProps, IState> {
             );
         }
         if (this.props.mobileRegister) {
-            return (
-                <Fragment>
-                    <div className="mx_MobileRegister_body">{body}</div>
-                </Fragment>
-            );
+            return <div className="mx_MobileRegister_body">{body}</div>;
         }
         return (
             <AuthPage>
