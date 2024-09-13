@@ -322,42 +322,10 @@ export class SlidingSyncManager {
      * @returns A working Sliding Sync or undefined
      */
     public async setup(client: MatrixClient): Promise<SlidingSync | undefined> {
-        const baseUrl = client.baseUrl;
-        const proxyUrl = SettingsStore.getValue("feature_sliding_sync_proxy_url");
-        const wellKnownProxyUrl = await this.getProxyFromWellKnown(client);
-
-        const slidingSyncEndpoint = proxyUrl || wellKnownProxyUrl || baseUrl;
-
-        this.configure(client, slidingSyncEndpoint);
-        logger.info("Sliding sync activated at", slidingSyncEndpoint);
+        this.configure(client, client.baseUrl);
+        logger.info("Simplified Sliding Sync activated at", client.baseUrl);
         this.startSpidering(100, 50); // 100 rooms at a time, 50ms apart
-
         return this.slidingSync;
-    }
-
-    /**
-     * Get the sliding sync proxy URL from the client well known
-     * @param client The MatrixClient to use
-     * @return The proxy url
-     */
-    public async getProxyFromWellKnown(client: MatrixClient): Promise<string | undefined> {
-        let proxyUrl: string | undefined;
-
-        try {
-            const clientDomain = await client.getDomain();
-            if (clientDomain === null) {
-                throw new RangeError("Homeserver domain is null");
-            }
-            const clientWellKnown = await AutoDiscovery.findClientConfig(clientDomain);
-            proxyUrl = clientWellKnown?.["org.matrix.msc3575.proxy"]?.url;
-        } catch (e) {
-            // Either client.getDomain() is null so we've shorted out, or is invalid so `AutoDiscovery.findClientConfig` has thrown
-        }
-
-        if (proxyUrl != undefined) {
-            logger.log("getProxyFromWellKnown: client well-known declares sliding sync proxy at", proxyUrl);
-        }
-        return proxyUrl;
     }
 
     /**
@@ -370,7 +338,7 @@ export class SlidingSyncManager {
         // `client` can be undefined/null in tests for some reason.
         const support = await client?.doesServerSupportUnstableFeature("org.matrix.simplified_msc3575");
         if (support) {
-            logger.log("nativeSlidingSyncSupport: sliding sync advertised as unstable");
+            logger.log("nativeSlidingSyncSupport: org.matrix.simplified_msc3575 sliding sync advertised as unstable");
         }
         return support;
     }
@@ -387,17 +355,6 @@ export class SlidingSyncManager {
             SlidingSyncController.serverSupportsSlidingSync = true;
             return;
         }
-
-        const proxyUrl = await this.getProxyFromWellKnown(client);
-        if (proxyUrl != undefined) {
-            const response = await fetch(new URL("/client/server.json", proxyUrl), {
-                method: Method.Get,
-                signal: timeoutSignal(10 * 1000), // 10s
-            });
-            if (response.status === 200) {
-                logger.log("checkSupport: well-known sliding sync proxy is up at", proxyUrl);
-                SlidingSyncController.serverSupportsSlidingSync = true;
-            }
-        }
+        SlidingSyncController.serverSupportsSlidingSync = false;
     }
 }
