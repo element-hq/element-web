@@ -36,7 +36,7 @@ Please see LICENSE files in the repository root for full details.
  *                      list ops)
  */
 
-import { MatrixClient, EventType, AutoDiscovery, Method, timeoutSignal } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, EventType } from "matrix-js-sdk/src/matrix";
 import {
     MSC3575Filter,
     MSC3575List,
@@ -48,7 +48,6 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 
-import SettingsStore from "./settings/SettingsStore";
 import SlidingSyncController from "./settings/controllers/SlidingSyncController";
 
 // how long to long poll for
