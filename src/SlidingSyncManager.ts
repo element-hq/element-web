@@ -266,14 +266,14 @@ export class SlidingSyncManager {
      */
     public async startSpidering(batchSize: number, gapBetweenRequestsMs: number): Promise<void> {
         await sleep(gapBetweenRequestsMs); // wait a bit as this is called on first render so let's let things load
-        let windowSize = batchSize;
+        let fetchUpTo = batchSize;
         let hasMore = true;
         let firstTime = true;
         while (hasMore) {
             try {
                 if (firstTime) {
                     await this.slidingSync!.setList(SlidingSyncManager.ListSearch, {
-                        ranges: [[0, windowSize]],
+                        ranges: [[0, fetchUpTo]],
                         sort: [
                             "by_recency", // this list isn't shown on the UI so just sorting by timestamp is enough
                         ],
@@ -296,7 +296,7 @@ export class SlidingSyncManager {
                         },
                     });
                 } else {
-                    await this.slidingSync!.setListRanges(SlidingSyncManager.ListSearch, ranges);
+                    await this.slidingSync!.setListRanges(SlidingSyncManager.ListSearch, [[0,fetchUpTo]]);
                 }
             } catch (err) {
                 // do nothing, as we reject only when we get interrupted but that's fine as the next
@@ -306,8 +306,8 @@ export class SlidingSyncManager {
                 await sleep(gapBetweenRequestsMs);
             }
             const listData = this.slidingSync!.getListData(SlidingSyncManager.ListSearch)!;
-            hasMore = windowSize < listData.joinedCount;
-            windowSize += batchSize;
+            hasMore = fetchUpTo < listData.joinedCount;
+            fetchUpTo += batchSize;
             firstTime = false;
         }
     }

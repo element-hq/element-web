@@ -79,7 +79,6 @@ describe("SlidingSyncManager", () => {
         it("creates a new list based on the key", async () => {
             const listKey = "key";
             mocked(slidingSync.getListParams).mockReturnValue(null);
-            mocked(slidingSync.setList).mockResolvedValue("yep");
             await manager.ensureListRegistered(listKey, {
                 sort: ["by_recency"],
             });
@@ -114,7 +113,6 @@ describe("SlidingSyncManager", () => {
             mocked(slidingSync.getListParams).mockReturnValue({
                 ranges: [[0, 42]],
             });
-            mocked(slidingSync.setList).mockResolvedValue("yep");
             await manager.ensureListRegistered(listKey, {
                 ranges: [[0, 52]],
             });
@@ -128,7 +126,6 @@ describe("SlidingSyncManager", () => {
                 ranges: [[0, 42]],
                 sort: ["by_recency"],
             });
-            mocked(slidingSync.setList).mockResolvedValue("yep");
             await manager.ensureListRegistered(listKey, {
                 ranges: [[0, 42]],
                 sort: ["by_recency"],
@@ -139,11 +136,9 @@ describe("SlidingSyncManager", () => {
     });
 
     describe("startSpidering", () => {
-        it("requests in batchSizes", async () => {
+        it("requests in expanding batchSizes", async () => {
             const gapMs = 1;
             const batchSize = 10;
-            mocked(slidingSync.setList).mockResolvedValue("yep");
-            mocked(slidingSync.setListRanges).mockResolvedValue("yep");
             mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 64,
@@ -153,12 +148,13 @@ describe("SlidingSyncManager", () => {
             await manager.startSpidering(batchSize, gapMs);
             // we expect calls for 10,19 -> 20,29 -> 30,39 -> 40,49 -> 50,59 -> 60,69
             const wantWindows = [
-                [10, 19],
-                [20, 29],
-                [30, 39],
-                [40, 49],
-                [50, 59],
-                [60, 69],
+                [0, 10],
+                [0, 20],
+                [0, 30],
+                [0, 40],
+                [0, 50],
+                [0, 60],
+                [0, 70],
             ];
             expect(slidingSync.getListData).toHaveBeenCalledTimes(wantWindows.length);
             expect(slidingSync.setList).toHaveBeenCalledTimes(1);
@@ -170,13 +166,12 @@ describe("SlidingSyncManager", () => {
                         SlidingSyncManager.ListSearch,
                         // eslint-disable-next-line jest/no-conditional-expect
                         expect.objectContaining({
-                            ranges: [[0, batchSize - 1], range],
+                            ranges: [range],
                         }),
                     );
                     return;
                 }
                 expect(slidingSync.setListRanges).toHaveBeenCalledWith(SlidingSyncManager.ListSearch, [
-                    [0, batchSize - 1],
                     range,
                 ]);
             });
@@ -184,7 +179,6 @@ describe("SlidingSyncManager", () => {
         it("handles accounts with zero rooms", async () => {
             const gapMs = 1;
             const batchSize = 10;
-            mocked(slidingSync.setList).mockResolvedValue("yep");
             mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 0,
@@ -198,31 +192,7 @@ describe("SlidingSyncManager", () => {
                 SlidingSyncManager.ListSearch,
                 expect.objectContaining({
                     ranges: [
-                        [0, batchSize - 1],
-                        [batchSize, batchSize + batchSize - 1],
-                    ],
-                }),
-            );
-        });
-        it("continues even when setList rejects", async () => {
-            const gapMs = 1;
-            const batchSize = 10;
-            mocked(slidingSync.setList).mockRejectedValue("narp");
-            mocked(slidingSync.getListData).mockImplementation((key) => {
-                return {
-                    joinedCount: 0,
-                    roomIndexToRoomId: {},
-                };
-            });
-            await manager.startSpidering(batchSize, gapMs);
-            expect(slidingSync.getListData).toHaveBeenCalledTimes(1);
-            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
-            expect(slidingSync.setList).toHaveBeenCalledWith(
-                SlidingSyncManager.ListSearch,
-                expect.objectContaining({
-                    ranges: [
-                        [0, batchSize - 1],
-                        [batchSize, batchSize + batchSize - 1],
+                        [0, batchSize],
                     ],
                 }),
             );
@@ -277,7 +247,7 @@ describe("SlidingSyncManager", () => {
             const unstableSpy = jest
                 .spyOn(client, "doesServerSupportUnstableFeature")
                 .mockImplementation(async (feature: string) => {
-                    expect(feature).toBe("org.matrix.msc3575");
+                    expect(feature).toBe("org.matrix.simplified_msc3575");
                     return true;
                 });
             const proxySpy = jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
