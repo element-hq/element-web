@@ -196,6 +196,21 @@ describe("<PinnedMessagesCard />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    it("should not show more than 100 messages", async () => {
+        const events = Array.from({ length: 120 }, (_, i) =>
+            mkMessage({
+                event: true,
+                room: "!room:example.org",
+                user: "@alice:example.org",
+                msg: `The message ${i}`,
+                ts: i,
+            }),
+        );
+        await initPinnedMessagesCard(events, []);
+
+        expect(screen.queryAllByRole("listitem")).toHaveLength(100);
+    });
+
     it("should updates when messages are pinned", async () => {
         // Start with nothing pinned
         const { addLocalPinEvent, addNonLocalPinEvent } = await initPinnedMessagesCard([], []);

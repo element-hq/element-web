@@ -24,19 +24,22 @@ import { ReadPinsEventId } from "../components/views/right_panel/types";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useAsyncMemo } from "./useAsyncMemo";
 import PinningUtils from "../utils/PinningUtils";
+import { batch } from "../utils/promise.ts";
 
 /**
  * Get the pinned event IDs from a room.
+ * The number of pinned events is limited to 100.
  * @param room
  */
 function getPinnedEventIds(room?: Room): string[] {
-    return (
+    const eventIds: string[] =
         room
             ?.getLiveTimeline()
             .getState(EventTimeline.FORWARDS)
             ?.getStateEvents(EventType.RoomPinnedEvents, "")
-            ?.getContent()?.pinned ?? []
-    );
+            ?.getContent()?.pinned ?? [];
+    // Limit the number of pinned events to 100
+    return eventIds.slice(0, 100);
 }
 
 /**
@@ -173,12 +176,11 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
     const cli = useMatrixClientContext();
 
     return useAsyncMemo(
-        () =>
-            Promise.all(
-                pinnedEventIds.map(
-                    async (eventId): Promise<MatrixEvent | null> => fetchPinnedEvent(room, eventId, cli),
-                ),
-            ),
+        () => {
+            const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
+            // Fetch the pinned events in batches of 10
+            return batch(fetchPromises, 10);
+        },
         [cli, room, pinnedEventIds],
         null,
     );
