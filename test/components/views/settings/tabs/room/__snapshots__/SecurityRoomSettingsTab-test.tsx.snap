@@ -178,9 +178,9 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
       <p>
          
         <span>
-          <b>
+          <strong>
             It's not recommended to make encrypted rooms public.
-          </b>
+          </strong>
            It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.
         </span>
          

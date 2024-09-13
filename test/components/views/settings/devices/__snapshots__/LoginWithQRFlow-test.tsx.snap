@@ -1067,9 +1067,9 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
         <li>
           <span>
             Select "
-            <b>
+            <strong>
               Sign in with QR code
-            </b>
+            </strong>
             "
           </span>
         </li>

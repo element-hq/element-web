@@ -41,9 +41,9 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
   >
     <span>
       Use an integration manager 
-      <b>
+      <strong>
         (scalar.vector.im)
-      </b>
+      </strong>
        to manage bots, widgets, and sticker packs.
     </span>
   </div>

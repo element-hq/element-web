@@ -66,9 +66,9 @@ exports[`ManualDeviceKeyVerificationDialog should display the device 1`] = `
                
               <span>
                 <code>
-                  <b>
+                  <strong>
                     ABCD EFGH
-                  </b>
+                  </strong>
                 </code>
               </span>
             </li>
@@ -181,9 +181,9 @@ exports[`ManualDeviceKeyVerificationDialog should display the device of another 
                
               <span>
                 <code>
-                  <b>
+                  <strong>
                     ABCD EFGH
-                  </b>
+                  </strong>
                 </code>
               </span>
             </li>
