@@ -36,7 +36,7 @@ Please see LICENSE files in the repository root for full details.
  *                      list ops)
  */
 
-import { MatrixClient, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, EventType, ClientEvent, Room } from "matrix-js-sdk/src/matrix";
 import {
     MSC3575Filter,
     MSC3575List,
@@ -232,29 +232,35 @@ export class SlidingSyncManager {
             subscriptions.delete(roomId);
         }
         const room = this.client?.getRoom(roomId);
-        let shouldLazyLoad = !this.client?.isRoomEncrypted(roomId);
-        if (!room) {
-            // default to safety: request all state if we can't work it out. This can happen if you
-            // refresh the app whilst viewing a room: we call setRoomVisible before we know anything
-            // about the room.
-            shouldLazyLoad = false;
+        // default to safety: request all state if we can't work it out. This can happen if you
+        // refresh the app whilst viewing a room: we call setRoomVisible before we know anything
+        // about the room.
+        let shouldLazyLoad = false;
+        if (room) {
+            // do not lazy load encrypted rooms as we need the entire member list.
+            shouldLazyLoad = !room.hasEncryptionStateEvent()
         }
         logger.log("SlidingSync setRoomVisible:", roomId, visible, "shouldLazyLoad:", shouldLazyLoad);
         if (shouldLazyLoad) {
             // lazy load this room
             this.slidingSync!.useCustomSubscription(roomId, UNENCRYPTED_SUBSCRIPTION_NAME);
         }
-        const p = this.slidingSync!.modifyRoomSubscriptions(subscriptions);
+        this.slidingSync!.modifyRoomSubscriptions(subscriptions);
         if (room) {
             return roomId; // we have data already for this room, show immediately e.g it's in a list
         }
-        try {
-            // wait until the next sync before returning as RoomView may need to know the current state
-            await p;
-        } catch (err) {
-            logger.warn("SlidingSync setRoomVisible:", roomId, visible, "failed to confirm transaction");
-        }
-        return roomId;
+        // wait until we know about this room. This may take a little while.
+        return new Promise((resolve) => {
+            logger.log(`SlidingSync setRoomVisible room ${roomId} not found, waiting for ClientEvent.Room`);
+            const waitForRoom = (r: Room) => {
+                if (r.roomId === roomId) {
+                    this.client?.off(ClientEvent.Room, waitForRoom);
+                    logger.log(`SlidingSync room ${roomId} found, resolving setRoomVisible`);
+                    resolve(roomId);
+                }
+            };
+            this.client?.on(ClientEvent.Room, waitForRoom);
+        });
     }
 
     /**
