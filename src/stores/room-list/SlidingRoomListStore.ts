@@ -337,7 +337,8 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     }
 
     private onSelectedSpaceUpdated = (activeSpace: SpaceKey, allRoomsInHome: boolean): void => {
-        logger.info("SlidingRoomListStore.onSelectedSpaceUpdated", activeSpace);
+        logger.info("TODO: Synapse does not implement filters.spaces yet. SlidingRoomListStore.onSelectedSpaceUpdated", activeSpace);
+        return;
         // update the untagged filter
         const tagId = DefaultTagID.Untagged;
         const filters = filterConditions[tagId];
