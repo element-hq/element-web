@@ -17,7 +17,6 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import SettingsStore from "../../settings/SettingsStore";
 import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
@@ -220,7 +219,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                 break;
 
             case RightPanelPhases.PinnedMessages:
-                if (!!this.props.room && SettingsStore.getValue("feature_pinning")) {
+                if (!!this.props.room) {
                     card = (
                         <PinnedMessagesCard
                             room={this.props.room}

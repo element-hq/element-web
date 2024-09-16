@@ -26,7 +26,6 @@ import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { RoomNotifState } from "../../../RoomNotifs";
 import Modal from "../../../Modal";
 import ExportDialog from "../dialogs/ExportDialog";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -261,11 +260,10 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         );
     }
 
-    const pinningEnabled = useFeatureEnabled("feature_pinning");
-    const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
+    const pinCount = usePinnedEvents(room).length;
 
     let pinsOption: JSX.Element | undefined;
-    if (pinningEnabled && !isVideoRoom) {
+    if (!isVideoRoom) {
         pinsOption = (
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {

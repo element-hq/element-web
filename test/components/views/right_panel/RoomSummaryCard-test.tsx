@@ -259,8 +259,7 @@ describe("<RoomSummaryCard />", () => {
     });
 
     describe("pinning", () => {
-        it("renders pins options when pinning feature is enabled", () => {
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_pinning");
+        it("renders pins options", () => {
             const { getByText } = getComponent();
 
             expect(getByText("Pinned messages")).toBeInTheDocument();
@@ -291,9 +290,7 @@ describe("<RoomSummaryCard />", () => {
     describe("video rooms", () => {
         it("does not render irrelevant options for element video room", () => {
             jest.spyOn(room, "isElementVideoRoom").mockReturnValue(true);
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation(
-                (feature) => feature === "feature_video_rooms" || feature === "feature_pinning",
-            );
+            mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_video_rooms");
             const { queryByText } = getComponent();
 
             // options not rendered
@@ -305,10 +302,7 @@ describe("<RoomSummaryCard />", () => {
         it("does not render irrelevant options for element call room", () => {
             jest.spyOn(room, "isCallRoom").mockReturnValue(true);
             mocked(settingsHooks.useFeatureEnabled).mockImplementation(
-                (feature) =>
-                    feature === "feature_element_call_video_rooms" ||
-                    feature === "feature_video_rooms" ||
-                    feature === "feature_pinning",
+                (feature) => feature === "feature_element_call_video_rooms" || feature === "feature_video_rooms",
             );
             const { queryByText } = getComponent();
 

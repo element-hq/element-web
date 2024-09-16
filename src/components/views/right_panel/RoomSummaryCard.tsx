@@ -49,7 +49,6 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -314,8 +313,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
         </header>
     );
 
-    const pinningEnabled = useFeatureEnabled("feature_pinning");
-    const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
+    const pinCount = usePinnedEvents(room).length;
 
     const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
         RoomListStore.instance.getTagsForRoom(room),
@@ -382,17 +380,16 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 {!isVideoRoom && (
                     <>
-                        {pinningEnabled && (
-                            <MenuItem
-                                Icon={PinIcon}
-                                label={_t("right_panel|pinned_messages_button")}
-                                onSelect={onRoomPinsClick}
-                            >
-                                <Text as="span" size="sm">
-                                    {pinCount}
-                                </Text>
-                            </MenuItem>
-                        )}
+                        <MenuItem
+                            Icon={PinIcon}
+                            label={_t("right_panel|pinned_messages_button")}
+                            onSelect={onRoomPinsClick}
+                        >
+                            <Text as="span" size="sm">
+                                {pinCount}
+                            </Text>
+                        </MenuItem>
+
                         <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
                     </>
                 )}

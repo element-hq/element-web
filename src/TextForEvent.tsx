@@ -561,7 +561,6 @@ const onPinnedMessagesClick = (): void => {
 };
 
 function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: boolean): (() => Renderable) | null {
-    if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = getSenderName(event);
     const roomId = event.getRoomId()!;
 

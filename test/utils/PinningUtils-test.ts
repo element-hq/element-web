@@ -141,14 +141,6 @@ describe("PinningUtils", () => {
 
     describe("canPin & canUnpin", () => {
         describe("canPin", () => {
-            test("should return false if pinning is disabled", () => {
-                // Disable feature pinning
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                const event = makePinEvent();
-
-                expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
-            });
-
             test("should return false if event is not actionable", () => {
                 mockedIsContentActionable.mockImplementation(() => false);
                 const event = makePinEvent();

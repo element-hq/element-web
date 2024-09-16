@@ -21,7 +21,6 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import { ActionPayload } from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { showThreadPanel } from "../../../dispatcher/dispatch-actions/threads";
-import SettingsStore from "../../../settings/SettingsStore";
 import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
@@ -245,17 +244,16 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
 
         const rightPanelPhaseButtons: Map<RightPanelPhases, any> = new Map();
 
-        if (SettingsStore.getValue("feature_pinning")) {
-            rightPanelPhaseButtons.set(
-                RightPanelPhases.PinnedMessages,
-                <PinnedMessagesHeaderButton
-                    key="pinnedMessagesButton"
-                    room={this.props.room}
-                    isHighlighted={this.isPhase(RightPanelPhases.PinnedMessages)}
-                    onClick={this.onPinnedMessagesClicked}
-                />,
-            );
-        }
+        rightPanelPhaseButtons.set(
+            RightPanelPhases.PinnedMessages,
+            <PinnedMessagesHeaderButton
+                key="pinnedMessagesButton"
+                room={this.props.room}
+                isHighlighted={this.isPhase(RightPanelPhases.PinnedMessages)}
+                onClick={this.onPinnedMessagesClicked}
+            />,
+        );
+
         rightPanelPhaseButtons.set(
             RightPanelPhases.Timeline,
             <TimelineCardHeaderButton

@@ -201,6 +201,50 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+          >
+            0
+          </span>
+        </button>
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
               d="M6 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 20V4c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 6 2h7.175a1.975 1.975 0 0 1 1.4.575l4.85 4.85a1.975 1.975 0 0 1 .575 1.4V20c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 22H6Zm7-14V4H6v16h12V9h-4a.968.968 0 0 1-.713-.287A.967.967 0 0 1 13 8Z"
             />
           </svg>
@@ -584,6 +628,50 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+          >
+            0
+          </span>
+        </button>
         <button
           class="_item_1gwvj_17 _interactive_1gwvj_36"
           data-kind="primary"
@@ -1009,6 +1097,50 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           data-orientation="horizontal"
           role="separator"
         />
+        <button
+          class="_item_1gwvj_17 _interactive_1gwvj_36"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1gwvj_44"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+          >
+            Pinned messages
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_1gwvj_60"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+          >
+            0
+          </span>
+        </button>
         <button
           class="_item_1gwvj_17 _interactive_1gwvj_36"
           data-kind="primary"

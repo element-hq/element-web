@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { MatrixEvent, EventType, M_POLL_START, MatrixClient, EventTimeline, Room } from "matrix-js-sdk/src/matrix";
 
 import { isContentActionable } from "./EventUtils";
-import SettingsStore from "../settings/SettingsStore";
 import { ReadPinsEventId } from "../components/views/right_panel/types";
 
 export default class PinningUtils {
@@ -70,7 +69,6 @@ export default class PinningUtils {
      * @private
      */
     private static canPinOrUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
-        if (!SettingsStore.getValue("feature_pinning")) return false;
         if (!isContentActionable(mxEvent)) return false;
 
         const room = matrixClient.getRoom(mxEvent.getRoomId());
