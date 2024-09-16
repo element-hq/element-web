@@ -956,12 +956,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.showScreen("welcome");
             return;
         }
+        const isMobileRegistrationAllowed =
+            isMobileRegistration && SettingsStore.getValue("Registration.mobileRegistrationHelper");
 
         const newState: Partial<IState> = {
             view: Views.REGISTER,
         };
 
-        if (isMobileRegistration && params.hs_url) {
+        if (isMobileRegistrationAllowed && params.hs_url) {
             try {
                 const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
                 newState.serverConfig = config;
@@ -990,12 +992,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             newState.register_id_sid = params.sid;
         }
 
-        newState.isMobileRegistration = isMobileRegistration; //&& SettingsStore.getValue("Registration.mobileRegistrationHelper");
+        newState.isMobileRegistration = isMobileRegistrationAllowed;
 
         this.setStateForNewView(newState);
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
-        this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
+        this.notifyNewScreen(isMobileRegistrationAllowed ? "mobile_register" : "register");
     }
 
     // switch view to the given room
