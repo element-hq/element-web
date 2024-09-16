@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
+import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, TranslationKey } from "../languageHandler";
 import {
@@ -640,6 +641,19 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
+    },
+    "userTimezonePublish": {
+        // This is per-device so you can avoid having devices overwrite each other.
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("settings|preferences|publish_timezone"),
+        default: false,
+        controller: new ServerSupportUnstableFeatureController(
+            "userTimezonePublish",
+            defaultWatchManager,
+            [[UNSTABLE_MSC4133_EXTENDED_PROFILES]],
+            undefined,
+            _td("labs|extended_profiles_msc_support"),
+        ),
     },
     "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

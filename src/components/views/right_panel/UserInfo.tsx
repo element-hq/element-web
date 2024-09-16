@@ -26,7 +26,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { Heading, MenuItem, Text } from "@vector-im/compound-web";
+import { Heading, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
@@ -85,7 +85,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 import { Flex } from "../../utils/Flex";
 import CopyableText from "../elements/CopyableText";
-
+import { useUserTimezone } from "../../../hooks/useUserTimezone";
 export interface IDevice extends Device {
     ambiguous?: boolean;
 }
@@ -1694,6 +1694,8 @@ export const UserInfoHeader: React.FC<{
         );
     }
 
+    const timezoneInfo = useUserTimezone(cli, member.userId);
+
     const e2eIcon = e2eStatus ? <E2EIcon size={18} status={e2eStatus} isUser={true} /> : null;
     const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
         roomId,
@@ -1727,6 +1729,15 @@ export const UserInfoHeader: React.FC<{
                         </Flex>
                     </Heading>
                     {presenceLabel}
+                    {timezoneInfo && (
+                        <Tooltip label={timezoneInfo?.timezone ?? ""}>
+                            <span className="mx_UserInfo_timezone">
+                                <Text size="sm" weight="regular">
+                                    {timezoneInfo?.friendly ?? ""}
+                                </Text>
+                            </span>
+                        </Tooltip>
+                    )}
                     <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
                         <CopyableText getTextToCopy={() => userIdentifier} border={false}>
                             {userIdentifier}

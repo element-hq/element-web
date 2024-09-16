@@ -20,6 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
     ContinueKind,
+    CustomAuthType,
     IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
@@ -75,11 +76,11 @@ export interface InteractiveAuthProps<T> {
     // Called when the stage changes, or the stage's phase changes. First
     // argument is the stage, second is the phase. Some stages do not have
     // phases and will be counted as 0 (numeric).
-    onStagePhaseChange?(stage: AuthType | null, phase: number): void;
+    onStagePhaseChange?(stage: AuthType | CustomAuthType | null, phase: number): void;
 }
 
 interface IState {
-    authStage?: AuthType;
+    authStage?: CustomAuthType | AuthType;
     stageState?: IStageStatus;
     busy: boolean;
     errorText?: string;

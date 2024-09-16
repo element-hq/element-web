@@ -302,6 +302,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         </div>
 
                         {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                        <SettingsFlag name="userTimezonePublish" level={SettingLevel.DEVICE} />
                     </SettingsSubsection>
 
                     <SettingsSubsection
