@@ -55,7 +55,8 @@
         "feature_element_call_video_rooms": true
     },
     "setting_defaults": {
-        "RustCrypto.staged_rollout_percent": 100
+        "RustCrypto.staged_rollout_percent": 100,
+        "Registration.mobileRegistrationHelper": true
     },
     "element_call": {
         "url": "https://call.element.dev"
