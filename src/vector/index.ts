@@ -62,11 +62,6 @@ function checkBrowserFeatures(): boolean {
     );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
-    // ES2024: https://tc39.es/ecma262/2024/#sec-get-regexp.prototype.unicodesets
-    window.Modernizr.addTest(
-        "regexpunicodesets",
-        () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
-    );
     // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
     // The built-in modernizer 'intl' check only checks for the presence of the Intl object, not the Segmenter,
     // and older Firefox has the former but not the latter, so we add our own.
