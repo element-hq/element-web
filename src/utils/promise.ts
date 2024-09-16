@@ -40,3 +40,18 @@ export async function retry<T, E extends Error>(
     }
     throw lastErr;
 }
+
+/**
+ * Batch promises into groups of a given size.
+ * Execute the promises in parallel, but wait for all promises in a batch to resolve before moving to the next batch.
+ * @param funcs - The promises to batch
+ * @param batchSize - The number of promises to execute in parallel
+ */
+export async function batch<T>(funcs: Array<() => Promise<T>>, batchSize: number): Promise<T[]> {
+    const results: T[] = [];
+    for (let i = 0; i < funcs.length; i += batchSize) {
+        const batch = funcs.slice(i, i + batchSize);
+        results.push(...(await Promise.all(batch.map((f) => f()))));
+    }
+    return results;
+}

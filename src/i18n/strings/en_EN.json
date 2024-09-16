@@ -370,6 +370,8 @@
             "email_resend_prompt": "Did not receive it? <a>Resend it</a>",
             "email_resent": "Resent!",
             "fallback_button": "Start authentication",
+            "mas_cross_signing_reset_cta": "Go to your account",
+            "mas_cross_signing_reset_description": "Reset your identity through your account provider and then come back and click “Retry”.",
             "msisdn": "A text message has been sent to %(msisdn)s",
             "msisdn_token_incorrect": "Token incorrect",
             "msisdn_token_prompt": "Please enter the code it contains:",
