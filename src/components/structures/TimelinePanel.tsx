@@ -319,7 +319,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        console.log("componentDidMount");
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }
@@ -365,7 +364,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        console.log("componentWillUnmount");
         // set a boolean to say we've been unmounted, which any pending
         // promises can use to throw away their results.
         //
@@ -706,7 +704,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         removed: boolean,
         data: IRoomTimelineData,
     ): void => {
-        console.log("onRoomTimeline ", ev, room, "toStart:",toStartOfTimeline, "removed:",removed,"data:",data);
         // ignore events for other timeline sets
         if (
             data.timeline.getTimelineSet() !== this.props.timelineSet &&
@@ -812,7 +809,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     private onRoomTimelineReset = (room: Room | undefined, timelineSet: EventTimelineSet): void => {
-        console.log("onRoomTimelineReset", room, timelineSet);
         if (timelineSet !== this.props.timelineSet && timelineSet !== this.props.overlayTimelineSet) return;
 
         if (this.canResetTimeline()) {
@@ -1428,7 +1424,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     private initTimeline(props: IProps): void {
-        console.log("initTimeline");
         const initialEvent = props.eventId;
         const pixelOffset = props.eventPixelOffset;
 
@@ -1538,7 +1533,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * @param {boolean?} scrollIntoView whether to scroll the event into view.
      */
     private loadTimeline(eventId?: string, pixelOffset?: number, offsetBase?: number, scrollIntoView = true): void {
-        console.log("loadTimeline");
         const cli = MatrixClientPeg.safeGet();
         this.timelineWindow = new TimelineWindow(cli, this.props.timelineSet, { windowLimit: this.props.timelineCap });
         this.overlayTimelineWindow = this.props.overlayTimelineSet
@@ -1547,7 +1541,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const onLoaded = (): void => {
             if (this.unmounted) return;
-            console.log("loadTimeline -> onLoaded");
             // clear the timeline min-height when (re)loading the timeline
             this.messagePanel.current?.onTimelineReset();
             this.reloadEvents();
@@ -1595,7 +1588,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const onError = (error: MatrixError): void => {
             if (this.unmounted) return;
-            console.log("loadTimeline -> onError", error);
 
             this.setState({ timelineLoading: false });
             logger.error(`Error loading timeline panel at ${this.props.timelineSet.room?.roomId}/${eventId}`, error);
@@ -1650,7 +1642,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             onLoaded();
             return;
         }
-        console.log("calling timelineWindow.load");
         const prom = this.timelineWindow.load(eventId, INITIAL_SIZE).then(async (): Promise<void> => {
             if (this.overlayTimelineWindow) {
                 // TODO: use timestampToEvent to load the overlay timeline
@@ -1691,7 +1682,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     // get the list of events from the timeline windows and the pending event list
     private getEvents(): Pick<IState, "events" | "liveEvents"> {
-        console.log("getEvents");
         const mainEvents = this.timelineWindow!.getEvents();
         let overlayEvents = this.overlayTimelineWindow?.getEvents() ?? [];
         if (this.props.overlayTimelineSetFilter !== undefined) {

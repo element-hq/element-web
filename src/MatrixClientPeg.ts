@@ -42,6 +42,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
+import SlidingSyncController from "./settings/controllers/SlidingSyncController";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -298,10 +299,16 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
         opts.threadSupport = true;
 
+        /* TODO: Uncomment before PR lands
         if (SettingsStore.getValue("feature_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
             SlidingSyncManager.instance.checkSupport(this.matrixClient);
+        } */
+        // TODO: remove before PR lands. Defaults to SSS if the server entered supports it.
+        await SlidingSyncManager.instance.checkSupport(this.matrixClient);
+        if (SlidingSyncController.serverSupportsSlidingSync) {
+            opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         }
 
         // Connect the matrix client to the dispatcher and setting handlers
