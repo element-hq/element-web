@@ -86,8 +86,16 @@
             "administration_portal": "Administration portal",
             "signing_order": "Signing orders",
             "login_account": "Account & Login"
+        },
+        "operating_messages" : {
+            "title" : "Operating messages",
+            "messages" : "Operating messages from <a>Verji</a>"
+        },
+        "news" : {
+          "title" : "Lates news",
+          "messages" : "News from <a>Verji</a>"
         }
-   },
+     },
     "a11y": {
         "emoji_picker": "Emoji picker",
         "jump_first_invite": "Jump to first invite.",

@@ -86,8 +86,16 @@
             "administration_portal": "Administrasjonsportal",
             "signing_order": "Signeringsordre",
             "login_account": "Konto og innlogging"
+        },
+        "operating_messages" : {
+            "title" : "Operating messages",
+            "messages" : "Operating messages from <a>Verji</a>"
+        },
+        "news" : {
+          "title" : "News",
+          "messages" : "News from <a>Verji</a>"
         }
-    },
+  },
   "%(duration)sd": "%(duration)sd",
   "%(duration)sh": "%(duration)st",
   "%(duration)sm": "%(duration)sm",
