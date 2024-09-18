@@ -106,7 +106,7 @@ const ENCRYPTED_SUBSCRIPTION = Object.assign(
 // on the count for each one.
 const sssLists: Record<string, MSC3575List> = {
     spaces: {
-        ranges: [[0, 20]],
+        ranges: [[0, 10]],
         timeline_limit: 0, // we don't care about the most recent message for spaces
         required_state: REQUIRED_STATE_LIST,
         include_old_rooms: {
@@ -118,7 +118,7 @@ const sssLists: Record<string, MSC3575List> = {
         },
     },
     invites: {
-        ranges: [[0, 20]],
+        ranges: [[0, 10]],
         timeline_limit: 1, // most recent message display
         required_state: REQUIRED_STATE_LIST,
         include_old_rooms: {
@@ -130,7 +130,7 @@ const sssLists: Record<string, MSC3575List> = {
         },
     },
     favourites: {
-        ranges: [[0, 20]],
+        ranges: [[0, 10]],
         timeline_limit: 1, // most recent message display
         required_state: REQUIRED_STATE_LIST,
         include_old_rooms: {
@@ -142,7 +142,7 @@ const sssLists: Record<string, MSC3575List> = {
         },
     },
     dms: {
-        ranges: [[0, 20]],
+        ranges: [[0, 10]],
         timeline_limit: 1, // most recent message display
         required_state: REQUIRED_STATE_LIST,
         include_old_rooms: {
@@ -158,7 +158,7 @@ const sssLists: Record<string, MSC3575List> = {
     },
     untagged: {
         // SSS will dupe suppress invites/dms from here, so we don't need "not dms, not invites"
-        ranges: [[0, 20]],
+        ranges: [[0, 10]],
         timeline_limit: 1, // most recent message display
         required_state: REQUIRED_STATE_LIST,
         include_old_rooms: {
