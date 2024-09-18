@@ -102,6 +102,7 @@ export const enum UIFeature {
     HelpShowMatrixDisclosurePolicyAndLinks = "UIFeature.helpShowMatrixDisclosurePolicyAndLinks",
     ShowInviteToSpaceFromPeoplePlus = "UIFeature.showInviteToSpaceFromPeoplePlus",
     SettingShowMessageSearch = "UIFeature.settingShowMessageSearch",
+    ShowRoomMembersInSuggestions = "UIFeature.showRoomMembersInSuggestions",
 }
 
 export enum UIComponent {

@@ -386,7 +386,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 userResults.push(result);
             }
         }
-        addUserResults(findVisibleRoomMembers(visibleRooms, cli), false);
+        if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+            addUserResults(findVisibleRoomMembers(visibleRooms, cli), false);
+        }
         addUserResults(userDirectorySearchResults, true);
         if (profile) {
             addUserResults([new DirectoryMember(profile)], true);
@@ -428,7 +430,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         if (trimmedQuery) {
             const lcQuery = trimmedQuery.toLowerCase();
             const normalizedQuery = normalize(trimmedQuery);
-
             possibleResults.forEach((entry) => {
                 if (isRoomResult(entry)) {
                     // If the room is a DM with a user that is part of the user directory search results,

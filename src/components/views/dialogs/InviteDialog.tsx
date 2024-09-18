@@ -438,7 +438,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         // Verji Start - generate a list of userId's which are members in currently active space
         this.spaceMembers = SpaceStore.instance.activeSpaceRoom?.getJoinedMembers() ?? ([] as RoomMember[]);
         this.spaceMembers.forEach((m) => {
-            console.log(m);
             this.spaceMemberIds.push(m.userId);
         });
         // Verji end
@@ -619,11 +618,17 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private buildSuggestions(excludedTargetIds: Set<string>): { userId: string; user: Member }[] {
         const cli = MatrixClientPeg.safeGet();
         const activityScores = buildActivityScores(cli);
-        const memberScores = buildMemberScores(cli);
+
+        let memberScores  = {} as {[userId: string]: { member: RoomMember;
+            score: number;
+            numRooms: number;
+        }}
+        if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+            memberScores = buildMemberScores(cli);
+        }
 
         console.log("[VERJI INVESTIGATION] - Buildings suggestions....")
         const memberComparator = compareMembers(activityScores, memberScores);
-
         return Object.values(memberScores)
             .map(({ member }) => member)
             .filter((member) => !excludedTargetIds.has(member.userId))
@@ -676,14 +681,19 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (foundUser == false) {
             // Look in other stores for user if search might have failed unexpectedly
-            // VERJI HIDE ALL RESULTS
-            const possibleMembers = [
-                ...this.state.recents,
-                ...this.state.suggestions,
-                ...this.state.serverResultsMixin,
-                ...this.state.threepidResultsMixin,
-               ...this.searchResults
-            ];
+            // VERJI - Add feature flag ShowRoomMembersInSuggestions, if false, only show searchResults, and Recents
+            let possibleMembers = []
+            if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+                possibleMembers = [
+                    ...this.state.recents,
+                    ...this.state.suggestions,
+                    ...this.state.serverResultsMixin,
+                    ...this.state.threepidResultsMixin,
+                    ...this.searchResults
+                ];
+            }else{
+                possibleMembers = [...this.state.recents, ...this.searchResults]
+            }
             const toAdd = [];
             const potentialAddresses = this.state.filterText
                 .split(/[\s,]+/)
@@ -1392,11 +1402,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
-        console.log("[VERJI INVESTIGATION] - priorityAdditionalMembers: ", priorityAdditionalMembers)
-        console.log("[VERJI INVESTIGATION] - sourceMembers: ", sourceMembers)
-        console.log("[VERJI INVESTIGATION] - otherAdditionalMembers: ", otherAdditionalMembers)
-        console.log("[VERJI INVESTIGATION] - serverResultsMixin: ", this.state.serverResultsMixin)
-
 
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
