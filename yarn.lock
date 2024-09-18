@@ -2072,6 +2072,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
   integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
 
+"@matrix-org/matrix-sdk-crypto-wasm@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-9.0.0.tgz#293fe8fcb9bc4d577c5f6cf2cbffa151c6e11329"
+  integrity sha512-dz4dkYXj6BeOQuw52XQj8dMuhi85pSFhfFeFlNRAO7JdRPhE9CHBrfK8knkZV5Zux5vvf3Ub4E7myoLeJgZoEw==
+
 "@matrix-org/matrix-wysiwyg@2.37.9":
   version "2.37.9"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.9.tgz#4d5667df3c74e11fd01c4b5be920caff72bf2f48"
@@ -8196,6 +8201,27 @@ matrix-js-sdk@34.5.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^7.0.0"
+    "@matrix-org/olm" "3.2.15"
+    another-json "^0.2.0"
+    bs58 "^6.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.8.2"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "10"
+
+matrix-js-sdk@34.6.0-rc.0:
+  version "34.6.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.6.0-rc.0.tgz#a057f49a8f5f33a07be9cce2466aae3537c4b393"
+  integrity sha512-5g1zJGn7f/KeXGIiIZ3+iUrmC4DRtD+QikGQ+PCFNmEFV99RejZ/+BAfiGo+V/bBA7eaCX17RG8cyDbBivBdVw==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
     "@matrix-org/olm" "3.2.15"
     another-json "^0.2.0"
     bs58 "^6.0.0"
