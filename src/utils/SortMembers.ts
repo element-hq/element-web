@@ -110,13 +110,13 @@ export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMembe
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
 
     const memberPeerEntries = consideredRooms.flatMap((room) => {
-        // Log the roomId here
-        console.log("[VERJI INVESTIGATION] - Processing room:", room.roomId);
-        console.log("[VERJI INVESTIGATION] - is this a space room?:", room.isSpaceRoom());
+        // VERJI Log the roomId here
+        console.log("[SortMembers.ts] - Processing room:", room.roomId);
+        console.log("[SortMembers.ts] - is this a space room?:", room.isSpaceRoom());
         // VERJI - A filter to exclude members from Space Rooms, not really necessary if featureflag showRoomMembersInSuggestions is false, but keeping it in case we want to "fine-tune" suggestions later
         if(room.isSpaceRoom()){
-            console.log("[VERJI INVESTIGATION] - skipping the room", room.roomId);
-            console.log("[VERJI INVESTIGATION] - number of members excluded: ", room.getJoinedMemberCount());
+            console.log("[SortMembers.ts] - skipping the room", room.roomId);
+            console.log("[SortMembers.ts] - number of members excluded: ", room.getJoinedMemberCount());
             return []
         }
 

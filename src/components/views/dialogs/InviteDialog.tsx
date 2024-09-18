@@ -627,7 +627,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             memberScores = buildMemberScores(cli);
         }
 
-        console.log("[VERJI INVESTIGATION] - Buildings suggestions....")
         const memberComparator = compareMembers(activityScores, memberScores);
         return Object.values(memberScores)
             .map(({ member }) => member)
@@ -1018,7 +1017,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         user: new DirectoryMember(u),
                     })),
                 });
-                console.log("[VERJI INVESTIGATION] - serverResultsMixin: ", this.state.serverResultsMixin)
             })
             .catch((e) => {
                 logger.error("Error searching user directory:");
@@ -1356,7 +1354,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let priorityAdditionalMembers: Result[] = []; // Shows up before our own suggestions, higher quality
         let otherAdditionalMembers: Result[] = []; // Shows up after our own suggestions, lower quality
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
-        console.log("[VERJI INVESTIGATION] - hasMixins: ", hasMixins)
         if (this.state.filterText && hasMixins && kind === "suggestions") {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
             // The type of u is a pain to define but members of both mixins have the 'userId' property
