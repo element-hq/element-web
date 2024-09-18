@@ -49,7 +49,6 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -73,6 +72,7 @@ import { Key } from "../../../Keyboard";
 import { useTransition } from "../../../hooks/useTransition";
 import { useIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
+import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 
 interface IProps {
     room: Room;
@@ -314,8 +314,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
         </header>
     );
 
-    const pinningEnabled = useFeatureEnabled("feature_pinning");
-    const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
+    const pinCount = usePinnedEvents(room).length;
 
     const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
         RoomListStore.instance.getTagsForRoom(room),
@@ -382,17 +381,25 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 {!isVideoRoom && (
                     <>
-                        {pinningEnabled && (
-                            <MenuItem
-                                Icon={PinIcon}
-                                label={_t("right_panel|pinned_messages_button")}
-                                onSelect={onRoomPinsClick}
-                            >
-                                <Text as="span" size="sm">
-                                    {pinCount}
-                                </Text>
-                            </MenuItem>
-                        )}
+                        <ReleaseAnnouncement
+                            feature="pinningMessageList"
+                            header={_t("right_panel|pinned_messages|release_announcement|title")}
+                            description={_t("right_panel|pinned_messages|release_announcement|description")}
+                            closeLabel={_t("right_panel|pinned_messages|release_announcement|close")}
+                            placement="top"
+                        >
+                            <div>
+                                <MenuItem
+                                    Icon={PinIcon}
+                                    label={_t("right_panel|pinned_messages_button")}
+                                    onSelect={onRoomPinsClick}
+                                >
+                                    <Text as="span" size="sm">
+                                        {pinCount}
+                                    </Text>
+                                </MenuItem>
+                            </div>
+                        </ReleaseAnnouncement>
                         <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
                     </>
                 )}

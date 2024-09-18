@@ -6,9 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import { Page } from "@playwright/test";
+
 import { expect, test } from "../../element-web-test";
 import { autoJoin, createSharedRoomWithUser, enableKeyBackup, logIntoElement, logOutOfElement, verify } from "./utils";
 import { Bot } from "../../pages/bot";
+import { HomeserverInstance } from "../../plugins/homeserver";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -41,16 +44,14 @@ test.describe("Cryptography", function () {
             });
         });
 
-        test("should show the correct shield on e2e events", async ({ page, app, bot: bob, homeserver }) => {
+        test("should show the correct shield on e2e events", async ({
+            page,
+            app,
+            bot: bob,
+            homeserver,
+        }, workerInfo) => {
             // Bob has a second, not cross-signed, device
-            const bobSecondDevice = new Bot(page, homeserver, {
-                bootstrapSecretStorage: false,
-                bootstrapCrossSigning: false,
-            });
-            bobSecondDevice.setCredentials(
-                await homeserver.loginUser(bob.credentials.userId, bob.credentials.password),
-            );
-            await bobSecondDevice.prepareClient();
+            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
 
             await bob.sendEvent(testRoomId, null, "m.room.encrypted", {
                 algorithm: "m.megolm.v1.aes-sha2",
@@ -117,7 +118,10 @@ test.describe("Cryptography", function () {
             await lastTileE2eIcon.focus();
             await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
 
-            /* Should show a grey padlock for a message from an unknown device */
+            /* In legacy crypto: should show a grey padlock for a message from a deleted device.
+             * In rust crypto: should show a red padlock for a message from an unverified device.
+             * Rust crypto remembers the verification state of the sending device, so it will know that the device was
+             * unverified, even if it gets deleted. */
             // bob deletes his second device
             await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
@@ -148,7 +152,11 @@ test.describe("Cryptography", function () {
             await expect(last).toContainText("test encrypted from unverified");
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
-            await expect(page.getByRole("tooltip")).toContainText("Encrypted by an unknown or deleted device.");
+            await expect(page.getByRole("tooltip")).toContainText(
+                workerInfo.project.name === "Legacy Crypto"
+                    ? "Encrypted by an unknown or deleted device."
+                    : "Encrypted by a device not verified by its owner.",
+            );
         });
 
         test("Should show a grey padlock for a key restored from backup", async ({
@@ -204,14 +212,7 @@ test.describe("Cryptography", function () {
 
         test("should show the correct shield on edited e2e events", async ({ page, app, bot: bob, homeserver }) => {
             // bob has a second, not cross-signed, device
-            const bobSecondDevice = new Bot(page, homeserver, {
-                bootstrapSecretStorage: false,
-                bootstrapCrossSigning: false,
-            });
-            bobSecondDevice.setCredentials(
-                await homeserver.loginUser(bob.credentials.userId, bob.credentials.password),
-            );
-            await bobSecondDevice.prepareClient();
+            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
 
             // verify Bob
             await verify(app, bob);
@@ -257,5 +258,51 @@ test.describe("Cryptography", function () {
                 page.locator(".mx_EventTile", { hasText: "Hee!" }).locator(".mx_EventTile_e2eIcon_warning"),
             ).not.toBeVisible();
         });
+
+        test("should show correct shields on events sent by devices which have since been deleted", async ({
+            page,
+            app,
+            bot: bob,
+            homeserver,
+        }) => {
+            // Our app is blocked from syncing while Bob sends his messages.
+            await app.client.network.goOffline();
+
+            // Bob sends a message from his verified device
+            await bob.sendMessage(testRoomId, "test encrypted from verified");
+
+            // And one from a second, not cross-signed, device
+            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+            await bobSecondDevice.waitForNextSync(); // make sure the client knows the room is encrypted
+            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
+
+            // ... and then logs out both devices.
+            await bob.evaluate((cli) => cli.logout(true));
+            await bobSecondDevice.evaluate((cli) => cli.logout(true));
+
+            // Let our app start syncing again
+            await app.client.network.goOnline();
+
+            // Wait for the messages to arrive
+            const last = page.locator(".mx_EventTile_last");
+            await expect(last).toContainText("test encrypted from unverified");
+            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+            await lastE2eIcon.focus();
+            await expect(page.getByRole("tooltip")).toContainText("Encrypted by a device not verified by its owner.");
+
+            const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
+            await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+        });
     });
 });
+
+async function createSecondBotDevice(page: Page, homeserver: HomeserverInstance, bob: Bot) {
+    const bobSecondDevice = new Bot(page, homeserver, {
+        bootstrapSecretStorage: false,
+        bootstrapCrossSigning: false,
+    });
+    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
+    await bobSecondDevice.prepareClient();
+    return bobSecondDevice;
+}

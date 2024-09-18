@@ -275,14 +275,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_pinning": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|pinning"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: true,
-    },
     "feature_wysiwyg_composer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -875,6 +867,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "FTUE.useCaseSelection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    "Registration.mobileRegistrationHelper": {
+        supportedLevels: [SettingLevel.CONFIG],
+        default: false,
     },
     "autocompleteDelay": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

@@ -116,22 +116,6 @@ describe("MessageContextMenu", () => {
             expect(screen.queryByRole("menuitem", { name: "Pin" })).toBeFalsy();
         });
 
-        it("does not show pin option when pinning feature is disabled", () => {
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
-
-            // disable pinning feature
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-            createMenu(pinnableEvent, { rightClick: true }, {}, undefined, room);
-
-            expect(screen.queryByRole("menuitem", { name: "Pin" })).toBeFalsy();
-        });
-
         it("shows pin option when pinning feature is enabled", () => {
             const eventContent = createMessageEventContent("hello");
             const pinnableEvent = new MatrixEvent({

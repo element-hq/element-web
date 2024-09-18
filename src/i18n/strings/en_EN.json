@@ -229,6 +229,7 @@
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
         "misconfigured_title": "Your %(brand)s is misconfigured",
+        "mobile_create_account_title": "You're about to create an account on %(hsName)s",
         "msisdn_field_description": "Other users can invite you to rooms using your contact details",
         "msisdn_field_label": "Phone",
         "msisdn_field_number_invalid": "That phone number doesn't look quite right, please check and try again",
@@ -369,6 +370,8 @@
             "email_resend_prompt": "Did not receive it? <a>Resend it</a>",
             "email_resent": "Resent!",
             "fallback_button": "Start authentication",
+            "mas_cross_signing_reset_cta": "Go to your account",
+            "mas_cross_signing_reset_description": "Reset your identity through your account provider and then come back and click “Retry”.",
             "msisdn": "A text message has been sent to %(msisdn)s",
             "msisdn_token_incorrect": "Token incorrect",
             "msisdn_token_prompt": "Please enter the code it contains:",
@@ -1465,7 +1468,6 @@
         "notifications": "Enable the notifications panel in the room header",
         "oidc_native_flow": "OIDC native authentication",
         "oidc_native_flow_description": "⚠ WARNING: Experimental. Use OIDC native authentication when supported by the server.",
-        "pinning": "Message Pinning",
         "release_announcement": "Release announcement",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
@@ -1851,6 +1853,11 @@
                 "other": "You can only pin up to %(count)s widgets"
             },
             "menu": "Open menu",
+            "release_announcement": {
+                "close": "Ok",
+                "description": "Find all pinned messages here. Rollover any message and select “Pin” to add it.",
+                "title": "All new pinned messages"
+            },
             "reply_thread": "Reply to a <link>thread message</link>",
             "title": "Pinned messages",
             "unpin_all": {

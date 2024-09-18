@@ -376,8 +376,8 @@ describe("Rageshakes", () => {
         const mockSettingsStore = mocked(SettingsStore);
 
         it("should collect labs from settings store", async () => {
-            const someFeatures: string[] = ["feature_video_rooms", "feature_notification_settings2", "feature_pinning"];
-            const enabledFeatures: string[] = ["feature_video_rooms", "feature_pinning"];
+            const someFeatures: string[] = ["feature_video_rooms", "feature_notification_settings2"];
+            const enabledFeatures: string[] = ["feature_video_rooms"];
             jest.spyOn(mockSettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
             jest.spyOn(mockSettingsStore, "getValue").mockImplementation((settingName): any => {
                 return enabledFeatures.includes(settingName);

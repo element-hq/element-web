@@ -65,11 +65,6 @@ describe("TextForEvent", () => {
     });
 
     describe("TextForPinnedEvent", () => {
-        beforeAll(() => {
-            // enable feature_pinning setting
-            (SettingsStore.getValue as jest.Mock).mockImplementation((feature) => feature === "feature_pinning");
-        });
-
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1"]);
             const plainText = textForEvent(event, mockClient);
