@@ -321,7 +321,7 @@ export class SlidingSyncManager {
     public async setup(client: MatrixClient): Promise<SlidingSync | undefined> {
         const slidingSync = this.configure(client, client.baseUrl);
         logger.info("Simplified Sliding Sync activated at", client.baseUrl);
-        this.startSpidering(slidingSync, 100, 50); // 100 rooms at a time, 50ms apart
+        this.startSpidering(slidingSync, 50, 50); // 50 rooms at a time, 50ms apart
         return slidingSync;
     }
 
