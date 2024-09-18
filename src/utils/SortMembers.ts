@@ -103,8 +103,8 @@ interface IMemberScore {
 
 export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMemberScore } {
     // VERJI - if feature flag is false, we don't need to calculate and build memberscores, and just return an empty map instead. Suggestions will be populated by searchResults instead
-    if(!SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
-        return {} as {[userId: string]: IMemberScore}
+    if (!SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
+        return {} as { [userId: string]: IMemberScore };
     }
     const maxConsideredMembers = 200;
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
@@ -114,10 +114,10 @@ export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMembe
         console.log("[SortMembers.ts] - Processing room:", room.roomId);
         console.log("[SortMembers.ts] - is this a space room?:", room.isSpaceRoom());
         // VERJI - A filter to exclude members from Space Rooms, not really necessary if featureflag showRoomMembersInSuggestions is false, but keeping it in case we want to "fine-tune" suggestions later
-        if(room.isSpaceRoom()){
+        if (room.isSpaceRoom()) {
             console.log("[SortMembers.ts] - skipping the room", room.roomId);
             console.log("[SortMembers.ts] - number of members excluded: ", room.getJoinedMemberCount());
-            return []
+            return [];
         }
 
         return room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() }));

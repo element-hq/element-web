@@ -386,7 +386,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 userResults.push(result);
             }
         }
-        if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+        if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
             addUserResults(findVisibleRoomMembers(visibleRooms, cli), false);
         }
         addUserResults(userDirectorySearchResults, true);

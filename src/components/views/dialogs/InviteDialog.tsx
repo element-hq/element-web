@@ -430,7 +430,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     // Verji
     private spaceMembers = [] as RoomMember[];
     private spaceMemberIds = [] as string[];
-    private searchResults = [] as any
+    private searchResults = [] as any;
     // Verji End
 
     public constructor(props: Props) {
@@ -489,7 +489,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     public componentDidMount(): void {
         /* VERJI START */
-        
+
         // Get singleton VerjiGrowthBook - if not available, one will be created.
         // const verjiGrowthbook: VerjiGrowthBook = VerjiGrowthBook.getInstance();
 
@@ -619,11 +619,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const cli = MatrixClientPeg.safeGet();
         const activityScores = buildActivityScores(cli);
 
-        let memberScores  = {} as {[userId: string]: { member: RoomMember;
-            score: number;
-            numRooms: number;
-        }}
-        if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+        let memberScores = {} as { [userId: string]: { member: RoomMember; score: number; numRooms: number } };
+        if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
             memberScores = buildMemberScores(cli);
         }
 
@@ -663,7 +660,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 )
                 .then(async (r) => {
                     this.setState({ busy: false });
-                    this.searchResults = r.results
+                    this.searchResults = r.results;
                     if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
                         foundUser = true;
                     }
@@ -681,17 +678,17 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (foundUser == false) {
             // Look in other stores for user if search might have failed unexpectedly
             // VERJI - Add feature flag ShowRoomMembersInSuggestions, if false, only show searchResults, and Recents
-            let possibleMembers = []
-            if(SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)){
+            let possibleMembers = [];
+            if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
                 possibleMembers = [
                     ...this.state.recents,
                     ...this.state.suggestions,
                     ...this.state.serverResultsMixin,
                     ...this.state.threepidResultsMixin,
-                    ...this.searchResults
+                    ...this.searchResults,
                 ];
-            }else{
-                possibleMembers = [...this.state.recents, ...this.searchResults]
+            } else {
+                possibleMembers = [...this.state.recents, ...this.searchResults];
             }
             const toAdd = [];
             const potentialAddresses = this.state.filterText
