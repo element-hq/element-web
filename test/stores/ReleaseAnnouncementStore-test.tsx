@@ -89,7 +89,13 @@ describe("ReleaseAnnouncementStore", () => {
         // Sanity check
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
 
-        const promise = listenReleaseAnnouncementChanged();
+        let promise = listenReleaseAnnouncementChanged();
+        await releaseAnnouncementStore.nextReleaseAnnouncement();
+
+        expect(await promise).toBe("pinningMessageList");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("pinningMessageList");
+
+        promise = listenReleaseAnnouncementChanged();
         await releaseAnnouncementStore.nextReleaseAnnouncement();
 
         expect(await promise).toBeNull();
@@ -108,7 +114,7 @@ describe("ReleaseAnnouncementStore", () => {
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBeNull();
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
+        expect(await promise).toBe("pinningMessageList");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("pinningMessageList");
     });
 });
