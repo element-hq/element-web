@@ -149,7 +149,7 @@
         "babel-plugin-jsx-remove-data-test-id": "^3.0.0",
         "buffer": "^6.0.3",
         "chokidar": "^3.5.1",
-        "concurrently": "^8.0.0",
+        "concurrently": "^9.0.0",
         "copy-webpack-plugin": "^12.0.0",
         "cronstrue": "^2.41.0",
         "css-loader": "^7.0.0",
