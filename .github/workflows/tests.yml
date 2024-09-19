@@ -39,7 +39,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
 
             - name: Yarn cache
               uses: actions/setup-node@v4
@@ -111,7 +111,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
 
             - uses: actions/setup-node@v4
               with:
