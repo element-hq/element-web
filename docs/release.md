@@ -256,7 +256,7 @@ For the first RC of a given release cycle do these steps:
 
 -   [ ] Go to the [matrix-js-sdk Renovate dashboard](https://github.com/matrix-org/matrix-js-sdk/issues/2406) and click the checkbox to create/update its PRs.
 
--   [ ] Go to the [matrix-react-sdk Renovate dashboard](https://github.com/element-hq/matrix-react-sdk/issues/9667) and click the checkbox to create/update its PRs.
+-   [ ] Go to the [matrix-react-sdk Renovate dashboard](https://github.com/element-hq/matrix-react-sdk/issues/6) and click the checkbox to create/update its PRs.
 
 -   [ ] Go to the [element-web Renovate dashboard](https://github.com/element-hq/element-web/issues/22941) and click the checkbox to create/update its PRs.
 
