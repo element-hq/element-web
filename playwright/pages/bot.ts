@@ -14,7 +14,7 @@ import type { Logger } from "matrix-js-sdk/src/logger";
 import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
 import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
-import { Client } from "./client";
+import { bootstrapCrossSigningForClient, Client } from "./client";
 
 export interface CreateBotOpts {
     /**
@@ -90,9 +90,13 @@ export class Bot extends Client {
     }
 
     protected async getClientHandle(): Promise<JSHandle<ExtendedMatrixClient>> {
-        if (this.handlePromise) return this.handlePromise;
+        if (!this.handlePromise) this.handlePromise = this.buildClient();
+        return this.handlePromise;
+    }
 
-        this.handlePromise = this.page.evaluateHandle(
+    private async buildClient(): Promise<JSHandle<ExtendedMatrixClient>> {
+        const credentials = await this.getCredentials();
+        const clientHandle = await this.page.evaluateHandle(
             async ({ homeserver, credentials, opts }) => {
                 function getLogger(loggerName: string): Logger {
                     const logger = {
@@ -172,53 +176,50 @@ export class Bot extends Client {
                     });
                 }
 
-                if (!opts.startClient) {
-                    return cli;
-                }
-
-                await cli.initRustCrypto({ useIndexedDB: false });
-                cli.setGlobalErrorOnUnknownDevices(false);
-                await cli.startClient();
-
-                if (opts.bootstrapCrossSigning) {
-                    // XXX: workaround https://github.com/element-hq/element-web/issues/26755
-                    //   wait for out device list to be available, as a proxy for the device keys having been uploaded.
-                    await cli.getCrypto()!.getUserDeviceInfo([credentials.userId]);
-
-                    await cli.getCrypto()!.bootstrapCrossSigning({
-                        authUploadDeviceSigningKeys: async (func) => {
-                            await func({
-                                type: "m.login.password",
-                                identifier: {
-                                    type: "m.id.user",
-                                    user: credentials.userId,
-                                },
-                                password: credentials.password,
-                            });
-                        },
-                    });
-                }
-
-                if (opts.bootstrapSecretStorage) {
-                    const passphrase = "new passphrase";
-                    const recoveryKey = await cli.getCrypto().createRecoveryKeyFromPassphrase(passphrase);
-                    Object.assign(cli, { __playwright_recovery_key: recoveryKey });
-
-                    await cli.getCrypto()!.bootstrapSecretStorage({
-                        setupNewSecretStorage: true,
-                        setupNewKeyBackup: true,
-                        createSecretStorageKey: () => Promise.resolve(recoveryKey),
-                    });
-                }
-
                 return cli;
             },
             {
                 homeserver: this.homeserver.config,
-                credentials: await this.getCredentials(),
+                credentials,
                 opts: this.opts,
             },
         );
-        return this.handlePromise;
+
+        // If we weren't configured to start the client, bail out now.
+        if (!this.opts.startClient) {
+            return clientHandle;
+        }
+
+        await clientHandle.evaluate(async (cli) => {
+            await cli.initRustCrypto({ useIndexedDB: false });
+            cli.setGlobalErrorOnUnknownDevices(false);
+            await cli.startClient();
+        });
+
+        if (this.opts.bootstrapCrossSigning) {
+            // XXX: workaround https://github.com/element-hq/element-web/issues/26755
+            //   wait for out device list to be available, as a proxy for the device keys having been uploaded.
+            await clientHandle.evaluate(async (cli, credentials) => {
+                await cli.getCrypto()!.getUserDeviceInfo([credentials.userId]);
+            }, credentials);
+
+            await bootstrapCrossSigningForClient(clientHandle, credentials);
+        }
+
+        if (this.opts.bootstrapSecretStorage) {
+            await clientHandle.evaluate(async (cli) => {
+                const passphrase = "new passphrase";
+                const recoveryKey = await cli.getCrypto().createRecoveryKeyFromPassphrase(passphrase);
+                Object.assign(cli, { __playwright_recovery_key: recoveryKey });
+
+                await cli.getCrypto()!.bootstrapSecretStorage({
+                    setupNewSecretStorage: true,
+                    setupNewKeyBackup: true,
+                    createSecretStorageKey: () => Promise.resolve(recoveryKey),
+                });
+            });
+        }
+
+        return clientHandle;
     }
 }
