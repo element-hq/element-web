@@ -21,6 +21,7 @@ jobs:
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
             final: ${{ inputs.mode == 'final' }}
             npm: ${{ inputs.npm }}
