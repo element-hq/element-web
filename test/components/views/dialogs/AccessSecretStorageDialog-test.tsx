@@ -58,15 +58,12 @@ describe("AccessSecretStorageDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
-            keyBackupKeyFromRecoveryKey: jest.fn(),
             checkSecretStorageKey: jest.fn(),
-            isValidRecoveryKey: jest.fn(),
         });
     });
 
     it("Closes the dialog when the form is submitted with a valid key", async () => {
         mockClient.checkSecretStorageKey.mockResolvedValue(true);
-        mockClient.isValidRecoveryKey.mockReturnValue(true);
 
         const onFinished = jest.fn();
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
@@ -88,8 +85,8 @@ describe("AccessSecretStorageDialog", () => {
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
         renderComponent({ onFinished, checkPrivateKey });
 
-        mockClient.keyBackupKeyFromRecoveryKey.mockImplementation(() => {
-            throw new Error("that's no key");
+        mockClient.checkSecretStorageKey.mockImplementation(() => {
+            throw new Error("invalid key");
         });
 
         await enterSecurityKey();
@@ -115,7 +112,6 @@ describe("AccessSecretStorageDialog", () => {
         };
         const checkPrivateKey = jest.fn().mockResolvedValue(false);
         renderComponent({ checkPrivateKey, keyInfo });
-        mockClient.isValidRecoveryKey.mockReturnValue(false);
 
         await enterSecurityKey("Security Phrase");
         expect(screen.getByPlaceholderText("Security Phrase")).toHaveValue(securityKey);
