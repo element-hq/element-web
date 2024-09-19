@@ -155,7 +155,7 @@
         "css-loader": "^7.0.0",
         "css-minimizer-webpack-plugin": "^7.0.0",
         "dotenv": "^16.0.2",
-        "eslint": "8.57.0",
+        "eslint": "8.57.1",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-deprecate": "0.8.5",
