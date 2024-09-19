@@ -45,6 +45,11 @@ import PosthogTrackers from "../../PosthogTrackers";
 import PageType from "../../PageTypes";
 import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
 import SettingsStore from "../../settings/SettingsStore";
+import { ModuleRunner } from "../../modules/ModuleRunner";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 interface IProps {
     isMinimized: boolean;
@@ -356,7 +361,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             );
         }
 
-        return (
+            const customNewsOpts = { CustomComponent: React.Fragment };
+            ModuleRunner.instance.invoke(CustomComponentLifecycle.NewsAndOperatingMessages, customNewsOpts as CustomComponentOpts);
+            return (
             <div
                 className="mx_LeftPanel_filterContainer"
                 onFocus={this.onFocus}
@@ -367,6 +374,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <RoomSearch isMinimized={this.props.isMinimized} />
 
                 {dialPadButton}
+                <customNewsOpts.CustomComponent/>
                 {rightButton}
             </div>
         );
