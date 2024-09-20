@@ -21,6 +21,7 @@ import { RoomType, MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/mat
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mocked, Mocked } from "jest-mock";
+
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import {
@@ -217,9 +218,7 @@ describe("InviteDialog", () => {
         beforeEach(() => {
             // Mock activeSpaceRoom to be an object with getJoinedMembers method
             const roomMock: Partial<Room> = {
-                getJoinedMembers: jest
-                    .fn()
-                    .mockReturnValue([mockSpaceMembers/* mock RoomMember[] */]),
+                getJoinedMembers: jest.fn().mockReturnValue([mockSpaceMembers /* mock RoomMember[] */]),
             };
             const mockBuildMembers = jest.spyOn(SortMembers, "buildMemberScores");
             mockBuildMembers.mockImplementation(() => {
