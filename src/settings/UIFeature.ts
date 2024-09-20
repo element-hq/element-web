@@ -103,6 +103,7 @@ export const enum UIFeature {
     ShowInviteToSpaceFromPeoplePlus = "UIFeature.showInviteToSpaceFromPeoplePlus",
     SettingShowMessageSearch = "UIFeature.settingShowMessageSearch",
     ShowRoomMembersInSuggestions = "UIFeature.showRoomMembersInSuggestions",
+    ShowRecentsInSuggestions = "UIFeature.showRecentsInSuggestions",
 }
 
 export enum UIComponent {

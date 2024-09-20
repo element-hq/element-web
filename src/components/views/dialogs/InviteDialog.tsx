@@ -430,7 +430,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     // Verji
     private spaceMembers = [] as RoomMember[];
     private spaceMemberIds = [] as string[];
-    private searchResults = [] as any;
     // Verji End
 
     public constructor(props: Props) {
@@ -535,8 +534,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         externals.forEach((id) => excludedTargetIds.add(id));
     }
 
-    // VERJI added param activeSpaceMembers - used to fileter the recents based on membership in space
+    // VERJI added param activeSpaceMembers - used to filter the recents based on membership in space
     public static buildRecents(excludedTargetIds: Set<string>, activeSpaceMembers: string[]): Result[] {
+        // Verji - If we don't want to see the Recents-suggestions(featureflag), we just return an empty array
+        if(!SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
+            return [] as Result[]
+        }
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -660,7 +663,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 )
                 .then(async (r) => {
                     this.setState({ busy: false });
-                    this.searchResults = r.results;
                     if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
                         foundUser = true;
                     }
@@ -677,18 +679,20 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (foundUser == false) {
             // Look in other stores for user if search might have failed unexpectedly
-            // VERJI - Add feature flag ShowRoomMembersInSuggestions, if false, only show searchResults, and Recents
-            let possibleMembers = [];
+            // VERJI - Add feature flag ShowRoomMembersInSuggestions, if false, only show Recents
+            let possibleMembers = [] as Result[];
             if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
                 possibleMembers = [
                     ...this.state.recents,
                     ...this.state.suggestions,
                     ...this.state.serverResultsMixin,
                     ...this.state.threepidResultsMixin,
-                    ...this.searchResults,
                 ];
-            } else {
-                possibleMembers = [...this.state.recents, ...this.searchResults];
+            }
+            else if(SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
+                possibleMembers = [
+                    ...this.state.recents
+                ];
             }
             const toAdd = [];
             const potentialAddresses = this.state.filterText

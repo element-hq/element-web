@@ -21,7 +21,6 @@ import { RoomType, MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/mat
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mocked, Mocked } from "jest-mock";
-
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import {
@@ -43,6 +42,8 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import Modal from "../../../../src/Modal";
 import HomePage from "../../../../src/components/structures/HomePage";
 import { UIFeature } from "../../../../src/settings/UIFeature";
+import * as SortMembers from "../../../../src/utils/SortMembers";
+import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../src/IdentityAuthClient", () =>
@@ -189,7 +190,81 @@ describe("InviteDialog", () => {
     afterAll(() => {
         jest.restoreAllMocks();
     });
+    describe("UIFeature.ShowRoomMembersInSuggestions", () => {
+        const testUser = {
+            _userId: "@suggestedMember:verji.app",
+            displayName: "Suggested Member",
+            getMxcAvatarUrl: jest.fn().mockReturnValue(aliceProfileInfo.avatar_url),
+        };
+        const mockSpaceMembers = [
+            {
+                userId: testUser._userId,
+                user: {
+                    _userId: "@suggestedMember:verji.app",
+                    displayName: "Suggested Member",
+                    getMxcAvatarUrl: jest.fn().mockReturnValue(aliceProfileInfo.avatar_url),
+                },
+            },
+        ];
 
+        const memberScores: { [userId: string]: any } = {
+            [testUser._userId]: {
+                member: testUser,
+                score: 0.92,
+                numRooms: 2,
+            },
+        };
+        beforeEach(() => {
+            // Mock activeSpaceRoom to be an object with getJoinedMembers method
+            const roomMock: Partial<Room> = {
+                getJoinedMembers: jest
+                    .fn()
+                    .mockReturnValue([mockSpaceMembers/* mock RoomMember[] */]),
+            };
+            const mockBuildMembers = jest.spyOn(SortMembers, "buildMemberScores");
+            mockBuildMembers.mockImplementation(() => {
+                return memberScores;
+            });
+
+            // Mock the SpaceStore instance and activeSpaceRoom
+            jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(roomMock as Room);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+            jest.restoreAllMocks();
+        });
+
+        it("Should render suggestions when UIFeature.ShowRoomMembersInSuggestions is TRUE(default)", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowRoomMembersInSuggestions) return true;
+            });
+
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} initialText="" />);
+
+            expect(screen.queryAllByText("Suggestions").length).toBe(1);
+
+            // The "presentation" is used by the rendered tiles of members in the suggestion.
+            const suggestionTile = screen.getAllByRole("presentation");
+
+            expect(suggestionTile).toBeTruthy();
+        });
+
+        it("should NOT render suggestions when UIFeature.ShowRoomMembersInSuggestions is FALSE", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name == UIFeature.ShowRoomMembersInSuggestions) return false;
+            });
+
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} initialText="" />);
+
+            expect(screen.queryAllByText("Suggestions").length).toBe(0);
+
+            // The "presentation" is used by the rendered tiles of members in the suggestion.
+            const suggestionTile = screen.queryByRole("presentation");
+
+            expect(suggestionTile).toBeFalsy();
+        });
+    });
     it("should label with space name", () => {
         room.isSpaceRoom = jest.fn().mockReturnValue(true);
         room.getType = jest.fn().mockReturnValue(RoomType.Space);
