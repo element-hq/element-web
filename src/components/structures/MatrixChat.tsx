@@ -952,18 +952,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async startRegistration(params: { [key: string]: string }, isMobileRegistration?: boolean): Promise<void> {
-        if (!SettingsStore.getValue(UIFeature.Registration)) {
+        // If registration is disabled or mobile registration is requested but not enabled in settings redirect to the welcome screen
+        if (
+            !SettingsStore.getValue(UIFeature.Registration) ||
+            (isMobileRegistration && !SettingsStore.getValue("Registration.mobileRegistrationHelper"))
+        ) {
             this.showScreen("welcome");
             return;
         }
-        const isMobileRegistrationAllowed =
-            isMobileRegistration && SettingsStore.getValue("Registration.mobileRegistrationHelper");
 
         const newState: Partial<IState> = {
             view: Views.REGISTER,
         };
 
-        if (isMobileRegistrationAllowed && params.hs_url) {
+        if (isMobileRegistration && params.hs_url) {
             try {
                 const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
                 newState.serverConfig = config;
@@ -992,12 +994,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             newState.register_id_sid = params.sid;
         }
 
-        newState.isMobileRegistration = isMobileRegistrationAllowed;
+        newState.isMobileRegistration = isMobileRegistration;
 
         this.setStateForNewView(newState);
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
-        this.notifyNewScreen(isMobileRegistrationAllowed ? "mobile_register" : "register");
+        this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
     // switch view to the given room

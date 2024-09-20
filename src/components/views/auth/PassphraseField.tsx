@@ -15,6 +15,7 @@ import withValidation, { IFieldState, IValidationResult } from "../elements/Vali
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import Field, { IInputProps } from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { Alignment } from "../elements/Tooltip";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     autoFocus?: boolean;
@@ -30,6 +31,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     labelEnterPassword: TranslationKey;
     labelStrongPassword: TranslationKey;
     labelAllowedButUnsafe: TranslationKey;
+    tooltipAlignment?: Alignment;
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;
@@ -111,6 +113,7 @@ class PassphraseField extends PureComponent<IProps> {
                 value={this.props.value}
                 onChange={this.props.onChange}
                 onValidate={this.onValidate}
+                tooltipAlignment={this.props.tooltipAlignment}
             />
         );
     }

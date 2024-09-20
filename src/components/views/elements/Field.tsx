@@ -17,7 +17,7 @@ import classNames from "classnames";
 import { debounce } from "lodash";
 
 import { IFieldState, IValidationResult } from "./Validation";
-import Tooltip from "./Tooltip";
+import Tooltip, { Alignment } from "./Tooltip";
 import { Key } from "../../../Keyboard";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
@@ -60,6 +60,8 @@ interface IProps {
     tooltipContent?: React.ReactNode;
     // If specified the tooltip will be shown regardless of feedback
     forceTooltipVisible?: boolean;
+    // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
+    tooltipAlignment?: Alignment;
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
     tooltipClassName?: string;
@@ -261,6 +263,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             validateOnFocus,
             usePlaceholderAsHint,
             forceTooltipVisible,
+            tooltipAlignment,
             ...inputProps
         } = this.props;
 
@@ -286,7 +289,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                     tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
                     visible={visible}
                     label={tooltipContent || this.state.feedback}
-                    alignment={Tooltip.Alignment.Right}
+                    alignment={tooltipAlignment || Alignment.Right}
                     role={role}
                 />
             );

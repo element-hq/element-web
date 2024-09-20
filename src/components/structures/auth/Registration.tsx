@@ -627,6 +627,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         serverConfig={this.props.serverConfig}
                         canSubmit={!this.state.serverErrorIsFatal}
                         matrixClient={this.state.matrixClient}
+                        mobileRegister={this.props.mobileRegister}
                     />
                 </React.Fragment>
             );
@@ -779,7 +780,11 @@ export default class Registration extends React.Component<IProps, IState> {
             );
         }
         if (this.props.mobileRegister) {
-            return <div className="mx_MobileRegister_body">{body}</div>;
+            return (
+                <div className="mx_MobileRegister_body" data-testid="mobile-register">
+                    {body}
+                </div>
+            );
         }
         return (
             <AuthPage>

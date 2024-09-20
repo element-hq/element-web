@@ -12,6 +12,7 @@ import Field, { IInputProps } from "../elements/Field";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import * as Email from "../../../email";
+import { Alignment } from "../elements/Tooltip";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     id?: string;
@@ -22,6 +23,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     label: TranslationKey;
     labelRequired: TranslationKey;
     labelInvalid: TranslationKey;
+    tooltipAlignment?: Alignment;
 
     // When present, completely overrides the default validation rules.
     validationRules?: (fieldState: IFieldState) => Promise<IValidationResult>;
@@ -77,6 +79,7 @@ class EmailField extends PureComponent<IProps> {
                 autoFocus={this.props.autoFocus}
                 onChange={this.props.onChange}
                 onValidate={this.onValidate}
+                tooltipAlignment={this.props.tooltipAlignment}
             />
         );
     }
