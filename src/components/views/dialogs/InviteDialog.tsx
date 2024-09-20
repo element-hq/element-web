@@ -437,7 +437,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         // Verji Start - generate a list of userId's which are members in currently active space
         this.spaceMembers = SpaceStore.instance.activeSpaceRoom?.getJoinedMembers() ?? ([] as RoomMember[]);
         this.spaceMembers.forEach((m) => {
-            console.log(m);
             this.spaceMemberIds.push(m.userId);
         });
         // Verji end
@@ -535,8 +534,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         externals.forEach((id) => excludedTargetIds.add(id));
     }
 
-    // VERJI added param activeSpaceMembers - used to fileter the recents based on membership in space
+    // VERJI added param activeSpaceMembers - used to filter the recents based on membership in space
     public static buildRecents(excludedTargetIds: Set<string>, activeSpaceMembers: string[]): Result[] {
+        // Verji - If we don't want to see the Recents-suggestions(featureflag), we just return an empty array
+        if(!SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
+            return [] as Result[]
+        }
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -618,10 +621,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private buildSuggestions(excludedTargetIds: Set<string>): { userId: string; user: Member }[] {
         const cli = MatrixClientPeg.safeGet();
         const activityScores = buildActivityScores(cli);
-        const memberScores = buildMemberScores(cli);
+
+        let memberScores = {} as { [userId: string]: { member: RoomMember; score: number; numRooms: number } };
+        if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
+            memberScores = buildMemberScores(cli);
+        }
 
         const memberComparator = compareMembers(activityScores, memberScores);
-
         return Object.values(memberScores)
             .map(({ member }) => member)
             .filter((member) => !excludedTargetIds.has(member.userId))
@@ -657,7 +663,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 )
                 .then(async (r) => {
                     this.setState({ busy: false });
-
                     if (r.results.find((e) => e.user_id == this.state.filterText.trim())) {
                         foundUser = true;
                     }
@@ -674,12 +679,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         if (foundUser == false) {
             // Look in other stores for user if search might have failed unexpectedly
-            const possibleMembers = [
-                ...this.state.recents,
-                ...this.state.suggestions,
-                ...this.state.serverResultsMixin,
-                ...this.state.threepidResultsMixin,
-            ];
+            // VERJI - Add feature flag ShowRoomMembersInSuggestions, if false, only show Recents
+            let possibleMembers = [] as Result[];
+            if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
+                possibleMembers = [
+                    ...this.state.recents,
+                    ...this.state.suggestions,
+                    ...this.state.serverResultsMixin,
+                    ...this.state.threepidResultsMixin,
+                ];
+            }
+            else if(SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
+                possibleMembers = [
+                    ...this.state.recents
+                ];
+            }
             const toAdd = [];
             const potentialAddresses = this.state.filterText
                 .split(/[\s,]+/)
@@ -1207,6 +1221,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         e.preventDefault();
 
         // Process it as a list of addresses to add instead
+        // VERJI HIDE RESULTS HER
         const possibleMembers = [
             // If we can avoid hitting the profile endpoint, we should.
             ...this.state.recents,
@@ -1349,6 +1364,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     !sourceMembers.some((m) => m.userId === u.userId) &&
                     !priorityAdditionalMembers.some((m) => m.userId === u.userId) &&
                     !otherAdditionalMembers.some((m) => m.userId === u.userId)
+                    //HERE
                 );
             };
 
@@ -1384,6 +1400,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Now we mix in the additional members. Again, we presume these have already been filtered. We
         // also assume they are more relevant than our suggestions and prepend them to the list.
+
         sourceMembers = [...priorityAdditionalMembers, ...sourceMembers, ...otherAdditionalMembers];
 
         // If we're going to hide one member behind 'show more', just use up the space of the button
