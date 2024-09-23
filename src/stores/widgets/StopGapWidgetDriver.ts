@@ -175,7 +175,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
-            const sendRecvRoomEvents = ["io.element.call.encryption_keys"];
+            const sendRecvRoomEvents = ["io.element.call.encryption_keys", EventType.Reaction, EventType.RoomRedaction];
             for (const eventType of sendRecvRoomEvents) {
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
