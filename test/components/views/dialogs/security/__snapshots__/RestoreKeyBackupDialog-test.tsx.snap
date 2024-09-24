@@ -29,9 +29,9 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
       <div>
         <p>
           <span>
-            <b>
+            <strong>
               Warning
-            </b>
+            </strong>
             : you should only set up key backup from a trusted computer.
           </span>
         </p>
@@ -129,9 +129,9 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
       <div>
         <p>
           <span>
-            <b>
+            <strong>
               Warning
-            </b>
+            </strong>
             : you should only set up key backup from a trusted computer.
           </span>
         </p>
@@ -228,9 +228,9 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       <div>
         <p>
           <span>
-            <b>
+            <strong>
               Warning
-            </b>
+            </strong>
             : you should only set up key backup from a trusted computer.
           </span>
         </p>
