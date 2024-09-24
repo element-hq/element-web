@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -218,7 +218,17 @@ describe("AddRemoveThreepids", () => {
         await userEvent.type(input, PHONE1_LOCALNUM);
 
         const addButton = screen.getByRole("button", { name: "Add" });
-        await userEvent.click(addButton);
+        userEvent.click(addButton);
+
+        const continueButton = await screen.findByRole("button", { name: "Continue" });
+
+        await expect(continueButton).toHaveAttribute("aria-disabled", "true");
+
+        await expect(
+            await screen.findByText(
+                `A text message has been sent to +${PHONE1.address}. Please enter the verification code it contains.`,
+            ),
+        ).toBeInTheDocument();
 
         expect(client.requestAdd3pidMsisdnToken).toHaveBeenCalledWith(
             "GB",
@@ -226,15 +236,14 @@ describe("AddRemoveThreepids", () => {
             client.generateClientSecret(),
             1,
         );
-        const continueButton = screen.getByRole("button", { name: "Continue" });
-
-        expect(continueButton).toHaveAttribute("aria-disabled", "true");
 
         const verificationInput = screen.getByRole("textbox", { name: "Verification code" });
         await userEvent.type(verificationInput, "123456");
 
         expect(continueButton).not.toHaveAttribute("aria-disabled", "true");
-        await userEvent.click(continueButton);
+        userEvent.click(continueButton);
+
+        await waitFor(() => expect(continueButton).toHaveAttribute("aria-disabled", "true"));
 
         expect(client.addThreePidOnly).toHaveBeenCalledWith({
             client_secret: client.generateClientSecret(),

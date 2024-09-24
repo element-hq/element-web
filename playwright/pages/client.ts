@@ -356,24 +356,11 @@ export class Client {
     }
 
     /**
-     * Boostraps cross-signing.
+     * Bootstraps cross-signing.
      */
     public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
         const client = await this.prepareClient();
-        return client.evaluate(async (client, credentials) => {
-            await client.getCrypto().bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (func) => {
-                    await func({
-                        type: "m.login.password",
-                        identifier: {
-                            type: "m.id.user",
-                            user: credentials.userId,
-                        },
-                        password: credentials.password,
-                    });
-                },
-            });
-        }, credentials);
+        return bootstrapCrossSigningForClient(client, credentials);
     }
 
     /**
@@ -438,4 +425,32 @@ export class Client {
             { roomId, visibility },
         );
     }
+}
+
+/** Call `CryptoApi.bootstrapCrossSigning` on the given Matrix client, using the given credentials to authenticate
+ * the UIA request.
+ */
+export function bootstrapCrossSigningForClient(
+    client: JSHandle<MatrixClient>,
+    credentials: Credentials,
+    resetKeys: boolean = false,
+) {
+    return client.evaluate(
+        async (client, { credentials, resetKeys }) => {
+            await client.getCrypto().bootstrapCrossSigning({
+                authUploadDeviceSigningKeys: async (func) => {
+                    await func({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+                },
+                setupNewCrossSigning: resetKeys,
+            });
+        },
+        { credentials, resetKeys },
+    );
 }

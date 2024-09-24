@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
  */
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import ICanvasEffect from "../../../effects/ICanvasEffect";
@@ -44,9 +45,10 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
                 canvasRef.current.height = UIStore.instance.windowHeight;
             }
         };
-        const onAction = (payload: { action: string }): void => {
+        const onAction = (payload: { action: string; event?: MatrixEvent }): void => {
             const actionPrefix = "effects.";
-            if (canvasRef.current && payload.action.startsWith(actionPrefix)) {
+            const isOutdated = isEventOutdated(payload.event);
+            if (canvasRef.current && payload.action.startsWith(actionPrefix) && !isOutdated) {
                 const effect = payload.action.slice(actionPrefix.length);
                 lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current!));
             }
@@ -88,3 +90,19 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
 };
 
 export default EffectsOverlay;
+
+// 48 hours
+// 48h * 60m * 60s * 1000ms
+const OUTDATED_EVENT_THRESHOLD = 48 * 60 * 60 * 1000;
+
+/**
+ * Return true if the event is older than 48h.
+ * @param event
+ */
+function isEventOutdated(event?: MatrixEvent): boolean {
+    if (!event) return false;
+
+    const nowTs = Date.now();
+    const eventTs = event.getTs();
+    return nowTs - eventTs > OUTDATED_EVENT_THRESHOLD;
+}

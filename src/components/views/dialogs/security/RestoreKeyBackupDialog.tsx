@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ChangeEvent } from "react";
 import { MatrixClient, MatrixError, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { decodeRecoveryKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { logger } from "matrix-js-sdk/src/logger";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
@@ -118,10 +118,24 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
     };
 
+    /**
+     * Check if the recovery key is valid
+     * @param recoveryKey
+     * @private
+     */
+    private isValidRecoveryKey(recoveryKey: string): boolean {
+        try {
+            decodeRecoveryKey(recoveryKey);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     private onRecoveryKeyChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             recoveryKey: e.target.value,
-            recoveryKeyValid: MatrixClientPeg.safeGet().isValidRecoveryKey(e.target.value),
+            recoveryKeyValid: this.isValidRecoveryKey(e.target.value),
         });
     };
 
@@ -184,7 +198,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 { progressCallback: this.progressCallback },
             );
             if (this.props.keyCallback) {
-                const key = MatrixClientPeg.safeGet().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                const key = decodeRecoveryKey(this.state.recoveryKey);
                 this.props.keyCallback(key);
             }
             if (!this.props.showSummary) {

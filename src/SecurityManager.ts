@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ICryptoCallbacks, SecretStorage } from "matrix-js-sdk/src/matrix";
-import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
-import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
+import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
@@ -64,7 +63,7 @@ function makeInputToKey(
 ): (keyParams: KeyParams) => Promise<Uint8Array> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
         if (passphrase) {
-            return deriveKey(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
+            return deriveRecoveryKeyFromPassphrase(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
         } else if (recoveryKey) {
             return decodeRecoveryKey(recoveryKey);
         }

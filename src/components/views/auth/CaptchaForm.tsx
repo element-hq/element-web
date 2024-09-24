@@ -63,6 +63,19 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
 
     public componentWillUnmount(): void {
         this.resetRecaptcha();
+        // Resettting the captcha does not clear the challenge overlay from the body in android webviews.
+        // Search for an iframe with the challenge src and remove it's topmost ancestor from the body.
+        // TODO: Remove this when the "mobile_register" page is retired.
+        const iframes = document.querySelectorAll("iframe");
+        for (const iframe of iframes) {
+            if (iframe.src.includes("https://www.recaptcha.net/recaptcha/api2/bframe")) {
+                let parentBeforeBody: HTMLElement | null = iframe;
+                do {
+                    parentBeforeBody = parentBeforeBody.parentElement;
+                } while (parentBeforeBody?.parentElement && parentBeforeBody.parentElement != document.body);
+                parentBeforeBody?.remove();
+            }
+        }
     }
 
     // Borrowed directly from: https://github.com/codeep/react-recaptcha-google/commit/e118fa5670fa268426969323b2e7fe77698376ba

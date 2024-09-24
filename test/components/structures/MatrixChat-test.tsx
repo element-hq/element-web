@@ -55,6 +55,7 @@ import { MatrixClientPeg as peg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../src/DraftCleaner";
+import { UIFeature } from "../../../src/settings/UIFeature";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -1460,6 +1461,44 @@ describe("<MatrixChat />", () => {
                 await sleep(10); // Modals take a few ms to appear
                 expect(document.body).toMatchSnapshot();
             });
+        });
+    });
+
+    describe("mobile registration", () => {
+        const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
+            const renderResult = getComponent();
+            // wait for welcome page chrome render
+            await screen.findByText("powered by Matrix");
+
+            // go to mobile_register page
+            defaultDispatcher.dispatch({
+                action: "start_mobile_registration",
+            });
+
+            await flushPromises();
+
+            return renderResult;
+        };
+
+        const enabledMobileRegistration = (): void => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "Registration.mobileRegistrationHelper") return true;
+                if (settingName === UIFeature.Registration) return true;
+            });
+        };
+
+        it("should render welcome screen if mobile registration is not enabled in settings", async () => {
+            await getComponentAndWaitForReady();
+
+            await screen.findByText("powered by Matrix");
+        });
+
+        it("should render mobile registration", async () => {
+            enabledMobileRegistration();
+
+            await getComponentAndWaitForReady();
+
+            expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
         });
     });
 });

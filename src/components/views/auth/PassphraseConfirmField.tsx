@@ -11,6 +11,7 @@ import React, { PureComponent, RefCallback, RefObject } from "react";
 import Field, { IInputProps } from "../elements/Field";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { Alignment } from "../elements/Tooltip";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;
@@ -22,7 +23,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     label: TranslationKey;
     labelRequired: TranslationKey;
     labelInvalid: TranslationKey;
-
+    tooltipAlignment?: Alignment;
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;
 }
@@ -70,6 +71,7 @@ class PassphraseConfirmField extends PureComponent<IProps> {
                 onChange={this.props.onChange}
                 onValidate={this.onValidate}
                 autoFocus={this.props.autoFocus}
+                tooltipAlignment={this.props.tooltipAlignment}
             />
         );
     }

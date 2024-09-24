@@ -26,6 +26,7 @@ import RegistrationEmailPromptDialog from "../dialogs/RegistrationEmailPromptDia
 import CountryDropdown from "./CountryDropdown";
 import PassphraseConfirmField from "./PassphraseConfirmField";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
+import { Alignment } from "../elements/Tooltip";
 
 enum RegistrationField {
     Email = "field_email",
@@ -58,6 +59,7 @@ interface IProps {
     serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
     matrixClient: MatrixClient;
+    mobileRegister?: boolean;
 
     onRegisterClick(params: {
         username: string;
@@ -439,6 +441,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return true;
     }
 
+    private tooltipAlignment(): Alignment | undefined {
+        if (this.props.mobileRegister) {
+            return Alignment.Bottom;
+        }
+        return undefined;
+    }
+
     private renderEmail(): ReactNode {
         if (!this.showEmail()) {
             return null;
@@ -454,6 +463,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 validationRules={this.validateEmailRules.bind(this)}
                 onChange={this.onEmailChange}
                 onValidate={this.onEmailValidate}
+                tooltipAlignment={this.tooltipAlignment()}
             />
         );
     }
@@ -468,6 +478,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 onChange={this.onPasswordChange}
                 onValidate={this.onPasswordValidate}
                 userInputs={[this.state.username]}
+                tooltipAlignment={this.tooltipAlignment()}
             />
         );
     }
@@ -482,6 +493,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 password={this.state.password}
                 onChange={this.onPasswordConfirmChange}
                 onValidate={this.onPasswordConfirmValidate}
+                tooltipAlignment={this.tooltipAlignment()}
             />
         );
     }
@@ -526,6 +538,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 value={this.state.username}
                 onChange={this.onUsernameChange}
                 onValidate={this.onUsernameValidate}
+                tooltipAlignment={this.tooltipAlignment()}
+                autoCorrect="off"
+                autoCapitalize="none"
             />
         );
     }
@@ -557,14 +572,28 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             }
         }
 
+        let passwordFields: JSX.Element | undefined;
+        if (this.props.mobileRegister) {
+            passwordFields = (
+                <>
+                    <div className="mx_AuthBody_fieldRow">{this.renderPassword()}</div>
+                    <div className="mx_AuthBody_fieldRow">{this.renderPasswordConfirm()}</div>
+                </>
+            );
+        } else {
+            passwordFields = (
+                <div className="mx_AuthBody_fieldRow">
+                    {this.renderPassword()}
+                    {this.renderPasswordConfirm()}
+                </div>
+            );
+        }
+
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">{this.renderUsername()}</div>
-                    <div className="mx_AuthBody_fieldRow">
-                        {this.renderPassword()}
-                        {this.renderPasswordConfirm()}
-                    </div>
+                    {passwordFields}
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderEmail()}
                         {this.renderPhoneNumber()}
