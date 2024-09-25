@@ -37,7 +37,7 @@ describe("CryptographyPanel", () => {
         expect(codes[0].innerHTML).toEqual(sessionId);
 
         // Initially a placeholder
-        expect(codes[1].innerHTML).toEqual("<b>...</b>");
+        expect(codes[1].innerHTML).toEqual("<strong>...</strong>");
 
         // Then the actual key
         await flushPromises();
@@ -60,7 +60,7 @@ describe("CryptographyPanel", () => {
         const codes = rendered.container.querySelectorAll("code");
 
         // Initially a placeholder
-        expect(codes[1].innerHTML).toEqual("<b>...</b>");
+        expect(codes[1].innerHTML).toEqual("<strong>...</strong>");
 
         // Then "not supported key
         await flushPromises();
