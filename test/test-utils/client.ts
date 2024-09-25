@@ -135,7 +135,6 @@ export const mockClientMethodsDevice = (
     deviceId = "test-device-id",
 ): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
     getDeviceId: jest.fn().mockReturnValue(deviceId),
-    getDeviceEd25519Key: jest.fn(),
     getDevices: jest.fn().mockResolvedValue({ devices: [] }),
 });
 
@@ -164,10 +163,9 @@ export const mockClientMethodsCrypto = (): Partial<
         isSecretStorageReady: jest.fn(),
         getSessionBackupPrivateKey: jest.fn(),
         getVersion: jest.fn().mockReturnValue("Version 0"),
-        getOwnDeviceKeys: jest.fn(),
+        getOwnDeviceKeys: jest.fn().mockReturnValue(new Promise(() => {})),
         getCrossSigningKeyId: jest.fn(),
     }),
-    getDeviceEd25519Key: jest.fn(),
 });
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({

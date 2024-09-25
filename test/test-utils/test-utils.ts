@@ -124,6 +124,7 @@ export function createTestClient(): MatrixClient {
             },
         },
         getCrypto: jest.fn().mockReturnValue({
+            getOwnDeviceKeys: jest.fn(),
             getUserDeviceInfo: jest.fn(),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
