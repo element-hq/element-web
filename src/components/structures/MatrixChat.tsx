@@ -949,7 +949,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Action.OpenInviteExternalUsersDialog: {
                 const customOnboardingOpts = { CustomComponent: React.Fragment };
                 ModuleRunner.instance.invoke(
-                    CustomComponentLifecycle.Experimental,
+                    CustomComponentLifecycle.OnboardingDialog,
                     customOnboardingOpts as CustomComponentOpts,
                 );
                 const Props = (props: any): React.JSX.Element => <div>{props}</div>;
