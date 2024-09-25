@@ -472,6 +472,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
+        // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
+        // Chrome seems to have a strange issue where non-standard protocols prevent URL object mutations on pathname
+        // field, so we cannot mutate `pathname` reliably and instead have to rewrite the href manually.
+        if (url.pathname.startsWith("//")) {
+            url.href = url.href.replace(url.pathname, url.pathname.slice(1));
+        }
         return url;
     }
 }
