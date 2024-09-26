@@ -38,6 +38,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -50,6 +51,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -62,6 +64,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -74,6 +77,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -86,6 +90,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -98,6 +103,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -110,6 +116,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -122,6 +129,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 
@@ -134,6 +142,7 @@ describe("parseGeoUri", () => {
             altitudeAccuracy: null,
             heading: null,
             speed: null,
+            toJSON: expect.any(Function),
         });
     });
 });
