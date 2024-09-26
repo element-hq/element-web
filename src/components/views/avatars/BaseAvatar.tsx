@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useState } from "react";
+import React, { AriaRole, forwardRef, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { Avatar } from "@vector-im/compound-web";
@@ -33,6 +33,7 @@ interface IProps {
     className?: string;
     tabIndex?: number;
     altText?: string;
+    role?: AriaRole;
 }
 
 const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_RoomHeader {
     height: 64px;
     box-sizing: border-box;
-    padding: 0 var(--cpd-space-3x);
+    padding: 0 var(--cpd-space-3x) 0 calc(var(--cpd-space-3x) + var(--cpd-space-1-5x));
     border-bottom: 1px solid $separator;
     background-color: $background;
     transition: all 0.2s ease;
@@ -31,6 +31,8 @@ Please see LICENSE files in the repository root for full details.
     cursor: pointer;
     gap: var(--cpd-space-3x);
     text-align: left;
+    height: 100%;
+    padding: 0;
 }
 
 .mx_RoomHeader_info {

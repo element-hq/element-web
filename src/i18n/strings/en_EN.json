@@ -1983,6 +1983,7 @@
             "video_call_ec_layout_spotlight": "Spotlight",
             "video_room_view_chat_button": "View chat timeline"
         },
+        "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
         "header_untrusted_label": "Untrusted",
         "inaccessible": "This room or space is not accessible at this time.",

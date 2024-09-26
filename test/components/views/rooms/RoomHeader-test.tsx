@@ -683,6 +683,14 @@ describe("RoomHeader", () => {
             expect(screen.getByRole("heading", { name: "Asking to join" })).toBeInTheDocument();
         });
     });
+
+    it("should open room settings when clicking the room avatar", async () => {
+        const { container } = render(<RoomHeader room={room} />, getWrapper());
+
+        const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
+        fireEvent.click(getByLabelText(container, "Open room settings"));
+        expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ action: "open_room_settings" }));
+    });
 });
 
 /**

@@ -45,8 +45,8 @@ test.describe("Room Header", () => {
             await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
             await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
 
-            // Assert that there are six buttons in total
-            await expect(header.getByRole("button")).toHaveCount(7);
+            // Assert that there are eight buttons in total
+            await expect(header.getByRole("button")).toHaveCount(8);
 
             await expect(header).toMatchScreenshot("room-header.png");
         });
@@ -119,7 +119,7 @@ test.describe("Room Header", () => {
                 await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
 
                 // Assert that there is not a button except those buttons
-                await expect(header.getByRole("button")).toHaveCount(6);
+                await expect(header.getByRole("button")).toHaveCount(7);
 
                 await expect(header).toMatchScreenshot("room-header-video-room.png");
             });
