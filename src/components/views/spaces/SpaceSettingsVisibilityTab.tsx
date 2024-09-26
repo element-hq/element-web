@@ -163,7 +163,9 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                         <p>
                             {_t("room_settings|visibility|history_visibility_anyone_space_description")}
                             <br />
-                            <b>{_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}</b>
+                            <strong>
+                                {_t("room_settings|visibility|history_visibility_anyone_space_recommendation")}
+                            </strong>
                         </p>
                     </div>
                 </SettingsFieldset>

@@ -370,9 +370,9 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>
@@ -625,9 +625,9 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>
@@ -952,9 +952,9 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>

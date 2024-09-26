@@ -98,7 +98,7 @@ export default class HTMLExporter extends Exporter {
                         exportDate,
                     },
                     {
-                        roomName: () => <b>{safeRoomName}</b>,
+                        roomName: () => <strong>{safeRoomName}</strong>,
                         exporterDetails: () => (
                             <a
                                 href={`https://matrix.to/#/${encodeURIComponent(exporter)}`}
@@ -107,10 +107,10 @@ export default class HTMLExporter extends Exporter {
                             >
                                 {exporterName ? (
                                     <>
-                                        <b>{escapeHtml(exporterName)}</b>I {" (" + safeExporter + ")"}
+                                        <strong>{escapeHtml(exporterName)}</strong>I {" (" + safeExporter + ")"}
                                     </>
                                 ) : (
-                                    <b>{safeExporter}</b>
+                                    <strong>{safeExporter}</strong>
                                 )}
                             </a>
                         ),

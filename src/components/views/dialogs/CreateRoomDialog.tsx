@@ -280,7 +280,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "create_room|join_rule_restricted_label",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</b>,
+                            SpaceName: () => (
+                                <strong>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</strong>
+                            ),
                         },
                     )}
                     &nbsp;
@@ -294,7 +296,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "create_room|join_rule_public_parent_space_label",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</b>,
+                            SpaceName: () => (
+                                <strong>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</strong>
+                            ),
                         },
                     )}
                     &nbsp;

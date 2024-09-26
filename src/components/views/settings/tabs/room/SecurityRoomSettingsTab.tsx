@@ -117,7 +117,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             {_t(
                                 "room_settings|security|enable_encryption_public_room_confirm_description_1",
                                 undefined,
-                                { b: (sub) => <b>{sub}</b> },
+                                { b: (sub) => <strong>{sub}</strong> },
                             )}{" "}
                         </p>
                         <p>
@@ -308,7 +308,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t("room_settings|security|encrypted_room_public_confirm_description_1", undefined, {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             })}{" "}
                         </p>
                         <p>

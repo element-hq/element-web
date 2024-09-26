@@ -54,7 +54,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
                         "auth|registration|continue_without_email_description",
                         {},
                         {
-                            b: (sub) => <b>{sub}</b>,
+                            b: (sub) => <strong>{sub}</strong>,
                         },
                     )}
                 </p>

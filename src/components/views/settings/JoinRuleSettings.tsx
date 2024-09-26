@@ -281,7 +281,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                 "room_settings|security|join_rule_restricted_description_active_space",
                 {},
                 {
-                    spaceName: () => <b>{SpaceStore.instance.activeSpaceRoom!.name}</b>,
+                    spaceName: () => <strong>{SpaceStore.instance.activeSpaceRoom!.name}</strong>,
                 },
             );
         } else {
@@ -349,7 +349,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     (roomId) => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId),
                 );
                 if (unableToUpdateSomeParents) {
-                    warning = <b>{_t("room_settings|security|join_rule_restricted_upgrade_warning")}</b>;
+                    warning = <strong>{_t("room_settings|security|join_rule_restricted_upgrade_warning")}</strong>;
                 }
 
                 upgradeRequiredDialog(

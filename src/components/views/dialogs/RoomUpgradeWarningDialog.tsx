@@ -181,7 +181,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                             "room_settings|advanced|upgrade_warning_dialog_explainer",
                             {},
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             },
                         )}
                     </p>

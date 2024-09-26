@@ -259,7 +259,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 statusDescription = (
                     <>
                         <SettingsSubsectionText>
-                            {_t("settings|security|key_backup_inactive", {}, { b: (sub) => <b>{sub}</b> })}
+                            {_t("settings|security|key_backup_inactive", {}, { b: (sub) => <strong>{sub}</strong> })}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
                             {_t("settings|security|key_backup_connect_prompt")}
@@ -336,7 +336,11 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             statusDescription = (
                 <>
                     <SettingsSubsectionText>
-                        {_t("settings|security|key_backup_inactive_warning", {}, { b: (sub) => <b>{sub}</b> })}
+                        {_t(
+                            "settings|security|key_backup_inactive_warning",
+                            {},
+                            { b: (sub) => <strong>{sub}</strong> },
+                        )}
                     </SettingsSubsectionText>
                     <SettingsSubsectionText>{_t("encryption|setup_secure_backup|explainer")}</SettingsSubsectionText>
                 </>

@@ -48,9 +48,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           <span>
             Use an integration manager 
-            <b>
+            <strong>
               (scalar.vector.im)
-            </b>
+            </strong>
              to manage bots, widgets, and sticker packs.
           </span>
         </div>
@@ -333,9 +333,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                       </th>
                       <td>
                         <code>
-                          <b>
+                          <strong>
                             ...
-                          </b>
+                          </strong>
                         </code>
                       </td>
                     </tr>

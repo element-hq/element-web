@@ -108,7 +108,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
                                 <th scope="row">{_t("settings|security|session_key")}</th>
                                 <td>
                                     <code>
-                                        <b>{identityKey}</b>
+                                        <strong>{identityKey}</strong>
                                     </code>
                                 </td>
                             </tr>

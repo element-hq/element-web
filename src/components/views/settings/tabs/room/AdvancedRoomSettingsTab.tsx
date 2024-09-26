@@ -115,7 +115,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                             "room_settings|advanced|room_upgrade_warning",
                             {},
                             {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                                 i: (sub) => <i>{sub}</i>,
                             },
                         )}

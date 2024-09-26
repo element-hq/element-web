@@ -20,7 +20,7 @@ describe("CryptographyPanel", () => {
     it("shows the session ID and key", async () => {
         const sessionId = "ABCDEFGHIJ";
         const sessionKey = "AbCDeFghIJK7L/m4nOPqRSTUVW4xyzaBCDef6gHIJkl";
-        const sessionKeyFormatted = "<b>AbCD eFgh IJK7 L/m4 nOPq RSTU VW4x yzaB CDef 6gHI Jkl</b>";
+        const sessionKeyFormatted = "<strong>AbCD eFgh IJK7 L/m4 nOPq RSTU VW4x yzaB CDef 6gHI Jkl</strong>";
 
         TestUtils.stubClient();
         const client: MatrixClient = MatrixClientPeg.safeGet();
@@ -37,7 +37,7 @@ describe("CryptographyPanel", () => {
         expect(codes[0].innerHTML).toEqual(sessionId);
 
         // Initially a placeholder
-        expect(codes[1].innerHTML).toEqual("<b>...</b>");
+        expect(codes[1].innerHTML).toEqual("<strong>...</strong>");
 
         // Then the actual key
         await flushPromises();
@@ -60,10 +60,10 @@ describe("CryptographyPanel", () => {
         const codes = rendered.container.querySelectorAll("code");
 
         // Initially a placeholder
-        expect(codes[1].innerHTML).toEqual("<b>...</b>");
+        expect(codes[1].innerHTML).toEqual("<strong>...</strong>");
 
         // Then "not supported key
         await flushPromises();
-        expect(codes[1].innerHTML).toEqual("<b>&lt;not supported&gt;</b>");
+        expect(codes[1].innerHTML).toEqual("<strong>&lt;not supported&gt;</strong>");
     });
 });

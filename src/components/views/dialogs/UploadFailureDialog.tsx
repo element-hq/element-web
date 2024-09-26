@@ -46,7 +46,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
                     sizeOfThisFile: fileSize(this.props.badFiles[0].size),
                 },
                 {
-                    b: (sub) => <b>{sub}</b>,
+                    b: (sub) => <strong>{sub}</strong>,
                 },
             );
             buttons = (
@@ -64,7 +64,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
                     limit: fileSize(this.props.contentMessages.getUploadLimit()!),
                 },
                 {
-                    b: (sub) => <b>{sub}</b>,
+                    b: (sub) => <strong>{sub}</strong>,
                 },
             );
             buttons = (
@@ -82,7 +82,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
                     limit: fileSize(this.props.contentMessages.getUploadLimit()!),
                 },
                 {
-                    b: (sub) => <b>{sub}</b>,
+                    b: (sub) => <strong>{sub}</strong>,
                 },
             );
             const howManyOthers = this.props.totalFiles - this.props.badFiles.length;

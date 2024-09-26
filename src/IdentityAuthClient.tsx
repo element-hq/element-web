@@ -141,7 +141,7 @@ export default class IdentityAuthClient {
                                 "terms|identity_server_no_terms_description_1",
                                 {},
                                 {
-                                    server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
+                                    server: () => <strong>{abbreviateUrl(identityServerUrl)}</strong>,
                                 },
                             )}
                         </p>

@@ -293,7 +293,7 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                                 </li>
                                 <li>
                                     {_t("auth|qr_code_login|select_qr_code", {
-                                        scanQRCode: <b>{_t("auth|qr_code_login|scan_qr_code")}</b>,
+                                        scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
                                     })}
                                 </li>
                                 <li>{_t("auth|qr_code_login|point_the_camera")}</li>
