@@ -50,6 +50,8 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { parseUrl } from "../../../utils/UrlUtils";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
 
 interface IProps {
     app: IWidget | IApp;
@@ -576,6 +578,14 @@ export default class AppTile extends React.Component<IProps, IState> {
             ? Container.Top
             : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
+
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (
+            targetContainer === Container.Top &&
+            RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
+        ) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
     };
 
     private onMinimiseClicked = (): void => {
