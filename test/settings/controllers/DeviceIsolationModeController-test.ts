@@ -27,7 +27,7 @@ describe("DeviceIsolationModeController", () => {
             const cli = stubClient();
             const controller = new DeviceIsolationModeController();
             controller.onChange(SettingLevel.DEVICE, "", false);
-            expect(cli.getCrypto()?.setDeviceIsolationMode).toHaveBeenCalledWith(new AllDevicesIsolationMode(true));
+            expect(cli.getCrypto()?.setDeviceIsolationMode).toHaveBeenCalledWith(new AllDevicesIsolationMode(false));
         });
     });
 });

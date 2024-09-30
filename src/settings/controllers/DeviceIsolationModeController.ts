@@ -29,9 +29,11 @@ export default class DeviceIsolationModeController extends SettingController {
  * @param settingValue - value of the "exclude_insecure_devices" setting.
  */
 export function setDeviceIsolationMode(client: MatrixClient, settingValue: boolean): void {
-    client
-        .getCrypto()
-        ?.setDeviceIsolationMode(
-            settingValue ? new OnlySignedDevicesIsolationMode() : new AllDevicesIsolationMode(true),
-        );
+    client.getCrypto()?.setDeviceIsolationMode(
+        settingValue
+            ? new OnlySignedDevicesIsolationMode()
+            : // TODO: As part of https://github.com/element-hq/element-meta/issues/2492, we will change
+              //   `errorOnVerifiedUserProblems` to `true`, but we need to have better UI in place before we can do so.
+              new AllDevicesIsolationMode(false),
+    );
 }
