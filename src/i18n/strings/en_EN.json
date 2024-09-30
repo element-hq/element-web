@@ -1427,6 +1427,8 @@
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
+        "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
+        "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",

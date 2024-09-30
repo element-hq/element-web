@@ -1002,6 +1002,7 @@ describe("<MatrixChat />", () => {
                     getUserVerificationStatus: jest
                         .fn()
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
+                    setDeviceIsolationMode: jest.fn(),
                 };
                 loginClient.isCryptoEnabled.mockReturnValue(true);
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);

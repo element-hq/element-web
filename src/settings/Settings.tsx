@@ -11,6 +11,7 @@ import React, { ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, TranslationKey } from "../languageHandler";
+import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -305,6 +306,16 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
         displayName: _td("labs|dehydration"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_exclude_insecure_devices": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        controller: new DeviceIsolationModeController(),
+        displayName: _td("labs|exclude_insecure_devices"),
+        description: _td("labs|exclude_insecure_devices_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

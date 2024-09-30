@@ -42,6 +42,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
+import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -343,6 +344,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         });
 
         StorageManager.setCryptoInitialised(true);
+
+        setDeviceIsolationMode(this.matrixClient, SettingsStore.getValue("feature_exclude_insecure_devices"));
+
         // TODO: device dehydration and whathaveyou
         return;
     }
