@@ -2521,9 +2521,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mx_RoomView_timeline_rr_enabled: this.state.showReadReceipts,
         });
 
+        let { mainSplitContentType } = this.state;
+        if (this.state.search) {
+            // When in the middle of a search force the main split content type to timeline
+            mainSplitContentType = MainSplitContentType.Timeline;
+        }
+
         const mainClasses = classNames("mx_RoomView", {
             mx_RoomView_inCall: Boolean(activeCall),
-            mx_RoomView_immersive: this.state.mainSplitContentType !== MainSplitContentType.Timeline,
+            mx_RoomView_immersive: mainSplitContentType !== MainSplitContentType.Timeline,
         });
 
         const showChatEffects = SettingsStore.getValue("showChatEffects");
@@ -2531,7 +2537,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let mainSplitBody: JSX.Element | undefined;
         let mainSplitContentClassName: string | undefined;
         // Decide what to show in the main split
-        switch (this.state.mainSplitContentType) {
+        switch (mainSplitContentType) {
             case MainSplitContentType.Timeline:
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
@@ -2595,7 +2601,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let viewingCall = false;
 
         // Simplify the header for other main split types
-        switch (this.state.mainSplitContentType) {
+        switch (mainSplitContentType) {
             case MainSplitContentType.MaximisedWidget:
                 excludedRightPanelPhaseButtons = [];
                 onAppsClick = null;
