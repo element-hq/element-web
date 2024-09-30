@@ -229,23 +229,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     /**
-     * If the right panel is open, it is closed.
-     * If the right panel is closed, it is opened with `phase`.
-     *
-     * This is different from showOrHidePhase which only closes the panel
-     * if the panel was already showing the phase passed as argument.
-     * @see showOrHidePhase
-     * @param phase The right panel phase.
-     */
-    public showOrHidePanel(phase: RightPanelPhases): void {
-        if (!this.isOpen) {
-            this.setCard({ phase });
-        } else {
-            this.togglePanel(null);
-        }
-    }
-
-    /**
      * Helper to show a right panel phase.
      * If the UI is already showing that phase, the right panel will be hidden.
      *

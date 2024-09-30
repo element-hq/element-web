@@ -255,7 +255,7 @@ export default function RoomHeader({
                 <button
                     aria-label={_t("right_panel|room_summary_card|title")}
                     tabIndex={0}
-                    onClick={() => RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary)}
+                    onClick={() => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)}
                     className="mx_RoomHeader_infoWrapper"
                 >
                     <Box flex="1" className="mx_RoomHeader_info">
@@ -339,7 +339,7 @@ export default function RoomHeader({
                         <IconButton
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
                             }}
                             aria-label={_t("right_panel|room_summary_card|title")}
                         >
@@ -354,7 +354,7 @@ export default function RoomHeader({
                             indicator={notificationLevelToIndicator(threadNotifications)}
                             onClick={(evt) => {
                                 evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
                                 PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                             }}
                             aria-label={_t("common|threads")}
@@ -368,7 +368,7 @@ export default function RoomHeader({
                                 indicator={notificationLevelToIndicator(globalNotificationState.level)}
                                 onClick={(evt) => {
                                     evt.stopPropagation();
-                                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
                                 }}
                                 aria-label={_t("notifications|enable_prompt_toast_title")}
                             >
@@ -387,7 +387,7 @@ export default function RoomHeader({
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
                             onClick={(e: ButtonEvent) => {
-                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
                                 e.stopPropagation();
                             }}
                             aria-label={_t("common|n_members", { count: memberCount })}

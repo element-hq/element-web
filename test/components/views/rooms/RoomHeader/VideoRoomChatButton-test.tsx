@@ -56,7 +56,7 @@ describe("<VideoRoomChatButton />", () => {
             ...mockClientMethodsUser(),
         });
         rightPanelStore = {
-            showOrHidePanel: jest.fn(),
+            showOrHidePhase: jest.fn(),
         } as unknown as MockedObject<RightPanelStore>;
         sdkContext = new SdkContextClass();
         sdkContext.client = client;
@@ -73,7 +73,7 @@ describe("<VideoRoomChatButton />", () => {
 
         fireEvent.click(screen.getByLabelText("Chat"));
 
-        expect(sdkContext.rightPanelStore.showOrHidePanel).toHaveBeenCalledWith(RightPanelPhases.Timeline);
+        expect(sdkContext.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.Timeline);
     });
 
     it("renders button with an unread marker when room is unread", () => {

@@ -44,7 +44,7 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
         // stop event propagating up and triggering RoomHeader bar click
         // which will open RoomSummary
         event.stopPropagation();
-        sdkContext.rightPanelStore.showOrHidePanel(RightPanelPhases.Timeline);
+        sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.Timeline);
     };
 
     return (
