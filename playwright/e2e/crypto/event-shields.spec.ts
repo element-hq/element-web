@@ -6,12 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page } from "@playwright/test";
-
 import { expect, test } from "../../element-web-test";
-import { autoJoin, createSharedRoomWithUser, enableKeyBackup, logIntoElement, logOutOfElement, verify } from "./utils";
-import { Bot } from "../../pages/bot";
-import { HomeserverInstance } from "../../plugins/homeserver";
+import {
+    autoJoin,
+    createSecondBotDevice,
+    createSharedRoomWithUser,
+    enableKeyBackup,
+    logIntoElement,
+    logOutOfElement,
+    verify,
+} from "./utils";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -296,13 +300,3 @@ test.describe("Cryptography", function () {
         });
     });
 });
-
-async function createSecondBotDevice(page: Page, homeserver: HomeserverInstance, bob: Bot) {
-    const bobSecondDevice = new Bot(page, homeserver, {
-        bootstrapSecretStorage: false,
-        bootstrapCrossSigning: false,
-    });
-    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
-    await bobSecondDevice.prepareClient();
-    return bobSecondDevice;
-}

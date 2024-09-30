@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import classNames from "classnames";
 import React, { forwardRef, ForwardRefExoticComponent, useContext } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
@@ -13,8 +14,9 @@ import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { _t } from "../../../languageHandler";
 import { IBodyProps } from "./IBodyProps";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { Icon as WarningBadgeIcon } from "../../../../res/img/compound/error-16px.svg";
 
-function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string {
+function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string | React.JSX.Element {
     switch (mxEvent.decryptionFailureReason) {
         case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
             return _t("timeline|decryption_failure|blocked");
@@ -32,16 +34,44 @@ function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined):
             break;
 
         case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
+            // TODO: event should be hidden instead of showing this error.
+            //   To be revisited as part of https://github.com/element-hq/element-meta/issues/2449
             return _t("timeline|decryption_failure|historical_event_user_not_joined");
+
+        case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+            return (
+                <span>
+                    <WarningBadgeIcon className="mx_Icon mx_Icon_16" />
+                    {_t("timeline|decryption_failure|sender_identity_previously_verified")}
+                </span>
+            );
+
+        case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+            // TODO: event should be hidden instead of showing this error.
+            //   To be revisited as part of https://github.com/element-hq/element-meta/issues/2449
+            return _t("timeline|decryption_failure|sender_unsigned_device");
     }
     return _t("timeline|decryption_failure|unable_to_decrypt");
+}
+
+/** Get an extra CSS class, specific to the decryption failure reason */
+function errorClassName(mxEvent: MatrixEvent): string | null {
+    switch (mxEvent.decryptionFailureReason) {
+        case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+            return "mx_DecryptionFailureVerifiedIdentityChanged";
+
+        default:
+            return null;
+    }
 }
 
 // A placeholder element for messages that could not be decrypted
 export const DecryptionFailureBody = forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent }, ref): React.JSX.Element => {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const classes = classNames("mx_DecryptionFailureBody", "mx_EventTile_content", errorClassName(mxEvent));
+
     return (
-        <div className="mx_DecryptionFailureBody mx_EventTile_content" ref={ref}>
+        <div className={classes} ref={ref}>
             {getErrorMessage(mxEvent, verificationState)}
         </div>
     );
