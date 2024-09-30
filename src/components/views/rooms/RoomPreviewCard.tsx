@@ -17,7 +17,6 @@ import { UserTab } from "../dialogs/UserTab";
 import { EffectiveMembership, getEffectiveMembership } from "../../../utils/membership";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -29,7 +28,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import RoomInfoLine from "./RoomInfoLine";
-import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps {
     room: Room;
@@ -43,8 +42,7 @@ interface IProps {
 // and viewing invite reasons to achieve parity with the default invite screen.
 const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
-    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
-    const isVideoRoom = useIsVideoRoom(room, true);
+    const isVideoRoom = calcIsVideoRoom(room);
     const myMembership = useMyRoomMembership(room);
     useDispatcher(defaultDispatcher, (payload) => {
         if (payload.action === Action.JoinRoomError && payload.roomId === room.roomId) {
@@ -164,24 +162,6 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         avatarRow = <RoomAvatar room={room} size="50px" viewAvatarOnClick />;
     }
 
-    let notice: string | null = null;
-    if (cannotJoin) {
-        notice = _t("room|join_failed_needs_invite", {
-            roomName: room.name,
-        });
-    } else if (isVideoRoom && !videoRoomsEnabled) {
-        notice =
-            myMembership === KnownMembership.Join
-                ? _t("room|view_failed_enable_video_rooms")
-                : _t("room|join_failed_enable_video_rooms");
-
-        joinButtons = (
-            <AccessibleButton kind="primary" onClick={viewLabs}>
-                {_t("room|show_labs_settings")}
-            </AccessibleButton>
-        );
-    }
-
     return (
         <div className="mx_RoomPreviewCard">
             {inviterSection}
@@ -192,7 +172,11 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
             <RoomInfoLine room={room} />
             <RoomTopic room={room} className="mx_RoomPreviewCard_topic" />
             {room.getJoinRule() === "public" && <RoomFacePile room={room} />}
-            {notice ? <div className="mx_RoomPreviewCard_notice">{notice}</div> : null}
+            {cannotJoin ? (
+                <div className="mx_RoomPreviewCard_notice">
+                    {_t("room|join_failed_needs_invite", { roomName: room.name })}
+                </div>
+            ) : null}
             <div className="mx_RoomPreviewCard_joinButtons">{joinButtons}</div>
         </div>
     );

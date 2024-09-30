@@ -338,7 +338,7 @@ export class JitsiCall extends Call {
 
     public static get(room: Room): JitsiCall | null {
         // Only supported in video rooms
-        if (SettingsStore.getValue("feature_video_rooms") && room.isElementVideoRoom()) {
+        if (room.isElementVideoRoom()) {
             const apps = WidgetStore.instance.getApps(room.roomId);
             // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
             const jitsiWidget = apps.find((app) => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
@@ -805,33 +805,24 @@ export class ElementCall extends Call {
     }
 
     public static get(room: Room): ElementCall | null {
-        // Only supported in the new group call experience or in video rooms.
+        const apps = WidgetStore.instance.getApps(room.roomId);
+        const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
+        const session = room.client.matrixRTC.getRoomSession(room);
 
-        if (
-            SettingsStore.getValue("feature_group_calls") ||
-            (SettingsStore.getValue("feature_video_rooms") &&
-                SettingsStore.getValue("feature_element_call_video_rooms") &&
-                room.isCallRoom())
-        ) {
-            const apps = WidgetStore.instance.getApps(room.roomId);
-            const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
-            const session = room.client.matrixRTC.getRoomSession(room);
-
-            // A call is present if we
-            // - have a widget: This means the create function was called.
-            // - or there is a running session where we have not yet created a widget for.
-            // - or this is a call room. Then we also always want to show a call.
-            if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
-                // create a widget for the case we are joining a running call and don't have on yet.
-                const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
-                    room.roomId,
-                    room.client,
-                    undefined,
-                    undefined,
-                    isVideoRoom(room),
-                );
-                return new ElementCall(session, availableOrCreatedWidget, room.client);
-            }
+        // A call is present if we
+        // - have a widget: This means the create function was called.
+        // - or there is a running session where we have not yet created a widget for.
+        // - or this is a call room. Then we also always want to show a call.
+        if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
+            // create a widget for the case we are joining a running call and don't have on yet.
+            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
+                room.roomId,
+                room.client,
+                undefined,
+                undefined,
+                isVideoRoom(room),
+            );
+            return new ElementCall(session, availableOrCreatedWidget, room.client);
         }
 
         return null;

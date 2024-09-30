@@ -513,12 +513,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
-        if (
-            EventType.CallNotify === ev.getType() &&
-            SettingsStore.getValue("feature_group_calls") &&
-            (ev.getAge() ?? 0) < 10000 &&
-            !thisUserHasConnectedDevice
-        ) {
+        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 10000 && !thisUserHasConnectedDevice) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
             if (typeof content.call_id !== "string") {

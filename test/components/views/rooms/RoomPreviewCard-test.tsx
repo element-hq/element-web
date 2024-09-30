@@ -83,21 +83,4 @@ describe("RoomPreviewCard", () => {
         await renderPreview();
         expect(screen.queryByRole("button", { name: /beta/i })).toBeNull();
     });
-
-    it("shows instructions on Jitsi video rooms invites if video rooms are disabled", async () => {
-        jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
-
-        await renderPreview();
-        screen.getByText(/enable video rooms in labs/i);
-    });
-
-    it("shows instructions on Element video rooms invites if video rooms are disabled", async () => {
-        jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
-        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Invite);
-        enabledFeatures = ["feature_element_call_video_rooms"];
-
-        await renderPreview();
-        screen.getByText(/enable video rooms in labs/i);
-    });
 });

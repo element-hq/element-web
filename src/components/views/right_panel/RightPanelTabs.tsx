@@ -20,7 +20,7 @@ import { Action } from "../../../dispatcher/actions";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 
 function shouldShowTabsForPhase(phase?: RightPanelPhases): boolean {
     const tabs = [
@@ -48,7 +48,7 @@ export const RightPanelTabs: React.FC<Props> = ({ phase, room }): JSX.Element | 
         }
     });
 
-    const isVideoRoom = useIsVideoRoom(room);
+    const isVideoRoom = room !== undefined && calcIsVideoRoom(room);
 
     if (!shouldShowTabsForPhase(phase)) return null;
 

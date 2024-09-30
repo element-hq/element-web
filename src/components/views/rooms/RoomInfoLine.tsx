@@ -17,7 +17,7 @@ import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useRoomMemberCount, useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
-import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps {
     room: Room;
@@ -37,7 +37,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     const membership = useMyRoomMembership(room);
     const memberCount = useRoomMemberCount(room);
 
-    const isVideoRoom = useIsVideoRoom(room, true);
+    const isVideoRoom = calcIsVideoRoom(room);
 
     let iconClass: string;
     let roomType: string;

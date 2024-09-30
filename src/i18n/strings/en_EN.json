@@ -2019,7 +2019,6 @@
         "inviter_unknown": "Unknown",
         "invites_you_text": "<inviter/> invites you",
         "join_button_account": "Sign Up",
-        "join_failed_enable_video_rooms": "To join, please enable video rooms in Labs first",
         "join_failed_needs_invite": "To view %(roomName)s, you need an invite",
         "join_the_discussion": "Join the discussion",
         "join_title": "Join the room to participate",
@@ -2088,7 +2087,6 @@
             },
             "this_room_button": "Search this room"
         },
-        "show_labs_settings": "Show Labs settings",
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
@@ -2119,7 +2117,6 @@
             },
             "uploading_single_file": "Uploading %(filename)s"
         },
-        "view_failed_enable_video_rooms": "To view, please enable video rooms in Labs first",
         "waiting_for_join_subtitle": "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted",
         "waiting_for_join_title": "Waiting for users to join %(brand)s"
     },

@@ -70,7 +70,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Key } from "../../../Keyboard";
 import { useTransition } from "../../../hooks/useTransition";
-import { useIsVideoRoom } from "../../../utils/video-rooms";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 
@@ -219,7 +219,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useContext(RoomContext);
     const e2eStatus = roomContext.e2eStatus;
-    const isVideoRoom = useIsVideoRoom(room);
+    const isVideoRoom = calcIsVideoRoom(room);
 
     const roomState = useRoomState(room);
     const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);

@@ -1039,10 +1039,13 @@ describe("<MatrixChat />", () => {
                 });
 
                 describe("when encryption is force disabled", () => {
-                    const unencryptedRoom = new Room("!unencrypted:server.org", loginClient, userId);
-                    const encryptedRoom = new Room("!encrypted:server.org", loginClient, userId);
+                    let unencryptedRoom: Room;
+                    let encryptedRoom: Room;
 
                     beforeEach(() => {
+                        unencryptedRoom = new Room("!unencrypted:server.org", loginClient, userId);
+                        encryptedRoom = new Room("!encrypted:server.org", loginClient, userId);
+
                         loginClient.getClientWellKnown.mockReturnValue({
                             "io.element.e2ee": {
                                 force_disable: true,
