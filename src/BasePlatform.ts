@@ -432,12 +432,8 @@ export default abstract class BasePlatform {
             redirectUris: [this.getOidcCallbackUrl().href],
             logoUri: config.oidc_metadata?.logo_uri ?? new URL("vector-icons/1024.png", this.baseUrl).href,
             applicationType: "web",
-            // XXX: We break the spec by not consistently supplying these required fields
-            // @ts-ignore
             contacts: config.oidc_metadata?.contacts,
-            // @ts-ignore
             tosUri: config.oidc_metadata?.tos_uri ?? config.terms_and_conditions_links?.[0]?.url,
-            // @ts-ignore
             policyUri: config.oidc_metadata?.policy_uri ?? config.privacy_policy_url,
         };
     }
