@@ -128,6 +128,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
             case MetaSpace.Home:
             case MetaSpace.Favourites:
             case MetaSpace.People:
+            case MetaSpace.Orphans:
                 showStartChatPlusMenuForMetaSpace = false;
                 break;
 
@@ -371,6 +372,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
             case MetaSpace.Home:
             case MetaSpace.Favourites:
             case MetaSpace.People:
+            case MetaSpace.Orphans:
                 ShowAddRoomPlusMenuForMetaSpace = false;
                 break;
 
