@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { ReactNode } from "react";
 import { createClient, MatrixClient, SSOAction, OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk/src/matrix";
-import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -472,9 +472,9 @@ export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
     hasAccessToken: boolean;
-    accessToken: string | IEncryptedPayload;
+    accessToken: string | AESEncryptedSecretStoragePayload;
     hasRefreshToken: boolean;
-    refreshToken?: string | IEncryptedPayload;
+    refreshToken?: string | AESEncryptedSecretStoragePayload;
     userId: string;
     deviceId: string;
     isGuest: boolean;

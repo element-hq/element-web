@@ -10,7 +10,7 @@ import { Crypto } from "@peculiar/webcrypto";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
-import * as MatrixCryptoAes from "matrix-js-sdk/src/crypto/aes";
+import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
 import { mocked, MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
@@ -74,7 +74,7 @@ describe("Lifecycle", () => {
         delete window.crypto;
         window.crypto = webCrypto;
 
-        jest.spyOn(MatrixCryptoAes, "encryptAES").mockRestore();
+        jest.spyOn(encryptAESSecretStorageItemModule, "default").mockRestore();
     });
 
     afterAll(() => {
@@ -675,7 +675,7 @@ describe("Lifecycle", () => {
             });
 
             it("should persist token when encrypting the token fails", async () => {
-                jest.spyOn(MatrixCryptoAes, "encryptAES").mockRejectedValue("MOCK REJECT ENCRYPTAES");
+                jest.spyOn(encryptAESSecretStorageItemModule, "default").mockRejectedValue("MOCK REJECT ENCRYPTAES");
                 await setLoggedIn(credentials);
 
                 // persist the unencrypted token

@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 import { logger } from "matrix-js-sdk/src/logger";
+import decryptAESSecretStorageItem from "matrix-js-sdk/src/utils/decryptAESSecretStorageItem";
+import encryptAESSecretStorageItem from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
+import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 
 import * as StorageAccess from "../StorageAccess";
 
@@ -78,7 +80,7 @@ async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array> {
  */
 export async function tryDecryptToken(
     pickleKey: string | undefined,
-    token: IEncryptedPayload | string,
+    token: AESEncryptedSecretStoragePayload | string,
     tokenName: string,
 ): Promise<string> {
     if (typeof token === "string") {
@@ -92,7 +94,7 @@ export async function tryDecryptToken(
     }
 
     const encrKey = await pickleKeyToAesKey(pickleKey);
-    const decryptedToken = await decryptAES(token, encrKey, tokenName);
+    const decryptedToken = await decryptAESSecretStorageItem(token, encrKey, tokenName);
     encrKey.fill(0);
     return decryptedToken;
 }
@@ -130,12 +132,12 @@ export async function persistTokenInStorage(
     }
 
     if (pickleKey) {
-        let encryptedToken: IEncryptedPayload | undefined;
+        let encryptedToken: AESEncryptedSecretStoragePayload | undefined;
         if (token) {
             try {
                 // try to encrypt the access token using the pickle key
                 const encrKey = await pickleKeyToAesKey(pickleKey);
-                encryptedToken = await encryptAES(token, encrKey, tokenName);
+                encryptedToken = await encryptAESSecretStorageItem(token, encrKey, tokenName);
                 encrKey.fill(0);
             } catch (e) {
                 // This is likely due to the browser not having WebCrypto or somesuch.
