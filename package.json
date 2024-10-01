@@ -171,7 +171,7 @@
         "@types/css-tree": "^2.3.8",
         "@types/diff-match-patch": "^1.0.32",
         "@types/escape-html": "^1.0.1",
-        "@types/express": "^4.17.21",
+        "@types/express": "^5.0.0",
         "@types/file-saver": "^2.0.3",
         "@types/fs-extra": "^11.0.0",
         "@types/glob-to-regexp": "^0.4.1",
