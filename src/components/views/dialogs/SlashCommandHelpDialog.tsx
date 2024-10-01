@@ -45,7 +45,7 @@ const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
                             <strong>{cmd.getCommand()}</strong>
                         </td>
                         <td>{cmd.args}</td>
-                        <td>{cmd.description}</td>
+                        <td>{_t(cmd.description)}</td>
                     </tr>,
                 );
             });
