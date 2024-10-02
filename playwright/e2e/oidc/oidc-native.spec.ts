@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect, registerAccountMas } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("OIDC Native", () => {
     test.skip(isDendrite, "does not yet support MAS");
@@ -17,7 +18,7 @@ test.describe("OIDC Native", () => {
         labsFlags: ["feature_oidc_native_flow"],
     });
 
-    test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhog, app, mas }) => {
+    test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhog, mas }) => {
         const tokenUri = `http://localhost:${mas.port}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
@@ -36,6 +37,7 @@ test.describe("OIDC Native", () => {
 
         const deviceId = await page.evaluate<string>(() => window.localStorage.mx_device_id);
 
+        const app = new ElementAppPage(page);
         await app.settings.openUserSettings("Account");
         const newPagePromise = context.waitForEvent("page");
         await page.getByRole("button", { name: "Manage account" }).click();
