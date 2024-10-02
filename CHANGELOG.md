@@ -1,3 +1,13 @@
+Changes in [1.11.79](https://github.com/element-hq/element-web/releases/tag/v1.11.79) (2024-10-01)
+==================================================================================================
+* No changes
+
+## ✨ Features
+
+* [Backport staging] Allow joining calls and video rooms without enabling the labs flags ([#106](https://github.com/element-hq/matrix-react-sdk/pull/106)). Contributed by @RiotRobot.
+
+
+
 Changes in [1.11.78](https://github.com/element-hq/element-web/releases/tag/v1.11.78) (2024-09-24)
 ==================================================================================================
 ## ✨ Features
