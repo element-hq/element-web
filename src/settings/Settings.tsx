@@ -37,6 +37,7 @@ import ServerSupportUnstableFeatureController from "./controllers/ServerSupportU
 import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
 import AnalyticsController from "./controllers/AnalyticsController";
+import FallbackIceServerController from "./controllers/FallbackIceServerController";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -980,6 +981,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         description: _td("settings|voip|enable_fallback_ice_server_description"),
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
+        controller: new FallbackIceServerController(),
     },
     "showImages": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

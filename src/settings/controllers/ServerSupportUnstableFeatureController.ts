@@ -6,8 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-
 import { SettingLevel } from "../SettingLevel";
 import MatrixClientBackedController from "./MatrixClientBackedController";
 import { WatchManager } from "../WatchManager";
@@ -53,9 +51,9 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         this.watchers.notifyUpdate(this.settingName, null, level, settingValue);
     }
 
-    protected async initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): Promise<void> {
+    protected async initMatrixClient(): Promise<void> {
         // Check for stable version support first
-        if (this.stableVersion && (await this.client.isVersionSupported(this.stableVersion))) {
+        if (this.stableVersion && (await this.client!.isVersionSupported(this.stableVersion))) {
             this.disabled = false;
             return;
         }
@@ -66,7 +64,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         for (const featureGroup of this.unstableFeatureGroups) {
             const featureSupportList = await Promise.all(
                 featureGroup.map(async (feature) => {
-                    const isFeatureSupported = await this.client.doesServerSupportUnstableFeature(feature);
+                    const isFeatureSupported = await this.client!.doesServerSupportUnstableFeature(feature);
                     return isFeatureSupported;
                 }),
             );

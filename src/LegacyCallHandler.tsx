@@ -765,7 +765,6 @@ export default class LegacyCallHandler extends EventEmitter {
                 cancelButton: _t("action|ok"),
                 onFinished: (allow) => {
                     SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
-                    cli.setFallbackICEServerAllowed(!!allow);
                 },
             },
             undefined,

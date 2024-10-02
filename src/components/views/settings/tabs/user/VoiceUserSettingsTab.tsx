@@ -112,10 +112,6 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         this.context.setForceTURN(!p2p);
     };
 
-    private changeFallbackICEServerAllowed = (allow: boolean): void => {
-        this.context.setFallbackICEServerAllowed(allow);
-    };
-
     private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
         return devices.map((d) => {
             return (
@@ -226,7 +222,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                                 server: new URL(FALLBACK_ICE_SERVER).pathname,
                             })}
                             level={SettingLevel.DEVICE}
-                            onChange={this.changeFallbackICEServerAllowed}
+                            hideIfCannotSet
                         />
                     </SettingsSubsection>
                 </SettingsSection>

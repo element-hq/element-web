@@ -18,7 +18,7 @@ import SettingController from "./SettingController";
  * This class performs no logic and should be overridden.
  */
 export default abstract class MatrixClientBackedController extends SettingController {
-    private static _matrixClient: MatrixClient;
+    private static _matrixClient?: MatrixClient;
     private static instances: MatrixClientBackedController[] = [];
 
     public static set matrixClient(client: MatrixClient) {
@@ -26,7 +26,7 @@ export default abstract class MatrixClientBackedController extends SettingContro
         MatrixClientBackedController._matrixClient = client;
 
         for (const instance of MatrixClientBackedController.instances) {
-            instance.initMatrixClient(oldClient, client);
+            instance.initMatrixClient(client, oldClient);
         }
     }
 
@@ -36,9 +36,9 @@ export default abstract class MatrixClientBackedController extends SettingContro
         MatrixClientBackedController.instances.push(this);
     }
 
-    public get client(): MatrixClient {
+    public get client(): MatrixClient | undefined {
         return MatrixClientBackedController._matrixClient;
     }
 
-    protected abstract initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void;
+    protected abstract initMatrixClient(newClient: MatrixClient, oldClient?: MatrixClient): void;
 }
