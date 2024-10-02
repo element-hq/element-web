@@ -1461,9 +1461,6 @@
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
-        "new_room_decoration_ui": "New room header",
-        "new_room_decoration_ui_beta_caption": "A new look for your rooms with a simpler, cleaner and more accessible room header.",
-        "new_room_decoration_ui_beta_title": "Room header",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
@@ -1558,9 +1555,7 @@
         "error_send_description": "%(brand)s could not send your location. Please try again later.",
         "error_send_title": "We couldn't send your location",
         "error_sharing_live_location": "An error occurred whilst sharing your live location",
-        "error_sharing_live_location_try_again": "An error occurred whilst sharing your live location, please try again",
         "error_stopping_live_location": "An error occurred while stopping your live location",
-        "error_stopping_live_location_try_again": "An error occurred while stopping your live location, please try again",
         "expand_map": "Expand map",
         "failed_generic": "Failed to fetch your location. Please try again later.",
         "failed_load_map": "Unable to load map",
@@ -1590,7 +1585,6 @@
         "share_type_own": "My current location",
         "share_type_pin": "Drop a Pin",
         "share_type_prompt": "What location type do you want to share?",
-        "stop_and_close": "Stop and close",
         "toggle_attribution": "Toggle attribution"
     },
     "member_list": {
@@ -1838,7 +1832,6 @@
     "right_panel": {
         "add_integrations": "Add extensions",
         "add_topic": "Add topic",
-        "export_chat_button": "Export chat",
         "extensions_empty_description": "Select “%(addIntegrations)s” to browse and add extensions to this room",
         "extensions_empty_title": "Boost productivity with more tools, widgets and bots",
         "files_button": "Files",
@@ -1861,7 +1854,6 @@
                 "title": "All new pinned messages"
             },
             "reply_thread": "Reply to a <link>thread message</link>",
-            "title": "Pinned messages",
             "unpin_all": {
                 "button": "Unpin all messages",
                 "content": "Make sure that you really want to remove all pinned messages. This action can’t be undone.",
@@ -1903,8 +1895,7 @@
         },
         "video_room_chat": {
             "title": "Chat"
-        },
-        "widgets_section": "Widgets"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "This invite was sent to %(email)s which is not associated with your account",
@@ -1925,7 +1916,6 @@
             "low_priority": "Low Priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "mentions_only": "Mentions only",
             "notifications_default": "Match default setting",
             "notifications_mute": "Mute room",
             "title": "Room options",
@@ -1968,22 +1958,11 @@
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
         "header": {
-            "close_call_button": "Close call",
-            "forget_room_button": "Forget room",
-            "hide_widgets_button": "Hide Widgets",
             "n_people_asking_to_join": {
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "room_is_public": "This room is public",
-            "show_widgets_button": "Show Widgets",
-            "video_call_button_ec": "Video call (%(brand)s)",
-            "video_call_button_jitsi": "Video call (Jitsi)",
-            "video_call_button_legacy": "Legacy video call",
-            "video_call_ec_change_layout": "Change layout",
-            "video_call_ec_layout_freedom": "Freedom",
-            "video_call_ec_layout_spotlight": "Spotlight",
-            "video_room_view_chat_button": "View chat timeline"
+            "room_is_public": "This room is public"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
@@ -2077,10 +2056,6 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
-            "result_count": {
-                "one": "(~%(count)s result)",
-                "other": "(~%(count)s results)"
-            },
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"

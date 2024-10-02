@@ -1100,7 +1100,6 @@ exports[`RoomView should show error view if failed to look up room alias 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
-    data-room-header="new"
   >
     <div
       class="mx_RoomPreviewBar mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { useState, useCallback, useMemo } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
-import { Call, ConnectionState, ElementCall, Layout, CallEvent } from "../models/Call";
+import { Call, ConnectionState, CallEvent } from "../models/Call";
 import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
@@ -81,10 +81,3 @@ export const useJoinCallButtonDisabledTooltip = (call: Call | null): string | nu
     if (isFull) return _t("voip|join_button_tooltip_call_full");
     return null;
 };
-
-export const useLayout = (call: ElementCall): Layout =>
-    useTypedEventEmitterState(
-        call,
-        CallEvent.Layout,
-        useCallback((state) => state ?? call.layout, [call]),
-    );
