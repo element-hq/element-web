@@ -62,29 +62,18 @@ export default class PinningUtils {
     }
 
     /**
-     * Determines if the given event may be pinned or unpinned by the current user
-     * It doesn't check if the event is pinnable or unpinnable.
-     * @param matrixClient
-     * @param mxEvent
-     * @private
-     */
-    private static canPinOrUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
-        if (!isContentActionable(mxEvent)) return false;
-
-        const room = matrixClient.getRoom(mxEvent.getRoomId());
-        if (!room) return false;
-
-        return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room);
-    }
-
-    /**
      * Determines if the given event may be pinned by the current user.
      * This checks if the user has the necessary permissions to pin or unpin the event, and if the event is pinnable.
      * @param matrixClient
      * @param mxEvent
      */
     public static canPin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
-        return PinningUtils.canPinOrUnpin(matrixClient, mxEvent) && PinningUtils.isPinnable(mxEvent);
+        if (!isContentActionable(mxEvent)) return false;
+
+        const room = matrixClient.getRoom(mxEvent.getRoomId());
+        if (!room) return false;
+
+        return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room) && PinningUtils.isPinnable(mxEvent);
     }
 
     /**
@@ -94,7 +83,10 @@ export default class PinningUtils {
      * @param mxEvent
      */
     public static canUnpin(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
-        return PinningUtils.canPinOrUnpin(matrixClient, mxEvent) && PinningUtils.isUnpinnable(mxEvent);
+        const room = matrixClient.getRoom(mxEvent.getRoomId());
+        if (!room) return false;
+
+        return PinningUtils.userHasPinOrUnpinPermission(matrixClient, room) && PinningUtils.isUnpinnable(mxEvent);
     }
 
     /**

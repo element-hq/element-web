@@ -190,6 +190,12 @@ describe("PinningUtils", () => {
 
                 expect(PinningUtils.canUnpin(matrixClient, event)).toBe(true);
             });
+
+            test("should return true if the event is redacted", () => {
+                const event = makePinEvent({ unsigned: { redacted_because: "because" as unknown as IEvent } });
+
+                expect(PinningUtils.canUnpin(matrixClient, event)).toBe(true);
+            });
         });
     });
 
