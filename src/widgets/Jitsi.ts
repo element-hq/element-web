@@ -12,7 +12,8 @@ import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
+const JITSI_WK_PROPERTY_LEGACY = "im.vector.riot.jitsi";
+const JITSI_WK_PROPERTY = "io.element.jitsi";
 
 export interface JitsiWidgetData {
     conferenceId: string;
@@ -24,9 +25,14 @@ export class Jitsi {
     private static instance: Jitsi;
 
     private domain?: string;
+    private _useFor1To1Calls = false;
 
     public get preferredDomain(): string {
         return this.domain || "meet.element.io";
+    }
+
+    public get useFor1To1Calls(): boolean {
+        return this._useFor1To1Calls;
     }
 
     /**
@@ -65,12 +71,16 @@ export class Jitsi {
         let domain = SdkConfig.getObject("jitsi")?.get("preferred_domain") || "meet.element.io";
 
         logger.log("Attempting to get Jitsi conference information from homeserver");
-        const wkPreferredDomain = discoveryResponse?.[JITSI_WK_PROPERTY]?.["preferredDomain"];
+        const wkJitsiConfig = discoveryResponse?.[JITSI_WK_PROPERTY] ?? discoveryResponse?.[JITSI_WK_PROPERTY_LEGACY];
+
+        const wkPreferredDomain = wkJitsiConfig?.["preferredDomain"];
         if (wkPreferredDomain) domain = wkPreferredDomain;
 
         // Put the result into memory for us to use later
         this.domain = domain;
         logger.log("Jitsi conference domain:", this.preferredDomain);
+        this._useFor1To1Calls = wkJitsiConfig?.["useFor1To1Calls"] || false;
+        logger.log("Jitsi use for 1:1 calls:", this.useFor1To1Calls);
     };
 
     /**

@@ -59,6 +59,7 @@ import { SdkContextClass } from "./contexts/SDKContext";
 import { showCantStartACallDialog } from "./voice-broadcast/utils/showCantStartACallDialog";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
+import { Jitsi } from "./widgets/Jitsi.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
@@ -908,12 +909,12 @@ export default class LegacyCallHandler extends EventEmitter {
             Modal.createDialog(ErrorDialog, {
                 description: _t("voip|cannot_call_yourself_description"),
             });
-        } else if (members.length === 2) {
+        } else if (members.length === 2 && !Jitsi.getInstance().useFor1To1Calls) {
             logger.info(`Place ${type} call in ${roomId}`);
 
             await this.placeMatrixCall(roomId, type, transferee);
         } else {
-            // > 2
+            // > 2 || useFor1To1Calls
             await this.placeJitsiCall(roomId, type);
         }
     }
