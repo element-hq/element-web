@@ -110,10 +110,6 @@ This is useful while we experiment with encryption and to make calling compatibl
 
 Enables rendering of MD / HTML in room topics.
 
-## New room header & details (`feature_new_room_decoration_ui`) [In Development]
-
-Refactors visually the room header and room sidebar
-
 ## Enable the notifications panel in the room header (`feature_notifications`)
 
 Unreliable in encrypted rooms.
