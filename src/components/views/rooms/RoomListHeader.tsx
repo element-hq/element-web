@@ -417,6 +417,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             case MetaSpace.Home:
             case MetaSpace.Favourites:
             case MetaSpace.People:
+            case MetaSpace.Orphans:
                 showPlusMenuForMetaSpace = false;
                 break;
 

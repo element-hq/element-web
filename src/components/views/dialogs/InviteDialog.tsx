@@ -537,8 +537,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     // VERJI added param activeSpaceMembers - used to filter the recents based on membership in space
     public static buildRecents(excludedTargetIds: Set<string>, activeSpaceMembers: string[]): Result[] {
         // Verji - If we don't want to see the Recents-suggestions(featureflag), we just return an empty array
-        if(!SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
-            return [] as Result[]
+        if (!SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)) {
+            return [] as Result[];
         }
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
@@ -688,11 +688,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     ...this.state.serverResultsMixin,
                     ...this.state.threepidResultsMixin,
                 ];
-            }
-            else if(SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)){
-                possibleMembers = [
-                    ...this.state.recents
-                ];
+            } else if (SettingsStore.getValue(UIFeature.ShowRecentsInSuggestions)) {
+                possibleMembers = [...this.state.recents];
             }
             const toAdd = [];
             const potentialAddresses = this.state.filterText
