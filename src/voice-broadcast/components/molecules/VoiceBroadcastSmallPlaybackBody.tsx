@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import {
     VoiceBroadcastHeader,
@@ -16,7 +17,6 @@ import {
 } from "../..";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
-import { Icon as XIcon } from "../../../../res/img/compound/close-8px.svg";
 
 interface VoiceBroadcastSmallPlaybackBodyProps {
     playback: VoiceBroadcastPlayback;
@@ -37,7 +37,7 @@ export const VoiceBroadcastSmallPlaybackBody: React.FC<VoiceBroadcastSmallPlayba
             />
             <VoiceBroadcastPlaybackControl state={playbackState} onClick={toggle} />
             <AccessibleButton onClick={() => playback.stop()}>
-                <XIcon className="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close" />
+                <CloseIcon className="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close" />
             </AccessibleButton>
         </div>
     );

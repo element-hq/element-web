@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import { _t } from "../../../languageHandler";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -16,7 +17,6 @@ import { useOwnLiveBeacons } from "../../../utils/beacon";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
-import { Icon as CloseIcon } from "../../../../res/img/image-view/close.svg";
 import LiveTimeRemaining from "./LiveTimeRemaining";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";

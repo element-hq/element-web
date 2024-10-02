@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import { LiveBadge, VoiceBroadcastLiveness } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/compound/live-16px.svg";
 import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
 import { Icon as TimerIcon } from "../../../../res/img/compound/timer-16px.svg";
-import { Icon as XIcon } from "../../../../res/img/compound/close-16px.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
 import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
@@ -65,7 +65,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
 
     const closeButton = showClose && (
         <AccessibleButton onClick={onCloseClick}>
-            <XIcon className="mx_Icon mx_Icon_16" />
+            <CloseIcon className="mx_Icon mx_Icon_16" />
         </AccessibleButton>
     );
 

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Beacon } from "matrix-js-sdk/src/matrix";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
-import { Icon as CloseIcon } from "../../../../res/img/image-view/close.svg";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
@@ -32,7 +32,7 @@ const DialogSidebar: React.FC<Props> = ({ beacons, onBeaconClick, requestClose }
                     title={_t("location_sharing|close_sidebar")}
                     data-testid="dialog-sidebar-close"
                 >
-                    <CloseIcon className="mx_DialogSidebar_closeButtonIcon" />
+                    <CloseIcon className="mx_DialogSidebar_closeButtonIcon" height="24px" width="24px" />
                 </AccessibleButton>
             </div>
             {beacons?.length ? (

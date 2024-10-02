@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { useCallback, useState, VFC } from "react";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import { Icon as CheckIcon } from "../../../../../../res/img/feather-customised/check.svg";
-import { Icon as XIcon } from "../../../../../../res/img/feather-customised/x.svg";
 import { formatRelativeTime } from "../../../../../DateUtils";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { _t } from "../../../../../languageHandler";
@@ -89,7 +89,7 @@ const Knock: VFC<{
                 onClick={() => handleDeny(roomMember.userId)}
                 title={_t("action|deny")}
             >
-                <XIcon width={18} height={18} />
+                <CloseIcon width={18} height={18} />
             </AccessibleButton>
             <AccessibleButton
                 className="mx_PeopleRoomSettingsTab_action"

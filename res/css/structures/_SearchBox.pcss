@@ -16,11 +16,13 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_SearchBox_closeButton {
         cursor: pointer;
-        background-image: url("$(res)/img/icons-close.svg");
-        background-repeat: no-repeat;
+        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 16px;
         width: 16px;
         height: 16px;
-        background-position: center;
         padding: 9px;
+        background-color: var(--cpd-color-icon-secondary);
     }
 }
