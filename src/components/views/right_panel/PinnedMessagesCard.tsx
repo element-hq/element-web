@@ -20,7 +20,6 @@ import { PinnedEventTile } from "../rooms/PinnedEventTile";
 import { useRoomState } from "../../../hooks/useRoomState";
 import RoomContext, { TimelineRenderingType, useRoomContext } from "../../../contexts/RoomContext";
 import { ReadPinsEventId } from "./types";
-import Heading from "../typography/Heading";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { filterBoolean } from "../../../utils/arrays";
 import Modal from "../../../Modal";
@@ -86,13 +85,7 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
 
     return (
         <BaseCard
-            header={
-                <div className="mx_BaseCard_header_title">
-                    <Heading size="4" className="mx_BaseCard_header_title_heading">
-                        {_t("right_panel|pinned_messages|header", { count: pinnedEventIds.length })}
-                    </Heading>
-                </div>
-            }
+            header={_t("right_panel|pinned_messages|header", { count: pinnedEventIds.length })}
             className="mx_PinnedMessagesCard"
             onClose={onClose}
         >

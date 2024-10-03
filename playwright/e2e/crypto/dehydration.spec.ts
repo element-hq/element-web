@@ -94,7 +94,7 @@ test.describe("Dehydration", () => {
 
         await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-        await page.locator(".mx_RightPanelTabs").getByText("People").click();
+        await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
         await expect(page.locator(".mx_MemberList")).toBeVisible();
 
         await getMemberTileByName(page, NAME).click();

@@ -125,7 +125,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         }
 
         return (
-            <BaseCard onClose={this.props.onClose}>
+            <BaseCard onClose={this.props.onClose} header={_t("common|profile")}>
                 <Flex className="mx_ThirdPartyMemberInfo" direction="column" gap="var(--cpd-space-4x)">
                     <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
                         {/* same as userinfo name style */}

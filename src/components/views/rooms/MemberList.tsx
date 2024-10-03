@@ -55,7 +55,6 @@ const SHOW_MORE_INCREMENT = 100;
 interface IProps {
     roomId: string;
     searchQuery: string;
-    hideHeaderButtons?: boolean;
     onClose(): void;
     onSearchQueryChanged: (query: string) => void;
 }
@@ -355,7 +354,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                     className="mx_MemberList"
                     ariaLabelledBy="memberlist-panel-tab"
                     role="tabpanel"
-                    hideHeaderButtons={this.props.hideHeaderButtons}
+                    header={_t("common|people")}
                     onClose={this.props.onClose}
                 >
                     <Spinner />
@@ -420,7 +419,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                 className="mx_MemberList"
                 ariaLabelledBy="memberlist-panel-tab"
                 role="tabpanel"
-                hideHeaderButtons={this.props.hideHeaderButtons}
+                header={_t("common|people")}
                 footer={footer}
                 onClose={this.props.onClose}
             >

@@ -220,7 +220,7 @@ test.describe("Cryptography", function () {
 
         // Assert that verified icon is rendered
         await page.getByTestId("base-card-back-button").click();
-        await page.locator(".mx_RightPanelTabs").getByText("Info").click();
+        await page.getByLabel("Room info").nth(1).click();
         await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="success"]')).toContainText("Encrypted");
 
         // Take a snapshot of RoomSummaryCard with a verified E2EE icon

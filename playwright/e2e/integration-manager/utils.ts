@@ -11,6 +11,6 @@ import type { ElementAppPage } from "../../pages/ElementAppPage";
 export async function openIntegrationManager(app: ElementAppPage) {
     const { page } = app;
     await app.toggleRoomInfoPanel();
-    await page.getByRole("tab", { name: "Extensions" }).click();
+    await page.getByRole("menuitem", { name: "Extensions" }).click();
     await page.getByRole("button", { name: "Add extensions" }).click();
 }

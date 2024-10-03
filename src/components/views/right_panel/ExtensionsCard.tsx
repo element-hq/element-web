@@ -157,13 +157,6 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
         }
     };
 
-    // The button is in the header to keep it outside the scrollable region
-    const header = (
-        <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
-            {_t("right_panel|add_integrations")}
-        </Button>
-    );
-
     let body: JSX.Element;
     if (realApps.length < 1) {
         body = (
@@ -197,7 +190,10 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
     }
 
     return (
-        <BaseCard header={header} className="mx_ExtensionsCard" onClose={onClose} hideHeaderButtons>
+        <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
+            <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                {_t("right_panel|add_integrations")}
+            </Button>
             {body}
         </BaseCard>
     );

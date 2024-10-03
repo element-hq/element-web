@@ -157,6 +157,6 @@ test.describe("Threads Activity Centre", () => {
         await util.openTac();
         await util.clickRoomInTac(room1.name);
 
-        await util.assertThreadTabFocused();
+        await util.assertThreadPanelIsOpened();
     });
 });

@@ -33,7 +33,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
-import { RightPanelTabs } from "../views/right_panel/RightPanelTabs";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 
 interface BaseProps {
@@ -164,7 +163,6 @@ export default class RightPanel extends React.Component<Props, IState> {
                         <MemberList
                             roomId={roomId}
                             key={roomId}
-                            hideHeaderButtons
                             onClose={this.onClose}
                             searchQuery={this.state.searchQuery}
                             onSearchQueryChanged={this.onSearchQueryChanged}
@@ -313,7 +311,6 @@ export default class RightPanel extends React.Component<Props, IState> {
 
         return (
             <aside className="mx_RightPanel" id="mx_RightPanel">
-                {phase && <RightPanelTabs room={this.props.room} phase={phase} />}
                 {card}
             </aside>
         );

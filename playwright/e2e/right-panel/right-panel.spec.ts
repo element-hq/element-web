@@ -65,7 +65,7 @@ test.describe("RightPanel", () => {
         test("should handle clicking add widgets", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.getByRole("tab", { name: "Extensions" }).click();
+            await page.getByRole("menuitem", { name: "Extensions" }).click();
             await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
         });
@@ -106,7 +106,7 @@ test.describe("RightPanel", () => {
         test("should handle viewing room member", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.locator(".mx_RightPanelTabs").getByText("People").click();
+            await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
@@ -116,7 +116,7 @@ test.describe("RightPanel", () => {
             await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
-            await page.locator(".mx_RightPanelTabs").getByText("Info").click();
+            await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
     });

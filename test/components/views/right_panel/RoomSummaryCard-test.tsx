@@ -258,6 +258,36 @@ describe("<RoomSummaryCard />", () => {
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
     });
 
+    it("opens room member list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("People"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.RoomMemberList },
+            true,
+        );
+    });
+
+    it("opens room threads list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Threads"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel }, true);
+    });
+
+    it("opens room pinned messages on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Pinned messages"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.PinnedMessages },
+            true,
+        );
+    });
+
     describe("pinning", () => {
         it("renders pins options", () => {
             const { getByText } = getComponent();

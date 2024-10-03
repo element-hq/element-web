@@ -10,19 +10,15 @@ Please see LICENSE files in the repository root for full details.
     --cpd-separator-inset: var(--cpd-space-4x);
     --cpd-separator-spacing: var(--cpd-space-4x);
 
-    .mx_BaseCard_header {
-        /* Hide the line between the header and the body of the card */
-        border-block-end: none;
-
-        /* Styling for the "Add extensions" button */
-        button {
-            width: 100%;
-        }
-    }
-
     .mx_AutoHideScrollbar {
         padding: 0 var(--cpd-space-4x);
+        margin-top: var(--cpd-space-3x);
         box-sizing: border-box;
+
+        /* Styling for the "Add extensions" button */
+        & > button {
+            width: 100%;
+        }
     }
 
     .mx_ExtensionsCard_container {

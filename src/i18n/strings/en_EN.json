@@ -477,7 +477,6 @@
         "encrypted": "Encrypted",
         "encryption_enabled": "Encryption enabled",
         "error": "Error",
-        "extensions": "Extensions",
         "faq": "FAQ",
         "favourites": "Favourites",
         "feedback": "Feedback",
@@ -1832,17 +1831,17 @@
     "right_panel": {
         "add_integrations": "Add extensions",
         "add_topic": "Add topic",
+        "extensions_button": "Extensions",
         "extensions_empty_description": "Select “%(addIntegrations)s” to browse and add extensions to this room",
         "extensions_empty_title": "Boost productivity with more tools, widgets and bots",
         "files_button": "Files",
-        "info": "Info",
         "pinned_messages": {
             "empty_description": "Select a message and choose “%(pinAction)s” to it include here.",
             "empty_title": "Pin important messages so that they can be easily discovered",
             "header": {
                 "one": "1 Pinned message",
                 "other": "%(count)s Pinned messages",
-                "zero": "Pinned message"
+                "zero": "Pinned messages"
             },
             "limits": {
                 "other": "You can only pin up to %(count)s widgets"

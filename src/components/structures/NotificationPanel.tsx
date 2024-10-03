@@ -18,7 +18,6 @@ import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
-import Heading from "../views/typography/Heading";
 import EmptyState from "../views/right_panel/EmptyState";
 
 interface IProps {
@@ -88,13 +87,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                 }}
             >
                 <BaseCard
-                    header={
-                        <div className="mx_BaseCard_header_title">
-                            <Heading size="4" className="mx_BaseCard_header_title_heading">
-                                {_t("notifications|enable_prompt_toast_title")}
-                            </Heading>
-                        </div>
-                    }
+                    header={_t("notifications|enable_prompt_toast_title")}
                     /**
                      * Need to rename this CSS class to something more generic
                      * Will be done once all the panels are using a similar layout

@@ -223,7 +223,11 @@ class FilePanel extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         if (MatrixClientPeg.safeGet().isGuest()) {
             return (
-                <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
+                <BaseCard
+                    className="mx_FilePanel mx_RoomView_messageListWrapper"
+                    onClose={this.props.onClose}
+                    header={_t("right_panel|files_button")}
+                >
                     <div className="mx_RoomView_empty">
                         {_t(
                             "file_panel|guest_note",
@@ -241,7 +245,11 @@ class FilePanel extends React.Component<IProps, IState> {
             );
         } else if (this.noRoom) {
             return (
-                <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
+                <BaseCard
+                    className="mx_FilePanel mx_RoomView_messageListWrapper"
+                    onClose={this.props.onClose}
+                    header={_t("right_panel|files_button")}
+                >
                     <div className="mx_RoomView_empty">{_t("file_panel|peek_note")}</div>
                 </BaseCard>
             );
@@ -273,6 +281,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         onClose={this.props.onClose}
                         withoutScrollContainer
                         ref={this.card}
+                        header={_t("right_panel|files_button")}
                     >
                         {this.card.current && (
                             <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
@@ -299,7 +308,11 @@ class FilePanel extends React.Component<IProps, IState> {
                         timelineRenderingType: TimelineRenderingType.File,
                     }}
                 >
-                    <BaseCard className="mx_FilePanel" onClose={this.props.onClose}>
+                    <BaseCard
+                        className="mx_FilePanel"
+                        onClose={this.props.onClose}
+                        header={_t("right_panel|files_button")}
+                    >
                         <Spinner />
                     </BaseCard>
                 </RoomContext.Provider>

@@ -193,7 +193,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
             }}
         >
             <BaseCard
-                hideHeaderButtons
                 header={
                     hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />
                 }

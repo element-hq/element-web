@@ -8,6 +8,45 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
     <div
       class="mx_BaseCard_header"
     >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Extensions
+        </p>
+      </div>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
       <button
         class="_button_zt6rp_17 _has-icon_zt6rp_61"
         data-kind="secondary"
@@ -22,11 +61,6 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         />
         Add extensions
       </button>
-    </div>
-    <div
-      class="mx_AutoHideScrollbar"
-      tabindex="-1"
-    >
       <div
         class="mx_Flex mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
@@ -59,6 +93,45 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
     <div
       class="mx_BaseCard_header"
     >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Extensions
+        </p>
+      </div>
+      <button
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
       <button
         class="_button_zt6rp_17 _has-icon_zt6rp_61"
         data-kind="secondary"
@@ -73,11 +146,6 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         />
         Add extensions
       </button>
-    </div>
-    <div
-      class="mx_AutoHideScrollbar"
-      tabindex="-1"
-    >
       <div
         class="_separator_144s5_17"
         data-kind="primary"

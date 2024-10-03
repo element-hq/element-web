@@ -36,7 +36,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import JumpToBottomButton from "../rooms/JumpToBottomButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import Measured from "../elements/Measured";
-import Heading from "../typography/Heading";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
@@ -185,16 +184,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         }
     };
 
-    private renderTimelineCardHeader = (): JSX.Element => {
-        return (
-            <div className="mx_BaseCard_header_title">
-                <Heading size="4" className="mx_BaseCard_header_title_heading">
-                    {_t("right_panel|video_room_chat|title")}
-                </Heading>
-            </div>
-        );
-    };
-
     public render(): React.ReactNode {
         const highlightedEventId = this.state.isInitialEventHighlighted ? this.state.initialEventId : undefined;
 
@@ -226,7 +215,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     className={this.props.classNames}
                     onClose={this.props.onClose}
                     withoutScrollContainer={true}
-                    header={this.renderTimelineCardHeader()}
+                    header={_t("right_panel|video_room_chat|title")}
                     ref={this.card}
                 >
                     {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}

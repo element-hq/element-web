@@ -329,13 +329,6 @@ export class Helpers {
     }
 
     /**
-     * Assert that the thread tab is focused
-     */
-    assertThreadTabFocused() {
-        return expect(this.page.locator("#thread-panel-tab")).toBeFocused();
-    }
-
-    /**
      * Populate the rooms with messages and threads
      * @param room1
      * @param room2

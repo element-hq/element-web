@@ -9,8 +9,15 @@ exports[`FilePanel renders empty state 1`] = `
       class="mx_BaseCard_header"
     >
       <div
-        class="mx_BaseCard_header_spacer"
-      />
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Files
+        </p>
+      </div>
       <button
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
