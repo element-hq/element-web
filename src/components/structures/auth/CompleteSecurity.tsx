@@ -83,7 +83,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
             throw new Error(`Unknown phase ${phase}`);
         }
 
-        const forceVerification = SdkConfig.get("force_verification") ?? false;
+        const forceVerification = SdkConfig.get("force_verification");
 
         let skipButton;
         if (!forceVerification && (phase === Phase.Intro || phase === Phase.ConfirmReset)) {

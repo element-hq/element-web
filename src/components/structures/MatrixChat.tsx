@@ -166,6 +166,12 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
+
+    // Used by tests, this function is called when session initialisation starts
+    // with a promise that resolves or rejects once the initialiation process
+    // has finished, so that tests can wait for this to avoid them executing over
+    // each other.
+    initPromiseCallback?: (p: Promise<void>) => void;
 }
 
 interface IState {
@@ -309,7 +315,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Kick off a call to {@link initSession}, and handle any errors
      */
     private startInitSession = (): void => {
-        this.initSession().catch((err) => {
+        const initProm = this.initSession();
+        if (this.props.initPromiseCallback) {
+            this.props.initPromiseCallback(initProm);
+        }
+
+        initProm.catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
         });
@@ -881,7 +892,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case "client_started":
-                this.onClientStarted();
+                // No need to make this handler async to wait for the result of this
+                this.onClientStarted().catch((e) => {
+                    logger.error("Exception in onClientStarted", e);
+                });
                 break;
             case "send_event":
                 this.onSendEvent(payload.room_id, payload.event);
@@ -1321,6 +1335,25 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
+     * Returns true if the user must go through the device verification process before they
+     * can use the app.
+     * @returns true if the user must verify
+     */
+    private async shouldForceVerification(): Promise<boolean> {
+        if (!SdkConfig.get("force_verification")) return false;
+        const mustVerifyFlag = localStorage.getItem("must_verify_device");
+        if (!mustVerifyFlag) return false;
+
+        const client = MatrixClientPeg.safeGet();
+        if (client.isGuest()) return false;
+
+        const crypto = client.getCrypto();
+        const crossSigningReady = await crypto?.isCrossSigningReady();
+
+        return !crossSigningReady;
+    }
+
+    /**
      * Called when a new logged in session has started
      */
     private async onLoggedIn(): Promise<void> {
@@ -1328,30 +1361,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
-            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
-
-            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
-            // account settings can still be changing at this point in app init (due to the initial sync being cached,
-            // then subsequent syncs being received from the server)
-            //
-            // This seems unlikely for something that should happen directly after registration, but if a user does
-            // their initial login on another device/browser than they registered on, we want to avoid asking this
-            // question twice
-            //
-            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
-            SettingsStore.watchSetting(
-                "FTUE.useCaseSelection",
-                null,
-                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
-                        this.onShowPostLoginScreen();
-                    }
-                },
-            );
-        } else {
-            return this.onShowPostLoginScreen();
-        }
+        await this.onShowPostLoginScreen();
     }
 
     private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
@@ -1557,9 +1567,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             dis.fire(Action.FocusSendMessageComposer);
-            this.setState({
-                ready: true,
-            });
         });
 
         cli.on(HttpApiEvent.SessionLoggedOut, function (errObj) {
@@ -1702,8 +1709,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * setting up anything that requires the client to be started.
      * @private
      */
-    private onClientStarted(): void {
+    private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
+
+        const shouldForceVerification = await this.shouldForceVerification();
+        // XXX: Don't replace the screen if it's already one of these: postLoginSetup
+        // changes to these screens in certain circumstances so we shouldn't clobber it.
+        // We should probably have one place where we decide what the next screen is after
+        // login.
+        if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
+            if (shouldForceVerification) {
+                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            }
+        }
 
         if (cli.isCryptoEnabled()) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
@@ -1722,6 +1740,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         }
+
+        this.setState({
+            ready: true,
+        });
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
@@ -2013,7 +2035,33 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        this.onLoggedIn();
+        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
+            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
+
+            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
+            // account settings can still be changing at this point in app init (due to the initial sync being cached,
+            // then subsequent syncs being received from the server)
+            //
+            // This seems unlikely for something that should happen directly after registration, but if a user does
+            // their initial login on another device/browser than they registered on, we want to avoid asking this
+            // question twice
+            //
+            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
+            SettingsStore.watchSetting(
+                "FTUE.useCaseSelection",
+                null,
+                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
+                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
+                        this.onShowPostLoginScreen();
+                    }
+                },
+            );
+        } else {
+            // This is async but we makign this function async to wait for it isn't useful
+            this.onShowPostLoginScreen().catch((e) => {
+                logger.error("Exception showing post-login screen", e);
+            });
+        }
     };
 
     private getFragmentAfterLogin(): string {

@@ -24,6 +24,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     integrations_rest_url: "https://scalar.vector.im/api",
     uisi_autorageshake_app: "element-auto-uisi",
     show_labs_settings: false,
+    force_verification: false,
 
     jitsi: {
         preferred_domain: "meet.element.io",

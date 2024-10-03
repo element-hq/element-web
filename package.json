@@ -198,6 +198,7 @@
         "axe-core": "4.10.0",
         "babel-jest": "^29.0.0",
         "blob-polyfill": "^9.0.0",
+        "core-js": "^3.38.1",
         "eslint": "8.57.1",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",

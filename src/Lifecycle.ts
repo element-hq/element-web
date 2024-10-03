@@ -824,6 +824,8 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
+    // We are now logged in, so fire this. We have yet to start the client but the
+    // client_started dispatch is for that.
     dis.fire(Action.OnLoggedIn);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {};
@@ -845,6 +847,12 @@ async function doSetLoggedIn(
 
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations(isFreshLogin);
+
+    if (isFreshLogin && !credentials.guest) {
+        // For newly registered users, set a flag so that we force them to verify,
+        // (we don't want to force users with existing sessions to verify though)
+        localStorage.setItem("must_verify_device", "true");
+    }
 
     return client;
 }
