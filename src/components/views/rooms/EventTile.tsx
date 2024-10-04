@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, MouseEvent, ReactNode } from "react";
+import React, { createRef, forwardRef, JSX, MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -76,6 +76,8 @@ import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
+import PinningUtils from "../../../utils/PinningUtils.ts";
+import { PinnedMessageBadge } from "../messages/PinnedMessageBadge.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1123,6 +1125,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const timestamp = showTimestamp && ts ? messageTimestamp : null;
 
+        let pinnedMessageBadge: JSX.Element | undefined;
+        if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+            pinnedMessageBadge = <PinnedMessageBadge />;
+        }
+
         let reactionsRow: JSX.Element | undefined;
         if (!isRedacted) {
             reactionsRow = (
@@ -1133,6 +1140,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 />
             );
         }
+
+        // If we have reactions or a pinned message badge, we need a footer
+        const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
 
         const linkedTimestamp = !this.props.hideTimestamp ? (
             <a
@@ -1239,7 +1249,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             </a>
                             {msgOption}
                         </div>,
-                        reactionsRow,
+                        hasFooter && (
+                            <div className="mx_EventTile_footer" key="mx_EventTile_footer">
+                                {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                {reactionsRow}
+                                {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                            </div>
+                        ),
                     ],
                 );
             }
@@ -1428,14 +1444,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {actionBar}
                             {this.props.layout === Layout.IRC && (
                                 <>
-                                    {reactionsRow}
+                                    {hasFooter && (
+                                        <div className="mx_EventTile_footer">
+                                            {pinnedMessageBadge}
+                                            {reactionsRow}
+                                        </div>
+                                    )}
                                     {this.renderThreadInfo()}
                                 </>
                             )}
                         </div>
                         {this.props.layout !== Layout.IRC && (
                             <>
-                                {reactionsRow}
+                                {hasFooter && (
+                                    <div className="mx_EventTile_footer">
+                                        {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                        {reactionsRow}
+                                        {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                                    </div>
+                                )}
                                 {this.renderThreadInfo()}
                             </>
                         )}

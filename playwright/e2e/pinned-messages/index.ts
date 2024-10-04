@@ -92,6 +92,14 @@ export class Helpers {
     }
 
     /**
+     * Get the timeline tile for the given message
+     * @param message
+     */
+    getEventTile(message: string) {
+        return this.page.locator(".mx_EventTile", { hasText: message });
+    }
+
+    /**
      * Pin the given message from the quick actions
      * @param message
      * @param unpin

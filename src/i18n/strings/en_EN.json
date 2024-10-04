@@ -2034,6 +2034,7 @@
         "not_found_title": "This room or space does not exist.",
         "not_found_title_name": "%(roomName)s does not exist.",
         "peek_join_prompt": "You're previewing %(roomName)s. Want to join it?",
+        "pinned_message_badge": "Pinned message",
         "pinned_message_banner": {
             "button_close_list": "Close list",
             "button_view_all": "View all",

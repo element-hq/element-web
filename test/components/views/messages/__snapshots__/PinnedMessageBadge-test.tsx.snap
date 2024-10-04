@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PinnedMessageBadge should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_PinnedMessageBadge"
+  >
+    <div
+      width="16"
+    />
+    Pinned message
+  </div>
+</DocumentFragment>
+`;

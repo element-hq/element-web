@@ -18,6 +18,22 @@ test.describe("Pinned messages", () => {
         await util.assertEmptyPinnedMessagesList();
     });
 
+    test("should pin one message and to have the pinned message badge in the timeline", async ({
+        page,
+        app,
+        room1,
+        util,
+    }) => {
+        await util.goTo(room1);
+        await util.receiveMessages(room1, ["Msg1"]);
+        await util.pinMessages(["Msg1"]);
+
+        const tile = util.getEventTile("Msg1");
+        await expect(tile).toMatchScreenshot("pinned-message-Msg1.png", {
+            mask: [tile.locator(".mx_MessageTimestamp")],
+        });
+    });
+
     test("should pin messages and show them in the room info panel", async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);

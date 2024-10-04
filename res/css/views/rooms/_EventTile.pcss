@@ -463,6 +463,10 @@ $left-gutter: 64px;
                 margin-left: calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding));
             }
         }
+
+        .mx_EventTile_footer {
+            margin: var(--cpd-space-1-5x) 0;
+        }
     }
 
     &[data-layout="group"] {
@@ -509,8 +513,8 @@ $left-gutter: 64px;
             margin-left: $left-gutter;
         }
 
-        .mx_ReactionsRow {
-            margin: $spacing-4 64px;
+        .mx_EventTile_footer {
+            margin: var(--cpd-space-1x) var(--cpd-space-16x);
         }
 
         > .mx_DisambiguatedProfile {
@@ -1248,7 +1252,7 @@ $left-gutter: 64px;
             padding-block-start: $spacing-16;
 
             .mx_EventTile_line,
-            .mx_ReactionsRow {
+            .mx_EventTile_footer {
                 margin-inline-end: var(--ThreadView_group_spacing-end);
             }
 
@@ -1266,7 +1270,7 @@ $left-gutter: 64px;
                 }
             }
 
-            .mx_ReactionsRow {
+            .mx_EventTile_footer {
                 /* Align with message text and summary text */
                 margin-inline-start: var(--ThreadView_group_spacing-start);
             }
@@ -1454,6 +1458,12 @@ $left-gutter: 64px;
 
 .mx_EventTile_annotated {
     display: flex;
+}
+
+.mx_EventTile_footer {
+    display: flex;
+    gap: var(--cpd-space-2x);
+    align-items: center;
 }
 
 /* Media query for mobile UI */
