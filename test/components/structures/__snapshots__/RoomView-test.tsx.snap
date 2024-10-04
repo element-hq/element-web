@@ -1125,3 +1125,322 @@ exports[`RoomView should show error view if failed to look up room alias 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`RoomView video rooms should render joined video room view 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView mx_RoomView_immersive"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_call"
+        data-layout="group"
+      >
+        <header
+          class="mx_Flex mx_RoomHeader light-panel"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+        >
+          <button
+            aria-label="Open room settings"
+            aria-live="off"
+            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+            data-color="3"
+            data-testid="avatar-img"
+            data-type="round"
+            role="button"
+            style="--cpd-avatar-size: 40px;"
+            tabindex="-1"
+          >
+            !
+          </button>
+          <button
+            aria-label="Room info"
+            class="mx_RoomHeader_infoWrapper"
+            tabindex="0"
+          >
+            <div
+              class="mx_Box mx_RoomHeader_info mx_Box--flex"
+              style="--mx-box-flex: 1;"
+            >
+              <div
+                aria-level="1"
+                class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+                dir="auto"
+                role="heading"
+              >
+                <span
+                  class="mx_RoomHeader_truncated mx_lineClamp"
+                >
+                  !10:example.org
+                </span>
+              </div>
+            </div>
+          </button>
+          <div
+            class="mx_Flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+          >
+            <button
+              aria-label="Room info"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <div />
+              </div>
+            </button>
+            <button
+              aria-label="Chat"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <div />
+              </div>
+            </button>
+            <button
+              aria-label="Threads"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <div />
+              </div>
+            </button>
+          </div>
+          <div
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+          >
+            <div
+              aria-label="0 members"
+              class="mx_AccessibleButton mx_FacePile"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="_stacked-avatars_mcap2_111"
+              />
+              0
+            </div>
+          </div>
+        </header>
+      </div>
+      <div
+        class="mx_RightPanel_ResizeWrapper"
+        style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
+      >
+        <aside
+          class="mx_RightPanel"
+          id="mx_RightPanel"
+        >
+          <div
+            class="mx_BaseCard mx_ThreadPanel mx_TimelineCard"
+          >
+            <div
+              class="mx_BaseCard_header"
+            >
+              <div
+                class="mx_BaseCard_header_title"
+              >
+                <p
+                  class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+                  role="heading"
+                >
+                  Chat
+                </p>
+              </div>
+              <button
+                class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+                data-testid="base-card-close-button"
+                role="button"
+                style="--cpd-icon-button-size: 28px;"
+                tabindex="0"
+              >
+                <div
+                  class="_indicator-icon_133tf_26"
+                  style="--cpd-icon-button-size: 100%;"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
+            <div
+              class="mx_TimelineCard_timeline"
+            >
+              <div
+                class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+                tabindex="-1"
+              >
+                <div
+                  class="mx_RoomView_messageListWrapper"
+                >
+                  <ol
+                    aria-live="polite"
+                    class="mx_RoomView_MessageList"
+                    style="height: 400px;"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Message composer"
+              class="mx_MessageComposer mx_MessageComposer--compact"
+              role="region"
+            >
+              <div
+                class="mx_MessageComposer_wrapper"
+              >
+                <div
+                  class="mx_MessageComposer_row"
+                >
+                  <div
+                    class="mx_SendMessageComposer"
+                  >
+                    <div
+                      class="mx_BasicMessageComposer"
+                    >
+                      <div
+                        aria-label="Formatting"
+                        class="mx_MessageComposerFormatBar"
+                        role="toolbar"
+                      >
+                        <button
+                          aria-label="Bold"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                          role="button"
+                          tabindex="0"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Italics"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Strikethrough"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Code block"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Quote"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Insert link"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                      </div>
+                      <div
+                        aria-autocomplete="list"
+                        aria-disabled="false"
+                        aria-haspopup="listbox"
+                        aria-label="Send a message…"
+                        aria-multiline="true"
+                        class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                        contenteditable="true"
+                        data-testid="basicmessagecomposer"
+                        dir="auto"
+                        role="textbox"
+                        style="--placeholder: 'Send\\ a\\ message…';"
+                        tabindex="0"
+                        translate="no"
+                      >
+                        <div>
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="mx_MessageComposer_actions"
+                  >
+                    <div
+                      aria-label="Emoji"
+                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <div
+                      aria-label="Attachment"
+                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <div
+                      aria-label="More options"
+                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <input
+                      multiple=""
+                      style="display: none;"
+                      type="file"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div>
+          <div
+            class="mx_ResizeHandle--horizontal"
+            style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; left: -5px; cursor: col-resize;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
