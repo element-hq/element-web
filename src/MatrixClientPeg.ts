@@ -1,20 +1,12 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
+Copyright 2017, 2018 , 2019 New Vector Ltd
 Copyright 2017 Vector Creations Ltd.
-Copyright 2017, 2018, 2019 New Vector Ltd
-Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import {
@@ -41,7 +33,6 @@ import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientB
 import * as StorageManager from "./utils/StorageManager";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { crossSigningCallbacks } from "./SecurityManager";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import { _t, UserFriendlyError } from "./languageHandler";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -51,6 +42,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
+import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -352,6 +344,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         });
 
         StorageManager.setCryptoInitialised(true);
+
+        setDeviceIsolationMode(this.matrixClient, SettingsStore.getValue("feature_exclude_insecure_devices"));
+
         // TODO: device dehydration and whathaveyou
         return;
     }
@@ -451,11 +446,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
                 }
             },
         };
-
-        const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup.getDehydrationKeyCallback();
-        if (dehydrationKeyCallback) {
-            opts.cryptoCallbacks!.getDehydrationKey = dehydrationKeyCallback;
-        }
 
         this.matrixClient = createMatrixClient(opts);
         this.matrixClient.setGuest(Boolean(creds.guest));

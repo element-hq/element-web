@@ -1,18 +1,10 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { IClientWellKnown } from "matrix-js-sdk/src/matrix";
@@ -60,6 +52,8 @@ export interface IConfigOptions {
         auth_footer_links?: { text: string; url: string }[];
     };
 
+    force_verification?: boolean; // if true, users must verify new logins
+
     map_style_url?: string; // for location-shared maps
 
     embedded_pages?: {
@@ -75,6 +69,10 @@ export interface IConfigOptions {
         available: boolean;
         logo: string; // url
         url: string; // download url
+        url_macos?: string;
+        url_win64?: string;
+        url_win32?: string;
+        url_linux?: string;
     };
     mobile_builds: {
         ios: string | null; // download url
@@ -94,6 +92,7 @@ export interface IConfigOptions {
     integrations_ui_url?: string;
     integrations_rest_url?: string;
     integrations_widgets_urls?: string[];
+    default_widget_container_height?: number; // height in pixels
 
     show_labs_settings: boolean;
     features?: Record<string, boolean>; // <FeatureName, EnabledBool>

@@ -1,17 +1,9 @@
 /*
-Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
@@ -42,24 +34,20 @@ interface IState {
 
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher?: string;
 
-    public constructor(props: IBodyProps) {
-        super(props);
-
-        this.state = {
-            fetchingData: false,
-            decryptedUrl: null,
-            decryptedThumbnailUrl: null,
-            decryptedBlob: null,
-            error: null,
-            posterLoading: false,
-            blurhashUrl: null,
-        };
-    }
+    public state = {
+        fetchingData: false,
+        decryptedUrl: null,
+        decryptedThumbnailUrl: null,
+        decryptedBlob: null,
+        error: null,
+        posterLoading: false,
+        blurhashUrl: null,
+    };
 
     private getContentUrl(): string | undefined {
         const content = this.props.mxEvent.getContent<MediaEventContent>();

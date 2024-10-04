@@ -1628,12 +1628,9 @@
     },
     "right_panel": {
         "add_integrations": "添加挂件、桥接和机器人",
-        "edit_integrations": "编辑挂件、桥接和机器人",
         "export_chat_button": "导出聊天",
         "files_button": "文件",
         "pinned_messages": {
-            "empty": "尚无固定任何东西",
-            "explainer": "如果你拥有权限，请打开任何消息的菜单并选择<b>固定</b>将它们粘贴至此。",
             "limits": {
                 "other": "你仅能固定 %(count)s 个挂件"
             },
@@ -2203,7 +2200,6 @@
             "error_share_msisdn_discovery": "无法共享电话号码",
             "identity_server_no_token": "找不到身份访问令牌",
             "identity_server_not_set": "身份服务器未设置",
-            "incorrect_msisdn_verification": "验证码错误",
             "language_section": "语言与地区",
             "msisdn_in_use": "此电话号码已被使用",
             "msisdn_label": "电话号码",

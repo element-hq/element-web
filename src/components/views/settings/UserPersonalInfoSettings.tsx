@@ -1,25 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
 import { ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { Alert } from "@vector-im/compound-web";
 
-import AccountEmailAddresses from "./account/EmailAddresses";
-import AccountPhoneNumbers from "./account/PhoneNumbers";
 import { _t } from "../../../languageHandler";
 import InlineSpinner from "../elements/InlineSpinner";
 import SettingsSubsection from "./shared/SettingsSubsection";
@@ -27,6 +17,7 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { ThirdPartyIdentifier } from "../../../AddThreepid";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
+import { AddRemoveThreepids } from "./AddRemoveThreepids";
 
 type LoadingState = "loading" | "loaded" | "error";
 
@@ -64,26 +55,28 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
 
     const client = useMatrixClientContext();
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const threepids = await client.getThreePids();
-                setEmails(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Email));
-                setPhoneNumbers(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Phone));
-                setLoadingState("loaded");
-            } catch (e) {
-                setLoadingState("error");
-            }
-        })();
+    const updateThreepids = useCallback(async () => {
+        try {
+            const threepids = await client.getThreePids();
+            setEmails(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Email));
+            setPhoneNumbers(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Phone));
+            setLoadingState("loaded");
+        } catch (e) {
+            setLoadingState("error");
+        }
     }, [client]);
 
-    const onEmailsChange = useCallback((emails: ThirdPartyIdentifier[]) => {
-        setEmails(emails);
-    }, []);
+    useEffect(() => {
+        updateThreepids().then();
+    }, [updateThreepids]);
 
-    const onMsisdnsChange = useCallback((msisdns: ThirdPartyIdentifier[]) => {
-        setPhoneNumbers(msisdns);
-    }, []);
+    const onEmailsChange = useCallback(() => {
+        updateThreepids().then();
+    }, [updateThreepids]);
+
+    const onMsisdnsChange = useCallback(() => {
+        updateThreepids().then();
+    }, [updateThreepids]);
 
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
 
@@ -99,10 +92,13 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
                     error={_t("settings|general|unable_to_load_emails")}
                     loadingState={loadingState}
                 >
-                    <AccountEmailAddresses
-                        emails={emails!}
-                        onEmailsChange={onEmailsChange}
+                    <AddRemoveThreepids
+                        mode="hs"
+                        medium={ThreepidMedium.Email}
+                        threepids={emails!}
+                        onChange={onEmailsChange}
                         disabled={!canMake3pidChanges}
+                        isLoading={loadingState === "loading"}
                     />
                 </ThreepidSectionWrapper>
             </SettingsSubsection>
@@ -116,10 +112,13 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
                     error={_t("settings|general|unable_to_load_msisdns")}
                     loadingState={loadingState}
                 >
-                    <AccountPhoneNumbers
-                        msisdns={phoneNumbers!}
-                        onMsisdnsChange={onMsisdnsChange}
+                    <AddRemoveThreepids
+                        mode="hs"
+                        medium={ThreepidMedium.Phone}
+                        threepids={phoneNumbers!}
+                        onChange={onMsisdnsChange}
                         disabled={!canMake3pidChanges}
+                        isLoading={loadingState === "loading"}
                     />
                 </ThreepidSectionWrapper>
             </SettingsSubsection>

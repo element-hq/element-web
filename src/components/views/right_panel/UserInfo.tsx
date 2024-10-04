@@ -1,20 +1,12 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 Vector Creations Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2017, 2018 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -34,18 +26,18 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { Heading, MenuItem, Text } from "@vector-im/compound-web";
-import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat.svg";
-import { Icon as CheckIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
-import { Icon as ShareIcon } from "@vector-im/compound-design-tokens/icons/share.svg";
-import { Icon as MentionIcon } from "@vector-im/compound-design-tokens/icons/mention.svg";
-import { Icon as InviteIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
-import { Icon as BlockIcon } from "@vector-im/compound-design-tokens/icons/block.svg";
-import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
-import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
-import { Icon as ChatProblemIcon } from "@vector-im/compound-design-tokens/icons/chat-problem.svg";
-import { Icon as VisibilityOffIcon } from "@vector-im/compound-design-tokens/icons/visibility-off.svg";
-import { Icon as LeaveIcon } from "@vector-im/compound-design-tokens/icons/leave.svg";
+import { Heading, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
+import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
+import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
+import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
+import VisibilityOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-off";
+import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -93,7 +85,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 import { Flex } from "../../utils/Flex";
 import CopyableText from "../elements/CopyableText";
-
+import { useUserTimezone } from "../../../hooks/useUserTimezone";
 export interface IDevice extends Device {
     ambiguous?: boolean;
 }
@@ -424,6 +416,7 @@ export const UserOptionsSection: React.FC<{
     member: Member;
     canInvite: boolean;
     isSpace?: boolean;
+    children?: ReactNode;
 }> = ({ member, canInvite, isSpace, children }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -441,19 +434,35 @@ export const UserOptionsSection: React.FC<{
     // Only allow the user to ignore the user if its not ourselves
     // same goes for jumping to read receipt
     if (!isMe) {
-        if (member instanceof RoomMember && member.roomId && !isSpace) {
-            const onReadReceiptButton = function (): void {
-                const room = cli.getRoom(member.roomId);
-                dis.dispatch<ViewRoomPayload>({
-                    action: Action.ViewRoom,
-                    highlighted: true,
-                    // this could return null, the default prevents a type error
-                    event_id: room?.getEventReadUpTo(member.userId) || undefined,
-                    room_id: member.roomId,
-                    metricsTrigger: undefined, // room doesn't change
-                });
-            };
+        const onReadReceiptButton = function (room: Room): void {
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                highlighted: true,
+                // this could return null, the default prevents a type error
+                event_id: room.getEventReadUpTo(member.userId) || undefined,
+                room_id: room.roomId,
+                metricsTrigger: undefined, // room doesn't change
+            });
+        };
 
+        const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : null;
+        const readReceiptButtonDisabled = isSpace || !room?.getEventReadUpTo(member.userId);
+        readReceiptButton = (
+            <MenuItem
+                role="button"
+                onSelect={async (ev) => {
+                    ev.preventDefault();
+                    if (room && !readReceiptButtonDisabled) {
+                        onReadReceiptButton(room);
+                    }
+                }}
+                label={_t("user_info|jump_to_rr_button")}
+                disabled={readReceiptButtonDisabled}
+                Icon={CheckIcon}
+            />
+        );
+
+        if (member instanceof RoomMember && member.roomId && !isSpace) {
             const onInsertPillButton = function (): void {
                 dis.dispatch<ComposerInsertPayload>({
                     action: Action.ComposerInsert,
@@ -461,21 +470,6 @@ export const UserOptionsSection: React.FC<{
                     timelineRenderingType: TimelineRenderingType.Room,
                 });
             };
-
-            const room = member instanceof RoomMember ? cli.getRoom(member.roomId) : undefined;
-            if (room?.getEventReadUpTo(member.userId)) {
-                readReceiptButton = (
-                    <MenuItem
-                        role="button"
-                        onSelect={async (ev) => {
-                            ev.preventDefault();
-                            onReadReceiptButton();
-                        }}
-                        label={_t("user_info|jump_to_rr_button")}
-                        Icon={CheckIcon}
-                    />
-                );
-            }
 
             insertPillButton = (
                 <MenuItem
@@ -1036,7 +1030,7 @@ const IgnoreToggleButton: React.FC<{
     }, [cli, member.userId]);
     // Recheck also if we receive new accountData m.ignored_user_list
     const accountDataHandler = useCallback(
-        (ev) => {
+        (ev: MatrixEvent) => {
             if (ev.getType() === "m.ignored_user_list") {
                 setIsIgnored(cli.isUserIgnored(member.userId));
             }
@@ -1700,6 +1694,8 @@ export const UserInfoHeader: React.FC<{
         );
     }
 
+    const timezoneInfo = useUserTimezone(cli, member.userId);
+
     const e2eIcon = e2eStatus ? <E2EIcon size={18} status={e2eStatus} isUser={true} /> : null;
     const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
         roomId,
@@ -1733,6 +1729,15 @@ export const UserInfoHeader: React.FC<{
                         </Flex>
                     </Heading>
                     {presenceLabel}
+                    {timezoneInfo && (
+                        <Tooltip label={timezoneInfo?.timezone ?? ""}>
+                            <span className="mx_UserInfo_timezone">
+                                <Text size="sm" weight="regular">
+                                    {timezoneInfo?.friendly ?? ""}
+                                </Text>
+                            </span>
+                        </Tooltip>
+                    )}
                     <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
                         <CopyableText getTextToCopy={() => userIdentifier} border={false}>
                             {userIdentifier}

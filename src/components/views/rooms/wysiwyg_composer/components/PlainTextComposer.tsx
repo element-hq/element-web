@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
@@ -26,6 +18,7 @@ import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
 import { ComposerFunctions } from "../types";
 import { Editor } from "./Editor";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface PlainTextComposerProps {
     disabled?: boolean;
@@ -52,6 +45,7 @@ export function PlainTextComposer({
     rightComponent,
     eventRelation,
 }: PlainTextComposerProps): JSX.Element {
+    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
     const {
         ref: editorRef,
         autocompleteRef,
@@ -66,14 +60,12 @@ export function PlainTextComposer({
         handleCommand,
         handleMention,
         handleAtRoomMention,
-    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation);
-
+    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation, isAutoReplaceEmojiEnabled);
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
     useSetCursorPosition(disabled, editorRef);
     const { isFocused, onFocus } = useIsFocused();
     const computedPlaceholder = (!content && placeholder) || undefined;
-
     return (
         <div
             data-testid="PlainTextComposer"

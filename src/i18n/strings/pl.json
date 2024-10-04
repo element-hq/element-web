@@ -474,6 +474,7 @@
         "encrypted": "Szyfrowane",
         "encryption_enabled": "Włączono szyfrowanie",
         "error": "Błąd",
+        "extensions": "Rozszerzenia",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
         "feedback": "Opinia użytkownika",
@@ -1628,7 +1629,7 @@
         "level_none": "Brak",
         "level_notification": "Powiadomienie",
         "level_unsent": "Niewysłane",
-        "mark_all_read": "Oznacz wszystko jako przeczytane",
+        "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "mentions_and_keywords": "@wzmianki & słowa kluczowe",
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko z wzmiankami i słowami kluczowymi zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
@@ -1654,8 +1655,8 @@
         "download_brand_desktop": "Pobierz %(brand)s Desktop",
         "download_f_droid": "Pobierz w F-Droid",
         "download_google_play": "Pobierz w Google Play",
-        "enable_notifications": "Włącz powiadomienia",
-        "enable_notifications_action": "Włącz powiadomienia",
+        "enable_notifications": "Włącz powiadomienia na pulpicie",
+        "enable_notifications_action": "Otwórz ustawienia",
         "enable_notifications_description": "Nie przegap odpowiedzi lub ważnej wiadomości",
         "explore_rooms": "Przeglądaj pokoje publiczne",
         "find_community_members": "Znajdź i zaproś członków swojej społeczności",
@@ -1832,21 +1833,35 @@
         "restore_failed_error": "Przywrócenie kopii zapasowej jest niemożliwe"
     },
     "right_panel": {
-        "add_integrations": "Dodaj widżety, mostki i boty",
+        "add_integrations": "Dodaj rozszerzenia",
         "add_topic": "Dodaj temat",
-        "edit_integrations": "Edytuj widżety, mostki i boty",
         "export_chat_button": "Eksportuj czat",
+        "extensions_empty_description": "Wybierz “%(addIntegrations)s”, aby przeglądać i dodawać rozszerzenia do tego pokoju",
+        "extensions_empty_title": "Zwiększ produktywność dzięki większej liczbie narzędzi, widżetów i botów",
         "files_button": "Pliki",
         "info": "Info",
         "pinned_messages": {
-            "empty": "Nie przypięto tu jeszcze niczego",
-            "explainer": "Jeżeli masz uprawnienia, przejdź do menu dowolnej wiadomości i wybierz <b>Przypnij</b>, aby przyczepić ją tutaj.",
+            "empty_description": "Znajdź wiadomość i wybierz „%(pinAction)s”, aby załączyć ją tutaj.",
+            "empty_title": "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć",
+            "header": {
+                "one": "Przypięto 1 wiadomość",
+                "few": "Przypięto %(count)s wiadomości",
+                "many": "Przypięto %(count)s wiadomości"
+            },
             "limits": {
                 "other": "Możesz przypiąć do %(count)s widżetów"
             },
-            "title": "Przypięte wiadomości"
+            "menu": "Otwórz menu",
+            "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
+            "title": "Przypięte wiadomości",
+            "unpin_all": {
+                "button": "Odepnij wszystkie wiadomości",
+                "content": "Upewnij się, czy naprawdę chcesz usunąć wszystkie przypięte wiadomości. Tej akcji nie można cofnąć.",
+                "title": "Odpiąć wszystkie wiadomości?"
+            },
+            "view": "Wyświetl na osi czasu"
         },
-        "pinned_messages_button": "Przypięte",
+        "pinned_messages_button": "Przypięte wiadomości",
         "poll": {
             "active_heading": "Aktywne ankiety",
             "empty_active": "Brak aktywnych ankiet w tym pokoju",
@@ -1871,7 +1886,7 @@
             "view_in_timeline": "Wyświetl ankietę na osi czasu",
             "view_poll": "Wyświetl ankietę"
         },
-        "polls_button": "Historia ankiet",
+        "polls_button": "Ankiety",
         "room_summary_card": {
             "title": "Informacje pokoju"
         },
@@ -1990,7 +2005,7 @@
         "invite_reject_ignore": "Odrzuć i zignoruj użytkownika",
         "invite_sent_to_email": "To zaproszenie zostało wysłane do %(email)s",
         "invite_sent_to_email_room": "To zaproszenie do %(roomName)s zostało wysłane do %(email)s",
-        "invite_subtitle": "<userName/> zaprosił Cię",
+        "invite_subtitle": "Zaproszony przez <userName/>",
         "invite_this_room": "Zaproś do tego pokoju",
         "invite_title": "Czy chcesz dołączyć do %(roomName)s?",
         "inviter_unknown": "Nieznany",
@@ -2004,7 +2019,7 @@
         "joining": "Dołączanie…",
         "joining_room": "Dołączanie do pokoju…",
         "joining_space": "Dołączanie do przestrzeni…",
-        "jump_read_marker": "Przeskocz do pierwszej nieprzeczytanej wiadomości.",
+        "jump_read_marker": "Skocz do pierwszej nieprzeczytanej wiadomości.",
         "jump_to_bottom_button": "Przewiń do najnowszych wiadomości",
         "jump_to_date": "Przeskocz do daty",
         "jump_to_date_beginning": "Początek pokoju",
@@ -2034,6 +2049,21 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
+        "pinned_message_banner": {
+            "button_close_list": "Zamknij listę",
+            "button_view_all": "Pokaż wszystkie",
+            "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
+            "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
+            "prefix": {
+                "audio": "Audio",
+                "file": "Plik",
+                "image": "Obraz",
+                "poll": "Ankieta",
+                "video": "Wideo"
+            },
+            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
+            "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
+        },
         "read_topic": "Kliknij, aby przeczytać temat",
         "rejecting": "Odrzucanie zaproszenia…",
         "rejoin_button": "Dołącz ponownie",
@@ -2422,6 +2452,10 @@
         }
     },
     "settings": {
+        "account": {
+            "dialog_title": "<strong>Ustawienia:</strong> Konto",
+            "title": "Konto"
+        },
         "all_rooms_home": "Pokaż wszystkie pokoje na ekranie głównym",
         "all_rooms_home_description": "Wszystkie pokoje w których jesteś zostaną pokazane na ekranie głównym.",
         "always_show_message_timestamps": "Zawsze pokazuj znaczniki czasu wiadomości",
@@ -2497,7 +2531,6 @@
             "deactivate_confirm_erase_label": "Ukryj moje wiadomości dla nowych osób",
             "deactivate_section": "Dezaktywuj konto",
             "deactivate_warning": "Dezaktywacja konta jest akcją trwałą — bądź ostrożny!",
-            "dialog_title": "<strong>Ustawienia:</strong> Ogólne",
             "discovery_email_empty": "Opcje odkrywania pojawią się, gdy dodasz adres e-mail.",
             "discovery_email_verification_instructions": "Zweryfikuj link w swojej skrzynce odbiorczej",
             "discovery_msisdn_empty": "Opcje odkrywania pojawią się, gdy dodasz numer telefonu.",
@@ -2529,7 +2562,6 @@
             "error_share_msisdn_discovery": "Nie udało się udostępnić numeru telefonu",
             "identity_server_no_token": "Nie znaleziono tokena dostępu tożsamości",
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
-            "incorrect_msisdn_verification": "Nieprawidłowy kod weryfikujący",
             "language_section": "Język",
             "msisdn_in_use": "Ten numer telefonu jest już zajęty",
             "msisdn_label": "Numer telefonu",
@@ -2681,6 +2713,7 @@
             "code_blocks_heading": "Bloki kodu",
             "compact_modern": "Użyj bardziej kompaktowego, \"nowoczesnego\" wyglądu",
             "composer_heading": "Kompozytor",
+            "default_timezone": "Ustawienie przeglądarki (%(timezone)s)",
             "dialog_title": "<strong>Ustawienia:</strong> Preferencje",
             "enable_hardware_acceleration": "Włącz przyspieszenie sprzętowe",
             "enable_tray_icon": "Pokaż ikonę w zasobniku systemowym i zminimalizuj okno do niej zamiast zamknięcia",
@@ -2696,7 +2729,8 @@
             "show_checklist_shortcuts": "Pokaż skrót do listy powitalnej nad listą pokojów",
             "show_polls_button": "Pokaż przycisk ankiet",
             "surround_text": "Otocz zaznaczony tekst podczas wpisywania specjalnych znaków",
-            "time_heading": "Wyświetlanie czasu"
+            "time_heading": "Wyświetlanie czasu",
+            "user_timezone": "Ustaw strefę czasową"
         },
         "prompt_invite": "Powiadamiaj przed wysłaniem zaproszenia do potencjalnie nieprawidłowych ID matrix",
         "replace_plain_emoji": "Automatycznie zastępuj tekstowe emotikony",
@@ -3197,6 +3231,8 @@
             "one": "%(count)s odpowiedź",
             "other": "%(count)s odpowiedzi"
         },
+        "empty_description": "Użyj „%(replyInThread)s” po najechaniu kursorem na wiadomość",
+        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo za nimi podążyć.",
         "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
@@ -3262,6 +3298,8 @@
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
+        "download_failed": "Błąd pobierania",
+        "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
         "edits": {
             "tooltip_label": "Edytowano w %(date)s. Kliknij, aby zobaczyć zmiany.",
             "tooltip_sub": "Kliknij, aby wyświetlić edycje",
@@ -3693,6 +3731,10 @@
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
+    "unsupported_browser": {
+        "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
+        "title": "%(brand)s nie wspiera tej przeglądarki"
+    },
     "unsupported_server_description": "Ten serwer używa starszej wersji Matrix. Zaktualizuj do Matrix%(version)s, aby używać %(brand)s bez błędów.",
     "unsupported_server_title": "Twój serwer nie jest wspierany",
     "update": {
@@ -3768,6 +3810,7 @@
         "error_revoke_3pid_invite_title": "Nie udało się odwołać zaproszenia",
         "hide_sessions": "Ukryj sesje",
         "hide_verified_sessions": "Ukryj zweryfikowane sesje",
+        "ignore_button": "Ignoruj",
         "ignore_confirm_description": "Wszystkie wiadomości i zaproszenia od tego użytkownika zostaną ukryte. Czy na pewno chcesz zignorować?",
         "ignore_confirm_title": "Ignoruj %(user)s",
         "invited_by": "Zaproszony przez %(sender)s",
@@ -3795,19 +3838,21 @@
             "no_recent_messages_description": "Spróbuj przewinąć się w górę na osi czasu, aby sprawdzić, czy nie ma wcześniejszych.",
             "no_recent_messages_title": "Nie znaleziono ostatnich wiadomości od %(user)s"
         },
-        "redact_button": "Usuń ostatnie wiadomości",
+        "redact_button": "Usuń wiadomości",
         "revoke_invite": "Odwołaj zaproszenie",
         "room_encrypted": "Wiadomości w tym pokoju są szyfrowane end-to-end.",
         "room_encrypted_detail": "Twoje wiadomości są zabezpieczone i tylko Ty i Twój odbiorca posiadacie unikalne klucze, aby je odblokować.",
         "room_unencrypted": "Wiadomości w tym pokoju nie są szyfrowane end-to-end.",
         "room_unencrypted_detail": "W pokojach szyfrowanych Twoje wiadomości są zabezpieczone i tylko Ty i Twój odbiorca posiadacie unikalne klucze, aby je odblokować.",
-        "share_button": "Udostępnij link użytkownika",
+        "send_message": "Wyślij wiadomość",
+        "share_button": "Udostępnij profil",
         "unban_button_room": "Odbanuj z przestrzeni",
         "unban_button_space": "Odbanuj z przestrzeni",
         "unban_room_confirm_title": "Odbanuj z %(roomName)s",
         "unban_space_everything": "Odbanuj ich z wszystkiego co mogę",
         "unban_space_specific": "Odbanuj ich z określonych rzeczy, które mogę",
         "unban_space_warning": "Nie będą w stanie uzyskać dostępu gdziekolwiek, gdzie nie jesteś administratorem.",
+        "unignore_button": "Przestań ignorować",
         "verify_button": "Weryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
     },
@@ -3882,8 +3927,8 @@
         "disable_camera": "Wyłącz kamerę",
         "disable_microphone": "Wycisz mikrofon",
         "disabled_no_one_here": "Nie ma tu nikogo, do kogo można zadzwonić",
-        "disabled_no_perms_start_video_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy wideo",
-        "disabled_no_perms_start_voice_call": "Nie posiadasz uprawnień do rozpoczęcia rozmowy głosowej",
+        "disabled_no_perms_start_video_call": "Nie masz uprawnień do rozpoczęcia rozmowy wideo",
+        "disabled_no_perms_start_voice_call": "Nie masz uprawnień do rozpoczęcia rozmowy głosowej",
         "disabled_ongoing_call": "Rozmowa w toku",
         "element_call": "Element Call",
         "enable_camera": "Włącz kamerę",
@@ -4059,7 +4104,7 @@
             "title": "Zezwól temu widżetowi na weryfikacje Twojej tożsamości"
         },
         "popout": "Wyskakujący widżet",
-        "set_room_layout": "Ustaw mój układ pokoju dla wszystkich",
+        "set_room_layout": "Ustaw układ dla wszystkich",
         "shared_data_avatar": "URL Twojego zdjęcia profilowego",
         "shared_data_device_id": "Twoje ID urządzenia",
         "shared_data_lang": "Twój język",

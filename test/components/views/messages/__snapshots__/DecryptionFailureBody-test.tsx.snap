@@ -19,3 +19,18 @@ exports[`DecryptionFailureBody Should display "Unable to decrypt message" 1`] = 
   </div>
 </div>
 `;
+
+exports[`DecryptionFailureBody should handle messages from users who change identities after verification 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content mx_DecryptionFailureVerifiedIdentityChanged"
+  >
+    <span>
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Verified identity has changed
+    </span>
+  </div>
+</div>
+`;

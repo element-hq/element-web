@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
@@ -67,7 +59,7 @@ interface IState {
 
 export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -125,7 +117,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             {_t(
                                 "room_settings|security|enable_encryption_public_room_confirm_description_1",
                                 undefined,
-                                { b: (sub) => <b>{sub}</b> },
+                                { b: (sub) => <strong>{sub}</strong> },
                             )}{" "}
                         </p>
                         <p>
@@ -316,7 +308,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t("room_settings|security|encrypted_room_public_confirm_description_1", undefined, {
-                                b: (sub) => <b>{sub}</b>,
+                                b: (sub) => <strong>{sub}</strong>,
                             })}{" "}
                         </p>
                         <p>

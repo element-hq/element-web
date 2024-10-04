@@ -1,22 +1,22 @@
 /*
-Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
+import {
+    act,
+    fireEvent,
+    render,
+    RenderResult,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
+} from "@testing-library/react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
@@ -30,6 +30,7 @@ import {
     filterConsole,
     flushPromises,
     getMockClientWithEventEmitter,
+    mockClientMethodsRooms,
     mockClientMethodsUser,
 } from "../../../test-utils";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
@@ -358,6 +359,7 @@ describe("MemberList", () => {
                 mocked(shouldShowComponent).mockReturnValue(true);
                 client = getMockClientWithEventEmitter({
                     ...mockClientMethodsUser(),
+                    ...mockClientMethodsRooms(),
                     getRoom: jest.fn(),
                     hasLazyLoadMembersEnabled: jest.fn(),
                 });
@@ -372,7 +374,7 @@ describe("MemberList", () => {
             const renderComponent = () => {
                 const context = new TestSdkContext();
                 context.client = client;
-                render(
+                return render(
                     <SDKContext.Provider value={context}>
                         <MemberList
                             searchQuery=""
@@ -407,7 +409,10 @@ describe("MemberList", () => {
                 await flushPromises();
 
                 // button rendered but disabled
-                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
+                expect(screen.getByRole("button", { name: "Invite to this room" })).toHaveAttribute(
+                    "aria-disabled",
+                    "true",
+                );
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {
@@ -425,10 +430,17 @@ describe("MemberList", () => {
                 jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(true);
 
-                renderComponent();
-                await flushPromises();
+                const { getByRole } = renderComponent();
+                await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
 
-                fireEvent.click(screen.getByText("Invite to this room"));
+                await waitFor(() =>
+                    expect(getByRole("button", { name: "Invite to this room" })).not.toHaveAttribute(
+                        "aria-disabled",
+                        "true",
+                    ),
+                );
+
+                fireEvent.click(getByRole("button", { name: "Invite to this room" }));
 
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                     action: "view_invite",

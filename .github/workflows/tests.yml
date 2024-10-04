@@ -39,7 +39,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
 
             - name: Yarn cache
               uses: actions/setup-node@v4
@@ -89,14 +89,18 @@ jobs:
                       coverage
                       !coverage/lcov-report
 
-    skip_sonar:
-        name: Skip SonarCloud in merge queue
-        if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
-        runs-on: ubuntu-latest
+    complete:
+        name: jest-tests
         needs: jest
+        if: always()
+        runs-on: ubuntu-latest
         steps:
-            - name: Skip SonarCloud
-              uses: Sibz/github-status-action@071b5370da85afbb16637d6eed8524a06bc2053e # v1
+            - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
+              run: exit 1
+
+            - name: Skip SonarCloud in merge queue
+              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+              uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: success
@@ -111,7 +115,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
 
             - uses: actions/setup-node@v4
               with:

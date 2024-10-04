@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
@@ -28,12 +20,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import {
+    CallMembership,
+    MatrixRTCSessionManagerEvents,
+    MatrixRTCSession,
+    MatrixRTCSessionEvent,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice, RoomMember } from "matrix-js-sdk/src/matrix";
@@ -963,6 +955,18 @@ describe("ElementCall", () => {
 
             await call.setLayout(Layout.Tile);
             expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
+        });
+
+        it("acknowledges mute_device widget action", async () => {
+            await callConnectProcedure(call);
+            const preventDefault = jest.fn();
+            const mockEv = {
+                preventDefault,
+                detail: { video_enabled: false },
+            };
+            messaging.emit(`action:${ElementWidgetActions.DeviceMute}`, mockEv);
+            expect(messaging.transport.reply).toHaveBeenCalledWith({ video_enabled: false }, {});
+            expect(preventDefault).toHaveBeenCalled();
         });
 
         it("emits events when connection state changes", async () => {

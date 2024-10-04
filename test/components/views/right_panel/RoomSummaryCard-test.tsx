@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -125,7 +117,7 @@ describe("<RoomSummaryCard />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("has button to edit topic when expanded", () => {
+    it("has button to edit topic", () => {
         room.currentState.setStateEvents([
             new MatrixEvent({
                 type: "m.room.topic",
@@ -138,7 +130,6 @@ describe("<RoomSummaryCard />", () => {
             }),
         ]);
         const { container, getByText } = getComponent();
-        fireEvent.click(screen.getByText("This is the room's topic."));
         expect(getByText("Edit")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
@@ -267,12 +258,41 @@ describe("<RoomSummaryCard />", () => {
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
     });
 
+    it("opens room member list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("People"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.RoomMemberList },
+            true,
+        );
+    });
+
+    it("opens room threads list on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Threads"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel }, true);
+    });
+
+    it("opens room pinned messages on button click", () => {
+        const { getByText } = getComponent();
+
+        fireEvent.click(getByText("Pinned messages"));
+
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
+            { phase: RightPanelPhases.PinnedMessages },
+            true,
+        );
+    });
+
     describe("pinning", () => {
-        it("renders pins options when pinning feature is enabled", () => {
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_pinning");
+        it("renders pins options", () => {
             const { getByText } = getComponent();
 
-            expect(getByText("Pinned")).toBeInTheDocument();
+            expect(getByText("Pinned messages")).toBeInTheDocument();
         });
     });
 
@@ -280,14 +300,14 @@ describe("<RoomSummaryCard />", () => {
         it("renders poll history option", () => {
             const { getByText } = getComponent();
 
-            expect(getByText("Poll history")).toBeInTheDocument();
+            expect(getByText("Polls")).toBeInTheDocument();
         });
 
         it("opens poll history dialog on button click", () => {
             const permalinkCreator = new RoomPermalinkCreator(room);
             const { getByText } = getComponent({ permalinkCreator });
 
-            fireEvent.click(getByText("Poll history"));
+            fireEvent.click(getByText("Polls"));
 
             expect(Modal.createDialog).toHaveBeenCalledWith(PollHistoryDialog, {
                 room,
@@ -300,9 +320,7 @@ describe("<RoomSummaryCard />", () => {
     describe("video rooms", () => {
         it("does not render irrelevant options for element video room", () => {
             jest.spyOn(room, "isElementVideoRoom").mockReturnValue(true);
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation(
-                (feature) => feature === "feature_video_rooms" || feature === "feature_pinning",
-            );
+            mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_video_rooms");
             const { queryByText } = getComponent();
 
             // options not rendered
@@ -314,10 +332,7 @@ describe("<RoomSummaryCard />", () => {
         it("does not render irrelevant options for element call room", () => {
             jest.spyOn(room, "isCallRoom").mockReturnValue(true);
             mocked(settingsHooks.useFeatureEnabled).mockImplementation(
-                (feature) =>
-                    feature === "feature_element_call_video_rooms" ||
-                    feature === "feature_video_rooms" ||
-                    feature === "feature_pinning",
+                (feature) => feature === "feature_element_call_video_rooms" || feature === "feature_video_rooms",
             );
             const { queryByText } = getComponent();
 

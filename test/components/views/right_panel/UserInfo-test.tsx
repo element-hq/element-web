@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -100,6 +92,7 @@ let mockRoom: Mocked<Room>;
 let mockSpace: Mocked<Room>;
 let mockClient: Mocked<MatrixClient>;
 let mockCrypto: Mocked<CryptoApi>;
+const origDate = global.Date.prototype.toLocaleString;
 
 beforeEach(() => {
     mockRoom = mocked({
@@ -158,6 +151,8 @@ beforeEach(() => {
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
+        doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
+        getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
         mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
@@ -237,6 +232,28 @@ describe("<UserInfo />", () => {
             expect(screen.getByRole("heading", { name: defaultUserId })).toBeInTheDocument();
         });
 
+        it("renders user timezone if set", async () => {
+            // For timezone, force a consistent locale.
+            jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
+                this: Date,
+                _locale,
+                opts,
+            ) {
+                return origDate.call(this, "en-US", opts);
+            });
+            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+            mockClient.getExtendedProfileProperty.mockResolvedValue("Europe/London");
+            renderComponent();
+            await expect(screen.findByText(/\d\d:\d\d (AM|PM)/)).resolves.toBeInTheDocument();
+        });
+
+        it("does not renders user timezone if timezone is invalid", async () => {
+            mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
+            mockClient.getExtendedProfileProperty.mockResolvedValue("invalid-tz");
+            renderComponent();
+            expect(screen.queryByText(/\d\d:\d\d (AM|PM)/)).not.toBeInTheDocument();
+        });
+
         it("renders encryption info panel without pending verification", () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel });
             expect(screen.getByRole("heading", { name: /encryption/i })).toBeInTheDocument();
@@ -287,10 +304,10 @@ describe("<UserInfo />", () => {
             expect(spy).not.toHaveBeenCalled();
         });
 
-        it("renders close button correctly when encryption panel with a pending verification request", () => {
+        it("renders close button correctly when encryption panel with a pending verification request", async () => {
             renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
             screen.getByTestId("base-card-close-button").focus();
-            expect(screen.getByRole("tooltip")).toHaveTextContent("Cancel");
+            await expect(screen.findByRole("tooltip", { name: "Cancel" })).resolves.toBeInTheDocument();
         });
     });
 
@@ -927,19 +944,19 @@ describe("<UserOptionsSection />", () => {
         });
     });
 
-    it("when call to client.getRoom is null, does not show read receipt button", () => {
+    it("when call to client.getRoom is null, shows disabled read receipt button", () => {
         mockClient.getRoom.mockReturnValueOnce(null);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).toBeDisabled();
     });
 
-    it("when call to client.getRoom is non-null and room.getEventReadUpTo is null, does not show read receipt button", () => {
+    it("when call to client.getRoom is non-null and room.getEventReadUpTo is null, shows disabled read receipt button", () => {
         mockRoom.getEventReadUpTo.mockReturnValueOnce(null);
         mockClient.getRoom.mockReturnValueOnce(mockRoom);
         renderComponent();
 
-        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Jump to read receipt" })).toBeDisabled();
     });
 
     it("when calls to client.getRoom and room.getEventReadUpTo are non-null, shows read receipt button", () => {

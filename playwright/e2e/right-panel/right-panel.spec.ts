@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { Locator, type Page } from "@playwright/test";
@@ -63,9 +55,9 @@ test.describe("RightPanel", () => {
             await app.closeDialog();
 
             // Close and reopen the right panel to render the room address
-            await page.getByRole("button", { name: "Room info" }).click();
+            await app.toggleRoomInfoPanel();
             await expect(page.locator(".mx_RightPanel")).not.toBeVisible();
-            await page.getByRole("button", { name: "Room info" }).click();
+            await app.toggleRoomInfoPanel();
 
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-name-and-address.png");
         });
@@ -73,7 +65,8 @@ test.describe("RightPanel", () => {
         test("should handle clicking add widgets", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.getByRole("button", { name: "Add widgets, bridges & bots" }).click();
+            await page.getByRole("menuitem", { name: "Extensions" }).click();
+            await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
         });
 
@@ -113,7 +106,7 @@ test.describe("RightPanel", () => {
         test("should handle viewing room member", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            await page.locator(".mx_RightPanelTabs").getByText("People").click();
+            await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
@@ -123,7 +116,7 @@ test.describe("RightPanel", () => {
             await page.getByTestId("base-card-back-button").click();
             await expect(page.locator(".mx_MemberList")).toBeVisible();
 
-            await page.locator(".mx_RightPanelTabs").getByText("Info").click();
+            await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
         });
     });

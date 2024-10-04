@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 import React from "react";
 
@@ -20,6 +12,7 @@ import {
     findSuggestionInText,
     getMappedSuggestion,
     processCommand,
+    processEmojiReplacement,
     processMention,
     processSelectionChange,
 } from "../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useSuggestion";
@@ -30,6 +23,16 @@ function createMockPlainTextSuggestionPattern(props: Partial<Suggestion> = {}): 
         node: document.createTextNode(""),
         startOffset: 0,
         endOffset: 0,
+        ...props,
+    };
+}
+
+function createMockCustomSuggestionPattern(props: Partial<Suggestion> = {}): Suggestion {
+    return {
+        mappedSuggestion: { keyChar: "", type: "custom", text: "🙂", ...props.mappedSuggestion },
+        node: document.createTextNode(":)"),
+        startOffset: 0,
+        endOffset: 2,
         ...props,
     };
 }
@@ -64,6 +67,39 @@ describe("processCommand", () => {
 
         // check that the text has changed and includes a trailing space
         expect(mockSetText).toHaveBeenCalledWith(`${replacementText} `);
+    });
+});
+
+describe("processEmojiReplacement", () => {
+    it("does not change parent hook state if suggestion is null", () => {
+        // create a mockSuggestion using the text node above
+        const mockSetSuggestion = jest.fn();
+        const mockSetText = jest.fn();
+
+        // call the function with a null suggestion
+        processEmojiReplacement(null, mockSetSuggestion, mockSetText);
+
+        // check that the parent state setter has not been called
+        expect(mockSetText).not.toHaveBeenCalled();
+    });
+
+    it("can change the parent hook state when required", () => {
+        // create a div and append a text node to it with some initial text
+        const editorDiv = document.createElement("div");
+        const initialText = ":)";
+        const textNode = document.createTextNode(initialText);
+        editorDiv.appendChild(textNode);
+
+        // create a mockSuggestion using the text node above
+        const mockSuggestion = createMockCustomSuggestionPattern({ node: textNode });
+        const mockSetSuggestion = jest.fn();
+        const mockSetText = jest.fn();
+        const replacementText = "🙂";
+
+        processEmojiReplacement(mockSuggestion, mockSetSuggestion, mockSetText);
+
+        // check that the text has changed and includes a trailing space
+        expect(mockSetText).toHaveBeenCalledWith(replacementText);
     });
 });
 
@@ -334,6 +370,17 @@ describe("findSuggestionInText", () => {
         const mentionWithSpaceAfter = "@ somebody";
         expect(findSuggestionInText(mentionWithSpaceAfter, 2, true)).toBeNull();
     });
+
+    it("returns an object for an emoji suggestion", () => {
+        const emoiticon = ":)";
+        const precedingText = "hello ";
+        const mentionInput = precedingText + emoiticon;
+        expect(findSuggestionInText(mentionInput, precedingText.length, true, true)).toEqual({
+            mappedSuggestion: getMappedSuggestion(emoiticon, true),
+            startOffset: precedingText.length,
+            endOffset: precedingText.length + emoiticon.length,
+        });
+    });
 });
 
 describe("getMappedSuggestion", () => {
@@ -359,6 +406,14 @@ describe("getMappedSuggestion", () => {
             type: "command",
             keyChar: "/",
             text: "command",
+        });
+    });
+
+    it("returns the expected mapped suggestion when the text is a plain text emoiticon", () => {
+        expect(getMappedSuggestion(":)", true)).toEqual({
+            type: "custom",
+            keyChar: "",
+            text: "🙂",
         });
     });
 });

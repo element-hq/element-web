@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
@@ -247,6 +239,111 @@ test.describe("Composer", () => {
                     "href",
                     new RegExp("https://matrix.org/"),
                 );
+            });
+        });
+
+        test.describe("Drafts", () => {
+            test("drafts with rich and plain text", async ({ page, app }) => {
+                // Set up a second room to swtich to, to test drafts
+                const firstRoomname = "Composing Room";
+                const secondRoomname = "Second Composing Room";
+                await app.client.createRoom({ name: secondRoomname });
+
+                // Composer is visible
+                const composer = page.locator("div[contenteditable=true]");
+                await expect(composer).toBeVisible();
+
+                // Type some formatted text
+                await composer.pressSequentially("my ");
+                await composer.press(`${CtrlOrMeta}+KeyB`);
+                await composer.pressSequentially("bold");
+
+                // Change to plain text mode
+                await page.getByRole("button", { name: "Hide formatting" }).click();
+
+                // Change to another room and back again
+                await app.viewRoomByName(secondRoomname);
+                await app.viewRoomByName(firstRoomname);
+
+                // assert the markdown
+                await expect(page.locator("div[contenteditable=true]", { hasText: "my __bold__" })).toBeVisible();
+
+                // Change to plain text mode and assert the markdown
+                await page.getByRole("button", { name: "Show formatting" }).click();
+
+                // Change to another room and back again
+                await app.viewRoomByName(secondRoomname);
+                await app.viewRoomByName(firstRoomname);
+
+                // Send the message and assert the message
+                await page.getByRole("button", { name: "Send message" }).click();
+                await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my bold")).toBeVisible();
+            });
+
+            test("draft with replies", async ({ page, app }) => {
+                // Set up a second room to swtich to, to test drafts
+                const firstRoomname = "Composing Room";
+                const secondRoomname = "Second Composing Room";
+                await app.client.createRoom({ name: secondRoomname });
+
+                // Composer is visible
+                const composer = page.locator("div[contenteditable=true]");
+                await expect(composer).toBeVisible();
+
+                // Send a message
+                await composer.pressSequentially("my first message");
+                await page.getByRole("button", { name: "Send message" }).click();
+
+                // Click reply
+                const tile = page.locator(".mx_EventTile_last");
+                await tile.hover();
+                await tile.getByRole("button", { name: "Reply", exact: true }).click();
+
+                // Type reply text
+                await composer.pressSequentially("my reply");
+
+                // Change to another room and back again
+                await app.viewRoomByName(secondRoomname);
+                await app.viewRoomByName(firstRoomname);
+
+                // Assert reply mode and reply text
+                await expect(page.getByText("Replying")).toBeVisible();
+                await expect(page.locator("div[contenteditable=true]", { hasText: "my reply" })).toBeVisible();
+            });
+
+            test("draft in threads", async ({ page, app }) => {
+                // Set up a second room to swtich to, to test drafts
+                const firstRoomname = "Composing Room";
+                const secondRoomname = "Second Composing Room";
+                await app.client.createRoom({ name: secondRoomname });
+
+                // Composer is visible
+                const composer = page.locator("div[contenteditable=true]");
+                await expect(composer).toBeVisible();
+
+                // Send a message
+                await composer.pressSequentially("my first message");
+                await page.getByRole("button", { name: "Send message" }).click();
+
+                // Click reply
+                const tile = page.locator(".mx_EventTile_last");
+                await tile.hover();
+                await tile.getByRole("button", { name: "Reply in thread" }).click();
+
+                const thread = page.locator(".mx_ThreadView");
+                const threadComposer = thread.locator("div[contenteditable=true]");
+
+                // Type threaded text
+                await threadComposer.pressSequentially("my threaded message");
+
+                // Change to another room and back again
+                await app.viewRoomByName(secondRoomname);
+                await app.viewRoomByName(firstRoomname);
+
+                // Assert threaded draft
+                await expect(
+                    thread.locator("div[contenteditable=true]", { hasText: "my threaded message" }),
+                ).toBeVisible();
             });
         });
     });

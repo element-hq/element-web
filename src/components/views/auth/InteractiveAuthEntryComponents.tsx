@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2016-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
@@ -19,6 +11,8 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { AuthType, AuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { ChangeEvent, createRef, FormEvent, Fragment } from "react";
+import { Button, Text } from "@vector-im/compound-web";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
@@ -29,6 +23,7 @@ import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
+import { Flex } from "../../utils/Flex";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -473,7 +468,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                     />
                     <p>
                         {_t("auth|uia|email", {
-                            emailAddress: <b>{this.props.inputs.emailAddress}</b>,
+                            emailAddress: <strong>{this.props.inputs.emailAddress}</strong>,
                         })}
                     </p>
                     {this.state.requesting ? (
@@ -833,7 +828,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     };
 
     private onReceiveMessage = (event: MessageEvent): void => {
-        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+        if (event.data === "authDone" && event.source === this.popupWindow) {
             if (this.popupWindow) {
                 this.popupWindow.close();
                 this.popupWindow = null;
@@ -913,11 +908,11 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     }
 }
 
-export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
-    private popupWindow: Window | null;
-    private fallbackButton = createRef<HTMLButtonElement>();
+export class FallbackAuthEntry<T = {}> extends React.Component<IAuthEntryProps & T> {
+    protected popupWindow: Window | null;
+    protected fallbackButton = createRef<HTMLButtonElement>();
 
-    public constructor(props: IAuthEntryProps) {
+    public constructor(props: IAuthEntryProps & T) {
         super(props);
 
         // we have to make the user click a button, as browsers will block
@@ -950,7 +945,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     };
 
     private onReceiveMessage = (event: MessageEvent): void => {
-        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+        if (event.data === "authDone" && event.source === this.popupWindow) {
             this.props.submitAuthDict({});
         }
     };
@@ -975,6 +970,50 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     }
 }
 
+export enum CustomAuthType {
+    // Workaround for MAS requiring non-UIA authentication for resetting cross-signing.
+    MasCrossSigningReset = "org.matrix.cross_signing_reset",
+}
+
+export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
+    stageParams?: {
+        url?: string;
+    };
+}> {
+    public static LOGIN_TYPE = CustomAuthType.MasCrossSigningReset;
+
+    private onGoToAccountClick = (): void => {
+        if (!this.props.stageParams?.url) return;
+        this.popupWindow = window.open(this.props.stageParams.url, "_blank");
+    };
+
+    private onRetryClick = (): void => {
+        this.props.submitAuthDict({});
+    };
+
+    public render(): React.ReactNode {
+        return (
+            <div>
+                <Text>{_t("auth|uia|mas_cross_signing_reset_description")}</Text>
+                <Flex gap="var(--cpd-space-4x)">
+                    <Button
+                        Icon={PopOutIcon}
+                        onClick={this.onGoToAccountClick}
+                        autoFocus
+                        kind="primary"
+                        className="mx_Dialog_nonDialogButton"
+                    >
+                        {_t("auth|uia|mas_cross_signing_reset_cta")}
+                    </Button>
+                    <Button onClick={this.onRetryClick} kind="secondary" className="mx_Dialog_nonDialogButton">
+                        {_t("action|retry")}
+                    </Button>
+                </Flex>
+            </div>
+        );
+    }
+}
+
 export interface IStageComponentProps extends IAuthEntryProps {
     stageParams?: Record<string, any>;
     inputs?: IInputs;
@@ -991,8 +1030,10 @@ export interface IStageComponent extends React.ComponentClass<React.PropsWithRef
     focus?(): void;
 }
 
-export default function getEntryComponentForLoginType(loginType: AuthType): IStageComponent {
+export default function getEntryComponentForLoginType(loginType: AuthType | CustomAuthType): IStageComponent {
     switch (loginType) {
+        case CustomAuthType.MasCrossSigningReset:
+            return MasUnlockCrossSigningAuthEntry;
         case AuthType.Password:
             return PasswordAuthEntry;
         case AuthType.Recaptcha:

@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -24,6 +16,7 @@ import {
     getMockClientWithEventEmitter,
     makePollEndEvent,
     makePollStartEvent,
+    mockClientMethodsRooms,
     mockClientMethodsUser,
     mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
@@ -41,7 +34,7 @@ describe("<PollHistory />", () => {
     const roomId = "!room:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        ...mockClientMethodsRooms([]),
         relations: jest.fn(),
         decryptEventIfNeeded: jest.fn(),
         getOrCreateFilter: jest.fn(),
@@ -117,7 +110,7 @@ describe("<PollHistory />", () => {
         expect(getByText("Loading polls")).toBeInTheDocument();
 
         // flush filter creation request
-        await flushPromises();
+        await act(flushPromises);
 
         expect(liveTimeline.getPaginationToken).toHaveBeenCalledWith(EventTimeline.BACKWARDS);
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledWith(liveTimeline, { backwards: true });
@@ -147,7 +140,7 @@ describe("<PollHistory />", () => {
         );
 
         // flush filter creation request
-        await flushPromises();
+        await act(flushPromises);
         // once per page
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(3);
 
@@ -182,7 +175,7 @@ describe("<PollHistory />", () => {
 
     it("renders a no polls message when there are no active polls in the room", async () => {
         const { getByText } = getComponent();
-        await flushPromises();
+        await act(flushPromises);
 
         expect(getByText("There are no active polls in this room")).toBeTruthy();
     });
@@ -320,7 +313,7 @@ describe("<PollHistory />", () => {
 
             fireEvent.click(getByText("Question?"));
 
-            expect(queryByText("Poll history")).not.toBeInTheDocument();
+            expect(queryByText("Polls")).not.toBeInTheDocument();
             // elements from MPollBody
             expect(getByText("Question?")).toMatchSnapshot();
             expect(getByText("Socks")).toBeInTheDocument();
@@ -396,13 +389,13 @@ describe("<PollHistory />", () => {
             expect(getByText("Question?")).toBeInTheDocument();
 
             // header not shown
-            expect(queryByText("Poll history")).not.toBeInTheDocument();
+            expect(queryByText("Polls")).not.toBeInTheDocument();
 
             expect(getByText("Active polls")).toMatchSnapshot();
             fireEvent.click(getByText("Active polls"));
 
             // main list header displayed again
-            expect(getByText("Poll history")).toBeInTheDocument();
+            expect(getByText("Polls")).toBeInTheDocument();
             // active filter still active
             expect(getByTestId("filter-tab-PollHistory_filter-ACTIVE").firstElementChild).toBeChecked();
             // list displayed

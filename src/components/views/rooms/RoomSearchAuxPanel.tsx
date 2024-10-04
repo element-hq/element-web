@@ -1,28 +1,21 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Icon as SearchIcon } from "@vector-im/compound-design-tokens/icons/search.svg";
-import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { IconButton, Link } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 import { SearchInfo, SearchScope } from "../../../Searching";
+import InlineSpinner from "../elements/InlineSpinner";
 
 interface Props {
     searchInfo?: SearchInfo;
@@ -41,13 +34,15 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                 <div className="mx_RoomSearchAuxPanel_summary">
                     <SearchIcon width="24px" height="24px" />
                     <div className="mx_RoomSearchAuxPanel_summary_text">
-                        {searchInfo
-                            ? _t(
-                                  "room|search|summary",
-                                  { count: searchInfo.count ?? 0 },
-                                  { query: () => <b>{searchInfo.term}</b> },
-                              )
-                            : undefined}
+                        {searchInfo?.count !== undefined ? (
+                            _t(
+                                "room|search|summary",
+                                { count: searchInfo.count },
+                                { query: () => <strong>{searchInfo.term}</strong> },
+                            )
+                        ) : (
+                            <InlineSpinner />
+                        )}
                         <SearchWarning kind={WarningKind.Search} isRoomEncrypted={isRoomEncrypted} showLogo={false} />
                     </div>
                 </div>

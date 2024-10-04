@@ -1,17 +1,9 @@
 /*
-Copyright 2016 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2016-2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode, TransitionEvent } from "react";
@@ -47,7 +39,7 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
+import { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
@@ -205,7 +197,7 @@ interface IReadReceiptForUser {
  */
 export default class MessagePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         disableGrouping: false,
@@ -213,7 +205,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations
-    private readReceiptMap: { [userId: string]: IReadReceiptInfo } = {};
+    private readReceiptMap: { [userId: string]: IReadReceiptPosition } = {};
 
     // Track read receipts by event ID. For each _shown_ event ID, we store
     // the list of read receipts to display:

@@ -1,23 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip } from "@vector-im/compound-web";
-import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
+import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -35,7 +27,7 @@ import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
 import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import { Call } from "../models/Call";
+import { Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
@@ -111,6 +103,16 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
         [dismissToast, notifyEvent],
     );
 
+    // Dismiss if antother device from this user joins.
+    const onParticipantChange = useCallback(
+        (participants: Map<RoomMember, Set<string>>, prevParticipants: Map<RoomMember, Set<string>>) => {
+            if (Array.from(participants.keys()).some((p) => p.userId == room?.client.getUserId())) {
+                dismissToast();
+            }
+        },
+        [dismissToast, room?.client],
+    );
+
     // Dismiss on timeout.
     useEffect(() => {
         const timeout = setTimeout(dismissToast, MAX_RING_TIME_MS);
@@ -158,6 +160,7 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     );
 
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
+    useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
 
     return (
         <>

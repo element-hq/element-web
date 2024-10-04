@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -53,6 +45,32 @@ describe("PreferencesUserSettingsTab", () => {
         const germanOption = await screen.findByText("Deutsch");
         await userEvent.click(germanOption);
         expect(reloadStub).toHaveBeenCalled();
+    });
+
+    it("should search and select a user timezone", async () => {
+        renderTab();
+
+        expect(await screen.findByText(/Browser default/)).toBeInTheDocument();
+        const timezoneDropdown = await screen.findByRole("button", { name: "Set timezone" });
+        await userEvent.click(timezoneDropdown);
+
+        // Without filtering `expect(screen.queryByRole("option" ...` take over 1s.
+        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+            target: { value: "Africa/Abidjan" },
+        });
+
+        expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).toBeInTheDocument();
+        expect(screen.queryByRole("option", { name: "Europe/Paris" })).not.toBeInTheDocument();
+
+        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+            target: { value: "Europe/Paris" },
+        });
+
+        expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).not.toBeInTheDocument();
+        const option = await screen.getByRole("option", { name: "Europe/Paris" });
+        await userEvent.click(option);
+
+        expect(await screen.findByText("Europe/Paris")).toBeInTheDocument();
     });
 
     it("should not show spell check setting if unsupported", async () => {

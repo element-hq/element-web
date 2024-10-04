@@ -35,14 +35,14 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
           <h2
             class="mx_Heading_h4"
           >
-            vector-im/element-web
+            element-hq/element-web
           </h2>
           <ul>
             <li
               class="mx_ChangelogDialog_li"
             >
               <a
-                href="https://api.github.com/repos/vector-im/element-web/commit/commit-sha"
+                href="https://api.github.com/repos/element-hq/element-web/commit/commit-sha"
                 rel="noreferrer noopener"
                 target="_blank"
               >
@@ -55,14 +55,14 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
           <h2
             class="mx_Heading_h4"
           >
-            matrix-org/matrix-react-sdk
+            element-hq/matrix-react-sdk
           </h2>
           <ul>
             <li
               class="mx_ChangelogDialog_li"
             >
               <a
-                href="https://api.github.com/repos/matrix-org/matrix-react-sdk/commit/commit-sha"
+                href="https://api.github.com/repos/element-hq/matrix-react-sdk/commit/commit-sha"
                 rel="noreferrer noopener"
                 target="_blank"
               >

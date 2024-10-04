@@ -1,109 +1,61 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2017 Travis Ralston
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 .mx_PinnedEventTile {
-    min-height: 40px;
-    width: 100%;
-    padding: 0 4px 12px;
+    display: flex;
+    gap: var(--cpd-space-4x);
+    align-items: flex-start;
 
-    display: grid;
-    grid-template-areas:
-        "avatar name remove"
-        "content content content"
-        "footer footer footer";
-    grid-template-rows: max-content auto max-content;
-    grid-template-columns: 24px auto 24px;
-    grid-row-gap: 12px;
-    grid-column-gap: 8px;
-
-    & + .mx_PinnedEventTile {
-        padding: 12px 4px;
-        border-top: 1px solid $menu-border-color;
-    }
-
-    .mx_PinnedEventTile_senderAvatar,
-    .mx_PinnedEventTile_sender,
-    .mx_PinnedEventTile_unpinButton,
-    .mx_PinnedEventTile_message,
-    .mx_PinnedEventTile_footer {
-        min-width: 0; /* Prevent a grid blowout */
-    }
-
-    .mx_PinnedEventTile_senderAvatar {
-        grid-area: avatar;
-    }
-
-    .mx_PinnedEventTile_sender {
-        grid-area: name;
-        font-weight: var(--cpd-font-weight-semibold);
-        font-size: $font-15px;
-        line-height: $font-24px;
-        text-overflow: ellipsis;
+    .mx_PinnedEventTile_wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
+        /* Remove avatar width and space between the avatar and the wrapper */
+        /* We need it to make the location fit */
+        width: calc(100% - var(--cpd-space-4x) - 32px);
+        /* Prevent a long sender name to overflow the tile */
         overflow: hidden;
-        white-space: nowrap;
-    }
 
-    .mx_PinnedEventTile_unpinButton {
-        visibility: hidden;
-        grid-area: remove;
-        position: relative;
-        width: 24px;
-        height: 24px;
-        border-radius: 8px;
+        .mx_PinnedEventTile_top {
+            display: flex;
+            gap: var(--cpd-space-1x);
+            justify-content: space-between;
+            align-items: center;
 
-        &:hover {
-            background-color: $roomheader-addroom-bg-color;
+            .mx_PinnedEventTile_sender {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                font: var(--cpd-font-body-md-semibold);
+            }
         }
 
-        &::before {
-            content: "";
-            position: absolute;
-            height: inherit;
-            width: inherit;
-            background: $secondary-content;
-            mask-position: center;
-            mask-size: 8px;
-            mask-repeat: no-repeat;
-            mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-        }
-    }
+        .mx_PinnedEventTile_thread {
+            display: flex;
+            gap: var(--cpd-space-2x);
+            font: var(--cpd-font-body-sm-regular);
 
-    .mx_PinnedEventTile_message {
-        grid-area: content;
-    }
+            svg {
+                width: 20px;
+                fill: var(--cpd-color-icon-tertiary);
+            }
 
-    .mx_PinnedEventTile_footer {
-        grid-area: footer;
-        font-size: $font-10px;
-        line-height: 12px;
+            span {
+                display: flex;
+                color: var(--cpd-color-text-secondary);
+            }
 
-        .mx_PinnedEventTile_timestamp {
-            color: $secondary-content;
-            display: unset;
-            width: unset; /* Cancel the default width value */
-        }
-
-        .mx_AccessibleButton_kind_link {
-            margin-left: 12px;
-        }
-    }
-
-    &:hover {
-        .mx_PinnedEventTile_unpinButton {
-            visibility: visible;
+            button {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                text-decoration: underline;
+            }
         }
     }
 }

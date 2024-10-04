@@ -1,17 +1,9 @@
 /*
-Copyright 2020-2021 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 // eslint-disable-next-line no-restricted-imports
@@ -144,68 +136,13 @@ declare global {
         usageDetails?: { [key: string]: number };
     }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
-    interface OffscreenCanvas {
-        convertToBlob(opts?: { type?: string; quality?: number }): Promise<Blob>;
-    }
-
-    interface HTMLAudioElement {
-        type?: string;
-    }
-
-    interface HTMLVideoElement {
-        type?: string;
-    }
-
-    // Add Chrome-specific `instant` ScrollBehaviour
-    type _ScrollBehavior = ScrollBehavior | "instant";
-
-    interface _ScrollOptions {
-        behavior?: _ScrollBehavior;
-    }
-
-    interface _ScrollIntoViewOptions extends _ScrollOptions {
-        block?: ScrollLogicalPosition;
-        inline?: ScrollLogicalPosition;
-    }
-
     interface Element {
         // Safari & IE11 only have this prefixed: we used prefixed versions
         // previously so let's continue to support them for now
         webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
         msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
-        scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
+        // scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
-
-    interface Error {
-        // Standard
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause
-        cause?: unknown;
-
-        // Non-standard
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/fileName
-        fileName?: string;
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/lineNumber
-        lineNumber?: number;
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber
-        columnNumber?: number;
-    }
-
-    // We can remove these pieces if we ever update to `target: "es2022"` in our
-    // TypeScript config which supports the new `cause` property, see
-    // https://github.com/vector-im/element-web/issues/24913
-    interface ErrorOptions {
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause
-        cause?: unknown;
-    }
-
-    interface ErrorConstructor {
-        new (message?: string, options?: ErrorOptions): Error;
-        (message?: string, options?: ErrorOptions): Error;
-    }
-
-    // eslint-disable-next-line no-var
-    var Error: ErrorConstructor;
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
     interface AudioWorkletProcessor {

@@ -1287,12 +1287,9 @@
     },
     "right_panel": {
         "add_integrations": "Aldonu fenestraĵojn, pontojn, kaj robotojn",
-        "edit_integrations": "Redakti fenestraĵojn, pontojn, kaj robotojn",
         "export_chat_button": "Eksporti babilejon",
         "files_button": "Dosieroj",
         "pinned_messages": {
-            "empty": "Ankoraŭ nenio fiksita",
-            "explainer": "Se vi havas la bezonajn permesojn, malfermu la menuon sur ajna mesaĝo, kaj klaku al <b>Fiksi</b> por meti ĝin ĉi tien.",
             "limits": {
                 "other": "Vi povas fiksi maksimume %(count)s fenestraĵojn"
             },
@@ -1755,7 +1752,6 @@
             "error_revoke_msisdn_discovery": "Ne povas senvalidigi havigadon je telefonnumero",
             "error_share_email_discovery": "Ne povas havigi vian retpoŝtadreson",
             "error_share_msisdn_discovery": "Ne povas havigi telefonnumeron",
-            "incorrect_msisdn_verification": "Malĝusta kontrola kodo",
             "language_section": "Lingvo kaj regiono",
             "msisdn_in_use": "Tiu ĉi telefonnumero jam estas uzata",
             "msisdn_label": "Telefonnumero",

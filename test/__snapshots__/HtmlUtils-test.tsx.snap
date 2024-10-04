@@ -3,7 +3,7 @@
 exports[`bodyToHtml does not mistake characters in text presentation mode for emoji 1`] = `
 <DocumentFragment>
   <span
-    class="mx_EventTile_body"
+    class="mx_EventTile_body translate"
     dir="auto"
   >
     ↔ ❗︎
@@ -22,7 +22,7 @@ exports[`bodyToHtml feature_latex_maths should render inline katex 1`] = `"hello
 exports[`bodyToHtml generates big emoji for emoji made of multiple characters 1`] = `
 <DocumentFragment>
   <span
-    class="mx_EventTile_body mx_EventTile_bigEmoji"
+    class="mx_EventTile_body mx_EventTile_bigEmoji translate"
     dir="auto"
   >
     <span
@@ -52,7 +52,7 @@ exports[`bodyToHtml generates big emoji for emoji made of multiple characters 1`
 exports[`bodyToHtml should generate big emoji for an emoji-only reply to a message 1`] = `
 <DocumentFragment>
   <span
-    class="mx_EventTile_body mx_EventTile_bigEmoji"
+    class="mx_EventTile_body mx_EventTile_bigEmoji translate"
     dir="auto"
   >
     <span

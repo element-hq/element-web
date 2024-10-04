@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { _t } from "../languageHandler";
@@ -20,9 +12,11 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
+import SettingsStore from "../settings/SettingsStore";
+import { SettingLevel } from "../settings/SettingLevel";
 
-const onAccept = (): void => {
-    Notifier.setEnabled(true);
+const onAccept = async (): Promise<void> => {
+    await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
     const cli = MatrixClientPeg.safeGet();
     const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
     cli.setAccountData(eventType, {
@@ -44,10 +38,10 @@ export const showToast = (fromMessageSend: boolean): void => {
             : _t("notifications|enable_prompt_toast_title"),
         props: {
             description: _t("notifications|enable_prompt_toast_description"),
-            acceptLabel: _t("action|enable"),
-            onAccept,
-            rejectLabel: _t("action|dismiss"),
-            onReject,
+            primaryLabel: _t("action|enable"),
+            onPrimaryClick: onAccept,
+            secondaryLabel: _t("action|dismiss"),
+            onSecondaryClick: onReject,
         },
         component: GenericToast,
         priority: 30,

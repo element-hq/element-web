@@ -1,22 +1,14 @@
 /*
-Copyright 2016 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2016-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications.svg";
+import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications";
 
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -26,7 +18,6 @@ import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
-import Heading from "../views/typography/Heading";
 import EmptyState from "../views/right_panel/EmptyState";
 
 interface IProps {
@@ -42,11 +33,12 @@ interface IState {
  */
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private card = React.createRef<HTMLDivElement>();
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
 
         this.state = {
             narrow: false,
@@ -95,13 +87,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                 }}
             >
                 <BaseCard
-                    header={
-                        <div className="mx_BaseCard_header_title">
-                            <Heading size="4" className="mx_BaseCard_header_title_heading">
-                                {_t("notifications|enable_prompt_toast_title")}
-                            </Heading>
-                        </div>
-                    }
+                    header={_t("notifications|enable_prompt_toast_title")}
                     /**
                      * Need to rename this CSS class to something more generic
                      * Will be done once all the panels are using a similar layout

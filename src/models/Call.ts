@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import {
@@ -30,14 +22,13 @@ import { randomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { IWidgetApiRequest } from "matrix-widget-api";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
-// eslint-disable-next-line no-restricted-imports
-import { CallMembership } from "matrix-js-sdk/src/matrixrtc/CallMembership";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc/types";
+import {
+    MatrixRTCSession,
+    MatrixRTCSessionEvent,
+    CallMembership,
+    MatrixRTCSessionManagerEvents,
+    ICallNotifyContent,
+} from "matrix-js-sdk/src/matrixrtc";
 
 import type EventEmitter from "events";
 import type { ClientWidgetApi, IWidgetData } from "matrix-widget-api";
@@ -127,8 +118,8 @@ interface CallEventHandlerMap {
  * A group call accessed through a widget.
  */
 export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandlerMap> {
-    protected readonly widgetUid = WidgetUtils.getWidgetUid(this.widget);
-    protected readonly room = this.client.getRoom(this.roomId)!;
+    protected readonly widgetUid: string;
+    protected readonly room: Room;
 
     /**
      * The time after which device member state should be considered expired.
@@ -185,6 +176,8 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         protected readonly client: MatrixClient,
     ) {
         super();
+        this.widgetUid = WidgetUtils.getWidgetUid(this.widget);
+        this.room = this.client.getRoom(this.roomId)!;
     }
 
     /**
@@ -345,7 +338,7 @@ export class JitsiCall extends Call {
 
     public static get(room: Room): JitsiCall | null {
         // Only supported in video rooms
-        if (SettingsStore.getValue("feature_video_rooms") && room.isElementVideoRoom()) {
+        if (room.isElementVideoRoom()) {
             const apps = WidgetStore.instance.getApps(room.roomId);
             // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
             const jitsiWidget = apps.find((app) => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
@@ -812,33 +805,24 @@ export class ElementCall extends Call {
     }
 
     public static get(room: Room): ElementCall | null {
-        // Only supported in the new group call experience or in video rooms.
+        const apps = WidgetStore.instance.getApps(room.roomId);
+        const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
+        const session = room.client.matrixRTC.getRoomSession(room);
 
-        if (
-            SettingsStore.getValue("feature_group_calls") ||
-            (SettingsStore.getValue("feature_video_rooms") &&
-                SettingsStore.getValue("feature_element_call_video_rooms") &&
-                room.isCallRoom())
-        ) {
-            const apps = WidgetStore.instance.getApps(room.roomId);
-            const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
-            const session = room.client.matrixRTC.getRoomSession(room);
-
-            // A call is present if we
-            // - have a widget: This means the create function was called.
-            // - or there is a running session where we have not yet created a widget for.
-            // - or this is a call room. Then we also always want to show a call.
-            if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
-                // create a widget for the case we are joining a running call and don't have on yet.
-                const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
-                    room.roomId,
-                    room.client,
-                    undefined,
-                    undefined,
-                    isVideoRoom(room),
-                );
-                return new ElementCall(session, availableOrCreatedWidget, room.client);
-            }
+        // A call is present if we
+        // - have a widget: This means the create function was called.
+        // - or there is a running session where we have not yet created a widget for.
+        // - or this is a call room. Then we also always want to show a call.
+        if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
+            // create a widget for the case we are joining a running call and don't have on yet.
+            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(
+                room.roomId,
+                room.client,
+                undefined,
+                undefined,
+                isVideoRoom(room),
+            );
+            return new ElementCall(session, availableOrCreatedWidget, room.client);
         }
 
         return null;
@@ -892,6 +876,10 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, async (ev) => {
+            ev.preventDefault();
+            await this.messaging!.transport.reply(ev.detail, {}); // ack
+        });
 
         if (!this.widget.data?.skipLobby) {
             // If we do not skip the lobby we need to wait until the widget has

@@ -1,22 +1,23 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
-import { EventStatus, MatrixEvent, Room, MatrixError, SyncState, SyncStateData } from "matrix-js-sdk/src/matrix";
-import { Icon as WarningIcon } from "@vector-im/compound-design-tokens/icons/warning.svg";
+import {
+    ClientEvent,
+    EventStatus,
+    MatrixError,
+    MatrixEvent,
+    Room,
+    RoomEvent,
+    SyncState,
+    SyncStateData,
+} from "matrix-js-sdk/src/matrix";
+import WarningIcon from "@vector-im/compound-design-tokens/assets/web/icons/warning";
 
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
@@ -79,8 +80,8 @@ interface IProps {
 }
 
 interface IState {
-    syncState: SyncState;
-    syncStateData: SyncStateData;
+    syncState: SyncState | null;
+    syncStateData: SyncStateData | null;
     unsentMessages: MatrixEvent[];
     isResending: boolean;
 }
@@ -88,8 +89,9 @@ interface IState {
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     public static contextType = MatrixClientContext;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: typeof MatrixClientContext) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {
@@ -102,8 +104,8 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
 
     public componentDidMount(): void {
         const client = this.context;
-        client.on("sync", this.onSyncStateChange);
-        client.on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+        client.on(ClientEvent.Sync, this.onSyncStateChange);
+        client.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
 
         this.checkSize();
     }
@@ -117,19 +119,19 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = this.context;
         if (client) {
-            client.removeListener("sync", this.onSyncStateChange);
-            client.removeListener("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+            client.removeListener(ClientEvent.Sync, this.onSyncStateChange);
+            client.removeListener(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
         }
     }
 
-    private onSyncStateChange = (state: SyncState, prevState: SyncState, data: SyncStateData): void => {
+    private onSyncStateChange = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
         if (this.unmounted) return;
         this.setState({
             syncState: state,
-            syncStateData: data,
+            syncStateData: data ?? null,
         });
     };
 

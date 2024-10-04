@@ -1,24 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
-import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
+import { render, fireEvent, RenderResult, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { sleep } from "matrix-js-sdk/src/utils";
 
 import { withClientContextRenderOptions, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -374,8 +365,7 @@ describe("<RoomPreviewBar />", () => {
                     const onJoinClick = jest.fn();
                     const onRejectClick = jest.fn();
                     const component = getComponent({ ...props, onJoinClick, onRejectClick });
-                    await sleep(0);
-                    expect(getPrimaryActionButton(component)).toBeTruthy();
+                    await waitFor(() => expect(getPrimaryActionButton(component)).toBeTruthy());
                     if (expectSecondaryButton) expect(getSecondaryActionButton(component)).toBeFalsy();
                     fireEvent.click(getPrimaryActionButton(component)!);
                     expect(onJoinClick).toHaveBeenCalled();
@@ -388,7 +378,7 @@ describe("<RoomPreviewBar />", () => {
 
                 it("renders error message", async () => {
                     const component = getComponent({ inviterName, invitedEmail });
-                    await sleep(0);
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
 
                     expect(getMessage(component)).toMatchSnapshot();
                 });
@@ -405,7 +395,7 @@ describe("<RoomPreviewBar />", () => {
 
                 it("renders invite message with invited email", async () => {
                     const component = getComponent({ inviterName, invitedEmail });
-                    await sleep(0);
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
 
                     expect(getMessage(component)).toMatchSnapshot();
                 });
@@ -421,7 +411,7 @@ describe("<RoomPreviewBar />", () => {
 
                 it("renders invite message with invited email", async () => {
                     const component = getComponent({ inviterName, invitedEmail });
-                    await sleep(0);
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
 
                     expect(getMessage(component)).toMatchSnapshot();
                 });
@@ -439,7 +429,7 @@ describe("<RoomPreviewBar />", () => {
                 it("renders email mismatch message when invite email mxid doesnt match", async () => {
                     MatrixClientPeg.safeGet().lookupThreePid = jest.fn().mockReturnValue({ mxid: "not userid" });
                     const component = getComponent({ inviterName, invitedEmail });
-                    await sleep(0);
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
 
                     expect(getMessage(component)).toMatchSnapshot();
                     expect(MatrixClientPeg.safeGet().lookupThreePid).toHaveBeenCalledWith(
@@ -453,7 +443,7 @@ describe("<RoomPreviewBar />", () => {
                 it("renders invite message when invite email mxid match", async () => {
                     MatrixClientPeg.safeGet().lookupThreePid = jest.fn().mockReturnValue({ mxid: userId });
                     const component = getComponent({ inviterName, invitedEmail });
-                    await sleep(0);
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
 
                     expect(getMessage(component)).toMatchSnapshot();
                     await testJoinButton({ inviterName, invitedEmail }, false)();

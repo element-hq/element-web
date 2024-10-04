@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es2016",
+        "target": "es2022",
         "jsx": "react",
-        "lib": ["ESNext", "es2021", "dom", "dom.iterable"],
+        "lib": ["ESNext", "es2022", "dom", "dom.iterable"],
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "module": "es2022"
+        "module": "es2022",
+        "allowImportingTsExtensions": true
     },
     "include": [
         "**/*.ts",

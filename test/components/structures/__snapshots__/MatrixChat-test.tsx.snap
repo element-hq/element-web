@@ -117,6 +117,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     >
       <div
         class="mx_Welcome"
+        data-testid="mx_welcome_screen"
       >
         <div
           class="mx_WelcomePage mx_WelcomePage_loggedIn"

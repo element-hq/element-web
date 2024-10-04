@@ -1,23 +1,16 @@
 /*
-Copyright 2019 - 2024 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
-import { Icon as PopOutIcon } from "@vector-im/compound-design-tokens/icons/pop-out.svg";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -31,8 +24,12 @@ import { useId } from "../../../utils/useId";
 import CopyableText from "../elements/CopyableText";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "../elements/AccessibleButton";
+import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
+import Modal from "../../../Modal";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Flex } from "../../utils/Flex";
 
-const SpinnerToast: React.FC = ({ children }) => (
+const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
         <InlineSpinner />
         {children}
@@ -75,6 +72,25 @@ const ManageAccountButton: React.FC<ManageAccountButtonProps> = ({ externalAccou
         {_t("settings|general|oidc_manage_button")}
     </AccessibleButton>
 );
+
+const SignOutButton: React.FC = () => {
+    const client = useMatrixClientContext();
+
+    const onClick = useCallback(async () => {
+        if (await shouldShowLogoutDialog(client)) {
+            Modal.createDialog(LogoutDialog);
+        } else {
+            defaultDispatcher.dispatch({ action: "logout" });
+        }
+    }, [client]);
+
+    return (
+        <AccessibleButton onClick={onClick} kind="danger_outline">
+            <SignOutIcon className="mx_UserProfileSettings_accountmanageIcon" width="24" height="24" />
+            {_t("action|sign_out")}
+        </AccessibleButton>
+    );
+};
 
 interface UserProfileSettingsProps {
     // The URL to redirect the user to in order to manage their account.
@@ -219,11 +235,12 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                 </Alert>
             )}
             {userIdentifier && <UsernameBox username={userIdentifier} />}
-            {externalAccountManagementUrl && (
-                <div className="mx_UserProfileSettings_profile_buttons">
+            <Flex gap="var(--cpd-space-4x)" className="mx_UserProfileSettings_profile_buttons">
+                {externalAccountManagementUrl && (
                     <ManageAccountButton externalAccountManagementUrl={externalAccountManagementUrl} />
-                </div>
-            )}
+                )}
+                <SignOutButton />
+            </Flex>
         </div>
     );
 };

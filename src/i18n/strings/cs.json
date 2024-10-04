@@ -1789,12 +1789,9 @@
     },
     "right_panel": {
         "add_integrations": "Přidat widgety, propojení a boty",
-        "edit_integrations": "Upravujte widgety, propojení a boty",
         "export_chat_button": "Exportovat chat",
         "files_button": "Soubory",
         "pinned_messages": {
-            "empty": "Zatím není nic připnuto",
-            "explainer": "Pokud máte oprávnění, otevřete nabídku na libovolné zprávě a výběrem možnosti <b>Připnout</b> je sem vložte.",
             "limits": {
                 "other": "Můžete připnout až %(count)s widgetů"
             },
@@ -2455,7 +2452,6 @@
             "error_share_msisdn_discovery": "Nepovedlo se nasdílet telefonní číslo",
             "identity_server_no_token": "Nebyl nalezen žádný přístupový token identity",
             "identity_server_not_set": "Server identit není nastaven",
-            "incorrect_msisdn_verification": "Nesprávný ověřovací kód",
             "language_section": "Jazyk a region",
             "msisdn_in_use": "Toto telefonní číslo je již používáno",
             "msisdn_label": "Telefonní číslo",

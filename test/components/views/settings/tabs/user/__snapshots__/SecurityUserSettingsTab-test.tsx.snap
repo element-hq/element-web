@@ -48,9 +48,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           <span>
             Use an integration manager 
-            <b>
+            <strong>
               (scalar.vector.im)
-            </b>
+            </strong>
              to manage bots, widgets, and sticker packs.
           </span>
         </div>
@@ -314,31 +314,51 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                 <table
                   class="mx_CryptographyPanel_sessionInfo"
                 >
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Session ID:
-                    </th>
-                    <td>
-                      <code />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th
-                      scope="row"
-                    >
-                      Session key:
-                    </th>
-                    <td>
-                      <code>
-                        <b>
-                          &lt;not supported&gt;
-                        </b>
-                      </code>
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Session ID:
+                      </th>
+                      <td>
+                        <code />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th
+                        scope="row"
+                      >
+                        Session key:
+                      </th>
+                      <td>
+                        <code>
+                          <strong>
+                            ...
+                          </strong>
+                        </code>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
+              </div>
+              <div
+                class="mx_CryptographyPanel_importExportButtons"
+              >
+                <div
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                  role="button"
+                  tabindex="0"
+                >
+                  Export E2E room keys
+                </div>
+                <div
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                  role="button"
+                  tabindex="0"
+                >
+                  Import E2E room keys
+                </div>
               </div>
               <div
                 class="mx_SettingsFlag"

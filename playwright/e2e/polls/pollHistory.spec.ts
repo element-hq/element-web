@@ -1,22 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 import { test, expect } from "../../element-web-test";
-import type { Page } from "@playwright/test";
 import type { Bot } from "../../pages/bot";
 import type { Client } from "../../pages/client";
+import { ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Poll history", () => {
     type CreatePollOptions = {
@@ -66,9 +58,10 @@ test.describe("Poll history", () => {
         });
     };
 
-    async function openPollHistory(page: Page): Promise<void> {
-        await page.getByRole("button", { name: "Room info" }).click();
-        await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "Poll history" }).click();
+    async function openPollHistory(app: ElementAppPage): Promise<void> {
+        const { page } = app;
+        await app.toggleRoomInfoPanel();
+        await page.locator(".mx_RoomSummaryCard").getByRole("menuitem", { name: "Polls" }).click();
     }
 
     test.use({
@@ -116,7 +109,7 @@ test.describe("Poll history", () => {
         await botVoteForOption(bot, roomId, pollId2, pollParams1.options[1].id);
         await endPoll(bot, roomId, pollId2);
 
-        await openPollHistory(page);
+        await openPollHistory(app);
 
         // these polls are also in the timeline
         // focus on the poll history dialog

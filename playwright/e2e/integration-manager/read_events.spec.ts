@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import type { Page } from "@playwright/test";
@@ -142,7 +134,7 @@ test.describe("Integration Manager: Read Events", () => {
 
         // Send a state event
         const sendEventResponse = await app.client.sendStateEvent(room.roomId, eventType, eventContent, stateKey);
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);
@@ -162,7 +154,7 @@ test.describe("Integration Manager: Read Events", () => {
 
         // Send a state event
         const sendEventResponse = await app.client.sendStateEvent(room.roomId, eventType, eventContent, stateKey);
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);
@@ -196,7 +188,7 @@ test.describe("Integration Manager: Read Events", () => {
             app.client.sendStateEvent(room.roomId, eventType, eventContent3, stateKey3),
         ]);
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(
@@ -217,11 +209,11 @@ test.describe("Integration Manager: Read Events", () => {
         await expect(iframe.locator("#message-response")).toContainText(`"content":${JSON.stringify(eventContent3)}`);
     });
 
-    test("should fail to read an event type which is not allowed", async ({ page, room }) => {
+    test("should fail to read an event type which is not allowed", async ({ page, app, room }) => {
         const eventType = "com.example.event";
         const stateKey = "";
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
 
         // Read state events
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, eventType, stateKey);

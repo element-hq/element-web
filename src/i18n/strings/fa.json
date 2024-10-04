@@ -1168,7 +1168,6 @@
     },
     "right_panel": {
         "add_integrations": "افزودن ابزارک‌ها، پل‌ها و ربات‌ها",
-        "edit_integrations": "ویرایش ابزارک ها ، پل ها و ربات ها",
         "pinned_messages": {
             "limits": {
                 "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
@@ -1546,7 +1545,6 @@
             "error_share_email_discovery": "به اشتراک‌گذاری آدرس ایمیل ممکن نیست",
             "error_share_msisdn_discovery": "امکان به اشتراک‌گذاری شماره تلفن وجود ندارد",
             "identity_server_not_set": "سرور هویت تنظیم نشده است",
-            "incorrect_msisdn_verification": "کد فعال‌سازی اشتباه است",
             "language_section": "زبان و جغرافیا",
             "msisdn_in_use": "این شماره تلفن در حال استفاده است",
             "msisdn_label": "شماره تلفن",

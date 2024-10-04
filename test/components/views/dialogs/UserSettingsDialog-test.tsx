@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement } from "react";
@@ -57,14 +49,9 @@ jest.mock("../../../../src/settings/SettingsStore", () => ({
     settingIsOveriddenAtConfigLevel: jest.fn(),
 }));
 
-jest.mock("../../../../src/SdkConfig", () => ({
-    get: jest.fn(),
-}));
-
 describe("<UserSettingsDialog />", () => {
     const userId = "@alice:server.org";
     const mockSettingsStore = mocked(SettingsStore);
-    const mockSdkConfig = mocked(SdkConfig);
     let mockClient!: MockedObject<MatrixClient>;
 
     let sdkContext: SdkContextClass;
@@ -89,7 +76,8 @@ describe("<UserSettingsDialog />", () => {
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getValueAt.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
-        mockSdkConfig.get.mockReturnValue({ brand: "Test" });
+        SdkConfig.reset();
+        SdkConfig.put({ brand: "Test" });
     });
 
     const getActiveTabLabel = (container: Element) =>
@@ -98,7 +86,7 @@ describe("<UserSettingsDialog />", () => {
     it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());
 
-        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabLabel(container)).toEqual("Account");
     });
 
     it("should render initial tab when initialTabId is set", () => {
@@ -111,10 +99,13 @@ describe("<UserSettingsDialog />", () => {
         // mjolnir tab is only rendered in some configs
         const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
 
-        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabLabel(container)).toEqual("Account");
     });
 
     it("renders tabs correctly", () => {
+        SdkConfig.add({
+            show_labs_settings: true,
+        });
         const { container } = render(getComponent());
         expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });
@@ -181,7 +172,7 @@ describe("<UserSettingsDialog />", () => {
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Settings: Voice & Video");
     });
 
-    it("renders with secutity tab selected", () => {
+    it("renders with security tab selected", () => {
         const { container } = render(getComponent({ initialTabId: UserTab.Security }));
 
         expect(getActiveTabLabel(container)).toEqual("Security & Privacy");
@@ -189,18 +180,8 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders with labs tab selected", () => {
-        // @ts-ignore I give up trying to get the types right here
-        // why do we have functions that return different things depending on what they're passed?
-        mockSdkConfig.get.mockImplementation((x) => {
-            const mockConfig = { show_labs_settings: true, brand: "Test" };
-            switch (x) {
-                case "show_labs_settings":
-                case "brand":
-                    // @ts-ignore
-                    return mockConfig[x];
-                default:
-                    return mockConfig;
-            }
+        SdkConfig.add({
+            show_labs_settings: true,
         });
         const { container } = render(getComponent({ initialTabId: UserTab.Labs }));
 
@@ -223,8 +204,9 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders labs tab when show_labs_settings is enabled in config", () => {
-        // @ts-ignore simplified test stub
-        mockSdkConfig.get.mockImplementation((configName) => configName === "show_labs_settings");
+        SdkConfig.add({
+            show_labs_settings: true,
+        });
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
     });
@@ -238,7 +220,7 @@ describe("<UserSettingsDialog />", () => {
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
     });
 
-    it("watches settings", () => {
+    it("watches settings", async () => {
         const watchSettingCallbacks: Record<string, CallbackFn> = {};
 
         mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
@@ -247,7 +229,7 @@ describe("<UserSettingsDialog />", () => {
         });
         mockSettingsStore.getValue.mockReturnValue(false);
 
-        const { queryByTestId, unmount } = render(getComponent());
+        const { queryByTestId, findByTestId, unmount } = render(getComponent());
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeFalsy();
 
         expect(mockSettingsStore.watchSetting).toHaveBeenCalledWith("feature_mjolnir", null, expect.anything());
@@ -257,7 +239,7 @@ describe("<UserSettingsDialog />", () => {
         watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", "", SettingLevel.ACCOUNT, true, true);
 
         // tab is rendered now
-        expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
+        await expect(findByTestId(`settings-tab-${UserTab.Mjolnir}`)).resolves.toBeTruthy();
 
         unmount();
 

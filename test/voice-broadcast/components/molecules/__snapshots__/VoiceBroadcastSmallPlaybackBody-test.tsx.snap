@@ -68,9 +68,18 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 'pause', 
       role="button"
       tabindex="0"
     >
-      <div
+      <svg
         class="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -152,9 +161,18 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 'playing'
       role="button"
       tabindex="0"
     >
-      <div
+      <svg
         class="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -247,9 +265,18 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a buffering broadcas
       role="button"
       tabindex="0"
     >
-      <div
+      <svg
         class="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -323,9 +350,18 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a playing broadcast 
       role="button"
       tabindex="0"
     >
-      <div
+      <svg
         class="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -399,9 +435,18 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a stopped broadcast 
       role="button"
       tabindex="0"
     >
-      <div
+      <svg
         class="mx_Icon mx_Icon_8 mx_VoiceBroadcastBody__small-close"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+        />
+      </svg>
     </div>
   </div>
 </div>

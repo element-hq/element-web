@@ -1533,12 +1533,9 @@
     },
     "right_panel": {
         "add_integrations": "Engade widgets, pontes e bots",
-        "edit_integrations": "Editar widgets, pontes e bots",
         "export_chat_button": "Exportar chat",
         "files_button": "Ficheiros",
         "pinned_messages": {
-            "empty": "Nada fixado, por agora",
-            "explainer": "Se tes permisos, abre o menú en calquera mensaxe e elixe <b>Fixar</b> para pegalos aquí.",
             "limits": {
                 "other": "Só podes fixar ata %(count)s widgets"
             },
@@ -2082,7 +2079,6 @@
             "error_revoke_msisdn_discovery": "Non se puido revogar a compartición do número de teléfono",
             "error_share_email_discovery": "Non se puido compartir co enderezo de email",
             "error_share_msisdn_discovery": "Non se puido compartir o número de teléfono",
-            "incorrect_msisdn_verification": "Código de verificación incorrecto",
             "language_section": "Idioma e rexión",
             "msisdn_in_use": "Xa se está a usar este teléfono",
             "msisdn_label": "Número de teléfono",

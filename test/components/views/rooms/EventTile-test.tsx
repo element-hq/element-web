@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
@@ -40,6 +32,8 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
+import PinningUtils from "../../../../src/utils/PinningUtils";
+import { Layout } from "../../../../src/settings/enums/Layout";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -97,6 +91,10 @@ describe("EventTile", () => {
             msg: "Hello world!",
             event: true,
         });
+    });
+
+    afterEach(() => {
+        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
     });
 
     describe("EventTile thread summary", () => {
@@ -160,6 +158,27 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
         });
+    });
+
+    describe("EventTile renderingType: Threads", () => {
+        it("should display the pinned message badge", async () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            getComponent({}, TimelineRenderingType.Thread);
+
+            expect(screen.getByText("Pinned message")).toBeInTheDocument();
+        });
+    });
+
+    describe("EventTile renderingType: default", () => {
+        it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
+            "should display the pinned message badge",
+            async (layout) => {
+                jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+                getComponent({ layout });
+
+                expect(screen.getByText("Pinned message")).toBeInTheDocument();
+            },
+        );
     });
 
     describe("EventTile in the right panel", () => {

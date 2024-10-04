@@ -89,7 +89,7 @@ NodeList [
       class="mx_TabbedView_tabLabel_text"
       id="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
     >
-      Poll history
+      Polls
     </span>
   </li>,
 ]
@@ -105,7 +105,7 @@ exports[`<RoomSettingsDialog /> poll history displays poll history when tab clic
     <h2
       class="mx_Heading_h2 mx_PollHistory_header"
     >
-      Poll history
+      Polls
     </h2>
     <div
       class="mx_PollHistoryList"

@@ -1,24 +1,16 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { forwardRef, ReactNode, KeyboardEvent, Ref, MouseEvent } from "react";
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
-import { Icon as CloseIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
-import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
@@ -41,25 +33,16 @@ interface IProps {
     onKeyDown?(ev: KeyboardEvent): void;
     cardState?: any;
     ref?: Ref<HTMLDivElement>;
-    // Ref for the 'close' button the the card
+    // Ref for the 'close' button the card
     closeButtonRef?: Ref<HTMLButtonElement>;
     children: ReactNode;
 }
 
-interface IGroupProps {
-    className?: string;
-    title: string;
-    children: ReactNode;
+function closeRightPanel(ev: MouseEvent<HTMLButtonElement>): void {
+    ev.preventDefault();
+    ev.stopPropagation();
+    RightPanelStore.instance.popCard();
 }
-
-export const Group: React.FC<IGroupProps> = ({ className, title, children }) => {
-    return (
-        <div className={classNames("mx_BaseCard_Group", className)}>
-            <h2>{title}</h2>
-            {children}
-        </div>
-    );
-};
 
 const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
     (
@@ -104,12 +87,12 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
         }
 
         let closeButton;
-        if (onClose && !hideHeaderButtons) {
+        if (!hideHeaderButtons) {
             closeButton = (
                 <IconButton
                     size="28px"
                     data-testid="base-card-close-button"
-                    onClick={onClose}
+                    onClick={onClose ?? closeRightPanel}
                     ref={closeButtonRef}
                     tooltip={closeLabel ?? _t("action|close")}
                     subtleBackground
@@ -139,11 +122,18 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
                         <div className="mx_BaseCard_header">
                             {backButton}
                             {typeof header === "string" ? (
-                                <Text size="md" weight="medium" className="mx_BaseCard_header_title">
-                                    {header}
-                                </Text>
+                                <div className="mx_BaseCard_header_title">
+                                    <Text
+                                        size="md"
+                                        weight="medium"
+                                        className="mx_BaseCard_header_title_heading"
+                                        role="heading"
+                                    >
+                                        {header}
+                                    </Text>
+                                </div>
                             ) : (
-                                header ?? <div className="mx_BaseCard_header_spacer" />
+                                (header ?? <div className="mx_BaseCard_header_spacer" />)
                             )}
                             {closeButton}
                         </div>

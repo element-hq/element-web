@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import os from "node:os";
@@ -98,6 +90,10 @@ test.describe("HTML Export", () => {
     });
 
     test("should export html successfully and match screenshot", async ({ page, app, room }) => {
+        // Set a fixed time rather than masking off the line with the time in it: we don't need to worry
+        // about the width changing and we can actually test this line looks correct.
+        page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
+
         // Send a bunch of messages to populate the room
         for (let i = 1; i < 10; i++) {
             await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
@@ -108,7 +104,7 @@ test.describe("HTML Export", () => {
             page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("Testing 9"),
         ).toBeVisible();
 
-        await page.getByRole("button", { name: "Room info" }).click();
+        await app.toggleRoomInfoPanel();
         await page.getByRole("menuitem", { name: "Export Chat" }).click();
 
         const downloadPromise = page.waitForEvent("download");
@@ -123,7 +119,6 @@ test.describe("HTML Export", () => {
         await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
         await expect(page).toMatchScreenshot("html-export.png", {
             mask: [
-                page.getByText("This is the start of export", { exact: false }),
                 // We need to mask the whole thing because the width of the time part changes
                 page.locator(".mx_TimelineSeparator"),
                 page.locator(".mx_MessageTimestamp"),

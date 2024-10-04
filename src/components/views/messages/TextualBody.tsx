@@ -1,17 +1,9 @@
 /*
-Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
@@ -59,23 +51,19 @@ interface IState {
 }
 
 export default class TextualBody extends React.Component<IBodyProps, IState> {
-    private readonly contentRef = createRef<HTMLSpanElement>();
+    private readonly contentRef = createRef<HTMLDivElement>();
 
     private unmounted = false;
     private pills: Element[] = [];
     private tooltips: Element[] = [];
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
-    public constructor(props: IBodyProps) {
-        super(props);
-
-        this.state = {
-            links: [],
-            widgetHidden: false,
-        };
-    }
+    public state = {
+        links: [],
+        widgetHidden: false,
+    };
 
     public componentDidMount(): void {
         if (!this.props.editState) {
@@ -566,35 +554,38 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
-        let isNotice = false;
-        let isEmote = false;
+        const isNotice = content.msgtype === MsgType.Notice;
+        const isEmote = content.msgtype === MsgType.Emote;
+
+        const willHaveWrapper =
+            this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
 
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-        isEmote = content.msgtype === MsgType.Emote;
-        isNotice = content.msgtype === MsgType.Notice;
-        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
+
+        const htmlOpts = {
             disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
-            ref: this.contentRef,
-            returnString: false,
-        });
+        };
+        let body = willHaveWrapper
+            ? HtmlUtils.bodyToSpan(content, this.props.highlights, htmlOpts, this.contentRef, false)
+            : HtmlUtils.bodyToDiv(content, this.props.highlights, htmlOpts, this.contentRef);
 
         if (this.props.replacingEventId) {
             body = (
-                <>
+                <div dir="auto" className="mx_EventTile_annotated">
                     {body}
                     {this.renderEditedMarker()}
-                </>
+                </div>
             );
         }
         if (this.props.isSeeingThroughMessageHiddenForModeration) {
             body = (
-                <>
+                <div dir="auto" className="mx_EventTile_annotated">
                     {body}
                     {this.renderPendingModerationMarker()}
-                </>
+                </div>
             );
         }
 
@@ -625,7 +616,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}

@@ -1,21 +1,13 @@
 /*
-Copyright 2015 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, MouseEvent, ReactNode } from "react";
+import React, { createRef, forwardRef, JSX, MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -60,7 +52,7 @@ import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import MessageTimestamp from "../messages/MessageTimestamp";
-import { IReadReceiptInfo } from "./ReadReceiptMarker";
+import { IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
@@ -84,6 +76,8 @@ import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
+import PinningUtils from "../../../utils/PinningUtils.ts";
+import { PinnedMessageBadge } from "../messages/PinnedMessageBadge.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -167,7 +161,7 @@ export interface EventTileProps {
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
-    readReceiptMap?: { [userId: string]: IReadReceiptInfo };
+    readReceiptMap?: { [userId: string]: IReadReceiptPosition };
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
@@ -297,7 +291,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
 
@@ -1131,6 +1125,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const timestamp = showTimestamp && ts ? messageTimestamp : null;
 
+        let pinnedMessageBadge: JSX.Element | undefined;
+        if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+            pinnedMessageBadge = <PinnedMessageBadge />;
+        }
+
         let reactionsRow: JSX.Element | undefined;
         if (!isRedacted) {
             reactionsRow = (
@@ -1141,6 +1140,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 />
             );
         }
+
+        // If we have reactions or a pinned message badge, we need a footer
+        const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
 
         const linkedTimestamp = !this.props.hideTimestamp ? (
             <a
@@ -1247,7 +1249,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             </a>
                             {msgOption}
                         </div>,
-                        reactionsRow,
+                        hasFooter && (
+                            <div className="mx_EventTile_footer" key="mx_EventTile_footer">
+                                {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                {reactionsRow}
+                                {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                            </div>
+                        ),
                     ],
                 );
             }
@@ -1436,14 +1444,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {actionBar}
                             {this.props.layout === Layout.IRC && (
                                 <>
-                                    {reactionsRow}
+                                    {hasFooter && (
+                                        <div className="mx_EventTile_footer">
+                                            {pinnedMessageBadge}
+                                            {reactionsRow}
+                                        </div>
+                                    )}
                                     {this.renderThreadInfo()}
                                 </>
                             )}
                         </div>
                         {this.props.layout !== Layout.IRC && (
                             <>
-                                {reactionsRow}
+                                {hasFooter && (
+                                    <div className="mx_EventTile_footer">
+                                        {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                        {reactionsRow}
+                                        {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                                    </div>
+                                )}
                                 {this.renderThreadInfo()}
                             </>
                         )}

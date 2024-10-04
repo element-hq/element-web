@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
@@ -143,7 +135,6 @@ export const mockClientMethodsDevice = (
     deviceId = "test-device-id",
 ): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
     getDeviceId: jest.fn().mockReturnValue(deviceId),
-    getDeviceEd25519Key: jest.fn(),
     getDevices: jest.fn().mockResolvedValue({ devices: [] }),
 });
 
@@ -172,13 +163,13 @@ export const mockClientMethodsCrypto = (): Partial<
         isSecretStorageReady: jest.fn(),
         getSessionBackupPrivateKey: jest.fn(),
         getVersion: jest.fn().mockReturnValue("Version 0"),
-        getOwnDeviceKeys: jest.fn(),
+        getOwnDeviceKeys: jest.fn().mockReturnValue(new Promise(() => {})),
         getCrossSigningKeyId: jest.fn(),
     }),
-    getDeviceEd25519Key: jest.fn(),
 });
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
     getRooms: jest.fn().mockReturnValue(rooms),
     getRoom: jest.fn((roomId) => rooms.find((r) => r.roomId === roomId) ?? null),
+    isRoomEncrypted: jest.fn(),
 });

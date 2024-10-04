@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, JSHandle, type Page } from "@playwright/test";
@@ -330,15 +322,6 @@ export async function createRoom(page: Page, roomName: string, isEncrypted: bool
 }
 
 /**
- * Open the room info panel and return the panel element
- * @param page - the page to use
- */
-export const openRoomInfo = async (page: Page) => {
-    await page.getByRole("button", { name: "Room info" }).click();
-    return page.locator(".mx_RightPanel");
-};
-
-/**
  * Configure the given MatrixClient to auto-accept any invites
  * @param client - the client to configure
  */
@@ -357,11 +340,12 @@ export async function autoJoin(client: Client) {
  * @param page - the page to use
  * @param bob - the user to verify
  */
-export const verify = async (page: Page, bob: Bot) => {
+export const verify = async (app: ElementAppPage, bob: Bot) => {
+    const page = app.page;
     const bobsVerificationRequestPromise = waitForVerificationRequest(bob);
 
-    const roomInfo = await openRoomInfo(page);
-    await page.locator(".mx_RightPanelTabs").getByText("People").click();
+    const roomInfo = await app.toggleRoomInfoPanel();
+    await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
     await roomInfo.getByText("Bob").click();
     await roomInfo.getByRole("button", { name: "Verify" }).click();
     await roomInfo.getByRole("button", { name: "Start Verification" }).click();
@@ -392,4 +376,15 @@ export async function awaitVerifier(
         }
         return verificationRequest.verifier;
     });
+}
+
+/** Log in a second device for the given bot user */
+export async function createSecondBotDevice(page: Page, homeserver: HomeserverInstance, bob: Bot) {
+    const bobSecondDevice = new Bot(page, homeserver, {
+        bootstrapSecretStorage: false,
+        bootstrapCrossSigning: false,
+    });
+    bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
+    await bobSecondDevice.prepareClient();
+    return bobSecondDevice;
 }

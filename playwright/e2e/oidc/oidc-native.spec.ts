@@ -1,21 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect, registerAccountMas } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("OIDC Native", () => {
     test.skip(isDendrite, "does not yet support MAS");
@@ -25,7 +18,7 @@ test.describe("OIDC Native", () => {
         labsFlags: ["feature_oidc_native_flow"],
     });
 
-    test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhog, app, mas }) => {
+    test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhog, mas }) => {
         const tokenUri = `http://localhost:${mas.port}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
@@ -44,7 +37,8 @@ test.describe("OIDC Native", () => {
 
         const deviceId = await page.evaluate<string>(() => window.localStorage.mx_device_id);
 
-        await app.settings.openUserSettings("General");
+        const app = new ElementAppPage(page);
+        await app.settings.openUserSettings("Account");
         const newPagePromise = context.waitForEvent("page");
         await page.getByRole("button", { name: "Manage account" }).click();
         await app.settings.closeDialog();

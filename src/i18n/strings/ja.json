@@ -1661,12 +1661,9 @@
     },
     "right_panel": {
         "add_integrations": "ウィジェット、ブリッジ、ボットの追加",
-        "edit_integrations": "ウィジェット、ブリッジ、ボットを編集",
         "export_chat_button": "チャットをエクスポート",
         "files_button": "ファイル",
         "pinned_messages": {
-            "empty": "固定メッセージはありません",
-            "explainer": "権限がある場合は、メッセージのメニューを開いて<b>固定</b>を選択すると、ここにメッセージが表示されます。",
             "limits": {
                 "other": "ウィジェットのピン留めは%(count)s件までです"
             },
@@ -2240,7 +2237,6 @@
             "error_revoke_msisdn_discovery": "電話番号の共有を取り消せません",
             "error_share_email_discovery": "メールアドレスを共有できません",
             "error_share_msisdn_discovery": "電話番号を共有できません",
-            "incorrect_msisdn_verification": "認証コードが誤っています",
             "language_section": "言語と地域",
             "msisdn_in_use": "この電話番号は既に使用されています",
             "msisdn_label": "電話番号",

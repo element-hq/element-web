@@ -1,21 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat-solid.svg";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-solid";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 
@@ -52,7 +44,7 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
         // stop event propagating up and triggering RoomHeader bar click
         // which will open RoomSummary
         event.stopPropagation();
-        sdkContext.rightPanelStore.showOrHidePanel(RightPanelPhases.Timeline);
+        sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.Timeline);
     };
 
     return (

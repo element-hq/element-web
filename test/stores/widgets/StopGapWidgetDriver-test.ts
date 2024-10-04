@@ -1,20 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, MockedObject } from "jest-mock";
+import fetchMockJest from "fetch-mock-jest";
 import {
     MatrixClient,
     ClientEvent,
@@ -35,6 +28,7 @@ import {
     SimpleObservable,
     OpenIDRequestState,
     IOpenIDUpdate,
+    UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     ApprovalOpts,
@@ -48,6 +42,7 @@ import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDr
 import { stubClient } from "../../test-utils";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import dis from "../../../src/dispatcher/dispatcher";
+import Modal from "../../../src/Modal";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("StopGapWidgetDriver", () => {
@@ -66,6 +61,10 @@ describe("StopGapWidgetDriver", () => {
             false,
             "!1:example.org",
         );
+
+    jest.spyOn(Modal, "createDialog").mockImplementation(() => {
+        throw new Error("Should not have to create a dialog");
+    });
 
     beforeEach(() => {
         stubClient();
@@ -95,6 +94,10 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.timeline:!1:example.org",
             "org.matrix.msc2762.send.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.event:org.matrix.rageshake_request",
+            "org.matrix.msc2762.send.event:m.reaction",
+            "org.matrix.msc2762.receive.event:m.reaction",
+            "org.matrix.msc2762.send.event:m.room.redaction",
+            "org.matrix.msc2762.receive.event:m.room.redaction",
             "org.matrix.msc2762.receive.state_event:m.room.create",
             "org.matrix.msc2762.receive.state_event:m.room.member",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
@@ -122,9 +125,10 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc3819.receive.to_device:org.matrix.call.sdp_stream_metadata_changed",
             "org.matrix.msc3819.send.to_device:m.call.replaces",
             "org.matrix.msc3819.receive.to_device:m.call.replaces",
+            "org.matrix.msc4157.send.delayed_event",
+            "org.matrix.msc4157.update_delayed_event",
         ]);
 
-        // As long as this resolves, we'll know that it didn't try to pop up a modal
         const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
         expect(approvedCapabilities).toEqual(requestedCapabilities);
     });
@@ -388,6 +392,125 @@ describe("StopGapWidgetDriver", () => {
         });
     });
 
+    describe("sendDelayedEvent", () => {
+        let driver: WidgetDriver;
+        const roomId = "!this-room-id";
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("cannot send delayed events with missing arguments", async () => {
+            await expect(driver.sendDelayedEvent(null, null, EventType.RoomMessage, {})).rejects.toThrow(
+                "Must provide at least one of",
+            );
+        });
+
+        it("sends delayed message events", async () => {
+            client._unstable_sendDelayedEvent.mockResolvedValue({
+                delay_id: "id",
+            });
+
+            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomMessage, {})).resolves.toEqual({
+                roomId,
+                delayId: "id",
+            });
+
+            expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
+                roomId,
+                { delay: 2000 },
+                null,
+                EventType.RoomMessage,
+                {},
+            );
+        });
+
+        it("sends child action delayed message events", async () => {
+            client._unstable_sendDelayedEvent.mockResolvedValue({
+                delay_id: "id-child",
+            });
+
+            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomMessage, {})).resolves.toEqual({
+                roomId,
+                delayId: "id-child",
+            });
+
+            expect(client._unstable_sendDelayedEvent).toHaveBeenCalledWith(
+                roomId,
+                { parent_delay_id: "id-parent" },
+                null,
+                EventType.RoomMessage,
+                {},
+            );
+        });
+
+        it("sends delayed state events", async () => {
+            client._unstable_sendDelayedStateEvent.mockResolvedValue({
+                delay_id: "id",
+            });
+
+            await expect(driver.sendDelayedEvent(2000, null, EventType.RoomTopic, {}, "")).resolves.toEqual({
+                roomId,
+                delayId: "id",
+            });
+
+            expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
+                roomId,
+                { delay: 2000 },
+                EventType.RoomTopic,
+                {},
+                "",
+            );
+        });
+
+        it("sends child action delayed state events", async () => {
+            client._unstable_sendDelayedStateEvent.mockResolvedValue({
+                delay_id: "id-child",
+            });
+
+            await expect(driver.sendDelayedEvent(null, "id-parent", EventType.RoomTopic, {}, "")).resolves.toEqual({
+                roomId,
+                delayId: "id-child",
+            });
+
+            expect(client._unstable_sendDelayedStateEvent).toHaveBeenCalledWith(
+                roomId,
+                { parent_delay_id: "id-parent" },
+                EventType.RoomTopic,
+                {},
+                "",
+            );
+        });
+    });
+
+    describe("updateDelayedEvent", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("updates delayed events", async () => {
+            client._unstable_updateDelayedEvent.mockResolvedValue({});
+            for (const action of [
+                UpdateDelayedEventAction.Cancel,
+                UpdateDelayedEventAction.Restart,
+                UpdateDelayedEventAction.Send,
+            ]) {
+                await expect(driver.updateDelayedEvent("id", action)).resolves.toBeUndefined();
+                expect(client._unstable_updateDelayedEvent).toHaveBeenCalledWith("id", action);
+            }
+        });
+
+        it("fails to update delayed events", async () => {
+            const errorMessage = "Cannot restart this delayed event";
+            client._unstable_updateDelayedEvent.mockRejectedValue(new Error(errorMessage));
+            await expect(driver.updateDelayedEvent("id", UpdateDelayedEventAction.Restart)).rejects.toThrow(
+                errorMessage,
+            );
+        });
+    });
+
     describe("If the feature_dynamic_room_predecessors feature is not enabled", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
@@ -488,6 +611,34 @@ describe("StopGapWidgetDriver", () => {
             });
 
             expect(client.uploadContent).toHaveBeenCalledWith("data");
+        });
+    });
+
+    describe("downloadFile", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("should download a file and return the blob", async () => {
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockImplementation((mxcUrl) => {
+                if (mxcUrl === "mxc://example.com/test_file") {
+                    return "https://example.com/_matrix/media/v3/download/example.com/test_file";
+                }
+
+                return null;
+            });
+
+            fetchMockJest.get("https://example.com/_matrix/media/v3/download/example.com/test_file", "test contents");
+
+            const result = await driver.downloadFile("mxc://example.com/test_file");
+            // A type test is impossible here because of
+            // https://github.com/jefflau/jest-fetch-mock/issues/209
+            // Tell TypeScript that file is a blob.
+            const file = result.file as Blob;
+            await expect(file.text()).resolves.toEqual("test contents");
         });
     });
 });

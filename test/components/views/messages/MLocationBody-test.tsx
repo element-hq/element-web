@@ -1,24 +1,17 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -42,7 +35,7 @@ describe("MLocationBody", () => {
             isGuest: jest.fn().mockReturnValue(false),
         });
         const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
-        const defaultProps: ComponentProps<typeof MLocationBody> = {
+        const defaultProps: MLocationBody["props"] = {
             mxEvent: defaultEvent,
             highlights: [],
             highlightLink: "",
@@ -64,9 +57,11 @@ describe("MLocationBody", () => {
             });
             const component = getComponent();
 
-            // simulate error initialising map in maplibregl
-            // @ts-ignore
-            mockMap.emit("error", { status: 404 });
+            sleep(10).then(() => {
+                // simulate error initialising map in maplibregl
+                // @ts-ignore
+                mockMap.emit("error", { status: 404 });
+            });
 
             return component;
         };
@@ -100,9 +95,10 @@ describe("MLocationBody", () => {
                 expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
             });
 
-            it("displays correct fallback content when map_style_url is misconfigured", () => {
+            it("displays correct fallback content when map_style_url is misconfigured", async () => {
                 const component = getMapErrorComponent();
-                expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot();
+                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toBeTruthy());
+                await waitFor(() => expect(component.container.querySelector(".mx_EventTile_body")).toMatchSnapshot());
             });
 
             it("should clear the error on reconnect", () => {

@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import * as fs from "node:fs";
@@ -410,7 +402,6 @@ test.describe("Timeline", () => {
                 {
                     // Exclude timestamp from snapshot of mx_MainSplit
                     mask: [page.locator(".mx_MessageTimestamp")],
-                    hideTooltips: true,
                 },
             );
 
@@ -428,7 +419,6 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-and-messages-irc-layout.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
-                hideTooltips: true,
             });
 
             // 3. Alignment of expanded GELS and placeholder of deleted message
@@ -449,7 +439,6 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-redaction-placeholder.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
-                hideTooltips: true,
             });
 
             // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
@@ -472,7 +461,6 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-emote-irc-layout.png", {
                 // Exclude timestamp from snapshot of mx_MainSplit
                 mask: [page.locator(".mx_MessageTimestamp")],
-                hideTooltips: true,
             });
         });
 
@@ -485,7 +473,6 @@ test.describe("Timeline", () => {
                         display: none !important;
                     }
                 `,
-                hideTooltips: true,
             };
 
             await sendEvent(app.client, room.roomId);
@@ -725,11 +712,16 @@ test.describe("Timeline", () => {
             ).toBeVisible();
         });
 
-        test("should render url previews", async ({ page, app, room, axe, checkA11y }) => {
+        test("should render url previews", async ({ page, app, room, axe, checkA11y, context }) => {
             axe.disableRules("color-contrast");
 
-            await page.route(
-                "**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
+            // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
+            // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
+            // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
+            // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
+            // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
+            await context.route(
+                "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
                 async (route) => {
                     await route.fulfill({
                         path: "playwright/sample-files/riot.png",
@@ -755,6 +747,7 @@ test.describe("Timeline", () => {
 
             const requestPromises: Promise<any>[] = [
                 page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
+                // see context.route above for why we listen for the unauthenticated endpoint
                 page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
             ];
 
@@ -784,7 +777,7 @@ test.describe("Timeline", () => {
                 await sendEvent(app.client, room.roomId, true);
                 await page.goto(`/#/room/${room.roomId}`);
 
-                await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Search" }).click();
+                await app.toggleRoomInfoPanel();
 
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill("Message");
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
@@ -809,7 +802,7 @@ test.describe("Timeline", () => {
                 await page.goto(`/#/room/${room.roomId}`);
 
                 // Open a room setting dialog
-                await page.getByRole("button", { name: "Room options" }).click();
+                await app.toggleRoomInfoPanel();
                 await page.getByRole("menuitem", { name: "Settings" }).click();
 
                 // Set a room topic to render a TextualEvent
@@ -822,9 +815,6 @@ test.describe("Timeline", () => {
                 await expect(
                     page.getByText(`${OLD_NAME} changed the topic to "This is a room for ${stringToSearch}.".`),
                 ).toHaveClass(/mx_TextualEvent/);
-
-                // Display the room search bar
-                await page.locator(".mx_LegacyRoomHeader").getByRole("button", { name: "Search" }).click();
 
                 // Search the string to display both the message and TextualEvent on search results panel
                 await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);

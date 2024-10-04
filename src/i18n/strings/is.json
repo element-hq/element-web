@@ -1467,11 +1467,9 @@
     },
     "right_panel": {
         "add_integrations": "Bæta við viðmótshlutum, brúm og vélmennum",
-        "edit_integrations": "Breyta viðmótshlutum, brúm og vélmennum",
         "export_chat_button": "Flytja út spjall",
         "files_button": "Skrár",
         "pinned_messages": {
-            "empty": "Ekkert fest, ennþá",
             "limits": {
                 "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
             },
@@ -1969,7 +1967,6 @@
             "error_revoke_msisdn_discovery": "Ekki er hægt að afturkalla að deila símanúmeri",
             "error_share_email_discovery": "Get ekki deilt tölvupóstfangi",
             "error_share_msisdn_discovery": "Ekki er hægt að deila símanúmeri",
-            "incorrect_msisdn_verification": "Rangur sannvottunarkóði",
             "language_section": "Tungumál og landsvæði",
             "msisdn_in_use": "Þetta símanúmer er nú þegar í notkun",
             "msisdn_label": "Símanúmer",

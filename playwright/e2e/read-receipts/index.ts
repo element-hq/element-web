@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import type { JSHandle, Page } from "@playwright/test";
@@ -402,7 +394,7 @@ class Helpers {
      * Close the threads panel.
      */
     async closeThreadsPanel() {
-        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
+        await this.page.locator(".mx_RightPanel").getByTestId("base-card-close-button").click();
         await expect(this.page.locator(".mx_RightPanel")).not.toBeVisible();
     }
 
@@ -410,7 +402,7 @@ class Helpers {
      * Return to the list of threads, given we are viewing a single thread.
      */
     async backToThreadsList() {
-        await this.page.locator(".mx_LegacyRoomHeader").getByLabel("Threads").click();
+        await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
     }
 
     /**
@@ -530,12 +522,11 @@ class Helpers {
         // whether it's open or not - wait here to give it a chance to settle.
         await this.page.waitForTimeout(200);
 
-        const ariaCurrent = await this.page.getByTestId("threadsButton").getAttribute("aria-current");
-        if (ariaCurrent !== "true") {
-            await this.page.getByTestId("threadsButton").click();
-        }
-
         const threadPanel = this.page.locator(".mx_ThreadPanel");
+        const isThreadPanelOpen = (await threadPanel.count()) !== 0;
+        if (!isThreadPanelOpen) {
+            await this.page.locator(".mx_RoomHeader").getByLabel("Threads").click();
+        }
         await expect(threadPanel).toBeVisible();
         await threadPanel.evaluate(($panel) => {
             const $button = $panel.querySelector<HTMLElement>('[data-testid="base-card-back-button"]');

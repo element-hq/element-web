@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
@@ -196,8 +188,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                             "identity_server|change_prompt",
                             {},
                             {
-                                current: (sub) => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-                                new: (sub) => <b>{abbreviateUrl(idServer)}</b>,
+                                current: (sub) => <strong>{abbreviateUrl(currentClientIdServer)}</strong>,
+                                new: (sub) => <strong>{abbreviateUrl(idServer)}</strong>,
                             },
                         ),
                         button: _t("action|continue"),
@@ -243,7 +235,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 unboundMessage: _t(
                     "identity_server|disconnect_server",
                     {},
-                    { idserver: (sub) => <b>{abbreviateUrl(this.state.currentClientIdServer)}</b> },
+                    { idserver: (sub) => <strong>{abbreviateUrl(this.state.currentClientIdServer)}</strong> },
                 ),
                 button: _t("action|disconnect"),
             });
@@ -286,8 +278,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let message;
         let danger = false;
         const messageElements = {
-            idserver: (sub: string) => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-            b: (sub: string) => <b>{sub}</b>,
+            idserver: (sub: string) => <strong>{abbreviateUrl(currentClientIdServer)}</strong>,
+            b: (sub: string) => <strong>{sub}</strong>,
         };
         if (!currentServerReachable) {
             message = (
@@ -364,13 +356,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             bodyText = _t(
                 "identity_server|description_connected",
                 {},
-                { server: (sub) => <b>{abbreviateUrl(idServerUrl)}</b> },
+                { server: (sub) => <strong>{abbreviateUrl(idServerUrl)}</strong> },
             );
             if (this.props.missingTerms) {
                 bodyText = _t(
                     "identity_server|change_server_prompt",
                     {},
-                    { server: (sub) => <b>{abbreviateUrl(idServerUrl)}</b> },
+                    { server: (sub) => <strong>{abbreviateUrl(idServerUrl)}</strong> },
                 );
             }
         } else {

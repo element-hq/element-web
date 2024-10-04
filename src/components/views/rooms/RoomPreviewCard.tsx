@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { FC, useContext, useState } from "react";
@@ -25,7 +17,6 @@ import { UserTab } from "../dialogs/UserTab";
 import { EffectiveMembership, getEffectiveMembership } from "../../../utils/membership";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -37,6 +28,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import RoomInfoLine from "./RoomInfoLine";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 
 interface IProps {
     room: Room;
@@ -50,9 +42,7 @@ interface IProps {
 // and viewing invite reasons to achieve parity with the default invite screen.
 const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
-    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
-    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const isVideoRoom = room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom());
+    const isVideoRoom = calcIsVideoRoom(room);
     const myMembership = useMyRoomMembership(room);
     useDispatcher(defaultDispatcher, (payload) => {
         if (payload.action === Action.JoinRoomError && payload.roomId === room.roomId) {
@@ -103,7 +93,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                                 "room|invites_you_text",
                                 {},
                                 {
-                                    inviter: () => <b>{inviter?.name || inviteSender}</b>,
+                                    inviter: () => <strong>{inviter?.name || inviteSender}</strong>,
                                 },
                             )}
                         </div>
@@ -172,24 +162,6 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         avatarRow = <RoomAvatar room={room} size="50px" viewAvatarOnClick />;
     }
 
-    let notice: string | null = null;
-    if (cannotJoin) {
-        notice = _t("room|join_failed_needs_invite", {
-            roomName: room.name,
-        });
-    } else if (isVideoRoom && !videoRoomsEnabled) {
-        notice =
-            myMembership === KnownMembership.Join
-                ? _t("room|view_failed_enable_video_rooms")
-                : _t("room|join_failed_enable_video_rooms");
-
-        joinButtons = (
-            <AccessibleButton kind="primary" onClick={viewLabs}>
-                {_t("room|show_labs_settings")}
-            </AccessibleButton>
-        );
-    }
-
     return (
         <div className="mx_RoomPreviewCard">
             {inviterSection}
@@ -200,7 +172,11 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
             <RoomInfoLine room={room} />
             <RoomTopic room={room} className="mx_RoomPreviewCard_topic" />
             {room.getJoinRule() === "public" && <RoomFacePile room={room} />}
-            {notice ? <div className="mx_RoomPreviewCard_notice">{notice}</div> : null}
+            {cannotJoin ? (
+                <div className="mx_RoomPreviewCard_notice">
+                    {_t("room|join_failed_needs_invite", { roomName: room.name })}
+                </div>
+            ) : null}
             <div className="mx_RoomPreviewCard_joinButtons">{joinButtons}</div>
         </div>
     );

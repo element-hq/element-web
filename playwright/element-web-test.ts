@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base, expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
@@ -313,8 +305,8 @@ export const expect = baseExpect.extend({
         name: `${string}.png`,
         options?: {
             mask?: Array<Locator>;
-            omitBackground?: boolean;
-            hideTooltips?: boolean;
+            includeDialogBackground?: boolean;
+            showTooltips?: boolean;
             timeout?: number;
             css?: string;
         },
@@ -324,45 +316,58 @@ export const expect = baseExpect.extend({
 
         const page = "page" in receiver ? receiver.page() : receiver;
 
-        let hideTooltipsCss: string | undefined;
-        if (options?.hideTooltips) {
-            hideTooltipsCss = `
+        let css = `
+            .mx_MessagePanel_myReadMarker {
+                display: none !important;
+            }
+            .mx_RoomView_MessageList {
+                height: auto !important;
+            }
+            .mx_DisambiguatedProfile_displayName {
+                color: var(--cpd-color-blue-1200) !important;
+            }
+            .mx_BaseAvatar {
+                background-color: var(--cpd-color-fuchsia-1200) !important;
+                color: white !important;
+            }
+            .mx_ReplyChain {
+                border-left-color: var(--cpd-color-blue-1200) !important;
+            }
+            /* Avoid flakiness from hover styling */
+            .mx_ReplyChain_show {
+                color: var(--cpd-color-text-secondary) !important;
+            }
+            /* Use monospace font for timestamp for consistent mask width */
+            .mx_MessageTimestamp {
+                font-family: Inconsolata !important;
+            }
+        `;
+
+        if (!options?.showTooltips) {
+            css += `
+                [role="tooltip"],
                 .mx_Tooltip_visible {
                     visibility: hidden !important;
                 }
             `;
         }
 
+        if (!options?.includeDialogBackground) {
+            css += `
+                /* Make the dialog backdrop solid so any dialog screenshots don't show any components behind them */
+                .mx_Dialog_background {
+                    background-color: #030c1b !important;
+                }
+            `;
+        }
+
+        if (options?.css) {
+            css += options.css;
+        }
+
         // We add a custom style tag before taking screenshots
         const style = (await page.addStyleTag({
-            content: `
-                .mx_MessagePanel_myReadMarker {
-                    display: none !important;
-                }
-                .mx_RoomView_MessageList {
-                    height: auto !important;
-                }
-                .mx_DisambiguatedProfile_displayName {
-                    color: var(--cpd-color-blue-1200) !important;
-                }
-                .mx_BaseAvatar {
-                    background-color: var(--cpd-color-fuchsia-1200) !important;
-                    color: white !important;
-                }
-                .mx_ReplyChain {
-                    border-left-color: var(--cpd-color-blue-1200) !important;
-                }
-                /* Avoid flakiness from hover styling */
-                .mx_ReplyChain_show {
-                    color: var(--cpd-color-text-secondary) !important;
-                }
-                /* Use monospace font for timestamp for consistent mask width */
-                .mx_MessageTimestamp {
-                    font-family: Inconsolata !important;
-                }
-                ${hideTooltipsCss ?? ""}
-                ${options?.css ?? ""}
-            `,
+            content: css,
         })) as ElementHandle<Element>;
 
         const screenshotName = sanitizeFilePathBeforeExtension(name);

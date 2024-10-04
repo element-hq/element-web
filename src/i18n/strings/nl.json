@@ -1513,12 +1513,9 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, bruggen & bots toevoegen",
-        "edit_integrations": "Widgets, bruggen & bots bewerken",
         "export_chat_button": "Chat exporteren",
         "files_button": "Bestanden",
         "pinned_messages": {
-            "empty": "Nog niks vastgeprikt",
-            "explainer": "Als je de rechten hebt, open dan het menu op elk bericht en selecteer <b>Vastprikken</b> om ze hier te zetten.",
             "limits": {
                 "other": "Je kunt maar %(count)s widgets vastzetten"
             },
@@ -2077,7 +2074,6 @@
             "error_revoke_msisdn_discovery": "Kan delen voor dit telefoonnummer niet intrekken",
             "error_share_email_discovery": "Kan e-mailadres niet delen",
             "error_share_msisdn_discovery": "Kan telefoonnummer niet delen",
-            "incorrect_msisdn_verification": "Onjuiste verificatiecode",
             "language_section": "Taal en regio",
             "msisdn_in_use": "Dit telefoonnummer is al in gebruik",
             "msisdn_label": "Telefoonnummer",

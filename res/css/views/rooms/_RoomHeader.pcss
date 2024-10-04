@@ -1,23 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 .mx_RoomHeader {
     height: 64px;
     box-sizing: border-box;
-    padding: 0 var(--cpd-space-3x);
+    padding: 0 var(--cpd-space-3x) 0 calc(var(--cpd-space-3x) + var(--cpd-space-1-5x));
     border-bottom: 1px solid $separator;
     background-color: $background;
     transition: all 0.2s ease;
@@ -39,6 +31,8 @@ limitations under the License.
     cursor: pointer;
     gap: var(--cpd-space-3x);
     text-align: left;
+    height: 100%;
+    padding: 0;
 }
 
 .mx_RoomHeader_info {
@@ -61,31 +55,6 @@ limitations under the License.
     display: flex;
     gap: var(--cpd-space-1x);
     align-items: center;
-}
-
-.mx_RoomHeader_topic {
-    height: 0;
-    opacity: 0;
-    transition: all var(--transition-standard) ease 0.1s;
-    /* Emojis are rendered a bit bigger than text in the timeline
-        Make them compact/the same size as text here */
-    .mx_Emoji {
-        font-size: inherit;
-    }
-}
-
-.mx_RoomHeader:hover,
-.mx_RoomHeader:focus-within {
-    .mx_RoomHeader_topic {
-        /* height needed to compute the transition, it equals to the `line-height`
-        value in pixels */
-        height: calc($font-13px * 1.5);
-        opacity: 1;
-
-        a:hover {
-            text-decoration: underline;
-        }
-    }
 }
 
 .mx_RoomHeader_icon {

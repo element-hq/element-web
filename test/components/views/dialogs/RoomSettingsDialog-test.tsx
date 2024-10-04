@@ -1,21 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
     EventTimeline,
     EventType,
@@ -129,7 +121,7 @@ describe("<RoomSettingsDialog />", () => {
                 expect(screen.getByTestId("settings-tab-ROOM_PEOPLE_TAB")).toBeInTheDocument();
             });
 
-            it("re-renders on room join rule changes", () => {
+            it("re-renders on room join rule changes", async () => {
                 jest.spyOn(SettingsStore, "getValue").mockImplementation(
                     (setting) => setting === "feature_ask_to_join",
                 );
@@ -142,7 +134,9 @@ describe("<RoomSettingsDialog />", () => {
                     room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                     null,
                 );
-                expect(screen.queryByTestId("settings-tab-ROOM_PEOPLE_TAB")).not.toBeInTheDocument();
+                await waitFor(() =>
+                    expect(screen.queryByTestId("settings-tab-ROOM_PEOPLE_TAB")).not.toBeInTheDocument(),
+                );
             });
         });
 
@@ -183,7 +177,7 @@ describe("<RoomSettingsDialog />", () => {
         it("displays poll history when tab clicked", () => {
             const { container } = getComponent();
 
-            fireEvent.click(screen.getByText("Poll history"));
+            fireEvent.click(screen.getByText("Polls"));
 
             expect(container.querySelector(".mx_SettingsTab")).toMatchSnapshot();
         });

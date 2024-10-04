@@ -1081,12 +1081,9 @@
     },
     "right_panel": {
         "add_integrations": "Pridėti valdiklius, tiltus ir botus",
-        "edit_integrations": "Redaguoti valdiklius, tiltus ir botus",
         "export_chat_button": "Eksportuoti pokalbį",
         "files_button": "Failai",
         "pinned_messages": {
-            "empty": "Kol kas nieko neprisegta",
-            "explainer": "Jei turite leidimus, atidarykite bet kurios žinutės meniu ir pasirinkite <b>Prisegti</b>, kad juos čia priklijuotumėte.",
             "limits": {
                 "other": "Galite prisegti tik iki %(count)s valdiklių"
             },
@@ -1569,7 +1566,6 @@
             "error_revoke_msisdn_discovery": "Neina atšaukti telefono numerio bendrinimo",
             "error_share_email_discovery": "Nepavyko pasidalinti el. pašto adresu",
             "error_share_msisdn_discovery": "Neina bendrinti telefono numerio",
-            "incorrect_msisdn_verification": "Neteisingas patvirtinimo kodas",
             "language_section": "Kalba ir regionas",
             "msisdn_in_use": "Šis telefono numeris jau naudojamas",
             "msisdn_label": "Telefono Numeris",

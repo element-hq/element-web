@@ -1,34 +1,26 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { MouseEventHandler, ReactNode } from "react";
 import { FormattingFunctions, AllActionStates, ActionState } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
-import { Icon as BoldIcon } from "@vector-im/compound-design-tokens/icons/bold.svg";
-import { Icon as BulletedListIcon } from "@vector-im/compound-design-tokens/icons/list-bulleted.svg";
-import { Icon as CodeBlockIcon } from "@vector-im/compound-design-tokens/icons/code.svg";
-import { Icon as UnIndentIcon } from "@vector-im/compound-design-tokens/icons/indent-decrease.svg";
-import { Icon as IndentIcon } from "@vector-im/compound-design-tokens/icons/indent-increase.svg";
-import { Icon as InlineCodeIcon } from "@vector-im/compound-design-tokens/icons/inline-code.svg";
-import { Icon as ItalicIcon } from "@vector-im/compound-design-tokens/icons/italic.svg";
-import { Icon as NumberedListIcon } from "@vector-im/compound-design-tokens/icons/list-numbered.svg";
-import { Icon as QuoteIcon } from "@vector-im/compound-design-tokens/icons/quote.svg";
-import { Icon as StrikeThroughIcon } from "@vector-im/compound-design-tokens/icons/strikethrough.svg";
-import { Icon as UnderlineIcon } from "@vector-im/compound-design-tokens/icons/underline.svg";
-import { Icon as LinkIcon } from "@vector-im/compound-design-tokens/icons/link.svg";
+import BoldIcon from "@vector-im/compound-design-tokens/assets/web/icons/bold";
+import BulletedListIcon from "@vector-im/compound-design-tokens/assets/web/icons/list-bulleted";
+import CodeBlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/code";
+import UnIndentIcon from "@vector-im/compound-design-tokens/assets/web/icons/indent-decrease";
+import IndentIcon from "@vector-im/compound-design-tokens/assets/web/icons/indent-increase";
+import InlineCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/inline-code";
+import ItalicIcon from "@vector-im/compound-design-tokens/assets/web/icons/italic";
+import NumberedListIcon from "@vector-im/compound-design-tokens/assets/web/icons/list-numbered";
+import QuoteIcon from "@vector-im/compound-design-tokens/assets/web/icons/quote";
+import StrikeThroughIcon from "@vector-im/compound-design-tokens/assets/web/icons/strikethrough";
+import UnderlineIcon from "@vector-im/compound-design-tokens/assets/web/icons/underline";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";

@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 import { mocked, MockedObject } from "jest-mock";
 import {
@@ -26,6 +18,7 @@ import {
     SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/react";
+import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import BasePlatform from "../src/BasePlatform";
 import Notifier from "../src/Notifier";
@@ -139,6 +132,11 @@ describe("Notifier", () => {
             getRoom: jest.fn(),
             getPushActionsForEvent: jest.fn(),
             supportsThreads: jest.fn().mockReturnValue(false),
+            matrixRTC: {
+                on: jest.fn(),
+                off: jest.fn(),
+                getRoomSession: jest.fn(),
+            },
         });
 
         mockClient.pushRules = {
@@ -425,15 +423,7 @@ describe("Notifier", () => {
             return callEvent;
         };
 
-        const setGroupCallsEnabled = (val: boolean) => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-                if (name === "feature_group_calls") return val;
-            });
-        };
-
-        it("should show toast when group calls are supported", () => {
-            setGroupCallsEnabled(true);
-
+        it("shows group call toast", () => {
             const notifyEvent = emitCallNotifyEvent();
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
@@ -447,17 +437,35 @@ describe("Notifier", () => {
             );
         });
 
-        it("should not show toast when group calls are not supported", () => {
-            setGroupCallsEnabled(false);
+        it("should not show toast when group call is already connected", () => {
+            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
+                new CallMembership(
+                    mkEvent({
+                        event: true,
+                        room: testRoom.roomId,
+                        user: userId,
+                        type: EventType.GroupCallMemberPrefix,
+                        content: {},
+                    }),
+                    {
+                        call_id: "123",
+                        application: "m.call",
+                        focus_active: { type: "livekit" },
+                        foci_preferred: [],
+                        device_id: "DEVICE",
+                    },
+                ),
+            ]);
 
+            const roomSession = MatrixRTCSession.roomSessionForRoom(mockClient, testRoom);
+
+            mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
             emitCallNotifyEvent();
-
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            spyCallMemberships.mockRestore();
         });
 
         it("should not show toast when calling with non-group call event", () => {
-            setGroupCallsEnabled(true);
-
             emitCallNotifyEvent("event_type");
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();

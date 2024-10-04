@@ -1,29 +1,24 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent } from "react";
 import { act, render, screen } from "@testing-library/react";
 import { MatrixClient, UploadResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import UserProfileSettings from "../../../../src/components/views/settings/UserProfileSettings";
-import { stubClient } from "../../../test-utils";
+import { mkStubRoom, stubClient } from "../../../test-utils";
 import { ToastContext, ToastRack } from "../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import dis from "../../../../src/dispatcher/dispatcher";
+import Modal from "../../../../src/Modal";
 
 interface MockedAvatarSettingProps {
     removeAvatar: () => void;
@@ -42,6 +37,11 @@ jest.mock(
             return <div>Mocked AvatarSetting</div>;
         }) as React.FC<MockedAvatarSettingProps>,
 );
+
+jest.mock("../../../../src/dispatcher/dispatcher", () => ({
+    dispatch: jest.fn(),
+    register: jest.fn(),
+}));
 
 let editInPlaceOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
 let editInPlaceOnSave: () => void;
@@ -208,5 +208,31 @@ describe("ProfileSettings", () => {
         });
 
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
+    });
+
+    it("signs out directly if no rooms are encrypted", async () => {
+        renderProfileSettings(toastRack, client);
+
+        const signOutButton = await screen.findByText("Sign out");
+        await userEvent.click(signOutButton);
+
+        expect(dis.dispatch).toHaveBeenCalledWith({ action: "logout" });
+    });
+
+    it("displays confirmation dialog if rooms are encrypted", async () => {
+        jest.spyOn(Modal, "createDialog");
+
+        const mockRoom = mkStubRoom("!test:room", "Test Room", client);
+        client.getRooms = jest.fn().mockReturnValue([mockRoom]);
+        client.getCrypto = jest.fn().mockReturnValue({
+            isEncryptionEnabledInRoom: jest.fn().mockReturnValue(true),
+        });
+
+        renderProfileSettings(toastRack, client);
+
+        const signOutButton = await screen.findByText("Sign out");
+        await userEvent.click(signOutButton);
+
+        expect(Modal.createDialog).toHaveBeenCalled();
     });
 });

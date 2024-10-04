@@ -1,23 +1,23 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2024 The Matrix.org Foundation C.I.C.
+Copyright 2018 New Vector Ltd
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2020, 2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
+// Note: we don't import the base64 utils from `matrix-js-sdk/src/matrix` because this file
+// is used by Element Web's service worker, and importing `matrix` brings in ~1mb of stuff
+// we don't need. Instead, we ignore the import restriction and only bring in what we actually
+// need.
+// Note: `base64` is not public in the js-sdk, so if it changes/breaks, that's on us. We should
+// be okay with our frequent tests, locked versioning, etc though. We'll pick up problems well
+// before release.
+// eslint-disable-next-line no-restricted-imports
+import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/base64";
 import { logger } from "matrix-js-sdk/src/logger";
 
 /**

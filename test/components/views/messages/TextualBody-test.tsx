@@ -1,17 +1,9 @@
 /*
-Copyright 2019, 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -135,7 +127,7 @@ describe("<TextualBody />", () => {
         const { container } = getComponent({ mxEvent: ev });
         expect(container).toHaveTextContent("* sender winks");
         const content = container.querySelector(".mx_EventTile_body");
-        expect(content).toContainHTML('<span class="mx_EventTile_body" dir="auto">winks</span>');
+        expect(content).toMatchSnapshot();
     });
 
     it("renders m.notice correctly", () => {
@@ -155,7 +147,7 @@ describe("<TextualBody />", () => {
         const { container } = getComponent({ mxEvent: ev });
         expect(container).toHaveTextContent(ev.getContent().body);
         const content = container.querySelector(".mx_EventTile_body");
-        expect(content).toContainHTML(`<span class="mx_EventTile_body" dir="auto">${ev.getContent().body}</span>`);
+        expect(content).toMatchSnapshot();
     });
 
     describe("renders plain-text m.text correctly", () => {
@@ -168,7 +160,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             expect(container).toHaveTextContent(ev.getContent().body);
             const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(`<span class="mx_EventTile_body" dir="auto">${ev.getContent().body}</span>`);
+            expect(content).toMatchSnapshot();
         });
 
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
@@ -177,11 +169,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             expect(container).toHaveTextContent(ev.getContent().body);
             const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body" dir="auto">' +
-                    'Visit <a href="https://matrix.org/" class="linkified" target="_blank" rel="noreferrer noopener">' +
-                    "https://matrix.org/</a></span>",
-            );
+            expect(content).toMatchSnapshot();
         });
 
         it("should not pillify MXIDs", () => {
@@ -266,11 +254,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev }, matrixClient);
             expect(container).toHaveTextContent("foo baz bar del u");
             const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                    ev.getContent().formatted_body +
-                    "</span>",
-            );
+            expect(content).toMatchSnapshot();
         });
 
         it("spoilers get injected properly into the DOM", () => {
@@ -281,14 +265,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev }, matrixClient);
             expect(container).toHaveTextContent("Hey (movie) the movie was awesome");
             const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                    "Hey <span>" +
-                    '<button class="mx_EventTile_spoiler">' +
-                    '<span class="mx_EventTile_spoiler_reason">(movie)</span>&nbsp;' +
-                    '<span class="mx_EventTile_spoiler_content"><span>the movie was awesome</span></span>' +
-                    "</span></button></span>",
-            );
+            expect(content).toMatchSnapshot();
         });
 
         it("linkification is not applied to code blocks", () => {
@@ -366,7 +343,7 @@ describe("<TextualBody />", () => {
             expect(content).toMatchSnapshot();
         });
 
-        it("renders formatted body without html corretly", () => {
+        it("renders formatted body without html correctly", () => {
             const ev = mkEvent({
                 type: "m.room.message",
                 room: "room_id",
@@ -383,9 +360,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev }, matrixClient);
 
             const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body" dir="auto">' + "escaped *markdown*" + "</span>",
-            );
+            expect(content).toMatchSnapshot();
         });
     });
 

@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import type { Page } from "@playwright/test";
@@ -167,7 +159,7 @@ test.describe("Integration Manager: Kick", () => {
         await app.client.inviteUser(room.roomId, targetUser.credentials.userId);
         await expect(page.getByText(`${BOT_DISPLAY_NAME} joined the room`)).toBeVisible();
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, targetUser.credentials.userId);
         await closeIntegrationManager(page, integrationManagerUrl);
         await expectKickedMessage(page, true);
@@ -185,7 +177,7 @@ test.describe("Integration Manager: Kick", () => {
             },
         });
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, targetUser.credentials.userId);
         await closeIntegrationManager(page, integrationManagerUrl);
         await expectKickedMessage(page, false);
@@ -197,7 +189,7 @@ test.describe("Integration Manager: Kick", () => {
         await expect(page.getByText(`${BOT_DISPLAY_NAME} joined the room`)).toBeVisible();
         await targetUser.leave(room.roomId);
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, targetUser.credentials.userId);
         await closeIntegrationManager(page, integrationManagerUrl);
         await expectKickedMessage(page, false);
@@ -209,7 +201,7 @@ test.describe("Integration Manager: Kick", () => {
         await expect(page.getByText(`${BOT_DISPLAY_NAME} joined the room`)).toBeVisible();
         await app.client.ban(room.roomId, targetUser.credentials.userId);
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, targetUser.credentials.userId);
         await closeIntegrationManager(page, integrationManagerUrl);
         await expectKickedMessage(page, false);
@@ -218,7 +210,7 @@ test.describe("Integration Manager: Kick", () => {
     test("should no-op if the target was never a room member", async ({ page, app, bot: targetUser, room }) => {
         await app.viewRoomByName(ROOM_NAME);
 
-        await openIntegrationManager(page);
+        await openIntegrationManager(app);
         await sendActionFromIntegrationManager(page, integrationManagerUrl, room.roomId, targetUser.credentials.userId);
         await closeIntegrationManager(page, integrationManagerUrl);
         await expectKickedMessage(page, false);

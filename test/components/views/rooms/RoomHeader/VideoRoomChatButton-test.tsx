@@ -1,23 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { MockedObject } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { VideoRoomChatButton } from "../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
 import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
@@ -64,7 +56,7 @@ describe("<VideoRoomChatButton />", () => {
             ...mockClientMethodsUser(),
         });
         rightPanelStore = {
-            showOrHidePanel: jest.fn(),
+            showOrHidePhase: jest.fn(),
         } as unknown as MockedObject<RightPanelStore>;
         sdkContext = new SdkContextClass();
         sdkContext.client = client;
@@ -81,7 +73,7 @@ describe("<VideoRoomChatButton />", () => {
 
         fireEvent.click(screen.getByLabelText("Chat"));
 
-        expect(sdkContext.rightPanelStore.showOrHidePanel).toHaveBeenCalledWith(RightPanelPhases.Timeline);
+        expect(sdkContext.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.Timeline);
     });
 
     it("renders button with an unread marker when room is unread", () => {
@@ -94,7 +86,7 @@ describe("<VideoRoomChatButton />", () => {
         expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy();
     });
 
-    it("adds unread marker when room notification state changes to unread", () => {
+    it("adds unread marker when room notification state changes to unread", async () => {
         const room = makeRoom();
         // start in read state
         const notificationState = mockRoomNotificationState(room, NotificationLevel.None);
@@ -108,10 +100,10 @@ describe("<VideoRoomChatButton />", () => {
         notificationState.emit(NotificationStateEvents.Update);
 
         // unread marker
-        expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy();
+        await waitFor(() => expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy());
     });
 
-    it("clears unread marker when room notification state changes to read", () => {
+    it("clears unread marker when room notification state changes to read", async () => {
         const room = makeRoom();
         // start in unread state
         const notificationState = mockRoomNotificationState(room, NotificationLevel.Highlight);
@@ -125,6 +117,6 @@ describe("<VideoRoomChatButton />", () => {
         notificationState.emit(NotificationStateEvents.Update);
 
         // unread marker cleared
-        expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeFalsy();
+        await waitFor(() => expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeFalsy());
     });
 });

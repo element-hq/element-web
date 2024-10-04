@@ -1,21 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
+import React from "react";
 import { cleanup, queryByRole, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
@@ -53,7 +45,7 @@ describe("RoomList", () => {
     const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
-    function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {
+    function getComponent(props: Partial<RoomList["props"]> = {}): JSX.Element {
         return (
             <RoomList
                 onKeyDown={jest.fn()}

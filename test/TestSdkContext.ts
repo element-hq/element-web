@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { SdkContextClass } from "../src/contexts/SDKContext";
@@ -35,18 +27,18 @@ import {
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
 export class TestSdkContext extends SdkContextClass {
-    public _RightPanelStore?: RightPanelStore;
-    public _RoomNotificationStateStore?: RoomNotificationStateStore;
-    public _RoomViewStore?: RoomViewStore;
-    public _WidgetPermissionStore?: WidgetPermissionStore;
-    public _WidgetLayoutStore?: WidgetLayoutStore;
-    public _WidgetStore?: WidgetStore;
-    public _PosthogAnalytics?: PosthogAnalytics;
-    public _SlidingSyncManager?: SlidingSyncManager;
-    public _SpaceStore?: SpaceStoreClass;
-    public _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
-    public _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
-    public _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
+    public declare _RightPanelStore?: RightPanelStore;
+    public declare _RoomNotificationStateStore?: RoomNotificationStateStore;
+    public declare _RoomViewStore?: RoomViewStore;
+    public declare _WidgetPermissionStore?: WidgetPermissionStore;
+    public declare _WidgetLayoutStore?: WidgetLayoutStore;
+    public declare _WidgetStore?: WidgetStore;
+    public declare _PosthogAnalytics?: PosthogAnalytics;
+    public declare _SlidingSyncManager?: SlidingSyncManager;
+    public declare _SpaceStore?: SpaceStoreClass;
+    public declare _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
+    public declare _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
+    public declare _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
 
     constructor() {
         super();

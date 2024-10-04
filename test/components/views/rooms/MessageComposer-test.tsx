@@ -1,22 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
 import { EventType, MatrixEvent, Room, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -49,10 +41,6 @@ import { VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../../../../sr
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 
-jest.mock("../../../../src/components/views/rooms/wysiwyg_composer", () => ({
-    SendWysiwygComposer: jest.fn().mockImplementation(() => <div data-testid="wysiwyg-composer" />),
-}));
-
 const openStickerPicker = async (): Promise<void> => {
     await act(async () => {
         await userEvent.click(screen.getByLabelText("More options"));
@@ -76,12 +64,6 @@ const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState
     SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording);
 };
 
-const shouldClearModal = async (): Promise<void> => {
-    afterEach(async () => {
-        await clearAllModals();
-    });
-};
-
 const expectVoiceMessageRecordingTriggered = (): void => {
     // Checking for the voice message dialog text, if no mic can be found.
     // By this we know at least that starting a voice message was triggered.
@@ -96,7 +78,8 @@ describe("MessageComposer", () => {
         mockPlatformPeg();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        await clearAllModals();
         jest.useRealTimers();
 
         SdkContextClass.instance.voiceBroadcastRecordingsStore.clearCurrent();
@@ -415,8 +398,6 @@ describe("MessageComposer", () => {
                 await flushPromises();
             });
 
-            shouldClearModal();
-
             it("should try to start a voice message", () => {
                 expectVoiceMessageRecordingTriggered();
             });
@@ -429,8 +410,6 @@ describe("MessageComposer", () => {
                 await startVoiceMessage();
                 await waitEnoughCyclesForModal();
             });
-
-            shouldClearModal();
 
             it("should not start a voice message and display the info dialog", async () => {
                 expect(screen.queryByLabelText("Stop recording")).not.toBeInTheDocument();
@@ -445,8 +424,6 @@ describe("MessageComposer", () => {
                 await startVoiceMessage();
                 await waitEnoughCyclesForModal();
             });
-
-            shouldClearModal();
 
             it("should try to start a voice message and should not display the info dialog", async () => {
                 expect(screen.queryByText("Can't start voice message")).not.toBeInTheDocument();
@@ -467,13 +444,50 @@ describe("MessageComposer", () => {
         });
     });
 
-    it("should render SendWysiwygComposer when enabled", () => {
+    it("wysiwyg correctly persists state to and from localStorage", async () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
-        SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+        const messageText = "Test Text";
+        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+        const { renderResult, rawComponent } = wrapAndRender({ room });
+        const { unmount, rerender } = renderResult;
 
-        wrapAndRender({ room });
-        expect(screen.getByTestId("wysiwyg-composer")).toBeInTheDocument();
-    });
+        await act(async () => {
+            await flushPromises();
+        });
+
+        const key = `mx_wysiwyg_state_${room.roomId}`;
+
+        await act(async () => {
+            await userEvent.click(screen.getByRole("textbox"));
+        });
+        fireEvent.input(screen.getByRole("textbox"), {
+            data: messageText,
+            inputType: "insertText",
+        });
+
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+
+        // Wait for event dispatch to happen
+        await act(async () => {
+            await flushPromises();
+        });
+
+        // assert there is state persisted
+        expect(localStorage.getItem(key)).toBeNull();
+
+        // ensure the right state was persisted to localStorage
+        unmount();
+
+        // assert the persisted state
+        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
+            content: messageText,
+            isRichText: true,
+        });
+
+        // ensure the correct state is re-loaded
+        rerender(rawComponent);
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+    }, 10000);
 });
 
 function wrapAndRender(
@@ -506,14 +520,16 @@ function wrapAndRender(
         permalinkCreator: new RoomPermalinkCreator(room),
     };
 
+    const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
+        <MatrixClientContext.Provider value={client}>
+            <RoomContext.Provider value={context}>
+                <MessageComposer {...defaultProps} {...props} />
+            </RoomContext.Provider>
+        </MatrixClientContext.Provider>
+    );
     return {
-        renderResult: render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={roomContext}>
-                    <MessageComposer {...defaultProps} {...props} />
-                </RoomContext.Provider>
-            </MatrixClientContext.Provider>,
-        ),
+        rawComponent: getRawComponent(props, roomContext, mockClient),
+        renderResult: render(getRawComponent(props, roomContext, mockClient)),
         roomContext,
     };
 }

@@ -1772,12 +1772,9 @@
     },
     "right_panel": {
         "add_integrations": "Lisa vidinaid, võrgusildu ja roboteid",
-        "edit_integrations": "Muuda vidinaid, võrgusildu ja roboteid",
         "export_chat_button": "Ekspordi vestlus",
         "files_button": "Failid",
         "pinned_messages": {
-            "empty": "Klammerdatud sõnumeid veel pole",
-            "explainer": "Kui sul on vastavad õigused olemas, siis ava sõnumi juuresolev menüü ning püsisõnumi tekitamiseks vali <b>Klammerda</b>.",
             "limits": {
                 "other": "Sa saad kinnitada kuni %(count)s vidinat"
             },
@@ -2417,7 +2414,6 @@
             "error_share_msisdn_discovery": "Telefoninumbri jagamine ei õnnestunud",
             "identity_server_no_token": "Ei leidu tunnusluba isikutuvastusserveri jaoks",
             "identity_server_not_set": "Isikutuvastusserver on määramata",
-            "incorrect_msisdn_verification": "Vigane verifikatsioonikood",
             "language_section": "Keel ja piirkond",
             "msisdn_in_use": "See telefoninumber on juba kasutusel",
             "msisdn_label": "Telefoninumber",

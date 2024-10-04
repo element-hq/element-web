@@ -1,18 +1,10 @@
 /*
-Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps, createRef, ReactNode } from "react";
@@ -20,7 +12,7 @@ import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -65,29 +57,22 @@ interface IState {
 
 export default class MImageBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
     private timeout?: number;
     private sizeWatcher?: string;
-    private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
-    public constructor(props: IBodyProps) {
-        super(props);
-
-        this.reconnectedListener = createReconnectedListener(this.clearError);
-
-        this.state = {
-            contentUrl: null,
-            thumbUrl: null,
-            imgError: false,
-            imgLoaded: false,
-            hover: false,
-            showImage: SettingsStore.getValue("showImages"),
-            placeholder: Placeholder.NoImage,
-        };
-    }
+    public state: IState = {
+        contentUrl: null,
+        thumbUrl: null,
+        imgError: false,
+        imgLoaded: false,
+        hover: false,
+        showImage: SettingsStore.getValue("showImages"),
+        placeholder: Placeholder.NoImage,
+    };
 
     protected showImage(): void {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
@@ -160,10 +145,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgElement.src = url;
     };
 
-    private clearError = (): void => {
+    private reconnectedListener = createReconnectedListener((): void => {
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.setState({ imgError: false });
-    };
+    });
 
     private onImageError = (): void => {
         // If the thumbnail failed to load then try again using the contentUrl

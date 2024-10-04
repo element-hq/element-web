@@ -1,20 +1,12 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2017, 2018 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -34,7 +26,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 import { Button, Tooltip } from "@vector-im/compound-web";
-import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add-solid.svg";
+import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -63,7 +55,6 @@ const SHOW_MORE_INCREMENT = 100;
 interface IProps {
     roomId: string;
     searchQuery: string;
-    hideHeaderButtons?: boolean;
     onClose(): void;
     onSearchQueryChanged: (query: string) => void;
 }
@@ -82,11 +73,11 @@ export default class MemberList extends React.Component<IProps, IState> {
     private mounted = false;
 
     public static contextType = SDKContext;
-    public context!: React.ContextType<typeof SDKContext>;
+    public declare context: React.ContextType<typeof SDKContext>;
     private tiles: Map<string, MemberTile> = new Map();
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props);
+        super(props, context);
         this.state = this.getMembersState([], []);
         this.showPresence = context?.memberListStore.isPresenceEnabled() ?? true;
         this.mounted = true;
@@ -367,7 +358,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                     className="mx_MemberList"
                     ariaLabelledBy="memberlist-panel-tab"
                     role="tabpanel"
-                    hideHeaderButtons={this.props.hideHeaderButtons}
+                    header={_t("common|people")}
                     onClose={this.props.onClose}
                 >
                     <Spinner />
@@ -432,7 +423,7 @@ export default class MemberList extends React.Component<IProps, IState> {
                 className="mx_MemberList"
                 ariaLabelledBy="memberlist-panel-tab"
                 role="tabpanel"
-                hideHeaderButtons={this.props.hideHeaderButtons}
+                header={_t("common|people")}
                 footer={footer}
                 onClose={this.props.onClose}
             >

@@ -1,17 +1,9 @@
 /*
-Copyright 2020, 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
@@ -66,15 +58,12 @@ describe("AccessSecretStorageDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
-            keyBackupKeyFromRecoveryKey: jest.fn(),
             checkSecretStorageKey: jest.fn(),
-            isValidRecoveryKey: jest.fn(),
         });
     });
 
     it("Closes the dialog when the form is submitted with a valid key", async () => {
         mockClient.checkSecretStorageKey.mockResolvedValue(true);
-        mockClient.isValidRecoveryKey.mockReturnValue(true);
 
         const onFinished = jest.fn();
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
@@ -96,8 +85,8 @@ describe("AccessSecretStorageDialog", () => {
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
         renderComponent({ onFinished, checkPrivateKey });
 
-        mockClient.keyBackupKeyFromRecoveryKey.mockImplementation(() => {
-            throw new Error("that's no key");
+        mockClient.checkSecretStorageKey.mockImplementation(() => {
+            throw new Error("invalid key");
         });
 
         await enterSecurityKey();
@@ -123,17 +112,16 @@ describe("AccessSecretStorageDialog", () => {
         };
         const checkPrivateKey = jest.fn().mockResolvedValue(false);
         renderComponent({ checkPrivateKey, keyInfo });
-        mockClient.isValidRecoveryKey.mockReturnValue(false);
 
         await enterSecurityKey("Security Phrase");
         expect(screen.getByPlaceholderText("Security Phrase")).toHaveValue(securityKey);
         await submitDialog();
 
-        expect(
-            screen.getByText(
+        await expect(
+            screen.findByText(
                 "👎 Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
             ),
-        ).toBeInTheDocument();
+        ).resolves.toBeInTheDocument();
 
         expect(screen.getByPlaceholderText("Security Phrase")).toHaveFocus();
     });

@@ -1648,12 +1648,9 @@
     },
     "right_panel": {
         "add_integrations": "Añadir accesorios, puentes y bots",
-        "edit_integrations": "Editar accesorios, puentes y bots",
         "export_chat_button": "Exportar conversación",
         "files_button": "Archivos",
         "pinned_messages": {
-            "empty": "Ningún mensaje fijado… todavía",
-            "explainer": "Si tienes permisos, abre el menú de cualquier mensaje y selecciona <b>Fijar</b> para colocarlo aquí.",
             "limits": {
                 "other": "Solo puedes anclar hasta %(count)s accesorios"
             },
@@ -2249,7 +2246,6 @@
             "error_share_email_discovery": "No se logró compartir la dirección de correo electrónico",
             "error_share_msisdn_discovery": "No se logró compartir el número de teléfono",
             "identity_server_not_set": "Servidor de identidad no configurado",
-            "incorrect_msisdn_verification": "Verificación de código incorrecta",
             "language_section": "Idioma y región",
             "msisdn_in_use": "Este número de teléfono ya está en uso",
             "msisdn_label": "Número de teléfono",

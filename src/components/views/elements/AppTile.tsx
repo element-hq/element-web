@@ -1,20 +1,12 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2018 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
@@ -24,9 +16,9 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import { Icon as MenuIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
-import { Icon as MaximiseIcon } from "@vector-im/compound-design-tokens/icons/expand.svg";
-import { Icon as CollapseIcon } from "@vector-im/compound-design-tokens/icons/collapse.svg";
+import MenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import MaximiseIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
+import CollapseIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -58,6 +50,8 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { parseUrl } from "../../../utils/UrlUtils";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
 
 interface IProps {
     app: IWidget | IApp;
@@ -120,7 +114,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public context!: ContextType<typeof MatrixClientContext>;
+    public declare context: ContextType<typeof MatrixClientContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
@@ -143,8 +137,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private unmounted = false;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props);
-        this.context = context; // XXX: workaround for lack of `declare` support on `public context!:` definition
+        super(props, context);
 
         // Tiles in miniMode are floating, and therefore not docked
         if (!this.props.miniMode) {
@@ -585,6 +578,14 @@ export default class AppTile extends React.Component<IProps, IState> {
             ? Container.Top
             : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
+
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (
+            targetContainer === Container.Top &&
+            RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
+        ) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
     };
 
     private onMinimiseClicked = (): void => {

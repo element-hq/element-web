@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2015-2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
@@ -143,11 +135,12 @@ import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
 import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
+import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 
 // legacy export
 export { default as Views } from "../../Views";
 
-const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
+const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -173,6 +166,12 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
+
+    // Used by tests, this function is called when session initialisation starts
+    // with a promise that resolves or rejects once the initialiation process
+    // has finished, so that tests can wait for this to avoid them executing over
+    // each other.
+    initPromiseCallback?: (p: Promise<void>) => void;
 }
 
 interface IState {
@@ -196,6 +195,7 @@ interface IState {
     register_session_id?: string;
     // eslint-disable-next-line camelcase
     register_id_sid?: string;
+    isMobileRegistration?: boolean;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
     hideToSRUsers: boolean;
@@ -250,6 +250,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             currentUserId: null,
 
             hideToSRUsers: false,
+            isMobileRegistration: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
             resizeNotifier: new ResizeNotifier(),
@@ -314,7 +315,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Kick off a call to {@link initSession}, and handle any errors
      */
     private startInitSession = (): void => {
-        this.initSession().catch((err) => {
+        const initProm = this.initSession();
+        if (this.props.initPromiseCallback) {
+            this.props.initPromiseCallback(initProm);
+        }
+
+        initProm.catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
         });
@@ -374,7 +380,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // Create and start the client
             // accesses the new credentials just set in storage during attemptDelegatedAuthLogin
             // and sets logged in state
-            await Lifecycle.restoreFromLocalStorage({ ignoreGuest: true });
+            await Lifecycle.restoreSessionFromStorage({ ignoreGuest: true });
             await this.postLoginSetup();
             return;
         }
@@ -657,6 +663,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case "require_registration":
                 startAnyRegistrationFlow(payload as any);
                 break;
+            case "start_mobile_registration":
+                this.startRegistration(payload.params || {}, true);
+                break;
             case "start_registration":
                 if (Lifecycle.isSoftLogout()) {
                     this.onSoftLogout();
@@ -883,7 +892,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case "client_started":
-                this.onClientStarted();
+                // No need to make this handler async to wait for the result of this
+                this.onClientStarted().catch((e) => {
+                    logger.error("Exception in onClientStarted", e);
+                });
                 break;
             case "send_event":
                 this.onSendEvent(payload.room_id, payload.event);
@@ -953,8 +965,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async startRegistration(params: { [key: string]: string }): Promise<void> {
-        if (!SettingsStore.getValue(UIFeature.Registration)) {
+    private async startRegistration(params: { [key: string]: string }, isMobileRegistration?: boolean): Promise<void> {
+        // If registration is disabled or mobile registration is requested but not enabled in settings redirect to the welcome screen
+        if (
+            !SettingsStore.getValue(UIFeature.Registration) ||
+            (isMobileRegistration && !SettingsStore.getValue("Registration.mobileRegistrationHelper"))
+        ) {
             this.showScreen("welcome");
             return;
         }
@@ -963,9 +979,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.REGISTER,
         };
 
-        // Only honour params if they are all present, otherwise we reset
-        // HS and IS URLs when switching to registration.
-        if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+        if (isMobileRegistration && params.hs_url) {
+            try {
+                const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
+                newState.serverConfig = config;
+            } catch (err) {
+                logger.warn("Failed to load hs_url param:", params.hs_url);
+            }
+        } else if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
+            // Only honour params if they are all present, otherwise we reset
+            // HS and IS URLs when switching to registration.
             newState.serverConfig = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                 params.hs_url,
                 params.is_url,
@@ -985,10 +1008,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             newState.register_id_sid = params.sid;
         }
 
+        newState.isMobileRegistration = isMobileRegistration;
+
         this.setStateForNewView(newState);
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
-        this.notifyNewScreen("register");
+        this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
     // switch view to the given room
@@ -1310,6 +1335,25 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
+     * Returns true if the user must go through the device verification process before they
+     * can use the app.
+     * @returns true if the user must verify
+     */
+    private async shouldForceVerification(): Promise<boolean> {
+        if (!SdkConfig.get("force_verification")) return false;
+        const mustVerifyFlag = localStorage.getItem("must_verify_device");
+        if (!mustVerifyFlag) return false;
+
+        const client = MatrixClientPeg.safeGet();
+        if (client.isGuest()) return false;
+
+        const crypto = client.getCrypto();
+        const crossSigningReady = await crypto?.isCrossSigningReady();
+
+        return !crossSigningReady;
+    }
+
+    /**
      * Called when a new logged in session has started
      */
     private async onLoggedIn(): Promise<void> {
@@ -1317,30 +1361,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
-            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
-
-            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
-            // account settings can still be changing at this point in app init (due to the initial sync being cached,
-            // then subsequent syncs being received from the server)
-            //
-            // This seems unlikely for something that should happen directly after registration, but if a user does
-            // their initial login on another device/browser than they registered on, we want to avoid asking this
-            // question twice
-            //
-            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
-            SettingsStore.watchSetting(
-                "FTUE.useCaseSelection",
-                null,
-                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
-                        this.onShowPostLoginScreen();
-                    }
-                },
-            );
-        } else {
-            return this.onShowPostLoginScreen();
-        }
+        await this.onShowPostLoginScreen();
     }
 
     private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
@@ -1390,8 +1411,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     title: userNotice.title,
                     props: {
                         description: <Linkify>{userNotice.description}</Linkify>,
-                        acceptLabel: _t("action|ok"),
-                        onAccept: () => {
+                        primaryLabel: _t("action|ok"),
+                        onPrimaryClick: () => {
                             ToastStore.sharedInstance().dismissToast(key);
                             localStorage.setItem(key, "1");
                         },
@@ -1528,6 +1549,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             if (state === SyncState.Syncing && prevState === SyncState.Syncing) {
+                // We know we have performabed a live update and known rooms should be in a good state.
+                // Now is a good time to clean up drafts.
+                cleanUpDraftsIfRequired();
                 return;
             }
             logger.debug(`MatrixClient sync state => ${state}`);
@@ -1543,9 +1567,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             dis.fire(Action.FocusSendMessageComposer);
-            this.setState({
-                ready: true,
-            });
         });
 
         cli.on(HttpApiEvent.SessionLoggedOut, function (errObj) {
@@ -1688,8 +1709,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * setting up anything that requires the client to be started.
      * @private
      */
-    private onClientStarted(): void {
+    private async onClientStarted(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
+
+        const shouldForceVerification = await this.shouldForceVerification();
+        // XXX: Don't replace the screen if it's already one of these: postLoginSetup
+        // changes to these screens in certain circumstances so we shouldn't clobber it.
+        // We should probably have one place where we decide what the next screen is after
+        // login.
+        if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
+            if (shouldForceVerification) {
+                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            }
+        }
 
         if (cli.isCryptoEnabled()) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
@@ -1708,6 +1740,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         }
+
+        this.setState({
+            ready: true,
+        });
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
@@ -1725,6 +1761,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
             PerformanceMonitor.instance.start(PerformanceEntryNames.REGISTER);
+        } else if (screen === "mobile_register") {
+            dis.dispatch({
+                action: "start_mobile_registration",
+                params: params,
+            });
         } else if (screen === "login") {
             dis.dispatch({
                 action: "start_login",
@@ -1994,7 +2035,33 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        this.onLoggedIn();
+        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
+            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
+
+            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
+            // account settings can still be changing at this point in app init (due to the initial sync being cached,
+            // then subsequent syncs being received from the server)
+            //
+            // This seems unlikely for something that should happen directly after registration, but if a user does
+            // their initial login on another device/browser than they registered on, we want to avoid asking this
+            // question twice
+            //
+            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
+            SettingsStore.watchSetting(
+                "FTUE.useCaseSelection",
+                null,
+                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
+                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
+                        this.onShowPostLoginScreen();
+                    }
+                },
+            );
+        } else {
+            // This is async but we makign this function async to wait for it isn't useful
+            this.onShowPostLoginScreen().catch((e) => {
+                logger.error("Exception showing post-login screen", e);
+            });
+        }
     };
 
     private getFragmentAfterLogin(): string {
@@ -2084,6 +2151,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onServerConfigChange={this.onServerConfigChange}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     fragmentAfterLogin={fragmentAfterLogin}
+                    mobileRegister={this.state.isMobileRegistration}
                     {...this.getServerProperties()}
                 />
             );

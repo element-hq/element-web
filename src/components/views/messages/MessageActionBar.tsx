@@ -1,19 +1,11 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement, useCallback, useContext, useEffect } from "react";
@@ -24,13 +16,18 @@ import {
     MsgType,
     RelationType,
     M_BEACON_INFO,
+    EventTimeline,
+    RoomStateEvent,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { Icon as ThreadIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
-import { Icon as ReplyIcon } from "@vector-im/compound-design-tokens/icons/reply.svg";
-import { Icon as ContextMenuIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
-import { Icon as ResendIcon } from "@vector-im/compound-design-tokens/icons/restart.svg";
-import { Icon as TrashcanIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
+import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
+import ThreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
+import ReplyIcon from "@vector-im/compound-design-tokens/assets/web/icons/reply";
+import ContextMenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import ResendIcon from "@vector-im/compound-design-tokens/assets/web/icons/restart";
+import TrashcanIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
@@ -61,6 +58,8 @@ import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayloa
 import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import PinningUtils from "../../../utils/PinningUtils";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -261,6 +260,7 @@ interface IMessageActionBarProps {
 
 export default class MessageActionBar extends React.PureComponent<IMessageActionBarProps> {
     public static contextType = RoomContext;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public componentDidMount(): void {
         if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
@@ -274,12 +274,20 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             this.props.mxEvent.once(MatrixEventEvent.Decrypted, this.onDecrypted);
         }
         this.props.mxEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
+        this.context.room
+            ?.getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.on(RoomStateEvent.Events, this.onRoomEvent);
     }
 
     public componentWillUnmount(): void {
         this.props.mxEvent.off(MatrixEventEvent.Status, this.onSent);
         this.props.mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.props.mxEvent.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
+        this.context.room
+            ?.getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.off(RoomStateEvent.Events, this.onRoomEvent);
     }
 
     private onDecrypted = (): void => {
@@ -290,6 +298,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     private onBeforeRedaction = (): void => {
         // When an event is redacted, we can't edit it so update the available actions.
+        this.forceUpdate();
+    };
+
+    private onRoomEvent = (event?: MatrixEvent): void => {
+        // If the event is pinned or unpinned, rerender the component.
+        if (!event || event.getType() !== EventType.RoomPinnedEvents) return;
         this.forceUpdate();
     };
 
@@ -383,6 +397,18 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         );
     };
 
+    /**
+     * Pin or unpin the event.
+     */
+    private onPinClick = async (event: ButtonEvent, isPinned: boolean): Promise<void> => {
+        // Don't open the regular browser or our context menu on right-click
+        event.preventDefault();
+        event.stopPropagation();
+
+        await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
+    };
+
     public render(): React.ReactNode {
         const toolbarOpts: JSX.Element[] = [];
         if (canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
@@ -396,6 +422,25 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     placement="left"
                 >
                     <EditIcon />
+                </RovingAccessibleButton>,
+            );
+        }
+
+        if (
+            PinningUtils.canPin(MatrixClientPeg.safeGet(), this.props.mxEvent) ||
+            PinningUtils.canUnpin(MatrixClientPeg.safeGet(), this.props.mxEvent)
+        ) {
+            const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
+            toolbarOpts.push(
+                <RovingAccessibleButton
+                    className="mx_MessageActionBar_iconButton"
+                    title={isPinned ? _t("action|unpin") : _t("action|pin")}
+                    onClick={(e) => this.onPinClick(e, isPinned)}
+                    onContextMenu={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
+                    key="pin"
+                    placement="left"
+                >
+                    {isPinned ? <UnpinIcon /> : <PinIcon />}
                 </RovingAccessibleButton>,
             );
         }

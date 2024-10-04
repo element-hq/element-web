@@ -1193,12 +1193,9 @@
     },
     "right_panel": {
         "add_integrations": "Adicionar widgets, integrações e bots",
-        "edit_integrations": "Editar widgets, integrações e bots",
         "export_chat_button": "Exportar conversa",
         "files_button": "Arquivos",
         "pinned_messages": {
-            "empty": "Nada fixado ainda",
-            "explainer": "Caso você tenha a permissão para isso, abra o menu em qualquer mensagem e selecione <b>Fixar</b> para fixá-la aqui.",
             "limits": {
                 "other": "Você pode fixar até %(count)s widgets"
             },
@@ -1665,7 +1662,6 @@
             "error_revoke_msisdn_discovery": "Não foi possível revogar o compartilhamento do número de celular",
             "error_share_email_discovery": "Não foi possível compartilhar o endereço de e-mail",
             "error_share_msisdn_discovery": "Não foi possível compartilhar o número de celular",
-            "incorrect_msisdn_verification": "Código de confirmação incorreto",
             "language_section": "Idioma e região",
             "msisdn_in_use": "Este número de telefone já está em uso",
             "msisdn_label": "Número de telefone",

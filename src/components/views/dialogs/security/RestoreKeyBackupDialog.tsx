@@ -1,25 +1,17 @@
 /*
-Copyright 2018, 2019 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018, 2019 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent } from "react";
 import { MatrixClient, MatrixError, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { decodeRecoveryKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { logger } from "matrix-js-sdk/src/logger";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
@@ -126,10 +118,24 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
     };
 
+    /**
+     * Check if the recovery key is valid
+     * @param recoveryKey
+     * @private
+     */
+    private isValidRecoveryKey(recoveryKey: string): boolean {
+        try {
+            decodeRecoveryKey(recoveryKey);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     private onRecoveryKeyChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             recoveryKey: e.target.value,
-            recoveryKeyValid: MatrixClientPeg.safeGet().isValidRecoveryKey(e.target.value),
+            recoveryKeyValid: this.isValidRecoveryKey(e.target.value),
         });
     };
 
@@ -192,7 +198,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 { progressCallback: this.progressCallback },
             );
             if (this.props.keyCallback) {
-                const key = MatrixClientPeg.safeGet().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                const key = decodeRecoveryKey(this.state.recoveryKey);
                 this.props.keyCallback(key);
             }
             if (!this.props.showSummary) {
@@ -399,7 +405,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             title = _t("restore_key_backup_dialog|enter_phrase_title");
             content = (
                 <div>
-                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>
+                        {_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <strong>{sub}</strong> })}
+                    </p>
                     <p>{_t("restore_key_backup_dialog|enter_phrase_description")}</p>
 
                     <form className="mx_RestoreKeyBackupDialog_primaryContainer">
@@ -461,7 +469,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
             content = (
                 <div>
-                    <p>{_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <b>{sub}</b> })}</p>
+                    <p>
+                        {_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <strong>{sub}</strong> })}
+                    </p>
                     <p>{_t("restore_key_backup_dialog|enter_key_description")}</p>
 
                     <div className="mx_RestoreKeyBackupDialog_primaryContainer">

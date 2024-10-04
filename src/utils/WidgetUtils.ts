@@ -1,20 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2017-2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Travis Ralston
-Copyright 2017 - 2020 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
+import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
 import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -32,8 +25,10 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import { IApp, isAppWidget } from "../stores/WidgetStore";
+import WidgetStore, { IApp, isAppWidget } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
+import { useEventEmitter } from "../hooks/useEventEmitter";
+import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -562,3 +557,22 @@ export default class WidgetUtils {
         return false;
     }
 }
+
+/**
+ * Hook to get the widgets for a room and update when they change
+ * @param room the room to get widgets for
+ */
+export const useWidgets = (room: Room): IApp[] => {
+    const [apps, setApps] = useState<IApp[]>(() => WidgetStore.instance.getApps(room.roomId));
+
+    const updateApps = useCallback(() => {
+        // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
+        setApps([...WidgetStore.instance.getApps(room.roomId)]);
+    }, [room]);
+
+    useEffect(updateApps, [room, updateApps]);
+    useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
+    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
+
+    return apps;
+};

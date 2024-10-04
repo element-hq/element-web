@@ -5,11 +5,6 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
   <div
     class="mx_BaseCard_header_title"
   >
-    <h4
-      class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-    >
-      Threads
-    </h4>
     <button
       aria-label="Mark all as read"
       class="_icon-button_bh2qc_17"
@@ -45,11 +40,6 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
   <div
     class="mx_BaseCard_header_title"
   >
-    <h4
-      class="mx_Heading_h4 mx_BaseCard_header_title_heading"
-    >
-      Threads
-    </h4>
     <button
       aria-label="Mark all as read"
       class="_icon-button_bh2qc_17"

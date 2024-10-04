@@ -1450,12 +1450,9 @@
     },
     "right_panel": {
         "add_integrations": "ເພີ່ມວິດເຈັດ, ຂົວ ແລະບັອດ",
-        "edit_integrations": "ແກ້ໄຂວິດເຈັດ, ຂົວ ແລະບັອດ",
         "export_chat_button": "ສົ່ງການສົນທະນາອອກ",
         "files_button": "ໄຟລ໌",
         "pinned_messages": {
-            "empty": "ບໍ່ມີຫຍັງຖືກປັກໝຸດ,",
-            "explainer": "ຖ້າຫາກທ່ານມີການອະນຸຍາດ, ເປີດເມນູໃນຂໍ້ຄວາມໃດຫນຶ່ງ ແລະ ເລືອກ <b>Pin</b> ເພື່ອຕິດໃຫ້ເຂົາເຈົ້າຢູ່ທີ່ນີ້.",
             "limits": {
                 "other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ"
             },
@@ -1995,7 +1992,6 @@
             "error_revoke_msisdn_discovery": "ບໍ່ສາມາດຖອນການແບ່ງປັນສຳລັບເບີໂທລະສັບໄດ້",
             "error_share_email_discovery": "ບໍ່ສາມາດແບ່ງປັນທີ່ຢູ່ອີເມວໄດ້",
             "error_share_msisdn_discovery": "ບໍ່ສາມາດແບ່ງປັນເບີໂທລະສັບໄດ້",
-            "incorrect_msisdn_verification": "ລະຫັດຢືນຢັນບໍ່ຖືກຕ້ອງ",
             "language_section": "ພາສາ ແລະ ພາກພື້ນ",
             "msisdn_in_use": "ເບີໂທນີ້ຖືກໃຊ້ແລ້ວ",
             "msisdn_label": "ເບີໂທລະສັບ",

@@ -1,21 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, MutableRefObject, ReactNode, useEffect, useRef } from "react";
+import React, { memo, MutableRefObject, ReactNode, useEffect, useMemo, useRef } from "react";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
@@ -31,6 +24,7 @@ import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { isNotNull } from "../../../../../Typeguards";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -43,6 +37,11 @@ interface WysiwygComposerProps {
     rightComponent?: ReactNode;
     children?: (ref: MutableRefObject<HTMLDivElement | null>, wysiwyg: FormattingFunctions) => ReactNode;
     eventRelation?: IEventRelation;
+}
+
+function getEmojiSuggestions(enabled: boolean): Map<string, string> {
+    const emojiSuggestions = new Map(Array.from(EMOTICON_TO_EMOJI, ([key, value]) => [key, value.unicode]));
+    return enabled ? emojiSuggestions : new Map();
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer({
@@ -61,9 +60,14 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
+
+    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
+    const emojiSuggestions = useMemo(() => getEmojiSuggestions(isAutoReplaceEmojiEnabled), [isAutoReplaceEmojiEnabled]);
+
     const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion, messageContent } = useWysiwyg({
         initialContent,
         inputEventProcessor,
+        emojiSuggestions,
     });
 
     const { isFocused, onFocus } = useIsFocused();

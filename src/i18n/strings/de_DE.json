@@ -1775,12 +1775,9 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, Brücken und Bots hinzufügen",
-        "edit_integrations": "Widgets, Brücken und Bots bearbeiten",
         "export_chat_button": "Unterhaltung exportieren",
         "files_button": "Dateien",
         "pinned_messages": {
-            "empty": "Es ist nichts angepinnt. Noch nicht.",
-            "explainer": "Sofern du die Berechtigung hast, öffne das Menü einer Nachricht und wähle <b>Anheften</b>, ⁣ um sie hier aufzubewahren.",
             "limits": {
                 "other": "Du kannst nur %(count)s Widgets anheften"
             },
@@ -2434,7 +2431,6 @@
             "error_share_msisdn_discovery": "Teilen der Telefonnummer nicht möglich",
             "identity_server_no_token": "Kein Identitäts-Zugangs-Token gefunden",
             "identity_server_not_set": "Kein Identitäts-Server festgelegt",
-            "incorrect_msisdn_verification": "Falscher Verifizierungscode",
             "language_section": "Sprache und Region",
             "msisdn_in_use": "Diese Telefonnummer wird bereits verwendet",
             "msisdn_label": "Telefonnummer",

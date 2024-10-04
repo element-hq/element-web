@@ -1,21 +1,14 @@
 /*
- Copyright 2020 Nurjin Jafar
- Copyright 2020 Nordeck IT + Consulting GmbH.
+Copyright 2024 New Vector Ltd.
+Copyright 2020 Nurjin Jafar
+Copyright 2020 Nordeck IT + Consulting GmbH.
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
  */
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import ICanvasEffect from "../../../effects/ICanvasEffect";
@@ -52,9 +45,10 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
                 canvasRef.current.height = UIStore.instance.windowHeight;
             }
         };
-        const onAction = (payload: { action: string }): void => {
+        const onAction = (payload: { action: string; event?: MatrixEvent }): void => {
             const actionPrefix = "effects.";
-            if (canvasRef.current && payload.action.startsWith(actionPrefix)) {
+            const isOutdated = isEventOutdated(payload.event);
+            if (canvasRef.current && payload.action.startsWith(actionPrefix) && !isOutdated) {
                 const effect = payload.action.slice(actionPrefix.length);
                 lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current!));
             }
@@ -96,3 +90,19 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
 };
 
 export default EffectsOverlay;
+
+// 48 hours
+// 48h * 60m * 60s * 1000ms
+const OUTDATED_EVENT_THRESHOLD = 48 * 60 * 60 * 1000;
+
+/**
+ * Return true if the event is older than 48h.
+ * @param event
+ */
+function isEventOutdated(event?: MatrixEvent): boolean {
+    if (!event) return false;
+
+    const nowTs = Date.now();
+    const eventTs = event.getTs();
+    return nowTs - eventTs > OUTDATED_EVENT_THRESHOLD;
+}

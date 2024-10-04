@@ -1,33 +1,90 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
+
+import { Page } from "playwright-core";
 
 import { expect, test } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { selectHomeserver } from "../utils";
+import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
+
+const username = "user1234";
+const password = "p4s5W0rD";
+
+// Pre-generated dummy signing keys to create an account that has signing keys set.
+// Note the signatures are specific to the username and must be valid or the HS will reject the keys.
+const DEVICE_SIGNING_KEYS_BODY = {
+    master_key: {
+        keys: {
+            "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg": "6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg",
+        },
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "mvwqsYiGa2gPH6ueJsiJnceHMrZhf1pqIMGxkvKisN3ucz8sU7LwyzndbYaLkUKEDx1JuOKFfZ9Mb3mqc7PMBQ",
+                "ed25519:SRHVWTNVBH":
+                    "HVGmVIzsJe3d+Un/6S9tXPsU7YA8HjZPdxogVzdjEFIU8OjLyElccvjupow0rVWgkEqU8sO21LIHw9cWRZEmDw",
+            },
+        },
+        usage: ["master"],
+        user_id: "@user1234:localhost",
+    },
+    self_signing_key: {
+        keys: {
+            "ed25519:eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8": "eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8",
+        },
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "M2rt5xs+23egbVUwUcZuU7pMpn0chBNC5rpdyZGayfU3FDlx1DbopbakIcl5v4uOSGMbqUotyzkE6CchB+dgDw",
+            },
+        },
+        usage: ["self_signing"],
+        user_id: "@user1234:localhost",
+    },
+    user_signing_key: {
+        keys: {
+            "ed25519:h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4": "h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4",
+        },
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "5ZMJ7SG2qr76vU2nITKap88AxLZ/RZQmF/mBcAcVZ9Bknvos3WQp8qN9jKuiqOHCq/XpPORA6XBmiDIyPqTFAA",
+            },
+        },
+        usage: ["user_signing"],
+        user_id: "@user1234:localhost",
+    },
+    auth: {
+        type: "m.login.password",
+        identifier: { type: "m.id.user", user: "@user1234:localhost" },
+        password: password,
+    },
+};
+
+async function login(page: Page, homeserver: HomeserverInstance) {
+    await page.getByRole("link", { name: "Sign in" }).click();
+    await selectHomeserver(page, homeserver.config.baseUrl);
+
+    await page.getByRole("textbox", { name: "Username" }).fill(username);
+    await page.getByPlaceholder("Password").fill(password);
+    await page.getByRole("button", { name: "Sign in" }).click();
+}
 
 test.describe("Login", () => {
     test.describe("Password login", () => {
         test.use({ startHomeserverOpts: "consent" });
 
-        const username = "user1234";
-        const password = "p4s5W0rD";
+        let creds: Credentials;
 
         test.beforeEach(async ({ homeserver }) => {
-            await homeserver.registerUser(username, password);
+            creds = await homeserver.registerUser(username, password);
         });
 
         test("Loads the welcome page by default; then logs in with an existing account and lands on the home screen", async ({
@@ -73,16 +130,96 @@ test.describe("Login", () => {
 
         test("Follows the original link after login", async ({ page, homeserver }) => {
             await page.goto("/#/room/!room:id"); // should redirect to the welcome page
-            await page.getByRole("link", { name: "Sign in" }).click();
-
-            await selectHomeserver(page, homeserver.config.baseUrl);
-
-            await page.getByRole("textbox", { name: "Username" }).fill(username);
-            await page.getByPlaceholder("Password").fill(password);
-            await page.getByRole("button", { name: "Sign in" }).click();
+            await login(page, homeserver);
 
             await expect(page).toHaveURL(/\/#\/room\/!room:id$/);
             await expect(page.getByRole("button", { name: "Join the discussion" })).toBeVisible();
+        });
+
+        test.describe("verification after login", () => {
+            test("Shows verification prompt after login if signing keys are set up, skippable by default", async ({
+                page,
+                homeserver,
+                request,
+            }) => {
+                const res = await request.post(
+                    `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                    { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
+                );
+                if (res.status() / 100 !== 2) {
+                    console.log("Uploading dummy keys failed", await res.json());
+                }
+                expect(res.status() / 100).toEqual(2);
+
+                await page.goto("/");
+                await login(page, homeserver);
+
+                await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+
+                await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+            });
+
+            test.describe("with force_verification off", () => {
+                test.use({
+                    config: {
+                        force_verification: false,
+                    },
+                });
+
+                test("Shows skippable verification prompt after login if signing keys are set up", async ({
+                    page,
+                    homeserver,
+                    request,
+                }) => {
+                    const res = await request.post(
+                        `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
+                    );
+                    if (res.status() / 100 !== 2) {
+                        console.log("Uploading dummy keys failed", await res.json());
+                    }
+                    expect(res.status() / 100).toEqual(2);
+
+                    await page.goto("/");
+                    await login(page, homeserver);
+
+                    await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+
+                    await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                });
+            });
+
+            test.describe("with force_verification on", () => {
+                test.use({
+                    config: {
+                        force_verification: true,
+                    },
+                });
+
+                test("Shows unskippable verification prompt after login if signing keys are set up", async ({
+                    page,
+                    homeserver,
+                    request,
+                }) => {
+                    console.log(`uid ${creds.userId} body`, DEVICE_SIGNING_KEYS_BODY);
+                    const res = await request.post(
+                        `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
+                    );
+                    if (res.status() / 100 !== 2) {
+                        console.log("Uploading dummy keys failed", await res.json());
+                    }
+                    expect(res.status() / 100).toEqual(2);
+
+                    await page.goto("/");
+                    await login(page, homeserver);
+
+                    const h1 = await page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    await expect(h1).toBeVisible();
+
+                    expect(h1.locator(".mx_CompleteSecurity_skip")).not.toBeVisible();
+                });
+            });
         });
     });
 

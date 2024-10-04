@@ -1,25 +1,17 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2024 New Vector Ltd.
+Copyright 2019, 2020 , 2023 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
-Copyright 2019, 2020, 2023 The Matrix.org Foundation C.I.C.
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { ReactNode } from "react";
 import { createClient, MatrixClient, SSOAction, OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk/src/matrix";
-import { IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
+import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -58,7 +50,6 @@ import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
-import AbstractLocalStorageSettingsHandler from "./settings/handlers/AbstractLocalStorageSettingsHandler";
 import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
@@ -83,6 +74,7 @@ import {
     tryDecryptToken,
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
+import { checkBrowserSupport } from "./SupportedBrowser";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -102,7 +94,7 @@ dis.register((payload) => {
         // If we unset the client and the component is updated,  the render will fail and unmount everything.
         // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
         stopMatrixClient(false);
-        doSetLoggedIn(typed.credentials, true).catch((e) => {
+        doSetLoggedIn(typed.credentials, true, true).catch((e) => {
             // XXX we might want to fire a new event here to let the app know that the login failed ?
             // The module api could use it to display a message to the user.
             logger.warn("Failed to overwrite login", e);
@@ -208,9 +200,10 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                     guest: true,
                 },
                 true,
+                false,
             ).then(() => true);
         }
-        const success = await restoreFromLocalStorage({
+        const success = await restoreSessionFromStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
         });
         if (success) {
@@ -465,6 +458,7 @@ function registerAsGuest(hsUrl: string, isUrl?: string, defaultDeviceDisplayName
                         guest: true,
                     },
                     true,
+                    true,
                 ).then(() => true);
             },
             (err) => {
@@ -478,9 +472,9 @@ export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
     hasAccessToken: boolean;
-    accessToken: string | IEncryptedPayload;
+    accessToken: string | AESEncryptedSecretStoragePayload;
     hasRefreshToken: boolean;
-    refreshToken?: string | IEncryptedPayload;
+    refreshToken?: string | AESEncryptedSecretStoragePayload;
     userId: string;
     deviceId: string;
     isGuest: boolean;
@@ -554,17 +548,19 @@ async function abortLogin(): Promise<void> {
     }
 }
 
-// returns a promise which resolves to true if a session is found in
-// localstorage
-//
-// N.B. Lifecycle.js should not maintain any further localStorage state, we
-//      are moving towards using SessionStore to keep track of state related
-//      to the current session (which is typically backed by localStorage).
-//
-//      The plan is to gradually move the localStorage access done here into
-//      SessionStore to avoid bugs where the view becomes out-of-sync with
-//      localStorage (e.g. isGuest etc.)
-export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+/** Attempt to restore the session from localStorage or indexeddb.
+ *
+ * @returns true if a session was found; false if no existing session was found.
+ *
+ * N.B. Lifecycle.js should not maintain any further localStorage state, we
+ *      are moving towards using SessionStore to keep track of state related
+ *      to the current session (which is typically backed by localStorage).
+ *
+ *      The plan is to gradually move the localStorage access done here into
+ *      SessionStore to avoid bugs where the view becomes out-of-sync with
+ *      localStorage (e.g. isGuest etc.)
+ */
+export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
@@ -586,12 +582,13 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 
         const pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
         if (pickleKey) {
-            logger.log("Got pickle key");
+            logger.log(`Got pickle key for ${userId}|${deviceId}`);
         } else {
-            logger.log("No pickle key available");
+            logger.log(`No pickle key available for ${userId}|${deviceId}`);
         }
         const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
-        const decryptedRefreshToken = await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV);
+        const decryptedRefreshToken =
+            refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
@@ -601,7 +598,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             {
                 userId: userId,
                 deviceId: deviceId,
-                accessToken: decryptedAccessToken!,
+                accessToken: decryptedAccessToken,
                 refreshToken: decryptedRefreshToken,
                 homeserverUrl: hsUrl,
                 identityServerUrl: isUrl,
@@ -609,6 +606,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
                 pickleKey: pickleKey ?? undefined,
                 freshLogin: freshLogin,
             },
+            false,
             false,
         );
         return true;
@@ -658,12 +656,12 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
             : null;
 
     if (pickleKey) {
-        logger.log("Created pickle key");
+        logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
     } else {
         logger.log("Pickle key not created");
     }
 
-    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true);
+    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true, true);
 }
 
 /**
@@ -700,7 +698,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
             (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
     }
 
-    return doSetLoggedIn(credentials, overwrite);
+    return doSetLoggedIn(credentials, overwrite, false);
 }
 
 /**
@@ -746,12 +744,17 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
  * optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
  *
- * @param {IMatrixClientCreds} credentials
- * @param {Boolean} clearStorageEnabled
+ * @param {IMatrixClientCreds} credentials The credentials to use
+ * @param {Boolean} clearStorageEnabled True to clear storage before starting the new client
+ * @param {Boolean} isFreshLogin True if this is a fresh login, false if it is previous session being restored
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnabled: boolean): Promise<MatrixClient> {
+async function doSetLoggedIn(
+    credentials: IMatrixClientCreds,
+    clearStorageEnabled: boolean,
+    isFreshLogin: boolean,
+): Promise<MatrixClient> {
     checkSessionLock();
     credentials.guest = Boolean(credentials.guest);
 
@@ -821,6 +824,8 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     }
     checkSessionLock();
 
+    // We are now logged in, so fire this. We have yet to start the client but the
+    // client_started dispatch is for that.
     dis.fire(Action.OnLoggedIn);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {};
@@ -838,6 +843,15 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
         await startMatrixClient(client, /*startSyncing=*/ !softLogout, clientPegOpts);
     } finally {
         clientPegOpts.rustCryptoStoreKey?.fill(0);
+    }
+
+    // Run the migrations after the MatrixClientPeg has been assigned
+    SettingsStore.runMigrations(isFreshLogin);
+
+    if (isFreshLogin && !credentials.guest) {
+        // For newly registered users, set a flag so that we force them to verify,
+        // (we don't want to force users with existing sessions to verify though)
+        localStorage.setItem("must_verify_device", "true");
     }
 
     return client;
@@ -1001,6 +1015,7 @@ async function startMatrixClient(
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
     LegacyCallHandler.instance.start();
+    checkBrowserSupport();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
     // the thing just wastes CPU cycles, but should result in no actual functionality
@@ -1019,9 +1034,6 @@ async function startMatrixClient(
     }
 
     checkSessionLock();
-
-    // Run the migrations after the MatrixClientPeg has been assigned
-    SettingsStore.runMigrations();
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start(client);
@@ -1085,7 +1097,6 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         const registrationTime = window.localStorage.getItem("mx_registration_time");
 
         window.localStorage.clear();
-        AbstractLocalStorageSettingsHandler.clear();
 
         try {
             await StorageAccess.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
@@ -1165,5 +1176,6 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
             userId,
         },
         true,
+        false,
     );
 };

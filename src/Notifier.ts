@@ -1,20 +1,12 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import {
@@ -29,9 +21,11 @@ import {
     IRoomTimelineData,
     M_LOCATION,
     EventType,
+    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -102,7 +96,15 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     },
 };
 
-class NotifierClass {
+export const enum NotifierEvent {
+    NotificationHiddenChange = "notification_hidden_change",
+}
+
+interface EmittedEvents {
+    [NotifierEvent.NotificationHiddenChange]: (hidden: boolean) => void;
+}
+
+class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
     // A list of event IDs that we've received but need to wait until
@@ -356,6 +358,7 @@ class NotifierClass {
         if (persistent && global.localStorage) {
             global.localStorage.setItem("notifications_hidden", String(hidden));
         }
+        this.emit(NotifierEvent.NotificationHiddenChange, hidden);
     }
 
     public shouldShowPrompt(): boolean {
@@ -505,11 +508,12 @@ class NotifierClass {
      * Some events require special handling such as showing in-app toasts
      */
     private performCustomEventHandling(ev: MatrixEvent): void {
-        if (
-            EventType.CallNotify === ev.getType() &&
-            SettingsStore.getValue("feature_group_calls") &&
-            (ev.getAge() ?? 0) < 10000
-        ) {
+        const cli = MatrixClientPeg.safeGet();
+        const room = cli.getRoom(ev.getRoomId());
+        const thisUserHasConnectedDevice =
+            room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
+
+        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 10000 && !thisUserHasConnectedDevice) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
             if (typeof content.call_id !== "string") {

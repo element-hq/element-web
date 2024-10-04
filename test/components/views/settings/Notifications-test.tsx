@@ -1,15 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -30,7 +24,16 @@ import {
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
+import {
+    act,
+    fireEvent,
+    getByTestId,
+    render,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
+    within,
+} from "@testing-library/react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -244,7 +247,7 @@ describe("<Notifications />", () => {
     // get component, wait for async data and force a render
     const getComponentAndWait = async () => {
         const component = getComponent();
-        await flushPromises();
+        await waitForElementToBeRemoved(() => component.queryAllByRole("progressbar"));
         return component;
     };
 
@@ -527,7 +530,9 @@ describe("<Notifications />", () => {
             // oneToOneRule is set to 'on'
             // and is kind: 'underride'
             const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
-            fireEvent.click(offToggle);
+            await act(() => {
+                fireEvent.click(offToggle);
+            });
 
             await flushPromises();
 
@@ -552,7 +557,9 @@ describe("<Notifications />", () => {
             // oneToOneRule is set to 'on'
             // and is kind: 'underride'
             const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
-            fireEvent.click(offToggle);
+            await act(() => {
+                fireEvent.click(offToggle);
+            });
 
             await flushPromises();
 
@@ -576,7 +583,7 @@ describe("<Notifications />", () => {
 
             await flushPromises();
 
-            // no error after after successful change
+            // no error after successful change
             expect(
                 within(oneToOneRuleElement).queryByText(
                     "An error occurred when updating your notification preferences. Please try to toggle your option again.",
@@ -716,7 +723,9 @@ describe("<Notifications />", () => {
                 mockClient.setPushRuleActions.mockRejectedValue("oups");
 
                 const offToggle = oneToOneRuleElement.querySelector('input[type="radio"]')!;
-                fireEvent.click(offToggle);
+                await act(() => {
+                    fireEvent.click(offToggle);
+                });
 
                 await flushPromises();
 
@@ -814,7 +823,9 @@ describe("<Notifications />", () => {
 
             mockClient.setPushRuleEnabled.mockRejectedValueOnce("oups");
 
-            fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off"));
+            await act(() => {
+                fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off"));
+            });
 
             await flushPromises();
 

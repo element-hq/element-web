@@ -1,19 +1,11 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2017 Vector Creations Ltd
+Copyright 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import {
@@ -271,9 +263,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(
-        msisdnToken: string,
-    ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
+    public async haveMsisdnToken(msisdnToken: string): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {
@@ -301,13 +291,14 @@ export default class AddThreepid {
                 id_server: getIdServerDomain(this.matrixClient),
                 id_access_token: await authClient.getAccessToken(),
             });
+            return [true];
         } else {
             try {
                 await this.makeAddThreepidOnlyRequest();
 
                 // The spec has always required this to use UI auth but synapse briefly
                 // implemented it without, so this may just succeed and that's OK.
-                return;
+                return [true];
             } catch (err) {
                 if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
                     // doesn't look like an interactive-auth failure

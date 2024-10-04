@@ -1,21 +1,13 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, fireEvent } from "@testing-library/react";
+import { act, render, fireEvent, screen, waitFor } from "@testing-library/react";
 import {
     EventType,
     EventStatus,
@@ -25,6 +17,8 @@ import {
     Room,
     FeatureSupport,
     Thread,
+    EventTimeline,
+    RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 
 import MessageActionBar from "../../../../src/components/views/messages/MessageActionBar";
@@ -40,6 +34,7 @@ import { IRoomState } from "../../../../src/components/structures/RoomView";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { Action } from "../../../../src/dispatcher/actions";
+import PinningUtils from "../../../../src/utils/PinningUtils";
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
@@ -51,6 +46,8 @@ describe("<MessageActionBar />", () => {
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsEvents(),
         getRoom: jest.fn(),
+        setRoomAccountData: jest.fn(),
+        sendStateEvent: jest.fn(),
     });
     const room = new Room(roomId, client, userId);
 
@@ -116,6 +113,7 @@ describe("<MessageActionBar />", () => {
         timelineRenderingType: TimelineRenderingType.Room,
         canSendMessages: true,
         canReact: true,
+        room,
     } as unknown as IRoomState;
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) =>
         render(
@@ -442,10 +440,10 @@ describe("<MessageActionBar />", () => {
         });
     });
 
-    it.each([["React"], ["Reply"], ["Reply in thread"], ["Edit"]])(
+    it.each([["React"], ["Reply"], ["Reply in thread"], ["Edit"], ["Pin"]])(
         "does not show context menu when right-clicking",
         (buttonLabel: string) => {
-            // For favourite button
+            // For favourite and pin buttons
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 
             const event = new MouseEvent("contextmenu", {
@@ -467,5 +465,55 @@ describe("<MessageActionBar />", () => {
         const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
         fireEvent.contextMenu(queryByLabelText("Options")!);
         expect(queryByTestId("mx_MessageContextMenu")).toBeTruthy();
+    });
+
+    describe("pin button", () => {
+        beforeEach(() => {
+            // enable pin button
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+        });
+
+        afterEach(() => {
+            jest.spyOn(
+                room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockRestore();
+        });
+
+        it("should not render pin button when user can't send state event", () => {
+            jest.spyOn(
+                room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+                "mayClientSendStateEvent",
+            ).mockReturnValue(false);
+
+            const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+            expect(queryByLabelText("Pin")).toBeFalsy();
+        });
+
+        it("should render pin button", () => {
+            const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+            expect(queryByLabelText("Pin")).toBeTruthy();
+        });
+
+        it("should listen to room pinned events", async () => {
+            getComponent({ mxEvent: alicesMessageEvent });
+            expect(screen.getByLabelText("Pin")).toBeInTheDocument();
+
+            // Event is considered pinned
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            // Emit that the room pinned events have changed
+            const roomState = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
+            roomState.emit(
+                RoomStateEvent.Events,
+                {
+                    getType: () => EventType.RoomPinnedEvents,
+                } as MatrixEvent,
+                roomState,
+                null,
+            );
+
+            await waitFor(() => expect(screen.getByLabelText("Unpin")).toBeInTheDocument());
+        });
     });
 });

@@ -1,19 +1,9 @@
 /*
- *
+ * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * /
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * Please see LICENSE files in the repository root for full details.
  */
 
 import { mocked } from "jest-mock";
@@ -99,14 +89,20 @@ describe("ReleaseAnnouncementStore", () => {
         // Sanity check
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("threadsActivityCentre");
 
-        const promise = listenReleaseAnnouncementChanged();
+        let promise = listenReleaseAnnouncementChanged();
         await releaseAnnouncementStore.nextReleaseAnnouncement();
-        // Currently there is only one feature, so the next feature should be null
+
+        expect(await promise).toBe("pinningMessageList");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("pinningMessageList");
+
+        promise = listenReleaseAnnouncementChanged();
+        await releaseAnnouncementStore.nextReleaseAnnouncement();
+
         expect(await promise).toBeNull();
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
 
         const secondStore = new ReleaseAnnouncementStore();
-        // The TAC release announcement has been viewed, so it should be updated in the store account
+        // All the release announcements have been viewed, so it should be updated in the store account
         // The release announcement viewing states should be share among all instances (devices in the same account)
         expect(secondStore.getReleaseAnnouncement()).toBeNull();
     });
@@ -118,8 +114,7 @@ describe("ReleaseAnnouncementStore", () => {
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        // Currently there is only one feature, so the next feature should be null
-        expect(await promise).toBeNull();
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
+        expect(await promise).toBe("pinningMessageList");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("pinningMessageList");
     });
 });

@@ -1,17 +1,9 @@
 /*
-Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ClipboardEvent } from "react";
@@ -139,6 +131,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected layoutWatcherRef?: string;
     protected compactLayoutWatcherRef?: string;
     protected backgroundImageWatcherRef?: string;
+    protected timezoneProfileUpdateRef?: string[];
     protected resizer?: Resizer<ICollapseConfig, CollapseItem>;
 
     public constructor(props: IProps) {
@@ -190,6 +183,11 @@ class LoggedInView extends React.Component<IProps, IState> {
             this.refreshBackgroundImage,
         );
 
+        this.timezoneProfileUpdateRef = [
+            SettingsStore.watchSetting("userTimezonePublish", null, this.onTimezoneUpdate),
+            SettingsStore.watchSetting("userTimezone", null, this.onTimezoneUpdate),
+        ];
+
         this.resizer = this.createResizer();
         this.resizer.attach();
 
@@ -197,6 +195,31 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.loadResizerPreferences();
         this.refreshBackgroundImage();
     }
+
+    private onTimezoneUpdate = async (): Promise<void> => {
+        if (!SettingsStore.getValue("userTimezonePublish")) {
+            // Ensure it's deleted
+            try {
+                await this._matrixClient.deleteExtendedProfileProperty("us.cloke.msc4175.tz");
+            } catch (ex) {
+                console.warn("Failed to delete timezone from user profile", ex);
+            }
+            return;
+        }
+        const currentTimezone =
+            SettingsStore.getValue("userTimezone") ||
+            // If the timezone is empty, then use the browser timezone.
+            // eslint-disable-next-line new-cap
+            Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (!currentTimezone || typeof currentTimezone !== "string") {
+            return;
+        }
+        try {
+            await this._matrixClient.setExtendedProfileProperty("us.cloke.msc4175.tz", currentTimezone);
+        } catch (ex) {
+            console.warn("Failed to update user profile with current timezone", ex);
+        }
+    };
 
     public componentWillUnmount(): void {
         document.removeEventListener("keydown", this.onNativeKeyDown, false);
@@ -208,6 +231,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (this.layoutWatcherRef) SettingsStore.unwatchSetting(this.layoutWatcherRef);
         if (this.compactLayoutWatcherRef) SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         if (this.backgroundImageWatcherRef) SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
+        this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
         this.resizer?.detach();
     }
 

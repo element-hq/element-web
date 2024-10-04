@@ -1,18 +1,10 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 Ahmad Kadri
 Copyright 2023 Nordeck IT + Consulting GmbH.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base, expect } from "../../element-web-test";
@@ -35,10 +27,10 @@ test.describe("1:1 chat room", () => {
         await page.goto(`/#/user/${user2.userId}?action=chat`);
     });
 
-    test("should open new 1:1 chat room after leaving the old one", async ({ page, user2 }) => {
+    test("should open new 1:1 chat room after leaving the old one", async ({ page, app, user2 }) => {
         // leave 1:1 chat room
-        await page.locator(".mx_LegacyRoomHeader_nametext").getByText(user2.displayName).click();
-        await page.getByRole("menuitem", { name: "Leave" }).click();
+        await app.toggleRoomInfoPanel();
+        await page.getByRole("menuitem", { name: "Leave room" }).click();
         await page.getByRole("button", { name: "Leave" }).click();
 
         // wait till the room was left
@@ -49,6 +41,6 @@ test.describe("1:1 chat room", () => {
 
         // open new 1:1 chat room
         await page.goto(`/#/user/${user2.userId}?action=chat`);
-        await expect(page.locator(".mx_LegacyRoomHeader_nametext").getByText(user2.displayName)).toBeVisible();
+        await expect(page.locator(".mx_RoomHeader_heading").getByText(user2.displayName)).toBeVisible();
     });
 });

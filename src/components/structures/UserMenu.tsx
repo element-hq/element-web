@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode } from "react";
@@ -27,7 +19,7 @@ import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
-import LogoutDialog from "../views/dialogs/LogoutDialog";
+import LogoutDialog, { shouldShowLogoutDialog } from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import { findHighContrastTheme, getCustomTheme, isHighContrastTheme } from "../../theme";
 import { RovingAccessibleButton } from "../../accessibility/RovingTabIndex";
@@ -90,7 +82,7 @@ const below = (rect: PartialDOMRect): MenuProps => {
 
 export default class UserMenu extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    public context!: React.ContextType<typeof SDKContext>;
+    public declare context: React.ContextType<typeof SDKContext>;
 
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
@@ -100,7 +92,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
-        this.context = context;
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
@@ -288,7 +279,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (await this.shouldShowLogoutDialog()) {
+        if (await shouldShowLogoutDialog(MatrixClientPeg.safeGet())) {
             Modal.createDialog(LogoutDialog);
         } else {
             defaultDispatcher.dispatch({ action: "logout" });
@@ -296,27 +287,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
-
-    /**
-     * Checks if the `LogoutDialog` should be shown instead of the simple logout flow.
-     * The `LogoutDialog` will check the crypto recovery status of the account and
-     * help the user setup recovery properly if needed.
-     * @private
-     */
-    private async shouldShowLogoutDialog(): Promise<boolean> {
-        const cli = MatrixClientPeg.get();
-        const crypto = cli?.getCrypto();
-        if (!crypto) return false;
-
-        // If any room is encrypted, we need to show the advanced logout flow
-        const allRooms = cli!.getRooms();
-        for (const room of allRooms) {
-            const isE2e = await crypto.isEncryptionEnabledInRoom(room.roomId);
-            if (isE2e) return true;
-        }
-
-        return false;
-    }
 
     private onSignInClick = (): void => {
         defaultDispatcher.dispatch({ action: "start_login" });

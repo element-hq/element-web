@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { JSHandle, Page } from "@playwright/test";
@@ -364,24 +356,11 @@ export class Client {
     }
 
     /**
-     * Boostraps cross-signing.
+     * Bootstraps cross-signing.
      */
     public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
         const client = await this.prepareClient();
-        return client.evaluate(async (client, credentials) => {
-            await client.getCrypto().bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (func) => {
-                    await func({
-                        type: "m.login.password",
-                        identifier: {
-                            type: "m.id.user",
-                            user: credentials.userId,
-                        },
-                        password: credentials.password,
-                    });
-                },
-            });
-        }, credentials);
+        return bootstrapCrossSigningForClient(client, credentials);
     }
 
     /**
@@ -446,4 +425,32 @@ export class Client {
             { roomId, visibility },
         );
     }
+}
+
+/** Call `CryptoApi.bootstrapCrossSigning` on the given Matrix client, using the given credentials to authenticate
+ * the UIA request.
+ */
+export function bootstrapCrossSigningForClient(
+    client: JSHandle<MatrixClient>,
+    credentials: Credentials,
+    resetKeys: boolean = false,
+) {
+    return client.evaluate(
+        async (client, { credentials, resetKeys }) => {
+            await client.getCrypto().bootstrapCrossSigning({
+                authUploadDeviceSigningKeys: async (func) => {
+                    await func({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+                },
+                setupNewCrossSigning: resetKeys,
+            });
+        },
+        { credentials, resetKeys },
+    );
 }

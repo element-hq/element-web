@@ -1,24 +1,16 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2023 Nordeck IT + Consulting GmbH
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { useCallback, useState, VFC } from "react";
-import { Icon as CheckIcon } from "@vector-im/compound-design-tokens/icons/check.svg";
-import { Icon as XIcon } from "@vector-im/compound-design-tokens/icons/close.svg";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import { formatRelativeTime } from "../../../../../DateUtils";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
@@ -97,7 +89,7 @@ const Knock: VFC<{
                 onClick={() => handleDeny(roomMember.userId)}
                 title={_t("action|deny")}
             >
-                <XIcon width={18} height={18} />
+                <CloseIcon width={18} height={18} />
             </AccessibleButton>
             <AccessibleButton
                 className="mx_PeopleRoomSettingsTab_action"

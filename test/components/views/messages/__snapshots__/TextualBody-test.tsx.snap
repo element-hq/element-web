@@ -1,8 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<TextualBody /> renders formatted m.text correctly italics, bold, underline and strikethrough render as expected 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  foo 
+  <em>
+    baz
+  </em>
+   
+  <strong>
+    bar
+  </strong>
+   
+  <del>
+    del
+  </del>
+   
+  <u>
+    u
+  </u>
+</div>
+`;
+
 exports[`<TextualBody /> renders formatted m.text correctly linkification is not applied to code blocks 1`] = `
-<span
-  class="mx_EventTile_body markdown-body"
+<div
+  class="mx_EventTile_body markdown-body translate"
   dir="auto"
 >
   <p>
@@ -38,12 +62,12 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
   </div>
   
 
-</span>
+</div>
 `;
 
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for an MXID permalink 1`] = `
-<span
-  class="mx_EventTile_body markdown-body"
+<div
+  class="mx_EventTile_body markdown-body translate"
   dir="auto"
 >
   Chat with 
@@ -81,7 +105,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
       </a>
     </bdi>
   </span>
-</span>
+</div>
 `;
 
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for event permalinks without a custom label 1`] = `
@@ -89,8 +113,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
   <div
     class="mx_MTextBody mx_EventTile_content"
   >
-    <span
-      class="mx_EventTile_body markdown-body"
+    <div
+      class="mx_EventTile_body markdown-body translate"
       dir="auto"
     >
       See this message 
@@ -128,7 +152,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
           </a>
         </bdi>
       </span>
-    </span>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -138,8 +162,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
   <div
     class="mx_MTextBody mx_EventTile_content"
   >
-    <span
-      class="mx_EventTile_body markdown-body"
+    <div
+      class="mx_EventTile_body markdown-body translate"
       dir="auto"
     >
       A 
@@ -178,7 +202,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
         </bdi>
       </span>
        with vias
-    </span>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -188,8 +212,8 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
   <div
     class="mx_MTextBody mx_EventTile_content"
   >
-    <span
-      class="mx_EventTile_body markdown-body"
+    <div
+      class="mx_EventTile_body markdown-body translate"
       dir="auto"
     >
       An 
@@ -200,14 +224,14 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
         event link
       </a>
        with text
-    </span>
+    </div>
   </div>
 </DocumentFragment>
 `;
 
 exports[`<TextualBody /> renders formatted m.text correctly pills do not appear in code blocks 1`] = `
-<span
-  class="mx_EventTile_body markdown-body"
+<div
+  class="mx_EventTile_body markdown-body translate"
   dir="auto"
 >
   <p>
@@ -242,12 +266,12 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
   </div>
   
 
-</span>
+</div>
 `;
 
 exports[`<TextualBody /> renders formatted m.text correctly pills get injected correctly into the DOM 1`] = `
-<span
-  class="mx_EventTile_body markdown-body"
+<div
+  class="mx_EventTile_body markdown-body translate"
   dir="auto"
 >
   Hey 
@@ -285,7 +309,78 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
       </a>
     </bdi>
   </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly renders formatted body without html correctly 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  escaped *markdown*
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly spoilers get injected properly into the DOM 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  Hey 
+  <span>
+    <button
+      class="mx_EventTile_spoiler"
+    >
+      <span
+        class="mx_EventTile_spoiler_reason"
+      >
+        (movie)
+      </span>
+       
+      <span
+        class="mx_EventTile_spoiler_content"
+      >
+        <span>
+          the movie was awesome
+        </span>
+      </span>
+    </button>
+  </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders m.emote correctly 1`] = `
+<span
+  class="mx_EventTile_body translate"
+>
+  winks
 </span>
+`;
+
+exports[`<TextualBody /> renders m.notice correctly 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  this is a notice, probably from a bot
+</div>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly linkification get applied correctly into the DOM 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  Visit 
+  <a
+    class="linkified"
+    href="https://matrix.org/"
+    rel="noreferrer noopener"
+    target="_blank"
+  >
+    https://matrix.org/
+  </a>
+</div>
 `;
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message from Member</span></a></bdi></span>"`;
@@ -293,8 +388,8 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/room.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi></span>"`;
 
 exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
-<span
-  class="mx_EventTile_body"
+<div
+  class="mx_EventTile_body translate"
   dir="auto"
 >
   Visit 
@@ -315,5 +410,14 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       </a>
     </bdi>
   </span>
-</span>
+</div>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly simple message renders as expected 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  this is a plaintext message
+</div>
 `;

@@ -1,17 +1,9 @@
 /*
-Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -44,7 +36,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import JumpToBottomButton from "../rooms/JumpToBottomButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import Measured from "../elements/Measured";
-import Heading from "../typography/Heading";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
@@ -77,6 +68,7 @@ interface IState {
 
 export default class TimelineCard extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef?: string;
     private layoutWatcherRef?: string;
@@ -84,8 +76,8 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     private card = React.createRef<HTMLDivElement>();
     private readReceiptsSettingWatcher: string | undefined;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
         this.state = {
             showReadReceipts: SettingsStore.getValue("showReadReceipts", props.room.roomId),
             layout: SettingsStore.getValue("layout"),
@@ -192,16 +184,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         }
     };
 
-    private renderTimelineCardHeader = (): JSX.Element => {
-        return (
-            <div className="mx_BaseCard_header_title">
-                <Heading size="4" className="mx_BaseCard_header_title_heading">
-                    {_t("right_panel|video_room_chat|title")}
-                </Heading>
-            </div>
-        );
-    };
-
     public render(): React.ReactNode {
         const highlightedEventId = this.state.isInitialEventHighlighted ? this.state.initialEventId : undefined;
 
@@ -233,7 +215,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     className={this.props.classNames}
                     onClose={this.props.onClose}
                     withoutScrollContainer={true}
-                    header={this.renderTimelineCardHeader()}
+                    header={_t("right_panel|video_room_chat|title")}
                     ref={this.card}
                 >
                     {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}

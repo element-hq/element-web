@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
@@ -40,6 +32,8 @@ function isDivElement(target: EventTarget): target is HTMLDivElement {
  * @param initialContent - the content of the editor when it is first mounted
  * @param onChange - called whenever there is change in the editor content
  * @param onSend - called whenever the user sends the message
+ * @param eventRelation - used to send the event to the correct place eg timeline vs thread
+ * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  * @returns
  * - `ref`: a ref object which the caller must attach to the HTML `div` node for the editor
  * * `autocompleteRef`: a ref object which the caller must attach to the autocomplete component
@@ -53,6 +47,7 @@ export function usePlainTextListeners(
     onChange?: (content: string) => void,
     onSend?: () => void,
     eventRelation?: IEventRelation,
+    isAutoReplaceEmojiEnabled?: boolean,
 ): {
     ref: RefObject<HTMLDivElement>;
     autocompleteRef: React.RefObject<Autocomplete>;
@@ -100,7 +95,8 @@ export function usePlainTextListeners(
     // For separation of concerns, the suggestion handling is kept in a separate hook but is
     // nested here because we do need to be able to update the `content` state in this hook
     // when a user selects a suggestion from the autocomplete menu
-    const { suggestion, onSelect, handleCommand, handleMention, handleAtRoomMention } = useSuggestion(ref, setText);
+    const { suggestion, onSelect, handleCommand, handleMention, handleAtRoomMention, handleEmojiReplacement } =
+        useSuggestion(ref, setText, isAutoReplaceEmojiEnabled);
 
     const onInput = useCallback(
         (event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
@@ -140,6 +136,10 @@ export function usePlainTextListeners(
             if (isHandledByAutocomplete) {
                 return;
             }
+            // handle accepting of plain text emojicon to emoji replacement
+            if (event.key == Key.ENTER || event.key == Key.SPACE) {
+                handleEmojiReplacement();
+            }
 
             // resume regular flow
             if (event.key === Key.ENTER) {
@@ -161,7 +161,7 @@ export function usePlainTextListeners(
                 }
             }
         },
-        [autocompleteRef, enterShouldSend, send],
+        [autocompleteRef, enterShouldSend, send, handleEmojiReplacement],
     );
 
     return {

@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -24,6 +16,8 @@ import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -53,6 +47,23 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
     }
 
     private onDownloadClick = async (): Promise<void> => {
+        try {
+            await this.doDownload();
+        } catch (e) {
+            Modal.createDialog(ErrorDialog, {
+                title: _t("timeline|download_failed"),
+                description: (
+                    <>
+                        <div>{_t("timeline|download_failed_description")}</div>
+                        <div>{e instanceof Error ? e.toString() : ""}</div>
+                    </>
+                ),
+            });
+            this.setState({ loading: false });
+        }
+    };
+
+    private async doDownload(): Promise<void> {
         const mediaEventHelper = this.props.mediaEventHelperGet();
         if (this.state.loading || !mediaEventHelper) return;
 
@@ -64,15 +75,15 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         if (this.state.blob) {
             // Cheat and trigger a download, again.
-            return this.doDownload(this.state.blob);
+            return this.downloadBlob(this.state.blob);
         }
 
         const blob = await mediaEventHelper.sourceBlob.value;
         this.setState({ blob });
-        await this.doDownload(blob);
-    };
+        await this.downloadBlob(blob);
+    }
 
-    private async doDownload(blob: Blob): Promise<void> {
+    private async downloadBlob(blob: Blob): Promise<void> {
         await this.downloader.download({
             blob,
             name: this.props.mediaEventHelperGet()!.fileName,

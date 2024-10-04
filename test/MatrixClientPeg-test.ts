@@ -1,31 +1,18 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMockJest from "fetch-mock-jest";
-import {
-    ProvideCryptoSetupExtensions,
-    SecretStorageKeyDescription,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
 
 import { advanceDateAndTime, stubClient } from "./test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../src/MatrixClientPeg";
 import SettingsStore from "../src/settings/SettingsStore";
 import { SettingLevel } from "../src/settings/SettingLevel";
-import { ModuleRunner } from "../src/modules/ModuleRunner";
 
 jest.useFakeTimers();
 
@@ -76,78 +63,6 @@ describe("MatrixClientPeg", () => {
         expect(peg.userRegisteredWithinLastHours(0)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(1)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(24)).toBe(false);
-    });
-
-    describe(".start extensions", () => {
-        let testPeg: IMatrixClientPeg;
-
-        beforeEach(() => {
-            // instantiate a MatrixClientPegClass instance, with a new MatrixClient
-            testPeg = new PegClass();
-            fetchMockJest.get("http://example.com/_matrix/client/versions", {});
-        });
-
-        describe("cryptoSetup extension", () => {
-            it("should call default cryptoSetup.getDehydrationKeyCallback", async () => {
-                const mockCryptoSetup = {
-                    SHOW_ENCRYPTION_SETUP_UI: true,
-                    examineLoginResponse: jest.fn(),
-                    persistCredentials: jest.fn(),
-                    getSecretStorageKey: jest.fn(),
-                    createSecretStorageKey: jest.fn(),
-                    catchAccessSecretStorageError: jest.fn(),
-                    setupEncryptionNeeded: jest.fn(),
-                    getDehydrationKeyCallback: jest.fn().mockReturnValue(null),
-                } as ProvideCryptoSetupExtensions;
-
-                // Ensure we have an instance before we set up spies
-                const instance = ModuleRunner.instance;
-                jest.spyOn(instance.extensions, "cryptoSetup", "get").mockReturnValue(mockCryptoSetup);
-
-                testPeg.replaceUsingCreds({
-                    accessToken: "SEKRET",
-                    homeserverUrl: "http://example.com",
-                    userId: "@user:example.com",
-                    deviceId: "TEST_DEVICE_ID",
-                });
-
-                expect(mockCryptoSetup.getDehydrationKeyCallback).toHaveBeenCalledTimes(1);
-            });
-
-            it("should call overridden cryptoSetup.getDehydrationKeyCallback", async () => {
-                const mockDehydrationKeyCallback = () => Uint8Array.from([0x11, 0x22, 0x33]);
-
-                const mockCryptoSetup = {
-                    SHOW_ENCRYPTION_SETUP_UI: true,
-                    examineLoginResponse: jest.fn(),
-                    persistCredentials: jest.fn(),
-                    getSecretStorageKey: jest.fn(),
-                    createSecretStorageKey: jest.fn(),
-                    catchAccessSecretStorageError: jest.fn(),
-                    setupEncryptionNeeded: jest.fn(),
-                    getDehydrationKeyCallback: jest.fn().mockReturnValue(mockDehydrationKeyCallback),
-                } as ProvideCryptoSetupExtensions;
-
-                // Ensure we have an instance before we set up spies
-                const instance = ModuleRunner.instance;
-                jest.spyOn(instance.extensions, "cryptoSetup", "get").mockReturnValue(mockCryptoSetup);
-
-                testPeg.replaceUsingCreds({
-                    accessToken: "SEKRET",
-                    homeserverUrl: "http://example.com",
-                    userId: "@user:example.com",
-                    deviceId: "TEST_DEVICE_ID",
-                });
-                expect(mockCryptoSetup.getDehydrationKeyCallback).toHaveBeenCalledTimes(1);
-
-                const client = testPeg.get();
-                const dehydrationKey = await client?.cryptoCallbacks.getDehydrationKey!(
-                    {} as SecretStorageKeyDescription,
-                    (key: Uint8Array) => true,
-                );
-                expect(dehydrationKey).toEqual(Uint8Array.from([0x11, 0x22, 0x33]));
-            });
-        });
     });
 
     describe(".start", () => {

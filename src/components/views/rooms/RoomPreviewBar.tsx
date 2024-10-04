@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent, ReactNode } from "react";
@@ -506,33 +498,39 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.Invite: {
+                const isDM = this.isDMInvite();
                 const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
 
                 const inviteMember = this.getInviteMember();
-                let inviterElement: JSX.Element;
-                if (inviteMember) {
-                    inviterElement = (
-                        <span>
-                            <span className="mx_RoomPreviewBar_inviter">{inviteMember.rawDisplayName}</span> (
-                            {inviteMember.userId})
-                        </span>
-                    );
-                } else {
-                    inviterElement = <span className="mx_RoomPreviewBar_inviter">{this.props.inviterName}</span>;
-                }
+                const userName = (
+                    <span className="mx_RoomPreviewBar_inviter">
+                        {inviteMember?.rawDisplayName ?? this.props.inviterName}
+                    </span>
+                );
+                const inviterElement = (
+                    <>
+                        {isDM
+                            ? _t("room|dm_invite_subtitle", {}, { userName })
+                            : _t("room|invite_subtitle", {}, { userName })}
+                        {inviteMember && (
+                            <>
+                                <br />
+                                <span className="mx_RoomPreviewBar_inviter_mxid">{inviteMember.userId}</span>
+                            </>
+                        )}
+                    </>
+                );
 
-                const isDM = this.isDMInvite();
                 if (isDM) {
                     title = _t("room|dm_invite_title", {
                         user: inviteMember?.name ?? this.props.inviterName,
                     });
-                    subTitle = [avatar, _t("room|dm_invite_subtitle", {}, { userName: () => inviterElement })];
                     primaryActionLabel = _t("room|dm_invite_action");
                 } else {
                     title = _t("room|invite_title", { roomName });
-                    subTitle = [avatar, _t("room|invite_subtitle", {}, { userName: () => inviterElement })];
                     primaryActionLabel = _t("action|accept");
                 }
+                subTitle = [avatar, inviterElement];
 
                 const myUserId = MatrixClientPeg.safeGet().getSafeUserId();
                 const member = this.props.room?.currentState.getMember(myUserId);

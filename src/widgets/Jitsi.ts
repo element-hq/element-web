@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
@@ -20,7 +12,8 @@ import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
+const JITSI_WK_PROPERTY_LEGACY = "im.vector.riot.jitsi";
+const JITSI_WK_PROPERTY = "io.element.jitsi";
 
 export interface JitsiWidgetData {
     conferenceId: string;
@@ -32,9 +25,14 @@ export class Jitsi {
     private static instance: Jitsi;
 
     private domain?: string;
+    private _useFor1To1Calls = false;
 
     public get preferredDomain(): string {
         return this.domain || "meet.element.io";
+    }
+
+    public get useFor1To1Calls(): boolean {
+        return this._useFor1To1Calls;
     }
 
     /**
@@ -73,12 +71,16 @@ export class Jitsi {
         let domain = SdkConfig.getObject("jitsi")?.get("preferred_domain") || "meet.element.io";
 
         logger.log("Attempting to get Jitsi conference information from homeserver");
-        const wkPreferredDomain = discoveryResponse?.[JITSI_WK_PROPERTY]?.["preferredDomain"];
+        const wkJitsiConfig = discoveryResponse?.[JITSI_WK_PROPERTY] ?? discoveryResponse?.[JITSI_WK_PROPERTY_LEGACY];
+
+        const wkPreferredDomain = wkJitsiConfig?.["preferredDomain"];
         if (wkPreferredDomain) domain = wkPreferredDomain;
 
         // Put the result into memory for us to use later
         this.domain = domain;
         logger.log("Jitsi conference domain:", this.preferredDomain);
+        this._useFor1To1Calls = wkJitsiConfig?.["useFor1To1Calls"] || false;
+        logger.log("Jitsi use for 1:1 calls:", this.useFor1To1Calls);
     };
 
     /**

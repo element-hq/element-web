@@ -79,9 +79,9 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
   >
     <span>
       This session is 
-      <b>
+      <strong>
         not backing up your keys
-      </b>
+      </strong>
       , but you do have an existing backup you can restore from and add to going forward.
     </span>
   </div>

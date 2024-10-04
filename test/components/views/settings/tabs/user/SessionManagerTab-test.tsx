@@ -1,21 +1,22 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
+import {
+    act,
+    fireEvent,
+    render,
+    RenderResult,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
+    within,
+} from "@testing-library/react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
@@ -146,7 +147,7 @@ describe("<SessionManagerTab />", () => {
         // open device detail
         const tile = getByTestId(`device-tile-${deviceId}`);
         const label = isOpen ? "Hide details" : "Show details";
-        const toggle = tile.querySelector(`[aria-label="${label}"]`) as Element;
+        const toggle = within(tile).getByLabelText(label);
         fireEvent.click(toggle);
     };
 
@@ -165,16 +166,14 @@ describe("<SessionManagerTab />", () => {
         return getByTestId(`device-tile-${deviceId}`);
     };
 
-    const setFilter = async (container: HTMLElement, option: DeviceSecurityVariation | string) =>
-        await act(async () => {
-            const dropdown = container.querySelector('[aria-label="Filter devices"]');
+    const setFilter = async (container: HTMLElement, option: DeviceSecurityVariation | string) => {
+        const dropdown = within(container).getByLabelText("Filter devices");
 
-            fireEvent.click(dropdown as Element);
-            // tick to let dropdown render
-            await flushPromises();
+        fireEvent.click(dropdown);
+        screen.getByRole("listbox");
 
-            fireEvent.click(container.querySelector(`#device-list-filter__${option}`) as Element);
-        });
+        fireEvent.click(screen.getByTestId(`filter-option-${option}`) as Element);
+    };
 
     const isDeviceSelected = (
         getByTestId: ReturnType<typeof render>["getByTestId"],
@@ -920,37 +919,31 @@ describe("<SessionManagerTab />", () => {
 
             it("deletes a device when interactive auth is not required", async () => {
                 mockClient.deleteMultipleDevices.mockResolvedValue({});
-                mockClient.getDevices
-                    .mockResolvedValueOnce({
-                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
-                    })
-                    // pretend it was really deleted on refresh
-                    .mockResolvedValueOnce({
-                        devices: [alicesDevice, alicesOlderMobileDevice],
-                    });
-
-                const { getByTestId } = render(getComponent());
-
-                await act(async () => {
-                    await flushPromises();
+                mockClient.getDevices.mockResolvedValue({
+                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
 
-                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                const { getByTestId, findByTestId } = render(getComponent());
 
-                const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                const signOutButton = deviceDetails.querySelector(
-                    '[data-testid="device-detail-sign-out-cta"]',
-                ) as Element;
-                fireEvent.click(signOutButton);
+                await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
+                await toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
-                await confirmSignout(getByTestId);
+                const signOutButton = await within(
+                    await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),
+                ).findByTestId("device-detail-sign-out-cta");
+
+                // pretend it was really deleted on refresh
+                mockClient.getDevices.mockResolvedValueOnce({
+                    devices: [alicesDevice, alicesOlderMobileDevice],
+                });
 
                 // sign out button is disabled with spinner
-                expect(
-                    (deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element).getAttribute(
-                        "aria-disabled",
-                    ),
-                ).toEqual("true");
+                const prom = waitFor(() => expect(signOutButton).toHaveAttribute("aria-disabled", "true"));
+
+                fireEvent.click(signOutButton);
+                await confirmSignout(getByTestId);
+                await prom;
+
                 // delete called
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
                     [alicesMobileDevice.device_id],
@@ -1008,9 +1001,7 @@ describe("<SessionManagerTab />", () => {
 
                 const { getByTestId, getByLabelText } = render(getComponent());
 
-                await act(async () => {
-                    await flushPromises();
-                });
+                await act(flushPromises);
 
                 // reset mock count after initial load
                 mockClient.getDevices.mockClear();
@@ -1570,9 +1561,7 @@ describe("<SessionManagerTab />", () => {
                 });
                 const { getByTestId, container } = render(getComponent());
 
-                await act(async () => {
-                    await flushPromises();
-                });
+                await act(flushPromises);
 
                 // filter for inactive sessions
                 await setFilter(container, DeviceSecurityVariation.Inactive);
@@ -1765,6 +1754,7 @@ describe("<SessionManagerTab />", () => {
             await flushPromises();
 
             fireEvent.click(getByText("Show QR code"));
+            await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
 
             await expect(findByTestId("login-with-qr")).resolves.toBeTruthy();
         });

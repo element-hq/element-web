@@ -1,24 +1,16 @@
 /*
-Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import classNames from "classnames";
-import { Icon as EllipsisIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
-import { Icon as MembersIcon } from "@vector-im/compound-design-tokens/icons/user-profile-solid.svg";
-import { Icon as FavoriteIcon } from "@vector-im/compound-design-tokens/icons/favourite-solid.svg";
+import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import MembersIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
+import FavoriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite-solid";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -45,7 +37,7 @@ const QuickSettingsButton: React.FC<{
         useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
 
     const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    const developerModeEnabled = useSettingValue("developerMode");
+    const developerModeEnabled = useSettingValue<boolean>("developerMode");
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed && handle.current) {

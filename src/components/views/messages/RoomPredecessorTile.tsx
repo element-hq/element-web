@@ -1,23 +1,15 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
-Copyright 2019, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useContext } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomState } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -52,7 +44,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
     const predecessor = useRoomState(
         roomContext.room,
         useCallback(
-            (state) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
+            (state: RoomState) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
             [msc3946ProcessDynamicPredecessor],
         ),
     );
@@ -63,9 +55,9 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                event_id: predecessor.eventId,
+                event_id: predecessor?.eventId,
                 highlighted: true,
-                room_id: predecessor.roomId,
+                room_id: predecessor?.roomId,
                 metricsTrigger: "Predecessor",
                 metricsViaKeyboard: e.type !== "click",
             });
@@ -126,7 +118,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
     const predecessorPermalink = prevRoom
         ? createLinkWithRoom(prevRoom, predecessor.roomId, predecessor.eventId)
-        : createLinkWithoutRoom(predecessor.roomId, predecessor.viaServers, predecessor.eventId);
+        : createLinkWithoutRoom(predecessor.roomId, predecessor?.viaServers ?? [], predecessor.eventId);
 
     const link = (
         <a href={predecessorPermalink} onClick={onLinkClicked}>

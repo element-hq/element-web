@@ -1,17 +1,9 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -87,10 +79,10 @@ export const showToast = (): void => {
         // them to opt in again.
         props = {
             description: _t("analytics|consent_migration"),
-            acceptLabel: _t("analytics|accept_button"),
-            onAccept,
-            rejectLabel: _t("action|learn_more"),
-            onReject: onLearnMorePreviouslyOptedIn,
+            primaryLabel: _t("analytics|accept_button"),
+            onPrimaryClick: onAccept,
+            secondaryLabel: _t("action|learn_more"),
+            onSecondaryClick: onLearnMorePreviouslyOptedIn,
         };
     } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
@@ -102,10 +94,10 @@ export const showToast = (): void => {
         );
         props = {
             description: _t("analytics|learn_more", {}, { LearnMoreLink: learnMoreLink }),
-            acceptLabel: _t("action|yes"),
-            onAccept,
-            rejectLabel: _t("action|no"),
-            onReject,
+            primaryLabel: _t("action|yes"),
+            onPrimaryClick: onAccept,
+            secondaryLabel: _t("action|no"),
+            onSecondaryClick: onReject,
         };
     } else {
         // false

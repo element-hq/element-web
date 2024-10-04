@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
@@ -44,10 +36,7 @@ import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { MapperOpts } from "matrix-js-sdk/src/event-mapper";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSessionManager } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSessionManager";
-// eslint-disable-next-line no-restricted-imports
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc/MatrixRTCSession";
+import { MatrixRTCSessionManager, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type { GroupCall } from "matrix-js-sdk/src/matrix";
 import type { Membership } from "matrix-js-sdk/src/types";
@@ -119,6 +108,7 @@ export function createTestClient(): MatrixClient {
 
         secretStorage: {
             get: jest.fn(),
+            isStored: jest.fn().mockReturnValue(false),
         },
 
         store: {
@@ -134,11 +124,14 @@ export function createTestClient(): MatrixClient {
             },
         },
         getCrypto: jest.fn().mockReturnValue({
+            getOwnDeviceKeys: jest.fn(),
             getUserDeviceInfo: jest.fn(),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
             isEncryptionEnabledInRoom: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+            setDeviceIsolationMode: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -175,7 +168,7 @@ export function createTestClient(): MatrixClient {
                 content: {},
             });
         }),
-        mxcUrlToHttp: (mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`,
+        mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         scheduleAllGroupSessionsForBackup: jest.fn().mockResolvedValue(undefined),
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
@@ -255,6 +248,10 @@ export function createTestClient(): MatrixClient {
             });
         }),
 
+        _unstable_sendDelayedEvent: jest.fn(),
+        _unstable_sendDelayedStateEvent: jest.fn(),
+        _unstable_updateDelayedEvent: jest.fn(),
+
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
         joinRoom: jest.fn(),
@@ -264,8 +261,13 @@ export function createTestClient(): MatrixClient {
         knockRoom: jest.fn(),
         leave: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
+        requestAdd3pidEmailToken: jest.fn(),
         requestAdd3pidMsisdnToken: jest.fn(),
         submitMsisdnTokenOtherUrl: jest.fn(),
+        deleteThreePid: jest.fn().mockResolvedValue({}),
+        bindThreePid: jest.fn().mockResolvedValue({}),
+        unbindThreePid: jest.fn().mockResolvedValue({}),
+        requestEmailToken: jest.fn(),
         addThreePidOnly: jest.fn(),
         requestMsisdnToken: jest.fn(),
         submitMsisdnToken: jest.fn(),
@@ -573,7 +575,10 @@ export function mkStubRoom(
     name: string | undefined,
     client: MatrixClient | undefined,
 ): Room {
-    const stubTimeline = { getEvents: (): MatrixEvent[] => [] } as unknown as EventTimeline;
+    const stubTimeline = {
+        getEvents: (): MatrixEvent[] => [],
+        getState: (): RoomState | undefined => undefined,
+    } as unknown as EventTimeline;
     return {
         canInvite: jest.fn(),
         client,

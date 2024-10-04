@@ -1,17 +1,9 @@
 /*
-Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { Optional } from "matrix-events-sdk";
@@ -19,7 +11,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { EventTimelineSet, Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
+import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";
@@ -36,7 +28,6 @@ import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
-import Heading from "../views/typography/Heading";
 import { clearRoomNotification } from "../../utils/notifications";
 import EmptyState from "../views/right_panel/EmptyState";
 
@@ -118,7 +109,7 @@ export const ThreadPanelHeader: React.FC<{
     ) : null;
 
     const onMarkAllThreadsReadClick = React.useCallback(
-        (e) => {
+        (e: React.MouseEvent) => {
             PosthogTrackers.trackInteraction("WebThreadsMarkAllReadButton", e);
             if (!roomContext.room) {
                 logger.error("No room in context to mark all threads read");
@@ -138,9 +129,6 @@ export const ThreadPanelHeader: React.FC<{
 
     return (
         <div className="mx_BaseCard_header_title">
-            <Heading size="4" className="mx_BaseCard_header_title_heading">
-                {_t("common|threads")}
-            </Heading>
             <Tooltip label={_t("threads|mark_all_read")}>
                 <IconButton onClick={onMarkAllThreadsReadClick} aria-label={_t("threads|mark_all_read")} size="24px">
                     <MarkAllThreadsReadIcon />
@@ -205,7 +193,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
             }}
         >
             <BaseCard
-                hideHeaderButtons
                 header={
                     hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />
                 }

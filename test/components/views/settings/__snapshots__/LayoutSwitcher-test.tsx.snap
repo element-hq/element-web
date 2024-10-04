@@ -101,12 +101,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   <div
                     class="mx_MTextBody mx_EventTile_content"
                   >
-                    <span
-                      class="mx_EventTile_body"
+                    <div
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!
-                    </span>
+                    </div>
                   </div>
                   <div
                     aria-label="Message Actions"
@@ -217,12 +217,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   <div
                     class="mx_MTextBody mx_EventTile_content"
                   >
-                    <span
-                      class="mx_EventTile_body"
+                    <div
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!
-                    </span>
+                    </div>
                   </div>
                   <div
                     aria-label="Message Actions"
@@ -333,12 +333,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   <div
                     class="mx_MTextBody mx_EventTile_content"
                   >
-                    <span
-                      class="mx_EventTile_body"
+                    <div
+                      class="mx_EventTile_body translate"
                       dir="auto"
                     >
                       Hey you. You're the best!
-                    </span>
+                    </div>
                   </div>
                   <div
                     aria-label="Message Actions"

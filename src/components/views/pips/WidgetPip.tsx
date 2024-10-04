@@ -1,22 +1,14 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { FC, MutableRefObject, useCallback, useMemo } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { Icon as BackIcon } from "@vector-im/compound-design-tokens/icons/arrow-left.svg";
+import BackIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-left";
 
 import PersistentApp from "../elements/PersistentApp";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -34,6 +26,7 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface Props {
     widgetId: string;
@@ -62,7 +55,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
     const call = useCallForWidget(widgetId, room.roomId);
 
     const onBackClick = useCallback(
-        (ev) => {
+        (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -87,7 +80,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
     );
 
     const onLeaveClick = useCallback(
-        (ev) => {
+        (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
 

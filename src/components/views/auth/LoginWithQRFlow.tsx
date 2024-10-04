@@ -1,17 +1,9 @@
 /*
-Copyright 2022 - 2024 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode } from "react";
@@ -20,9 +12,9 @@ import {
     LegacyRendezvousFailureReason,
     MSC4108FailureReason,
 } from "matrix-js-sdk/src/rendezvous";
-import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
-import { Icon as CheckCircleSolidIcon } from "@vector-im/compound-design-tokens/icons/check-circle-solid.svg";
-import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
+import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
+import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
@@ -301,7 +293,7 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                                 </li>
                                 <li>
                                     {_t("auth|qr_code_login|select_qr_code", {
-                                        scanQRCode: <b>{_t("auth|qr_code_login|scan_qr_code")}</b>,
+                                        scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
                                     })}
                                 </li>
                                 <li>{_t("auth|qr_code_login|point_the_camera")}</li>

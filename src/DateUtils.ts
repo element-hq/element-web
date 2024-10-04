@@ -1,24 +1,17 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { Optional } from "matrix-events-sdk";
 
 import { _t, getUserLanguage } from "./languageHandler";
+import { getUserTimezone } from "./TimezoneHandler";
 
 export const MINUTE_MS = 60000;
 export const HOUR_MS = MINUTE_MS * 60;
@@ -77,6 +70,7 @@ export function formatDate(date: Date, showTwelveHour = false, locale?: string):
             weekday: "short",
             hour: "numeric",
             minute: "2-digit",
+            timeZone: getUserTimezone(),
         }).format(date);
     } else if (now.getFullYear() === date.getFullYear()) {
         return new Intl.DateTimeFormat(_locale, {
@@ -86,6 +80,7 @@ export function formatDate(date: Date, showTwelveHour = false, locale?: string):
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
+            timeZone: getUserTimezone(),
         }).format(date);
     }
     return formatFullDate(date, showTwelveHour, false, _locale);
@@ -104,6 +99,7 @@ export function formatFullDateNoTime(date: Date, locale?: string): string {
         month: "short",
         day: "numeric",
         year: "numeric",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -127,6 +123,7 @@ export function formatFullDate(date: Date, showTwelveHour = false, showSeconds =
         hour: "numeric",
         minute: "2-digit",
         second: showSeconds ? "2-digit" : undefined,
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -160,6 +157,7 @@ export function formatFullTime(date: Date, showTwelveHour = false, locale?: stri
         hour: "numeric",
         minute: "2-digit",
         second: "2-digit",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -178,6 +176,7 @@ export function formatTime(date: Date, showTwelveHour = false, locale?: string):
         ...getTwelveHourOptions(showTwelveHour),
         hour: "numeric",
         minute: "2-digit",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -285,6 +284,7 @@ export function formatFullDateNoDayNoTime(date: Date, locale?: string): string {
         year: "numeric",
         month: "numeric",
         day: "numeric",
+        timeZone: getUserTimezone(),
     }).format(date);
 }
 
@@ -354,6 +354,9 @@ export function formatPreciseDuration(durationMs: number): string {
  * @returns {string} formattedDate
  */
 export const formatLocalDateShort = (timestamp: number, locale?: string): string =>
-    new Intl.DateTimeFormat(locale ?? getUserLanguage(), { day: "2-digit", month: "2-digit", year: "2-digit" }).format(
-        timestamp,
-    );
+    new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        timeZone: getUserTimezone(),
+    }).format(timestamp);

@@ -1,17 +1,9 @@
 /*
-Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode } from "react";
@@ -26,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 import { Tooltip } from "@vector-im/compound-web";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -64,6 +57,9 @@ import { VoiceBroadcastInfoState } from "../../../voice-broadcast";
 import { createCantStartVoiceMessageBroadcastDialog } from "../dialogs/CantStartVoiceMessageBroadcastDialog";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
+
+// The prefix used when persisting editor drafts to localstorage.
+export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
 
 let instanceCount = 0;
 
@@ -109,6 +105,12 @@ interface IState {
     initialComposerContent: string;
 }
 
+type WysiwygComposerState = {
+    content: string;
+    isRichText: boolean;
+    replyEventId?: string;
+};
+
 export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
@@ -119,7 +121,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private _voiceRecording: Optional<VoiceMessageRecording>;
 
     public static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+    public declare context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         compact: false,
@@ -127,13 +129,34 @@ export class MessageComposer extends React.Component<IProps, IState> {
         isRichTextEnabled: true,
     };
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
+        this.context = context; // otherwise React will only set it prior to render due to type def above
+
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
 
+        window.addEventListener("beforeunload", this.saveWysiwygEditorState);
+        const isWysiwygLabEnabled = SettingsStore.getValue<boolean>("feature_wysiwyg_composer");
+        let isRichTextEnabled = true;
+        let initialComposerContent = "";
+        if (isWysiwygLabEnabled) {
+            const wysiwygState = this.restoreWysiwygEditorState();
+            if (wysiwygState) {
+                isRichTextEnabled = wysiwygState.isRichText;
+                initialComposerContent = wysiwygState.content;
+                if (wysiwygState.replyEventId) {
+                    dis.dispatch({
+                        action: "reply_to_event",
+                        event: this.props.room.findEventById(wysiwygState.replyEventId),
+                        context: this.context.timelineRenderingType,
+                    });
+                }
+            }
+        }
+
         this.state = {
-            isComposerEmpty: true,
-            composerContent: "",
+            isComposerEmpty: initialComposerContent?.length === 0,
+            composerContent: initialComposerContent,
             haveRecording: false,
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
@@ -141,9 +164,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
             showVoiceBroadcastButton: SettingsStore.getValue(Features.VoiceBroadcast),
-            isWysiwygLabEnabled: SettingsStore.getValue<boolean>("feature_wysiwyg_composer"),
-            isRichTextEnabled: true,
-            initialComposerContent: "",
+            isWysiwygLabEnabled: isWysiwygLabEnabled,
+            isRichTextEnabled: isRichTextEnabled,
+            initialComposerContent: initialComposerContent,
         };
 
         this.instanceId = instanceCount++;
@@ -152,6 +175,52 @@ export class MessageComposer extends React.Component<IProps, IState> {
         SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
         SettingsStore.monitorSetting(Features.VoiceBroadcast, null);
         SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
+    }
+
+    private get editorStateKey(): string {
+        let key = WYSIWYG_EDITOR_STATE_STORAGE_PREFIX + this.props.room.roomId;
+        if (this.props.relation?.rel_type === THREAD_RELATION_TYPE.name) {
+            key += `_${this.props.relation.event_id}`;
+        }
+        return key;
+    }
+
+    private restoreWysiwygEditorState(): WysiwygComposerState | undefined {
+        const json = localStorage.getItem(this.editorStateKey);
+        if (json) {
+            try {
+                const state: WysiwygComposerState = JSON.parse(json);
+                return state;
+            } catch (e) {
+                logger.error(e);
+            }
+        }
+        return undefined;
+    }
+
+    private saveWysiwygEditorState = (): void => {
+        if (this.shouldSaveWysiwygEditorState()) {
+            const { isRichTextEnabled, composerContent } = this.state;
+            const replyEventId = this.props.replyToEvent ? this.props.replyToEvent.getId() : undefined;
+            const item: WysiwygComposerState = {
+                content: composerContent,
+                isRichText: isRichTextEnabled,
+                replyEventId: replyEventId,
+            };
+            localStorage.setItem(this.editorStateKey, JSON.stringify(item));
+        } else {
+            this.clearStoredEditorState();
+        }
+    };
+
+    // should save state when wysiwyg is enabled and has contents or reply is open
+    private shouldSaveWysiwygEditorState = (): boolean => {
+        const { isWysiwygLabEnabled, isComposerEmpty } = this.state;
+        return isWysiwygLabEnabled && (!isComposerEmpty || !!this.props.replyToEvent);
+    };
+
+    private clearStoredEditorState(): void {
+        localStorage.removeItem(this.editorStateKey);
     }
 
     private get voiceRecording(): Optional<VoiceMessageRecording> {
@@ -265,6 +334,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
         UIStore.instance.stopTrackingElementDimensions(`MessageComposer${this.instanceId}`);
         UIStore.instance.removeListener(`MessageComposer${this.instanceId}`, this.onResize);
 
+        window.removeEventListener("beforeunload", this.saveWysiwygEditorState);
+        this.saveWysiwygEditorState();
         // clean up our listeners by setting our cached recording to falsy (see internal setter)
         this.voiceRecording = null;
     }

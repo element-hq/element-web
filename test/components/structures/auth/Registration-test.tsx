@@ -1,22 +1,14 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2019 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { createClient, MatrixClient, MatrixError, OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
@@ -95,12 +87,23 @@ describe("Registration", function () {
     const defaultHsUrl = "https://matrix.org";
     const defaultIsUrl = "https://vector.im";
 
-    function getRawComponent(hsUrl = defaultHsUrl, isUrl = defaultIsUrl, authConfig?: OidcClientConfig) {
-        return <Registration {...defaultProps} serverConfig={mkServerConfig(hsUrl, isUrl, authConfig)} />;
+    function getRawComponent(
+        hsUrl = defaultHsUrl,
+        isUrl = defaultIsUrl,
+        authConfig?: OidcClientConfig,
+        mobileRegister?: boolean,
+    ) {
+        return (
+            <Registration
+                {...defaultProps}
+                serverConfig={mkServerConfig(hsUrl, isUrl, authConfig)}
+                mobileRegister={mobileRegister}
+            />
+        );
     }
 
-    function getComponent(hsUrl?: string, isUrl?: string, authConfig?: OidcClientConfig) {
-        return render(getRawComponent(hsUrl, isUrl, authConfig));
+    function getComponent(hsUrl?: string, isUrl?: string, authConfig?: OidcClientConfig, mobileRegister?: boolean) {
+        return render(getRawComponent(hsUrl, isUrl, authConfig, mobileRegister));
     }
 
     it("should show server picker", async function () {
@@ -214,6 +217,32 @@ describe("Registration", function () {
                     // isRegistration
                     true,
                 );
+            });
+        });
+
+        describe("when is mobile registeration", () => {
+            it("should not show server picker", async function () {
+                const { container } = getComponent(defaultHsUrl, defaultIsUrl, undefined, true);
+                expect(container.querySelector(".mx_ServerPicker")).toBeFalsy();
+            });
+
+            it("should show username field with autocaps disabled", async function () {
+                const { container } = getComponent(defaultHsUrl, defaultIsUrl, undefined, true);
+
+                await waitFor(() =>
+                    expect(container.querySelector("#mx_RegistrationForm_username")).toHaveAttribute(
+                        "autocapitalize",
+                        "none",
+                    ),
+                );
+            });
+
+            it("should show password and confirm password fields in separate rows", async function () {
+                const { container } = getComponent(defaultHsUrl, defaultIsUrl, undefined, true);
+
+                await waitFor(() => expect(container.querySelector("#mx_RegistrationForm_username")).toBeTruthy());
+                // when password and confirm password fields are in separate rows there should be 4 rather than 3
+                expect(container.querySelectorAll(".mx_AuthBody_fieldRow")).toHaveLength(4);
             });
         });
     });

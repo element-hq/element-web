@@ -6,45 +6,143 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_LegacyRoomHeader light-panel"
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
-      <div
-        class="mx_LegacyRoomHeader_wrapper"
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
       >
         <div
-          class="mx_LegacyRoomHeader_avatar"
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
         >
           <div
-            class="mx_DecoratedRoomAvatar"
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
           >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
             <span
               class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
               role="presentation"
-              style="--cpd-avatar-size: 24px;"
+              style="--cpd-avatar-size: 20px;"
             >
               u
             </span>
           </div>
+          2
         </div>
-        <div
-          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
-        >
-          <div
-            aria-level="1"
-            class="mx_LegacyRoomHeader_nametext"
-            dir="auto"
-            role="heading"
-            title="@user:example.com"
-          >
-            @user:example.com
-          </div>
-        </div>
-        <div
-          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
-        />
       </div>
     </header>
     <div
@@ -81,45 +179,143 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_LegacyRoomHeader light-panel"
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
-      <div
-        class="mx_LegacyRoomHeader_wrapper"
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
       >
         <div
-          class="mx_LegacyRoomHeader_avatar"
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
         >
           <div
-            class="mx_DecoratedRoomAvatar"
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
           >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
             <span
               class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
               role="presentation"
-              style="--cpd-avatar-size: 24px;"
+              style="--cpd-avatar-size: 20px;"
             >
               u
             </span>
           </div>
+          2
         </div>
-        <div
-          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
-        >
-          <div
-            aria-level="1"
-            class="mx_LegacyRoomHeader_nametext"
-            dir="auto"
-            role="heading"
-            title="@user:example.com"
-          >
-            @user:example.com
-          </div>
-        </div>
-        <div
-          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
-        />
       </div>
     </header>
     <main
@@ -180,9 +376,9 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>
@@ -241,45 +437,143 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_LegacyRoomHeader light-panel"
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
-      <div
-        class="mx_LegacyRoomHeader_wrapper"
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
       >
         <div
-          class="mx_LegacyRoomHeader_avatar"
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
         >
           <div
-            class="mx_DecoratedRoomAvatar"
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
           >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
             <span
               class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
               role="presentation"
-              style="--cpd-avatar-size: 24px;"
+              style="--cpd-avatar-size: 20px;"
             >
               u
             </span>
           </div>
+          2
         </div>
-        <div
-          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
-        >
-          <div
-            aria-level="1"
-            class="mx_LegacyRoomHeader_nametext"
-            dir="auto"
-            role="heading"
-            title="@user:example.com"
-          >
-            @user:example.com
-          </div>
-        </div>
-        <div
-          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
-        />
       </div>
     </header>
     <main
@@ -340,9 +634,9 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>
@@ -478,52 +772,143 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_LegacyRoomHeader light-panel"
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
-      <div
-        class="mx_LegacyRoomHeader_wrapper"
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
       >
         <div
-          class="mx_LegacyRoomHeader_avatar"
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
         >
           <div
-            class="mx_DecoratedRoomAvatar"
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
           >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <div />
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
             <span
               class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
               role="presentation"
-              style="--cpd-avatar-size: 24px;"
+              style="--cpd-avatar-size: 20px;"
             >
               u
             </span>
           </div>
+          2
         </div>
-        <span
-          tabindex="0"
-        >
-          <div
-            class="mx_E2EIcon mx_E2EIcon_normal mx_LegacyRoomHeader_icon"
-          />
-        </span>
-        <div
-          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
-        >
-          <div
-            aria-level="1"
-            class="mx_LegacyRoomHeader_nametext"
-            dir="auto"
-            role="heading"
-            title="@user:example.com"
-          >
-            @user:example.com
-          </div>
-        </div>
-        <div
-          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
-        />
       </div>
     </header>
     <main
@@ -579,9 +964,9 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 <p>
                   <span>
                     Send your first message to invite 
-                    <b>
+                    <strong>
                       @user:example.com
-                    </b>
+                    </strong>
                      to chat
                   </span>
                 </p>
@@ -715,7 +1100,6 @@ exports[`RoomView should show error view if failed to look up room alias 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
-    data-room-header="legacy"
   >
     <div
       class="mx_RoomPreviewBar mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"

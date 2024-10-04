@@ -1,18 +1,10 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
@@ -59,10 +51,10 @@ const mapDeviceKindToHandlerValue = (deviceKind: MediaDeviceKindEnum): string | 
 
 export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     public static contextType = MatrixClientContext;
-    public context!: React.ContextType<typeof MatrixClientContext>;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: {}) {
-        super(props);
+    public constructor(props: {}, context: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
 
         this.state = {
             mediaDevices: null,
@@ -118,10 +110,6 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
     private changeWebRtcMethod = (p2p: boolean): void => {
         this.context.setForceTURN(!p2p);
-    };
-
-    private changeFallbackICEServerAllowed = (allow: boolean): void => {
-        this.context.setFallbackICEServerAllowed(allow);
     };
 
     private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
@@ -234,7 +222,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                                 server: new URL(FALLBACK_ICE_SERVER).pathname,
                             })}
                             level={SettingLevel.DEVICE}
-                            onChange={this.changeFallbackICEServerAllowed}
+                            hideIfCannotSet
                         />
                     </SettingsSubsection>
                 </SettingsSection>

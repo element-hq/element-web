@@ -1,17 +1,9 @@
 /*
-Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
@@ -40,12 +32,13 @@ import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
 import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
-import AccessibleButton, { ButtonEvent } from "./components/views/elements/AccessibleButton";
+import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { ElementCall } from "./models/Call";
 import { textForVoiceBroadcastStoppedEvent, VoiceBroadcastInfoEventType } from "./voice-broadcast";
 import { getSenderName } from "./utils/event/getSenderName";
+import PosthogTrackers from "./PosthogTrackers.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -563,11 +556,11 @@ function textForPowerEvent(event: MatrixEvent, client: MatrixClient): (() => str
 }
 
 const onPinnedMessagesClick = (): void => {
+    PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
 
 function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: boolean): (() => Renderable) | null {
-    if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = getSenderName(event);
     const roomId = event.getRoomId()!;
 
@@ -590,7 +583,10 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
                             a: (sub) => (
                                 <AccessibleButton
                                     kind="link_inline"
-                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                    onClick={() => {
+                                        PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
+                                        highlightEvent(roomId, messageId);
+                                    }}
                                 >
                                     {sub}
                                 </AccessibleButton>
@@ -623,7 +619,10 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
                             a: (sub) => (
                                 <AccessibleButton
                                     kind="link_inline"
-                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                    onClick={() => {
+                                        PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
+                                        highlightEvent(roomId, messageId);
+                                    }}
                                 >
                                     {sub}
                                 </AccessibleButton>

@@ -143,9 +143,9 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                 <p>
                   Allow people to preview your space before they join.
                   <br />
-                  <b>
+                  <strong>
                     Recommended for public spaces.
-                  </b>
+                  </strong>
                 </p>
               </div>
             </div>

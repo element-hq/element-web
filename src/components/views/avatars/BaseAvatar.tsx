@@ -1,25 +1,17 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018 New Vector Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useState } from "react";
+import React, { AriaRole, forwardRef, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { Avatar } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -41,6 +33,7 @@ interface IProps {
     className?: string;
     tabIndex?: number;
     altText?: string;
+    role?: AriaRole;
 }
 
 const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {
@@ -80,7 +73,7 @@ const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [
     }, [url, JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const cli = useContext(MatrixClientContext);
-    const onClientSync = useCallback((syncState, prevState) => {
+    const onClientSync = useCallback((syncState: SyncState, prevState: SyncState | null) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;

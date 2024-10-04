@@ -1,19 +1,11 @@
 /*
-Copyright 2017 Travis Ralston
+Copyright 2024 New Vector Ltd.
+Copyright 2019, 2020 , 2024 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
-Copyright 2019, 2020, 2024 The Matrix.org Foundation C.I.C.
+Copyright 2017 Travis Ralston
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
@@ -34,14 +26,14 @@ export class Tab<T extends string> {
      * Creates a new tab.
      * @param {string} id The tab's ID.
      * @param {string} label The untranslated tab label.
-     * @param {string} icon The class for the tab icon. This should be a simple mask.
+     * @param {string|JSX.Element} icon An SVG element to use for the tab icon. Can also be a string for legacy icons, in which case it is the class for the tab icon. This should be a simple mask.
      * @param {React.ReactNode} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
      */
     public constructor(
         public readonly id: T,
         public readonly label: TranslationKey,
-        public readonly icon: string | null,
+        public readonly icon: string | JSX.Element | null,
         public readonly body: React.ReactNode,
         public readonly screenName?: ScreenName,
     ) {}
@@ -99,7 +91,11 @@ function TabLabel<T extends string>({ tab, isActive, showToolip, onClick }: ITab
 
     let tabIcon: JSX.Element | undefined;
     if (tab.icon) {
-        tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
+        if (typeof tab.icon === "object") {
+            tabIcon = tab.icon;
+        } else if (typeof tab.icon === "string") {
+            tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
+        }
     }
 
     const id = domIDForTabID(tab.id);

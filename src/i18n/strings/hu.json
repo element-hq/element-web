@@ -1742,12 +1742,9 @@
     },
     "right_panel": {
         "add_integrations": "Kisalkalmazások, hidak, és botok hozzáadása",
-        "edit_integrations": "Kisalkalmazások, hidak és botok szerkesztése",
         "export_chat_button": "Beszélgetés exportálása",
         "files_button": "Fájlok",
         "pinned_messages": {
-            "empty": "Még semmi sincs kitűzve",
-            "explainer": "Ha van hozzá jogosultsága, nyissa meg a menüt bármelyik üzenetben és válassza a <b>Kitűzés</b> menüpontot a kitűzéshez.",
             "limits": {
                 "other": "Csak %(count)s kisalkalmazást tud kitűzni"
             },
@@ -2376,7 +2373,6 @@
             "error_share_msisdn_discovery": "A telefonszámot nem sikerült megosztani",
             "identity_server_no_token": "Nem található személyazonosság-hozzáférési kulcs",
             "identity_server_not_set": "Az azonosítási kiszolgáló nincs megadva",
-            "incorrect_msisdn_verification": "Hibás azonosítási kód",
             "language_section": "Nyelv és régió",
             "msisdn_in_use": "Ez a telefonszám már használatban van",
             "msisdn_label": "Telefonszám",
