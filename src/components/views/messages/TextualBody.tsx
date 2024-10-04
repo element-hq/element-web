@@ -556,6 +556,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const content = mxEvent.getContent();
         const isNotice = content.msgtype === MsgType.Notice;
         const isEmote = content.msgtype === MsgType.Emote;
+        const isCaption = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(
+            content.msgtype as MsgType,
+        );
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
@@ -630,6 +633,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (isNotice) {
             return (
                 <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                    {body}
+                    {widgets}
+                </div>
+            );
+        }
+        if (isCaption) {
+            return (
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
