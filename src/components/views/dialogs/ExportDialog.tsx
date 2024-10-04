@@ -83,7 +83,7 @@ const useExportFormState = (): ExportConfig => {
             : config.includeAttachments ?? false,
     );
     const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
-    const [sizeLimit, setSizeLimit] = useState(
+    const [sizeLimit, setSizeLimit] = useState<number>(
         SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit) == false ? 20 : config.sizeMb ?? 8,
     );
 
@@ -161,8 +161,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             !setSizeLimit ||
             (await sizeLimitRef.current?.validate({
                 focused: false,
-            }));
-
+            })) ||
+            !SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit);
         if (!isValidSize) {
             sizeLimitRef.current?.validate({ focused: true });
             return;
