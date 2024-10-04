@@ -17,7 +17,7 @@ import { _t } from "../../../languageHandler.tsx";
 export function PinnedMessageBadge(): JSX.Element {
     return (
         <div className="mx_PinnedMessageBadge">
-            <PinIcon width="16" />
+            <PinIcon width="16px" height="16px" />
             {_t("room|pinned_message_badge")}
         </div>
     );

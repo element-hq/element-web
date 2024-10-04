@@ -10,8 +10,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { ReactNode } from "react";
 import { NumberSize, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
+import { WebPanelResize } from "@matrix-org/analytics-events/types/typescript/WebPanelResize";
 
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import { PosthogAnalytics } from "../../PosthogAnalytics.ts";
 
 interface IProps {
     resizeNotifier: ResizeNotifier;
@@ -26,14 +28,16 @@ interface IProps {
      */
     sizeKey?: string;
     /**
-     * The size to use for the panel component if one isn't persisted in storage. Defaults to 350.
+     * The size to use for the panel component if one isn't persisted in storage. Defaults to 320.
      */
     defaultSize: number;
+
+    analyticsRoomType: WebPanelResize["roomType"];
 }
 
 export default class MainSplit extends React.Component<IProps> {
     public static defaultProps = {
-        defaultSize: 350,
+        defaultSize: 320,
     };
 
     private onResizeStart = (): void => {
@@ -58,11 +62,16 @@ export default class MainSplit extends React.Component<IProps> {
         elementRef: HTMLElement,
         delta: NumberSize,
     ): void => {
+        const newSize = this.loadSidePanelSize().width + delta.width;
         this.props.resizeNotifier.stopResizing();
-        window.localStorage.setItem(
-            this.sizeSettingStorageKey,
-            (this.loadSidePanelSize().width + delta.width).toString(),
-        );
+        window.localStorage.setItem(this.sizeSettingStorageKey, newSize.toString());
+
+        PosthogAnalytics.instance.trackEvent<WebPanelResize>({
+            eventName: "WebPanelResize",
+            panel: "right",
+            roomType: this.props.analyticsRoomType,
+            size: newSize,
+        });
     };
 
     private loadSidePanelSize(): { height: string | number; width: number } {

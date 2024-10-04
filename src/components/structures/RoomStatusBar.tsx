@@ -269,7 +269,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
-                            <WarningIcon width="24" height="24" />
+                            <WarningIcon width="24px" height="24px" />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                                     {_t("room|status_bar|server_connectivity_lost_title")}

@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MockedObject } from "jest-mock";
-import { MatrixClient, MatrixEvent, EventType, Room, EventTimeline } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, EventType, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { IRoomState } from "../../src/components/structures/RoomView";
+import { IRoomState, MainSplitContentType } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
@@ -54,7 +54,6 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         showApps: false,
         isPeeking: false,
         showRightPanel: true,
-        threadRightPanel: false,
         joining: false,
         atEndOfLiveTimeline: true,
         showTopUnreadMessagesBar: false,
@@ -76,6 +75,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         showDisplaynameChanges: true,
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
+        mainSplitContentType: MainSplitContentType.Timeline,
         liveTimeline: undefined,
         canSelfRedact: false,
         resizing: false,

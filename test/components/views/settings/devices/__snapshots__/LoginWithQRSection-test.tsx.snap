@@ -36,10 +36,25 @@ exports[`<LoginWithQRSection /> MSC3906 should render panel get_login_token + .w
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
+            fill="currentColor"
             height="20"
+            viewBox="0 0 24 24"
             width="20"
-          />
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M15 16v-3h-2v3h2Z"
+            />
+            <path
+              d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+            />
+          </svg>
           Show QR code
         </div>
       </div>
@@ -78,10 +93,25 @@ exports[`<LoginWithQRSection /> MSC3906 should render panel get_login_token + MS
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
+            fill="currentColor"
             height="20"
+            viewBox="0 0 24 24"
             width="20"
-          />
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M15 16v-3h-2v3h2Z"
+            />
+            <path
+              d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+            />
+          </svg>
           Show QR code
         </div>
       </div>

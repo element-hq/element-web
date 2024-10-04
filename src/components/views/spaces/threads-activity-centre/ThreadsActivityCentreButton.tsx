@@ -7,7 +7,7 @@
  */
 
 import React, { ComponentProps, forwardRef } from "react";
-import { Icon } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
+import ThreadsSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import classNames from "classnames";
 import { IconButton, Text, Tooltip } from "@vector-im/compound-web";
 
@@ -51,7 +51,7 @@ export const ThreadsActivityCentreButton = forwardRef<HTMLButtonElement, Threads
                     ref={ref}
                 >
                     <>
-                        <Icon className="mx_ThreadsActivityCentreButton_Icon" />
+                        <ThreadsSolidIcon className="mx_ThreadsActivityCentreButton_Icon" />
                         {/* This is dirty, but we need to add the label to the indicator icon */}
                         {displayLabel && (
                             <Text

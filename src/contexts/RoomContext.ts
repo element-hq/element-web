@@ -21,6 +21,14 @@ export enum TimelineRenderingType {
     Pinned = "Pinned",
 }
 
+// This defines the content of the mainSplit.
+// If the mainSplit does not contain the Timeline, the chat is shown in the right panel.
+export enum MainSplitContentType {
+    Timeline,
+    MaximisedWidget,
+    Call,
+}
+
 const RoomContext = createContext<
     IRoomState & {
         threadId?: string;
@@ -35,7 +43,6 @@ const RoomContext = createContext<
     showApps: false,
     isPeeking: false,
     showRightPanel: true,
-    threadRightPanel: false,
     joining: false,
     showTopUnreadMessagesBar: false,
     statusBarVisible: false,
@@ -59,6 +66,7 @@ const RoomContext = createContext<
     matrixClientIsReady: false,
     showUrlPreview: false,
     timelineRenderingType: TimelineRenderingType.Room,
+    mainSplitContentType: MainSplitContentType.Timeline,
     threadId: undefined,
     liveTimeline: undefined,
     narrow: false,

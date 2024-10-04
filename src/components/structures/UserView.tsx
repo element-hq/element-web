@@ -87,7 +87,12 @@ export default class UserView extends React.Component<IProps, IState> {
                 />
             );
             return (
-                <MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
+                <MainSplit
+                    panel={panel}
+                    resizeNotifier={this.props.resizeNotifier}
+                    defaultSize={420}
+                    analyticsRoomType="user_profile"
+                >
                     <UserOnboardingPage />
                 </MainSplit>
             );

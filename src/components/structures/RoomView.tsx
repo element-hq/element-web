@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
+import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
@@ -54,7 +54,7 @@ import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -152,13 +152,8 @@ interface IRoomProps {
     onRegistered?(credentials: IMatrixClientCreds): void;
 }
 
-// This defines the content of the mainSplit.
-// If the mainSplit does not contain the Timeline, the chat is shown in the right panel.
-export enum MainSplitContentType {
-    Timeline,
-    MaximisedWidget,
-    Call,
-}
+export { MainSplitContentType };
+
 export interface IRoomState {
     room?: Room;
     virtualRoom?: Room;
@@ -191,11 +186,6 @@ export interface IRoomState {
     showApps: boolean;
     isPeeking: boolean;
     showRightPanel: boolean;
-    /**
-     * Whether the right panel shown is either of ThreadPanel or ThreadView.
-     * Always false when `showRightPanel` is false.
-     */
-    threadRightPanel: boolean;
     // error object, as from the matrix client/server API
     // If we failed to load information about the room,
     // store the error here.
@@ -234,7 +224,7 @@ export interface IRoomState {
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     hasPinnedWidgets?: boolean;
-    mainSplitContentType?: MainSplitContentType;
+    mainSplitContentType: MainSplitContentType;
     // whether or not a spaces context switch brought us here,
     // if it did we don't want the room to be marked as read as soon as it is loaded.
     wasContextSwitch?: boolean;
@@ -399,7 +389,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showApps: false,
             isPeeking: false,
             showRightPanel: false,
-            threadRightPanel: false,
             joining: false,
             showTopUnreadMessagesBar: false,
             statusBarVisible: false,
@@ -626,11 +615,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            threadRightPanel: roomId
-                ? [RightPanelPhases.ThreadView, RightPanelPhases.ThreadPanel].includes(
-                      this.context.rightPanelStore.currentCardForRoom(roomId).phase!,
-                  )
-                : false,
             activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
             promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
             viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
@@ -1033,11 +1017,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const { roomId } = this.state;
         this.setState({
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            threadRightPanel: roomId
-                ? [RightPanelPhases.ThreadView, RightPanelPhases.ThreadPanel].includes(
-                      this.context.rightPanelStore.currentCardForRoom(roomId).phase!,
-                  )
-                : false,
         });
     };
 
@@ -2531,6 +2510,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         const mainSplitContentClasses = classNames("mx_RoomView_body", mainSplitContentClassName);
 
+        let sizeKey: string | undefined;
+        let defaultSize: number | undefined;
+        let analyticsRoomType: ComponentProps<typeof MainSplit>["analyticsRoomType"] = "other_room";
+        if (this.state.mainSplitContentType !== MainSplitContentType.Timeline) {
+            // Override defaults for video rooms where more space is needed for the chat timeline
+            sizeKey = "wide";
+            defaultSize = 420;
+            analyticsRoomType =
+                this.state.mainSplitContentType === MainSplitContentType.Call ? "video_room" : "maximised_widget";
+        }
+
         return (
             <RoomContext.Provider value={this.state}>
                 <div className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
@@ -2541,10 +2531,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <MainSplit
                             panel={rightPanel}
                             resizeNotifier={this.props.resizeNotifier}
-                            // Override defaults when a thread is being shown to allow persisting a separate
-                            // right panel width for thread panels as they tend to want to be wider.
-                            sizeKey={this.state.threadRightPanel ? "thread" : undefined}
-                            defaultSize={this.state.threadRightPanel ? 500 : undefined}
+                            sizeKey={sizeKey}
+                            defaultSize={defaultSize}
+                            analyticsRoomType={analyticsRoomType}
                         >
                             <div
                                 className={mainSplitContentClasses}

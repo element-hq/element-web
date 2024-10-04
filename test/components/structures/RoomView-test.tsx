@@ -311,6 +311,12 @@ describe("RoomView", () => {
             expect(stores.rightPanelStore.isOpen).toEqual(true);
             expect(stores.rightPanelStore.currentCard.phase).toEqual(RightPanelPhases.Timeline);
         });
+
+        it("should render joined video room view", async () => {
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            const { asFragment } = await mountRoomView();
+            expect(asFragment()).toMatchSnapshot();
+        });
     });
 
     describe("for a local room", () => {
