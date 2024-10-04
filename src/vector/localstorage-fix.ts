@@ -5,7 +5,7 @@
 
 if (window.localStorage) {
     Object.keys(window.localStorage).forEach((key) => {
-        if (key.indexOf("loglevel:") === 0) {
+        if (key.startsWith("loglevel:")) {
             window.localStorage.removeItem(key);
         }
     });

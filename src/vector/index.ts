@@ -1,24 +1,17 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-segmenter/should-polyfill";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
@@ -69,14 +62,11 @@ function checkBrowserFeatures(): boolean {
     );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
-    // ES2024: https://tc39.es/ecma262/2024/#sec-get-regexp.prototype.unicodesets
-    window.Modernizr.addTest(
-        "regexpunicodesets",
-        () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
-    );
     // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
     // The built-in modernizer 'intl' check only checks for the presence of the Intl object, not the Segmenter,
     // and older Firefox has the former but not the latter, so we add our own.
+    // This is polyfilled now, but we still want to show the warning because we want to remove the polyfill
+    // at some point.
     window.Modernizr.addTest("intlsegmenter", () => typeof window.Intl?.Segmenter === "function");
 
     // Basic test for WebAssembly support. We could also try instantiating a simple module,
@@ -112,6 +102,10 @@ const supportedBrowser = checkBrowserFeatures();
 // the browser to use as much parallelism as it can.
 // Load parallelism is based on research in https://github.com/element-hq/element-web/issues/12253
 async function start(): Promise<void> {
+    if (shouldPolyFillIntlSegmenter()) {
+        await import(/* webpackChunkName: "intl-segmenter-polyfill" */ "@formatjs/intl-segmenter/polyfill-force");
+    }
+
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
     const {
         rageshakePromise,
@@ -132,6 +126,8 @@ async function start(): Promise<void> {
         "./init"
     );
 
+    // Now perform the next stage of initialisation. This has its own try/catch in which we render
+    // a react error page on failure.
     try {
         // give rageshake a chance to load/fail, we don't actually assert rageshake loads, we allow it to fail if no IDB
         await settled(rageshakePromise);

@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
+        "allowImportingTsExtensions": true,
         "experimentalDecorators": false,
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "useDefineForClassFields": true,
         "module": "es2022",
         "moduleResolution": "node",
-        "target": "es2018",
+        "target": "es2022",
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
@@ -23,6 +25,7 @@
         "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
         "./node_modules/matrix-react-sdk/src/@types/matrix-js-sdk.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/electron-to-chromium.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",

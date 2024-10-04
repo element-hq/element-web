@@ -19,20 +19,12 @@
         "invalid_json_generic": "Ongeldige JSON",
         "misconfigured": "Jouw Element is verkeerd geconfigureerd"
     },
-    "failed_to_start": "Opstarten mislukt",
-    "go_to_element_io": "Ga naar element.io",
     "incompatible_browser": {
-        "browser_links": "Installeer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, of <safariLink>Safari</safariLink> voor de beste gebruikservaring.",
-        "continue_warning": "Ik begrijp de risico's en wil verder gaan",
-        "feature_warning": "Je kan je huidige browser blijven gebruiken, maar sommige of alle functies zouden niet kunnen werken en de weergave van het programma kan verkeerd zijn.",
-        "features": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in je huidige browser.",
-        "summary": "Jouw browser kan %(brand)s niet starten",
         "title": "Niet-ondersteunde browser"
     },
     "powered_by_matrix": "Mogelijk gemaakt door Matrix",
     "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "unknown_device": "Onbekend apparaat",
-    "use_brand_on_mobile": "Gebruik %(brand)s op je mobiel",
     "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
     "welcome_to_element": "Welkom bij Element"
 }

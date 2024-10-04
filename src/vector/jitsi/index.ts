@@ -1,17 +1,8 @@
 /*
-Copyright 2020-2022 New Vector Ltd.
+Copyright 2020-2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { KJUR } from "jsrsasign";
@@ -34,7 +25,6 @@ import type {
     JitsiMeetExternalAPIConstructor,
     ExternalAPIEventCallbacks,
     JitsiMeetExternalAPI as _JitsiMeetExternalAPI,
-    AudioMuteStatusChangedEvent,
     LogEvent,
     VideoMuteStatusChangedEvent,
     ExternalAPIOptions as _ExternalAPIOptions,
@@ -103,6 +93,14 @@ let widgetApi: WidgetApi | undefined;
 let meetApi: _JitsiMeetExternalAPI | undefined;
 let skipOurWelcomeScreen = false;
 
+async function checkAudioVideoEnabled(): Promise<[audioEnabled: boolean, videoEnabled: boolean]> {
+    if (!meetApi) return [false, false];
+    const [audioEnabled, videoEnabled] = (await Promise.all([meetApi.isAudioMuted(), meetApi.isVideoMuted()])).map(
+        (muted) => !muted,
+    );
+    return [audioEnabled, videoEnabled];
+}
+
 const setupCompleted = (async (): Promise<string | void> => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
@@ -159,7 +157,7 @@ const setupCompleted = (async (): Promise<string | void> => {
 
             const handleAction = (
                 action: WidgetApiAction,
-                handler: (request: IWidgetApiRequestData) => Promise<void>,
+                handler: (request: IWidgetApiRequestData) => Promise<IWidgetApiResponseData | void>,
             ): void => {
                 widgetApi!.on(`action:${action}`, async (ev: CustomEvent<IWidgetApiRequest>) => {
                     ev.preventDefault();
@@ -167,8 +165,7 @@ const setupCompleted = (async (): Promise<string | void> => {
 
                     let response: IWidgetApiResponseData;
                     try {
-                        await handler(ev.detail.data);
-                        response = {};
+                        response = (await handler(ev.detail.data)) ?? {};
                     } catch (e) {
                         if (e instanceof Error) {
                             response = { error: { message: e.message } };
@@ -194,25 +191,26 @@ const setupCompleted = (async (): Promise<string | void> => {
                     meetApi?.executeCommand("hangup");
                 }
             });
-            handleAction(ElementWidgetActions.MuteAudio, async () => {
-                if (meetApi && !(await meetApi.isAudioMuted())) {
+            handleAction(ElementWidgetActions.DeviceMute, async (params) => {
+                if (!meetApi) return;
+
+                const [audioEnabled, videoEnabled] = await checkAudioVideoEnabled();
+
+                if (Object.keys(params).length === 0) {
+                    // Handle query
+                    return {
+                        audio_enabled: audioEnabled,
+                        video_enabled: videoEnabled,
+                    };
+                }
+
+                if (params.audio_enabled !== audioEnabled) {
                     meetApi.executeCommand("toggleAudio");
                 }
-            });
-            handleAction(ElementWidgetActions.UnmuteAudio, async () => {
-                if (meetApi && (await meetApi.isAudioMuted())) {
-                    meetApi.executeCommand("toggleAudio");
-                }
-            });
-            handleAction(ElementWidgetActions.MuteVideo, async () => {
-                if (meetApi && !(await meetApi.isVideoMuted())) {
+                if (params.video_enabled !== videoEnabled) {
                     meetApi.executeCommand("toggleVideo");
                 }
-            });
-            handleAction(ElementWidgetActions.UnmuteVideo, async () => {
-                if (meetApi && (await meetApi.isVideoMuted())) {
-                    meetApi.executeCommand("toggleVideo");
-                }
+                return params;
             });
             handleAction(ElementWidgetActions.TileLayout, async () => {
                 meetApi?.executeCommand("setTileView", true);
@@ -473,7 +471,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
     meetApi.on("videoConferenceLeft", onVideoConferenceLeft);
     meetApi.on("readyToClose", closeConference as ExternalAPIEventCallbacks["readyToClose"]);
     meetApi.on("errorOccurred", onErrorOccurred);
-    meetApi.on("audioMuteStatusChanged", onAudioMuteStatusChanged);
+    meetApi.on("audioMuteStatusChanged", onMuteStatusChanged);
     meetApi.on("videoMuteStatusChanged", onVideoMuteStatusChanged);
 
     (["videoConferenceJoined", "participantJoined", "participantLeft"] as const).forEach((event) => {
@@ -523,9 +521,13 @@ const onErrorOccurred = ({ error }: Parameters<ExternalAPIEventCallbacks["errorO
     }
 };
 
-const onAudioMuteStatusChanged = ({ muted }: AudioMuteStatusChangedEvent): void => {
-    const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-    void widgetApi?.transport.send(action, {});
+const onMuteStatusChanged = async (): Promise<void> => {
+    if (!meetApi) return;
+    const [audioEnabled, videoEnabled] = await checkAudioVideoEnabled();
+    void widgetApi?.transport.send(ElementWidgetActions.DeviceMute, {
+        audio_enabled: audioEnabled,
+        video_enabled: videoEnabled,
+    });
 };
 
 const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void => {
@@ -534,11 +536,9 @@ const onVideoMuteStatusChanged = ({ muted }: VideoMuteStatusChangedEvent): void 
         // hanging up, which we need to ignore by padding the timeout here,
         // otherwise the React SDK will mistakenly think the user turned off
         // their video by hand
-        setTimeout(() => {
-            if (meetApi) void widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
-        }, 200);
+        setTimeout(() => onMuteStatusChanged, 200);
     } else {
-        void widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        void onMuteStatusChanged();
     }
 };
 

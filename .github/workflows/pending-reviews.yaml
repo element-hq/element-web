@@ -1,8 +1,10 @@
 name: Pending reviews automation
 on:
+    # The bot exceeded its API rate limit. Disabling for now (adding workflow dispatch so the workflow file stays valid & we can test to see if it starts working again)
+    workflow_dispatch: {}
     # We run it on a schedule instead of on pull_request_* events to not create confusing messaging in the PR
-    schedule:
-        - cron: "*/10 * * * *"
+    #schedule:
+    #    - cron: "*/10 * * * *"
 concurrency: ${{ github.workflow }}
 jobs:
     bot:
@@ -62,7 +64,7 @@ jobs:
                       const repos = [
                           "element-hq/element-desktop",
                           "element-hq/element-web",
-                          "matrix-org/matrix-react-sdk",
+                          "element-hq/matrix-react-sdk",
                           "matrix-org/matrix-js-sdk",
                       ];
                       const teams = [

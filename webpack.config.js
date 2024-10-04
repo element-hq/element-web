@@ -714,8 +714,8 @@ module.exports = (env, argv) => {
                     sourcemaps: {
                         paths: "./webapp/bundles/**",
                     },
-                    errorHandler: (err, invokeErr, compilation) => {
-                        compilation.warnings.push("Sentry CLI Plugin: " + err.message);
+                    errorHandler: (err) => {
+                        console.warn("Sentry CLI Plugin: " + err.message);
                         console.log(`::warning title=Sentry error::${err.message}`);
                     },
                 }),

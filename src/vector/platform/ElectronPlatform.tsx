@@ -1,21 +1,13 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2018-2021 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2018 - 2021 New Vector Ltd
-Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
@@ -170,8 +162,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 title: _t("download_completed"),
                 props: {
                     description: name,
-                    acceptLabel: _t("action|open"),
-                    onAccept,
+                    primaryLabel: _t("action|open"),
+                    onPrimaryClick: onAccept,
                     dismissLabel: _t("action|dismiss"),
                     onDismiss,
                     numSeconds: 10,
@@ -480,6 +472,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
+        // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
+        // Chrome seems to have a strange issue where non-standard protocols prevent URL object mutations on pathname
+        // field, so we cannot mutate `pathname` reliably and instead have to rewrite the href manually.
+        if (url.pathname.startsWith("//")) {
+            url.href = url.href.replace(url.pathname, url.pathname.slice(1));
+        }
         return url;
     }
 }

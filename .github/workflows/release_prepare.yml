@@ -53,7 +53,7 @@ jobs:
               uses: actions/checkout@v4
               if: inputs.matrix-react-sdk
               with:
-                  repository: matrix-org/matrix-react-sdk
+                  repository: element-hq/matrix-react-sdk
                   path: matrix-react-sdk
                   ref: staging
                   fetch-depth: 0
@@ -70,11 +70,27 @@ jobs:
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-            - name: Merge develop
+            - name: Prepare Git
               run: |
                   git config --global user.email "releases@riot.im"
                   git config --global user.name "RiotRobot"
-                  for REPO in $REPOS; do [ -d "$REPO" ] && git -C "$REPO" merge origin/develop; done
+
+            - name: Merge Element Desktop
+              if: inputs.element-desktop
+              run: |
+                  git -C "element-desktop" merge origin/develop
+            - name: Merge Element Web
+              if: inputs.element-web
+              run: |
+                  git -C "element-web" merge origin/develop
+            - name: Merge React SDK
+              if: inputs.matrix-react-sdk
+              run: |
+                  git -C "matrix-react-sdk" merge origin/develop
+            - name: Merge JS SDK
+              if: inputs.matrix-js-sdk
+              run: |
+                  git -C "matrix-js-sdk" merge origin/develop
 
             - name: Push staging
               run: for REPO in $REPOS; do [ -d "$REPO" ] && git -C "$REPO" push origin staging; done
@@ -95,7 +111,7 @@ jobs:
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: staging
-                  repo: matrix-org/matrix-react-sdk
+                  repo: element-hq/matrix-react-sdk
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
                   check-name: draft

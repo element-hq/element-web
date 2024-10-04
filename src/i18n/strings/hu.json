@@ -21,20 +21,12 @@
         "invalid_json_generic": "Érvénytelen JSON",
         "misconfigured": "Az Element hibásan van beállítva"
     },
-    "failed_to_start": "Az indítás sikertelen",
-    "go_to_element_io": "Irány az element.io",
     "incompatible_browser": {
-        "browser_links": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
-        "continue_warning": "Megértettem a kockázatot és folytatom",
-        "feature_warning": "Folytathatja a jelenlegi böngészőjével, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",
-        "features": "A(z) %(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
-        "summary": "A böngészője nem tudja futtatni ezt: %(brand)s",
         "title": "Nem támogatott böngésző"
     },
     "powered_by_matrix": "A gépházban: Matrix",
     "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
     "unknown_device": "Ismeretlen eszköz",
-    "use_brand_on_mobile": "Mobilon használja ezt: %(brand)s",
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
     "welcome_to_element": "Üdvözli az Element"
 }

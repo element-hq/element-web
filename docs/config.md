@@ -154,7 +154,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-19. `help_encrption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -167,6 +168,10 @@ Starting with `desktop_builds`, the following subproperties are available:
 1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
 2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
 3. `url`: Required. The download URL for the app. This is used as a hyperlink.
+4. `url_macos`: Optional. Direct link to download macOS desktop app.
+5. `url_win32`: Optional. Direct link to download Windows 32-bit desktop app.
+6. `url_win64`: Optional. Direct link to download Windows 64-bit desktop app.
+7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
 
@@ -447,6 +452,12 @@ If you would like to use Scalar, the integration manager maintained by Element, 
     ]
 }
 ```
+
+For widgets in general (from an integration manager or not) there is also:
+
+-   `default_widget_container_height`
+
+This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.
 
 ## Administrative options
 

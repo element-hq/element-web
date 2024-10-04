@@ -20,20 +20,12 @@
         "invalid_json_generic": "Virheellinen JSON",
         "misconfigured": "Elementisi asetukset ovat pielessä"
     },
-    "failed_to_start": "Käynnistys ei onnistunut",
-    "go_to_element_io": "Mene osoitteeseen riot.im",
     "incompatible_browser": {
-        "browser_links": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
-        "continue_warning": "Ymmärrän riskit ja haluan jatkaa",
-        "feature_warning": "Voit käyttää edelleen nykyistä selaintasi, mutta jotkut tai kaikki ominaisuudet eivät ehkä toimi ja sovelluksen ulkoasu voi olla virheellinen.",
-        "features": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
-        "summary": "%(brand)s ei toimi selaimessasi",
         "title": "Selainta ei tueta"
     },
     "powered_by_matrix": "Moottorina Matrix",
     "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
     "unknown_device": "Tuntematon laite",
-    "use_brand_on_mobile": "Käytä %(brand)sia mobiilisti",
     "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
     "welcome_to_element": "Tervetuloa Element-sovellukseen"
 }

@@ -21,20 +21,12 @@
         "invalid_json_generic": "JSON non valide",
         "misconfigured": "Votre Element est mal configuré"
     },
-    "failed_to_start": "Échec au démarrage",
-    "go_to_element_io": "Aller vers element.io",
     "incompatible_browser": {
-        "browser_links": "Veuillez installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ou <safariLink>Safari</safariLink> pour une expérience optimale.",
-        "continue_warning": "Je comprends les risques et souhaite continuer",
-        "feature_warning": "Vous pouvez continuer à utiliser votre navigateur actuel, mais vous risquez de trouver que certaines fonctionnalités et/ou l’apparence de l’application sont incorrectes.",
-        "features": "%(brand)s nécessite des fonctionnalités avancées que votre navigateur actuel ne prend pas en charge.",
-        "summary": "Votre navigateur ne peut pas exécuter %(brand)s",
         "title": "Navigateur non pris en charge"
     },
     "powered_by_matrix": "Propulsé par Matrix",
     "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "unknown_device": "Appareil inconnu",
-    "use_brand_on_mobile": "Utiliser %(brand)s sur téléphone",
     "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
     "welcome_to_element": "Bienvenue sur Element"
 }
