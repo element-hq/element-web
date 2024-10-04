@@ -105,7 +105,6 @@ module.exports = (env, argv) => {
     //      (called to build nightly and develop.element.io)
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== "production";
-    const useHMR = process.env.CSS_HOT_RELOAD === "1" && devMode;
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
 
     const development = {};
@@ -157,7 +156,7 @@ module.exports = (env, argv) => {
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
             },
-            ...(useHMR ? {} : cssThemes),
+            ...cssThemes,
         },
 
         optimization: {
@@ -276,14 +275,6 @@ module.exports = (env, argv) => {
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
-                useHMR && {
-                    test: /devcss\.ts$/,
-                    loader: "string-replace-loader",
-                    options: {
-                        search: '"use theming";',
-                        replace: getThemesImports(),
-                    },
-                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
@@ -369,42 +360,7 @@ module.exports = (env, argv) => {
                 {
                     test: /\.pcss$/,
                     use: [
-                        /**
-                         * This code is hopeful that no .pcss outside of our themes will be directly imported in any
-                         * of the JS/TS files.
-                         * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
-                         */
-                        useHMR
-                            ? {
-                                  loader: "style-loader",
-                                  /**
-                                   * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
-                                   * we could try using `lazyStyleTag` here to add and remove styles on demand,
-                                   * that would nicely resolve issues of race conditions for themes,
-                                   * at least for development purposes.
-                                   */
-                                  options: {
-                                      insert: function insertBeforeAt(element) {
-                                          const parent = document.querySelector("head");
-                                          // We're in iframe
-                                          if (!window.MX_DEV_ACTIVE_THEMES) {
-                                              parent.appendChild(element);
-                                              return;
-                                          }
-                                          // Properly disable all other instances of themes
-                                          element.disabled = true;
-                                          element.onload = () => {
-                                              element.disabled = true;
-                                          };
-                                          const theme =
-                                              window.MX_DEV_ACTIVE_THEMES[window.MX_insertedThemeStylesCounter];
-                                          element.setAttribute("data-mx-theme", theme);
-                                          window.MX_insertedThemeStylesCounter++;
-                                          parent.appendChild(element);
-                                      },
-                                  },
-                              }
-                            : MiniCssExtractPlugin.loader,
+                        MiniCssExtractPlugin.loader,
                         {
                             loader: "css-loader",
                             options: {
@@ -642,8 +598,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
-                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[fullhash]/[name].css",
+                filename: "bundles/[name].css",
+                chunkFilename: "bundles/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
