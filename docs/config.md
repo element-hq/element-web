@@ -154,7 +154,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-19. `help_encrption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
 20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
 
 ### `desktop_builds` and `mobile_builds`
