@@ -10,12 +10,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { JSX, useCallback, useState } from "react";
 import { EventTimeline, EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Menu, MenuItem, Separator, Tooltip } from "@vector-im/compound-web";
-import { Icon as ViewIcon } from "@vector-im/compound-design-tokens/icons/visibility-on.svg";
-import { Icon as UnpinIcon } from "@vector-im/compound-design-tokens/icons/unpin.svg";
-import { Icon as ForwardIcon } from "@vector-im/compound-design-tokens/icons/forward.svg";
-import { Icon as TriggerIcon } from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
-import { Icon as DeleteIcon } from "@vector-im/compound-design-tokens/icons/delete.svg";
-import { Icon as ThreadIcon } from "@vector-im/compound-design-tokens/icons/threads.svg";
+import ViewIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
+import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
+import ForwardIcon from "@vector-im/compound-design-tokens/assets/web/icons/forward";
+import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
+import ThreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 import classNames from "classnames";
 
 import dis from "../../../dispatcher/dispatcher";

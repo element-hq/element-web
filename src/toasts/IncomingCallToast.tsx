@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip } from "@vector-im/compound-web";
-import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
+import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";

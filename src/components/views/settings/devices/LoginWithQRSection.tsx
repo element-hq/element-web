@@ -17,7 +17,7 @@ import {
     MatrixClient,
     DEVICE_CODE_SCOPE,
 } from "matrix-js-sdk/src/matrix";
-import { Icon as QrCodeIcon } from "@vector-im/compound-design-tokens/icons/qr-code.svg";
+import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";

@@ -26,7 +26,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 import { Button, Tooltip } from "@vector-im/compound-web";
-import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add-solid.svg";
+import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

@@ -12,8 +12,8 @@ import {
     LegacyRendezvousFailureReason,
     MSC4108FailureReason,
 } from "matrix-js-sdk/src/rendezvous";
-import { Icon as ChevronLeftIcon } from "@vector-im/compound-design-tokens/icons/chevron-left.svg";
-import { Icon as CheckCircleSolidIcon } from "@vector-im/compound-design-tokens/icons/check-circle-solid.svg";
+import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
+import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";

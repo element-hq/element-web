@@ -21,8 +21,8 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin.svg";
-import { Icon as UnpinIcon } from "@vector-im/compound-design-tokens/icons/unpin.svg";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
+import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";

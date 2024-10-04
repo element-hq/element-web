@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useContext, useState } from "react";
 import { Thread, ThreadEvent, IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
-import { Icon as ThreadIconSolid } from "@vector-im/compound-design-tokens/icons/threads-solid.svg";
+import ThreadIconSolid from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";

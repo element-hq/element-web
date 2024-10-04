@@ -21,10 +21,10 @@ import {
     Form,
 } from "@vector-im/compound-web";
 import FavouriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite";
-import { Icon as UserAddIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
+import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
-import { Icon as ExportArchiveIcon } from "@vector-im/compound-design-tokens/icons/export-archive.svg";
+import ExportArchiveIcon from "@vector-im/compound-design-tokens/assets/web/icons/export-archive";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
 import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
@@ -32,11 +32,11 @@ import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
-import { Icon as LockIcon } from "@vector-im/compound-design-tokens/icons/lock-solid.svg";
-import { Icon as LockOffIcon } from "@vector-im/compound-design-tokens/icons/lock-off.svg";
+import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
+import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
-import { Icon as ChevronDownIcon } from "@vector-im/compound-design-tokens/icons/chevron-down.svg";
+import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

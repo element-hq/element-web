@@ -7,7 +7,7 @@
  */
 
 import React, { JSX } from "react";
-import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin-solid.svg";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 
 import { _t } from "../../../languageHandler.tsx";
 
@@ -17,7 +17,7 @@ import { _t } from "../../../languageHandler.tsx";
 export function PinnedMessageBadge(): JSX.Element {
     return (
         <div className="mx_PinnedMessageBadge">
-            <PinIcon width="16" />
+            <PinIcon width="16px" height="16px" />
             {_t("room|pinned_message_badge")}
         </div>
     );

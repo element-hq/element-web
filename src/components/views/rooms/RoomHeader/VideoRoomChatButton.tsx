@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { Icon as ChatIcon } from "@vector-im/compound-design-tokens/icons/chat-solid.svg";
+import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-solid";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 

@@ -24,10 +24,18 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"
@@ -79,10 +87,18 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <div
           class="mx_PinnedMessageBanner_title"
           data-testid="banner-counter"
@@ -141,10 +157,18 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"
@@ -188,10 +212,18 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"
@@ -235,10 +267,18 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"
@@ -282,10 +322,18 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"
@@ -333,10 +381,18 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <div
           class="mx_PinnedMessageBanner_title"
           data-testid="banner-counter"
@@ -403,10 +459,18 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <div
           class="mx_PinnedMessageBanner_title"
           data-testid="banner-counter"
@@ -465,10 +529,18 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
             data-testid="banner-indicator"
           />
         </div>
-        <div
+        <svg
           class="mx_PinnedMessageBanner_PinIcon"
-          width="20"
-        />
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
         <span
           class="mx_PinnedMessageBanner_message"
           data-testid="banner-message"

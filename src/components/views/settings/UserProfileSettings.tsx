@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { ChangeEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
-import { Icon as PopOutIcon } from "@vector-im/compound-design-tokens/icons/pop-out.svg";
-import { Icon as SignOutIcon } from "@vector-im/compound-design-tokens/icons/sign-out.svg";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";

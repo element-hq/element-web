@@ -10,8 +10,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
-import { Icon as PlusIcon } from "@vector-im/compound-design-tokens/icons/plus.svg";
-import { Icon as ExtensionsIcon } from "@vector-im/compound-design-tokens/icons/extensions.svg";
+import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
+import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
 
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";

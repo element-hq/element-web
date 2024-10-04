@@ -487,9 +487,17 @@ exports[`<LoginWithQRFlow /> errors renders other_device_already_signed_in 1`] =
       <div
         class="mx_LoginWithQR_icon"
       >
-        <div
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
           width="32px"
-        />
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m10.6 13.8-2.15-2.15a.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275.948.948 0 0 0-.275.7.95.95 0 0 0 .275.7L9.9 15.9c.2.2.433.3.7.3.267 0 .5-.1.7-.3l5.65-5.65a.948.948 0 0 0 .275-.7.948.948 0 0 0-.275-.7.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275L10.6 13.8ZM12 22a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
       </div>
       <h1
         class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
@@ -1029,7 +1037,17 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
         role="button"
         tabindex="0"
       >
-        <div />
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
       </div>
       <div
         class="mx_LoginWithQR_breadcrumbs"
@@ -1230,7 +1248,17 @@ exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
         role="button"
         tabindex="0"
       >
-        <div />
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
       </div>
       <div
         class="mx_LoginWithQR_breadcrumbs"
@@ -1284,7 +1312,17 @@ exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
         role="button"
         tabindex="0"
       >
-        <div />
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
       </div>
       <div
         class="mx_LoginWithQR_breadcrumbs"
@@ -1350,7 +1388,17 @@ exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
         role="button"
         tabindex="0"
       >
-        <div />
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
       </div>
       <div
         class="mx_LoginWithQR_breadcrumbs"
@@ -1407,7 +1455,17 @@ exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
         role="button"
         tabindex="0"
       >
-        <div />
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
       </div>
       <div
         class="mx_LoginWithQR_breadcrumbs"

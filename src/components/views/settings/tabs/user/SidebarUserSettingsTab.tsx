@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent, useMemo } from "react";
-import { Icon as CameraCircle } from "@vector-im/compound-design-tokens/icons/video-call-solid.svg";
+import CameraCircle from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 
 import { Icon as HomeIcon } from "../../../../../../res/img/element-icons/home.svg";
 import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";

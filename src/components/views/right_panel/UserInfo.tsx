@@ -31,12 +31,12 @@ import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
-import { Icon as InviteIcon } from "@vector-im/compound-design-tokens/icons/user-add.svg";
+import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import { Icon as ChatProblemIcon } from "@vector-im/compound-design-tokens/icons/chat-problem.svg";
-import { Icon as VisibilityOffIcon } from "@vector-im/compound-design-tokens/icons/visibility-off.svg";
+import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
+import VisibilityOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-off";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 
 import dis from "../../../dispatcher/dispatcher";

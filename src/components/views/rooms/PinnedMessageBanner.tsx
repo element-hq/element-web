@@ -7,7 +7,7 @@
  */
 
 import React, { JSX, useEffect, useMemo, useState } from "react";
-import { Icon as PinIcon } from "@vector-im/compound-design-tokens/icons/pin-solid.svg";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
 import { M_POLL_START, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
@@ -92,7 +92,7 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             >
                 <div className="mx_PinnedMessageBanner_content">
                     <Indicators count={eventCount} currentIndex={currentEventIndex} />
-                    <PinIcon width="20" className="mx_PinnedMessageBanner_PinIcon" />
+                    <PinIcon width="20px" height="20px" className="mx_PinnedMessageBanner_PinIcon" />
                     {!isSinglePinnedEvent && (
                         <div className="mx_PinnedMessageBanner_title" data-testid="banner-counter">
                             {_t(

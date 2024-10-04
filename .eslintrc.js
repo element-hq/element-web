@@ -46,6 +46,7 @@ module.exports = {
 
         "import/no-duplicates": ["error"],
         // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
+        // Ban compound-design-tokens raw svg imports in favour of their React component counterparts
         "no-restricted-imports": [
             "error",
             {
@@ -149,6 +150,10 @@ module.exports = {
                         group: ["emojibase-regex/emoji*"],
                         message:
                             "This regex doesn't actually test for emoji. See the docs at https://emojibase.dev/docs/regex/ and prefer our own EMOJI_REGEX from HtmlUtils.",
+                    },
+                    {
+                        group: ["@vector-im/compound-design-tokens/icons/*"],
+                        message: "Please use @vector-im/compound-design-tokens/assets/web/icons/* instead",
                     },
                 ],
             },
