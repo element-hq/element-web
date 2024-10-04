@@ -158,10 +158,11 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const onExportClick = async (): Promise<void> => {
         const isValidSize =
-            (!setSizeLimit ||
+            !setSizeLimit ||
             (await sizeLimitRef.current?.validate({
                 focused: false,
-            }))) || !SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit);
+            })) ||
+            !SettingsStore.getValue(UIFeature.ExportDefaultSizeLimit);
         if (!isValidSize) {
             sizeLimitRef.current?.validate({ focused: true });
             return;
