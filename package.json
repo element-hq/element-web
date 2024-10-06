@@ -70,7 +70,7 @@
         "@types/react-dom": "17.0.25",
         "@types/react": "17.0.82",
         "@vector-im/compound-design-tokens": "1.8.0",
-        "@vector-im/compound-web": "5.5.0",
+        "@vector-im/compound-web": "6.3.1",
         "@floating-ui/react": "0.26.11",
         "@radix-ui/react-id": "1.1.0"
     },
@@ -78,7 +78,7 @@
         "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/react-sdk-module-api": "^2.3.0",
         "@vector-im/compound-design-tokens": "^1.8.0",
-        "@vector-im/compound-web": "^5.5.0",
+        "@vector-im/compound-web": "^6.3.1",
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
         "lodash": "^4.17.21",

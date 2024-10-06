@@ -102,7 +102,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
       >
         <button
-          class="_button_zt6rp_17 _has-icon_zt6rp_61"
+          class="_button_i91xf_17 _has-icon_i91xf_66"
           data-kind="secondary"
           data-size="sm"
           role="button"
@@ -143,7 +143,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
     >
       <a
-        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        class="_button_i91xf_17 _has-icon_i91xf_66"
         data-kind="secondary"
         data-size="lg"
         href="https://packages.element.io/desktop/install/macos/Element.dmg"
@@ -158,7 +158,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         Mac
       </a>
       <a
-        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        class="_button_i91xf_17 _has-icon_i91xf_66"
         data-kind="secondary"
         data-size="lg"
         href="https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe"
@@ -173,7 +173,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         Windows (64-bit)
       </a>
       <a
-        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        class="_button_i91xf_17 _has-icon_i91xf_66"
         data-kind="secondary"
         data-size="lg"
         href="https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe"
@@ -188,7 +188,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         Windows (32-bit)
       </a>
       <a
-        class="_button_zt6rp_17 _has-icon_zt6rp_61"
+        class="_button_i91xf_17 _has-icon_i91xf_66"
         data-kind="secondary"
         data-size="lg"
         href="https://element.io/download#linux"
