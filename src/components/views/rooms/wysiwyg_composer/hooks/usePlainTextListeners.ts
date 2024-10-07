@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
-import { AllowedMentionAttributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
+import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";

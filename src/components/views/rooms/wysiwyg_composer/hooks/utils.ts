@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { MutableRefObject, RefObject } from "react";
 import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { WysiwygEvent } from "@matrix-org/matrix-wysiwyg";
+import { WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 
 import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { IRoomState } from "../../../../structures/RoomView";

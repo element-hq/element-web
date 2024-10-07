@@ -1911,13 +1911,6 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-7.0.0.tgz#8d6abdb9ded8656cc9e2a7909913a34bf3fc9b3a"
   integrity sha512-MOencXiW/gI5MuTtCNsuojjwT5DXCrjMqv9xOslJC9h2tPdLFFFMGr58dY5Lis4DRd9MRWcgrGowUIHOqieWTA==
 
-"@matrix-org/matrix-wysiwyg@2.37.9":
-  version "2.37.9"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.37.9.tgz#4d5667df3c74e11fd01c4b5be920caff72bf2f48"
-  integrity sha512-Jn2ug6ySX5es5/SV5BVgSBhVPS7GXggwZ/GGWmnJvhnp/IArit4kgUAsNRhQeKebuVvNphwQykCGwyBOn2PLBA==
-  dependencies:
-    eslint-plugin-unicorn "^54.0.0"
-
 "@matrix-org/olm@3.2.15":
   version "3.2.15"
   resolved "https://registry.yarnpkg.com/@matrix-org/olm/-/olm-3.2.15.tgz#55f3c1b70a21bbee3f9195cecd6846b1083451ec"
@@ -3100,6 +3093,13 @@
     classnames "^2.3.2"
     ts-xor "^1.3.0"
     vaul "^0.7.0"
+
+"@vector-im/matrix-wysiwyg@2.37.13":
+  version "2.37.13"
+  resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.37.13.tgz#7b64e7652a196e811c0470dcbff8d36e2229cd46"
+  integrity sha512-3ilnJBJSzeTfAQXNJJ29EAqa14exrkca3acTPssdoh3WhTKwXyQ0xU8sS50d6gqlAP/Nahw1y2k+PzajXo1SsQ==
+  dependencies:
+    eslint-plugin-unicorn "^54.0.0"
 
 "@zxcvbn-ts/core@^3.0.4":
   version "3.0.4"
