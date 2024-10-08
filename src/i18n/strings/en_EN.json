@@ -89,11 +89,13 @@
         },
         "operating_messages" : {
             "title" : "Operating messages",
-            "messages" : "Operating messages from <a>Verji</a>"
+            "messages" : "Operating messages from <a>Verji</a>",
+            "readarticle" : "Les hele artikkelen"
         },
         "news" : {
           "title" : "Lates news",
-          "messages" : "News from <a>Verji</a>"
+          "messages" : "News from <a>Verji</a>",
+          "readarticle" : "Les hele artikkelen"
         }
      },
     "a11y": {
@@ -494,7 +496,7 @@
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
         "failed_send_logs": "Failed to send logs: ",
         "github_issue": "GitHub issue",
-        "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
+        "introduction": "If you've submitted a bug to Verji, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
         "logs_sent": "Logs sent",
         "matrix_security_issue": "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
@@ -1388,15 +1390,15 @@
         "key_share_warning": "Invited people will be able to read old messages.",
         "name_email_mxid_share_room": "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.",
         "name_email_mxid_share_space": "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.",
-        "name_mxid_share_room": "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
-        "name_mxid_share_space": "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.",
+        "name_mxid_share_room": "Invite someone using their name.",
+        "name_mxid_share_space": "Invite someone using their name.",
         "recents_section": "Recent Conversations",
         "room_failed_partial": "We sent the others, but the below people couldn't be invited to <RoomName/>",
         "room_failed_partial_title": "Some invites couldn't be sent",
         "room_failed_title": "Failed to invite users to %(roomName)s",
         "send_link_prompt": "Or send invite link",
-        "start_conversation_name_email_mxid_prompt": "Start a conversation with someone using their name, email address or username (like <userId/>).",
-        "start_conversation_name_mxid_prompt": "Start a conversation with someone using their name or username (like <userId/>).",
+        "start_conversation_name_email_mxid_prompt": "Start a conversation with someone using their name, or invite by using their email address.",
+        "start_conversation_name_mxid_prompt": "Start a conversation with someone using their name, or invite by using their email address.",
         "suggestions_disclaimer": "Some suggestions may be hidden for privacy.",
         "suggestions_disclaimer_prompt": "If you can't see who you're looking for, send them your invite link below.",
         "suggestions_section": "Recently Direct Messaged",
