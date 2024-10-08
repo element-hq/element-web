@@ -26,7 +26,6 @@ export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new RoomNotificationStateStore();
-        instance.start();
         return instance;
     })();
     private roomMap = new Map<Room, RoomNotificationState>();

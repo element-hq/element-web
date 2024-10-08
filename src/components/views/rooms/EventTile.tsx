@@ -385,7 +385,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
-            client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
             this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
@@ -425,7 +424,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
             const room = client.getRoom(this.props.mxEvent.getRoomId());
@@ -562,12 +560,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
         // decryption might, of course, trigger a height change, so call onHeightChanged after the re-render
         this.forceUpdate(this.props.onHeightChanged);
-    };
-
-    private onDeviceVerificationChanged = (userId: string, device: string): void => {
-        if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent();
-        }
     };
 
     private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {

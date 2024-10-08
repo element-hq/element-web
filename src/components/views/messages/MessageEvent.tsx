@@ -190,25 +190,42 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
         }
 
-        return BodyType ? (
-            <BodyType
-                ref={this.body}
-                mxEvent={this.props.mxEvent}
-                highlights={this.props.highlights}
-                highlightLink={this.props.highlightLink}
-                showUrlPreview={this.props.showUrlPreview}
-                forExport={this.props.forExport}
-                maxImageHeight={this.props.maxImageHeight}
-                replacingEventId={this.props.replacingEventId}
-                editState={this.props.editState}
-                onHeightChanged={this.props.onHeightChanged}
-                onMessageAllowed={this.onTileUpdate}
-                permalinkCreator={this.props.permalinkCreator}
-                mediaEventHelper={this.mediaHelper}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-                isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
-                inhibitInteraction={this.props.inhibitInteraction}
-            />
-        ) : null;
+        const hasCaption =
+            [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
+            content.filename &&
+            content.filename !== content.body;
+        const bodyProps: IBodyProps = {
+            ref: this.body,
+            mxEvent: this.props.mxEvent,
+            highlights: this.props.highlights,
+            highlightLink: this.props.highlightLink,
+            showUrlPreview: this.props.showUrlPreview,
+            forExport: this.props.forExport,
+            maxImageHeight: this.props.maxImageHeight,
+            replacingEventId: this.props.replacingEventId,
+            editState: this.props.editState,
+            onHeightChanged: this.props.onHeightChanged,
+            onMessageAllowed: this.onTileUpdate,
+            permalinkCreator: this.props.permalinkCreator,
+            mediaEventHelper: this.mediaHelper,
+            getRelationsForEvent: this.props.getRelationsForEvent,
+            isSeeingThroughMessageHiddenForModeration: this.props.isSeeingThroughMessageHiddenForModeration,
+            inhibitInteraction: this.props.inhibitInteraction,
+        };
+        if (hasCaption) {
+            return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;
+        }
+
+        return BodyType ? <BodyType {...bodyProps} /> : null;
     }
 }
+
+const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React.ComponentType<IBodyProps> }> = ({
+    WrappedBodyType,
+    ...props
+}) => (
+    <div className="mx_EventTile_content">
+        <WrappedBodyType {...props} />
+        <TextualBody {...{ ...props, ref: undefined }} />
+    </div>
+);

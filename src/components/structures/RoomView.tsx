@@ -428,7 +428,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         context.client.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         context.client.on(RoomEvent.MyMembership, this.onMyMembership);
         context.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
-        context.client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
         context.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
         context.client.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
         context.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
@@ -974,7 +973,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.context.client.removeListener(RoomEvent.MyMembership, this.onMyMembership);
             this.context.client.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
             this.context.client.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
-            this.context.client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             this.context.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.context.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
             this.context.client.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
@@ -1436,14 +1434,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 this.onRoomLoaded(room);
             },
         );
-    };
-
-    private onDeviceVerificationChanged = (userId: string): void => {
-        const room = this.state.room;
-        if (!room?.currentState.getMember(userId)) {
-            return;
-        }
-        this.updateE2EStatus(room);
     };
 
     private onUserVerificationChanged = (userId: string): void => {

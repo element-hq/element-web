@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ForwardedRef, forwardRef, FunctionComponent } from "react";
-import { FormattingFunctions, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
+import { FormattingFunctions, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useRoomContext } from "../../../../../contexts/RoomContext";

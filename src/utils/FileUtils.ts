@@ -38,7 +38,9 @@ export function presentableTextForFile(
     shortened = false,
 ): string {
     let text = fallbackText;
-    if (content.body?.length) {
+    if (content.filename?.length) {
+        text = content.filename;
+    } else if (content.body?.length) {
         // The content body should be the name of the file including a
         // file extension.
         text = content.body;

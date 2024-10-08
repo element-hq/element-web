@@ -403,7 +403,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
     public static get instance(): RightPanelStore {
         if (!this.internalInstance) {
             this.internalInstance = new RightPanelStore();
-            this.internalInstance.start();
         }
         return this.internalInstance;
     }

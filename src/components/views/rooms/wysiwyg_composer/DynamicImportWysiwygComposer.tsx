@@ -10,7 +10,7 @@ import React, { ComponentProps, lazy, Suspense } from "react";
 import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
 
 // we need to import the types for TS, but do not import the sendMessage
-// function to avoid importing from "@matrix-org/matrix-wysiwyg"
+// function to avoid importing from "@vector-im/matrix-wysiwyg"
 import { SendMessageParams } from "./utils/message";
 import { retry } from "../../../../utils/promise";
 
@@ -55,7 +55,7 @@ export const dynamicImportConversionFunctions = async (): Promise<{
      */
     plainToRich(plain: string, inMessageFormat: boolean): Promise<string>;
 }> => {
-    const { richToPlain, plainToRich } = await retry(() => import("@matrix-org/matrix-wysiwyg"), RETRY_COUNT);
+    const { richToPlain, plainToRich } = await retry(() => import("@vector-im/matrix-wysiwyg"), RETRY_COUNT);
 
     return { richToPlain, plainToRich };
 };

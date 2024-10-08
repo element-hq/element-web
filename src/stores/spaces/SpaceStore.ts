@@ -17,6 +17,7 @@ import {
     MatrixEvent,
     ClientEvent,
     ISendEventResponse,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -1397,7 +1398,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 export default class SpaceStore {
     private static readonly internalInstance = (() => {
         const instance = new SpaceStoreClass();
-        instance.start();
         return instance;
     })();
 
@@ -1408,9 +1408,9 @@ export default class SpaceStore {
     /**
      * @internal for test only
      */
-    public static testInstance(): SpaceStoreClass {
+    public static testInstance(client: MatrixClient): SpaceStoreClass {
         const store = new SpaceStoreClass();
-        store.start();
+        store.useUnitTestClient(client);
         return store;
     }
 }

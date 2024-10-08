@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { memo, MutableRefObject, ReactNode, useEffect, useMemo, useRef } from "react";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
+import { useWysiwyg, FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 
 import Autocomplete from "../../Autocomplete";

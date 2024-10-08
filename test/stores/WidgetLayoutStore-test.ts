@@ -167,7 +167,7 @@ describe("WidgetLayoutStore", () => {
 
     it("should recalculate all rooms when the client is ready", async () => {
         mocked(client.getVisibleRooms).mockReturnValue([mockRoom]);
-        await store.start();
+        await store.start(client);
 
         expect(roomUpdateListener).toHaveBeenCalled();
         expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
@@ -243,7 +243,7 @@ describe("WidgetLayoutStore", () => {
     });
 
     it("should copy the layout to the room", async () => {
-        await store.start();
+        await store.start(client);
         store.recalculateRoom(mockRoom);
         store.moveToContainer(mockRoom, mockApps[0], Container.Top);
         store.copyLayoutToRoom(mockRoom);
@@ -297,7 +297,7 @@ describe("WidgetLayoutStore", () => {
             mocked(client.getVisibleRooms).mockReturnValue([]);
             // @ts-ignore bypass private ctor for tests
             const store = new WidgetLayoutStore();
-            await store.start();
+            await store.start(client);
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
     });
@@ -314,7 +314,7 @@ describe("WidgetLayoutStore", () => {
             mocked(client.getVisibleRooms).mockReturnValue([]);
             // @ts-ignore bypass private ctor for tests
             const store = new WidgetLayoutStore();
-            await store.start();
+            await store.start(client);
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });

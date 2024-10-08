@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { MouseEventHandler, ReactNode } from "react";
-import { FormattingFunctions, AllActionStates, ActionState } from "@matrix-org/matrix-wysiwyg";
+import { FormattingFunctions, AllActionStates, ActionState } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 import BoldIcon from "@vector-im/compound-design-tokens/assets/web/icons/bold";
 import BulletedListIcon from "@vector-im/compound-design-tokens/assets/web/icons/list-bulleted";

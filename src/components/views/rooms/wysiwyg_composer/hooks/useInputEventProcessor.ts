@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Wysiwyg, WysiwygEvent } from "@matrix-org/matrix-wysiwyg";
+import { Wysiwyg, WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 import { useCallback } from "react";
 import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
 

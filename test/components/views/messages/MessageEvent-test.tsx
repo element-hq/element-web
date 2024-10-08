@@ -8,7 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, EventType, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import fetchMock from "fetch-mock-jest";
+import fs from "fs";
+import path from "path";
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
@@ -23,6 +26,26 @@ jest.mock("../../../../src/components/views/messages/UnknownBody", () => ({
 
 jest.mock("../../../../src/voice-broadcast/components/VoiceBroadcastBody", () => ({
     VoiceBroadcastBody: () => <div data-testid="voice-broadcast-body" />,
+}));
+
+jest.mock("../../../../src/components/views/messages/MImageBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="image-body" />,
+}));
+
+jest.mock("../../../../src/components/views/messages/MImageReplyBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="image-reply-body" />,
+}));
+
+jest.mock("../../../../src/components/views/messages/MStickerBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="sticker-body" />,
+}));
+
+jest.mock("../../../../src/components/views/messages/TextualBody.tsx", () => ({
+    __esModule: true,
+    default: () => <div data-testid="textual-body" />,
 }));
 
 describe("MessageEvent", () => {
@@ -66,6 +89,44 @@ describe("MessageEvent", () => {
 
         it("should render a VoiceBroadcast component", () => {
             result.getByTestId("voice-broadcast-body");
+        });
+    });
+
+    describe("when an image with a caption is sent", () => {
+        let result: RenderResult;
+
+        beforeEach(() => {
+            event = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: client.getUserId()!,
+                room: room.roomId,
+                content: {
+                    body: "caption for a test image",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "<strong>caption for a test image</strong>",
+                    msgtype: MsgType.Image,
+                    filename: "image.webp",
+                    info: {
+                        w: 40,
+                        h: 50,
+                    },
+                    url: "mxc://server/image",
+                },
+            });
+            result = renderMessageEvent();
+        });
+
+        it("should render a TextualBody and an ImageBody", () => {
+            fetchMock.getOnce(
+                "https://server/_matrix/media/v3/download/server/image",
+                {
+                    body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
+                },
+                { sendAsJson: false },
+            );
+            result.getByTestId("image-body");
+            result.getByTestId("textual-body");
         });
     });
 });

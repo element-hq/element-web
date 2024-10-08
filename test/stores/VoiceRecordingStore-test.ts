@@ -31,7 +31,7 @@ describe("VoiceRecordingStore", () => {
 
     const mkStore = (): VoiceRecordingStore => {
         const store = new VoiceRecordingStore();
-        store.start();
+        store.useUnitTestClient(stubClient);
         return store;
     };
 

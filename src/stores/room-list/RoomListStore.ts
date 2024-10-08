@@ -643,11 +643,9 @@ export default class RoomListStore {
             if (SettingsStore.getValue("feature_sliding_sync")) {
                 logger.info("using SlidingRoomListStoreClass");
                 const instance = new SlidingRoomListStoreClass(defaultDispatcher, SdkContextClass.instance);
-                instance.start();
                 RoomListStore.internalInstance = instance;
             } else {
                 const instance = new RoomListStoreClass(defaultDispatcher);
-                instance.start();
                 RoomListStore.internalInstance = instance;
             }
         }

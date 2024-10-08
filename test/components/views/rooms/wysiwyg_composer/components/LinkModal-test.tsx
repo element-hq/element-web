@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
+import { FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import userEvent from "@testing-library/user-event";
