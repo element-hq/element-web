@@ -87,7 +87,6 @@ const getLocallyCreatedBeaconEventIds = (): string[] => {
 export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     private static readonly internalInstance = (() => {
         const instance = new OwnBeaconStore();
-        instance.start();
         return instance;
     })();
     // users beacons, keyed by event type

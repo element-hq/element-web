@@ -45,7 +45,6 @@ interface IRoomWidgets {
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetStore();
-        instance.start();
         return instance;
     })();
 

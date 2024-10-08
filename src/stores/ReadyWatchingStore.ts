@@ -9,27 +9,40 @@
 import { MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ActionPayload } from "../dispatcher/payloads";
 import { IDestroyable } from "../utils/IDestroyable";
 import { Action } from "../dispatcher/actions";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
-    protected matrixClient: MatrixClient | null = null;
+    private static instances: ReadyWatchingStore[] = [];
+    protected _matrixClient: MatrixClient | null = null;
     private dispatcherRef: string | null = null;
+
+    public static set matrixClient(client: MatrixClient) {
+        for (const instance of ReadyWatchingStore.instances) {
+            instance.start(client);
+        }
+    }
 
     public constructor(protected readonly dispatcher: MatrixDispatcher) {
         super();
+
+        this.dispatcherRef = this.dispatcher.register(this.onAction);
     }
 
-    public async start(): Promise<void> {
-        this.dispatcherRef = this.dispatcher.register(this.onAction);
+    public get matrixClient(): MatrixClient | null {
+        return this._matrixClient;
+    }
 
-        // MatrixClientPeg can be undefined in tests because of circular dependencies with other stores
-        const matrixClient = MatrixClientPeg?.get();
+    public async start(matrixClient: MatrixClient | null): Promise<void> {
+        const oldClient = this._matrixClient;
+        this._matrixClient = matrixClient;
+
+        if (oldClient !== matrixClient) {
+            await this.onNotReady();
+        }
         if (matrixClient) {
-            this.matrixClient = matrixClient;
             await this.onReady();
         }
     }
@@ -38,8 +51,10 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         return this.matrixClient; // for external readonly access
     }
 
-    public useUnitTestClient(cli: MatrixClient): void {
-        this.matrixClient = cli;
+    // XXX: This method is intended only for use in tests.
+    public async useUnitTestClient(cli: MatrixClient): Promise<void> {
+        this._matrixClient = cli;
+        await this.onReady();
     }
 
     public destroy(): void {
@@ -74,13 +89,13 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
                 if (this.matrixClient) {
                     await this.onNotReady();
                 }
-                this.matrixClient = payload.matrixClient;
+                this._matrixClient = payload.matrixClient;
                 await this.onReady();
             }
         } else if (payload.action === "on_client_not_viable" || payload.action === Action.OnLoggedOut) {
             if (this.matrixClient) {
                 await this.onNotReady();
-                this.matrixClient = null;
+                this._matrixClient = null;
             }
         }
     };

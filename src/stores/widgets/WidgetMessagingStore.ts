@@ -27,7 +27,6 @@ export enum WidgetMessagingStoreEvent {
 export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetMessagingStore();
-        instance.start();
         return instance;
     })();
 
