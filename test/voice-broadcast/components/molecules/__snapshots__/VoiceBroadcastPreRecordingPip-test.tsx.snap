@@ -44,9 +44,21 @@ exports[`VoiceBroadcastPreRecordingPip when rendered should match the snapshot 1
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             Default Device
           </span>

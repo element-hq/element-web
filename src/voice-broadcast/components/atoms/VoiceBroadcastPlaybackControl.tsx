@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement } from "react";
+import PauseIcon from "@vector-im/compound-design-tokens/assets/web/icons/pause-solid";
+import PlayIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 
-import { Icon as PlayIcon } from "../../../../res/img/compound/play-16.svg";
-import { Icon as PauseIcon } from "../../../../res/img/compound/pause-12.svg";
 import { _t } from "../../../languageHandler";
 import { VoiceBroadcastControl, VoiceBroadcastPlaybackState } from "../..";
 

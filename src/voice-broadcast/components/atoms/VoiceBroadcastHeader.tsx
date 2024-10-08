@@ -10,10 +10,10 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import MicrophoneIcon from "@vector-im/compound-design-tokens/assets/web/icons/mic-on-solid";
 
 import { LiveBadge, VoiceBroadcastLiveness } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/compound/live-16px.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
 import { Icon as TimerIcon } from "../../../../res/img/compound/timer-16px.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
