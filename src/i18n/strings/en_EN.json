@@ -3025,7 +3025,6 @@
         "rageshake": "Send a bug report with logs",
         "rainbow": "Sends the given message coloured as a rainbow",
         "rainbowme": "Sends the given emote coloured as a rainbow",
-        "remakeolm": "Developer command: Discards the current outbound group session and sets up new Olm sessions",
         "remove": "Removes user with given id from this room",
         "roomavatar": "Changes the avatar of the current room",
         "roomname": "Sets the room name",

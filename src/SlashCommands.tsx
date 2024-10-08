@@ -737,34 +737,6 @@ export const Commands = [
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({
-        command: "remakeolm",
-        description: _td("slash_command|remakeolm"),
-        isEnabled: (cli) => {
-            return SettingsStore.getValue("developerMode") && !isCurrentLocalRoom(cli);
-        },
-        runFn: (cli, roomId) => {
-            try {
-                const room = cli.getRoom(roomId);
-
-                cli.forceDiscardSession(roomId);
-
-                return success(
-                    room?.getEncryptionTargetMembers().then((members) => {
-                        // noinspection JSIgnoredPromiseFromCall
-                        cli.crypto?.ensureOlmSessionsForUsers(
-                            members.map((m) => m.userId),
-                            true,
-                        );
-                    }),
-                );
-            } catch (e) {
-                return reject(e instanceof Error ? e.message : e);
-            }
-        },
-        category: CommandCategories.advanced,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
-    new Command({
         command: "rainbow",
         description: _td("slash_command|rainbow"),
         args: "<message>",
