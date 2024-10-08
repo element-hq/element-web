@@ -1381,22 +1381,16 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
             if (!users.includes(userId)) return;
             updateDevices();
         };
-        const onDeviceVerificationChanged = (_userId: string, deviceId: string): void => {
-            if (_userId !== userId) return;
-            updateDevices();
-        };
         const onUserTrustStatusChanged = (_userId: string, trustLevel: UserVerificationStatus): void => {
             if (_userId !== userId) return;
             updateDevices();
         };
         cli.on(CryptoEvent.DevicesUpdated, onDevicesUpdated);
-        cli.on(CryptoEvent.DeviceVerificationChanged, onDeviceVerificationChanged);
         cli.on(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
         // Handle being unmounted
         return () => {
             cancel = true;
             cli.removeListener(CryptoEvent.DevicesUpdated, onDevicesUpdated);
-            cli.removeListener(CryptoEvent.DeviceVerificationChanged, onDeviceVerificationChanged);
             cli.removeListener(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
         };
     }, [cli, userId]);

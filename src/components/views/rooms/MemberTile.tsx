@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { RoomMember, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
@@ -62,7 +61,6 @@ export default class MemberTile extends React.Component<IProps, IState> {
             });
             if (isRoomEncrypted) {
                 cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
-                cli.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
                 this.updateE2EStatus();
             } else {
                 // Listen for room to become encrypted
@@ -77,7 +75,6 @@ export default class MemberTile extends React.Component<IProps, IState> {
         if (cli) {
             cli.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
             cli.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
-            cli.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
         }
     }
 
@@ -96,11 +93,6 @@ export default class MemberTile extends React.Component<IProps, IState> {
     };
 
     private onUserTrustStatusChanged = (userId: string, trustStatus: UserVerificationStatus): void => {
-        if (userId !== this.props.member.userId) return;
-        this.updateE2EStatus();
-    };
-
-    private onDeviceVerificationChanged = (userId: string, deviceId: string, deviceInfo: DeviceInfo): void => {
         if (userId !== this.props.member.userId) return;
         this.updateE2EStatus();
     };

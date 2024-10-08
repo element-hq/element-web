@@ -85,9 +85,7 @@ export default class DeviceListener {
     public start(matrixClient: MatrixClient): void {
         this.running = true;
         this.client = matrixClient;
-        this.client.on(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
         this.client.on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
-        this.client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
         this.client.on(ClientEvent.AccountData, this.onAccountData);
@@ -109,9 +107,7 @@ export default class DeviceListener {
     public stop(): void {
         this.running = false;
         if (this.client) {
-            this.client.removeListener(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
             this.client.removeListener(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
-            this.client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             this.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
             this.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
             this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
@@ -170,7 +166,7 @@ export default class DeviceListener {
         return await getUserDeviceIds(cli, cli.getSafeUserId());
     }
 
-    private onWillUpdateDevices = async (users: string[], initialFetch?: boolean): Promise<void> => {
+    private onDevicesUpdated = async (users: string[], initialFetch?: boolean): Promise<void> => {
         if (!this.client) return;
         // If we didn't know about *any* devices before (ie. it's fresh login),
         // then they are all pre-existing devices, so ignore this and set the
@@ -180,19 +176,6 @@ export default class DeviceListener {
         const myUserId = this.client.getSafeUserId();
         if (users.includes(myUserId)) await this.ensureDeviceIdsAtStartPopulated();
 
-        // No need to do a recheck here: we just need to get a snapshot of our devices
-        // before we download any new ones.
-    };
-
-    private onDevicesUpdated = (users: string[]): void => {
-        if (!this.client) return;
-        if (!users.includes(this.client.getSafeUserId())) return;
-        this.recheck();
-    };
-
-    private onDeviceVerificationChanged = (userId: string): void => {
-        if (!this.client) return;
-        if (userId !== this.client.getUserId()) return;
         this.recheck();
     };
 
