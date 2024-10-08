@@ -32,9 +32,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -84,9 +96,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_12"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 4a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Zm8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Z"
+          />
+        </svg>
       </div>
       <div
         aria-label="30s forward"
@@ -162,9 +183,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a pause/not-live broadcast sh
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -198,9 +231,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a pause/not-live broadcast sh
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_16"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743Z"
+          />
+        </svg>
       </div>
       <div
         aria-label="30s forward"
@@ -288,9 +330,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -324,9 +378,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_12"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 4a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Zm8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Z"
+          />
+        </svg>
       </div>
       <div
         aria-label="30s forward"
@@ -402,9 +465,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -438,9 +513,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_12"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 4a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Zm8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Z"
+          />
+        </svg>
       </div>
       <div
         aria-label="30s forward"
@@ -516,9 +600,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast shou
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -560,9 +656,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast shou
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_12"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 4a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Zm8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V6a2 2 0 0 0-2-2Z"
+          />
+        </svg>
       </div>
       <div
         aria-label="30s forward"
@@ -638,9 +743,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
@@ -664,9 +781,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
         role="button"
         tabindex="0"
       >
-        <div
+        <svg
           class="mx_Icon mx_Icon_16"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743Z"
+          />
+        </svg>
       </div>
     </div>
     <input
@@ -732,9 +858,21 @@ exports[`VoiceBroadcastPlaybackBody when rendering an error broadcast should ren
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_16"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
           <span>
             @user:example.com
           </span>
