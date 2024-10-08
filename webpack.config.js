@@ -36,15 +36,6 @@ const cssThemes = {
     "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.pcss",
 };
 
-function getActiveThemes() {
-    // Default to `light` theme when the MATRIX_THEMES environment variable is not defined.
-    const theme = process.env.MATRIX_THEMES ?? "light";
-    return theme
-        .split(",")
-        .map((x) => x.trim())
-        .filter(Boolean);
-}
-
 // See docs/customisations.md
 let fileOverrides = {
     /* {[file: string]: string} */
@@ -128,19 +119,6 @@ module.exports = (env, argv) => {
     // directory, so we don't have to rely on an index.js or similar file existing.
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), "..", "src");
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), "..", "src");
-
-    const ACTIVE_THEMES = getActiveThemes();
-    function getThemesImports() {
-        const imports = ACTIVE_THEMES.map((t) => {
-            return cssThemes[`theme-${t}`].replace("./node_modules/", ""); // theme import path
-        });
-        const s = JSON.stringify(ACTIVE_THEMES);
-        return `
-            window.MX_insertedThemeStylesCounter = 0;
-            window.MX_DEV_ACTIVE_THEMES = (${s});
-            ${imports.map((i) => `import("${i}")`).join("\n")};
-        `;
-    }
 
     return {
         ...development,
@@ -598,8 +576,8 @@ module.exports = (env, argv) => {
 
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: "bundles/[name].css",
-                chunkFilename: "bundles/[name].css",
+                filename: "bundles/[fullhash]/[name].css",
+                chunkFilename: "bundles/[fullhash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
