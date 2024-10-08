@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import LeftCaretIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 
-import { Icon as LeftCaretIcon } from "../../../../../res/img/element-icons/caret-left.svg";
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 import { PollHistoryFilter } from "./types";

@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { DetailedHTMLProps, HTMLAttributes } from "react";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import AccessibleButton from "./AccessibleButton";
-import { Icon as CancelRounded } from "../../../../res/img/element-icons/cancel-rounded.svg";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     icon?: () => JSX.Element;
@@ -30,7 +30,7 @@ export const Tag: React.FC<IProps> = ({ icon, label, onDeleteClick, disabled = f
                     onClick={onDeleteClick}
                     disabled={disabled}
                 >
-                    <CancelRounded />
+                    <CloseIcon />
                 </AccessibleButton>
             )}
         </div>

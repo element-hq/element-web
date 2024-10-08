@@ -23,8 +23,8 @@ import {
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
+import ContextMenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
 import { Icon as ResendIcon } from "../../../../res/img/element-icons/retry.svg";

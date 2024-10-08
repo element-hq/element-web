@@ -16,6 +16,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -37,7 +38,6 @@ import { Icon as CollapseIcon } from "../../../../res/img/element-icons/minimise
 import { Icon as MaximiseIcon } from "../../../../res/img/element-icons/maximise-expand.svg";
 import { Icon as MinimiseIcon } from "../../../../res/img/element-icons/minus-button.svg";
 import { Icon as PopoutIcon } from "../../../../res/img/feather-customised/widget/external-link.svg";
-import { Icon as MenuIcon } from "../../../../res/img/element-icons/room/ellipsis.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -806,7 +806,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         ref={this.contextMenuButton}
                                         onClick={this.onContextMenuClick}
                                     >
-                                        <MenuIcon className="mx_Icon mx_Icon_12" />
+                                        <EllipsisIcon className="mx_Icon mx_Icon_12" />
                                     </ContextMenuButton>
                                 )}
                             </span>
