@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "./test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../src/MatrixClientPeg";
@@ -19,9 +19,14 @@ jest.useFakeTimers();
 const PegClass = Object.getPrototypeOf(peg).constructor;
 
 describe("MatrixClientPeg", () => {
+    let mockClient: MatrixJs.MatrixClient;
+
     beforeEach(() => {
         // stub out Logger.log which gets called a lot and clutters up the test output
         jest.spyOn(logger, "log").mockImplementation(() => {});
+
+        mockClient = stubClient();
+        jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
     });
 
     afterEach(() => {
@@ -33,7 +38,6 @@ describe("MatrixClientPeg", () => {
     });
 
     it("setJustRegisteredUserId", () => {
-        stubClient();
         (peg as any).matrixClient = peg.get();
         peg.setJustRegisteredUserId("@userId:matrix.org");
         expect(peg.safeGet().credentials.userId).toBe("@userId:matrix.org");
@@ -52,7 +56,6 @@ describe("MatrixClientPeg", () => {
     });
 
     it("setJustRegisteredUserId(null)", () => {
-        stubClient();
         (peg as any).matrixClient = peg.get();
         peg.setJustRegisteredUserId(null);
         expect(peg.currentUserIsJustRegistered()).toBe(false);
@@ -71,7 +74,6 @@ describe("MatrixClientPeg", () => {
         beforeEach(() => {
             // instantiate a MatrixClientPegClass instance, with a new MatrixClient
             testPeg = new PegClass();
-            fetchMockJest.get("http://example.com/_matrix/client/versions", {});
             testPeg.replaceUsingCreds({
                 accessToken: "SEKRET",
                 homeserverUrl: "http://example.com",
@@ -83,13 +85,10 @@ describe("MatrixClientPeg", () => {
         it("should initialise the rust crypto library by default", async () => {
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
-            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
-
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
-            expect(mockInitCrypto).not.toHaveBeenCalled();
-            expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+            expect(mockClient.initCrypto).not.toHaveBeenCalled();
+            expect(mockClient.initRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
 
             // we should have stashed the setting in the settings store
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
@@ -97,10 +96,9 @@ describe("MatrixClientPeg", () => {
 
         it("Should migrate existing login", async () => {
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
-            expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
+            expect(mockClient.initRustCrypto).toHaveBeenCalledTimes(1);
 
             // we should have stashed the setting in the settings store
             expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);

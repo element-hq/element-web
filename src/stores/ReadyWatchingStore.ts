@@ -29,6 +29,8 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         super();
 
         this.dispatcherRef = this.dispatcher.register(this.onAction);
+
+        ReadyWatchingStore.instances.push(this);
     }
 
     public get matrixClient(): MatrixClient | null {
