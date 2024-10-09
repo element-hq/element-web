@@ -66,15 +66,29 @@ export const SESSION_LOCK_CONSTANTS = {
  * @returns true if any instance is currently active
  */
 export function checkSessionLockFree(): boolean {
+    const prefixedLogger = logger.getChild(`checkSessionLockFree`);
+
     const lastPingTime = window.localStorage.getItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_PING);
     if (lastPingTime === null) {
         // no other holder
+        prefixedLogger.info("No other session has the lock");
         return true;
     }
 
+    const lockHolder = window.localStorage.getItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_OWNER);
+
     // see if it has expired
     const timeAgo = Date.now() - parseInt(lastPingTime);
-    return timeAgo > SESSION_LOCK_CONSTANTS.LOCK_EXPIRY_TIME_MS;
+
+    const remaining = SESSION_LOCK_CONSTANTS.LOCK_EXPIRY_TIME_MS - timeAgo;
+    if (remaining <= 0) {
+        // another session claimed the lock, but it is stale.
+        prefixedLogger.info(`Last ping (from ${lockHolder}) was ${timeAgo}ms ago: lock is free`);
+        return true;
+    }
+
+    prefixedLogger.info(`Last ping (from ${lockHolder}) was ${timeAgo}ms ago: lock is taken`);
+    return false;
 }
 
 /**
@@ -95,7 +109,7 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
     /** unique ID for this session */
     const sessionIdentifier = uuidv4();
 
-    const prefixedLogger = logger.withPrefix(`getSessionLock[${sessionIdentifier}]`);
+    const prefixedLogger = logger.getChild(`getSessionLock[${sessionIdentifier}]`);
 
     /** The ID of our regular task to service the lock.
      *
@@ -133,7 +147,7 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
             return 0;
         }
 
-        prefixedLogger.info(`Last ping (from ${lockHolder}) was ${timeAgo}ms ago, waiting`);
+        prefixedLogger.info(`Last ping (from ${lockHolder}) was ${timeAgo}ms ago, waiting ${remaining}ms`);
         return remaining;
     }
 
