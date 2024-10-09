@@ -194,7 +194,6 @@ describe("<LoginWithQR />", () => {
         });
 
         test("approve - no crypto", async () => {
-            (client as any).crypto = undefined;
             (client as any).getCrypto = () => undefined;
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));
