@@ -1519,7 +1519,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps> {
         // https://github.com/element-hq/compound/issues/294
         return (
             <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} />
+                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
             </Tooltip>
         );
     }
