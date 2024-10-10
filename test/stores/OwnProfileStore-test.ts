@@ -40,7 +40,7 @@ describe("OwnProfileStore", () => {
             displayname: "Display Name",
             avatar_url: "mxc://example.com/abc123",
         });
-        await ownProfileStore.useUnitTestClient(client);
+        await ownProfileStore.start();
 
         expect(onUpdate).toHaveBeenCalled();
         expect(ownProfileStore.displayName).toBe("Display Name");
@@ -54,7 +54,7 @@ describe("OwnProfileStore", () => {
                 errcode: "M_NOT_FOUND",
             }),
         );
-        await ownProfileStore.useUnitTestClient(client);
+        await ownProfileStore.start();
 
         expect(onUpdate).toHaveBeenCalled();
         expect(ownProfileStore.displayName).toBe(client.getSafeUserId());
@@ -69,7 +69,7 @@ describe("OwnProfileStore", () => {
             }),
         );
         try {
-            await ownProfileStore.useUnitTestClient(client);
+            await ownProfileStore.start();
         } catch (ignore) {}
 
         expect(onUpdate).not.toHaveBeenCalled();

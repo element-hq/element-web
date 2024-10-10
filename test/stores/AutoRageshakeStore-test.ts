@@ -47,7 +47,7 @@ describe("AutoRageshakeStore", () => {
 
         // @ts-ignore bypass private ctor for tests
         autoRageshakeStore = new AutoRageshakeStore();
-        autoRageshakeStore.useUnitTestClient(client);
+        autoRageshakeStore.start();
 
         utdEvent = mkEvent({
             event: true,

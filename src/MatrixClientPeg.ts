@@ -43,7 +43,6 @@ import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { Features } from "./settings/Settings";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
-import { ReadyWatchingStore } from "./stores/ReadyWatchingStore.ts";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -310,7 +309,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
         MatrixClientBackedController.matrixClient = this.matrixClient;
-        ReadyWatchingStore.matrixClient = this.matrixClient;
 
         return opts;
     }

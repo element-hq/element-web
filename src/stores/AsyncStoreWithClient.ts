@@ -36,13 +36,8 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         })(dispatcher);
     }
 
-    protected async start(matrixClient: MatrixClient | null): Promise<void> {
-        await this.readyStore.start(matrixClient);
-    }
-
-    // XXX: This method is intended only for use in tests.
-    public async useUnitTestClient(cli: MatrixClient): Promise<void> {
-        await this.readyStore.useUnitTestClient(cli);
+    public async start(): Promise<void> {
+        await this.readyStore.start();
     }
 
     public get matrixClient(): MatrixClient | null {

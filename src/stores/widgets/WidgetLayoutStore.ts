@@ -60,6 +60,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     public static get instance(): WidgetLayoutStore {
         if (!this.internalInstance) {
             this.internalInstance = new WidgetLayoutStore();
+            this.internalInstance.start();
         }
         return this.internalInstance;
     }
