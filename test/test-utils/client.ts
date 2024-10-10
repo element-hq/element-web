@@ -144,7 +144,6 @@ export const mockClientMethodsCrypto = (): Partial<
     isCrossSigningReady: jest.fn(),
     isKeyBackupKeyStored: jest.fn(),
     getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
-    getStoredCrossSigningForUser: jest.fn(),
     getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     secretStorage: { hasKey: jest.fn() },
     getCrypto: jest.fn().mockReturnValue({
