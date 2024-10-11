@@ -20,6 +20,14 @@ import { Client } from "../pages/client";
  * @param client Client instance that can be user or bot
  * @param roomId room id to find room and check
  * @param predicate defines condition that is used to check the room state
+ *
+ * FIXME this does not do what it is supposed to do, and I think it is unfixable.
+ *   `page.exposeFunction` adds a function which returns a Promise. `window[predicateId](room)` therefore
+ *   always returns a truthy value (a Promise).  But even if you fix that: as far as I can tell, the Room is
+ *   just passed to the callback function as a JSON blob: you cannot actually call any methods on it, so the
+ *   callback is useless.
+ *
+ * @deprecated This function is broken.
  */
 export async function waitForRoom(
     page: Page,

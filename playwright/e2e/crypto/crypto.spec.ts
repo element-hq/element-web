@@ -43,6 +43,7 @@ const testMessages = async (page: Page, bob: Bot, bobRoomId: string) => {
 };
 
 const bobJoin = async (page: Page, bob: Bot) => {
+    // Wait for Bob to get the invite
     await bob.evaluate(async (cli) => {
         const bobRooms = cli.getRooms();
         if (!bobRooms.length) {
@@ -55,9 +56,13 @@ const bobJoin = async (page: Page, bob: Bot) => {
             });
         }
     });
-    const roomId = await bob.joinRoomByName("Alice");
 
+    const roomId = await bob.joinRoomByName("Alice");
     await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+    // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+    await bob.awaitRoomMembership(roomId);
+
     return roomId;
 };
 
