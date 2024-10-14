@@ -169,6 +169,15 @@ describe("EventTile", () => {
         });
     });
 
+    describe("EventTile renderingType: File", () => {
+        it("should not display the pinned message badge", async () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            getComponent({}, TimelineRenderingType.File);
+
+            expect(screen.queryByText("Pinned message")).not.toBeInTheDocument();
+        });
+    });
+
     describe("EventTile renderingType: default", () => {
         it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
             "should display the pinned message badge",

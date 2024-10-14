@@ -20,70 +20,51 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_RoomView_MessageList {
         width: 100%;
-
-        h2 {
-            display: none;
-        }
+        gap: var(--cpd-space-6x);
     }
 
     /* FIXME: rather than having EventTile's default CSS be for MessagePanel,
    we should make EventTile a base CSS class and customise it specifically
    for usage in {Message,File,Notification}Panel. */
 
-    .mx_EventTile_avatar {
-        display: none;
-    }
-
     /* Overrides for the attachment body tiles */
     .mx_EventTile {
         word-break: break-word;
-        margin-top: 10px;
         padding-top: 0;
+
+        & + .mx_EventTile {
+            border-top: 1px solid var(--cpd-color-gray-400);
+            padding-top: var(--cpd-space-6x);
+        }
 
         .mx_EventTile_line {
             padding-inline-start: 0;
         }
 
-        .mx_MFileBody {
-            line-height: 2.4rem;
-        }
-
         .mx_MFileBody_download {
-            padding-top: $spacing-8;
-            display: flex;
-            justify-content: space-between;
-            font: var(--cpd-font-body-md-regular);
-            color: $event-timestamp-color;
-
-            .mx_MImageBody_size {
-                font: var(--cpd-font-body-md-regular);
-                text-align: right;
-                white-space: nowrap;
-            }
-        }
-
-        .mx_MFileBody_downloadLink {
-            flex: 1 1 auto;
-            color: $light-fg-color;
+            margin-top: var(--cpd-space-4x);
         }
 
         /* anchor link as wrapper */
         .mx_EventTile_senderDetailsLink {
             text-decoration: none;
+            margin-bottom: var(--cpd-space-1x);
+            display: block;
 
             .mx_EventTile_senderDetails {
                 display: flex;
-                justify-content: space-between;
                 margin-top: -2px;
+                gap: var(--cpd-space-2x);
+                align-items: center;
 
                 .mx_DisambiguatedProfile {
                     color: $event-timestamp-color; /* for ellipsis. Color of displayName and mxid is inherited */
                 }
 
                 .mx_MessageTimestamp {
-                    text-align: right;
-                    color: $secondary-content;
-                    font: var(--cpd-font-body-sm-regular);
+                    margin-left: auto;
+                    font: var(--cpd-font-body-xs-regular);
+                    color: var(--cpd-color-text-secondary);
                 }
             }
         }

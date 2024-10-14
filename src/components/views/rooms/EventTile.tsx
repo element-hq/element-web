@@ -1024,6 +1024,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;
             needsSenderProfile = false;
+        } else if (this.context.timelineRenderingType === TimelineRenderingType.File) {
+            avatarSize = "20px";
+            needsSenderProfile = true;
         } else {
             avatarSize = "30px";
             needsSenderProfile = true;
@@ -1351,6 +1354,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-scroll-tokens": scrollToken,
                     },
                     [
+                        <a
+                            className="mx_EventTile_senderDetailsLink"
+                            key="mx_EventTile_senderDetailsLink"
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                        >
+                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                                {avatar}
+                                {sender}
+                                {timestamp}
+                            </div>
+                        </a>,
                         <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
                             {this.renderContextMenu()}
                             {renderTile(
@@ -1371,17 +1386,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 this.context.showHiddenEvents,
                             )}
                         </div>,
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            key="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                                {sender}
-                                {timestamp}
-                            </div>
-                        </a>,
                     ],
                 );
             }

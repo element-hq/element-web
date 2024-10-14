@@ -477,6 +477,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public readMarkerForEvent(eventId: string, isLastEvent: boolean): ReactNode {
+        if (this.context.timelineRenderingType === TimelineRenderingType.File) return null;
+
         const visible = !isLastEvent && this.props.readMarkerVisible;
 
         if (this.props.readMarkerEventId === eventId) {
