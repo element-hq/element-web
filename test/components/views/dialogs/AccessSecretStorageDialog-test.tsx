@@ -10,15 +10,14 @@ import React, { ComponentProps } from "react";
 import { SecretStorage, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Mocked } from "jest-mock";
 
-import { getMockClientWithEventEmitter, mockPlatformPeg } from "../../../test-utils";
+import { mockPlatformPeg, stubClient } from "../../../test-utils";
 import AccessSecretStorageDialog from "../../../../src/components/views/dialogs/security/AccessSecretStorageDialog";
 
 const securityKey = "EsTc WKmb ivvk jLS7 Y1NH 5CcQ mP1E JJwj B3Fd pFWm t4Dp dbyu";
 
 describe("AccessSecretStorageDialog", () => {
-    let mockClient: Mocked<MatrixClient>;
+    let mockClient: MatrixClient;
 
     const defaultProps: ComponentProps<typeof AccessSecretStorageDialog> = {
         keyInfo: {} as any,
@@ -57,13 +56,11 @@ describe("AccessSecretStorageDialog", () => {
     });
 
     beforeEach(() => {
-        mockClient = getMockClientWithEventEmitter({
-            checkSecretStorageKey: jest.fn(),
-        });
+        mockClient = stubClient();
     });
 
     it("Closes the dialog when the form is submitted with a valid key", async () => {
-        mockClient.checkSecretStorageKey.mockResolvedValue(true);
+        jest.spyOn(mockClient.secretStorage, "checkKey").mockResolvedValue(true);
 
         const onFinished = jest.fn();
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
@@ -85,7 +82,7 @@ describe("AccessSecretStorageDialog", () => {
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
         renderComponent({ onFinished, checkPrivateKey });
 
-        mockClient.checkSecretStorageKey.mockImplementation(() => {
+        jest.spyOn(mockClient.secretStorage, "checkKey").mockImplementation(() => {
             throw new Error("invalid key");
         });
 
