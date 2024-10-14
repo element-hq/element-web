@@ -16,7 +16,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import MenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 import MaximiseIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
 import CollapseIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse";
 
@@ -806,7 +806,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         ref={this.contextMenuButton}
                                         onClick={this.onContextMenuClick}
                                     >
-                                        <MenuIcon className="mx_Icon mx_Icon_12" />
+                                        <EllipsisIcon className="mx_Icon mx_Icon_12" />
                                     </ContextMenuButton>
                                 )}
                             </span>
