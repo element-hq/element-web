@@ -3272,6 +3272,7 @@
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
+        "e2e_state": "State of the end-to-end encryption",
         "edits": {
             "tooltip_label": "Edited at %(date)s. Click to view edits.",
             "tooltip_sub": "Click to view edits",

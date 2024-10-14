@@ -18,7 +18,7 @@ env:
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 
@@ -67,7 +67,7 @@ jobs:
 
     rethemendex_lint:
         name: "Rethemendex Check"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 
@@ -77,7 +77,7 @@ jobs:
 
     js_lint:
         name: "ESLint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 
@@ -95,7 +95,7 @@ jobs:
 
     style_lint:
         name: "Style Lint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 
@@ -113,7 +113,7 @@ jobs:
 
     workflow_lint:
         name: "Workflow Lint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 
@@ -131,7 +131,7 @@ jobs:
 
     analyse_dead_code:
         name: "Analyse Dead Code"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
 

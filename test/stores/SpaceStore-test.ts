@@ -1428,7 +1428,7 @@ describe("SpaceStore", () => {
 
         it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
             // Given a store
-            const store = SpaceStore.testInstance(client);
+            const store = SpaceStore.testInstance();
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1478,7 +1478,7 @@ describe("SpaceStore", () => {
 
         it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
             // Given a store
-            const store = SpaceStore.testInstance(client);
+            const store = SpaceStore.testInstance();
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
 

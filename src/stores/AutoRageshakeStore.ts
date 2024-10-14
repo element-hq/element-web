@@ -46,7 +46,9 @@ interface IState {
  */
 export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
-        return new AutoRageshakeStore();
+        const instance = new AutoRageshakeStore();
+        instance.start();
+        return instance;
     })();
 
     private constructor() {

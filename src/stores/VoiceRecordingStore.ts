@@ -30,6 +30,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     public static get instance(): VoiceRecordingStore {
         if (!this.internalInstance) {
             this.internalInstance = new VoiceRecordingStore();
+            this.internalInstance.start();
         }
         return this.internalInstance;
     }

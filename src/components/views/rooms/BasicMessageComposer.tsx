@@ -201,9 +201,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // so xd will not match if the string was "mixd 123456"
         // and we are lookinh at xd 123456 part of the string
         if (emoticonMatch && (n >= 0 || emoticonMatch.index !== 0)) {
-            const query = emoticonMatch[1].replace("-", "");
-            // try both exact match and lower-case, this means that xd won't match xD but :P will match :p
-            const data = EMOTICON_TO_EMOJI.get(query) || EMOTICON_TO_EMOJI.get(query.toLowerCase());
+            const query = emoticonMatch[1];
+            // variations of plaintext emoitcons(E.g. :P vs :p vs :-P) are handled upstream by the emojibase-bindings library
+            const data = EMOTICON_TO_EMOJI.get(query);
 
             if (data) {
                 const { partCreator } = model;

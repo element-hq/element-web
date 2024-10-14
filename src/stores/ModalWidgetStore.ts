@@ -24,6 +24,7 @@ interface IState {
 export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new ModalWidgetStore();
+        instance.start();
         return instance;
     })();
     private modalInstance: IHandle<typeof ModalWidgetDialog> | null = null;

@@ -290,6 +290,54 @@ export class Client {
     }
 
     /**
+     * Wait for the client to have specific membership of a given room
+     *
+     * This is often useful after joining a room, when we need to wait for the sync loop to catch up.
+     *
+     * Times out with an error after 1 second.
+     *
+     * @param roomId - ID of the room to check
+     * @param membership - required membership.
+     */
+    public async awaitRoomMembership(roomId: string, membership: string = "join") {
+        await this.evaluate(
+            (cli: MatrixClient, { roomId, membership }) => {
+                const isReady = () => {
+                    // Fetch the room on each check, because we get a different instance before and after the join arrives.
+                    const room = cli.getRoom(roomId);
+                    const myMembership = room?.getMyMembership();
+                    // @ts-ignore access to private field "logger"
+                    cli.logger.info(`waiting for room ${roomId}: membership now ${myMembership}`);
+                    return myMembership === membership;
+                };
+                if (isReady()) return;
+
+                const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+                    const room = cli.getRoom(roomId);
+                    const myMembership = room?.getMyMembership();
+                    throw new Error(
+                        `Timeout waiting for room ${roomId} membership (now '${myMembership}', wanted '${membership}')`,
+                    );
+                });
+
+                const readyPromise = new Promise<void>((resolve) => {
+                    async function onEvent() {
+                        if (isReady()) {
+                            cli.removeListener(window.matrixcs.ClientEvent.Event, onEvent);
+                            resolve();
+                        }
+                    }
+
+                    cli.on(window.matrixcs.ClientEvent.Event, onEvent);
+                });
+
+                return Promise.race([timeoutPromise, readyPromise]);
+            },
+            { roomId, membership },
+        );
+    }
+
+    /**
      * @param {MatrixEvent} event
      * @param {ReceiptType} receiptType
      * @param {boolean} unthreaded

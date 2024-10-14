@@ -31,6 +31,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
     public static get instance(): CallStore {
         if (!this._instance) {
             this._instance = new CallStore();
+            this._instance.start();
         }
         return this._instance;
     }

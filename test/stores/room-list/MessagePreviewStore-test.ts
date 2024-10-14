@@ -80,7 +80,7 @@ describe("MessagePreviewStore", () => {
         mocked(client.getRoom).mockReturnValue(room);
 
         store = MessagePreviewStore.testInstance();
-        await store.useUnitTestClient(client);
+        await store.start();
         await setupAsyncStoreWithClient(store, client);
     });
 
