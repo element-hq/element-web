@@ -29,7 +29,7 @@ env:
 jobs:
     jest:
         name: Jest
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         strategy:
             fail-fast: false
             matrix:
@@ -93,7 +93,7 @@ jobs:
         name: jest-tests
         needs: jest
         if: always()
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
               run: exit 1
@@ -111,7 +111,7 @@ jobs:
 
     app-tests:
         name: Element Web Integration Tests
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v4
               with:
