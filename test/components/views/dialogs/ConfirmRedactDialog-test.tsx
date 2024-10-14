@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
-import { screen } from "@testing-library/react";
+import { screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { flushPromises, mkEvent, stubClient } from "../../../test-utils";

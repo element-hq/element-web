@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, RefObject } from "react";
 import { mocked } from "jest-mock";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
 
 import { Playback } from "../../../../src/audio/Playback";
 import { createTestPlayback } from "../../../test-utils/audio";

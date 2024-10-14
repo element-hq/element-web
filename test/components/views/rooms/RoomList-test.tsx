@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { cleanup, queryByRole, render, screen, within } from "@testing-library/react";
+import { cleanup, queryByRole, render, screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";

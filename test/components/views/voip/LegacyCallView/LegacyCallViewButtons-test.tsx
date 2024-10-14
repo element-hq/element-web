@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import LegacyCallViewButtons from "../../../../../src/components/views/voip/LegacyCallView/LegacyCallViewButtons";

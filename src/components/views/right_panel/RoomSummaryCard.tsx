@@ -373,9 +373,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
                     Icon={FavouriteIcon}
                     label={_t("room|context_menu|favourite")}
                     checked={isFavorite}
-                    onChange={() => tagRoom(room, DefaultTagID.Favourite)}
-                    // XXX: https://github.com/element-hq/compound/issues/288
-                    onSelect={() => {}}
+                    onSelect={() => tagRoom(room, DefaultTagID.Favourite)}
                 />
                 <MenuItem
                     Icon={UserAddIcon}

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render } from "jest-matrix-react";
 
 import LearnMore from "../../../../src/components/views/elements/LearnMore";
 import Modal from "../../../../src/Modal";

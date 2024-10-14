@@ -21,7 +21,7 @@ import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 import fetchMock from "fetch-mock-jest";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 
 import LegacyCallHandler, {
     AudioID,

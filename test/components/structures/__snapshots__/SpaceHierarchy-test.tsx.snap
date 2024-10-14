@@ -393,6 +393,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             Join
           </div>
           <span
+            aria-labelledby="floating-ui-9"
             tabindex="0"
           >
             <span

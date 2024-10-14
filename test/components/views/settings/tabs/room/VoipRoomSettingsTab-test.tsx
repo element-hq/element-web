@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, render, RenderResult, waitFor } from "jest-matrix-react";
 import { MatrixClient, Room, MatrixEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { mkStubRoom, stubClient } from "../../../../../test-utils";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventTimeline, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { render, RenderOptions } from "@testing-library/react";
+import { render, RenderOptions } from "jest-matrix-react";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../src/settings/SettingsStore";

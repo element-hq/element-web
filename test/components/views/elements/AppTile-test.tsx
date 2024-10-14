@@ -11,7 +11,7 @@ import { jest } from "@jest/globals";
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
-import { act, render, RenderResult } from "@testing-library/react";
+import { act, render, RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { SpiedFunction } from "jest-mock";
 import {

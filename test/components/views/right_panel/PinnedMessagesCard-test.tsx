@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, act, RenderResult, waitForElementToBeRemoved, screen } from "@testing-library/react";
+import { render, act, RenderResult, waitForElementToBeRemoved, screen, waitFor } from "jest-matrix-react";
 import { mocked, MockedObject } from "jest-mock";
 import {
     MatrixEvent,
@@ -192,7 +192,7 @@ describe("<PinnedMessagesCard />", () => {
     it("should show two pinned messages", async () => {
         const { asFragment } = await initPinnedMessagesCard([pin1], [pin2]);
 
-        expect(screen.queryAllByRole("listitem")).toHaveLength(2);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(2));
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -208,36 +208,36 @@ describe("<PinnedMessagesCard />", () => {
         );
         await initPinnedMessagesCard(events, []);
 
-        expect(screen.queryAllByRole("listitem")).toHaveLength(100);
-    });
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(100));
+    }, 15000);
 
     it("should updates when messages are pinned", async () => {
         // Start with nothing pinned
         const { addLocalPinEvent, addNonLocalPinEvent } = await initPinnedMessagesCard([], []);
 
-        expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(0));
 
         // Pin the first message
         await addLocalPinEvent(pin1);
-        expect(screen.getAllByRole("listitem")).toHaveLength(1);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(1));
 
         // Pin the second message
         await addNonLocalPinEvent(pin2);
-        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(2));
     });
 
     it("should updates when messages are unpinned", async () => {
         // Start with two pins
         const { removeLastLocalPinEvent, removeLastNonLocalPinEvent } = await initPinnedMessagesCard([pin1], [pin2]);
-        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(2));
 
         // Unpin the first message
         await removeLastLocalPinEvent();
-        expect(screen.getAllByRole("listitem")).toHaveLength(1);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(1));
 
         // Unpin the second message
         await removeLastNonLocalPinEvent();
-        expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+        await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(0));
     });
 
     it("should display an edited pinned event", async () => {

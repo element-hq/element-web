@@ -205,7 +205,7 @@ export default function RoomHeader({
     );
     const closeLobbyButton = (
         <Tooltip label={_t("voip|close_lobby")}>
-            <IconButton onClick={toggleCall} aria-label={_t("voip|close_lobby")}>
+            <IconButton onClick={toggleCall}>
                 <CloseCallIcon />
             </IconButton>
         </Tooltip>

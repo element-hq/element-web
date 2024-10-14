@@ -61,7 +61,7 @@ export default class MStickerBody extends MImageBody {
 
         return {
             placement: "right",
-            label: content.body,
+            description: content.body,
         };
     }
 

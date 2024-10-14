@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { act, render } from "jest-matrix-react";
 
 import { tooltipifyLinks } from "../../src/utils/tooltipify";
 import PlatformPeg from "../../src/PlatformPeg";
@@ -53,8 +53,8 @@ describe("tooltipify", () => {
         expect(root.outerHTML).toEqual(originalHtml);
     });
 
-    it("does not re-wrap if called multiple times", () => {
-        const { container: root } = render(
+    it("does not re-wrap if called multiple times", async () => {
+        const { container: root, unmount } = render(
             <div>
                 <a href="/foo">click</a>
             </div>,
@@ -69,5 +69,8 @@ describe("tooltipify", () => {
         expect(anchor?.getAttribute("href")).toEqual("/foo");
         const tooltip = anchor!.querySelector(".mx_TextWithTooltip_target");
         expect(tooltip).toBeDefined();
+        await act(async () => {
+            unmount();
+        });
     });
 });

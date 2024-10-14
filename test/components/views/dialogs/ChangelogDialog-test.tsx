@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 
 import ChangelogDialog from "../../../../src/components/views/dialogs/ChangelogDialog";
 

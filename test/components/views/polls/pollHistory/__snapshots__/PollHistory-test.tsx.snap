@@ -82,6 +82,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
+              aria-labelledby="floating-ui-10"
               class="mx_PollListItem_content"
             >
               <span>
@@ -106,6 +107,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
+              aria-labelledby="floating-ui-16"
               class="mx_PollListItem_content"
             >
               <span>

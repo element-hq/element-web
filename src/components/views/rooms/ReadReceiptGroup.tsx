@@ -211,7 +211,7 @@ export function ReadReceiptPerson({
     onAfterClick,
 }: ReadReceiptPersonProps): JSX.Element {
     return (
-        <Tooltip label={roomMember?.rawDisplayName ?? userId} caption={userId} placement="top">
+        <Tooltip description={roomMember?.rawDisplayName ?? userId} caption={userId} placement="top">
             <div>
                 <MenuItem
                     className="mx_ReadReceiptGroup_person"

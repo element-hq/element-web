@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, waitFor, screen } from "@testing-library/react";
+import { render, waitFor, screen } from "jest-matrix-react";
 import {
     ReceiptType,
     EventTimelineSet,
@@ -399,7 +399,7 @@ describe("TimelinePanel", () => {
         setupPagination(client, timeline, eventsPage1, null);
 
         await withScrollPanelMountSpy(async (mountSpy) => {
-            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />, {});
+            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />);
 
             await waitFor(() => expectEvents(container, [events[1]]));
 

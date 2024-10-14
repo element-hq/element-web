@@ -16,7 +16,7 @@ exports[`DecoratedRoomAvatar shows an avatar with globe icon and tooltip for pub
       r
     </span>
     <div
-      aria-describedby="floating-ui-2"
+      aria-labelledby="floating-ui-1"
       class="mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_globe"
       tabindex="0"
     />
@@ -40,7 +40,7 @@ exports[`DecoratedRoomAvatar shows the presence indicator in a DM room that also
       r
     </span>
     <div
-      aria-describedby="floating-ui-8"
+      aria-labelledby="floating-ui-6"
       class="mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_online"
       tabindex="0"
     />

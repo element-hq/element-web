@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import ImageView from "../../../../src/components/views/elements/ImageView";
 

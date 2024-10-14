@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor, act, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, act, fireEvent } from "jest-matrix-react";
 import { AuthType } from "matrix-js-sdk/src/interactive-auth";
 import userEvent from "@testing-library/user-event";
 

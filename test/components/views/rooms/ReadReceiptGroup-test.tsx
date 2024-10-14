@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
@@ -113,7 +113,8 @@ describe("ReadReceiptGroup", () => {
 
             await userEvent.hover(screen.getByRole("menuitem"));
             await waitFor(() => {
-                const tooltip = screen.getByRole("tooltip", { name: member.rawDisplayName });
+                const tooltip = screen.getByRole("tooltip");
+                expect(tooltip.textContent).toMatch(new RegExp(member.rawDisplayName));
                 expect(tooltip).toMatchSnapshot();
             });
         });

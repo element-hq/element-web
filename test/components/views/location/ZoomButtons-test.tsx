@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import * as maplibregl from "maplibre-gl";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 
 import ZoomButtons from "../../../../src/components/views/location/ZoomButtons";
 

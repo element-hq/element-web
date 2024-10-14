@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { FormattingFunctions } from "@vector-im/matrix-wysiwyg";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 

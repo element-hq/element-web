@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render } from "jest-matrix-react";
 
 import { FilterTabGroup } from "../../../../src/components/views/elements/FilterTabGroup";
 

@@ -19,7 +19,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import sanitizeHtml from "sanitize-html";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 
 import SpotlightDialog from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { Filter } from "../../../../src/components/views/dialogs/spotlight/Filter";

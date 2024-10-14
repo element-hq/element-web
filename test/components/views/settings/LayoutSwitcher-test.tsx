@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import { LayoutSwitcher } from "../../../../src/components/views/settings/LayoutSwitcher";

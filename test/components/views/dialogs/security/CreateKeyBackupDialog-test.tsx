@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
 import { mocked } from "jest-mock";
 

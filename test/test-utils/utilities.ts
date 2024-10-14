@@ -188,7 +188,7 @@ export const waitEnoughCyclesForModal = async ({
 
 /**
  * A horrible hack necessary to make sure modals don't leak and pollute tests.
- * `@testing-library/react` automatic cleanup function does not pick up the async modal
+ * `jest-matrix-react` automatic cleanup function does not pick up the async modal
  * rendering and the modals don't unmount when the component unmounts. We should strive
  * to fix this.
  */

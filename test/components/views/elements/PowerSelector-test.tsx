@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import PowerSelector from "../../../../src/components/views/elements/PowerSelector";

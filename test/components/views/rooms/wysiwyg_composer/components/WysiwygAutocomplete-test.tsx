@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import "@testing-library/jest-dom";
 import React, { createRef } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../../src/contexts/RoomContext";

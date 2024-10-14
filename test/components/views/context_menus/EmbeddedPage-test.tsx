@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import { _t } from "../../../../src/languageHandler";

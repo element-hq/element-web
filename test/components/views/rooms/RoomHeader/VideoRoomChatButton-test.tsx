@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { MockedObject } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import { VideoRoomChatButton } from "../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
 import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
@@ -71,7 +71,7 @@ describe("<VideoRoomChatButton />", () => {
         const room = makeRoom();
         getComponent(room);
 
-        fireEvent.click(screen.getByLabelText("Chat"));
+        fireEvent.click(screen.getByRole("button", { name: "Chat" }));
 
         expect(sdkContext.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.Timeline);
     });
@@ -82,8 +82,8 @@ describe("<VideoRoomChatButton />", () => {
         getComponent(room);
 
         // snapshot includes `data-indicator` attribute
-        expect(screen.getByLabelText("Chat")).toMatchSnapshot();
-        expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Chat" })).toMatchSnapshot();
+        expect(screen.getByRole("button", { name: "Chat" }).hasAttribute("data-indicator")).toBeTruthy();
     });
 
     it("adds unread marker when room notification state changes to unread", async () => {
@@ -93,14 +93,16 @@ describe("<VideoRoomChatButton />", () => {
         getComponent(room);
 
         // no unread marker
-        expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeFalsy();
+        expect(screen.getByRole("button", { name: "Chat" }).hasAttribute("data-indicator")).toBeFalsy();
 
         // @ts-ignore ugly mocking
         notificationState._level = NotificationLevel.Highlight;
         notificationState.emit(NotificationStateEvents.Update);
 
         // unread marker
-        await waitFor(() => expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy());
+        await waitFor(() =>
+            expect(screen.getByRole("button", { name: "Chat" }).hasAttribute("data-indicator")).toBeTruthy(),
+        );
     });
 
     it("clears unread marker when room notification state changes to read", async () => {
@@ -110,13 +112,15 @@ describe("<VideoRoomChatButton />", () => {
         getComponent(room);
 
         // unread marker
-        expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Chat" }).hasAttribute("data-indicator")).toBeTruthy();
 
         // @ts-ignore ugly mocking
         notificationState._level = NotificationLevel.None;
         notificationState.emit(NotificationStateEvents.Update);
 
         // unread marker cleared
-        await waitFor(() => expect(screen.getByLabelText("Chat").hasAttribute("data-indicator")).toBeFalsy());
+        await waitFor(() =>
+            expect(screen.getByRole("button", { name: "Chat" }).hasAttribute("data-indicator")).toBeFalsy(),
+        );
     });
 });

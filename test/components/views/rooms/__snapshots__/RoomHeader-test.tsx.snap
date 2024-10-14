@@ -47,7 +47,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
     >
       <button
-        aria-label="Close lobby"
+        aria-labelledby="floating-ui-1180"
         class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -73,6 +73,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       <button
         aria-disabled="true"
         aria-label="There's no one here to call"
+        aria-labelledby="floating-ui-1185"
         class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -97,6 +98,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Room info"
+        aria-labelledby="floating-ui-1190"
         class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -121,6 +123,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Threads"
+        aria-labelledby="floating-ui-1195"
         class="_icon-button_bh2qc_17"
         role="button"
         style="--cpd-icon-button-size: 32px;"

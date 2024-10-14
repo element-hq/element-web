@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { MatrixEvent, Poll, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 
 import { PollListItemEnded } from "../../../../../src/components/views/polls/pollHistory/PollListItemEnded";

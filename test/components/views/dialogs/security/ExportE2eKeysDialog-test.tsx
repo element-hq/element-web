@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { screen, fireEvent, render, waitFor } from "@testing-library/react";
+import { screen, fireEvent, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Crypto, IMegolmSessionData } from "matrix-js-sdk/src/matrix";
 

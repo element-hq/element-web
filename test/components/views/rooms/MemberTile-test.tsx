@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { MatrixClient, RoomMember, Device } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
@@ -43,9 +43,7 @@ describe("MemberTile", () => {
         expect(container).toMatchSnapshot();
         await waitFor(async () => {
             await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
-            expect(
-                screen.getByRole("tooltip", { name: "This user has not verified all of their sessions." }),
-            ).toBeInTheDocument();
+            expect(screen.getByText("This user has not verified all of their sessions.")).toBeInTheDocument();
         });
     });
 
@@ -68,9 +66,7 @@ describe("MemberTile", () => {
         await waitFor(async () => {
             await userEvent.hover(container.querySelector(".mx_E2EIcon")!);
             expect(
-                screen.getByRole("tooltip", {
-                    name: "You have verified this user. This user has verified all of their sessions.",
-                }),
+                screen.getByText("You have verified this user. This user has verified all of their sessions."),
             ).toBeInTheDocument();
         });
     });

@@ -15,7 +15,10 @@
         "declaration": true,
         "jsx": "react",
         "lib": ["es2022", "dom", "dom.iterable"],
-        "strict": true
+        "strict": true,
+        "paths": {
+            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"]
+        }
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",

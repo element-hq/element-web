@@ -33,7 +33,7 @@ import {
     waitFor,
     waitForElementToBeRemoved,
     within,
-} from "@testing-library/react";
+} from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 

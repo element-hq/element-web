@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { JoinRule, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
@@ -61,7 +61,7 @@ describe("DecoratedRoomAvatar", () => {
 
         // wait for the tooltip to open
         const tooltip = await waitFor(() => {
-            const tooltip = document.getElementById(globe.getAttribute("aria-describedby")!);
+            const tooltip = document.getElementById(globe.getAttribute("aria-labelledby")!);
             expect(tooltip).toBeVisible();
             return tooltip;
         });
@@ -88,7 +88,7 @@ describe("DecoratedRoomAvatar", () => {
 
         // wait for the tooltip to open
         const tooltip = await waitFor(() => {
-            const tooltip = document.getElementById(presence.getAttribute("aria-describedby")!);
+            const tooltip = document.getElementById(presence.getAttribute("aria-labelledby")!);
             expect(tooltip).toBeVisible();
             return tooltip;
         });

@@ -121,7 +121,7 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
       </div>
     </button>
     <button
-      class="_button_zt6rp_17 mx_PinnedMessageBanner_actions"
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -415,7 +415,7 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
       </div>
     </button>
     <button
-      class="_button_zt6rp_17 mx_PinnedMessageBanner_actions"
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -493,7 +493,7 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
       </div>
     </button>
     <button
-      class="_button_zt6rp_17 mx_PinnedMessageBanner_actions"
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"

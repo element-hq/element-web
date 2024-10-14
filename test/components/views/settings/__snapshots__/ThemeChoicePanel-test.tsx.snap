@@ -240,6 +240,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </span>
             <button
               aria-label="Delete"
+              aria-labelledby="floating-ui-24"
               class="_icon-button_bh2qc_17 _destructive_bh2qc_83"
               role="button"
               style="--cpd-icon-button-size: 32px;"
@@ -516,6 +517,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </span>
             <button
               aria-label="Delete"
+              aria-labelledby="floating-ui-1"
               class="_icon-button_bh2qc_17 _destructive_bh2qc_83"
               role="button"
               style="--cpd-icon-button-size: 32px;"

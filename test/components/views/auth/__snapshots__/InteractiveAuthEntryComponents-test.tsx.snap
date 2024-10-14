@@ -46,7 +46,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
     >
       <button
-        class="_button_zt6rp_17 mx_Dialog_nonDialogButton _has-icon_zt6rp_61"
+        class="_button_i91xf_17 mx_Dialog_nonDialogButton _has-icon_i91xf_66"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -70,7 +70,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
         Go to your account
       </button>
       <button
-        class="_button_zt6rp_17 mx_Dialog_nonDialogButton"
+        class="_button_i91xf_17 mx_Dialog_nonDialogButton"
         data-kind="secondary"
         data-size="lg"
         role="button"

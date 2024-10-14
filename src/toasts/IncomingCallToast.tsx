@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { Button, Tooltip } from "@vector-im/compound-web";
+import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 
 import { _t } from "../languageHandler";
@@ -47,7 +47,7 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
     disTooltip = disabledTooltip ?? disabledBecauseFullTooltip ?? undefined;
 
     return (
-        <Tooltip label={disTooltip ?? _t("voip|video_call")}>
+        <Tooltip description={disTooltip ?? _t("voip|video_call")}>
             <Button
                 className="mx_IncomingCallToast_joinButton"
                 onClick={onClick}
@@ -163,38 +163,40 @@ export function IncomingCallToast({ notifyEvent }: Props): JSX.Element {
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
 
     return (
-        <>
-            <div>
-                <RoomAvatar room={room ?? undefined} size="24px" />
-            </div>
-            <div className="mx_IncomingCallToast_content">
-                <div className="mx_IncomingCallToast_info">
-                    <span className="mx_IncomingCallToast_room">
-                        {room ? room.name : _t("voip|call_toast_unknown_room")}
-                    </span>
-                    <div className="mx_IncomingCallToast_message">{_t("voip|video_call_started")}</div>
-                    {call ? (
-                        <LiveContentSummaryWithCall call={call} />
-                    ) : (
-                        <LiveContentSummary
-                            type={LiveContentType.Video}
-                            text={_t("common|video")}
-                            active={false}
-                            participantCount={0}
-                        />
-                    )}
+        <TooltipProvider>
+            <>
+                <div>
+                    <RoomAvatar room={room ?? undefined} size="24px" />
                 </div>
-                <JoinCallButtonWithCall
-                    onClick={onJoinClick}
-                    call={call}
-                    disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
+                <div className="mx_IncomingCallToast_content">
+                    <div className="mx_IncomingCallToast_info">
+                        <span className="mx_IncomingCallToast_room">
+                            {room ? room.name : _t("voip|call_toast_unknown_room")}
+                        </span>
+                        <div className="mx_IncomingCallToast_message">{_t("voip|video_call_started")}</div>
+                        {call ? (
+                            <LiveContentSummaryWithCall call={call} />
+                        ) : (
+                            <LiveContentSummary
+                                type={LiveContentType.Video}
+                                text={_t("common|video")}
+                                active={false}
+                                participantCount={0}
+                            />
+                        )}
+                    </div>
+                    <JoinCallButtonWithCall
+                        onClick={onJoinClick}
+                        call={call}
+                        disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
+                    />
+                </div>
+                <AccessibleButton
+                    className="mx_IncomingCallToast_closeButton"
+                    onClick={onCloseClick}
+                    title={_t("action|close")}
                 />
-            </div>
-            <AccessibleButton
-                className="mx_IncomingCallToast_closeButton"
-                onClick={onCloseClick}
-                title={_t("action|close")}
-            />
-        </>
+            </>
+        </TooltipProvider>
     );
 }

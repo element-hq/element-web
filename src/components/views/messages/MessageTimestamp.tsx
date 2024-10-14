@@ -53,7 +53,7 @@ export default class MessageTimestamp extends React.Component<IProps> {
         }
 
         return (
-            <Tooltip label={label} caption={caption}>
+            <Tooltip description={label} caption={caption}>
                 <span className="mx_MessageTimestamp" aria-hidden={true} aria-live="off">
                     {icon}
                     {timestamp}

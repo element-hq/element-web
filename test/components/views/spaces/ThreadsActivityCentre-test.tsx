@@ -7,7 +7,7 @@
  */
 
 import React, { ComponentProps } from "react";
-import { getByText, render, screen } from "@testing-library/react";
+import { getByText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 
@@ -29,12 +29,12 @@ describe("ThreadsActivityCentre", () => {
         return screen.getByRole("menu");
     };
 
-    const getTACDescription = () => {
-        return screen.getByText("Threads");
+    const getTACDescription = (container: ReturnType<typeof render>["container"]) => {
+        return container.querySelector(".mx_ThreadsActivityCentreButton_Text");
     };
 
     const renderTAC = (props?: ComponentProps<typeof ThreadsActivityCentre>) => {
-        render(
+        return render(
             <MatrixClientContext.Provider value={cli}>
                 <ThreadsActivityCentre {...props} />
             </MatrixClientContext.Provider>,
@@ -130,9 +130,9 @@ describe("ThreadsActivityCentre", () => {
     });
 
     it("should render the threads activity centre button and the display label", async () => {
-        renderTAC({ displayButtonLabel: true });
+        const { container } = renderTAC({ displayButtonLabel: true });
         expect(getTACButton()).toBeInTheDocument();
-        expect(getTACDescription()).toBeInTheDocument();
+        expect(getTACDescription(container)).toBeInTheDocument();
     });
 
     it("should render the threads activity centre menu when the button is clicked", async () => {

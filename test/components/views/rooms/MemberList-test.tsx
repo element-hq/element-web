@@ -8,15 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import {
-    act,
-    fireEvent,
-    render,
-    RenderResult,
-    screen,
-    waitFor,
-    waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { act, fireEvent, render, RenderResult, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
@@ -409,10 +401,7 @@ describe("MemberList", () => {
                 await flushPromises();
 
                 // button rendered but disabled
-                expect(screen.getByRole("button", { name: "Invite to this room" })).toHaveAttribute(
-                    "aria-disabled",
-                    "true",
-                );
+                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {

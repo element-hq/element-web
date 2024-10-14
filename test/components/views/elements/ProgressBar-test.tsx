@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render } from "@testing-library/react";
+import { act, render } from "jest-matrix-react";
 
 import ProgressBar from "../../../../src/components/views/elements/ProgressBar";
 

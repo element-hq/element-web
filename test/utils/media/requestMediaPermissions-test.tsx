@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { screen } from "@testing-library/react";
+import { screen } from "jest-matrix-react";
 
 import { requestMediaPermissions } from "../../../src/utils/media/requestMediaPermissions";
 import { flushPromises, useMockMediaDevices } from "../../test-utils";

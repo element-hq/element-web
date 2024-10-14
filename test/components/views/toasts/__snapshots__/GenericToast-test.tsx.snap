@@ -15,7 +15,7 @@ exports[`GenericToast should render as expected with detail content 1`] = `
       class="mx_Toast_buttons"
     >
       <button
-        class="_button_zt6rp_17"
+        class="_button_i91xf_17"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -24,7 +24,7 @@ exports[`GenericToast should render as expected with detail content 1`] = `
         Reject
       </button>
       <button
-        class="_button_zt6rp_17"
+        class="_button_i91xf_17"
         data-kind="primary"
         data-size="sm"
         role="button"
@@ -57,7 +57,7 @@ exports[`GenericToast should render as expected without detail content 1`] = `
       class="mx_Toast_buttons"
     >
       <button
-        class="_button_zt6rp_17"
+        class="_button_i91xf_17"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -66,7 +66,7 @@ exports[`GenericToast should render as expected without detail content 1`] = `
         Reject
       </button>
       <button
-        class="_button_zt6rp_17"
+        class="_button_i91xf_17"
         data-kind="primary"
         data-size="sm"
         role="button"

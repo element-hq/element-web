@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 
 import RoomSearchAuxPanel from "../../../../src/components/views/rooms/RoomSearchAuxPanel";
 import { SearchScope } from "../../../../src/Searching";
@@ -81,7 +81,7 @@ describe("RoomSearchAuxPanel", () => {
             />,
         );
 
-        screen.getByLabelText("Cancel").click();
+        screen.getByRole("button", { name: "Cancel" }).click();
         expect(onCancelClick).toHaveBeenCalled();
     });
 });

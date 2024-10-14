@@ -229,11 +229,12 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls="floating-ui-39"
-        aria-describedby="floating-ui-39"
+        aria-controls="floating-ui-40"
+        aria-describedby="floating-ui-40"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
+        aria-labelledby="floating-ui-33"
         class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
         role="button"
         style="--cpd-icon-button-size: 32px;"

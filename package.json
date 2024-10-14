@@ -68,7 +68,9 @@
         "jwt-decode": "4.0.0",
         "@floating-ui/react": "0.26.11",
         "@radix-ui/react-id": "1.1.0",
-        "caniuse-lite": "1.0.30001655"
+        "caniuse-lite": "1.0.30001655",
+        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
+        "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
@@ -80,7 +82,7 @@
         "@sentry/browser": "^8.0.0",
         "@testing-library/react-hooks": "^8.0.1",
         "@vector-im/compound-design-tokens": "^1.8.0",
-        "@vector-im/compound-web": "^5.5.0",
+        "@vector-im/compound-web": "^6.3.1",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-en": "^3.0.2",

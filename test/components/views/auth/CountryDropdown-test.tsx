@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import CountryDropdown from "../../../../src/components/views/auth/CountryDropdown";

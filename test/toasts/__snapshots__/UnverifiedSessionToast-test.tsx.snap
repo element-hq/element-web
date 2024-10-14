@@ -50,7 +50,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
               class="mx_Toast_buttons"
             >
               <button
-                class="_button_zt6rp_17 _destructive_zt6rp_111"
+                class="_button_i91xf_17 _destructive_i91xf_116"
                 data-kind="secondary"
                 data-size="sm"
                 role="button"
@@ -59,7 +59,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
                 No
               </button>
               <button
-                class="_button_zt6rp_17"
+                class="_button_i91xf_17"
                 data-kind="primary"
                 data-size="sm"
                 role="button"

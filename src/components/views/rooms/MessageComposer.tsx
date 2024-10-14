@@ -666,7 +666,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <Tooltip open={isTooltipOpen} label={formatTimeLeft(secondsLeft)} placement="top">
+            <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
                 <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                     {recordingTooltip}
                     <div className="mx_MessageComposer_wrapper">

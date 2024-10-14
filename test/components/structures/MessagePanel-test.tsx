@@ -11,7 +11,7 @@ import React from "react";
 import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";

@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "jest-matrix-react";
 
 import { ReleaseAnnouncement } from "../../../src/components/structures/ReleaseAnnouncement";
 import Modal, { ModalManagerEvent } from "../../../src/Modal";

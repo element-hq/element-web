@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement } from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import SettingsTab, { SettingsTabProps } from "../../../../../src/components/views/settings/tabs/SettingsTab";
 

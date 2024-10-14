@@ -52,6 +52,10 @@ module.exports = {
             {
                 paths: [
                     {
+                        name: "@testing-library/react",
+                        message: "Please use jest-matrix-react instead",
+                    },
+                    {
                         name: "matrix-js-sdk",
                         message: "Please use matrix-js-sdk/src/matrix instead",
                     },

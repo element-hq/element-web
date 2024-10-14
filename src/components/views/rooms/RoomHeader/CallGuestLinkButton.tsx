@@ -80,7 +80,7 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
         <>
             {canInviteGuests && (
                 <Tooltip label={_t("voip|get_call_link")}>
-                    <IconButton onClick={shareClick} aria-label={_t("voip|get_call_link")}>
+                    <IconButton onClick={shareClick}>
                         <ExternalLinkIcon />
                     </IconButton>
                 </Tooltip>

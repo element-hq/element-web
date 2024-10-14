@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { act, render, RenderResult, screen, waitFor } from "jest-matrix-react";
 import { DEVICE_CODE_SCOPE, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, RenderResult } from "@testing-library/react";
+import { act, render, RenderResult } from "jest-matrix-react";
 
 import { filterConsole, withClientContextRenderOptions, stubClient } from "../../../test-utils";
 import { UserOnboardingPage } from "../../../../src/components/views/user-onboarding/UserOnboardingPage";

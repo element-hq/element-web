@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { render, fireEvent } from "jest-matrix-react";
 
 import MainSplit from "../../../src/components/structures/MainSplit";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";

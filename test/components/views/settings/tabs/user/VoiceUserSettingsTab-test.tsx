@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VoiceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";

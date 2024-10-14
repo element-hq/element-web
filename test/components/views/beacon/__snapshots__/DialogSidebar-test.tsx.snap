@@ -74,6 +74,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
               class="mx_BeaconListItem_interactions"
             >
               <a
+                aria-labelledby="floating-ui-8"
                 data-testid="open-location-in-osm"
                 href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
                 rel="noreferrer noopener"

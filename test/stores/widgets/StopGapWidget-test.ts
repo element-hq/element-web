@@ -10,7 +10,7 @@ import { mocked, MockedObject } from "jest-mock";
 import { last } from "lodash";
 import { MatrixEvent, MatrixClient, ClientEvent, EventTimeline } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 
 import { stubClient, mkRoom, mkEvent } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";

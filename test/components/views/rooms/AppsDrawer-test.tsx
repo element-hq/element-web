@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import { stubClient } from "../../../test-utils";
 import AppsDrawer from "../../../../src/components/views/rooms/AppsDrawer";

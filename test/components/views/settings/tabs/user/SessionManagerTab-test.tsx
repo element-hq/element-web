@@ -16,7 +16,7 @@ import {
     waitFor,
     waitForElementToBeRemoved,
     within,
-} from "@testing-library/react";
+} from "jest-matrix-react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";

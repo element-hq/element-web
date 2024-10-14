@@ -25,6 +25,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
+          aria-labelledby="floating-ui-1"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
@@ -100,6 +101,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
+          aria-labelledby="floating-ui-6"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
@@ -194,7 +196,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   tabindex="-1"
 >
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -203,7 +205,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -215,13 +217,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       View in timeline
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -234,7 +236,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -243,7 +245,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -260,13 +262,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       Unpin
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -279,7 +281,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -288,7 +290,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -300,13 +302,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       Forward
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -325,7 +327,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     role="separator"
   />
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="critical"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -334,7 +336,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -346,13 +348,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       Delete
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -385,7 +387,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   tabindex="-1"
 >
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -394,7 +396,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -406,13 +408,13 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       View in timeline
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -425,7 +427,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
     </svg>
   </button>
   <button
-    class="_item_1gwvj_17 _interactive_1gwvj_36"
+    class="_item_8j2l6_17 _interactive_8j2l6_35"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -434,7 +436,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   >
     <svg
       aria-hidden="true"
-      class="_icon_1gwvj_44"
+      class="_icon_8j2l6_43"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -446,13 +448,13 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
       />
     </svg>
     <span
-      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_1gwvj_53"
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
     >
       Forward
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_1gwvj_60"
+      class="_nav-hint_8j2l6_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"

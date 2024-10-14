@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "jest-matrix-react";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import EventIndexPanel from "../../../../src/components/views/settings/EventIndexPanel";

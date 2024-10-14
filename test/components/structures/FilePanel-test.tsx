@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventTimelineSet, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import FilePanel from "../../../src/components/structures/FilePanel";

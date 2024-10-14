@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "jest-matrix-react";
 
 import CurrentDeviceSection from "../../../../../src/components/views/settings/devices/CurrentDeviceSection";
 import { DeviceType } from "../../../../../src/utils/device/parseUserAgent";

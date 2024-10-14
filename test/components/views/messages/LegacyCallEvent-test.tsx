@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 

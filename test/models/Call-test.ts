@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 import {
     RoomType,
     Room,

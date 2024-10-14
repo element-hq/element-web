@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import EmojiPicker from "../../../../src/components/views/emojipicker/EmojiPicker";

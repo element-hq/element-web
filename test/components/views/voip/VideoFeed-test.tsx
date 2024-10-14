@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ReactElement } from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
 
 import {

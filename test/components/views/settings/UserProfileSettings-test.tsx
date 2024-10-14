@@ -7,10 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent } from "react";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen } from "jest-matrix-react";
 import { MatrixClient, UploadResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserProfileSettings from "../../../../src/components/views/settings/UserProfileSettings";
 import { mkStubRoom, stubClient } from "../../../test-utils";
@@ -54,22 +55,29 @@ interface MockedEditInPlaceProps {
     value: string;
 }
 
-jest.mock("@vector-im/compound-web", () => ({
-    EditInPlace: (({ onChange, onSave, onCancel, value }) => {
-        editInPlaceOnChange = onChange;
-        editInPlaceOnSave = onSave;
-        editInPlaceOnCancel = onCancel;
-        return <div>Mocked EditInPlace: {value}</div>;
-    }) as React.FC<MockedEditInPlaceProps>,
-}));
+jest.mock("@vector-im/compound-web", () => {
+    const compound = jest.requireActual("@vector-im/compound-web");
+    return {
+        __esModule: true,
+        ...compound,
+        EditInPlace: (({ onChange, onSave, onCancel, value }) => {
+            editInPlaceOnChange = onChange;
+            editInPlaceOnSave = onSave;
+            editInPlaceOnCancel = onCancel;
+            return <div>Mocked EditInPlace: {value}</div>;
+        }) as React.FC<MockedEditInPlaceProps>,
+    };
+});
 
 const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClient) => {
     return render(
-        <MatrixClientContext.Provider value={client}>
-            <ToastContext.Provider value={toastRack}>
-                <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
-            </ToastContext.Provider>
-        </MatrixClientContext.Provider>,
+        <TooltipProvider>
+            <MatrixClientContext.Provider value={client}>
+                <ToastContext.Provider value={toastRack}>
+                    <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
+                </ToastContext.Provider>
+            </MatrixClientContext.Provider>
+        </TooltipProvider>,
     );
 };
 

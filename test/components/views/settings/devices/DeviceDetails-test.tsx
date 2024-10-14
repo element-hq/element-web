@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render } from "jest-matrix-react";
 import { PUSHER_ENABLED } from "matrix-js-sdk/src/matrix";
 
 import DeviceDetails from "../../../../../src/components/views/settings/devices/DeviceDetails";

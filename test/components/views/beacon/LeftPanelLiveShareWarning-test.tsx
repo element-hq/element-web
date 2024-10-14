@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { act, fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "jest-matrix-react";
 import { Beacon, BeaconIdentifier } from "matrix-js-sdk/src/matrix";
 
 import LeftPanelLiveShareWarning from "../../../../src/components/views/beacon/LeftPanelLiveShareWarning";

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, render } from "@testing-library/react";
+import { act, render } from "jest-matrix-react";
 import React, { useContext } from "react";
 import { CryptoEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";

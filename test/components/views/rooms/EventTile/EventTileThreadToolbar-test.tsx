@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { getByLabelText, render, RenderResult } from "@testing-library/react";
+import { getByLabelText, render, RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React, { ComponentProps } from "react";
 

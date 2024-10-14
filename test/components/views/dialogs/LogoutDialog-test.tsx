@@ -10,7 +10,7 @@ import React from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoApi, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../test-utils";
 import LogoutDialog from "../../../../src/components/views/dialogs/LogoutDialog";

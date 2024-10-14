@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { fireEvent, getByLabelText, render, screen } from "@testing-library/react";
+import { fireEvent, getByLabelText, render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { ReceiptType, MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";

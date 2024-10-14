@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen } from "jest-matrix-react";
 
 import { useTopic } from "../src/hooks/room/useTopic";
 import { mkEvent, stubClient } from "./test-utils";

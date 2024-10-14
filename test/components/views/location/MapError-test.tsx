@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult } from "jest-matrix-react";
 
 import { MapError, MapErrorProps } from "../../../../src/components/views/location/MapError";
 import { LocationShareError } from "../../../../src/utils/location";

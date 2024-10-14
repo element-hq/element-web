@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RenderResult, render } from "@testing-library/react";
+import { RenderResult, render } from "jest-matrix-react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import MKeyVerificationRequest from "../../../../src/components/views/messages/MKeyVerificationRequest";

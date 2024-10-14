@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import { waitFor } from "@testing-library/react";
+import { waitFor } from "jest-matrix-react";
 
 import { useUserOnboardingTasks } from "../../src/hooks/useUserOnboardingTasks";
 import { useUserOnboardingContext } from "../../src/hooks/useUserOnboardingContext";

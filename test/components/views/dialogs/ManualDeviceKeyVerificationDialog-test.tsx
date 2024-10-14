@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import { Device, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";

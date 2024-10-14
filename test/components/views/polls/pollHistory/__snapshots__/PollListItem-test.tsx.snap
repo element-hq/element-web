@@ -10,6 +10,7 @@ exports[`<PollListItem /> renders a poll 1`] = `
       tabindex="0"
     >
       <div
+        aria-labelledby="floating-ui-1"
         class="mx_PollListItem_content"
       >
         <span>

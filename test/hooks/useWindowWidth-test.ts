@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { renderHook } from "@testing-library/react-hooks";
-import { act } from "@testing-library/react";
+import { act } from "jest-matrix-react";
 
 import UIStore, { UI_EVENTS } from "../../src/stores/UIStore";
 import { useWindowWidth } from "../../src/hooks/useWindowWidth";

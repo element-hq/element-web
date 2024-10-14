@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import * as React from "react";
 import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
-import { render, type RenderResult } from "@testing-library/react";
+import { render, type RenderResult } from "jest-matrix-react";
 
 import { stubClient } from "../../../test-utils";
 import SearchResultTile from "../../../../src/components/views/rooms/SearchResultTile";

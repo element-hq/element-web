@@ -32,7 +32,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
       class="mx_UnpinAllDialog_buttons"
     >
       <button
-        class="_button_zt6rp_17 _destructive_zt6rp_111"
+        class="_button_i91xf_17 _destructive_i91xf_116"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -41,7 +41,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
         Continue
       </button>
       <button
-        class="_button_zt6rp_17"
+        class="_button_i91xf_17"
         data-kind="tertiary"
         data-size="lg"
         role="button"

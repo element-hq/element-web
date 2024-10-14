@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "jest-matrix-react";
 
 import InfoTooltip from "../../../../src/components/views/elements/InfoTooltip";
 

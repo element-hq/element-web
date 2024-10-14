@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
-import { render, fireEvent, RenderResult, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, fireEvent, RenderResult, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 

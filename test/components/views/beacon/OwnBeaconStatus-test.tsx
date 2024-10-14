@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { Beacon } from "matrix-js-sdk/src/matrix";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import OwnBeaconStatus from "../../../../src/components/views/beacon/OwnBeaconStatus";

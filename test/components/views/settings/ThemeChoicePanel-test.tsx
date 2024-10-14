@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "jest-matrix-react";
 import { mocked, MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock-jest";

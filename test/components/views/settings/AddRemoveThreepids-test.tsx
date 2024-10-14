@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -209,7 +209,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const countryDropdown = screen.getByRole("button", { name: "Country Dropdown" });
+        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
         const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
         await userEvent.click(gbOption);
@@ -217,10 +217,10 @@ describe("AddRemoveThreepids", () => {
         const input = screen.getByRole("textbox", { name: "Phone Number" });
         await userEvent.type(input, PHONE1_LOCALNUM);
 
-        const addButton = screen.getByRole("button", { name: "Add" });
+        const addButton = screen.getByRole("button", { name: /Add/ });
         userEvent.click(addButton);
 
-        const continueButton = await screen.findByRole("button", { name: "Continue" });
+        const continueButton = await screen.findByRole("button", { name: /Continue/ });
 
         await expect(continueButton).toHaveAttribute("aria-disabled", "true");
 
@@ -252,7 +252,7 @@ describe("AddRemoveThreepids", () => {
         });
 
         expect(onChangeFn).toHaveBeenCalled();
-    });
+    }, 10000);
 
     it("should display an error if the code is incorrect", async () => {
         const onChangeFn = jest.fn();
@@ -281,12 +281,12 @@ describe("AddRemoveThreepids", () => {
         const input = screen.getByRole("textbox", { name: "Phone Number" });
         await userEvent.type(input, PHONE1_LOCALNUM);
 
-        const countryDropdown = screen.getByRole("button", { name: "Country Dropdown" });
+        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
         const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
         await userEvent.click(gbOption);
 
-        const addButton = screen.getByRole("button", { name: "Add" });
+        const addButton = screen.getByRole("button", { name: /Add/ });
         await userEvent.click(addButton);
 
         mocked(client).addThreePidOnly.mockRejectedValueOnce(new Error("Unauthorized"));
@@ -294,7 +294,7 @@ describe("AddRemoveThreepids", () => {
         const verificationInput = screen.getByRole("textbox", { name: "Verification code" });
         await userEvent.type(verificationInput, "123457");
 
-        const continueButton = screen.getByRole("button", { name: "Continue" });
+        const continueButton = screen.getByRole("button", { name: /Continue/ });
         await userEvent.click(continueButton);
 
         expect(createDialogFn).toHaveBeenCalledWith(expect.anything(), {
@@ -320,12 +320,12 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: "Remove" });
+        const removeButton = screen.getByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
 
-        const confirmRemoveButton = screen.getByRole("button", { name: "Remove" });
+        const confirmRemoveButton = screen.getByRole("button", { name: /Remove/ });
         await userEvent.click(confirmRemoveButton);
 
         expect(client.deleteThreePid).toHaveBeenCalledWith(ThreepidMedium.Email, EMAIL1.address);
@@ -347,12 +347,12 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: "Remove" });
+        const removeButton = screen.getByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
 
-        const confirmRemoveButton = screen.getByRole("button", { name: "Cancel" });
+        const confirmRemoveButton = screen.getByRole("button", { name: /Cancel/ });
         await userEvent.click(confirmRemoveButton);
 
         expect(screen.queryByText(`Remove ${EMAIL1.address}?`)).not.toBeInTheDocument();
@@ -376,12 +376,12 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: "Remove" });
+        const removeButton = screen.getByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${PHONE1.address}?`)).toBeVisible();
 
-        const confirmRemoveButton = screen.getByRole("button", { name: "Remove" });
+        const confirmRemoveButton = screen.getByRole("button", { name: /Remove/ });
         await userEvent.click(confirmRemoveButton);
 
         expect(client.deleteThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);
@@ -408,7 +408,7 @@ describe("AddRemoveThreepids", () => {
         );
 
         expect(screen.getByText(EMAIL1.address)).toBeVisible();
-        const shareButton = screen.getByRole("button", { name: "Share" });
+        const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
         expect(screen.getByText("Verify the link in your inbox")).toBeVisible();
@@ -421,7 +421,7 @@ describe("AddRemoveThreepids", () => {
             MOCK_IDENTITY_ACCESS_TOKEN,
         );
 
-        const completeButton = screen.getByRole("button", { name: "Complete" });
+        const completeButton = screen.getByRole("button", { name: /Complete/ });
         await userEvent.click(completeButton);
 
         expect(client.bindThreePid).toHaveBeenCalledWith({
@@ -459,7 +459,7 @@ describe("AddRemoveThreepids", () => {
         );
 
         expect(screen.getByText(PHONE1.address)).toBeVisible();
-        const shareButton = screen.getByRole("button", { name: "Share" });
+        const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
         expect(screen.getByText("Please enter verification code sent via text.")).toBeVisible();
@@ -503,7 +503,7 @@ describe("AddRemoveThreepids", () => {
         );
 
         expect(screen.getByText(EMAIL1.address)).toBeVisible();
-        const revokeButton = screen.getByRole("button", { name: "Revoke" });
+        const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Email, EMAIL1.address);
@@ -526,7 +526,7 @@ describe("AddRemoveThreepids", () => {
         );
 
         expect(screen.getByText(PHONE1.address)).toBeVisible();
-        const revokeButton = screen.getByRole("button", { name: "Revoke" });
+        const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);

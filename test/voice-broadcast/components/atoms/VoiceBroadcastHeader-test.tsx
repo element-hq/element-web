@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult } from "jest-matrix-react";
 
 import { VoiceBroadcastHeader, VoiceBroadcastLiveness } from "../../../../src/voice-broadcast";
 import { mkRoom, stubClient } from "../../../test-utils";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, getByLabelText, getByText, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, getByLabelText, getByText, render, screen, waitFor } from "jest-matrix-react";
 import { EventTimeline, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -99,7 +99,7 @@ describe("<CallGuestLinkButton />", () => {
 
     it("shows the JoinRuleDialog on click with private join rules", async () => {
         getComponent(room);
-        fireEvent.click(screen.getByLabelText("Share call link"));
+        fireEvent.click(screen.getByRole("button", { name: "Share call link" }));
         expect(modalSpy).toHaveBeenCalledWith(JoinRuleDialog, { room, canInvite: false });
         // pretend public was selected
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
@@ -115,7 +115,7 @@ describe("<CallGuestLinkButton />", () => {
     it("shows the ShareDialog on click with public join rules", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         getComponent(room);
-        fireEvent.click(screen.getByLabelText("Share call link"));
+        fireEvent.click(screen.getByRole("button", { name: "Share call link" }));
         const callParams = modalSpy.mock.calls[0];
         expect(callParams[0]).toEqual(ShareDialog);
         expect(callParams[1].target.toString()).toEqual(expectedShareDialogProps.target);
@@ -127,7 +127,7 @@ describe("<CallGuestLinkButton />", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         getComponent(room);
-        fireEvent.click(screen.getByLabelText("Share call link"));
+        fireEvent.click(screen.getByRole("button", { name: "Share call link" }));
         const callParams = modalSpy.mock.calls[0];
         expect(callParams[0]).toEqual(ShareDialog);
         expect(callParams[1].target.toString()).toEqual(expectedShareDialogProps.target);
@@ -170,17 +170,17 @@ describe("<CallGuestLinkButton />", () => {
             return oldGet(key);
         });
 
-        const { container } = getComponent(room);
-        expect(getByLabelText(container, "Share call link")).toBeInTheDocument();
+        getComponent(room);
+        expect(getByLabelText(document.body, "Share call link")).toBeInTheDocument();
     });
 
     it("opens the share dialog with the correct share link in an encrypted room", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
-        const { container } = getComponent(room);
+        getComponent(room);
         const modalSpy = jest.spyOn(Modal, "createDialog");
-        fireEvent.click(getByLabelText(container, _t("voip|get_call_link")));
+        fireEvent.click(getByLabelText(document.body, _t("voip|get_call_link")));
         // const target =
         //     "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&perParticipantE2EE=true&viaServers=example.org";
         expect(modalSpy).toHaveBeenCalled();
@@ -200,9 +200,9 @@ describe("<CallGuestLinkButton />", () => {
         jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
         jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
-        const { container } = getComponent(room);
+        getComponent(room);
         const modalSpy = jest.spyOn(Modal, "createDialog");
-        fireEvent.click(getByLabelText(container, _t("voip|get_call_link")));
+        fireEvent.click(getByLabelText(document.body, _t("voip|get_call_link")));
         const arg1 = modalSpy.mock.calls[0][1] as any;
         expect(arg1.target.toString()).toEqual(targetUnencrypted);
     });

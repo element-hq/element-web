@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import React, { ComponentProps } from "react";
 import userEvent from "@testing-library/user-event";
 

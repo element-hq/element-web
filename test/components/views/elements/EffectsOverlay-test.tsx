@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "jest-matrix-react";
 
 import dis from "../../../../src/dispatcher/dispatcher";
 import EffectsOverlay from "../../../../src/components/views/elements/EffectsOverlay.tsx";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 import { RoomMember, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 
 import { shouldShowFeedback } from "../../../../src/utils/Feedback";
 import BetaCard from "../../../../src/components/views/beta/BetaCard";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import fetchMockJest from "fetch-mock-jest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { screen, render, fireEvent, waitFor, within, act } from "@testing-library/react";
+import { screen, render, fireEvent, waitFor, within, act } from "jest-matrix-react";
 
 import * as TestUtils from "../../test-utils";
 import AutocompleteProvider from "../../../src/autocomplete/AutocompleteProvider";

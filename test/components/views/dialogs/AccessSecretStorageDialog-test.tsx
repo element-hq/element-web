@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ComponentProps } from "react";
 import { SecretStorage, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { mockPlatformPeg, stubClient } from "../../../test-utils";

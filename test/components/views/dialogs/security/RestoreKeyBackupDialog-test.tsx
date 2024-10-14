@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 // Needed to be able to mock decodeRecoveryKey
 // eslint-disable-next-line no-restricted-imports

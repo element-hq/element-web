@@ -10,7 +10,7 @@ import React from "react";
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
-import { screen, within } from "@testing-library/react";
+import { screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Mocked } from "jest-mock";

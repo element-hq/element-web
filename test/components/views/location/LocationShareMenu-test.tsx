@@ -10,7 +10,7 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { RoomMember, RelationType, MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 
 import LocationShareMenu from "../../../../src/components/views/location/LocationShareMenu";

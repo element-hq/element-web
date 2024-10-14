@@ -37,6 +37,7 @@ const config: Config = {
     coverageReporters: ["text-summary", "lcov"],
     testResultsProcessor: "@casualbot/jest-sonar-reporter",
     prettierPath: null,
+    moduleDirectories: ["node_modules", "test/test-utils"],
 };
 
 // if we're running under GHA, enable the GHA reporter

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ReactElement } from "react";
 import { mocked } from "jest-mock";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "jest-matrix-react";
 import { IContent } from "matrix-js-sdk/src/matrix";
 
 import { bodyToSpan, formatEmojis, topicToHtml } from "../src/HtmlUtils";

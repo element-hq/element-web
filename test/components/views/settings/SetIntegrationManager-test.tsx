@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

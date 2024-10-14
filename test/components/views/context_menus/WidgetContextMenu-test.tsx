@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ComponentProps } from "react";
-import { screen, render } from "@testing-library/react";
+import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixWidgetType } from "matrix-widget-api";

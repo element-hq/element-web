@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventType, getHttpUriForMxc, IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

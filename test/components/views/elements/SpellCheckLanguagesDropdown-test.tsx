@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 
 import SpellCheckLanguagesDropdown from "../../../../src/components/views/elements/SpellCheckLanguagesDropdown";
 import PlatformPeg from "../../../../src/PlatformPeg";

@@ -212,7 +212,7 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
     if (title) {
         return (
             <Tooltip
-                label={title}
+                description={title}
                 caption={caption}
                 isTriggerInteractive={true}
                 placement={placement}

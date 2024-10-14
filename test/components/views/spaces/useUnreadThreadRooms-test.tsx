@@ -15,7 +15,7 @@ import {
     PendingEventOrdering,
     Room,
 } from "matrix-js-sdk/src/matrix";
-import { act } from "@testing-library/react";
+import { act } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { stubClient } from "../../../test-utils";
