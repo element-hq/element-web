@@ -168,7 +168,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return;
         }
 
-        Lifecycle.hydrateSession(credentials).catch((e) => {
+        Lifecycle.setLoggedIn(credentials).catch((e) => {
             logger.error(e);
             this.setState({ busy: false, errorText: _t("auth|failed_soft_logout_auth") });
         });
@@ -204,7 +204,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return false;
         }
 
-        return Lifecycle.hydrateSession(credentials)
+        return Lifecycle.setLoggedIn(credentials)
             .then(() => {
                 if (this.props.onTokenLoginCompleted) {
                     this.props.onTokenLoginCompleted();
