@@ -945,35 +945,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     true,
                 );
                 break;
-            // VERJI
-            case Action.OpenInviteExternalUsersDialog: {
-                const customOnboardingOpts = { CustomComponent: React.Fragment };
-                ModuleRunner.instance.invoke(
-                    CustomComponentLifecycle.OnboardingDialog,
-                    customOnboardingOpts as CustomComponentOpts,
-                );
-                const Props = (props: any): React.JSX.Element => <div>{props}</div>;
-                const customOnboardingDialog = (props: any): React.JSX.Element => (
-                    <customOnboardingOpts.CustomComponent>
-                        <Props props={props} />
-                    </customOnboardingOpts.CustomComponent>
-                );
-                console.log("[Verji.Onboarding - Action.OpenInviteExternalUsers]", payload.data);
-                Modal.createDialog(
-                    customOnboardingDialog,
-                    {
-                        initialText: payload.initialText,
-                        data: payload?.data,
-                        onFinished: () => {
-                            Modal.toggleCurrentDialogVisibility();
-                        },
-                    },
-                    "mx_RoomDirectory_dialogWrapper",
-                    false,
-                    true,
-                );
-            }
-            // END VERJI
         }
     };
 
