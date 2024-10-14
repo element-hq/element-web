@@ -38,7 +38,7 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
-    if (matrixClient.getCryptoTrustCrossSignedDevices()) {
+    if (matrixClient.getCrypto()?.getTrustCrossSignedDevices()) {
         if (!(await enable4SIfNeeded(matrixClient))) {
             return;
         }
@@ -69,7 +69,7 @@ export async function legacyVerifyUser(matrixClient: MatrixClient, user: User): 
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
-    if (matrixClient.getCryptoTrustCrossSignedDevices()) {
+    if (matrixClient.getCrypto()?.getTrustCrossSignedDevices()) {
         if (!(await enable4SIfNeeded(matrixClient))) {
             return;
         }
