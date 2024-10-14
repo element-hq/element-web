@@ -66,7 +66,6 @@ interface IProps {
     presenceLastActiveAgo: number;
     presenceLastTs: number;
     presenceCurrentlyActive?: boolean;
-    showInviteButton: boolean;
     onClick(): void;
     showPresence: boolean;
     subtextLabel?: string;
@@ -135,20 +134,6 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
             </div>
         );
 
-        let inviteButton;
-        if (this.props.showInviteButton) {
-            inviteButton = (
-                <div className="mx_EntityTile_invite">
-                    <img
-                        alt={_t("action|invite")}
-                        src={require("../../../../res/img/plus.svg").default}
-                        width="16"
-                        height="16"
-                    />
-                </div>
-            );
-        }
-
         let powerLabel;
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
@@ -178,7 +163,6 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
                     </div>
                     {nameAndPresence}
                     {powerLabel}
-                    {inviteButton}
                 </AccessibleButton>
             </div>
         );

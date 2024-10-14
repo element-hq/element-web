@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-
-import { Icon as WarningIcon } from "../../../../res/img/compound/error-16px.svg";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface Props {
     message: string;

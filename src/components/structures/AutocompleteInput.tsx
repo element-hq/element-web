@@ -8,13 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useState, ReactNode, ChangeEvent, KeyboardEvent, useRef, ReactElement } from "react";
 import classNames from "classnames";
+import { SearchIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import Autocompleter from "../../autocomplete/AutocompleteProvider";
 import { Key } from "../../Keyboard";
 import { ICompletion } from "../../autocomplete/Autocompleter";
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
-import { Icon as PillRemoveIcon } from "../../../res/img/icon-pill-remove.svg";
-import { Icon as SearchIcon } from "../../../res/img/element-icons/roomlist/search.svg";
 import useFocus from "../../hooks/useFocus";
 
 interface AutocompleteInputProps {
@@ -119,7 +118,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
                 onClick={onClickInputArea}
                 data-testid="autocomplete-editor"
             >
-                <SearchIcon className="mx_AutocompleteInput_search_icon" width={16} height={16} />
+                <SearchIcon className="mx_AutocompleteInput_search_icon" width="18px" height="18px" />
                 {selection.map((item) => (
                     <SelectionItem
                         key={item.completionId}
@@ -179,7 +178,7 @@ const SelectionItem: React.FC<SelectionItemProps> = ({ item, onClick, render }) 
                 onClick={() => onClick(item)}
                 data-testid={`autocomplete-selection-remove-button-${item.completionId}`}
             >
-                <PillRemoveIcon width={8} height={8} />
+                <CloseIcon width="16px" height="16px" />
             </AccessibleButton>
         </span>
     );

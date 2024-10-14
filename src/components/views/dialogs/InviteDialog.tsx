@@ -13,6 +13,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
@@ -123,13 +124,12 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         let closeButton;
         if (this.props.onRemove) {
             closeButton = (
-                <AccessibleButton className="mx_InviteDialog_userTile_remove" onClick={this.onRemove}>
-                    <img
-                        src={require("../../../../res/img/icon-pill-remove.svg").default}
-                        alt={_t("action|remove")}
-                        width={8}
-                        height={8}
-                    />
+                <AccessibleButton
+                    className="mx_InviteDialog_userTile_remove"
+                    onClick={this.onRemove}
+                    aria-label={_t("action|remove")}
+                >
+                    <CloseIcon width="16px" height="16px" />
                 </AccessibleButton>
             );
         }
