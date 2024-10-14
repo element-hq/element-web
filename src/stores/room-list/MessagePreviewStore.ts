@@ -124,7 +124,11 @@ const mkMessagePreview = (text: string, event: MatrixEvent): MessagePreview => {
 };
 
 export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
-    private static readonly internalInstance = (() => new MessagePreviewStore())();
+    private static readonly internalInstance = (() => {
+        const instance = new MessagePreviewStore();
+        instance.start();
+        return instance;
+    })();
 
     /**
      * @internal Public for test only

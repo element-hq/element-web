@@ -65,7 +65,7 @@ describe("SlidingRoomListStore", () => {
 
     describe("spaces", () => {
         it("alters 'filters.spaces' on the DefaultTagID.Untagged list when the selected space changes", async () => {
-            await store.useUnitTestClient(context.client!); // call onReady
+            await store.start(); // call onReady
             const spaceRoomId = "!foo:bar";
 
             const p = untilEmission(store, LISTS_LOADING_EVENT, (listName, isLoading) => {
@@ -92,7 +92,7 @@ describe("SlidingRoomListStore", () => {
                 },
             );
             activeSpace = MetaSpace.Home;
-            await store.useUnitTestClient(context.client!); // call onReady
+            await store.start(); // call onReady
 
             expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(DefaultTagID.Untagged, {
                 filters: expect.objectContaining({
@@ -108,7 +108,7 @@ describe("SlidingRoomListStore", () => {
             const p = untilEmission(store, LISTS_LOADING_EVENT, (listName, isLoading) => {
                 return listName === DefaultTagID.Untagged && !isLoading;
             });
-            await store.useUnitTestClient(context.client!); // call onReady
+            await store.start(); // call onReady
             await p;
             expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(
                 DefaultTagID.Untagged,
@@ -121,7 +121,7 @@ describe("SlidingRoomListStore", () => {
         });
 
         it("includes subspaces in 'filters.spaces' when the selected space has subspaces", async () => {
-            await store.useUnitTestClient(context.client!); // call onReady
+            await store.start(); // call onReady
             const spaceRoomId = "!foo:bar";
             const subSpace1 = "!ss1:bar";
             const subSpace2 = "!ss2:bar";
@@ -168,7 +168,7 @@ describe("SlidingRoomListStore", () => {
     });
 
     it("getTagsForRoom gets the tags for the room", async () => {
-        await store.useUnitTestClient(context.client!);
+        await store.start();
         const roomA = "!a:localhost";
         const roomB = "!b:localhost";
         const keyToListData: Record<string, { joinedCount: number; roomIndexToRoomId: Record<number, string> }> = {
@@ -200,7 +200,7 @@ describe("SlidingRoomListStore", () => {
     });
 
     it("emits LISTS_UPDATE_EVENT when slidingSync lists update", async () => {
-        await store.useUnitTestClient(context.client!);
+        await store.start();
         const roomA = "!a:localhost";
         const roomB = "!b:localhost";
         const roomC = "!c:localhost";
@@ -236,7 +236,7 @@ describe("SlidingRoomListStore", () => {
     });
 
     it("sets the sticky room on the basis of the viewed room in RoomViewStore", async () => {
-        await store.useUnitTestClient(context.client!);
+        await store.start();
         // seed the store with 3 rooms
         const roomIdA = "!a:localhost";
         const roomIdB = "!b:localhost";
@@ -301,7 +301,7 @@ describe("SlidingRoomListStore", () => {
     });
 
     it("gracefully handles unknown room IDs", async () => {
-        await store.useUnitTestClient(context.client!);
+        await store.start();
         const roomIdA = "!a:localhost";
         const roomIdB = "!b:localhost"; // does not exist
         const roomIdC = "!c:localhost";

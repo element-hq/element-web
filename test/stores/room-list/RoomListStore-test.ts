@@ -29,9 +29,6 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { flushPromises, stubClient, upsertRoomStateEvents, mkRoom } from "../../test-utils";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../test-utils/pushRules";
 
-// Mock out the SpaceWatcher as it messes with the prefilterConditions
-jest.mock("../../../src/stores/room-list/SpaceWatcher.ts");
-
 describe("RoomListStore", () => {
     const client = stubClient();
     const newRoomId = "!roomid:example.com";
@@ -94,10 +91,6 @@ describe("RoomListStore", () => {
         await (RoomListStore.instance as RoomListStoreClass).makeReady(client);
     });
 
-    beforeEach(() => {
-        DMRoomMap.makeShared(client);
-    });
-
     it.each(OrderedDefaultTagIDs)("defaults to importance ordering for %s=", (tagId) => {
         expect(RoomListStore.instance.getTagSorting(tagId)).toBe(SortAlgorithm.Recent);
     });
@@ -109,11 +102,11 @@ describe("RoomListStore", () => {
     function createStore(): { store: RoomListStoreClass; handleRoomUpdate: jest.Mock<any, any> } {
         const fakeDispatcher = { register: jest.fn() } as unknown as MatrixDispatcher;
         const store = new RoomListStoreClass(fakeDispatcher);
+        // @ts-ignore accessing private member to set client
+        store.readyStore.matrixClient = client;
         const handleRoomUpdate = jest.fn();
         // @ts-ignore accessing private member to mock it
         store.algorithm.handleRoomUpdate = handleRoomUpdate;
-        // @ts-ignore accessing private member to set client
-        store.readyStore.useUnitTestClient(client);
 
         return { store, handleRoomUpdate };
     }
@@ -164,6 +157,7 @@ describe("RoomListStore", () => {
         room1.updateMyMembership(KnownMembership.Join);
         room2.updateMyMembership(KnownMembership.Join);
         room3.updateMyMembership(KnownMembership.Join);
+        DMRoomMap.makeShared(client);
         const { store } = createStore();
         client.getVisibleRooms = jest.fn().mockReturnValue([room1, room2, room3]);
 
@@ -275,6 +269,7 @@ describe("RoomListStore", () => {
 
         it("Passes the feature flag on to the client when asking for visible rooms", () => {
             // Given a store that we can ask for a room list
+            DMRoomMap.makeShared(client);
             const { store } = createStore();
             client.getVisibleRooms = jest.fn().mockReturnValue([]);
 
@@ -290,7 +285,7 @@ describe("RoomListStore", () => {
     describe("room updates", () => {
         const makeStore = async () => {
             const store = new RoomListStoreClass(defaultDispatcher);
-            await store.useUnitTestClient(client);
+            await store.start();
             return store;
         };
 

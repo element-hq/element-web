@@ -63,6 +63,7 @@ describe("BasicMessageComposer", () => {
             { before: ":-D", after: "😄" },
             { before: ":D", after: "😄" },
             { before: ":3", after: "😽" },
+            { before: "=-]", after: "🙂" },
         ];
         const input = screen.getByRole("textbox");
 
