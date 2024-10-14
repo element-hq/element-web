@@ -280,7 +280,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             const cli = MatrixClientPeg.safeGet();
             const backupInfo = await cli.getKeyBackupVersion();
-            const has4S = await cli.hasSecretStorageKey();
+            const has4S = await cli.secretStorage.hasKey();
             const backupKeyStored = has4S ? await cli.isKeyBackupKeyStored() : null;
             this.setState({
                 backupInfo,
