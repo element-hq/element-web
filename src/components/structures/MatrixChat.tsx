@@ -426,7 +426,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // from another device.
             promisesList.push(
                 (async (): Promise<void> => {
-                    crossSigningIsSetUp = await cli.userHasCrossSigningKeys();
+                    crossSigningIsSetUp = Boolean(await cli.getCrypto()?.userHasCrossSigningKeys());
                 })(),
             );
         }
