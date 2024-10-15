@@ -133,6 +133,7 @@ export function createTestClient(): MatrixClient {
             isEncryptionEnabledInRoom: jest.fn(),
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
+            prepareToEncrypt: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),

@@ -588,7 +588,6 @@ describe("LegacyCallHandler without third party protocols", () => {
             jest.spyOn(MatrixClientPeg.safeGet(), "supportsVoip").mockReturnValue(true);
 
             MatrixClientPeg.safeGet().isFallbackICEServerAllowed = jest.fn();
-            MatrixClientPeg.safeGet().prepareToEncrypt = jest.fn();
 
             MatrixClientPeg.safeGet().pushRules = {
                 global: {

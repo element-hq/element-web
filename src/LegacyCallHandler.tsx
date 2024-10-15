@@ -367,7 +367,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // the mapped one: that's where we'll send the events.
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(call.roomId);
-        if (room) cli.prepareToEncrypt(room);
+        if (room) cli.getCrypto()?.prepareToEncrypt(room);
     };
 
     public getCallById(callId: string): MatrixCall | null {
