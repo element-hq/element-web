@@ -64,6 +64,7 @@ type ElectronChannel =
     | "userDownloadAction"
     | "openDesktopCapturerSourcePicker"
     | "userAccessToken"
+    | "homeserverUrl"
     | "serverSupportedVersions";
 
 declare global {

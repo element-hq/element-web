@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
 import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
 import dis from "../../dispatcher/dispatcher";
@@ -62,10 +63,12 @@ export default class WebPlatform extends VectorBasePlatform {
             if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
                 const userId = localStorage.getItem("mx_user_id");
                 const deviceId = localStorage.getItem("mx_device_id");
+                const homeserver = MatrixClientPeg.get()?.getHomeserverUrl();
                 event.source!.postMessage({
                     responseKey: event.data["responseKey"],
                     userId,
                     deviceId,
+                    homeserver,
                 });
             }
         } catch (e) {
