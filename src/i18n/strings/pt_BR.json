@@ -625,16 +625,6 @@
         "incompatible_database_disable": "Continuar com criptografia desativada",
         "incompatible_database_sign_out_description": "Para evitar perder seu histórico de bate-papo, você precisa exportar as chaves da sua sala antes de se desconectar. Quando entrar novamente, você precisará usar a versão mais atual do %(brand)s",
         "incompatible_database_title": "Banco de dados incompatível",
-        "key_signature_upload_cancelled": "Envio cancelado da assinatura",
-        "key_signature_upload_completed": "Envio concluído",
-        "key_signature_upload_failed": "Falha no envio",
-        "key_signature_upload_failed_body": "%(brand)s encontrou um erro durante o envio de:",
-        "key_signature_upload_failed_cross_signing_key_signature": "uma nova chave de autoverificação",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "um aparelho autoverificado",
-        "key_signature_upload_failed_key_signature": "uma assinatura de chave",
-        "key_signature_upload_failed_master_key_signature": "uma nova chave mestra de assinatura",
-        "key_signature_upload_failed_title": "O envio da assinatura falhou",
-        "key_signature_upload_success_title": "Envio bem-sucedido da assinatura",
         "messages_not_secure": {
             "cause_1": "Seu servidor local",
             "cause_2": "O servidor doméstico do usuário que você está verificando está conectado",
@@ -650,8 +640,6 @@
             "warning": "Se você não definiu a nova opção de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina uma nova opção de recuperação imediatamente nas Configurações."
         },
         "not_supported": "<não suportado>",
-        "old_version_detected_description": "Detectamos uma versão mais antiga do %(brand)s. Isso fará com que a criptografia de ponta a ponta não funcione corretamente. As mensagens criptografadas de ponta a ponta trocadas recentemente, enquanto você usava a versão mais antiga, talvez não sejam descriptografáveis na nova versão. Isso também poderá fazer com que as mensagens trocadas nesta sessão falhem na mais atual. Se você tiver problemas, desconecte-se e entre novamente. Para manter o histórico de mensagens, exporte e reimporte suas chaves.",
-        "old_version_detected_title": "Dados de criptografia antigos foram detectados",
         "recovery_method_removed": {
             "description_1": "Esta sessão detectou que a sua Frase de Segurança e a chave para mensagens seguras foram removidas.",
             "description_2": "Se você fez isso acidentalmente, você pode configurar Mensagens Seguras nesta sessão, o que vai re-criptografar o histórico de mensagens desta sessão com uma nova opção de recuperação.",
@@ -999,7 +987,6 @@
         "group_threads": "Tópicos",
         "group_voip": "Voz e vídeo",
         "latex_maths": "Renderizar fórmulas matemáticas LaTeX em mensagens",
-        "pinning": "Fixar mensagem",
         "video_rooms": "Salas de vídeo"
     },
     "labs_mjolnir": {
@@ -1193,13 +1180,11 @@
     },
     "right_panel": {
         "add_integrations": "Adicionar widgets, integrações e bots",
-        "export_chat_button": "Exportar conversa",
         "files_button": "Arquivos",
         "pinned_messages": {
             "limits": {
                 "other": "Você pode fixar até %(count)s widgets"
-            },
-            "title": "Mensagens fixadas"
+            }
         },
         "poll": {
             "final_result": {
@@ -1248,10 +1233,7 @@
         "failed_reject_invite": "Não foi possível recusar o convite",
         "forget_room": "Esquecer esta sala",
         "header": {
-            "forget_room_button": "Esquecer sala",
-            "hide_widgets_button": "Esconder widgets",
-            "room_is_public": "Esta sala é pública",
-            "show_widgets_button": "Mostrar widgets"
+            "room_is_public": "Esta sala é pública"
         },
         "inaccessible_name": "%(roomName)s não está acessível neste momento.",
         "intro": {
@@ -1292,12 +1274,6 @@
         "not_found_title_name": "%(roomName)s não existe.",
         "peek_join_prompt": "Você está visualizando %(roomName)s. Deseja participar?",
         "rejoin_button": "Entrar novamente",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s resultado)",
-                "other": "(~%(count)s resultados)"
-            }
-        },
         "status_bar": {
             "exceeded_resource_limit": "Sua mensagem não foi enviada porque este servidor local excedeu o limite de recursos. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
             "monthly_user_limit_reached": "Sua mensagem não foi enviada porque este homeserver atingiu seu Limite de usuário ativo mensal. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",

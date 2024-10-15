@@ -726,12 +726,6 @@
         "import_invalid_passphrase": "Sannvottun auðkenningar mistókst: er lykilorðið rangt?",
         "incompatible_database_disable": "Halda áfram með dulritun óvirka",
         "incompatible_database_title": "Ósamhæfður gagnagrunnur",
-        "key_signature_upload_completed": "Innsendingu er lokið",
-        "key_signature_upload_failed": "Ekki tókst að senda inn",
-        "key_signature_upload_failed_body": "%(brand)s rakst á villu við innsendingu á:",
-        "key_signature_upload_failed_cross_signing_key_signature": "ný kross-undirritun undirritunarlykils",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "kross-undirritun undirritunarlykils tækis",
-        "key_signature_upload_failed_key_signature": "Fingrafar lykils",
         "messages_not_secure": {
             "cause_1": "Heimaþjónninn þinn",
             "heading": "Eitt af eftirfarandi gæti verið berskjaldað:",
@@ -741,7 +735,6 @@
             "title": "Ný endurheimtuaðferð"
         },
         "not_supported": "<ekki stutt>",
-        "old_version_detected_title": "Gömul dulritunargögn fundust",
         "recovery_method_removed": {
             "title": "Endurheimtuaðferð fjarlægð"
         },
@@ -1161,7 +1154,6 @@
         "location_share_live_description": "Bráðabirgðaútfærsla. Staðsetningar haldast í ferli spjallrása.",
         "mjolnir": "Nýjar leiðir til að hunsa fólk",
         "msc3531_hide_messages_pending_moderation": "Láta umsjónarmenn fela skilaboð sem bíða yfirferðar.",
-        "pinning": "Festing skilaboða",
         "report_to_moderators": "Tilkynna til umsjónarmanna",
         "report_to_moderators_description": "Í spjallrásum sem styðja eftirlit umsjónarmanna, mun 'Kæra'-hnappurinn gefa þér færi á að tilkynna misnotkun til umsjónarmanna spjallrása.",
         "under_active_development": "Í virkri þróun.",
@@ -1253,7 +1245,6 @@
         "share_type_own": "Núverandi staðsetning mín",
         "share_type_pin": "Sleppa pinna",
         "share_type_prompt": "Hvaða gerð staðsetningar vilt þú deila?",
-        "stop_and_close": "Hætta og loka",
         "toggle_attribution": "Víxla tilvísun af/á"
     },
     "member_list": {
@@ -1467,13 +1458,11 @@
     },
     "right_panel": {
         "add_integrations": "Bæta við viðmótshlutum, brúm og vélmennum",
-        "export_chat_button": "Flytja út spjall",
         "files_button": "Skrár",
         "pinned_messages": {
             "limits": {
                 "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
-            },
-            "title": "Föst skilaboð"
+            }
         },
         "pinned_messages_button": "Fest",
         "poll": {
@@ -1490,8 +1479,7 @@
         },
         "video_room_chat": {
             "title": "Spjall"
-        },
-        "widgets_section": "Viðmótshlutar"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Þetta boð var sent til %(email)s sem er ekki tengt notandaaðgangnum þínum",
@@ -1508,7 +1496,6 @@
             "forget": "Gleyma spjallrás",
             "low_priority": "Lítill forgangur",
             "mark_read": "Merkja sem lesið",
-            "mentions_only": "Aðeins minnst á",
             "title": "Valkostir spjallrásar",
             "unfavourite": "Í eftirlætum"
         },
@@ -1537,17 +1524,7 @@
         "forget_room": "Gleyma þessari spjallrás",
         "forget_space": "Gleyma þessu svæði",
         "header": {
-            "close_call_button": "Loka samtali",
-            "forget_room_button": "Gleyma spjallrás",
-            "hide_widgets_button": "Fela viðmótshluta",
-            "room_is_public": "Þessi spjallrás er opinber",
-            "show_widgets_button": "Sýna viðmótshluta",
-            "video_call_button_ec": "Myndsímtal (%(brand)s)",
-            "video_call_button_jitsi": "Myndsímtal (Jitsi)",
-            "video_call_ec_change_layout": "Breyta framsetningu",
-            "video_call_ec_layout_freedom": "Frelsi",
-            "video_call_ec_layout_spotlight": "Í kastljósi",
-            "video_room_view_chat_button": "Skoða tímalínu spjalls"
+            "room_is_public": "Þessi spjallrás er opinber"
         },
         "inaccessible": "Þessi spjallrás eða svæði er ekki aðgengilegt í augnablikinu.",
         "inaccessible_name": "%(roomName)s er ekki aðgengileg í augnablikinu.",
@@ -1602,13 +1579,6 @@
         "peek_join_prompt": "Þú ert að forskoða %(roomName)s. Viltu taka þátt í henni?",
         "read_topic": "Smelltu til að lesa umfjöllunarefni",
         "rejoin_button": "Taka þátt aftur",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s niðurstaða)",
-                "other": "(~%(count)s niðurstöður)"
-            }
-        },
-        "show_labs_settings": "Sýna tilraunastillingar",
         "status_bar": {
             "delete_all": "Eyða öllu",
             "exceeded_resource_limit": "Skilaboðin þín voru ekki send vegna þess að þessi heimaþjónn er kominn fram yfir takmörk á notuðum tilföngum. Hafðu <a>samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þjónustuna.",

@@ -862,16 +862,6 @@
         "incompatible_database_disable": "Pokračovať s vypnutým šifrovaním",
         "incompatible_database_sign_out_description": "Aby ste po odhlásení neprišli o možnosť čítať históriu šifrovaných konverzácií, mali by ste si ešte pred odhlásením exportovať šifrovacie kľúče miestností. Prosím vráťte sa k novšej verzii %(brand)s a exportujte si kľúče",
         "incompatible_database_title": "Nekompatibilná databáza",
-        "key_signature_upload_cancelled": "Zrušené nahrávanie podpisu",
-        "key_signature_upload_completed": "Nahrávanie dokončené",
-        "key_signature_upload_failed": "Nie je možné nahrať",
-        "key_signature_upload_failed_body": "%(brand)s zaznamenal chybu pri nahrávaní:",
-        "key_signature_upload_failed_cross_signing_key_signature": "nový podpis kľúča pre krížové podpisovanie",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "krížový podpis zariadenia",
-        "key_signature_upload_failed_key_signature": "podpis kľúča",
-        "key_signature_upload_failed_master_key_signature": "nový podpis hlavného kľúča",
-        "key_signature_upload_failed_title": "Nahrávanie podpisu zlyhalo",
-        "key_signature_upload_success_title": "Úspešné nahratie podpisu",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ku ktorému je pripojený používateľ, ktorého overujete",
@@ -887,8 +877,6 @@
             "warning": "Ak ste si nenastavili nový spôsob obnovenia, je možné, že útočník sa pokúša dostať k vášmu účtu. Radšej si ihneď zmeňte vaše heslo a nastavte si nový spôsob obnovenia v Nastaveniach."
         },
         "not_supported": "<nepodporované>",
-        "old_version_detected_description": "Boli zistené údaje zo staršej verzie %(brand)s. To spôsobilo nefunkčnosť end-to-end kryptografie v staršej verzii. End-to-end šifrované správy, ktoré boli nedávno vymenené pri používaní staršej verzie, sa v tejto verzii nemusia dať dešifrovať. To môže spôsobiť aj zlyhanie správ vymenených pomocou tejto verzie. Ak sa vyskytnú problémy, odhláste sa a znova sa prihláste. Ak chcete zachovať históriu správ, exportujte a znovu importujte svoje kľúče.",
-        "old_version_detected_title": "Nájdené zastaralé kryptografické údaje",
         "recovery_method_removed": {
             "description_1": "Táto relácia zistila, že vaša bezpečnostná fráza a kľúč pre zabezpečené správy boli odstránené.",
             "description_2": "Ak ste to urobili omylom, môžete v tejto relácii nastaviť Zabezpečené správy, ktoré znovu zašifrujú históriu správ tejto relácie pomocou novej metódy obnovy.",
@@ -1410,14 +1398,12 @@
         "location_share_live_description": "Dočasná implementácia. Polohy ostávajú v histórii miestnosti.",
         "mjolnir": "Nové spôsoby ignorovania ľudí",
         "msc3531_hide_messages_pending_moderation": "Umožniť moderátorom skryť správy čakajúce na schválenie.",
-        "new_room_decoration_ui": "V štádiu aktívneho vývoja, nová hlavička miestnosti a rozhranie s detailmi",
         "notification_settings": "Nové nastavenia oznámení",
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
         "oidc_native_flow": "Povoliť nové natívne toky OIDC (v štádiu aktívneho vývoja)",
         "oidc_native_flow_description": "⚠ VAROVANIE: Experimentálne. Použite natívne overenie OIDC, ak je podporované serverom.",
-        "pinning": "Pripnutie správ",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
@@ -1503,9 +1489,7 @@
         "error_send_description": "%(brand)s nemohol odoslať vašu polohu. Skúste to prosím neskôr.",
         "error_send_title": "Nepodarilo sa nám odoslať vašu polohu",
         "error_sharing_live_location": "Počas zdieľania vašej polohy v reálnom čase došlo k chybe",
-        "error_sharing_live_location_try_again": "Počas zdieľania vašej polohy v reálnom čase došlo k chybe, skúste to prosím znova",
         "error_stopping_live_location": "Pri zastavovaní zdieľania polohy v reálnom čase došlo k chybe",
-        "error_stopping_live_location_try_again": "Pri vypínaní polohy v reálnom čase došlo k chybe, skúste to prosím znova",
         "expand_map": "Zväčšiť mapu",
         "failed_generic": "Nepodarilo sa načítať vašu polohu. Skúste to prosím neskôr.",
         "failed_load_map": "Nie je možné načítať mapu",
@@ -1535,7 +1519,6 @@
         "share_type_own": "Moja aktuálna poloha",
         "share_type_pin": "Označiť špendlíkom",
         "share_type_prompt": "Aký typ polohy chcete zdieľať?",
-        "stop_and_close": "Zastaviť a zavrieť",
         "toggle_attribution": "Prepínanie atribútu"
     },
     "member_list": {
@@ -1776,13 +1759,11 @@
     },
     "right_panel": {
         "add_integrations": "Pridať widgety, premostenia a boty",
-        "export_chat_button": "Exportovať konverzáciu",
         "files_button": "Súbory",
         "pinned_messages": {
             "limits": {
                 "other": "Môžete pripnúť iba %(count)s widgetov"
-            },
-            "title": "Pripnuté správy"
+            }
         },
         "pinned_messages_button": "Pripnuté",
         "poll": {
@@ -1818,8 +1799,7 @@
         },
         "video_room_chat": {
             "title": "Konverzácia"
-        },
-        "widgets_section": "Widgety"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Táto pozvánka bola odoslaná na %(email)s, ktorý nie je spojený s vaším účtom",
@@ -1839,7 +1819,6 @@
             "forget": "Zabudnúť miestnosť",
             "low_priority": "Nízka priorita",
             "mark_read": "Označiť ako prečítané",
-            "mentions_only": "Iba zmienky",
             "notifications_default": "Rovnaké ako predvolené nastavenie",
             "notifications_mute": "Stlmiť miestnosť",
             "title": "Možnosti miestnosti",
@@ -1882,23 +1861,12 @@
         "forget_room": "Zabudnúť túto miestnosť",
         "forget_space": "Zabudnúť tento priestor",
         "header": {
-            "close_call_button": "Zavrieť hovor",
-            "forget_room_button": "Zabudnúť miestnosť",
-            "hide_widgets_button": "Skryť widgety",
             "n_people_asking_to_join": {
                 "one": "Žiada o pripojenie",
                 "few": "%(count)s ľudia žiadajú o pripojenie",
                 "other": "%(count)s ľudí žiada o pripojenie"
             },
-            "room_is_public": "Táto miestnosť je verejná",
-            "show_widgets_button": "Zobraziť widgety",
-            "video_call_button_ec": "Videohovor (%(brand)s)",
-            "video_call_button_jitsi": "Videohovor (Jitsi)",
-            "video_call_button_legacy": "Starší typ videohovoru",
-            "video_call_ec_change_layout": "Zmeniť rozloženie",
-            "video_call_ec_layout_freedom": "Sloboda",
-            "video_call_ec_layout_spotlight": "Stredobod",
-            "video_room_view_chat_button": "Zobraziť časovú os konverzácie"
+            "room_is_public": "Táto miestnosť je verejná"
         },
         "header_untrusted_label": "Nedôveryhodný",
         "inaccessible": "Táto miestnosť alebo priestor nie je momentálne prístupná.",
@@ -1932,7 +1900,6 @@
         "inviter_unknown": "Neznámy",
         "invites_you_text": "<inviter/> vás pozýva",
         "join_button_account": "Zaregistrovať sa",
-        "join_failed_enable_video_rooms": "Ak sa chcete pripojiť, povoľte najprv video miestnosti v laboratóriách",
         "join_failed_needs_invite": "Na zobrazenie %(roomName)s potrebujete pozvánku",
         "join_the_discussion": "Pripojiť sa k diskusii",
         "join_title": "Pripojte sa k miestnosti a zúčastnite sa",
@@ -1975,13 +1942,8 @@
         "rejoin_button": "Znovu sa pripojiť",
         "search": {
             "all_rooms_button": "Vyhľadávať vo všetkých miestnostiach",
-            "result_count": {
-                "other": "(~%(count)s výsledkov)",
-                "one": "(~%(count)s výsledok)"
-            },
             "this_room_button": "Vyhľadávať v tejto miestnosti"
         },
-        "show_labs_settings": "Zobraziť nastavenia laboratórií",
         "status_bar": {
             "delete_all": "Vymazať všetko",
             "exceeded_resource_limit": "Vaša správa nebola odoslaná, pretože bol prekročený limit prostriedkov tohoto domovského servera. Prosím, <a>kontaktujte správcu služieb</a> aby ste službu mohli naďalej používať.",
@@ -2012,7 +1974,6 @@
             },
             "uploading_single_file": "Nahrávanie %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Ak ich chcete zobraziť, povoľte najprv video miestnosti v laboratóriách",
         "waiting_for_join_subtitle": "Keď sa pozvaní používatelia pripoja k aplikácii %(brand)s, budete môcť konverzovať a miestnosť bude end-to-end šifrovaná",
         "waiting_for_join_title": "Čaká sa na používateľov, kým sa pripoja k aplikácii %(brand)s"
     },

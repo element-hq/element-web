@@ -606,16 +606,6 @@
         "incompatible_database_disable": "با رمزنگاری غیرفعال ادامه بده",
         "incompatible_database_sign_out_description": "برای جلوگیری از دست دادن تاریخچه‌ی گفتگوی خود باید قبل از ورود به برنامه ، کلیدهای اتاق خود را استخراج (Export) کنید. برای این کار باید از نسخه جدیدتر %(brand)s استفاده کنید",
         "incompatible_database_title": "پایگاه داده ناسازگار",
-        "key_signature_upload_cancelled": "بارگذاری امضا لغو شد",
-        "key_signature_upload_completed": "بارگذاری انجام شد",
-        "key_signature_upload_failed": "بارگذاری امکان پذیر نیست",
-        "key_signature_upload_failed_body": "%(brand)s در حین بارگذاری این دچار مشکل شد:",
-        "key_signature_upload_failed_cross_signing_key_signature": "یک کلید امضای متقابل جدید",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "کلید امضای متقابل یک دستگاه",
-        "key_signature_upload_failed_key_signature": "یک امضای کلیدی",
-        "key_signature_upload_failed_master_key_signature": "یک شاه‌کلید جدید",
-        "key_signature_upload_failed_title": "بارگذاری امضا انجام نشد",
-        "key_signature_upload_success_title": "موفقیت در بارگذاری امضا",
         "messages_not_secure": {
             "cause_1": "سرور شما",
             "heading": "ممکن است یکی از موارد زیر به در معرض خطر باشد:",
@@ -628,8 +618,6 @@
             "warning": "اگر روش بازیابی جدیدی را تنظیم نکرده‌اید، ممکن است حمله‌کننده‌ای تلاش کند به حساب کاربری شما دسترسی پیدا کند. لطفا گذرواژه حساب کاربری خود را تغییر داده و فورا یک روش جدیدِ بازیابی در بخش تنظیمات انتخاب کنید."
         },
         "not_supported": "<پشتیبانی نمی‌شود>",
-        "old_version_detected_description": "داده هایی از نسخه قدیمی %(brand)s شناسایی شده است. این امر باعث اختلال در رمزنگاری سرتاسر در نسخه قدیمی شده است. پیام های رمزگذاری شده سرتاسر که اخیراً رد و بدل شده اند ممکن است با استفاده از نسخه قدیمی رمزگشایی نشوند. همچنین ممکن است پیام های رد و بدل شده با این نسخه با مشکل مواجه شود. اگر مشکلی رخ داد، از سیستم خارج شوید و مجددا وارد شوید. برای حفظ سابقه پیام، کلیدهای خود را خروجی گرفته و دوباره وارد کنید.",
-        "old_version_detected_title": "داده‌های رمزنگاری قدیمی شناسایی شد",
         "recovery_method_removed": {
             "description_1": "نشست فعلی تشخیص داده که عبارت امنیتی و کلید لازم شما برای پیام‌رسانی امن حذف شده‌است.",
             "description_2": "اگر این کار را به صورت تصادفی انجام دادید، می‌توانید سازوکار پیام امن را برای این نشست تنظیم کرده که باعث می‌شود تمام تاریخچه‌ی این نشست با استفاده از یک روش جدیدِ بازیابی، مجددا رمزشود.",
@@ -985,7 +973,6 @@
         "join_beta": "اضافه‌شدن به نسخه‌ی بتا",
         "latex_maths": "نمایش لاتکس ریاضیات در پیام‌ها",
         "leave_beta": "ترک نسخه‌ی بتا",
-        "pinning": "پین کردن پیام",
         "video_rooms": "اتاق های تصویری",
         "video_rooms_a_new_way_to_chat": "راهکار جدیدی برای گفتگوی صوتی و تصویری در%(brand)sوجود دارد.",
         "voice_broadcast": "صدای جمعی"
@@ -1172,8 +1159,7 @@
             "limits": {
                 "other": "فقط می توانید تا %(count)s ابزارک را پین کنید"
             }
-        },
-        "widgets_section": "ابزارک ها"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account_room": "این دعوت به %(roomName)s به %(email)s ارسال شده است که با حساب شما مرتبط نیست",
@@ -1211,10 +1197,7 @@
         "failed_reject_invite": "رد دعوتنامه با شکست همراه شد",
         "forget_room": "فراموش کردن این اتاق",
         "header": {
-            "forget_room_button": "فراموش کردن اتاق",
-            "hide_widgets_button": "پنهان‌کردن ابزارک‌ها",
-            "room_is_public": "این اتاق عمومی است",
-            "show_widgets_button": "نمایش ابزارک‌ها"
+            "room_is_public": "این اتاق عمومی است"
         },
         "inaccessible_name": "در حال حاضر %(roomName)s قابل دسترسی نیست.",
         "intro": {
@@ -1252,12 +1235,6 @@
         "not_found_title_name": "%(roomName)s وجود ندارد.",
         "peek_join_prompt": "شما در حال پیش نمایش %(roomName)s هستید. می خواهید به آن بپیوندید؟",
         "rejoin_button": "دوباره بپیوندید",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s نتیجه)",
-                "other": "(~%(count)s نتیجه)"
-            }
-        },
         "status_bar": {
             "delete_all": "حذف همه",
             "exceeded_resource_limit": "پیام شما ارسال نشد زیرا این سرور از محدودیت منابع فراتر رفته است. لطفاً برای ادامه استفاده از سرویس <a> با مدیر سرور خود تماس بگیرید </a>.",

@@ -865,16 +865,6 @@
         "incompatible_database_disable": "Jätka ilma krüptimiseta",
         "incompatible_database_sign_out_description": "Selleks, et sa ei kaotaks oma vestluste ajalugu, pead sa eksportima jututoa krüptovõtmed enne välja logimist. Küll, aga pead sa selleks kasutama %(brand)s uuemat versiooni",
         "incompatible_database_title": "Mitteühilduv andmebaas",
-        "key_signature_upload_cancelled": "Allkirja üleslaadimine on tühistatud",
-        "key_signature_upload_completed": "Üleslaadimine valmis",
-        "key_signature_upload_failed": "Üleslaadimine ei õnnestu",
-        "key_signature_upload_failed_body": "%(brand)s'is tekkis viga järgneva üleslaadimisel:",
-        "key_signature_upload_failed_cross_signing_key_signature": "uus risttunnustamise võtme allkiri",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "seadme risttunnustamise allkiri",
-        "key_signature_upload_failed_key_signature": "võtme allkiri",
-        "key_signature_upload_failed_master_key_signature": "uus üldvõtme allkiri",
-        "key_signature_upload_failed_title": "Allkirja üleslaadimine ei õnnestunud",
-        "key_signature_upload_success_title": "Allkirja üleslaadimine õnnestus",
         "messages_not_secure": {
             "cause_1": "Sinu koduserver",
             "cause_2": "Sinu poolt verifitseeritava kasutaja koduserver",
@@ -890,8 +880,6 @@
             "warning": "Kui sa ei ole ise uusi taastamise meetodeid lisanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
         "not_supported": "<ei ole toetatud>",
-        "old_version_detected_description": "%(brand)s vanema versiooni andmed on tuvastatud. See kindlasti põhjustab läbiva krüptimise tõrke vanemas versioonis. Läbivalt krüptitud sõnumid, mida on vanema versiooni kasutamise ajal hiljuti vahetatud, ei pruugi selles versioonis olla dekrüptitavad. See võib põhjustada vigu ka selle versiooniga saadetud sõnumite lugemisel. Kui teil tekib probleeme, logige välja ja uuesti sisse. Sõnumite ajaloo säilitamiseks eksportige ja uuesti importige oma krüptovõtmed.",
-        "old_version_detected_title": "Tuvastasin andmed, mille puhul on kasutatud vanemat tüüpi krüptimist",
         "recovery_method_removed": {
             "description_1": "Oleme tuvastanud, et selles sessioonis ei leidu turvafraasi ega krüptitud sõnumite turvavõtit.",
             "description_2": "Kui sa tegid seda juhuslikult, siis sa võid selles sessioonis uuesti seadistada sõnumite krüptimise, mille tulemusel krüptime uuesti kõik sõnumid ja loome uue taastamise meetodi.",
@@ -1413,13 +1401,11 @@
         "location_share_live_description": "Tegemist on ajutise ja esialgse lahendusega: asukohad on jututoa ajaloos näha.",
         "mjolnir": "Uued võimalused osalejate eiramiseks",
         "msc3531_hide_messages_pending_moderation": "Luba modereerimist ootavate sõnumite peitmist.",
-        "new_room_decoration_ui": "Uus jututoa päis ja infovaade on hetkel aktiivses arenduses",
         "notification_settings": "Uued teavituste seadistused",
         "notification_settings_beta_title": "Teavituste seadistused",
         "notifications": "Kasuta jututoa päises teavituste riba",
         "oidc_native_flow": "OIDC-põhine autentimine",
         "oidc_native_flow_description": "⚠ HOIATUS: Kasuta OIDC liidestust, kui server seda võimaldab (aktiivselt arendamisel).",
-        "pinning": "Sõnumite esiletõstmine",
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
@@ -1501,9 +1487,7 @@
         "error_send_description": "%(brand)s ei saanud sinu asukohta edastada. Palun proovi hiljem uuesti.",
         "error_send_title": "Sinu asukoha saatmine ei õnnestunud",
         "error_sharing_live_location": "Sinu asukoha jagamisel reaalajas tekkis viga",
-        "error_sharing_live_location_try_again": "Asukoha reaalajas jagamisel tekkis viga, palun proovi mõne hetke pärast uuesti",
         "error_stopping_live_location": "Sinu asukoha reaalajas jagamise lõpetamisel tekkis viga",
-        "error_stopping_live_location_try_again": "Asukoha jagamise lõpetamisel tekkis viga, palun proovi mõne hetke pärast uuesti",
         "expand_map": "Kuva kaart laiemana",
         "failed_generic": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
         "failed_load_map": "Kaardi laadimine ei õnnestu",
@@ -1533,7 +1517,6 @@
         "share_type_own": "Minu praegune asukoht",
         "share_type_pin": "Märgi nööpnõelaga",
         "share_type_prompt": "Missugust asukohta sa soovid jagada?",
-        "stop_and_close": "Peata ja sulge",
         "toggle_attribution": "Lülita omistamine sisse või välja"
     },
     "member_list": {
@@ -1772,13 +1755,11 @@
     },
     "right_panel": {
         "add_integrations": "Lisa vidinaid, võrgusildu ja roboteid",
-        "export_chat_button": "Ekspordi vestlus",
         "files_button": "Failid",
         "pinned_messages": {
             "limits": {
                 "other": "Sa saad kinnitada kuni %(count)s vidinat"
-            },
-            "title": "Klammerdatud sõnumid"
+            }
         },
         "pinned_messages_button": "Klammerdatud",
         "poll": {
@@ -1814,8 +1795,7 @@
         },
         "video_room_chat": {
             "title": "Vestle"
-        },
-        "widgets_section": "Vidinad"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "See kutse saadeti e-posti aadressile %(email)s, mis ei ole seotud sinu kontoga",
@@ -1835,7 +1815,6 @@
             "forget": "Unusta jututuba ära",
             "low_priority": "Vähetähtis",
             "mark_read": "Märgi loetuks",
-            "mentions_only": "Ainult mainimised",
             "notifications_default": "Sobita vaikimisi seadistusega",
             "notifications_mute": "Summuta jututuba",
             "title": "Jututoa eelistused",
@@ -1878,17 +1857,7 @@
         "forget_room": "Unusta see jututuba",
         "forget_space": "Unusta see kogukond",
         "header": {
-            "close_call_button": "Lõpeta kõne",
-            "forget_room_button": "Unusta jututuba",
-            "hide_widgets_button": "Peida vidinad",
-            "room_is_public": "See jututuba on avalik",
-            "show_widgets_button": "Näita vidinaid",
-            "video_call_button_ec": "Videokõne (%(brand)s)",
-            "video_call_button_jitsi": "Videokõne (Jitsi)",
-            "video_call_ec_change_layout": "Muuda paigutust",
-            "video_call_ec_layout_freedom": "Vabadus",
-            "video_call_ec_layout_spotlight": "Rambivalgus",
-            "video_room_view_chat_button": "Vaata vestluse ajajoont"
+            "room_is_public": "See jututuba on avalik"
         },
         "inaccessible": "See jututuba või kogukond pole hetkel ligipääsetav.",
         "inaccessible_name": "Jututuba %(roomName)s ei ole parasjagu kättesaadav.",
@@ -1921,7 +1890,6 @@
         "inviter_unknown": "Teadmata olek",
         "invites_you_text": "<inviter/> saatis sulle kutse",
         "join_button_account": "Registreeru",
-        "join_failed_enable_video_rooms": "Liitumiseks võta seadistustest katsete lehelt videotoad kasutusele",
         "join_failed_needs_invite": "%(roomName)s jututoaga tutvumiseks vajad sa kutset",
         "join_the_discussion": "Liitu vestlusega",
         "join_title": "Osalemiseks liitu jututoaga",
@@ -1962,13 +1930,8 @@
         "rejoin_button": "Liitu uuesti",
         "search": {
             "all_rooms_button": "Otsi kõikidest jututubadest",
-            "result_count": {
-                "other": "(~%(count)s tulemust)",
-                "one": "(~%(count)s tulemus)"
-            },
             "this_room_button": "Otsi sellest jututoast"
         },
-        "show_labs_settings": "Näita seadistusi",
         "status_bar": {
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit": "Sinu sõnumit ei saadetud, kuna see koduserver on ületanud on ületanud ressursipiirangu. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
@@ -1999,7 +1962,6 @@
             },
             "uploading_single_file": "Laadin üles %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Jututoa nägemiseks võta seadistustest katsete lehelt videotoad kasutusele",
         "waiting_for_join_subtitle": "Kui kutse saanud kasutajad on liitunud %(brand)s'ga, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud",
         "waiting_for_join_title": "Kasutajate liitumise ootel %(brand)s'ga"
     },

@@ -857,16 +857,6 @@
         "incompatible_database_disable": "Folytatás a titkosítás kikapcsolásával",
         "incompatible_database_sign_out_description": "Hogy a régi üzenetekhez továbbra is hozzáférhess kijelentkezés előtt ki kell mentened a szobák titkosító kulcsait. Ehhez a %(brand)s egy frissebb verzióját kell használnod",
         "incompatible_database_title": "Nem kompatibilis adatbázis",
-        "key_signature_upload_cancelled": "Az aláírás feltöltése megszakítva",
-        "key_signature_upload_completed": "A feltöltés befejeződött",
-        "key_signature_upload_failed": "Nem lehet feltölteni",
-        "key_signature_upload_failed_body": "%(brand)s hibába ütközött a feltöltés közben:",
-        "key_signature_upload_failed_cross_signing_key_signature": "az új eszközök közötti kulcs aláírása",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "az eszköz eszközök közötti aláírása",
-        "key_signature_upload_failed_key_signature": "kulcs aláírás",
-        "key_signature_upload_failed_master_key_signature": "az új mester kulcs aláírás",
-        "key_signature_upload_failed_title": "Az aláírások feltöltése sikertelen",
-        "key_signature_upload_success_title": "Az aláírások feltöltése sikeres",
         "messages_not_secure": {
             "cause_1": "Matrix szervered",
             "cause_2": "Az ellenőrizendő felhasználó ehhez a Matrix-kiszolgálóhoz kapcsolódik:",
@@ -882,8 +872,6 @@
             "warning": "Ha nem Ön állította be az új helyreállítási módot, akkor lehet, hogy egy támadó próbálja elérni a fiókját. Változtassa meg a fiókja jelszavát, és amint csak lehet, állítsa be az új helyreállítási eljárást a Beállításokban."
         },
         "not_supported": "<nem támogatott>",
-        "old_version_detected_description": "Régebbi %(brand)s verzióból származó adatok találhatók. Ezek hibás működéshez vezethettek a végpontok közti titkosításban a régebbi verzióknál. A nemrég küldött/fogadott titkosított üzenetek, ha a régi adatokat használták, lehetséges, hogy nem lesznek visszafejthetők ebben a verzióban. Ha problémákba ütközik, akkor jelentkezzen ki és be. A régi üzenetek elérésének biztosításához exportálja a kulcsokat, és importálja be újra.",
-        "old_version_detected_title": "Régi titkosítási adatot találhatók",
         "recovery_method_removed": {
             "description_1": "A munkamenet észrevette, hogy a biztonságos üzenetek biztonsági jelmondata és kulcsa törölve lett.",
             "description_2": "Ha véletlenül tette, akkor beállíthatja a biztonságos üzeneteket ebben a munkamenetben, ami újra titkosítja a régi üzeneteket a helyreállítási móddal.",
@@ -1394,9 +1382,7 @@
         "location_share_live_description": "Átmeneti megvalósítás. A helyadatok megmaradnak a szoba naplójában.",
         "mjolnir": "Új lehetőség emberek figyelmen kívül hagyására",
         "msc3531_hide_messages_pending_moderation": "A moderátorok kitakarhatják a még nem moderált üzeneteket.",
-        "new_room_decoration_ui": "Aktív fejlesztés alatt, új szobafejléc és -részletek felület",
         "notification_settings": "Új értesítési beállítások",
-        "pinning": "Üzenet kitűzése",
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "sliding_sync": "Csúszó szinkronizációs mód",
@@ -1478,9 +1464,7 @@
         "error_send_description": "Az %(brand)s nem tudja elküldeni a földrajzi helyzetét. Próbálja újra később.",
         "error_send_title": "A földrajzi helyzetet nem sikerült elküldeni",
         "error_sharing_live_location": "Élő pozíció megosztás közben hiba történt",
-        "error_sharing_live_location_try_again": "Élő pozíció megosztás közben hiba történt, kérjük próbálja újra",
         "error_stopping_live_location": "Élő pozíció megosztás megállítása közben hiba történt",
-        "error_stopping_live_location_try_again": "Élő pozíció megosztás befejezése közben hiba történt, kérjük próbálja újra",
         "expand_map": "Térkép szétnyitása",
         "failed_generic": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
         "failed_load_map": "A térkép betöltése sikertelen",
@@ -1510,7 +1494,6 @@
         "share_type_own": "Jelenlegi saját földrajzi helyzet",
         "share_type_pin": "Hely kijelölése",
         "share_type_prompt": "Milyen jellegű földrajzi helyzetet szeretne megosztani?",
-        "stop_and_close": "Befejezés és kilépés",
         "toggle_attribution": "Forrásmegjelölés be/ki"
     },
     "member_list": {
@@ -1742,13 +1725,11 @@
     },
     "right_panel": {
         "add_integrations": "Kisalkalmazások, hidak, és botok hozzáadása",
-        "export_chat_button": "Beszélgetés exportálása",
         "files_button": "Fájlok",
         "pinned_messages": {
             "limits": {
                 "other": "Csak %(count)s kisalkalmazást tud kitűzni"
-            },
-            "title": "Kitűzött üzenetek"
+            }
         },
         "pinned_messages_button": "Kitűzött",
         "poll": {
@@ -1784,8 +1765,7 @@
         },
         "video_room_chat": {
             "title": "Csevegés"
-        },
-        "widgets_section": "Kisalkalmazások"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Ez a meghívó ide lett küldve: %(email)s ami nincs összekötve a fiókjával",
@@ -1805,7 +1785,6 @@
             "forget": "Szoba elfelejtése",
             "low_priority": "Alacsony prioritás",
             "mark_read": "Megjelölés olvasottként",
-            "mentions_only": "Csak megemlítések",
             "notifications_default": "Az alapértelmezett beállítások szerint",
             "notifications_mute": "Szoba némítása",
             "title": "Szoba beállítások",
@@ -1848,21 +1827,11 @@
         "forget_room": "Szoba elfelejtése",
         "forget_space": "Ennek a térnek az elfelejtése",
         "header": {
-            "close_call_button": "Hívás befejezése",
-            "forget_room_button": "Szoba elfelejtése",
-            "hide_widgets_button": "Kisalkalmazások elrejtése",
             "n_people_asking_to_join": {
                 "one": "Csatlakozást kér",
                 "other": "%(count)s csatlakozást kérő ember"
             },
-            "room_is_public": "Ez egy nyilvános szoba",
-            "show_widgets_button": "Kisalkalmazások megjelenítése",
-            "video_call_button_ec": "Videó hívás (%(brand)s)",
-            "video_call_button_jitsi": "Videóhívás (Jitsi)",
-            "video_call_ec_change_layout": "Képernyőbeosztás megváltoztatása",
-            "video_call_ec_layout_freedom": "Szabadság",
-            "video_call_ec_layout_spotlight": "Reflektor",
-            "video_room_view_chat_button": "Beszélgetés idővonal megjelenítése"
+            "room_is_public": "Ez egy nyilvános szoba"
         },
         "header_untrusted_label": "Nem megbízható",
         "inaccessible": "Ez a szoba vagy tér jelenleg elérhetetlen.",
@@ -1896,7 +1865,6 @@
         "inviter_unknown": "Ismeretlen",
         "invites_you_text": "<inviter/> meghívta",
         "join_button_account": "Fiók készítés",
-        "join_failed_enable_video_rooms": "A belépéshez a Laborban be kell kapcsolni a videó szobákat",
         "join_failed_needs_invite": "A %(roomName)s megjelenítéséhez meghívó szükséges",
         "join_the_discussion": "Beszélgetéshez csatlakozás",
         "join_title": "Csatlakozz a szobához, hogy részt vehess",
@@ -1931,13 +1899,8 @@
         "rejoin_button": "Újra-csatlakozás",
         "search": {
             "all_rooms_button": "Keresés az összes szobában",
-            "result_count": {
-                "one": "(~%(count)s db eredmény)",
-                "other": "(~%(count)s db eredmény)"
-            },
             "this_room_button": "Keresés ebben a szobában"
         },
-        "show_labs_settings": "Labor beállítások megjelenítése",
         "status_bar": {
             "delete_all": "Mind törlése",
             "exceeded_resource_limit": "Az üzenete nem lett elküldve, mert a Matrix-kiszolgáló túllépett egy erőforráskorlátot. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás rendszergazdájával</a>.",
@@ -1967,8 +1930,7 @@
                 "other": "%(filename)s és még %(count)s db másik feltöltése"
             },
             "uploading_single_file": "%(filename)s feltöltése"
-        },
-        "view_failed_enable_video_rooms": "A megjelenítéshez a Laborban be kell kapcsolni a videó szobákat"
+        }
     },
     "room_list": {
         "add_room_label": "Szoba hozzáadása",

@@ -817,16 +817,6 @@
         "incompatible_database_disable": "暗号化を無効にして続行",
         "incompatible_database_sign_out_description": "チャットの履歴の消去を防ぐには、ログアウトする前にルームの鍵をエクスポートする必要があります。そのためには%(brand)sの新しいバージョンへと戻る必要があります",
         "incompatible_database_title": "互換性のないデータベース",
-        "key_signature_upload_cancelled": "署名のアップロードをキャンセルしました",
-        "key_signature_upload_completed": "アップロードが完了しました",
-        "key_signature_upload_failed": "アップロードできません",
-        "key_signature_upload_failed_body": "以下のアップロードの際に%(brand)sでエラーが発生しました：",
-        "key_signature_upload_failed_cross_signing_key_signature": "新しいクロス署名鍵の署名",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "端末のクロス署名",
-        "key_signature_upload_failed_key_signature": "鍵の署名",
-        "key_signature_upload_failed_master_key_signature": "新しいマスターキーの署名",
-        "key_signature_upload_failed_title": "署名のアップロードに失敗しました",
-        "key_signature_upload_success_title": "署名のアップロードに成功しました",
         "messages_not_secure": {
             "cause_1": "あなたのホームサーバー",
             "cause_2": "認証しようとしているユーザーが接続しているホームサーバー",
@@ -842,8 +832,6 @@
             "warning": "新しい復元方法を設定しなかった場合、攻撃者がアカウントへアクセスしようとしている可能性があります。設定画面ですぐにアカウントのパスワードを変更し、新しい復元方法を設定してください。"
         },
         "not_supported": "<サポート対象外>",
-        "old_version_detected_description": "%(brand)sの古いバージョンのデータを検出しました。これにより、古いバージョンではエンドツーエンドの暗号化が機能しなくなります。古いバージョンを使用している間に最近交換されたエンドツーエンドの暗号化されたメッセージは、このバージョンでは復号化できません。また、このバージョンで交換されたメッセージが失敗することもあります。問題が発生した場合は、ログアウトして再度ログインしてください。メッセージ履歴を保持するには、鍵をエクスポートして再インポートしてください。",
-        "old_version_detected_title": "古い暗号化データが検出されました",
         "recovery_method_removed": {
             "description_1": "セキュリティーフレーズと、セキュアメッセージの鍵が削除されました。",
             "description_2": "偶然削除してしまった場合は、このセッションで、メッセージの暗号化を設定することができます。設定すると、新しい復元方法でセッションのデータを改めて暗号化します。",
@@ -1322,7 +1310,6 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "pinning": "固定メッセージを有効にする",
         "report_to_moderators": "モデレーターに報告",
         "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
@@ -1401,9 +1388,7 @@
         "error_send_description": "%(brand)sは位置情報を送信できませんでした。後でもう一度やり直してください。",
         "error_send_title": "位置情報を送信できませんでした",
         "error_sharing_live_location": "位置情報（ライブ）を共有している際にエラーが発生しました",
-        "error_sharing_live_location_try_again": "位置情報（ライブ）を共有している際にエラーが発生しました。もう一度やり直してください",
         "error_stopping_live_location": "位置情報（ライブ）を停止する際にエラーが発生しました",
-        "error_stopping_live_location_try_again": "位置情報（ライブ）を停止している際にエラーが発生しました。もう一度やり直してください",
         "expand_map": "地図を開く",
         "failed_generic": "位置情報の取得に失敗しました。後でもう一度やり直してください。",
         "failed_load_map": "地図を読み込めません",
@@ -1433,7 +1418,6 @@
         "share_type_own": "自分の現在の位置情報",
         "share_type_pin": "場所を選択",
         "share_type_prompt": "どのような種類の位置情報を共有したいですか？",
-        "stop_and_close": "停止して閉じる",
         "toggle_attribution": "属性を切り替える"
     },
     "member_list": {
@@ -1661,13 +1645,11 @@
     },
     "right_panel": {
         "add_integrations": "ウィジェット、ブリッジ、ボットの追加",
-        "export_chat_button": "チャットをエクスポート",
         "files_button": "ファイル",
         "pinned_messages": {
             "limits": {
                 "other": "ウィジェットのピン留めは%(count)s件までです"
-            },
-            "title": "固定メッセージ"
+            }
         },
         "pinned_messages_button": "固定メッセージ",
         "poll": {
@@ -1686,8 +1668,7 @@
         },
         "video_room_chat": {
             "title": "会話"
-        },
-        "widgets_section": "ウィジェット"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "この招待は、アカウントに関連付けられていないメールアドレス %(email)s に送信されました",
@@ -1707,7 +1688,6 @@
             "forget": "ルームを消去",
             "low_priority": "低優先度",
             "mark_read": "既読にする",
-            "mentions_only": "メンションのみ",
             "title": "ルームの設定",
             "unfavourite": "お気に入り登録中"
         },
@@ -1737,17 +1717,7 @@
         "forget_room": "このルームを消去",
         "forget_space": "このスペースの履歴を消去",
         "header": {
-            "close_call_button": "通話を終了",
-            "forget_room_button": "ルームを消去",
-            "hide_widgets_button": "ウィジェットを非表示にする",
-            "room_is_public": "このルームは公開されています",
-            "show_widgets_button": "ウィジェットを表示",
-            "video_call_button_ec": "ビデオ通話（%(brand)s）",
-            "video_call_button_jitsi": "ビデオ通話（Jitsi）",
-            "video_call_ec_change_layout": "レイアウトを変更",
-            "video_call_ec_layout_freedom": "自由",
-            "video_call_ec_layout_spotlight": "スポットライト",
-            "video_room_view_chat_button": "チャットのタイムラインを表示"
+            "room_is_public": "このルームは公開されています"
         },
         "inaccessible": "このルームまたはスペースは現在アクセスできません。",
         "inaccessible_name": "%(roomName)sは現在アクセスできません。",
@@ -1779,7 +1749,6 @@
         "inviter_unknown": "不明",
         "invites_you_text": "<inviter/>があなたを招待しています",
         "join_button_account": "サインアップ",
-        "join_failed_enable_video_rooms": "参加するには、まずラボのビデオ通話ルームを有効にしてください",
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "join_the_discussion": "ルームに参加",
         "join_title": "ルームに参加",
@@ -1810,13 +1779,6 @@
         "read_topic": "クリックしてトピックを読む",
         "rejecting": "招待を拒否しています…",
         "rejoin_button": "再参加",
-        "search": {
-            "result_count": {
-                "other": "（〜%(count)s件）",
-                "one": "（〜%(count)s件）"
-            }
-        },
-        "show_labs_settings": "ラボの設定を表示",
         "status_bar": {
             "delete_all": "全て削除",
             "exceeded_resource_limit": "このホームサーバーがリソース制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
@@ -1845,8 +1807,7 @@
                 "one": "%(filename)sと他%(count)s件をアップロードしています"
             },
             "uploading_single_file": "%(filename)sをアップロードしています"
-        },
-        "view_failed_enable_video_rooms": "表示するには、まずラボのビデオ通話ルームを有効にしてください"
+        }
     },
     "room_list": {
         "add_room_label": "ルームを追加",

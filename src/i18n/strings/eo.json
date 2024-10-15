@@ -645,16 +645,6 @@
         "incompatible_database_disable": "Pluigi sen ĉifrado",
         "incompatible_database_sign_out_description": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
         "incompatible_database_title": "Neakorda datumbazo",
-        "key_signature_upload_cancelled": "Alŝuto de subskribo nuliĝis",
-        "key_signature_upload_completed": "Alŝuto finiĝis",
-        "key_signature_upload_failed": "Ne povas alŝuti",
-        "key_signature_upload_failed_body": "%(brand)s eraris dum alŝuto de:",
-        "key_signature_upload_failed_cross_signing_key_signature": "nova subskribo de delega ŝlosilo",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "delega subskribo de aparato",
-        "key_signature_upload_failed_key_signature": "ŝlosila subskribo",
-        "key_signature_upload_failed_master_key_signature": "nova ĉefŝlosila subskribo",
-        "key_signature_upload_failed_title": "Alŝuto de subskribo malsukcesis",
-        "key_signature_upload_success_title": "Alŝuto de subskribo sukcesis",
         "messages_not_secure": {
             "cause_1": "Via hejmservilo",
             "heading": "Unu el la jenaj eble estas malkonfidencigita:",
@@ -667,8 +657,6 @@
             "warning": "Se vi ne agordis la novan rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "not_supported": "<nesubtenata>",
-        "old_version_detected_description": "Datumoj el malnova versio de %(brand)s troviĝis. Ĉi tio malfunkciigos tutvojan ĉifradon en la malnova versio. Tutvoje ĉifritaj mesaĝoj interŝanĝitaj freŝtempe per la malnova versio eble ne malĉifreblos. Tio povas kaŭzi malsukceson ankaŭ al mesaĝoj interŝanĝitaj kun tiu ĉi versio. Se vin trafos problemoj, adiaŭu kaj resalutu. Por reteni mesaĝan historion, elportu kaj reenportu viajn ŝlosilojn.",
-        "old_version_detected_title": "Malnovaj datumoj de ĉifroteĥnikaro troviĝis",
         "recovery_method_removed": {
             "description_1": "Tiu ĉi salutaĵo trovis, ke viaj Sekureca frazo kaj ŝlosilo por Sekuraj mesaĝoj foriĝis.",
             "description_2": "Se vi faris tion akcidente, vi povas agordi Sekurajn mesaĝojn en ĉi tiu salutaĵo, kio reĉifros la historion de mesaj de ĉi tiu salutaĵo kun nova rehava metodo.",
@@ -1064,7 +1052,6 @@
         "leave_beta": "Ĉesi provadon",
         "location_share_live": "Viva Loka Kundivido",
         "mjolnir": "Novaj manieroj ignori personojn",
-        "pinning": "Fiksado de mesaĝoj",
         "report_to_moderators": "Raportu al moderigaĵoj",
         "video_rooms": "Videoĉambroj",
         "video_rooms_a_new_way_to_chat": "Nova maniero babili per voĉo kaj video en %(brand)s.",
@@ -1287,15 +1274,12 @@
     },
     "right_panel": {
         "add_integrations": "Aldonu fenestraĵojn, pontojn, kaj robotojn",
-        "export_chat_button": "Eksporti babilejon",
         "files_button": "Dosieroj",
         "pinned_messages": {
             "limits": {
                 "other": "Vi povas fiksi maksimume %(count)s fenestraĵojn"
-            },
-            "title": "Fiksitaj mesaĝoj"
-        },
-        "widgets_section": "Fenestraĵoj"
+            }
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account_room": "Ĉi tiu invito al %(roomName)s sendiĝis al %(email)s, kiu ne estas ligita al via konto",
@@ -1331,10 +1315,7 @@
         "failed_reject_invite": "Malsukcesis rifuzi inviton",
         "forget_room": "Forgesi ĉi tiun ĉambron",
         "header": {
-            "forget_room_button": "Forgesi ĉambron",
-            "hide_widgets_button": "Kaŝi fenestraĵojn",
-            "room_is_public": "Ĉi tiu ĉambro estas publika",
-            "show_widgets_button": "Montri fenestraĵojn"
+            "room_is_public": "Ĉi tiu ĉambro estas publika"
         },
         "inaccessible_name": "%(roomName)s ne estas atingebla nun.",
         "intro": {
@@ -1375,12 +1356,6 @@
         "not_found_title_name": "%(roomName)s ne ekzistas.",
         "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
         "rejoin_button": "Re-aliĝi",
-        "search": {
-            "result_count": {
-                "other": "(~%(count)s rezultoj)",
-                "one": "(~%(count)s rezulto)"
-            }
-        },
         "status_bar": {
             "delete_all": "Forigi ĉiujn",
             "exceeded_resource_limit": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis rimedan limon. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",

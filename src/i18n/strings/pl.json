@@ -142,7 +142,7 @@
         "view_source": "Wyświetl źródło",
         "yes": "Tak",
         "zoom_in": "Powiększ",
-        "zoom_out": "Zmniejsz"
+        "zoom_out": "Pomniejsz"
     },
     "analytics": {
         "accept_button": "To jest w porządku",
@@ -229,6 +229,7 @@
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
         "misconfigured_title": "Twój %(brand)s jest źle skonfigurowany",
+        "mobile_create_account_title": "Jesteś w trakcie tworzenia konta na %(hsName)s",
         "msisdn_field_description": "Inni użytkownicy mogą Cię zaprosić do pokoi za pomocą Twoich danych kontaktowych",
         "msisdn_field_label": "Telefon",
         "msisdn_field_number_invalid": "Ten numer telefonu nie wygląda dobrze, sprawdź go ponownie",
@@ -369,6 +370,8 @@
             "email_resend_prompt": "Nic nie przyszło? <a>Wyślij ponownie</a>",
             "email_resent": "Wysłano ponownie!",
             "fallback_button": "Rozpocznij uwierzytelnienie",
+            "mas_cross_signing_reset_cta": "Przejdź do swojego konta",
+            "mas_cross_signing_reset_description": "Zresetuj swoją tożsamość poprzez dostawcę swojego konta, wróć i kliknij „Ponów”.",
             "msisdn": "Wysłano wiadomość tekstową do %(msisdn)s",
             "msisdn_token_incorrect": "Niepoprawny token",
             "msisdn_token_prompt": "Wpisz kod, który jest tam zawarty:",
@@ -474,7 +477,6 @@
         "encrypted": "Szyfrowane",
         "encryption_enabled": "Włączono szyfrowanie",
         "error": "Błąd",
-        "extensions": "Rozszerzenia",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
         "feedback": "Opinia użytkownika",
@@ -904,16 +906,6 @@
         "incompatible_database_disable": "Kontynuuj Z Wyłączonym Szyfrowaniem",
         "incompatible_database_sign_out_description": "Aby uniknąć utraty historii czatu, eksportuj swoje klucze pokoju przed wylogowaniem. Musisz powrócić do nowszej wersji %(brand)s, aby do zrobić",
         "incompatible_database_title": "Niekompatybilna baza danych",
-        "key_signature_upload_cancelled": "Przesyłanie sygnatury zostało anulowane",
-        "key_signature_upload_completed": "Przesyłanie zakończone",
-        "key_signature_upload_failed": "Nie można wysłać",
-        "key_signature_upload_failed_body": "%(brand)s napotkał błąd podczas wysyłania:",
-        "key_signature_upload_failed_cross_signing_key_signature": "nowa sygnatura kluczu weryfikacji krzyżowej",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "sygnatura weryfikacji krzyżowej urządzenia",
-        "key_signature_upload_failed_key_signature": "sygnatura klucza",
-        "key_signature_upload_failed_master_key_signature": "nowa główna sygnatura klucza",
-        "key_signature_upload_failed_title": "Wysłanie podpisu nie powiodło się",
-        "key_signature_upload_success_title": "Wysłanie podpisu udało się",
         "messages_not_secure": {
             "cause_1": "Twój serwer domowy",
             "cause_2": "Użytkownik, którego weryfikujesz jest połączony z serwerem domowym",
@@ -929,8 +921,6 @@
             "warning": "Jeżeli nie ustawiłeś nowej metody odzyskiwania, atakujący może uzyskać dostęp do Twojego konta. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "not_supported": "<niewspierany>",
-        "old_version_detected_description": "Dane ze starszej wersji %(brand)s zostały wykryte. Spowoduje to błędne działanie kryptografii typu end-to-end w starszej wersji. Wiadomości szyfrowane end-to-end wymieniane ostatnio podczas korzystania ze starszej wersji mogą być niemożliwe do odszyfrowywane w tej wersji. Może to również spowodować niepowodzenie wiadomości wymienianych z tą wersją. Jeśli wystąpią problemy, wyloguj się i zaloguj ponownie. Aby zachować historię wiadomości, wyeksportuj i ponownie zaimportuj klucze.",
-        "old_version_detected_title": "Wykryto stare dane kryptograficzne",
         "recovery_method_removed": {
             "description_1": "Ta sesja wykryła, że Twoja fraza bezpieczeństwa i klucz dla bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wiadomości w tej sesji, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -1409,7 +1399,7 @@
         "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
         "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
         "automatic_debug_logs_key_backup": "Automatycznie wysyłaj logi debugowania gdy kopia zapasowa kluczy nie działa",
-        "beta_description": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu zanim dotrą one do szerszego grona użytkowników.",
+        "beta_description": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu, zanim dotrą one do szerszego grona użytkowników.",
         "beta_feature": "To jest funkcja beta",
         "beta_feedback_leave_button": "Aby wyjść z bety, odwiedź swoje ustawienia.",
         "beta_feedback_title": "%(featureName)s opinia Beta",
@@ -1426,8 +1416,11 @@
         "dynamic_room_predecessors": "Dynamiczne poprzedniki pokoju",
         "dynamic_room_predecessors_description": "Włącz MSC3946 (dla opóźnionych archiwów pokoju)",
         "element_call_video_rooms": "Pokoje rozmów wideo Element Call",
+        "exclude_insecure_devices": "Wyklucz niezabezpieczone urządzenia wysyłając/odbierając wiadomości",
+        "exclude_insecure_devices_description": "Gdy ten tryb jest włączony, wiadomości szyfrowane nie zostaną udostępnione niezweryfikowanym urządzeniom, a wiadomości odbierane od tych urządzeń wyświetlą błąd. Należy pamiętać, że jeśli włączysz ten tryb, możesz nie być w stanie komunikować się z użytkownikami, którzy nie zweryfikowali swoich urządzeń.",
         "experimental_description": "Chcesz poeksperymentować? Wypróbuj nasze najnowsze pomysły w trakcie rozwoju. Przedstawione funkcje nie zostały w pełni ukończone; mogą być niestabilne; mogą się zmienić lub zostać kompletnie porzucone. <a>Dowiedz się więcej</a>.",
         "experimental_section": "Wczesny podgląd",
+        "extended_profiles_msc_support": "Serwer musi wspierać MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
         "feature_wysiwyg_composer_description": "Użyj bogatego edytora tekstu zamiast edytora Markdown podczas tworzenia wiadomości.",
         "group_calls": "Nowe wrażenia rozmów grupowych",
@@ -1457,16 +1450,12 @@
         "location_share_live_description": "Implementacja tymczasowa. Lokalizacje są zapisywane w historii pokoju.",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
-        "new_room_decoration_ui": "Nowy nagłówek pokoju",
-        "new_room_decoration_ui_beta_caption": "Nowy wygląd dla Twoich pokoi dzięki prostszemu i łatwiejszemu w użyciu nagłówkowi.",
-        "new_room_decoration_ui_beta_title": "Nagłówek pokoju",
         "notification_settings": "Ustawienia nowych powiadomień",
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
         "oidc_native_flow": "Uwierzytelnianie natywne OIDC",
         "oidc_native_flow_description": "⚠ OSTRZEŻENIE: Funkcja eksperymentalna. Użyj uwierzytelniania natywnego OIDC, gdy jest wspierane przez serwer.",
-        "pinning": "Przypinanie wiadomości",
         "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
@@ -1555,9 +1544,7 @@
         "error_send_description": "%(brand)s nie mógł wysłać Twojej lokalizacji. Spróbuj ponownie później.",
         "error_send_title": "Nie mogliśmy wysłać Twojej lokalizacji",
         "error_sharing_live_location": "Wystąpił błąd podczas udostępniania Twojej lokalizacji na żywo",
-        "error_sharing_live_location_try_again": "Wystąpił błąd podczas udostępniania Twojej lokalizacji na żywo, spróbuj ponownie",
         "error_stopping_live_location": "Wystąpił błąd podczas kończenia lokalizacji na żywo",
-        "error_stopping_live_location_try_again": "Wystąpił błąd podczas zatrzymywania Twojej lokalizacji na żywo, spróbuj ponownie",
         "expand_map": "Rozwiń mapę",
         "failed_generic": "Nie udało się pobrać Twojej lokalizacji. Spróbuj ponownie później.",
         "failed_load_map": "Nie udało się wczytać mapy",
@@ -1587,7 +1574,6 @@
         "share_type_own": "Moja aktualna lokalizacja",
         "share_type_pin": "Upuść przypinkę",
         "share_type_prompt": "Jaki typ lokalizacji chcesz udostępnić?",
-        "stop_and_close": "Zatrzymaj i zamknij",
         "toggle_attribution": "Przełącz atrybucje"
     },
     "member_list": {
@@ -1835,25 +1821,28 @@
     "right_panel": {
         "add_integrations": "Dodaj rozszerzenia",
         "add_topic": "Dodaj temat",
-        "export_chat_button": "Eksportuj czat",
+        "extensions_button": "Rozszerzenia",
         "extensions_empty_description": "Wybierz “%(addIntegrations)s”, aby przeglądać i dodawać rozszerzenia do tego pokoju",
         "extensions_empty_title": "Zwiększ produktywność dzięki większej liczbie narzędzi, widżetów i botów",
         "files_button": "Pliki",
-        "info": "Info",
         "pinned_messages": {
             "empty_description": "Znajdź wiadomość i wybierz „%(pinAction)s”, aby załączyć ją tutaj.",
             "empty_title": "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć",
             "header": {
-                "one": "Przypięto 1 wiadomość",
-                "few": "Przypięto %(count)s wiadomości",
-                "many": "Przypięto %(count)s wiadomości"
+                "one": "1 przypięta wiadomość",
+                "few": "%(count)s przypięte wiadomości",
+                "many": "%(count)s przypiętych wiadomości"
             },
             "limits": {
                 "other": "Możesz przypiąć do %(count)s widżetów"
             },
             "menu": "Otwórz menu",
+            "release_announcement": {
+                "close": "Ok",
+                "description": "Wszystkie przypięte wiadomości są tutaj. Najedź na dowolną wiadomość i wybierz „Przypnij”, aby dodać.",
+                "title": "Wszystkie nowe przypięte wiadomości"
+            },
             "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
-            "title": "Przypięte wiadomości",
             "unpin_all": {
                 "button": "Odepnij wszystkie wiadomości",
                 "content": "Upewnij się, czy naprawdę chcesz usunąć wszystkie przypięte wiadomości. Tej akcji nie można cofnąć.",
@@ -1895,8 +1884,7 @@
         },
         "video_room_chat": {
             "title": "Czat"
-        },
-        "widgets_section": "Widżety"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "To zaproszenie zostało wysłane do %(email)s, które nie jest powiązane z Twoim kontem",
@@ -1917,7 +1905,6 @@
             "low_priority": "Niski priorytet",
             "mark_read": "Oznacz jako przeczytane",
             "mark_unread": "Oznacz jako nieprzeczytane",
-            "mentions_only": "Tylko wzmianki",
             "notifications_default": "Dopasuj z ustawieniami domyślnymi",
             "notifications_mute": "Wycisz pokój",
             "title": "Ustawienia pokoju",
@@ -1960,24 +1947,14 @@
         "forget_room": "Zapomnij o tym pokoju",
         "forget_space": "Zapomnij tą przestrzeń",
         "header": {
-            "close_call_button": "Zamknij połączenie",
-            "forget_room_button": "Zapomnij pokój",
-            "hide_widgets_button": "Ukryj widżety",
             "n_people_asking_to_join": {
                 "one": "Prosi o dołączenie",
                 "few": "%(count)s osoby proszą o dołączenie",
                 "many": "%(count)s osób prosi o dołączenie"
             },
-            "room_is_public": "Ten pokój jest publiczny",
-            "show_widgets_button": "Pokaż widżety",
-            "video_call_button_ec": "Rozmowa wideo (%(brand)s)",
-            "video_call_button_jitsi": "Rozmowa wideo (Jitsi)",
-            "video_call_button_legacy": "Stary tryb połączenia video",
-            "video_call_ec_change_layout": "Zmień układ",
-            "video_call_ec_layout_freedom": "Wolność",
-            "video_call_ec_layout_spotlight": "Centrum uwagi",
-            "video_room_view_chat_button": "Wyświetl oś czasu czatu"
+            "room_is_public": "Ten pokój jest publiczny"
         },
+        "header_avatar_open_settings_label": "Otwórz ustawienia pokoju",
         "header_face_pile_tooltip": "Osoby",
         "header_untrusted_label": "Niezaufany",
         "inaccessible": "Ten pokój lub przestrzeń nie jest dostępna w tym momencie.",
@@ -2011,7 +1988,6 @@
         "inviter_unknown": "Nieznany",
         "invites_you_text": "<inviter/> zaprasza cię",
         "join_button_account": "Zarejestruj się",
-        "join_failed_enable_video_rooms": "Aby dołączyć, włącz najpierw pokoje wideo w laboratoriach",
         "join_failed_needs_invite": "Aby wyświetlić %(roomName)s, potrzebujesz zaproszenia",
         "join_the_discussion": "Dołącz do dyskusji",
         "join_title": "Dołącz do pokoju, aby uczestniczyć",
@@ -2049,6 +2025,7 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
+        "pinned_message_badge": "Przypięta wiadomość",
         "pinned_message_banner": {
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",
@@ -2070,10 +2047,6 @@
         "search": {
             "all_rooms_button": "Wyszukaj wszystkie pokoje",
             "placeholder": "Szukaj wiadomości...",
-            "result_count": {
-                "one": "(~%(count)s wynik)",
-                "other": "(~%(count)s wyników)"
-            },
             "summary": {
                 "one": "Znaleziono 1 wynik dla \"<query/>\"",
                 "few": "Znaleziono %(count)s wyniki dla \"<query/>\"",
@@ -2081,7 +2054,6 @@
             },
             "this_room_button": "Wyszukaj ten pokój"
         },
-        "show_labs_settings": "Pokaż ustawienia laboratoriów",
         "status_bar": {
             "delete_all": "Usuń wszystkie",
             "exceeded_resource_limit": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył limit swoich zasobów. <a>Skontaktuj się z administratorem serwisu</a>, aby kontynuować.",
@@ -2112,7 +2084,6 @@
             },
             "uploading_single_file": "Przesyłanie %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Aby wyświetlić, włącz najpierw pokoje wideo w laboratoriach",
         "waiting_for_join_subtitle": "Jak tylko zaproszeni użytkownicy dołączą do %(brand)s, będziesz mógł czatować w pokoju szyfrowanym end-to-end",
         "waiting_for_join_title": "Czekanie na użytkowników %(brand)s"
     },
@@ -2216,6 +2187,8 @@
             "error_deleting_alias_description": "Wystąpił błąd podczas usuwania tego adresu. Może już nie istnieć lub wystąpił tymczasowy błąd.",
             "error_deleting_alias_description_forbidden": "Nie posiadasz uprawnień do usunięcia tego adresu.",
             "error_deleting_alias_title": "Wystąpił błąd podczas usuwania adresu",
+            "error_publishing": "Nie można opublikować pokoju",
+            "error_publishing_detail": "Wystąpił błąd podczas publikowania tego pokoju",
             "error_save_space_settings": "Nie udało się zapisać ustawień przestrzeni.",
             "error_updating_alias_description": "Wystąpił błąd podczas aktualizowania alternatywnego adresu pokoju. Serwer mógł odrzucić żądanie lub wystąpił błąd tymczasowy.",
             "error_updating_canonical_alias_description": "Wystąpił błąd podczas aktualizowania adresu głównego pokoju. Serwer mógł odrzucić żądanie lub wystąpił błąd tymczasowy.",
@@ -2721,6 +2694,7 @@
             "keyboard_view_shortcuts_button": "<a>Kliknij tutaj</a> aby wyświetlić wszystkie skróty klawiaturowe.",
             "media_heading": "Obrazy, GIFy i wideo",
             "presence_description": "Udostępnij swoją aktywność i status z innymi.",
+            "publish_timezone": "Opublikuj strefę czasową na profilu publicznym",
             "rm_lifetime": "Długość życia znacznika odczytu (ms)",
             "rm_lifetime_offscreen": "Długość życia znacznika odczytu poza ekranem (ms)",
             "room_directory_heading": "Katalog pokoju",
@@ -2801,7 +2775,7 @@
             "message_search_room_progress": "%(doneRooms)s z %(totalRooms)s",
             "message_search_section": "Wyszukiwanie wiadomości",
             "message_search_sleep_time": "Jak szybko powinny być pobierane wiadomości.",
-            "message_search_space_used": "Użyta powierzchnia:",
+            "message_search_space_used": "Użyte miejsce:",
             "message_search_unsupported": "%(brand)s brakuje niektórych komponentów wymaganych do bezpiecznego przechowywania wiadomości szyfrowanych lokalnie. Jeśli chcesz eksperymentować z tą funkcją, zbuduj własny %(brand)s Desktop z <nativeLink> dodanymi komponentami wyszukiwania</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s nie jest w stanie bezpiecznie przechowywać wiadomości szyfrowanych lokalnie, gdy działa w przeglądarce. Użyj <desktopLink> Desktop</desktopLink>, aby wiadomości pojawiły się w wynikach wyszukiwania.",
             "record_session_details": "Zapisz nazwę klienta, wersję i URL, aby łatwiej rozpoznawać sesje w menedżerze sesji",
@@ -3293,6 +3267,8 @@
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość uległa zmianie",
+            "sender_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3300,6 +3276,7 @@
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
+        "e2e_state": "Stan szyfrowania end-to-end",
         "edits": {
             "tooltip_label": "Edytowano w %(date)s. Kliknij, aby zobaczyć zmiany.",
             "tooltip_sub": "Kliknij, aby wyświetlić edycje",

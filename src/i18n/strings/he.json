@@ -613,16 +613,6 @@
         "incompatible_database_disable": "המשך כאשר ההצפנה מושבתת",
         "incompatible_database_sign_out_description": "כדי להימנע מאיבוד היסטוריית הצ'אט שלכם, עליכם לייצא את מפתחות החדר שלכם לפני שאתם מתנתקים. יהיה עליכם לחזור לגרסה החדשה יותר של %(brand)s כדי לעשות זאת",
         "incompatible_database_title": "מסד נתונים לא תואם",
-        "key_signature_upload_cancelled": "העלאת החתימה בוטלה",
-        "key_signature_upload_completed": "העלאה הושלמה",
-        "key_signature_upload_failed": "לא ניתן להעלות",
-        "key_signature_upload_failed_body": "%(brand)s נתקל בשגיאה במהלך ההעלאה של:",
-        "key_signature_upload_failed_cross_signing_key_signature": "חתימת מפתח צולבת חדשה",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "חתימה צולבת של התקן",
-        "key_signature_upload_failed_key_signature": "חתימת מפתח",
-        "key_signature_upload_failed_master_key_signature": "חתימת מפתח ראשית חדשה",
-        "key_signature_upload_failed_title": "העלאת החתימה נכשלה",
-        "key_signature_upload_success_title": "הצלחה בהעלאת חתימה",
         "messages_not_secure": {
             "cause_1": "שרת הבית שלכם",
             "heading": "אחד מהדברים הבאים עלול להוות סיכון:",
@@ -634,8 +624,6 @@
             "warning": "אם לא הגדרת את שיטת השחזור החדשה, ייתכן שתוקף מנסה לגשת לחשבונך. שנה את סיסמת החשבון שלך והגדר מיד שיטת שחזור חדשה בהגדרות."
         },
         "not_supported": "<לא נתמך>",
-        "old_version_detected_description": "נתגלו גרסאות ישנות יותר של %(brand)s. זה יגרום לתקלה בקריפטוגרפיה מקצה לקצה בגרסה הישנה יותר. הודעות מוצפנות מקצה לקצה שהוחלפו לאחרונה בעת השימוש בגרסה הישנה עשויות שלא להיות ניתנות לפענוח בגירסה זו. זה עלול גם לגרום להודעות שהוחלפו עם גרסה זו להיכשל. אם אתה נתקל בבעיות, צא וחזור שוב. כדי לשמור על היסטוריית ההודעות, ייצא וייבא מחדש את המפתחות שלך.",
-        "old_version_detected_title": "נתגלו נתוני הצפנה ישנים",
         "recovery_method_removed": {
             "description_2": "אם עשית זאת בטעות, באפשרותך להגדיר הודעות מאובטחות בהפעלה זו אשר תצפין מחדש את היסטוריית ההודעות של הפגישה בשיטת שחזור חדשה.",
             "title": "שיטת השחזור הוסרה",
@@ -1020,8 +1008,7 @@
         "join_beta_reload": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
         "jump_to_date": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)",
         "latex_maths": "בצע מתמטיקה של LaTeX בהודעות",
-        "leave_beta_reload": "עזיבת הניסוי תטען מחדש את %(brand)s.",
-        "pinning": "נעיצת הודעות"
+        "leave_beta_reload": "עזיבת הניסוי תטען מחדש את %(brand)s."
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ הגדרות אלה מיועדות למשתמשים מתקדמים.",
@@ -1070,7 +1057,6 @@
     "location_sharing": {
         "MapStyleUrlNotReachable": "שרת בית זה אינו מוגדר כהלכה להצגת מפות, או ששרת המפות המוגדר אינו ניתן לגישה.",
         "close_sidebar": "סגור סרגל צד",
-        "error_sharing_live_location_try_again": "אירעה שגיאה במהלך שיתוף המיקום החי שלכם, אנא נסו שוב",
         "failed_generic": "איתור המיקום שלך נכשל. אנא נסה שוב מאוחר יותר.",
         "find_my_location": "מצא את מיקומי",
         "live_enable_description": "שימו לב: זוהי תכונת פיתוח המשתמשת ביישום זמני. משמעות הדבר היא שלא תוכלו למחוק את היסטוריית המיקומים שלכם, ומשתמשים מתקדמים יוכלו לראות את היסטוריית המיקומים שלך גם לאחר שתפסיקו לשתף את המיקום החי שלכם עם החדר הזה.",
@@ -1230,13 +1216,11 @@
     },
     "right_panel": {
         "add_integrations": "הוסף יישומונים, גשרים ובוטים",
-        "export_chat_button": "ייצוא צ'אט",
         "files_button": "קבצים",
         "pinned_messages": {
             "limits": {
                 "other": "אתה יכול להצמיד עד%(count)s ווידג'טים בלבד"
-            },
-            "title": "הודעות נעוצות"
+            }
         },
         "pinned_messages_button": "הודעות נעוצות",
         "room_summary_card": {
@@ -1244,8 +1228,7 @@
         },
         "thread_list": {
             "context_menu_label": "אפשרויות שרשור"
-        },
-        "widgets_section": "ישומונים"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account_room": "הזמנה זו ל-%(roomName)s נשלחה ל-%(email)s שאינה משויכת לחשבונך",
@@ -1272,10 +1255,7 @@
         "forget_room": "שכח חדר זה",
         "forget_space": "שכח את מרחב עבודה זה",
         "header": {
-            "forget_room_button": "שכח חדר",
-            "hide_widgets_button": "הסתר ישומונים",
-            "room_is_public": "חדר זה ציבורי",
-            "show_widgets_button": "הצג ישומונים"
+            "room_is_public": "חדר זה ציבורי"
         },
         "inaccessible": "חדר זה או מרחב העבודה אינם זמינים כעת.",
         "inaccessible_name": "לא ניתן להכנס אל %(roomName)s בזמן הזה.",
@@ -1301,7 +1281,6 @@
         "invite_title": "האם אתם מעוניינים להצטרף אל %(roomName)s?",
         "inviter_unknown": "לא ידוע",
         "join_button_account": "הרשמה",
-        "join_failed_enable_video_rooms": "כדי להצטרף, נא אפשר תחילה וידאו במעבדת הפיתוח",
         "join_the_discussion": "הצטרף אל הדיון",
         "join_title_account": "הצטרף לשיחה עם חשבון",
         "jump_read_marker": "קפצו להודעה הראשונה שלא נקראה.",
@@ -1318,13 +1297,6 @@
         "not_found_title_name": "%(roomName)s לא קיים.",
         "peek_join_prompt": "אתם צופים ב־%(roomName)s. האם תרצו להצטרף?",
         "rejoin_button": "הצטרפות מחדש",
-        "search": {
-            "result_count": {
-                "one": "(תוצאת %(count)s)",
-                "other": "(תוצאת %(count)s)"
-            }
-        },
-        "show_labs_settings": "הצג את אופציית מעבדת הפיתוח",
         "status_bar": {
             "exceeded_resource_limit": "ההודעה שלך לא נשלחה מכיוון ששרת הבית הזה חרג ממגבלת המשאבים. אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות.",
             "monthly_user_limit_reached": "ההודעה שלך לא נשלחה מכיוון ששרת הבתים הזה הגיע למגבלת המשתמשים הפעילים החודשיים שלה. אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות.",
@@ -1348,8 +1320,7 @@
                 "other": "מעלה %(filename)s ו-%(count)s אחרים"
             },
             "uploading_single_file": "מעלה %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "כדי לצפות, אנא הפעל תחילה חדרי וידאו במעבדת הפיתוח"
+        }
     },
     "room_list": {
         "add_room_label": "הוסף חדר",

@@ -547,16 +547,6 @@
         "incompatible_database_disable": "Tęsti išjungus šifravimą",
         "incompatible_database_sign_out_description": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
         "incompatible_database_title": "Nesuderinama duomenų bazė",
-        "key_signature_upload_cancelled": "Atšauktas parašo įkėlimas",
-        "key_signature_upload_completed": "Įkėlimas baigtas",
-        "key_signature_upload_failed": "Nepavyksta įkelti",
-        "key_signature_upload_failed_body": "%(brand)s aptiko klaidą įkeliant:",
-        "key_signature_upload_failed_cross_signing_key_signature": "naujas kryžminio pasirašymo rakto parašas",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "įrenginio kryžminio pasirašymo parašas",
-        "key_signature_upload_failed_key_signature": "rakto parašas",
-        "key_signature_upload_failed_master_key_signature": "naujas pagrindinio rakto parašas",
-        "key_signature_upload_failed_title": "Parašo įkėlimas nepavyko",
-        "key_signature_upload_success_title": "Parašo įkėlimas sėkmingas",
         "messages_not_secure": {
             "cause_1": "Jūsų serveris",
             "cause_2": "Namų serveris, prie kurio yra prisijungęs patvirtinamas naudotojas",
@@ -571,7 +561,6 @@
             "warning": "Jei jūs nenustatėte naujo paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "not_supported": "<nepalaikoma>",
-        "old_version_detected_title": "Aptikti seni kriptografijos duomenys",
         "recovery_method_removed": {
             "description_2": "Jei tai padarėte netyčia, šiame seanse galite nustatyti saugias žinutes, kurios pakartotinai užšifruos šio seanso žinučių istoriją nauju atgavimo metodu.",
             "title": "Atgavimo Metodas Pašalintas",
@@ -883,7 +872,6 @@
         "latex_maths": "Atvaizduoti LaTeX matematikas žinutėse",
         "leave_beta": "Palikti beta versiją",
         "msc3531_hide_messages_pending_moderation": "Leisti moderatoriams slėpti žinutes, laukiančias moderavimo.",
-        "pinning": "Žinučių prisegimas",
         "video_rooms": "Vaizdo kambariai",
         "video_rooms_a_new_way_to_chat": "Naujas būdas kalbėtis balsu ir vaizdu per %(brand)s.",
         "video_rooms_always_on_voip_channels": "Vaizdo kambariai - tai visada veikiantys VoIP kanalai, įterpti į %(brand)s kambarį.",
@@ -1081,19 +1069,16 @@
     },
     "right_panel": {
         "add_integrations": "Pridėti valdiklius, tiltus ir botus",
-        "export_chat_button": "Eksportuoti pokalbį",
         "files_button": "Failai",
         "pinned_messages": {
             "limits": {
                 "other": "Galite prisegti tik iki %(count)s valdiklių"
-            },
-            "title": "Prisegtos žinutės"
+            }
         },
         "pinned_messages_button": "Prisegta",
         "video_room_chat": {
             "title": "Pokalbis"
-        },
-        "widgets_section": "Valdikliai"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Šis kvietimas buvo išsiųstas į %(email)s, kuris nėra susijęs su jūsų paskyra",
@@ -1128,11 +1113,6 @@
         "failed_reject_invite": "Nepavyko atmesti pakvietimo",
         "forget_room": "Pamiršti šį kambarį",
         "forget_space": "Pamiršti šią erdvę",
-        "header": {
-            "forget_room_button": "Pamiršti kambarį",
-            "hide_widgets_button": "Slėpti Valdiklius",
-            "show_widgets_button": "Rodyti Valdiklius"
-        },
         "inaccessible": "Šiuo metu į šį kambarį ar erdvę negalima patekti.",
         "inaccessible_name": "%(roomName)s šiuo metu nėra pasiekiamas.",
         "inaccessible_subtitle_1": "Pabandykite vėliau arba paprašykite kambario ar erdvės administratoriaus patikrinti, ar turite prieigą.",
@@ -1163,7 +1143,6 @@
         "inviter_unknown": "Nežinoma",
         "invites_you_text": "<inviter/> kviečia jus",
         "join_button_account": "Registruotis",
-        "join_failed_enable_video_rooms": "Norint prisijungti, pirmiausia įjunkite vaizdo kambarius laboratorijose",
         "join_failed_needs_invite": "Norint peržiūrėti %(roomName)s, turite gauti kvietimą",
         "join_the_discussion": "Prisijungti prie diskusijos",
         "join_title": "Prisijunkite prie kambario ir dalyvaukite",
@@ -1190,13 +1169,6 @@
         "not_found_title_name": "%(roomName)s neegzistuoja.",
         "peek_join_prompt": "Jūs peržiūrite %(roomName)s. Norite prie jo prisijungti?",
         "rejoin_button": "Prisijungti iš naujo",
-        "search": {
-            "result_count": {
-                "other": "(~%(count)s rezultatų(-ai))",
-                "one": "(~%(count)s rezultatas)"
-            }
-        },
-        "show_labs_settings": "Rodyti laboratorijų nustatymus",
         "status_bar": {
             "server_connectivity_lost_description": "Išsiųstos žinutės bus saugomos tol, kol atsiras ryšys.",
             "server_connectivity_lost_title": "Jungiamumas su šiuo serveriu buvo prarastas."
@@ -1217,8 +1189,7 @@
                 "one": "Įkeliamas %(filename)s ir dar %(count)s failas"
             },
             "uploading_single_file": "Įkeliamas %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "Norint peržiūrėti, pirmiausia įjunkite vaizdo kambarius laboratorijose"
+        }
     },
     "room_list": {
         "add_room_label": "Sukurti kambarį",

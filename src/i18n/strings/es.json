@@ -798,16 +798,6 @@
         "incompatible_database_disable": "Seguir con el cifrado desactivado",
         "incompatible_database_sign_out_description": "Para evitar perder tu historial de chat, debes exportar las claves de la sala antes de salir. Debes volver a la versión actual de %(brand)s para esto",
         "incompatible_database_title": "Base de datos incompatible",
-        "key_signature_upload_cancelled": "Subida de firma cancelada",
-        "key_signature_upload_completed": "Subida completada",
-        "key_signature_upload_failed": "No se ha podido enviar",
-        "key_signature_upload_failed_body": "%(brand)s encontró un error durante la carga de:",
-        "key_signature_upload_failed_cross_signing_key_signature": "una nueva firma de código de firma cruzada",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "una firma para la firma cruzada de dispositivos",
-        "key_signature_upload_failed_key_signature": "un firma de clave",
-        "key_signature_upload_failed_master_key_signature": "una nueva firma de llave maestra",
-        "key_signature_upload_failed_title": "Subida de firma ha fallado",
-        "key_signature_upload_success_title": "Subida de firma exitosa",
         "messages_not_secure": {
             "cause_1": "Tu servidor base",
             "cause_2": "El servidor base del usuario al que estás invitando",
@@ -823,8 +813,6 @@
             "warning": "Si no configuró el nuevo método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
         "not_supported": "<no soportado>",
-        "old_version_detected_description": "Se detectó una versión más antigua de %(brand)s. Esto habrá provocado que la criptografía de extremo a extremo funcione incorrectamente en la versión más antigua. Los mensajes cifrados de extremo a extremo intercambiados recientemente mientras usaba la versión más antigua puede que no sean descifrables con esta versión. Esto también puede hacer que fallen con la más reciente. Si experimenta problemas, desconecte y vuelva a ingresar. Para conservar el historial de mensajes, exporte y vuelva a importar sus claves.",
-        "old_version_detected_title": "Se detectó información de criptografía antigua",
         "recovery_method_removed": {
             "description_1": "Esta sesión ha detectado que tu frase de seguridad y clave para mensajes seguros ha sido eliminada.",
             "description_2": "Si hizo esto accidentalmente, puede configurar Mensajes seguros en esta sesión que volverá a cifrar el historial de mensajes de esta sesión con un nuevo método de recuperación.",
@@ -1308,7 +1296,6 @@
         "mjolnir": "Nuevas maneras de ignorar a otras personas",
         "msc3531_hide_messages_pending_moderation": "Permitir a los moderadores ocultar mensajes a la espera de revisión.",
         "oidc_native_flow": "Activar flujos de OIDC nativos (en desarrollo)",
-        "pinning": "Mensajes anclados",
         "report_to_moderators": "Denunciar ante los moderadores",
         "report_to_moderators_description": "En las salas que sean compatible con la moderación, el botón de «Denunciar» avisará a los moderadores de la sala.",
         "sliding_sync": "Modo de sincronización progresiva",
@@ -1387,9 +1374,7 @@
         "error_send_description": "%(brand)s no ha podido enviar tu ubicación. Por favor, inténtalo de nuevo más tarde.",
         "error_send_title": "No hemos podido enviar tu ubicación",
         "error_sharing_live_location": "Ocurrió un error mientras se compartía tu ubicación en tiempo real",
-        "error_sharing_live_location_try_again": "Ha ocurrido un error al compartir tu ubicación en tiempo real. Por favor, inténtalo de nuevo",
         "error_stopping_live_location": "Ha ocurrido un error al dejar de compartir tu ubicación en tiempo real",
-        "error_stopping_live_location_try_again": "Ha ocurrido un error al dejar de compartir tu ubicación en tiempo real. Por favor, inténtalo de nuevo",
         "expand_map": "Expandir mapa",
         "failed_generic": "No se ha podido conseguir tu ubicación. Por favor, inténtalo de nuevo más tarde.",
         "failed_load_map": "No se ha podido cargar el mapa",
@@ -1419,7 +1404,6 @@
         "share_type_own": "Mi ubicación actual",
         "share_type_pin": "Elige un punto en el mapa",
         "share_type_prompt": "¿Qué ubicación quieres compartir?",
-        "stop_and_close": "Parar y cerrar",
         "toggle_attribution": "Mostrar/ocultar fuente"
     },
     "member_list": {
@@ -1648,13 +1632,11 @@
     },
     "right_panel": {
         "add_integrations": "Añadir accesorios, puentes y bots",
-        "export_chat_button": "Exportar conversación",
         "files_button": "Archivos",
         "pinned_messages": {
             "limits": {
                 "other": "Solo puedes anclar hasta %(count)s accesorios"
-            },
-            "title": "Mensajes fijados"
+            }
         },
         "pinned_messages_button": "Fijado",
         "poll": {
@@ -1679,8 +1661,7 @@
         },
         "video_room_chat": {
             "title": "Conversación"
-        },
-        "widgets_section": "Accesorios"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Esta invitación se envió originalmente a %(email)s, que no está asociada a tu cuenta",
@@ -1700,7 +1681,6 @@
             "forget": "Olvidar sala",
             "low_priority": "Prioridad baja",
             "mark_read": "Marcar como leído",
-            "mentions_only": "Solo menciones",
             "notifications_mute": "Silenciar sala",
             "title": "Opciones de la sala",
             "unfavourite": "Favorecido"
@@ -1734,16 +1714,7 @@
         "forget_room": "Olvidar esta sala",
         "forget_space": "Olvidar este espacio",
         "header": {
-            "close_call_button": "Terminar llamada",
-            "forget_room_button": "Olvidar sala",
-            "hide_widgets_button": "Ocultar accesorios",
-            "room_is_public": "Esta sala es pública",
-            "show_widgets_button": "Mostrar accesorios",
-            "video_call_button_ec": "Videollamada (%(brand)s)",
-            "video_call_button_jitsi": "Videollamada (Jitsi)",
-            "video_call_ec_change_layout": "Cambiar disposición",
-            "video_call_ec_layout_freedom": "Libertad",
-            "video_room_view_chat_button": "Ver historial del chat"
+            "room_is_public": "Esta sala es pública"
         },
         "inaccessible": "Esta sala o espacio no es accesible en este momento.",
         "inaccessible_name": "%(roomName)s no es accesible en este momento.",
@@ -1776,7 +1747,6 @@
         "inviter_unknown": "Desconocido",
         "invites_you_text": "<inviter/> te ha invitado",
         "join_button_account": "Registrarse",
-        "join_failed_enable_video_rooms": "Para unirse, por favor activa las salas de vídeo en Labs primero",
         "join_failed_needs_invite": "Para ver %(roomName)s necesitas una invitación",
         "join_the_discussion": "Unirme a la Sala",
         "join_title": "Únete a la sala para participar",
@@ -1809,13 +1779,8 @@
         "rejoin_button": "Volver a entrar",
         "search": {
             "all_rooms_button": "Buscar en todas las salas",
-            "result_count": {
-                "other": "(~%(count)s resultados)",
-                "one": "(~%(count)s resultado)"
-            },
             "this_room_button": "Buscar en esta sala"
         },
-        "show_labs_settings": "Ver ajustes de los experimentos",
         "status_bar": {
             "delete_all": "Borrar todo",
             "exceeded_resource_limit": "Tu mensaje no se ha enviado porque este servidor base ha excedido un límite de recursos. Por favor <a>contacta con el administrador de tu servicio</a> para continuar utilizándolo.",
@@ -1845,8 +1810,7 @@
                 "other": "Subiendo %(filename)s y otros %(count)s"
             },
             "uploading_single_file": "Subiendo %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "Para verla, activa las salas de vídeos en la sección de experimentos de los ajustes"
+        }
     },
     "room_list": {
         "add_room_label": "Añadir una sala",

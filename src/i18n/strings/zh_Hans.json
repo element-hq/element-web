@@ -792,16 +792,6 @@
         "incompatible_database_disable": "在停用加密的情况下继续",
         "incompatible_database_sign_out_description": "为避免丢失聊天记录，你必须在登出前导出房间密钥。你需要切换至新版 %(brand)s 方可继续执行此操作",
         "incompatible_database_title": "数据库不兼容",
-        "key_signature_upload_cancelled": "已取消签名上传",
-        "key_signature_upload_completed": "上传完成",
-        "key_signature_upload_failed": "无法上传",
-        "key_signature_upload_failed_body": "%(brand)s 在上传此文件时出错：",
-        "key_signature_upload_failed_cross_signing_key_signature": "一个新的交叉签名密钥的签名",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "一个设备的交叉签名的签名",
-        "key_signature_upload_failed_key_signature": "一个密钥签名",
-        "key_signature_upload_failed_master_key_signature": "一个新的主密钥签名",
-        "key_signature_upload_failed_title": "签名上传失败",
-        "key_signature_upload_success_title": "签名上传成功",
         "messages_not_secure": {
             "cause_1": "你的家服务器",
             "cause_2": "你正在验证的用户所连接的家服务器",
@@ -817,8 +807,6 @@
             "warning": "如果你没有设置新恢复方式，可能有攻击者正试图侵入你的账户。请立即更改你的账户密码并在设置中设定一个新恢复方式。"
         },
         "not_supported": "<不支持>",
-        "old_version_detected_description": "已检测到旧版%(brand)s的数据，这将导致端到端加密在旧版本中发生故障。在此版本中，使用旧版本交换的端到端加密消息可能无法解密。这也可能导致与此版本交换的消息失败。如果你遇到问题，请登出并重新登录。要保留历史消息，请先导出并在重新登录后导入你的密钥。",
-        "old_version_detected_title": "检测到旧的加密数据",
         "recovery_method_removed": {
             "description_1": "此会话已检测到你的安全短语和安全消息密钥被移除。",
             "description_2": "如果你出于意外这样做了，你可以在此会话上设置安全消息，以使用新的加密方式重新加密此会话的消息历史。",
@@ -1295,11 +1283,9 @@
         "location_share_live_description": "临时的实现。位置在房间历史中持续保留。",
         "mjolnir": "忽略他人的新方式",
         "msc3531_hide_messages_pending_moderation": "让协管员隐藏等待审核的消息。",
-        "new_room_decoration_ui": "新的房间标题和一些细节界面正在积极开发中",
         "notification_settings": "通知设置",
         "notification_settings_beta_caption": "引入一种更简单的方式来更改通知设置。以你喜欢的方式定制%(brand)s。",
         "notification_settings_beta_title": "通知设置",
-        "pinning": "消息置顶",
         "report_to_moderators": "报告给协管员",
         "report_to_moderators_description": "在支持审核的房间中，“报告”按钮将让你向房间协管员举报滥用行为。",
         "sliding_sync": "滑动同步模式",
@@ -1376,9 +1362,7 @@
         "error_send_description": "%(brand)s无法发送你的位置。请稍后再试。",
         "error_send_title": "我们无法发送你的位置",
         "error_sharing_live_location": "分享实时位置时出错",
-        "error_sharing_live_location_try_again": "分享你的实时位置时出错，请重试",
         "error_stopping_live_location": "停止实时位置时出错",
-        "error_stopping_live_location_try_again": "停止你的实时位置时出错，请重试",
         "expand_map": "展开地图",
         "failed_generic": "获取你的位置失败。请之后再试。",
         "failed_load_map": "无法加载地图",
@@ -1406,7 +1390,6 @@
         "share_type_own": "我当前的位置",
         "share_type_pin": "放置图钉",
         "share_type_prompt": "你想分享什么位置类型？",
-        "stop_and_close": "停止并关闭",
         "toggle_attribution": "切换属性"
     },
     "member_list": {
@@ -1628,13 +1611,11 @@
     },
     "right_panel": {
         "add_integrations": "添加挂件、桥接和机器人",
-        "export_chat_button": "导出聊天",
         "files_button": "文件",
         "pinned_messages": {
             "limits": {
                 "other": "你仅能固定 %(count)s 个挂件"
-            },
-            "title": "已固定的消息"
+            }
         },
         "pinned_messages_button": "已固定",
         "poll": {
@@ -1652,8 +1633,7 @@
         },
         "video_room_chat": {
             "title": "聊天"
-        },
-        "widgets_section": "挂件"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "该邀请被发送到了与你的账户无关的 %(email)s",
@@ -1672,7 +1652,6 @@
             "favourite": "收藏",
             "forget": "忘记房间",
             "low_priority": "低优先级",
-            "mentions_only": "仅提及",
             "title": "房间选项",
             "unfavourite": "已收藏"
         },
@@ -1703,12 +1682,7 @@
         "forget_room": "忘记此房间",
         "forget_space": "忘记此空间",
         "header": {
-            "forget_room_button": "忘记房间",
-            "hide_widgets_button": "隐藏挂件",
-            "room_is_public": "此房间为公共的",
-            "show_widgets_button": "显示挂件",
-            "video_call_button_jitsi": "视频通话（Jitsi）",
-            "video_call_ec_change_layout": "更改布局"
+            "room_is_public": "此房间为公共的"
         },
         "inaccessible": "这个房间或空间当前不可访问。",
         "inaccessible_name": "%(roomName)s 此时无法访问。",
@@ -1740,7 +1714,6 @@
         "inviter_unknown": "未知的",
         "invites_you_text": "<inviter/> 邀请了你",
         "join_button_account": "注册",
-        "join_failed_enable_video_rooms": "加入前请在实验室允许虚拟房间",
         "join_failed_needs_invite": "你需要一个邀请来查看 %(roomName)s",
         "join_the_discussion": "加入讨论",
         "join_title": "加入房间以参与",
@@ -1768,13 +1741,6 @@
         "peek_join_prompt": "你正在预览 %(roomName)s。想加入吗？",
         "read_topic": "点击阅读话题",
         "rejoin_button": "重新加入",
-        "search": {
-            "result_count": {
-                "one": "（~%(count)s 个结果）",
-                "other": "（~%(count)s 个结果）"
-            }
-        },
-        "show_labs_settings": "显示实验室设置",
         "status_bar": {
             "delete_all": "删除全部",
             "exceeded_resource_limit": "你的消息未被发送，因为本家服务器已达到其使用量限制之一。请 <a>联系你的服务管理员</a> 以继续使用本服务。",
@@ -1803,8 +1769,7 @@
                 "one": "正在上传 %(filename)s 与其他 %(count)s 个文件"
             },
             "uploading_single_file": "正在上传 %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "查看前请在实验室允许虚拟房间"
+        }
     },
     "room_list": {
         "add_room_label": "添加房间",

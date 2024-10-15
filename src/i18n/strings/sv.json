@@ -867,16 +867,6 @@
         "incompatible_database_disable": "Fortsätt med kryptering inaktiverad",
         "incompatible_database_sign_out_description": "För att undvika att förlora din chatthistorik måste du exportera dina rumsnycklar innan du loggar ut. Du behöver gå tillbaka till den nyare versionen av %(brand)s för att göra detta",
         "incompatible_database_title": "Inkompatibel databas",
-        "key_signature_upload_cancelled": "Avbröt signaturuppladdning",
-        "key_signature_upload_completed": "Uppladdning slutförd",
-        "key_signature_upload_failed": "Kunde inte ladda upp",
-        "key_signature_upload_failed_body": "%(brand)s stötte på ett fel vid uppladdning av:",
-        "key_signature_upload_failed_cross_signing_key_signature": "en ny korssigneringssignatur",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "en enhets korssigneringssignatur",
-        "key_signature_upload_failed_key_signature": "en nyckelsignatur",
-        "key_signature_upload_failed_master_key_signature": "en ny huvudnyckelsignatur",
-        "key_signature_upload_failed_title": "Signaturuppladdning misslyckades",
-        "key_signature_upload_success_title": "Signaturuppladdning lyckades",
         "messages_not_secure": {
             "cause_1": "Din hemserver",
             "cause_2": "Hemservern användaren du verifierar är ansluten till",
@@ -892,8 +882,6 @@
             "warning": "Om du inte har ställt in den nya återställningsmetoden kan en angripare försöka komma åt ditt konto. Byt ditt kontolösenord och ställ in en ny återställningsmetod omedelbart i inställningarna."
         },
         "not_supported": "<stöds inte>",
-        "old_version_detected_description": "Data från en äldre version av %(brand)s has upptäckts. Detta ska ha orsakat att totalsträckskryptering inte fungerat i den äldre versionen. Krypterade meddelanden som nyligen har skickats medans den äldre versionen användes kanske inte kan avkrypteras i denna version. Detta kan även orsaka att meddelanden skickade med denna version inte fungerar. Om du upplever problem, logga ut och in igen. För att behålla meddelandehistoriken, exportera dina nycklar och importera dem igen.",
-        "old_version_detected_title": "Gammal kryptografidata upptäckt",
         "recovery_method_removed": {
             "description_1": "Den här sessionen har detekterat att din säkerhetsfras och -nyckel för säkra meddelanden har tagits bort.",
             "description_2": "Om du gjorde det av misstag kan du ställa in säkra meddelanden på den här sessionen som krypterar sessionens meddelandehistorik igen med en ny återställningsmetod.",
@@ -1416,14 +1404,12 @@
         "location_share_live_description": "Temporär implementation. Platser stannar kvar i rumshistoriken.",
         "mjolnir": "Nya sätt att ignorera personer",
         "msc3531_hide_messages_pending_moderation": "Låt moderatorer dölja meddelanden i väntan på moderering.",
-        "new_room_decoration_ui": "Under aktiv utveckling, ny rumsrubrik & detaljgränssnitt",
         "notification_settings": "Nya aviseringsinställningar",
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
         "oidc_native_flow": "Inbyggd OIDC-autentisering",
         "oidc_native_flow_description": "⚠ VARNING: Experimentellt. Använd inbyggd OIDC-autentisering när den stöds av servern.",
-        "pinning": "Fastnålning av meddelanden",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
@@ -1509,9 +1495,7 @@
         "error_send_description": "%(brand)s kunde inte skicka din position. Försök igen senare.",
         "error_send_title": "Vi kunde inte skicka din positoin",
         "error_sharing_live_location": "Ett fel inträffade vid delning av din realtidsplats",
-        "error_sharing_live_location_try_again": "Ett fel inträffade vid delning av din realtidsplats, försök igen",
         "error_stopping_live_location": "Ett fel inträffade vid delning av din realtidsposition",
-        "error_stopping_live_location_try_again": "Ett fel inträffade medans din platsdelning avslutades, försök igen",
         "expand_map": "Expandera karta",
         "failed_generic": "Misslyckades att hämta din plats. Pröva igen senare.",
         "failed_load_map": "Kunde inte ladda kartan",
@@ -1541,7 +1525,6 @@
         "share_type_own": "Min nuvarande positoin",
         "share_type_pin": "Sätt en nål",
         "share_type_prompt": "Vilken typ av positionsdelning vill du använda?",
-        "stop_and_close": "Sluta och stäng",
         "toggle_attribution": "Växla tillskrivning"
     },
     "member_list": {
@@ -1788,13 +1771,11 @@
     },
     "right_panel": {
         "add_integrations": "Lägg till widgets, bryggor och bottar",
-        "export_chat_button": "Exportera chatt",
         "files_button": "Filer",
         "pinned_messages": {
             "limits": {
                 "other": "Du kan bara fästa upp till %(count)s widgets"
-            },
-            "title": "Fästa meddelanden"
+            }
         },
         "pinned_messages_button": "Fäst",
         "poll": {
@@ -1830,8 +1811,7 @@
         },
         "video_room_chat": {
             "title": "Chatt"
-        },
-        "widgets_section": "Widgets"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Denna inbjudan skickades till %(email)s vilken inte är associerad med ditt konto",
@@ -1851,7 +1831,6 @@
             "forget": "Glöm rum",
             "low_priority": "Låg prioritet",
             "mark_read": "Markera som läst",
-            "mentions_only": "Endast omnämnanden",
             "notifications_default": "Matcha förvalsinställning",
             "notifications_mute": "Tysta rum",
             "title": "Rumsinställningar",
@@ -1894,22 +1873,11 @@
         "forget_room": "Glöm det här rummet",
         "forget_space": "Glöm det här utrymmet",
         "header": {
-            "close_call_button": "Stäng samtal",
-            "forget_room_button": "Glöm bort rum",
-            "hide_widgets_button": "Dölj widgets",
             "n_people_asking_to_join": {
                 "one": "Ber om att gå med",
                 "other": "%(count)s personer ber om att gå med"
             },
-            "room_is_public": "Det här rummet är offentligt",
-            "show_widgets_button": "Visa widgets",
-            "video_call_button_ec": "Videosamtal (%(brand)s)",
-            "video_call_button_jitsi": "Videosamtal (Jitsi)",
-            "video_call_button_legacy": "Äldre videosamtalsmetod",
-            "video_call_ec_change_layout": "Byt utseende",
-            "video_call_ec_layout_freedom": "Frihet",
-            "video_call_ec_layout_spotlight": "Rampljus",
-            "video_room_view_chat_button": "Visa chattidslinje"
+            "room_is_public": "Det här rummet är offentligt"
         },
         "header_face_pile_tooltip": "Växla medlemslista",
         "header_untrusted_label": "Ej betrodd",
@@ -1944,7 +1912,6 @@
         "inviter_unknown": "Okänt",
         "invites_you_text": "<inviter/> bjuder in dig",
         "join_button_account": "Registrera dig",
-        "join_failed_enable_video_rooms": "För att gå med, aktivera videorum i experiment först",
         "join_failed_needs_invite": "För att se %(roomName)s så behöver du en inbjudan",
         "join_the_discussion": "Gå med i diskussionen",
         "join_title": "Gå med i rummet för att delta",
@@ -1987,13 +1954,8 @@
         "rejoin_button": "Gå med igen",
         "search": {
             "all_rooms_button": "Sök i alla rum",
-            "result_count": {
-                "other": "(~%(count)s resultat)",
-                "one": "(~%(count)s resultat)"
-            },
             "this_room_button": "Sök i det här rummet"
         },
-        "show_labs_settings": "Visa experimentinställningar",
         "status_bar": {
             "delete_all": "Radera alla",
             "exceeded_resource_limit": "Ditt meddelande skickades inte eftersom hemservern har överskridit en av sina resursgränser. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
@@ -2024,7 +1986,6 @@
             },
             "uploading_single_file": "Laddar upp %(filename)s"
         },
-        "view_failed_enable_video_rooms": "För att se, aktivera videorum i experiment först",
         "waiting_for_join_subtitle": "När inbjudna användare har gått med i %(brand)s kommer du att kunna chatta och rummet kommer att vara totalsträckskrypterat",
         "waiting_for_join_title": "Väntar på att användare går med i %(brand)s"
     },

@@ -850,16 +850,6 @@
         "incompatible_database_disable": "在停用加密的情況下繼續",
         "incompatible_database_sign_out_description": "為了避免遺失您的聊天歷史，您必須在登出前匯出您的聊天室金鑰。您必須回到較新版的 %(brand)s 才能執行此動作",
         "incompatible_database_title": "不相容的資料庫",
-        "key_signature_upload_cancelled": "已取消簽章上傳",
-        "key_signature_upload_completed": "上傳完成",
-        "key_signature_upload_failed": "無法上傳",
-        "key_signature_upload_failed_body": "%(brand)s 在上傳以下內容時遇到錯誤：",
-        "key_signature_upload_failed_cross_signing_key_signature": "新交叉簽署金鑰的簽章",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "裝置交叉簽署",
-        "key_signature_upload_failed_key_signature": "金鑰簽章",
-        "key_signature_upload_failed_master_key_signature": "新的主金鑰簽署",
-        "key_signature_upload_failed_title": "無上傳簽章",
-        "key_signature_upload_success_title": "簽章上傳成功",
         "messages_not_secure": {
             "cause_1": "您的家伺服器",
             "cause_2": "您正在驗證的使用者所連線的家伺服器",
@@ -875,8 +865,6 @@
             "warning": "如果您沒有設定新的復原方法，攻擊者可能會嘗試存取您的帳號。在設定中立刻變更您的密碼並設定新的復原方法。"
         },
         "not_supported": "<不支援>",
-        "old_version_detected_description": "偵測到來自舊版 %(brand)s 的資料。這將會造成舊版的端對端加密失敗。在此版本中使用最近在舊版本交換的金鑰可能無法解密訊息。這也會造成與此版本的訊息交換失敗。若您遇到問題，請登出並重新登入。要保留訊息歷史，請匯出並重新匯入您的金鑰。",
-        "old_version_detected_title": "偵測到舊的加密資料",
         "recovery_method_removed": {
             "description_1": "此工作階段偵測到您的安全密語以及安全訊息金鑰已被移除。",
             "description_2": "如果您不小心這樣做了，您可以在此工作階段上設定安全訊息，這將會以新的復原方法重新加密此工作階段的訊息歷史。",
@@ -1379,11 +1367,9 @@
         "location_share_live_description": "暫時的實作版本。位置資訊將保留在聊天室的聊天紀錄中。",
         "mjolnir": "忽略人們的新方式",
         "msc3531_hide_messages_pending_moderation": "讓版主能夠隱藏待審核的訊息。",
-        "new_room_decoration_ui": "正在積極開發中，新的聊天室標題與詳細資訊介面",
         "notification_settings": "新通知設定",
         "notification_settings_beta_title": "通知設定",
         "oidc_native_flow": "啟用新的原生 OIDC 流程（正在積極開發中）",
-        "pinning": "訊息釘選功能",
         "report_to_moderators": "回報給版主",
         "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
         "sliding_sync": "滑動同步模式",
@@ -1465,9 +1451,7 @@
         "error_send_description": "%(brand)s 無法傳送您的位置。請稍後再試。",
         "error_send_title": "我們無法傳送您的位置",
         "error_sharing_live_location": "分享您的即時位置時發生錯誤",
-        "error_sharing_live_location_try_again": "分享您的即時位置時發生錯誤，請再試一次",
         "error_stopping_live_location": "停止您的即時位置時發生錯誤",
-        "error_stopping_live_location_try_again": "停止您的即時位置時發生錯誤，請再試一次",
         "expand_map": "展開地圖",
         "failed_generic": "無法取得您的位置。請稍後再試。",
         "failed_load_map": "無法載入地圖",
@@ -1497,7 +1481,6 @@
         "share_type_own": "我目前的位置",
         "share_type_pin": "自訂位置",
         "share_type_prompt": "您要分享哪種位置類型？",
-        "stop_and_close": "停止並關閉",
         "toggle_attribution": "切換屬性"
     },
     "member_list": {
@@ -1735,13 +1718,11 @@
     },
     "right_panel": {
         "add_integrations": "新增小工具、橋接與聊天機器人",
-        "export_chat_button": "匯出聊天",
         "files_button": "檔案",
         "pinned_messages": {
             "limits": {
                 "other": "您最多只能釘選 %(count)s 個小工具"
-            },
-            "title": "已釘選的訊息"
+            }
         },
         "pinned_messages_button": "已釘選",
         "poll": {
@@ -1777,8 +1758,7 @@
         },
         "video_room_chat": {
             "title": "聊天"
-        },
-        "widgets_section": "小工具"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "此邀請已傳送到與您的帳號無關聯的 %(email)s",
@@ -1798,7 +1778,6 @@
             "forget": "忘記聊天室",
             "low_priority": "低優先度",
             "mark_read": "標示為已讀",
-            "mentions_only": "僅提及",
             "notifications_default": "符合預設設定值",
             "notifications_mute": "聊天室靜音",
             "title": "聊天室選項",
@@ -1841,17 +1820,7 @@
         "forget_room": "忘記此聊天室",
         "forget_space": "忘記此聊天空間",
         "header": {
-            "close_call_button": "關閉通話",
-            "forget_room_button": "忘記聊天室",
-            "hide_widgets_button": "隱藏小工具",
-            "room_is_public": "此聊天室為公開聊天室",
-            "show_widgets_button": "顯示小工具",
-            "video_call_button_ec": "視訊通話 (%(brand)s)",
-            "video_call_button_jitsi": "視訊通話 (Jitsi)",
-            "video_call_ec_change_layout": "變更排列",
-            "video_call_ec_layout_freedom": "自由",
-            "video_call_ec_layout_spotlight": "聚焦",
-            "video_room_view_chat_button": "檢視聊天時間軸"
+            "room_is_public": "此聊天室為公開聊天室"
         },
         "inaccessible": "目前無法存取此聊天室或聊天空間。",
         "inaccessible_name": "%(roomName)s 此時無法存取。",
@@ -1884,7 +1853,6 @@
         "inviter_unknown": "未知",
         "invites_you_text": "<inviter/> 邀請您",
         "join_button_account": "註冊",
-        "join_failed_enable_video_rooms": "要加入，請先在「實驗室」中啟用視訊聊天室",
         "join_failed_needs_invite": "要檢視 %(roomName)s，您需要邀請",
         "join_the_discussion": "加入此討論",
         "join_title": "加入聊天室以參與",
@@ -1925,13 +1893,8 @@
         "rejoin_button": "重新加入",
         "search": {
             "all_rooms_button": "搜尋所有聊天室",
-            "result_count": {
-                "one": "（~%(count)s 結果）",
-                "other": "（~%(count)s 結果）"
-            },
             "this_room_button": "搜尋此聊天室"
         },
-        "show_labs_settings": "顯示「實驗室」設定",
         "status_bar": {
             "delete_all": "刪除全部",
             "exceeded_resource_limit": "您的訊息未傳送，因為其家伺服器已超過一項資源限制。請<a>聯絡您的服務管理員</a>以繼序使用服務。",
@@ -1962,7 +1925,6 @@
             },
             "uploading_single_file": "正在上傳 %(filename)s"
         },
-        "view_failed_enable_video_rooms": "要檢視，請先在「實驗室」中啟用視訊聊天室",
         "waiting_for_join_subtitle": "被邀請的使用者加入 %(brand)s 後，您就可以聊天，聊天室將會進行端到端加密",
         "waiting_for_join_title": "等待使用者加入 %(brand)s"
     },

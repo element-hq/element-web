@@ -762,16 +762,6 @@
         "incompatible_database_disable": "Jatka salaus poistettuna käytöstä",
         "incompatible_database_sign_out_description": "Jotta et menetä keskusteluhistoriaasi, sinun täytyy tallentaa huoneen avaimet ennen kuin kirjaudut ulos. Joudut käyttämään uudempaa %(brand)sin versiota tätä varten",
         "incompatible_database_title": "Yhteensopimaton tietokanta",
-        "key_signature_upload_cancelled": "Allekirjoituksen lähetys peruutettu",
-        "key_signature_upload_completed": "Lähetys valmis",
-        "key_signature_upload_failed": "Lähettäminen ei ole mahdollista",
-        "key_signature_upload_failed_body": "%(brand)s kohtasi virheen lähettäessään:",
-        "key_signature_upload_failed_cross_signing_key_signature": "Uusi ristiinvarmennuksen allekirjoitus",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "laitteen ristiinvarmennuksen allekirjoitus",
-        "key_signature_upload_failed_key_signature": "avaimen allekirjoitus",
-        "key_signature_upload_failed_master_key_signature": "uusi pääsalasanan avaintunnus",
-        "key_signature_upload_failed_title": "Allekirjoituksen lähettäminen epäonnistui",
-        "key_signature_upload_success_title": "Allekirjoituksen lähettäminen onnistui",
         "messages_not_secure": {
             "cause_1": "Kotipalvelimesi",
             "cause_3": "Sinun tai toisen osapuolen internet-yhteys",
@@ -785,8 +775,6 @@
             "warning": "Jos et ottanut käyttöön uutta palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
         "not_supported": "<ei tuettu>",
-        "old_version_detected_description": "Tunnistimme dataa, joka on lähtöisin vanhasta %(brand)sin versiosta. Tämä aiheuttaa toimintahäiriöitä päästä päähän -salauksessa vanhassa versiossa. Viestejä, jotka on salattu päästä päähän -salauksella vanhalla versiolla, ei välttämättä voida purkaa tällä versiolla. Tämä voi myös aiheuttaa epäonnistumisia viestien välityksessä tämän version kanssa. Jos kohtaat ongelmia, kirjaudu ulos ja takaisin sisään. Säilyttääksesi viestihistoriasi, vie salausavaimesi ja tuo ne uudelleen.",
-        "old_version_detected_title": "Vanhaa salaustietoa havaittu",
         "recovery_method_removed": {
             "title": "Palautustapa poistettu",
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
@@ -1238,7 +1226,6 @@
         "location_share_live_description": "Tilapäinen toteutus. Sijainnit säilyvät huoneen historiassa.",
         "mjolnir": "Uusia tapoja jättää ihmiset huomiotta",
         "msc3531_hide_messages_pending_moderation": "Anna moderaattorien piilottaa moderointia odottavia viestejä.",
-        "pinning": "Viestien kiinnittäminen",
         "report_to_moderators": "Ilmoita moderaattoreille",
         "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
         "sliding_sync": "Liukuvan synkronoinnin tila",
@@ -1328,8 +1315,7 @@
         "share_button": "Jaa sijainti",
         "share_type_own": "Tämänhetkinen sijaintini",
         "share_type_pin": "Sijoita karttaneula",
-        "share_type_prompt": "Minkä sijaintityypin haluat jakaa?",
-        "stop_and_close": "Pysäytä ja sulje"
+        "share_type_prompt": "Minkä sijaintityypin haluat jakaa?"
     },
     "member_list": {
         "filter_placeholder": "Suodata huoneen jäseniä",
@@ -1544,13 +1530,11 @@
     },
     "right_panel": {
         "add_integrations": "Lisää sovelmia, siltoja ja botteja",
-        "export_chat_button": "Vie keskustelu",
         "files_button": "Tiedostot",
         "pinned_messages": {
             "limits": {
                 "other": "Voit kiinnittää enintään %(count)s sovelmaa"
-            },
-            "title": "Kiinnitetyt viestit"
+            }
         },
         "pinned_messages_button": "Kiinnitetty",
         "poll": {
@@ -1586,8 +1570,7 @@
         },
         "video_room_chat": {
             "title": "Keskustelu"
-        },
-        "widgets_section": "Sovelmat"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Tämä kutsu lähetettiin sähköpostiosoitteeseen %(email)s, joka ei ole yhteydessä tiliisi",
@@ -1607,7 +1590,6 @@
             "forget": "Unohda huone",
             "low_priority": "Matala prioriteetti",
             "mark_read": "Merkitse luetuksi",
-            "mentions_only": "Vain maininnat",
             "notifications_mute": "Mykistä huone",
             "title": "Huoneen asetukset",
             "unfavourite": "Suositut"
@@ -1640,17 +1622,7 @@
         "forget_room": "Unohda tämä huone",
         "forget_space": "Unohda tämä avaruus",
         "header": {
-            "close_call_button": "Lopeta puhelu",
-            "forget_room_button": "Unohda huone",
-            "hide_widgets_button": "Piilota sovelmat",
-            "room_is_public": "Tämä huone on julkinen",
-            "show_widgets_button": "Näytä sovelmat",
-            "video_call_button_ec": "Videopuhelu (%(brand)s)",
-            "video_call_button_jitsi": "Videopuhelu (Jitsi)",
-            "video_call_ec_change_layout": "Vaihda asettelua",
-            "video_call_ec_layout_freedom": "Vapaus",
-            "video_call_ec_layout_spotlight": "Valokeila",
-            "video_room_view_chat_button": "Näytä keskustelun aikajana"
+            "room_is_public": "Tämä huone on julkinen"
         },
         "inaccessible": "Tämä huone tai avaruus ei ole käytettävissä juuri tällä hetkellä.",
         "inaccessible_name": "%(roomName)s ei ole saatavilla tällä hetkellä.",
@@ -1681,7 +1653,6 @@
         "inviter_unknown": "Tuntematon",
         "invites_you_text": "<inviter/> kutsuu sinut",
         "join_button_account": "Rekisteröidy",
-        "join_failed_enable_video_rooms": "Liittyäksesi ota videohuoneet käyttöön laboratorion kautta",
         "join_failed_needs_invite": "Huoneen %(roomName)s katseluun tarvitaan kutsu",
         "join_the_discussion": "Liity keskusteluun",
         "join_title": "Liity huoneeseen osallistuaksesi",
@@ -1712,13 +1683,6 @@
         "read_topic": "Lue aihe napsauttamalla",
         "rejecting": "Hylätään kutsua…",
         "rejoin_button": "Liity uudelleen",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s tulos)",
-                "other": "(~%(count)s tulosta)"
-            }
-        },
-        "show_labs_settings": "Näytä laboratorion asetukset",
         "status_bar": {
             "delete_all": "Poista kaikki",
             "exceeded_resource_limit": "Viestiäsi ei lähetetty, koska tämä kotipalvelin on ylittänyt resurssirajan. <a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttämistä.",

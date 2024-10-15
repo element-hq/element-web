@@ -820,16 +820,6 @@
         "incompatible_database_disable": "Vazhdo Me Fshehtëzimin të Çaktivizuar",
         "incompatible_database_sign_out_description": "Që të shmanget humbja e historikut të fjalosjes tuaj, duhet të eksportoni kyçet e dhomës tuaj përpara se të dilni nga llogari. Që ta bëni këtë, duhe të riktheheni te versioni më i ri i %(brand)s-it",
         "incompatible_database_title": "Bazë të dhënash e Papërputhshme",
-        "key_signature_upload_cancelled": "Ngarkim i anuluar nënshkrimi",
-        "key_signature_upload_completed": "Ngarkimi u plotësua",
-        "key_signature_upload_failed": "S’arrihet të ngarkohet",
-        "key_signature_upload_failed_body": "%(brand)s-i hasi një gabim gjatë ngarkimit të:",
-        "key_signature_upload_failed_cross_signing_key_signature": "një nënshkrim i ri kyçi <em>cross-signing</em>",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "një nënshkrim <em>cross-signing</em> pajisjeje",
-        "key_signature_upload_failed_key_signature": "një nënshkrim kyçi",
-        "key_signature_upload_failed_master_key_signature": "një nënshkrim i ri kyçi të përgjithshëm",
-        "key_signature_upload_failed_title": "Ngarkimi i nënshkrimit dështoi",
-        "key_signature_upload_success_title": "Sukses ngarkimi nënshkrimi",
         "messages_not_secure": {
             "cause_1": "Shërbyesi juaj Home",
             "cause_2": "Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni",
@@ -845,8 +835,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "not_supported": "<nuk mbulohet>",
-        "old_version_detected_description": "Janë pikasur të dhëna nga një version i dikurshëm i %(brand)s-it. Kjo do të bëjë që kriptografia skaj-më-skaj te versioni i dikurshëm të mos punojë si duhet. Mesazhet e fshehtëzuar skaj-më-skaj tani së fundi teksa përdorej versioni i dikurshëm mund të mos jenë të shfshehtëzueshëm në këtë version. Kjo mund bëjë edhe që mesazhet e shkëmbyera me këtë version të dështojnë. Nëse ju dalin probleme, bëni daljen dhe rihyni në llogari. Që të ruhet historiku i mesazheve, eksportoni dhe riimportoni kyçet tuaj.",
-        "old_version_detected_title": "U pikasën të dhëna kriptografie të vjetër",
         "recovery_method_removed": {
             "description_1": "Ky sesion ka pikasur se Fraza e Sigurisë dhe kyçi juaj për Mesazhe të Sigurt janë hequr.",
             "description_2": "Nëse këtë e keni bërë pa dashje, mund të ujdisni Mesazhe të Sigurt në këtë sesion, gjë që do të sjellë rifshehtëzimin e historikut të mesazheve të sesionit me një metodë të re rimarrjesh.",
@@ -1333,7 +1321,6 @@
         "location_share_live_description": "Sendërtim i përkohshëm. Vendndodhjet mbeten te historiku i dhomës.",
         "mjolnir": "Rrugë të reja për të shpërfillur njerëz",
         "msc3531_hide_messages_pending_moderation": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
-        "pinning": "Fiksim Mesazhi",
         "report_to_moderators": "Raportojeni te moderatorët",
         "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
@@ -1414,9 +1401,7 @@
         "error_send_description": "%(brand)s s’dërgoi dot vendndodhjen tuaj. Ju lutemi, riprovoni.",
         "error_send_title": "S’e dërguam dot vendndodhjen tuaj",
         "error_sharing_live_location": "Ndodhi një gabim teksa tregohej vendndodhja juaj “live”",
-        "error_sharing_live_location_try_again": "Ndodhi një gabim teksa tregohej vendndodhja juaj aty për aty, ju lutemi, riprovoni",
         "error_stopping_live_location": "Ndodhi një gabim teksa ndalej dhënia aty për aty e vendndodhjes tuaj",
-        "error_stopping_live_location_try_again": "Ndodhi një gabim teksa ndalej dhënia aty për aty e vendndodhjes tuaj, ju lutemi, riprovoni",
         "expand_map": "Zgjeroje hartën",
         "failed_generic": "S’u arrit të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
         "failed_load_map": "S’arrihet të ngarkohet hartë",
@@ -1444,7 +1429,6 @@
         "share_type_own": "Vendndodhja ime e tanishme",
         "share_type_pin": "Lini një Piketë",
         "share_type_prompt": "Ç’lloj vendndodhjeje doni të jepet?",
-        "stop_and_close": "Resht dhe mbylle",
         "toggle_attribution": "Shfaq/fshih atribut"
     },
     "member_list": {
@@ -1677,13 +1661,11 @@
     },
     "right_panel": {
         "add_integrations": "Shtoni widget-e, ura & robotë",
-        "export_chat_button": "Eksportoni fjalosje",
         "files_button": "Kartela",
         "pinned_messages": {
             "limits": {
                 "other": "Mundeni të fiksoni deri në %(count)s widget-e"
-            },
-            "title": "Mesazhe të fiksuar"
+            }
         },
         "pinned_messages_button": "I fiksuar",
         "poll": {
@@ -1719,8 +1701,7 @@
         },
         "video_room_chat": {
             "title": "Fjalosje"
-        },
-        "widgets_section": "Widget-e"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Kjo ftesë u dërgua për %(email)s, që s’është i përshoqëruar me llogarinë tuaj",
@@ -1740,7 +1721,6 @@
             "forget": "Harroje Dhomën",
             "low_priority": "Përparësi e Ulët",
             "mark_read": "Vëri shenjë si të lexuar",
-            "mentions_only": "Vetëm përmendje",
             "notifications_default": "Kërko përputhje me rregullimin parazgjedhje",
             "notifications_mute": "Heshtoni dhomën",
             "title": "Mundësi dhome",
@@ -1780,17 +1760,7 @@
         "forget_room": "Harroje këtë dhomë",
         "forget_space": "Harroje këtë hapësirë",
         "header": {
-            "close_call_button": "Mbylli krejt",
-            "forget_room_button": "Harroje dhomën",
-            "hide_widgets_button": "Fshihi Widget-et",
-            "room_is_public": "Kjo dhomë është publike",
-            "show_widgets_button": "Shfaqi Widget-et",
-            "video_call_button_ec": "Thirrje video (%(brand)s)",
-            "video_call_button_jitsi": "Thirrje me video (Jitsi)",
-            "video_call_ec_change_layout": "Ndryshoni skemë",
-            "video_call_ec_layout_freedom": "Liri",
-            "video_call_ec_layout_spotlight": "Projektor",
-            "video_room_view_chat_button": "Shihni rrjedhë kohore fjalosjeje"
+            "room_is_public": "Kjo dhomë është publike"
         },
         "inaccessible": "Te kjo dhomë ose hapësirë s’hyhet dot tani.",
         "inaccessible_name": "Te %(roomName)s s’hyhet dot tani.",
@@ -1823,7 +1793,6 @@
         "inviter_unknown": "I panjohur",
         "invites_you_text": "<inviter/> ju fton",
         "join_button_account": "Regjistrohuni",
-        "join_failed_enable_video_rooms": "Për t’u bërë pjesë, ju lutemi, së pari aktivizoni te Labs dhoma me video",
         "join_failed_needs_invite": "Që të shihni %(roomName)s, ju duhet një ftesë",
         "join_the_discussion": "Merrni pjesë në diskutim",
         "join_title": "Që të merrni pjesë, hyni në dhomë",
@@ -1856,13 +1825,8 @@
         "rejoin_button": "Rihyni",
         "search": {
             "all_rooms_button": "Kërko në krejt dhomat",
-            "result_count": {
-                "other": "(~%(count)s përfundime)",
-                "one": "(~%(count)s përfundim)"
-            },
             "this_room_button": "Kërko në këtë dhomë"
         },
-        "show_labs_settings": "Shfaq rregullime për Labs",
         "status_bar": {
             "delete_all": "Fshiji krejt",
             "exceeded_resource_limit": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka tejkaluar kufirin e një burimi. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
@@ -1893,7 +1857,6 @@
             },
             "uploading_single_file": "Po ngarkohet %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Për të parë, ju lutemi, së pari aktivizoni te Labs dhoma me video",
         "waiting_for_join_subtitle": "Pasi përdoruesit e ftuar të kenë ardhur në %(brand)s, do të jeni në gjendje të bisedoni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj",
         "waiting_for_join_title": "Po pritet që përdorues të vijnë në %(brand)s"
     },

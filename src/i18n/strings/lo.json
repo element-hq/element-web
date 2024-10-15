@@ -722,16 +722,6 @@
         "incompatible_database_disable": "ສືບຕໍ່ດ້ວຍການປິດການເຂົ້າລະຫັດ",
         "incompatible_database_sign_out_description": "ເພື່ອຫຼີກເວັ້ນການສູນເສຍປະຫວັດການສົນທະນາຂອງທ່ານ, ທ່ານຕ້ອງອອກກະແຈຫ້ອງຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບ. ທ່ານຈະຕ້ອງໄດ້ກັບຄືນໄປຫາເວີຊັ້ນໃຫມ່ຂອງ %(brand)s ເພື່ອເຮັດສິ່ງນີ້",
         "incompatible_database_title": "ຖານຂໍ້ມູນບໍ່ສອດຄ່ອງກັນ",
-        "key_signature_upload_cancelled": "ຍົກເລີກການອັບໂຫລດລາຍເຊັນແລ້ວ",
-        "key_signature_upload_completed": "ອັບໂຫຼດສຳເລັດ",
-        "key_signature_upload_failed": "ບໍ່ສາມາດອັບໂຫລດໄດ້",
-        "key_signature_upload_failed_body": "%(brand)s ພົບຂໍ້ຜິດພາດໃນລະຫວ່າງການອັບໂຫລດ:",
-        "key_signature_upload_failed_cross_signing_key_signature": "ການລົງລາຍເຊັນ cross-signing ແບບໃໝ່",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "ການ cross-signing ອຸປະກອນ",
-        "key_signature_upload_failed_key_signature": "ລາຍເຊັນຫຼັກ",
-        "key_signature_upload_failed_master_key_signature": "ລາຍເຊັນຫຼັກອັນໃໝ່",
-        "key_signature_upload_failed_title": "ການອັບໂຫລດລາຍເຊັນບໍ່ສຳເລັດ",
-        "key_signature_upload_success_title": "ສຳເລັດການອັບໂຫລດລາຍເຊັນ",
         "messages_not_secure": {
             "cause_1": "homeserver ຂອງທ່ານ",
             "cause_2": "homeserver ຜູ້ໃຊ້ທີ່ທ່ານກໍາລັງຢືນຢັນແມ່ນເຊື່ອມຕໍ່ກັບ",
@@ -747,8 +737,6 @@
             "warning": "ຖ້າທ່ານບໍ່ໄດ້ກຳນົດວິທີການກູ້ຄືນໃໝ່, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະກຳນົດ ວິທີການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ."
         },
         "not_supported": "<ບໍ່ຮອງຮັບ>",
-        "old_version_detected_description": "ກວດພົບຂໍ້ມູນຈາກ%(brand)s ລຸ້ນເກົ່າກວ່າ. ອັນນີ້ຈະເຮັດໃຫ້ການເຂົ້າລະຫັດລັບແບບຕົ້ນທາງເຖິງປາຍທາງເຮັດວຽກຜິດປົກກະຕິໃນລຸ້ນເກົ່າ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງທີ່ໄດ້ແລກປ່ຽນເມື່ອບໍ່ດົນມານີ້ ໃນຂະນະທີ່ໃຊ້ເວີຊັນເກົ່າອາດຈະບໍ່ສາມາດຖອດລະຫັດໄດ້ໃນລູ້ນນີ້. ນີ້ອາດຈະເຮັດໃຫ້ຂໍ້ຄວາມທີ່ແລກປ່ຽນກັບລູ້ນນີ້ບໍ່ສຳເລັດ. ຖ້າເຈົ້າປະສົບບັນຫາ, ໃຫ້ອອກຈາກລະບົບ ແລະ ກັບມາໃໝ່ອີກຄັ້ງ. ເພື່ອຮັກສາປະຫວັດຂໍ້ຄວາມ, ສົ່ງອອກ ແລະ ນໍາເຂົ້າລະຫັດຂອງທ່ານຄືນໃໝ່.",
-        "old_version_detected_title": "ກວດພົບຂໍ້ມູນການເຂົ້າລະຫັດລັບເກົ່າ",
         "recovery_method_removed": {
             "description_1": "ລະບົບນີ້ໄດ້ກວດພົບປະໂຫຍກຄວາມປອດໄພ ແລະ ກະແຈຂໍ້ຄວາມທີ່ປອດໄພຂອງທ່ານໄດ້ຖືກເອົາອອກແລ້ວ.",
             "description_2": "ຖ້າທ່ານດຳເນີນການສິ່ງນີ້ໂດຍບໍ່ໄດ້ຕັ້ງໃຈ, ທ່ານສາມາດຕັ້ງຄ່າຄວາມປອດໄພຂອງຂໍ້ຄວາມ ໃນລະບົບນີ້ ເຊິ່ງຈະມີການເຂົ້າລະຫັດປະຫວັດຂໍ້ຄວາມຂອງລະບົບນີ້ຄືນໃໝ່ດ້ວຍຂະບວນການກູ້ຂໍ້ມູນໃໝ່.",
@@ -1187,8 +1175,7 @@
         "jump_to_date": "ໄປຫາວັນທີ (ເພີ່ມ /jumptodate ແລະໄປຫາຫົວຂໍ້ວັນທີ)",
         "latex_maths": "ສະແດງຜົນຄະນິດສາດ LaTeX ໃນຂໍ້ຄວາມ",
         "leave_beta": "ອອກຈາກເບຕ້າ",
-        "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
-        "pinning": "ການປັກໝຸດຂໍ້ຄວາມ"
+        "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ."
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ ການຕັ້ງຄ່າເຫຼົ່ານີ້ແມ່ນຫມາຍເຖິງຜູ້ໃຊ້ຂັ້ນສູງ.",
@@ -1247,9 +1234,7 @@
         "error_send_description": "%(brand)s ບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "error_send_title": "ພວກເຮົາບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້",
         "error_sharing_live_location": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ",
-        "error_sharing_live_location_try_again": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ, ກະລຸນາລອງໃໝ່",
         "error_stopping_live_location": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ຢຸດສະຖານທີ່ສະຖານທີ່ຂອງທ່ານ",
-        "error_stopping_live_location_try_again": "ເກີດຄວາມຜິດພາດໃນລະຫວ່າງການຢຸດສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ, ກະລຸນາລອງໃໝ່ອີກຄັ້ງ",
         "expand_map": "ຂະຫຍາຍແຜນທີ່",
         "failed_generic": "ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານບໍ່ສຳເລັດ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້",
@@ -1450,13 +1435,11 @@
     },
     "right_panel": {
         "add_integrations": "ເພີ່ມວິດເຈັດ, ຂົວ ແລະບັອດ",
-        "export_chat_button": "ສົ່ງການສົນທະນາອອກ",
         "files_button": "ໄຟລ໌",
         "pinned_messages": {
             "limits": {
                 "other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ"
-            },
-            "title": "ປັກໝຸດຂໍ້ຄວາມ"
+            }
         },
         "pinned_messages_button": "ໄດ້ປັກໝຸດ",
         "poll": {
@@ -1470,8 +1453,7 @@
         },
         "video_room_chat": {
             "title": "ສົນທະນາ"
-        },
-        "widgets_section": "ວິດເຈັດ"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s ທີ່ບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
@@ -1490,7 +1472,6 @@
             "favourite": "ສິ່ງທີ່ມັກ",
             "forget": "ລືມຫ້ອງ",
             "low_priority": "ຄວາມສຳຄັນຕໍ່າ",
-            "mentions_only": "ກ່າວເຖິງເທົ່ານັ້ນ",
             "title": "ຕົວເລືອກຫ້ອງ",
             "unfavourite": "ສີ່ງທີ່ມັກ"
         },
@@ -1519,10 +1500,7 @@
         "forget_room": "ລືມຫ້ອງນີ້",
         "forget_space": "ລືມພຶ້ນທີ່ນີ້",
         "header": {
-            "forget_room_button": "ລືມຫ້ອງ",
-            "hide_widgets_button": "ເຊື່ອງ Widgets",
-            "room_is_public": "ນີ້ແມ່ນຫ້ອງສາທາລະນະ",
-            "show_widgets_button": "ສະແດງ Widgets"
+            "room_is_public": "ນີ້ແມ່ນຫ້ອງສາທາລະນະ"
         },
         "inaccessible": "ຫ້ອງ ຫຼື ພື້ນທີ່ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
         "inaccessible_name": "%(roomName)s ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
@@ -1553,7 +1531,6 @@
         "inviter_unknown": "ບໍ່ຮູ້ຈັກ",
         "invites_you_text": "<inviter/> ເຊີນທ່ານ",
         "join_button_account": "ລົງທະບຽນ",
-        "join_failed_enable_video_rooms": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
         "join_failed_needs_invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
         "join_the_discussion": "ເຂົ້າຮ່ວມການສົນທະນາ",
         "join_title_account": "ເຂົ້າຮ່ວມການສົນທະນາດ້ວຍບັນຊີ",
@@ -1580,13 +1557,6 @@
         "peek_join_prompt": "ທ່ານກຳລັງເບິ່ງຕົວຢ່າງ %(roomName)s. ຕ້ອງການເຂົ້າຮ່ວມບໍ?",
         "read_topic": "ກົດເພື່ອອ່ານຫົວຂໍ້",
         "rejoin_button": "ເຂົ້າຮ່ວມອີກຄັ້ງ",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)sຜົນຮັບ)",
-                "other": "(~%(count)sຜົນຮັບ)"
-            }
-        },
-        "show_labs_settings": "ໂຊການຕັ້ງຄ່າສູນທົດລອງ",
         "status_bar": {
             "delete_all": "ລົບທັງຫມົດ",
             "exceeded_resource_limit": "ຂໍ້ຄວາມຂອງທ່ານບໍ່ຖືກສົ່ງເນື່ອງຈາກ homeserver ນີ້ເກີນຂອບເຂດຈໍາກັດ. ກະລຸນາ <a>ຕິດຕໍ່ຜູູ້ຄຸມຄອງການບໍລິການຂອງທ່ານ</a> ເພື່ອສືບຕໍ່ໃຊ້ບໍລິການ.",
@@ -1615,8 +1585,7 @@
                 "other": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ"
             },
             "uploading_single_file": "ກຳລັງອັບໂຫລດ %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ"
+        }
     },
     "room_list": {
         "add_room_label": "ເພີ່ມຫ້ອງ",

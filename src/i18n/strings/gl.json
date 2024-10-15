@@ -731,16 +731,6 @@
         "incompatible_database_disable": "Continuar con Cifrado Desactivado",
         "incompatible_database_sign_out_description": "Para evitar perder o historial da conversa, debes exportar as chaves da sala antes de saír. Necesitarás volver á nova versión de %(brand)s para facer esto",
         "incompatible_database_title": "Base de datos non compatible",
-        "key_signature_upload_cancelled": "Cancelada a subida da sinatura",
-        "key_signature_upload_completed": "Subida completa",
-        "key_signature_upload_failed": "Non foi posible a subida",
-        "key_signature_upload_failed_body": "%(brand)s atopou un fallo ao subir:",
-        "key_signature_upload_failed_cross_signing_key_signature": "unha nova firma con chave de sinatura-cruzada",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "unha sinatura sinatura-cruzada de dispositivo",
-        "key_signature_upload_failed_key_signature": "unha chave de sinatura",
-        "key_signature_upload_failed_master_key_signature": "unha nova firma con chave mestra",
-        "key_signature_upload_failed_title": "Fallou a subida da sinatura",
-        "key_signature_upload_success_title": "Subeuse correctamente a sinatura",
         "messages_not_secure": {
             "cause_1": "O teu servidor",
             "cause_2": "O servidor ao que está conectado a persoa que estás verificando",
@@ -756,8 +746,6 @@
             "warning": "Se non configuras o novo método de recuperación, un atacante podería intentar o acceso á túa conta. Cambia inmediatamente o contrasinal da conta e configura un novo método de recuperación nos Axustes."
         },
         "not_supported": "<non soportado>",
-        "old_version_detected_description": "Detectáronse datos de una versión anterior de %(brand)s. Isto causará un mal funcionamento da criptografía extremo-a-extremo na versión antiga. As mensaxes cifradas extremo-a-extremo intercambiadas mentres utilizaba a versión anterior poderían non ser descifrables en esta versión. Isto tamén podería causar que mensaxes intercambiadas con esta versión tampouco funcionasen. Se ten problemas, desconéctese e conéctese de novo. Para manter o historial de mensaxes, exporte e reimporte as súas chaves.",
-        "old_version_detected_title": "Detectouse o uso de criptografía sobre datos antigos",
         "recovery_method_removed": {
             "description_1": "Esta sesión detectou que se eliminaron a túa Frase de Seguridade e chave para Mensaxes Seguras.",
             "description_2": "Se fixeches esto sen querer, podes configurar Mensaxes Seguras nesta sesión e volverá a cifrar as mensaxes da sesión cun novo método de recuperación.",
@@ -1208,7 +1196,6 @@
         "leave_beta": "Saír da beta",
         "leave_beta_reload": "Ao saír da beta volveremos a cargar %(brand)s.",
         "msc3531_hide_messages_pending_moderation": "Permitir que a moderación agoche mensaxes pendentes de moderar.",
-        "pinning": "Fixando mensaxe",
         "sliding_sync_server_no_support": "O teu servidor non ten soporte nativo",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Un novo xeito de conversar con voz e vídeo en %(brand)s.",
@@ -1279,9 +1266,7 @@
         "error_send_description": "%(brand)s non enviou a túa localización. Inténtao máis tarde.",
         "error_send_title": "Non puidemos enviar a túa localización",
         "error_sharing_live_location": "Algo fallou ao intentar compartir a túa localización en directo",
-        "error_sharing_live_location_try_again": "Algo fallou ao compartir a túa localización en directo, inténtao outra vez",
         "error_stopping_live_location": "Algo fallou ao deter a compartición da localización en directo",
-        "error_stopping_live_location_try_again": "Algo fallou ao deter a túa localización en directo, inténtao outra vez",
         "expand_map": "Despregar mapa",
         "failed_generic": "Non se obtivo a localización, inténtao máis tarde.",
         "failed_load_map": "Non se cargou o mapa",
@@ -1310,7 +1295,6 @@
         "share_type_own": "Localización actual",
         "share_type_pin": "Fixa a posición",
         "share_type_prompt": "Que tipo de localización queres compartir?",
-        "stop_and_close": "Deter e pechar",
         "toggle_attribution": "Cambiar atribución"
     },
     "member_list": {
@@ -1533,13 +1517,11 @@
     },
     "right_panel": {
         "add_integrations": "Engade widgets, pontes e bots",
-        "export_chat_button": "Exportar chat",
         "files_button": "Ficheiros",
         "pinned_messages": {
             "limits": {
                 "other": "Só podes fixar ata %(count)s widgets"
-            },
-            "title": "Mensaxes fixadas"
+            }
         },
         "pinned_messages_button": "Fixado",
         "poll": {
@@ -1569,7 +1551,6 @@
             "favourite": "Favorita",
             "forget": "Esquecer sala",
             "low_priority": "Baixa prioridade",
-            "mentions_only": "Só mencións",
             "title": "Opcións da Sala",
             "unfavourite": "Con marca de Favorita"
         },
@@ -1599,10 +1580,7 @@
         "forget_room": "Esquecer sala",
         "forget_space": "Esquecer este espazo",
         "header": {
-            "forget_room_button": "Esquecer sala",
-            "hide_widgets_button": "Agochar Widgets",
-            "room_is_public": "Esta é unha sala pública",
-            "show_widgets_button": "Mostrar Widgets"
+            "room_is_public": "Esta é unha sala pública"
         },
         "inaccessible": "Esta sala ou espazo non é accesible neste intre.",
         "inaccessible_name": "%(roomName)s non está accesible neste momento.",
@@ -1634,7 +1612,6 @@
         "inviter_unknown": "Descoñecido",
         "invites_you_text": "<inviter/> convídate",
         "join_button_account": "Rexistro",
-        "join_failed_enable_video_rooms": "Para unirte, primeiro activa as salas de vídeo en Labs",
         "join_failed_needs_invite": "Para ver %(roomName)s, precisas un convite",
         "join_the_discussion": "Súmate a conversa",
         "join_title": "Únete á sala para participar",
@@ -1662,13 +1639,6 @@
         "peek_join_prompt": "Vista previa de %(roomName)s. Queres unirte?",
         "read_topic": "Preme para ler o tema",
         "rejoin_button": "Volta a unirte",
-        "search": {
-            "result_count": {
-                "other": "(~%(count)s resultados)",
-                "one": "(~%(count)s resultado)"
-            }
-        },
-        "show_labs_settings": "Mostrar axustes en Labs",
         "status_bar": {
             "delete_all": "Eliminar todo",
             "exceeded_resource_limit": "A súa mensaxe non foi enviada porque o servidor superou o límite de recursos. Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
@@ -1697,8 +1667,7 @@
                 "one": "Subindo %(filename)s e %(count)s máis"
             },
             "uploading_single_file": "Subindo %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "Para ver, primeiro activa as salas de vídeo en Labs"
+        }
     },
     "room_list": {
         "add_room_label": "Engadir sala",

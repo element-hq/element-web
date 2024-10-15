@@ -765,16 +765,6 @@
         "incompatible_database_disable": "Tiếp tục với mã hóa bị tắt",
         "incompatible_database_sign_out_description": "Để tránh mất lịch sử trò chuyện, bạn phải xuất chìa khóa phòng trước khi đăng xuất. Bạn sẽ cần quay lại phiên bản %(brand)s mới hơn để thực hiện việc này",
         "incompatible_database_title": "Cơ sở dữ liệu không tương thích",
-        "key_signature_upload_cancelled": "Đã hủy tải lên chữ ký",
-        "key_signature_upload_completed": "Hoàn tất tải lên",
-        "key_signature_upload_failed": "Không thể tải lên",
-        "key_signature_upload_failed_body": "%(brand)s đã gặp lỗi khi tải lên:",
-        "key_signature_upload_failed_cross_signing_key_signature": "một chữ ký khóa xác thực chéo mới",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "một chữ ký được xác thực chéo trên thiết bị",
-        "key_signature_upload_failed_key_signature": "một chữ ký chính",
-        "key_signature_upload_failed_master_key_signature": "một chữ ký khóa chính mới",
-        "key_signature_upload_failed_title": "Tải lên chữ ký không thành công",
-        "key_signature_upload_success_title": "Tải lên chữ ký thành công",
         "messages_not_secure": {
             "cause_1": "Chủ nhà của bạn",
             "cause_2": "Máy chủ nhà người dùng bạn đang xác thực được kết nối đến",
@@ -790,8 +780,6 @@
             "warning": "Nếu bạn không đặt phương pháp khôi phục mới, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
         "not_supported": "<không được hỗ trợ>",
-        "old_version_detected_description": "Dữ liệu từ phiên bản cũ hơn của %(brand)s đã được phát hiện. Điều này sẽ khiến mật mã end-to-end bị trục trặc trong phiên bản cũ hơn. Các tin nhắn được mã hóa end-to-end được trao đổi gần đây trong khi sử dụng phiên bản cũ hơn có thể không giải mã được trong phiên bản này. Điều này cũng có thể khiến các tin nhắn được trao đổi với phiên bản này bị lỗi. Nếu bạn gặp sự cố, hãy đăng xuất và đăng nhập lại. Để lưu lại lịch sử tin nhắn, hãy export và re-import các khóa của bạn.",
-        "old_version_detected_title": "Đã phát hiện dữ liệu mật mã cũ",
         "recovery_method_removed": {
             "description_1": "Phiên này đã phát hiện rằng Cụm từ bảo mật và khóa cho Tin nhắn an toàn của bạn đã bị xóa.",
             "description_2": "Nếu bạn vô tình làm điều này, bạn có thể Cài đặt Tin nhắn được bảo toàn trên phiên này. Tính năng này sẽ mã hóa lại lịch sử tin nhắn của phiên này bằng một phương pháp khôi phục mới.",
@@ -1279,7 +1267,6 @@
         "msc3531_hide_messages_pending_moderation": "Cho phép điều phối viên ẩn các tin nhắn đang chờ duyệt.",
         "notification_settings": "Cài đặt thông báo mới",
         "notification_settings_beta_title": "Cài đặt thông báo",
-        "pinning": "Ghim tin nhắn",
         "report_to_moderators": "Báo cáo cho điều phối viên",
         "report_to_moderators_description": "Trong các phòng hỗ trợ điều phối, nút \"Báo cáo\" sẽ giúp bạn báo cáo lạm dụng cho điều phối viên của phòng.",
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
@@ -1581,12 +1568,10 @@
     },
     "right_panel": {
         "add_integrations": "Thêm các widget, bridge và bot",
-        "export_chat_button": "Xuất trò chuyện",
         "pinned_messages": {
             "limits": {
                 "other": "Bạn chỉ có thể ghim tối đa %(count)s widget"
-            },
-            "title": "Tin nhắn đã ghim"
+            }
         },
         "pinned_messages_button": "Đã ghim",
         "poll": {
@@ -1607,8 +1592,7 @@
         },
         "video_room_chat": {
             "title": "Trò chuyện"
-        },
-        "widgets_section": "Vật dụng"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Lời mời này đã được gửi đến %(email)s nhưng không liên kết với tài khoản của bạn",
@@ -1627,7 +1611,6 @@
             "forget": "Quên phòng",
             "low_priority": "Ưu tiên thấp",
             "mark_read": "Đánh dấu đã đọc",
-            "mentions_only": "Chỉ tin nhắn được đề cập",
             "notifications_default": "Theo cài đặt mặc định",
             "notifications_mute": "Tắt tiếng phòng",
             "title": "Tùy chọn phòng",
@@ -1663,15 +1646,7 @@
         "forget_room": "Quên phòng này đi",
         "forget_space": "Quên space này",
         "header": {
-            "close_call_button": "Đóng cuộc gọi",
-            "forget_room_button": "Quên phòng",
-            "hide_widgets_button": "Ẩn widget",
-            "room_is_public": "Phòng này là công cộng",
-            "show_widgets_button": "Hiển thị widget",
-            "video_call_button_ec": "Cuộc gọi truyền hình (%(brand)s)",
-            "video_call_button_jitsi": "Cuộc gọi truyền hình (Jitsi)",
-            "video_call_ec_layout_freedom": "Tự do",
-            "video_room_view_chat_button": "Xem dòng tin nhắn"
+            "room_is_public": "Phòng này là công cộng"
         },
         "inaccessible": "Phòng hoặc space này không thể truy cập được bây giờ.",
         "inaccessible_name": "Không thể truy cập %(roomName)s vào lúc này.",
@@ -1733,13 +1708,8 @@
         "rejoin_button": "Tham gia lại",
         "search": {
             "all_rooms_button": "Tìm tất cả phòng",
-            "result_count": {
-                "one": "(~%(count)s kết quả)",
-                "other": "(~%(count)s kết quả)"
-            },
             "this_room_button": "Tìm trong phòng này"
         },
-        "show_labs_settings": "Hiện các cài đặt thử nghiệm",
         "status_bar": {
             "delete_all": "Xóa hết",
             "exceeded_resource_limit": "Thư của bạn không gửi được vì máy chủ(homeserver) đã vượt quá giới hạn tài nguyên. Vui lòng <a>liên hệ với quản trị viên</a> để tiếp tục sử dụng dịch vụ.",

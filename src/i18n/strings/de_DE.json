@@ -861,16 +861,6 @@
         "incompatible_database_disable": "Mit deaktivierter Verschlüsselung fortfahren",
         "incompatible_database_sign_out_description": "Um zu vermeiden, dass dein Verlauf verloren geht, musst du deine Raumschlüssel exportieren, bevor du dich abmeldest. Dazu musst du auf die neuere Version von %(brand)s zurückgehen",
         "incompatible_database_title": "Inkompatible Datenbanken",
-        "key_signature_upload_cancelled": "Hochladen der Signatur abgebrochen",
-        "key_signature_upload_completed": "Hochladen abgeschlossen",
-        "key_signature_upload_failed": "Hochladen nicht möglich",
-        "key_signature_upload_failed_body": "%(brand)s hat einen Fehler festgestellt beim hochladen von:",
-        "key_signature_upload_failed_cross_signing_key_signature": "Eine neue Cross-Signing-Schlüsselsignatur",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "Eine Geräte Schlüssel Signatur",
-        "key_signature_upload_failed_key_signature": "Eine Schlüssel Signatur",
-        "key_signature_upload_failed_master_key_signature": "Eine neue Hauptschlüssel Signatur",
-        "key_signature_upload_failed_title": "Hochladen der Signatur fehlgeschlagen",
-        "key_signature_upload_success_title": "Signatur erfolgreich hochgeladen",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",
@@ -886,8 +876,6 @@
             "warning": "Wenn du die neue Wiederherstellungsmethode nicht festgelegt hast, versucht ein Angreifer möglicherweise, auf dein Konto zuzugreifen. Ändere dein Kontopasswort und lege sofort eine neue Wiederherstellungsmethode in den Einstellungen fest."
         },
         "not_supported": "<nicht unterstützt>",
-        "old_version_detected_description": "Es wurden Daten von einer älteren Version von %(brand)s entdeckt. Dies wird zu Fehlern in der Ende-zu-Ende-Verschlüsselung der älteren Version geführt haben. Ende-zu-Ende verschlüsselte Nachrichten, die ausgetauscht wruden, während die ältere Version genutzt wurde, werden in dieser Version nicht entschlüsselbar sein. Es kann auch zu Fehlern mit Nachrichten führen, die mit dieser Version versendet werden. Wenn du Probleme feststellst, melde dich ab und wieder an. Um die Historie zu behalten, ex- und reimportiere deine Schlüssel.",
-        "old_version_detected_title": "Alte Kryptografiedaten erkannt",
         "recovery_method_removed": {
             "description_1": "In dieser Sitzung wurde festgestellt, dass deine Sicherheitsphrase und dein Schlüssel für sichere Nachrichten entfernt wurden.",
             "description_2": "Wenn du dies versehentlich getan hast, kannst du in dieser Sitzung \"sichere Nachrichten\" einrichten, die den Nachrichtenverlauf dieser Sitzung mit einer neuen Wiederherstellungsmethode erneut verschlüsseln.",
@@ -1406,14 +1394,12 @@
         "location_share_live_description": "Vorläufige Implementierung: Standorte verbleiben im Raumverlauf.",
         "mjolnir": "Neue Methoden, Personen zu blockieren",
         "msc3531_hide_messages_pending_moderation": "Erlaube Moderatoren, noch nicht moderierte Nachrichten auszublenden.",
-        "new_room_decoration_ui": "In aktiver Entwicklung, neue Raumkopfzeile & Detailoberfläche",
         "notification_settings": "Neue Benachrichtigungseinstellungen",
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Kopfleiste des Raums anschalten",
         "oidc_native_flow": "Native OIDC Authentifizierung",
         "oidc_native_flow_description": "⚠ Warnung: Experimentell. Nutze OIDC native Authentifizierung wenn dies vom Server unterstützt wird.",
-        "pinning": "Nachrichten anheften",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Raummoderation melden",
@@ -1499,9 +1485,7 @@
         "error_send_description": "%(brand)s konnte deinen Standort nicht senden. Bitte versuche es später erneut.",
         "error_send_title": "Wir konnten deinen Standort nicht senden",
         "error_sharing_live_location": "Ein Fehler ist während des Teilens deines Echtzeit-Standorts aufgetreten",
-        "error_sharing_live_location_try_again": "Ein Fehler ist während des Teilens deines Echtzeit-Standorts aufgetreten, bitte versuche es erneut",
         "error_stopping_live_location": "Ein Fehler ist während des Beendens deines Echtzeit-Standorts aufgetreten",
-        "error_stopping_live_location_try_again": "Ein Fehler ist während des Beendens deines Echtzeit-Standorts aufgetreten, bitte versuche es erneut",
         "expand_map": "Karte vergrößern",
         "failed_generic": "Standort konnte nicht abgerufen werden. Bitte versuche es später erneut.",
         "failed_load_map": "Karte kann nicht geladen werden",
@@ -1531,7 +1515,6 @@
         "share_type_own": "Mein Standort",
         "share_type_pin": "Standort setzen",
         "share_type_prompt": "Wie willst du deinen Standort teilen?",
-        "stop_and_close": "Beenden und schließen",
         "toggle_attribution": "Info ein-/ausblenden"
     },
     "member_list": {
@@ -1775,13 +1758,11 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, Brücken und Bots hinzufügen",
-        "export_chat_button": "Unterhaltung exportieren",
         "files_button": "Dateien",
         "pinned_messages": {
             "limits": {
                 "other": "Du kannst nur %(count)s Widgets anheften"
-            },
-            "title": "Angeheftete Nachrichten"
+            }
         },
         "pinned_messages_button": "Angeheftet",
         "poll": {
@@ -1817,8 +1798,7 @@
         },
         "video_room_chat": {
             "title": "Unterhaltung"
-        },
-        "widgets_section": "Widgets"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Diese Einladung wurde an die E-Mail-Adresse %(email)s gesendet, die nicht zu deinem Konto gehört",
@@ -1838,7 +1818,6 @@
             "forget": "Raum vergessen",
             "low_priority": "Niedrige Priorität",
             "mark_read": "Als gelesen markieren",
-            "mentions_only": "Nur Erwähnungen",
             "notifications_default": "Standardeinstellung verwenden",
             "notifications_mute": "Raum stumm stellen",
             "title": "Raumoptionen",
@@ -1881,21 +1860,11 @@
         "forget_room": "Diesen Raum entfernen",
         "forget_space": "Diesen Space vergessen",
         "header": {
-            "close_call_button": "Anruf schließen",
-            "forget_room_button": "Raum entfernen",
-            "hide_widgets_button": "Widgets verstecken",
             "n_people_asking_to_join": {
                 "one": "Möchte beitreten",
                 "other": "%(count)s Personen möchten beitreten"
             },
-            "room_is_public": "Dieser Raum ist öffentlich",
-            "show_widgets_button": "Widgets anzeigen",
-            "video_call_button_ec": "Videoanruf (%(brand)s)",
-            "video_call_button_jitsi": "Videoanruf (Jitsi)",
-            "video_call_ec_change_layout": "Anordnung ändern",
-            "video_call_ec_layout_freedom": "Freiraum",
-            "video_call_ec_layout_spotlight": "Rampenlicht",
-            "video_room_view_chat_button": "Nachrichtenverlauf anzeigen"
+            "room_is_public": "Dieser Raum ist öffentlich"
         },
         "header_untrusted_label": "Nicht vertrauenswürdig",
         "inaccessible": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
@@ -1929,7 +1898,6 @@
         "inviter_unknown": "Unbekannt",
         "invites_you_text": "Du wirst von <inviter/> eingeladen",
         "join_button_account": "Registrieren",
-        "join_failed_enable_video_rooms": "Zum Betreten, aktiviere bitte Videoräume in den Laboreinstellungen",
         "join_failed_needs_invite": "Um %(roomName)s zu betrachten, benötigst du eine Einladung",
         "join_the_discussion": "An Diskussion teilnehmen",
         "join_title": "Betrete den Raum, um teilzunehmen",
@@ -1972,13 +1940,8 @@
         "rejoin_button": "Erneut betreten",
         "search": {
             "all_rooms_button": "Alle Räume durchsuchen",
-            "result_count": {
-                "one": "(~%(count)s Ergebnis)",
-                "other": "(~%(count)s Ergebnisse)"
-            },
             "this_room_button": "Diesen Raum durchsuchen"
         },
-        "show_labs_settings": "Zeige die \"Labor\" Einstellungen",
         "status_bar": {
             "delete_all": "Alle löschen",
             "exceeded_resource_limit": "Deine Nachricht wurde nicht gesendet, weil dieser Heim-Server ein Ressourcen-Limit erreicht hat. Bitte <a>kontaktiere deine Systemadministration</a>, um diesen Dienst weiterzunutzen.",
@@ -2009,7 +1972,6 @@
             },
             "uploading_single_file": "%(filename)s wird hochgeladen"
         },
-        "view_failed_enable_video_rooms": "Zum Anzeigen, aktiviere bitte Videoräume in den Laboreinstellungen",
         "waiting_for_join_subtitle": "Sobald eingeladene Benutzer %(brand)s beigetreten sind, werdet ihr euch unterhalten können und der Raum wird Ende-zu-Ende-verschlüsselt sein",
         "waiting_for_join_title": "Warte darauf, dass Benutzer %(brand)s beitreten"
     },
@@ -3119,6 +3081,7 @@
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
+        "e2e_state": "Status der Ende zu Ende Verschlüssellung",
         "edits": {
             "tooltip_label": "Am %(date)s geändert. Klicke, um Änderungen anzuzeigen.",
             "tooltip_sub": "Klicke, um Änderungen anzuzeigen",

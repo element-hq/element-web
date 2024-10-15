@@ -856,16 +856,6 @@
         "incompatible_database_disable": "Lanjutkan Dengan Enkripsi Dinonaktifkan",
         "incompatible_database_sign_out_description": "Untuk menghindari kehilangan riwayat obrolan, Anda harus mengekspor kunci ruangan Anda sebelum keluar. Anda harus kembali ke versi %(brand)s yang baru untuk melakukannya",
         "incompatible_database_title": "Databasis Tidak Kompatibel",
-        "key_signature_upload_cancelled": "Unggahan tandatangan dibatalkan",
-        "key_signature_upload_completed": "Unggahan selesai",
-        "key_signature_upload_failed": "Tidak dapat mengunggah",
-        "key_signature_upload_failed_body": "%(brand)s mengalami sebuah kesalahan ketika mengunggah unggahan:",
-        "key_signature_upload_failed_cross_signing_key_signature": "sebuah tandatangan kunci penandatanganan silang baru",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "sebuah tandatangan penandatanganan silang perangkat",
-        "key_signature_upload_failed_key_signature": "sebuah tandatangan kunci",
-        "key_signature_upload_failed_master_key_signature": "sebuah tandatangan kunci utama baru",
-        "key_signature_upload_failed_title": "Unggahan tandatangan gagal",
-        "key_signature_upload_success_title": "Unggahan tandatangan berhasil",
         "messages_not_secure": {
             "cause_1": "Homeserver Anda",
             "cause_2": "Homeserver pengguna yang Anda memverifikasi",
@@ -881,8 +871,6 @@
             "warning": "Jika Anda tidak menyetel metode pemulihan yang baru, sebuah penyerang mungkin mencoba mengakses akun Anda. Ubah kata sandi akun Anda dan segera tetapkan metode pemulihan yang baru di Pengaturan."
         },
         "not_supported": "<tidak didukung>",
-        "old_version_detected_description": "Data dari %(brand)s versi lama telah terdeteksi. Ini akan menyebabkan kriptografi ujung ke ujung tidak berfungsi di versi yang lebih lama. Pesan terenkripsi secara ujung ke ujung yang dipertukarkan baru-baru ini saat menggunakan versi yang lebih lama mungkin tidak dapat didekripsi dalam versi ini. Ini juga dapat menyebabkan pesan yang dipertukarkan dengan versi ini gagal. Jika Anda mengalami masalah, keluar dan masuk kembali. Untuk menyimpan riwayat pesan, ekspor dan impor ulang kunci Anda.",
-        "old_version_detected_title": "Data kriptografi lama terdeteksi",
         "recovery_method_removed": {
             "description_1": "Sesi ini telah mendeteksi bahwa Frasa Keamanan dan kunci untuk Pesan Aman Anda telah dihapus.",
             "description_2": "Jika Anda melakukan ini secara tidak sengaja, Anda dapat mengatur Pesan Aman pada sesi ini yang akan mengenkripsi ulang riwayat pesan sesi ini dengan metode pemulihan baru.",
@@ -1394,13 +1382,11 @@
         "location_share_live_description": "Penerapan sementara. Lokasi tetap berada di riwayat ruangan.",
         "mjolnir": "Cara baru mengabaikan orang",
         "msc3531_hide_messages_pending_moderation": "Memperbolehkan moderator untuk menyembunyikan pesan yang akan dimoderasikan.",
-        "new_room_decoration_ui": "Dalam pengembangan aktif, tajuk ruangan & antarmuka detail baru",
         "notification_settings": "Pengaturan Notifikasi Baru",
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
         "oidc_native_flow": "Autentikasi asli OIDC",
-        "pinning": "Pin Pesan",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -1486,9 +1472,7 @@
         "error_send_description": "%(brand)s tidak dapat mengirimkan lokasi Anda. Silakan coba lagi nanti.",
         "error_send_title": "Kami tidak dapat mengirimkan lokasi Anda",
         "error_sharing_live_location": "Sebuah kesalahan terjadi saat berbagi lokasi langsung Anda",
-        "error_sharing_live_location_try_again": "Sebuah kesalahan terjadi saat membagikan lokasi langsung Anda, mohon coba lagi",
         "error_stopping_live_location": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda",
-        "error_stopping_live_location_try_again": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda, mohon coba lagi",
         "expand_map": "Buka peta",
         "failed_generic": "Gagal untuk mendapatkan lokasi Anda. Silakan coba lagi nanti.",
         "failed_load_map": "Tidak dapat memuat peta",
@@ -1518,7 +1502,6 @@
         "share_type_own": "Lokasi saya saat ini",
         "share_type_pin": "Drop sebuah Pin",
         "share_type_prompt": "Tipe lokasi apa yang Anda ingin bagikan?",
-        "stop_and_close": "Berhenti dan tutup",
         "toggle_attribution": "Alih atribusi"
     },
     "member_list": {
@@ -1754,13 +1737,11 @@
     },
     "right_panel": {
         "add_integrations": "Tambahkan widget, jembatan & bot",
-        "export_chat_button": "Ekspor obrolan",
         "files_button": "File",
         "pinned_messages": {
             "limits": {
                 "other": "Anda hanya dapat memasang pin sampai %(count)s widget"
-            },
-            "title": "Pesan yang dipasangi pin"
+            }
         },
         "pinned_messages_button": "Disematkan",
         "poll": {
@@ -1796,8 +1777,7 @@
         },
         "video_room_chat": {
             "title": "Obrolan"
-        },
-        "widgets_section": "Widget"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Undangan ini telah dikirim ke %(email)s yang tidak ditautkan dengan akun Anda",
@@ -1817,7 +1797,6 @@
             "forget": "Lupakan Ruangan",
             "low_priority": "Prioritas Rendah",
             "mark_read": "Tandai sebagai dibaca",
-            "mentions_only": "Sebutan saja",
             "notifications_default": "Sesuai dengan pengaturan bawaan",
             "notifications_mute": "Bisukan ruangan",
             "title": "Opsi ruangan",
@@ -1860,20 +1839,10 @@
         "forget_room": "Lupakan ruangan ini",
         "forget_space": "Lupakan space ini",
         "header": {
-            "close_call_button": "Tutup panggilan",
-            "forget_room_button": "Lupakan ruangan",
-            "hide_widgets_button": "Sembunyikan Widget",
             "n_people_asking_to_join": {
                 "other": "%(count)s orang meminta untuk bergabung"
             },
-            "room_is_public": "Ruangan ini publik",
-            "show_widgets_button": "Tampilkan Widget",
-            "video_call_button_ec": "Panggilan video (%(brand)s)",
-            "video_call_button_jitsi": "Panggilan video (Jitsi)",
-            "video_call_ec_change_layout": "Ubah tata letak",
-            "video_call_ec_layout_freedom": "Bebas",
-            "video_call_ec_layout_spotlight": "Sorotan",
-            "video_room_view_chat_button": "Tampilkan lini masa obrolan"
+            "room_is_public": "Ruangan ini publik"
         },
         "header_untrusted_label": "Tidak dipercaya",
         "inaccessible": "Ruangan atau space ini tidak dapat diakses pada saat ini.",
@@ -1907,7 +1876,6 @@
         "inviter_unknown": "Tidak Dikenal",
         "invites_you_text": "<inviter/> mengundang Anda",
         "join_button_account": "Daftar",
-        "join_failed_enable_video_rooms": "Untuk bergabung, mohon aktifkan ruangan video di Uji Coba terlebih dahulu",
         "join_failed_needs_invite": "Untuk menampilkan %(roomName)s, Anda perlu sebuah undangan",
         "join_the_discussion": "Bergabung dengan diskusinya",
         "join_title": "Bergabung dengan ruangan ini untuk berpartisipasi",
@@ -1950,13 +1918,8 @@
         "rejoin_button": "Bergabung Ulang",
         "search": {
             "all_rooms_button": "Cari semua ruangan",
-            "result_count": {
-                "one": "(~%(count)s hasil)",
-                "other": "(~%(count)s hasil)"
-            },
             "this_room_button": "Cari ruangan ini"
         },
-        "show_labs_settings": "Tampilkan pengaturan Uji Coba",
         "status_bar": {
             "delete_all": "Hapus semua",
             "exceeded_resource_limit": "Pesan Anda tidak terkirim karena homeserver ini melebihi sebuah batas sumber daya. Mohon <a>hubungi administrator layanan Anda</a> untuk melanjutkan menggunakan layanannya.",
@@ -1987,7 +1950,6 @@
             },
             "uploading_single_file": "Mengunggah %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Untuk menampilkan, mohon aktifkan ruangan video dalam Uji Coba terlebih dahulu",
         "waiting_for_join_subtitle": "Setelah pengguna yang diundang telah bergabung ke %(brand)s, Anda akan dapat bercakapan dan ruangan akan terenkripsi secara ujung ke ujung",
         "waiting_for_join_title": "Menunggu pengguna untuk bergabung ke %(brand)s"
     },

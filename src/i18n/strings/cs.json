@@ -868,16 +868,6 @@
         "incompatible_database_disable": "Pokračovat bez šifrování",
         "incompatible_database_sign_out_description": "Abyste po odhlášení nepřišli o přístup k historii šifrovaných konverzací, měli byste si před odhlášením exportovat šifrovací klíče místností. Prosím vraťte se k novější verzi %(brand)su a exportujte si klíče",
         "incompatible_database_title": "Nekompatibilní databáze",
-        "key_signature_upload_cancelled": "Nahrávání podpisu zrušeno",
-        "key_signature_upload_completed": "Nahrávání dokončeno",
-        "key_signature_upload_failed": "Nelze nahrát",
-        "key_signature_upload_failed_body": "%(brand)s narazil na chybu při nahrávání:",
-        "key_signature_upload_failed_cross_signing_key_signature": "nový klíč pro křížový podpis",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "zařízení používající křížový podpis",
-        "key_signature_upload_failed_key_signature": "podpis klíče",
-        "key_signature_upload_failed_master_key_signature": "nový podpis hlavního klíče",
-        "key_signature_upload_failed_title": "Podpis se nepodařilo nahrát",
-        "key_signature_upload_success_title": "Podpis úspěšně nahrán",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
@@ -893,8 +883,6 @@
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "not_supported": "<nepodporováno>",
-        "old_version_detected_description": "Byla zjištěna data ze starší verze %(brand)s. To bude mít za následek nefunkčnost koncové kryptografie ve starší verzi. Koncově šifrované zprávy vyměněné nedávno při používání starší verze nemusí být v této verzi dešifrovatelné. To může také způsobit selhání zpráv vyměňovaných s touto verzí. Pokud narazíte na problémy, odhlaste se a znovu se přihlaste. Chcete-li zachovat historii zpráv, exportujte a znovu importujte klíče.",
-        "old_version_detected_title": "Nalezeny starší šifrované datové zprávy",
         "recovery_method_removed": {
             "description_1": "Tato relace zjistila, že byla odstraněna vaše bezpečnostní fráze a klíč pro zabezpečené zprávy.",
             "description_2": "Pokud se vám to stalo neúmyslně, můžete znovu nastavit zálohu zpráv pro tuto relaci. To znovu zašifruje historii zpráv novým způsobem.",
@@ -1417,14 +1405,12 @@
         "location_share_live_description": "Dočasná implementace. Polohy zůstanou v historii místností.",
         "mjolnir": "Nové způsoby ignorování lidí",
         "msc3531_hide_messages_pending_moderation": "Umožnit moderátorům skrývat zprávy čekající na moderaci.",
-        "new_room_decoration_ui": "V aktivním vývoji, nové rozhraní pro záhlaví a detaily místnosti",
         "notification_settings": "Nová nastavení oznámení",
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
         "oidc_native_flow": "Nativní autentizace OIDC",
         "oidc_native_flow_description": "⚠ VAROVÁNÍ: Experimentální. Použijte nativní ověřování OIDC, pokud je serverem podporováno.",
-        "pinning": "Připíchnutí zprávy",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
@@ -1510,9 +1496,7 @@
         "error_send_description": "%(brand)s nemohl odeslat vaši polohu. Zkuste to prosím později.",
         "error_send_title": "Vaši polohu se nepodařilo odeslat",
         "error_sharing_live_location": "Při sdílení vaší polohy živě došlo k chybě",
-        "error_sharing_live_location_try_again": "Při sdílení vaší polohy živě došlo k chybě, zkuste to prosím znovu",
         "error_stopping_live_location": "Při ukončování sdílení polohy živě došlo k chybě",
-        "error_stopping_live_location_try_again": "Při ukončování vaší polohy živě došlo k chybě, zkuste to prosím znovu",
         "expand_map": "Rozbalit mapu",
         "failed_generic": "Nepodařilo se zjistit vaši polohu. Zkuste to prosím později.",
         "failed_load_map": "Nelze načíst mapu",
@@ -1542,7 +1526,6 @@
         "share_type_own": "Moje současná poloha",
         "share_type_pin": "Zvolená poloha",
         "share_type_prompt": "Jaký typ polohy chcete sdílet?",
-        "stop_and_close": "Zastavit a zavřít",
         "toggle_attribution": "Přepnout atribut"
     },
     "member_list": {
@@ -1789,13 +1772,11 @@
     },
     "right_panel": {
         "add_integrations": "Přidat widgety, propojení a boty",
-        "export_chat_button": "Exportovat chat",
         "files_button": "Soubory",
         "pinned_messages": {
             "limits": {
                 "other": "Můžete připnout až %(count)s widgetů"
-            },
-            "title": "Připnuté zprávy"
+            }
         },
         "pinned_messages_button": "Připnuto",
         "poll": {
@@ -1831,8 +1812,7 @@
         },
         "video_room_chat": {
             "title": "Chatovat"
-        },
-        "widgets_section": "Widgety"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Tato pozvánka byla odeslána na adresu %(email)s, která není spojena s vaším účtem",
@@ -1853,7 +1833,6 @@
             "low_priority": "Nízká priorita",
             "mark_read": "Označit jako přečtené",
             "mark_unread": "Označit jako nepřečtené",
-            "mentions_only": "Pouze zmínky",
             "notifications_default": "Odpovídá výchozímu nastavení",
             "notifications_mute": "Ztlumit místnost",
             "title": "Možnosti místnosti",
@@ -1896,23 +1875,12 @@
         "forget_room": "Zapomenout na tuto místnost",
         "forget_space": "Zapomenout tento prostor",
         "header": {
-            "close_call_button": "Zavřít hovor",
-            "forget_room_button": "Zapomenout místnost",
-            "hide_widgets_button": "Skrýt widgety",
             "n_people_asking_to_join": {
                 "one": "Žádá o vstup",
                 "few": "%(count)s lidé žádají o vstup",
                 "other": "%(count)s lidí žádá o vstup"
             },
-            "room_is_public": "Tato místnost je veřejná",
-            "show_widgets_button": "Zobrazit widgety",
-            "video_call_button_ec": "Videohovor (%(brand)s)",
-            "video_call_button_jitsi": "Videohovor (Jitsi)",
-            "video_call_button_legacy": "Zastaralý způsob videohovoru",
-            "video_call_ec_change_layout": "Změnit rozvržení",
-            "video_call_ec_layout_freedom": "Svoboda",
-            "video_call_ec_layout_spotlight": "Reflektor",
-            "video_room_view_chat_button": "Zobrazit časovou osu konverzace"
+            "room_is_public": "Tato místnost je veřejná"
         },
         "header_face_pile_tooltip": "Přepnout seznam členů",
         "header_untrusted_label": "Nedůvěryhodné",
@@ -1947,7 +1915,6 @@
         "inviter_unknown": "Neznámý",
         "invites_you_text": "<inviter/> vás zve",
         "join_button_account": "Zaregistrovat se",
-        "join_failed_enable_video_rooms": "Pro vstup, povolte prosím nejprve video místnosti v Experimentálních funkcích",
         "join_failed_needs_invite": "Pro zobrazení %(roomName)s potřebujete pozvánku",
         "join_the_discussion": "Zapojit se do diskuze",
         "join_title": "Připojte se k místnosti a zúčastněte se",
@@ -1990,13 +1957,8 @@
         "rejoin_button": "Znovu vstoupit",
         "search": {
             "all_rooms_button": "Vyhledávat ve všech místnostech",
-            "result_count": {
-                "other": "(~%(count)s výsledků)",
-                "one": "(~%(count)s výsledek)"
-            },
             "this_room_button": "Vyhledávat v této místnosti"
         },
-        "show_labs_settings": "Zobrazit nastavení Experimentálních funkcí",
         "status_bar": {
             "delete_all": "Smazat všechny",
             "exceeded_resource_limit": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl limitu svých zdrojů. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
@@ -2028,7 +1990,6 @@
             },
             "uploading_single_file": "Nahrávání %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Pro zobrazení, povolte prosím nejprve video místnosti v Experimentálních funkcích",
         "waiting_for_join_subtitle": "Jakmile se pozvaní uživatelé připojí k %(brand)s, budete moci chatovat a místnost bude koncově šifrovaná",
         "waiting_for_join_title": "Čekání na připojení uživatelů k %(brand)s"
     },

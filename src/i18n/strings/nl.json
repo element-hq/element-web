@@ -726,16 +726,6 @@
         "incompatible_database_disable": "Verdergaan met versleuteling uitgeschakeld",
         "incompatible_database_sign_out_description": "Om jouw kamergeschiedenis niet te verliezen vóór het uitloggen dien je jouw veiligheidssleutel te exporteren. Dat moet vanuit de nieuwere versie van %(brand)s",
         "incompatible_database_title": "Incompatibele database",
-        "key_signature_upload_cancelled": "Geannuleerde ondertekening upload",
-        "key_signature_upload_completed": "Upload voltooid",
-        "key_signature_upload_failed": "Versturen niet mogelijk",
-        "key_signature_upload_failed_body": "%(brand)s is een fout tegengekomen tijdens het uploaden van:",
-        "key_signature_upload_failed_cross_signing_key_signature": "een nieuwe kruiselings ondertekenen ondertekening",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "een apparaat kruiselings ondertekenen ondertekening",
-        "key_signature_upload_failed_key_signature": "een sleutel ondertekening",
-        "key_signature_upload_failed_master_key_signature": "een nieuwe hoofdsleutel ondertekening",
-        "key_signature_upload_failed_title": "Versturen van ondertekening mislukt",
-        "key_signature_upload_success_title": "Ondertekening succesvol verstuurd",
         "messages_not_secure": {
             "cause_1": "Jouw homeserver",
             "cause_2": "De homeserver waarmee de persoon die jij verifieert verbonden is",
@@ -751,8 +741,6 @@
             "warning": "Als je deze nieuwe herstelmethode niet hebt ingesteld, is het mogelijk dat een aanvaller toegang tot jouw account probeert te krijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
         "not_supported": "<niet ondersteund>",
-        "old_version_detected_description": "Er zijn gegevens van een oudere versie van %(brand)s gevonden, die problemen veroorzaakt hebben met de eind-tot-eind-versleuteling in de oude versie. Onlangs vanuit de oude versie verzonden eind-tot-eind-versleutelde berichten zijn mogelijk onontsleutelbaar in deze versie. Ook kunnen berichten die met deze versie uitgewisseld zijn falen. Mocht je problemen ervaren, log dan opnieuw in. Exporteer je sleutels en importeer ze weer om je berichtgeschiedenis te behouden.",
-        "old_version_detected_title": "Oude cryptografiegegevens gedetecteerd",
         "recovery_method_removed": {
             "description_1": "Deze sessie heeft ontdekt dat je veiligheidswachtwoord en -sleutel voor versleutelde berichten zijn verwijderd.",
             "description_2": "Als je dit per ongeluk hebt gedaan, kan je beveiligde berichten op deze sessie instellen, waarmee de berichtgeschiedenis van deze sessie opnieuw zal versleuteld worden aan de hand van een nieuwe herstelmethode.",
@@ -1192,7 +1180,6 @@
         "leave_beta": "Beta verlaten",
         "leave_beta_reload": "Als je de bèta verlaat, wordt %(brand)s opnieuw geladen.",
         "msc3531_hide_messages_pending_moderation": "Laat moderators berichten verbergen in afwachting van moderatie.",
-        "pinning": "Berichten vastprikken",
         "sliding_sync_server_no_support": "Jouw server heeft geen native ondersteuning",
         "video_rooms": "Video kamers",
         "video_rooms_a_new_way_to_chat": "Een nieuwe manier om te chatten via spraak en video in %(brand)s.",
@@ -1263,9 +1250,7 @@
         "error_send_description": "%(brand)s kan jouw locatie niet versturen. Probeer het later opnieuw.",
         "error_send_title": "We kunnen jouw locatie niet versturen",
         "error_sharing_live_location": "Er is een fout opgetreden bij het delen van je live locatie",
-        "error_sharing_live_location_try_again": "Er is een fout opgetreden bij het delen van je live locatie, probeer het opnieuw",
         "error_stopping_live_location": "Er is een fout opgetreden bij het stoppen van je live locatie",
-        "error_stopping_live_location_try_again": "Er is een fout opgetreden bij het stoppen van je live locatie, probeer het opnieuw",
         "expand_map": "Map uitvouwen",
         "failed_generic": "Kan jouw locatie niet ophalen. Probeer het later opnieuw.",
         "failed_load_map": "Kan kaart niet laden",
@@ -1293,7 +1278,6 @@
         "share_type_own": "Mijn huidige locatie",
         "share_type_pin": "Zet een pin neer",
         "share_type_prompt": "Welk locatietype wil je delen?",
-        "stop_and_close": "Stop en sluit",
         "toggle_attribution": "Attributie in-/uitschakelen"
     },
     "member_list": {
@@ -1513,13 +1497,11 @@
     },
     "right_panel": {
         "add_integrations": "Widgets, bruggen & bots toevoegen",
-        "export_chat_button": "Chat exporteren",
         "files_button": "Bestanden",
         "pinned_messages": {
             "limits": {
                 "other": "Je kunt maar %(count)s widgets vastzetten"
-            },
-            "title": "Vastgeprikte berichten"
+            }
         },
         "pinned_messages_button": "Vastgezet",
         "poll": {
@@ -1552,7 +1534,6 @@
             "favourite": "Favoriet",
             "forget": "Kamer vergeten",
             "low_priority": "Lage prioriteit",
-            "mentions_only": "Alleen vermeldingen",
             "title": "Kameropties",
             "unfavourite": "Favoriet"
         },
@@ -1582,16 +1563,7 @@
         "forget_room": "Deze kamer vergeten",
         "forget_space": "Vergeet deze space",
         "header": {
-            "close_call_button": "Sluit oproep",
-            "forget_room_button": "Kamer vergeten",
-            "hide_widgets_button": "Widgets verbergen",
-            "room_is_public": "Deze kamer is publiek",
-            "show_widgets_button": "Widgets tonen",
-            "video_call_button_ec": "Videogesprek (%(brand)s)",
-            "video_call_button_jitsi": "Videogesprek (Jitsi)",
-            "video_call_ec_layout_freedom": "Vrijheid",
-            "video_call_ec_layout_spotlight": "Schijnwerper",
-            "video_room_view_chat_button": "Gesprekstijdslijn bekijken"
+            "room_is_public": "Deze kamer is publiek"
         },
         "inaccessible": "Deze kamer of space is op dit moment niet toegankelijk.",
         "inaccessible_name": "%(roomName)s is op dit moment niet toegankelijk.",
@@ -1623,7 +1595,6 @@
         "inviter_unknown": "Onbekend",
         "invites_you_text": "<inviter/> nodigt je uit",
         "join_button_account": "Registreren",
-        "join_failed_enable_video_rooms": "Schakel eerst videokamers in Labs in om deel te nemen",
         "join_failed_needs_invite": "Om %(roomName)s te bekijken, heb je een uitnodiging nodig",
         "join_the_discussion": "Neem deel aan de kamer",
         "join_title": "Doe mee met de kamer om deel te nemen",
@@ -1651,13 +1622,6 @@
         "peek_join_prompt": "Je bekijkt %(roomName)s. Wilt je eraan deelnemen?",
         "read_topic": "Klik om het onderwerp te lezen",
         "rejoin_button": "Opnieuw toetreden",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s resultaat)",
-                "other": "(~%(count)s resultaten)"
-            }
-        },
-        "show_labs_settings": "Lab instellingen weergeven",
         "status_bar": {
             "delete_all": "Verwijder alles",
             "exceeded_resource_limit": "Je bericht is niet verstuurd omdat deze homeserver een systeembronlimiet heeft overschreden. <a>Neem contact op met je dienstbeheerder</a> om de dienst te blijven gebruiken.",
@@ -1686,8 +1650,7 @@
                 "other": "%(filename)s en %(count)s andere worden geüpload"
             },
             "uploading_single_file": "%(filename)s wordt geüpload"
-        },
-        "view_failed_enable_video_rooms": "Schakel eerst videokamers in Labs in om te bekijken"
+        }
     },
     "room_list": {
         "add_room_label": "Kamer toevoegen",
