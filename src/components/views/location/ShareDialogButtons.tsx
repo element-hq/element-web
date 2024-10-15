@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import BackIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 
 import AccessibleButton from "../elements/AccessibleButton";
-import { Icon as BackIcon } from "../../../../res/img/element-icons/caret-left.svg";
-import { Icon as CloseIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
 import { _t } from "../../../languageHandler";
 
 interface Props {

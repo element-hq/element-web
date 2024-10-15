@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useContext, useEffect } from "react";
 import { MatrixEvent, MatrixError, IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LinkPreviewWidget from "./LinkPreviewWidget";
@@ -66,15 +67,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
                             onClick={onCancelClick}
                             aria-label={_t("timeline|url_preview|close")}
                         >
-                            <img
-                                className="mx_filterFlipColor"
-                                alt=""
-                                role="presentation"
-                                src={require("../../../../res/img/cancel.svg").default}
-                                width="18"
-                                height="18"
-                                draggable="false"
-                            />
+                            <CloseIcon width="20px" height="20px" />
                         </AccessibleButton>
                     ) : undefined}
                 </LinkPreviewWidget>

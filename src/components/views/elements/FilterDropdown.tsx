@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ReactElement } from "react";
 import classNames from "classnames";
+import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
-import { Icon as CheckmarkIcon } from "../../../../res/img/element-icons/roomlist/checkmark.svg";
 import Dropdown, { DropdownProps } from "./Dropdown";
 import { NonEmptyArray } from "../../../@types/common";
 

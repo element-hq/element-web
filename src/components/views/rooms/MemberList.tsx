@@ -238,7 +238,11 @@ export default class MemberList extends React.Component<IProps, IState> {
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
+                    <BaseAvatar
+                        url={require("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg").default}
+                        name="..."
+                        size="36px"
+                    />
                 }
                 name={text}
                 showPresence={false}
