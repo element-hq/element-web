@@ -8192,27 +8192,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@34.7.0:
-  version "34.7.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.7.0.tgz#243e4eacbedd98a1096135a75765756cda910b7b"
-  integrity sha512-epauE/ZwksDyadm+0vg+g1keRUo600H/b1MzDZbaIrCY9fELzq3fIWctq9IxMQE/EEPe9jjLiNDooGJT5JJ2Ag==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
-    "@matrix-org/olm" "3.2.15"
-    another-json "^0.2.0"
-    bs58 "^6.0.0"
-    content-type "^1.0.4"
-    jwt-decode "^4.0.0"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.8.2"
-    oidc-client-ts "^3.0.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "10"
-
 matrix-js-sdk@34.8.0:
   version "34.8.0"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.8.0.tgz#7ee18fb2ca22fb96d72a6720d0e80f9de12dd4c6"
@@ -8241,10 +8220,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.112.0:
-  version "3.112.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.112.0.tgz#653929e27554289b14e289113d97c6189c2f3db2"
-  integrity sha512-S7rwFJuTGi1lHOHYh2QEmzhLWrubNh+4LQ4K3Bpf/Oco1Hh0IdabMidvFWkSy0fUcrZRKN04Acif7iLem3IhSw==
+matrix-react-sdk@3.113.0:
+  version "3.113.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.113.0.tgz#66bb447d6ead469df191a9cd1a412210b18a2c95"
+  integrity sha512-ZMOcmcCRW1La3dp9Cqyuuk9qUP+OLJ4BCB2zkjwpUbSKO35e1ahFy+dYqtRNFbCz3C2Auzw3ED9kV2uLFkTxLg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.25.0"
@@ -8289,7 +8268,7 @@ matrix-react-sdk@3.112.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "34.7.0"
+    matrix-js-sdk "34.8.0"
     matrix-widget-api "^1.9.0"
     memoize-one "^6.0.0"
     minimist "^1.2.5"
