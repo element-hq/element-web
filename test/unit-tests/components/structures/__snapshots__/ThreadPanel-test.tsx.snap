@@ -6,7 +6,7 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
     class="mx_BaseCard_header_title"
   >
     <button
-      aria-labelledby="floating-ui-93sh1"
+      aria-labelledby="floating-ui-legq1"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 24px;"
@@ -41,7 +41,7 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
     class="mx_BaseCard_header_title"
   >
     <button
-      aria-labelledby="floating-ui-zp986"
+      aria-labelledby="floating-ui-frdf6"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 24px;"

@@ -3,7 +3,7 @@
 exports[`<FacePile /> renders with a tooltip 1`] = `
 <DocumentFragment>
   <div
-    aria-labelledby="floating-ui-te7y1"
+    aria-labelledby="floating-ui-v3641"
     class="mx_AccessibleButton mx_FacePile"
     role="button"
     tabindex="0"

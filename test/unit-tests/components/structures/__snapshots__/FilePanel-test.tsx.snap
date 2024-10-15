@@ -19,7 +19,7 @@ exports[`FilePanel renders empty state 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-626p1"
+        aria-labelledby="floating-ui-2gfu1"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"

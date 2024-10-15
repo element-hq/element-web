@@ -7,7 +7,7 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="floating-ui-urk41"
+      aria-labelledby="floating-ui-zwhz1"
       class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_online"
       style="width: 32px; height: 32px;"
       tabindex="0"
@@ -23,7 +23,7 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="floating-ui-hbg46"
+      aria-labelledby="floating-ui-isno6"
       class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_offline"
       style="width: 32px; height: 32px;"
       tabindex="0"
@@ -39,7 +39,7 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="floating-ui-7h6o12"
+      aria-labelledby="floating-ui-bh1c12"
       class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_away"
       style="width: 32px; height: 32px;"
       tabindex="0"

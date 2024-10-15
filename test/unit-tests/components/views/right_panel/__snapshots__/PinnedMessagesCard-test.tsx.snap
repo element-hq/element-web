@@ -19,7 +19,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-k3to12"
+        aria-labelledby="floating-ui-dl5t12"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -100,7 +100,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-9iwr18"
+        aria-labelledby="floating-ui-org218"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -156,7 +156,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-i00u24"
+                aria-labelledby="floating-ui-7pbq24"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -233,7 +233,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-yxil29"
+                aria-labelledby="floating-ui-lsdm29"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -319,7 +319,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-y2hf712"
+        aria-labelledby="floating-ui-zgoz712"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -375,7 +375,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-rbcw718"
+                aria-labelledby="floating-ui-3fed718"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -452,7 +452,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-acez723"
+                aria-labelledby="floating-ui-66dj723"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
