@@ -8213,6 +8213,27 @@ matrix-js-sdk@34.7.0:
     unhomoglyph "^1.0.6"
     uuid "10"
 
+matrix-js-sdk@34.8.0:
+  version "34.8.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-34.8.0.tgz#7ee18fb2ca22fb96d72a6720d0e80f9de12dd4c6"
+  integrity sha512-zHYPE+vb6PP/dnRa6X3ktXf34yQg/Pct9r5CSP263hA4tRg5sKEVQgnY7KDADaABTvNMb9h7BZ5Xm9vjXsowNQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
+    "@matrix-org/olm" "3.2.15"
+    another-json "^0.2.0"
+    bs58 "^6.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^4.0.0"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.8.2"
+    oidc-client-ts "^3.0.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "10"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"

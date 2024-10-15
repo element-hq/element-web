@@ -82,7 +82,7 @@
         "jsrsasign": "^11.0.0",
         "katex": "^0.16.0",
         "lodash": "^4.17.21",
-        "matrix-js-sdk": "34.7.0",
+        "matrix-js-sdk": "34.8.0",
         "matrix-react-sdk": "3.112.0",
         "matrix-widget-api": "^1.8.2",
         "react": "17.0.2",
