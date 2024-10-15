@@ -11,6 +11,13 @@ Please see LICENSE files in the repository root for full details.
     margin-bottom: $spacing-16;
 }
 
+.mx_LoginWithQRSection {
+    .mx_AccessibleButton_kind_primary + p {
+        color: var(--cpd-color-text-secondary);
+        margin-top: var(--cpd-space-2x);
+    }
+}
+
 .mx_LoginWithQRSection .mx_AccessibleButton svg {
     margin-right: $spacing-12;
 }
@@ -135,9 +142,16 @@ Please see LICENSE files in the repository root for full details.
         padding: var(--cpd-space-3x);
         gap: 10px;
 
-        background-color: var(--cpd-color-bg-success-subtle);
+        background-color: var(--cpd-color-bg-subtle-secondary);
         svg {
-            color: var(--cpd-color-icon-success-primary);
+            color: var(--cpd-color-icon-secondary);
+        }
+
+        &.mx_LoginWithQR_icon--success {
+            background-color: var(--cpd-color-bg-success-subtle);
+            svg {
+                color: var(--cpd-color-icon-success-primary);
+            }
         }
 
         &.mx_LoginWithQR_icon--critical {

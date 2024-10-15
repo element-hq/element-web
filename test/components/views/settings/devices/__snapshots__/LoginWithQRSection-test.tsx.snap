@@ -1,10 +1,196 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LoginWithQRSection /> MSC3906 should not render MSC3886 + get_login_token disabled 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render MSC3886 + get_login_token disabled 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Link new device
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_LoginWithQRSection"
+      >
+        <p
+          class="mx_SettingsTab_subsectionText"
+        >
+          Use a QR code to sign in to another device and set up secure messaging.
+        </p>
+        <div
+          aria-disabled="true"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+          disabled=""
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M15 16v-3h-2v3h2Z"
+            />
+            <path
+              d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+            />
+          </svg>
+          Show QR code
+        </div>
+        <p
+          class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+        >
+          Not supported by your account provider
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
-exports[`<LoginWithQRSection /> MSC3906 should not render no support at all 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render no support at all 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Link new device
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_LoginWithQRSection"
+      >
+        <p
+          class="mx_SettingsTab_subsectionText"
+        >
+          Use a QR code to sign in to another device and set up secure messaging.
+        </p>
+        <div
+          aria-disabled="true"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+          disabled=""
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M15 16v-3h-2v3h2Z"
+            />
+            <path
+              d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+            />
+          </svg>
+          Show QR code
+        </div>
+        <p
+          class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+        >
+          Not supported by your account provider
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
-exports[`<LoginWithQRSection /> MSC3906 should not render only get_login_token enabled 1`] = `<div />`;
+exports[`<LoginWithQRSection /> MSC3906 should not render only get_login_token enabled 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Link new device
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_LoginWithQRSection"
+      >
+        <p
+          class="mx_SettingsTab_subsectionText"
+        >
+          Use a QR code to sign in to another device and set up secure messaging.
+        </p>
+        <div
+          aria-disabled="true"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+          disabled=""
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+              fill-rule="evenodd"
+            />
+            <path
+              d="M15 16v-3h-2v3h2Z"
+            />
+            <path
+              d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+            />
+          </svg>
+          Show QR code
+        </div>
+        <p
+          class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+        >
+          Not supported by your account provider
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`<LoginWithQRSection /> MSC3906 should render panel get_login_token + .well-known 1`] = `
 <div>

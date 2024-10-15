@@ -18,12 +18,11 @@ import {
     DEVICE_CODE_SCOPE,
 } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
+import { Text } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 import SettingsSubsection from "../shared/SettingsSubsection";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { Features } from "../../../../settings/Settings";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -64,9 +63,8 @@ export function shouldShowQr(
         oidcClientConfig?.metadata?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
 
     return (
-        deviceAuthorizationGrantSupported &&
+        !!deviceAuthorizationGrantSupported &&
         msc4108Supported &&
-        SettingsStore.getValue(Features.OidcNativeFlow) &&
         !!cli.getCrypto()?.exportSecretsBundle &&
         isCrossSigningReady
     );
@@ -85,19 +83,15 @@ const LoginWithQRSection: React.FC<IProps> = ({
         ? shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions, wellKnown)
         : shouldShowQrLegacy(versions, wellKnown, capabilities);
 
-    // don't show anything if no method is available
-    if (!offerShowQr) {
-        return null;
-    }
-
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>
             <div className="mx_LoginWithQRSection">
                 <p className="mx_SettingsTab_subsectionText">{_t("settings|sessions|sign_in_with_qr_description")}</p>
-                <AccessibleButton onClick={onShowQr} kind="primary">
+                <AccessibleButton onClick={onShowQr} kind="primary" disabled={!offerShowQr}>
                     <QrCodeIcon height={20} width={20} />
                     {_t("settings|sessions|sign_in_with_qr_button")}
                 </AccessibleButton>
+                {!offerShowQr && <Text size="sm">{_t("settings|sessions|sign_in_with_qr_unsupported")}</Text>}
             </div>
         </SettingsSubsection>
     );

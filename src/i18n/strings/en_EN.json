@@ -283,6 +283,8 @@
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "sign_in_new_device": "Sign in new device",
+            "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
+            "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
         },
         "register_action": "Create Account",
@@ -2855,6 +2857,7 @@
             "sign_in_with_qr": "Link new device",
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
+            "sign_in_with_qr_unsupported": "Not supported by your account provider",
             "sign_out": "Sign out of this session",
             "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -3829,8 +3832,6 @@
     },
     "user_menu": {
         "link_new_device": "Link new device",
-        "link_new_device_not_supported": "Not supported",
-        "link_new_device_not_supported_caption": "You need to sign in manually",
         "settings": "All settings",
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"

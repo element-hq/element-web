@@ -17,6 +17,7 @@ import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/i
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
+import { QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -94,7 +95,10 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
 
         switch (this.props.phase) {
             case Phase.Error: {
-                let success = false;
+                backButton = false;
+
+                let Icon = ErrorIcon;
+                let success: boolean | null = false;
                 let title: string | undefined;
                 let message: ReactNode | undefined;
 
@@ -138,6 +142,7 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
 
                     case ClientRendezvousFailureReason.OtherDeviceAlreadySignedIn:
                         success = true;
+                        Icon = CheckCircleSolidIcon;
                         title = _t("auth|qr_code_login|error_other_device_already_signed_in_title");
                         message = _t("auth|qr_code_login|error_other_device_already_signed_in");
                         break;
@@ -157,6 +162,15 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                         message = _t("auth|qr_code_login|error_etag_missing");
                         break;
 
+                    case LegacyRendezvousFailureReason.HomeserverLacksSupport:
+                    case ClientRendezvousFailureReason.HomeserverLacksSupport:
+                        success = null;
+                        Icon = QrCodeIcon;
+                        backButton = true;
+                        title = _t("auth|qr_code_login|unsupported_heading");
+                        message = _t("auth|qr_code_login|unsupported_explainer");
+                        break;
+
                     case MSC4108FailureReason.DeviceAlreadyExists:
                     case MSC4108FailureReason.DeviceNotFound:
                     case MSC4108FailureReason.UnexpectedMessageReceived:
@@ -168,15 +182,15 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                         break;
                 }
                 className = "mx_LoginWithQR_error";
-                backButton = false;
                 main = (
                     <>
                         <div
                             className={classNames("mx_LoginWithQR_icon", {
-                                "mx_LoginWithQR_icon--critical": !success,
+                                "mx_LoginWithQR_icon--critical": success === false,
+                                "mx_LoginWithQR_icon--success": success === true,
                             })}
                         >
-                            {success ? <CheckCircleSolidIcon width="32px" /> : <ErrorIcon width="32px" />}
+                            <Icon width="32px" height="32px" />
                         </div>
                         <Heading as="h1" size="sm" weight="semibold">
                             {title}
