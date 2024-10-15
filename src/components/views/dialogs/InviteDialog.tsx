@@ -20,6 +20,11 @@ import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matr
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { Icon as InfoIcon } from "../../../../res/img/element-icons/info.svg";
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
@@ -27,7 +32,7 @@ import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import SdkConfig from "../../../SdkConfig";
+// import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
@@ -74,7 +79,6 @@ import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
 import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { UserProfilesStore } from "../../../stores/UserProfilesStore";
-import { CustomComponentLifecycle, CustomComponentOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
@@ -371,8 +375,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
         const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
-        const welcomeUserId = SdkConfig.get("welcome_user_id");
-        if (welcomeUserId) excludedIds.add(welcomeUserId);
+        // const welcomeUserId = SdkConfig.get("welcome_user_id");
+        // if (welcomeUserId) excludedIds.add(welcomeUserId);
 
         if (isRoomInvite(props)) {
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
@@ -1560,10 +1564,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
         const customInviteDialog = { CustomComponent: React.Fragment };
         const Props = (props: any): React.JSX.Element => <></>;
-        ModuleRunner.instance.invoke(
-            CustomComponentLifecycle.InviteDialog,
-            customInviteDialog as CustomComponentOpts,
-        );
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.InviteDialog, customInviteDialog as CustomComponentOpts);
         return (
             <customInviteDialog.CustomComponent>
                 {/* VERJI: Workaround, pass needed props in a child element of the customComponent wrapper, so we can extract in module implementation */}

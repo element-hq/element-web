@@ -32,13 +32,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+
 // what-input helps improve keyboard accessibility
 import "what-input";
-import {
-    CustomComponentLifecycle,
-    CustomComponentOpts,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
-
 import type NewRecoveryMethodDialog from "../../async-components/views/dialogs/security/NewRecoveryMethodDialog";
 import type RecoveryMethodRemovedDialog from "../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog";
 import PosthogTrackers from "../../PosthogTrackers";
