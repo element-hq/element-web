@@ -48,7 +48,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Deps
-              run: "./scripts/ci/install-deps.sh"
+              run: "./scripts/layered.sh"
               env:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 

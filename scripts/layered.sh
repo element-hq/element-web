@@ -23,6 +23,7 @@ export PR_REPO=element-web
 # Set up the js-sdk first
 scripts/fetchdep.sh matrix-org matrix-js-sdk develop
 pushd matrix-js-sdk
+[ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile
 popd
@@ -41,3 +42,5 @@ fi
 
 # Link the layers into element-web
 yarn link matrix-js-sdk
+[ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
+yarn install --frozen-lockfile $@
