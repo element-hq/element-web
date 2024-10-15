@@ -210,7 +210,6 @@ export function createTestClient(): MatrixClient {
         makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
         sendToDevice: jest.fn().mockResolvedValue(undefined),
         queueToDevice: jest.fn().mockResolvedValue(undefined),
-        encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
         cancelPendingEvent: jest.fn(),
 
         getMediaHandler: jest.fn().mockReturnValue({
