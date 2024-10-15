@@ -1,3 +1,7 @@
+Changes in [1.11.81](https://github.com/element-hq/element-web/releases/tag/v1.11.81) (2024-10-15)
+==================================================================================================
+This release fixes High severity vulnerability CVE-2024-47771 / GHSA-963w-49j9-gxj6
+
 Changes in [1.11.80](https://github.com/element-hq/element-web/releases/tag/v1.11.80) (2024-10-08)
 ==================================================================================================
 ## ✨ Features
