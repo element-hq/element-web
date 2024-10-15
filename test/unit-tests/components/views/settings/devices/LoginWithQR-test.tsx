@@ -51,7 +51,6 @@ function makeClient() {
         },
         getClientWellKnown: jest.fn().mockReturnValue({}),
         getCrypto: jest.fn().mockReturnValue({}),
-        crypto: {},
     } as unknown as MatrixClient);
 }
 
