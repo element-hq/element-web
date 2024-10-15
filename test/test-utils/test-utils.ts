@@ -212,7 +212,6 @@ export function createTestClient(): MatrixClient {
         relations: jest.fn().mockResolvedValue({
             events: [],
         }),
-        isCryptoEnabled: jest.fn().mockReturnValue(false),
         hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),
         downloadKeys: jest.fn(),

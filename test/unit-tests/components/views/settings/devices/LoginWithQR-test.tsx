@@ -38,7 +38,6 @@ function makeClient() {
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
         isUserIgnored: jest.fn(),
-        isCryptoEnabled: jest.fn(),
         getUserId: jest.fn(),
         on: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),

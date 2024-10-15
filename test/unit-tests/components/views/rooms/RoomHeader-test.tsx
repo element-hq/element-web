@@ -8,15 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import {
-    EventType,
-    JoinRule,
-    MatrixClient,
-    MatrixEvent,
-    PendingEventOrdering,
-    Room,
-    RoomMember,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, MatrixEvent, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     createEvent,
@@ -86,6 +78,7 @@ describe("RoomHeader", () => {
         } as unknown as DMRoomMap);
 
         setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
+        jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
     });
 
     afterEach(() => {
@@ -595,10 +588,7 @@ describe("RoomHeader", () => {
     });
 
     describe("dm", () => {
-        let client: MatrixClient;
         beforeEach(() => {
-            client = MatrixClientPeg.get()!;
-
             // Make the mocked room a DM
             mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId) => {
                 if (roomId === room.roomId) return "@user:example.com";
@@ -624,8 +614,6 @@ describe("RoomHeader", () => {
                     getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                 },
             ]);
-            jest.spyOn(client, "isCryptoEnabled").mockReturnValue(true);
-            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
         });
 
         it.each([
