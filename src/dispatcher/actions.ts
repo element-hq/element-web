@@ -400,9 +400,5 @@ export enum Action {
      */
     ViewOperatingMessages = "view_operatingmessages",
 
-    /**
-     * Opens dialog to invite external Verji users
-     */
-    OpenInviteExternalUsersDialog = "open_invite_external_users_dialog",
     // Verji end
 }
