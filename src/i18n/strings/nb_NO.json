@@ -88,12 +88,14 @@
             "login_account": "Konto og innlogging"
         },
         "operating_messages" : {
-            "title" : "Operating messages",
-            "messages" : "Operating messages from <a>Verji</a>"
-        },
+            "title" : "Driftsmeldinger",
+            "messages" : "Driftsmeldinger fra Verji",
+            "readarticle" : "Les hele artikkelen"
+          },
         "news" : {
-          "title" : "News",
-          "messages" : "News from <a>Verji</a>"
+          "title" : "Nyheter",
+          "messages" : "Nyheter fra Verji",
+          "readarticle" : "Les hele artikkelen"
         }
   },
   "%(duration)sd": "%(duration)sd",
@@ -1832,8 +1834,8 @@
     "key_share_warning": "Invited people will be able to read old messages.",
     "name_email_mxid_share_room": "Inviter noen ved å bruke navn, e-postadresse eller inviter nye gjester med e-postadressen deres.",
     "name_email_mxid_share_space": "Inviter noen ved å bruke navn, e-postadresse, brukernavn (lik <userId/>) eller <a> del dette området</a>.",
-    "name_mxid_share_room": "Inviter noen ved å bruke navnet sitt, brukernavnet (lik <userId/>) eller <a> dele dette rommet</a>.",
-    "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt, brukernavnet (lik <userId/>) eller <a> dele dette området</a>.",
+    "name_mxid_share_room": "Inviter noen ved å bruke navnet sitt</a>.",
+    "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt",
     "recents_section": "Nylige samtaler",
     "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
     "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",
