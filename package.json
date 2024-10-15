@@ -71,7 +71,7 @@
         "@types/react": "17.0.82",
         "@vector-im/compound-design-tokens": "1.8.0",
         "@vector-im/compound-web": "7.0.0",
-        "@floating-ui/react": "0.26.11",
+        "@floating-ui/react": "0.26.24",
         "@radix-ui/react-id": "1.1.0"
     },
     "dependencies": {
