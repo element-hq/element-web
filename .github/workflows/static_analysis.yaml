@@ -65,6 +65,9 @@ jobs:
                 labs|element_call_video_rooms
                 labs|feature_disable_call_per_sender_encryption
                 voip|element_call
+                error|invalid_json
+                error|misconfigured
+                welcome_to_element
 
     rethemendex_lint:
         name: "Rethemendex Check"

@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
