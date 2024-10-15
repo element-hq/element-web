@@ -72,8 +72,8 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
         >
           <span
-            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_qipht_17"
-            data-kind="default"
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
           >
             <svg
               fill="currentColor"
@@ -726,8 +726,8 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
         >
           <span
-            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_qipht_17"
-            data-kind="default"
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
           >
             <svg
               fill="currentColor"
@@ -1343,8 +1343,8 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
         >
           <span
-            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_qipht_17"
-            data-kind="default"
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
           >
             <svg
               fill="currentColor"
