@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BeaconStatus /> active state renders with children 1`] = `
+<span
+  data-testid="test-child"
+>
+  test
+</span>
+`;
+
+exports[`<BeaconStatus /> active state renders without children 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BeaconStatus mx_BeaconStatus_Active"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon"
+    />
+    <div
+      class="mx_BeaconStatus_description"
+    >
+      <span
+        class="mx_BeaconStatus_label"
+      >
+        test label
+      </span>
+      <span
+        class="mx_BeaconStatus_expiryTime"
+      >
+        Live until 11:17
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<BeaconStatus /> renders loading state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BeaconStatus mx_BeaconStatus_Loading"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
+    />
+    <div
+      class="mx_BeaconStatus_description"
+    >
+      <span
+        class="mx_BeaconStatus_description_status"
+      >
+        Loading live location…
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<BeaconStatus /> renders stopped state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BeaconStatus mx_BeaconStatus_Stopped"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
+    />
+    <div
+      class="mx_BeaconStatus_description"
+    >
+      <span
+        class="mx_BeaconStatus_description_status"
+      >
+        Live location ended
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

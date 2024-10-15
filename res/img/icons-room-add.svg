@@ -1,0 +1,9 @@
+
+<svg width="8px" height="8px" viewBox="0 0 8 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Design" stroke="none" stroke-width="1.6" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Add" transform="translate(1.000000, 1.000000)" fill-rule="nonzero" stroke="#FFFFFF">
+            <path d="M3,0 L3,6" id="Stroke H"></path>
+            <path d="M3,0 L3,6" id="Stroke V" transform="translate(3.000000, 3.000000) rotate(90.000000) translate(-3.000000, -3.000000) "></path>
+        </g>
+    </g>
+</svg>

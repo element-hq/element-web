@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LabelledCheckbox {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+
+    .mx_Checkbox {
+        margin-top: 3px; /* visually align with label text */
+    }
+
+    .mx_LabelledCheckbox_labels {
+        flex: 1;
+
+        .mx_LabelledCheckbox_label {
+            vertical-align: middle;
+        }
+
+        .mx_LabelledCheckbox_byline {
+            display: block;
+            padding-top: $spacing-4;
+            color: $muted-fg-color;
+            font-size: $font-11px;
+        }
+    }
+}

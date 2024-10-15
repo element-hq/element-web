@@ -18,10 +18,11 @@ Please see LICENSE files in the repository root for full details.
  * from the rageshake.)
  */
 
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 import { logger } from "matrix-js-sdk/src/logger";
+
+import * as rageshake from "../rageshake/rageshake";
+import SdkConfig from "../SdkConfig";
+import sendBugReport from "../rageshake/submit-rageshake";
 
 export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves

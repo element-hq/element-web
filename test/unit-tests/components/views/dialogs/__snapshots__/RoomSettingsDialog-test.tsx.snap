@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`] = `
+NodeList [
+  <li
+    aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
+    aria-selected="true"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+    data-testid="settings-tab-ROOM_GENERAL_TAB"
+    role="tab"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_GENERAL_TAB_label"
+    >
+      General
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_SECURITY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_SECURITY_TAB_label"
+    >
+      Security & Privacy
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_ROLES_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_ROLES_TAB_label"
+    >
+      Roles & Permissions
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_notificationsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_NOTIFICATIONS_TAB_label"
+    >
+      Notifications
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_pollsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
+    >
+      Polls
+    </span>
+  </li>,
+]
+`;
+
+exports[`<RoomSettingsDialog /> poll history displays poll history when tab clicked 1`] = `
+<div
+  class="mx_SettingsTab"
+>
+  <div
+    class="mx_PollHistory_content"
+  >
+    <h2
+      class="mx_Heading_h2 mx_PollHistory_header"
+    >
+      Polls
+    </h2>
+    <div
+      class="mx_PollHistoryList"
+    >
+      <fieldset
+        class="mx_FilterTabGroup"
+      >
+        <label
+          data-testid="filter-tab-PollHistory_filter-ACTIVE"
+        >
+          <input
+            checked=""
+            name="PollHistory_filter"
+            type="radio"
+            value="ACTIVE"
+          />
+          <span>
+            Active polls
+          </span>
+        </label>
+        <label
+          data-testid="filter-tab-PollHistory_filter-ENDED"
+        >
+          <input
+            name="PollHistory_filter"
+            type="radio"
+            value="ENDED"
+          />
+          <span>
+            Past polls
+          </span>
+        </label>
+      </fieldset>
+      <div
+        class="mx_PollHistoryList_loading mx_PollHistoryList_noResultsYet"
+      >
+        <div
+          class="mx_InlineSpinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_InlineSpinner_icon mx_Spinner_icon"
+            style="width: 16px; height: 16px;"
+          />
+        </div>
+        Loading polls
+      </div>
+    </div>
+  </div>
+</div>
+`;

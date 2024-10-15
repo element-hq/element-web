@@ -1,0 +1,40 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SecurityUserSettingsTab_bulkOptions {
+    display: flex;
+    flex-direction: row;
+    column-gap: $spacing-8;
+}
+
+.mx_SecurityUserSettingsTab_ignoredUser {
+    margin-bottom: $spacing-4;
+}
+
+.mx_SecurityUserSettingsTab_ignoredUser .mx_AccessibleButton {
+    margin-right: $spacing-8;
+}
+
+.mx_SecurityUserSettingsTab_warning {
+    color: $alert;
+    position: relative;
+    padding-left: 40px;
+
+    &::before {
+        mask-repeat: no-repeat;
+        mask-position: 0 center;
+        mask-size: $font-24px;
+        position: absolute;
+        width: $font-24px;
+        height: $font-24px;
+        content: "";
+        top: 0;
+        left: 0;
+        background-color: $alert;
+        mask-image: url("$(res)/img/feather-customised/alert-triangle.svg");
+    }
+}

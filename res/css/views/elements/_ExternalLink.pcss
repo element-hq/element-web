@@ -1,0 +1,23 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ExternalLink {
+    color: $links;
+}
+
+.mx_ExternalLink_icon {
+    display: inline-block;
+    mask-image: url("$(res)/img/external-link.svg");
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    width: $font-11px;
+    height: $font-11px;
+    margin-left: 0.3rem;
+    vertical-align: middle;
+}

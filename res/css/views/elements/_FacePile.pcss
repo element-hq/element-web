@@ -1,0 +1,40 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FacePile_more {
+    /* Needed to calculate the offset on the face pile */
+    --cpd-avatar-size: 28px;
+    position: relative;
+    border-radius: 100%;
+    width: 28px;
+    height: 28px;
+    background-color: $panels;
+    display: inline-block;
+
+    &::before {
+        content: "";
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: inherit;
+        width: inherit;
+        background: $tertiary-content;
+        mask-position: center;
+        mask-size: 20px;
+        mask-repeat: no-repeat;
+        mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
+    }
+}
+
+.mx_FacePile_summary {
+    margin-left: 12px;
+    font: var(--cpd-font-body-md-regular);
+    line-height: $font-24px;
+    color: $tertiary-content;
+}

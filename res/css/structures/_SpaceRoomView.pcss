@@ -1,0 +1,299 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+@define-mixin SpacePillButton {
+    position: relative;
+    padding: 16px 32px 16px 72px;
+    width: 432px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $input-border-color;
+    font-size: $font-17px;
+    font-weight: var(--cpd-font-weight-semibold);
+    margin: 20px 0;
+
+    > div {
+        margin-top: 4px;
+        font-weight: normal;
+        font-size: $font-15px;
+        color: $secondary-content;
+    }
+
+    &::before {
+        position: absolute;
+        content: "";
+        width: 24px;
+        height: 24px;
+        top: 27px;
+        left: 20px;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 24px;
+        background-color: $tertiary-content;
+    }
+
+    &:hover {
+        border-color: var(--cpd-color-bg-interactive-primary-rest);
+
+        &::before {
+            background-color: var(--cpd-color-icon-primary);
+        }
+
+        > span {
+            color: $primary-content;
+        }
+    }
+}
+
+.mx_SpaceRoomView {
+    --innerWidth: 428px;
+
+    overflow-y: auto;
+    flex: 1;
+
+    .mx_MainSplit > div:first-child {
+        padding: 80px 60px;
+        flex-grow: 1;
+        max-height: 100%;
+        overflow-y: auto;
+
+        h1 {
+            margin: 0;
+            font-size: $font-24px;
+            font-weight: var(--cpd-font-weight-semibold);
+            color: $primary-content;
+            width: max-content;
+        }
+
+        .mx_SpaceRoomView_description {
+            font-size: $font-15px;
+            color: $secondary-content;
+            margin-top: 12px;
+            margin-bottom: 24px;
+            max-width: var(--innerWidth);
+        }
+
+        .mx_AddExistingToSpace {
+            max-width: var(--innerWidth);
+
+            .mx_AddExistingToSpace_content {
+                height: calc(100vh - 360px);
+                max-height: 400px;
+            }
+        }
+
+        .mx_SpaceRoomView_buttons {
+            display: block;
+            margin-top: 44px;
+            width: var(--innerWidth);
+            text-align: right; /* button alignment right */
+
+            .mx_AccessibleButton_hasKind {
+                padding: 8px 22px;
+                margin-left: 16px;
+            }
+
+            input.mx_AccessibleButton {
+                border: none; /* override default styles */
+            }
+        }
+
+        .mx_Field {
+            max-width: var(--innerWidth);
+
+            & + .mx_Field {
+                margin-top: 28px;
+            }
+        }
+
+        .mx_SpaceRoomView_errorText {
+            font-weight: var(--cpd-font-weight-semibold);
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $alert;
+            margin-bottom: 28px;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    .mx_SpaceRoomView_landing {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+
+        .mx_SpaceRoomView_landing_header {
+            display: flex;
+            justify-content: space-between;
+
+            .mx_BaseAvatar {
+                width: 80px;
+            }
+        }
+
+        .mx_SpaceRoomView_landing_name {
+            margin: 24px 0 16px;
+            font-size: $font-15px;
+            color: $secondary-content;
+
+            > span {
+                display: flex;
+                flex-flow: column;
+                gap: 12px 0;
+
+                h1 {
+                    display: inline-block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 100%;
+                }
+            }
+
+            .mx_SpaceRoomView_landing_inviter {
+                .mx_BaseAvatar {
+                    margin-right: 4px;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        .mx_SpaceRoomView_landing_infoBar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            line-height: $font-24px;
+
+            .mx_SpaceRoomView_landing_infoBar_interactive {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 12px 12px;
+
+                .mx_FacePile {
+                    display: inline-block;
+                    cursor: pointer;
+                }
+
+                .mx_SpaceRoomView_landing_inviteButton,
+                .mx_SpaceRoomView_landing_settingsButton {
+                    position: relative;
+
+                    &::before {
+                        position: absolute;
+                        content: "";
+                        mask-position: center;
+                        mask-repeat: no-repeat;
+                    }
+                }
+
+                .mx_SpaceRoomView_landing_inviteButton {
+                    padding: 4px 18px 4px 40px;
+                    height: min-content;
+
+                    &::before {
+                        left: 8px;
+                        height: 16px;
+                        width: 16px;
+                        background: var(--cpd-color-icon-on-solid-primary);
+                        mask-size: 16px;
+                        mask-image: url("$(res)/img/element-icons/room/invite.svg");
+                    }
+                }
+
+                .mx_SpaceRoomView_landing_settingsButton {
+                    width: 24px;
+                    height: 24px;
+
+                    &::before {
+                        left: 0;
+                        top: 0;
+                        height: 24px;
+                        width: 24px;
+                        background: $tertiary-content;
+                        mask-size: contain;
+                        mask-image: url("$(res)/img/element-icons/settings.svg");
+                    }
+                }
+            }
+        }
+
+        .mx_SpaceRoomView_landing_topic {
+            font-size: $font-15px;
+            margin-top: 12px;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .mx_SearchBox {
+            margin: 0 0 20px;
+            flex: 0;
+        }
+    }
+
+    .mx_SpaceRoomView_privateScope {
+        > .mx_AccessibleButton {
+            @mixin SpacePillButton;
+        }
+
+        .mx_SpaceRoomView_privateScope_justMeButton::before {
+            mask-image: url("$(res)/img/element-icons/room/members.svg");
+        }
+
+        .mx_SpaceRoomView_privateScope_meAndMyTeammatesButton::before {
+            mask-image: url("$(res)/img/element-icons/group-members.svg");
+        }
+    }
+
+    .mx_SpaceRoomView_inviteTeammates {
+        .mx_SpaceRoomView_inviteTeammates_buttons {
+            color: $secondary-content;
+            margin-top: 28px;
+
+            .mx_AccessibleButton {
+                position: relative;
+                display: inline-block;
+                padding-left: 32px;
+                line-height: 24px; /* to center icons */
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    height: 24px;
+                    width: 24px;
+                    top: 0;
+                    left: 0;
+                    background-color: $secondary-content;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: contain;
+                }
+
+                & + .mx_AccessibleButton {
+                    margin-left: 32px;
+                }
+            }
+
+            .mx_SpaceRoomView_inviteTeammates_inviteDialogButton {
+                color: var(--cpd-color-text-primary);
+                font-weight: var(--cpd-font-weight-semibold);
+                text-decoration: underline;
+
+                &::before {
+                    mask-image: url("$(res)/img/element-icons/room/invite.svg");
+                    background-color: var(--cpd-color-icon-primary);
+                }
+            }
+        }
+    }
+}

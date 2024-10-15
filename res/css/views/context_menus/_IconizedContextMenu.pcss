@@ -1,0 +1,178 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* A context menu that largely fits the | [icon]    [label] | format. */
+.mx_IconizedContextMenu {
+    min-width: 146px;
+    width: max-content;
+    /* override default ul styles */
+    margin: 0;
+    padding: 0;
+
+    .mx_IconizedContextMenu_optionList {
+        & > * {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .mx_IconizedContextMenu_optionList_label {
+            font-size: $font-15px;
+            font-weight: var(--cpd-font-weight-semibold);
+        }
+
+        /* the notFirst class is for cases where the optionList might be under a header of sorts. */
+        &:nth-child(n + 2),
+        .mx_IconizedContextMenu_optionList_notFirst {
+            border-top: var(--cpd-border-width-1) solid var(--cpd-color-gray-400);
+        }
+
+        /* round the top corners of the top button for the hover effect to be bounded */
+        &:first-child .mx_IconizedContextMenu_item:first-child {
+            border-radius: 8px 8px 0 0; /* radius matches .mx_ContextualMenu */
+        }
+
+        /* round the bottom corners of the bottom button for the hover effect to be bounded */
+        &:last-child .mx_IconizedContextMenu_item:last-child {
+            border-radius: 0 0 8px 8px; /* radius matches .mx_ContextualMenu */
+        }
+
+        /* round all corners of the only button for the hover effect to be bounded */
+        &:first-child:last-child .mx_IconizedContextMenu_item:first-child:last-child {
+            border-radius: 8px; /* radius matches .mx_ContextualMenu */
+        }
+
+        .mx_IconizedContextMenu_item {
+            /* pad the inside of the button so that the hover background is padded too */
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
+            color: $primary-content;
+            font: var(--cpd-font-body-md-regular);
+
+            /* Create a flexbox to more easily define the list items */
+            display: flex;
+            align-items: center;
+
+            &:hover,
+            &:focus-visible {
+                background-color: var(--cpd-color-bg-action-secondary-hovered);
+            }
+
+            &.mx_AccessibleButton_disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            img,
+            .mx_IconizedContextMenu_icon {
+                /* icons */
+                width: 16px;
+                min-width: 16px;
+                max-width: 16px;
+            }
+
+            span.mx_IconizedContextMenu_label {
+                /* labels */
+                width: 100%;
+                flex: 1;
+
+                /* Ellipsize any text overflow */
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
+                padding-left: 14px;
+            }
+
+            .mx_BetaCard_betaPill {
+                margin-left: 16px;
+            }
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+
+        &::before {
+            content: "";
+            width: inherit;
+            height: inherit;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: var(--cpd-color-icon-primary);
+        }
+    }
+
+    .mx_IconizedContextMenu_optionList_red {
+        .mx_IconizedContextMenu_item {
+            color: $alert !important;
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: var(--cpd-color-icon-critical-primary);
+        }
+    }
+
+    .mx_IconizedContextMenu_option_red {
+        color: $alert !important;
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $alert;
+        }
+    }
+
+    .mx_IconizedContextMenu_active {
+        &.mx_IconizedContextMenu_item,
+        .mx_IconizedContextMenu_item {
+            color: $accent !important;
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $accent;
+        }
+    }
+
+    &.mx_IconizedContextMenu_compact {
+        .mx_IconizedContextMenu_optionList > * {
+            padding: 8px 16px 8px 12px;
+        }
+    }
+
+    .mx_IconizedContextMenu_checked,
+    .mx_IconizedContextMenu_unchecked {
+        margin-left: 16px;
+        margin-right: -5px;
+    }
+
+    .mx_IconizedContextMenu_developerTools::before {
+        mask-image: url("$(res)/img/element-icons/settings/flask.svg");
+    }
+
+    .mx_IconizedContextMenu_checked::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/checkmark.svg");
+    }
+
+    .mx_IconizedContextMenu_unchecked::before {
+        content: unset;
+    }
+
+    .mx_IconizedContextMenu_sublabel {
+        margin-left: 20px;
+        color: $tertiary-content;
+    }
+}
+
+.mx_IconizedContextMenu_item.mx_IconizedContextMenu_itemDestructive {
+    color: $alert !important;
+}

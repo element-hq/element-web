@@ -11,7 +11,7 @@ import { mocked } from "jest-mock";
 import PWAPlatform from "../../../../src/vector/platform/PWAPlatform";
 import WebPlatform from "../../../../src/vector/platform/WebPlatform";
 
-jest.mock("../../../../src/vector/platform/WebPlatform");
+jest.mock("../../../../../src/vector/platform/WebPlatform");
 
 describe("PWAPlatform", () => {
     beforeEach(() => {

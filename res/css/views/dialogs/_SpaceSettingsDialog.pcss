@@ -1,0 +1,84 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SpaceSettingsDialog {
+    color: $primary-content;
+
+    .mx_SpaceSettings_errorText {
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $alert;
+        margin-bottom: 28px;
+    }
+
+    .mx_ToggleSwitch {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 16px;
+    }
+
+    .mx_SettingsTab_section {
+        .mx_SettingsTab_section_caption {
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mx_StyledRadioButton {
+            margin-top: 8px;
+            margin-bottom: 4px;
+
+            .mx_StyledRadioButton_content {
+                font-weight: var(--cpd-font-weight-semibold);
+                line-height: $font-18px;
+                color: $primary-content;
+            }
+
+            & + span {
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $secondary-content;
+                margin-left: 26px;
+            }
+        }
+    }
+
+    .mx_SpaceSettingsDialog_buttons {
+        display: flex;
+        margin-top: 64px;
+
+        .mx_AccessibleButton {
+            display: inline-block;
+        }
+
+        .mx_AccessibleButton_kind_link {
+            margin-left: auto;
+        }
+    }
+
+    .mx_AccessibleButton_hasKind {
+        &.mx_AccessibleButton_kind_link {
+            font: var(--cpd-font-body-md-semibold);
+            margin: 7px 18px;
+
+            &.mx_SettingsTab_showAdvanced {
+                margin: 18px 0;
+            }
+        }
+    }
+
+    .mx_TabbedView_tabLabel {
+        .mx_SpaceSettingsDialog_generalIcon::before {
+            mask-image: url("$(res)/img/element-icons/settings.svg");
+        }
+
+        .mx_SpaceSettingsDialog_visibilityIcon::before {
+            mask-image: url("$(res)/img/element-icons/eye.svg");
+        }
+    }
+}

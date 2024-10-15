@@ -1,0 +1,90 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SettingsTab {
+    --SettingsTab_tooltip-max-width: 120px; /* So it fits in the space provided by the page */
+
+    color: $primary-content;
+
+    a {
+        color: $links;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-8;
+        flex-grow: 1;
+    }
+    // never want full width buttons
+    // event when other content is 100% width
+    .mx_AccessibleButton {
+        align-self: flex-start;
+        justify-self: flex-start;
+    }
+
+    .mx_Field {
+        margin: 0;
+        flex: 1;
+    }
+}
+
+.mx_SettingsTab_warningText {
+    color: $alert;
+}
+
+.mx_SettingsTab_subsectionText {
+    color: $secondary-content;
+    font: var(--cpd-font-body-md-regular);
+    display: block;
+    margin-top: 10px;
+    margin-inline-end: 80px; /* Align with the rest of the view */
+    margin-bottom: 10px;
+    margin-inline-start: 0;
+}
+
+.mx_SettingsTab_section {
+    $end-gutter: 80px;
+
+    margin-bottom: $spacing-24;
+
+    .mx_SettingsFlag {
+        margin-inline-end: $end-gutter;
+        margin-bottom: 10px;
+
+        .mx_SettingsFlag_label {
+            vertical-align: middle;
+            display: inline-block;
+            max-width: calc(100% - $font-48px); /* Force word wrap instead of colliding with the switch */
+            box-sizing: border-box;
+        }
+
+        .mx_ToggleSwitch {
+            float: inline-end;
+        }
+    }
+
+    > p {
+        margin-inline-end: $end-gutter;
+    }
+
+    &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
+        margin-inline-end: 0 !important;
+    }
+}
+
+.mx_SettingsTab_toggleWithDescription {
+    margin-top: $spacing-24;
+}
+
+.mx_SettingsTab_sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: $spacing-32;
+
+    padding-bottom: $spacing-16;
+}

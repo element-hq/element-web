@@ -12,7 +12,7 @@ Element Web and the React SDK support "customisation points" that can be used to
 easily add custom logic specific to a particular deployment of Element Web.
 
 An example of this is the [security customisations
-module](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/customisations/Security.ts).
+module](https://github.com/element-hq/element-web/blob/develop/src/customisations/Security.ts).
 This module in the React SDK only defines some empty functions and their types:
 it does not do anything by default.
 
@@ -54,7 +54,7 @@ UI for some actions can be hidden via the ComponentVisibility customisation:
 -   creating rooms,
 -   creating spaces,
 
-To customise visibility create a customisation module from [ComponentVisibility](https://github.com/matrix-org/matrix-react-sdk/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
+To customise visibility create a customisation module from [ComponentVisibility](https://github.com/element-hq/element-web/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
 
 `shouldShowComponent` determines whether the active MatrixClient user should be able to use
 the given UI component. When `shouldShowComponent` returns falsy all UI components for that feature will be hidden.

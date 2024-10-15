@@ -1,0 +1,63 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* ICONS */
+/* ========================================================== */
+
+.mx_RoomSettingsDialog_settingsIcon::before {
+    mask-image: url("$(res)/img/element-icons/settings.svg");
+}
+
+.mx_RoomSettingsDialog_voiceIcon::before {
+    mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+}
+
+.mx_RoomSettingsDialog_securityIcon::before {
+    mask-image: url("$(res)/img/element-icons/security.svg");
+}
+
+.mx_RoomSettingsDialog_rolesIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/settings/roles.svg");
+}
+
+.mx_RoomSettingsDialog_notificationsIcon::before {
+    mask-image: url("$(res)/img/element-icons/notifications.svg");
+}
+
+.mx_RoomSettingsDialog_bridgesIcon::before {
+    /* This icon is pants, please improve :) */
+    mask-image: url("$(res)/img/feather-customised/bridge.svg");
+}
+
+.mx_RoomSettingsDialog_pollsIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+}
+
+.mx_RoomSettingsDialog_warningIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/settings/advanced.svg");
+}
+
+.mx_RoomSettingsDialog_peopleIcon::before {
+    mask-image: url("$(res)/img/element-icons/group-members.svg");
+}
+
+.mx_RoomSettingsDialog .mx_Dialog_title {
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0 auto;
+    padding-right: 80px;
+}
+
+/* show a different AvatarSetting placeholder for RoomProfileSettings which is basically a clone of ProfileSettings */
+.mx_RoomSettingsDialog .mx_AvatarSetting_avatar .mx_AvatarSetting_avatarPlaceholder::before {
+    mask: url("$(res)/img/feather-customised/image.svg");
+    mask-repeat: no-repeat;
+    mask-size: 36px;
+    mask-position: center;
+}

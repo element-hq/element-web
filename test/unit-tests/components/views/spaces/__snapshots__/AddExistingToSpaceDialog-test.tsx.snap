@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_AddExistingToSpace"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_AddExistingToSpaceDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        <div
+          class="mx_SubspaceSelector"
+        >
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="square"
+            style="--cpd-avatar-size: 40px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="square"
+              height="40px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="http://this.is.a.url/avatar.url/room.png"
+              width="40px"
+            />
+          </span>
+          <div>
+            <h1>
+              Add existing rooms
+            </h1>
+            <div
+              class="mx_SubspaceSelector_onlySpace"
+            >
+              !spaceid:example.com
+            </div>
+          </div>
+        </div>
+      </h1>
+    </div>
+    <div
+      class="mx_AddExistingToSpace"
+    >
+      <div
+        class="mx_SearchBox mx_textinput"
+      >
+        <input
+          autocomplete="off"
+          class="mx_textinput_icon mx_textinput_search mx_textinput_icon mx_textinput_search"
+          data-testid="searchbox-input"
+          placeholder="Search for rooms"
+          type="text"
+          value=""
+        />
+        <div
+          class="mx_AccessibleButton mx_SearchBox_closeButton"
+          role="button"
+          tabindex="-1"
+        />
+      </div>
+      <div
+        class="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
+        tabindex="-1"
+      >
+        <span
+          class="mx_AddExistingToSpace_noResults"
+        >
+          No results
+        </span>
+      </div>
+      <div
+        class="mx_AddExistingToSpace_footer"
+      >
+        <span>
+          <div>
+            Want to add a new room instead?
+          </div>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Create a new room
+          </div>
+        </span>
+        <div
+          aria-disabled="true"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+          disabled=""
+          role="button"
+          tabindex="0"
+        >
+          Add
+        </div>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

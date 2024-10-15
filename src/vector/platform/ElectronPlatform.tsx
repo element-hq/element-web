@@ -10,34 +10,31 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import BaseEventIndexManager from "matrix-react-sdk/src/indexing/BaseEventIndexManager";
-import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
-import Modal from "matrix-react-sdk/src/Modal";
-import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
-import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
+import { MatrixClient, Room, MatrixEvent, OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
-import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
-import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
-import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
-import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
-import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
-import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
-import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
-import { OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
-import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
+import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import dis from "../../dispatcher/dispatcher";
+import SdkConfig from "../../SdkConfig";
+import { IConfigOptions } from "../../IConfigOptions";
+import * as rageshake from "../../rageshake/rageshake";
+import Modal from "../../Modal";
+import InfoDialog from "../../components/views/dialogs/InfoDialog";
+import Spinner from "../../components/views/elements/Spinner";
+import { Action } from "../../dispatcher/actions";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { showToast as showUpdateToast } from "../../toasts/UpdateToast";
+import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import ToastStore from "../../stores/ToastStore";
+import GenericExpiringToast from "../../components/views/toasts/GenericExpiringToast";
+import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import { avatarUrlForRoom, getInitialLetter } from "../../Avatar";
+import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";

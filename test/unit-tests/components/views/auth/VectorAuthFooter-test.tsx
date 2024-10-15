@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import VectorAuthFooter from "../../../../../src/components/views/auth/VectorAuthFooter";
 import { setupLanguageMock } from "../../../../setup/setupLanguage";

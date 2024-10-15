@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PowerLevelSelector should display only the current user 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    title
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_4"
+          label="@userId:matrix.org"
+          placeholder="@userId:matrix.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_4"
+        >
+          @userId:matrix.org
+        </label>
+      </div>
+    </div>
+    <button
+      aria-disabled="true"
+      aria-label="Apply"
+      class="_button_i91xf_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      data-kind="primary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      Apply
+    </button>
+  </div>
+</fieldset>
+`;
+
+exports[`PowerLevelSelector should render 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    title
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_1"
+          label="@bob:server.org"
+          placeholder="@bob:server.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_1"
+        >
+          @bob:server.org
+        </label>
+      </div>
+    </div>
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_2"
+          label="@alice:server.org"
+          placeholder="@alice:server.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_2"
+        >
+          @alice:server.org
+        </label>
+      </div>
+    </div>
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_3"
+          label="@userId:matrix.org"
+          placeholder="@userId:matrix.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_3"
+        >
+          @userId:matrix.org
+        </label>
+      </div>
+    </div>
+    <button
+      aria-disabled="true"
+      aria-label="Apply"
+      class="_button_i91xf_17 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      data-kind="primary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      Apply
+    </button>
+  </div>
+</fieldset>
+`;

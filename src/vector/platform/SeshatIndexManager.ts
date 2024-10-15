@@ -5,15 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+// eslint-disable-next-line no-restricted-imports
+import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
+
 import BaseEventIndexManager, {
     ICrawlerCheckpoint,
     IEventAndProfile,
     IIndexStats,
     ISearchArgs,
     ILoadArgs,
-} from "matrix-react-sdk/src/indexing/BaseEventIndexManager";
-import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
-
+} from "../../indexing/BaseEventIndexManager";
 import { IPCManager } from "./IPCManager";
 
 export class SeshatIndexManager extends BaseEventIndexManager {

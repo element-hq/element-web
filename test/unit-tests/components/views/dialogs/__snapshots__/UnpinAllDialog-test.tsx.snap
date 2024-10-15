@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UnpinAllDialog /> should render 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_UnpinAllDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title mx_UnpinAllDialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Unpin all messages?
+      </h1>
+    </div>
+    <span
+      class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+    >
+      Make sure that you really want to remove all pinned messages. This action can’t be undone.
+    </span>
+    <div
+      class="mx_UnpinAllDialog_buttons"
+    >
+      <button
+        class="_button_i91xf_17 _destructive_i91xf_116"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

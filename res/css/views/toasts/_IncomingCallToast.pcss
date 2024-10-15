@@ -1,0 +1,102 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_IncomingCallToast {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    pointer-events: initial; /* restore pointer events so the user can accept/decline */
+    width: 250px;
+
+    $closeButtonSize: 16px;
+
+    .mx_IncomingCallToast_content {
+        display: flex;
+        flex-direction: column;
+        margin-left: 8px;
+        width: 100%;
+        overflow: hidden;
+
+        .mx_IncomingCallToast_info {
+            margin-bottom: $spacing-16;
+
+            .mx_IncomingCallToast_room {
+                display: inline-block;
+
+                font-weight: var(--cpd-font-weight-semibold);
+                font-size: $font-15px;
+                line-height: $font-24px;
+
+                /* Prevent overlap with the close button */
+                width: calc(100% - $closeButtonSize - 2 * $spacing-4);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                margin-bottom: $spacing-4;
+            }
+
+            .mx_IncomingCallToast_message {
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                margin-bottom: $spacing-4;
+            }
+
+            .mx_LiveContentSummary {
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                .mx_LiveContentSummary_participants::before {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
+
+        .mx_IncomingCallToast_joinButton {
+            position: relative;
+
+            bottom: $spacing-4;
+            right: $spacing-4;
+
+            align-self: flex-end;
+
+            box-sizing: border-box;
+            min-width: 120px;
+
+            padding: $spacing-4 0;
+
+            line-height: $font-24px;
+        }
+    }
+
+    .mx_IncomingCallToast_closeButton {
+        position: absolute;
+
+        top: $spacing-4;
+        right: $spacing-4;
+
+        display: flex;
+        height: $closeButtonSize;
+        width: $closeButtonSize;
+
+        &::before {
+            content: "";
+
+            mask-image: url("$(res)/img/cancel.svg");
+
+            height: inherit;
+            width: inherit;
+            background-color: $secondary-content;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
+        }
+    }
+}

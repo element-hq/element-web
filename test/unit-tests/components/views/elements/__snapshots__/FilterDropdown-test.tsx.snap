@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
+<ul
+  class="mx_Dropdown_menu"
+  id="test_listbox"
+  role="listbox"
+>
+  <li
+    aria-selected="true"
+    class="mx_Dropdown_option mx_Dropdown_option_highlight"
+    id="test__one"
+    role="option"
+  >
+    <div
+      class="mx_FilterDropdown_option"
+      data-testid="filter-option-one"
+    >
+      <div
+        class="mx_FilterDropdown_optionSelectedIcon"
+      />
+      <span
+        class="mx_FilterDropdown_optionLabel"
+      >
+        Option one
+      </span>
+    </div>
+  </li>
+  <li
+    aria-selected="false"
+    class="mx_Dropdown_option"
+    id="test__two"
+    role="option"
+  >
+    <div
+      class="mx_FilterDropdown_option"
+      data-testid="filter-option-two"
+    >
+      <span
+        class="mx_FilterDropdown_optionLabel"
+      >
+        Option two
+      </span>
+      <span
+        class="mx_FilterDropdown_optionDescription"
+      >
+        with description
+      </span>
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`<FilterDropdown /> renders selected option 1`] = `
+<div>
+  <div
+    class="mx_Dropdown mx_FilterDropdown test"
+  >
+    <div
+      aria-describedby="test_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="test label"
+      aria-owns="test_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="test_value"
+      >
+        Option one
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<FilterDropdown /> renders selected option with selectedLabel 1`] = `
+<div>
+  <div
+    class="mx_Dropdown mx_FilterDropdown test"
+  >
+    <div
+      aria-describedby="test_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="test label"
+      aria-owns="test_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="test_value"
+      >
+        Show: Option one
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<FilterDropdown /> renders when selected option is not in options 1`] = `
+<div>
+  <div
+    class="mx_Dropdown mx_FilterDropdown test"
+  >
+    <div
+      aria-describedby="test_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="test label"
+      aria-owns="test_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="test_value"
+      />
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</div>
+`;
