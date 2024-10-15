@@ -126,6 +126,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
             window.electron!.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
         });
 
+        // `homeserverUrl` (IPC) is requested by the main process. A reply is sent over the same channel.
+        window.electron.on("homeserverUrl", () => {
+            window.electron!.send("homeserverUrl", MatrixClientPeg.get()?.getHomeserverUrl());
+        });
+
         // `serverSupportedVersions` is requested by the main process when it needs to know if the
         // server supports a particular version. This is primarily used to detect authenticated media
         // support. A reply is sent over the same channel.
