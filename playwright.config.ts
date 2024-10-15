@@ -23,7 +23,7 @@ export default defineConfig({
         trace: "on-first-retry",
     },
     webServer: {
-        command: process.env.CI ? "npx serve -p 8080 -L ../webapp" : "yarn --cwd ../element-web start",
+        command: process.env.CI ? "npx serve -p 8080 -L ./webapp" : "yarn start",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
     },
