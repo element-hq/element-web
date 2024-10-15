@@ -1567,7 +1567,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         ModuleRunner.instance.invoke(CustomComponentLifecycle.InviteDialog, customInviteDialog as CustomComponentOpts);
         return (
             <customInviteDialog.CustomComponent>
-                {/* VERJI: Workaround, pass needed props in a child element of the customComponent wrapper, so we can extract in module implementation */}
+                {/* VERJI: Workaround, pass needed props in a child element of the customComponent wrapper, so we can extract in module implementation. */}
                 <Props props={this.props} />
                 <BaseDialog
                     className={classNames({
