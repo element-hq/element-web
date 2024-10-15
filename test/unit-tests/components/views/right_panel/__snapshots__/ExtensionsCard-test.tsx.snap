@@ -19,7 +19,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-1"
+        aria-labelledby="floating-ui-x3bg1"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -119,7 +119,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-6"
+        aria-labelledby="floating-ui-kac16"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"

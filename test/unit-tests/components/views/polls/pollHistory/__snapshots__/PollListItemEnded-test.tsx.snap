@@ -10,7 +10,7 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
       tabindex="0"
     >
       <div
-        aria-labelledby="floating-ui-1"
+        aria-labelledby="floating-ui-l7o01"
         class="mx_PollListItemEnded_content"
       >
         <div

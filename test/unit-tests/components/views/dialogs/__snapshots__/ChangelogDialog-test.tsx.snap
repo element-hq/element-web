@@ -55,26 +55,6 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
           <h2
             class="mx_Heading_h4"
           >
-            element-hq/matrix-react-sdk
-          </h2>
-          <ul>
-            <li
-              class="mx_ChangelogDialog_li"
-            >
-              <a
-                href="https://api.github.com/repos/element-hq/matrix-react-sdk/commit/commit-sha"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                This is a commit message
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2
-            class="mx_Heading_h4"
-          >
             matrix-org/matrix-js-sdk
           </h2>
           <ul>

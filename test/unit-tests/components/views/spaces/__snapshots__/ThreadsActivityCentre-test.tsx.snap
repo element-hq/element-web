@@ -150,7 +150,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
         aria-expanded="true"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="floating-ui-42"
+        aria-labelledby="floating-ui-hbr542"
         class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
         data-state="open"
         id="radix-2"
@@ -183,10 +183,11 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     aria-hidden="true"
     data-aria-hidden="true"
     data-floating-ui-portal=""
-    id="floating-ui-46"
+    id="floating-ui-k9oa46"
   >
     <div
       class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(6px, 5px);"
       tabindex="-1"
     >
@@ -203,7 +204,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
           stroke="none"
         />
         <clippath
-          id="floating-ui-47"
+          id="floating-ui-c5yf47"
         >
           <rect
             height="10"
@@ -214,7 +215,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
         </clippath>
       </svg>
       <span
-        id="floating-ui-42"
+        id="floating-ui-hbr542"
       >
         Threads
       </span>
@@ -483,12 +484,12 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       class="mx_ThreadsActivityCentre_container"
     >
       <button
-        aria-controls="floating-ui-8"
-        aria-describedby="floating-ui-8"
+        aria-controls="floating-ui-dh9r8"
+        aria-describedby="floating-ui-dh9r8"
         aria-expanded="true"
         aria-haspopup="dialog"
         aria-label="Threads"
-        aria-labelledby="floating-ui-10"
+        aria-labelledby="floating-ui-bsvo10"
         class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -513,6 +514,11 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         </div>
       </button>
       <span
+        aria-hidden="true"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="-1"
+      />
+      <span
         data-floating-ui-focus-guard=""
         data-type="outside"
         role="button"
@@ -520,7 +526,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         tabindex="0"
       />
       <span
-        aria-owns="floating-ui-15"
+        aria-owns="floating-ui-1xw415"
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
       />
       <span
@@ -535,10 +541,11 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   <div
     data-floating-ui-inert=""
     data-floating-ui-portal=""
-    id="floating-ui-14"
+    id="floating-ui-meuw14"
   >
     <div
       class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
       tabindex="-1"
     >
@@ -555,7 +562,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
           stroke="none"
         />
         <clippath
-          id="floating-ui-16"
+          id="floating-ui-dccs16"
         >
           <rect
             height="10"
@@ -566,7 +573,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         </clippath>
       </svg>
       <span
-        id="floating-ui-10"
+        id="floating-ui-bsvo10"
       >
         Threads
       </span>
@@ -574,7 +581,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   </div>
   <div
     data-floating-ui-portal=""
-    id="floating-ui-15"
+    id="floating-ui-1xw415"
   >
     <span
       data-floating-ui-focus-guard=""
@@ -585,10 +592,11 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       tabindex="0"
     />
     <div
-      aria-describedby="floating-ui-7"
-      aria-labelledby="floating-ui-6"
+      aria-describedby="floating-ui-xjg57"
+      aria-labelledby="floating-ui-ckeg6"
       class="_content_1oa1y_17"
-      id="floating-ui-8"
+      data-floating-ui-focusable=""
+      id="floating-ui-dh9r8"
       role="dialog"
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
       tabindex="-1"
@@ -606,7 +614,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
           stroke="none"
         />
         <clippath
-          id="floating-ui-17"
+          id="floating-ui-lg3d17"
         >
           <rect
             height="20"
@@ -618,13 +626,13 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       </svg>
       <h3
         class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 _header_1oa1y_46"
-        id="floating-ui-6"
+        id="floating-ui-ckeg6"
       >
         Threads Activity Centre
       </h3>
       <span
         class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40 _description_1oa1y_52"
-        id="floating-ui-7"
+        id="floating-ui-xjg57"
       >
         Threads notifications have moved, find them here from now on.
       </span>

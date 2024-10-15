@@ -11,7 +11,7 @@ import { render } from "jest-matrix-react";
 import { TextInputField } from "@matrix-org/react-sdk-module-api/lib/components/TextInputField";
 import { Spinner as ModuleSpinner } from "@matrix-org/react-sdk-module-api/lib/components/Spinner";
 
-import "../../src/modules/ModuleRunner";
+import "../../../src/modules/ModuleRunner";
 
 describe("Module Components", () => {
     // Note: we're not testing to see if there's components that are missing a renderFactory()

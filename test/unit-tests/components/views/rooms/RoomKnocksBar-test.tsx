@@ -166,9 +166,11 @@ describe("RoomKnocksBar", () => {
             beforeEach(() => jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]));
 
             it("renders a heading and a paragraph with name and user ID", () => {
-                getComponent(room);
+                const { container } = getComponent(room);
                 expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");
-                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} (${bob.userId})`);
+                expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
+                    `${bob.name} (${bob.userId})`,
+                );
             });
 
             describe("when a knock reason is not provided", () => {
@@ -296,24 +298,30 @@ describe("RoomKnocksBar", () => {
         describe("when knock members count is 2", () => {
             it("renders a paragraph with two names", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
-                getComponent(room);
-                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} and ${jane.name}`);
+                const { container } = getComponent(room);
+                expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
+                    `${bob.name} and ${jane.name}`,
+                );
             });
         });
 
         describe("when knock members count is 3", () => {
             it("renders a paragraph with three names", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john]);
-                getComponent(room);
-                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and ${john.name}`);
+                const { container } = getComponent(room);
+                expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
+                    `${bob.name}, ${jane.name} and ${john.name}`,
+                );
             });
         });
 
         describe("when knock count is greater than 3", () => {
             it("renders a paragraph with two names and a count", () => {
                 jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane, john, other]);
-                getComponent(room);
-                expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name}, ${jane.name} and 2 others`);
+                const { container } = getComponent(room);
+                expect(container.querySelector(".mx_RoomKnocksBar_paragraph")).toHaveTextContent(
+                    `${bob.name}, ${jane.name} and 2 others`,
+                );
             });
         });
     });

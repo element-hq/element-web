@@ -352,7 +352,7 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
     >
       <input
         aria-label="Select all"
-        aria-labelledby="floating-ui-142"
+        aria-labelledby="floating-ui-bhqy142"
         data-testid="device-select-all-checkbox"
         id="device-select-all-checkbox"
         type="checkbox"

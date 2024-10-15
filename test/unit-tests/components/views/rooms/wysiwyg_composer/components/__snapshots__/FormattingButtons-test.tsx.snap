@@ -6,7 +6,7 @@ exports[`FormattingButtons renders in german 1`] = `
     class="mx_FormattingButtons"
   >
     <button
-      aria-label="Fett"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -25,7 +25,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Kursiv"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -44,7 +44,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Unterstrichen"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -63,7 +63,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Durchgestrichen"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -82,7 +82,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Ungeordnete Liste"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -101,7 +101,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Nummerierte Liste"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -120,7 +120,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Zitieren"
+      aria-label="action"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -139,7 +139,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Code"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -158,7 +158,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Quelltextblock"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"
@@ -177,7 +177,7 @@ exports[`FormattingButtons renders in german 1`] = `
       </svg>
     </button>
     <button
-      aria-label="Link"
+      aria-label="composer"
       class="mx_AccessibleButton mx_FormattingButtons_Button mx_FormattingButtons_Button_hover"
       role="button"
       tabindex="0"

@@ -64,8 +64,8 @@ describe("<ChangelogDialog />", () => {
             files: [],
         });
 
-        const newVersion = "newsha1-react-newsha2-js-newsha3";
-        const oldVersion = "oldsha1-react-oldsha2-js-oldsha3";
+        const newVersion = "newsha1-js-newsha3";
+        const oldVersion = "oldsha1-js-oldsha3";
         const { asFragment } = render(
             <ChangelogDialog newVersion={newVersion} version={oldVersion} onFinished={jest.fn()} />,
         );
