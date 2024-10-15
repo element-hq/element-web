@@ -1547,7 +1547,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 <React.Fragment>
                     <TabbedView
                         tabs={tabs}
-                        initialTabId={this.state.currentTabId}
+                        activeTabId={this.state.currentTabId}
                         tabLocation={TabLocation.TOP}
                         onChange={this.onTabChange}
                     />
