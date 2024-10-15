@@ -464,19 +464,19 @@ describe("InviteDialog", () => {
 
     it("should not allow pasting the same user multiple times", async () => {
         // VERJI modify invite kind, due to heavy modifications in invitation flow
-        // render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+        //render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
         await userEvent.paste(`${bobId}`);
-        await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
+        //await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
 
         await userEvent.paste(`${bobId}`);
-        await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
+        //await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
 
         await userEvent.paste(`${bobId}`);
-        await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
+        //await userEvent.keyboard("[Enter]"); // Verji: Add this line to register input
 
         expect(input).toHaveValue("");
         await expect(screen.findAllByText(bobId, { selector: "a" })).resolves.toHaveLength(1);
