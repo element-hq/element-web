@@ -248,8 +248,8 @@ describe("InviteDialog", () => {
 
             expect(suggestionTile).toBeTruthy();
         });
-
-        it("should NOT render suggestions when UIFeature.ShowRoomMembersInSuggestions is FALSE", async () => {
+        // VERJI: Skip - We have exported customisations in invite-dialog to the onboarding-module
+        it.skip("should NOT render suggestions when UIFeature.ShowRoomMembersInSuggestions is FALSE", async () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
                 if (name == UIFeature.ShowRoomMembersInSuggestions) return false;
             });
@@ -357,15 +357,12 @@ describe("InviteDialog", () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        // VERJI modify invite kind, due to heavy modifications in invitation flow
-        // render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
 
-        // VERJI modify test, by pasting individually and separating values with enter key
-        //await userEvent.paste(`${bobId} ${aliceEmail}`);
+        await userEvent.paste(`${bobId} ${aliceEmail}`);
         await userEvent.paste(`${bobId}`);
         await userEvent.keyboard("[Enter]");
 
@@ -380,10 +377,7 @@ describe("InviteDialog", () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        // VERJI modify invite kind, due to heavy modifications in invitation flow
-        // render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
-
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
         await userEvent.paste(`${bobbob}`);
@@ -393,9 +387,7 @@ describe("InviteDialog", () => {
     });
 
     it("should allow to invite multiple emails to a room", async () => {
-        // VERJI modify invite kind, due to heavy modifications in invitation flow
-        // render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
-        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
         await enterIntoSearchField(aliceEmail);
         expectPill(aliceEmail);
@@ -597,7 +589,8 @@ describe("InviteDialog", () => {
         render(<HomePage justRegistered={true} />);
         expect(screen.queryByText("Explore")).not.toBeInTheDocument();
     });
-    it("shows 'Send invite link' in invitedialog when UIFeature is true", () => {
+    // VERJI: Skip - We have exported customisations in invite-dialog to the onboarding-module
+    it.skip("shows 'Send invite link' in invitedialog when UIFeature is true", () => {
         room.currentState.setStateEvents([mkRoomCreateEvent(bobId, roomId, { "m.federate": false })]);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
             if (name === UIFeature.SendInviteLinkPrompt) {
@@ -617,7 +610,8 @@ describe("InviteDialog", () => {
         expect(asFragment).toMatchSnapshot();
         expect(screen.queryByText("Or send invite link")).not.toBeNull();
     });
-    it("does not show 'Send invite link' in invitedialog when UIFeature is false", () => {
+    // VERJI: Skip - We have exported customisations in invite-dialog to the onboarding-module
+    it.skip("does not show 'Send invite link' in invitedialog when UIFeature is false", () => {
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
             if (name === UIFeature.SendInviteLinkPrompt) {
                 return false;
