@@ -6,7 +6,7 @@ on:
     merge_group:
         types: [checks_requested]
     repository_dispatch:
-        types: [upstream-sdk-notify]
+        types: [element-web-notify]
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
     cancel-in-progress: true

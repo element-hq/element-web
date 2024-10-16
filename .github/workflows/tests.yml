@@ -6,7 +6,7 @@ on:
     push:
         branches: [develop, master]
     repository_dispatch:
-        types: [upstream-sdk-notify]
+        types: [element-web-notify]
     workflow_call:
         inputs:
             disable_coverage:
