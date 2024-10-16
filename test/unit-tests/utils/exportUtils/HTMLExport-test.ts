@@ -7,19 +7,24 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
+    EventTimeline,
+    EventTimelineSet,
     EventType,
     IRoomEvent,
     MatrixClient,
     MatrixEvent,
     MsgType,
+    Relations,
+    RelationType,
     Room,
     RoomMember,
     RoomState,
 } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import escapeHtml from "escape-html";
+import { RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
 
-import { filterConsole, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
+import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
 import { ExportType, IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
 import SdkConfig from "../../../../src/SdkConfig";
 import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
@@ -586,5 +591,42 @@ describe("HTMLExport", () => {
         const file = getMessageFile(exporter);
         expect(await file.text()).toContain("testing testing");
         expect(client.createMessagesRequest).not.toHaveBeenCalled();
+    });
+
+    it("should include reactions", async () => {
+        const firstMessage = new MatrixEvent(EVENT_MESSAGE);
+        const reaction = mkReaction(firstMessage);
+
+        const relationsContainer = {
+            getRelations: jest.fn(),
+            getChildEventsForEvent: jest.fn(),
+        } as unknown as RelationsContainer;
+        const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
+        relations.addEvent(reaction);
+        relationsContainer.getChildEventsForEvent = jest.fn().mockReturnValue(relations);
+
+        const timelineSet = {
+            relations: relationsContainer,
+            getLiveTimeline: () => timeline,
+        } as unknown as EventTimelineSet;
+        const timeline = new EventTimeline(timelineSet);
+        room.getUnfilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        mockMessages(EVENT_MESSAGE);
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const file = getMessageFile(exporter);
+        expect(await file.text()).toContain(reaction.getContent()["m.relates_to"]?.key);
     });
 });
