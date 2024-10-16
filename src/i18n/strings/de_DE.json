@@ -1381,7 +1381,6 @@
         "click_for_info": "Klicke für mehr Infos",
         "currently_experimental": "Aktuell experimentell.",
         "custom_themes": "Selbstdefinierte Designs",
-        "dehydration": "Offline verschlüsselte Kommunikation mit Hilfe von dehydrierten Geräten",
         "dynamic_room_predecessors": "Veränderbare Raumvorgänger",
         "dynamic_room_predecessors_description": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)",
         "element_call_video_rooms": "Element Call-Videoräume",
@@ -3159,8 +3158,6 @@
             "voice_call_unsupported": "%(senderName)s hat einen Sprachanruf getätigt. (Nicht von diesem Browser unterstützt)"
         },
         "m.file": {
-            "decrypt_label": "%(text)s entschlüsseln",
-            "download_label": "%(text)s herunterladen",
             "error_decrypting": "Fehler beim Entschlüsseln des Anhangs",
             "error_invalid": "Ungültige Datei%(extra)s"
         },

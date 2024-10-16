@@ -907,6 +907,10 @@
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
+        "incompatible_database_description": "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.",
+        "incompatible_database_disable": "Continue With Encryption Disabled",
+        "incompatible_database_sign_out_description": "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
+        "incompatible_database_title": "Incompatible Database",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -2564,6 +2568,7 @@
             "msisdn_verification_field_label": "Verification code",
             "msisdn_verification_instructions": "Please enter verification code sent via text.",
             "msisdns_heading": "Phone numbers",
+            "name_placeholder": "No display name",
             "oidc_manage_button": "Manage account",
             "password_change_section": "Set a new account password…",
             "password_change_success": "Your password was successfully changed.",
