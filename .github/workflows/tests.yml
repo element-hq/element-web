@@ -29,7 +29,7 @@ env:
 jobs:
     jest:
         name: Jest
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
@@ -93,7 +93,7 @@ jobs:
         name: jest-tests
         needs: jest
         if: always()
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         steps:
             - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
               run: exit 1

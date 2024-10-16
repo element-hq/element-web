@@ -5,7 +5,7 @@ on:
 jobs:
     check_base_branch:
         name: Check PR base branch
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/github-script@v7
               with:

@@ -15,7 +15,7 @@ jobs:
     report:
         if: github.event.workflow_run.conclusion != 'cancelled'
         name: Report results
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         environment: Netlify
         permissions:
             statuses: write

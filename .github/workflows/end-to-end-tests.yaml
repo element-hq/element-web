@@ -36,7 +36,7 @@ env:
 jobs:
     build:
         name: "Build Element-Web"
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         if: inputs.skip != true
         steps:
             - name: Checkout code
@@ -82,7 +82,7 @@ jobs:
         name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
         needs: build
         if: inputs.skip != true
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         permissions:
             actions: read
             issues: read
@@ -144,7 +144,7 @@ jobs:
         name: end-to-end-tests
         needs: playwright
         if: always()
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
               if: inputs.skip != true
