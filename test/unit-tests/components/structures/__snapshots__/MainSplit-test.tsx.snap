@@ -17,15 +17,14 @@ exports[`<MainSplit/> renders 1`] = `
       style="position: relative; user-select: auto; width: 320px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
     >
       <div>
+        Right panel
+      </div>
+      <div>
         <div
           class="mx_ResizeHandle--horizontal"
           style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; left: -5px; cursor: col-resize;"
         />
       </div>
-      <div>
-        Right panel
-      </div>
-      <div />
     </div>
   </div>
 </DocumentFragment>
@@ -48,15 +47,14 @@ exports[`<MainSplit/> respects defaultSize prop 1`] = `
       style="position: relative; user-select: auto; width: 500px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
     >
       <div>
+        Right panel
+      </div>
+      <div>
         <div
           class="mx_ResizeHandle--horizontal"
           style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; left: -5px; cursor: col-resize;"
         />
       </div>
-      <div>
-        Right panel
-      </div>
-      <div />
     </div>
   </div>
 </DocumentFragment>
