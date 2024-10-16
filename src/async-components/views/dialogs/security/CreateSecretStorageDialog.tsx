@@ -11,9 +11,8 @@ import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { CryptoEvent, BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
-import { BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";

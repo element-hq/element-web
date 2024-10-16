@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, Mocked, MockedObject } from "jest-mock";
-import { CryptoEvent, HttpApiEvent, MatrixClient, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { HttpApiEvent, MatrixClient, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
-import { CryptoApi, DecryptionFailureCode, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { CryptoApi, DecryptionFailureCode, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { DecryptionFailureTracker, ErrorProperties } from "../../src/DecryptionFailureTracker";

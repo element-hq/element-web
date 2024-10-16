@@ -34,7 +34,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import shouldHideEvent from "../../shouldHideEvent";

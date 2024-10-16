@@ -26,8 +26,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { EventShieldColour, EventShieldReason, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import {
+    CryptoEvent,
+    EventShieldColour,
+    EventShieldReason,
+    UserVerificationStatus,
+} from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 
 import ReplyChain from "../elements/ReplyChain";

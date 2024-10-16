@@ -8,9 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

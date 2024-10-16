@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, JSHandle, type Page } from "@playwright/test";
 
-import type { CryptoEvent, ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
+    CryptoEvent,
     EmojiMapping,
     ShowSasCallbacks,
     VerificationRequest,

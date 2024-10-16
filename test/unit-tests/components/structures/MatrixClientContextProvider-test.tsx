@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { act, render } from "jest-matrix-react";
 import React, { useContext } from "react";
-import { CryptoEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientContextProvider } from "../../../../src/components/structures/MatrixClientContextProvider";

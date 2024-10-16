@@ -16,8 +16,7 @@ import {
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";

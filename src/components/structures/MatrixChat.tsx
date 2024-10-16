@@ -22,8 +22,7 @@ import {
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 // what-input helps improve keyboard accessibility

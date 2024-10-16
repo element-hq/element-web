@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { act, render, RenderResult } from "jest-matrix-react";
 import React, { ComponentProps } from "react";
 import EventEmitter from "events";
-import { CryptoEvent } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { LoginSplashView } from "../../../../../src/components/structures/auth/LoginSplashView";

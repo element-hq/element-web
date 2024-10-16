@@ -12,8 +12,8 @@ import {
     VerificationPhase as Phase,
     VerificationRequest,
     VerificationRequestEvent,
+    CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t, _td, TranslationKey } from "../../../../languageHandler";

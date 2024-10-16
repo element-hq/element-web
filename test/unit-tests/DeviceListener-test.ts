@@ -9,9 +9,14 @@ Please see LICENSE files in the repository root for full details.
 import { Mocked, mocked } from "jest-mock";
 import { MatrixEvent, Room, MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import {
+    CryptoEvent,
+    CrossSigningStatus,
+    CryptoApi,
+    DeviceVerificationStatus,
+    KeyBackupInfo,
+} from "matrix-js-sdk/src/crypto-api";
 import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
-import { CrossSigningStatus, CryptoApi, DeviceVerificationStatus, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import DeviceListener from "../../src/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";

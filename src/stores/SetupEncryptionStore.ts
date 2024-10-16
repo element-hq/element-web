@@ -12,9 +12,9 @@ import {
     VerificationPhase,
     VerificationRequest,
     VerificationRequestEvent,
+    CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
