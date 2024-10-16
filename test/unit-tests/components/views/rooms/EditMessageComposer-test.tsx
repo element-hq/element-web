@@ -432,8 +432,6 @@ describe("<EditMessageComposer/>", () => {
                     user_ids: [
                         // sender of event we replied to
                         originalEvent.getSender()!,
-                        // mentions from this event
-                        "@bob:server.org",
                     ],
                 },
             },

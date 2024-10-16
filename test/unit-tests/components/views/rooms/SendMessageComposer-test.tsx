@@ -196,7 +196,7 @@ describe("<SendMessageComposer/>", () => {
                 "m.mentions": { user_ids: ["@bob:test"] },
             });
 
-            // It also adds any other mentioned users, but removes yourself.
+            // It no longer adds any other mentioned users
             replyToEvent = mkEvent({
                 type: "m.room.message",
                 user: "@bob:test",
@@ -207,7 +207,7 @@ describe("<SendMessageComposer/>", () => {
             content = {};
             attachMentions("@alice:test", content, model, replyToEvent);
             expect(content).toEqual({
-                "m.mentions": { user_ids: ["@bob:test", "@charlie:test"] },
+                "m.mentions": { user_ids: ["@bob:test"] },
             });
         });
 
