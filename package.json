@@ -67,7 +67,7 @@
         "test:playwright:open": "yarn test:playwright --ui",
         "test:playwright:screenshots": "yarn test:playwright:screenshots:build && yarn test:playwright:screenshots:run",
         "test:playwright:screenshots:build": "docker build playwright -t element-web-playwright",
-        "test:playwright:screenshots:run": "docker run --rm --network host -e BASE_URL -e CI -v $(pwd):/work/ -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it element-web-playwright",
+        "test:playwright:screenshots:run": "docker run --rm --network host -e BASE_URL -e CI -v $(pwd):/work/ -v $(readlink -f node_modules/matrix-js-sdk):/work/node_modules/matrix-js-sdk -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it element-web-playwright",
         "coverage": "yarn test --coverage",
         "analyse:unused-exports": "ts-node ./scripts/analyse_unused_exports.ts",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
