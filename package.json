@@ -3,6 +3,9 @@
     "version": "1.11.81",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
@@ -310,8 +313,5 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    },
-    "engines": {
-        "node": ">=20.0.0"
     }
 }
