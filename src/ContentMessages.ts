@@ -396,11 +396,7 @@ export default class ContentMessages {
     }
 
     public getUploadLimit(): number | null {
-        if (this.mediaConfig !== null && this.mediaConfig["m.upload.size"] !== undefined) {
-            return this.mediaConfig["m.upload.size"];
-        } else {
-            return null;
-        }
+        return this.mediaConfig?.["m.upload.size"] ?? null;
     }
 
     public async sendContentListToRoom(
@@ -578,7 +574,7 @@ export default class ContentMessages {
                     logger.error(e);
                     content.msgtype = MsgType.File;
                 }
-            } else if (file.type.indexOf("audio/") === 0) {
+            } else if (file.type.startsWith("audio/")) {
                 content.msgtype = MsgType.Audio;
                 try {
                     const audioInfo = await infoForAudioFile(file);
@@ -588,7 +584,7 @@ export default class ContentMessages {
                     logger.error(e);
                     content.msgtype = MsgType.File;
                 }
-            } else if (file.type.indexOf("video/") === 0) {
+            } else if (file.type.startsWith("video/")) {
                 content.msgtype = MsgType.Video;
                 try {
                     const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
@@ -648,11 +644,7 @@ export default class ContentMessages {
     }
 
     private isFileSizeAcceptable(file: File): boolean {
-        if (
-            this.mediaConfig !== null &&
-            this.mediaConfig["m.upload.size"] !== undefined &&
-            file.size > this.mediaConfig["m.upload.size"]
-        ) {
+        if (this.mediaConfig?.["m.upload.size"] !== undefined && file.size > this.mediaConfig["m.upload.size"]) {
             return false;
         }
         return true;

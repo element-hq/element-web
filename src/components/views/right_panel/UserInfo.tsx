@@ -725,7 +725,7 @@ export const RoomKickButton = ({
                     logger.error("Kick error: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("user_info|error_kicking_user"),
-                        description: err && err.message ? err.message : "Operation failed",
+                        description: err?.message ?? "Operation failed",
                     });
                 },
             )

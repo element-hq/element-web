@@ -42,7 +42,7 @@ export function inviteMultipleToRoom(
     progressCallback?: () => void,
 ): Promise<IInviteResult> {
     const inviter = new MultiInviter(client, roomId, progressCallback);
-    return inviter.invite(addresses, undefined).then((states) => Promise.resolve({ states, inviter }));
+    return inviter.invite(addresses).then((states) => Promise.resolve({ states, inviter }));
 }
 
 export function showStartChatInviteDialog(initialText = ""): void {
@@ -104,7 +104,7 @@ export function inviteUsersToRoom(
             logger.error(err.stack);
             Modal.createDialog(ErrorDialog, {
                 title: _t("invite|failed_title"),
-                description: err && err.message ? err.message : _t("invite|failed_generic"),
+                description: err?.message ?? _t("invite|failed_generic"),
             });
         });
 }

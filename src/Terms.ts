@@ -102,13 +102,8 @@ export async function startTermsFlow(
     });
 
     // fetch the set of agreed policy URLs from account data
-    const currentAcceptedTerms = await client.getAccountData("m.accepted_terms");
-    let agreedUrlSet: Set<string>;
-    if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
-        agreedUrlSet = new Set();
-    } else {
-        agreedUrlSet = new Set(currentAcceptedTerms.getContent().accepted);
-    }
+    const currentAcceptedTerms = client.getAccountData("m.accepted_terms")?.getContent();
+    const agreedUrlSet = new Set<string>(currentAcceptedTerms?.accepted || []);
 
     // remove any policies the user has already agreed to and any services where
     // they've already agreed to all the policies
