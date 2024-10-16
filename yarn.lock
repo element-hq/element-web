@@ -2104,9 +2104,9 @@
     "@babel/runtime" "^7.17.9"
 
 "@matrix-org/spec@^1.7.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.11.0.tgz#73864eab965c81a4c8c48ca0da8c9d94e8efd5dc"
-  integrity sha512-80000pCXpUnt3ue910uZY70kLo9b7pNfrUrlXY5smpDjfycEs1oztUAriPAnKxMp31gUqt9/tfjmBM2H/LNCZw==
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.12.0.tgz#9e8d37f65dc8029ceeac1da47556e6ba59d44733"
+  integrity sha512-QHUQ79dMtd0eKQgebRye8li1y/S1172T6fXhu10dsFKtirSWblneoeFnCUR8hsUSBGWLtqBFcryVGa9uoBhqxg==
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
