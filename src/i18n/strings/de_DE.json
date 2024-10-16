@@ -1,10 +1,21 @@
 {
+    "a11y": {
+        "emoji_picker": "Emoji-Auswahl",
+        "jump_first_invite": "Zur ersten Einladung springen.",
+        "n_unread_messages": {
+            "other": "%(count)s ungelesene Nachrichten.",
+            "one": "1 ungelesene Nachricht."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s ungelesene Nachrichten einschließlich Erwähnungen.",
+            "one": "1 ungelesene Erwähnung."
+        },
+        "room_name": "Raum %(name)s",
+        "unread_messages": "Ungelesene Nachrichten.",
+        "user_menu": "Benutzermenü"
+    },
+    "a11y_jump_first_unread_room": "Zum ersten ungelesenen Raum springen.",
     "action": {
-        "create_account": "Konto erstellen",
-        "dismiss": "Ausblenden",
-        "explore_rooms": "Räume erkunden",
-        "open": "Öffnen",
-        "sign_in": "Anmelden",
         "accept": "Annehmen",
         "add": "Hinzufügen",
         "add_existing_room": "Existierenden Raum hinzufügen",
@@ -28,11 +39,13 @@
         "copy_link": "Link kopieren",
         "create": "Erstellen",
         "create_a_room": "Raum erstellen",
+        "create_account": "Konto erstellen",
         "decline": "Ablehnen",
         "delete": "Löschen",
         "deny": "Ablehnen",
         "disable": "Deaktivieren",
         "disconnect": "Trennen",
+        "dismiss": "Ausblenden",
         "done": "Fertig",
         "download": "Herunterladen",
         "edit": "Bearbeiten",
@@ -41,6 +54,7 @@
         "exit_fullscreeen": "Vollbild verlassen",
         "expand": "Ausklappen",
         "explore_public_rooms": "Öffentliche Räume erkunden",
+        "explore_rooms": "Räume erkunden",
         "export": "Exportieren",
         "forward": "Weiterleiten",
         "go": "Los",
@@ -67,6 +81,7 @@
         "next": "Weiter",
         "no": "Nein",
         "ok": "Ok",
+        "open": "Öffnen",
         "pause": "Pausieren",
         "pin": "Anheften",
         "play": "Abspielen",
@@ -96,6 +111,7 @@
         "show": "Zeigen",
         "show_advanced": "Erweiterte Einstellungen",
         "show_all": "Alles zeigen",
+        "sign_in": "Anmelden",
         "sign_out": "Abmelden",
         "skip": "Überspringen",
         "start": "Starte",
@@ -124,8 +140,19 @@
         "zoom_in": "Vergrößern",
         "zoom_out": "Verkleinern"
     },
+    "analytics": {
+        "accept_button": "Das ist okay",
+        "bullet_1": "Wir erfassen und analysieren <Bold>keine</Bold> Kontodaten",
+        "bullet_2": "Wir teilen <Bold>keine</Bold> Informationen mit Dritten",
+        "consent_migration": "Sie haben zuvor zugestimmt, anonymisierte Nutzungsdaten mit uns zu teilen. Wir aktualisieren, wie das funktioniert.",
+        "disable_prompt": "Du kannst dies jederzeit in den Einstellungen deaktivieren",
+        "enable_prompt": "Hilf mit, %(analyticsOwner)s zu verbessern",
+        "learn_more": "Teile Daten anonymisiert um uns zu helfen Probleme zu identifizieren. Nichts persönliches. Keine Dritten. <LearnMoreLink>Mehr dazu hier</LearnMoreLink>",
+        "privacy_policy": "<PrivacyPolicyUrl>Du kannst unsere Datenschutzbedingungen hier lesen</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Hilf uns dabei Probleme zu identifizieren und %(analyticsOwner)s zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte verwenden, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.",
+        "shared_data_heading": "Die folgenden Informationen können geteilt werden:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Browser öffnen, um die Anmeldung abzuschließen",
         "3pid_in_use": "Diese E-Mail-Adresse oder Telefonnummer wird bereits verwendet.",
         "account_clash": "Dein neues Konto (%(newAccountId)s) ist registriert, aber du hast dich bereits in mit einem anderen Konto (%(loggedInUserId)s) angemeldet.",
         "account_clash_previous_account": "Mit vorherigem Konto fortfahren",
@@ -301,6 +328,7 @@
         "soft_logout_subheading": "Persönliche Daten löschen",
         "soft_logout_warning": "Achtung: Deine persönlichen Daten (einschließlich Verschlüsselungs-Schlüssel) sind noch in dieser Sitzung gespeichert. Lösche diese Daten, wenn du diese Sitzung nicht mehr benötigst, oder dich mit einem anderen Konto anmelden möchtest.",
         "sso": "Single Sign-on",
+        "sso_complete_in_browser_dialog_title": "Browser öffnen, um die Anmeldung abzuschließen",
         "sso_failed_missing_storage": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Heim-Server du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut.",
         "sso_or_username_password": "%(ssoButtons)s oder %(usernamePassword)s",
         "sync_footer_subtitle": "Du bist einer Menge Räumen beigetreten, das kann eine Weile dauern",
@@ -335,83 +363,6 @@
         "username_in_use": "Dieser Benutzername wird bereits genutzt, bitte versuche es mit einem anderen.",
         "verify_email_explainer": "Wir müssen wissen, dass du es auch wirklich bist, bevor wir dein Passwort zurücksetzen. Klicke auf den Link in der E-Mail, die wir gerade an <b>%(email)s</b> gesendet haben",
         "verify_email_heading": "Verifiziere deine E-Mail, um fortzufahren"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
-    "download_completed": "Herunterladen fertiggestellt",
-    "error": {
-        "app_launch_unexpected_error": "Unerwarteter Fehler bei der Vorbereitung der App; mehr Details in der Konsole.",
-        "cannot_load_config": "Konfigurationsdatei kann nicht geladen werden: Bitte aktualisiere die Seite, um es erneut zu versuchen.",
-        "invalid_configuration_mixed_server": "Ungültige Konfiguration: default_hs_url kann nicht zeitgleich mit default_server_name oder default_server_config festgelegt werden",
-        "invalid_configuration_no_server": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
-        "invalid_json": "Deine Element-Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
-        "invalid_json_detail": "Die Nachricht des Parsers ist: %(message)s",
-        "invalid_json_generic": "Ungültiges JSON",
-        "misconfigured": "Dein Element ist falsch konfiguriert",
-        "admin_contact": "Bitte <a>kontaktiere deinen Systemadministrator</a> um diesen Dienst weiter zu nutzen.",
-        "admin_contact_short": "Kontaktiere deine <a>Heim-Server-Administration</a>.",
-        "connection": "Es gab ein Problem bei der Kommunikation mit dem Heim-Server. Bitte versuche es später erneut.",
-        "dialog_description_default": "Ein Fehler ist aufgetreten.",
-        "download_media": "Herunterladen der Quellmedien fehlgeschlagen, da keine Quell-URL gefunden wurde",
-        "edit_history_unsupported": "Dein Heim-Server scheint diese Funktion nicht zu unterstützen.",
-        "failed_copy": "Kopieren fehlgeschlagen",
-        "hs_blocked": "Dieser Heim-Server wurde von seiner Administration geblockt.",
-        "mau": "Dieser Heim-Server hat seinen Grenzwert an monatlich aktiven Nutzern erreicht.",
-        "mixed_content": "Es kann keine Verbindung zum Heim-Server via HTTP aufgebaut werden, wenn die Adresszeile des Browsers eine HTTPS-URL enthält. Entweder HTTPS verwenden oder alternativ <a>unsichere Skripte erlauben</a>.",
-        "non_urgent_echo_failure_toast": "Dein Server antwortet auf einige <a>Anfragen</a> nicht.",
-        "resource_limits": "Dieser Heim-Server hat einen seiner Ressourcengrenzwerte überschritten.",
-        "session_restore": {
-            "clear_storage_button": "Speicher leeren und abmelden",
-            "clear_storage_description": "Abmelden und Verschlüsselungsschlüssel entfernen?",
-            "description_1": "Wir haben ein Problem beim Wiederherstellen deiner vorherigen Sitzung festgestellt.",
-            "description_2": "Wenn du zuvor eine aktuellere Version von %(brand)s verwendet hast, ist deine Sitzung eventuell inkompatibel mit dieser Version. Bitte schließe dieses Fenster und kehre zur aktuelleren Version zurück.",
-            "description_3": "Den Browser-Speicher zu löschen kann das Problem lösen, wird dich aber abmelden und verschlüsselte Nachrichten unlesbar machen.",
-            "title": "Sitzungswiederherstellung fehlgeschlagen"
-        },
-        "something_went_wrong": "Etwas ist schiefgelaufen!",
-        "storage_evicted_description_1": "Einige Sitzungsdaten, einschließlich der Verschlüsselungsschlüssel, fehlen. Melde dich ab, wieder an und stelle die Schlüssel aus der Sicherung wieder her um dies zu beheben.",
-        "storage_evicted_description_2": "Dein Browser hat diese Daten wahrscheinlich entfernt als der Festplattenspeicher knapp wurde.",
-        "storage_evicted_title": "Fehlende Sitzungsdaten",
-        "sync": "Verbindung mit Heim-Server fehlgeschlagen. Versuche es erneut …",
-        "tls": "Verbindung zum Heim-Server fehlgeschlagen – bitte überprüfe die Internetverbindung und stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und dass Anfragen nicht durch eine Browser-Erweiterung blockiert werden.",
-        "unknown": "Unbekannter Fehler",
-        "unknown_error_code": "Unbekannter Fehlercode",
-        "update_power_level": "Ändern der Berechtigungsstufe fehlgeschlagen"
-    },
-    "incompatible_browser": {
-        "title": "Nicht unterstützter Browser"
-    },
-    "powered_by_matrix": "Betrieben mit Matrix",
-    "powered_by_matrix_with_logo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo",
-    "unknown_device": "Unbekanntes Gerät",
-    "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "welcome_to_element": "Willkommen bei Element",
-    "a11y": {
-        "emoji_picker": "Emoji-Auswahl",
-        "jump_first_invite": "Zur ersten Einladung springen.",
-        "n_unread_messages": {
-            "other": "%(count)s ungelesene Nachrichten.",
-            "one": "1 ungelesene Nachricht."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s ungelesene Nachrichten einschließlich Erwähnungen.",
-            "one": "1 ungelesene Erwähnung."
-        },
-        "room_name": "Raum %(name)s",
-        "unread_messages": "Ungelesene Nachrichten.",
-        "user_menu": "Benutzermenü"
-    },
-    "a11y_jump_first_unread_room": "Zum ersten ungelesenen Raum springen.",
-    "analytics": {
-        "accept_button": "Das ist okay",
-        "bullet_1": "Wir erfassen und analysieren <Bold>keine</Bold> Kontodaten",
-        "bullet_2": "Wir teilen <Bold>keine</Bold> Informationen mit Dritten",
-        "consent_migration": "Sie haben zuvor zugestimmt, anonymisierte Nutzungsdaten mit uns zu teilen. Wir aktualisieren, wie das funktioniert.",
-        "disable_prompt": "Du kannst dies jederzeit in den Einstellungen deaktivieren",
-        "enable_prompt": "Hilf mit, %(analyticsOwner)s zu verbessern",
-        "learn_more": "Teile Daten anonymisiert um uns zu helfen Probleme zu identifizieren. Nichts persönliches. Keine Dritten. <LearnMoreLink>Mehr dazu hier</LearnMoreLink>",
-        "privacy_policy": "<PrivacyPolicyUrl>Du kannst unsere Datenschutzbedingungen hier lesen</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Hilf uns dabei Probleme zu identifizieren und %(analyticsOwner)s zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte verwenden, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.",
-        "shared_data_heading": "Die folgenden Informationen können geteilt werden:"
     },
     "bug_reporting": {
         "additional_context": "Wenn es mehr Informationen gibt, die uns bei der Auswertung des Problems würden – z. B. was du getan hast, Raum- oder Benutzer-IDs … – gib sie bitte hier an.",
@@ -843,6 +794,7 @@
         "widget_screenshots": "Bildschirmfotos für unterstützte Widgets"
     },
     "dialog_close_label": "Dialog schließen",
+    "download_completed": "Herunterladen fertiggestellt",
     "emoji": {
         "categories": "Kategorien",
         "category_activities": "Aktivitäten",
@@ -1047,6 +999,45 @@
         "verify_toast_description": "Andere Benutzer vertrauen ihr vielleicht nicht",
         "verify_toast_title": "Sitzung verifizieren"
     },
+    "error": {
+        "admin_contact": "Bitte <a>kontaktiere deinen Systemadministrator</a> um diesen Dienst weiter zu nutzen.",
+        "admin_contact_short": "Kontaktiere deine <a>Heim-Server-Administration</a>.",
+        "app_launch_unexpected_error": "Unerwarteter Fehler bei der Vorbereitung der App; mehr Details in der Konsole.",
+        "cannot_load_config": "Konfigurationsdatei kann nicht geladen werden: Bitte aktualisiere die Seite, um es erneut zu versuchen.",
+        "connection": "Es gab ein Problem bei der Kommunikation mit dem Heim-Server. Bitte versuche es später erneut.",
+        "dialog_description_default": "Ein Fehler ist aufgetreten.",
+        "download_media": "Herunterladen der Quellmedien fehlgeschlagen, da keine Quell-URL gefunden wurde",
+        "edit_history_unsupported": "Dein Heim-Server scheint diese Funktion nicht zu unterstützen.",
+        "failed_copy": "Kopieren fehlgeschlagen",
+        "hs_blocked": "Dieser Heim-Server wurde von seiner Administration geblockt.",
+        "invalid_configuration_mixed_server": "Ungültige Konfiguration: default_hs_url kann nicht zeitgleich mit default_server_name oder default_server_config festgelegt werden",
+        "invalid_configuration_no_server": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
+        "invalid_json": "Deine Element-Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
+        "invalid_json_detail": "Die Nachricht des Parsers ist: %(message)s",
+        "invalid_json_generic": "Ungültiges JSON",
+        "mau": "Dieser Heim-Server hat seinen Grenzwert an monatlich aktiven Nutzern erreicht.",
+        "misconfigured": "Dein Element ist falsch konfiguriert",
+        "mixed_content": "Es kann keine Verbindung zum Heim-Server via HTTP aufgebaut werden, wenn die Adresszeile des Browsers eine HTTPS-URL enthält. Entweder HTTPS verwenden oder alternativ <a>unsichere Skripte erlauben</a>.",
+        "non_urgent_echo_failure_toast": "Dein Server antwortet auf einige <a>Anfragen</a> nicht.",
+        "resource_limits": "Dieser Heim-Server hat einen seiner Ressourcengrenzwerte überschritten.",
+        "session_restore": {
+            "clear_storage_button": "Speicher leeren und abmelden",
+            "clear_storage_description": "Abmelden und Verschlüsselungsschlüssel entfernen?",
+            "description_1": "Wir haben ein Problem beim Wiederherstellen deiner vorherigen Sitzung festgestellt.",
+            "description_2": "Wenn du zuvor eine aktuellere Version von %(brand)s verwendet hast, ist deine Sitzung eventuell inkompatibel mit dieser Version. Bitte schließe dieses Fenster und kehre zur aktuelleren Version zurück.",
+            "description_3": "Den Browser-Speicher zu löschen kann das Problem lösen, wird dich aber abmelden und verschlüsselte Nachrichten unlesbar machen.",
+            "title": "Sitzungswiederherstellung fehlgeschlagen"
+        },
+        "something_went_wrong": "Etwas ist schiefgelaufen!",
+        "storage_evicted_description_1": "Einige Sitzungsdaten, einschließlich der Verschlüsselungsschlüssel, fehlen. Melde dich ab, wieder an und stelle die Schlüssel aus der Sicherung wieder her um dies zu beheben.",
+        "storage_evicted_description_2": "Dein Browser hat diese Daten wahrscheinlich entfernt als der Festplattenspeicher knapp wurde.",
+        "storage_evicted_title": "Fehlende Sitzungsdaten",
+        "sync": "Verbindung mit Heim-Server fehlgeschlagen. Versuche es erneut …",
+        "tls": "Verbindung zum Heim-Server fehlgeschlagen – bitte überprüfe die Internetverbindung und stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und dass Anfragen nicht durch eine Browser-Erweiterung blockiert werden.",
+        "unknown": "Unbekannter Fehler",
+        "unknown_error_code": "Unbekannter Fehlercode",
+        "update_power_level": "Ändern der Berechtigungsstufe fehlgeschlagen"
+    },
     "error_app_open_in_another_tab": "Wechsle zu einem anderen Tab um mit %(brand)s zu verbinden. Dieser Tab kann jetzt geschlossen werden.",
     "error_app_open_in_another_tab_title": "%(brand)s läuft bereits in einem anderen Tab.",
     "error_app_opened_in_another_window": "%(brand)s läuft bereit in einem anderen Fenster. Klicke \"%(label)s um %(brand)s hier zu nutzen und beende das andere Fenster.",
@@ -1211,6 +1202,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Im Space %(spaceName)s und %(count)s weiteren Spaces.",
         "other": "In %(spaceName)s und %(count)s weiteren Spaces."
+    },
+    "incompatible_browser": {
+        "title": "Nicht unterstützter Browser"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -1695,6 +1689,8 @@
         "moderator": "Moderator",
         "restricted": "Eingeschränkt"
     },
+    "powered_by_matrix": "Betrieben mit Matrix",
+    "powered_by_matrix_with_logo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo",
     "presence": {
         "away": "Abwesend",
         "busy": "Beschäftigt",
@@ -3531,6 +3527,7 @@
     "truncated_list_n_more": {
         "other": "Und %(count)s weitere …"
     },
+    "unknown_device": "Unbekanntes Gerät",
     "unsupported_server_description": "Dieser Server nutzt eine ältere Matrix-Version. Aktualisiere auf Matrix %(version)s, um %(brand)s fehlerfrei nutzen zu können.",
     "unsupported_server_title": "Dein Server wird nicht unterstützt",
     "update": {
@@ -3773,6 +3770,8 @@
         "voice_call": "Sprachanruf",
         "you_are_presenting": "Du präsentierst"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
+    "welcome_to_element": "Willkommen bei Element",
     "widget": {
         "added_by": "Widget hinzugefügt von",
         "capabilities_dialog": {

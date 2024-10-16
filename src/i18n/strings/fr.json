@@ -1,10 +1,25 @@
 {
+    "a11y": {
+        "emoji_picker": "Sélecteur d'emoji",
+        "jump_first_invite": "Sauter à la première invitation.",
+        "message_composer": "Rédaction des messages",
+        "n_unread_messages": {
+            "other": "%(count)s messages non lus.",
+            "one": "1 message non lu."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s messages non lus y compris les mentions.",
+            "one": "1 mention non lue."
+        },
+        "recent_rooms": "Salons récents",
+        "room_name": "Salon %(name)s",
+        "room_status_bar": "Barre de statut du salon",
+        "seek_bar_label": "Barre de recherche audio",
+        "unread_messages": "Messages non lus.",
+        "user_menu": "Menu utilisateur"
+    },
+    "a11y_jump_first_unread_room": "Sauter au premier salon non lu.",
     "action": {
-        "create_account": "Créer un compte",
-        "dismiss": "Ignorer",
-        "explore_rooms": "Parcourir les salons",
-        "open": "Ouvrir",
-        "sign_in": "Se connecter",
         "accept": "Accepter",
         "add": "Ajouter",
         "add_existing_room": "Ajouter un salon existant",
@@ -28,11 +43,13 @@
         "copy_link": "Copier le lien",
         "create": "Créer",
         "create_a_room": "Créer un salon",
+        "create_account": "Créer un compte",
         "decline": "Refuser",
         "delete": "Supprimer",
         "deny": "Interdire",
         "disable": "Désactiver",
         "disconnect": "Se déconnecter",
+        "dismiss": "Ignorer",
         "done": "Terminé",
         "download": "Télécharger",
         "edit": "Modifier",
@@ -41,6 +58,7 @@
         "exit_fullscreeen": "Quitter le plein écran",
         "expand": "Développer",
         "explore_public_rooms": "Parcourir les salons publics",
+        "explore_rooms": "Parcourir les salons",
         "export": "Exporter",
         "forward": "Transférer",
         "go": "C’est parti",
@@ -67,6 +85,7 @@
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
+        "open": "Ouvrir",
         "pause": "Pause",
         "pin": "Épingler",
         "play": "Lecture",
@@ -97,6 +116,7 @@
         "show": "Afficher",
         "show_advanced": "Afficher les paramètres avancés",
         "show_all": "Tout afficher",
+        "sign_in": "Se connecter",
         "sign_out": "Se déconnecter",
         "skip": "Passer",
         "start": "Commencer",
@@ -126,8 +146,19 @@
         "zoom_in": "Zoomer",
         "zoom_out": "Dé-zoomer"
     },
+    "analytics": {
+        "accept_button": "C’est bon",
+        "bullet_1": "Nous n’enregistrons ou ne profilons <Bold>aucune</Bold> donnée du compte",
+        "bullet_2": "Nous ne partageons <Bold>aucune</Bold> information avec des tiers",
+        "consent_migration": "Vous aviez précédemment consenti au partage de données d’utilisation anonymisées avec nous. Nous sommes en train de changer ce fonctionnement.",
+        "disable_prompt": "Vous pouvez désactiver ceci à n’importe quel moment dans les paramètres",
+        "enable_prompt": "Aidez à améliorer %(analyticsOwner)s",
+        "learn_more": "Partager des données anonymisées pour nous aider à identifier les problèmes. Aucune tierce partie. <LearnMoreLink>En savoir plus</LearnMoreLink>",
+        "privacy_policy": "Vous pouvez lire toutes nos conditions <PrivacyPolicyUrl>ici</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Aidez nous à identifier les problèmes et améliorer %(analyticsOwner)s en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.",
+        "shared_data_heading": "Les données suivants peuvent être partagées :"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Utilisez votre navigateur pour terminer la connexion",
         "3pid_in_use": "Cette adresse e-mail ou numéro de téléphone est déjà utilisé.",
         "account_clash": "Votre nouveau compte (%(newAccountId)s) est créé, mais vous êtes déjà connecté avec un autre compte (%(loggedInUserId)s).",
         "account_clash_previous_account": "Continuer avec le compte précédent",
@@ -329,6 +360,7 @@
         "soft_logout_subheading": "Supprimer les données personnelles",
         "soft_logout_warning": "Attention : vos données personnelles (y compris les clés de chiffrement) seront stockées dans cette session. Effacez-les si vous n’utilisez plus cette session ou si vous voulez vous connecter à un autre compte.",
         "sso": "Authentification unique",
+        "sso_complete_in_browser_dialog_title": "Utilisez votre navigateur pour terminer la connexion",
         "sso_failed_missing_storage": "Nous avons demandé à votre navigateur de mémoriser votre serveur d’accueil, mais il semble l’avoir oublié. Rendez-vous à la page de connexion et réessayez.",
         "sso_or_username_password": "%(ssoButtons)s ou %(usernamePassword)s",
         "sync_footer_subtitle": "Si vous avez rejoint beaucoup de salons, cela peut prendre du temps",
@@ -363,87 +395,6 @@
         "username_in_use": "Quelqu’un possède déjà ce nom d’utilisateur, veuillez en essayer un autre.",
         "verify_email_explainer": "Nous avons besoin de savoir que c’est vous avant de réinitialiser votre mot de passe. Cliquer sur le lien dans l’e-mail que nous venons juste d’envoyer à <b>%(email)s</b>",
         "verify_email_heading": "Vérifiez vos e-mail avant de continuer"
-    },
-    "desktop_default_device_name": "%(brand)s pour bureau : %(platformName)s",
-    "download_completed": "Téléchargement terminé",
-    "error": {
-        "app_launch_unexpected_error": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
-        "cannot_load_config": "Impossible de charger le fichier de configuration : rechargez la page pour réessayer.",
-        "invalid_configuration_mixed_server": "Configuration invalide : default_hs_url ne peut pas être défini en même temps que default_server_name ou default_server_config",
-        "invalid_configuration_no_server": "Configuration invalide : aucun serveur par défaut indiqué.",
-        "invalid_json": "La configuration de votre Element contient du JSON invalide. Veuillez corriger le problème et recharger la page.",
-        "invalid_json_detail": "Le message de l’analyseur est : %(message)s",
-        "invalid_json_generic": "JSON non valide",
-        "misconfigured": "Votre Element est mal configuré",
-        "admin_contact": "Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-        "admin_contact_short": "Contactez <a>l’administrateur de votre serveur</a>.",
-        "connection": "Il y a eu un problème lors de la communication avec le serveur d’accueil, veuillez réessayer ultérieurement.",
-        "dialog_description_default": "Une erreur est survenue.",
-        "download_media": "Impossible de télécharger la source du média, aucune URL source n’a été trouvée",
-        "edit_history_unsupported": "Il semble que votre serveur d’accueil ne prenne pas en charge cette fonctionnalité.",
-        "failed_copy": "Échec de la copie",
-        "hs_blocked": "Ce serveur d’accueil a été bloqué par son administrateur.",
-        "mau": "Ce serveur d’accueil a atteint sa limite mensuelle d'utilisateurs actifs.",
-        "mixed_content": "Impossible de se connecter au serveur d'accueil en HTTP si l’URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez la prise en charge des scripts non-vérifiés</a>.",
-        "non_urgent_echo_failure_toast": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
-        "resource_limits": "Ce serveur d’accueil a dépassé une de ses limites de ressources.",
-        "session_restore": {
-            "clear_storage_button": "Effacer le stockage et se déconnecter",
-            "clear_storage_description": "Se déconnecter et supprimer les clés de chiffrement ?",
-            "description_1": "Une erreur est survenue lors de la restauration de la dernière session.",
-            "description_2": "Si vous avez utilisé une version plus récente de %(brand)s précédemment, votre session risque d’être incompatible avec cette version. Fermez cette fenêtre et retournez à la version plus récente.",
-            "description_3": "Effacer le stockage de votre navigateur peut résoudre le problème. Ceci vous déconnectera et tous les historiques de conversations chiffrées seront illisibles.",
-            "title": "Impossible de restaurer la session"
-        },
-        "something_went_wrong": "Quelque chose s’est mal déroulé !",
-        "storage_evicted_description_1": "Des données de la session, dont les clés des messages chiffrés, sont manquantes. Déconnectez-vous et reconnectez-vous pour régler ce problème, en restaurant les clés depuis la sauvegarde.",
-        "storage_evicted_description_2": "Votre navigateur a sûrement supprimé ces données car il restait peu d’espace sur le disque.",
-        "storage_evicted_title": "Données de la session manquantes",
-        "sync": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
-        "tls": "Impossible de se connecter au serveur d’accueil - veuillez vérifier votre connexion, assurez-vous que le <a>certificat SSL de votre serveur d’accueil</a> est un certificat de confiance, et qu’aucune extension du navigateur ne bloque les requêtes.",
-        "unknown": "Erreur inconnue",
-        "unknown_error_code": "code d’erreur inconnu",
-        "update_power_level": "Échec du changement de rang"
-    },
-    "incompatible_browser": {
-        "title": "Navigateur non pris en charge"
-    },
-    "powered_by_matrix": "Propulsé par Matrix",
-    "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
-    "unknown_device": "Appareil inconnu",
-    "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
-    "welcome_to_element": "Bienvenue sur Element",
-    "a11y": {
-        "emoji_picker": "Sélecteur d'emoji",
-        "jump_first_invite": "Sauter à la première invitation.",
-        "message_composer": "Rédaction des messages",
-        "n_unread_messages": {
-            "other": "%(count)s messages non lus.",
-            "one": "1 message non lu."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s messages non lus y compris les mentions.",
-            "one": "1 mention non lue."
-        },
-        "recent_rooms": "Salons récents",
-        "room_name": "Salon %(name)s",
-        "room_status_bar": "Barre de statut du salon",
-        "seek_bar_label": "Barre de recherche audio",
-        "unread_messages": "Messages non lus.",
-        "user_menu": "Menu utilisateur"
-    },
-    "a11y_jump_first_unread_room": "Sauter au premier salon non lu.",
-    "analytics": {
-        "accept_button": "C’est bon",
-        "bullet_1": "Nous n’enregistrons ou ne profilons <Bold>aucune</Bold> donnée du compte",
-        "bullet_2": "Nous ne partageons <Bold>aucune</Bold> information avec des tiers",
-        "consent_migration": "Vous aviez précédemment consenti au partage de données d’utilisation anonymisées avec nous. Nous sommes en train de changer ce fonctionnement.",
-        "disable_prompt": "Vous pouvez désactiver ceci à n’importe quel moment dans les paramètres",
-        "enable_prompt": "Aidez à améliorer %(analyticsOwner)s",
-        "learn_more": "Partager des données anonymisées pour nous aider à identifier les problèmes. Aucune tierce partie. <LearnMoreLink>En savoir plus</LearnMoreLink>",
-        "privacy_policy": "Vous pouvez lire toutes nos conditions <PrivacyPolicyUrl>ici</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Aidez nous à identifier les problèmes et améliorer %(analyticsOwner)s en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.",
-        "shared_data_heading": "Les données suivants peuvent être partagées :"
     },
     "bug_reporting": {
         "additional_context": "S’il y a des informations supplémentaires qui pourraient nous aider à analyser le problème, comme ce que vous faisiez, l’identifiant du salon ou des utilisateurs etc, veuillez les préciser ici.",
@@ -779,6 +730,7 @@
         "twemoji": "L’art émoji <twemoji>Twemoji</twemoji> est © <author>Twitter, Inc et autres contributeurs</author> utilisé sous licence <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "La police <colr>twemoji-colr</colr> est © <author>Mozilla Foundation</author> utilisée sous licence <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s pour bureau : %(platformName)s",
     "devtools": {
         "active_widgets": "Widgets actifs",
         "category_other": "Autre",
@@ -883,6 +835,7 @@
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge"
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
+    "download_completed": "Téléchargement terminé",
     "emoji": {
         "categories": "Catégories",
         "category_activities": "Activités",
@@ -1088,6 +1041,45 @@
         "verify_toast_description": "D’autres utilisateurs pourraient ne pas lui faire confiance",
         "verify_toast_title": "Vérifier cette session"
     },
+    "error": {
+        "admin_contact": "Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
+        "admin_contact_short": "Contactez <a>l’administrateur de votre serveur</a>.",
+        "app_launch_unexpected_error": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
+        "cannot_load_config": "Impossible de charger le fichier de configuration : rechargez la page pour réessayer.",
+        "connection": "Il y a eu un problème lors de la communication avec le serveur d’accueil, veuillez réessayer ultérieurement.",
+        "dialog_description_default": "Une erreur est survenue.",
+        "download_media": "Impossible de télécharger la source du média, aucune URL source n’a été trouvée",
+        "edit_history_unsupported": "Il semble que votre serveur d’accueil ne prenne pas en charge cette fonctionnalité.",
+        "failed_copy": "Échec de la copie",
+        "hs_blocked": "Ce serveur d’accueil a été bloqué par son administrateur.",
+        "invalid_configuration_mixed_server": "Configuration invalide : default_hs_url ne peut pas être défini en même temps que default_server_name ou default_server_config",
+        "invalid_configuration_no_server": "Configuration invalide : aucun serveur par défaut indiqué.",
+        "invalid_json": "La configuration de votre Element contient du JSON invalide. Veuillez corriger le problème et recharger la page.",
+        "invalid_json_detail": "Le message de l’analyseur est : %(message)s",
+        "invalid_json_generic": "JSON non valide",
+        "mau": "Ce serveur d’accueil a atteint sa limite mensuelle d'utilisateurs actifs.",
+        "misconfigured": "Votre Element est mal configuré",
+        "mixed_content": "Impossible de se connecter au serveur d'accueil en HTTP si l’URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez la prise en charge des scripts non-vérifiés</a>.",
+        "non_urgent_echo_failure_toast": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
+        "resource_limits": "Ce serveur d’accueil a dépassé une de ses limites de ressources.",
+        "session_restore": {
+            "clear_storage_button": "Effacer le stockage et se déconnecter",
+            "clear_storage_description": "Se déconnecter et supprimer les clés de chiffrement ?",
+            "description_1": "Une erreur est survenue lors de la restauration de la dernière session.",
+            "description_2": "Si vous avez utilisé une version plus récente de %(brand)s précédemment, votre session risque d’être incompatible avec cette version. Fermez cette fenêtre et retournez à la version plus récente.",
+            "description_3": "Effacer le stockage de votre navigateur peut résoudre le problème. Ceci vous déconnectera et tous les historiques de conversations chiffrées seront illisibles.",
+            "title": "Impossible de restaurer la session"
+        },
+        "something_went_wrong": "Quelque chose s’est mal déroulé !",
+        "storage_evicted_description_1": "Des données de la session, dont les clés des messages chiffrés, sont manquantes. Déconnectez-vous et reconnectez-vous pour régler ce problème, en restaurant les clés depuis la sauvegarde.",
+        "storage_evicted_description_2": "Votre navigateur a sûrement supprimé ces données car il restait peu d’espace sur le disque.",
+        "storage_evicted_title": "Données de la session manquantes",
+        "sync": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
+        "tls": "Impossible de se connecter au serveur d’accueil - veuillez vérifier votre connexion, assurez-vous que le <a>certificat SSL de votre serveur d’accueil</a> est un certificat de confiance, et qu’aucune extension du navigateur ne bloque les requêtes.",
+        "unknown": "Erreur inconnue",
+        "unknown_error_code": "code d’erreur inconnu",
+        "update_power_level": "Échec du changement de rang"
+    },
     "error_app_open_in_another_tab": "Vous pouvez fermer cet onglet déconnecté, et aller à l'autre onglet %(brand)s.",
     "error_app_open_in_another_tab_title": "%(brand)s est connecté dans un autre onglet",
     "error_app_opened_in_another_window": "%(brand)s est ouvert dans une autre fenêtre. Cliquez \\\"%(label)s\\\" pour utiliser %(brand)s ici et déconnecter l'autre fenêtre.",
@@ -1256,6 +1248,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Dans %(spaceName)s et %(count)s autre espace.",
         "other": "Dans %(spaceName)s et %(count)s autres espaces."
+    },
+    "incompatible_browser": {
+        "title": "Navigateur non pris en charge"
     },
     "info_tooltip_title": "Informations",
     "integration_manager": {
@@ -1746,6 +1741,8 @@
         "moderator": "Modérateur",
         "restricted": "Restreint"
     },
+    "powered_by_matrix": "Propulsé par Matrix",
+    "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "presence": {
         "away": "Absent",
         "busy": "Occupé",
@@ -3590,6 +3587,7 @@
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
     },
+    "unknown_device": "Appareil inconnu",
     "unsupported_server_description": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs.",
     "unsupported_server_title": "Votre serveur n’est pas pris en charge",
     "update": {
@@ -3834,6 +3832,8 @@
         "voice_call": "Appel audio",
         "you_are_presenting": "Vous êtes à l’écran"
     },
+    "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
+    "welcome_to_element": "Bienvenue sur Element",
     "widget": {
         "added_by": "Widget ajouté par",
         "capabilities_dialog": {

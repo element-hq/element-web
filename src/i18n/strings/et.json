@@ -1,10 +1,25 @@
 {
+    "a11y": {
+        "emoji_picker": "Emojide valija",
+        "jump_first_invite": "Siirdu esimese kutse juurde.",
+        "message_composer": "Sõnumikoostaja",
+        "n_unread_messages": {
+            "other": "%(count)s lugemata teadet.",
+            "one": "1 lugemata teade."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 lugemata mainimine.",
+            "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
+        },
+        "recent_rooms": "Hiljuti kasutatud jututoad",
+        "room_name": "Jututuba %(name)s",
+        "room_status_bar": "Jututoa olekuriba",
+        "seek_bar_label": "Heli kerimisriba",
+        "unread_messages": "Lugemata sõnumid.",
+        "user_menu": "Kasutajamenüü"
+    },
+    "a11y_jump_first_unread_room": "Siirdu esimesse lugemata jututuppa.",
     "action": {
-        "create_account": "Loo konto",
-        "dismiss": "Loobu",
-        "explore_rooms": "Tutvu jututubadega",
-        "open": "Ava",
-        "sign_in": "Logi sisse",
         "accept": "Võta vastu",
         "add": "Lisa",
         "add_existing_room": "Lisa olemasolev jututuba",
@@ -28,11 +43,13 @@
         "copy_link": "Kopeeri link",
         "create": "Loo",
         "create_a_room": "Loo jututuba",
+        "create_account": "Loo konto",
         "decline": "Keeldu",
         "delete": "Kustuta",
         "deny": "Keeldu",
         "disable": "Lülita välja",
         "disconnect": "Katkesta ühendus",
+        "dismiss": "Loobu",
         "done": "Valmis",
         "download": "Laadi alla",
         "edit": "Muuda",
@@ -41,6 +58,7 @@
         "exit_fullscreeen": "Lülita täisekraanivaade välja",
         "expand": "Laienda",
         "explore_public_rooms": "Sirvi avalikke jututubasid",
+        "explore_rooms": "Tutvu jututubadega",
         "export": "Ekspordi",
         "forward": "Edasta",
         "go": "Mine",
@@ -67,6 +85,7 @@
         "next": "Järgmine",
         "no": "Ei",
         "ok": "Sobib",
+        "open": "Ava",
         "pause": "Peata",
         "pin": "Nööpnõel",
         "play": "Esita",
@@ -96,6 +115,7 @@
         "show": "Näita",
         "show_advanced": "Näita lisaseadistusi",
         "show_all": "Näita kõiki",
+        "sign_in": "Logi sisse",
         "sign_out": "Logi välja",
         "skip": "Jäta vahele",
         "start": "Alusta",
@@ -124,8 +144,19 @@
         "zoom_in": "Suumi sisse",
         "zoom_out": "Suumi välja"
     },
+    "analytics": {
+        "accept_button": "Sobib",
+        "bullet_1": "Meie <Bold>ei</Bold> salvesta ega profileeri sinu kasutajakonto andmeid",
+        "bullet_2": "Meie <Bold>ei</Bold> jaga teavet kolmandate osapooltega",
+        "consent_migration": "Sa oled varem meiega lubanud jagada anonüümset teavet. Me nüüd uuendame seda teavet.",
+        "disable_prompt": "Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel",
+        "enable_prompt": "Aita kaasa %(analyticsOwner)s'i arendamisele",
+        "learn_more": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega. <LearnMoreLink>Lisateave</LearnMoreLink>",
+        "privacy_policy": "Meie kasutustingimused leiad <PrivacyPolicyUrl>siit</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Võimalike vigade leidmiseks ja %(analyticsOwner)s'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.",
+        "shared_data_heading": "Järgnevaid andmeid võib jagada:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Sisselogimiseks ava oma brauser",
         "3pid_in_use": "See e-posti aadress või telefoninumber on juba kasutusel.",
         "account_clash": "Sinu uus kasutajakonto (%(newAccountId)s) on registreeritud, kuid sa jube oled sisse loginud teise kasutajakontoga (%(loggedInUserId)s).",
         "account_clash_previous_account": "Jätka senise konto kasutamist",
@@ -301,6 +332,7 @@
         "soft_logout_subheading": "Kustuta privaatsed andmed",
         "soft_logout_warning": "Hoiatus: Sinu privaatsed andmed (sealhulgas krüptimisvõtmed) on jätkuvalt salvestatud selles sessioonis. Eemalda nad, kui oled lõpetanud selle sessiooni kasutamise või soovid sisse logida muu kasutajakontoga.",
         "sso": "SSO Ühekordne sisselogimine",
+        "sso_complete_in_browser_dialog_title": "Sisselogimiseks ava oma brauser",
         "sso_failed_missing_storage": "Me sättisime nii, et sinu veebibrauser jätaks järgmiseks sisselogimiseks meelde sinu koduserveri, kuid kahjuks on ta selle unustanud. Palun mine sisselogimise lehele ja proovi uuesti.",
         "sso_or_username_password": "%(ssoButtons)s või %(usernamePassword)s",
         "sync_footer_subtitle": "Kui oled liitunud paljude jututubadega, siis see võib natuke aega võtta",
@@ -335,87 +367,6 @@
         "username_in_use": "Keegi juba pruugib sellist kasutajanime. Palun katseta mõne muuga.",
         "verify_email_explainer": "Enne sinu salasõna lähtestamist soovime olla kindlad, et tegemist on sinuga. Palun klõpsi linki, mille just saatsime <b>%(email)s</b> e-posti aadressile",
         "verify_email_heading": "Jätkamiseks kinnita oma e-posti aadress"
-    },
-    "desktop_default_device_name": "%(brand)s töölaud: %(platformName)s",
-    "download_completed": "Allalaadimine on lõpetatud",
-    "error": {
-        "app_launch_unexpected_error": "Rakenduse ettevalmistamisel tekkis ootamatu viga. Täpsema teabe leiad konsoolist.",
-        "cannot_load_config": "Seadistuste faili laadimine ei õnnestunud: uuesti proovimiseks palun laadi leht uuesti.",
-        "invalid_configuration_mixed_server": "Vigane seadistus: default_hs_url ei saa olla määratud koos default_server_name või default_server_config tunnustega",
-        "invalid_configuration_no_server": "Vigane seadistus: vaikimisi server on määramata.",
-        "invalid_json": "Sinu Element'i seadistustes on vigased JSON-vormingus andmed. Palun paranda see viga ja laadi leht uuesti.",
-        "invalid_json_detail": "Sõnum parserist on: %(message)s",
-        "invalid_json_generic": "Vigane JSON",
-        "misconfigured": "Sinu Element on valesti seadistatud",
-        "admin_contact": "Jätkamaks selle teenuse kasutamist palun <a>võta ühendust oma teenuse haldajaga</a>.",
-        "admin_contact_short": "Võta ühendust <a>oma serveri haldajaga</a>.",
-        "connection": "Serveriühenduses tekkis viga. Palun proovi mõne aja pärast uuesti.",
-        "dialog_description_default": "Tekkis viga.",
-        "download_media": "Kuna meedia aadressi ei leidu, siis allalaadimine ei õnnestu",
-        "edit_history_unsupported": "Tundub, et sinu koduserver ei toeta sellist funktsionaalsust.",
-        "failed_copy": "Kopeerimine ebaõnnestus",
-        "hs_blocked": "Ligipääs sellele koduserverile on sinu serveri haldaja poolt blokeeritud.",
-        "mau": "See koduserver on saavutanud igakuise aktiivsete kasutajate piiri.",
-        "mixed_content": "Kui aadressiribal on HTTPS-aadress, siis HTTP-protokolli kasutades ei saa ühendust koduserveriga. Palun pruugi HTTPS-protokolli või <a>luba brauseris ebaturvaliste skriptide kasutamine</a>.",
-        "non_urgent_echo_failure_toast": "Sinu koduserver ei vasta mõnedele <a>päringutele</a>.",
-        "resource_limits": "See koduserver ületanud ühe oma ressursipiirangutest.",
-        "session_restore": {
-            "clear_storage_button": "Tühjenda andmeruum ja logi välja",
-            "clear_storage_description": "Logi välja ja eemalda krüptimisvõtmed?",
-            "description_1": "Meil tekkis eelmise sessiooni taastamisel viga.",
-            "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu pragune sessioon ei pruugi olla sellega ühilduv. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
-            "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas logid sa ka välja ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
-            "title": "Sessiooni taastamine ei õnnestunud"
-        },
-        "something_went_wrong": "Midagi läks nüüd valesti!",
-        "storage_evicted_description_1": "Osa sessiooniandmetest, sealhulgas sõnumi krüptovõtmed, on puudu. Vea parandamiseks logi välja ja sisse, vajadusel taasta võtmed varundusest.",
-        "storage_evicted_description_2": "On võimalik et sinu brauser kustutas need andmed, sest kõvakettaruumist jäi puudu.",
-        "storage_evicted_title": "Sessiooni andmed on puudu",
-        "sync": "Ei saa ühendust koduserveriga. Proovin uuesti…",
-        "tls": "Ei sa ühendust koduserveriga. Palun kontrolli, et sinu <a>koduserveri SSL sertifikaat</a> oleks usaldusväärne ning mõni brauseri lisamoodul ei blokeeri päringuid.",
-        "unknown": "Teadmata viga",
-        "unknown_error_code": "tundmatu veakood",
-        "update_power_level": "Õiguste muutmine ei õnnestunud"
-    },
-    "incompatible_browser": {
-        "title": "Sellele brauserile puudub tugi"
-    },
-    "powered_by_matrix": "Põhineb Matrix'il",
-    "powered_by_matrix_with_logo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
-    "unknown_device": "Tundmatu seade",
-    "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
-    "welcome_to_element": "Tere tulemast kasutama suhtlusrakendust Element",
-    "a11y": {
-        "emoji_picker": "Emojide valija",
-        "jump_first_invite": "Siirdu esimese kutse juurde.",
-        "message_composer": "Sõnumikoostaja",
-        "n_unread_messages": {
-            "other": "%(count)s lugemata teadet.",
-            "one": "1 lugemata teade."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 lugemata mainimine.",
-            "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
-        },
-        "recent_rooms": "Hiljuti kasutatud jututoad",
-        "room_name": "Jututuba %(name)s",
-        "room_status_bar": "Jututoa olekuriba",
-        "seek_bar_label": "Heli kerimisriba",
-        "unread_messages": "Lugemata sõnumid.",
-        "user_menu": "Kasutajamenüü"
-    },
-    "a11y_jump_first_unread_room": "Siirdu esimesse lugemata jututuppa.",
-    "analytics": {
-        "accept_button": "Sobib",
-        "bullet_1": "Meie <Bold>ei</Bold> salvesta ega profileeri sinu kasutajakonto andmeid",
-        "bullet_2": "Meie <Bold>ei</Bold> jaga teavet kolmandate osapooltega",
-        "consent_migration": "Sa oled varem meiega lubanud jagada anonüümset teavet. Me nüüd uuendame seda teavet.",
-        "disable_prompt": "Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel",
-        "enable_prompt": "Aita kaasa %(analyticsOwner)s'i arendamisele",
-        "learn_more": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega. <LearnMoreLink>Lisateave</LearnMoreLink>",
-        "privacy_policy": "Meie kasutustingimused leiad <PrivacyPolicyUrl>siit</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Võimalike vigade leidmiseks ja %(analyticsOwner)s'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.",
-        "shared_data_heading": "Järgnevaid andmeid võib jagada:"
     },
     "bug_reporting": {
         "additional_context": "Kui sul leidub lisateavet, mis võis selle vea analüüsimisel abiks olla, siis palun lisa need ka siia - näiteks mida sa vea tekkimise hetkel tegid, jututoa tunnus, kasutajate tunnused, jne.",
@@ -746,6 +697,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emotikonide autoriõiguste omanik on <author>Twitter, Inc koos kaasautoritega</author> ning neid kasutame vastavalt <terms>CC-BY 4.0</terms> litsentsi tingimustele.",
         "twemoji_colr": "<colr>Twemoji-colr</colr> kirjatüübi autoriõiguste omanik on <author>Mozilla Foundation</author> seda kasutame vastavalt <terms>Apache 2.0</terms> litsentsi tingimustele."
     },
+    "desktop_default_device_name": "%(brand)s töölaud: %(platformName)s",
     "devtools": {
         "active_widgets": "Kasutusel vidinad",
         "category_other": "Muud",
@@ -847,6 +799,7 @@
         "widget_screenshots": "Kui vidin seda toetab, siis luba tal teha ekraanitõmmiseid"
     },
     "dialog_close_label": "Sulge dialoog",
+    "download_completed": "Allalaadimine on lõpetatud",
     "emoji": {
         "categories": "Kategooriad",
         "category_activities": "Tegevused",
@@ -1051,6 +1004,45 @@
         "verify_toast_description": "Teised kasutajad ei pruugi seda usaldada",
         "verify_toast_title": "Verifitseeri see sessioon"
     },
+    "error": {
+        "admin_contact": "Jätkamaks selle teenuse kasutamist palun <a>võta ühendust oma teenuse haldajaga</a>.",
+        "admin_contact_short": "Võta ühendust <a>oma serveri haldajaga</a>.",
+        "app_launch_unexpected_error": "Rakenduse ettevalmistamisel tekkis ootamatu viga. Täpsema teabe leiad konsoolist.",
+        "cannot_load_config": "Seadistuste faili laadimine ei õnnestunud: uuesti proovimiseks palun laadi leht uuesti.",
+        "connection": "Serveriühenduses tekkis viga. Palun proovi mõne aja pärast uuesti.",
+        "dialog_description_default": "Tekkis viga.",
+        "download_media": "Kuna meedia aadressi ei leidu, siis allalaadimine ei õnnestu",
+        "edit_history_unsupported": "Tundub, et sinu koduserver ei toeta sellist funktsionaalsust.",
+        "failed_copy": "Kopeerimine ebaõnnestus",
+        "hs_blocked": "Ligipääs sellele koduserverile on sinu serveri haldaja poolt blokeeritud.",
+        "invalid_configuration_mixed_server": "Vigane seadistus: default_hs_url ei saa olla määratud koos default_server_name või default_server_config tunnustega",
+        "invalid_configuration_no_server": "Vigane seadistus: vaikimisi server on määramata.",
+        "invalid_json": "Sinu Element'i seadistustes on vigased JSON-vormingus andmed. Palun paranda see viga ja laadi leht uuesti.",
+        "invalid_json_detail": "Sõnum parserist on: %(message)s",
+        "invalid_json_generic": "Vigane JSON",
+        "mau": "See koduserver on saavutanud igakuise aktiivsete kasutajate piiri.",
+        "misconfigured": "Sinu Element on valesti seadistatud",
+        "mixed_content": "Kui aadressiribal on HTTPS-aadress, siis HTTP-protokolli kasutades ei saa ühendust koduserveriga. Palun pruugi HTTPS-protokolli või <a>luba brauseris ebaturvaliste skriptide kasutamine</a>.",
+        "non_urgent_echo_failure_toast": "Sinu koduserver ei vasta mõnedele <a>päringutele</a>.",
+        "resource_limits": "See koduserver ületanud ühe oma ressursipiirangutest.",
+        "session_restore": {
+            "clear_storage_button": "Tühjenda andmeruum ja logi välja",
+            "clear_storage_description": "Logi välja ja eemalda krüptimisvõtmed?",
+            "description_1": "Meil tekkis eelmise sessiooni taastamisel viga.",
+            "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu pragune sessioon ei pruugi olla sellega ühilduv. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
+            "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas logid sa ka välja ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
+            "title": "Sessiooni taastamine ei õnnestunud"
+        },
+        "something_went_wrong": "Midagi läks nüüd valesti!",
+        "storage_evicted_description_1": "Osa sessiooniandmetest, sealhulgas sõnumi krüptovõtmed, on puudu. Vea parandamiseks logi välja ja sisse, vajadusel taasta võtmed varundusest.",
+        "storage_evicted_description_2": "On võimalik et sinu brauser kustutas need andmed, sest kõvakettaruumist jäi puudu.",
+        "storage_evicted_title": "Sessiooni andmed on puudu",
+        "sync": "Ei saa ühendust koduserveriga. Proovin uuesti…",
+        "tls": "Ei sa ühendust koduserveriga. Palun kontrolli, et sinu <a>koduserveri SSL sertifikaat</a> oleks usaldusväärne ning mõni brauseri lisamoodul ei blokeeri päringuid.",
+        "unknown": "Teadmata viga",
+        "unknown_error_code": "tundmatu veakood",
+        "update_power_level": "Õiguste muutmine ei õnnestunud"
+    },
     "error_app_open_in_another_tab": "%(brand)s'i kasutamiseks ava teine vahekaart. Selle vahekaardi võid kinni panna.",
     "error_app_open_in_another_tab_title": "%(brand)s'i on kasutatav teisel vahekaardil",
     "error_app_opened_in_another_window": "%(brand)s on avatud teises aknas. Klõpsa \"%(label)s\", et kasutada siin %(brand)s ja katkestada teise akna ühendus.",
@@ -1218,6 +1210,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Kogukonnas %(spaceName)s ja veel %(count)s's kogukonnas.",
         "other": "Kogukonnas %(spaceName)s ja %(count)s's muus kogukonnas."
+    },
+    "incompatible_browser": {
+        "title": "Sellele brauserile puudub tugi"
     },
     "info_tooltip_title": "Teave",
     "integration_manager": {
@@ -1696,6 +1691,8 @@
         "moderator": "Moderaator",
         "restricted": "Piiratud õigustega kasutaja"
     },
+    "powered_by_matrix": "Põhineb Matrix'il",
+    "powered_by_matrix_with_logo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
     "presence": {
         "away": "Eemal",
         "busy": "Hõivatud",
@@ -3495,6 +3492,7 @@
     "truncated_list_n_more": {
         "other": "Ja %(count)s muud..."
     },
+    "unknown_device": "Tundmatu seade",
     "unsupported_server_description": "See server kasutab Matrixi vanemat versiooni. Selleks, et %(brand)s'i kasutamisel vigu ei tekiks palun uuenda serverit nii, et kasutusel oleks Matrixi %(version)s.",
     "unsupported_server_title": "Sinu server ei ole toetatud",
     "update": {
@@ -3737,6 +3735,8 @@
         "voice_call": "Häälkõne",
         "you_are_presenting": "Sina esitad"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
+    "welcome_to_element": "Tere tulemast kasutama suhtlusrakendust Element",
     "widget": {
         "added_by": "Vidina lisaja",
         "capabilities_dialog": {

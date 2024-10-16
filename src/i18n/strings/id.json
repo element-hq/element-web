@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Pergi ke undangan pertama.",
+        "n_unread_messages": {
+            "one": "1 pesan yang belum dibaca.",
+            "other": "%(count)s pesan yang belum dibaca."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 sebutan yang belum dibaca.",
+            "other": "%(count)s pesan yang belum dibaca termasuk sebutan."
+        },
+        "room_name": "Ruangan %(name)s",
+        "unread_messages": "Pesan yang belum dibaca.",
+        "user_menu": "Menu pengguna"
+    },
+    "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
     "action": {
-        "create_account": "Buat Akun",
-        "dismiss": "Abaikan",
-        "explore_rooms": "Jelajahi ruangan",
-        "open": "Buka",
-        "sign_in": "Masuk",
         "accept": "Terima",
         "add": "Tambahkan",
         "add_existing_room": "Tambahkan ruangan yang sudah ada",
@@ -28,11 +38,13 @@
         "copy_link": "Salin tautan",
         "create": "Buat",
         "create_a_room": "Buat sebuah ruangan",
+        "create_account": "Buat Akun",
         "decline": "Tolak",
         "delete": "Hapus",
         "deny": "Tolak",
         "disable": "Nonaktifkan",
         "disconnect": "Lepaskan Hubungan",
+        "dismiss": "Abaikan",
         "done": "Selesai",
         "download": "Unduh",
         "edit": "Sunting",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "Keluar dari layar penuh",
         "expand": "Buka",
         "explore_public_rooms": "Jelajahi ruangan publik",
+        "explore_rooms": "Jelajahi ruangan",
         "export": "Ekspor",
         "forward": "Teruskan",
         "go": "Mulai",
@@ -67,6 +80,7 @@
         "next": "Lanjut",
         "no": "Tidak",
         "ok": "Oke",
+        "open": "Buka",
         "pause": "Jeda",
         "pin": "Sematkan",
         "play": "Mainkan",
@@ -96,6 +110,7 @@
         "show": "Tampilkan",
         "show_advanced": "Tampilkan lanjutan",
         "show_all": "Tampilkan semua",
+        "sign_in": "Masuk",
         "sign_out": "Keluar",
         "skip": "Lewat",
         "start": "Mulai",
@@ -124,8 +139,19 @@
         "zoom_in": "Perbesar",
         "zoom_out": "Perkecil"
     },
+    "analytics": {
+        "accept_button": "Saya tidak keberatan",
+        "bullet_1": "Kami <Bold>tidak</Bold> merekam atau memprofil data akun apa pun",
+        "bullet_2": "Kami <Bold>tidak</Bold> membagikan informasi ini dengan pihak ketiga",
+        "consent_migration": "Anda sebelumnya setuju untuk membagikan data penggunaan anonim dengan kami. Kami memperbarui cara kerjanya.",
+        "disable_prompt": "Anda dapat mematikannya kapan saja di pengaturan",
+        "enable_prompt": "Bantu membuat %(analyticsOwner)s lebih baik",
+        "learn_more": "Bagikan data anonim untuk membantu kami mengidentifikasi masalah-masalah. Tidak ada yang pribadi. Tidak ada pihak ketiga. <LearnMoreLink>Pelajari Lebih Lanjut</LearnMoreLink>",
+        "privacy_policy": "Anda dapat membaca kebijakan kami <PrivacyPolicyUrl>di sini</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Bantu kami mengidentifikasi masalah-masalah dan membuat %(analyticsOwner)s lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.",
+        "shared_data_heading": "Data berikut ini mungkin dibagikan:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Buka peramban Anda untuk menyelesaikan Sign In",
         "3pid_in_use": "Alamat e-mail atau nomor telepon itu sudah digunakan.",
         "account_clash": "Akun Anda yang baru (%(newAccountId)s) telah didaftarkan, tetapi Anda telah masuk ke akun yang lain (%(loggedInUserId)s).",
         "account_clash_previous_account": "Lanjutkan dengan akun sebelumnya",
@@ -299,6 +325,7 @@
         "soft_logout_subheading": "Hapus data personal",
         "soft_logout_warning": "Peringatan: Data personal Anda (termasuk kunci enkripsi) masih disimpan di sesi ini. Hapus jika Anda selesai menggunakan sesi ini, atau jika ingin masuk ke akun yang lain.",
         "sso": "Sistem Masuk Tunggal",
+        "sso_complete_in_browser_dialog_title": "Buka peramban Anda untuk menyelesaikan Sign In",
         "sso_failed_missing_storage": "Kami menanyakan browser ini untuk mengingat homeserver apa yang Anda gunakan untuk membantu Anda masuk, tetapi sayangnya browser ini melupakannya. Pergi ke halaman masuk dan coba lagi.",
         "sso_or_username_password": "%(ssoButtons)s Atau %(usernamePassword)s",
         "sync_footer_subtitle": "Jika Anda bergabung dengan banyak ruangan, ini mungkin membutuhkan beberapa waktu",
@@ -333,82 +360,6 @@
         "username_in_use": "Seseorang sudah memiliki nama pengguna itu, mohon coba yang lain.",
         "verify_email_explainer": "Kami harus tahu bahwa itu Anda sebelum mengatur ulang kata sandi Anda. Klik tautan dalam email yang kami sudah kirim ke <b>%(email)s</b>",
         "verify_email_heading": "Verifikasi email Anda untuk melanjutkan"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
-    "download_completed": "Unduhan Selesai",
-    "error": {
-        "app_launch_unexpected_error": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",
-        "cannot_load_config": "Tidak dapat memuat file konfigurasi: mohon muat ulang laman ini untuk mencoba lagi.",
-        "invalid_configuration_mixed_server": "Konfigurasi tidak valid: default_hs_url tidak dapat ditentukan bersama dengan default_server_name atau default_server_config",
-        "invalid_configuration_no_server": "Konfigurasi tidak absah: server bawaan belum ditentukan.",
-        "invalid_json": "Konfigurasi Element Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
-        "invalid_json_detail": "Pesan dari pengurai adalah: %(message)s",
-        "invalid_json_generic": "JSON tidak absah",
-        "misconfigured": "Anda salah mengatur Element",
-        "admin_contact": "Mohon <a>hubungi administrator layanan Anda</a> untuk melanjutkan menggunakan layanannya.",
-        "admin_contact_short": "Hubungi <a>admin server</a> Anda.",
-        "connection": "Terjadi sebuah masalah berkomunikasi dengan homeservernya, coba lagi nanti.",
-        "dialog_description_default": "Telah terjadi kesalahan.",
-        "download_media": "Gagal mengunduh media sumber, tidak ada URL sumber yang ditemukan",
-        "edit_history_unsupported": "Homeserver Anda sepertinya tidak mendukung fitur ini.",
-        "failed_copy": "Gagal untuk menyalin",
-        "hs_blocked": "Homeserver ini telah diblokir oleh administratornya.",
-        "mau": "Homeserver ini telah mencapai batasnya Pengguna Aktif Bulanan.",
-        "mixed_content": "Tidak dapat terhubung ke homeserver melalui HTTP ketika URL di browser berupa HTTPS. Gunakan HTTPS atau <a>aktifkan skrip yang tidak aman</a>.",
-        "non_urgent_echo_failure_toast": "Server Anda tidak menanggapi beberapa <a>permintaan</a>.",
-        "resource_limits": "Homeserver ini telah melebihi batas sumber dayanya.",
-        "session_restore": {
-            "clear_storage_button": "Hapus Penyimpanan dan Keluar",
-            "clear_storage_description": "Keluar dan hapus kunci-kunci enkripsi?",
-            "description_1": "Kami mengalami sebuah kesalahan saat memulihkan sesi Anda sebelumnya.",
-            "description_2": "Jika Anda sebelumnya menggunakan versi %(brand)s yang lebih baru, sesi Anda mungkin tidak kompatibel dengan versi ini. Tutup jendela ini dan kembali ke versi yang lebih baru.",
-            "description_3": "Menghapus penyimpanan browser Anda mungkin memperbaiki masalahnya, tetapi akan mengeluarkan Anda dan membuat riwayat obrolan tidak dapat dibaca.",
-            "title": "Tidak dapat memulihkan sesi"
-        },
-        "something_went_wrong": "Ada sesuatu yang salah!",
-        "storage_evicted_description_1": "Beberapa data sesi, termasuk kunci pesan terenkripsi, hilang. Keluar dan masuk lagi untuk memperbaikinya, memulihkan kunci-kunci dari cadangan.",
-        "storage_evicted_description_2": "Kemungkinan browser Anda menghapus datanya ketika ruang disk rendah.",
-        "storage_evicted_title": "Data sesi hilang",
-        "sync": "Tidak dapat menghubungkan ke Homeserver. Mencoba ulang…",
-        "tls": "Tidak dapat terhubung ke homeserver — harap cek koneksi anda, pastikan <a>sertifikat SSL homeserver</a> Anda terpercaya, dan ekstensi browser tidak memblokir permintaan.",
-        "unknown": "Kesalahan tidak diketahui",
-        "unknown_error_code": "kode kesalahan tidak diketahui",
-        "update_power_level": "Gagal untuk mengubah tingkat daya"
-    },
-    "incompatible_browser": {
-        "title": "Peramban tidak didukung"
-    },
-    "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
-    "unknown_device": "Perangkat tidak diketahui",
-    "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
-    "a11y": {
-        "jump_first_invite": "Pergi ke undangan pertama.",
-        "n_unread_messages": {
-            "one": "1 pesan yang belum dibaca.",
-            "other": "%(count)s pesan yang belum dibaca."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 sebutan yang belum dibaca.",
-            "other": "%(count)s pesan yang belum dibaca termasuk sebutan."
-        },
-        "room_name": "Ruangan %(name)s",
-        "unread_messages": "Pesan yang belum dibaca.",
-        "user_menu": "Menu pengguna"
-    },
-    "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
-    "analytics": {
-        "accept_button": "Saya tidak keberatan",
-        "bullet_1": "Kami <Bold>tidak</Bold> merekam atau memprofil data akun apa pun",
-        "bullet_2": "Kami <Bold>tidak</Bold> membagikan informasi ini dengan pihak ketiga",
-        "consent_migration": "Anda sebelumnya setuju untuk membagikan data penggunaan anonim dengan kami. Kami memperbarui cara kerjanya.",
-        "disable_prompt": "Anda dapat mematikannya kapan saja di pengaturan",
-        "enable_prompt": "Bantu membuat %(analyticsOwner)s lebih baik",
-        "learn_more": "Bagikan data anonim untuk membantu kami mengidentifikasi masalah-masalah. Tidak ada yang pribadi. Tidak ada pihak ketiga. <LearnMoreLink>Pelajari Lebih Lanjut</LearnMoreLink>",
-        "privacy_policy": "Anda dapat membaca kebijakan kami <PrivacyPolicyUrl>di sini</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Bantu kami mengidentifikasi masalah-masalah dan membuat %(analyticsOwner)s lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.",
-        "shared_data_heading": "Data berikut ini mungkin dibagikan:"
     },
     "bug_reporting": {
         "additional_context": "Jika ada konteks yang mungkin akan membantu saat memeriksa masalahnya, seperti apa yang Anda lakukan waktu itu, ID ruangan, ID pengguna, dll., dan silakan menambahkannya di sini.",
@@ -838,6 +789,7 @@
         "widget_screenshots": "Aktifkan tangkapan layar widget di widget yang didukung"
     },
     "dialog_close_label": "Tutup dialog",
+    "download_completed": "Unduhan Selesai",
     "emoji": {
         "categories": "Categori",
         "category_activities": "Aktivitas",
@@ -1042,6 +994,45 @@
         "verify_toast_description": "Pengguna yang lain mungkin tidak mempercayainya",
         "verify_toast_title": "Verifikasi sesi ini"
     },
+    "error": {
+        "admin_contact": "Mohon <a>hubungi administrator layanan Anda</a> untuk melanjutkan menggunakan layanannya.",
+        "admin_contact_short": "Hubungi <a>admin server</a> Anda.",
+        "app_launch_unexpected_error": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",
+        "cannot_load_config": "Tidak dapat memuat file konfigurasi: mohon muat ulang laman ini untuk mencoba lagi.",
+        "connection": "Terjadi sebuah masalah berkomunikasi dengan homeservernya, coba lagi nanti.",
+        "dialog_description_default": "Telah terjadi kesalahan.",
+        "download_media": "Gagal mengunduh media sumber, tidak ada URL sumber yang ditemukan",
+        "edit_history_unsupported": "Homeserver Anda sepertinya tidak mendukung fitur ini.",
+        "failed_copy": "Gagal untuk menyalin",
+        "hs_blocked": "Homeserver ini telah diblokir oleh administratornya.",
+        "invalid_configuration_mixed_server": "Konfigurasi tidak valid: default_hs_url tidak dapat ditentukan bersama dengan default_server_name atau default_server_config",
+        "invalid_configuration_no_server": "Konfigurasi tidak absah: server bawaan belum ditentukan.",
+        "invalid_json": "Konfigurasi Element Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
+        "invalid_json_detail": "Pesan dari pengurai adalah: %(message)s",
+        "invalid_json_generic": "JSON tidak absah",
+        "mau": "Homeserver ini telah mencapai batasnya Pengguna Aktif Bulanan.",
+        "misconfigured": "Anda salah mengatur Element",
+        "mixed_content": "Tidak dapat terhubung ke homeserver melalui HTTP ketika URL di browser berupa HTTPS. Gunakan HTTPS atau <a>aktifkan skrip yang tidak aman</a>.",
+        "non_urgent_echo_failure_toast": "Server Anda tidak menanggapi beberapa <a>permintaan</a>.",
+        "resource_limits": "Homeserver ini telah melebihi batas sumber dayanya.",
+        "session_restore": {
+            "clear_storage_button": "Hapus Penyimpanan dan Keluar",
+            "clear_storage_description": "Keluar dan hapus kunci-kunci enkripsi?",
+            "description_1": "Kami mengalami sebuah kesalahan saat memulihkan sesi Anda sebelumnya.",
+            "description_2": "Jika Anda sebelumnya menggunakan versi %(brand)s yang lebih baru, sesi Anda mungkin tidak kompatibel dengan versi ini. Tutup jendela ini dan kembali ke versi yang lebih baru.",
+            "description_3": "Menghapus penyimpanan browser Anda mungkin memperbaiki masalahnya, tetapi akan mengeluarkan Anda dan membuat riwayat obrolan tidak dapat dibaca.",
+            "title": "Tidak dapat memulihkan sesi"
+        },
+        "something_went_wrong": "Ada sesuatu yang salah!",
+        "storage_evicted_description_1": "Beberapa data sesi, termasuk kunci pesan terenkripsi, hilang. Keluar dan masuk lagi untuk memperbaikinya, memulihkan kunci-kunci dari cadangan.",
+        "storage_evicted_description_2": "Kemungkinan browser Anda menghapus datanya ketika ruang disk rendah.",
+        "storage_evicted_title": "Data sesi hilang",
+        "sync": "Tidak dapat menghubungkan ke Homeserver. Mencoba ulang…",
+        "tls": "Tidak dapat terhubung ke homeserver — harap cek koneksi anda, pastikan <a>sertifikat SSL homeserver</a> Anda terpercaya, dan ekstensi browser tidak memblokir permintaan.",
+        "unknown": "Kesalahan tidak diketahui",
+        "unknown_error_code": "kode kesalahan tidak diketahui",
+        "update_power_level": "Gagal untuk mengubah tingkat daya"
+    },
     "error_database_closed_title": "%(brand)s berhenti bekerja",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1203,6 +1194,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Dalam %(spaceName)s dan %(count)s space lainnya.",
         "other": "Dalam %(spaceName)s dan %(count)s space lainnya."
+    },
+    "incompatible_browser": {
+        "title": "Peramban tidak didukung"
     },
     "info_tooltip_title": "Informasi",
     "integration_manager": {
@@ -1678,6 +1672,8 @@
         "moderator": "Moderator",
         "restricted": "Dibatasi"
     },
+    "powered_by_matrix": "Diberdayakan oleh Matrix",
+    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -3500,6 +3496,7 @@
     "truncated_list_n_more": {
         "other": "Dan %(count)s lagi..."
     },
+    "unknown_device": "Perangkat tidak diketahui",
     "unsupported_server_description": "Server ini menjalankan sebuah versi Matrix yang lama. Tingkatkan ke Matrix %(version)s untuk menggunakan %(brand)s tanpa eror.",
     "unsupported_server_title": "Server Anda tidak didukung",
     "update": {
@@ -3742,6 +3739,8 @@
         "voice_call": "Panggilan suara",
         "you_are_presenting": "Anda sedang mempresentasi"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
+    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "קפצו להזמנה ראשונה.",
+        "n_unread_messages": {
+            "one": "1 הודעה שלא נקראה.",
+            "other": "%(count)s הודעות שלא נקראו."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 אזכור שלא נקרא.",
+            "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
+        },
+        "room_name": "חדר %(name)s",
+        "unread_messages": "הודעות שלא נקראו.",
+        "user_menu": "תפריט משתמש"
+    },
+    "a11y_jump_first_unread_room": "קפצו לחדר הראשון שלא נקרא.",
     "action": {
-        "create_account": "משתמש חדש",
-        "dismiss": "התעלם",
-        "explore_rooms": "גלה חדרים",
-        "open": "פתח",
-        "sign_in": "כניסה",
         "accept": "קבל",
         "add": "הוספה",
         "approve": "אישור",
@@ -19,10 +29,12 @@
         "continue": "המשך",
         "copy": "העתק",
         "create": "צור",
+        "create_account": "משתמש חדש",
         "decline": "סרב",
         "delete": "מחק",
         "disable": "השבת",
         "disconnect": "התנתק",
+        "dismiss": "התעלם",
         "done": "סיום",
         "download": "הורדה",
         "edit": "ערוך",
@@ -31,6 +43,7 @@
         "exit_fullscreeen": "יציאה ממסך מלא",
         "expand": "להרחיב",
         "explore_public_rooms": "שוטט בחדרים ציבוריים",
+        "explore_rooms": "גלה חדרים",
         "export": "ייצוא",
         "forward": "קדימה",
         "go": "המשך",
@@ -54,6 +67,7 @@
         "next": "הבא",
         "no": "לא",
         "ok": "בסדר",
+        "open": "פתח",
         "pin": "נעץ",
         "quote": "ציטוט",
         "react": "הגב",
@@ -79,6 +93,7 @@
         "share": "לשתף",
         "show_advanced": "הצג מתקדם",
         "show_all": "הצג הכל",
+        "sign_in": "כניסה",
         "sign_out": "יציאה",
         "skip": "דלג",
         "start": "התחל",
@@ -103,8 +118,14 @@
         "zoom_in": "התמקדות פנימה",
         "zoom_out": "התמקדות החוצה"
     },
+    "analytics": {
+        "accept_button": "זה בסדר",
+        "consent_migration": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
+        "enable_prompt": "עזרו בשיפור %(analyticsOwner)s",
+        "learn_more": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
+        "shared_data_heading": "ניתן לשתף כל אחד מהנתונים הבאים:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "עבור לדפדפן להמשך ההתחברות",
         "account_clash": "החשבון החדש שלך (%(newAccountId)s) רשום, אך אתה כבר מחובר לחשבון אחר (%(loggedInUserId)s).",
         "account_clash_previous_account": "המשך בחשבון הקודם",
         "account_deactivated": "חשבון זה הושבת.",
@@ -236,6 +257,7 @@
         "soft_logout_intro_unsupported_auth": "אינך יכול להיכנס לחשבונך. אנא פנה למנהל שרת הבית שלך למידע נוסף.",
         "soft_logout_subheading": "נקה מידע אישי",
         "sso": "כניסה חד שלבית",
+        "sso_complete_in_browser_dialog_title": "עבור לדפדפן להמשך ההתחברות",
         "sso_failed_missing_storage": "ביקשנו מהדפדפן לזכור באיזה שרת בית אתה משתמש כדי לאפשר לך להיכנס, אך למרבה הצער הדפדפן שלך שכח אותו. עבור לדף הכניסה ונסה שוב.",
         "sso_or_username_password": "%(ssoButtons)s או %(usernamePassword)s",
         "sync_footer_subtitle": "אם הצטרפת להרבה חדרים, זה עשוי לקחת זמן מה",
@@ -258,75 +280,6 @@
         "unsupported_auth_email": "שרת בית זה אינו תומך בכניסה באמצעות כתובת דוא\"ל.",
         "unsupported_auth_msisdn": "שרת זה אינו תומך באימות עם מספר טלפון.",
         "username_field_required_invalid": "הזן שם משתמש"
-    },
-    "desktop_default_device_name": "%(brand)s שולחן עבודה: %(platformName)s",
-    "download_completed": "ההורדה הושלמה",
-    "error": {
-        "app_launch_unexpected_error": "שגיאה לא צפויה במהלך טעינת האפליקציה. ראו קונסול לפרטים נוספים.",
-        "cannot_load_config": "לא ניתן לטעון את קובץ ההגדרות: יש לרענן את הדף כדי לנסות שנית.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
-        "invalid_configuration_no_server": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
-        "invalid_json": "האלמנט מכיל הגדרת JSON שגויה, אנא תקנו את הבעיה ואתחלו את הדף.",
-        "invalid_json_detail": "ההודעה מהמנתח היא: %(message)s",
-        "invalid_json_generic": "JSON לא חוקי",
-        "misconfigured": "Element אינו מוגדר תקין",
-        "admin_contact": "אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות זה.",
-        "admin_contact_short": "צרו קשר עם <a>מנהל השרת</a>.",
-        "connection": "הייתה תקשורת עם שרת הבית. נסה שוב מאוחר יותר.",
-        "dialog_description_default": "קרתה שגיאה.",
-        "edit_history_unsupported": "נראה ששרת הבית שלך אינו תומך בתכונה זו.",
-        "failed_copy": "שגיאה בהעתקה",
-        "hs_blocked": "שרת זה נחסם על ידי מנהלו.",
-        "mau": "השרת הזה הגיע לקצה מספר המשתמשים הפעילים לחודש.",
-        "mixed_content": "לא ניתן להתחבר לשרת ביתי באמצעות HTTP כאשר כתובת HTTPS נמצאת בסרגל הדפדפן שלך. השתמש ב- HTTPS או <a> הפעל סקריפטים לא בטוחים </a>.",
-        "non_urgent_echo_failure_toast": "השרת שלכם אינו מגיב לבקשות מסויימות <a>בקשות</a>.",
-        "resource_limits": "השרת הזה חרג מאחד ממגבלות המשאבים שלו.",
-        "session_restore": {
-            "clear_storage_button": "נקה אחסון והתנתק",
-            "clear_storage_description": "להתנתק ולהסיר מפתחות הצפנה?",
-            "description_1": "נתקלנו בשגיאה בניסיון לשחזר את ההפעלה הקודמת שלך.",
-            "description_2": "אם השתמשת בעבר בגרסה עדכנית יותר של %(brand)s, ייתכן שההפעלה שלך אינה תואמת לגרסה זו. סגרו חלון זה וחזרו לגרסה העדכנית יותר.",
-            "description_3": "ניקוי שטח האחסון של הדפדפן עשוי לפתור את הבעיה, אך ינתק אתכם ויגרום לכל היסטוריית צ'אט מוצפנת להיות בלתי קריאה.",
-            "title": "לא ניתן לשחזר את ההפעלה"
-        },
-        "something_went_wrong": "משהו השתבש!",
-        "storage_evicted_description_1": "חלק מנתוני ההפעלה, כולל מפתחות הודעות מוצפנים, חסרים. צא והיכנס כדי לתקן זאת, ושחזר את המפתחות מהגיבוי.",
-        "storage_evicted_description_2": "סביר להניח שהדפדפן שלך הסיר נתונים אלה כאשר שטח הדיסק שלהם נמוך.",
-        "storage_evicted_title": "חסרים נתוני הפעלות",
-        "tls": "לא ניתן להתחבר לשרת בית - אנא בדוק את הקישוריות שלך, וודא ש- <a> תעודת ה- SSL של שרת הביתה </a> שלך מהימנה ושהסיומת לדפדפן אינה חוסמת בקשות.",
-        "unknown": "שגיאה לא ידועה",
-        "unknown_error_code": "קוד שגיאה לא מוכר",
-        "update_power_level": "שינוי דרגת מנהל נכשל"
-    },
-    "incompatible_browser": {
-        "title": "דפדפן לא נתמך"
-    },
-    "powered_by_matrix": "מופעל על ידי מטריקס",
-    "powered_by_matrix_with_logo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
-    "unknown_device": "מכשיר לא ידוע",
-    "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
-    "welcome_to_element": "ברוכים הבאים ל Element",
-    "a11y": {
-        "jump_first_invite": "קפצו להזמנה ראשונה.",
-        "n_unread_messages": {
-            "one": "1 הודעה שלא נקראה.",
-            "other": "%(count)s הודעות שלא נקראו."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 אזכור שלא נקרא.",
-            "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
-        },
-        "room_name": "חדר %(name)s",
-        "unread_messages": "הודעות שלא נקראו.",
-        "user_menu": "תפריט משתמש"
-    },
-    "a11y_jump_first_unread_room": "קפצו לחדר הראשון שלא נקרא.",
-    "analytics": {
-        "accept_button": "זה בסדר",
-        "consent_migration": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
-        "enable_prompt": "עזרו בשיפור %(analyticsOwner)s",
-        "learn_more": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
-        "shared_data_heading": "ניתן לשתף כל אחד מהנתונים הבאים:"
     },
     "bug_reporting": {
         "additional_context": "אם ישנו הקשר נוסף שיעזור לניתוח הבעיה, כגון מה שעשיתם באותו זמן, תעודות זהות, מזהי משתמש וכו ', אנא כללו את הדברים כאן.",
@@ -575,6 +528,7 @@
         "subspace_join_rule_public_description": "כל אחד יוכל למצוא ולהצטרך אל חלל עבודה זה. לא רק חברי <SpaceName/>.",
         "subspace_join_rule_restricted_description": "כל אחד ב<SpaceName/> יוכל למצוא ולהצטרף."
     },
+    "desktop_default_device_name": "%(brand)s שולחן עבודה: %(platformName)s",
     "devtools": {
         "active_widgets": "יישומונים פעילים",
         "category_other": "אחר",
@@ -603,6 +557,7 @@
         "widget_screenshots": "אפשר צילומי מסך של ישומונים עבור ישומונים נתמכים"
     },
     "dialog_close_label": "סגור דיאלוג",
+    "download_completed": "ההורדה הושלמה",
     "emoji": {
         "categories": "נושאים",
         "category_activities": "פעילויות",
@@ -760,6 +715,42 @@
         "verify_toast_description": "יתכן משתמשים אחרים לא יבטחו בזה",
         "verify_toast_title": "אשרו את ההתחברות הזאת"
     },
+    "error": {
+        "admin_contact": "אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות זה.",
+        "admin_contact_short": "צרו קשר עם <a>מנהל השרת</a>.",
+        "app_launch_unexpected_error": "שגיאה לא צפויה במהלך טעינת האפליקציה. ראו קונסול לפרטים נוספים.",
+        "cannot_load_config": "לא ניתן לטעון את קובץ ההגדרות: יש לרענן את הדף כדי לנסות שנית.",
+        "connection": "הייתה תקשורת עם שרת הבית. נסה שוב מאוחר יותר.",
+        "dialog_description_default": "קרתה שגיאה.",
+        "edit_history_unsupported": "נראה ששרת הבית שלך אינו תומך בתכונה זו.",
+        "failed_copy": "שגיאה בהעתקה",
+        "hs_blocked": "שרת זה נחסם על ידי מנהלו.",
+        "invalid_configuration_no_server": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
+        "invalid_json": "האלמנט מכיל הגדרת JSON שגויה, אנא תקנו את הבעיה ואתחלו את הדף.",
+        "invalid_json_detail": "ההודעה מהמנתח היא: %(message)s",
+        "invalid_json_generic": "JSON לא חוקי",
+        "mau": "השרת הזה הגיע לקצה מספר המשתמשים הפעילים לחודש.",
+        "misconfigured": "Element אינו מוגדר תקין",
+        "mixed_content": "לא ניתן להתחבר לשרת ביתי באמצעות HTTP כאשר כתובת HTTPS נמצאת בסרגל הדפדפן שלך. השתמש ב- HTTPS או <a> הפעל סקריפטים לא בטוחים </a>.",
+        "non_urgent_echo_failure_toast": "השרת שלכם אינו מגיב לבקשות מסויימות <a>בקשות</a>.",
+        "resource_limits": "השרת הזה חרג מאחד ממגבלות המשאבים שלו.",
+        "session_restore": {
+            "clear_storage_button": "נקה אחסון והתנתק",
+            "clear_storage_description": "להתנתק ולהסיר מפתחות הצפנה?",
+            "description_1": "נתקלנו בשגיאה בניסיון לשחזר את ההפעלה הקודמת שלך.",
+            "description_2": "אם השתמשת בעבר בגרסה עדכנית יותר של %(brand)s, ייתכן שההפעלה שלך אינה תואמת לגרסה זו. סגרו חלון זה וחזרו לגרסה העדכנית יותר.",
+            "description_3": "ניקוי שטח האחסון של הדפדפן עשוי לפתור את הבעיה, אך ינתק אתכם ויגרום לכל היסטוריית צ'אט מוצפנת להיות בלתי קריאה.",
+            "title": "לא ניתן לשחזר את ההפעלה"
+        },
+        "something_went_wrong": "משהו השתבש!",
+        "storage_evicted_description_1": "חלק מנתוני ההפעלה, כולל מפתחות הודעות מוצפנים, חסרים. צא והיכנס כדי לתקן זאת, ושחזר את המפתחות מהגיבוי.",
+        "storage_evicted_description_2": "סביר להניח שהדפדפן שלך הסיר נתונים אלה כאשר שטח הדיסק שלהם נמוך.",
+        "storage_evicted_title": "חסרים נתוני הפעלות",
+        "tls": "לא ניתן להתחבר לשרת בית - אנא בדוק את הקישוריות שלך, וודא ש- <a> תעודת ה- SSL של שרת הביתה </a> שלך מהימנה ושהסיומת לדפדפן אינה חוסמת בקשות.",
+        "unknown": "שגיאה לא ידועה",
+        "unknown_error_code": "קוד שגיאה לא מוכר",
+        "update_power_level": "שינוי דרגת מנהל נכשל"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "title": "לא ניתן להעתיק קישור לחדר"
@@ -891,6 +882,9 @@
     "in_space_and_n_other_spaces": {
         "one": "ב%(spaceName)sו%(count)s מרחבי עבודה אחרים.",
         "other": "%(spaceName)sו%(count)s מרחבי עבודה אחרים."
+    },
+    "incompatible_browser": {
+        "title": "דפדפן לא נתמך"
     },
     "info_tooltip_title": "מידע",
     "integration_manager": {
@@ -1176,6 +1170,8 @@
         "moderator": "מנהל",
         "restricted": "מחוץ לתחום"
     },
+    "powered_by_matrix": "מופעל על ידי מטריקס",
+    "powered_by_matrix_with_logo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
     "presence": {
         "away": "מרוחק",
         "idle": "לא פעיל",
@@ -2414,6 +2410,7 @@
     "truncated_list_n_more": {
         "other": "ו%(count)s עוד..."
     },
+    "unknown_device": "מכשיר לא ידוע",
     "update": {
         "changelog": "דו\"ח שינויים",
         "check_action": "בדוק עדכונים",
@@ -2568,6 +2565,8 @@
         "voice_call": "שיחת אודיו",
         "you_are_presenting": "אתה מציג"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
+    "welcome_to_element": "ברוכים הבאים ל Element",
     "widget": {
         "added_by": "ישומון נוסף על ידי",
         "capabilities_dialog": {

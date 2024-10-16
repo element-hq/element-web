@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "跳转至第一个邀请。",
+        "n_unread_messages": {
+            "other": "%(count)s 个未读消息。",
+            "one": "1 个未读消息。"
+        },
+        "n_unread_messages_mentions": {
+            "other": "包括提及在内有 %(count)s 个未读消息。",
+            "one": "1 个未读提及。"
+        },
+        "room_name": "房间 %(name)s",
+        "unread_messages": "未读消息。",
+        "user_menu": "用户菜单"
+    },
+    "a11y_jump_first_unread_room": "跳转至第一个未读房间。",
     "action": {
-        "create_account": "创建账户",
-        "dismiss": "忽略",
-        "explore_rooms": "查找房间",
-        "open": "打开",
-        "sign_in": "登录",
         "accept": "接受",
         "add": "添加",
         "add_existing_room": "添加现有的房间",
@@ -28,11 +38,13 @@
         "copy_link": "复制链接",
         "create": "创建",
         "create_a_room": "创建房间",
+        "create_account": "创建账户",
         "decline": "拒绝",
         "delete": "删除",
         "deny": "拒绝",
         "disable": "禁用",
         "disconnect": "断开连接",
+        "dismiss": "忽略",
         "done": "完成",
         "download": "下载",
         "edit": "编辑",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "退出全屏",
         "expand": "展开",
         "explore_public_rooms": "查找公开房间",
+        "explore_rooms": "查找房间",
         "export": "导出",
         "forward": "转发",
         "go": "前往",
@@ -67,6 +80,7 @@
         "next": "下一个",
         "no": "不",
         "ok": "确定",
+        "open": "打开",
         "pause": "暂停",
         "pin": "别针",
         "play": "播放",
@@ -96,6 +110,7 @@
         "show": "显示",
         "show_advanced": "显示高级",
         "show_all": "显示全部",
+        "sign_in": "登录",
         "sign_out": "注销",
         "skip": "跳过",
         "start": "开始",
@@ -124,8 +139,19 @@
         "zoom_in": "放大",
         "zoom_out": "缩小"
     },
+    "analytics": {
+        "accept_button": "没问题",
+        "bullet_1": "我们<Bold>不会</Bold>记录或配置任何账户数据",
+        "bullet_2": "我们<Bold>不会</Bold>与第三方共享信息",
+        "consent_migration": "你之前同意与我们分享匿名使用数据。我们正在更新其工作方式。",
+        "disable_prompt": "您可以随时在设置中关闭此功能",
+        "enable_prompt": "帮助改进 %(analyticsOwner)s",
+        "learn_more": "共享匿名数据帮助我们发现问题。无个人数据。 没有第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
+        "privacy_policy": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们所有的条款",
+        "pseudonymous_usage_data": "通过共享匿名使用数据，帮助我们发现问题并改进%(analyticsOwner)s。为了了解人们如何使用多台设备，我们将生成一个由您的设备共享的随机标识符。",
+        "shared_data_heading": "以下数据之一可能被分享："
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录",
         "3pid_in_use": "该电子邮件地址或电话号码已被使用。",
         "account_clash": "你的新账户（%(newAccountId)s）已注册，但你已经登录了一个不同的账户（%(loggedInUserId)s）。",
         "account_clash_previous_account": "用之前的账户继续",
@@ -286,6 +312,7 @@
         "soft_logout_intro_unsupported_auth": "你不能登录到你的账户。请联系你的家服务器管理员以获取更多信息。",
         "soft_logout_subheading": "清除个人数据",
         "sso": "单点登录",
+        "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录",
         "sso_failed_missing_storage": "我们已请求浏览器记住你使用的服务器，但是你的浏览器貌似已经忘记了。请前往登录页面重试。",
         "sso_or_username_password": "%(ssoButtons)s 或 %(usernamePassword)s",
         "sync_footer_subtitle": "如果你加入了很多房间，可能会消耗一些时间",
@@ -316,81 +343,6 @@
         "unsupported_auth_msisdn": "此服务器不支持使用电话号码认证。",
         "username_field_required_invalid": "输入用户名",
         "username_in_use": "用户名已被占用，请尝试使用其他用户名。"
-    },
-    "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
-    "download_completed": "下载完成",
-    "error": {
-        "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
-        "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
-        "invalid_configuration_mixed_server": "配置无效：无法与 default_server_name 或 default_server_config 一起指定 default_hs_url",
-        "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
-        "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
-        "invalid_json_detail": "来自解析器的消息：%(message)s",
-        "invalid_json_generic": "无效的 JSON",
-        "misconfigured": "Element 配置错误",
-        "admin_contact": "请 <a>联系你的服务管理员</a> 以继续使用本服务。",
-        "admin_contact_short": "请联系你的<a>服务器管理员</a>。",
-        "connection": "与家服务器通讯时出现问题，请稍后再试。",
-        "dialog_description_default": "发生了一个错误。",
-        "edit_history_unsupported": "你的家服务器似乎不支持此功能。",
-        "failed_copy": "复制失败",
-        "hs_blocked": "此 homeserver 已被其管理员屏蔽。",
-        "mau": "此家服务器已达到其每月活跃用户限制。",
-        "mixed_content": "当浏览器地址栏里有 HTTPS 的 URL 时，不能使用 HTTP 连接家服务器。请使用 HTTPS 或者<a>允许不安全的脚本</a>。",
-        "non_urgent_echo_failure_toast": "你的服务器没有响应一些<a>请求</a>。",
-        "resource_limits": "本服务器已达到其使用量限制之一。",
-        "session_restore": {
-            "clear_storage_button": "清除存储并登出",
-            "clear_storage_description": "登出并删除加密密钥？",
-            "description_1": "我们在尝试恢复你先前的会话时遇到了错误。",
-            "description_2": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
-            "description_3": "清除本页储存在你浏览器上的数据或许能修复此问题，但也会导致你退出登录并无法读取任何已加密的聊天记录。",
-            "title": "无法恢复会话"
-        },
-        "something_went_wrong": "出了点问题！",
-        "storage_evicted_description_1": "一些会话数据，包括加密消息密钥，已缺失。要修复此问题，登出并重新登录，然后从备份恢复密钥。",
-        "storage_evicted_description_2": "你的浏览器可能在磁盘空间不足时删除了此数据。",
-        "storage_evicted_title": "缺失会话数据",
-        "sync": "服务器连接失败，正在重试……",
-        "tls": "无法连接家服务器 - 请检查网络连接，确保你的<a>家服务器 SSL 证书</a>被信任，且没有浏览器插件拦截请求。",
-        "unknown": "未知错误",
-        "unknown_error_code": "未知错误代码",
-        "update_power_level": "权力级别修改失败"
-    },
-    "incompatible_browser": {
-        "title": "不支持的浏览器"
-    },
-    "powered_by_matrix": "由 Matrix 驱动",
-    "powered_by_matrix_with_logo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
-    "unknown_device": "未知设备",
-    "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
-    "welcome_to_element": "欢迎来到 Element",
-    "a11y": {
-        "jump_first_invite": "跳转至第一个邀请。",
-        "n_unread_messages": {
-            "other": "%(count)s 个未读消息。",
-            "one": "1 个未读消息。"
-        },
-        "n_unread_messages_mentions": {
-            "other": "包括提及在内有 %(count)s 个未读消息。",
-            "one": "1 个未读提及。"
-        },
-        "room_name": "房间 %(name)s",
-        "unread_messages": "未读消息。",
-        "user_menu": "用户菜单"
-    },
-    "a11y_jump_first_unread_room": "跳转至第一个未读房间。",
-    "analytics": {
-        "accept_button": "没问题",
-        "bullet_1": "我们<Bold>不会</Bold>记录或配置任何账户数据",
-        "bullet_2": "我们<Bold>不会</Bold>与第三方共享信息",
-        "consent_migration": "你之前同意与我们分享匿名使用数据。我们正在更新其工作方式。",
-        "disable_prompt": "您可以随时在设置中关闭此功能",
-        "enable_prompt": "帮助改进 %(analyticsOwner)s",
-        "learn_more": "共享匿名数据帮助我们发现问题。无个人数据。 没有第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
-        "privacy_policy": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们所有的条款",
-        "pseudonymous_usage_data": "通过共享匿名使用数据，帮助我们发现问题并改进%(analyticsOwner)s。为了了解人们如何使用多台设备，我们将生成一个由您的设备共享的随机标识符。",
-        "shared_data_heading": "以下数据之一可能被分享："
     },
     "bug_reporting": {
         "additional_context": "如果有额外的上下文可以帮助我们分析问题，比如你当时在做什么、房间 ID、用户 ID 等等，请将其列于此处。",
@@ -706,6 +658,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emoji art ©<author>Twitter, Inc 和其他贡献者</author> 根据<terms>CC-BY 4.0</terms> 条款使用。",
         "twemoji_colr": "<colr>twemoji-colr</colr> 字体 ©<author>Mozilla Foundation</author> 根据<terms>Apache 2.0</terms> 条款使用。"
     },
+    "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
     "devtools": {
         "active_widgets": "已启用的挂件",
         "category_other": "其他",
@@ -776,6 +729,7 @@
         "widget_screenshots": "对支持的挂件启用挂件截图"
     },
     "dialog_close_label": "关闭对话框",
+    "download_completed": "下载完成",
     "emoji": {
         "categories": "类别",
         "category_activities": "活动",
@@ -970,6 +924,44 @@
         "verify_toast_description": "其他用户可能不信任它",
         "verify_toast_title": "验证此会话"
     },
+    "error": {
+        "admin_contact": "请 <a>联系你的服务管理员</a> 以继续使用本服务。",
+        "admin_contact_short": "请联系你的<a>服务器管理员</a>。",
+        "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
+        "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
+        "connection": "与家服务器通讯时出现问题，请稍后再试。",
+        "dialog_description_default": "发生了一个错误。",
+        "edit_history_unsupported": "你的家服务器似乎不支持此功能。",
+        "failed_copy": "复制失败",
+        "hs_blocked": "此 homeserver 已被其管理员屏蔽。",
+        "invalid_configuration_mixed_server": "配置无效：无法与 default_server_name 或 default_server_config 一起指定 default_hs_url",
+        "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
+        "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
+        "invalid_json_detail": "来自解析器的消息：%(message)s",
+        "invalid_json_generic": "无效的 JSON",
+        "mau": "此家服务器已达到其每月活跃用户限制。",
+        "misconfigured": "Element 配置错误",
+        "mixed_content": "当浏览器地址栏里有 HTTPS 的 URL 时，不能使用 HTTP 连接家服务器。请使用 HTTPS 或者<a>允许不安全的脚本</a>。",
+        "non_urgent_echo_failure_toast": "你的服务器没有响应一些<a>请求</a>。",
+        "resource_limits": "本服务器已达到其使用量限制之一。",
+        "session_restore": {
+            "clear_storage_button": "清除存储并登出",
+            "clear_storage_description": "登出并删除加密密钥？",
+            "description_1": "我们在尝试恢复你先前的会话时遇到了错误。",
+            "description_2": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
+            "description_3": "清除本页储存在你浏览器上的数据或许能修复此问题，但也会导致你退出登录并无法读取任何已加密的聊天记录。",
+            "title": "无法恢复会话"
+        },
+        "something_went_wrong": "出了点问题！",
+        "storage_evicted_description_1": "一些会话数据，包括加密消息密钥，已缺失。要修复此问题，登出并重新登录，然后从备份恢复密钥。",
+        "storage_evicted_description_2": "你的浏览器可能在磁盘空间不足时删除了此数据。",
+        "storage_evicted_title": "缺失会话数据",
+        "sync": "服务器连接失败，正在重试……",
+        "tls": "无法连接家服务器 - 请检查网络连接，确保你的<a>家服务器 SSL 证书</a>被信任，且没有浏览器插件拦截请求。",
+        "unknown": "未知错误",
+        "unknown_error_code": "未知错误代码",
+        "update_power_level": "权力级别修改失败"
+    },
     "error_app_opened_in_another_window": "%(brand)s已在另一个窗口中打开。单击“%(label)s”以在此处使用%(brand)s并断开其他窗口的连接。",
     "error_database_closed_title": "数据库意外关闭",
     "error_dialog": {
@@ -1119,6 +1111,9 @@
     "in_space_and_n_other_spaces": {
         "one": "在 %(spaceName)s 和其他 %(count)s 个空间。",
         "other": "在 %(spaceName)s 和其他 %(count)s 个空间。"
+    },
+    "incompatible_browser": {
+        "title": "不支持的浏览器"
     },
     "info_tooltip_title": "信息",
     "integration_manager": {
@@ -1554,6 +1549,8 @@
         "moderator": "协管员",
         "restricted": "受限"
     },
+    "powered_by_matrix": "由 Matrix 驱动",
+    "powered_by_matrix_with_logo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
     "presence": {
         "away": "离开",
         "busy": "忙",
@@ -3181,6 +3178,7 @@
     "truncated_list_n_more": {
         "other": "和 %(count)s 个其他…"
     },
+    "unknown_device": "未知设备",
     "update": {
         "changelog": "更改日志",
         "check_action": "检查更新",
@@ -3397,6 +3395,8 @@
         "voice_call": "语音通话",
         "you_are_presenting": "你正在展示"
     },
+    "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
+    "welcome_to_element": "欢迎来到 Element",
     "widget": {
         "added_by": "挂件添加者",
         "capabilities_dialog": {

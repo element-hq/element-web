@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Fara í fyrsta boð.",
+        "n_unread_messages": {
+            "one": "1 ólesin skilaboð.",
+            "other": "%(count)s ólesin skilaboð."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 ólesin tilvísun í þig.",
+            "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
+        },
+        "room_name": "Spjallrás %(name)s",
+        "unread_messages": "Ólesin skilaboð.",
+        "user_menu": "Valmynd notandans"
+    },
+    "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
     "action": {
-        "create_account": "Búa til notandaaðgang",
-        "dismiss": "Hunsa",
-        "explore_rooms": "Kanna spjallrásir",
-        "open": "Opna",
-        "sign_in": "Skrá inn",
         "accept": "Samþykkja",
         "add": "Bæta við",
         "add_existing_room": "Bæta við fyrirliggjandi spjallrás",
@@ -27,10 +37,12 @@
         "copy_link": "Afrita tengil",
         "create": "Búa til",
         "create_a_room": "Búa til spjallrás",
+        "create_account": "Búa til notandaaðgang",
         "decline": "Hafna",
         "delete": "Eyða",
         "disable": "Gera óvirkt",
         "disconnect": "Aftengjast",
+        "dismiss": "Hunsa",
         "done": "Lokið",
         "download": "Niðurhal",
         "edit": "Breyta",
@@ -39,6 +51,7 @@
         "exit_fullscreeen": "Fara úr fullskjásstillingu",
         "expand": "Fletta út",
         "explore_public_rooms": "Kanna almenningsspjallrásir",
+        "explore_rooms": "Kanna spjallrásir",
         "export": "Flytja út",
         "forward": "Áfram",
         "go": "Fara",
@@ -65,6 +78,7 @@
         "next": "Næsta",
         "no": "Nei",
         "ok": "Í lagi",
+        "open": "Opna",
         "pause": "Bið",
         "pin": "Pinni",
         "play": "Spila",
@@ -92,6 +106,7 @@
         "show": "Sýna",
         "show_advanced": "Birta ítarlegt",
         "show_all": "Sýna allt",
+        "sign_in": "Skrá inn",
         "sign_out": "Skrá út",
         "skip": "Sleppa",
         "start": "Byrja",
@@ -120,8 +135,19 @@
         "zoom_in": "Renna að",
         "zoom_out": "Renna frá"
     },
+    "analytics": {
+        "accept_button": "Það er í góðu",
+        "bullet_1": "Við skráum <Bold>ekki</Bold> eða búum til snið með gögnum notendaaðganga",
+        "bullet_2": "Við deilum <Bold>ekki</Bold> upplýsingum með utanaðkomandi aðilum",
+        "consent_migration": "Þú hefur áður samþykkt að deila nafnlausum upplýsingum um notkun forritsins með okkur. Við erum að uppfæra hvernig það virkar.",
+        "disable_prompt": "Þú getur slökkt á þessu hvenær sem er í stillingunum",
+        "enable_prompt": "Hjálpaðu okkur að bæta %(analyticsOwner)s",
+        "learn_more": "Deildu nafnlausum gögnum til að hjálpa okkur við að greina vandamál. Ekkert persónulegt. Engir utanaðkomandi. <LearnMoreLink>Kanna nánar</LearnMoreLink>",
+        "privacy_policy": "Þú getur lesið skilmálana okkar <PrivacyPolicyUrl>hér</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Hjálpaðu okkur við að greina vandamál og bæta %(analyticsOwner)s með því að deila nafnlausum gögnum varðandi notkun. Til að skilja hvernig fólk notar saman mörg tæki, munum við útbúa tilviljanakennt auðkenni, sem tækin þín deila.",
+        "shared_data_heading": "Eftirfarandi gögnum gæti verið deilt:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu",
         "account_clash": "Nýi aðgangurinn þinn (%(newAccountId)s) er skráður, eð þú ert þegar skráð/ur inn á öðrum notandaaðgangi (%(loggedInUserId)s).",
         "account_clash_previous_account": "Halda áfram með fyrri aðgangi",
         "account_deactivated": "Þessi notandaaðgangur hefur verið gerður óvirkur.",
@@ -257,6 +283,7 @@
         "soft_logout_intro_unsupported_auth": "Þú getur ekki skráð þig inn á notandaaðganginn þinn. Hafðu samband við stjórnanda heimaþjónsins þíns til að fá frekari upplýsingar.",
         "soft_logout_subheading": "Hreinsa persónuleg gögn",
         "sso": "Einföld innskráning (single-sign-on)",
+        "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu",
         "sso_failed_missing_storage": "Við báðum vafrann þinn að muna hvaða heimaþjón þú notar til að skrá þig inn, en því miður virðist það hafa gleymst. Farðu á innskráningarsíðuna og reyndu aftur.",
         "sso_or_username_password": "%(ssoButtons)s eða %(usernamePassword)s",
         "sync_footer_subtitle": "Þetta getur tekið dálítinn tíma ef þú tekur þátt í mörgum spjallrásum",
@@ -285,74 +312,6 @@
         "username_field_required_invalid": "Settu inn notandanafn",
         "username_in_use": "Einhver annar er að nota þetta notandanafn, prófaðu eitthvað annað.",
         "verify_email_heading": "Skoðaðu tölvupóstinn þinn til að halda áfram"
-    },
-    "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
-    "download_completed": "Niðurhali lokið",
-    "error": {
-        "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
-        "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
-        "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
-        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
-        "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
-        "invalid_json_generic": "Ógilt JSON",
-        "misconfigured": "Element-tilvikið þitt er rangt stillt",
-        "admin_contact": "<a>Hafðu samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þessa þjónustu.",
-        "admin_contact_short": "Hafðu samband við <a>kerfisstjórann þinn</a>.",
-        "connection": "Vandamál kom upp í samskiptunum við heimaþjóninn, reyndu aftur síðar.",
-        "dialog_description_default": "Villa kom upp.",
-        "edit_history_unsupported": "Heimaþjóninn þinn virðist ekki styðja þennan eiginleika.",
-        "failed_copy": "Mistókst að afrita",
-        "hs_blocked": "Þessi heimaþjónn hefur verið útilokaður af kerfisstjóra hans.",
-        "mau": "Þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum.",
-        "non_urgent_echo_failure_toast": "Netþjónninn þinn er ekki að svara sumum <a>beiðnum</a>.",
-        "resource_limits": "Þessi heimaþjónn er kominn fram yfir takmörk á tilföngum sínum.",
-        "session_restore": {
-            "clear_storage_button": "Hreinsa gagnageymslu og skrá út",
-            "clear_storage_description": "Skrá út og fjarlægja dulritunarlykla?",
-            "description_1": "Villa kom upp þegar reynt var að endurheimta fyrri setuna þína.",
-            "description_3": "Hreinsun geymslu vafrans gæti lagað vandamálið en mun skrá þig út og valda því að dulritaður spjallferil verði ólæsilegur.",
-            "title": "Tókst ekki að endurheimta setu"
-        },
-        "something_went_wrong": "Eitthvað fór úrskeiðis!",
-        "storage_evicted_title": "Vantar setugögn",
-        "unknown": "Óþekkt villa",
-        "unknown_error_code": "óþekktur villukóði",
-        "update_power_level": "Mistókst að breyta valdastigi"
-    },
-    "incompatible_browser": {
-        "title": "Óstuddur vafri"
-    },
-    "powered_by_matrix": "Keyrt með Matrix",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
-    "unknown_device": "Óþekkt tæki",
-    "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
-    "a11y": {
-        "jump_first_invite": "Fara í fyrsta boð.",
-        "n_unread_messages": {
-            "one": "1 ólesin skilaboð.",
-            "other": "%(count)s ólesin skilaboð."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 ólesin tilvísun í þig.",
-            "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
-        },
-        "room_name": "Spjallrás %(name)s",
-        "unread_messages": "Ólesin skilaboð.",
-        "user_menu": "Valmynd notandans"
-    },
-    "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
-    "analytics": {
-        "accept_button": "Það er í góðu",
-        "bullet_1": "Við skráum <Bold>ekki</Bold> eða búum til snið með gögnum notendaaðganga",
-        "bullet_2": "Við deilum <Bold>ekki</Bold> upplýsingum með utanaðkomandi aðilum",
-        "consent_migration": "Þú hefur áður samþykkt að deila nafnlausum upplýsingum um notkun forritsins með okkur. Við erum að uppfæra hvernig það virkar.",
-        "disable_prompt": "Þú getur slökkt á þessu hvenær sem er í stillingunum",
-        "enable_prompt": "Hjálpaðu okkur að bæta %(analyticsOwner)s",
-        "learn_more": "Deildu nafnlausum gögnum til að hjálpa okkur við að greina vandamál. Ekkert persónulegt. Engir utanaðkomandi. <LearnMoreLink>Kanna nánar</LearnMoreLink>",
-        "privacy_policy": "Þú getur lesið skilmálana okkar <PrivacyPolicyUrl>hér</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Hjálpaðu okkur við að greina vandamál og bæta %(analyticsOwner)s með því að deila nafnlausum gögnum varðandi notkun. Til að skilja hvernig fólk notar saman mörg tæki, munum við útbúa tilviljanakennt auðkenni, sem tækin þín deila.",
-        "shared_data_heading": "Eftirfarandi gögnum gæti verið deilt:"
     },
     "bug_reporting": {
         "collecting_information": "Safna upplýsingum um útgáfu smáforrits",
@@ -642,6 +601,7 @@
         "subspace_join_rule_public_description": "Hver sem er getur fundið og tekið þátt í þessu svæði, ekki bara meðlimir í <SpaceName/>.",
         "subspace_join_rule_restricted_description": "Hver sem er í <SpaceName/> getur fundið og tekið þátt."
     },
+    "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
     "devtools": {
         "active_widgets": "Virkir viðmótshlutar",
         "category_other": "Annað",
@@ -711,6 +671,7 @@
         "widget_screenshots": "Virkja skjámyndir viðmótshluta í studdum viðmótshlutum"
     },
     "dialog_close_label": "Loka glugga",
+    "download_completed": "Niðurhali lokið",
     "emoji": {
         "categories": "Flokkar",
         "category_activities": "Afþreying",
@@ -874,6 +835,37 @@
         "verify_toast_description": "Aðrir notendur gætu ekki treyst því",
         "verify_toast_title": "Sannprófa þessa setu"
     },
+    "error": {
+        "admin_contact": "<a>Hafðu samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þessa þjónustu.",
+        "admin_contact_short": "Hafðu samband við <a>kerfisstjórann þinn</a>.",
+        "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
+        "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
+        "connection": "Vandamál kom upp í samskiptunum við heimaþjóninn, reyndu aftur síðar.",
+        "dialog_description_default": "Villa kom upp.",
+        "edit_history_unsupported": "Heimaþjóninn þinn virðist ekki styðja þennan eiginleika.",
+        "failed_copy": "Mistókst að afrita",
+        "hs_blocked": "Þessi heimaþjónn hefur verið útilokaður af kerfisstjóra hans.",
+        "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
+        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
+        "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
+        "invalid_json_generic": "Ógilt JSON",
+        "mau": "Þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum.",
+        "misconfigured": "Element-tilvikið þitt er rangt stillt",
+        "non_urgent_echo_failure_toast": "Netþjónninn þinn er ekki að svara sumum <a>beiðnum</a>.",
+        "resource_limits": "Þessi heimaþjónn er kominn fram yfir takmörk á tilföngum sínum.",
+        "session_restore": {
+            "clear_storage_button": "Hreinsa gagnageymslu og skrá út",
+            "clear_storage_description": "Skrá út og fjarlægja dulritunarlykla?",
+            "description_1": "Villa kom upp þegar reynt var að endurheimta fyrri setuna þína.",
+            "description_3": "Hreinsun geymslu vafrans gæti lagað vandamálið en mun skrá þig út og valda því að dulritaður spjallferil verði ólæsilegur.",
+            "title": "Tókst ekki að endurheimta setu"
+        },
+        "something_went_wrong": "Eitthvað fór úrskeiðis!",
+        "storage_evicted_title": "Vantar setugögn",
+        "unknown": "Óþekkt villa",
+        "unknown_error_code": "óþekktur villukóði",
+        "update_power_level": "Mistókst að breyta valdastigi"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Tókst ekki að afrita tengil á spjallrás á klippispjaldið.",
@@ -1004,6 +996,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Á %(spaceName)s og %(count)s svæði til viðbótar.",
         "other": "Á %(spaceName)s og %(count)s svæðum til viðbótar."
+    },
+    "incompatible_browser": {
+        "title": "Óstuddur vafri"
     },
     "info_tooltip_title": "Upplýsingar",
     "integration_manager": {
@@ -1412,6 +1407,8 @@
         "moderator": "Umsjónarmaður",
         "restricted": "Takmarkað"
     },
+    "powered_by_matrix": "Keyrt með Matrix",
+    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -2923,6 +2920,7 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
     },
+    "unknown_device": "Óþekkt tæki",
     "update": {
         "changelog": "Breytingaskrá",
         "check_action": "Athuga með uppfærslu",
@@ -3131,6 +3129,8 @@
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
+    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

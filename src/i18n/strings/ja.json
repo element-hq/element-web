@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "最初の招待に移動。",
+        "n_unread_messages": {
+            "one": "未読メッセージ1件。",
+            "other": "未読メッセージ%(count)s件。"
+        },
+        "n_unread_messages_mentions": {
+            "one": "未読のメンション1件。",
+            "other": "メンションを含む未読メッセージ%(count)s件。"
+        },
+        "room_name": "ルーム %(name)s",
+        "unread_messages": "未読メッセージ。",
+        "user_menu": "ユーザーメニュー"
+    },
+    "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
-        "create_account": "アカウントを作成",
-        "dismiss": "閉じる",
-        "explore_rooms": "ルームを探す",
-        "open": "開く",
-        "sign_in": "サインイン",
         "accept": "同意",
         "add": "追加",
         "add_existing_room": "既存のルームを追加",
@@ -27,10 +37,12 @@
         "copy_link": "リンクをコピー",
         "create": "作成",
         "create_a_room": "ルームを作成",
+        "create_account": "アカウントを作成",
         "decline": "拒否",
         "delete": "削除",
         "disable": "無効にする",
         "disconnect": "切断",
+        "dismiss": "閉じる",
         "done": "完了",
         "download": "ダウンロード",
         "edit": "編集",
@@ -39,6 +51,7 @@
         "exit_fullscreeen": "フルスクリーンを解除",
         "expand": "展開",
         "explore_public_rooms": "公開ルームを探す",
+        "explore_rooms": "ルームを探す",
         "export": "エクスポート",
         "forward": "転送",
         "go": "続行",
@@ -64,6 +77,7 @@
         "new_video_room": "新しいビデオ通話ルーム",
         "next": "次へ",
         "no": "いいえ",
+        "open": "開く",
         "pause": "一時停止",
         "pin": "ピン",
         "play": "再生",
@@ -91,6 +105,7 @@
         "show": "表示",
         "show_advanced": "高度な設定を表示",
         "show_all": "全て表示",
+        "sign_in": "サインイン",
         "sign_out": "サインアウト",
         "skip": "スキップ",
         "start": "開始",
@@ -119,8 +134,19 @@
         "zoom_in": "拡大",
         "zoom_out": "縮小"
     },
+    "analytics": {
+        "accept_button": "問題ありません",
+        "bullet_1": "私たちは、アカウントのいかなるデータも記録したり分析したりすることは<Bold>ありません</Bold>",
+        "bullet_2": "私たちは、情報を第三者と共有することは<Bold>ありません</Bold>",
+        "consent_migration": "以前あなたは利用状況に関する匿名データの共有に同意しました。私たちはそれが機能する仕方を更新しています。",
+        "disable_prompt": "これはいつでも設定から無効にできます",
+        "enable_prompt": "%(analyticsOwner)sの改善を手伝う",
+        "learn_more": "匿名のデータを共有すると、問題の特定に役立ちます。個人情報の収集や、第三者とのデータ共有はありません。<LearnMoreLink>詳細を確認</LearnMoreLink>",
+        "privacy_policy": "規約は<PrivacyPolicyUrl>ここ</PrivacyPolicyUrl>で確認できます",
+        "pseudonymous_usage_data": "%(analyticsOwner)sの改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。",
+        "shared_data_heading": "以下のデータが共有される可能性があります："
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "ブラウザーに移動してサインインを完了してください",
         "3pid_in_use": "そのメールアドレスまたは電話番号は既に使われています。",
         "account_clash": "新しいアカウント（%(newAccountId)s）が登録されましたが、あなたは別のアカウント（%(loggedInUserId)s）でログインしています。",
         "account_clash_previous_account": "以前のアカウントで続行",
@@ -288,6 +314,7 @@
         "soft_logout_subheading": "個人データを消去",
         "soft_logout_warning": "警告：あなたの個人データ（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
         "sso": "シングルサインオン",
+        "sso_complete_in_browser_dialog_title": "ブラウザーに移動してサインインを完了してください",
         "sso_failed_missing_storage": "残念ながら、ブラウザーはサインインするホームサーバーを忘れてしまいました。サインインページに移動して再試行してください。",
         "sso_or_username_password": "%(ssoButtons)sあるいは、以下に入力して登録%(usernamePassword)s",
         "sync_footer_subtitle": "多くのルームに参加している場合は、時間がかかる可能性があります",
@@ -321,79 +348,6 @@
         "username_in_use": "そのユーザー名は既に使用されています。他のユーザー名を試してください。",
         "verify_email_explainer": "パスワードを再設定する前に本人確認を行います。<b>%(email)s</b>に送信した電子メールにあるリンクをクリックしてください。",
         "verify_email_heading": "続行するには電子メールを認証してください"
-    },
-    "desktop_default_device_name": "%(brand)sデスクトップ：%(platformName)s",
-    "download_completed": "ダウンロードが完了しました",
-    "error": {
-        "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
-        "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
-        "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
-        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
-        "invalid_json_detail": "パーサーのメッセージ：%(message)s",
-        "invalid_json_generic": "不正なJSON",
-        "misconfigured": "Elementの設定が誤っています",
-        "admin_contact": "このサービスを引き続き使用するには、<a>サービス管理者にお問い合わせ</a>ください。",
-        "admin_contact_short": "<a>サーバー管理者</a>に問い合わせてください。",
-        "connection": "ホームサーバーとの通信時に問題が発生しました。後でもう一度やり直してください。",
-        "dialog_description_default": "エラーが発生しました。",
-        "edit_history_unsupported": "ホームサーバーはこの機能をサポートしていません。",
-        "failed_copy": "コピーに失敗しました",
-        "hs_blocked": "このホームサーバーは管理者によりブロックされています。",
-        "mau": "このホームサーバーは月間アクティブユーザー数の上限に達しました 。",
-        "mixed_content": "HTTPSのURLがブラウザーのバーにある場合、HTTP経由でホームサーバーに接続することはできません。HTTPSを使用するか<a>安全でないスクリプトを有効にしてください</a>。",
-        "non_urgent_echo_failure_toast": "あなたのサーバーはいくつかの<a>リクエスト</a>に応答しません。",
-        "resource_limits": "このホームサーバーはリソースの上限に達しました。",
-        "session_restore": {
-            "clear_storage_button": "ストレージをクリアし、サインアウト",
-            "clear_storage_description": "サインアウトして、暗号鍵を削除しますか？",
-            "description_1": "以前のセッションを復元する際にエラーが発生しました。",
-            "description_2": "以前に%(brand)sの最新バージョンを使用していた場合、セッションはこのバージョンと互換性がない可能性があります。このウィンドウを閉じて、最新のバージョンに戻ってください。",
-            "description_3": "ブラウザーのストレージを消去すると問題は解決するかもしれません。ただし、サインアウトを行うため、暗号化されたチャットの履歴を読むことができなくなります。",
-            "title": "セッションを復元できません"
-        },
-        "something_went_wrong": "問題が発生しました！",
-        "storage_evicted_description_1": "暗号化されたメッセージの鍵を含むセッションのデータが見つかりません。サインアウトして改めてサインインすると、バックアップから鍵を回復します。",
-        "storage_evicted_description_2": "ディスクの空き容量が少なかったため、ブラウザーはこのデータを削除しました。",
-        "storage_evicted_title": "セッションのデータがありません",
-        "sync": "ホームサーバーに接続できません。 再試行しています…",
-        "tls": "ホームサーバーに接続できません。接続を確認し、<a>ホームサーバーのSSL証明書</a>が信頼できるものであり、ブラウザーの拡張機能が要求をブロックしていないことを確認してください。",
-        "unknown": "不明なエラー",
-        "unknown_error_code": "不明なエラーコード",
-        "update_power_level": "権限レベルの変更に失敗しました"
-    },
-    "incompatible_browser": {
-        "title": "サポートされていないブラウザー"
-    },
-    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
-    "unknown_device": "不明な端末",
-    "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "welcome_to_element": "Elementにようこそ",
-    "a11y": {
-        "jump_first_invite": "最初の招待に移動。",
-        "n_unread_messages": {
-            "one": "未読メッセージ1件。",
-            "other": "未読メッセージ%(count)s件。"
-        },
-        "n_unread_messages_mentions": {
-            "one": "未読のメンション1件。",
-            "other": "メンションを含む未読メッセージ%(count)s件。"
-        },
-        "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
-    },
-    "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
-    "analytics": {
-        "accept_button": "問題ありません",
-        "bullet_1": "私たちは、アカウントのいかなるデータも記録したり分析したりすることは<Bold>ありません</Bold>",
-        "bullet_2": "私たちは、情報を第三者と共有することは<Bold>ありません</Bold>",
-        "consent_migration": "以前あなたは利用状況に関する匿名データの共有に同意しました。私たちはそれが機能する仕方を更新しています。",
-        "disable_prompt": "これはいつでも設定から無効にできます",
-        "enable_prompt": "%(analyticsOwner)sの改善を手伝う",
-        "learn_more": "匿名のデータを共有すると、問題の特定に役立ちます。個人情報の収集や、第三者とのデータ共有はありません。<LearnMoreLink>詳細を確認</LearnMoreLink>",
-        "privacy_policy": "規約は<PrivacyPolicyUrl>ここ</PrivacyPolicyUrl>で確認できます",
-        "pseudonymous_usage_data": "%(analyticsOwner)sの改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。",
-        "shared_data_heading": "以下のデータが共有される可能性があります："
     },
     "bug_reporting": {
         "additional_context": "実行していたこと、ルームID、ユーザーIDなど、問題を分析するのに役立つ追加情報があれば、それをここに含めてください。",
@@ -709,6 +663,7 @@
         "subspace_join_rule_public_description": "<SpaceName/>のメンバーだけでなく、誰でもこのスペースを検索し、参加できます。",
         "subspace_join_rule_restricted_description": "<SpaceName/>の誰でも検索し、参加できます。"
     },
+    "desktop_default_device_name": "%(brand)sデスクトップ：%(platformName)s",
     "devtools": {
         "active_widgets": "使用中のウィジェット",
         "category_other": "その他",
@@ -799,6 +754,7 @@
         "widget_screenshots": "サポートされているウィジェットで、ウィジェットのスクリーンショットを有効にする"
     },
     "dialog_close_label": "ダイアログを閉じる",
+    "download_completed": "ダウンロードが完了しました",
     "emoji": {
         "categories": "カテゴリー",
         "category_activities": "アクティビティー",
@@ -997,6 +953,43 @@
         "verify_toast_description": "他のユーザーはこのセッションを信頼しない可能性があります",
         "verify_toast_title": "このセッションを認証"
     },
+    "error": {
+        "admin_contact": "このサービスを引き続き使用するには、<a>サービス管理者にお問い合わせ</a>ください。",
+        "admin_contact_short": "<a>サーバー管理者</a>に問い合わせてください。",
+        "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
+        "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
+        "connection": "ホームサーバーとの通信時に問題が発生しました。後でもう一度やり直してください。",
+        "dialog_description_default": "エラーが発生しました。",
+        "edit_history_unsupported": "ホームサーバーはこの機能をサポートしていません。",
+        "failed_copy": "コピーに失敗しました",
+        "hs_blocked": "このホームサーバーは管理者によりブロックされています。",
+        "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
+        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
+        "invalid_json_detail": "パーサーのメッセージ：%(message)s",
+        "invalid_json_generic": "不正なJSON",
+        "mau": "このホームサーバーは月間アクティブユーザー数の上限に達しました 。",
+        "misconfigured": "Elementの設定が誤っています",
+        "mixed_content": "HTTPSのURLがブラウザーのバーにある場合、HTTP経由でホームサーバーに接続することはできません。HTTPSを使用するか<a>安全でないスクリプトを有効にしてください</a>。",
+        "non_urgent_echo_failure_toast": "あなたのサーバーはいくつかの<a>リクエスト</a>に応答しません。",
+        "resource_limits": "このホームサーバーはリソースの上限に達しました。",
+        "session_restore": {
+            "clear_storage_button": "ストレージをクリアし、サインアウト",
+            "clear_storage_description": "サインアウトして、暗号鍵を削除しますか？",
+            "description_1": "以前のセッションを復元する際にエラーが発生しました。",
+            "description_2": "以前に%(brand)sの最新バージョンを使用していた場合、セッションはこのバージョンと互換性がない可能性があります。このウィンドウを閉じて、最新のバージョンに戻ってください。",
+            "description_3": "ブラウザーのストレージを消去すると問題は解決するかもしれません。ただし、サインアウトを行うため、暗号化されたチャットの履歴を読むことができなくなります。",
+            "title": "セッションを復元できません"
+        },
+        "something_went_wrong": "問題が発生しました！",
+        "storage_evicted_description_1": "暗号化されたメッセージの鍵を含むセッションのデータが見つかりません。サインアウトして改めてサインインすると、バックアップから鍵を回復します。",
+        "storage_evicted_description_2": "ディスクの空き容量が少なかったため、ブラウザーはこのデータを削除しました。",
+        "storage_evicted_title": "セッションのデータがありません",
+        "sync": "ホームサーバーに接続できません。 再試行しています…",
+        "tls": "ホームサーバーに接続できません。接続を確認し、<a>ホームサーバーのSSL証明書</a>が信頼できるものであり、ブラウザーの拡張機能が要求をブロックしていないことを確認してください。",
+        "unknown": "不明なエラー",
+        "unknown_error_code": "不明なエラーコード",
+        "update_power_level": "権限レベルの変更に失敗しました"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "ルームのリンクをクリップボードにコピーできませんでした。",
@@ -1145,6 +1138,9 @@
     "in_space_and_n_other_spaces": {
         "one": "%(spaceName)sと他%(count)s個のスペース。",
         "other": "スペース %(spaceName)s と他%(count)s個のスペース内。"
+    },
+    "incompatible_browser": {
+        "title": "サポートされていないブラウザー"
     },
     "info_tooltip_title": "情報",
     "integration_manager": {
@@ -1588,6 +1584,7 @@
         "moderator": "モデレーター",
         "restricted": "制限"
     },
+    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "presence": {
         "away": "離席中",
         "busy": "取り込み中",
@@ -3261,6 +3258,7 @@
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"
     },
+    "unknown_device": "不明な端末",
     "update": {
         "changelog": "更新履歴",
         "check_action": "更新を確認",
@@ -3499,6 +3497,8 @@
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },
+    "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
+    "welcome_to_element": "Elementにようこそ",
     "widget": {
         "added_by": "ウィジェットの追加者",
         "capabilities_dialog": {

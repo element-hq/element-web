@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Siirry ensimmäiseen kutsuun.",
+        "n_unread_messages": {
+            "other": "%(count)s lukematonta viestiä.",
+            "one": "Yksi lukematon viesti."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
+            "one": "Yksi lukematon maininta."
+        },
+        "room_name": "Huone %(name)s",
+        "unread_messages": "Lukemattomat viestit.",
+        "user_menu": "Käyttäjän valikko"
+    },
+    "a11y_jump_first_unread_room": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
     "action": {
-        "create_account": "Luo tili",
-        "dismiss": "Hylkää",
-        "explore_rooms": "Selaa huoneita",
-        "open": "Avaa",
-        "sign_in": "Kirjaudu sisään",
         "accept": "Hyväksy",
         "add": "Lisää",
         "add_existing_room": "Lisää olemassa oleva huone",
@@ -26,10 +36,12 @@
         "copy_link": "Kopioi linkki",
         "create": "Luo",
         "create_a_room": "Luo huone",
+        "create_account": "Luo tili",
         "decline": "Hylkää",
         "delete": "Poista",
         "disable": "Poista käytöstä",
         "disconnect": "Katkaise yhteys",
+        "dismiss": "Hylkää",
         "done": "Valmis",
         "download": "Lataa",
         "edit": "Muokkaa",
@@ -38,6 +50,7 @@
         "exit_fullscreeen": "Poistu koko näytön tilasta",
         "expand": "Laajenna",
         "explore_public_rooms": "Selaa julkisia huoneita",
+        "explore_rooms": "Selaa huoneita",
         "export": "Vie",
         "forward": "Välitä",
         "go": "Mene",
@@ -63,6 +76,7 @@
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
         "no": "Ei",
+        "open": "Avaa",
         "pause": "Keskeytä",
         "pin": "Nuppineula",
         "play": "Toista",
@@ -91,6 +105,7 @@
         "show": "Näytä",
         "show_advanced": "Näytä lisäasetukset",
         "show_all": "Näytä kaikki",
+        "sign_in": "Kirjaudu sisään",
         "sign_out": "Kirjaudu ulos",
         "skip": "Ohita",
         "start": "Aloita",
@@ -119,8 +134,18 @@
         "zoom_in": "Lähennä",
         "zoom_out": "Loitonna"
     },
+    "analytics": {
+        "accept_button": "Sopii",
+        "bullet_1": "<Bold>Emme</Bold> tallenna tai profiloi tilin tietoja",
+        "bullet_2": "<Bold>Emme</Bold> jaa tietoja kolmansille tahoille",
+        "consent_migration": "Olet aiemmin suostunut jakamaan anonyymiä käyttötietoa kanssamme. Päivitämme jakamisen toimintaperiaatteita.",
+        "disable_prompt": "Tämän voi poistaa käytöstä koska tahansa asetuksista",
+        "enable_prompt": "Auta parantamaan %(analyticsOwner)s",
+        "learn_more": "Jaa anonyymiä tietoa ongelmien tunnistamiseksi. Ei mitään henkilökohtaista. Ei kolmansia tahoja. <LearnMoreLink>Lue lisää</LearnMoreLink>",
+        "privacy_policy": "Voit lukea kaikki ehdot <PrivacyPolicyUrl>tästä</PrivacyPolicyUrl>",
+        "shared_data_heading": "Seuraavat tiedot saatetaan jakaa:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Tee kirjautuminen loppuun selaimessasi",
         "3pid_in_use": "Tämä sähköpostiosoite tai puhelinnumero on jo käytössä.",
         "account_clash": "Uusi tilisi (%(newAccountId)s) on rekisteröity, mutta olet jo kirjautuneena toisella tilillä (%(loggedInUserId)s).",
         "account_clash_previous_account": "Jatka aiemmalla tilillä",
@@ -278,6 +303,7 @@
         "soft_logout_intro_unsupported_auth": "Et voi kirjautua tilillesi. Ota yhteyttä kotipalvelimesi ylläpitäjään saadaksesi lisätietoja.",
         "soft_logout_subheading": "Poista henkilökohtaiset tiedot",
         "sso": "Kertakirjautuminen",
+        "sso_complete_in_browser_dialog_title": "Tee kirjautuminen loppuun selaimessasi",
         "sso_failed_missing_storage": "Pyysimme selainta muistamaan kirjautumista varten mitä kotipalvelinta käytät, mutta selain on unohtanut sen. Mene kirjautumissivulle ja yritä uudelleen.",
         "sso_or_username_password": "%(ssoButtons)s Tai %(usernamePassword)s",
         "sync_footer_subtitle": "Jos olet liittynyt moniin huoneisiin, tässä voi kestää hetken",
@@ -308,79 +334,6 @@
         "username_field_required_invalid": "Syötä käyttäjätunnus",
         "username_in_use": "Jollakin on jo kyseinen käyttäjätunnus. Valitse eri käyttäjätunnus.",
         "verify_email_heading": "Vahvista sähköpostiosoitteesi jatkaaksesi"
-    },
-    "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
-    "download_completed": "Lataus valmis",
-    "error": {
-        "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
-        "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
-        "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
-        "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
-        "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",
-        "invalid_json_generic": "Virheellinen JSON",
-        "misconfigured": "Elementisi asetukset ovat pielessä",
-        "admin_contact": "<a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttöä.",
-        "admin_contact_short": "Ota yhteyttä <a>palvelimesi ylläpitäjään</a>.",
-        "connection": "Yhteydessä kotipalvelimeen ilmeni ongelma, yritä myöhemmin uudelleen.",
-        "dialog_description_default": "Tapahtui virhe.",
-        "edit_history_unsupported": "Kotipalvelimesi ei näytä tukevan tätä ominaisuutta.",
-        "failed_copy": "Kopiointi epäonnistui",
-        "hs_blocked": "Tämä kotipalvelin on ylläpitäjänsä estämä.",
-        "mau": "Tämän kotipalvelimen kuukausittaisten aktiivisten käyttäjien raja on täynnä.",
-        "mixed_content": "Yhdistäminen kotipalvelimeen HTTP:n avulla ei ole mahdollista, kun selaimen osoitepalkissa on HTTPS-osoite. Käytä joko HTTPS:ää tai <a>salli turvattomat komentosarjat</a>.",
-        "non_urgent_echo_failure_toast": "Palvelimesi ei vastaa joihinkin <a>pyyntöihin</a>.",
-        "resource_limits": "Tämä kotipalvelin on ylittänyt yhden rajoistaan.",
-        "session_restore": {
-            "clear_storage_button": "Tyhjennä varasto ja kirjaudu ulos",
-            "clear_storage_description": "Kirjaudu ulos ja poista salausavaimet?",
-            "description_1": "Törmäsimme ongelmaan yrittäessämme palauttaa edellistä istuntoasi.",
-            "description_2": "Jos olet aikaisemmin käyttänyt uudempaa versiota %(brand)sista, istuntosi voi olla epäyhteensopiva tämän version kanssa. Sulje tämä ikkuna ja yritä uudemman version kanssa.",
-            "description_3": "Selaimen varaston tyhjentäminen saattaa korjata ongelman, mutta kirjaa sinut samalla ulos ja estää sinua lukemasta salattuja keskusteluita.",
-            "title": "Istunnon palautus epäonnistui"
-        },
-        "something_went_wrong": "Jokin meni vikaan!",
-        "storage_evicted_description_1": "Istunnon dataa, mukaan lukien salausavaimia, puuttuu. Kirjaudu ulos ja sisään, jolloin avaimet palautetaan varmuuskopiosta.",
-        "storage_evicted_description_2": "Selaimesi luultavasti poisti tämän datan, kun levytila oli vähissä.",
-        "storage_evicted_title": "Istunnon dataa puuttuu",
-        "sync": "Kotipalvelimeen yhdistäminen ei onnistunut. Yritetään uudelleen…",
-        "tls": "Kotipalvelimeen ei saada yhteyttä. Tarkista verkkoyhteytesi, varmista että <a>kotipalvelimesi SSL-sertifikaatti</a> on luotettu, ja että mikään selaimen lisäosa ei estä pyyntöjen lähettämistä.",
-        "unknown": "Tuntematon virhe",
-        "unknown_error_code": "tuntematon virhekoodi",
-        "update_power_level": "Oikeustason muuttaminen epäonnistui"
-    },
-    "incompatible_browser": {
-        "title": "Selainta ei tueta"
-    },
-    "powered_by_matrix": "Moottorina Matrix",
-    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
-    "unknown_device": "Tuntematon laite",
-    "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
-    "welcome_to_element": "Tervetuloa Element-sovellukseen",
-    "a11y": {
-        "jump_first_invite": "Siirry ensimmäiseen kutsuun.",
-        "n_unread_messages": {
-            "other": "%(count)s lukematonta viestiä.",
-            "one": "Yksi lukematon viesti."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
-            "one": "Yksi lukematon maininta."
-        },
-        "room_name": "Huone %(name)s",
-        "unread_messages": "Lukemattomat viestit.",
-        "user_menu": "Käyttäjän valikko"
-    },
-    "a11y_jump_first_unread_room": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
-    "analytics": {
-        "accept_button": "Sopii",
-        "bullet_1": "<Bold>Emme</Bold> tallenna tai profiloi tilin tietoja",
-        "bullet_2": "<Bold>Emme</Bold> jaa tietoja kolmansille tahoille",
-        "consent_migration": "Olet aiemmin suostunut jakamaan anonyymiä käyttötietoa kanssamme. Päivitämme jakamisen toimintaperiaatteita.",
-        "disable_prompt": "Tämän voi poistaa käytöstä koska tahansa asetuksista",
-        "enable_prompt": "Auta parantamaan %(analyticsOwner)s",
-        "learn_more": "Jaa anonyymiä tietoa ongelmien tunnistamiseksi. Ei mitään henkilökohtaista. Ei kolmansia tahoja. <LearnMoreLink>Lue lisää</LearnMoreLink>",
-        "privacy_policy": "Voit lukea kaikki ehdot <PrivacyPolicyUrl>tästä</PrivacyPolicyUrl>",
-        "shared_data_heading": "Seuraavat tiedot saatetaan jakaa:"
     },
     "bug_reporting": {
         "additional_context": "Sisällytä tähän lisätiedot, joista voi olla apua ongelman analysoinnissa, kuten mitä olit tekemässä, huoneen tunnukset, käyttäjätunnukset, jne.",
@@ -693,6 +646,7 @@
         "default_cover_photo": "<photo>Oletuskansikuva</photo> © <author>Jesús Roncero</author>, käytössä <terms>CC-BY-SA 4.0</terms>:n ehtojen mukaisesti.",
         "twemoji_colr": "<colr>twemoji-colr</colr>-fontti © <author>Mozilla Foundation</author>, käytössä <terms>Apache 2.0</terms>:n ehtojen mukaisesti."
     },
+    "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktiiviset sovelmat",
         "category_other": "Muut",
@@ -750,6 +704,7 @@
         "widget_screenshots": "Ota sovelmien kuvankaappaukset käyttöön tuetuissa sovelmissa"
     },
     "dialog_close_label": "Sulje dialogi",
+    "download_completed": "Lataus valmis",
     "emoji": {
         "categories": "Luokat",
         "category_activities": "Aktiviteetit",
@@ -926,6 +881,43 @@
         "verify_toast_description": "Muut eivät välttämättä luota siihen",
         "verify_toast_title": "Vahvista tämä istunto"
     },
+    "error": {
+        "admin_contact": "<a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttöä.",
+        "admin_contact_short": "Ota yhteyttä <a>palvelimesi ylläpitäjään</a>.",
+        "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
+        "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
+        "connection": "Yhteydessä kotipalvelimeen ilmeni ongelma, yritä myöhemmin uudelleen.",
+        "dialog_description_default": "Tapahtui virhe.",
+        "edit_history_unsupported": "Kotipalvelimesi ei näytä tukevan tätä ominaisuutta.",
+        "failed_copy": "Kopiointi epäonnistui",
+        "hs_blocked": "Tämä kotipalvelin on ylläpitäjänsä estämä.",
+        "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
+        "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
+        "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",
+        "invalid_json_generic": "Virheellinen JSON",
+        "mau": "Tämän kotipalvelimen kuukausittaisten aktiivisten käyttäjien raja on täynnä.",
+        "misconfigured": "Elementisi asetukset ovat pielessä",
+        "mixed_content": "Yhdistäminen kotipalvelimeen HTTP:n avulla ei ole mahdollista, kun selaimen osoitepalkissa on HTTPS-osoite. Käytä joko HTTPS:ää tai <a>salli turvattomat komentosarjat</a>.",
+        "non_urgent_echo_failure_toast": "Palvelimesi ei vastaa joihinkin <a>pyyntöihin</a>.",
+        "resource_limits": "Tämä kotipalvelin on ylittänyt yhden rajoistaan.",
+        "session_restore": {
+            "clear_storage_button": "Tyhjennä varasto ja kirjaudu ulos",
+            "clear_storage_description": "Kirjaudu ulos ja poista salausavaimet?",
+            "description_1": "Törmäsimme ongelmaan yrittäessämme palauttaa edellistä istuntoasi.",
+            "description_2": "Jos olet aikaisemmin käyttänyt uudempaa versiota %(brand)sista, istuntosi voi olla epäyhteensopiva tämän version kanssa. Sulje tämä ikkuna ja yritä uudemman version kanssa.",
+            "description_3": "Selaimen varaston tyhjentäminen saattaa korjata ongelman, mutta kirjaa sinut samalla ulos ja estää sinua lukemasta salattuja keskusteluita.",
+            "title": "Istunnon palautus epäonnistui"
+        },
+        "something_went_wrong": "Jokin meni vikaan!",
+        "storage_evicted_description_1": "Istunnon dataa, mukaan lukien salausavaimia, puuttuu. Kirjaudu ulos ja sisään, jolloin avaimet palautetaan varmuuskopiosta.",
+        "storage_evicted_description_2": "Selaimesi luultavasti poisti tämän datan, kun levytila oli vähissä.",
+        "storage_evicted_title": "Istunnon dataa puuttuu",
+        "sync": "Kotipalvelimeen yhdistäminen ei onnistunut. Yritetään uudelleen…",
+        "tls": "Kotipalvelimeen ei saada yhteyttä. Tarkista verkkoyhteytesi, varmista että <a>kotipalvelimesi SSL-sertifikaatti</a> on luotettu, ja että mikään selaimen lisäosa ei estä pyyntöjen lähettämistä.",
+        "unknown": "Tuntematon virhe",
+        "unknown_error_code": "tuntematon virhekoodi",
+        "update_power_level": "Oikeustason muuttaminen epäonnistui"
+    },
     "error_database_closed_title": "Tietokanta sulkeutui odottamattomasti",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1073,6 +1065,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa.",
         "other": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa."
+    },
+    "incompatible_browser": {
+        "title": "Selainta ei tueta"
     },
     "info_tooltip_title": "Tiedot",
     "integration_manager": {
@@ -1488,6 +1483,8 @@
         "moderator": "Valvoja",
         "restricted": "Rajoitettu"
     },
+    "powered_by_matrix": "Moottorina Matrix",
+    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
     "presence": {
         "away": "Poissa",
         "busy": "Varattu",
@@ -3121,6 +3118,7 @@
     "truncated_list_n_more": {
         "other": "Ja %(count)s muuta..."
     },
+    "unknown_device": "Tuntematon laite",
     "update": {
         "changelog": "Muutosloki",
         "check_action": "Tarkista päivitykset",
@@ -3330,6 +3328,8 @@
         "voice_call": "Äänipuhelu",
         "you_are_presenting": "Esität parhaillaan"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
+    "welcome_to_element": "Tervetuloa Element-sovellukseen",
     "widget": {
         "added_by": "Sovelman lisäsi",
         "capabilities_dialog": {

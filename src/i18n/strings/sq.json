@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Hidhu te ftesa e parë.",
+        "n_unread_messages": {
+            "other": "%(count)s mesazhe të palexuar.",
+            "one": "1 mesazh i palexuar."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s mesazhe të palexuar, përfshi përmendje.",
+            "one": "1 përmendje e palexuar."
+        },
+        "room_name": "Dhoma %(name)s",
+        "unread_messages": "Mesazhe të palexuar.",
+        "user_menu": "Menu përdoruesi"
+    },
+    "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
     "action": {
-        "create_account": "Krijoni Llogari",
-        "dismiss": "Mos e merr parasysh",
-        "explore_rooms": "Eksploroni dhoma",
-        "open": "Hape",
-        "sign_in": "Hyni",
         "accept": "Pranoje",
         "add": "Shtojeni",
         "add_existing_room": "Shtoni dhomë ekzistuese",
@@ -27,10 +37,12 @@
         "copy_link": "Kopjoji vendndodhjen",
         "create": "Krijoje",
         "create_a_room": "Krijoni një dhomë",
+        "create_account": "Krijoni Llogari",
         "decline": "Hidhe poshtë",
         "delete": "Fshije",
         "disable": "Çaktivizoje",
         "disconnect": "Shkëputu",
+        "dismiss": "Mos e merr parasysh",
         "done": "U bë",
         "download": "Shkarkoje",
         "edit": "Përpuno",
@@ -39,6 +51,7 @@
         "exit_fullscreeen": "Dil nga mënyra “Sa krejt ekrani”",
         "expand": "Zgjeroje",
         "explore_public_rooms": "Eksploroni dhoma publike",
+        "explore_rooms": "Eksploroni dhoma",
         "export": "Eksporto",
         "forward": "Përcille",
         "go": "Shko",
@@ -64,6 +77,7 @@
         "new_video_room": "Dhomë e re me video",
         "next": "Pasuesja",
         "no": "Jo",
+        "open": "Hape",
         "pause": "Ndalesë",
         "pin": "Fiksoje",
         "play": "Luaje",
@@ -92,6 +106,7 @@
         "show": "Shfaqe",
         "show_advanced": "Shfaqi të mëtejshmet",
         "show_all": "Shfaqi krejt",
+        "sign_in": "Hyni",
         "sign_out": "Dilni",
         "skip": "Anashkaloje",
         "start": "Nise",
@@ -120,8 +135,19 @@
         "zoom_in": "Zmadhoje",
         "zoom_out": "Zvogëloje"
     },
+    "analytics": {
+        "accept_button": "S’ka problem",
+        "bullet_1": "<Bold>Nuk</Bold> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie",
+        "bullet_2": "<Bold>Nuk</Bold> u japin hollësi palëve të treta",
+        "consent_migration": "Keni dhënë më parë pëlqimin të jepni për ne të dhëna anonime përdorimi. Po përditësojmë se si funksionon kjo punë.",
+        "disable_prompt": "Këtë mund të çaktivizoni në çfarëdo kohe që nga rregullimet",
+        "enable_prompt": "Ndihmonani të përmirësojmë %(analyticsOwner)s-in",
+        "learn_more": "Ndani me ne të dhëna anonime, për të na ndihmuar të gjejmë problemet. Asgjë personale. Pa palë të treta. <LearnMoreLink>Mësoni Më Tepër\t</LearnMoreLink>",
+        "privacy_policy": "<PrivacyPolicyUrl>Këtu</PrivacyPolicyUrl> mund të lexoni krejt kushtet tona",
+        "pseudonymous_usage_data": "Ndihmonani të gjejmë probleme dhe të përmirësojmë %(analyticsOwner)s-in duke ndarë me ne të dhëna anonime përdorimi. Që të kuptohet se si përdorin njerëzit disa pajisje, do të prodhojmë një identifikues kuturu, që na jepet nga pajisjet tuaja.",
+        "shared_data_heading": "Mund të ndahen me të tjerët cilado prej të dhënave vijuese:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj",
         "3pid_in_use": "Ajo adresë email, apo numër telefoni, është tashmë e përdorur.",
         "account_clash": "Llogaria juaj e re (%(newAccountId)s) është e regjistruar, por jeni i futur në një tjetër llogari (%(loggedInUserId)s).",
         "account_clash_previous_account": "Vazhdoni me llogarinë e mëparshme",
@@ -291,6 +317,7 @@
         "soft_logout_subheading": "Spastro të dhëna personale",
         "soft_logout_warning": "Kujdes: të dhënat tuaja personale (përfshi kyçe fshehtëzimi) janë ende të depozituara në këtë sesion. Spastrojini, nëse keni përfunduar së përdoruri këtë sesion, ose dëshironi të bëni hyrjen në një tjetër llogari.",
         "sso": "Hyrje Njëshe",
+        "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj",
         "sso_failed_missing_storage": "I kërkuam shfletuesit të mbajë mend cilin shërbyes Home përdorni, për t’ju lënë të bëni hyrje, por për fat të keq, shfletuesi juaj e ka harruar këtë. Kaloni te faqja e hyrjeve dhe riprovoni.",
         "sso_or_username_password": "%(ssoButtons)s Ose %(usernamePassword)s",
         "sync_footer_subtitle": "Nëse jeni pjesë e shumë dhomave, kjo mund të zgjasë ca",
@@ -324,82 +351,6 @@
         "username_in_use": "Dikush e ka atë emër përdoruesi, ju lutemi, provoni tjetër.",
         "verify_email_explainer": "Duhet të dimë se jeni ju, përpara ricaktimit të fjalëkalimt. Klikoni lidhjen te email-i që sapo ju dërguam te <b>%(email)s</b>",
         "verify_email_heading": "Që të vazhdohet, verifikoni email-in tuaj"
-    },
-    "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
-    "download_completed": "Shkarkim i Plotësuar",
-    "error": {
-        "app_launch_unexpected_error": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
-        "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
-        "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
-        "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
-        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
-        "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
-        "invalid_json_generic": "JSON i pavlefshëm",
-        "misconfigured": "Element-i juaj është i keqformësuar",
-        "admin_contact": "Ju lutemi, që të vazhdoni të përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-        "admin_contact_short": "Lidhuni me <a>përgjegjësin e shërbyesit tuaj</a>.",
-        "connection": "Pati një problem në komunikimin me shërbyesin Home, ju lutemi, riprovoni më vonë.",
-        "dialog_description_default": "Ndodhi një gabim.",
-        "download_media": "S’u arrit të shkarkohet media burim, s’u gjet URL burimi",
-        "edit_history_unsupported": "Shërbyesi juaj Home nuk duket se e mbulon këtë veçori.",
-        "failed_copy": "S’u arrit të kopjohej",
-        "hs_blocked": "Ky shërbyes Home është bllokuar nga përgjegjësit e tij.",
-        "mau": "Ky shërbyes home ka tejkaluar kufirin e vet Përdorues Aktivë Mujorë.",
-        "mixed_content": "S’lidhet dot te shërbyes Home përmes HTTP-je, kur te shtylla e shfletuesit tuaj jepet një URL HTTPS. Ose përdorni HTTPS-në, ose <a>aktivizoni përdorimin e programtheve jo të sigurt</a>.",
-        "non_urgent_echo_failure_toast": "Shërbyesi juaj s’po u përgjigjet ca <a>kërkesave</a>.",
-        "resource_limits": "Ky shërbyes home ka tejkaluar një nga kufijtë e tij mbi burimet.",
-        "session_restore": {
-            "clear_storage_button": "Spastro Depon dhe Dil",
-            "clear_storage_description": "Të dilet dhe të hiqen kyçet e fshehtëzimit?",
-            "description_1": "Hasëm një gabim teksa provohej të rikthehej sesioni juaj i dikurshëm.",
-            "description_2": "Nëse më herët keni përdorur një version më të freskët të %(brand)s-it, sesioni juaj mund të jetë i papërputhshëm me këtë version. Mbylleni këtë dritare dhe kthehuni te versioni më i ri.",
-            "description_3": "Spastrimi i gjërave të depozituara në shfletuesin tuaj mund ta ndreqë problemin, por kjo do të sjellë nxjerrjen tuaj nga llogari dhe do ta bëjë të palexueshëm çfarëdo historiku të fshehtëzuar të bisedës.",
-            "title": "S’arrihet të rikthehet sesioni"
-        },
-        "something_went_wrong": "Diçka shkoi ters!",
-        "storage_evicted_description_1": "Mungojnë disa të dhëna sesioni, përfshi kyçe mesazhesh të fshehtëzuar. Për të ndrequr këtë, dilni dhe hyni, duke rikthyer kështu kyçet nga kopjeruajtje.",
-        "storage_evicted_description_2": "Ka gjasa që shfletuesi juaj të ketë hequr këto të dhëna kur kish pak hapësirë në disk.",
-        "storage_evicted_title": "Mungojnë të dhëna sesioni",
-        "sync": "S’u arrit të lidhej me shërbyesin Home. Po riprovohet…",
-        "tls": "S’lidhet dot te shërbyes Home - ju lutemi, kontrolloni lidhjen tuaj, sigurohuni që <a>dëshmia SSL e shërbyesit tuaj Home</a> besohet, dhe që s’ka ndonjë zgjerim shfletuesi që po bllokon kërkesat tuaja.",
-        "unknown": "Gabim i panjohur",
-        "unknown_error_code": "kod gabimi të panjohur",
-        "update_power_level": "S’u arrit të ndryshohej shkalla e pushtetit"
-    },
-    "incompatible_browser": {
-        "title": "Shfletues i pambuluar"
-    },
-    "powered_by_matrix": "Bazuar në Matrix",
-    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
-    "unknown_device": "Pajisje e panjohur",
-    "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "welcome_to_element": "Mirë se vini te Element",
-    "a11y": {
-        "jump_first_invite": "Hidhu te ftesa e parë.",
-        "n_unread_messages": {
-            "other": "%(count)s mesazhe të palexuar.",
-            "one": "1 mesazh i palexuar."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s mesazhe të palexuar, përfshi përmendje.",
-            "one": "1 përmendje e palexuar."
-        },
-        "room_name": "Dhoma %(name)s",
-        "unread_messages": "Mesazhe të palexuar.",
-        "user_menu": "Menu përdoruesi"
-    },
-    "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
-    "analytics": {
-        "accept_button": "S’ka problem",
-        "bullet_1": "<Bold>Nuk</Bold> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie",
-        "bullet_2": "<Bold>Nuk</Bold> u japin hollësi palëve të treta",
-        "consent_migration": "Keni dhënë më parë pëlqimin të jepni për ne të dhëna anonime përdorimi. Po përditësojmë se si funksionon kjo punë.",
-        "disable_prompt": "Këtë mund të çaktivizoni në çfarëdo kohe që nga rregullimet",
-        "enable_prompt": "Ndihmonani të përmirësojmë %(analyticsOwner)s-in",
-        "learn_more": "Ndani me ne të dhëna anonime, për të na ndihmuar të gjejmë problemet. Asgjë personale. Pa palë të treta. <LearnMoreLink>Mësoni Më Tepër\t</LearnMoreLink>",
-        "privacy_policy": "<PrivacyPolicyUrl>Këtu</PrivacyPolicyUrl> mund të lexoni krejt kushtet tona",
-        "pseudonymous_usage_data": "Ndihmonani të gjejmë probleme dhe të përmirësojmë %(analyticsOwner)s-in duke ndarë me ne të dhëna anonime përdorimi. Që të kuptohet se si përdorin njerëzit disa pajisje, do të prodhojmë një identifikues kuturu, që na jepet nga pajisjet tuaja.",
-        "shared_data_heading": "Mund të ndahen me të tjerët cilado prej të dhënave vijuese:"
     },
     "bug_reporting": {
         "additional_context": "Nëse ka kontekst shtesë që mund të ndihmonte në analizimin e problemit, b.f., ç’po bënit në atë kohë, ID dhomash, ID përdorueusish, etj, ju lutemi, përfshijini këto gjëra këtu.",
@@ -712,6 +663,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> © <author>Twitter, Inc dhe kontribues të tjerë</author> përdoren sipas kushteve të <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Shkronjat <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> përdoren sipas kushteve të <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Widget-e Aktivë",
         "category_other": "Tjetër",
@@ -805,6 +757,7 @@
         "widget_screenshots": "Aktivizo foto ekrani widget-esh për widget-e që e mbulojnë"
     },
     "dialog_close_label": "Mbylle dialogun",
+    "download_completed": "Shkarkim i Plotësuar",
     "emoji": {
         "categories": "Kategori",
         "category_activities": "Veprimtari",
@@ -1006,6 +959,45 @@
         "verify_toast_description": "Përdorues të tjerë mund të mos e besojnë",
         "verify_toast_title": "Verifikoni këtë sesion"
     },
+    "error": {
+        "admin_contact": "Ju lutemi, që të vazhdoni të përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
+        "admin_contact_short": "Lidhuni me <a>përgjegjësin e shërbyesit tuaj</a>.",
+        "app_launch_unexpected_error": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
+        "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
+        "connection": "Pati një problem në komunikimin me shërbyesin Home, ju lutemi, riprovoni më vonë.",
+        "dialog_description_default": "Ndodhi një gabim.",
+        "download_media": "S’u arrit të shkarkohet media burim, s’u gjet URL burimi",
+        "edit_history_unsupported": "Shërbyesi juaj Home nuk duket se e mbulon këtë veçori.",
+        "failed_copy": "S’u arrit të kopjohej",
+        "hs_blocked": "Ky shërbyes Home është bllokuar nga përgjegjësit e tij.",
+        "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
+        "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
+        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
+        "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
+        "invalid_json_generic": "JSON i pavlefshëm",
+        "mau": "Ky shërbyes home ka tejkaluar kufirin e vet Përdorues Aktivë Mujorë.",
+        "misconfigured": "Element-i juaj është i keqformësuar",
+        "mixed_content": "S’lidhet dot te shërbyes Home përmes HTTP-je, kur te shtylla e shfletuesit tuaj jepet një URL HTTPS. Ose përdorni HTTPS-në, ose <a>aktivizoni përdorimin e programtheve jo të sigurt</a>.",
+        "non_urgent_echo_failure_toast": "Shërbyesi juaj s’po u përgjigjet ca <a>kërkesave</a>.",
+        "resource_limits": "Ky shërbyes home ka tejkaluar një nga kufijtë e tij mbi burimet.",
+        "session_restore": {
+            "clear_storage_button": "Spastro Depon dhe Dil",
+            "clear_storage_description": "Të dilet dhe të hiqen kyçet e fshehtëzimit?",
+            "description_1": "Hasëm një gabim teksa provohej të rikthehej sesioni juaj i dikurshëm.",
+            "description_2": "Nëse më herët keni përdorur një version më të freskët të %(brand)s-it, sesioni juaj mund të jetë i papërputhshëm me këtë version. Mbylleni këtë dritare dhe kthehuni te versioni më i ri.",
+            "description_3": "Spastrimi i gjërave të depozituara në shfletuesin tuaj mund ta ndreqë problemin, por kjo do të sjellë nxjerrjen tuaj nga llogari dhe do ta bëjë të palexueshëm çfarëdo historiku të fshehtëzuar të bisedës.",
+            "title": "S’arrihet të rikthehet sesioni"
+        },
+        "something_went_wrong": "Diçka shkoi ters!",
+        "storage_evicted_description_1": "Mungojnë disa të dhëna sesioni, përfshi kyçe mesazhesh të fshehtëzuar. Për të ndrequr këtë, dilni dhe hyni, duke rikthyer kështu kyçet nga kopjeruajtje.",
+        "storage_evicted_description_2": "Ka gjasa që shfletuesi juaj të ketë hequr këto të dhëna kur kish pak hapësirë në disk.",
+        "storage_evicted_title": "Mungojnë të dhëna sesioni",
+        "sync": "S’u arrit të lidhej me shërbyesin Home. Po riprovohet…",
+        "tls": "S’lidhet dot te shërbyes Home - ju lutemi, kontrolloni lidhjen tuaj, sigurohuni që <a>dëshmia SSL e shërbyesit tuaj Home</a> besohet, dhe që s’ka ndonjë zgjerim shfletuesi që po bllokon kërkesat tuaja.",
+        "unknown": "Gabim i panjohur",
+        "unknown_error_code": "kod gabimi të panjohur",
+        "update_power_level": "S’u arrit të ndryshohej shkalla e pushtetit"
+    },
     "error_database_closed_title": "Baza e të dhënave u mbyll papritur",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1155,6 +1147,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Në %(spaceName)s dhe %(count)s hapësirë tjetër.",
         "other": "Në %(spaceName)s dhe %(count)s hapësira të tjera."
+    },
+    "incompatible_browser": {
+        "title": "Shfletues i pambuluar"
     },
     "info_tooltip_title": "Informacion",
     "integration_manager": {
@@ -1604,6 +1599,8 @@
         "mod": "Moderator",
         "restricted": "E kufizuar"
     },
+    "powered_by_matrix": "Bazuar në Matrix",
+    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "presence": {
         "away": "I larguar",
         "busy": "I zënë",
@@ -3328,6 +3325,7 @@
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"
     },
+    "unknown_device": "Pajisje e panjohur",
     "update": {
         "changelog": "Regjistër ndryshimesh",
         "check_action": "Kontrollo për përditësime",
@@ -3563,6 +3561,8 @@
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
+    "welcome_to_element": "Mirë se vini te Element",
     "widget": {
         "added_by": "Widget i shtuar nga",
         "capabilities_dialog": {

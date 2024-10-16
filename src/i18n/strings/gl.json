@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Vai ó primeiro convite.",
+        "n_unread_messages": {
+            "other": "%(count)s mensaxe non lidas.",
+            "one": "1 mensaxe non lida."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s mensaxes non lidas incluíndo mencións.",
+            "one": "1 mención non lida."
+        },
+        "room_name": "Sala %(name)s",
+        "unread_messages": "Mensaxes non lidas.",
+        "user_menu": "Menú de usuaria"
+    },
+    "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
     "action": {
-        "create_account": "Crear conta",
-        "dismiss": "Rexeitar",
-        "explore_rooms": "Explorar salas",
-        "open": "Abrir",
-        "sign_in": "Acceder",
         "accept": "Aceptar",
         "add": "Engadir",
         "add_existing_room": "Engadir sala existente",
@@ -26,10 +36,12 @@
         "copy_link": "Copiar ligazón",
         "create": "Crear",
         "create_a_room": "Crear unha sala",
+        "create_account": "Crear conta",
         "decline": "Rexeitar",
         "delete": "Eliminar",
         "disable": "Desactivar",
         "disconnect": "Desconectar",
+        "dismiss": "Rexeitar",
         "done": "Feito",
         "download": "Descargar",
         "edit": "Editar",
@@ -38,6 +50,7 @@
         "exit_fullscreeen": "Saír de pantalla completa",
         "expand": "Despregar",
         "explore_public_rooms": "Explorar salas públicas",
+        "explore_rooms": "Explorar salas",
         "export": "Exportar",
         "forward": "Reenviar",
         "go": "Ir",
@@ -63,6 +76,7 @@
         "new_video_room": "Nova sala de vídeo",
         "next": "Seguinte",
         "no": "Non",
+        "open": "Abrir",
         "pause": "Deter",
         "play": "Reproducir",
         "quote": "Cita",
@@ -89,6 +103,7 @@
         "show": "Mostar",
         "show_advanced": "Mostrar Avanzado",
         "show_all": "Mostrar todo",
+        "sign_in": "Acceder",
         "sign_out": "Saír",
         "skip": "Saltar",
         "start": "Comezar",
@@ -117,8 +132,19 @@
         "zoom_in": "Achegar",
         "zoom_out": "Alonxar"
     },
+    "analytics": {
+        "accept_button": "Iso está ben",
+        "bullet_1": "<Bold>Non</Bold> rexistramos o teu perfil nin datos da conta",
+        "bullet_2": "<Bold>Non</Bold> compartimos a información con terceiras partes",
+        "consent_migration": "Consentiches con anterioridade compartir datos anónimos de uso con nós. Estamos actualizando o seu funcionamento.",
+        "disable_prompt": "Podes desactivar esto cando queiras non axustes",
+        "enable_prompt": "Axuda a mellorar %(analyticsOwner)s",
+        "learn_more": "Comparte datos anónimos para axudarnos a identificar os problemas. Nada persoal. Nin con terceiras partes. <LearnMoreLink>Coñece máis</LearnMoreLink>",
+        "privacy_policy": "Podes ler os nosos termos <PrivacyPolicyUrl>aquí</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Axúdanos a atopar problemas e mellorar %(analyticsOwner)s compartindo datos anónimos de uso. Para comprender de que xeito as persoas usan varios dispositivos imos crear un identificador aleatorio compartido polos teus dispositivos.",
+        "shared_data_heading": "Calquera do seguinte podería ser compartido:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Abre o navegador para realizar a Conexión",
         "account_clash": "A tú conta (%(newAccountId)s) foi rexistrada, pero iniciaches sesión usando outra conta (%(loggedInUserId)s).",
         "account_clash_previous_account": "Continúa coa conta anterior",
         "account_deactivated": "Esta conta foi desactivada.",
@@ -254,6 +280,7 @@
         "soft_logout_intro_sso": "Conéctate e recupera o acceso a túa conta.",
         "soft_logout_intro_unsupported_auth": "Non podes conectar a conta. Contacta coa administración do teu servidor para máis información.",
         "soft_logout_subheading": "Baleirar datos personais",
+        "sso_complete_in_browser_dialog_title": "Abre o navegador para realizar a Conexión",
         "sso_failed_missing_storage": "Pedíramoslle ao teu navegador que lembrase o teu servidor de inicio para acceder, pero o navegador esqueceuno. Vaite á páxina de conexión e inténtao outra vez.",
         "sso_or_username_password": "%(ssoButtons)s Ou %(usernamePassword)s",
         "sync_footer_subtitle": "Se te uniches a moitas salas, esto podería levarnos un anaco",
@@ -282,79 +309,6 @@
         "unsupported_auth_msisdn": "O servidor non soporta a autenticación con número de teléfono.",
         "username_field_required_invalid": "Escribe nome de usuaria",
         "username_in_use": "Este nome de usuaria xa está pillado, inténtao con outro."
-    },
-    "desktop_default_device_name": "%(brand)s para Escritorio: %(platformName)s",
-    "download_completed": "Descarga realizada",
-    "error": {
-        "app_launch_unexpected_error": "Fallo non agardado ao preparar a app. Detalles na consola.",
-        "cannot_load_config": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
-        "invalid_configuration_no_server": "Configuración non válida: non se indicou servidor por defecto.",
-        "invalid_json": "A configuración de Element contén JSON non válido. Corrixe o problema e recarga a páxina.",
-        "invalid_json_detail": "A mensaxe desde o intérprete é: %(message)s",
-        "invalid_json_generic": "JSON non válido",
-        "misconfigured": "Element non está ben configurado",
-        "admin_contact": "Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
-        "admin_contact_short": "Contacta coa <a>administración</a>.",
-        "connection": "Houbo un problema de comunicación co servidor de inicio, inténtao máis tarde.",
-        "dialog_description_default": "Algo fallou.",
-        "edit_history_unsupported": "O servidor non semella soportar esta característica.",
-        "failed_copy": "Fallo ao copiar",
-        "hs_blocked": "O servidor de inicio foi bloqueado pola súa administración.",
-        "mau": "Este servidor acadou o límite mensual de usuarias activas.",
-        "mixed_content": "Non se pode conectar ao servidor vía HTTP cando na barra de enderezos do navegador está HTTPS. Utiliza HTTPS ou <a>active scripts non seguros</a>.",
-        "non_urgent_echo_failure_toast": "O teu servidor non responde a algunhas <a>solicitudes</a>.",
-        "resource_limits": "Este servidor excedeu un dos seus límites de recursos.",
-        "session_restore": {
-            "clear_storage_button": "Limpar o almacenamento e Saír",
-            "clear_storage_description": "Saír e eliminar as chaves de cifrado?",
-            "description_1": "Atopamos un fallo intentando restablecer a súa sesión anterior.",
-            "description_2": "Se anteriormente utilizaches unha versión máis recente de %(brand)s, a túa sesión podería non ser compatible con esta versión. Pecha esta ventá e volve á versión máis recente.",
-            "description_3": "Limpando o almacenamento do navegador podería resolver o problema, pero sairás da sesión e non poderás ler o historial cifrado da conversa.",
-            "title": "Non se puido restaurar a sesión"
-        },
-        "something_went_wrong": "Algo fallou!",
-        "storage_evicted_description_1": "Faltan algúns datos da sesión, incluíndo chaves de mensaxes cifradas. Sae e volve a entrar para arranxalo, restaurando as chaves desde a copia.",
-        "storage_evicted_description_2": "O navegador probablemente eliminou estos datos ao quedar con pouco espazo de disco.",
-        "storage_evicted_title": "Faltan datos da sesión",
-        "tls": "Non se conectou ao servidor - por favor comprobe a conexión, asegúrese de que o<a>certificado SSL do servidor</a> sexa de confianza, e que ningún engadido do navegador estea bloqueando as peticións.",
-        "unknown": "Fallo descoñecido",
-        "unknown_error_code": "código de fallo descoñecido",
-        "update_power_level": "Fallo ao cambiar o nivel de permisos"
-    },
-    "incompatible_browser": {
-        "title": "Navegador non soportado"
-    },
-    "powered_by_matrix": "Funciona grazas a Matrix",
-    "powered_by_matrix_with_logo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
-    "unknown_device": "Dispositivo descoñecido",
-    "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
-    "welcome_to_element": "Benvida/o a Element",
-    "a11y": {
-        "jump_first_invite": "Vai ó primeiro convite.",
-        "n_unread_messages": {
-            "other": "%(count)s mensaxe non lidas.",
-            "one": "1 mensaxe non lida."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s mensaxes non lidas incluíndo mencións.",
-            "one": "1 mención non lida."
-        },
-        "room_name": "Sala %(name)s",
-        "unread_messages": "Mensaxes non lidas.",
-        "user_menu": "Menú de usuaria"
-    },
-    "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
-    "analytics": {
-        "accept_button": "Iso está ben",
-        "bullet_1": "<Bold>Non</Bold> rexistramos o teu perfil nin datos da conta",
-        "bullet_2": "<Bold>Non</Bold> compartimos a información con terceiras partes",
-        "consent_migration": "Consentiches con anterioridade compartir datos anónimos de uso con nós. Estamos actualizando o seu funcionamento.",
-        "disable_prompt": "Podes desactivar esto cando queiras non axustes",
-        "enable_prompt": "Axuda a mellorar %(analyticsOwner)s",
-        "learn_more": "Comparte datos anónimos para axudarnos a identificar os problemas. Nada persoal. Nin con terceiras partes. <LearnMoreLink>Coñece máis</LearnMoreLink>",
-        "privacy_policy": "Podes ler os nosos termos <PrivacyPolicyUrl>aquí</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Axúdanos a atopar problemas e mellorar %(analyticsOwner)s compartindo datos anónimos de uso. Para comprender de que xeito as persoas usan varios dispositivos imos crear un identificador aleatorio compartido polos teus dispositivos.",
-        "shared_data_heading": "Calquera do seguinte podería ser compartido:"
     },
     "bug_reporting": {
         "additional_context": "Se hai contexto que cres que axudaría a analizar o problema, como o que estabas a facer, ID da sala, ID da usuaria, etc., por favor inclúeo aquí.",
@@ -640,6 +594,7 @@
         "subspace_join_rule_public_description": "Calquera poderá atopar e unirse a este espazo, non só os membros de <SpaceName/>.",
         "subspace_join_rule_restricted_description": "Calquera en <SpaceName/> poderá atopar e unirse."
     },
+    "desktop_default_device_name": "%(brand)s para Escritorio: %(platformName)s",
     "devtools": {
         "active_widgets": "Widgets activos",
         "category_other": "Outro",
@@ -713,6 +668,7 @@
         "widget_screenshots": "Activar as capturas de trebellos para aqueles que as permiten"
     },
     "dialog_close_label": "Pechar diálogo",
+    "download_completed": "Descarga realizada",
     "emoji": {
         "categories": "Categorías",
         "category_activities": "Actividades",
@@ -906,6 +862,42 @@
         "verify_toast_description": "Outras usuarias poderían non confiar",
         "verify_toast_title": "Verificar esta sesión"
     },
+    "error": {
+        "admin_contact": "Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
+        "admin_contact_short": "Contacta coa <a>administración</a>.",
+        "app_launch_unexpected_error": "Fallo non agardado ao preparar a app. Detalles na consola.",
+        "cannot_load_config": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
+        "connection": "Houbo un problema de comunicación co servidor de inicio, inténtao máis tarde.",
+        "dialog_description_default": "Algo fallou.",
+        "edit_history_unsupported": "O servidor non semella soportar esta característica.",
+        "failed_copy": "Fallo ao copiar",
+        "hs_blocked": "O servidor de inicio foi bloqueado pola súa administración.",
+        "invalid_configuration_no_server": "Configuración non válida: non se indicou servidor por defecto.",
+        "invalid_json": "A configuración de Element contén JSON non válido. Corrixe o problema e recarga a páxina.",
+        "invalid_json_detail": "A mensaxe desde o intérprete é: %(message)s",
+        "invalid_json_generic": "JSON non válido",
+        "mau": "Este servidor acadou o límite mensual de usuarias activas.",
+        "misconfigured": "Element non está ben configurado",
+        "mixed_content": "Non se pode conectar ao servidor vía HTTP cando na barra de enderezos do navegador está HTTPS. Utiliza HTTPS ou <a>active scripts non seguros</a>.",
+        "non_urgent_echo_failure_toast": "O teu servidor non responde a algunhas <a>solicitudes</a>.",
+        "resource_limits": "Este servidor excedeu un dos seus límites de recursos.",
+        "session_restore": {
+            "clear_storage_button": "Limpar o almacenamento e Saír",
+            "clear_storage_description": "Saír e eliminar as chaves de cifrado?",
+            "description_1": "Atopamos un fallo intentando restablecer a súa sesión anterior.",
+            "description_2": "Se anteriormente utilizaches unha versión máis recente de %(brand)s, a túa sesión podería non ser compatible con esta versión. Pecha esta ventá e volve á versión máis recente.",
+            "description_3": "Limpando o almacenamento do navegador podería resolver o problema, pero sairás da sesión e non poderás ler o historial cifrado da conversa.",
+            "title": "Non se puido restaurar a sesión"
+        },
+        "something_went_wrong": "Algo fallou!",
+        "storage_evicted_description_1": "Faltan algúns datos da sesión, incluíndo chaves de mensaxes cifradas. Sae e volve a entrar para arranxalo, restaurando as chaves desde a copia.",
+        "storage_evicted_description_2": "O navegador probablemente eliminou estos datos ao quedar con pouco espazo de disco.",
+        "storage_evicted_title": "Faltan datos da sesión",
+        "tls": "Non se conectou ao servidor - por favor comprobe a conexión, asegúrese de que o<a>certificado SSL do servidor</a> sexa de confianza, e que ningún engadido do navegador estea bloqueando as peticións.",
+        "unknown": "Fallo descoñecido",
+        "unknown_error_code": "código de fallo descoñecido",
+        "update_power_level": "Fallo ao cambiar o nivel de permisos"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Non se copiou a ligazón da sala ao portapapeis.",
@@ -1043,6 +1035,9 @@
     "in_space_and_n_other_spaces": {
         "one": "No %(spaceName)s e %(count)s outro espazo.",
         "other": "No espazo %(spaceName)s e %(count)s outros espazos."
+    },
+    "incompatible_browser": {
+        "title": "Navegador non soportado"
     },
     "info_tooltip_title": "Información",
     "integration_manager": {
@@ -1461,6 +1456,8 @@
         "moderator": "Moderador",
         "restricted": "Restrinxido"
     },
+    "powered_by_matrix": "Funciona grazas a Matrix",
+    "powered_by_matrix_with_logo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
     "presence": {
         "away": "Fóra",
         "busy": "Ocupado",
@@ -3020,6 +3017,7 @@
     "truncated_list_n_more": {
         "other": "E %(count)s máis..."
     },
+    "unknown_device": "Dispositivo descoñecido",
     "update": {
         "changelog": "Rexistro de cambios",
         "check_action": "Comprobar actualización",
@@ -3213,6 +3211,8 @@
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Estaste a presentar"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
+    "welcome_to_element": "Benvida/o a Element",
     "widget": {
         "added_by": "Widget engadido por",
         "capabilities_dialog": {

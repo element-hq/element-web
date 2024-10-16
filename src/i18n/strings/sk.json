@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Prejsť na prvú pozvánku.",
+        "n_unread_messages": {
+            "other": "%(count)s neprečítaných správ.",
+            "one": "1 neprečítaná správa."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 neprečítaná zmienka.",
+            "other": "%(count)s neprečítaných správ vrátane zmienok."
+        },
+        "room_name": "Miestnosť %(name)s",
+        "unread_messages": "Neprečítané správy.",
+        "user_menu": "Používateľské menu"
+    },
+    "a11y_jump_first_unread_room": "Preskočiť na prvú neprečítanú miestnosť.",
     "action": {
-        "create_account": "Vytvoriť účet",
-        "dismiss": "Zamietnuť",
-        "explore_rooms": "Preskúmať miestnosti",
-        "open": "Otvoriť",
-        "sign_in": "Prihlásiť sa",
         "accept": "Prijať",
         "add": "Pridať",
         "add_existing_room": "Pridať existujúcu miestnosť",
@@ -28,11 +38,13 @@
         "copy_link": "Kopírovať odkaz",
         "create": "Vytvoriť",
         "create_a_room": "Vytvoriť miestnosť",
+        "create_account": "Vytvoriť účet",
         "decline": "Odmietnuť",
         "delete": "Vymazať",
         "deny": "Zamietnuť",
         "disable": "Nepovoliť",
         "disconnect": "Odpojiť",
+        "dismiss": "Zamietnuť",
         "done": "Hotovo",
         "download": "Stiahnuť",
         "edit": "Upraviť",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "Ukončiť režim celej obrazovky",
         "expand": "Rozbaliť",
         "explore_public_rooms": "Preskúmajte verejné miestnosti",
+        "explore_rooms": "Preskúmať miestnosti",
         "export": "Exportovať",
         "forward": "Preposlať",
         "go": "Spustiť",
@@ -67,6 +80,7 @@
         "next": "Ďalej",
         "no": "Nie",
         "ok": "OK",
+        "open": "Otvoriť",
         "pause": "Pozastaviť",
         "pin": "Špendlík",
         "play": "Prehrať",
@@ -96,6 +110,7 @@
         "show": "Zobraziť",
         "show_advanced": "Ukázať pokročilé možnosti",
         "show_all": "Zobraziť všetko",
+        "sign_in": "Prihlásiť sa",
         "sign_out": "Odhlásiť sa",
         "skip": "Preskočiť",
         "start": "Začať",
@@ -124,8 +139,19 @@
         "zoom_in": "Priblížiť",
         "zoom_out": "Oddialiť"
     },
+    "analytics": {
+        "accept_button": "To je v poriadku",
+        "bullet_1": "<Bold>Nezaznamenávame ani neprofilujeme</Bold> žiadne údaje o účte",
+        "bullet_2": "<Bold>Nezdieľame</Bold> informácie s tretími stranami",
+        "consent_migration": "Predtým ste nám udelili súhlas so zdieľaním anonymných údajov o používaní. Aktualizujeme spôsob, akým to funguje.",
+        "disable_prompt": "Túto funkciu môžete kedykoľvek vypnúť v nastaveniach",
+        "enable_prompt": "Pomôžte zlepšiť %(analyticsOwner)s",
+        "learn_more": "Zdieľajte anonymné údaje, ktoré nám pomôžu identifikovať problémy. Nič osobné. Žiadne tretie strany. <LearnMoreLink>Zistite viac</LearnMoreLink>",
+        "privacy_policy": "Všetky naše podmienky si môžete prečítať <PrivacyPolicyUrl>tu</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Pomôžte nám identifikovať problémy a zlepšiť %(analyticsOwner)s zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor zdieľaný vašimi zariadeniami.",
+        "shared_data_heading": "Zdieľané môžu byť niektoré z nasledujúcich údajov:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Prejdite do prehliadača a dokončite prihlásenie",
         "3pid_in_use": "Táto e-mailová adresa alebo telefónne číslo sa už používa.",
         "account_clash": "Váš nový účet (%(newAccountId)s) je registrovaný, ale už ste prihlásený pod iným účtom (%(loggedInUserId)s).",
         "account_clash_previous_account": "Pokračovať s predošlým účtom",
@@ -300,6 +326,7 @@
         "soft_logout_subheading": "Zmazať osobné dáta",
         "soft_logout_warning": "Varovanie: Vaše osobné údaje (vrátane šifrovacích kľúčov) sú stále uložené v tejto relácií. Vymažte ich, ak ste ukončili používanie tejto relácie alebo sa chcete prihlásiť do iného konta.",
         "sso": "Single Sign On",
+        "sso_complete_in_browser_dialog_title": "Prejdite do prehliadača a dokončite prihlásenie",
         "sso_failed_missing_storage": "Požiadali sme prehliadač, aby si pamätal, aký domovský server používate na prihlásenie, ale váš prehliadač ho, bohužiaľ, zabudol. Prejdite na prihlasovaciu stránku a skúste to znova.",
         "sso_or_username_password": "%(ssoButtons)s alebo %(usernamePassword)s",
         "sync_footer_subtitle": "Ak ste sa pripojili k mnohým miestnostiam, môže to chvíľu trvať",
@@ -334,82 +361,6 @@
         "username_in_use": "Toto používateľské meno už niekto má, skúste iné.",
         "verify_email_explainer": "Pred obnovením hesla potrebujeme vedieť, že ste to naozaj vy. Kliknite na odkaz v e-maile, ktorý sme vám práve poslali <b>%(email)s</b>",
         "verify_email_heading": "Overte svoj e-mail a pokračujte"
-    },
-    "desktop_default_device_name": "%(brand)s Stolný počítač: %(platformName)s",
-    "download_completed": "Preberanie dokončené",
-    "error": {
-        "app_launch_unexpected_error": "Neočakávaná chyba počas pripravovania aplikácie. Pre podrobnosti pozri konzolu.",
-        "cannot_load_config": "Nemožno načítať konfiguračný súbor: prosím obnovte stránku a skúste to znova.",
-        "invalid_configuration_mixed_server": "Neplatná konfigurácia: default_hs_url nemôže byť určená spolu s default_server_name alebo default_server_config",
-        "invalid_configuration_no_server": "Neplatné nastavenie: nebol určený východiskový server.",
-        "invalid_json": "Vaša konfigurácia Elementu obsahuje nesprávny údaj JSON. Prosím, opravte chybu a obnovte stránku.",
-        "invalid_json_detail": "Správa z parsera je: %(message)s",
-        "invalid_json_generic": "Neplatný JSON",
-        "misconfigured": "Váš Element je nesprávne nastavený",
-        "admin_contact": "Prosím, <a>kontaktujte správcu služieb</a> aby ste mohli službu ďalej používať.",
-        "admin_contact_short": "Kontaktujte svojho <a>administrátora serveru</a>.",
-        "connection": "Nastal problém pri komunikácii s domovským serverom. Skúste to prosím znova.",
-        "dialog_description_default": "Vyskytla sa chyba.",
-        "download_media": "Nepodarilo sa stiahnuť zdrojové médium, nebola nájdená žiadna zdrojová url adresa",
-        "edit_history_unsupported": "Zdá sa, že váš domovský server túto funkciu nepodporuje.",
-        "failed_copy": "Nepodarilo sa skopírovať",
-        "hs_blocked": "Tento domovský server bol zablokovaný jeho správcom.",
-        "mau": "Bol dosiahnutý mesačný limit počtu aktívnych používateľov tohoto domovského servera.",
-        "mixed_content": "K domovskému serveru nie je možné pripojiť sa použitím protokolu HTTP keďže v adresnom riadku prehliadača máte HTTPS adresu. Použite protokol HTTPS alebo <a>povolte nezabezpečené skripty</a>.",
-        "non_urgent_echo_failure_toast": "Váš server neodpovedá na niektoré <a>požiadavky</a>.",
-        "resource_limits": "Bol prekročený limit využitia prostriedkov pre tento domovský server.",
-        "session_restore": {
-            "clear_storage_button": "Vymazať úložisko a odhlásiť sa",
-            "clear_storage_description": "Odhlásiť sa a odstrániť šifrovacie kľúče?",
-            "description_1": "Počas obnovovania vašej predchádzajúcej relácie sa vyskytla chyba.",
-            "description_2": "Ak ste predtým používali novšiu verziu %(brand)s, vaša relácia môže byť s touto verziou nekompatibilná. Zatvorte toto okno a vráťte sa k novšej verzii.",
-            "description_3": "Vymazaním úložiska prehliadača možno opravíte váš problém, no zároveň sa týmto odhlásite a história vašich šifrovaných konverzácií sa pre vás môže stať nečitateľná.",
-            "title": "Nie je možné obnoviť reláciu"
-        },
-        "something_went_wrong": "Niečo sa pokazilo!",
-        "storage_evicted_description_1": "Chýbajú niektoré údaje relácie vrátane zašifrovaných kľúčov správ. Odhláste sa a prihláste sa, aby ste to opravili a obnovili kľúče zo zálohy.",
-        "storage_evicted_description_2": "Váš prehliadač pravdepodobne odstránil tieto údaje, keď mal málo miesta na disku.",
-        "storage_evicted_title": "Chýbajú údaje relácie",
-        "sync": "Nie je možné sa pripojiť k domovskému serveru. Prebieha pokus o opätovné pripojenie…",
-        "tls": "Nie je možné pripojiť sa k domovskému serveru - skontrolujte prosím funkčnosť vášho pripojenia na internet. Uistite sa že <a>certifikát domovského servera</a> je dôveryhodný a že žiaden doplnok nainštalovaný v prehliadači nemôže blokovať požiadavky.",
-        "unknown": "Neznáma chyba",
-        "unknown_error_code": "neznámy kód chyby",
-        "update_power_level": "Nepodarilo sa zmeniť úroveň oprávnenia"
-    },
-    "incompatible_browser": {
-        "title": "Nepodporovaný prehliadač"
-    },
-    "powered_by_matrix": "používa protokol Matrix",
-    "powered_by_matrix_with_logo": "Decentralizované, šifrované konverzácie a spolupráca na platforme $matrixLogo",
-    "unknown_device": "Neznáme zariadenie",
-    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Víta vás Element",
-    "a11y": {
-        "jump_first_invite": "Prejsť na prvú pozvánku.",
-        "n_unread_messages": {
-            "other": "%(count)s neprečítaných správ.",
-            "one": "1 neprečítaná správa."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 neprečítaná zmienka.",
-            "other": "%(count)s neprečítaných správ vrátane zmienok."
-        },
-        "room_name": "Miestnosť %(name)s",
-        "unread_messages": "Neprečítané správy.",
-        "user_menu": "Používateľské menu"
-    },
-    "a11y_jump_first_unread_room": "Preskočiť na prvú neprečítanú miestnosť.",
-    "analytics": {
-        "accept_button": "To je v poriadku",
-        "bullet_1": "<Bold>Nezaznamenávame ani neprofilujeme</Bold> žiadne údaje o účte",
-        "bullet_2": "<Bold>Nezdieľame</Bold> informácie s tretími stranami",
-        "consent_migration": "Predtým ste nám udelili súhlas so zdieľaním anonymných údajov o používaní. Aktualizujeme spôsob, akým to funguje.",
-        "disable_prompt": "Túto funkciu môžete kedykoľvek vypnúť v nastaveniach",
-        "enable_prompt": "Pomôžte zlepšiť %(analyticsOwner)s",
-        "learn_more": "Zdieľajte anonymné údaje, ktoré nám pomôžu identifikovať problémy. Nič osobné. Žiadne tretie strany. <LearnMoreLink>Zistite viac</LearnMoreLink>",
-        "privacy_policy": "Všetky naše podmienky si môžete prečítať <PrivacyPolicyUrl>tu</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Pomôžte nám identifikovať problémy a zlepšiť %(analyticsOwner)s zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor zdieľaný vašimi zariadeniami.",
-        "shared_data_heading": "Zdieľané môžu byť niektoré z nasledujúcich údajov:"
     },
     "bug_reporting": {
         "additional_context": "Ak existujú ďalšie súvislosti, ktoré by pomohli pri analýze problému, napríklad čo ste v tom čase robili, ID miestnosti, ID používateľa atď., uveďte ich tu.",
@@ -740,6 +691,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emoji grafika je © <author>Twitter, Inc a ďalší prispievatelia</author> používaná podľa podmienok <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Písmo <colr>twemoji-colr</colr> je © <author>Mozilla Foundation</author> používané podľa podmienok <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Stolný počítač: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktívne widgety",
         "category_other": "Ďalšie",
@@ -844,6 +796,7 @@
         "widget_screenshots": "Umožniť zachytiť snímku obrazovky pre podporované widgety"
     },
     "dialog_close_label": "Zavrieť dialógové okno",
+    "download_completed": "Preberanie dokončené",
     "emoji": {
         "categories": "Kategórie",
         "category_activities": "Aktivity",
@@ -1048,6 +1001,45 @@
         "verify_toast_description": "Ostatní používatelia jej nemusia dôverovať",
         "verify_toast_title": "Overiť túto reláciu"
     },
+    "error": {
+        "admin_contact": "Prosím, <a>kontaktujte správcu služieb</a> aby ste mohli službu ďalej používať.",
+        "admin_contact_short": "Kontaktujte svojho <a>administrátora serveru</a>.",
+        "app_launch_unexpected_error": "Neočakávaná chyba počas pripravovania aplikácie. Pre podrobnosti pozri konzolu.",
+        "cannot_load_config": "Nemožno načítať konfiguračný súbor: prosím obnovte stránku a skúste to znova.",
+        "connection": "Nastal problém pri komunikácii s domovským serverom. Skúste to prosím znova.",
+        "dialog_description_default": "Vyskytla sa chyba.",
+        "download_media": "Nepodarilo sa stiahnuť zdrojové médium, nebola nájdená žiadna zdrojová url adresa",
+        "edit_history_unsupported": "Zdá sa, že váš domovský server túto funkciu nepodporuje.",
+        "failed_copy": "Nepodarilo sa skopírovať",
+        "hs_blocked": "Tento domovský server bol zablokovaný jeho správcom.",
+        "invalid_configuration_mixed_server": "Neplatná konfigurácia: default_hs_url nemôže byť určená spolu s default_server_name alebo default_server_config",
+        "invalid_configuration_no_server": "Neplatné nastavenie: nebol určený východiskový server.",
+        "invalid_json": "Vaša konfigurácia Elementu obsahuje nesprávny údaj JSON. Prosím, opravte chybu a obnovte stránku.",
+        "invalid_json_detail": "Správa z parsera je: %(message)s",
+        "invalid_json_generic": "Neplatný JSON",
+        "mau": "Bol dosiahnutý mesačný limit počtu aktívnych používateľov tohoto domovského servera.",
+        "misconfigured": "Váš Element je nesprávne nastavený",
+        "mixed_content": "K domovskému serveru nie je možné pripojiť sa použitím protokolu HTTP keďže v adresnom riadku prehliadača máte HTTPS adresu. Použite protokol HTTPS alebo <a>povolte nezabezpečené skripty</a>.",
+        "non_urgent_echo_failure_toast": "Váš server neodpovedá na niektoré <a>požiadavky</a>.",
+        "resource_limits": "Bol prekročený limit využitia prostriedkov pre tento domovský server.",
+        "session_restore": {
+            "clear_storage_button": "Vymazať úložisko a odhlásiť sa",
+            "clear_storage_description": "Odhlásiť sa a odstrániť šifrovacie kľúče?",
+            "description_1": "Počas obnovovania vašej predchádzajúcej relácie sa vyskytla chyba.",
+            "description_2": "Ak ste predtým používali novšiu verziu %(brand)s, vaša relácia môže byť s touto verziou nekompatibilná. Zatvorte toto okno a vráťte sa k novšej verzii.",
+            "description_3": "Vymazaním úložiska prehliadača možno opravíte váš problém, no zároveň sa týmto odhlásite a história vašich šifrovaných konverzácií sa pre vás môže stať nečitateľná.",
+            "title": "Nie je možné obnoviť reláciu"
+        },
+        "something_went_wrong": "Niečo sa pokazilo!",
+        "storage_evicted_description_1": "Chýbajú niektoré údaje relácie vrátane zašifrovaných kľúčov správ. Odhláste sa a prihláste sa, aby ste to opravili a obnovili kľúče zo zálohy.",
+        "storage_evicted_description_2": "Váš prehliadač pravdepodobne odstránil tieto údaje, keď mal málo miesta na disku.",
+        "storage_evicted_title": "Chýbajú údaje relácie",
+        "sync": "Nie je možné sa pripojiť k domovskému serveru. Prebieha pokus o opätovné pripojenie…",
+        "tls": "Nie je možné pripojiť sa k domovskému serveru - skontrolujte prosím funkčnosť vášho pripojenia na internet. Uistite sa že <a>certifikát domovského servera</a> je dôveryhodný a že žiaden doplnok nainštalovaný v prehliadači nemôže blokovať požiadavky.",
+        "unknown": "Neznáma chyba",
+        "unknown_error_code": "neznámy kód chyby",
+        "update_power_level": "Nepodarilo sa zmeniť úroveň oprávnenia"
+    },
     "error_app_open_in_another_tab": "Aplikácia %(brand)s bola otvorená na inej karte.",
     "error_app_open_in_another_tab_title": "%(brand)s je pripojený na inej karte",
     "error_app_opened_in_another_window": "%(brand)s je otvorený v inom okne. Kliknutím na \"%(label)s\" použijete túto aplikáciu %(brand)s a odpojíte druhé okno.",
@@ -1216,6 +1208,9 @@
     "in_space_and_n_other_spaces": {
         "one": "V %(spaceName)s a v %(count)s ďalšom priestore.",
         "other": "V %(spaceName)s a %(count)s ďalších priestoroch."
+    },
+    "incompatible_browser": {
+        "title": "Nepodporovaný prehliadač"
     },
     "info_tooltip_title": "Informácie",
     "integration_manager": {
@@ -1696,6 +1691,8 @@
         "moderator": "Moderátor",
         "restricted": "Obmedzené"
     },
+    "powered_by_matrix": "používa protokol Matrix",
+    "powered_by_matrix_with_logo": "Decentralizované, šifrované konverzácie a spolupráca na platforme $matrixLogo",
     "presence": {
         "away": "Preč",
         "busy": "Obsadený/zaneprázdnený",
@@ -3562,6 +3559,7 @@
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
     },
+    "unknown_device": "Neznáme zariadenie",
     "unsupported_server_description": "Tento server používa staršiu verziu systému Matrix. Ak chcete používať %(brand)s bez chýb, aktualizujte na Matrix %(version)s.",
     "unsupported_server_title": "Váš server nie je podporovaný",
     "update": {
@@ -3804,6 +3802,8 @@
         "voice_call": "Hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome_to_element": "Víta vás Element",
     "widget": {
         "added_by": "Widget pridaný používateľom",
         "capabilities_dialog": {

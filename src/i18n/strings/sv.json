@@ -1,10 +1,25 @@
 {
+    "a11y": {
+        "emoji_picker": "Emojiväljare",
+        "jump_first_invite": "Hoppa till första inbjudan.",
+        "message_composer": "Meddelanderedigerare",
+        "n_unread_messages": {
+            "other": "%(count)s olästa meddelanden.",
+            "one": "1 oläst meddelande."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s olästa meddelanden inklusive omnämnanden.",
+            "one": "1 oläst omnämnande."
+        },
+        "recent_rooms": "Nyliga rum",
+        "room_name": "Rum %(name)s",
+        "room_status_bar": "Rumsstatusfält",
+        "seek_bar_label": "Förloppsfält för ljud",
+        "unread_messages": "Olästa meddelanden.",
+        "user_menu": "Användarmeny"
+    },
+    "a11y_jump_first_unread_room": "Hoppa till första olästa rum.",
     "action": {
-        "create_account": "Skapa konto",
-        "dismiss": "Avvisa",
-        "explore_rooms": "Utforska rum",
-        "open": "Öppna",
-        "sign_in": "Logga in",
         "accept": "Godkänn",
         "add": "Lägg till",
         "add_existing_room": "Lägg till existerande rum",
@@ -28,11 +43,13 @@
         "copy_link": "Kopiera länk",
         "create": "Skapa",
         "create_a_room": "Skapa ett rum",
+        "create_account": "Skapa konto",
         "decline": "Avvisa",
         "delete": "Radera",
         "deny": "Neka",
         "disable": "Inaktivera",
         "disconnect": "Koppla ifrån",
+        "dismiss": "Avvisa",
         "done": "Klar",
         "download": "Ladda ner",
         "edit": "Ändra",
@@ -41,6 +58,7 @@
         "exit_fullscreeen": "Gå ur fullskärm",
         "expand": "Expandera",
         "explore_public_rooms": "Utforska offentliga rum",
+        "explore_rooms": "Utforska rum",
         "export": "Exportera",
         "forward": "Vidarebefordra",
         "go": "Gå",
@@ -67,6 +85,7 @@
         "next": "Nästa",
         "no": "Nej",
         "ok": "OK",
+        "open": "Öppna",
         "pause": "Pausa",
         "pin": "Häftstift",
         "play": "Spela",
@@ -96,6 +115,7 @@
         "show": "Visa",
         "show_advanced": "Visa avancerat",
         "show_all": "Visa alla",
+        "sign_in": "Logga in",
         "sign_out": "Logga ut",
         "skip": "Hoppa över",
         "start": "Starta",
@@ -124,8 +144,19 @@
         "zoom_in": "Zooma in",
         "zoom_out": "Zooma ut"
     },
+    "analytics": {
+        "accept_button": "Det är okej",
+        "bullet_1": "Vi spelar <Bold>inte</Bold> in eller profilerar någon kontodata",
+        "bullet_2": "Vi delar <Bold>inte</Bold> information med tredje parter",
+        "consent_migration": "Du har tidigare gått med på att dela anonym användningsdata med oss. Vi uppdaterar hur det fungerar.",
+        "disable_prompt": "Du kan stänga av detta när som helst i inställningarna",
+        "enable_prompt": "Hjälp att förbättra %(analyticsOwner)s",
+        "learn_more": "Dela anonym data för att hjälpa oss att hitta problem. Inget personligt. Inga tredje parter. <LearnMoreLink>Läs mer</LearnMoreLink>",
+        "privacy_policy": "Du kan läsa alla våra villkor <PrivacyPolicyUrl>här</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Hjälp oss hitta fel och förbättra %(analyticsOwner)s genom att dela anonym användardata. För att förstå hur folk använder flera enheter så skapar vi en slumpmässig identifierare som delas mellan dina enheter.",
+        "shared_data_heading": "Vissa av följande data kan delas:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Gå till din webbläsare för att slutföra inloggningen",
         "3pid_in_use": "Den e-postadressen eller det telefonnumret används redan.",
         "account_clash": "Ditt nya konto (%(newAccountId)s) är registrerat, men du är redan inloggad på ett annat konto (%(loggedInUserId)s).",
         "account_clash_previous_account": "Fortsätt med de tidigare kontot",
@@ -301,6 +332,7 @@
         "soft_logout_subheading": "Rensa personlig information",
         "soft_logout_warning": "Varning: din personliga data (inklusive krypteringsnycklar) lagras i den här sessionen. Rensa den om du är färdig med den här sessionen, eller vill logga in i ett annat konto.",
         "sso": "Samlad inloggning",
+        "sso_complete_in_browser_dialog_title": "Gå till din webbläsare för att slutföra inloggningen",
         "sso_failed_missing_storage": "Vi bad webbläsaren att komma ihåg vilken hemserver du använder för att logga in, men tyvärr har din webbläsare glömt det. Gå till inloggningssidan och försök igen.",
         "sso_or_username_password": "%(ssoButtons)s Eller %(usernamePassword)s",
         "sync_footer_subtitle": "Om du har gått med i många rum kan det här ta ett tag",
@@ -335,87 +367,6 @@
         "username_in_use": "Någon annan har redan det användarnamnet, vänligen pröva ett annat.",
         "verify_email_explainer": "Vi behöver veta att det är du innan vi återställer ditt lösenord. Klicka länken i e-brevet vi just skickade till <b>%(email)s</b>",
         "verify_email_heading": "Verifiera din e-post för att fortsätta"
-    },
-    "desktop_default_device_name": "%(brand)s Skrivbord: %(platformName)s",
-    "download_completed": "Nedladdning slutförd",
-    "error": {
-        "app_launch_unexpected_error": "Oväntat fel vid appstart. Se konsolen för mer information.",
-        "cannot_load_config": "Kan inte ladda konfigurationsfilen: ladda om sidan för att försöka igen.",
-        "invalid_configuration_mixed_server": "Ogiltig konfiguration: en default_hs_url kan inte anges tillsammans med default_server_name eller default_server_config",
-        "invalid_configuration_no_server": "Ogiltiga inställningar: ingen standardserver specificerad.",
-        "invalid_json": "Din Elementkonfiguration innehåller ogiltig JSON. Vänligen rätta till problemet och ladda om sidan.",
-        "invalid_json_detail": "Meddelandet från parsern är: %(message)s",
-        "invalid_json_generic": "Ogiltig JSON",
-        "misconfigured": "Din Element är felkonfigurerad",
-        "admin_contact": "Vänligen <a>kontakta din tjänstadministratör</a> för att fortsätta använda tjänsten.",
-        "admin_contact_short": "Kontakta din <a>serveradministratör</a>.",
-        "connection": "Ett problem inträffade vi kommunikation med hemservern, vänligen försök igen senare.",
-        "dialog_description_default": "Ett fel har inträffat.",
-        "download_media": "Misslyckades att ladda ned källmedian, ingen käll-URL hittades",
-        "edit_history_unsupported": "Din hemserver verkar inte stödja den här funktionen.",
-        "failed_copy": "Misslyckades att kopiera",
-        "hs_blocked": "Hemservern har blockerats av sin administratör.",
-        "mau": "Hemservern har nått sin månatliga gräns för användaraktivitet.",
-        "mixed_content": "Kan inte ansluta till en hemserver via HTTP då adressen i webbläsaren är HTTPS. Använd HTTPS, eller <a>aktivera osäkra skript</a>.",
-        "non_urgent_echo_failure_toast": "Din server svarar inte på vissa <a>förfrågningar</a>.",
-        "resource_limits": "Hemservern har överskridit en av sina resursgränser.",
-        "session_restore": {
-            "clear_storage_button": "Rensa lagring och logga ut",
-            "clear_storage_description": "Logga ut och ta bort krypteringsnycklar?",
-            "description_1": "Ett fel uppstod vid återställning av din tidigare session.",
-            "description_2": "Om du nyligen har använt en senare version av %(brand)s kan din session vara inkompatibel med den här versionen. Stäng det här fönstret och använd senare versionen istället.",
-            "description_3": "Att rensa webbläsarens lagring kan lösa problemet, men då loggas du ut och krypterad chatthistorik blir oläslig.",
-            "title": "Kunde inte återställa sessionen"
-        },
-        "something_went_wrong": "Något gick fel!",
-        "storage_evicted_description_1": "Vissa sessionsdata, inklusive krypteringsnycklar för meddelanden, saknas. Logga ut och logga in för att åtgärda detta genom återställning av nycklarna från säkerhetskopia.",
-        "storage_evicted_description_2": "Din webbläsare har troligen tagit bort dessa data när det blev ont om diskutrymme.",
-        "storage_evicted_title": "Sessionsdata saknas",
-        "sync": "Kunde inte kontakta hemservern. Försöker igen …",
-        "tls": "Kan inte ansluta till hemservern - vänligen kolla din nätverksanslutning, se till att <a>hemserverns SSL-certifikat</a> är betrott, och att inget webbläsartillägg blockerar förfrågningar.",
-        "unknown": "Okänt fel",
-        "unknown_error_code": "okänd felkod",
-        "update_power_level": "Misslyckades att ändra behörighetsnivå"
-    },
-    "incompatible_browser": {
-        "title": "Webbläsaren stöds ej"
-    },
-    "powered_by_matrix": "Drivs av Matrix",
-    "powered_by_matrix_with_logo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
-    "unknown_device": "Okänd enhet",
-    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Välkommen till Element",
-    "a11y": {
-        "emoji_picker": "Emojiväljare",
-        "jump_first_invite": "Hoppa till första inbjudan.",
-        "message_composer": "Meddelanderedigerare",
-        "n_unread_messages": {
-            "other": "%(count)s olästa meddelanden.",
-            "one": "1 oläst meddelande."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s olästa meddelanden inklusive omnämnanden.",
-            "one": "1 oläst omnämnande."
-        },
-        "recent_rooms": "Nyliga rum",
-        "room_name": "Rum %(name)s",
-        "room_status_bar": "Rumsstatusfält",
-        "seek_bar_label": "Förloppsfält för ljud",
-        "unread_messages": "Olästa meddelanden.",
-        "user_menu": "Användarmeny"
-    },
-    "a11y_jump_first_unread_room": "Hoppa till första olästa rum.",
-    "analytics": {
-        "accept_button": "Det är okej",
-        "bullet_1": "Vi spelar <Bold>inte</Bold> in eller profilerar någon kontodata",
-        "bullet_2": "Vi delar <Bold>inte</Bold> information med tredje parter",
-        "consent_migration": "Du har tidigare gått med på att dela anonym användningsdata med oss. Vi uppdaterar hur det fungerar.",
-        "disable_prompt": "Du kan stänga av detta när som helst i inställningarna",
-        "enable_prompt": "Hjälp att förbättra %(analyticsOwner)s",
-        "learn_more": "Dela anonym data för att hjälpa oss att hitta problem. Inget personligt. Inga tredje parter. <LearnMoreLink>Läs mer</LearnMoreLink>",
-        "privacy_policy": "Du kan läsa alla våra villkor <PrivacyPolicyUrl>här</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Hjälp oss hitta fel och förbättra %(analyticsOwner)s genom att dela anonym användardata. För att förstå hur folk använder flera enheter så skapar vi en slumpmässig identifierare som delas mellan dina enheter.",
-        "shared_data_heading": "Vissa av följande data kan delas:"
     },
     "bug_reporting": {
         "additional_context": "Om det finns ytterligare sammanhang som kan hjälpa för att analysera problemet, till exempel vad du gjorde vid den tiden, rums-ID:n, användar-ID:n o.s.v., vänligen inkludera dessa saker här.",
@@ -747,6 +698,7 @@
         "twemoji": "Emojigrafiken <twemoji>Twemoji</twemoji> är © <author>Twitter, Inc och andra bidragsgivare</author> och används under villkoren i <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Teckensnittet <colr>twemoji-colr</colr> är © <author>Mozilla Foundation</author> och används under villkoren för <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Skrivbord: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktiva widgets",
         "category_other": "Annat",
@@ -849,6 +801,7 @@
         "widget_screenshots": "Aktivera widget-skärmdumpar för widgets som stöder det"
     },
     "dialog_close_label": "Stäng dialogrutan",
+    "download_completed": "Nedladdning slutförd",
     "emoji": {
         "categories": "Kategorier",
         "category_activities": "Aktiviteter",
@@ -1053,6 +1006,45 @@
         "verify_toast_description": "Andra användare kanske inta litar på den",
         "verify_toast_title": "Verifiera denna session"
     },
+    "error": {
+        "admin_contact": "Vänligen <a>kontakta din tjänstadministratör</a> för att fortsätta använda tjänsten.",
+        "admin_contact_short": "Kontakta din <a>serveradministratör</a>.",
+        "app_launch_unexpected_error": "Oväntat fel vid appstart. Se konsolen för mer information.",
+        "cannot_load_config": "Kan inte ladda konfigurationsfilen: ladda om sidan för att försöka igen.",
+        "connection": "Ett problem inträffade vi kommunikation med hemservern, vänligen försök igen senare.",
+        "dialog_description_default": "Ett fel har inträffat.",
+        "download_media": "Misslyckades att ladda ned källmedian, ingen käll-URL hittades",
+        "edit_history_unsupported": "Din hemserver verkar inte stödja den här funktionen.",
+        "failed_copy": "Misslyckades att kopiera",
+        "hs_blocked": "Hemservern har blockerats av sin administratör.",
+        "invalid_configuration_mixed_server": "Ogiltig konfiguration: en default_hs_url kan inte anges tillsammans med default_server_name eller default_server_config",
+        "invalid_configuration_no_server": "Ogiltiga inställningar: ingen standardserver specificerad.",
+        "invalid_json": "Din Elementkonfiguration innehåller ogiltig JSON. Vänligen rätta till problemet och ladda om sidan.",
+        "invalid_json_detail": "Meddelandet från parsern är: %(message)s",
+        "invalid_json_generic": "Ogiltig JSON",
+        "mau": "Hemservern har nått sin månatliga gräns för användaraktivitet.",
+        "misconfigured": "Din Element är felkonfigurerad",
+        "mixed_content": "Kan inte ansluta till en hemserver via HTTP då adressen i webbläsaren är HTTPS. Använd HTTPS, eller <a>aktivera osäkra skript</a>.",
+        "non_urgent_echo_failure_toast": "Din server svarar inte på vissa <a>förfrågningar</a>.",
+        "resource_limits": "Hemservern har överskridit en av sina resursgränser.",
+        "session_restore": {
+            "clear_storage_button": "Rensa lagring och logga ut",
+            "clear_storage_description": "Logga ut och ta bort krypteringsnycklar?",
+            "description_1": "Ett fel uppstod vid återställning av din tidigare session.",
+            "description_2": "Om du nyligen har använt en senare version av %(brand)s kan din session vara inkompatibel med den här versionen. Stäng det här fönstret och använd senare versionen istället.",
+            "description_3": "Att rensa webbläsarens lagring kan lösa problemet, men då loggas du ut och krypterad chatthistorik blir oläslig.",
+            "title": "Kunde inte återställa sessionen"
+        },
+        "something_went_wrong": "Något gick fel!",
+        "storage_evicted_description_1": "Vissa sessionsdata, inklusive krypteringsnycklar för meddelanden, saknas. Logga ut och logga in för att åtgärda detta genom återställning av nycklarna från säkerhetskopia.",
+        "storage_evicted_description_2": "Din webbläsare har troligen tagit bort dessa data när det blev ont om diskutrymme.",
+        "storage_evicted_title": "Sessionsdata saknas",
+        "sync": "Kunde inte kontakta hemservern. Försöker igen …",
+        "tls": "Kan inte ansluta till hemservern - vänligen kolla din nätverksanslutning, se till att <a>hemserverns SSL-certifikat</a> är betrott, och att inget webbläsartillägg blockerar förfrågningar.",
+        "unknown": "Okänt fel",
+        "unknown_error_code": "okänd felkod",
+        "update_power_level": "Misslyckades att ändra behörighetsnivå"
+    },
     "error_app_open_in_another_tab": "Byt till den andra fliken för att ansluta till %(brand)s. Den här fliken kan nu stängas",
     "error_app_open_in_another_tab_title": "%(brand)s är ansluten i en annan flik",
     "error_app_opened_in_another_window": "%(brand)s är öppen i ett annat fönster. Klicka på \"%(label)s\" för att använda %(brand)s här och koppla bort det andra fönstret.",
@@ -1221,6 +1213,9 @@
     "in_space_and_n_other_spaces": {
         "one": "I %(spaceName)s och %(count)s annat utrymme.",
         "other": "I %(spaceName)s och %(count)s andra utrymmen."
+    },
+    "incompatible_browser": {
+        "title": "Webbläsaren stöds ej"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -1708,6 +1703,8 @@
         "moderator": "Moderator",
         "restricted": "Begränsad"
     },
+    "powered_by_matrix": "Drivs av Matrix",
+    "powered_by_matrix_with_logo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
     "presence": {
         "away": "Borta",
         "busy": "Upptagen",
@@ -3548,6 +3545,7 @@
     "truncated_list_n_more": {
         "other": "Och %(count)s till…"
     },
+    "unknown_device": "Okänd enhet",
     "unsupported_server_description": "Servern använder en äldre version av Matrix. Uppgradera till Matrix %(version)s för att använda %(brand)s utan fel.",
     "unsupported_server_title": "Din server stöds inte",
     "update": {
@@ -3797,6 +3795,8 @@
         "voice_call": "Röstsamtal",
         "you_are_presenting": "Du presenterar"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
+    "welcome_to_element": "Välkommen till Element",
     "widget": {
         "added_by": "Widget tillagd av",
         "capabilities_dialog": {

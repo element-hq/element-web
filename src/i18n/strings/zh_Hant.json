@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "跳到第一個邀請。",
+        "n_unread_messages": {
+            "other": "%(count)s 則未讀訊息。",
+            "one": "1 則未讀的訊息。"
+        },
+        "n_unread_messages_mentions": {
+            "other": "包含提及有 %(count)s 則未讀訊息。",
+            "one": "1 則未讀的提及。"
+        },
+        "room_name": "聊天室 %(name)s",
+        "unread_messages": "未讀的訊息。",
+        "user_menu": "使用者選單"
+    },
+    "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
     "action": {
-        "create_account": "建立帳號",
-        "dismiss": "關閉",
-        "explore_rooms": "探索聊天室",
-        "open": "開啟",
-        "sign_in": "登入",
         "accept": "接受",
         "add": "新增",
         "add_existing_room": "新增既有的聊天室",
@@ -28,11 +38,13 @@
         "copy_link": "複製連結",
         "create": "建立",
         "create_a_room": "建立聊天室",
+        "create_account": "建立帳號",
         "decline": "拒絕",
         "delete": "刪除",
         "deny": "拒絕",
         "disable": "停用",
         "disconnect": "中斷連線",
+        "dismiss": "關閉",
         "done": "完成",
         "download": "下載",
         "edit": "編輯",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "離開全螢幕",
         "expand": "展開",
         "explore_public_rooms": "探索公開聊天室",
+        "explore_rooms": "探索聊天室",
         "export": "匯出",
         "forward": "轉寄",
         "go": "前往",
@@ -67,6 +80,7 @@
         "next": "下一步",
         "no": "否",
         "ok": "確定",
+        "open": "開啟",
         "pause": "暫停",
         "pin": "圖釘",
         "play": "播放",
@@ -96,6 +110,7 @@
         "show": "顯示",
         "show_advanced": "顯示進階設定",
         "show_all": "顯示全部",
+        "sign_in": "登入",
         "sign_out": "登出",
         "skip": "略過",
         "start": "開始",
@@ -124,8 +139,19 @@
         "zoom_in": "放大",
         "zoom_out": "縮小"
     },
+    "analytics": {
+        "accept_button": "沒關係",
+        "bullet_1": "我們<Bold>不會</Bold>記錄或分析任何帳號資料",
+        "bullet_2": "我們<Bold>不會</Bold>與第三方分享這些資訊",
+        "consent_migration": "您先前曾同意與我們分享匿名使用資料。我們正在更新其運作方式。",
+        "disable_prompt": "您可以隨時在設定中關閉此功能",
+        "enable_prompt": "協助改善 %(analyticsOwner)s",
+        "learn_more": "分享匿名資料以協助我們識別問題。無個人資料。無第三方。<LearnMoreLink>取得更多資訊</LearnMoreLink>",
+        "privacy_policy": "您可以<PrivacyPolicyUrl>在此</PrivacyPolicyUrl>閱讀我們的條款",
+        "pseudonymous_usage_data": "匿名分享使用資料能幫我們辨識錯誤和改善 %(analyticsOwner)s。為了瞭解使用者如何使用多種裝置，我們會隨機產生能夠辨識您裝置的辨識碼。",
+        "shared_data_heading": "可能會分享以下資料："
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "前往您的瀏覽器以完成登入",
         "3pid_in_use": "該電子郵件地址或電話號碼已被使用。",
         "account_clash": "您的新帳號 %(newAccountId)s 已註冊，但您已經登入到不同的帳號 (%(loggedInUserId)s)。",
         "account_clash_previous_account": "使用先前的帳號繼續",
@@ -297,6 +323,7 @@
         "soft_logout_subheading": "清除個人資料",
         "soft_logout_warning": "警告：您的個人資料（包含加密金鑰）仍儲存於此工作階段。若您使用完此工作階段或想要登入其他帳號，請清除它。",
         "sso": "單一登入",
+        "sso_complete_in_browser_dialog_title": "前往您的瀏覽器以完成登入",
         "sso_failed_missing_storage": "我們要求瀏覽器記住它讓您登入時使用的家伺服器，但不幸的是，您的瀏覽器忘了它。到登入頁面然後重試。",
         "sso_or_username_password": "%(ssoButtons)s 或 %(usernamePassword)s",
         "sync_footer_subtitle": "如果您已加入很多聊天室，這可能需要一點時間",
@@ -331,82 +358,6 @@
         "username_in_use": "某人已使用該使用者名稱。請改用其他名稱。",
         "verify_email_explainer": "在重設您的密碼前，我們必須知道是您本人。請點擊我們剛剛寄送至<b>%(email)s</b>的電子郵件中的連結",
         "verify_email_heading": "請驗證您的郵件信箱以繼續"
-    },
-    "desktop_default_device_name": "%(brand)s 桌面版：%(platformName)s",
-    "download_completed": "下載完成",
-    "error": {
-        "app_launch_unexpected_error": "準備應用程式時發生未知錯誤。請見主控台以取得更多資訊。",
-        "cannot_load_config": "無法載入設定檔：請重新整理頁面以再試一次。",
-        "invalid_configuration_mixed_server": "無效設定：default_hs_url 不能與 default_server_name 或 default_server_config 一起指定",
-        "invalid_configuration_no_server": "無效設定：未指定預設伺服器。",
-        "invalid_json": "您的 Element 設定中包含無效 JSON，請修正後重新載入網頁。",
-        "invalid_json_detail": "解析器收到的訊息：%(message)s",
-        "invalid_json_generic": "無效的 JSON",
-        "misconfigured": "您的 Element 設定錯誤",
-        "admin_contact": "請<a>聯絡您的服務管理員</a>以繼續使用此服務。",
-        "admin_contact_short": "聯絡您的<a>伺服器管理員</a>。",
-        "connection": "與家伺服器通訊時出現問題，請再試一次。",
-        "dialog_description_default": "出現一個錯誤。",
-        "download_media": "下載來源媒體失敗，找不到來源 URL",
-        "edit_history_unsupported": "您的家伺服器似乎並不支援此功能。",
-        "failed_copy": "無法複製",
-        "hs_blocked": "此家伺服器已被管理員封鎖。",
-        "mau": "此家伺服器已超出每月活躍使用者上限。",
-        "mixed_content": "當瀏覽器網址列使用的是 HTTPS 網址時，不能使用 HTTP 連線到家伺服器。請改用 HTTPS 連線或<a>允許不安全的指令碼</a>。",
-        "non_urgent_echo_failure_toast": "您的伺服器未回應某些<a>請求</a>。",
-        "resource_limits": "此家伺服器已經超過其中一項資源限制。",
-        "session_restore": {
-            "clear_storage_button": "清除儲存的東西並登出",
-            "clear_storage_description": "登出並移除加密金鑰？",
-            "description_1": "我們在嘗試復原您先前的工作階段時遇到了一點錯誤。",
-            "description_2": "若您先前使用過較新版本的 %(brand)s，您的工作階段可能與此版本不相容。關閉此視窗並回到較新的版本。",
-            "description_3": "清除您瀏覽器的儲存的東西也許可以修復問題，但會將您登出並造成任何已加密的聊天都無法讀取。",
-            "title": "無法復原工作階段"
-        },
-        "something_went_wrong": "出了點問題！",
-        "storage_evicted_description_1": "某些工作階段資料遺失了，其中包含加密訊息金鑰。登出再登入並從備份中復原金鑰可以修復這個問題。",
-        "storage_evicted_description_2": "當硬碟空間不足時，您的瀏覽器可能會移除這些資料。",
-        "storage_evicted_title": "遺失工作階段資料",
-        "sync": "無法連線至家伺服器。正在重試…",
-        "tls": "無法連線到家伺服器 - 請檢查您的連線，確保您的<a>家伺服器的 SSL 憑證</a>可被信任，而瀏覽器擴充套件也沒有阻擋請求。",
-        "unknown": "未知的錯誤",
-        "unknown_error_code": "未知的錯誤代碼",
-        "update_power_level": "無法變更權限等級"
-    },
-    "incompatible_browser": {
-        "title": "不支援的瀏覽器"
-    },
-    "powered_by_matrix": "由Matrix支持",
-    "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
-    "unknown_device": "未知裝置",
-    "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "welcome_to_element": "歡迎使用 Element",
-    "a11y": {
-        "jump_first_invite": "跳到第一個邀請。",
-        "n_unread_messages": {
-            "other": "%(count)s 則未讀訊息。",
-            "one": "1 則未讀的訊息。"
-        },
-        "n_unread_messages_mentions": {
-            "other": "包含提及有 %(count)s 則未讀訊息。",
-            "one": "1 則未讀的提及。"
-        },
-        "room_name": "聊天室 %(name)s",
-        "unread_messages": "未讀的訊息。",
-        "user_menu": "使用者選單"
-    },
-    "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
-    "analytics": {
-        "accept_button": "沒關係",
-        "bullet_1": "我們<Bold>不會</Bold>記錄或分析任何帳號資料",
-        "bullet_2": "我們<Bold>不會</Bold>與第三方分享這些資訊",
-        "consent_migration": "您先前曾同意與我們分享匿名使用資料。我們正在更新其運作方式。",
-        "disable_prompt": "您可以隨時在設定中關閉此功能",
-        "enable_prompt": "協助改善 %(analyticsOwner)s",
-        "learn_more": "分享匿名資料以協助我們識別問題。無個人資料。無第三方。<LearnMoreLink>取得更多資訊</LearnMoreLink>",
-        "privacy_policy": "您可以<PrivacyPolicyUrl>在此</PrivacyPolicyUrl>閱讀我們的條款",
-        "pseudonymous_usage_data": "匿名分享使用資料能幫我們辨識錯誤和改善 %(analyticsOwner)s。為了瞭解使用者如何使用多種裝置，我們會隨機產生能夠辨識您裝置的辨識碼。",
-        "shared_data_heading": "可能會分享以下資料："
     },
     "bug_reporting": {
         "additional_context": "如果有其他有助於釐清問題的情境，如您當時正在做什麼，聊天室 ID、使用者 ID 等等，請在這裡加入這些資訊。",
@@ -734,6 +685,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> 表情符號藝術作者為 © <author>Twitter 公司與其他貢獻者</author>，以 <terms>CC-BY 4.0</terms> 授權使用。",
         "twemoji_colr": "<colr>twemoji-colr</colr> 字型作者為 © <author>Mozilla 基金會</author>，以 <terms>Apache 2.0</terms> 授權使用。"
     },
+    "desktop_default_device_name": "%(brand)s 桌面版：%(platformName)s",
     "devtools": {
         "active_widgets": "執行中的小工具",
         "category_other": "其他",
@@ -835,6 +787,7 @@
         "widget_screenshots": "在支援的小工具上啟用小工具螢幕快照"
     },
     "dialog_close_label": "關閉對話框",
+    "download_completed": "下載完成",
     "emoji": {
         "categories": "分類",
         "category_activities": "活動",
@@ -1036,6 +989,45 @@
         "verify_toast_description": "其他使用者可能不會信任它",
         "verify_toast_title": "驗證此工作階段"
     },
+    "error": {
+        "admin_contact": "請<a>聯絡您的服務管理員</a>以繼續使用此服務。",
+        "admin_contact_short": "聯絡您的<a>伺服器管理員</a>。",
+        "app_launch_unexpected_error": "準備應用程式時發生未知錯誤。請見主控台以取得更多資訊。",
+        "cannot_load_config": "無法載入設定檔：請重新整理頁面以再試一次。",
+        "connection": "與家伺服器通訊時出現問題，請再試一次。",
+        "dialog_description_default": "出現一個錯誤。",
+        "download_media": "下載來源媒體失敗，找不到來源 URL",
+        "edit_history_unsupported": "您的家伺服器似乎並不支援此功能。",
+        "failed_copy": "無法複製",
+        "hs_blocked": "此家伺服器已被管理員封鎖。",
+        "invalid_configuration_mixed_server": "無效設定：default_hs_url 不能與 default_server_name 或 default_server_config 一起指定",
+        "invalid_configuration_no_server": "無效設定：未指定預設伺服器。",
+        "invalid_json": "您的 Element 設定中包含無效 JSON，請修正後重新載入網頁。",
+        "invalid_json_detail": "解析器收到的訊息：%(message)s",
+        "invalid_json_generic": "無效的 JSON",
+        "mau": "此家伺服器已超出每月活躍使用者上限。",
+        "misconfigured": "您的 Element 設定錯誤",
+        "mixed_content": "當瀏覽器網址列使用的是 HTTPS 網址時，不能使用 HTTP 連線到家伺服器。請改用 HTTPS 連線或<a>允許不安全的指令碼</a>。",
+        "non_urgent_echo_failure_toast": "您的伺服器未回應某些<a>請求</a>。",
+        "resource_limits": "此家伺服器已經超過其中一項資源限制。",
+        "session_restore": {
+            "clear_storage_button": "清除儲存的東西並登出",
+            "clear_storage_description": "登出並移除加密金鑰？",
+            "description_1": "我們在嘗試復原您先前的工作階段時遇到了一點錯誤。",
+            "description_2": "若您先前使用過較新版本的 %(brand)s，您的工作階段可能與此版本不相容。關閉此視窗並回到較新的版本。",
+            "description_3": "清除您瀏覽器的儲存的東西也許可以修復問題，但會將您登出並造成任何已加密的聊天都無法讀取。",
+            "title": "無法復原工作階段"
+        },
+        "something_went_wrong": "出了點問題！",
+        "storage_evicted_description_1": "某些工作階段資料遺失了，其中包含加密訊息金鑰。登出再登入並從備份中復原金鑰可以修復這個問題。",
+        "storage_evicted_description_2": "當硬碟空間不足時，您的瀏覽器可能會移除這些資料。",
+        "storage_evicted_title": "遺失工作階段資料",
+        "sync": "無法連線至家伺服器。正在重試…",
+        "tls": "無法連線到家伺服器 - 請檢查您的連線，確保您的<a>家伺服器的 SSL 憑證</a>可被信任，而瀏覽器擴充套件也沒有阻擋請求。",
+        "unknown": "未知的錯誤",
+        "unknown_error_code": "未知的錯誤代碼",
+        "update_power_level": "無法變更權限等級"
+    },
     "error_database_closed_title": "資料庫意外關閉",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1193,6 +1185,9 @@
     "in_space_and_n_other_spaces": {
         "one": "在 %(spaceName)s 與 %(count)s 個其他空間。",
         "other": "在 %(spaceName)s 與 %(count)s 個其他空間。"
+    },
+    "incompatible_browser": {
+        "title": "不支援的瀏覽器"
     },
     "info_tooltip_title": "資訊",
     "integration_manager": {
@@ -1659,6 +1654,8 @@
         "moderator": "版主",
         "restricted": "已限制"
     },
+    "powered_by_matrix": "由Matrix支持",
+    "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "presence": {
         "away": "離開",
         "busy": "忙碌",
@@ -3451,6 +3448,7 @@
     "truncated_list_n_more": {
         "other": "與更多 %(count)s 個…"
     },
+    "unknown_device": "未知裝置",
     "unsupported_server_description": "此伺服器正在使用較舊版本的 Matrix。升級至 Matrix %(version)s 以在沒有錯誤的情況下使用 %(brand)s。",
     "unsupported_server_title": "您的伺服器不支援",
     "update": {
@@ -3693,6 +3691,8 @@
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },
+    "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
+    "welcome_to_element": "歡迎使用 Element",
     "widget": {
         "added_by": "小工具新增者為",
         "capabilities_dialog": {

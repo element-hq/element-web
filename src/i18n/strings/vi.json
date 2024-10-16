@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Chuyển đến lời mời đầu tiên.",
+        "n_unread_messages": {
+            "one": "1 tin chưa đọc.",
+            "other": "%(count)s tin nhắn chưa đọc."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 đề cập chưa đọc.",
+            "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
+        },
+        "room_name": "Phòng %(name)s",
+        "unread_messages": "Các tin nhắn chưa đọc.",
+        "user_menu": "Menu người dùng"
+    },
+    "a11y_jump_first_unread_room": "Chuyển đến phòng chưa đọc đầu tiên.",
     "action": {
-        "create_account": "Tạo tài khoản",
-        "dismiss": "Bỏ qua",
-        "explore_rooms": "Khám phá các phòng",
-        "open": "Mở",
-        "sign_in": "Đăng nhập",
         "accept": "Đồng ý",
         "add": "Thêm",
         "add_existing_room": "Thêm phòng hiện có",
@@ -28,11 +38,13 @@
         "copy_link": "Sao chép liên kết",
         "create": "Tạo",
         "create_a_room": "Tạo phòng",
+        "create_account": "Tạo tài khoản",
         "decline": "Từ chối",
         "delete": "Xoá",
         "deny": "Từ chối",
         "disable": "Tắt",
         "disconnect": "Ngắt kết nối",
+        "dismiss": "Bỏ qua",
         "done": "Xong",
         "download": "Tải xuống",
         "edit": "Sửa",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "Thoát toàn màn hình",
         "expand": "Mở rộng",
         "explore_public_rooms": "Khám phá các phòng chung",
+        "explore_rooms": "Khám phá các phòng",
         "export": "Xuất",
         "forward": "Chuyển tiếp",
         "go": "Đi",
@@ -66,6 +79,7 @@
         "new_video_room": "Tạo phòng truyền hình",
         "next": "Tiếp",
         "no": "Không",
+        "open": "Mở",
         "pause": "Tạm dừng",
         "pin": "Ghim",
         "play": "Chạy",
@@ -95,6 +109,7 @@
         "show": "Hiện",
         "show_advanced": "Hiện nâng cao",
         "show_all": "Hiển thị tất cả",
+        "sign_in": "Đăng nhập",
         "sign_out": "Đăng xuất",
         "skip": "Bỏ qua",
         "start": "Bắt đầu",
@@ -122,8 +137,18 @@
         "zoom_in": "Phóng to",
         "zoom_out": "Thu nhỏ"
     },
+    "analytics": {
+        "accept_button": "Không sao cả",
+        "bullet_1": "Chúng tôi <Bold>không</Bold> thu thập hoặc lập hồ sơ bất kỳ dữ liệu tài khoản nào",
+        "bullet_2": "Chúng tôi <Bold>không</Bold> chia sẻ thông tin với các bên thứ ba",
+        "consent_migration": "Trước đây bạn đã đồng ý chia sẻ dữ liệu sử dụng ẩn danh với chúng tôi. Chúng tôi đang cập nhật cách thức hoạt động.",
+        "disable_prompt": "Bạn có thể tắt tính năng này bất cứ lúc nào trong cài đặt",
+        "enable_prompt": "Giúp cải thiện %(analyticsOwner)s",
+        "learn_more": "Chia sẻ dữ liệu ẩn danh giúp chúng tôi xác định các sự cố. Không có thông tin cá nhân. Không có bên thứ ba. <LearnMoreLink>Tìm hiểu thêm</LearnMoreLink>",
+        "privacy_policy": "Bạn có thể đọc tất cả các điều khoản của chúng tôi <PrivacyPolicyUrl>ở đây</PrivacyPolicyUrl>",
+        "shared_data_heading": "Bất kỳ dữ liệu nào sau đây đều có thể được chia sẻ:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập",
         "3pid_in_use": "Địa chỉ thư điện tử hay số điện thoại đó đã được sử dụng.",
         "account_clash": "Tài khoản mới của bạn (%(newAccountId)s) đã được đăng ký, nhưng bạn đã đăng nhập vào một tài khoản khác (%(loggedInUserId)s).",
         "account_clash_previous_account": "Tiếp tục với tài khoản trước",
@@ -271,6 +296,7 @@
         "soft_logout_intro_unsupported_auth": "Bạn không thể đăng nhập vào tài khoản của mình. Vui lòng liên hệ với quản trị viên máy chủ của bạn để biết thêm thông tin.",
         "soft_logout_subheading": "Xóa dữ liệu cá nhân",
         "sso": "Đăng Nhập Một Lần",
+        "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập",
         "sso_failed_missing_storage": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại.",
         "sso_or_username_password": "%(ssoButtons)s Hoặc %(usernamePassword)s",
         "sync_footer_subtitle": "Nếu bạn đã tham gia nhiều phòng, quá trình này có thể mất một lúc",
@@ -297,81 +323,6 @@
         "unsupported_auth_msisdn": "Máy chủ này không hỗ trợ xác thực bằng số điện thoại.",
         "username_field_required_invalid": "Điền tên đăng nhập",
         "username_in_use": "Ai đó đã có username đó, vui lòng thử một cái khác."
-    },
-    "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
-    "download_completed": "Tải xuống hoàn tất",
-    "error": {
-        "app_launch_unexpected_error": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
-        "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
-        "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
-        "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
-        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
-        "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
-        "invalid_json_generic": "JSON không hợp lệ",
-        "misconfigured": "Element đang bị thiết lập sai",
-        "admin_contact": "Vui lòng liên hệ với quản trị viên dịch vụ của bạn <a>contact your service administrator</a> để tiếp tục sử dụng dịch vụ này.",
-        "admin_contact_short": "Liên hệ với <a>quản trị viên máy chủ</a> của bạn.",
-        "connection": "Đã xảy ra sự cố khi giao tiếp với máy chủ, vui lòng thử lại sau.",
-        "dialog_description_default": "Một lỗi đã xảy ra.",
-        "download_media": "Tải xuống phương tiện nguồn thất bại, không tìm thấy nguồn url",
-        "edit_history_unsupported": "Máy chủ nhà của bạn dường như không hỗ trợ tính năng này.",
-        "failed_copy": "Sao chép không thành công",
-        "hs_blocked": "Máy chủ này đã bị chặn bởi quản trị viên của nó.",
-        "mau": "Máy chủ nhà này đã đạt đến giới hạn người dùng hoạt động hàng tháng.",
-        "mixed_content": "Không thể kết nối với máy chủ thông qua HTTP khi URL HTTPS nằm trong thanh trình duyệt của bạn. Sử dụng HTTPS hoặc bật các tập lệnh không an toàn <a>enable unsafe scripts</a>.",
-        "non_urgent_echo_failure_toast": "Máy chủ của bạn không phản hồi một số yêu cầu <a>requests</a>.",
-        "resource_limits": "Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.",
-        "session_restore": {
-            "clear_storage_button": "Xóa bộ nhớ và Đăng xuất",
-            "clear_storage_description": "Đăng xuất và xóa khóa mã hóa?",
-            "description_1": "Chúng tôi đã gặp lỗi khi cố gắng khôi phục phiên trước đó của bạn.",
-            "description_2": "Nếu trước đây bạn đã sử dụng phiên bản %(brand)s mới hơn, thì phiên của bạn có thể không tương thích với phiên bản này. Đóng cửa sổ này và quay lại phiên bản mới hơn.",
-            "description_3": "Xóa bộ nhớ của trình duyệt có thể khắc phục được sự cố nhưng sẽ khiến bạn đăng xuất và khiến mọi lịch sử trò chuyện được mã hóa trở nên không thể đọc được.",
-            "title": "Không thể khôi phục phiên"
-        },
-        "something_went_wrong": "Đã xảy ra lỗi!",
-        "storage_evicted_description_1": "Một số dữ liệu phiên, bao gồm cả khóa tin nhắn được mã hóa, bị thiếu. Đăng xuất và đăng nhập để khắc phục sự cố này, khôi phục khóa từ bản sao lưu.",
-        "storage_evicted_description_2": "Trình duyệt của bạn có thể đã xóa dữ liệu này khi sắp hết dung lượng đĩa.",
-        "storage_evicted_title": "Thiếu dữ liệu phiên",
-        "sync": "Không kết nối được với máy chủ nhà. Đang thử lại…",
-        "tls": "Không thể kết nối với máy chủ - vui lòng kiểm tra kết nối của bạn, đảm bảo rằng chứng chỉ SSL của máy chủ nhà <a>homeserver's SSL certificate</a> của bạn được tin cậy và tiện ích mở rộng của trình duyệt không chặn các yêu cầu.",
-        "unknown": "Lỗi không thể nhận biết",
-        "unknown_error_code": "mã lỗi không xác định",
-        "update_power_level": "Không thay đổi được mức công suất"
-    },
-    "incompatible_browser": {
-        "title": "Trình duyệt không được hỗ trợ"
-    },
-    "powered_by_matrix": "Chạy trên giao thức Matrix",
-    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
-    "unknown_device": "Thiết bị không xác định",
-    "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
-    "welcome_to_element": "Chào mừng tới Element",
-    "a11y": {
-        "jump_first_invite": "Chuyển đến lời mời đầu tiên.",
-        "n_unread_messages": {
-            "one": "1 tin chưa đọc.",
-            "other": "%(count)s tin nhắn chưa đọc."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 đề cập chưa đọc.",
-            "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
-        },
-        "room_name": "Phòng %(name)s",
-        "unread_messages": "Các tin nhắn chưa đọc.",
-        "user_menu": "Menu người dùng"
-    },
-    "a11y_jump_first_unread_room": "Chuyển đến phòng chưa đọc đầu tiên.",
-    "analytics": {
-        "accept_button": "Không sao cả",
-        "bullet_1": "Chúng tôi <Bold>không</Bold> thu thập hoặc lập hồ sơ bất kỳ dữ liệu tài khoản nào",
-        "bullet_2": "Chúng tôi <Bold>không</Bold> chia sẻ thông tin với các bên thứ ba",
-        "consent_migration": "Trước đây bạn đã đồng ý chia sẻ dữ liệu sử dụng ẩn danh với chúng tôi. Chúng tôi đang cập nhật cách thức hoạt động.",
-        "disable_prompt": "Bạn có thể tắt tính năng này bất cứ lúc nào trong cài đặt",
-        "enable_prompt": "Giúp cải thiện %(analyticsOwner)s",
-        "learn_more": "Chia sẻ dữ liệu ẩn danh giúp chúng tôi xác định các sự cố. Không có thông tin cá nhân. Không có bên thứ ba. <LearnMoreLink>Tìm hiểu thêm</LearnMoreLink>",
-        "privacy_policy": "Bạn có thể đọc tất cả các điều khoản của chúng tôi <PrivacyPolicyUrl>ở đây</PrivacyPolicyUrl>",
-        "shared_data_heading": "Bất kỳ dữ liệu nào sau đây đều có thể được chia sẻ:"
     },
     "bug_reporting": {
         "additional_context": "Nếu có ngữ cảnh bổ sung có thể giúp phân tích vấn đề, chẳng hạn như bạn đang làm gì vào thời điểm đó, ID phòng, ID người dùng, v.v., hãy đưa những điều đó vào đây.",
@@ -686,6 +637,7 @@
     "credits": {
         "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "devtools": {
         "active_widgets": "Tiện ích hoạt động",
         "category_other": "Khác",
@@ -750,6 +702,7 @@
         "widget_screenshots": "Bật widget chụp màn hình cho các widget có hỗ trợ"
     },
     "dialog_close_label": "Đóng hộp thoại",
+    "download_completed": "Tải xuống hoàn tất",
     "emoji": {
         "categories": "Hạng mục",
         "category_activities": "Các hoạt động",
@@ -951,6 +904,45 @@
         "verify_toast_description": "Những người dùng khác có thể không tin tưởng nó",
         "verify_toast_title": "Xác thực phiên này"
     },
+    "error": {
+        "admin_contact": "Vui lòng liên hệ với quản trị viên dịch vụ của bạn <a>contact your service administrator</a> để tiếp tục sử dụng dịch vụ này.",
+        "admin_contact_short": "Liên hệ với <a>quản trị viên máy chủ</a> của bạn.",
+        "app_launch_unexpected_error": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
+        "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
+        "connection": "Đã xảy ra sự cố khi giao tiếp với máy chủ, vui lòng thử lại sau.",
+        "dialog_description_default": "Một lỗi đã xảy ra.",
+        "download_media": "Tải xuống phương tiện nguồn thất bại, không tìm thấy nguồn url",
+        "edit_history_unsupported": "Máy chủ nhà của bạn dường như không hỗ trợ tính năng này.",
+        "failed_copy": "Sao chép không thành công",
+        "hs_blocked": "Máy chủ này đã bị chặn bởi quản trị viên của nó.",
+        "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
+        "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
+        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
+        "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
+        "invalid_json_generic": "JSON không hợp lệ",
+        "mau": "Máy chủ nhà này đã đạt đến giới hạn người dùng hoạt động hàng tháng.",
+        "misconfigured": "Element đang bị thiết lập sai",
+        "mixed_content": "Không thể kết nối với máy chủ thông qua HTTP khi URL HTTPS nằm trong thanh trình duyệt của bạn. Sử dụng HTTPS hoặc bật các tập lệnh không an toàn <a>enable unsafe scripts</a>.",
+        "non_urgent_echo_failure_toast": "Máy chủ của bạn không phản hồi một số yêu cầu <a>requests</a>.",
+        "resource_limits": "Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.",
+        "session_restore": {
+            "clear_storage_button": "Xóa bộ nhớ và Đăng xuất",
+            "clear_storage_description": "Đăng xuất và xóa khóa mã hóa?",
+            "description_1": "Chúng tôi đã gặp lỗi khi cố gắng khôi phục phiên trước đó của bạn.",
+            "description_2": "Nếu trước đây bạn đã sử dụng phiên bản %(brand)s mới hơn, thì phiên của bạn có thể không tương thích với phiên bản này. Đóng cửa sổ này và quay lại phiên bản mới hơn.",
+            "description_3": "Xóa bộ nhớ của trình duyệt có thể khắc phục được sự cố nhưng sẽ khiến bạn đăng xuất và khiến mọi lịch sử trò chuyện được mã hóa trở nên không thể đọc được.",
+            "title": "Không thể khôi phục phiên"
+        },
+        "something_went_wrong": "Đã xảy ra lỗi!",
+        "storage_evicted_description_1": "Một số dữ liệu phiên, bao gồm cả khóa tin nhắn được mã hóa, bị thiếu. Đăng xuất và đăng nhập để khắc phục sự cố này, khôi phục khóa từ bản sao lưu.",
+        "storage_evicted_description_2": "Trình duyệt của bạn có thể đã xóa dữ liệu này khi sắp hết dung lượng đĩa.",
+        "storage_evicted_title": "Thiếu dữ liệu phiên",
+        "sync": "Không kết nối được với máy chủ nhà. Đang thử lại…",
+        "tls": "Không thể kết nối với máy chủ - vui lòng kiểm tra kết nối của bạn, đảm bảo rằng chứng chỉ SSL của máy chủ nhà <a>homeserver's SSL certificate</a> của bạn được tin cậy và tiện ích mở rộng của trình duyệt không chặn các yêu cầu.",
+        "unknown": "Lỗi không thể nhận biết",
+        "unknown_error_code": "mã lỗi không xác định",
+        "update_power_level": "Không thay đổi được mức công suất"
+    },
     "error_database_closed_title": "Cơ sở dữ liệu đột nhiên bị đóng",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1106,6 +1098,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Trong %(spaceName)s và %(count)s space khác.",
         "other": "Trong %(spaceName)s và %(count)s space khác."
+    },
+    "incompatible_browser": {
+        "title": "Trình duyệt không được hỗ trợ"
     },
     "info_tooltip_title": "Thông tin",
     "integration_manager": {
@@ -1513,6 +1508,8 @@
         "moderator": "Điều phối viên",
         "restricted": "Bị hạn chế"
     },
+    "powered_by_matrix": "Chạy trên giao thức Matrix",
+    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "presence": {
         "away": "Vắng mặt",
         "busy": "Bận",
@@ -3191,6 +3188,7 @@
     "truncated_list_n_more": {
         "other": "Và %(count)s thêm…"
     },
+    "unknown_device": "Thiết bị không xác định",
     "update": {
         "changelog": "Lịch sử thay đổi",
         "check_action": "Kiểm tra cập nhật",
@@ -3421,6 +3419,8 @@
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
+    "welcome_to_element": "Chào mừng tới Element",
     "widget": {
         "added_by": "widget được thêm bởi",
         "capabilities_dialog": {

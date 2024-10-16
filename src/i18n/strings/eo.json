@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Salti al unua invito.",
+        "n_unread_messages": {
+            "other": "%(count)s nelegitaj mesaĝoj.",
+            "one": "1 nelegita mesaĝo."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s nelegitaj mesaĝoj, inkluzive menciojn.",
+            "one": "1 nelegita mencio."
+        },
+        "room_name": "Ĉambro %(name)s",
+        "unread_messages": "Nelegitaj mesaĝoj.",
+        "user_menu": "Menuo de uzanto"
+    },
+    "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
     "action": {
-        "create_account": "Krei konton",
-        "dismiss": "Rezigni",
-        "explore_rooms": "Esplori ĉambrojn",
-        "open": "Malfermi",
-        "sign_in": "Saluti",
         "accept": "Akcepti",
         "add": "Aldoni",
         "add_existing_room": "Aldoni jaman ĉambron",
@@ -21,10 +31,12 @@
         "copy": "Kopii",
         "create": "Krei",
         "create_a_room": "Krei ĉambron",
+        "create_account": "Krei konton",
         "decline": "Rifuzi",
         "delete": "Forigi",
         "disable": "Malŝalti",
         "disconnect": "Malkonekti",
+        "dismiss": "Rezigni",
         "done": "Fini",
         "download": "Elŝuti",
         "edit": "Redakti",
@@ -33,6 +45,7 @@
         "exit_fullscreeen": "Eliru plenekrano",
         "expand": "Etendi",
         "explore_public_rooms": "Esplori publikajn ĉambrojn",
+        "explore_rooms": "Esplori ĉambrojn",
         "export": "Elporti",
         "forward": "Plusendi",
         "go": "Iri",
@@ -54,6 +67,7 @@
         "next": "Sekva",
         "no": "Ne",
         "ok": "Bone",
+        "open": "Malfermi",
         "pause": "Paŭzigi",
         "pin": "Pinglo",
         "play": "Ludi",
@@ -78,6 +92,7 @@
         "share": "Havigi",
         "show_advanced": "Montri specialajn",
         "show_all": "Montri ĉiujn",
+        "sign_in": "Saluti",
         "sign_out": "Adiaŭi",
         "skip": "Preterpasi",
         "start": "Komenci",
@@ -103,8 +118,12 @@
         "zoom_in": "Zomi",
         "zoom_out": "Malzomi"
     },
+    "analytics": {
+        "accept_button": "Tio estas bone",
+        "consent_migration": "Vi antaŭe konsentis kunhavigi anonimajn uzdatumojn kun ni. Ni ĝisdatigas kiel tio funkcias.",
+        "shared_data_heading": "Ĉiu el la jenaj datumoj povas kunhaviĝi:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Iru al via retumilo por finpretigi la ensaluton",
         "3pid_in_use": "Tiu retpoŝtadreso aŭ telefonnumero jam estas uzataj.",
         "account_clash": "Via nova konto (%(newAccountId)s) estas registrita, sed vi jam salutis per alia konto (%(loggedInUserId)s).",
         "account_clash_previous_account": "Daŭrigi per antaŭa konto",
@@ -248,6 +267,7 @@
         "soft_logout_intro_unsupported_auth": "Vi ne povas saluti per via konto. Bonvolu kontakti administranton de via hejmservilo por akiri pliajn informojn.",
         "soft_logout_subheading": "Vakigi personajn datumojn",
         "sso": "Ununura saluto",
+        "sso_complete_in_browser_dialog_title": "Iru al via retumilo por finpretigi la ensaluton",
         "sso_failed_missing_storage": "Ni petis la foliumilon memori, kiun hejmservilon vi uzas por saluti, sed domaĝe, via foliumilo forgesis. Iru al la saluta paĝo kaj reprovu.",
         "sso_or_username_password": "%(ssoButtons)s aŭ %(usernamePassword)s",
         "sync_footer_subtitle": "Se vi aliĝis al multaj ĉambroj, tio povas daŭri longe",
@@ -273,73 +293,6 @@
         "username_field_required_invalid": "Enigu uzantonomon",
         "username_in_use": "Iu jam havas tiun uzantnomon, bonvolu provi alian.",
         "verify_email_heading": "Kontrolu vian retpoŝtadreson por daŭrigi"
-    },
-    "desktop_default_device_name": "%(brand)s Labortablo: %(platformName)s",
-    "download_completed": "Elŝuto finiĝis",
-    "error": {
-        "app_launch_unexpected_error": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
-        "cannot_load_config": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
-        "invalid_configuration_no_server": "Nevalida agordo: neniu implicita servilo estas specifita.",
-        "invalid_json": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
-        "invalid_json_detail": "La mesaĝo el la analizilo estas: %(message)s",
-        "invalid_json_generic": "Nevalida JSON",
-        "misconfigured": "Via Elemento estas misagordita",
-        "admin_contact": "Bonvolu <a>kontakti vian servo-administranton</a> por daŭrigi uzadon de tiu ĉi servo.",
-        "admin_contact_short": "Kontaktu <a>administranton de via servilo</a>.",
-        "connection": "Eraris komunikado kun la hejmservilo, bonvolu reprovi poste.",
-        "dialog_description_default": "Okazis eraro.",
-        "edit_history_unsupported": "Via hejmservilo ŝajne ne subtenas ĉi tiun funkcion.",
-        "failed_copy": "Malsukcesis kopii",
-        "hs_blocked": "Tiu ĉi hejmservilo estas blokita de sia administranto.",
-        "mau": "Tiu ĉi hejmservilo atingis sian monatan limon de aktivaj uzantoj.",
-        "mixed_content": "Hejmservilo ne alkonekteblas per HTTP kun HTTPS URL en via adresbreto. Aŭ uzu HTTPS aŭ <a>ŝaltu malsekurajn skriptojn</a>.",
-        "non_urgent_echo_failure_toast": "Via servilo ne respondas al iuj <a>petoj</a>.",
-        "resource_limits": "Tiu ĉi hejmservilo superis je unu el siaj rimedaj limoj.",
-        "session_restore": {
-            "clear_storage_button": "Vakigi memoron kaj adiaŭi",
-            "clear_storage_description": "Ĉu adiaŭi kaj forigi ĉifrajn ŝlosilojn?",
-            "description_1": "Ni renkontis eraron provante rehavi vian antaŭan salutaĵon.",
-            "description_2": "Se vi antaŭe uzis pli novan version de %(brand)s, via salutaĵo eble ne akordos kun ĉi tiu versio. Fermu ĉi tiun fenestron kaj revenu al la pli nova versio.",
-            "description_3": "Vakigo de la memoro de via foliumilo eble korektos la problemon, sed adiaŭigos vin, kaj malebligos legadon de historio de ĉifritaj babiloj.",
-            "title": "Salutaĵo ne rehaveblas"
-        },
-        "something_went_wrong": "Io misokazis!",
-        "storage_evicted_description_1": "Iuj datumoj de salutaĵo, inkluzive viajn ĉifrajn ŝlosilojn, mankas. Por tion korekti, resalutu, kaj rehavu la ŝlosilojn el savkopio.",
-        "storage_evicted_description_2": "Via foliumilo verŝajne forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
-        "storage_evicted_title": "Mankas datumoj de salutaĵo",
-        "sync": "Ne povas konektiĝi al hejmservilo. Reprovante…",
-        "tls": "Ne eblas konekti al hejmservilo – bonvolu kontroli vian konekton, certigi ke <a>la SSL-atestilo de via hejmservilo</a> estas fidata, kaj ke neniu foliumila kromprogramo blokas petojn.",
-        "unknown": "Nekonata eraro",
-        "unknown_error_code": "nekonata kodo de eraro",
-        "update_power_level": "Malsukcesis ŝanĝi povnivelon"
-    },
-    "incompatible_browser": {
-        "title": "Nesubtenata retumilo"
-    },
-    "powered_by_matrix": "Povigata de Matrix",
-    "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
-    "unknown_device": "Nekonata aparato",
-    "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
-    "welcome_to_element": "Bonvenon al Element",
-    "a11y": {
-        "jump_first_invite": "Salti al unua invito.",
-        "n_unread_messages": {
-            "other": "%(count)s nelegitaj mesaĝoj.",
-            "one": "1 nelegita mesaĝo."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s nelegitaj mesaĝoj, inkluzive menciojn.",
-            "one": "1 nelegita mencio."
-        },
-        "room_name": "Ĉambro %(name)s",
-        "unread_messages": "Nelegitaj mesaĝoj.",
-        "user_menu": "Menuo de uzanto"
-    },
-    "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
-    "analytics": {
-        "accept_button": "Tio estas bone",
-        "consent_migration": "Vi antaŭe konsentis kunhavigi anonimajn uzdatumojn kun ni. Ni ĝisdatigas kiel tio funkcias.",
-        "shared_data_heading": "Ĉiu el la jenaj datumoj povas kunhaviĝi:"
     },
     "bug_reporting": {
         "additional_context": "Se plia kunteksto povus helpi bone analizi la problemon, ekzemple pri tio, kion vi faris, identigiloj de ĉambroj aŭ uzantoj, ktp., bonvolu kunskribi ĝin.",
@@ -595,6 +548,7 @@
         "subspace_join_rule_public_description": "Ĉiu povos trovi kaj aliĝi ĉi tiun aron, ne nur anoj de <SpaceName/>.",
         "subspace_join_rule_restricted_description": "Ĉiu en <SpaceName/> povos ĝin trovi kaj aliĝi."
     },
+    "desktop_default_device_name": "%(brand)s Labortablo: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktivaj fenestraĵoj",
         "category_other": "Alia",
@@ -630,6 +584,7 @@
         "widget_screenshots": "Ŝalti bildojn de fenestraĵoj por subtenataj fenestraĵoj"
     },
     "dialog_close_label": "Fermi interagujon",
+    "download_completed": "Elŝuto finiĝis",
     "emoji": {
         "categories": "Kategorioj",
         "category_activities": "Agadoj",
@@ -797,6 +752,43 @@
         "verify_toast_description": "Aliaj uzantoj eble ne kredas ĝin",
         "verify_toast_title": "Kontroli ĉi tiun salutaĵon"
     },
+    "error": {
+        "admin_contact": "Bonvolu <a>kontakti vian servo-administranton</a> por daŭrigi uzadon de tiu ĉi servo.",
+        "admin_contact_short": "Kontaktu <a>administranton de via servilo</a>.",
+        "app_launch_unexpected_error": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
+        "cannot_load_config": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
+        "connection": "Eraris komunikado kun la hejmservilo, bonvolu reprovi poste.",
+        "dialog_description_default": "Okazis eraro.",
+        "edit_history_unsupported": "Via hejmservilo ŝajne ne subtenas ĉi tiun funkcion.",
+        "failed_copy": "Malsukcesis kopii",
+        "hs_blocked": "Tiu ĉi hejmservilo estas blokita de sia administranto.",
+        "invalid_configuration_no_server": "Nevalida agordo: neniu implicita servilo estas specifita.",
+        "invalid_json": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
+        "invalid_json_detail": "La mesaĝo el la analizilo estas: %(message)s",
+        "invalid_json_generic": "Nevalida JSON",
+        "mau": "Tiu ĉi hejmservilo atingis sian monatan limon de aktivaj uzantoj.",
+        "misconfigured": "Via Elemento estas misagordita",
+        "mixed_content": "Hejmservilo ne alkonekteblas per HTTP kun HTTPS URL en via adresbreto. Aŭ uzu HTTPS aŭ <a>ŝaltu malsekurajn skriptojn</a>.",
+        "non_urgent_echo_failure_toast": "Via servilo ne respondas al iuj <a>petoj</a>.",
+        "resource_limits": "Tiu ĉi hejmservilo superis je unu el siaj rimedaj limoj.",
+        "session_restore": {
+            "clear_storage_button": "Vakigi memoron kaj adiaŭi",
+            "clear_storage_description": "Ĉu adiaŭi kaj forigi ĉifrajn ŝlosilojn?",
+            "description_1": "Ni renkontis eraron provante rehavi vian antaŭan salutaĵon.",
+            "description_2": "Se vi antaŭe uzis pli novan version de %(brand)s, via salutaĵo eble ne akordos kun ĉi tiu versio. Fermu ĉi tiun fenestron kaj revenu al la pli nova versio.",
+            "description_3": "Vakigo de la memoro de via foliumilo eble korektos la problemon, sed adiaŭigos vin, kaj malebligos legadon de historio de ĉifritaj babiloj.",
+            "title": "Salutaĵo ne rehaveblas"
+        },
+        "something_went_wrong": "Io misokazis!",
+        "storage_evicted_description_1": "Iuj datumoj de salutaĵo, inkluzive viajn ĉifrajn ŝlosilojn, mankas. Por tion korekti, resalutu, kaj rehavu la ŝlosilojn el savkopio.",
+        "storage_evicted_description_2": "Via foliumilo verŝajne forigos ĉi tiujn datumojn kiam al ĝi mankos spaco sur disko.",
+        "storage_evicted_title": "Mankas datumoj de salutaĵo",
+        "sync": "Ne povas konektiĝi al hejmservilo. Reprovante…",
+        "tls": "Ne eblas konekti al hejmservilo – bonvolu kontroli vian konekton, certigi ke <a>la SSL-atestilo de via hejmservilo</a> estas fidata, kaj ke neniu foliumila kromprogramo blokas petojn.",
+        "unknown": "Nekonata eraro",
+        "unknown_error_code": "nekonata kodo de eraro",
+        "update_power_level": "Malsukcesis ŝanĝi povnivelon"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Ne povas kopii ligilon al ĉambro al tondujo.",
@@ -918,6 +910,9 @@
     "in_space_and_n_other_spaces": {
         "one": "En %(spaceName)s kaj %(count)s alia aro.",
         "other": "En %(spaceName)s kaj %(count)s aliaj aroj."
+    },
+    "incompatible_browser": {
+        "title": "Nesubtenata retumilo"
     },
     "info_tooltip_title": "Informoj",
     "integration_manager": {
@@ -1221,6 +1216,8 @@
         "moderator": "Ĉambrestro",
         "restricted": "Limigita"
     },
+    "powered_by_matrix": "Povigata de Matrix",
+    "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
     "presence": {
         "away": "For",
         "idle": "Senfara",
@@ -2560,6 +2557,7 @@
     "truncated_list_n_more": {
         "other": "Kaj %(count)s pliaj…"
     },
+    "unknown_device": "Nekonata aparato",
     "update": {
         "changelog": "Protokolo de ŝanĝoj",
         "check_action": "Kontroli ĝisdatigojn",
@@ -2748,6 +2746,8 @@
         "voice_call": "Voĉvoko",
         "you_are_presenting": "Vi prezentas"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
+    "welcome_to_element": "Bonvenon al Element",
     "widget": {
         "added_by": "Fenestraĵon aldonis",
         "capabilities_dialog": {

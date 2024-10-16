@@ -1,10 +1,25 @@
 {
+    "a11y": {
+        "emoji_picker": "Selettore di emoji",
+        "jump_first_invite": "Salta al primo invito.",
+        "message_composer": "Compositore di messaggi",
+        "n_unread_messages": {
+            "other": "%(count)s messaggi non letti.",
+            "one": "1 messaggio non letto."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s messaggi non letti incluse le citazioni.",
+            "one": "1 citazione non letta."
+        },
+        "recent_rooms": "Stanze recenti",
+        "room_name": "Stanza %(name)s",
+        "room_status_bar": "Barra di stato della stanza",
+        "seek_bar_label": "Barra di ricerca audio",
+        "unread_messages": "Messaggi non letti.",
+        "user_menu": "Menu utente"
+    },
+    "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
     "action": {
-        "create_account": "Crea account",
-        "dismiss": "Chiudi",
-        "explore_rooms": "Esplora stanze",
-        "open": "Apri",
-        "sign_in": "Accedi",
         "accept": "Accetta",
         "add": "Aggiungi",
         "add_existing_room": "Aggiungi stanza esistente",
@@ -28,11 +43,13 @@
         "copy_link": "Copia collegamento",
         "create": "Crea",
         "create_a_room": "Crea una stanza",
+        "create_account": "Crea account",
         "decline": "Rifiuta",
         "delete": "Elimina",
         "deny": "Nega",
         "disable": "Disattiva",
         "disconnect": "Disconnetti",
+        "dismiss": "Chiudi",
         "done": "Fatto",
         "download": "Scarica",
         "edit": "Modifica",
@@ -41,6 +58,7 @@
         "exit_fullscreeen": "Esci da schermo intero",
         "expand": "Espandi",
         "explore_public_rooms": "Esplora stanze pubbliche",
+        "explore_rooms": "Esplora stanze",
         "export": "Esporta",
         "forward": "Inoltra",
         "go": "Vai",
@@ -67,6 +85,7 @@
         "next": "Avanti",
         "no": "No",
         "ok": "OK",
+        "open": "Apri",
         "pause": "Pausa",
         "pin": "Spillo",
         "play": "Riproduci",
@@ -96,6 +115,7 @@
         "show": "Mostra",
         "show_advanced": "Mostra avanzate",
         "show_all": "Mostra tutto",
+        "sign_in": "Accedi",
         "sign_out": "Disconnetti",
         "skip": "Salta",
         "start": "Inizia",
@@ -124,8 +144,19 @@
         "zoom_in": "Ingrandisci",
         "zoom_out": "Rimpicciolisci"
     },
+    "analytics": {
+        "accept_button": "Va bene",
+        "bullet_1": "<Bold>Non</Bold> registriamo o profiliamo alcun dato dell'account",
+        "bullet_2": "<Bold>Non</Bold> condividiamo informazioni con terze parti",
+        "consent_migration": "Hai precedentemente accettato di condividere dati anonimi di utilizzo con noi. Ne stiamo aggiornando il funzionamento.",
+        "disable_prompt": "Puoi disattivarlo in qualsiasi momento nelle impostazioni",
+        "enable_prompt": "Aiuta a migliorare %(analyticsOwner)s",
+        "learn_more": "Condividi dati anonimi per aiutarci a identificare problemi. Niente di personale. Niente terze parti. <LearnMoreLink>Maggiori informazioni</LearnMoreLink>",
+        "privacy_policy": "Puoi leggere tutti i nostri termini di servizio <PrivacyPolicyUrl>qui</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Aiutaci a identificare problemi e a migliorare %(analyticsOwner)s condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.",
+        "shared_data_heading": "Possono essere condivisi tutti i seguenti dati:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Vai nel tuo browser per completare l'accesso",
         "3pid_in_use": "Quell'indirizzo email o numero di telefono è già in uso.",
         "account_clash": "Il tuo nuovo account (%(newAccountId)s) è registrato, ma hai già fatto l'accesso in un account diverso (%(loggedInUserId)s).",
         "account_clash_previous_account": "Continua con l'account precedente",
@@ -301,6 +332,7 @@
         "soft_logout_subheading": "Elimina dati personali",
         "soft_logout_warning": "Attenzione: i tuoi dati personali (incluse le chiavi di crittografia) sono ancora memorizzati in questa sessione. Cancellali se hai finito di usare questa sessione o se vuoi accedere ad un altro account.",
         "sso": "Single sign-on",
+        "sso_complete_in_browser_dialog_title": "Vai nel tuo browser per completare l'accesso",
         "sso_failed_missing_storage": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova.",
         "sso_or_username_password": "%(ssoButtons)s o %(usernamePassword)s",
         "sync_footer_subtitle": "Se sei dentro a molte stanze, potrebbe impiegarci un po'",
@@ -335,87 +367,6 @@
         "username_in_use": "Qualcuno ha già quel nome utente, provane un altro.",
         "verify_email_explainer": "Dobbiamo sapere che sei tu prima di reimpostare la password. Clicca il link nell'email che abbiamo inviato a <b>%(email)s</b>",
         "verify_email_heading": "Verifica l'email per continuare"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
-    "download_completed": "Scaricamento completato",
-    "error": {
-        "app_launch_unexpected_error": "Errore inaspettato preparando l'app. Vedi la console per i dettagli.",
-        "cannot_load_config": "Impossibile caricare il file di configurazione: ricarica la pagina per riprovare.",
-        "invalid_configuration_mixed_server": "Configurazione non valida: default_hs_url non può essere specificato assieme a default_server_name o default_server_config",
-        "invalid_configuration_no_server": "Configurazione non valida: nessun server predefinito specificato.",
-        "invalid_json": "La configurazione del tuo elemento contiene un JSON non valido. Correggi il problema e ricarica la pagina.",
-        "invalid_json_detail": "Il messaggio dal parser è: %(message)s",
-        "invalid_json_generic": "JSON non valido",
-        "misconfigured": "Il tuo elemento è configurato male",
-        "admin_contact": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-        "admin_contact_short": "Contatta il tuo <a>amministratore del server</a>.",
-        "connection": "C'è stato un problema nella comunicazione con l'homeserver, riprova più tardi.",
-        "dialog_description_default": "Si è verificato un errore.",
-        "download_media": "Scaricamento della fonte fallito, nessun url trovato",
-        "edit_history_unsupported": "Il tuo homeserver non sembra supportare questa funzione.",
-        "failed_copy": "Copia fallita",
-        "hs_blocked": "Questo homeserver è stato bloccato dal suo amministratore.",
-        "mau": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili.",
-        "mixed_content": "Impossibile connettersi all'homeserver via HTTP quando c'è un URL HTTPS nella barra del tuo browser. Usa HTTPS o <a>attiva gli script non sicuri</a>.",
-        "non_urgent_echo_failure_toast": "Il tuo server non sta rispondendo ad alcune <a>richieste</a>.",
-        "resource_limits": "Questo homeserver ha oltrepassato uno dei suoi limiti di risorse.",
-        "session_restore": {
-            "clear_storage_button": "Elimina l'archiviazione e disconnetti",
-            "clear_storage_description": "Disconnettere e rimuovere le chiavi di crittografia?",
-            "description_1": "Abbiamo riscontrato un errore tentando di ripristinare la tua sessione precedente.",
-            "description_2": "Se hai usato precedentemente una versione più recente di %(brand)s, la tua sessione potrebbe essere incompatibile con questa versione. Chiudi questa finestra e torna alla versione più recente.",
-            "description_3": "Eliminare l'archiviazione del browser potrebbe risolvere il problema, ma verrai disconnesso e la cronologia delle chat criptate sarà illeggibile.",
-            "title": "Impossibile ripristinare la sessione"
-        },
-        "something_went_wrong": "Qualcosa è andato storto!",
-        "storage_evicted_description_1": "Alcuni dati di sessione, incluse le chiavi dei messaggi cifrati, sono mancanti. Esci e riaccedi per risolvere, ripristinando le chiavi da un backup.",
-        "storage_evicted_description_2": "Probabilmente il tuo browser ha rimosso questi dati per mancanza di spazio su disco.",
-        "storage_evicted_title": "Dati di sessione mancanti",
-        "sync": "Impossibile connettersi all'homeserver. Riprovo…",
-        "tls": "Impossibile connettersi all'homeserver - controlla la tua connessione, assicurati che il <a>certificato SSL dell'homeserver</a> sia fidato e che un'estensione del browser non stia bloccando le richieste.",
-        "unknown": "Errore sconosciuto",
-        "unknown_error_code": "codice errore sconosciuto",
-        "update_power_level": "Cambio di livello poteri fallito"
-    },
-    "incompatible_browser": {
-        "title": "Browser non supportato"
-    },
-    "powered_by_matrix": "Offerto da Matrix",
-    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
-    "unknown_device": "Dispositivo sconosciuto",
-    "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
-    "a11y": {
-        "emoji_picker": "Selettore di emoji",
-        "jump_first_invite": "Salta al primo invito.",
-        "message_composer": "Compositore di messaggi",
-        "n_unread_messages": {
-            "other": "%(count)s messaggi non letti.",
-            "one": "1 messaggio non letto."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s messaggi non letti incluse le citazioni.",
-            "one": "1 citazione non letta."
-        },
-        "recent_rooms": "Stanze recenti",
-        "room_name": "Stanza %(name)s",
-        "room_status_bar": "Barra di stato della stanza",
-        "seek_bar_label": "Barra di ricerca audio",
-        "unread_messages": "Messaggi non letti.",
-        "user_menu": "Menu utente"
-    },
-    "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
-    "analytics": {
-        "accept_button": "Va bene",
-        "bullet_1": "<Bold>Non</Bold> registriamo o profiliamo alcun dato dell'account",
-        "bullet_2": "<Bold>Non</Bold> condividiamo informazioni con terze parti",
-        "consent_migration": "Hai precedentemente accettato di condividere dati anonimi di utilizzo con noi. Ne stiamo aggiornando il funzionamento.",
-        "disable_prompt": "Puoi disattivarlo in qualsiasi momento nelle impostazioni",
-        "enable_prompt": "Aiuta a migliorare %(analyticsOwner)s",
-        "learn_more": "Condividi dati anonimi per aiutarci a identificare problemi. Niente di personale. Niente terze parti. <LearnMoreLink>Maggiori informazioni</LearnMoreLink>",
-        "privacy_policy": "Puoi leggere tutti i nostri termini di servizio <PrivacyPolicyUrl>qui</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Aiutaci a identificare problemi e a migliorare %(analyticsOwner)s condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.",
-        "shared_data_heading": "Possono essere condivisi tutti i seguenti dati:"
     },
     "bug_reporting": {
         "additional_context": "Se ci sono ulteriori dettagli che possono aiutare ad analizzare il problema, ad esempio cosa stavi facendo in quel momento, ID stanze, ID utenti, ecc., puoi includerli qui.",
@@ -849,6 +800,7 @@
         "widget_screenshots": "Attiva le schermate dei widget sui widget supportati"
     },
     "dialog_close_label": "Chiudi finestra",
+    "download_completed": "Scaricamento completato",
     "emoji": {
         "categories": "Categorie",
         "category_activities": "Attività",
@@ -1053,6 +1005,45 @@
         "verify_toast_description": "Altri utenti potrebbero non fidarsi",
         "verify_toast_title": "Verifica questa sessione"
     },
+    "error": {
+        "admin_contact": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
+        "admin_contact_short": "Contatta il tuo <a>amministratore del server</a>.",
+        "app_launch_unexpected_error": "Errore inaspettato preparando l'app. Vedi la console per i dettagli.",
+        "cannot_load_config": "Impossibile caricare il file di configurazione: ricarica la pagina per riprovare.",
+        "connection": "C'è stato un problema nella comunicazione con l'homeserver, riprova più tardi.",
+        "dialog_description_default": "Si è verificato un errore.",
+        "download_media": "Scaricamento della fonte fallito, nessun url trovato",
+        "edit_history_unsupported": "Il tuo homeserver non sembra supportare questa funzione.",
+        "failed_copy": "Copia fallita",
+        "hs_blocked": "Questo homeserver è stato bloccato dal suo amministratore.",
+        "invalid_configuration_mixed_server": "Configurazione non valida: default_hs_url non può essere specificato assieme a default_server_name o default_server_config",
+        "invalid_configuration_no_server": "Configurazione non valida: nessun server predefinito specificato.",
+        "invalid_json": "La configurazione del tuo elemento contiene un JSON non valido. Correggi il problema e ricarica la pagina.",
+        "invalid_json_detail": "Il messaggio dal parser è: %(message)s",
+        "invalid_json_generic": "JSON non valido",
+        "mau": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili.",
+        "misconfigured": "Il tuo elemento è configurato male",
+        "mixed_content": "Impossibile connettersi all'homeserver via HTTP quando c'è un URL HTTPS nella barra del tuo browser. Usa HTTPS o <a>attiva gli script non sicuri</a>.",
+        "non_urgent_echo_failure_toast": "Il tuo server non sta rispondendo ad alcune <a>richieste</a>.",
+        "resource_limits": "Questo homeserver ha oltrepassato uno dei suoi limiti di risorse.",
+        "session_restore": {
+            "clear_storage_button": "Elimina l'archiviazione e disconnetti",
+            "clear_storage_description": "Disconnettere e rimuovere le chiavi di crittografia?",
+            "description_1": "Abbiamo riscontrato un errore tentando di ripristinare la tua sessione precedente.",
+            "description_2": "Se hai usato precedentemente una versione più recente di %(brand)s, la tua sessione potrebbe essere incompatibile con questa versione. Chiudi questa finestra e torna alla versione più recente.",
+            "description_3": "Eliminare l'archiviazione del browser potrebbe risolvere il problema, ma verrai disconnesso e la cronologia delle chat criptate sarà illeggibile.",
+            "title": "Impossibile ripristinare la sessione"
+        },
+        "something_went_wrong": "Qualcosa è andato storto!",
+        "storage_evicted_description_1": "Alcuni dati di sessione, incluse le chiavi dei messaggi cifrati, sono mancanti. Esci e riaccedi per risolvere, ripristinando le chiavi da un backup.",
+        "storage_evicted_description_2": "Probabilmente il tuo browser ha rimosso questi dati per mancanza di spazio su disco.",
+        "storage_evicted_title": "Dati di sessione mancanti",
+        "sync": "Impossibile connettersi all'homeserver. Riprovo…",
+        "tls": "Impossibile connettersi all'homeserver - controlla la tua connessione, assicurati che il <a>certificato SSL dell'homeserver</a> sia fidato e che un'estensione del browser non stia bloccando le richieste.",
+        "unknown": "Errore sconosciuto",
+        "unknown_error_code": "codice errore sconosciuto",
+        "update_power_level": "Cambio di livello poteri fallito"
+    },
     "error_app_open_in_another_tab": "Passa all'altra scheda per connetterti a %(brand)s. Questa scheda può ora essere chiusa.",
     "error_app_open_in_another_tab_title": "%(brand)s è connesso in un'altra scheda",
     "error_app_opened_in_another_window": "%(brand)s è aperto in un'altra finestra. Clicca \"%(label)s\" per usare %(brand)s qui e scollegare l'altra finestra.",
@@ -1221,6 +1212,9 @@
     "in_space_and_n_other_spaces": {
         "one": "In %(spaceName)s e in %(count)s altro spazio.",
         "other": "In %(spaceName)s e in altri %(count)s spazi."
+    },
+    "incompatible_browser": {
+        "title": "Browser non supportato"
     },
     "info_tooltip_title": "Informazione",
     "integration_manager": {
@@ -1708,6 +1702,8 @@
         "moderator": "Moderatore",
         "restricted": "Limitato"
     },
+    "powered_by_matrix": "Offerto da Matrix",
+    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -3549,6 +3545,7 @@
     "truncated_list_n_more": {
         "other": "E altri %(count)s ..."
     },
+    "unknown_device": "Dispositivo sconosciuto",
     "unsupported_server_description": "Questo server usa una versione più vecchia di Matrix. Aggiorna a Matrix %(version)s per usare %(brand)s senza errori.",
     "unsupported_server_title": "Il tuo server non è supportato",
     "update": {
@@ -3798,6 +3795,8 @@
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
+    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

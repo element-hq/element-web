@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Újrás az első meghívóhoz.",
+        "n_unread_messages": {
+            "other": "%(count)s olvasatlan üzenet.",
+            "one": "1 olvasatlan üzenet."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s olvasatlan üzenet megemlítéssel.",
+            "one": "1 olvasatlan megemlítés."
+        },
+        "room_name": "Szoba: %(name)s",
+        "unread_messages": "Olvasatlan üzenetek.",
+        "user_menu": "Felhasználói menü"
+    },
+    "a11y_jump_first_unread_room": "Ugrás az első olvasatlan szobához.",
     "action": {
-        "create_account": "Fiók létrehozása",
-        "dismiss": "Eltüntetés",
-        "explore_rooms": "Szobák felderítése",
-        "open": "Megnyitás",
-        "sign_in": "Bejelentkezés",
         "accept": "Elfogadás",
         "add": "Hozzáadás",
         "add_existing_room": "Létező szoba hozzáadása",
@@ -28,11 +38,13 @@
         "copy_link": "Hivatkozás másolása",
         "create": "Létrehozás",
         "create_a_room": "Szoba létrehozása",
+        "create_account": "Fiók létrehozása",
         "decline": "Elutasítás",
         "delete": "Törlés",
         "deny": "Megtagadás",
         "disable": "Tiltás",
         "disconnect": "Kapcsolat bontása",
+        "dismiss": "Eltüntetés",
         "done": "Kész",
         "download": "Letöltés",
         "edit": "Szerkesztés",
@@ -41,6 +53,7 @@
         "exit_fullscreeen": "Kilépés a teljes képernyőből",
         "expand": "Kibontás",
         "explore_public_rooms": "Nyilvános szobák felfedezése",
+        "explore_rooms": "Szobák felderítése",
         "export": "Mentés",
         "forward": "Továbbítás",
         "go": "Meghívás",
@@ -67,6 +80,7 @@
         "next": "Következő",
         "no": "Nem",
         "ok": "Rendben",
+        "open": "Megnyitás",
         "pause": "Szünet",
         "pin": "Kitűzés",
         "play": "Lejátszás",
@@ -96,6 +110,7 @@
         "show": "Megjelenítés",
         "show_advanced": "Speciális beállítások megjelenítése",
         "show_all": "Összes megjelenítése",
+        "sign_in": "Bejelentkezés",
         "sign_out": "Kijelentkezés",
         "skip": "Kihagyás",
         "start": "Indítás",
@@ -124,8 +139,19 @@
         "zoom_in": "Nagyítás",
         "zoom_out": "Kicsinyítés"
     },
+    "analytics": {
+        "accept_button": "Rendben van",
+        "bullet_1": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
+        "bullet_2": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
+        "consent_migration": "Előzőleg beleegyezett, hogy anonimizált használati adatokat oszt meg velünk. Most frissítjük ennek a működését.",
+        "disable_prompt": "Ezt bármikor kikapcsolhatja a beállításokban",
+        "enable_prompt": "Segítsen jobbá tenni: %(analyticsOwner)s",
+        "learn_more": "Anonimizált adatok megosztása a problémák feltárásához. Semmi személyes. Nincs harmadik fél. <LearnMoreLink>További információk</LearnMoreLink>",
+        "privacy_policy": "Elolvashatja az összes feltételünket <PrivacyPolicyUrl>itt</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Segítsen észrevennünk a hibákat, és jobbá tenni a(z) %(analyticsOwner)s a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközei között meg lesz osztva.",
+        "shared_data_heading": "Az alábbi adatok közül bármelyik megosztásra kerülhet:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést",
         "3pid_in_use": "Ez az e-mail cím vagy telefonszám már használatban van.",
         "account_clash": "Az új (%(newAccountId)s) fiókod elkészült, de jelenleg egy másik fiókba (%(loggedInUserId)s) vagy bejelentkezve.",
         "account_clash_previous_account": "Folytatás az előző fiókkal",
@@ -299,6 +325,7 @@
         "soft_logout_subheading": "Személyes adatok törlése",
         "soft_logout_warning": "Figyelmeztetés: A személyes adatai (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva. Ha az eszközt nem használja tovább vagy másik fiókba szeretne bejelentkezni, törölje őket.",
         "sso": "Egyszeri bejelentkezés",
+        "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést",
         "sso_failed_missing_storage": "A böngészőt arra kértük, hogy jegyezze meg, melyik Matrix-kiszolgálót használta a bejelentkezéshez, de sajnos a böngészője elfelejtette. Navigáljon a bejelentkezési oldalra, és próbálja újra.",
         "sso_or_username_password": "%(ssoButtons)s vagy %(usernamePassword)s",
         "sync_footer_subtitle": "Ha sok szobához csatlakozott, ez eltarthat egy darabig",
@@ -333,82 +360,6 @@
         "username_in_use": "Ez a felhasználónév már foglalt, próbáljon ki másikat.",
         "verify_email_explainer": "Tudnunk kell, hogy Ön tényleg az akinek mondja magát mielőtt a jelszót beállíthatja. Kattintson a hivatkozásra az e-mailben amit éppen most küldtünk ide: <b>%(email)s</b>",
         "verify_email_heading": "E-mail ellenőrzés a továbblépéshez"
-    },
-    "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
-    "download_completed": "A letöltés befejeződött",
-    "error": {
-        "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
-        "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
-        "invalid_configuration_mixed_server": "Érvénytelen konfiguráció: a default_hs_url nem adható meg a default_server_name vagy a default_server_config kulcsokkal együtt",
-        "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
-        "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
-        "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",
-        "invalid_json_generic": "Érvénytelen JSON",
-        "misconfigured": "Az Element hibásan van beállítva",
-        "admin_contact": "A szolgáltatás további használatához <a>vegye fel a kapcsolatot a szolgáltatás rendszergazdájával</a>.",
-        "admin_contact_short": "Vegye fel a kapcsolatot a <a>kiszolgáló rendszergazdájával</a>.",
-        "connection": "A kiszolgálóval való kommunikáció során probléma történt, próbálja újra.",
-        "dialog_description_default": "Hiba történt.",
-        "download_media": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
-        "edit_history_unsupported": "Úgy tűnik, hogy a Matrix-kiszolgálója nem támogatja ezt a szolgáltatást.",
-        "failed_copy": "Sikertelen másolás",
-        "hs_blocked": "A Matrix-kiszolgálót a rendszergazda zárolta.",
-        "mau": "A Matrix-kiszolgáló elérte a havi aktív felhasználói korlátot.",
-        "mixed_content": "Nem lehet HTTP-vel csatlakozni a Matrix-kiszolgálóhoz, ha HTTPS van a böngésző címsorában. Vagy használjon HTTPS-t vagy <a>engedélyezze a nem biztonságos parancsfájlokat</a>.",
-        "non_urgent_echo_failure_toast": "A kiszolgálója nem válaszol néhány <a>kérésre</a>.",
-        "resource_limits": "A Matrix-kiszolgáló túllépte valamelyik erőforráskorlátját.",
-        "session_restore": {
-            "clear_storage_button": "Tárhely törlése és kijelentkezés",
-            "clear_storage_description": "Kilépés és a titkosítási kulcsok törlése?",
-            "description_1": "Hiba történt az előző munkamenet helyreállítási kísérlete során.",
-            "description_2": "Ha egy újabb %(brand)s verziót használt, akkor valószínűleg ez a munkamenet nem lesz kompatibilis vele. Zárja be az ablakot és térjen vissza az újabb verzióhoz.",
-            "description_3": "A böngésző tárolójának törlése megoldhatja a problémát, de ezzel kijelentkezik és a titkosított beszélgetéseinek előzményei olvashatatlanná válnak.",
-            "title": "A munkamenetet nem lehet helyreállítani"
-        },
-        "something_went_wrong": "Valami rosszul sikerült.",
-        "storage_evicted_description_1": "Néhány kapcsolati adat hiányzik, beleértve a titkosított üzenetek kulcsait. A hiba javításához lépjen ki és jelentkezzen be újra, így a mentésből helyreállítva a kulcsokat.",
-        "storage_evicted_description_2": "A böngésző valószínűleg törölte ezeket az adatokat, amikor lecsökkent a szabad lemezterület.",
-        "storage_evicted_title": "A munkamenetadatok hiányzik",
-        "sync": "A Matrix-kiszolgálóval nem lehet felvenni a kapcsolatot. Újrapróbálkozás…",
-        "tls": "Nem lehet kapcsolódni a Matrix-kiszolgálóhoz – ellenőrizze a kapcsolatot, győződjön meg arról, hogy a <a>Matrix-kiszolgáló tanúsítványa</a> hiteles, és hogy a böngészőkiegészítők nem blokkolják a kéréseket.",
-        "unknown": "Ismeretlen hiba",
-        "unknown_error_code": "ismeretlen hibakód",
-        "update_power_level": "A hozzáférési szint megváltoztatása sikertelen"
-    },
-    "incompatible_browser": {
-        "title": "Nem támogatott böngésző"
-    },
-    "powered_by_matrix": "A gépházban: Matrix",
-    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
-    "unknown_device": "Ismeretlen eszköz",
-    "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
-    "welcome_to_element": "Üdvözli az Element",
-    "a11y": {
-        "jump_first_invite": "Újrás az első meghívóhoz.",
-        "n_unread_messages": {
-            "other": "%(count)s olvasatlan üzenet.",
-            "one": "1 olvasatlan üzenet."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s olvasatlan üzenet megemlítéssel.",
-            "one": "1 olvasatlan megemlítés."
-        },
-        "room_name": "Szoba: %(name)s",
-        "unread_messages": "Olvasatlan üzenetek.",
-        "user_menu": "Felhasználói menü"
-    },
-    "a11y_jump_first_unread_room": "Ugrás az első olvasatlan szobához.",
-    "analytics": {
-        "accept_button": "Rendben van",
-        "bullet_1": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
-        "bullet_2": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
-        "consent_migration": "Előzőleg beleegyezett, hogy anonimizált használati adatokat oszt meg velünk. Most frissítjük ennek a működését.",
-        "disable_prompt": "Ezt bármikor kikapcsolhatja a beállításokban",
-        "enable_prompt": "Segítsen jobbá tenni: %(analyticsOwner)s",
-        "learn_more": "Anonimizált adatok megosztása a problémák feltárásához. Semmi személyes. Nincs harmadik fél. <LearnMoreLink>További információk</LearnMoreLink>",
-        "privacy_policy": "Elolvashatja az összes feltételünket <PrivacyPolicyUrl>itt</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Segítsen észrevennünk a hibákat, és jobbá tenni a(z) %(analyticsOwner)s a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközei között meg lesz osztva.",
-        "shared_data_heading": "Az alábbi adatok közül bármelyik megosztásra kerülhet:"
     },
     "bug_reporting": {
         "additional_context": "Ha a hiba felderítésében további adatok is segíthetnek, mint az, hogy mit csinált épp, mik a szobák vagy felhasználók azonosítói, stb. Ezeket itt adja meg.",
@@ -738,6 +689,7 @@
         "twemoji": "A <twemoji>Twemoji</twemoji> emodzsikra a következő vonatkozik: © <author>Twitter, Inc. és egyéb közreműködők</author>, a <terms>CC-BY 4.0</terms> licenc feltételei szerint használva.",
         "twemoji_colr": "A <colr>twemoji-colr</colr> betűkészletre a következő vonatkozik: © <author>Mozilla Foundation</author>, az <terms>Apache 2.0</terms> licenc feltételei szerint használva."
     },
+    "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
     "devtools": {
         "active_widgets": "Aktív kisalkalmazások",
         "category_other": "Egyéb",
@@ -839,6 +791,7 @@
         "widget_screenshots": "Kisalkalmazások képernyőképének engedélyezése a támogatott kisalkalmazásoknál"
     },
     "dialog_close_label": "Ablak bezárása",
+    "download_completed": "A letöltés befejeződött",
     "emoji": {
         "categories": "Kategóriák",
         "category_activities": "Mozgás",
@@ -1043,6 +996,45 @@
         "verify_toast_description": "Más felhasználók lehet, hogy nem bíznak benne",
         "verify_toast_title": "Munkamenet ellenőrzése"
     },
+    "error": {
+        "admin_contact": "A szolgáltatás további használatához <a>vegye fel a kapcsolatot a szolgáltatás rendszergazdájával</a>.",
+        "admin_contact_short": "Vegye fel a kapcsolatot a <a>kiszolgáló rendszergazdájával</a>.",
+        "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
+        "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
+        "connection": "A kiszolgálóval való kommunikáció során probléma történt, próbálja újra.",
+        "dialog_description_default": "Hiba történt.",
+        "download_media": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
+        "edit_history_unsupported": "Úgy tűnik, hogy a Matrix-kiszolgálója nem támogatja ezt a szolgáltatást.",
+        "failed_copy": "Sikertelen másolás",
+        "hs_blocked": "A Matrix-kiszolgálót a rendszergazda zárolta.",
+        "invalid_configuration_mixed_server": "Érvénytelen konfiguráció: a default_hs_url nem adható meg a default_server_name vagy a default_server_config kulcsokkal együtt",
+        "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
+        "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
+        "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",
+        "invalid_json_generic": "Érvénytelen JSON",
+        "mau": "A Matrix-kiszolgáló elérte a havi aktív felhasználói korlátot.",
+        "misconfigured": "Az Element hibásan van beállítva",
+        "mixed_content": "Nem lehet HTTP-vel csatlakozni a Matrix-kiszolgálóhoz, ha HTTPS van a böngésző címsorában. Vagy használjon HTTPS-t vagy <a>engedélyezze a nem biztonságos parancsfájlokat</a>.",
+        "non_urgent_echo_failure_toast": "A kiszolgálója nem válaszol néhány <a>kérésre</a>.",
+        "resource_limits": "A Matrix-kiszolgáló túllépte valamelyik erőforráskorlátját.",
+        "session_restore": {
+            "clear_storage_button": "Tárhely törlése és kijelentkezés",
+            "clear_storage_description": "Kilépés és a titkosítási kulcsok törlése?",
+            "description_1": "Hiba történt az előző munkamenet helyreállítási kísérlete során.",
+            "description_2": "Ha egy újabb %(brand)s verziót használt, akkor valószínűleg ez a munkamenet nem lesz kompatibilis vele. Zárja be az ablakot és térjen vissza az újabb verzióhoz.",
+            "description_3": "A böngésző tárolójának törlése megoldhatja a problémát, de ezzel kijelentkezik és a titkosított beszélgetéseinek előzményei olvashatatlanná válnak.",
+            "title": "A munkamenetet nem lehet helyreállítani"
+        },
+        "something_went_wrong": "Valami rosszul sikerült.",
+        "storage_evicted_description_1": "Néhány kapcsolati adat hiányzik, beleértve a titkosított üzenetek kulcsait. A hiba javításához lépjen ki és jelentkezzen be újra, így a mentésből helyreállítva a kulcsokat.",
+        "storage_evicted_description_2": "A böngésző valószínűleg törölte ezeket az adatokat, amikor lecsökkent a szabad lemezterület.",
+        "storage_evicted_title": "A munkamenetadatok hiányzik",
+        "sync": "A Matrix-kiszolgálóval nem lehet felvenni a kapcsolatot. Újrapróbálkozás…",
+        "tls": "Nem lehet kapcsolódni a Matrix-kiszolgálóhoz – ellenőrizze a kapcsolatot, győződjön meg arról, hogy a <a>Matrix-kiszolgáló tanúsítványa</a> hiteles, és hogy a böngészőkiegészítők nem blokkolják a kéréseket.",
+        "unknown": "Ismeretlen hiba",
+        "unknown_error_code": "ismeretlen hibakód",
+        "update_power_level": "A hozzáférési szint megváltoztatása sikertelen"
+    },
     "error_database_closed_title": "Az adatbázis váratlanul lezárult",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1203,6 +1195,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Itt: %(spaceName)s és %(count)s másik térben.",
         "other": "Itt: %(spaceName)s és %(count)s másik térben."
+    },
+    "incompatible_browser": {
+        "title": "Nem támogatott böngésző"
     },
     "info_tooltip_title": "Információ",
     "integration_manager": {
@@ -1668,6 +1663,8 @@
         "moderator": "Moderátor",
         "restricted": "Korlátozott"
     },
+    "powered_by_matrix": "A gépházban: Matrix",
+    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
     "presence": {
         "away": "Távol",
         "busy": "Foglalt",
@@ -3466,6 +3463,7 @@
     "truncated_list_n_more": {
         "other": "És még %(count)s..."
     },
+    "unknown_device": "Ismeretlen eszköz",
     "unsupported_server_description": "Ez a kiszolgáló a Matrix régebbi verzióját használja. Frissítsen a Matrix %(version)s verzióra az %(brand)s hibamentes használatához.",
     "unsupported_server_title": "A kiszolgálója nem támogatott",
     "update": {
@@ -3708,6 +3706,8 @@
         "voice_call": "Hanghívás",
         "you_are_presenting": "Ön tartja a bemutatót"
     },
+    "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
+    "welcome_to_element": "Üdvözli az Element",
     "widget": {
         "added_by": "A kisalkalmazást hozzáadta",
         "capabilities_dialog": {

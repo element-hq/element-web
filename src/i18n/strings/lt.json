@@ -1,10 +1,19 @@
 {
+    "a11y": {
+        "jump_first_invite": "Peršokti iki pirmo pakvietimo.",
+        "n_unread_messages": {
+            "one": "1 neperskaityta žinutė.",
+            "other": "%(count)s neperskaitytos žinutės."
+        },
+        "n_unread_messages_mentions": {
+            "one": "1 neperskaitytas paminėjimas.",
+            "other": "%(count)s neperskaitytos žinutės, įskaitant paminėjimus."
+        },
+        "room_name": "Kambarys %(name)s",
+        "unread_messages": "Neperskaitytos žinutės."
+    },
+    "a11y_jump_first_unread_room": "Peršokti į pirmą neperskaitytą kambarį.",
     "action": {
-        "create_account": "Sukurti Paskyrą",
-        "dismiss": "Atmesti",
-        "explore_rooms": "Žvalgyti kambarius",
-        "open": "Atidaryti",
-        "sign_in": "Prisijungti",
         "accept": "Priimti",
         "add": "Pridėti",
         "add_existing_room": "Pridėti esamą kambarį",
@@ -22,16 +31,19 @@
         "continue": "Tęsti",
         "copy": "Kopijuoti",
         "create": "Sukurti",
+        "create_account": "Sukurti Paskyrą",
         "decline": "Atmesti",
         "delete": "Ištrinti",
         "disable": "Išjungti",
         "disconnect": "Atsijungti",
+        "dismiss": "Atmesti",
         "done": "Atlikta",
         "download": "Atsisiųsti",
         "edit": "Koreguoti",
         "enable": "Įjungti",
         "expand": "Išplėsti",
         "explore_public_rooms": "Tyrinėti viešuosius kambarius",
+        "explore_rooms": "Žvalgyti kambarius",
         "export": "Eksportuoti",
         "forward": "Persiųsti",
         "go": "Eiti",
@@ -57,6 +69,7 @@
         "next": "Toliau",
         "no": "Ne",
         "ok": "Gerai",
+        "open": "Atidaryti",
         "pin": "Prisegti",
         "quote": "Cituoti",
         "react": "Reaguoti",
@@ -82,6 +95,7 @@
         "show": "Rodyti",
         "show_advanced": "Rodyti išplėstinius",
         "show_all": "Rodyti viską",
+        "sign_in": "Prisijungti",
         "sign_out": "Atsijungti",
         "skip": "Praleisti",
         "start": "Pradėti",
@@ -107,8 +121,14 @@
         "view_source": "Peržiūrėti šaltinį",
         "yes": "Taip"
     },
+    "analytics": {
+        "accept_button": "Tai gerai",
+        "consent_migration": "Anksčiau sutikote su mumis dalytis anoniminiais naudojimo duomenimis. Atnaujiname, kaip tai veikia.",
+        "enable_prompt": "Padėkite pagerinti %(analyticsOwner)s",
+        "learn_more": "Dalinkitės anoniminiais duomenimis, kurie padės mums nustatyti problemas. Nieko asmeniško. Jokių trečiųjų šalių. <LearnMoreLink>Sužinokite daugiau</LearnMoreLink>",
+        "shared_data_heading": "Gali būti dalijamasi bet kuriais toliau nurodytais duomenimis:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Norėdami užbaigti prisijungimą, eikite į naršyklę",
         "autodiscovery_invalid": "Klaidingas serverio radimo atsakas",
         "autodiscovery_invalid_hs": "Serverio adresas neatrodo esantis tinkamas Matrix serveris",
         "autodiscovery_invalid_is": "Tapatybės serverio URL neatrodo kaip tinkamas tapatybės serveris",
@@ -204,6 +224,7 @@
             "clear_data_title": "Išvalyti visus duomenis šiame seanse?"
         },
         "sso": "Vienas Prisijungimas",
+        "sso_complete_in_browser_dialog_title": "Norėdami užbaigti prisijungimą, eikite į naršyklę",
         "sso_failed_missing_storage": "Paprašėme naršyklės įsiminti, kurį namų serverį naudojate prisijungimui, bet, deja, naršyklė tai pamiršo. Eikite į prisijungimo puslapį ir bandykite dar kartą.",
         "sync_footer_subtitle": "Jei esate prisijungę prie daug kambarių, tai gali užtrukti",
         "uia": {
@@ -223,70 +244,6 @@
         "unsupported_auth_email": "Šis serveris nepalaiko prisijungimo naudojant el. pašto adresą.",
         "unsupported_auth_msisdn": "Šis serveris nepalaiko tapatybės nustatymo telefono numeriu.",
         "username_field_required_invalid": "Įveskite vartotojo vardą"
-    },
-    "desktop_default_device_name": "%(brand)s Kompiuteryje: %(platformName)s",
-    "download_completed": "Atsisiuntimas baigtas",
-    "error": {
-        "app_launch_unexpected_error": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
-        "cannot_load_config": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
-        "invalid_configuration_no_server": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
-        "invalid_json": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
-        "invalid_json_detail": "Analizatoriaus žinutė yra: %(message)s",
-        "invalid_json_generic": "Klaidingas JSON",
-        "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas",
-        "admin_contact_short": "Susisiekite su savo <a>serverio administratoriumi</a>.",
-        "dialog_description_default": "Įvyko klaida.",
-        "edit_history_unsupported": "Panašu, kad jūsų namų serveris nepalaiko šios galimybės.",
-        "failed_copy": "Nepavyko nukopijuoti",
-        "hs_blocked": "Šis namų serveris buvo užblokuotas jo administratoriaus.",
-        "mau": "Šis serveris pasiekė savo mėnesinį aktyvių vartotojų limitą.",
-        "mixed_content": "Neįmanoma prisijungti prie serverio per HTTP, kai naršyklės juostoje yra HTTPS URL. Naudokite HTTPS arba <a>įjunkite nesaugias rašmenas</a>.",
-        "non_urgent_echo_failure_toast": "Jūsų serveris neatsako į kai kurias <a>užklausas</a>.",
-        "resource_limits": "Šis serveris viršijo vieno iš savo išteklių limitą.",
-        "session_restore": {
-            "clear_storage_button": "Išvalyti Saugyklą ir Atsijungti",
-            "clear_storage_description": "Atsijungti ir pašalinti šifravimo raktus?",
-            "description_1": "Bandant atkurti ankstesnį seansą įvyko klaida.",
-            "description_2": "Jei anksčiau naudojote naujesnę %(brand)s versiją, jūsų seansas gali būti nesuderinamas su šia versija. Uždarykite šį langą ir grįžkite į naujesnę versiją.",
-            "description_3": "Išvalius naršyklės saugyklą, problema gali būti išspręsta, tačiau jus atjungs ir užšifruotų pokalbių istorija taps neperskaitoma.",
-            "title": "Nepavyko atkurti seanso"
-        },
-        "something_went_wrong": "Kažkas nutiko!",
-        "storage_evicted_description_1": "Trūksta kai kurių seanso duomenų, įskaitant šifruotų žinučių raktus. Atsijunkite ir prisijunkite, kad tai išspręstumėte, atkurdami raktus iš atsarginės kopijos.",
-        "storage_evicted_description_2": "Jūsų naršyklė greičiausiai pašalino šiuos duomenis pritrūkus vietos diske.",
-        "storage_evicted_title": "Trūksta seanso duomenų",
-        "tls": "Nepavyksta prisijungti prie serverio - patikrinkite savo ryšį, įsitikinkite, kad jūsų <a>serverio SSL sertifikatas</a> yra patikimas ir, kad naršyklės plėtinys neužblokuoja užklausų.",
-        "unknown": "Nežinoma klaida",
-        "unknown_error_code": "nežinomas klaidos kodas",
-        "update_power_level": "Nepavyko pakeisti galios lygio"
-    },
-    "incompatible_browser": {
-        "title": "Nepalaikoma naršyklė"
-    },
-    "powered_by_matrix": "Veikia su Matrix",
-    "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
-    "unknown_device": "Nežinomas įrenginys",
-    "welcome_to_element": "Sveiki atvykę į Element",
-    "a11y": {
-        "jump_first_invite": "Peršokti iki pirmo pakvietimo.",
-        "n_unread_messages": {
-            "one": "1 neperskaityta žinutė.",
-            "other": "%(count)s neperskaitytos žinutės."
-        },
-        "n_unread_messages_mentions": {
-            "one": "1 neperskaitytas paminėjimas.",
-            "other": "%(count)s neperskaitytos žinutės, įskaitant paminėjimus."
-        },
-        "room_name": "Kambarys %(name)s",
-        "unread_messages": "Neperskaitytos žinutės."
-    },
-    "a11y_jump_first_unread_room": "Peršokti į pirmą neperskaitytą kambarį.",
-    "analytics": {
-        "accept_button": "Tai gerai",
-        "consent_migration": "Anksčiau sutikote su mumis dalytis anoniminiais naudojimo duomenimis. Atnaujiname, kaip tai veikia.",
-        "enable_prompt": "Padėkite pagerinti %(analyticsOwner)s",
-        "learn_more": "Dalinkitės anoniminiais duomenimis, kurie padės mums nustatyti problemas. Nieko asmeniško. Jokių trečiųjų šalių. <LearnMoreLink>Sužinokite daugiau</LearnMoreLink>",
-        "shared_data_heading": "Gali būti dalijamasi bet kuriais toliau nurodytais duomenimis:"
     },
     "bug_reporting": {
         "additional_context": "Jei yra papildomo konteksto, kuris padėtų analizuojant šią problemą, tokio kaip ką jūs darėte tuo metu, kambarių ID, vartotojų ID ir t.t., įtraukite tuos dalykus čia.",
@@ -506,6 +463,7 @@
         "public_heading": "Jūsų vieša erdvė",
         "subspace_dropdown_title": "Sukurti erdvę"
     },
+    "desktop_default_device_name": "%(brand)s Kompiuteryje: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktyvūs Valdikliai",
         "category_other": "Kitas",
@@ -528,6 +486,7 @@
         "widget_screenshots": "Įjungti valdiklių ekrano kopijas palaikomuose valdikliuose"
     },
     "dialog_close_label": "Uždaryti dialogą",
+    "download_completed": "Atsisiuntimas baigtas",
     "emoji": {
         "categories": "Kategorijos",
         "category_activities": "Veikla",
@@ -695,6 +654,40 @@
         "verify_toast_description": "Kiti vartotojai gali nepasitikėti",
         "verify_toast_title": "Patvirtinti šį seansą"
     },
+    "error": {
+        "admin_contact_short": "Susisiekite su savo <a>serverio administratoriumi</a>.",
+        "app_launch_unexpected_error": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
+        "cannot_load_config": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
+        "dialog_description_default": "Įvyko klaida.",
+        "edit_history_unsupported": "Panašu, kad jūsų namų serveris nepalaiko šios galimybės.",
+        "failed_copy": "Nepavyko nukopijuoti",
+        "hs_blocked": "Šis namų serveris buvo užblokuotas jo administratoriaus.",
+        "invalid_configuration_no_server": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
+        "invalid_json": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
+        "invalid_json_detail": "Analizatoriaus žinutė yra: %(message)s",
+        "invalid_json_generic": "Klaidingas JSON",
+        "mau": "Šis serveris pasiekė savo mėnesinį aktyvių vartotojų limitą.",
+        "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas",
+        "mixed_content": "Neįmanoma prisijungti prie serverio per HTTP, kai naršyklės juostoje yra HTTPS URL. Naudokite HTTPS arba <a>įjunkite nesaugias rašmenas</a>.",
+        "non_urgent_echo_failure_toast": "Jūsų serveris neatsako į kai kurias <a>užklausas</a>.",
+        "resource_limits": "Šis serveris viršijo vieno iš savo išteklių limitą.",
+        "session_restore": {
+            "clear_storage_button": "Išvalyti Saugyklą ir Atsijungti",
+            "clear_storage_description": "Atsijungti ir pašalinti šifravimo raktus?",
+            "description_1": "Bandant atkurti ankstesnį seansą įvyko klaida.",
+            "description_2": "Jei anksčiau naudojote naujesnę %(brand)s versiją, jūsų seansas gali būti nesuderinamas su šia versija. Uždarykite šį langą ir grįžkite į naujesnę versiją.",
+            "description_3": "Išvalius naršyklės saugyklą, problema gali būti išspręsta, tačiau jus atjungs ir užšifruotų pokalbių istorija taps neperskaitoma.",
+            "title": "Nepavyko atkurti seanso"
+        },
+        "something_went_wrong": "Kažkas nutiko!",
+        "storage_evicted_description_1": "Trūksta kai kurių seanso duomenų, įskaitant šifruotų žinučių raktus. Atsijunkite ir prisijunkite, kad tai išspręstumėte, atkurdami raktus iš atsarginės kopijos.",
+        "storage_evicted_description_2": "Jūsų naršyklė greičiausiai pašalino šiuos duomenis pritrūkus vietos diske.",
+        "storage_evicted_title": "Trūksta seanso duomenų",
+        "tls": "Nepavyksta prisijungti prie serverio - patikrinkite savo ryšį, įsitikinkite, kad jūsų <a>serverio SSL sertifikatas</a> yra patikimas ir, kad naršyklės plėtinys neužblokuoja užklausų.",
+        "unknown": "Nežinoma klaida",
+        "unknown_error_code": "nežinomas klaidos kodas",
+        "update_power_level": "Nepavyko pakeisti galios lygio"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Nepavyko nukopijuoti nuorodos į kambarį į iškarpinę.",
@@ -784,6 +777,9 @@
         "url": "Tapatybės serveris (%(server)s)",
         "url_field_label": "Pridėkite naują tapatybės serverį",
         "url_not_https": "Tapatybės serverio URL privalo būti HTTPS"
+    },
+    "incompatible_browser": {
+        "title": "Nepalaikoma naršyklė"
     },
     "integration_manager": {
         "error_connecting": "Integracijų tvarkytuvas yra išjungtas arba negali pasiekti jūsų serverio.",
@@ -1025,6 +1021,8 @@
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
+    "powered_by_matrix": "Veikia su Matrix",
+    "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
     "presence": {
         "busy": "Užsiėmęs",
         "idle": "Neveiklus",
@@ -2297,6 +2295,7 @@
     "truncated_list_n_more": {
         "other": "Ir dar %(count)s..."
     },
+    "unknown_device": "Nežinomas įrenginys",
     "update": {
         "changelog": "Keitinių žurnalas",
         "check_action": "Tikrinti, ar yra atnaujinimų",
@@ -2480,6 +2479,7 @@
         "voice_call": "Balso skambutis",
         "you_are_presenting": "Jūs pristatote"
     },
+    "welcome_to_element": "Sveiki atvykę į Element",
     "widget": {
         "added_by": "Valdiklį pridėjo",
         "capabilities_dialog": {

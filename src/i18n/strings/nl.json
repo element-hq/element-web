@@ -1,10 +1,20 @@
 {
+    "a11y": {
+        "jump_first_invite": "Ga naar de eerste uitnodiging.",
+        "n_unread_messages": {
+            "other": "%(count)s ongelezen berichten.",
+            "one": "1 ongelezen bericht."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s ongelezen berichten, inclusief vermeldingen.",
+            "one": "1 ongelezen vermelding."
+        },
+        "room_name": "Kamer %(name)s",
+        "unread_messages": "Ongelezen berichten.",
+        "user_menu": "Persoonsmenu"
+    },
+    "a11y_jump_first_unread_room": "Ga naar het eerste ongelezen kamer.",
     "action": {
-        "create_account": "Registreren",
-        "dismiss": "Sluiten",
-        "explore_rooms": "Kamers ontdekken",
-        "open": "Openen",
-        "sign_in": "Inloggen",
         "accept": "Aannemen",
         "add": "Toevoegen",
         "add_existing_room": "Bestaande kamers toevoegen",
@@ -26,10 +36,12 @@
         "copy_link": "Link kopieren",
         "create": "Aanmaken",
         "create_a_room": "Kamer aanmaken",
+        "create_account": "Registreren",
         "decline": "Weigeren",
         "delete": "Verwijderen",
         "disable": "Uitschakelen",
         "disconnect": "Verbinding verbreken",
+        "dismiss": "Sluiten",
         "done": "Klaar",
         "download": "Downloaden",
         "edit": "Bewerken",
@@ -38,6 +50,7 @@
         "exit_fullscreeen": "Volledig scherm verlaten",
         "expand": "Uitvouwen",
         "explore_public_rooms": "Publieke kamers ontdekken",
+        "explore_rooms": "Kamers ontdekken",
         "export": "Wegschrijven",
         "forward": "Doorsturen",
         "go": "Start",
@@ -64,6 +77,7 @@
         "next": "Volgende",
         "no": "Nee",
         "ok": "Oké",
+        "open": "Openen",
         "pause": "Pauze",
         "pin": "Vastmaken",
         "play": "Afspelen",
@@ -91,6 +105,7 @@
         "show": "Toon",
         "show_advanced": "Geavanceerde info tonen",
         "show_all": "Alles tonen",
+        "sign_in": "Inloggen",
         "sign_out": "Uitloggen",
         "skip": "Overslaan",
         "start_chat": "Gesprek beginnen",
@@ -117,8 +132,19 @@
         "zoom_in": "Inzoomen",
         "zoom_out": "Uitzoomen"
     },
+    "analytics": {
+        "accept_button": "Dat is prima",
+        "bullet_1": "We verwerken of bewaren <Bold>geen</Bold> accountgegevens",
+        "bullet_2": "We delen <Bold>geen</Bold> informatie met derde partijen",
+        "consent_migration": "Je hebt eerder ingestemd met het verzamelen van anonieme gedragsdata met ons. We updaten nu hoe dit werkt.",
+        "disable_prompt": "Je kan dit elk moment uitzetten in instellingen",
+        "enable_prompt": "Help %(analyticsOwner)s verbeteren",
+        "learn_more": "Deel anonieme data om ons problemen te laten opsporen. Geen persoonsgegeven. Geen derde partijen. <LearnMoreLink>Lees Meer</LearnMoreLink>",
+        "privacy_policy": "Je kan alle voorwaarden <PrivacyPolicyUrl>hier</PrivacyPolicyUrl> lezen",
+        "pseudonymous_usage_data": "Help ons problemen te identificeren en %(analyticsOwner)s te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door jouw apparaten wordt gedeeld.",
+        "shared_data_heading": "De volgende gegevens worden mogelijk gedeeld:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Ga naar je browser om de aanmelding te voltooien",
         "account_clash": "Jouw nieuwe account (%(newAccountId)s) is geregistreerd, maar je bent al ingelogd met een andere account (%(loggedInUserId)s).",
         "account_clash_previous_account": "Doorgaan met vorige account",
         "account_deactivated": "Dit account is gesloten.",
@@ -264,6 +290,7 @@
         "soft_logout_intro_unsupported_auth": "Je kan niet inloggen met jouw account. Neem voor meer informatie contact op met de beheerder van je homeserver.",
         "soft_logout_subheading": "Persoonlijke gegevens wissen",
         "sso": "Eenmalige aanmelding",
+        "sso_complete_in_browser_dialog_title": "Ga naar je browser om de aanmelding te voltooien",
         "sso_failed_missing_storage": "De browser is verzocht de homeserver te onthouden die je gebruikt om in te loggen, maar helaas is de browser deze vergeten. Ga naar de inlog-pagina en probeer het opnieuw.",
         "sso_or_username_password": "%(ssoButtons)s of %(usernamePassword)s",
         "sync_footer_subtitle": "Als je bij veel kamers bent aangesloten kan dit een tijdje duren",
@@ -291,78 +318,6 @@
         "unsupported_auth_msisdn": "Deze server biedt geen ondersteuning voor authenticatie met een telefoonnummer.",
         "username_field_required_invalid": "Voer inlognaam in",
         "username_in_use": "Iemand heeft die inlognaam al, probeer een andere."
-    },
-    "download_completed": "Download voltooid",
-    "error": {
-        "app_launch_unexpected_error": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
-        "cannot_load_config": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
-        "invalid_configuration_no_server": "Configuratie ongeldig: geen standaardserver opgegeven.",
-        "invalid_json": "Jouw Element configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
-        "invalid_json_detail": "De ontleder meldt: %(message)s",
-        "invalid_json_generic": "Ongeldige JSON",
-        "misconfigured": "Jouw Element is verkeerd geconfigureerd",
-        "admin_contact": "Gelieve <a>contact op te nemen met je dienstbeheerder</a> om deze dienst te blijven gebruiken.",
-        "admin_contact_short": "Neem contact op met je <a>serverbeheerder</a>.",
-        "connection": "Er was een communicatieprobleem met de homeserver, probeer het later opnieuw.",
-        "dialog_description_default": "Er is een fout opgetreden.",
-        "edit_history_unsupported": "Jouw homeserver biedt geen ondersteuning voor deze functie.",
-        "failed_copy": "Kopiëren mislukt",
-        "hs_blocked": "Deze homeserver is geblokkeerd door jouw beheerder.",
-        "mau": "Deze homeserver heeft zijn limiet voor maandelijks actieve personen bereikt.",
-        "mixed_content": "Kan geen verbinding maken met de homeserver via HTTP wanneer er een HTTPS-URL in je browserbalk staat. Gebruik HTTPS of <a>schakel onveilige scripts in</a>.",
-        "non_urgent_echo_failure_toast": "Je server reageert niet op sommige <a>verzoeken</a>.",
-        "resource_limits": "Deze homeserver heeft één van zijn systeembron-limieten overschreden.",
-        "session_restore": {
-            "clear_storage_button": "Opslag wissen en uitloggen",
-            "clear_storage_description": "Uitloggen en versleutelingssleutels verwijderen?",
-            "description_1": "Het herstel van je vorige sessie is mislukt.",
-            "description_2": "Als je een recentere versie van %(brand)s hebt gebruikt is je sessie mogelijk niet geschikt voor deze versie. Sluit dit venster en ga terug naar die recentere versie.",
-            "description_3": "Het wissen van de browseropslag zal het probleem misschien verhelpen, maar zal je ook uitloggen en je gehele versleutelde kamergeschiedenis onleesbaar maken.",
-            "title": "Herstellen van sessie mislukt"
-        },
-        "something_went_wrong": "Er is iets misgegaan!",
-        "storage_evicted_description_1": "Sommige sessiegegevens, waaronder sleutels voor versleutelde berichten, ontbreken. Herstel de sleutels uit je back-up door je af- en weer aan te melden.",
-        "storage_evicted_description_2": "Jouw browser heeft deze gegevens wellicht verwijderd toen de beschikbare opslagSpace vol was.",
-        "storage_evicted_title": "Sessiegegevens ontbreken",
-        "tls": "Geen verbinding met de homeserver - controleer je verbinding, zorg ervoor dat het <a>SSL-certificaat van de homeserver</a> vertrouwd is en dat er geen browserextensies verzoeken blokkeren.",
-        "unknown": "Onbekende fout",
-        "unknown_error_code": "onbekende foutcode",
-        "update_power_level": "Wijzigen van machtsniveau is mislukt"
-    },
-    "incompatible_browser": {
-        "title": "Niet-ondersteunde browser"
-    },
-    "powered_by_matrix": "Mogelijk gemaakt door Matrix",
-    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
-    "unknown_device": "Onbekend apparaat",
-    "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
-    "welcome_to_element": "Welkom bij Element",
-    "a11y": {
-        "jump_first_invite": "Ga naar de eerste uitnodiging.",
-        "n_unread_messages": {
-            "other": "%(count)s ongelezen berichten.",
-            "one": "1 ongelezen bericht."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s ongelezen berichten, inclusief vermeldingen.",
-            "one": "1 ongelezen vermelding."
-        },
-        "room_name": "Kamer %(name)s",
-        "unread_messages": "Ongelezen berichten.",
-        "user_menu": "Persoonsmenu"
-    },
-    "a11y_jump_first_unread_room": "Ga naar het eerste ongelezen kamer.",
-    "analytics": {
-        "accept_button": "Dat is prima",
-        "bullet_1": "We verwerken of bewaren <Bold>geen</Bold> accountgegevens",
-        "bullet_2": "We delen <Bold>geen</Bold> informatie met derde partijen",
-        "consent_migration": "Je hebt eerder ingestemd met het verzamelen van anonieme gedragsdata met ons. We updaten nu hoe dit werkt.",
-        "disable_prompt": "Je kan dit elk moment uitzetten in instellingen",
-        "enable_prompt": "Help %(analyticsOwner)s verbeteren",
-        "learn_more": "Deel anonieme data om ons problemen te laten opsporen. Geen persoonsgegeven. Geen derde partijen. <LearnMoreLink>Lees Meer</LearnMoreLink>",
-        "privacy_policy": "Je kan alle voorwaarden <PrivacyPolicyUrl>hier</PrivacyPolicyUrl> lezen",
-        "pseudonymous_usage_data": "Help ons problemen te identificeren en %(analyticsOwner)s te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door jouw apparaten wordt gedeeld.",
-        "shared_data_heading": "De volgende gegevens worden mogelijk gedeeld:"
     },
     "bug_reporting": {
         "additional_context": "Alle verdere informatie die zou kunnen helpen het probleem te analyseren graag toevoegen (wat je aan het doen was, relevante kamer-ID’s, persoon-ID’s, etc.).",
@@ -707,6 +662,7 @@
         "widget_screenshots": "Widget-schermafbeeldingen inschakelen op ondersteunde widgets"
     },
     "dialog_close_label": "Dialoog sluiten",
+    "download_completed": "Download voltooid",
     "emoji": {
         "categories": "Categorieën",
         "category_activities": "Activiteiten",
@@ -899,6 +855,42 @@
         "verify_toast_description": "Mogelijk wantrouwen anderen het",
         "verify_toast_title": "Verifieer deze sessie"
     },
+    "error": {
+        "admin_contact": "Gelieve <a>contact op te nemen met je dienstbeheerder</a> om deze dienst te blijven gebruiken.",
+        "admin_contact_short": "Neem contact op met je <a>serverbeheerder</a>.",
+        "app_launch_unexpected_error": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
+        "cannot_load_config": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
+        "connection": "Er was een communicatieprobleem met de homeserver, probeer het later opnieuw.",
+        "dialog_description_default": "Er is een fout opgetreden.",
+        "edit_history_unsupported": "Jouw homeserver biedt geen ondersteuning voor deze functie.",
+        "failed_copy": "Kopiëren mislukt",
+        "hs_blocked": "Deze homeserver is geblokkeerd door jouw beheerder.",
+        "invalid_configuration_no_server": "Configuratie ongeldig: geen standaardserver opgegeven.",
+        "invalid_json": "Jouw Element configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
+        "invalid_json_detail": "De ontleder meldt: %(message)s",
+        "invalid_json_generic": "Ongeldige JSON",
+        "mau": "Deze homeserver heeft zijn limiet voor maandelijks actieve personen bereikt.",
+        "misconfigured": "Jouw Element is verkeerd geconfigureerd",
+        "mixed_content": "Kan geen verbinding maken met de homeserver via HTTP wanneer er een HTTPS-URL in je browserbalk staat. Gebruik HTTPS of <a>schakel onveilige scripts in</a>.",
+        "non_urgent_echo_failure_toast": "Je server reageert niet op sommige <a>verzoeken</a>.",
+        "resource_limits": "Deze homeserver heeft één van zijn systeembron-limieten overschreden.",
+        "session_restore": {
+            "clear_storage_button": "Opslag wissen en uitloggen",
+            "clear_storage_description": "Uitloggen en versleutelingssleutels verwijderen?",
+            "description_1": "Het herstel van je vorige sessie is mislukt.",
+            "description_2": "Als je een recentere versie van %(brand)s hebt gebruikt is je sessie mogelijk niet geschikt voor deze versie. Sluit dit venster en ga terug naar die recentere versie.",
+            "description_3": "Het wissen van de browseropslag zal het probleem misschien verhelpen, maar zal je ook uitloggen en je gehele versleutelde kamergeschiedenis onleesbaar maken.",
+            "title": "Herstellen van sessie mislukt"
+        },
+        "something_went_wrong": "Er is iets misgegaan!",
+        "storage_evicted_description_1": "Sommige sessiegegevens, waaronder sleutels voor versleutelde berichten, ontbreken. Herstel de sleutels uit je back-up door je af- en weer aan te melden.",
+        "storage_evicted_description_2": "Jouw browser heeft deze gegevens wellicht verwijderd toen de beschikbare opslagSpace vol was.",
+        "storage_evicted_title": "Sessiegegevens ontbreken",
+        "tls": "Geen verbinding met de homeserver - controleer je verbinding, zorg ervoor dat het <a>SSL-certificaat van de homeserver</a> vertrouwd is en dat er geen browserextensies verzoeken blokkeren.",
+        "unknown": "Onbekende fout",
+        "unknown_error_code": "onbekende foutcode",
+        "update_power_level": "Wijzigen van machtsniveau is mislukt"
+    },
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Kopiëren van kamerlink naar het klembord is mislukt.",
@@ -1036,6 +1028,9 @@
     "in_space_and_n_other_spaces": {
         "one": "In %(spaceName)s en %(count)s andere space.",
         "other": "In %(spaceName)s en %(count)s andere spaces."
+    },
+    "incompatible_browser": {
+        "title": "Niet-ondersteunde browser"
     },
     "info_tooltip_title": "Informatie",
     "integration_manager": {
@@ -1442,6 +1437,8 @@
         "label": "Machtsniveau",
         "restricted": "Beperkte toegang"
     },
+    "powered_by_matrix": "Mogelijk gemaakt door Matrix",
+    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "presence": {
         "away": "Afwezig",
         "busy": "Bezet",
@@ -3035,6 +3032,7 @@
     "truncated_list_n_more": {
         "other": "En %(count)s meer…"
     },
+    "unknown_device": "Onbekend apparaat",
     "update": {
         "changelog": "Wijzigingslogboek",
         "check_action": "Controleren op updates",
@@ -3248,6 +3246,8 @@
         "voice_call": "Spraakoproep",
         "you_are_presenting": "Je bent aan het presenteren"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
+    "welcome_to_element": "Welkom bij Element",
     "widget": {
         "added_by": "Widget toegevoegd door",
         "capabilities_dialog": {

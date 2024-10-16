@@ -1,10 +1,25 @@
 {
+    "a11y": {
+        "emoji_picker": "Selektor emoji",
+        "jump_first_invite": "Przejdź do pierwszego zaproszenia.",
+        "message_composer": "Kompozytor wiadomości",
+        "n_unread_messages": {
+            "other": "%(count)s nieprzeczytanych wiadomości.",
+            "one": "1 nieprzeczytana wiadomość."
+        },
+        "n_unread_messages_mentions": {
+            "other": "%(count)s nieprzeczytanych wiadomości, wliczając wzmianki.",
+            "one": "1 nieprzeczytana wzmianka."
+        },
+        "recent_rooms": "Ostatnie pokoje",
+        "room_name": "Pokój %(name)s",
+        "room_status_bar": "Pasek stanu pokoju",
+        "seek_bar_label": "Pasek wyszukiwania audio",
+        "unread_messages": "Nieprzeczytane wiadomości.",
+        "user_menu": "Menu użytkownika"
+    },
+    "a11y_jump_first_unread_room": "Przejdź do pierwszego nieprzeczytanego pokoju.",
     "action": {
-        "create_account": "Utwórz konto",
-        "dismiss": "Pomiń",
-        "explore_rooms": "Przeglądaj pokoje",
-        "open": "Otwórz",
-        "sign_in": "Zaloguj",
         "accept": "Akceptuj",
         "add": "Dodaj",
         "add_existing_room": "Dodaj istniejący pokój",
@@ -28,11 +43,13 @@
         "copy_link": "Kopiuj link",
         "create": "Utwórz",
         "create_a_room": "Utwórz pokój",
+        "create_account": "Utwórz konto",
         "decline": "Odrzuć",
         "delete": "Usuń",
         "deny": "Odmów",
         "disable": "Wyłącz",
         "disconnect": "Rozłącz",
+        "dismiss": "Pomiń",
         "done": "Gotowe",
         "download": "Pobierz",
         "edit": "Edytuj",
@@ -41,6 +58,7 @@
         "exit_fullscreeen": "Wyjdź z trybu pełnoekranowego",
         "expand": "Rozwiń",
         "explore_public_rooms": "Przeglądaj pokoje publiczne",
+        "explore_rooms": "Przeglądaj pokoje",
         "export": "Eksport",
         "forward": "Przekaż",
         "go": "Przejdź",
@@ -67,6 +85,7 @@
         "next": "Dalej",
         "no": "Nie",
         "ok": "OK",
+        "open": "Otwórz",
         "pause": "Wstrzymaj",
         "pin": "Przypnij",
         "play": "Odtwórz",
@@ -97,6 +116,7 @@
         "show": "Pokaż",
         "show_advanced": "Pokaż zaawansowane",
         "show_all": "Pokaż wszystko",
+        "sign_in": "Zaloguj",
         "sign_out": "Wyloguj",
         "skip": "Pomiń",
         "start": "Rozpocznij",
@@ -126,8 +146,19 @@
         "zoom_in": "Powiększ",
         "zoom_out": "Pomniejsz"
     },
+    "analytics": {
+        "accept_button": "To jest w porządku",
+        "bullet_1": "<Bold>Nie zapisujemy</Bold> żadnych danych, ani nie profilujemy Twojego konta",
+        "bullet_2": "<Bold>Nie udostępniamy</Bold> żadnych informacji stronom trzecim",
+        "consent_migration": "Wyrażono zgodę na udostępnianie z nami anonimowych danych. Teraz aktualizujemy jak to działa.",
+        "disable_prompt": "Możesz to wyłączyć kiedykolwiek w ustawieniach",
+        "enable_prompt": "Pomóż poprawić %(analyticsOwner)s",
+        "learn_more": "Udostępnij anonimowe dane, aby pomóc nam w identyfikacji problemów. Nic osobistego. Żadnych podmiotów zewnętrznych. <LearnMoreLink>Dowiedz się więcej</LearnMoreLink>",
+        "privacy_policy": "Możesz przeczytać wszystkie nasze warunki <PrivacyPolicyUrl>tutaj</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Pomóż nam zidentyfikować problemy i ulepszyć %(analyticsOwner)s, udostępniając anonimowe dane o użytkowaniu. Aby zrozumieć, w jaki sposób użytkownicy korzystają z wielu urządzeń, wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.",
+        "shared_data_heading": "Wszystkie wymienione dane mogą być udostępnione:"
+    },
     "auth": {
-        "sso_complete_in_browser_dialog_title": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki",
         "3pid_in_use": "Ten adres e-mail lub numer telefonu jest już w użyciu.",
         "account_clash": "Twoje nowe konto (%(newAccountId)s) zostało zarejestrowane, lecz jesteś już zalogowany na innym koncie (%(loggedInUserId)s).",
         "account_clash_previous_account": "Kontynuuj używając poprzedniego konta.",
@@ -330,6 +361,7 @@
         "soft_logout_subheading": "Wyczyść dane osobiste",
         "soft_logout_warning": "Ostrzeżenie: Twoje dane osobowe (włączając w to klucze szyfrujące) są wciąż przechowywane w tej sesji. Wyczyść je, jeśli chcesz zakończyć tę sesję lub chcesz zalogować się na inne konto.",
         "sso": "Pojedyncze logowanie",
+        "sso_complete_in_browser_dialog_title": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki",
         "sso_failed_missing_storage": "Poprosiliśmy przeglądarkę o zapamiętanie, z którego serwera domowego korzystasz, aby umożliwić Ci logowanie, ale niestety Twoja przeglądarka o tym zapomniała. Przejdź do strony logowania i spróbuj ponownie.",
         "sso_or_username_password": "%(ssoButtons)s lub %(usernamePassword)s",
         "sync_footer_subtitle": "Jeśli dołączono do wielu pokojów, może to chwilę zająć",
@@ -366,99 +398,6 @@
         "username_in_use": "Ktoś już ma tę nazwę użytkownika, użyj innej.",
         "verify_email_explainer": "Przed zresetowaniem hasła musimy się upewnić, że to Ty. Kliknij link we wiadomości e-mail, którą właśnie wysłaliśmy do <b>%(email)s</b>",
         "verify_email_heading": "Zweryfikuj adres e-mail, aby kontynuować"
-    },
-    "desktop_default_device_name": "Komputer %(brand)s: %(platformName)s",
-    "download_completed": "Pobieranie zakończone",
-    "error": {
-        "app_launch_unexpected_error": "Niespodziewany błąd podczas przygotowywania aplikacji. Otwórz konsolę po szczegóły.",
-        "cannot_load_config": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę, aby spróbować ponownie.",
-        "invalid_configuration_mixed_server": "Nieprawidłowa konfiguracja: nie można określić default_hs_url wraz z default_server_name lub default_server_config",
-        "invalid_configuration_no_server": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
-        "invalid_json": "Twoja konfiguracja Element zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
-        "invalid_json_detail": "Wiadomość od parsera to: %(message)s",
-        "invalid_json_generic": "Błędny JSON",
-        "misconfigured": "Twój Element jest nieprawidłowo skonfigurowany",
-        "admin_contact": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji.",
-        "admin_contact_short": "Skontaktuj się ze swoim <a>administratorem serwera</a>.",
-        "connection": "Wystąpił problem podczas łączenia się z serwerem domowym, spróbuj ponownie później.",
-        "dialog_description_default": "Wystąpił błąd.",
-        "download_media": "Nie udało się pobrać media źródłowego, nie znaleziono źródłowego adresu URL",
-        "edit_history_unsupported": "Wygląda na to, że Twój serwer domowy nie wspiera tej funkcji.",
-        "failed_copy": "Kopiowanie nieudane",
-        "hs_blocked": "Ten serwer domowy został zablokowany przez jego administratora.",
-        "mau": "Ten serwer osiągnął miesięczny limit aktywnego użytkownika.",
-        "mixed_content": "Nie można nawiązać połączenia z serwerem przy użyciu HTTP podczas korzystania z HTTPS dla bieżącej strony. Użyj HTTPS lub <a>włącz niebezpieczne skrypty</a>.",
-        "non_urgent_echo_failure_toast": "Twój serwer nie odpowiada na niektóre <a>zapytania</a>.",
-        "resource_limits": "Ten serwer przekroczył jeden z limitów.",
-        "session_restore": {
-            "clear_storage_button": "Wyczyść pamięć i wyloguj się",
-            "clear_storage_description": "Wylogować się i usunąć klucze szyfrowania?",
-            "description_1": "Napotkaliśmy błąd podczas przywracania poprzedniej sesji.",
-            "description_2": "Jeśli wcześniej używałeś/aś nowszej wersji %(brand)s, Twoja sesja może być niekompatybilna z tą wersją. Zamknij to okno i powróć do nowszej wersji.",
-            "description_3": "Wyczyszczenie pamięci przeglądarki może rozwiązać problem, ale wyloguje Cię i spowoduje, że jakakolwiek zaszyfrowana historia czatu stanie się nieczytelna.",
-            "title": "Przywrócenie sesji jest niemożliwe"
-        },
-        "something_went_wrong": "Coś poszło nie tak!",
-        "storage_evicted_description_1": "Brakuje niektórych danych sesji, w tym zaszyfrowanych kluczy wiadomości. Wyloguj się i zaloguj, aby to naprawić, przywracając klucze z kopii zapasowej.",
-        "storage_evicted_description_2": "Twoja przeglądarka prawdopodobnie usunęła te dane, kiedy brakowało jej miejsca.",
-        "storage_evicted_title": "Brakujące dane sesji",
-        "sync": "Nie można połączyć się z serwerem domowym. Ponawianie…",
-        "tls": "Nie można nawiązać połączenia z serwerem - proszę sprawdź twoje połączenie, upewnij się, że <a>certyfikat SSL serwera</a> jest zaufany, i że dodatki przeglądarki nie blokują żądania.",
-        "unknown": "Nieznany błąd",
-        "unknown_error_code": "nieznany kod błędu",
-        "update_power_level": "Nie udało się zmienić poziomu mocy"
-    },
-    "incompatible_browser": {
-        "continue": "Kontynuuj mimo to",
-        "description": "%(brand)s korzysta z niektórych funkcji, które nie są obecnie dostępne w Twojej przeglądarce. %(detail)s",
-        "detail_can_continue": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości.",
-        "detail_no_continue": "Zaktualizuj przeglądarkę, jeśli jeszcze tego nie zrobiłeś i spróbuj ponownie.",
-        "learn_more": "Dowiedz się więcej",
-        "linux": "Linux",
-        "macos": "Mac",
-        "supported_browsers": "Dla najlepszego doświadczenia korzystaj z <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> lub <Safari>Safari</Safari>.",
-        "title": "%(brand)s nie wspiera tej przeglądarki",
-        "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
-        "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
-        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej",
-        "windows": "Windows (%(bits)s-bit)"
-    },
-    "powered_by_matrix": "Zasilane przez Matrix",
-    "powered_by_matrix_with_logo": "Zdecentralizowany czat szyfrowany i współpraca oparta na $matrixLogo",
-    "unknown_device": "Nieznane urządzenie",
-    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Witamy w Element",
-    "a11y": {
-        "emoji_picker": "Selektor emoji",
-        "jump_first_invite": "Przejdź do pierwszego zaproszenia.",
-        "message_composer": "Kompozytor wiadomości",
-        "n_unread_messages": {
-            "other": "%(count)s nieprzeczytanych wiadomości.",
-            "one": "1 nieprzeczytana wiadomość."
-        },
-        "n_unread_messages_mentions": {
-            "other": "%(count)s nieprzeczytanych wiadomości, wliczając wzmianki.",
-            "one": "1 nieprzeczytana wzmianka."
-        },
-        "recent_rooms": "Ostatnie pokoje",
-        "room_name": "Pokój %(name)s",
-        "room_status_bar": "Pasek stanu pokoju",
-        "seek_bar_label": "Pasek wyszukiwania audio",
-        "unread_messages": "Nieprzeczytane wiadomości.",
-        "user_menu": "Menu użytkownika"
-    },
-    "a11y_jump_first_unread_room": "Przejdź do pierwszego nieprzeczytanego pokoju.",
-    "analytics": {
-        "accept_button": "To jest w porządku",
-        "bullet_1": "<Bold>Nie zapisujemy</Bold> żadnych danych, ani nie profilujemy Twojego konta",
-        "bullet_2": "<Bold>Nie udostępniamy</Bold> żadnych informacji stronom trzecim",
-        "consent_migration": "Wyrażono zgodę na udostępnianie z nami anonimowych danych. Teraz aktualizujemy jak to działa.",
-        "disable_prompt": "Możesz to wyłączyć kiedykolwiek w ustawieniach",
-        "enable_prompt": "Pomóż poprawić %(analyticsOwner)s",
-        "learn_more": "Udostępnij anonimowe dane, aby pomóc nam w identyfikacji problemów. Nic osobistego. Żadnych podmiotów zewnętrznych. <LearnMoreLink>Dowiedz się więcej</LearnMoreLink>",
-        "privacy_policy": "Możesz przeczytać wszystkie nasze warunki <PrivacyPolicyUrl>tutaj</PrivacyPolicyUrl>",
-        "pseudonymous_usage_data": "Pomóż nam zidentyfikować problemy i ulepszyć %(analyticsOwner)s, udostępniając anonimowe dane o użytkowaniu. Aby zrozumieć, w jaki sposób użytkownicy korzystają z wielu urządzeń, wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.",
-        "shared_data_heading": "Wszystkie wymienione dane mogą być udostępnione:"
     },
     "bug_reporting": {
         "additional_context": "Jeśli istnieje dodatkowy kontekst, który pomógłby nam w analizie zgłoszenia, taki jak co robiłeś w trakcie wystąpienia problemu, ID pokojów, ID użytkowników, itd., wprowadź go tutaj.",
@@ -795,6 +734,7 @@
         "twemoji": "Czcionka <twemoji>Twemoji</twemoji> jest w użyciu na warunkach licencji <terms>CC-BY 4.0</terms>. <author>© Twitter, Inc i pozostali kontrybutorzy</author>.",
         "twemoji_colr": "Czcionka <colr>twemoji-colr</colr> jest w użyciu na warunkach licencji <terms>Apache 2.0</terms>. <author>© Mozilla Foundation</author>."
     },
+    "desktop_default_device_name": "Komputer %(brand)s: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktywne widżety",
         "category_other": "Inne",
@@ -900,6 +840,7 @@
         "widget_screenshots": "Włącz zrzut ekranu widżetu na wspieranych widżetach"
     },
     "dialog_close_label": "Zamknij okno dialogowe",
+    "download_completed": "Pobieranie zakończone",
     "emoji": {
         "categories": "Kategorie",
         "category_activities": "Aktywności",
@@ -1105,6 +1046,45 @@
         "verify_toast_description": "Inni użytkownicy mogą temu nie ufać",
         "verify_toast_title": "Zweryfikuj tę sesję"
     },
+    "error": {
+        "admin_contact": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji.",
+        "admin_contact_short": "Skontaktuj się ze swoim <a>administratorem serwera</a>.",
+        "app_launch_unexpected_error": "Niespodziewany błąd podczas przygotowywania aplikacji. Otwórz konsolę po szczegóły.",
+        "cannot_load_config": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę, aby spróbować ponownie.",
+        "connection": "Wystąpił problem podczas łączenia się z serwerem domowym, spróbuj ponownie później.",
+        "dialog_description_default": "Wystąpił błąd.",
+        "download_media": "Nie udało się pobrać media źródłowego, nie znaleziono źródłowego adresu URL",
+        "edit_history_unsupported": "Wygląda na to, że Twój serwer domowy nie wspiera tej funkcji.",
+        "failed_copy": "Kopiowanie nieudane",
+        "hs_blocked": "Ten serwer domowy został zablokowany przez jego administratora.",
+        "invalid_configuration_mixed_server": "Nieprawidłowa konfiguracja: nie można określić default_hs_url wraz z default_server_name lub default_server_config",
+        "invalid_configuration_no_server": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
+        "invalid_json": "Twoja konfiguracja Element zawiera nieprawidłowy JSON. Rozwiąż problem i odśwież stronę.",
+        "invalid_json_detail": "Wiadomość od parsera to: %(message)s",
+        "invalid_json_generic": "Błędny JSON",
+        "mau": "Ten serwer osiągnął miesięczny limit aktywnego użytkownika.",
+        "misconfigured": "Twój Element jest nieprawidłowo skonfigurowany",
+        "mixed_content": "Nie można nawiązać połączenia z serwerem przy użyciu HTTP podczas korzystania z HTTPS dla bieżącej strony. Użyj HTTPS lub <a>włącz niebezpieczne skrypty</a>.",
+        "non_urgent_echo_failure_toast": "Twój serwer nie odpowiada na niektóre <a>zapytania</a>.",
+        "resource_limits": "Ten serwer przekroczył jeden z limitów.",
+        "session_restore": {
+            "clear_storage_button": "Wyczyść pamięć i wyloguj się",
+            "clear_storage_description": "Wylogować się i usunąć klucze szyfrowania?",
+            "description_1": "Napotkaliśmy błąd podczas przywracania poprzedniej sesji.",
+            "description_2": "Jeśli wcześniej używałeś/aś nowszej wersji %(brand)s, Twoja sesja może być niekompatybilna z tą wersją. Zamknij to okno i powróć do nowszej wersji.",
+            "description_3": "Wyczyszczenie pamięci przeglądarki może rozwiązać problem, ale wyloguje Cię i spowoduje, że jakakolwiek zaszyfrowana historia czatu stanie się nieczytelna.",
+            "title": "Przywrócenie sesji jest niemożliwe"
+        },
+        "something_went_wrong": "Coś poszło nie tak!",
+        "storage_evicted_description_1": "Brakuje niektórych danych sesji, w tym zaszyfrowanych kluczy wiadomości. Wyloguj się i zaloguj, aby to naprawić, przywracając klucze z kopii zapasowej.",
+        "storage_evicted_description_2": "Twoja przeglądarka prawdopodobnie usunęła te dane, kiedy brakowało jej miejsca.",
+        "storage_evicted_title": "Brakujące dane sesji",
+        "sync": "Nie można połączyć się z serwerem domowym. Ponawianie…",
+        "tls": "Nie można nawiązać połączenia z serwerem - proszę sprawdź twoje połączenie, upewnij się, że <a>certyfikat SSL serwera</a> jest zaufany, i że dodatki przeglądarki nie blokują żądania.",
+        "unknown": "Nieznany błąd",
+        "unknown_error_code": "nieznany kod błędu",
+        "update_power_level": "Nie udało się zmienić poziomu mocy"
+    },
     "error_app_open_in_another_tab": "Zmień kartę aby połączyć się do %(brand)s. Ta karta może zostać zamknięta.",
     "error_app_open_in_another_tab_title": "%(brand)s jest włączony na innej karcie",
     "error_app_opened_in_another_window": "%(brand)s jest już otwarty w innym oknie. Kliknij \"%(label)s\", aby otworzyć tutaj %(brand)s i odłączyć drugie okno.",
@@ -1273,6 +1253,18 @@
     "in_space_and_n_other_spaces": {
         "one": "W %(spaceName)s i %(count)s innej przestrzeni.",
         "other": "W %(spaceName)s i %(count)s innych przestrzeniach."
+    },
+    "incompatible_browser": {
+        "continue": "Kontynuuj mimo to",
+        "description": "%(brand)s korzysta z niektórych funkcji, które nie są obecnie dostępne w Twojej przeglądarce. %(detail)s",
+        "detail_can_continue": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości.",
+        "detail_no_continue": "Zaktualizuj przeglądarkę, jeśli jeszcze tego nie zrobiłeś i spróbuj ponownie.",
+        "learn_more": "Dowiedz się więcej",
+        "supported_browsers": "Dla najlepszego doświadczenia korzystaj z <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> lub <Safari>Safari</Safari>.",
+        "title": "%(brand)s nie wspiera tej przeglądarki",
+        "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
+        "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
+        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej"
     },
     "info_tooltip_title": "Informacje",
     "integration_manager": {
@@ -1769,6 +1761,8 @@
         "moderator": "Moderator",
         "restricted": "Ograniczony"
     },
+    "powered_by_matrix": "Zasilane przez Matrix",
+    "powered_by_matrix_with_logo": "Zdecentralizowany czat szyfrowany i współpraca oparta na $matrixLogo",
     "presence": {
         "away": "Z dala od urządzenia",
         "busy": "Zajęty",
@@ -3738,6 +3732,7 @@
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
+    "unknown_device": "Nieznane urządzenie",
     "unsupported_browser": {
         "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
         "title": "%(brand)s nie wspiera tej przeglądarki"
@@ -4006,6 +4001,8 @@
         "voice_call": "Rozmowa głosowa",
         "you_are_presenting": "Prezentujesz"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome_to_element": "Witamy w Element",
     "widget": {
         "added_by": "Widżet dodany przez",
         "capabilities_dialog": {
