@@ -83,7 +83,7 @@
         "@vector-im/compound-web": "7.0.0",
         "@floating-ui/react": "0.26.11",
         "@radix-ui/react-id": "1.1.0",
-        "caniuse-lite": "1.0.30001655",
+        "caniuse-lite": "1.0.30001668",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
