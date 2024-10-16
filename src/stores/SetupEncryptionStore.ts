@@ -284,8 +284,6 @@ export class SetupEncryptionStore extends EventEmitter {
     public done(): void {
         this.phase = Phase.Finished;
         this.emit("update");
-        // async - ask other clients for keys, if necessary
-        MatrixClientPeg.safeGet().crypto?.cancelAndResendAllOutgoingKeyRequests();
     }
 
     private async setActiveVerificationRequest(request: VerificationRequest): Promise<void> {

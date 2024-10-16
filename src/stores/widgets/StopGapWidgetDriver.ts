@@ -414,55 +414,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
         await client._unstable_updateDelayedEvent(delayId, action);
     }
 
-    public async sendToDevice(
-        eventType: string,
-        encrypted: boolean,
-        contentMap: { [userId: string]: { [deviceId: string]: object } },
-    ): Promise<void> {
-        const client = MatrixClientPeg.safeGet();
-
-        if (encrypted) {
-            const deviceInfoMap = await client.crypto!.deviceList.downloadKeys(Object.keys(contentMap), false);
-
-            await Promise.all(
-                Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(async ([deviceId, content]): Promise<void> => {
-                        const devices = deviceInfoMap.get(userId);
-                        if (!devices) return;
-
-                        if (deviceId === "*") {
-                            // Send the message to all devices we have keys for
-                            await client.encryptAndSendToDevices(
-                                Array.from(devices.values()).map((deviceInfo) => ({
-                                    userId,
-                                    deviceInfo,
-                                })),
-                                content,
-                            );
-                        } else if (devices.has(deviceId)) {
-                            // Send the message to a specific device
-                            await client.encryptAndSendToDevices(
-                                [{ userId, deviceInfo: devices.get(deviceId)! }],
-                                content,
-                            );
-                        }
-                    }),
-                ),
-            );
-        } else {
-            await client.queueToDevice({
-                eventType,
-                batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(([deviceId, content]) => ({
-                        userId,
-                        deviceId,
-                        payload: content,
-                    })),
-                ),
-            });
-        }
-    }
-
     private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
         const client = MatrixClientPeg.get();
         if (!client) throw new Error("Not attached to a client");

@@ -51,7 +51,6 @@ function makeClient() {
         },
         getClientWellKnown: jest.fn().mockReturnValue({}),
         getCrypto: jest.fn().mockReturnValue({}),
-        crypto: {},
     } as unknown as MatrixClient);
 }
 
@@ -194,7 +193,6 @@ describe("<LoginWithQR />", () => {
         });
 
         test("approve - no crypto", async () => {
-            (client as any).crypto = undefined;
             (client as any).getCrypto = () => undefined;
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));

@@ -119,11 +119,6 @@ export function createTestClient(): MatrixClient {
             removeRoom: jest.fn(),
         },
 
-        crypto: {
-            deviceList: {
-                downloadKeys: jest.fn(),
-            },
-        },
         getCrypto: jest.fn().mockReturnValue({
             getOwnDeviceKeys: jest.fn(),
             getUserDeviceInfo: jest.fn(),

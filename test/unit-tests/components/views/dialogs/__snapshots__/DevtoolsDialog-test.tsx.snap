@@ -78,11 +78,6 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         <button
           class="mx_DevTools_button"
         >
-          Verification explorer
-        </button>
-        <button
-          class="mx_DevTools_button"
-        >
           Active Widgets
         </button>
       </div>
