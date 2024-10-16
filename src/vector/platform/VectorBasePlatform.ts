@@ -8,9 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import BasePlatform from "matrix-react-sdk/src/BasePlatform";
-
-import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import type { IConfigOptions } from "../../IConfigOptions";
+import BasePlatform from "../../BasePlatform";
 import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
 import { _t } from "../../languageHandler";

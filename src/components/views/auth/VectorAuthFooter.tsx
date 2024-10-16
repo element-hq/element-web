@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactElement } from "react";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
+import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 
 const VectorAuthFooter = (): ReactElement => {

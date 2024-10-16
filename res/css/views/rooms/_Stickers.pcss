@@ -1,0 +1,46 @@
+.mx_Stickers_content {
+    overflow: hidden;
+}
+
+.mx_Stickers_content_container {
+    overflow: hidden;
+    height: 300px;
+}
+
+#mx_persistedElement_stickerPicker {
+    .mx_AppTileFullWidth {
+        height: unset;
+        box-sizing: border-box;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .mx_AppTileMenuBar {
+        padding: 0;
+    }
+
+    iframe {
+        /* Sticker picker depends on the fixed height previously used for all tiles */
+        height: 283px; /* height of the popout minus the AppTile menu bar */
+    }
+}
+
+.mx_Stickers_contentPlaceholder {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.mx_Stickers_contentPlaceholder p {
+    max-width: 200px;
+}
+
+.mx_Stickers_addLink {
+    display: inline;
+    cursor: pointer;
+    color: $accent;
+}

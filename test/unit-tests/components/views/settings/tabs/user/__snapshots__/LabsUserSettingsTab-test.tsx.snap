@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1`] = `
+<div
+  class="mx_SettingsSection"
+>
+  <h2
+    class="mx_Heading_h3"
+  >
+    Upcoming features
+  </h2>
+  <div
+    class="mx_SettingsSection_subSections"
+  >
+    <div
+      class="mx_SettingsSubsection_text"
+    >
+      What's next for BrandedClient? Labs are the best way to get things early, test out new features and help shape them before they actually launch.
+    </div>
+    <div
+      class="mx_BetaCard"
+    >
+      <div
+        class="mx_BetaCard_columns"
+      >
+        <div
+          class="mx_BetaCard_columns_description"
+        >
+          <h3
+            class="mx_BetaCard_title"
+          >
+            <span>
+              Video rooms
+            </span>
+            <span
+              class="mx_BetaCard_betaPill"
+            >
+              Beta
+            </span>
+          </h3>
+          <div
+            class="mx_BetaCard_caption"
+          >
+            <p>
+              A new way to chat over voice and video in BrandedClient.
+            </p>
+            <p>
+              Video rooms are always-on VoIP channels embedded within a room in BrandedClient.
+            </p>
+          </div>
+          <div
+            class="mx_BetaCard_buttons"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              role="button"
+              tabindex="0"
+            >
+              Join the beta
+            </div>
+          </div>
+          <div
+            class="mx_BetaCard_refreshWarning"
+          >
+            Joining the beta will reload BrandedClient.
+          </div>
+          <div
+            class="mx_BetaCard_faq"
+          />
+        </div>
+        <div
+          class="mx_BetaCard_columns_image_wrapper"
+        >
+          <img
+            alt=""
+            class="mx_BetaCard_columns_image"
+            src="image-file-stub"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_BetaCard"
+    >
+      <div
+        class="mx_BetaCard_columns"
+      >
+        <div
+          class="mx_BetaCard_columns_description"
+        >
+          <h3
+            class="mx_BetaCard_title"
+          >
+            <span>
+              Notification Settings
+            </span>
+            <span
+              class="mx_BetaCard_betaPill"
+            >
+              Beta
+            </span>
+          </h3>
+          <div
+            class="mx_BetaCard_caption"
+          >
+            <p>
+              Introducing a simpler way to change your notification settings. Customize your BrandedClient, just the way you like.
+            </p>
+          </div>
+          <div
+            class="mx_BetaCard_buttons"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              role="button"
+              tabindex="0"
+            >
+              Join the beta
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_BetaCard_columns_image_wrapper"
+        >
+          <img
+            alt=""
+            class="mx_BetaCard_columns_image"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

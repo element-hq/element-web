@@ -1,0 +1,25 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_EmojiButton {
+    @mixin composerButton 50%, var(--cpd-color-icon-secondary), var(--cpd-color-bg-subtle-secondary);
+}
+
+.mx_EmojiButton_highlight {
+    @mixin composerButtonHighLight;
+}
+
+.mx_EmojiButton_icon::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/emoji.svg");
+}
+
+.mx_MessageComposer_wysiwyg {
+    .mx_EmojiButton {
+        @mixin composerButton 5px, $tertiary-content, $panels;
+    }
+}

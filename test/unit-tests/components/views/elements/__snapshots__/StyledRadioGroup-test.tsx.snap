@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StyledRadioGroup /> renders radios correctly when no value is provided 1`] = `
+<DocumentFragment>
+  <label
+    class="mx_StyledRadioButton test-class a-class mx_StyledRadioButton_enabled"
+  >
+    <input
+      aria-describedby="test-Anteater-description"
+      id="test-Anteater"
+      name="test"
+      type="radio"
+      value="Anteater"
+    />
+    <div>
+      <div />
+    </div>
+    <div
+      class="mx_StyledRadioButton_content"
+    >
+      <span>
+        Anteater label
+      </span>
+    </div>
+    <div
+      class="mx_StyledRadioButton_spacer"
+    />
+  </label>
+  <span
+    id="test-Anteater-description"
+  >
+    anteater description
+  </span>
+  <label
+    class="mx_StyledRadioButton test-class mx_StyledRadioButton_enabled"
+  >
+    <input
+      id="test-Badger"
+      name="test"
+      type="radio"
+      value="Badger"
+    />
+    <div>
+      <div />
+    </div>
+    <div
+      class="mx_StyledRadioButton_content"
+    >
+      <span>
+        Badger label
+      </span>
+    </div>
+    <div
+      class="mx_StyledRadioButton_spacer"
+    />
+  </label>
+  <label
+    class="mx_StyledRadioButton test-class mx_StyledRadioButton_enabled"
+  >
+    <input
+      aria-describedby="test-Canary-description"
+      id="test-Canary"
+      name="test"
+      type="radio"
+      value="Canary"
+    />
+    <div>
+      <div />
+    </div>
+    <div
+      class="mx_StyledRadioButton_content"
+    >
+      <span>
+        Canary label
+      </span>
+    </div>
+    <div
+      class="mx_StyledRadioButton_spacer"
+    />
+  </label>
+  <span
+    id="test-Canary-description"
+  >
+    <span>
+      Canary description
+    </span>
+  </span>
+</DocumentFragment>
+`;

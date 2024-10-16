@@ -1,29 +1,190 @@
-# Triggers after the "Downstream artifacts" build has finished, to run the
-# matrix-react-sdk playwright tests (with access to repo secrets)
-
-name: matrix-react-sdk End to End Tests
+# Produce a build of element-web with this version of react-sdk
+# and any matching branches of element-web and js-sdk, output it
+# as an artifact and run end-to-end tests.
+name: End to End Tests
 on:
+    pull_request: {}
     merge_group:
         types: [checks_requested]
-    pull_request: {}
     push:
         branches: [develop, master]
+    repository_dispatch:
+        types: [element-web-notify]
+
+    # support triggering from other workflows
+    workflow_call:
+        inputs:
+            skip:
+                type: boolean
+                required: false
+                default: false
+                description: "A boolean to skip the playwright check itself while still creating the passing check. Useful when only running in Merge Queues."
+
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
-    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
+    build:
+        name: "Build Element-Web"
+        runs-on: ubuntu-22.04
+        if: inputs.skip != true
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  repository: element-hq/element-web
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  node-version: "lts/*"
+
+            - name: Fetch layered build
+              id: layered_build
+              env:
+                  # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+              run: |
+                  scripts/layered.sh
+                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
+
+            - name: Build
+              env:
+                  CI_PACKAGE: true
+                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+              run: |
+                  yarn build
+                  echo $VERSION > webapp/version
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: webapp
+                  path: webapp
+                  retention-days: 1
+
     playwright:
-        name: Playwright
-        uses: element-hq/matrix-react-sdk/.github/workflows/end-to-end-tests.yaml@develop
+        name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
+        needs: build
+        if: inputs.skip != true
+        runs-on: ubuntu-22.04
         permissions:
             actions: read
             issues: read
             pull-requests: read
-        with:
-            element-web-sha: ${{ github.sha }}
-            react-sdk-repository: element-hq/matrix-react-sdk
-            # We only want to run the playwright tests on merge queue to prevent regressions
-            # from creeping in. They take a long time to run and consume multiple concurrent runners.
-            skip: ${{ github.event_name != 'merge_group' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                # Run multiple instances in parallel to speed up the tests
+                runner: [1, 2, 3, 4, 5, 6]
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  persist-credentials: false
+                  repository: element-hq/element-web
+
+            - name: 📥 Download artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: webapp
+                  path: webapp
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  cache-dependency-path: yarn.lock
+                  node-version: "lts/*"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Get installed Playwright version
+              id: playwright
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+
+            - name: Cache playwright binaries
+              uses: actions/cache@v4
+              id: playwright-cache
+              with:
+                  path: |
+                      ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+
+            - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: yarn playwright install --with-deps
+
+            - name: Run Playwright tests
+              run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
+
+            - name: Upload blob report to GitHub Actions Artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: all-blob-reports-${{ matrix.runner }}
+                  path: blob-report
+                  retention-days: 1
+
+    complete:
+        name: end-to-end-tests
+        needs: playwright
+        if: always()
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+              if: inputs.skip != true
+              with:
+                  persist-credentials: false
+                  repository: element-hq/element-web
+
+            - uses: actions/setup-node@v4
+              if: inputs.skip != true
+              with:
+                  cache: "yarn"
+                  node-version: "lts/*"
+
+            - name: Install dependencies
+              if: inputs.skip != true
+              run: yarn install --frozen-lockfile
+
+            - name: Download blob reports from GitHub Actions Artifacts
+              if: inputs.skip != true
+              uses: actions/download-artifact@v4
+              with:
+                  pattern: all-blob-reports-*
+                  path: all-blob-reports
+                  merge-multiple: true
+
+            - name: Merge into HTML Report
+              if: inputs.skip != true
+              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
+              env:
+                  # Only pass creds to the flaky-reporter on main branch runs
+                  GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
+
+            # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
+            - name: Upload HTML report
+              if: always() && inputs.skip != true
+              uses: actions/upload-artifact@v4
+              with:
+                  name: html-report
+                  path: playwright-report
+                  retention-days: 14
+
+            - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
+              run: exit 1

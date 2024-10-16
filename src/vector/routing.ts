@@ -10,8 +10,8 @@ Please see LICENSE files in the repository root for full details.
 // MatrixChat.showScreen(screen, params)
 import { logger } from "matrix-js-sdk/src/logger";
 import { QueryDict } from "matrix-js-sdk/src/utils";
-import MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 
+import MatrixChatType from "../components/structures/MatrixChat";
 import { parseQsFromFragment } from "./url_utils";
 
 let lastLocationHashSet: string | null = null;

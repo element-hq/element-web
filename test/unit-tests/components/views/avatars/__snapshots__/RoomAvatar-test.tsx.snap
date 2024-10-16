@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomAvatar should render as expected for a DM room 1`] = `
+<div>
+  <span
+    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+    data-color="1"
+    data-testid="avatar-img"
+    data-type="round"
+    role="presentation"
+    style="--cpd-avatar-size: 36px;"
+  >
+    D
+  </span>
+</div>
+`;
+
+exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
+<div>
+  <span
+    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+    data-color="3"
+    data-testid="avatar-img"
+    data-type="round"
+    role="presentation"
+    style="--cpd-avatar-size: 36px;"
+  >
+    l
+  </span>
+</div>
+`;
+
+exports[`RoomAvatar should render as expected for a Room 1`] = `
+<div>
+  <span
+    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+    data-color="6"
+    data-testid="avatar-img"
+    data-type="round"
+    role="presentation"
+    style="--cpd-avatar-size: 36px;"
+  >
+    t
+  </span>
+</div>
+`;

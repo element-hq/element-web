@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Heading /> can have different appearance to its heading level 1`] = `
+<DocumentFragment>
+  <h1
+    class="mx_Heading_h4 test"
+    data-testid="test"
+  >
+    <div>
+      test
+    </div>
+  </h1>
+</DocumentFragment>
+`;
+
+exports[`<Heading /> renders h1 with correct attributes 1`] = `
+<DocumentFragment>
+  <h1
+    class="mx_Heading_h1 test"
+    data-testid="test"
+  >
+    <div>
+      test
+    </div>
+  </h1>
+</DocumentFragment>
+`;
+
+exports[`<Heading /> renders h2 with correct attributes 1`] = `
+<DocumentFragment>
+  <h2
+    class="mx_Heading_h2 test"
+    data-testid="test"
+  >
+    <div>
+      test
+    </div>
+  </h2>
+</DocumentFragment>
+`;
+
+exports[`<Heading /> renders h3 with correct attributes 1`] = `
+<DocumentFragment>
+  <h3
+    class="mx_Heading_h3 test"
+    data-testid="test"
+  >
+    <div>
+      test
+    </div>
+  </h3>
+</DocumentFragment>
+`;
+
+exports[`<Heading /> renders h4 with correct attributes 1`] = `
+<DocumentFragment>
+  <h4
+    class="mx_Heading_h4 test"
+    data-testid="test"
+  >
+    <div>
+      test
+    </div>
+  </h4>
+</DocumentFragment>
+`;

@@ -7,11 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 /* TODO: Match the user's theme: https://github.com/element-hq/element-web/issues/12794 */
 
+/* Path to `res` dir in the source tree */
+$res: ../../../res;
+
 @font-face {
     font-family: "Nunito";
     font-style: normal;
     font-weight: 400;
-    src: url("~matrix-react-sdk/res/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+    src: url("$(res)/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
 }
 
 $dark-fg: #edf3ff;
@@ -89,7 +92,7 @@ html {
         background-color: $dark-fg;
         mask-repeat: no-repeat;
         mask-position: center;
-        mask-image: url("~matrix-react-sdk/res/img/element-icons/call/video-call.svg");
+        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
         mask-size: $icon-size;
         display: block;
         width: $icon-size;

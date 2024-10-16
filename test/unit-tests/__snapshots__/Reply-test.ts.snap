@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Reply getNestedReplyText Returns valid reply fallback text for m.text msgtypes 1`] = `
+{
+  "body": "> <@user1:server> body
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>body</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for m.pin m.room.message/m.location 1`] = `
+{
+  "body": "> <@user1:server> shared a location.
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>shared a location.</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for m.pin org.matrix.msc3672.beacon_info/undefined 1`] = `
+{
+  "body": "> <@user1:server> shared a live location.
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>shared a live location.</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for m.self m.room.message/m.location 1`] = `
+{
+  "body": "> <@user1:server> shared their location.
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>shared their location.</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for m.self org.matrix.msc3672.beacon_info/undefined 1`] = `
+{
+  "body": "> <@user1:server> shared their live location.
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>shared their live location.</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for poll end events 1`] = `
+{
+  "body": "> <@user1:server>Ended poll
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>Ended poll</blockquote></mx-reply>",
+}
+`;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for poll start events 1`] = `
+{
+  "body": "> <@user:server.org> started poll: Will this test pass?
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user:server.org">@user:server.org</a><br>Poll: Will this test pass?</blockquote></mx-reply>",
+}
+`;
