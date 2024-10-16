@@ -76,7 +76,7 @@ describe("local-room", () => {
 
             it("should resolve the promise after invoking the callback", async () => {
                 localRoom.afterCreateCallbacks.forEach((callback) => {
-                    callback(localRoom.actualRoomId);
+                    callback(localRoom.actualRoomId!);
                 });
                 await prom;
             });
