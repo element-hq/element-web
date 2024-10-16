@@ -236,50 +236,6 @@ describe("SlashCommands", () => {
         });
     });
 
-    describe("/remakeolm", () => {
-        beforeEach(() => {
-            command = findCommand("remakeolm")!;
-        });
-
-        describe("isEnabled", () => {
-            describe("when developer mode is enabled", () => {
-                beforeEach(() => {
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                        if (settingName === "developerMode") return true;
-                    });
-                });
-
-                it("should return true for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(true);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
-
-            describe("when developer mode is not enabled", () => {
-                beforeEach(() => {
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                        if (settingName === "developerMode") return false;
-                    });
-                });
-
-                it("should return false for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
-        });
-    });
-
     describe("/part", () => {
         it("should part room matching alias if found", async () => {
             const room1 = new Room("room-id", client, client.getSafeUserId());

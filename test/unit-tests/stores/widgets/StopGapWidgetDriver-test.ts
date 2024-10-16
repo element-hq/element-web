@@ -18,7 +18,6 @@ import {
     MsgType,
     RelationType,
 } from "matrix-js-sdk/src/matrix";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import {
     Widget,
     MatrixWidgetType,
@@ -169,54 +168,6 @@ describe("StopGapWidgetDriver", () => {
             token: await client.getOpenIdToken(),
         };
         expect(listener).toHaveBeenCalledWith(openIdUpdate);
-    });
-
-    describe("sendToDevice", () => {
-        const contentMap = {
-            "@alice:example.org": {
-                "*": {
-                    hello: "alice",
-                },
-            },
-            "@bob:example.org": {
-                bobDesktop: {
-                    hello: "bob",
-                },
-            },
-        };
-
-        let driver: WidgetDriver;
-
-        beforeEach(() => {
-            driver = mkDefaultDriver();
-        });
-
-        it("sends unencrypted messages", async () => {
-            await driver.sendToDevice("org.example.foo", false, contentMap);
-            expect(client.queueToDevice.mock.calls).toMatchSnapshot();
-        });
-
-        it("sends encrypted messages", async () => {
-            const aliceWeb = new DeviceInfo("aliceWeb");
-            const aliceMobile = new DeviceInfo("aliceMobile");
-            const bobDesktop = new DeviceInfo("bobDesktop");
-
-            mocked(client.crypto!.deviceList).downloadKeys.mockResolvedValue(
-                new Map([
-                    [
-                        "@alice:example.org",
-                        new Map([
-                            ["aliceWeb", aliceWeb],
-                            ["aliceMobile", aliceMobile],
-                        ]),
-                    ],
-                    ["@bob:example.org", new Map([["bobDesktop", bobDesktop]])],
-                ]),
-            );
-
-            await driver.sendToDevice("org.example.foo", true, contentMap);
-            expect(client.encryptAndSendToDevices.mock.calls).toMatchSnapshot();
-        });
     });
 
     describe("getTurnServers", () => {
