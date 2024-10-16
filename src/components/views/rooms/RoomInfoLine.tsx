@@ -29,7 +29,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
         if (room.getMyMembership() !== KnownMembership.Invite) return null;
         try {
             return await room.client.getRoomSummary(room.roomId);
-        } catch (e) {
+        } catch {
             return null;
         }
     }, [room]);

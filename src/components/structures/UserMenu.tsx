@@ -44,6 +44,7 @@ import { Icon as LiveIcon } from "../../../res/img/compound/live-8px.svg";
 import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStoreEvent } from "../../voice-broadcast";
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
+import DarkLightModeSvg from "../../../res/img/element-icons/roomlist/dark-light-mode.svg";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -414,12 +415,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 : _t("user_menu|switch_theme_dark")
                         }
                     >
-                        <img
-                            src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg").default}
-                            role="presentation"
-                            alt=""
-                            width={16}
-                        />
+                        <img src={DarkLightModeSvg} role="presentation" alt="" width={16} />
                     </RovingAccessibleButton>
                 </div>
                 {topSection}

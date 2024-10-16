@@ -35,6 +35,7 @@ export type Defaultize<P, D> = P extends any
               Partial<Pick<D, Exclude<keyof D, keyof P>>>
     : never;
 
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 export type DeepReadonly<T> = T extends (infer R)[]
     ? DeepReadonlyArray<R>
     : T extends Function
@@ -42,6 +43,7 @@ export type DeepReadonly<T> = T extends (infer R)[]
       : T extends object
         ? DeepReadonlyObject<T>
         : T;
+/* eslint-enable @typescript-eslint/no-unsafe-function-type */
 
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 

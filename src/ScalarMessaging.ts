@@ -855,14 +855,14 @@ const onMessage = function (event: MessageEvent<any>): void {
     try {
         if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager()?.uiUrl;
         configUrl = new URL(openManagerUrl!);
-    } catch (e) {
+    } catch {
         // No integrations UI URL, ignore silently.
         return;
     }
     let eventOriginUrl: URL;
     try {
         eventOriginUrl = new URL(event.origin);
-    } catch (e) {
+    } catch {
         return;
     }
     // TODO -- Scalar postMessage API should be namespaced with event.data.api field

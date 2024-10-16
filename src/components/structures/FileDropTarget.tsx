@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useState } from "react";
 
 import { _t } from "../../languageHandler";
+import UploadBigSvg from "../../../res/img/upload-big.svg";
 
 interface IProps {
     parent: HTMLElement | null;
@@ -106,11 +107,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
     if (state.dragging) {
         return (
             <div className="mx_FileDropTarget">
-                <img
-                    src={require("../../../res/img/upload-big.svg").default}
-                    className="mx_FileDropTarget_image"
-                    alt=""
-                />
+                <img src={UploadBigSvg} className="mx_FileDropTarget_image" alt="" />
                 {_t("room|drop_file_prompt")}
             </div>
         );

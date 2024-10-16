@@ -26,6 +26,7 @@ import ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import StickerpackPlaceholderSvg from "../../../../res/img/stickerpack-placeholder.png";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -206,7 +207,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             <AccessibleButton onClick={this.launchManageIntegrations} className="mx_Stickers_contentPlaceholder">
                 <p>{_t("stickers|empty")}</p>
                 <p className="mx_Stickers_addLink">{_t("stickers|empty_add_prompt")}</p>
-                <img src={require("../../../../res/img/stickerpack-placeholder.png")} alt="" />
+                <img src={StickerpackPlaceholderSvg} alt="" />
             </AccessibleButton>
         );
     }

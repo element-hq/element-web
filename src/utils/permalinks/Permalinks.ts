@@ -377,7 +377,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         if (m) {
             return m[1];
         }
-    } catch (e) {
+    } catch {
         // Not a valid URI
         return permalink;
     }
@@ -396,7 +396,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 permalink = `#/user/${permalinkParts.userId}`;
             } // else not a valid permalink for our purposes - do not handle
         }
-    } catch (e) {
+    } catch {
         // Not an href we need to care about
     }
 
@@ -421,7 +421,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
         if (!permalinkParts) return null; // not processable
         if (permalinkParts.userId) return permalinkParts.userId;
         if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
-    } catch (e) {
+    } catch {
         // no entity - not a permalink
     }
 

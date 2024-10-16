@@ -48,7 +48,7 @@ function shouldCleanupDrafts(): boolean {
             return true;
         }
         return Date.now() > parsedTimestamp + DRAFT_CLEANUP_PERIOD;
-    } catch (error) {
+    } catch {
         return true;
     }
 }

@@ -45,7 +45,7 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
             let href = node.getAttribute("href")!;
             try {
                 href = new URL(href, window.location.href).toString();
-            } catch (e) {
+            } catch {
                 // Not all hrefs will be valid URLs
             }
 

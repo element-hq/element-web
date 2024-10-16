@@ -27,7 +27,7 @@ export let DOWNLOAD_ICON_URL: string; // cached copy of the download.svg asset f
 
 async function cacheDownloadIcon(): Promise<void> {
     if (DOWNLOAD_ICON_URL) return; // cached already
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const svg = await fetch(require("@vector-im/compound-design-tokens/icons/download.svg").default).then((r) =>
         r.text(),
     );
