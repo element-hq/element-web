@@ -4,3 +4,5 @@
 # Only commit snapshots from Linux
 /snapshots/**/*.png
 !/snapshots/**/*-linux.png
+# This file is also machine-generated
+/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json

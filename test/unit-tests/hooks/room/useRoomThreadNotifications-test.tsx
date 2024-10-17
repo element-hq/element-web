@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "@testing-library/react";
+import { renderHook } from "jest-matrix-react";
 import { MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 
 import { useRoomThreadNotifications } from "../../../../src/hooks/room/useRoomThreadNotifications";

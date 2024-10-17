@@ -30,7 +30,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           />
         </div>
         <button
-          aria-labelledby="floating-ui-1"
+          aria-labelledby=":r0:"
           class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
           data-testid="base-card-close-button"
           role="button"
@@ -320,8 +320,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="floating-ui-87"
-                aria-labelledby="floating-ui-86"
+                aria-describedby=":r2n:"
+                aria-labelledby=":r2m:"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg

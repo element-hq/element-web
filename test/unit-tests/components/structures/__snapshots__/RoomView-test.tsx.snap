@@ -62,7 +62,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
-              aria-labelledby="floating-ui-364"
+              aria-labelledby=":rbc:"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -78,7 +78,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         <button
           aria-disabled="false"
           aria-label="Voice call"
-          aria-labelledby="floating-ui-369"
+          aria-labelledby=":rbh:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -103,7 +103,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         </button>
         <button
           aria-label="Room info"
-          aria-labelledby="floating-ui-374"
+          aria-labelledby=":rbm:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -128,7 +128,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         </button>
         <button
           aria-label="Threads"
-          aria-labelledby="floating-ui-379"
+          aria-labelledby=":rbr:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -157,7 +157,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
       >
         <div
           aria-label="2 members"
-          aria-labelledby="floating-ui-384"
+          aria-labelledby=":rc0:"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -280,7 +280,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
-              aria-labelledby="floating-ui-394"
+              aria-labelledby=":rca:"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -296,7 +296,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         <button
           aria-disabled="false"
           aria-label="Voice call"
-          aria-labelledby="floating-ui-399"
+          aria-labelledby=":rcf:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -321,7 +321,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </button>
         <button
           aria-label="Room info"
-          aria-labelledby="floating-ui-404"
+          aria-labelledby=":rck:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -346,7 +346,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </button>
         <button
           aria-label="Threads"
-          aria-labelledby="floating-ui-409"
+          aria-labelledby=":rcp:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -375,7 +375,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="floating-ui-414"
+          aria-labelledby=":rcu:"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -583,7 +583,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
-              aria-labelledby="floating-ui-224"
+              aria-labelledby=":r70:"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -599,7 +599,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         <button
           aria-disabled="false"
           aria-label="Voice call"
-          aria-labelledby="floating-ui-229"
+          aria-labelledby=":r75:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -624,7 +624,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         </button>
         <button
           aria-label="Room info"
-          aria-labelledby="floating-ui-234"
+          aria-labelledby=":r7a:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -649,7 +649,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         </button>
         <button
           aria-label="Threads"
-          aria-labelledby="floating-ui-239"
+          aria-labelledby=":r7f:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -678,7 +678,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       >
         <div
           aria-label="2 members"
-          aria-labelledby="floating-ui-244"
+          aria-labelledby=":r7k:"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -963,7 +963,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
-              aria-labelledby="floating-ui-294"
+              aria-labelledby=":r96:"
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
@@ -979,7 +979,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         <button
           aria-disabled="false"
           aria-label="Voice call"
-          aria-labelledby="floating-ui-299"
+          aria-labelledby=":r9b:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -1004,7 +1004,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </button>
         <button
           aria-label="Room info"
-          aria-labelledby="floating-ui-304"
+          aria-labelledby=":r9g:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -1029,7 +1029,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </button>
         <button
           aria-label="Threads"
-          aria-labelledby="floating-ui-309"
+          aria-labelledby=":r9l:"
           class="_icon-button_bh2qc_17"
           role="button"
           style="--cpd-icon-button-size: 32px;"
@@ -1058,7 +1058,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       >
         <div
           aria-label="2 members"
-          aria-labelledby="floating-ui-314"
+          aria-labelledby=":r9q:"
           class="mx_AccessibleButton mx_FacePile"
           role="button"
           tabindex="0"
@@ -1370,7 +1370,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <button
               aria-label="Room info"
-              aria-labelledby="floating-ui-84"
+              aria-labelledby=":r2k:"
               class="_icon-button_bh2qc_17"
               role="button"
               style="--cpd-icon-button-size: 32px;"
@@ -1395,7 +1395,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             </button>
             <button
               aria-label="Chat"
-              aria-labelledby="floating-ui-89"
+              aria-labelledby=":r2p:"
               class="_icon-button_bh2qc_17"
               role="button"
               style="--cpd-icon-button-size: 32px;"
@@ -1420,7 +1420,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             </button>
             <button
               aria-label="Threads"
-              aria-labelledby="floating-ui-94"
+              aria-labelledby=":r2u:"
               class="_icon-button_bh2qc_17"
               role="button"
               style="--cpd-icon-button-size: 32px;"
@@ -1449,7 +1449,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="floating-ui-99"
+              aria-labelledby=":r33:"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -1487,7 +1487,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 </p>
               </div>
               <button
-                aria-labelledby="floating-ui-108"
+                aria-labelledby=":r3c:"
                 class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
                 data-testid="base-card-close-button"
                 role="button"
