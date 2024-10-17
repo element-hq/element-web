@@ -222,14 +222,7 @@ export class MessageBuilder {
                     threadId: !ev.isThreadRoot ? ev.threadRootId : undefined,
                 }));
                 const roomId = await room.evaluate((room) => room.roomId);
-
-                await bot.sendEvent(roomId, threadId ?? null, "m.reaction", {
-                    "m.relates_to": {
-                        rel_type: "m.annotation",
-                        event_id: id,
-                        key: reaction,
-                    },
-                });
+                await bot.reactToMessage(roomId, threadId, id, reaction);
             }
         })(this);
     }

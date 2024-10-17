@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Direction, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import { Direction, MatrixEvent, Relations, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, MediaEventContent, RelationType } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
@@ -283,6 +283,14 @@ export default abstract class Exporter {
         const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype!);
     }
+
+    protected getRelationsForEvent = (
+        eventId: string,
+        relationType: RelationType | string,
+        eventType: EventType | string,
+    ): Relations | undefined => {
+        return this.room.getUnfilteredTimelineSet().relations.getChildEventsForEvent(eventId, relationType, eventType);
+    };
 
     public abstract export(): Promise<void>;
 }

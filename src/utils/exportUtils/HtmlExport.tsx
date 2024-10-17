@@ -288,9 +288,10 @@ export default class HTMLExporter extends Exporter {
                             permalinkCreator={this.permalinkCreator}
                             lastSuccessful={false}
                             isSelectedEvent={false}
-                            showReactions={false}
+                            showReactions={true}
                             layout={Layout.Group}
                             showReadReceipts={false}
+                            getRelationsForEvent={this.getRelationsForEvent}
                         />
                     </TooltipProvider>
                 </MatrixClientContext.Provider>
