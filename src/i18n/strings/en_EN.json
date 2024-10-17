@@ -909,6 +909,8 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity appears to have changed. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity appears to have changed. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
