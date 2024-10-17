@@ -17,8 +17,8 @@ import {
     SyncState,
     SyncStateData,
 } from "matrix-js-sdk/src/matrix";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as WarningIcon } from "../../../res/img/feather-customised/warning-triangle.svg";
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
 import dis from "../../dispatcher/dispatcher";
