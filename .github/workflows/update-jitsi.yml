@@ -6,7 +6,7 @@ on:
         - cron: "0 3 * * 0" # 3am every Sunday
 jobs:
     update:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 

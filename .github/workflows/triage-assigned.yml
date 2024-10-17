@@ -6,7 +6,7 @@ on:
 
 jobs:
     web-app-team:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
             contains(github.event.issue.assignees.*.login, 'andybalaam') ||
