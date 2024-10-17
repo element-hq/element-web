@@ -153,6 +153,14 @@ Many thanks to @aviraldg for the initial work on the Electron integration.
 
 The [configuration docs](docs/config.md#desktop-app-configuration) show how to override the desktop app's default settings if desired.
 
+# Self-Hosting
+
+### Elestio
+
+You can deploy Element on Elestio using one-click deployment. Elestio handles version updates, maintenance, securtiy, backups, etc. Additionally, Elestio supports Element by providing revenue share so go ahead and click below to deploy and start using.
+
+[![Deploy on Elestio](https://elest.io/images/logos/deploy-to-elestio-btn.png)](https://elest.io/open-source/element)
+
 # config.json
 
 Element supports a variety of settings to configure default servers, behaviour, themes, etc.
