@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
+import ThreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 
 import { MessagePreview } from "../../../stores/room-list/MessagePreviewStore";
 import { Call } from "../../../models/Call";
 import { RoomTileCallSummary } from "./RoomTileCallSummary";
 import { VoiceBroadcastRoomSubtitle } from "../../../voice-broadcast";
-import { Icon as ThreadIcon } from "../../../../res/img/compound/thread-16px.svg";
 
 interface Props {
     call: Call | null;

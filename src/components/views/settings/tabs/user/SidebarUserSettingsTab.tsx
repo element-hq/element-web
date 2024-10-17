@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ChangeEvent, useMemo } from "react";
 import CameraCircle from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import MembersIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
+import FavoriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite-solid";
+import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home-solid";
 
-import { Icon as HomeIcon } from "../../../../../../res/img/element-icons/home.svg";
-import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";
-import { Icon as MembersIcon } from "../../../../../../res/img/element-icons/room/members.svg";
 import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";

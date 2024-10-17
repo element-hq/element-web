@@ -10,8 +10,8 @@ import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "ma
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { useCallback, useState, VFC } from "react";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
-import { Icon as CheckIcon } from "../../../../../../res/img/feather-customised/check.svg";
 import { formatRelativeTime } from "../../../../../DateUtils";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { _t } from "../../../../../languageHandler";

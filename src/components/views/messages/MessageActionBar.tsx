@@ -23,14 +23,14 @@ import {
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
+import ThreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
+import ReplyIcon from "@vector-im/compound-design-tokens/assets/web/icons/reply";
 import ContextMenuIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import ResendIcon from "@vector-im/compound-design-tokens/assets/web/icons/restart";
+import TrashcanIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
-import { Icon as ResendIcon } from "../../../../res/img/element-icons/retry.svg";
-import { Icon as ThreadIcon } from "../../../../res/img/element-icons/message/thread.svg";
-import { Icon as TrashcanIcon } from "../../../../res/img/element-icons/trashcan.svg";
-import { Icon as ReplyIcon } from "../../../../res/img/element-icons/room/message-bar/reply.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
 import type { Relations } from "matrix-js-sdk/src/matrix";

@@ -10,6 +10,7 @@ import React, { ReactElement } from "react";
 import classNames from "classnames";
 import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import UserIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -18,7 +19,6 @@ import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
-import { Icon as UserIcon } from "../../../../res/img/compound/user.svg";
 
 export enum PillType {
     UserMention = "TYPE_USER_MENTION",

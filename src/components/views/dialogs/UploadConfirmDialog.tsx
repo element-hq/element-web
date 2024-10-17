@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import FileIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
 
-import { Icon as FileIcon } from "../../../../res/img/feather-customised/files.svg";
 import { _t } from "../../../languageHandler";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";

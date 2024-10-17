@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { ReactNode, useState } from "react";
 import classNames from "classnames";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
+import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
-import { Icon as LocationIcon } from "../../../../res/img/element-icons/location.svg";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import MemberAvatar from "../avatars/MemberAvatar";
 
