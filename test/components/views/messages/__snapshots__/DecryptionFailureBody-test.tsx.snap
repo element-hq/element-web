@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DecryptionFailureBody Should display "The sender has blocked you from receiving this message" 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content"
+  >
+    The sender has blocked you from receiving this message because your device is unverified
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBody Should display "Unable to decrypt message" 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content"
+  >
+    Unable to decrypt message
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBody should handle messages from users who change identities after verification 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content mx_DecryptionFailureVerifiedIdentityChanged"
+  >
+    <span>
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Verified identity has changed
+    </span>
+  </div>
+</div>
+`;

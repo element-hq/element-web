@@ -1,0 +1,45 @@
+name: Update Playwright docker images
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 6 * * *" # Every day at 6am UTC
+jobs:
+    update:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Update synapse image
+              run: |
+                  docker pull "$IMAGE"
+                  INSPECT=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")
+                  DIGEST=${INSPECT#*@}
+                  sed -i "s/const DOCKER_TAG.*/const DOCKER_TAG = \"develop@$DIGEST\";/" playwright/plugins/homeserver/synapse/index.ts
+              env:
+                  IMAGE: ghcr.io/element-hq/synapse:develop
+
+            - name: Create Pull Request
+              id: cpr
+              uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  branch: actions/playwright-image-updates
+                  delete-branch: true
+                  title: Playwright Docker image updates
+                  labels: |
+                      T-Task
+
+            - name: Enable automerge
+              run: gh pr merge --merge --auto "$PR_NUMBER"
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              env:
+                  GH_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+
+            - name: Enable autoapprove
+              run: |
+                  gh pr review --approve "$PR_NUMBER"
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}

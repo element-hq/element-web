@@ -1,5 +1,5 @@
 module.exports = {
-    sourceMaps: true,
+    sourceMaps: "inline",
     presets: [
         [
             "@babel/preset-env",
@@ -20,15 +20,6 @@ module.exports = {
         "@babel/plugin-proposal-export-default-from",
         "@babel/plugin-transform-numeric-separator",
         "@babel/plugin-transform-object-rest-spread",
-        "@babel/plugin-transform-optional-chaining",
-        "@babel/plugin-transform-nullish-coalescing-operator",
-
-        // transform logical assignment (??=, ||=, &&=). preset-env doesn't
-        // normally bother with these (presumably because all the target
-        // browsers support it natively), but they make our webpack version (or
-        // something downstream of babel, at least) fall over.
-        "@babel/plugin-transform-logical-assignment-operators",
-
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-transform-runtime",
     ],

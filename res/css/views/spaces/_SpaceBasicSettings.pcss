@@ -1,0 +1,77 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SpaceBasicSettings {
+    .mx_Field {
+        margin: 24px 0;
+    }
+
+    .mx_SpaceBasicSettings_avatarContainer {
+        display: flex;
+        margin-top: 24px;
+
+        .mx_SpaceBasicSettings_avatar {
+            position: relative;
+            height: 80px;
+            width: 80px;
+            background-color: $tertiary-content;
+            border-radius: 16px;
+        }
+
+        img.mx_SpaceBasicSettings_avatar {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        /* only show it when the button is a div and not an img (has avatar) */
+        div.mx_SpaceBasicSettings_avatar {
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 80px;
+                width: 80px;
+                top: 0;
+                left: 0;
+                background-color: #ffffff; /* white icon fill */
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: 20px;
+                mask-image: url("$(res)/img/element-icons/camera.svg");
+            }
+        }
+
+        > input[type="file"] {
+            display: none;
+        }
+
+        > .mx_AccessibleButton_kind_link {
+            display: inline-block;
+            margin: auto 18px;
+            color: $links;
+            font: var(--cpd-font-body-md-regular);
+        }
+
+        > .mx_SpaceBasicSettings_avatar_remove {
+            color: $alert;
+        }
+    }
+
+    .mx_AccessibleButton_hasKind {
+        margin-left: auto;
+        display: block;
+        width: min-content;
+    }
+
+    .mx_AccessibleButton_disabled {
+        cursor: not-allowed;
+    }
+}

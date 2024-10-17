@@ -1,327 +1,208 @@
-[![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
-![Tests](https://github.com/element-hq/element-web/actions/workflows/tests.yaml/badge.svg)
-![Static Analysis](https://github.com/element-hq/element-web/actions/workflows/static_analysis.yaml/badge.svg)
+[![npm](https://img.shields.io/npm/v/matrix-react-sdk)](https://www.npmjs.com/package/matrix-react-sdk)
+![Tests](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/tests.yml/badge.svg)
+[![Playwright](https://img.shields.io/badge/Playwright-end_to_end_tests-blue)](https://e2e-develop--matrix-react-sdk.netlify.app/)
+![Static Analysis](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/static_analysis.yaml/badge.svg)
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=coverage)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=bugs)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
 
-# Element
+# matrix-react-sdk
 
-Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
-React SDK](https://github.com/matrix-org/matrix-react-sdk).
+This is a react-based SDK for inserting a Matrix chat/voip client into a web page.
 
-# Supported Environments
+This package provides the React components needed to build a Matrix web client
+using React. It is not useable in isolation, and instead must be used from
+a 'skin'. A skin provides:
 
-Element has several tiers of support for different environments:
+-   Customised implementations of presentation components.
+-   Custom CSS
+-   The containing application
+-   Zero or more 'modules' containing non-UI functionality
 
--   Supported
-    -   Definition:
-        -   Issues **actively triaged**, regressions **block** the release
-    -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
-    -   Last 2 versions of Safari
-    -   Latest release of official Element Desktop app on desktop OSes
-    -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
-        that are actively supported by the OS vendor and receive security updates
--   Best effort
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
-        -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
-    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
--   Community Supported
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   Community contributions are welcome to support these issues
-    -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
--   Not supported
-    -   Definition: Issues only affecting unsupported environments are **closed**
-    -   Everything else
+As of Aug 2018, the only skin that exists is
+[`vector-im/element-web`](https://github.com/vector-im/element-web/); it and
+`matrix-org/matrix-react-sdk` should effectively
+be considered as a single project (for instance, matrix-react-sdk bugs
+are currently filed against vector-im/element-web rather than this project).
 
-The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
+## Developer Guide
 
-For accessing Element on an Android or iOS device, we currently recommend the
-native apps [element-android](https://github.com/element-hq/element-android)
-and [element-ios](https://github.com/element-hq/element-ios).
+Platform Targets:
 
-# Getting Started
+-   Chrome, Firefox and Safari.
+-   WebRTC features (VoIP and Video calling) are only available in Chrome & Firefox.
+-   Mobile Web is not currently a target platform - instead please use the native
+    iOS (https://github.com/matrix-org/matrix-ios-kit) and Android
+    (https://github.com/matrix-org/matrix-android-sdk2) SDKs.
 
-The easiest way to test Element is to just use the hosted copy at <https://app.element.io>.
-The `develop` branch is continuously deployed to <https://develop.element.io>
-for those who like living dangerously.
+All code lands on the `develop` branch - `master` is only used for stable releases.
+**Please file PRs against `develop`!!**
 
-To host your own instance of Element see [Installing Element Web](docs/install.md).
+We use the same contribution guide as Element. Check it out here:
+https://github.com/vector-im/element-web/blob/develop/CONTRIBUTING.md
 
-To install Element as a desktop application, see [Running as a desktop app](#running-as-a-desktop-app) below.
+Our code style is also the same as Element's:
+https://github.com/vector-im/element-web/blob/develop/code_style.md
 
-# Important Security Notes
+Code should be committed as follows:
 
-## Separate domains
+-   All new components:
+    https://github.com/matrix-org/matrix-react-sdk/tree/master/src/components
+-   Element-specific components:
+    https://github.com/vector-im/element-web/tree/master/src/components
+    -   In practice, `matrix-react-sdk` is still evolving so fast that the
+        maintenance burden of customising and overriding these components for
+        Element can seriously impede development. So right now, there should be
+        very few (if any) customisations for Element.
+-   CSS: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css
+-   Theme specific CSS & resources:
+    https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
 
-We do not recommend running Element from the same domain name as your Matrix
-homeserver. The reason is the risk of XSS (cross-site-scripting)
-vulnerabilities that could occur if someone caused Element to load and render
-malicious user generated content from a Matrix API which then had trusted
-access to Element (or other apps) due to sharing the same domain.
+React components in matrix-react-sdk come in two different flavours:
+'structures' and 'views'. Structures are stateful components which handle the
+more complicated business logic of the app, delegating their actual presentation
+rendering to stateless 'view' components. For instance, the RoomView component
+that orchestrates the act of visualising the contents of a given Matrix chat
+room tracks lots of state for its child components which it passes into them for
+visual rendering via props.
 
-We have put some coarse mitigations into place to try to protect against this
-situation, but it's still not good practice to do it in the first place. See
-<https://github.com/element-hq/element-web/issues/1977> for more details.
+Good separation between the components is maintained by adopting various best
+practices that anyone working with the SDK needs to be aware of and uphold:
 
-## Configuration best practices
+-   Components are named with upper camel case (e.g. views/rooms/EventTile.js)
 
-Unless you have special requirements, you will want to add the following to
-your web server configuration when hosting Element Web:
+-   They are organised in a typically two-level hierarchy - first whether the
+    component is a view or a structure, and then a broad functional grouping
+    (e.g. 'rooms' here)
 
--   The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
-    framed and protect from [clickjacking][owasp-clickjacking].
--   The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
-    header, as the modern replacement for `X-Frame-Options` (though both should be
-    included since not all browsers support it yet, see
-    [this][owasp-clickjacking-csp]).
--   The `X-Content-Type-Options: nosniff` header, to [disable MIME
-    sniffing][mime-sniffing].
--   The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
-    legacy browsers.
+-   The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
+    CSS for matrix-react-sdk currently resides in
+    https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css.
 
-[mime-sniffing]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
-[owasp-clickjacking-csp]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples
-[owasp-clickjacking]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html
+-   Per-view CSS is optional - it could choose to inherit all its styling from
+    the context of the rest of the app, although this is unusual for any but
+-   Theme specific CSS & resources:
+    https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
+    structural components (lacking presentation logic) and the simplest view
+    components.
 
-If you are using nginx, this would look something like the following:
+-   The view MUST _only_ refer to the CSS rules defined in its own CSS file.
+    'Stealing' styling information from other components (including parents)
+    is not cool, as it breaks the independence of the components.
 
-```
-add_header X-Frame-Options SAMEORIGIN;
-add_header X-Content-Type-Options nosniff;
-add_header X-XSS-Protection "1; mode=block";
-add_header Content-Security-Policy "frame-ancestors 'self'";
-```
+-   CSS classes are named with an app-specific name-spacing prefix to try to
+    avoid CSS collisions. The base skin shipped by Matrix.org with the
+    matrix-react-sdk uses the naming prefix "mx*". A company called Yoyodyne
+    Inc might use a prefix like "yy*" for its app-specific classes.
 
-For Apache, the configuration looks like:
+-   CSS classes use upper camel case when they describe React components - e.g.
+    .mx_MessageTile is the selector for the CSS applied to a MessageTile view.
 
-```
-Header set X-Frame-Options SAMEORIGIN
-Header set X-Content-Type-Options nosniff
-Header set X-XSS-Protection "1; mode=block"
-Header set Content-Security-Policy "frame-ancestors 'self'"
-```
+-   CSS classes for DOM elements within a view which aren't components are named
+    by appending a lower camel case identifier to the view's class name - e.g.
+    .mx_MessageTile_randomDiv is how you'd name the class of an arbitrary div
+    within the MessageTile view.
 
-Note: In case you are already setting a `Content-Security-Policy` header
-elsewhere, you should modify it to include the `frame-ancestors` directive
-instead of adding that last line.
+-   We deliberately use vanilla CSS 3.0 to avoid adding any more magic
+    dependencies into the mix than we already have. App developers are welcome
+    to use whatever floats their boat however. In future we'll start using
+    css-next to pull in features like CSS variable support.
 
-# Building From Source
+-   The CSS for a component can override the rules for child components.
+    For instance, .mx*RoomList .mx_RoomTile {} would be the selector to override
+    styles of RoomTiles when viewed in the context of a RoomList view.
+    Overrides \_must* be scoped to the View's CSS class - i.e. don't just define
+    .mx_RoomTile {} in RoomList.css - only RoomTile.css is allowed to define its
+    own CSS. Instead, say .mx_RoomList .mx_RoomTile {} to scope the override
+    only to the context of RoomList views. N.B. overrides should be relatively
+    rare as in general CSS inheritance should be enough.
 
-Element is a modular webapp built with modern ES6 and uses a Node.js build system.
+-   Components should render only within the bounding box of their outermost DOM
+    element. Page-absolute positioning and negative CSS margins and similar are
+    generally not cool and stop the component from being reused easily in
+    different places.
+
+Originally `matrix-react-sdk` followed the Atomic design pattern as per
+http://patternlab.io to try to encourage a modular architecture. However, we
+found that the grouping of components into atoms/molecules/organisms
+made them harder to find relative to a functional split, and didn't emphasise
+the distinction between 'structural' and 'view' components, so we backed away
+from it.
+
+## Github Issues
+
+All issues should be filed under https://github.com/vector-im/element-web/issues
+for now.
+
+## Development
+
 Ensure you have the latest LTS version of Node.js installed.
 
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
+Using `yarn` instead of `npm` is recommended. Please see the Yarn 1 [install
+guide](https://classic.yarnpkg.com/docs/install) if you do not have it
+already. This project has not yet been migrated to Yarn 2, so please ensure
+`yarn --version` shows a version from the 1.x series.
 
-1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
-1. Install `yarn` if not present already.
-1. Clone the repo: `git clone https://github.com/element-hq/element-web.git`.
-1. Switch to the element-web directory: `cd element-web`.
-1. Install the prerequisites: `yarn install`.
-    - If you're using the `develop` branch, then it is recommended to set up a
-      proper development environment (see [Setting up a dev
-      environment](#setting-up-a-dev-environment) below). Alternatively, you
-      can use <https://develop.element.io> - the continuous integration release of
-      the develop branch.
-1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](docs/config.md) for details.
-1. `yarn dist` to build a tarball to deploy. Untaring this file will give
-   a version-specific directory containing all the files that need to go on your
-   web server.
-
-Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
-which will build all the necessary files into the `webapp` directory. The version of Element
-will not appear in Settings without using the dist script. You can then mount the
-`webapp` directory on your web server to actually serve up the app, which is
-entirely static content.
-
-# Running as a Desktop app
-
-Element can also be run as a desktop app, wrapped in Electron. You can download a
-pre-built version from <https://element.io/get-started> or, if you prefer,
-build it yourself.
-
-To build it yourself, follow the instructions at <https://github.com/element-hq/element-desktop>.
-
-Many thanks to @aviraldg for the initial work on the Electron integration.
-
-The [configuration docs](docs/config.md#desktop-app-configuration) show how to override the desktop app's default settings if desired.
-
-# config.json
-
-Element supports a variety of settings to configure default servers, behaviour, themes, etc.
-See the [configuration docs](docs/config.md) for more details.
-
-# Labs Features
-
-Some features of Element may be enabled by flags in the `Labs` section of the settings.
-Some of these features are described in [labs.md](https://github.com/element-hq/element-web/blob/develop/docs/labs.md).
-
-# Caching requirements
-
-Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
-
-```
-/config.*.json
-/i18n
-/home
-/sites
-/index.html
-```
-
-We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
-webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
-the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
-Dockerfile.
-
-# Development
-
-Before attempting to develop on Element you **must** read the [developer guide
-for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
-also defines the design, architecture and style for Element too.
-
-Read the [Choosing an issue](docs/choosing-an-issue.md) page for some guidance
-about where to start. Before starting work on a feature, it's best to ensure
-your plan aligns well with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
-you start so we can ensure it's something we'd be willing to merge.
-
-You should also familiarise yourself with the ["Here be Dragons" guide
-](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
-to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
-
-The idea of Element is to be a relatively lightweight "skin" of customisations on
-top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
-higher and lower level React components useful for building Matrix communication
-apps using React.
-
-Please note that Element is intended to run correctly without access to the public
-internet. So please don't depend on resources (JS libs, CSS, images, fonts)
-hosted by external CDNs or servers but instead please package all dependencies
-into Element itself.
-
-# Setting up a dev environment
-
-Much of the functionality in Element is actually in the `matrix-react-sdk` and
-`matrix-js-sdk` modules. It is possible to set these up in a way that makes it
-easy to track the `develop` branches in git and to make local changes without
-having to manually rebuild each time.
-
-First clone and build `matrix-js-sdk`:
+`matrix-react-sdk` depends on
+[`matrix-js-sdk`](https://github.com/matrix-org/matrix-js-sdk). To make use of
+changes in the latter and to ensure tests run against the develop branch of
+`matrix-js-sdk`, you should set up `matrix-js-sdk`:
 
 ```bash
-git clone https://github.com/matrix-org/matrix-js-sdk.git
-pushd matrix-js-sdk
+git clone https://github.com/matrix-org/matrix-js-sdk
+cd matrix-js-sdk
+git checkout develop
 yarn link
 yarn install
-popd
 ```
 
-Then similarly with `matrix-react-sdk`:
+Then check out `matrix-react-sdk` and pull in dependencies:
 
 ```bash
-git clone https://github.com/matrix-org/matrix-react-sdk.git
-pushd matrix-react-sdk
-yarn link
+git clone https://github.com/matrix-org/matrix-react-sdk
+cd matrix-react-sdk
+git checkout develop
 yarn link matrix-js-sdk
 yarn install
-popd
 ```
 
-Clone the repo and switch to the `element-web` directory:
+See the [help for `yarn link`](https://classic.yarnpkg.com/docs/cli/link) for
+more details about this.
+
+### Running tests
+
+Ensure you've followed the above development instructions and then:
 
 ```bash
-git clone https://github.com/element-hq/element-web.git
-cd element-web
-```
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
-
-Finally, build and start Element itself:
-
-```bash
-yarn link matrix-js-sdk
-yarn link matrix-react-sdk
-yarn install
-yarn start
-```
-
-Wait a few seconds for the initial build to finish; you should see something like:
-
-```
-[element-js] <s> [webpack.Progress] 100%
-[element-js]
-[element-js] ℹ ｢wdm｣:    1840 modules
-[element-js] ℹ ｢wdm｣: Compiled successfully.
-```
-
-Remember, the command will not terminate since it runs the web server
-and rebuilds source files when they change. This development server also
-disables caching, so do NOT use it in production.
-
-Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
-
-**Note**: The build script uses inotify by default on Linux to monitor directories
-for changes. If the inotify limits are too low your build will fail silently or with
-`Error: EMFILE: too many open files`. To avoid these issues, we recommend a watch limit
-of at least `128M` and instance limit around `512`.
-
-You may be interested in issues [#15750](https://github.com/element-hq/element-web/issues/15750) and
-[#15774](https://github.com/element-hq/element-web/issues/15774) for further details.
-
-To set a new inotify watch and instance limit, execute:
-
-```
-sudo sysctl fs.inotify.max_user_watches=131072
-sudo sysctl fs.inotify.max_user_instances=512
-sudo sysctl -p
-```
-
-If you wish, you can make the new limits permanent, by executing:
-
-```
-echo fs.inotify.max_user_watches=131072 | sudo tee -a /etc/sysctl.conf
-echo fs.inotify.max_user_instances=512 | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
-```
-
----
-
-When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
-automatically picked up by webpack and built.
-
-If any of these steps error with, `file table overflow`, you are probably on a mac
-which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
-You'll need to do this in each new terminal you open before building Element.
-
-## Running the tests
-
-There are a number of application-level tests in the `tests` directory; these
-are designed to run with Jest and JSDOM. To run them
-
-```
 yarn test
 ```
 
+### Running lint
+
+To check your code complies with the project style, ensure you've followed the
+above development instructions and then:
+
+```bash
+yarn lint
+```
+
+### Dependency problems
+
+If you see errors (particularly "Cannot find module") running the lint or test
+commands, and `yarn install` doesn't fix them, it may be because
+yarn is not fetching git dependencies eagerly enough.
+
+Try running this:
+
+```bash
+yarn cache clean && yarn install --force
+```
+
+Now the yarn commands should work as normal.
+
 ### End-to-End tests
 
-See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
-
-# Translations
-
-To add a new translation, head to the [translating doc](docs/translating.md).
-
-For a developer guide, see the [translating dev doc](docs/translating-dev.md).
-
-# Triaging issues
-
-Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).
-
-We use [issue labels](https://github.com/element-hq/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+We use Playwright and Element Web for end-to-end tests. See
+[`docs/playwright.md`](docs/playwright.md) for more information.

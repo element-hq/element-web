@@ -1,3 +1,1 @@
-_extends: element-hq/matrix-react-sdk
-version-resolver:
-    default: patch
+_extends: matrix-org/matrix-js-sdk

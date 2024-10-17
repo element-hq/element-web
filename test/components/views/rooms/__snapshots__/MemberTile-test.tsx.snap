@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MemberTile should display an verified E2EIcon when the e2E status = Verified 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_EntityTile_avatar"
+      >
+        <span
+          aria-hidden="true"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 36px;"
+          title="@userId:matrix.org"
+        >
+          u
+        </span>
+      </div>
+      <div
+        class="mx_EntityTile_details"
+      >
+        <div
+          class="mx_EntityTile_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_PresenceLabel"
+        >
+          Offline
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MemberTile should display an warning E2EIcon when the e2E status = Warning 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_EntityTile_avatar"
+      >
+        <span
+          aria-hidden="true"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 36px;"
+          title="@userId:matrix.org"
+        >
+          u
+        </span>
+      </div>
+      <div
+        class="mx_EntityTile_details"
+      >
+        <div
+          class="mx_EntityTile_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_PresenceLabel"
+        >
+          Offline
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MemberTile should not display an E2EIcon when the e2E status = normal 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_EntityTile mx_EntityTile_offline_neveractive"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_EntityTile_avatar"
+      >
+        <span
+          aria-hidden="true"
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 36px;"
+          title="@userId:matrix.org"
+        >
+          u
+        </span>
+      </div>
+      <div
+        class="mx_EntityTile_details"
+      >
+        <div
+          class="mx_EntityTile_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_PresenceLabel"
+        >
+          Offline
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

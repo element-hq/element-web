@@ -1,31 +1,21 @@
-/build
-/cert.pem
-/dist
-/key.pem
-/lib
-/node_modules
-/packages/
-/webapp
 /.npmrc
 /*.log
 package-lock.json
-.DS_Store
-electron/dist
-electron/pub
-**/.idea
-/config.json
-/config.json.*
-/config.local*.json
+
+/coverage
+/node_modules
+/lib
+
+# version file and tarball created by `npm pack` / `yarn pack`
+/git-revision.txt
+/matrix-react-sdk-*.tgz
+
+/.idea
 # Legacy skinning file that some people might still have
 /src/component-index.js
-/.tmp
-/webpack-stats.json
+
+.DS_Store
+*.tmp
+
 .vscode
 .vscode/
-.env
-/coverage
-# Auto-generated file
-/src/modules.ts
-/build_config.yaml
-/book
-/index.html

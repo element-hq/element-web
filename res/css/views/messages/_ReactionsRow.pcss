@@ -1,0 +1,63 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ReactionsRow {
+    color: var(--cpd-color-text-primary);
+
+    .mx_ReactionsRow_addReactionButton {
+        position: relative;
+        display: inline-block;
+        visibility: hidden; /* show on hover of the .mx_EventTile */
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-left: 4px;
+        margin-right: 4px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            mask-size: 16px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $tertiary-content;
+            mask-image: url("$(res)/img/element-icons/room/message-bar/emoji.svg");
+        }
+
+        &.mx_ReactionsRow_addReactionButton_active {
+            visibility: visible; /* keep showing whilst the context menu is shown */
+        }
+
+        &:hover,
+        &.mx_ReactionsRow_addReactionButton_active {
+            &::before {
+                background-color: $primary-content;
+            }
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_ReactionsRow_addReactionButton {
+    visibility: visible;
+}
+
+.mx_ReactionsRow_showAll {
+    color: $tertiary-content;
+
+    &.mx_AccessibleButton_kind_link_inline {
+        font-size: $font-12px;
+        line-height: $font-20px;
+        margin-inline-start: $spacing-4;
+        vertical-align: middle;
+
+        &:hover {
+            color: $primary-content;
+        }
+    }
+}

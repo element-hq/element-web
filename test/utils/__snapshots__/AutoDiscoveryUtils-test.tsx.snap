@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AutoDiscoveryUtils authComponentStateForError should return expected error for the registration page 1`] = `
+{
+  "serverDeadError": <div>
+    <strong>
+      Your Element is misconfigured
+    </strong>
+    <div>
+      <span>
+        Ask your Element admin to check 
+        <a
+          href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          your config
+        </a>
+         for incorrect or duplicate entries.
+      </span>
+    </div>
+  </div>,
+  "serverErrorIsFatal": true,
+  "serverIsAlive": false,
+}
+`;

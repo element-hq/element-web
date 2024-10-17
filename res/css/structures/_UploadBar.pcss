@@ -1,0 +1,59 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 , 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UploadBar {
+    padding-left: 65px; /* line up with the shield area in the composer */
+    padding-top: 5px;
+    position: relative;
+
+    .mx_ProgressBar {
+        width: calc(100% - 40px); /* cheating at a right margin */
+    }
+}
+
+.mx_ThreadView {
+    .mx_UploadBar {
+        padding-left: 0;
+    }
+}
+
+.mx_UploadBar_filename {
+    color: $muted-fg-color;
+    position: relative;
+    padding-right: 38px; /* 32px for cancel icon, 6px for padding */
+    padding-left: 22px; /* 18px for icon, 4px for padding */
+    font-size: $font-15px;
+    vertical-align: middle;
+
+    &::before {
+        content: "";
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: $muted-fg-color;
+        mask-image: url("$(res)/img/element-icons/upload.svg");
+    }
+}
+
+.mx_UploadBar_cancel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 16px;
+    width: 16px;
+    margin-right: 16px; /* align over rightmost button in composer */
+    margin-top: 5px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $muted-fg-color;
+    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+}

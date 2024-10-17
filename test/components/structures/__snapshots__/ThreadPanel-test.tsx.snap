@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properly renders Show: All threads 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard_header_title"
+  >
+    <button
+      aria-label="Mark all as read"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 24px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton mx_ThreadPanel_dropdown"
+      role="button"
+      tabindex="0"
+    >
+      Show: All threads
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly renders Show: My threads 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard_header_title"
+  >
+    <button
+      aria-label="Mark all as read"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 24px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton mx_ThreadPanel_dropdown"
+      role="button"
+      tabindex="0"
+    >
+      Show: My threads
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option selected in the context menu 1`] = `
+<div
+  aria-checked="true"
+  class="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem"
+  role="menuitemradio"
+  tabindex="0"
+>
+  <span>
+    All threads
+  </span>
+  <span>
+    Shows all threads from current room
+  </span>
+</div>
+`;

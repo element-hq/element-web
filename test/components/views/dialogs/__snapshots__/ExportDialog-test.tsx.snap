@@ -1,0 +1,206 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ExportDialog /> renders export dialog 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class="mx_ExportDialog false mx_Dialog_fixedWidth"
+  data-focus-lock-disabled="false"
+  role="dialog"
+>
+  <div
+    class="mx_Dialog_header"
+  >
+    <h1
+      class="mx_Heading_h3 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Export Chat
+    </h1>
+  </div>
+  <p>
+    Select from the options below to export chats from your timeline
+  </p>
+  <div
+    class="mx_ExportDialog_options"
+  >
+    <span
+      class="mx_ExportDialog_subheading"
+    >
+      Format
+    </span>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+    >
+      <input
+        checked=""
+        id="exportFormat-Html"
+        name="exportFormat"
+        type="radio"
+        value="Html"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        HTML
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+    >
+      <input
+        id="exportFormat-PlainText"
+        name="exportFormat"
+        type="radio"
+        value="PlainText"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        Plain Text
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+    >
+      <input
+        id="exportFormat-Json"
+        name="exportFormat"
+        type="radio"
+        value="Json"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        JSON
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <span
+      class="mx_ExportDialog_subheading"
+    >
+      Messages
+    </span>
+    <div
+      class="mx_Field mx_Field_select"
+    >
+      <select
+        id="export-type"
+        type="text"
+      >
+        <option
+          value="Timeline"
+        >
+          Current Timeline
+        </option>
+        <option
+          value="Beginning"
+        >
+          From the beginning
+        </option>
+        <option
+          value="LastNMessages"
+        >
+          Specify a number of messages
+        </option>
+      </select>
+      <label
+        for="export-type"
+      />
+    </div>
+    <span
+      class="mx_ExportDialog_subheading"
+    >
+      Size Limit
+    </span>
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="off"
+        id="size-limit"
+        type="number"
+        value="8"
+      />
+      <label
+        for="size-limit"
+      />
+      <span
+        class="mx_Field_postfix"
+      >
+        <span>
+          MB
+        </span>
+      </span>
+    </div>
+    <span
+      class="mx_Checkbox mx_ExportDialog_attachments-checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        id="include-attachments"
+        type="checkbox"
+      />
+      <label
+        for="include-attachments"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+        <div>
+          Include Attachments
+        </div>
+      </label>
+    </span>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary"
+        data-testid="dialog-primary-button"
+        type="button"
+      >
+        Export
+      </button>
+    </span>
+  </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  />
+</div>
+`;
+
+exports[`<ExportDialog /> renders success screen when export is finished 1`] = `null`;

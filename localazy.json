@@ -9,13 +9,13 @@
         "files": [
             {
                 "pattern": "src/i18n/strings/en_EN.json",
-                "file": "element-web.json",
+                "file": "matrix-react-sdk.json",
                 "lang": "inherited"
             },
             {
                 "group": "existing",
                 "pattern": "src/i18n/strings/*.json",
-                "file": "element-web.json",
+                "file": "matrix-react-sdk.json",
                 "excludes": ["src/i18n/strings/en_EN.json"],
                 "lang": "${autodetectLang}"
             }
@@ -25,7 +25,7 @@
     "download": {
         "files": [
             {
-                "conditions": "equals: ${file}, element-web.json",
+                "conditions": "equals: ${file}, matrix-react-sdk.json",
                 "output": "src/i18n/strings/${langLsrUnderscore}.json"
             }
         ],

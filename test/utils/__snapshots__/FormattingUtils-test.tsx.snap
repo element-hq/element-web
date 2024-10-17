@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormattingUtils formatList should return expected sentence in ReactNode when given 2 React children 1`] = `
+<span>
+  <span>
+    a
+  </span>
+   and 
+  <span>
+    b
+  </span>
+</span>
+`;
+
+exports[`FormattingUtils formatList should return expected sentence in ReactNode when given more React children 1`] = `
+<span>
+  <span>
+    a
+  </span>
+  , 
+  <span>
+    b
+  </span>
+  , 
+  <span>
+    c
+  </span>
+   and 
+  <span>
+    d
+  </span>
+</span>
+`;
+
+exports[`FormattingUtils formatList should return expected sentence in ReactNode when using itemLimit 1`] = `
+<span>
+  <span>
+    <span>
+      a
+    </span>
+    , 
+    <span>
+      b
+    </span>
+  </span>
+   and 2 others
+</span>
+`;

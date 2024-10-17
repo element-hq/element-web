@@ -1,0 +1,27 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UserOnboardingPage {
+    width: 100%;
+    height: 100%;
+
+    align-self: stretch;
+    max-width: 1200px;
+    margin: 0 auto auto;
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    gap: $spacing-64;
+    padding: $spacing-64 100px;
+
+    @media (max-width: 1280px) {
+        padding: $spacing-48 $spacing-32;
+    }
+}

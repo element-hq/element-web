@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MediaProcessingError /> renders 1`] = `
+<div>
+  <span
+    class="test-classname"
+  >
+    <div
+      class="mx_MediaProcessingError_Icon"
+      height="16"
+      width="16"
+    />
+    Something went wrong
+  </span>
+</div>
+`;

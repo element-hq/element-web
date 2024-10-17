@@ -1,0 +1,54 @@
+/*
+Copyright 2018-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ShareDialog hr {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border-color: $light-fg-color;
+}
+
+.mx_ShareDialog .mx_ShareDialog_content {
+    margin: 10px 0;
+
+    .mx_CopyableText {
+        width: unset; /* full width */
+
+        > a {
+            text-decoration: none;
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+.mx_ShareDialog_split {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mx_ShareDialog_qrcode_container {
+    float: left;
+    height: 256px;
+    width: 256px;
+    margin-right: 64px;
+}
+
+.mx_ShareDialog_qrcode_container + .mx_ShareDialog_social_container {
+    width: 299px;
+}
+
+.mx_ShareDialog_social_container {
+    display: inline-block;
+}
+
+.mx_ShareDialog_social_icon {
+    display: inline-grid;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

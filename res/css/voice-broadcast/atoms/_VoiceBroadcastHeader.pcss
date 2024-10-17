@@ -1,0 +1,60 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_VoiceBroadcastHeader {
+    align-items: flex-start;
+    display: flex;
+    gap: $spacing-8;
+    line-height: 20px;
+    margin-bottom: $spacing-16;
+    min-width: 0;
+}
+
+.mx_VoiceBroadcastHeader_content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.mx_VoiceBroadcastHeader_room_wrapper {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    justify-content: flex-start;
+}
+
+.mx_VoiceBroadcastHeader_room {
+    font-size: $font-12px;
+    font-weight: var(--cpd-font-weight-semibold);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_VoiceBroadcastHeader_line {
+    align-items: center;
+    color: $secondary-content;
+    font-size: $font-12px;
+    display: flex;
+    gap: $spacing-4;
+
+    .mx_Spinner {
+        flex: 0 0 14px;
+        padding: 1px;
+    }
+
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.mx_VoiceBroadcastHeader_mic--clickable {
+    cursor: pointer;
+}
