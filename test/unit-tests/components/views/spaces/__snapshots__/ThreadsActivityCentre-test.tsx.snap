@@ -187,6 +187,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
   >
     <div
       class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(6px, 5px);"
       tabindex="-1"
     >
@@ -513,6 +514,11 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         </div>
       </button>
       <span
+        aria-hidden="true"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="-1"
+      />
+      <span
         data-floating-ui-focus-guard=""
         data-type="outside"
         role="button"
@@ -539,6 +545,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   >
     <div
       class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
       tabindex="-1"
     >
@@ -588,6 +595,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       aria-describedby=":r9:"
       aria-labelledby=":r8:"
       class="_content_1oa1y_17"
+      data-floating-ui-focusable=""
       id=":ra:"
       role="dialog"
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"

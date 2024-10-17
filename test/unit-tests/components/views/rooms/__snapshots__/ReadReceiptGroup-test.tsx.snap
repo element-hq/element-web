@@ -3,6 +3,7 @@
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
   class="_tooltip_1pslb_17"
+  data-floating-ui-focusable=""
   id=":r6:"
   role="tooltip"
   style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
