@@ -142,11 +142,7 @@ describe("HTMLExport", () => {
             .fn()
             .mockImplementation(
                 (eventId: string, relationType: RelationType | string, eventType: EventType | string) => {
-                    console.log("langtest");
-                    console.log(eventId);
-                    console.log(firstMessage.getId());
                     if (eventId === firstMessage.getId()) {
-                        console.log("returned@!");
                         return relations;
                     }
                 },
