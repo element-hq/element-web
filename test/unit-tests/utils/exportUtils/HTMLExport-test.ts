@@ -128,6 +128,39 @@ describe("HTMLExport", () => {
         fetchMock.get(media.srcHttp!, body);
     }
 
+    function mockReactionForMessage(message: IRoomEvent): MatrixEvent {
+        const firstMessage = new MatrixEvent(message);
+        const reaction = mkReaction(firstMessage);
+
+        const relationsContainer = {
+            getRelations: jest.fn(),
+            getChildEventsForEvent: jest.fn(),
+        } as unknown as RelationsContainer;
+        const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
+        relations.addEvent(reaction);
+        relationsContainer.getChildEventsForEvent = jest
+            .fn()
+            .mockImplementation(
+                (eventId: string, relationType: RelationType | string, eventType: EventType | string) => {
+                    console.log("langtest");
+                    console.log(eventId);
+                    console.log(firstMessage.getId());
+                    if (eventId === firstMessage.getId()) {
+                        console.log("returned@!");
+                        return relations;
+                    }
+                },
+            );
+
+        const timelineSet = {
+            relations: relationsContainer,
+            getLiveTimeline: () => timeline,
+        } as unknown as EventTimelineSet;
+        const timeline = new EventTimeline(timelineSet);
+        room.getUnfilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        return reaction;
+    }
+
     it("should throw when created with invalid config for LastNMessages", async () => {
         expect(
             () =>
@@ -172,6 +205,7 @@ describe("HTMLExport", () => {
                 body: `Message #${i}`,
             },
         }));
+        mockReactionForMessage(events[0]);
         mockMessages(...events);
 
         const exporter = new HTMLExporter(
@@ -594,25 +628,8 @@ describe("HTMLExport", () => {
     });
 
     it("should include reactions", async () => {
-        const firstMessage = new MatrixEvent(EVENT_MESSAGE);
-        const reaction = mkReaction(firstMessage);
-
-        const relationsContainer = {
-            getRelations: jest.fn(),
-            getChildEventsForEvent: jest.fn(),
-        } as unknown as RelationsContainer;
-        const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
-        relations.addEvent(reaction);
-        relationsContainer.getChildEventsForEvent = jest.fn().mockReturnValue(relations);
-
-        const timelineSet = {
-            relations: relationsContainer,
-            getLiveTimeline: () => timeline,
-        } as unknown as EventTimelineSet;
-        const timeline = new EventTimeline(timelineSet);
-        room.getUnfilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        const reaction = mockReactionForMessage(EVENT_MESSAGE);
         mockMessages(EVENT_MESSAGE);
-
         const exporter = new HTMLExporter(
             room,
             ExportType.LastNMessages,
