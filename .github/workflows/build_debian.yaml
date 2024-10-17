@@ -7,7 +7,7 @@ jobs:
     build:
         name: Build package
         environment: packages.element.io
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         env:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}

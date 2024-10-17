@@ -13,7 +13,7 @@ permissions:
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: dockerhub
         strategy:
             fail-fast: false
