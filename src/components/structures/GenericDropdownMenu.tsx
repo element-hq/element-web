@@ -106,6 +106,10 @@ type IProps<T> = WithKeyFunction<T> & {
     AdditionalOptions?: FunctionComponent<AdditionalOptionsProps>;
 };
 
+function calculateKey<T>(value: T, toKey: ((key: T) => Key) | undefined): Key {
+    return toKey ? toKey(value) : (value as Key);
+}
+
 export function GenericDropdownMenu<T>({
     value,
     onChange,
@@ -119,23 +123,24 @@ export function GenericDropdownMenu<T>({
 }: IProps<T>): JSX.Element {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
 
+    const valueKey = calculateKey(value, toKey);
     const selected: GenericDropdownMenuItem<T> | undefined = options
         .flatMap((it) => (isGenericDropdownMenuGroup(it) ? [it, ...it.options] : [it]))
-        .find((option) => (toKey ? toKey(option.key) === toKey(value) : option.key === value));
+        .find((option) => calculateKey(option.key, toKey) === valueKey);
     let contextMenuOptions: JSX.Element;
     if (options && isGenericDropdownMenuGroupArray(options)) {
         contextMenuOptions = (
             <>
                 {options.map((group) => (
                     <GenericDropdownMenuGroup
-                        key={toKey?.(group.key) ?? (group.key as Key)}
+                        key={calculateKey(group.key, toKey)}
                         label={group.label}
                         description={group.description}
                         adornment={group.adornment}
                     >
                         {group.options.map((option) => (
                             <GenericDropdownMenuOption
-                                key={toKey?.(option.key) ?? (option.key as Key)}
+                                key={calculateKey(option.key, toKey)}
                                 label={option.label}
                                 description={option.description}
                                 onClick={(ev: ButtonEvent) => {
@@ -144,7 +149,7 @@ export function GenericDropdownMenu<T>({
                                     onClose?.(ev);
                                 }}
                                 adornment={option.adornment}
-                                isSelected={option === selected}
+                                isSelected={calculateKey(option.key, toKey) === valueKey}
                             />
                         ))}
                     </GenericDropdownMenuGroup>
@@ -156,7 +161,7 @@ export function GenericDropdownMenu<T>({
             <>
                 {options.map((option) => (
                     <GenericDropdownMenuOption
-                        key={toKey?.(option.key) ?? (option.key as Key)}
+                        key={calculateKey(option.key, toKey)}
                         label={option.label}
                         description={option.description}
                         onClick={(ev: ButtonEvent) => {
@@ -165,7 +170,7 @@ export function GenericDropdownMenu<T>({
                             onClose?.(ev);
                         }}
                         adornment={option.adornment}
-                        isSelected={option === selected}
+                        isSelected={calculateKey(option.key, toKey) === valueKey}
                     />
                 ))}
             </>
