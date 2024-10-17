@@ -74,17 +74,8 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
-        "@types/react-dom": "18.3.0",
-        "@types/react": "18.3.3",
-        "@types/seedrandom": "3.0.8",
-        "oidc-client-ts": "3.0.1",
         "jwt-decode": "4.0.0",
-        "@vector-im/compound-design-tokens": "1.8.0",
-        "@vector-im/compound-web": "7.0.0",
-        "@radix-ui/react-id": "1.1.0",
-        "caniuse-lite": "1.0.30001668",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^7.0.0"
+        "caniuse-lite": "1.0.30001668"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
