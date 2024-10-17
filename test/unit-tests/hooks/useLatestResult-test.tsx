@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook, RenderHookResult } from "@testing-library/react-hooks/dom";
+import { renderHook, RenderHookResult } from "@testing-library/react";
 
 import { useLatestResult } from "../../../src/hooks/useLatestResult";
 
@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 function simulateRequest(
-    hookResult: RenderHookResult<typeof useLatestResult, ReturnType<typeof useLatestResult>>["result"],
+    hookResult: RenderHookResult<ReturnType<typeof useLatestResult>, typeof useLatestResult>["result"],
     { id, delayInMs, result }: { id: string; delayInMs: number; result: string },
 ) {
     const [setQuery, setResult] = hookResult.current;

@@ -203,6 +203,7 @@ describe("TimelinePanel", () => {
                     manageReadReceipts={true}
                     ref={ref}
                 />,
+                { legacyRoot: true },
             );
             await flushPromises();
             timelinePanel = ref.current!;

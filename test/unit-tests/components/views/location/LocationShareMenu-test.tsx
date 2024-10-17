@@ -114,6 +114,7 @@ describe("<LocationShareMenu />", () => {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
+            legacyRoot: true,
         });
 
     beforeEach(async () => {

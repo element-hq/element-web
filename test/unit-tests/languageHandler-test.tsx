@@ -134,9 +134,8 @@ describe("languageHandler", () => {
         it("includes English message and localized translated message", async () => {
             await setLanguage("de");
 
-            const friendlyError = new UserFriendlyError(testErrorMessage, {
+            const friendlyError = new UserFriendlyError(testErrorMessage, undefined, {
                 email: "test@example.com",
-                cause: undefined,
             });
 
             // Ensure message is in English so it's readable in the logs
@@ -151,9 +150,8 @@ describe("languageHandler", () => {
             await setLanguage("de");
 
             const underlyingError = new Error("Fake underlying error");
-            const friendlyError = new UserFriendlyError(testErrorMessage, {
+            const friendlyError = new UserFriendlyError(testErrorMessage, underlyingError, {
                 email: "test@example.com",
-                cause: underlyingError,
             });
 
             expect(friendlyError.cause).toStrictEqual(underlyingError);

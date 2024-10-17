@@ -161,7 +161,7 @@ describe("<MatrixChat />", () => {
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />);
+        render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
 
     // make test results readable
     filterConsole(

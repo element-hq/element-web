@@ -13,6 +13,13 @@ import { mocked } from "jest-mock";
 
 import { PredictableRandom } from "./test-utils/predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
 
+declare global {
+    // eslint-disable-next-line no-var
+    var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 // Fake random strings to give a predictable snapshot for IDs
 jest.mock("matrix-js-sdk/src/randomstring");
 beforeEach(() => {

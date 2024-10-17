@@ -1002,7 +1002,7 @@ describe("<SessionManagerTab />", () => {
                         devices: [alicesDevice, alicesOlderMobileDevice],
                     });
 
-                const { getByTestId, getByLabelText } = render(getComponent());
+                const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
 
                 await act(flushPromises);
 
@@ -1046,7 +1046,7 @@ describe("<SessionManagerTab />", () => {
                         type: "m.id.user",
                         user: aliceId,
                     },
-                    password: "",
+                    password: "topsecret",
                     type: "m.login.password",
                 });
                 // devices refreshed

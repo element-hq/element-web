@@ -47,9 +47,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 32px;"
-        >
-          
-        </span>
+        />
         <div
           class="mx_BeaconListItem_info"
         >

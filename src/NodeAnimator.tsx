@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Key, MutableRefObject, ReactElement, ReactFragment, ReactInstance, ReactPortal } from "react";
+import React, { Key, MutableRefObject, ReactElement, ReactInstance } from "react";
 import ReactDom from "react-dom";
 
 interface IChildProps {
@@ -27,7 +27,7 @@ interface IProps {
     innerRef?: MutableRefObject<any>;
 }
 
-function isReactElement(c: ReactElement | ReactFragment | ReactPortal): c is ReactElement {
+function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number]): c is ReactElement {
     return typeof c === "object" && "type" in c;
 }
 
@@ -102,7 +102,8 @@ export default class NodeAnimator extends React.Component<IProps> {
     }
 
     private collectNode(k: Key, node: React.ReactInstance, restingStyle: React.CSSProperties): void {
-        if (node && this.nodes[k] === undefined && this.props.startStyles.length > 0) {
+        const key = typeof k === "bigint" ? Number(k) : k;
+        if (node && this.nodes[key] === undefined && this.props.startStyles.length > 0) {
             const startStyles = this.props.startStyles;
             const domNode = ReactDom.findDOMNode(node);
             // start from startStyle 1: 0 is the one we gave it
@@ -116,7 +117,7 @@ export default class NodeAnimator extends React.Component<IProps> {
                 this.applyStyles(domNode as HTMLElement, restingStyle);
             }, 0);
         }
-        this.nodes[k] = node;
+        this.nodes[key] = node;
 
         if (this.props.innerRef) {
             this.props.innerRef.current = node;

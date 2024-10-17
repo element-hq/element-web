@@ -375,6 +375,9 @@ describe("MemberList", () => {
                             roomId={room.roomId}
                         />
                     </SDKContext.Provider>,
+                    {
+                        // legacyRoot: true,
+                    },
                 );
             };
 
@@ -401,7 +404,10 @@ describe("MemberList", () => {
                 await flushPromises();
 
                 // button rendered but disabled
-                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
+                expect(screen.getByRole("button", { name: "Invite to this room" })).toHaveAttribute(
+                    "aria-disabled",
+                    "true",
+                );
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {
