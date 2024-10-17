@@ -58,17 +58,16 @@ describe("<VoiceUserSettingsTab />", () => {
     describe("devices", () => {
         it("renders dropdowns for input devices", async () => {
             render(getComponent());
-            await flushPromises();
 
-            expect(screen.getByLabelText("Microphone")).toHaveDisplayValue(audioIn1.label);
-            expect(screen.getByLabelText("Camera")).toHaveDisplayValue(videoIn1.label);
+            await expect(screen.findByLabelText("Microphone")).resolves.toHaveDisplayValue(audioIn1.label);
+            await expect(screen.findByLabelText("Camera")).resolves.toHaveDisplayValue(videoIn1.label);
         });
 
         it("updates device", async () => {
             render(getComponent());
             await flushPromises();
 
-            fireEvent.change(screen.getByLabelText("Camera"), { target: { value: videoIn2.deviceId } });
+            fireEvent.change(await screen.findByLabelText("Camera"), { target: { value: videoIn2.deviceId } });
 
             expect(MediaDeviceHandlerMock.instance.setDevice).toHaveBeenCalledWith(
                 videoIn2.deviceId,

@@ -926,10 +926,10 @@ describe("<SessionManagerTab />", () => {
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
 
-                const { getByTestId, findByTestId } = render(getComponent());
+                const { getByTestId, findByTestId } = render(getComponent(), { legacyRoot: true });
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-                await toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const signOutButton = await within(
                     await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),
@@ -1002,7 +1002,7 @@ describe("<SessionManagerTab />", () => {
                         devices: [alicesDevice, alicesOlderMobileDevice],
                     });
 
-                const { getByTestId, getByLabelText } = render(getComponent());
+                const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
 
                 await act(flushPromises);
 
@@ -1046,7 +1046,7 @@ describe("<SessionManagerTab />", () => {
                         type: "m.id.user",
                         user: aliceId,
                     },
-                    password: "",
+                    password: "topsecret",
                     type: "m.login.password",
                 });
                 // devices refreshed

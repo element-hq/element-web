@@ -37,5 +37,10 @@ package-lock.json
 
 # Downloaded and already minified
 res/jitsi_external_api.min.js
+
+/playwright/test-results/
+/playwright/html-report/
+/playwright/logs/
+/playwright/snapshots/
 # This file is also machine-generated
 /playwright/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json

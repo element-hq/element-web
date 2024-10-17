@@ -218,6 +218,7 @@ module.exports = (env, argv) => {
                 // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
+                "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),

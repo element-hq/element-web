@@ -19,7 +19,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-12"
+        aria-labelledby=":re:"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -100,7 +100,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-18"
+        aria-labelledby=":rk:"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -156,7 +156,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-24"
+                aria-labelledby=":rq:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -168,7 +168,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-2"
+                id="radix-:rv:"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -233,7 +233,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-29"
+                aria-labelledby=":r11:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -245,7 +245,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-3"
+                id="radix-:r16:"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -319,7 +319,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="floating-ui-712"
+        aria-labelledby=":rt2:"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -375,7 +375,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-718"
+                aria-labelledby=":rt8:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -387,7 +387,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-218"
+                id="radix-:rtd:"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -452,7 +452,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="floating-ui-723"
+                aria-labelledby=":rtf:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
@@ -464,7 +464,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-label="Open menu"
                 class="_icon-button_bh2qc_17"
                 data-state="closed"
-                id="radix-219"
+                id="radix-:rtk:"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"

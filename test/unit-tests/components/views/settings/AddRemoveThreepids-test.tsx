@@ -49,7 +49,7 @@ describe("AddRemoveThreepids", () => {
         clearAllModals();
     });
 
-    const clientProviderWrapper: React.FC = ({ children }) => (
+    const clientProviderWrapper: React.FC = ({ children }: React.PropsWithChildren) => (
         <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
     );
 
