@@ -16,9 +16,7 @@ import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
-const PREVIEW_URLS_EVENT_TYPE = "org.matrix.room.preview_urls";
-
-type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | typeof PREVIEW_URLS_EVENT_TYPE;
+type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | "org.matrix.room.preview_urls";
 
 /**
  * Gets and sets settings at the "room" level.

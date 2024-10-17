@@ -21,7 +21,7 @@ import { StaticNotificationState } from "../../../../../src/stores/notifications
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const EventEmitter = require("events");
     class MockSpaceStore extends EventEmitter {
         activeSpace: SpaceKey = "!space1";

@@ -353,7 +353,6 @@ describe("RoomListStore", () => {
             const videoRoomKnock = "!videoRoomKnock_server";
 
             const rooms: Room[] = [];
-            RoomListStore.instance;
             mkRoom(client, videoRoomPrivate, rooms);
             mkRoom(client, videoRoomPublic, rooms);
             mkRoom(client, videoRoomKnock, rooms);

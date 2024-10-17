@@ -10,7 +10,7 @@ import { EnhancedMap } from "./maps";
 
 // Inspired by https://pkg.go.dev/golang.org/x/sync/singleflight
 
-const keyMap = new EnhancedMap<Object, EnhancedMap<string, unknown>>();
+const keyMap = new EnhancedMap<object, EnhancedMap<string, unknown>>();
 
 /**
  * Access class to get a singleflight context. Singleflights execute a
@@ -47,7 +47,7 @@ export class Singleflight {
      * @param {string} key A string key relevant to that instance to namespace under.
      * @returns {SingleflightContext} Returns the context to execute the function.
      */
-    public static for(instance?: Object | null, key?: string | null): SingleflightContext {
+    public static for(instance?: object | null, key?: string | null): SingleflightContext {
         if (!instance || !key) throw new Error("An instance and key must be supplied");
         return new SingleflightContext(instance, key);
     }
@@ -56,7 +56,7 @@ export class Singleflight {
      * Forgets all results for a given instance.
      * @param {Object} instance The instance to forget about.
      */
-    public static forgetAllFor(instance: Object): void {
+    public static forgetAllFor(instance: object): void {
         keyMap.delete(instance);
     }
 
@@ -72,7 +72,7 @@ export class Singleflight {
 
 class SingleflightContext {
     public constructor(
-        private instance: Object,
+        private instance: object,
         private key: string,
     ) {}
 

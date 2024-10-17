@@ -252,7 +252,7 @@ export class SlidingSyncManager {
         try {
             // wait until the next sync before returning as RoomView may need to know the current state
             await p;
-        } catch (err) {
+        } catch {
             logger.warn("SlidingSync setRoomVisible:", roomId, visible, "failed to confirm transaction");
         }
         return roomId;
@@ -305,7 +305,7 @@ export class SlidingSyncManager {
                 } else {
                     await this.slidingSync!.setListRanges(SlidingSyncManager.ListSearch, ranges);
                 }
-            } catch (err) {
+            } catch {
                 // do nothing, as we reject only when we get interrupted but that's fine as the next
                 // request will include our data
             } finally {
@@ -357,7 +357,7 @@ export class SlidingSyncManager {
             }
             const clientWellKnown = await AutoDiscovery.findClientConfig(clientDomain);
             proxyUrl = clientWellKnown?.["org.matrix.msc3575.proxy"]?.url;
-        } catch (e) {
+        } catch {
             // Either client.getDomain() is null so we've shorted out, or is invalid so `AutoDiscovery.findClientConfig` has thrown
         }
 

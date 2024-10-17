@@ -33,6 +33,7 @@ import { arrayFastClone } from "../../../utils/arrays";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import SettingsStore from "../../../settings/SettingsStore";
+import WarningBadgeSvg from "../../../../res/img/element-icons/warning-badge.svg";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -185,12 +186,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                 onFinished={this.props.onFinished}
             >
                 <div className="mx_ModalWidgetDialog_warning">
-                    <img
-                        src={require("../../../../res/img/element-icons/warning-badge.svg").default}
-                        height="16"
-                        width="16"
-                        alt=""
-                    />
+                    <img src={WarningBadgeSvg} height="16" width="16" alt="" />
                     {_t("widget|modal_data_warning", {
                         widgetDomain: parsed.hostname,
                     })}

@@ -982,7 +982,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             try {
                 const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
                 newState.serverConfig = config;
-            } catch (err) {
+            } catch {
                 logger.warn("Failed to load hs_url param:", params.hs_url);
             }
         } else if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {

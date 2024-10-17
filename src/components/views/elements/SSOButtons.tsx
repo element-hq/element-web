@@ -33,6 +33,7 @@ interface ISSOButtonProps extends IProps {
 
 const getIcon = (brand: IdentityProviderBrand | string): string | null => {
     switch (brand) {
+        /* eslint-disable @typescript-eslint/no-require-imports */
         case IdentityProviderBrand.Apple:
             return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
         case IdentityProviderBrand.Facebook:
@@ -47,6 +48,7 @@ const getIcon = (brand: IdentityProviderBrand | string): string | null => {
             return require(`../../../../res/img/element-icons/brands/twitter.svg`).default;
         default:
             return null;
+        /* eslint-enable @typescript-eslint/no-require-imports */
     }
 };
 

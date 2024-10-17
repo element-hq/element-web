@@ -20,6 +20,7 @@ interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "
 }
 
 const WidgetAvatar: React.FC<IProps> = ({ app, className, size = "20px", ...props }) => {
+    /* eslint-disable @typescript-eslint/no-require-imports */
     let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg").default];
     // heuristics for some better icons until Widgets support their own icons
     if (app.type.includes("jitsi")) {
@@ -31,6 +32,7 @@ const WidgetAvatar: React.FC<IProps> = ({ app, className, size = "20px", ...prop
     } else if (app.type.includes("clock")) {
         iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg").default];
     }
+    /* eslint-enable @typescript-eslint/no-require-imports */
 
     return (
         <BaseAvatar

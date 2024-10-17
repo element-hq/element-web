@@ -15,7 +15,6 @@ import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } 
 
 describe("<PollListItem />", () => {
     const event = makePollStartEvent("Question?", "@me:domain.org");
-    event.getContent().origin;
     const defaultProps = { event, onClick: jest.fn() };
     const getComponent = (props = {}) => render(<PollListItem {...defaultProps} {...props} />);
 

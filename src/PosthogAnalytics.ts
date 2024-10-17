@@ -236,7 +236,7 @@ export class PosthogAnalytics {
         let appVersion: string | undefined;
         try {
             appVersion = await platform?.getAppVersion();
-        } catch (e) {
+        } catch {
             // this happens if no version is set i.e. in dev
             appVersion = "unknown";
         }

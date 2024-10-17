@@ -74,6 +74,7 @@ describe("MegolmExportEncryption", function () {
                 subtle: webCrypto.subtle,
             },
         });
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         MegolmExportEncryption = require("../../../src/utils/MegolmExportEncryption");
     });
 

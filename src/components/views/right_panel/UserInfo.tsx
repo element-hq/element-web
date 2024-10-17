@@ -1356,7 +1356,7 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
 
                 disambiguateDevices(devices);
                 setDevices(devices);
-            } catch (err) {
+            } catch {
                 setDevices(null);
             }
         }

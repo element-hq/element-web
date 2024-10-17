@@ -70,7 +70,7 @@ export class MessageBuilder {
     /**
      * Map of message content -> event.
      */
-    messages = new Map<String, Promise<JSHandle<MatrixEvent>>>();
+    messages = new Map<string, Promise<JSHandle<MatrixEvent>>>();
 
     /**
      * Utility to find a MatrixEvent by its body content

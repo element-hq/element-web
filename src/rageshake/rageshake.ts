@@ -525,7 +525,7 @@ export function tryInitStorage(): Promise<void> {
     let indexedDB;
     try {
         indexedDB = window.indexedDB;
-    } catch (e) {}
+    } catch {}
 
     if (indexedDB) {
         global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);

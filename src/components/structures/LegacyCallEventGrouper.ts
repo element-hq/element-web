@@ -161,9 +161,11 @@ export default class LegacyCallEventGrouper extends EventEmitter {
 
     public toggleSilenced = (): void => {
         const silenced = LegacyCallHandler.instance.isCallSilenced(this.callId);
-        silenced
-            ? LegacyCallHandler.instance.unSilenceCall(this.callId)
-            : LegacyCallHandler.instance.silenceCall(this.callId);
+        if (silenced) {
+            LegacyCallHandler.instance.unSilenceCall(this.callId);
+        } else {
+            LegacyCallHandler.instance.silenceCall(this.callId);
+        }
     };
 
     private setCallListeners(): void {

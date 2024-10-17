@@ -21,6 +21,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
  * @param {Room} room The room to check the visibility of.
  * @returns {boolean} True if the room should be visible, false otherwise.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isRoomVisible(room: Room): boolean {
     return true;
 }

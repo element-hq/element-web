@@ -57,7 +57,7 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
             await client.setPowerLevel(room.roomId, userIds, powerLevel);
             setSelectedUsers([]);
             setPowerLevel(defaultUserLevel);
-        } catch (error) {
+        } catch {
             Modal.createDialog(ErrorDialog, {
                 title: _t("common|error"),
                 description: _t("error|update_power_level"),

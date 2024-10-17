@@ -77,9 +77,11 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
     private onSilenceClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         const callId = this.props.call.callId;
-        this.state.silenced
-            ? LegacyCallHandler.instance.unSilenceCall(callId)
-            : LegacyCallHandler.instance.silenceCall(callId);
+        if (this.state.silenced) {
+            LegacyCallHandler.instance.unSilenceCall(callId);
+        } else {
+            LegacyCallHandler.instance.silenceCall(callId);
+        }
     };
 
     public render(): React.ReactNode {

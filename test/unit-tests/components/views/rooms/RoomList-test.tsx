@@ -210,7 +210,6 @@ describe("RoomList", () => {
             beforeEach(async () => {
                 cleanup();
                 const rooms: Room[] = [];
-                RoomListStore.instance;
                 testUtils.mkRoom(client, videoRoomPrivate, rooms);
                 testUtils.mkRoom(client, videoRoomPublic, rooms);
                 testUtils.mkRoom(client, videoRoomKnock, rooms);

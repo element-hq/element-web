@@ -68,12 +68,12 @@ async function getStorageContext(): Promise<StorageContext> {
     if (navigator.storage && navigator.storage.persisted) {
         try {
             result["storageManager_persisted"] = String(await navigator.storage.persisted());
-        } catch (e) {}
+        } catch {}
     } else if (document.hasStorageAccess) {
         // Safari
         try {
             result["storageManager_persisted"] = String(await document.hasStorageAccess());
-        } catch (e) {}
+        } catch {}
     }
     if (navigator.storage && navigator.storage.estimate) {
         try {
@@ -87,7 +87,7 @@ async function getStorageContext(): Promise<StorageContext> {
                 });
                 result[`storageManager_usage`] = usageDetails.join(", ");
             }
-        } catch (e) {}
+        } catch {}
     }
 
     return result;

@@ -11,6 +11,7 @@ import { MediaEventContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
+import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
@@ -44,7 +45,7 @@ export default class MStickerBody extends MImageBody {
                 aria-hidden
                 alt=""
                 className="mx_MStickerBody_placeholder"
-                src={require("../../../../res/img/icons-show-stickers.svg").default}
+                src={IconsShowStickersSvg}
                 width="80"
                 height="80"
                 onMouseEnter={this.onImageEnter}

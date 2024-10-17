@@ -120,7 +120,7 @@ export async function buildAndEncodePickleKey(
         if (pickleKeyBuf) {
             return encodeUnpaddedBase64(pickleKeyBuf);
         }
-    } catch (e) {
+    } catch {
         logger.error("Error decrypting pickle key");
     }
 

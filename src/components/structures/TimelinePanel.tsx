@@ -973,7 +973,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             UserActivity.sharedInstance().timeWhileActiveRecently(this.readMarkerActivityTimer);
             try {
                 await this.readMarkerActivityTimer.finished();
-            } catch (e) {
+            } catch {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors
@@ -988,7 +988,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             UserActivity.sharedInstance().timeWhileActiveNow(this.readReceiptActivityTimer);
             try {
                 await this.readReceiptActivityTimer.finished();
-            } catch (e) {
+            } catch {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors

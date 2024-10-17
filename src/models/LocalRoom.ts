@@ -31,7 +31,7 @@ export class LocalRoom extends Room {
     /** DM chat partner */
     public targets: Member[] = [];
     /** Callbacks that should be invoked after the actual room has been created. */
-    public afterCreateCallbacks: Function[] = [];
+    public afterCreateCallbacks: ((roomId: string) => void)[] = [];
     public state: LocalRoomState = LocalRoomState.NEW;
 
     public constructor(roomId: string, client: MatrixClient, myUserId: string) {

@@ -129,7 +129,7 @@ export default abstract class BasePlatform {
         try {
             const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY)!);
             return newVersion !== version || Date.now() > deferUntil;
-        } catch (e) {
+        } catch {
             return true;
         }
     }
@@ -380,7 +380,7 @@ export default abstract class BasePlatform {
 
         try {
             await idbSave("pickleKey", [userId, deviceId], data);
-        } catch (e) {
+        } catch {
             return null;
         }
         return encodeUnpaddedBase64(randomArray);

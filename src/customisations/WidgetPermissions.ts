@@ -21,6 +21,7 @@ import { Capability, Widget } from "matrix-widget-api";
  * @returns {Set<Capability>} Resolves to the capabilities that are approved for use
  * by the widget. If none are approved, this should return an empty Set.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function preapproveCapabilities(
     widget: Widget,
     requestedCapabilities: Set<Capability>,

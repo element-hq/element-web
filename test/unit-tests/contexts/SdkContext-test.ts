@@ -40,15 +40,11 @@ describe("SdkContextClass", () => {
     });
 
     it("userProfilesStore should raise an error without a client", () => {
-        expect(() => {
-            sdkContext.userProfilesStore;
-        }).toThrow("Unable to create UserProfilesStore without a client");
+        expect(() => sdkContext.userProfilesStore).toThrow("Unable to create UserProfilesStore without a client");
     });
 
     it("oidcClientStore should raise an error without a client", () => {
-        expect(() => {
-            sdkContext.oidcClientStore;
-        }).toThrow("Unable to create OidcClientStore without a client");
+        expect(() => sdkContext.oidcClientStore).toThrow("Unable to create OidcClientStore without a client");
     });
 
     describe("when SDKContext has a client", () => {

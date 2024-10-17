@@ -564,7 +564,7 @@ describe("RoomHeader", () => {
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
 
-            render(<RoomHeader room={room} />, getWrapper()).container;
+            render(<RoomHeader room={room} />, getWrapper());
 
             expect(getByLabelText(document.body, _t("voip|get_call_link"))).toBeInTheDocument();
         });

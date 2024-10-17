@@ -376,7 +376,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let replaced: SubstitutionValue;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
-                    replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
+                    replaced = ((mapping as Tags)[regexpString] as (...subs: string[]) => string)(...capturedGroups);
                 } else {
                     replaced = mapping[regexpString];
                 }

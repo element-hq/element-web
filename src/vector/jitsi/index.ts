@@ -62,6 +62,7 @@ interface ExternalAPIOptions extends _ExternalAPIOptions {
 }
 
 // We have to trick webpack into loading our CSS for us.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";

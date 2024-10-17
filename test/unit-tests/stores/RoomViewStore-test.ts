@@ -465,7 +465,7 @@ describe("RoomViewStore", function () {
                 try {
                     expect(setRoomVisible.mock.calls[i][0]).toEqual(v[0]);
                     expect(setRoomVisible.mock.calls[i][1]).toEqual(v[1]);
-                } catch (err) {
+                } catch {
                     throw new Error(`i=${i} got ${setRoomVisible.mock.calls[i]} want ${v}`);
                 }
             });

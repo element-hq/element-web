@@ -140,7 +140,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             const inReplyToEventId = getParentEventId(ev);
             if (!inReplyToEventId) return null;
             return await this.getEvent(inReplyToEventId);
-        } catch (e) {
+        } catch {
             return null;
         }
     }
@@ -154,7 +154,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             // ask the client to fetch the event we want using the context API, only interface to do so is to ask
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
             await this.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
-        } catch (e) {
+        } catch {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
             // Return null as it is falsy and thus should be treated as an error (as the event cannot be resolved).
             return null;

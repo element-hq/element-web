@@ -13,7 +13,7 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { ReadyWatchingStore } from "./ReadyWatchingStore";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
-export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {
+export abstract class AsyncStoreWithClient<T extends object> extends AsyncStore<T> {
     protected readyStore: ReadyWatchingStore;
 
     protected constructor(dispatcher: MatrixDispatcher, initialState: T = <T>{}) {

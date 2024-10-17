@@ -55,7 +55,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
         this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
-        this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
+        if (this.wrapperElement.current) this.resizeObserver.observe(this.wrapperElement.current);
     }
 
     public componentWillUnmount(): void {

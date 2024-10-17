@@ -247,11 +247,11 @@ describe("MessageComposer", () => {
         });
 
         describe("UIStore interactions", () => {
-            let resizeCallback: Function;
+            let resizeCallback: (key: string, data: object) => void;
 
             beforeEach(() => {
                 jest.spyOn(UIStore.instance, "on").mockImplementation(
-                    (_event: string | symbol, listener: Function): any => {
+                    (_event: string | symbol, listener: (key: string, data: object) => void): any => {
                         resizeCallback = listener;
                     },
                 );

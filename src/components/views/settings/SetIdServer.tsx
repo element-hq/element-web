@@ -52,7 +52,7 @@ async function checkIdentityServerUrl(u: string): Promise<string | null> {
         } else {
             return _t("identity_server|error_connection");
         }
-    } catch (e) {
+    } catch {
         return _t("identity_server|error_connection");
     }
 }

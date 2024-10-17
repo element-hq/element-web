@@ -57,7 +57,7 @@ export default class LocalEchoWrapper extends SettingsHandler {
 
         try {
             await handlerPromise;
-        } catch (e) {
+        } catch {
             // notify of a rollback
             this.handler.watchers?.notifyUpdate(settingName, roomId, this.level, currentValue);
         } finally {

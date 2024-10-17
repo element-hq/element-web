@@ -90,7 +90,7 @@ export class MemberListStore {
             // load using traditional lazy loading
             try {
                 await room.loadMembersIfNeeded();
-            } catch (ex) {
+            } catch {
                 /* already logged in RoomView */
             }
         }

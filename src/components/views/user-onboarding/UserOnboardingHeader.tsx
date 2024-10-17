@@ -34,6 +34,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
     let actionLabel: string;
 
     switch (useCase) {
+        /* eslint-disable @typescript-eslint/no-require-imports */
         case UseCase.PersonalMessaging:
             title = _t("onboarding|personal_messaging_title");
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
@@ -60,6 +61,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
             actionLabel = _t("onboarding|personal_messaging_action");
             break;
+        /* eslint-enable @typescript-eslint/no-require-imports */
     }
 
     return (

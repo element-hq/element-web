@@ -50,7 +50,7 @@ export class Jitsi {
         try {
             const response = await fetch(`https://${this.preferredDomain}/.well-known/element/jitsi`);
             data = await response.json();
-        } catch (error) {
+        } catch {
             return null;
         }
         if (data.auth) {

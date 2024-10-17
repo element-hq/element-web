@@ -148,7 +148,7 @@ export const options: Opts = {
                             };
                         }
                     }
-                } catch (e) {
+                } catch {
                     // OK fine, it's not actually a permalink
                 }
                 break;
@@ -215,7 +215,7 @@ export const options: Opts = {
                 } else {
                     return "_blank";
                 }
-            } catch (e) {
+            } catch {
                 // malformed URI
             }
         }

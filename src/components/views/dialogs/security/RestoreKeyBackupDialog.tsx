@@ -127,7 +127,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             decodeRecoveryKey(recoveryKey);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }

@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getDisplayAliasForAliasSet(canonicalAlias: string | null, altAliases: string[]): string | null {
     // E.g. prefer one of the aliases over another
     return null;

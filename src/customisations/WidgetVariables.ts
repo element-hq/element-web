@@ -17,6 +17,7 @@ import { ITemplateParams } from "matrix-widget-api";
  * This will not be called until after isReady() resolves.
  * @returns {Partial<Omit<ITemplateParams, "widgetRoomId">>} The variables.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function provideVariables(): Partial<Omit<ITemplateParams, "widgetRoomId">> {
     return {};
 }
@@ -26,6 +27,7 @@ function provideVariables(): Partial<Omit<ITemplateParams, "widgetRoomId">> {
  * to be provided. This will block widgets being rendered.
  * @returns {Promise<boolean>} Resolves when ready.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function isReady(): Promise<void> {
     return; // default no waiting
 }

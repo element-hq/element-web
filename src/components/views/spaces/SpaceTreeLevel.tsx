@@ -176,7 +176,7 @@ interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     activeSpaces: SpaceKey[];
     isNested?: boolean;
     isPanelCollapsed?: boolean;
-    onExpand?: Function;
+    onExpand?: () => void;
     parents?: Set<string>;
     innerRef?: LegacyRef<HTMLLIElement>;
     dragHandleProps?: DraggableProvidedDragHandleProps | null;

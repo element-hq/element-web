@@ -40,7 +40,7 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
         try {
             await saveDeviceName(deviceName);
             stopEditing();
-        } catch (error) {
+        } catch {
             setError(_t("settings|sessions|error_set_name"));
             setIsLoading(false);
         }

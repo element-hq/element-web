@@ -86,7 +86,6 @@ describe("Terms", function () {
                 policy_the_first: POLICY_ONE,
             },
         });
-        mockClient.agreeToTerms;
 
         const interactionCallback = jest.fn();
         await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);

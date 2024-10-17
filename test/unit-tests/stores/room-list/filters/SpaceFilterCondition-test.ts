@@ -17,7 +17,7 @@ import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 
 jest.mock("../../../../../src/settings/SettingsStore");
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const EventEmitter = require("events");
     class MockSpaceStore extends EventEmitter {
         isRoomInSpace = jest.fn();

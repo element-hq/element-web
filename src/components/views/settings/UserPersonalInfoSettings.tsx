@@ -61,7 +61,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
             setEmails(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Email));
             setPhoneNumbers(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Phone));
             setLoadingState("loaded");
-        } catch (e) {
+        } catch {
             setLoadingState("error");
         }
     }, [client]);

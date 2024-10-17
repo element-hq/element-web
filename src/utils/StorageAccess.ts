@@ -21,7 +21,7 @@ export function getIDBFactory(): IDBFactory | undefined {
         // We check `self` first because `window` returns something which doesn't work for service workers.
         // Note: `self?.indexedDB ?? window.indexedDB` breaks in service workers for unknown reasons.
         return self?.indexedDB ? self.indexedDB : window.indexedDB;
-    } catch (e) {}
+    } catch {}
 }
 
 let idb: IDBDatabase | null = null;

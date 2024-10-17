@@ -15,8 +15,10 @@ import { SetupEncryptionStore, Phase } from "../../../../stores/SetupEncryptionS
 
 function iconFromPhase(phase?: Phase): string {
     if (phase === Phase.Done) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require("../../../../../res/img/e2e/verified-deprecated.svg").default;
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require("../../../../../res/img/e2e/warning-deprecated.svg").default;
     }
 }
