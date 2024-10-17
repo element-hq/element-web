@@ -147,7 +147,7 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
 
     return (
         <div className="mx_MLocationBody">
-            <Tooltip label={tooltip}>
+            <Tooltip description={tooltip}>
                 <div className="mx_MLocationBody_map">{mapElement}</div>
             </Tooltip>
         </div>
