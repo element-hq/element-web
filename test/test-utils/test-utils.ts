@@ -97,7 +97,6 @@ export function createTestClient(): MatrixClient {
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         getStoredCrossSigningForUser: jest.fn(),
         getStoredDevice: jest.fn(),
-        requestVerification: jest.fn(),
         deviceId: "ABCDEFGHI",
         getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
         getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),

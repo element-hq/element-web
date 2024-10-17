@@ -52,7 +52,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { legacyVerifyUser, verifyDevice, verifyUser } from "../../../verification";
+import { verifyDevice, verifyUser } from "../../../verification";
 import { Action } from "../../../dispatcher/actions";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
@@ -1551,13 +1551,7 @@ const BasicUserInfo: React.FC<{
                     <AccessibleButton
                         kind="link"
                         className="mx_UserInfo_field mx_UserInfo_verifyButton"
-                        onClick={() => {
-                            if (hasCrossSigningKeys) {
-                                verifyUser(cli, member as User);
-                            } else {
-                                legacyVerifyUser(cli, member as User);
-                            }
-                        }}
+                        onClick={() => verifyUser(cli, member as User)}
                     >
                         {_t("action|verify")}
                     </AccessibleButton>
