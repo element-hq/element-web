@@ -1,0 +1,911 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C
+Copyright 2017-2019 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
+@import url("@vector-im/compound-web/dist/style.css");
+@import "./_font-sizes.pcss";
+@import "./_animations.pcss";
+@import "./_spacing.pcss";
+@import url("maplibre-gl/dist/maplibre-gl.css");
+
+:root {
+    --container-border-width: 8px;
+    --container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
+    --transition-short: 0.1s;
+    --transition-standard: 0.3s;
+    --buttons-dialog-gap-row: $spacing-8;
+    --buttons-dialog-gap-column: $spacing-8;
+    --MBody-border-radius: 8px;
+
+    /* Expected z-indexes for dialogs:
+        4000 - Default wrapper index
+        4009 - Static dialog background
+        4010 - Static dialog itself
+        4011 - Standard dialog background
+        4012 - Standard dialog itself
+
+       These are set up such that the static dialog always appears
+       underneath the standard dialogs.
+     */
+    --dialog-zIndex-wrapper-default: 4000;
+    --dialog-zIndex-static-background: 4009;
+    --dialog-zIndex-static: calc(var(--dialog-zIndex-static-background) + 1); /* 4010 */
+    --dialog-zIndex-standard-background: calc(var(--dialog-zIndex-static) + 1); /* 4011 */
+    --dialog-zIndex-standard: calc(var(--dialog-zIndex-standard-background) + 1); /* 4012 */
+}
+
+#matrixchat {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    contain: strict;
+}
+#mx_ContextualMenu_Container,
+#mx_PersistedElement_container,
+#mx_Dialog_Container,
+#mx_Dialog_StaticContainer {
+    /* This is required to ensure Compound tooltips correctly draw where they should with z-index: auto */
+    isolation: isolate;
+}
+
+/**
+ * We need to increase the specificity of the selector to override the
+ * custom property set by the design tokens package
+ */
+[class^="cpd-theme"][class^="cpd-theme"] {
+    /**
+     * The design tokens package currently does not expose the fallback fonts
+     * We want to keep on re-using `$font-family` to not break custom themes
+     * and because we can to use `Twemoji` to display emoji rather than using
+     * system ones
+     */
+    --cpd-font-family-sans: $font-family;
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --transition-short: 0;
+        --transition-standard: 0;
+    }
+}
+
+html {
+    /* hack to stop overscroll bounce on OSX and iOS.
+       N.B. Breaks things when we have legitimate horizontal overscroll */
+    height: 100%;
+    overflow: hidden;
+    /* Stop similar overscroll bounce in Firefox Nightly for macOS */
+    overscroll-behavior: none;
+}
+
+body {
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    /**
+     * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
+     * We need to tweak the `letter-spacing` property and doing so, disables by
+     * default the optional ligatures
+     * `font-feature-settings` allows us to override this behaviour and have the
+     * correct ligatures and the proper dynamic metric spacing.
+     */
+    font-feature-settings:
+        "kern" 1,
+        "liga" 1,
+        "calt" 1;
+
+    background-color: $background;
+    color: $primary-content;
+    border: 0px;
+    margin: 0px;
+
+    /* needed to match the designs correctly on macOS */
+    /* see https://github.com/vector-im/element-web/issues/11425 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+pre,
+code {
+    font-family: $monospace-font-family;
+    font-size: 100% !important;
+}
+
+.error,
+.warning,
+.text-error,
+.text-warning {
+    color: $alert;
+}
+
+.text-success {
+    color: $accent;
+}
+
+.text-muted {
+    color: $muted-fg-color;
+}
+
+.text-primary {
+    color: $primary-content;
+}
+
+.text-secondary {
+    color: $secondary-content;
+}
+
+.mx_Verified {
+    color: $e2e-verified-color;
+}
+
+.mx_Untrusted {
+    color: $e2e-warning-color;
+}
+
+b {
+    /* On Firefox, the default weight for `<b>` is `bolder` which results in no bold */
+    /* effect since we only have specific weights of our fonts available. */
+    font-weight: bold;
+}
+
+h2 {
+    color: $primary-content;
+    font: var(--cpd-font-heading-lg-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+a:hover,
+a:link,
+a:visited {
+    color: $accent-alt;
+}
+
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="text"],
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="search"],
+:not(.mx_no_textinput):not(.mx_textinput):not(.mx_Field) > input[type="password"] {
+    padding: 9px;
+    font: var(--cpd-font-body-md-semibold);
+    font-weight: var(--cpd-font-weight-semibold);
+    min-width: 0;
+}
+
+input[type="text"].mx_textinput_icon,
+input[type="search"].mx_textinput_icon {
+    padding-left: 36px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+/* FIXME THEME - Tint by CSS rather than referencing a duplicate asset */
+input[type="text"].mx_textinput_icon.mx_textinput_search,
+input[type="search"].mx_textinput_icon.mx_textinput_search {
+    background-image: url("$(res)/img/feather-customised/search-input.svg");
+}
+
+/* dont search UI as not all browsers support it, */
+/* we implement it ourselves where needed instead */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}
+
+/* Override Firefox's UA style so we get a consistent look across browsers */
+input::placeholder,
+textarea::placeholder {
+    opacity: initial;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    background-color: transparent;
+    color: $primary-content;
+}
+
+/* Required by Firefox */
+textarea {
+    color: $primary-content;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* This is used to hide the standard outline added by browsers for */
+/* accessible (focusable) components. Not intended for buttons, but */
+/* should be used on things like focusable containers where the outline */
+/* is usually not helping anyone. */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* override defaults */
+fieldset {
+    display: inline-block;
+    margin-inline: unset;
+    padding-block: unset;
+    padding-inline: unset;
+    min-inline-size: unset;
+    border: none;
+}
+
+summary {
+    cursor: pointer;
+}
+
+legend {
+    padding-inline: unset;
+    border: none;
+}
+
+/* .mx_textinput is a container for a text input */
+/* + some other controls like buttons, ... */
+/* it has the appearance of a text box so the controls */
+/* appear to be part of the input */
+
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
+    .mx_textinput > input[type="text"],
+    .mx_textinput > input[type="search"] {
+        border: none;
+        flex: 1;
+        color: $primary-content;
+    }
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"],
+    .mx_textinput {
+        display: block;
+        box-sizing: border-box;
+        background-color: transparent;
+        color: $input-darker-fg-color;
+        border-radius: 4px;
+        border: 1px solid $secondary-hairline-color;
+        /* these things should probably not be defined globally */
+        margin: 9px;
+    }
+
+    .mx_textinput {
+        display: flex;
+        align-items: center;
+    }
+
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $input-placeholder;
+    }
+}
+
+/* Prevent ugly dotted highlight around selected elements in Firefox */
+::-moz-focus-inner {
+    border: 0;
+}
+
+/* These are magic constants which are excluded from tinting, to let themes */
+/* (which only have CSS) tell the app what their non-tinted */
+/* colourscheme is by inspecting the stylesheet DOM. */
+/* They are not used for layout!! */
+#mx_theme_accentColor {
+    color: $accent;
+}
+
+#mx_theme_secondaryAccentColor {
+    color: $secondary-accent-color;
+}
+
+.mx_Dialog_wrapper {
+    position: fixed;
+    z-index: var(--dialog-zIndex-wrapper-default);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_Dialog_border {
+    z-index: var(--dialog-zIndex-standard);
+    position: relative;
+    width: 100%;
+    max-width: fit-content;
+    box-sizing: border-box;
+    max-height: calc(100% - var(--cpd-space-6x));
+    display: flex;
+    flex-direction: column;
+
+    .mx_Dialog_lightbox & {
+        /* The lightbox isn't so much of a dialog as a fullscreen overlay. We
+        don't want the glass border. */
+        display: contents;
+    }
+}
+
+.mx_Dialog {
+    background-color: $background;
+    color: $light-fg-color;
+    font-size: $font-15px;
+    position: relative;
+    padding: var(--cpd-space-8x) var(--cpd-space-10x);
+    box-sizing: border-box;
+    overflow-y: auto;
+
+    .mx_Dialog_staticWrapper & {
+        z-index: var(--dialog-zIndex-static);
+        contain: content;
+    }
+
+    .mx_Dialog_lightbox & {
+        border-radius: 0px;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        pointer-events: none;
+        padding: 0;
+    }
+
+    /* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
+    .markdown-body {
+        font: var(--cpd-font-body-md-regular) !important;
+        letter-spacing: var(--cpd-font-letter-spacing-body-md);
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
+        background-color: inherit;
+        color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+
+        pre,
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $codeblock-background-color;
+        }
+
+        /* this selector wrongly applies to code blocks too but we will unset it in the next one */
+        code {
+            white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+        }
+
+        pre {
+            /* have to use overlay rather than auto otherwise Linux and Windows */
+            /* Chrome gets very confused about vertical spacing: */
+            /* https://github.com/vector-im/vector-web/issues/754 */
+            overflow-x: overlay;
+            overflow-y: visible;
+
+            &::-webkit-scrollbar-corner {
+                background: transparent;
+            }
+
+            code {
+                white-space: pre; /* we want code blocks to be scrollable and not wrap */
+
+                > * {
+                    display: inline;
+                }
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: inherit !important;
+            color: inherit;
+        }
+
+        /* Make h1 and h2 the same size as h3. */
+        h1,
+        h2 {
+            font-size: 1.5em;
+            border-bottom: none !important; /* override GFM */
+        }
+
+        a {
+            color: $accent-alt;
+        }
+
+        blockquote {
+            border-left: 2px solid $blockquote-bar-color;
+            color: $secondary-content;
+            border-radius: 2px;
+            padding: 0 10px;
+        }
+    }
+}
+
+.mx_Dialog_fixedWidth {
+    width: 60vw;
+    max-width: 704px;
+}
+
+.mx_Dialog_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $dialog-backdrop-color;
+    z-index: var(--dialog-zIndex-standard-background);
+
+    &.mx_Dialog_staticBackground {
+        z-index: var(--dialog-zIndex-static-background);
+    }
+
+    .mx_Dialog_wrapperWithStaticUnder & {
+        /* Roughly half of what it would normally be - we don't want to black out */
+        /* the app, just make it clear that the dialogs are stacked. */
+        opacity: 0.4;
+    }
+
+    .mx_Dialog_lightbox & {
+        opacity: $lightbox-background-bg-opacity;
+        background-color: $lightbox-background-bg-color;
+        animation-name: mx_Dialog_lightbox_background_keyframes;
+        animation-duration: 300ms;
+    }
+}
+
+.mx_Dialog_titleImage {
+    vertical-align: sub;
+    width: 25px;
+    height: 25px;
+    margin-left: -2px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+}
+
+.mx_Dialog_title {
+    color: $dialog-title-fg-color;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
+
+    &.danger {
+        color: $alert;
+    }
+}
+
+.mx_Dialog_header {
+    position: relative;
+    padding: 0;
+    padding-inline-end: 20px; /* Reserve room for the close button */
+    margin-bottom: var(--cpd-space-2x);
+
+    &.mx_Dialog_headerWithButton > .mx_Dialog_title {
+        text-align: center;
+    }
+}
+
+@define-mixin customisedCancelButton {
+    cursor: pointer;
+    position: relative;
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+
+    &::before {
+        content: "";
+        width: 28px;
+        height: 28px;
+        left: 0;
+        top: 0;
+        position: absolute;
+        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 20px;
+        background-color: var(--cpd-color-icon-secondary);
+    }
+}
+
+.mx_Dialog_cancelButton {
+    @mixin customisedCancelButton;
+    position: absolute;
+    top: var(--cpd-space-4x);
+    right: var(--cpd-space-4x);
+}
+
+.mx_Dialog_content {
+    margin: 24px 0 68px;
+    font: var(--cpd-font-body-md-regular);
+    color: $primary-content;
+    word-wrap: break-word;
+}
+
+.mx_Dialog_buttons {
+    margin-top: $spacing-20;
+    margin-inline-start: auto;
+    text-align: right;
+
+    .mx_Dialog_buttons_additive {
+        /* The consumer is responsible for positioning their elements. */
+        float: left;
+    }
+
+    .mx_Dialog_buttons_row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        text-align: initial;
+        margin-inline-start: auto;
+
+        /* default gap among elements */
+        column-gap: var(--buttons-dialog-gap-column);
+        row-gap: var(--buttons-dialog-gap-row);
+
+        button {
+            margin: 0 !important; /* override the margin settings */
+        }
+    }
+}
+
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 24px;
+    font: var(--cpd-font-body-md-regular);
+    color: $button-fg-color;
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+
+    &:not(:focus-visible) {
+        outline: none;
+    }
+}
+
+/* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
+ * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
+ * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
+ * We should go through and have one consistent set of styles for buttons throughout the app.
+ * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
+ *
+ * Elements that should not be styled like a dialog button are mentioned in a :not() pseudo-class.
+ * For the widest browser support, we use multiple :not pseudo-classes instead of :not(.a, .b).
+ */
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button),
+.mx_Dialog input[type="submit"],
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
+.mx_Dialog_buttons input[type="submit"] {
+    @mixin mx_DialogButton;
+    margin-left: 0px;
+    margin-right: var(--buttons-dialog-gap-column);
+    margin-bottom: 5px;
+
+    /* flip colours for the secondary ones */
+    font-weight: var(--cpd-font-weight-semibold);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    color: var(--cpd-color-text-primary);
+    background-color: transparent;
+    font-family: inherit;
+}
+
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):last-child {
+    margin-right: 0px;
+}
+
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):focus,
+.mx_Dialog input[type="submit"]:focus,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
+.mx_Dialog_buttons input[type="submit"]:focus {
+    filter: brightness($focus-brightness);
+}
+
+.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog input[type="submit"].mx_Dialog_primary,
+.mx_Dialog_buttons
+    button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button),
+.mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-bg-action-primary-rest);
+    border-color: var(--cpd-color-bg-action-primary-rest);
+    min-width: 156px;
+}
+
+.mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog input[type="submit"].danger,
+.mx_Dialog_buttons
+    button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_UserProfileSettings button):not(
+        .mx_ThemeChoicePanel_CustomTheme button
+    ):not(.mx_UnpinAllDialog button),
+.mx_Dialog_buttons input[type="submit"].danger {
+    background-color: var(--cpd-color-bg-critical-primary);
+    border: solid 1px var(--cpd-color-bg-critical-primary);
+    color: var(--cpd-color-text-on-solid-primary);
+}
+
+.mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog input[type="submit"].warning {
+    border: solid 1px var(--cpd-color-border-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+}
+
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
+        .mx_UserProfileSettings button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):disabled,
+.mx_Dialog input[type="submit"]:disabled,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
+.mx_Dialog_buttons input[type="submit"]:disabled {
+    background-color: $light-fg-color;
+    border: solid 1px $light-fg-color;
+    opacity: 0.7;
+}
+
+/* Spinner Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_spinner {
+    /* This is not a real dialog, so we shouldn't show a glass border */
+    .mx_Dialog_border {
+        display: contents;
+    }
+
+    .mx_Dialog {
+        inline-size: auto;
+        block-size: auto;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: none;
+
+        /* Don't show scroll-bars on spinner dialogs */
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}
+
+/* TODO: Review mx_GeneralButton usage to see if it can use a different class */
+/* These classes were brought in from the old UserSettings and are included here to avoid */
+/* breaking the app. */
+/* Ref: https://github.com/vector-im/element-web/issues/8420 */
+.mx_GeneralButton {
+    @mixin mx_DialogButton;
+    display: inline;
+    margin: auto;
+}
+
+.mx_TextInputDialog_label {
+    text-align: left;
+    padding-bottom: 12px;
+}
+
+.mx_TextInputDialog_input {
+    font-size: $font-15px;
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $primary-content;
+    background-color: $background;
+}
+
+.mx_button_row {
+    margin-top: 69px;
+}
+
+/* username colors */
+/* used by SenderProfile & RoomPreviewBar */
+.mx_Username_color1 {
+    color: $username-variant1-color;
+}
+
+.mx_Username_color2 {
+    color: $username-variant2-color;
+}
+
+.mx_Username_color3 {
+    color: $username-variant3-color;
+}
+
+.mx_Username_color4 {
+    color: $username-variant4-color;
+}
+
+.mx_Username_color5 {
+    color: $username-variant5-color;
+}
+
+.mx_Username_color6 {
+    color: $username-variant6-color;
+}
+
+.mx_AppWarning,
+.mx_AppPermission {
+    text-align: center;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+@define-mixin ProgressBarColour $colour {
+    color: $colour;
+    &::-moz-progress-bar {
+        background-color: $colour;
+    }
+    &::-webkit-progress-value {
+        background-color: $colour;
+    }
+}
+
+@define-mixin ProgressBarBgColour $colour {
+    background-color: $colour;
+    &::-webkit-progress-bar {
+        background-color: $colour;
+    }
+}
+
+@define-mixin ProgressBarBorderRadius $radius {
+    border-radius: $radius;
+    &::-moz-progress-bar {
+        border-radius: $radius;
+    }
+    &::-webkit-progress-bar,
+    &::-webkit-progress-value {
+        border-radius: $radius;
+    }
+}
+
+@define-mixin unreal-focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+
+    /* WebKit gets its native focus styles. */
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
+    }
+}
+
+@define-mixin ButtonResetDefault {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    cursor: pointer;
+}
+
+@define-mixin LegacyCallButton {
+    box-sizing: border-box;
+    font-weight: var(--cpd-font-weight-semibold);
+    height: $font-24px;
+    line-height: $font-24px;
+    margin-right: 0;
+
+    span {
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: "";
+            display: inline-block;
+            background-color: $button-fg-color;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            margin-right: 8px;
+        }
+    }
+}
+
+@define-mixin ThreadRepliesAmount {
+    color: $secondary-content;
+    font-weight: var(--cpd-font-weight-semibold);
+    white-space: nowrap;
+    position: relative;
+    padding: 0 $spacing-12 0 $spacing-8;
+}
+
+@define-mixin ThreadSummaryIcon {
+    content: "";
+    display: inline-block;
+    mask-image: url("@vector-im/compound-design-tokens/icons/threads.svg");
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    height: 18px;
+    min-width: 18px;
+    background-color: $icon-button-color !important;
+}
+
+@define-mixin composerButtonHighLight {
+    background: var(--cpd-color-bg-subtle-primary);
+    &::before {
+        background-color: var(--cpd-color-icon-primary) !important;
+    }
+}
+
+@define-mixin composerButton $border-radius, $hover-color, $hover-bg {
+    --size: 26px;
+    position: relative;
+    cursor: pointer;
+    height: var(--size);
+    line-height: var(--size);
+    width: auto;
+    padding-left: var(--size);
+    border-radius: $border-radius;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        height: 20px;
+        width: 20px;
+        background-color: $icon-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        z-index: 2;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        width: var(--size);
+        height: var(--size);
+        border-radius: $border-radius;
+    }
+
+    &:hover {
+        &::after {
+            background: $hover-bg;
+        }
+
+        &::before {
+            background-color: $hover-color;
+        }
+    }
+}
+
+.mx_lineClamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--mx-line-clamp, 1);
+    overflow: hidden;
+}

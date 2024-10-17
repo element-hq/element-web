@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Advanced
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Room information
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div>
+                <span>
+                  Internal room ID
+                </span>
+                <div
+                  class="mx_CopyableText mx_CopyableText_border"
+                >
+                  !room:example.com
+                  <div
+                    aria-label="Copy"
+                    class="mx_AccessibleButton mx_CopyableText_copyButton"
+                    role="button"
+                    tabindex="0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Room version
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div>
+                <span>
+                  Room version:
+                </span>
+                 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

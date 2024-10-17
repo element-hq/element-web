@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import fetchMock from "fetch-mock-jest";
 
+import SdkConfig from "../../src/SdkConfig";
+import PlatformPeg from "../../src/PlatformPeg";
 import { loadApp } from "../../src/vector/app";
 import WebPlatform from "../../src/vector/platform/WebPlatform";
 

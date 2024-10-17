@@ -1,0 +1,232 @@
+/* Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847 */
+$accent: var(--cpd-color-text-action-accent);
+$alert: var(--cpd-color-text-critical-primary);
+$links: var(--cpd-color-text-link-external);
+$primary-content: var(--cpd-color-text-primary);
+$secondary-content: var(--cpd-color-text-secondary);
+$tertiary-content: var(--cpd-color-gray-800);
+$quaternary-content: var(--cpd-color-gray-600);
+$quinary-content: var(--cpd-color-gray-400);
+
+$username-variant1-color: var(--cpd-color-text-decorative-1);
+$username-variant2-color: var(--cpd-color-text-decorative-2);
+$username-variant3-color: var(--cpd-color-text-decorative-3);
+$username-variant4-color: var(--cpd-color-text-decorative-4);
+$username-variant5-color: var(--cpd-color-text-decorative-5);
+$username-variant6-color: var(--cpd-color-text-decorative-6);
+
+$accent-alt: $links;
+$input-border-color: $secondary-content;
+$input-darker-bg-color: $quinary-content;
+$input-darker-fg-color: $secondary-content;
+$resend-button-divider-color: $input-darker-bg-color;
+$icon-button-color: var(--cpd-color-icon-tertiary);
+$theme-button-bg-color: $quinary-content;
+/* not using a compound color here for now as we want to have the same color in
+   light and dark theme. Until we have a non-symetrical token for it, let's keep
+   it hardcoded to the following value */
+$presence-offline: #e3e8f0;
+$pinned-color: $tertiary-content;
+$button-secondary-bg-color: $accent-fg-color;
+$message-action-bar-fg-color: $primary-content;
+$voice-record-stop-border-color: $quinary-content;
+$voice-record-icon-color: $tertiary-content;
+$roomtopic-color: $secondary-content;
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
+
+/* Draw an outline on buttons with focus */
+.mx_AccessibleButton:focus {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+}
+
+.mx_BasicMessageComposer .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_TextualEvent {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $input-darker-fg-color !important;
+    }
+}
+
+.mx_UserMenu_contextMenu .mx_UserMenu_contextMenu_header .mx_UserMenu_contextMenu_themeButton {
+    background-color: $panel-actions !important;
+}
+
+.mx_ThemeChoicePanel_themeSelectors > .mx_StyledRadioButton input[type="radio"]:disabled + div {
+    border-color: $primary-content;
+}
+
+.mx_ThemeChoicePanel_themeSelectors > .mx_StyledRadioButton.mx_StyledRadioButton_disabled {
+    color: $primary-content;
+}
+
+.mx_RoomSearch {
+    &.mx_RoomSearch_focused,
+    &.mx_RoomSearch_hasQuery {
+        .mx_RoomSearch_clearButton {
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+}
+
+.mx_PollCreateDialog {
+    .mx_PollCreateDialog_option {
+        .mx_PollCreateDialog_removeOption {
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+}
+
+.mx_Dialog_buttons button.mx_LocationPicker_cancelButton::before {
+    background-color: $background !important;
+}
+
+.mx_SpotlightDialog_wrapper .mx_Dialog {
+    #mx_SpotlightDialog_keyboardPrompt {
+        kbd {
+            color: $background !important;
+        }
+    }
+}
+
+.mx_SpotlightDialog {
+    .mx_SpotlightDialog_searchBox {
+        > .mx_SpotlightDialog_filter {
+            color: $background !important;
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+    #mx_SpotlightDialog_content {
+        .mx_SpotlightDialog_recentlyViewed {
+            .mx_SpotlightDialog_option {
+                &:hover,
+                &[aria-selected="true"] {
+                    color: $background !important;
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_results,
+        .mx_SpotlightDialog_recentSearches,
+        .mx_SpotlightDialog_otherSearches,
+        .mx_SpotlightDialog_hiddenResults {
+            .mx_SpotlightDialog_option {
+                &:hover,
+                &[aria-selected="true"] {
+                    background-color: $quinary-content !important;
+                    color: $background !important;
+
+                    &.mx_SpotlightDialog_startChat::before,
+                    &.mx_SpotlightDialog_joinRoomAlias::before,
+                    &.mx_SpotlightDialog_explorePublicRooms::before,
+                    &.mx_SpotlightDialog_startGroupChat::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_publicRoomDetails {
+                        .mx_SpotlightDialog_result_publicRoomHeader {
+                            .mx_SpotlightDialog_result_publicRoomName {
+                                color: $background;
+                            }
+                            .mx_SpotlightDialog_result_publicRoomAlias {
+                                color: $background;
+                            }
+                        }
+                        .mx_SpotlightDialog_result_publicRoomDescription {
+                            color: $background;
+                        }
+                    }
+
+                    .mx_NotificationBadge {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_details {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_enterPrompt {
+            background-color: $background !important;
+        }
+    }
+}
+
+.mx_GenericDropdownMenu_button:hover,
+.mx_GenericDropdownMenu_button[aria-expanded="true"] {
+    color: $background !important;
+}
+
+.mx_ContextualMenu_wrapper.mx_GenericDropdownMenu_wrapper {
+    .mx_GenericDropdownMenu_Option {
+        &.mx_GenericDropdownMenu_Option--item {
+            &:hover {
+                background-color: $quinary-content !important;
+                color: $background !important;
+
+                &[aria-checked="true"]::before {
+                    background-color: $background !important;
+                }
+
+                > .mx_GenericDropdownMenu_Option--label {
+                    span:first-child {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mx_NetworkDropdown_removeServer::before {
+    background-color: $background !important;
+}

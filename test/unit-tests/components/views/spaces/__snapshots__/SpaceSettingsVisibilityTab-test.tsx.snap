@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpaceSettingsVisibilityTab /> for a public space Access renders guest access section toggle 1`] = `
+<div
+  aria-checked="true"
+  aria-disabled="false"
+  aria-labelledby="mx_LabelledToggleSwitch_testid_1"
+  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+  role="switch"
+  tabindex="0"
+>
+  <div
+    class="mx_ToggleSwitch_ball"
+  />
+</div>
+`;
+
+exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Visibility
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <fieldset
+            class="mx_SettingsFieldset"
+            data-testid="access-fieldset"
+          >
+            <legend
+              class="mx_SettingsFieldset_legend"
+            >
+              Access
+            </legend>
+            <div
+              class="mx_SettingsFieldset_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Decide who can view and join mock-space.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFieldset_content"
+            >
+              <label
+                class="mx_StyledRadioButton mx_JoinRuleSettings_radioButton mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
+              >
+                <input
+                  aria-describedby="joinRule-invite-description"
+                  checked=""
+                  disabled=""
+                  id="joinRule-invite"
+                  name="joinRule"
+                  type="radio"
+                  value="invite"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  class="mx_StyledRadioButton_content"
+                >
+                  Private (invite only)
+                </div>
+                <div
+                  class="mx_StyledRadioButton_spacer"
+                />
+              </label>
+              <span
+                id="joinRule-invite-description"
+              >
+                Only invited people can join.
+              </span>
+              <label
+                class="mx_StyledRadioButton mx_JoinRuleSettings_radioButton mx_StyledRadioButton_disabled"
+              >
+                <input
+                  aria-describedby="joinRule-public-description"
+                  disabled=""
+                  id="joinRule-public"
+                  name="joinRule"
+                  type="radio"
+                  value="public"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  class="mx_StyledRadioButton_content"
+                >
+                  Public
+                </div>
+                <div
+                  class="mx_StyledRadioButton_spacer"
+                />
+              </label>
+              <span
+                id="joinRule-public-description"
+              >
+                Anyone can find and join.
+              </span>
+              <div
+                class="mx_SettingsTab_toggleWithDescription"
+              >
+                <div
+                  class="mx_SettingsFlag"
+                >
+                  <span
+                    class="mx_SettingsFlag_label"
+                  >
+                    <div
+                      id="mx_LabelledToggleSwitch_testid_0"
+                    >
+                      Preview Space
+                    </div>
+                  </span>
+                  <div
+                    aria-checked="true"
+                    aria-disabled="false"
+                    aria-labelledby="mx_LabelledToggleSwitch_testid_0"
+                    class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                    role="switch"
+                    tabindex="0"
+                  >
+                    <div
+                      class="mx_ToggleSwitch_ball"
+                    />
+                  </div>
+                </div>
+                <p>
+                  Allow people to preview your space before they join.
+                  <br />
+                  <strong>
+                    Recommended for public spaces.
+                  </strong>
+                </p>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

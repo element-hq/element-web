@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExportE2eKeysDialog renders 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_exportE2eKeysDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Export room keys
+      </h1>
+    </div>
+    <form>
+      <div
+        class="mx_Dialog_content"
+      >
+        <p>
+          This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.
+        </p>
+        <p>
+          The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.
+        </p>
+        <div
+          class="error"
+        />
+        <div
+          class="mx_E2eKeysDialog_inputTable"
+        >
+          <div
+            class="mx_E2eKeysDialog_inputRow"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_PassphraseField"
+            >
+              <input
+                autocomplete="new-password"
+                id="mx_Field_1"
+                label="Enter passphrase"
+                placeholder="Enter passphrase"
+                type="password"
+                value=""
+              />
+              <label
+                for="mx_Field_1"
+              >
+                Enter passphrase
+              </label>
+            </div>
+          </div>
+          <div
+            class="mx_E2eKeysDialog_inputRow"
+          >
+            <div
+              class="mx_Field mx_Field_input"
+            >
+              <input
+                autocomplete="new-password"
+                id="mx_Field_2"
+                label="Confirm passphrase"
+                placeholder="Confirm passphrase"
+                type="password"
+                value=""
+              />
+              <label
+                for="mx_Field_2"
+              >
+                Confirm passphrase
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_Dialog_buttons"
+      >
+        <input
+          class="mx_Dialog_primary"
+          type="submit"
+          value="Export"
+        />
+        <button>
+          Cancel
+        </button>
+      </div>
+    </form>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

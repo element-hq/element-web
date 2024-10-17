@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MImageBody/> should generate a thumbnail if one isn't included for animated media 1`] = `
+<div>
+  <div
+    class="mx_MImageBody"
+  >
+    <a
+      href="https://server/_matrix/media/v3/download/server/image"
+    >
+      <div
+        class="mx_MImageBody_thumbnail_container"
+        style="max-height: 50px; max-width: 40px;"
+      >
+        <div
+          class="mx_MImageBody_placeholder"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <div
+          style="max-height: 50px; max-width: 40px;"
+        >
+          <img
+            alt="alt for a test image"
+            class="mx_MImageBody_thumbnail"
+            src="blob:generated-thumb"
+          />
+          <p
+            class="mx_MImageBody_gifLabel"
+          >
+            GIF
+          </p>
+        </div>
+        <div
+          style="height: 50px; width: 40px;"
+        />
+      </div>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`<MImageBody/> should show a thumbnail while image is being downloaded 1`] = `
+<div>
+  <div
+    class="mx_MImageBody"
+  >
+    <div
+      class="mx_MImageBody_thumbnail_container"
+      style="max-height: 50px; max-width: 40px;"
+    >
+      <div
+        class="mx_MImageBody_placeholder"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_Spinner_icon"
+            data-testid="spinner"
+            role="progressbar"
+            style="width: 32px; height: 32px;"
+          />
+        </div>
+      </div>
+      <div
+        style="max-height: 50px; max-width: 40px;"
+      />
+      <div
+        style="height: 50px; width: 40px;"
+      />
+    </div>
+  </div>
+</div>
+`;

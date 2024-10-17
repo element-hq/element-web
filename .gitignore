@@ -29,3 +29,5 @@ electron/pub
 /build_config.yaml
 /book
 /index.html
+# version file and tarball created by `npm pack` / `yarn pack`
+/git-revision.txt

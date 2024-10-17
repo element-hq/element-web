@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import VectorAuthPage from "../../../../../src/components/views/auth/VectorAuthPage";
 import { setupLanguageMock } from "../../../../setup/setupLanguage";

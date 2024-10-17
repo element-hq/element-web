@@ -1,0 +1,153 @@
+clients:
+    - client_id: 0000000000000000000SYNAPSE
+      client_auth_method: client_secret_basic
+      client_secret: "SomeRandomSecret"
+http:
+    listeners:
+        - name: web
+          resources:
+              - name: discovery
+              - name: human
+              - name: oauth
+              - name: compat
+              - name: graphql
+                playground: true
+              - name: assets
+                path: /usr/local/share/mas-cli/assets/
+          binds:
+              - address: "[::]:8080"
+          proxy_protocol: false
+        - name: internal
+          resources:
+              - name: health
+          binds:
+              - host: localhost
+                port: 8081
+          proxy_protocol: false
+    trusted_proxies:
+        - 192.128.0.0/16
+        - 172.16.0.0/12
+        - 10.0.0.0/10
+        - 127.0.0.1/8
+        - fd00::/8
+        - ::1/128
+    public_base: "http://localhost:{{MAS_PORT}}/"
+    issuer: http://localhost:{{MAS_PORT}}/
+database:
+    host: "{{POSTGRES_HOST}}"
+    port: 5432
+    database: postgres
+    username: postgres
+    password: "{{POSTGRES_PASSWORD}}"
+    max_connections: 10
+    min_connections: 0
+    connect_timeout: 30
+    idle_timeout: 600
+    max_lifetime: 1800
+telemetry:
+    tracing:
+        exporter: none
+        propagators: []
+    metrics:
+        exporter: none
+    sentry:
+        dsn: null
+templates:
+    path: /usr/local/share/mas-cli/templates/
+    assets_manifest: /usr/local/share/mas-cli/manifest.json
+    translations_path: /usr/local/share/mas-cli/translations/
+email:
+    from: '"Authentication Service" <root@localhost>'
+    reply_to: '"Authentication Service" <root@localhost>'
+    transport: smtp
+    mode: plain
+    hostname: "host.containers.internal"
+    port: %{{SMTP_PORT}}
+    username: username
+    password: password
+
+secrets:
+    encryption: 984b18e207c55ad5fbb2a49b217481a722917ee87b2308d4cf314c83fed8e3b5
+    keys:
+        - kid: YEAhzrKipJ
+          key: |
+              -----BEGIN RSA PRIVATE KEY-----
+              MIIEowIBAAKCAQEAuIV+AW5vx52I4CuumgSxp6yvKfIAnRdALeZZCoFkIGxUli1B
+              S79NJ3ls46oLh1pSD9RrhaMp6HTNoi4K3hnP9Q9v77pD7KwdFKG3UdG1zksIB0s/
+              +/Ey/DmX4LPluwBBS7r/LkQ1jk745lENA++oiDqZf2D/uP8jCHlvaSNyVKTqi1ki
+              OXPd4T4xBUjzuas9ze5jQVSYtfOidgnv1EzUipbIxgvH1jNt4raRlmP8mOq7xEnW
+              R+cF5x6n/g17PdSEfrwO4kz6aKGZuMP5lVlDEEnMHKabFSQDBl7+Mpok6jXutbtA
+              uiBnsKEahF9eoj4na4fpbRNPdIVyoaN5eGvm5wIDAQABAoIBAApyFCYEmHNWaa83
+              CdVSOrRhRDE9r+c0r79pcNT1ajOjrk4qFa4yEC4R46YntCtfY5Hd1pBkIjU0l4d8
+              z8Su9WTMEOwjQUEepS7L0NLi6kXZXYT8L40VpGs+32grBvBFHW0qEtQNrHJ36gMv
+              x2rXoFTF7HaXiSJx3wvVxAbRqOE9tBXLsmNHaWaAdWQG5o77V9+zvMri3cAeEg2w
+              VkKokb0dza7es7xG3tqS26k69SrwGeeuKo7qCHPH2cfyWmY5Yhv8iOoA59JzzbiK
+              UdxyzCHskrPSpRKVkVVwmY3RBt282TmSRG7td7e5ESSj50P2e5BI5uu1Hp/dvU4F
+              vYjV7kECgYEA6WqYoUpVsgQiqhvJwJIc/8gRm0mUy8TenI36z4Iim01Nt7fibWH7
+              XnsFqLGjXtYNVWvBcCrUl9doEnRbJeG2eRGbGKYAWVrOeFvwM4fYvw9GoOiJdDj4
+              cgWDe7eHbHE+UTqR7Nnr/UBfipoNWDh6X68HRBuXowh0Q6tOfxsrRFECgYEAyl/V
+              4b8bFp3pKZZCb+KPSYsQf793cRmrBexPcLWcDPYbMZQADEZ/VLjbrNrpTOWxUWJT
+              hr8MrWswnHO+l5AFu5CNO+QgV2dHLk+2w8qpdpFRPJCfXfo2D3wZ0c4cv3VCwv1V
+              5y7f6XWVjDWZYV4wj6c3shxZJjZ+9Hbhf3/twbcCgYA6fuRRR3fCbRbi2qPtBrEN
+              yO3gpMgNaQEA6vP4HPzfPrhDWmn8T5nXS61XYW03zxz4U1De81zj0K/cMBzHmZFJ
+              NghQXQmpWwBzWVcREvJWr1Vb7erEnaJlsMwKrSvbGWYspSj82oAxr3hCG+lMOpsw
+              b4S6pM+TpAK/EqdRY1WsgQKBgQCGoMaaTRXqL9bC0bEU2XVVCWxKb8c3uEmrwQ7/
+              /fD4NmjUzI5TnDps1CVfkqoNe+hAKddDFqmKXHqUOfOaxDbsFje+lf5l5tDVoDYH
+              fjTKKdYPIm7CiAeauYY7qpA5Vfq52Opixy4yEwUPp0CII67OggFtPaqY3zwJyWQt
+              +57hdQKBgGCXM/KKt7ceUDcNJxSGjvu0zD9D5Sv2ihYlEBT/JLaTCCJdvzREevaJ
+              1d+mpUAt0Lq6A8NWOMq8HPaxAik3rMQ0WtM5iG+XgsUqvTSb7NcshArDLuWGnW3m
+              MC4rM0UBYAS4QweduUSH1imrwH/1Gu5+PxbiecceRMMggWpzu0Bq
+              -----END RSA PRIVATE KEY-----
+        - kid: 8J1AxrlNZT
+          key: |
+              -----BEGIN EC PRIVATE KEY-----
+              MHcCAQEEIF1cjfIOEdy3BXJ72x6fKpEB8WP1ddZAUJAaqqr/6CpToAoGCCqGSM49
+              AwEHoUQDQgAEfHdNuI1Yeh3/uOq2PlnW2vymloOVpwBYebbw4VVsna9xhnutIdQW
+              dE8hkX8Yb0pIDasrDiwllVLzSvsWJAI0Kw==
+              -----END EC PRIVATE KEY-----
+        - kid: 3BW6un1EBi
+          key: |
+              -----BEGIN EC PRIVATE KEY-----
+              MIGkAgEBBDA+3ZV17r8TsiMdw1cpbTSNbyEd5SMy3VS1Mk/kz6O2Ev/3QZut8GE2
+              q3eGtLBoVQigBwYFK4EEACKhZANiAASs8Wxjk/uRimRKXnPr2/wDaXkN9wMDjYQK
+              mZULb+0ZP1/cXmuXuri8hUGhQvIU8KWY9PkpV+LMPEdpE54mHPKSLjq5CDXoSZ/P
+              9f7cdRaOZ000KQPZfIFR9ujJTtDN7Vs=
+              -----END EC PRIVATE KEY-----
+        - kid: pkZ0pTKK0X
+          key: |
+              -----BEGIN EC PRIVATE KEY-----
+              MHQCAQEEIHenfsXYPc5yzjZKUfvmydDR1YRwdsfZYvwHf/2wsYxooAcGBSuBBAAK
+              oUQDQgAEON1x7Vlu+nA0KvC5vYSOHhDUkfLYNZwYSLPFVT02h9E13yFFMIJegIBl
+              Aer+6PMZpPc8ycyeH9N+U9NAyliBhQ==
+              -----END EC PRIVATE KEY-----
+passwords:
+    enabled: true
+    schemes:
+        - version: 1
+          algorithm: argon2id
+matrix:
+    homeserver: localhost
+    secret: AnotherRandomSecret
+    endpoint: "{{SYNAPSE_URL}}"
+policy:
+    wasm_module: /usr/local/share/mas-cli/policy.wasm
+    client_registration_entrypoint: client_registration/violation
+    register_entrypoint: register/violation
+    authorization_grant_entrypoint: authorization_grant/violation
+    password_entrypoint: password/violation
+    email_entrypoint: email/violation
+    data:
+        client_registration:
+            allow_insecure_uris: true # allow non-SSL and localhost URIs
+            allow_missing_contacts: true # EW doesn't have contacts at this time
+upstream_oauth2:
+    providers: []
+branding:
+    service_name: null
+    policy_uri: null
+    tos_uri: null
+    imprint: null
+    logo_uri: null
+experimental:
+    access_token_ttl: 300
+    compat_token_ttl: 300

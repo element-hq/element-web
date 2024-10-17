@@ -1,0 +1,207 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021-2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ThreadPanel {
+    height: 100px;
+    overflow: visible;
+
+    /* Unset flex on the thread list, but not the thread view */
+    &:not(.mx_ThreadView) .mx_BaseCard_header .mx_BaseCard_header_title {
+        flex: unset;
+    }
+
+    .mx_BaseCard_header {
+        .mx_BaseCard_header_title {
+            .mx_AccessibleButton {
+                font-size: 12px;
+                color: $secondary-content;
+            }
+
+            .mx_ThreadPanel_vertical_separator {
+                height: 16px;
+                margin-left: var(--cpd-space-3x);
+                margin-right: var(--cpd-space-1x);
+                border-left: 1px solid var(--cpd-color-gray-400);
+            }
+
+            .mx_ThreadPanel_dropdown {
+                padding: 3px $spacing-4 3px $spacing-8;
+                border-radius: 4px;
+                line-height: 1.5;
+                user-select: none;
+
+                &:hover,
+                &[aria-expanded="true"] {
+                    background: $quinary-content;
+                }
+
+                &::before {
+                    content: "";
+                    width: 18px;
+                    height: 18px;
+                    background: currentColor;
+                    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+                    mask-size: 100%;
+                    mask-repeat: no-repeat;
+                    float: right;
+                }
+            }
+        }
+    }
+
+    .mx_AutoHideScrollbar,
+    .mx_RoomView_messagePanelSpinner {
+        background-color: $background;
+        border-radius: 8px;
+        padding-inline-end: 0;
+        overflow-y: scroll; /* set gap between the thread tile and the right border */
+        height: 100%;
+    }
+
+    .mx_EventTile[data-layout="group"] {
+        .mx_MessageActionBar {
+            right: 0;
+            top: -36px; /* 2px above EventTile */
+            z-index: 10; /* See _EventTile.pcss */
+        }
+    }
+
+    /* For style rules of EventTile in a thread, see _EventTile.pcss */
+    &.mx_ThreadView {
+        max-height: 100%;
+
+        .mx_ThreadView_timelinePanelWrapper {
+            position: relative;
+            min-height: 0; /* don't displace the composer */
+            flex-grow: 1;
+
+            .mx_FileDropTarget {
+                border-radius: 8px;
+            }
+        }
+
+        .mx_MessageComposer_sendMessage {
+            margin-right: 0;
+        }
+
+        // Make use of the space above the composer buttons too
+        .mx_Autocomplete {
+            width: calc(100% + 140px);
+        }
+        &.mx_ThreadView_narrow .mx_Autocomplete {
+            width: calc(100% + 108px);
+        }
+    }
+
+    .mx_RoomView_messagePanel {
+        &.mx_RoomView_messageListWrapper {
+            position: initial;
+        }
+
+        .mx_RoomView_messageListWrapper {
+            width: calc(100% + 6px); /* 8px - 2px */
+        }
+
+        .mx_RoomView_empty {
+            display: contents;
+        }
+    }
+
+    .mx_RoomView_MessageList {
+        padding-inline-start: $spacing-8;
+        padding-inline-end: $spacing-8;
+        content-visibility: visible;
+    }
+
+    .mx_EventTile,
+    .mx_GenericEventListSummary {
+        /* Account for scrollbar when hovering */
+        padding-top: 0;
+
+        .mx_TimelineSeparator {
+            display: none;
+        }
+
+        &.mx_EventTile_clamp:hover {
+            cursor: pointer;
+        }
+    }
+
+    .mx_MessageComposer {
+        background-color: $background;
+        border-radius: 8px;
+        margin-top: 8px;
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+
+    .mx_MessageTimestamp {
+        color: $secondary-content;
+    }
+
+    .mx_BaseCard_footer {
+        text-align: left;
+        font-size: $font-12px;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+        position: relative;
+        top: 2px;
+        padding-right: 8px;
+
+        .mx_AccessibleButton_kind_link_inline {
+            color: $secondary-content;
+        }
+    }
+}
+
+.mx_ThreadPanel_viewInRoom::before {
+    mask-image: url("$(res)/img/element-icons/view-in-room.svg");
+}
+
+.mx_ThreadPanel_copyLinkToThread::before {
+    mask-image: url("$(res)/img/element-icons/link.svg");
+}
+
+.mx_ContextualMenu_wrapper {
+    .mx_ThreadPanel_Header_FilterOptionItem {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px 20px 10px 30px;
+        position: relative;
+
+        &:hover {
+            background-color: $event-selected-color;
+        }
+
+        &[aria-checked="true"] {
+            :first-child {
+                margin-left: -20px;
+            }
+
+            :first-child::before {
+                content: "";
+                width: 12px;
+                height: 12px;
+                margin-right: 8px;
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                background-color: $primary-content;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        :last-child {
+            color: $secondary-content;
+        }
+    }
+}

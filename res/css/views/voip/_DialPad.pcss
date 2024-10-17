@@ -1,0 +1,59 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DialPad {
+    display: grid;
+    row-gap: 16px;
+    column-gap: 0px;
+    margin-top: 24px;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* squeeze the dial pad buttons together horizontally */
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.mx_DialPad_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+    background-color: $quinary-content;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: var(--cpd-font-weight-semibold);
+    text-align: center;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_DialPad_button .mx_DialPad_buttonSubText {
+    font-size: 8px;
+}
+
+.mx_DialPad_dialButton {
+    /* Always show the dial button in the center grid column */
+    grid-column: 2;
+    background-color: $accent;
+
+    &::before {
+        content: "";
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        vertical-align: middle;
+        mask-repeat: no-repeat;
+        mask-size: 20px;
+        mask-position: center;
+        background-color: #fff; /* on all themes */
+        mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+    }
+}

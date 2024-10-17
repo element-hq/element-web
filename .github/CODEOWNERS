@@ -2,4 +2,17 @@
 /.github/workflows/**     @element-hq/element-web-team
 /package.json             @element-hq/element-web-team
 /yarn.lock                @element-hq/element-web-team
+
+/src/SecurityManager.ts                           @element-hq/element-crypto-web-reviewers
+/test/SecurityManager-test.ts                     @element-hq/element-crypto-web-reviewers
+/src/async-components/views/dialogs/security/     @element-hq/element-crypto-web-reviewers
+/src/components/views/dialogs/security/           @element-hq/element-crypto-web-reviewers
+/test/components/views/dialogs/security/          @element-hq/element-crypto-web-reviewers
+/src/stores/SetupEncryptionStore.ts               @element-hq/element-crypto-web-reviewers
+/test/stores/SetupEncryptionStore-test.ts         @element-hq/element-crypto-web-reviewers
+
+# Ignore translations as those will be updated by GHA for Localazy download
 /src/i18n/strings
+# Ignore the synapse plugin as this is updated by GHA for docker image updating
+/playwright/plugins/homeserver/synapse/index.ts
+

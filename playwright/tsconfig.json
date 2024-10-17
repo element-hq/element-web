@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "jsx": "react",
+        "lib": ["ESNext", "es2022", "dom", "dom.iterable"],
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "module": "es2022",
+        "allowImportingTsExtensions": true
+    },
+    "include": [
+        "**/*.ts",
+        "../src/@types/matrix-js-sdk.d.ts",
+        "../node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "../node_modules/matrix-js-sdk/node_modules/@matrix-org/olm/index.d.ts"
+    ]
+}

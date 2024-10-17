@@ -1,0 +1,46 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_InviteReason {
+    position: relative;
+    margin-bottom: 1em;
+
+    .mx_InviteReason_reason {
+        visibility: visible;
+    }
+
+    .mx_InviteReason_view {
+        display: none;
+        position: absolute;
+        inset: 0;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: $secondary-content;
+
+        &::before {
+            content: "";
+            margin-right: 8px;
+            background-color: $secondary-content;
+            mask-image: url("$(res)/img/feather-customised/eye.svg");
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+        }
+    }
+}
+
+.mx_InviteReason_hidden {
+    .mx_InviteReason_reason {
+        visibility: hidden;
+    }
+
+    .mx_InviteReason_view {
+        display: flex;
+    }
+}

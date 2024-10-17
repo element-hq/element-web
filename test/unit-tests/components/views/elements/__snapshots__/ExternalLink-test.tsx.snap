@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ExternalLink /> renders link correctly 1`] = `
+<DocumentFragment>
+  <a
+    class="mx_ExternalLink myCustomClass"
+    data-testid="test"
+    href="test.com"
+    rel="noopener"
+    target="_self"
+  >
+    <span>
+      react element 
+      <b>
+        children
+      </b>
+    </span>
+    <i
+      class="mx_ExternalLink_icon"
+    />
+  </a>
+</DocumentFragment>
+`;
+
+exports[`<ExternalLink /> renders plain text link correctly 1`] = `
+<DocumentFragment>
+  <a
+    class="mx_ExternalLink myCustomClass"
+    data-testid="test"
+    href="test.com"
+    rel="noreferrer noopener"
+    target="_blank"
+  >
+    test
+    <i
+      class="mx_ExternalLink_icon"
+    />
+  </a>
+</DocumentFragment>
+`;

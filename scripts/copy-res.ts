@@ -9,9 +9,8 @@ import _ from "lodash";
 import { util } from "webpack";
 import { Translations } from "matrix-web-i18n";
 
-const REACT_I18N_BASE_PATH = "node_modules/matrix-react-sdk/src/i18n/strings/";
 const I18N_BASE_PATH = "src/i18n/strings/";
-const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH), ...fs.readdirSync(REACT_I18N_BASE_PATH)])]
+const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH)])]
     .filter((fn) => fn.endsWith(".json"))
     .map((f) => f.slice(0, -5));
 
@@ -43,11 +42,10 @@ const logWatch = (path: string) => {
 };
 
 function prepareLangFile(lang: string, dest: string): [filename: string, json: string] {
-    const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
-    const riotWebFile = I18N_BASE_PATH + lang + ".json";
+    const path = I18N_BASE_PATH + lang + ".json";
 
     let translations: Translations = {};
-    [reactSdkFile, riotWebFile].forEach(function (f) {
+    [path].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
                 translations = _.merge(translations, JSON.parse(fs.readFileSync(f).toString()));
@@ -101,8 +99,7 @@ function genLangList(langFileMap: Record<string, string>): void {
  * and regenerating languages.json with the new filename
  */
 function watchLanguage(lang: string, dest: string, langFileMap: Record<string, string>): void {
-    const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
-    const riotWebFile = I18N_BASE_PATH + lang + ".json";
+    const path = I18N_BASE_PATH + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
@@ -120,7 +117,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
         }, 500);
     };
 
-    [reactSdkFile, riotWebFile].forEach(function (f) {
+    [path].forEach(function (f) {
         chokidar
             .watch(f, { ignoreInitial: true })
             .on("ready", () => {
