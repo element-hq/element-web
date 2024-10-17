@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmailIdentityAuthEntry/> should render 1`] = `
+<div>
+  <div
+    class="mx_InteractiveAuthEntryComponents_emailWrapper"
+  >
+    <p>
+      <span>
+        To create your account, open the link in the email we just sent to 
+        <strong>
+          alice@example.xyz
+        </strong>
+        .
+      </span>
+    </p>
+    <p
+      class="secondary"
+    >
+      <span>
+        Did not receive it? 
+        <div
+          aria-label="Resend"
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Resend it
+        </div>
+      </span>
+    </p>
+  </div>
+</div>
+`;
+
+exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
+<div>
+  <div>
+    <p
+      class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+    >
+      Reset your identity through your account provider and then come back and click “Retry”.
+    </p>
+    <div
+      class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+    >
+      <button
+        class="_button_i91xf_17 mx_Dialog_nonDialogButton _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+          />
+          <path
+            d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2Z"
+          />
+        </svg>
+        Go to your account
+      </button>
+      <button
+        class="_button_i91xf_17 mx_Dialog_nonDialogButton"
+        data-kind="secondary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Retry
+      </button>
+    </div>
+  </div>
+</div>
+`;

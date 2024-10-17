@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MBeaconBody /> when map display is not configured renders maps unavailable error for a live beacon with location 1`] = `
+<div
+  class="mx_MapError mx_MBeaconBody_mapError mx_MBeaconBody_mapErrorInteractive mx_MapError_isMinimised"
+  data-testid="map-rendering-error"
+>
+  <div
+    class="mx_MapError_icon"
+  />
+  <h3
+    class="mx_Heading_h3 mx_MapError_heading"
+  >
+    Unable to load map
+  </h3>
+  <p
+    class="mx_MapError_message"
+  >
+    This homeserver is not configured to display maps.
+  </p>
+</div>
+`;

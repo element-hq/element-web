@@ -1,0 +1,36 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_CrossSigningPanel_statusList {
+    border-spacing: 0;
+
+    th {
+        text-align: start;
+    }
+
+    td,
+    th {
+        padding: 0;
+
+        &:first-of-type {
+            padding-inline-end: 1em;
+        }
+    }
+}
+
+.mx_CrossSigningPanel_buttonRow {
+    margin: 1em 0;
+
+    :nth-child(n + 1) {
+        margin-inline-end: 10px;
+    }
+}
+
+.mx_CrossSigningPanel_advanced {
+    width: fit-content;
+}

@@ -1,11 +1,8 @@
 # Builder
 FROM --platform=$BUILDPLATFORM node:20-bullseye as builder
 
-# Support custom branches of the react-sdk and js-sdk. This also helps us build
-# images of element-web develop.
+# Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
-ARG REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git"
-ARG REACT_SDK_BRANCH="master"
 ARG JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git"
 ARG JS_SDK_BRANCH="master"
 
@@ -17,7 +14,7 @@ COPY . /src
 RUN dos2unix /src/scripts/docker-link-repos.sh && bash /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=200000 install
 
-RUN dos2unix /src/scripts/docker-package.sh && bash /src/scripts/docker-package.sh
+RUN dos2unix /src/scripts/docker-package.sh /src/scripts/get-version-from-git.sh /src/scripts/normalize-version.sh && bash /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/config.sample.json /src/webapp/config.json

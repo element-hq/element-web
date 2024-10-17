@@ -109,7 +109,7 @@ instance. As of writing those settings are not fully documented, however a few a
     }
     ```
     These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
-    [Settings.tsx](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx).
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -154,7 +154,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-19. `help_encrption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -451,6 +452,12 @@ If you would like to use Scalar, the integration manager maintained by Element, 
     ]
 }
 ```
+
+For widgets in general (from an integration manager or not) there is also:
+
+-   `default_widget_container_height`
+
+This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.
 
 ## Administrative options
 

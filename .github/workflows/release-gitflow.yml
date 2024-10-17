@@ -11,5 +11,4 @@ jobs:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
             dependencies: |
-                matrix-react-sdk
                 matrix-js-sdk

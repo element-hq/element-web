@@ -6,6 +6,7 @@ jobs:
     close:
         runs-on: ubuntu-latest
         permissions:
+            actions: write
             issues: write
         steps:
             - uses: actions/stale@v9

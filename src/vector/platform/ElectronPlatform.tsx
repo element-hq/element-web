@@ -1,51 +1,40 @@
 /*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2018-2021 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2018 - 2021 New Vector Ltd
-Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import BaseEventIndexManager from "matrix-react-sdk/src/indexing/BaseEventIndexManager";
-import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
-import Modal from "matrix-react-sdk/src/Modal";
-import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
-import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
+import { MatrixClient, Room, MatrixEvent, OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
-import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
-import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
-import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
-import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
-import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
-import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
-import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
-import { OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
-import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
+import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import dis from "../../dispatcher/dispatcher";
+import SdkConfig from "../../SdkConfig";
+import { IConfigOptions } from "../../IConfigOptions";
+import * as rageshake from "../../rageshake/rageshake";
+import Modal from "../../Modal";
+import InfoDialog from "../../components/views/dialogs/InfoDialog";
+import Spinner from "../../components/views/elements/Spinner";
+import { Action } from "../../dispatcher/actions";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { showToast as showUpdateToast } from "../../toasts/UpdateToast";
+import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import ToastStore from "../../stores/ToastStore";
+import GenericExpiringToast from "../../components/views/toasts/GenericExpiringToast";
+import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import { avatarUrlForRoom, getInitialLetter } from "../../Avatar";
+import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
@@ -132,6 +121,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // to media downloads. A reply is sent over the same channel.
         window.electron.on("userAccessToken", () => {
             window.electron!.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
+        });
+
+        // `homeserverUrl` (IPC) is requested by the main process. A reply is sent over the same channel.
+        window.electron.on("homeserverUrl", () => {
+            window.electron!.send("homeserverUrl", MatrixClientPeg.get()?.getHomeserverUrl());
         });
 
         // `serverSupportedVersions` is requested by the main process when it needs to know if the
@@ -480,6 +474,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public getOidcCallbackUrl(): URL {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
+        // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
+        // Chrome seems to have a strange issue where non-standard protocols prevent URL object mutations on pathname
+        // field, so we cannot mutate `pathname` reliably and instead have to rewrite the href manually.
+        if (url.pathname.startsWith("//")) {
+            url.href = url.href.replace(url.pathname, url.pathname.slice(1));
+        }
         return url;
     }
 }
