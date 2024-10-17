@@ -34,7 +34,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import shouldHideEvent from "../../shouldHideEvent";
@@ -1461,7 +1461,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
         this.setState({ e2eStatus });
 
-        if (this.context.client.isCryptoEnabled()) {
+        if (this.context.client.getCrypto()) {
             /* At this point, the user has encryption on and cross-signing on */
             e2eStatus = await shieldStatusForRoom(this.context.client, room);
             RoomView.e2eStatusCache.set(room.roomId, e2eStatus);

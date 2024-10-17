@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2020-2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
@@ -10,6 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import "@types/modernizr";
 
+import type { Renderer } from "react-dom";
+import type { logger } from "matrix-js-sdk/src/logger";
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
@@ -21,7 +23,6 @@ import { IntegrationManagers } from "../integrations/IntegrationManagers";
 import { ModalManager } from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import { Notifier } from "../Notifier";
-import type { Renderer } from "react-dom";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import LegacyCallHandler from "../LegacyCallHandler";
@@ -46,9 +47,35 @@ import { DeepReadonly } from "./common";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
+type ElectronChannel =
+    | "app_onAction"
+    | "before-quit"
+    | "check_updates"
+    | "install_update"
+    | "ipcCall"
+    | "ipcReply"
+    | "loudNotification"
+    | "preferences"
+    | "seshat"
+    | "seshatReply"
+    | "setBadgeCount"
+    | "update-downloaded"
+    | "userDownloadCompleted"
+    | "userDownloadAction"
+    | "openDesktopCapturerSourcePicker"
+    | "userAccessToken"
+    | "homeserverUrl"
+    | "serverSupportedVersions";
+
 declare global {
     interface Window {
+        mxSendRageshake: (text: string, withLogs?: boolean) => void;
+        matrixLogger: typeof logger;
         matrixChat: ReturnType<Renderer>;
+        mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
+        mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
+        mxAutoRageshakeStore?: AutoRageshakeStore;
+        mxDispatcher: MatrixDispatcher;
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
@@ -93,15 +120,19 @@ declare global {
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxOnRecaptchaLoaded?: () => void;
+
+        // electron-only
         electron?: Electron;
-        mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
-        mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
-        mxAutoRageshakeStore?: AutoRageshakeStore;
-        mxDispatcher: MatrixDispatcher;
+        // opera-only
+        opera?: any;
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
+        InstallTrigger: any;
     }
 
     interface Electron {
-        // will be extended by element-web downstream
+        on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
+        send(channel: ElectronChannel, ...args: any[]): void;
     }
 
     interface DesktopCapturerSource {
@@ -200,6 +231,13 @@ declare global {
     var mx_rage_initStoragePromise: Promise<void>;
     // eslint-disable-next-line no-var, camelcase
     var mx_rage_store: IndexedDBLogStore;
+}
+
+// add method which is missing from the node typing
+declare module "url" {
+    interface Url {
+        format(): string;
+    }
 }
 
 /* eslint-enable @typescript-eslint/naming-convention */

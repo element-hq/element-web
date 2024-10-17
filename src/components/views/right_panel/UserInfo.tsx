@@ -23,9 +23,8 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { UserVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { UserVerificationStatus, VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { Heading, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";

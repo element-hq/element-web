@@ -159,37 +159,6 @@ Please see LICENSE files in the repository root for full details.
     cursor: pointer;
 }
 
-.mx_LegacyRoomHeader_button {
-    cursor: pointer;
-    flex: 0 0 auto;
-    margin-left: 1px;
-    margin-right: 1px;
-    height: 32px;
-    width: 32px;
-    position: relative;
-    border-radius: 100%;
-
-    &::before {
-        content: "";
-        position: absolute;
-        top: 4px; /* center with parent of 32px */
-        left: 4px; /* center with parent of 32px */
-        height: 24px;
-        width: 24px;
-        background-color: $icon-button-color;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-    }
-
-    &:hover {
-        background: var(--cpd-color-bg-subtle-primary);
-
-        &::before {
-            background-color: var(--cpd-color-icon-primary);
-        }
-    }
-}
-
 .mx_LegacyRoomHeader_button_unreadIndicator_bg {
     position: absolute;
     right: var(--RoomHeader-indicator-dot-offset);
@@ -222,18 +191,6 @@ Please see LICENSE files in the repository root for full details.
     &.mx_Indicator_activity {
         background: var(--cpd-color-icon-primary);
         box-shadow: var(--cpd-color-icon-primary);
-    }
-}
-
-.mx_LegacyRoomHeader_button--unread {
-    &::before {
-        background-color: $room-icon-unread-color !important;
-    }
-}
-
-.mx_LegacyRoomHeader_button--highlight {
-    &::before {
-        background-color: var(--cpd-color-icon-primary) !important;
     }
 }
 

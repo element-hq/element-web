@@ -36,9 +36,9 @@ function remoteRender(event: MessageEvent): void {
         // @ts-ignore
         img.style = data.imgStyle;
     } else {
-        img.style.width = "12px";
-        img.style.height = "12px";
-        img.style.webkitMaskSize = "12px";
+        img.style.width = "20px";
+        img.style.height = "20px";
+        img.style.webkitMaskSize = "20px";
         img.style.webkitMaskPosition = "center";
         img.style.webkitMaskRepeat = "no-repeat";
         img.style.display = "inline-block";

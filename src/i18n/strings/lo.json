@@ -36,6 +36,7 @@
         "copy_link": "ສຳເນົາລິ້ງ",
         "create": "ສ້າງ",
         "create_a_room": "ສ້າງຫ້ອງ",
+        "create_account": "ສ້າງບັນຊີ",
         "decline": "ຫຼຸດລົງ",
         "delete": "ລຶບ",
         "disable": "ປິດໃຊ້ງານ",
@@ -73,6 +74,7 @@
         "next": "ຕໍ່ໄປ",
         "no": "ບໍ່",
         "ok": "ຕົກລົງ",
+        "open": "ເປີດ",
         "pause": "ຢຸດຊົ່ວຄາວ",
         "pin": "ປັກໝຸດ",
         "play": "ຫຼິ້ນ",
@@ -275,6 +277,7 @@
         "soft_logout_intro_unsupported_auth": "ທ່ານບໍ່ສາມາດເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານໄດ້. ກະລຸນາຕິດຕໍ່ຜູຸ້ຄຸ້ມຄອງ homeserver ຂອງທ່ານສໍາລັບຂໍ້ມູນເພີ່ມເຕີມ.",
         "soft_logout_subheading": "ລຶບຂໍ້ມູນສ່ວນຕົວ",
         "sso": "ເຂົ້າລະບົບແບບປະຕູດຽວ (SSO)",
+        "sso_complete_in_browser_dialog_title": "ໄປທີ່ໜ້າເວັບຂອງທ່ານເພື່ອເຂົ້າສູ່ລະບົບ",
         "sso_failed_missing_storage": "ພວກເຮົາໃຫ້ບຣາວເຊີຈື່ homeserver ທີ່ທ່ານໃຊ້ ເຂົ້າສູ່ລະບົບ, ແຕ່ເສຍດາຍບຣາວເຊີຂອງທ່ານລືມມັນ. ກັບໄປທີ່ໜ້າເຂົ້າສູ່ລະບົບແລ້ວ ລອງໃໝ່ອີກຄັ້ງ.",
         "sso_or_username_password": "%(ssoButtons)s ຫຼື %(usernamePassword)s",
         "sync_footer_subtitle": "ຖ້າທ່ານໄດ້ເຂົ້າຮ່ວມຫຼາຍຫ້ອງ, ມັນອາດຈະໃຊ້ເວລາໄລຍະໜຶ່ງ",
@@ -657,6 +660,7 @@
         "widget_screenshots": "ເປີດໃຊ້ widget ຖ່າຍໜ້າຈໍໃນ widget ທີ່ຮອງຮັບ"
     },
     "dialog_close_label": "ປິດກ່ອງໂຕ້ຕອບ",
+    "download_completed": "ດາວໂຫຼດສຳເລັດແລ້ວ",
     "emoji": {
         "categories": "ໝວດໝູ່",
         "category_activities": "ກິດຈະກໍາ",
@@ -722,16 +726,6 @@
         "incompatible_database_disable": "ສືບຕໍ່ດ້ວຍການປິດການເຂົ້າລະຫັດ",
         "incompatible_database_sign_out_description": "ເພື່ອຫຼີກເວັ້ນການສູນເສຍປະຫວັດການສົນທະນາຂອງທ່ານ, ທ່ານຕ້ອງອອກກະແຈຫ້ອງຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບ. ທ່ານຈະຕ້ອງໄດ້ກັບຄືນໄປຫາເວີຊັ້ນໃຫມ່ຂອງ %(brand)s ເພື່ອເຮັດສິ່ງນີ້",
         "incompatible_database_title": "ຖານຂໍ້ມູນບໍ່ສອດຄ່ອງກັນ",
-        "key_signature_upload_cancelled": "ຍົກເລີກການອັບໂຫລດລາຍເຊັນແລ້ວ",
-        "key_signature_upload_completed": "ອັບໂຫຼດສຳເລັດ",
-        "key_signature_upload_failed": "ບໍ່ສາມາດອັບໂຫລດໄດ້",
-        "key_signature_upload_failed_body": "%(brand)s ພົບຂໍ້ຜິດພາດໃນລະຫວ່າງການອັບໂຫລດ:",
-        "key_signature_upload_failed_cross_signing_key_signature": "ການລົງລາຍເຊັນ cross-signing ແບບໃໝ່",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "ການ cross-signing ອຸປະກອນ",
-        "key_signature_upload_failed_key_signature": "ລາຍເຊັນຫຼັກ",
-        "key_signature_upload_failed_master_key_signature": "ລາຍເຊັນຫຼັກອັນໃໝ່",
-        "key_signature_upload_failed_title": "ການອັບໂຫລດລາຍເຊັນບໍ່ສຳເລັດ",
-        "key_signature_upload_success_title": "ສຳເລັດການອັບໂຫລດລາຍເຊັນ",
         "messages_not_secure": {
             "cause_1": "homeserver ຂອງທ່ານ",
             "cause_2": "homeserver ຜູ້ໃຊ້ທີ່ທ່ານກໍາລັງຢືນຢັນແມ່ນເຊື່ອມຕໍ່ກັບ",
@@ -747,8 +741,6 @@
             "warning": "ຖ້າທ່ານບໍ່ໄດ້ກຳນົດວິທີການກູ້ຄືນໃໝ່, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະກຳນົດ ວິທີການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ."
         },
         "not_supported": "<ບໍ່ຮອງຮັບ>",
-        "old_version_detected_description": "ກວດພົບຂໍ້ມູນຈາກ%(brand)s ລຸ້ນເກົ່າກວ່າ. ອັນນີ້ຈະເຮັດໃຫ້ການເຂົ້າລະຫັດລັບແບບຕົ້ນທາງເຖິງປາຍທາງເຮັດວຽກຜິດປົກກະຕິໃນລຸ້ນເກົ່າ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງທີ່ໄດ້ແລກປ່ຽນເມື່ອບໍ່ດົນມານີ້ ໃນຂະນະທີ່ໃຊ້ເວີຊັນເກົ່າອາດຈະບໍ່ສາມາດຖອດລະຫັດໄດ້ໃນລູ້ນນີ້. ນີ້ອາດຈະເຮັດໃຫ້ຂໍ້ຄວາມທີ່ແລກປ່ຽນກັບລູ້ນນີ້ບໍ່ສຳເລັດ. ຖ້າເຈົ້າປະສົບບັນຫາ, ໃຫ້ອອກຈາກລະບົບ ແລະ ກັບມາໃໝ່ອີກຄັ້ງ. ເພື່ອຮັກສາປະຫວັດຂໍ້ຄວາມ, ສົ່ງອອກ ແລະ ນໍາເຂົ້າລະຫັດຂອງທ່ານຄືນໃໝ່.",
-        "old_version_detected_title": "ກວດພົບຂໍ້ມູນການເຂົ້າລະຫັດລັບເກົ່າ",
         "recovery_method_removed": {
             "description_1": "ລະບົບນີ້ໄດ້ກວດພົບປະໂຫຍກຄວາມປອດໄພ ແລະ ກະແຈຂໍ້ຄວາມທີ່ປອດໄພຂອງທ່ານໄດ້ຖືກເອົາອອກແລ້ວ.",
             "description_2": "ຖ້າທ່ານດຳເນີນການສິ່ງນີ້ໂດຍບໍ່ໄດ້ຕັ້ງໃຈ, ທ່ານສາມາດຕັ້ງຄ່າຄວາມປອດໄພຂອງຂໍ້ຄວາມ ໃນລະບົບນີ້ ເຊິ່ງຈະມີການເຂົ້າລະຫັດປະຫວັດຂໍ້ຄວາມຂອງລະບົບນີ້ຄືນໃໝ່ດ້ວຍຂະບວນການກູ້ຂໍ້ມູນໃໝ່.",
@@ -860,12 +852,19 @@
     "error": {
         "admin_contact": "ກະລຸນາ <a>ຕິດຕໍ່ຜູ້ຄຸ້ມຄອງການບໍລິການຂອງທ່ານ</a> ເພື່ອສືບຕໍ່ໃຊ້ບໍລິການນີ້.",
         "admin_contact_short": "ຕິດຕໍ່ <a>ຜູ້ເບິ່ງຄຸ້ມຄອງເຊີບເວີ</a> ຂອງທ່ານ.",
+        "app_launch_unexpected_error": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດໃນການກະກຽມແອັບຯ. ເບິ່ງ console ສໍາລັບລາຍລະອຽດ.",
+        "cannot_load_config": "ບໍ່ສາມາດໂຫຼດໄຟລ໌ config ໄດ້: ກະລຸນາໂຫຼດໜ້ານີ້ຄືນໃໝ່ເພື່ອລອງອີກຄັ້ງ.",
         "connection": "ມີບັນຫາໃນການສື່ສານກັບ homeserver, ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "dialog_description_default": "ໄດ້ເກີດຂໍ້ຜິດພາດ.",
         "edit_history_unsupported": "ເບິ່ງຄືວ່າ homeserver ຂອງທ່ານບໍ່ຮອງຮັບຄຸນສົມບັດນີ້.",
         "failed_copy": "ສຳເນົາບໍ່ສຳເລັດ",
         "hs_blocked": "homeserver ນີ້ຖືກບລັອກໂດຍຜູູ້ຄຸ້ມຄອງລະບົບ.",
+        "invalid_configuration_no_server": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ບໍ່ໄດ້ລະບຸເຊີບເວີເລີ່ມຕົ້ນ.",
+        "invalid_json": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານມີຄ່າ JSON ທີ່ບໍ່ຖືກຕ້ອງ. ກະລຸນາແກ້ໄຂບັນຫາ ແລະໂຫຼດໜ້ານີ້ຄືນໃໝ່.",
+        "invalid_json_detail": "ຂໍ້ຄວາມຈາກຕົວປ່ຽນແມ່ນ: %(message)s",
+        "invalid_json_generic": "JSON ບໍ່ຖືກຕ້ອງ",
         "mau": "homeserver ນີ້ຮອດຂີດຈຳກັດຂອງຜູ້ໃຊ້ປະຈຳເດືອນແລ້ວ.",
+        "misconfigured": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານບໍ່ຖືກຕ້ອງ",
         "mixed_content": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບ homeserver ຜ່ານ HTTP ເມື່ອ HTTPS URL ຢູ່ໃນບຣາວເຊີຂອງທ່ານ. ໃຊ້ HTTPS ຫຼື <a>ເປີດໃຊ້ສະຄຣິບທີ່ບໍ່ປອດໄພ</a>.",
         "non_urgent_echo_failure_toast": "ເຊີບເວີຂອງທ່ານບໍ່ຕອບສະໜອງບາງ <a>ຄຳຮ້ອງຂໍ</a>.",
         "resource_limits": "homeserverນີ້ໃຊ້ຊັບພະຍາກອນເກີນຂີດຈຳກັດຢ່າງໃດຢ່າງໜຶ່ງ.",
@@ -1020,6 +1019,9 @@
         "url_field_label": "ໃສ່ເຊີບເວີໃໝ່",
         "url_not_https": "URL ເຊີບເວີຕ້ອງເປັນ HTTPS"
     },
+    "incompatible_browser": {
+        "title": "ບໍ່ຮັບຮອງເວັບບຣາວເຊີນີ້"
+    },
     "info_tooltip_title": "ຂໍ້ມູນ",
     "integration_manager": {
         "error_connecting": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້.",
@@ -1170,7 +1172,6 @@
         "bridge_state_workspace": "ພື້ນທີ່ເຮັດວຽກ: <networkLink/>",
         "click_for_info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
         "custom_themes": "ສະຫນັບສະຫນູນການເພີ່ມຫົວຂໍ້ ທີ່ກຳນົດເອງ",
-        "dehydration": "ຂໍ້ຄວາມເຂົ້າລະຫັດແບບອອບໄລນ໌ໂດຍໃຊ້ອຸປະກອນອົບແຫ້ງ",
         "group_developer": "ນັກພັດທະນາ",
         "group_encryption": "ການເຂົ້າລະຫັດ",
         "group_experimental": "ທົດລອງ",
@@ -1187,8 +1188,7 @@
         "jump_to_date": "ໄປຫາວັນທີ (ເພີ່ມ /jumptodate ແລະໄປຫາຫົວຂໍ້ວັນທີ)",
         "latex_maths": "ສະແດງຜົນຄະນິດສາດ LaTeX ໃນຂໍ້ຄວາມ",
         "leave_beta": "ອອກຈາກເບຕ້າ",
-        "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
-        "pinning": "ການປັກໝຸດຂໍ້ຄວາມ"
+        "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ."
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ ການຕັ້ງຄ່າເຫຼົ່ານີ້ແມ່ນຫມາຍເຖິງຜູ້ໃຊ້ຂັ້ນສູງ.",
@@ -1247,9 +1247,7 @@
         "error_send_description": "%(brand)s ບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "error_send_title": "ພວກເຮົາບໍ່ສາມາດສົ່ງສະຖານທີ່ຂອງທ່ານໄດ້",
         "error_sharing_live_location": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ",
-        "error_sharing_live_location_try_again": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ, ກະລຸນາລອງໃໝ່",
         "error_stopping_live_location": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ຢຸດສະຖານທີ່ສະຖານທີ່ຂອງທ່ານ",
-        "error_stopping_live_location_try_again": "ເກີດຄວາມຜິດພາດໃນລະຫວ່າງການຢຸດສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ, ກະລຸນາລອງໃໝ່ອີກຄັ້ງ",
         "expand_map": "ຂະຫຍາຍແຜນທີ່",
         "failed_generic": "ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານບໍ່ສຳເລັດ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
         "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້",
@@ -1375,6 +1373,8 @@
         "moderator": "ຜູ້ດຳເນິນລາຍການ",
         "restricted": "ຖືກຈຳກັດ"
     },
+    "powered_by_matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
+    "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "presence": {
         "away": "ຫ່າງອອກໄປ",
         "busy": "ບໍ່ຫວ່າງ",
@@ -1450,13 +1450,11 @@
     },
     "right_panel": {
         "add_integrations": "ເພີ່ມວິດເຈັດ, ຂົວ ແລະບັອດ",
-        "export_chat_button": "ສົ່ງການສົນທະນາອອກ",
         "files_button": "ໄຟລ໌",
         "pinned_messages": {
             "limits": {
                 "other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ"
-            },
-            "title": "ປັກໝຸດຂໍ້ຄວາມ"
+            }
         },
         "pinned_messages_button": "ໄດ້ປັກໝຸດ",
         "poll": {
@@ -1470,8 +1468,7 @@
         },
         "video_room_chat": {
             "title": "ສົນທະນາ"
-        },
-        "widgets_section": "ວິດເຈັດ"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "ການເຊີນນີ້ຖືກສົ່ງໄປຫາ %(email)s ທີ່ບໍ່ກ່ຽວຂ້ອງກັບບັນຊີຂອງທ່ານ",
@@ -1490,7 +1487,6 @@
             "favourite": "ສິ່ງທີ່ມັກ",
             "forget": "ລືມຫ້ອງ",
             "low_priority": "ຄວາມສຳຄັນຕໍ່າ",
-            "mentions_only": "ກ່າວເຖິງເທົ່ານັ້ນ",
             "title": "ຕົວເລືອກຫ້ອງ",
             "unfavourite": "ສີ່ງທີ່ມັກ"
         },
@@ -1519,10 +1515,7 @@
         "forget_room": "ລືມຫ້ອງນີ້",
         "forget_space": "ລືມພຶ້ນທີ່ນີ້",
         "header": {
-            "forget_room_button": "ລືມຫ້ອງ",
-            "hide_widgets_button": "ເຊື່ອງ Widgets",
-            "room_is_public": "ນີ້ແມ່ນຫ້ອງສາທາລະນະ",
-            "show_widgets_button": "ສະແດງ Widgets"
+            "room_is_public": "ນີ້ແມ່ນຫ້ອງສາທາລະນະ"
         },
         "inaccessible": "ຫ້ອງ ຫຼື ພື້ນທີ່ນີ້ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
         "inaccessible_name": "%(roomName)s ບໍ່ສາມາດເຂົ້າເຖິງໄດ້ໃນເວລານີ້.",
@@ -1553,7 +1546,6 @@
         "inviter_unknown": "ບໍ່ຮູ້ຈັກ",
         "invites_you_text": "<inviter/> ເຊີນທ່ານ",
         "join_button_account": "ລົງທະບຽນ",
-        "join_failed_enable_video_rooms": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
         "join_failed_needs_invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
         "join_the_discussion": "ເຂົ້າຮ່ວມການສົນທະນາ",
         "join_title_account": "ເຂົ້າຮ່ວມການສົນທະນາດ້ວຍບັນຊີ",
@@ -1580,13 +1572,6 @@
         "peek_join_prompt": "ທ່ານກຳລັງເບິ່ງຕົວຢ່າງ %(roomName)s. ຕ້ອງການເຂົ້າຮ່ວມບໍ?",
         "read_topic": "ກົດເພື່ອອ່ານຫົວຂໍ້",
         "rejoin_button": "ເຂົ້າຮ່ວມອີກຄັ້ງ",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)sຜົນຮັບ)",
-                "other": "(~%(count)sຜົນຮັບ)"
-            }
-        },
-        "show_labs_settings": "ໂຊການຕັ້ງຄ່າສູນທົດລອງ",
         "status_bar": {
             "delete_all": "ລົບທັງຫມົດ",
             "exceeded_resource_limit": "ຂໍ້ຄວາມຂອງທ່ານບໍ່ຖືກສົ່ງເນື່ອງຈາກ homeserver ນີ້ເກີນຂອບເຂດຈໍາກັດ. ກະລຸນາ <a>ຕິດຕໍ່ຜູູ້ຄຸມຄອງການບໍລິການຂອງທ່ານ</a> ເພື່ອສືບຕໍ່ໃຊ້ບໍລິການ.",
@@ -1615,8 +1600,7 @@
                 "other": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ"
             },
             "uploading_single_file": "ກຳລັງອັບໂຫລດ %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ"
+        }
     },
     "room_list": {
         "add_room_label": "ເພີ່ມຫ້ອງ",
@@ -2535,8 +2519,6 @@
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
         },
         "m.file": {
-            "decrypt_label": "ຖອດລະຫັດ %(text)s",
-            "download_label": "ດາວໂຫລດ %(text)s",
             "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
             "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
         },
@@ -2886,6 +2868,7 @@
     "truncated_list_n_more": {
         "other": "ແລະ %(count)sອີກ..."
     },
+    "unknown_device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
     "update": {
         "changelog": "ບັນທຶກການປ່ຽນແປງ",
         "check_action": "ກວດເບິ່ງເພຶ່ອອັບເດດ",
@@ -3076,6 +3059,7 @@
         "voice_call": "ໂທດ້ວຍສຽງ",
         "you_are_presenting": "ທ່ານກໍາລັງນໍາສະເຫນີ"
     },
+    "welcome_to_element": "ຍິນດີຕ້ອນຮັບ",
     "widget": {
         "added_by": "ເພີ່ມWidgetໂດຍ",
         "capabilities_dialog": {

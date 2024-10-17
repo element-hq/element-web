@@ -52,6 +52,10 @@ module.exports = {
             {
                 paths: [
                     {
+                        name: "@testing-library/react",
+                        message: "Please use jest-matrix-react instead",
+                    },
+                    {
                         name: "matrix-js-sdk",
                         message: "Please use matrix-js-sdk/src/matrix instead",
                     },
@@ -70,14 +74,6 @@ module.exports = {
                     {
                         name: "matrix-js-sdk/src/index",
                         message: "Please use matrix-js-sdk/src/matrix instead",
-                    },
-                    {
-                        name: "matrix-react-sdk",
-                        message: "Please use matrix-react-sdk/src/index instead",
-                    },
-                    {
-                        name: "matrix-react-sdk/",
-                        message: "Please use matrix-react-sdk/src/index instead",
                     },
                     {
                         name: "emojibase-regex",

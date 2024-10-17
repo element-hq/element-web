@@ -6,7 +6,7 @@ on:
     push:
         branches: [develop, master]
     repository_dispatch:
-        types: [upstream-sdk-notify]
+        types: [element-web-notify]
     workflow_call:
         inputs:
             disable_coverage:
@@ -39,7 +39,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
             - name: Yarn cache
               uses: actions/setup-node@v4
@@ -48,7 +48,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Deps
-              run: "./scripts/ci/install-deps.sh"
+              run: "./scripts/layered.sh"
               env:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
@@ -108,21 +108,3 @@ jobs:
                   context: SonarCloud Code Analysis
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-    app-tests:
-        name: Element Web Integration Tests
-        runs-on: ubuntu-22.04
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/matrix-react-sdk' || github.repository }}
-
-            - uses: actions/setup-node@v4
-              with:
-                  cache: "yarn"
-                  node-version: "lts/*"
-
-            - name: Run tests
-              run: "./scripts/ci/app-tests.sh"
-              env:
-                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}

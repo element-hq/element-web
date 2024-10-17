@@ -9,7 +9,7 @@ on:
     push:
         branches: [develop, master]
     repository_dispatch:
-        types: [upstream-sdk-notify]
+        types: [element-web-notify]
 
     # support triggering from other workflows
     workflow_call:
@@ -20,19 +20,10 @@ on:
                 default: false
                 description: "A boolean to skip the playwright check itself while still creating the passing check. Useful when only running in Merge Queues."
 
-            react-sdk-repository:
-                type: string
-                required: true
-                description: "The name of the github repository to check out and build."
-
             matrix-js-sdk-sha:
                 type: string
                 required: false
                 description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
-            element-web-sha:
-                type: string
-                required: false
-                description: "The Git SHA of element-web to build against. By default, will use a matching branch name if it exists, or develop."
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
@@ -51,7 +42,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+                  repository: element-hq/element-web
 
             - uses: actions/setup-node@v4
               with:
@@ -63,17 +54,14 @@ jobs:
               env:
                   # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-                  ELEMENT_WEB_GITHUB_BASE_REF: ${{ inputs.element-web-sha }}
               run: |
-                  scripts/ci/layered.sh
+                  scripts/layered.sh
                   JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
-                  REACT_SHA=$(git rev-parse --short=12 HEAD)
-                  VECTOR_SHA=$(git -C element-web rev-parse --short=12 HEAD)
-                  echo "VERSION=$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
 
             - name: Copy config
               run: cp element.io/develop/config.json config.json
-              working-directory: ./element-web
 
             - name: Build
               env:
@@ -82,13 +70,12 @@ jobs:
               run: |
                   yarn build
                   echo $VERSION > webapp/version
-              working-directory: ./element-web
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:
                   name: webapp
-                  path: element-web/webapp
+                  path: webapp
                   retention-days: 1
 
     playwright:
@@ -109,8 +96,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   persist-credentials: false
-                  path: matrix-react-sdk
-                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+                  repository: element-hq/element-web
 
             - name: 📥 Download artifact
               uses: actions/download-artifact@v4
@@ -121,16 +107,14 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
-                  cache-dependency-path: matrix-react-sdk/yarn.lock
+                  cache-dependency-path: yarn.lock
                   node-version: "lts/*"
 
             - name: Install dependencies
-              working-directory: matrix-react-sdk
               run: yarn install --frozen-lockfile
 
             - name: Get installed Playwright version
               id: playwright
-              working-directory: matrix-react-sdk
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
@@ -143,19 +127,17 @@ jobs:
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              working-directory: matrix-react-sdk
               run: yarn playwright install --with-deps
 
             - name: Run Playwright tests
               run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
-              working-directory: matrix-react-sdk
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: all-blob-reports-${{ matrix.runner }}
-                  path: matrix-react-sdk/blob-report
+                  path: blob-report
                   retention-days: 1
 
     complete:
@@ -168,7 +150,7 @@ jobs:
               if: inputs.skip != true
               with:
                   persist-credentials: false
-                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+                  repository: element-hq/element-web
 
             - uses: actions/setup-node@v4
               if: inputs.skip != true

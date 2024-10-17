@@ -16,9 +16,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
-import MaximiseIcon from "@vector-im/compound-design-tokens/assets/web/icons/expand";
-import CollapseIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse";
+import { EllipsisIcon, MaximiseIcon, CollapseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";

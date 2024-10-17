@@ -172,4 +172,22 @@ export class ElementAppPage {
         await this.page.getByRole("button", { name: "Room info" }).first().click();
         return this.page.locator(".mx_RightPanel");
     }
+
+    /**
+     * Get a locator for the tooltip associated with an element
+     * @param e The element with the tooltip
+     * @returns Locator to the tooltip
+     */
+    public async getTooltipForElement(e: Locator): Promise<Locator> {
+        const [labelledById, describedById] = await Promise.all([
+            e.getAttribute("aria-labelledby"),
+            e.getAttribute("aria-describedby"),
+        ]);
+        if (!labelledById && !describedById) {
+            throw new Error(
+                "Element has no aria-labelledby or aria-describedy attributes! The tooltip should have added either one of these.",
+            );
+        }
+        return this.page.locator(`#${labelledById ?? describedById}`);
+    }
 }

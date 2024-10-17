@@ -30,7 +30,7 @@ interface Commit {
     };
 }
 
-const REPOS = ["element-hq/element-web", "element-hq/matrix-react-sdk", "matrix-org/matrix-js-sdk"] as const;
+const REPOS = ["element-hq/element-web", "matrix-org/matrix-js-sdk"] as const;
 
 export default class ChangelogDialog extends React.Component<IProps, State> {
     public constructor(props: IProps) {

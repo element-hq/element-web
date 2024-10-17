@@ -1,3 +1,4 @@
+signing_id: releases@riot.im
 subprojects:
     matrix-js-sdk:
         includeByDefault: false

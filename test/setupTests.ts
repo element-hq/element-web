@@ -11,7 +11,7 @@ import "blob-polyfill";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { mocked } from "jest-mock";
 
-import { PredictableRandom } from "./predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
+import { PredictableRandom } from "./test-utils/predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
 
 // Fake random strings to give a predictable snapshot for IDs
 jest.mock("matrix-js-sdk/src/randomstring");

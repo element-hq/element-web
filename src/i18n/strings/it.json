@@ -43,6 +43,7 @@
         "copy_link": "Copia collegamento",
         "create": "Crea",
         "create_a_room": "Crea una stanza",
+        "create_account": "Crea account",
         "decline": "Rifiuta",
         "delete": "Elimina",
         "deny": "Nega",
@@ -84,6 +85,7 @@
         "next": "Avanti",
         "no": "No",
         "ok": "OK",
+        "open": "Apri",
         "pause": "Pausa",
         "pin": "Spillo",
         "play": "Riproduci",
@@ -330,6 +332,7 @@
         "soft_logout_subheading": "Elimina dati personali",
         "soft_logout_warning": "Attenzione: i tuoi dati personali (incluse le chiavi di crittografia) sono ancora memorizzati in questa sessione. Cancellali se hai finito di usare questa sessione o se vuoi accedere ad un altro account.",
         "sso": "Single sign-on",
+        "sso_complete_in_browser_dialog_title": "Vai nel tuo browser per completare l'accesso",
         "sso_failed_missing_storage": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova.",
         "sso_or_username_password": "%(ssoButtons)s o %(usernamePassword)s",
         "sync_footer_subtitle": "Se sei dentro a molte stanze, potrebbe impiegarci un po'",
@@ -797,6 +800,7 @@
         "widget_screenshots": "Attiva le schermate dei widget sui widget supportati"
     },
     "dialog_close_label": "Chiudi finestra",
+    "download_completed": "Scaricamento completato",
     "emoji": {
         "categories": "Categorie",
         "category_activities": "Attività",
@@ -867,16 +871,6 @@
         "incompatible_database_disable": "Continua con la crittografia disattivata",
         "incompatible_database_sign_out_description": "Per evitare di perdere la cronologia della chat, devi esportare le tue chiavi della stanza prima di uscire. Dovrai tornare alla versione più recente di %(brand)s per farlo",
         "incompatible_database_title": "Database non compatibile",
-        "key_signature_upload_cancelled": "Invio della firma annullato",
-        "key_signature_upload_completed": "Invio completato",
-        "key_signature_upload_failed": "Impossibile inviare",
-        "key_signature_upload_failed_body": "%(brand)s ha riscontrato un errore durante l'invio di:",
-        "key_signature_upload_failed_cross_signing_key_signature": "una nuova firma della chiave a firma incrociata",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "una firma incrociata di dispositivo",
-        "key_signature_upload_failed_key_signature": "una firma di chiave",
-        "key_signature_upload_failed_master_key_signature": "una nuova firma della chiave principale",
-        "key_signature_upload_failed_title": "Invio della firma fallito",
-        "key_signature_upload_success_title": "Firma inviata correttamente",
         "messages_not_secure": {
             "cause_1": "Il tuo homeserver",
             "cause_2": "L'homeserver al quale è connesso l'utente che stai verificando",
@@ -892,8 +886,6 @@
             "warning": "Se non hai impostato il nuovo metodo di recupero, un aggressore potrebbe tentare di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "not_supported": "<non supportato>",
-        "old_version_detected_description": "Sono stati rilevati dati da una vecchia versione di %(brand)s. Ciò avrà causato malfunzionamenti della crittografia end-to-end nella vecchia versione. I messaggi cifrati end-to-end scambiati di recente usando la vecchia versione potrebbero essere indecifrabili in questa versione. Anche i messaggi scambiati con questa versione possono fallire. Se riscontri problemi, disconnettiti e riaccedi. Per conservare la cronologia, esporta e re-importa le tue chiavi.",
-        "old_version_detected_title": "Rilevati dati di crittografia obsoleti",
         "recovery_method_removed": {
             "description_1": "Questa sessione ha rilevato che la tua password di sicurezza e la chiave per i messaggi sicuri sono state rimosse.",
             "description_2": "Se l'hai fatto accidentalmente, puoi configurare Messaggi Sicuri su questa sessione che cripterà nuovamente la cronologia dei messaggi con un nuovo metodo di recupero.",
@@ -1016,13 +1008,21 @@
     "error": {
         "admin_contact": "<a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
         "admin_contact_short": "Contatta il tuo <a>amministratore del server</a>.",
+        "app_launch_unexpected_error": "Errore inaspettato preparando l'app. Vedi la console per i dettagli.",
+        "cannot_load_config": "Impossibile caricare il file di configurazione: ricarica la pagina per riprovare.",
         "connection": "C'è stato un problema nella comunicazione con l'homeserver, riprova più tardi.",
         "dialog_description_default": "Si è verificato un errore.",
         "download_media": "Scaricamento della fonte fallito, nessun url trovato",
         "edit_history_unsupported": "Il tuo homeserver non sembra supportare questa funzione.",
         "failed_copy": "Copia fallita",
         "hs_blocked": "Questo homeserver è stato bloccato dal suo amministratore.",
+        "invalid_configuration_mixed_server": "Configurazione non valida: default_hs_url non può essere specificato assieme a default_server_name o default_server_config",
+        "invalid_configuration_no_server": "Configurazione non valida: nessun server predefinito specificato.",
+        "invalid_json": "La configurazione del tuo elemento contiene un JSON non valido. Correggi il problema e ricarica la pagina.",
+        "invalid_json_detail": "Il messaggio dal parser è: %(message)s",
+        "invalid_json_generic": "JSON non valido",
         "mau": "Questo homeserver ha raggiunto il suo limite di utenti attivi mensili.",
+        "misconfigured": "Il tuo elemento è configurato male",
         "mixed_content": "Impossibile connettersi all'homeserver via HTTP quando c'è un URL HTTPS nella barra del tuo browser. Usa HTTPS o <a>attiva gli script non sicuri</a>.",
         "non_urgent_echo_failure_toast": "Il tuo server non sta rispondendo ad alcune <a>richieste</a>.",
         "resource_limits": "Questo homeserver ha oltrepassato uno dei suoi limiti di risorse.",
@@ -1213,6 +1213,9 @@
         "one": "In %(spaceName)s e in %(count)s altro spazio.",
         "other": "In %(spaceName)s e in altri %(count)s spazi."
     },
+    "incompatible_browser": {
+        "title": "Browser non supportato"
+    },
     "info_tooltip_title": "Informazione",
     "integration_manager": {
         "connecting": "Connessione al gestore di integrazioni…",
@@ -1382,7 +1385,6 @@
         "click_for_info": "Clicca per altre info",
         "currently_experimental": "Al momento è sperimentale.",
         "custom_themes": "Supporta l'aggiunta di temi personalizzati",
-        "dehydration": "Messaggistica offline criptata usando dispositivi \"disidratati\"",
         "dynamic_room_predecessors": "Predecessori della stanza dinamici",
         "dynamic_room_predecessors_description": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)",
         "element_call_video_rooms": "Stanze video di Element Call",
@@ -1416,14 +1418,12 @@
         "location_share_live_description": "Implementazione temporanea: le posizioni persistono nella cronologia della stanza.",
         "mjolnir": "Nuovi modi di ignorare le persone",
         "msc3531_hide_messages_pending_moderation": "Lascia che i moderatori nascondano i messaggi in attesa di moderazione.",
-        "new_room_decoration_ui": "In sviluppo attivo, nuova interfaccia per intestazione e dettagli della stanza",
         "notification_settings": "Nuove impostazioni di notifica",
         "notification_settings_beta_caption": "Ti presentiamo un modo più semplice per modificare le impostazioni delle notifiche. Personalizza il tuo %(brand)s, proprio come piace a te.",
         "notification_settings_beta_title": "Impostazioni di notifica",
         "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
         "oidc_native_flow": "Autenticazione nativa OIDC",
         "oidc_native_flow_description": "⚠ ATTENZIONE: sperimentale. Usa l'autenticazione nativa OIDC se supportata dal server.",
-        "pinning": "Ancoraggio messaggi",
         "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
         "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
         "report_to_moderators": "Segnala ai moderatori",
@@ -1509,9 +1509,7 @@
         "error_send_description": "%(brand)s non ha potuto inviare la tua posizione. Riprova più tardi.",
         "error_send_title": "Non siamo riusciti ad inviare la tua posizione",
         "error_sharing_live_location": "Si è verificato un errore condividendo la tua posizione in tempo reale",
-        "error_sharing_live_location_try_again": "Si è verificato un errore condividendo la tua posizione in tempo reale, riprova",
         "error_stopping_live_location": "Si è verificato un errore fermando la tua posizione in tempo reale",
-        "error_stopping_live_location_try_again": "Si è verificato un errore fermando la tua posizione in tempo reale, riprova",
         "expand_map": "Espandi mappa",
         "failed_generic": "Impossibile rilevare la tua posizione. Riprova più tardi.",
         "failed_load_map": "Impossibile caricare la mappa",
@@ -1541,7 +1539,6 @@
         "share_type_own": "La mia posizione attuale",
         "share_type_pin": "Lascia una puntina",
         "share_type_prompt": "Che tipo di posizione vuoi condividere?",
-        "stop_and_close": "Ferma e chiudi",
         "toggle_attribution": "Attiva/disattiva attribuzione"
     },
     "member_list": {
@@ -1705,6 +1702,8 @@
         "moderator": "Moderatore",
         "restricted": "Limitato"
     },
+    "powered_by_matrix": "Offerto da Matrix",
+    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -1788,13 +1787,11 @@
     },
     "right_panel": {
         "add_integrations": "Aggiungi widget, bridge e bot",
-        "export_chat_button": "Esporta conversazione",
         "files_button": "File",
         "pinned_messages": {
             "limits": {
                 "other": "Puoi ancorare al massimo %(count)s widget"
-            },
-            "title": "Messaggi ancorati"
+            }
         },
         "pinned_messages_button": "Fissato",
         "poll": {
@@ -1830,8 +1827,7 @@
         },
         "video_room_chat": {
             "title": "Chat"
-        },
-        "widgets_section": "Widget"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Questo invito è stato inviato a %(email)s , la quale non è associata al tuo account",
@@ -1851,7 +1847,6 @@
             "forget": "Dimentica stanza",
             "low_priority": "Priorità bassa",
             "mark_read": "Segna come letto",
-            "mentions_only": "Solo le citazioni",
             "notifications_default": "Corrispondi l'impostazione predefinita",
             "notifications_mute": "Silenzia stanza",
             "title": "Opzioni stanza",
@@ -1894,22 +1889,11 @@
         "forget_room": "Dimentica questa stanza",
         "forget_space": "Dimentica questo spazio",
         "header": {
-            "close_call_button": "Chiudi chiamata",
-            "forget_room_button": "Dimentica la stanza",
-            "hide_widgets_button": "Nascondi i widget",
             "n_people_asking_to_join": {
                 "one": "Richiesta di entrare",
                 "other": "%(count)s persone chiedono di entrare"
             },
-            "room_is_public": "Questa stanza è pubblica",
-            "show_widgets_button": "Mostra i widget",
-            "video_call_button_ec": "Videochiamata (%(brand)s)",
-            "video_call_button_jitsi": "Videochiamata (Jitsi)",
-            "video_call_button_legacy": "Videochiamata legacy",
-            "video_call_ec_change_layout": "Cambia disposizione",
-            "video_call_ec_layout_freedom": "Libertà",
-            "video_call_ec_layout_spotlight": "Riflettore",
-            "video_room_view_chat_button": "Vedi linea temporale chat"
+            "room_is_public": "Questa stanza è pubblica"
         },
         "header_face_pile_tooltip": "Cambia l'elenco dei membri",
         "header_untrusted_label": "Non fidato",
@@ -1944,7 +1928,6 @@
         "inviter_unknown": "Sconosciuto",
         "invites_you_text": "<inviter/> ti ha invitato/a",
         "join_button_account": "Registrati",
-        "join_failed_enable_video_rooms": "Per entrare, prima attiva le stanze video in Laboratori",
         "join_failed_needs_invite": "Per vedere %(roomName)s ti serve un invito",
         "join_the_discussion": "Unisciti alla discussione",
         "join_title": "Entra nella stanza per partecipare",
@@ -1987,13 +1970,8 @@
         "rejoin_button": "Rientra",
         "search": {
             "all_rooms_button": "Cerca in tutte le stanze",
-            "result_count": {
-                "other": "(~%(count)s risultati)",
-                "one": "(~%(count)s risultato)"
-            },
             "this_room_button": "Cerca in questa stanza"
         },
-        "show_labs_settings": "Mostra impostazioni Laboratori",
         "status_bar": {
             "delete_all": "Elimina tutti",
             "exceeded_resource_limit": "Il tuo messaggio non è stato inviato perché questo homeserver ha oltrepassato un limite di risorse. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
@@ -2024,7 +2002,6 @@
             },
             "uploading_single_file": "Invio di %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Per vederla, prima attiva le stanze video in Laboratori",
         "waiting_for_join_subtitle": "Una volta che gli utenti si saranno uniti a %(brand)s, potrete scrivervi e la stanza sarà crittografata end-to-end",
         "waiting_for_join_title": "In attesa che gli utenti si uniscano a %(brand)s"
     },
@@ -3195,8 +3172,6 @@
             "voice_call_unsupported": "%(senderName)s ha iniziato una telefonata. (non supportata da questo browser)"
         },
         "m.file": {
-            "decrypt_label": "Decifra %(text)s",
-            "download_label": "Scarica %(text)s",
             "error_decrypting": "Errore decifratura allegato",
             "error_invalid": "File non valido %(extra)s"
         },
@@ -3570,6 +3545,7 @@
     "truncated_list_n_more": {
         "other": "E altri %(count)s ..."
     },
+    "unknown_device": "Dispositivo sconosciuto",
     "unsupported_server_description": "Questo server usa una versione più vecchia di Matrix. Aggiorna a Matrix %(version)s per usare %(brand)s senza errori.",
     "unsupported_server_title": "Il tuo server non è supportato",
     "update": {
@@ -3819,6 +3795,8 @@
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
+    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

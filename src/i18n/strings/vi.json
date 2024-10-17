@@ -38,6 +38,7 @@
         "copy_link": "Sao chép liên kết",
         "create": "Tạo",
         "create_a_room": "Tạo phòng",
+        "create_account": "Tạo tài khoản",
         "decline": "Từ chối",
         "delete": "Xoá",
         "deny": "Từ chối",
@@ -78,6 +79,7 @@
         "new_video_room": "Tạo phòng truyền hình",
         "next": "Tiếp",
         "no": "Không",
+        "open": "Mở",
         "pause": "Tạm dừng",
         "pin": "Ghim",
         "play": "Chạy",
@@ -294,6 +296,7 @@
         "soft_logout_intro_unsupported_auth": "Bạn không thể đăng nhập vào tài khoản của mình. Vui lòng liên hệ với quản trị viên máy chủ của bạn để biết thêm thông tin.",
         "soft_logout_subheading": "Xóa dữ liệu cá nhân",
         "sso": "Đăng Nhập Một Lần",
+        "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập",
         "sso_failed_missing_storage": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại.",
         "sso_or_username_password": "%(ssoButtons)s Hoặc %(usernamePassword)s",
         "sync_footer_subtitle": "Nếu bạn đã tham gia nhiều phòng, quá trình này có thể mất một lúc",
@@ -634,6 +637,7 @@
     "credits": {
         "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "devtools": {
         "active_widgets": "Tiện ích hoạt động",
         "category_other": "Khác",
@@ -698,6 +702,7 @@
         "widget_screenshots": "Bật widget chụp màn hình cho các widget có hỗ trợ"
     },
     "dialog_close_label": "Đóng hộp thoại",
+    "download_completed": "Tải xuống hoàn tất",
     "emoji": {
         "categories": "Hạng mục",
         "category_activities": "Các hoạt động",
@@ -765,16 +770,6 @@
         "incompatible_database_disable": "Tiếp tục với mã hóa bị tắt",
         "incompatible_database_sign_out_description": "Để tránh mất lịch sử trò chuyện, bạn phải xuất chìa khóa phòng trước khi đăng xuất. Bạn sẽ cần quay lại phiên bản %(brand)s mới hơn để thực hiện việc này",
         "incompatible_database_title": "Cơ sở dữ liệu không tương thích",
-        "key_signature_upload_cancelled": "Đã hủy tải lên chữ ký",
-        "key_signature_upload_completed": "Hoàn tất tải lên",
-        "key_signature_upload_failed": "Không thể tải lên",
-        "key_signature_upload_failed_body": "%(brand)s đã gặp lỗi khi tải lên:",
-        "key_signature_upload_failed_cross_signing_key_signature": "một chữ ký khóa xác thực chéo mới",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "một chữ ký được xác thực chéo trên thiết bị",
-        "key_signature_upload_failed_key_signature": "một chữ ký chính",
-        "key_signature_upload_failed_master_key_signature": "một chữ ký khóa chính mới",
-        "key_signature_upload_failed_title": "Tải lên chữ ký không thành công",
-        "key_signature_upload_success_title": "Tải lên chữ ký thành công",
         "messages_not_secure": {
             "cause_1": "Chủ nhà của bạn",
             "cause_2": "Máy chủ nhà người dùng bạn đang xác thực được kết nối đến",
@@ -790,8 +785,6 @@
             "warning": "Nếu bạn không đặt phương pháp khôi phục mới, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
         "not_supported": "<không được hỗ trợ>",
-        "old_version_detected_description": "Dữ liệu từ phiên bản cũ hơn của %(brand)s đã được phát hiện. Điều này sẽ khiến mật mã end-to-end bị trục trặc trong phiên bản cũ hơn. Các tin nhắn được mã hóa end-to-end được trao đổi gần đây trong khi sử dụng phiên bản cũ hơn có thể không giải mã được trong phiên bản này. Điều này cũng có thể khiến các tin nhắn được trao đổi với phiên bản này bị lỗi. Nếu bạn gặp sự cố, hãy đăng xuất và đăng nhập lại. Để lưu lại lịch sử tin nhắn, hãy export và re-import các khóa của bạn.",
-        "old_version_detected_title": "Đã phát hiện dữ liệu mật mã cũ",
         "recovery_method_removed": {
             "description_1": "Phiên này đã phát hiện rằng Cụm từ bảo mật và khóa cho Tin nhắn an toàn của bạn đã bị xóa.",
             "description_2": "Nếu bạn vô tình làm điều này, bạn có thể Cài đặt Tin nhắn được bảo toàn trên phiên này. Tính năng này sẽ mã hóa lại lịch sử tin nhắn của phiên này bằng một phương pháp khôi phục mới.",
@@ -914,13 +907,21 @@
     "error": {
         "admin_contact": "Vui lòng liên hệ với quản trị viên dịch vụ của bạn <a>contact your service administrator</a> để tiếp tục sử dụng dịch vụ này.",
         "admin_contact_short": "Liên hệ với <a>quản trị viên máy chủ</a> của bạn.",
+        "app_launch_unexpected_error": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
+        "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
         "connection": "Đã xảy ra sự cố khi giao tiếp với máy chủ, vui lòng thử lại sau.",
         "dialog_description_default": "Một lỗi đã xảy ra.",
         "download_media": "Tải xuống phương tiện nguồn thất bại, không tìm thấy nguồn url",
         "edit_history_unsupported": "Máy chủ nhà của bạn dường như không hỗ trợ tính năng này.",
         "failed_copy": "Sao chép không thành công",
         "hs_blocked": "Máy chủ này đã bị chặn bởi quản trị viên của nó.",
+        "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
+        "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
+        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
+        "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
+        "invalid_json_generic": "JSON không hợp lệ",
         "mau": "Máy chủ nhà này đã đạt đến giới hạn người dùng hoạt động hàng tháng.",
+        "misconfigured": "Element đang bị thiết lập sai",
         "mixed_content": "Không thể kết nối với máy chủ thông qua HTTP khi URL HTTPS nằm trong thanh trình duyệt của bạn. Sử dụng HTTPS hoặc bật các tập lệnh không an toàn <a>enable unsafe scripts</a>.",
         "non_urgent_echo_failure_toast": "Máy chủ của bạn không phản hồi một số yêu cầu <a>requests</a>.",
         "resource_limits": "Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.",
@@ -1098,6 +1099,9 @@
         "one": "Trong %(spaceName)s và %(count)s space khác.",
         "other": "Trong %(spaceName)s và %(count)s space khác."
     },
+    "incompatible_browser": {
+        "title": "Trình duyệt không được hỗ trợ"
+    },
     "info_tooltip_title": "Thông tin",
     "integration_manager": {
         "connecting": "Đang kết nối tới quản lý tích hợp…",
@@ -1245,7 +1249,6 @@
         "click_for_info": "Nhấp để có thêm thông tin",
         "currently_experimental": "Hiện đang thử nghiệm.",
         "custom_themes": "Hỗ trợ thêm các chủ đề tùy chỉnh",
-        "dehydration": "Nhắn tin được mã hóa ngoại tuyến bằng cách sử dụng các thiết khử nước",
         "dynamic_room_predecessors": "Tiền nhiệm động cho phòng",
         "element_call_video_rooms": "Phòng truyền hình Element Call",
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
@@ -1279,7 +1282,6 @@
         "msc3531_hide_messages_pending_moderation": "Cho phép điều phối viên ẩn các tin nhắn đang chờ duyệt.",
         "notification_settings": "Cài đặt thông báo mới",
         "notification_settings_beta_title": "Cài đặt thông báo",
-        "pinning": "Ghim tin nhắn",
         "report_to_moderators": "Báo cáo cho điều phối viên",
         "report_to_moderators_description": "Trong các phòng hỗ trợ điều phối, nút \"Báo cáo\" sẽ giúp bạn báo cáo lạm dụng cho điều phối viên của phòng.",
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
@@ -1506,6 +1508,8 @@
         "moderator": "Điều phối viên",
         "restricted": "Bị hạn chế"
     },
+    "powered_by_matrix": "Chạy trên giao thức Matrix",
+    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "presence": {
         "away": "Vắng mặt",
         "busy": "Bận",
@@ -1581,12 +1585,10 @@
     },
     "right_panel": {
         "add_integrations": "Thêm các widget, bridge và bot",
-        "export_chat_button": "Xuất trò chuyện",
         "pinned_messages": {
             "limits": {
                 "other": "Bạn chỉ có thể ghim tối đa %(count)s widget"
-            },
-            "title": "Tin nhắn đã ghim"
+            }
         },
         "pinned_messages_button": "Đã ghim",
         "poll": {
@@ -1607,8 +1609,7 @@
         },
         "video_room_chat": {
             "title": "Trò chuyện"
-        },
-        "widgets_section": "Vật dụng"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Lời mời này đã được gửi đến %(email)s nhưng không liên kết với tài khoản của bạn",
@@ -1627,7 +1628,6 @@
             "forget": "Quên phòng",
             "low_priority": "Ưu tiên thấp",
             "mark_read": "Đánh dấu đã đọc",
-            "mentions_only": "Chỉ tin nhắn được đề cập",
             "notifications_default": "Theo cài đặt mặc định",
             "notifications_mute": "Tắt tiếng phòng",
             "title": "Tùy chọn phòng",
@@ -1663,15 +1663,7 @@
         "forget_room": "Quên phòng này đi",
         "forget_space": "Quên space này",
         "header": {
-            "close_call_button": "Đóng cuộc gọi",
-            "forget_room_button": "Quên phòng",
-            "hide_widgets_button": "Ẩn widget",
-            "room_is_public": "Phòng này là công cộng",
-            "show_widgets_button": "Hiển thị widget",
-            "video_call_button_ec": "Cuộc gọi truyền hình (%(brand)s)",
-            "video_call_button_jitsi": "Cuộc gọi truyền hình (Jitsi)",
-            "video_call_ec_layout_freedom": "Tự do",
-            "video_room_view_chat_button": "Xem dòng tin nhắn"
+            "room_is_public": "Phòng này là công cộng"
         },
         "inaccessible": "Phòng hoặc space này không thể truy cập được bây giờ.",
         "inaccessible_name": "Không thể truy cập %(roomName)s vào lúc này.",
@@ -1733,13 +1725,8 @@
         "rejoin_button": "Tham gia lại",
         "search": {
             "all_rooms_button": "Tìm tất cả phòng",
-            "result_count": {
-                "one": "(~%(count)s kết quả)",
-                "other": "(~%(count)s kết quả)"
-            },
             "this_room_button": "Tìm trong phòng này"
         },
-        "show_labs_settings": "Hiện các cài đặt thử nghiệm",
         "status_bar": {
             "delete_all": "Xóa hết",
             "exceeded_resource_limit": "Thư của bạn không gửi được vì máy chủ(homeserver) đã vượt quá giới hạn tài nguyên. Vui lòng <a>liên hệ với quản trị viên</a> để tiếp tục sử dụng dịch vụ.",
@@ -2858,8 +2845,6 @@
             "voice_call_unsupported": "%(senderName)s đã thực hiện một cuộc gọi thoại. (không được hỗ trợ bởi trình duyệt này)"
         },
         "m.file": {
-            "decrypt_label": "Giải mã %(text)s",
-            "download_label": "Tải xuống %(text)s",
             "error_decrypting": "Lỗi khi giải mã tệp đính kèm",
             "error_invalid": "Tệp%(extra)s không hợp lệ"
         },
@@ -3203,6 +3188,7 @@
     "truncated_list_n_more": {
         "other": "Và %(count)s thêm…"
     },
+    "unknown_device": "Thiết bị không xác định",
     "update": {
         "changelog": "Lịch sử thay đổi",
         "check_action": "Kiểm tra cập nhật",
@@ -3433,6 +3419,8 @@
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
+    "welcome_to_element": "Chào mừng tới Element",
     "widget": {
         "added_by": "widget được thêm bởi",
         "capabilities_dialog": {

@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+
+import SdkConfig from "../../../SdkConfig";
 
 export default class VectorAuthHeaderLogo extends React.PureComponent {
     public render(): React.ReactElement {

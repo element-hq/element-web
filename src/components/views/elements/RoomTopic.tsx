@@ -111,7 +111,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
     if (!body) return <div className={classNames(className, "mx_RoomTopic")} />;
 
     return (
-        <Tooltip label={_t("room|read_topic")} disabled={disableTooltip}>
+        <Tooltip description={_t("room|read_topic")} disabled={disableTooltip}>
             <div
                 {...props}
                 tabIndex={0}

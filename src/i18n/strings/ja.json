@@ -37,6 +37,7 @@
         "copy_link": "リンクをコピー",
         "create": "作成",
         "create_a_room": "ルームを作成",
+        "create_account": "アカウントを作成",
         "decline": "拒否",
         "delete": "削除",
         "disable": "無効にする",
@@ -76,6 +77,7 @@
         "new_video_room": "新しいビデオ通話ルーム",
         "next": "次へ",
         "no": "いいえ",
+        "open": "開く",
         "pause": "一時停止",
         "pin": "ピン",
         "play": "再生",
@@ -312,6 +314,7 @@
         "soft_logout_subheading": "個人データを消去",
         "soft_logout_warning": "警告：あなたの個人データ（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
         "sso": "シングルサインオン",
+        "sso_complete_in_browser_dialog_title": "ブラウザーに移動してサインインを完了してください",
         "sso_failed_missing_storage": "残念ながら、ブラウザーはサインインするホームサーバーを忘れてしまいました。サインインページに移動して再試行してください。",
         "sso_or_username_password": "%(ssoButtons)sあるいは、以下に入力して登録%(usernamePassword)s",
         "sync_footer_subtitle": "多くのルームに参加している場合は、時間がかかる可能性があります",
@@ -660,6 +663,7 @@
         "subspace_join_rule_public_description": "<SpaceName/>のメンバーだけでなく、誰でもこのスペースを検索し、参加できます。",
         "subspace_join_rule_restricted_description": "<SpaceName/>の誰でも検索し、参加できます。"
     },
+    "desktop_default_device_name": "%(brand)sデスクトップ：%(platformName)s",
     "devtools": {
         "active_widgets": "使用中のウィジェット",
         "category_other": "その他",
@@ -750,6 +754,7 @@
         "widget_screenshots": "サポートされているウィジェットで、ウィジェットのスクリーンショットを有効にする"
     },
     "dialog_close_label": "ダイアログを閉じる",
+    "download_completed": "ダウンロードが完了しました",
     "emoji": {
         "categories": "カテゴリー",
         "category_activities": "アクティビティー",
@@ -817,16 +822,6 @@
         "incompatible_database_disable": "暗号化を無効にして続行",
         "incompatible_database_sign_out_description": "チャットの履歴の消去を防ぐには、ログアウトする前にルームの鍵をエクスポートする必要があります。そのためには%(brand)sの新しいバージョンへと戻る必要があります",
         "incompatible_database_title": "互換性のないデータベース",
-        "key_signature_upload_cancelled": "署名のアップロードをキャンセルしました",
-        "key_signature_upload_completed": "アップロードが完了しました",
-        "key_signature_upload_failed": "アップロードできません",
-        "key_signature_upload_failed_body": "以下のアップロードの際に%(brand)sでエラーが発生しました：",
-        "key_signature_upload_failed_cross_signing_key_signature": "新しいクロス署名鍵の署名",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "端末のクロス署名",
-        "key_signature_upload_failed_key_signature": "鍵の署名",
-        "key_signature_upload_failed_master_key_signature": "新しいマスターキーの署名",
-        "key_signature_upload_failed_title": "署名のアップロードに失敗しました",
-        "key_signature_upload_success_title": "署名のアップロードに成功しました",
         "messages_not_secure": {
             "cause_1": "あなたのホームサーバー",
             "cause_2": "認証しようとしているユーザーが接続しているホームサーバー",
@@ -842,8 +837,6 @@
             "warning": "新しい復元方法を設定しなかった場合、攻撃者がアカウントへアクセスしようとしている可能性があります。設定画面ですぐにアカウントのパスワードを変更し、新しい復元方法を設定してください。"
         },
         "not_supported": "<サポート対象外>",
-        "old_version_detected_description": "%(brand)sの古いバージョンのデータを検出しました。これにより、古いバージョンではエンドツーエンドの暗号化が機能しなくなります。古いバージョンを使用している間に最近交換されたエンドツーエンドの暗号化されたメッセージは、このバージョンでは復号化できません。また、このバージョンで交換されたメッセージが失敗することもあります。問題が発生した場合は、ログアウトして再度ログインしてください。メッセージ履歴を保持するには、鍵をエクスポートして再インポートしてください。",
-        "old_version_detected_title": "古い暗号化データが検出されました",
         "recovery_method_removed": {
             "description_1": "セキュリティーフレーズと、セキュアメッセージの鍵が削除されました。",
             "description_2": "偶然削除してしまった場合は、このセッションで、メッセージの暗号化を設定することができます。設定すると、新しい復元方法でセッションのデータを改めて暗号化します。",
@@ -963,12 +956,19 @@
     "error": {
         "admin_contact": "このサービスを引き続き使用するには、<a>サービス管理者にお問い合わせ</a>ください。",
         "admin_contact_short": "<a>サーバー管理者</a>に問い合わせてください。",
+        "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
+        "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
         "connection": "ホームサーバーとの通信時に問題が発生しました。後でもう一度やり直してください。",
         "dialog_description_default": "エラーが発生しました。",
         "edit_history_unsupported": "ホームサーバーはこの機能をサポートしていません。",
         "failed_copy": "コピーに失敗しました",
         "hs_blocked": "このホームサーバーは管理者によりブロックされています。",
+        "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
+        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
+        "invalid_json_detail": "パーサーのメッセージ：%(message)s",
+        "invalid_json_generic": "不正なJSON",
         "mau": "このホームサーバーは月間アクティブユーザー数の上限に達しました 。",
+        "misconfigured": "Elementの設定が誤っています",
         "mixed_content": "HTTPSのURLがブラウザーのバーにある場合、HTTP経由でホームサーバーに接続することはできません。HTTPSを使用するか<a>安全でないスクリプトを有効にしてください</a>。",
         "non_urgent_echo_failure_toast": "あなたのサーバーはいくつかの<a>リクエスト</a>に応答しません。",
         "resource_limits": "このホームサーバーはリソースの上限に達しました。",
@@ -1139,6 +1139,9 @@
         "one": "%(spaceName)sと他%(count)s個のスペース。",
         "other": "スペース %(spaceName)s と他%(count)s個のスペース内。"
     },
+    "incompatible_browser": {
+        "title": "サポートされていないブラウザー"
+    },
     "info_tooltip_title": "情報",
     "integration_manager": {
         "connecting": "インテグレーションマネージャーに接続しています…",
@@ -1291,7 +1294,6 @@
         "click_for_info": "クリックすると詳細を表示",
         "currently_experimental": "現在実験中。",
         "custom_themes": "ユーザー定義のテーマの追加をサポート",
-        "dehydration": "乾燥した（dehydrated）端末を使用したオフラインの暗号化メッセージング",
         "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
         "element_call_video_rooms": "Element Callのビデオ通話ルーム",
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
@@ -1322,7 +1324,6 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "pinning": "固定メッセージを有効にする",
         "report_to_moderators": "モデレーターに報告",
         "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
@@ -1401,9 +1402,7 @@
         "error_send_description": "%(brand)sは位置情報を送信できませんでした。後でもう一度やり直してください。",
         "error_send_title": "位置情報を送信できませんでした",
         "error_sharing_live_location": "位置情報（ライブ）を共有している際にエラーが発生しました",
-        "error_sharing_live_location_try_again": "位置情報（ライブ）を共有している際にエラーが発生しました。もう一度やり直してください",
         "error_stopping_live_location": "位置情報（ライブ）を停止する際にエラーが発生しました",
-        "error_stopping_live_location_try_again": "位置情報（ライブ）を停止している際にエラーが発生しました。もう一度やり直してください",
         "expand_map": "地図を開く",
         "failed_generic": "位置情報の取得に失敗しました。後でもう一度やり直してください。",
         "failed_load_map": "地図を読み込めません",
@@ -1433,7 +1432,6 @@
         "share_type_own": "自分の現在の位置情報",
         "share_type_pin": "場所を選択",
         "share_type_prompt": "どのような種類の位置情報を共有したいですか？",
-        "stop_and_close": "停止して閉じる",
         "toggle_attribution": "属性を切り替える"
     },
     "member_list": {
@@ -1586,6 +1584,7 @@
         "moderator": "モデレーター",
         "restricted": "制限"
     },
+    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "presence": {
         "away": "離席中",
         "busy": "取り込み中",
@@ -1661,13 +1660,11 @@
     },
     "right_panel": {
         "add_integrations": "ウィジェット、ブリッジ、ボットの追加",
-        "export_chat_button": "チャットをエクスポート",
         "files_button": "ファイル",
         "pinned_messages": {
             "limits": {
                 "other": "ウィジェットのピン留めは%(count)s件までです"
-            },
-            "title": "固定メッセージ"
+            }
         },
         "pinned_messages_button": "固定メッセージ",
         "poll": {
@@ -1686,8 +1683,7 @@
         },
         "video_room_chat": {
             "title": "会話"
-        },
-        "widgets_section": "ウィジェット"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "この招待は、アカウントに関連付けられていないメールアドレス %(email)s に送信されました",
@@ -1707,7 +1703,6 @@
             "forget": "ルームを消去",
             "low_priority": "低優先度",
             "mark_read": "既読にする",
-            "mentions_only": "メンションのみ",
             "title": "ルームの設定",
             "unfavourite": "お気に入り登録中"
         },
@@ -1737,17 +1732,7 @@
         "forget_room": "このルームを消去",
         "forget_space": "このスペースの履歴を消去",
         "header": {
-            "close_call_button": "通話を終了",
-            "forget_room_button": "ルームを消去",
-            "hide_widgets_button": "ウィジェットを非表示にする",
-            "room_is_public": "このルームは公開されています",
-            "show_widgets_button": "ウィジェットを表示",
-            "video_call_button_ec": "ビデオ通話（%(brand)s）",
-            "video_call_button_jitsi": "ビデオ通話（Jitsi）",
-            "video_call_ec_change_layout": "レイアウトを変更",
-            "video_call_ec_layout_freedom": "自由",
-            "video_call_ec_layout_spotlight": "スポットライト",
-            "video_room_view_chat_button": "チャットのタイムラインを表示"
+            "room_is_public": "このルームは公開されています"
         },
         "inaccessible": "このルームまたはスペースは現在アクセスできません。",
         "inaccessible_name": "%(roomName)sは現在アクセスできません。",
@@ -1779,7 +1764,6 @@
         "inviter_unknown": "不明",
         "invites_you_text": "<inviter/>があなたを招待しています",
         "join_button_account": "サインアップ",
-        "join_failed_enable_video_rooms": "参加するには、まずラボのビデオ通話ルームを有効にしてください",
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "join_the_discussion": "ルームに参加",
         "join_title": "ルームに参加",
@@ -1810,13 +1794,6 @@
         "read_topic": "クリックしてトピックを読む",
         "rejecting": "招待を拒否しています…",
         "rejoin_button": "再参加",
-        "search": {
-            "result_count": {
-                "other": "（〜%(count)s件）",
-                "one": "（〜%(count)s件）"
-            }
-        },
-        "show_labs_settings": "ラボの設定を表示",
         "status_bar": {
             "delete_all": "全て削除",
             "exceeded_resource_limit": "このホームサーバーがリソース制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
@@ -1845,8 +1822,7 @@
                 "one": "%(filename)sと他%(count)s件をアップロードしています"
             },
             "uploading_single_file": "%(filename)sをアップロードしています"
-        },
-        "view_failed_enable_video_rooms": "表示するには、まずラボのビデオ通話ルームを有効にしてください"
+        }
     },
     "room_list": {
         "add_room_label": "ルームを追加",
@@ -2927,8 +2903,6 @@
             "voice_call_unsupported": "%(senderName)sが音声通話を行いました。（このブラウザーではサポートされていません）"
         },
         "m.file": {
-            "decrypt_label": "%(text)sを復号化",
-            "download_label": "%(text)sをダウンロード",
             "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました",
             "error_invalid": "無効なファイル %(extra)s"
         },
@@ -3284,6 +3258,7 @@
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"
     },
+    "unknown_device": "不明な端末",
     "update": {
         "changelog": "更新履歴",
         "check_action": "更新を確認",
@@ -3522,6 +3497,8 @@
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },
+    "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
+    "welcome_to_element": "Elementにようこそ",
     "widget": {
         "added_by": "ウィジェットの追加者",
         "capabilities_dialog": {

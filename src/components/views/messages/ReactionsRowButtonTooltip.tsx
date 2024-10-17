@@ -51,7 +51,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<Props
             const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
 
             return (
-                <Tooltip label={formattedSenders} caption={caption} placement="right">
+                <Tooltip description={formattedSenders} caption={caption} placement="right">
                     {children}
                 </Tooltip>
             );

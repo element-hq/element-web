@@ -8,9 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
-import MembersIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
-import FavoriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite-solid";
+import { EllipsisIcon, MembersIcon, FavoriteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";

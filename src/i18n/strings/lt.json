@@ -31,6 +31,7 @@
         "continue": "Tęsti",
         "copy": "Kopijuoti",
         "create": "Sukurti",
+        "create_account": "Sukurti Paskyrą",
         "decline": "Atmesti",
         "delete": "Ištrinti",
         "disable": "Išjungti",
@@ -68,6 +69,7 @@
         "next": "Toliau",
         "no": "Ne",
         "ok": "Gerai",
+        "open": "Atidaryti",
         "pin": "Prisegti",
         "quote": "Cituoti",
         "react": "Reaguoti",
@@ -222,6 +224,7 @@
             "clear_data_title": "Išvalyti visus duomenis šiame seanse?"
         },
         "sso": "Vienas Prisijungimas",
+        "sso_complete_in_browser_dialog_title": "Norėdami užbaigti prisijungimą, eikite į naršyklę",
         "sso_failed_missing_storage": "Paprašėme naršyklės įsiminti, kurį namų serverį naudojate prisijungimui, bet, deja, naršyklė tai pamiršo. Eikite į prisijungimo puslapį ir bandykite dar kartą.",
         "sync_footer_subtitle": "Jei esate prisijungę prie daug kambarių, tai gali užtrukti",
         "uia": {
@@ -460,6 +463,7 @@
         "public_heading": "Jūsų vieša erdvė",
         "subspace_dropdown_title": "Sukurti erdvę"
     },
+    "desktop_default_device_name": "%(brand)s Kompiuteryje: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktyvūs Valdikliai",
         "category_other": "Kitas",
@@ -482,6 +486,7 @@
         "widget_screenshots": "Įjungti valdiklių ekrano kopijas palaikomuose valdikliuose"
     },
     "dialog_close_label": "Uždaryti dialogą",
+    "download_completed": "Atsisiuntimas baigtas",
     "emoji": {
         "categories": "Kategorijos",
         "category_activities": "Veikla",
@@ -547,16 +552,6 @@
         "incompatible_database_disable": "Tęsti išjungus šifravimą",
         "incompatible_database_sign_out_description": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
         "incompatible_database_title": "Nesuderinama duomenų bazė",
-        "key_signature_upload_cancelled": "Atšauktas parašo įkėlimas",
-        "key_signature_upload_completed": "Įkėlimas baigtas",
-        "key_signature_upload_failed": "Nepavyksta įkelti",
-        "key_signature_upload_failed_body": "%(brand)s aptiko klaidą įkeliant:",
-        "key_signature_upload_failed_cross_signing_key_signature": "naujas kryžminio pasirašymo rakto parašas",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "įrenginio kryžminio pasirašymo parašas",
-        "key_signature_upload_failed_key_signature": "rakto parašas",
-        "key_signature_upload_failed_master_key_signature": "naujas pagrindinio rakto parašas",
-        "key_signature_upload_failed_title": "Parašo įkėlimas nepavyko",
-        "key_signature_upload_success_title": "Parašo įkėlimas sėkmingas",
         "messages_not_secure": {
             "cause_1": "Jūsų serveris",
             "cause_2": "Namų serveris, prie kurio yra prisijungęs patvirtinamas naudotojas",
@@ -571,7 +566,6 @@
             "warning": "Jei jūs nenustatėte naujo paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "not_supported": "<nepalaikoma>",
-        "old_version_detected_title": "Aptikti seni kriptografijos duomenys",
         "recovery_method_removed": {
             "description_2": "Jei tai padarėte netyčia, šiame seanse galite nustatyti saugias žinutes, kurios pakartotinai užšifruos šio seanso žinučių istoriją nauju atgavimo metodu.",
             "title": "Atgavimo Metodas Pašalintas",
@@ -662,11 +656,18 @@
     },
     "error": {
         "admin_contact_short": "Susisiekite su savo <a>serverio administratoriumi</a>.",
+        "app_launch_unexpected_error": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
+        "cannot_load_config": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
         "dialog_description_default": "Įvyko klaida.",
         "edit_history_unsupported": "Panašu, kad jūsų namų serveris nepalaiko šios galimybės.",
         "failed_copy": "Nepavyko nukopijuoti",
         "hs_blocked": "Šis namų serveris buvo užblokuotas jo administratoriaus.",
+        "invalid_configuration_no_server": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
+        "invalid_json": "Jūsų Element konfigūracijoje yra klaidingas JSON. Ištaisykite problemą ir iš naujo įkelkite puslapį.",
+        "invalid_json_detail": "Analizatoriaus žinutė yra: %(message)s",
+        "invalid_json_generic": "Klaidingas JSON",
         "mau": "Šis serveris pasiekė savo mėnesinį aktyvių vartotojų limitą.",
+        "misconfigured": "Jūsų Element yra neteisingai sukonfigūruotas",
         "mixed_content": "Neįmanoma prisijungti prie serverio per HTTP, kai naršyklės juostoje yra HTTPS URL. Naudokite HTTPS arba <a>įjunkite nesaugias rašmenas</a>.",
         "non_urgent_echo_failure_toast": "Jūsų serveris neatsako į kai kurias <a>užklausas</a>.",
         "resource_limits": "Šis serveris viršijo vieno iš savo išteklių limitą.",
@@ -777,6 +778,9 @@
         "url_field_label": "Pridėkite naują tapatybės serverį",
         "url_not_https": "Tapatybės serverio URL privalo būti HTTPS"
     },
+    "incompatible_browser": {
+        "title": "Nepalaikoma naršyklė"
+    },
     "integration_manager": {
         "error_connecting": "Integracijų tvarkytuvas yra išjungtas arba negali pasiekti jūsų serverio.",
         "error_connecting_heading": "Neįmanoma prisijungti prie integracijų tvarkytuvo",
@@ -865,7 +869,6 @@
         "bridge_state_manager": "Šis tiltas yra tvarkomas <user />.",
         "bridge_state_workspace": "Darbo aplinka: <networkLink/>",
         "custom_themes": "Palaikykite pridėdami pasirinktines temas",
-        "dehydration": "Šifruoti pranešimai neprisijungus naudojant dehidruotus įrenginius",
         "element_call_video_rooms": "Element skambučio vaizdo kambariai",
         "group_developer": "Kūrėjas",
         "group_encryption": "Šifravimas",
@@ -883,7 +886,6 @@
         "latex_maths": "Atvaizduoti LaTeX matematikas žinutėse",
         "leave_beta": "Palikti beta versiją",
         "msc3531_hide_messages_pending_moderation": "Leisti moderatoriams slėpti žinutes, laukiančias moderavimo.",
-        "pinning": "Žinučių prisegimas",
         "video_rooms": "Vaizdo kambariai",
         "video_rooms_a_new_way_to_chat": "Naujas būdas kalbėtis balsu ir vaizdu per %(brand)s.",
         "video_rooms_always_on_voip_channels": "Vaizdo kambariai - tai visada veikiantys VoIP kanalai, įterpti į %(brand)s kambarį.",
@@ -1019,6 +1021,8 @@
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
+    "powered_by_matrix": "Veikia su Matrix",
+    "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
     "presence": {
         "busy": "Užsiėmęs",
         "idle": "Neveiklus",
@@ -1081,19 +1085,16 @@
     },
     "right_panel": {
         "add_integrations": "Pridėti valdiklius, tiltus ir botus",
-        "export_chat_button": "Eksportuoti pokalbį",
         "files_button": "Failai",
         "pinned_messages": {
             "limits": {
                 "other": "Galite prisegti tik iki %(count)s valdiklių"
-            },
-            "title": "Prisegtos žinutės"
+            }
         },
         "pinned_messages_button": "Prisegta",
         "video_room_chat": {
             "title": "Pokalbis"
-        },
-        "widgets_section": "Valdikliai"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Šis kvietimas buvo išsiųstas į %(email)s, kuris nėra susijęs su jūsų paskyra",
@@ -1128,11 +1129,6 @@
         "failed_reject_invite": "Nepavyko atmesti pakvietimo",
         "forget_room": "Pamiršti šį kambarį",
         "forget_space": "Pamiršti šią erdvę",
-        "header": {
-            "forget_room_button": "Pamiršti kambarį",
-            "hide_widgets_button": "Slėpti Valdiklius",
-            "show_widgets_button": "Rodyti Valdiklius"
-        },
         "inaccessible": "Šiuo metu į šį kambarį ar erdvę negalima patekti.",
         "inaccessible_name": "%(roomName)s šiuo metu nėra pasiekiamas.",
         "inaccessible_subtitle_1": "Pabandykite vėliau arba paprašykite kambario ar erdvės administratoriaus patikrinti, ar turite prieigą.",
@@ -1163,7 +1159,6 @@
         "inviter_unknown": "Nežinoma",
         "invites_you_text": "<inviter/> kviečia jus",
         "join_button_account": "Registruotis",
-        "join_failed_enable_video_rooms": "Norint prisijungti, pirmiausia įjunkite vaizdo kambarius laboratorijose",
         "join_failed_needs_invite": "Norint peržiūrėti %(roomName)s, turite gauti kvietimą",
         "join_the_discussion": "Prisijungti prie diskusijos",
         "join_title": "Prisijunkite prie kambario ir dalyvaukite",
@@ -1190,13 +1185,6 @@
         "not_found_title_name": "%(roomName)s neegzistuoja.",
         "peek_join_prompt": "Jūs peržiūrite %(roomName)s. Norite prie jo prisijungti?",
         "rejoin_button": "Prisijungti iš naujo",
-        "search": {
-            "result_count": {
-                "other": "(~%(count)s rezultatų(-ai))",
-                "one": "(~%(count)s rezultatas)"
-            }
-        },
-        "show_labs_settings": "Rodyti laboratorijų nustatymus",
         "status_bar": {
             "server_connectivity_lost_description": "Išsiųstos žinutės bus saugomos tol, kol atsiras ryšys.",
             "server_connectivity_lost_title": "Jungiamumas su šiuo serveriu buvo prarastas."
@@ -1217,8 +1205,7 @@
                 "one": "Įkeliamas %(filename)s ir dar %(count)s failas"
             },
             "uploading_single_file": "Įkeliamas %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "Norint peržiūrėti, pirmiausia įjunkite vaizdo kambarius laboratorijose"
+        }
     },
     "room_list": {
         "add_room_label": "Sukurti kambarį",
@@ -2019,8 +2006,6 @@
             "voice_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)"
         },
         "m.file": {
-            "decrypt_label": "Iššifruoti %(text)s",
-            "download_label": "Atsisiųsti %(text)s",
             "error_decrypting": "Klaida iššifruojant priedą",
             "error_invalid": "Neteisingas failas %(extra)s"
         },
@@ -2310,6 +2295,7 @@
     "truncated_list_n_more": {
         "other": "Ir dar %(count)s..."
     },
+    "unknown_device": "Nežinomas įrenginys",
     "update": {
         "changelog": "Keitinių žurnalas",
         "check_action": "Tikrinti, ar yra atnaujinimų",
@@ -2493,6 +2479,7 @@
         "voice_call": "Balso skambutis",
         "you_are_presenting": "Jūs pristatote"
     },
+    "welcome_to_element": "Sveiki atvykę į Element",
     "widget": {
         "added_by": "Valdiklį pridėjo",
         "capabilities_dialog": {

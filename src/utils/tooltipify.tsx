@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import ReactDOM from "react-dom";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
@@ -52,9 +53,11 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
             // wrapping the link with the LinkWithTooltip component, keeping the same children. Ideally we'd do this
             // without the superfluous span but this is not something React trivially supports at this time.
             const tooltip = (
-                <LinkWithTooltip tooltip={href}>
-                    <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
-                </LinkWithTooltip>
+                <TooltipProvider>
+                    <LinkWithTooltip tooltip={href}>
+                        <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
+                    </LinkWithTooltip>
+                </TooltipProvider>
             );
 
             ReactDOM.render(tooltip, node);

@@ -16,7 +16,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
 import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
-import SettingsStore from "./settings/SettingsStore";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
@@ -121,7 +120,7 @@ async function getSecretStorageKey({
             keyInfo,
             checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
-                return MatrixClientPeg.safeGet().checkSecretStorageKey(key, keyInfo);
+                return MatrixClientPeg.safeGet().secretStorage.checkKey(key, keyInfo);
             },
         },
         /* className= */ undefined,
@@ -276,20 +275,6 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
             });
             logger.debug("accessSecretStorage: bootstrapSecretStorage");
             await crypto.bootstrapSecretStorage({});
-
-            const keyId = Object.keys(secretStorageKeys)[0];
-            if (keyId && SettingsStore.getValue("feature_dehydration")) {
-                let dehydrationKeyInfo = {};
-                if (secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase) {
-                    dehydrationKeyInfo = { passphrase: secretStorageKeyInfo[keyId].passphrase };
-                }
-                logger.log("accessSecretStorage: Setting dehydration key");
-                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
-            } else if (!keyId) {
-                logger.warn("accessSecretStorage: Not setting dehydration key: no SSSS key found");
-            } else {
-                logger.log("accessSecretStorage: Not setting dehydration key: feature disabled");
-            }
         }
 
         logger.debug("accessSecretStorage: 4S now ready");

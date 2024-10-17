@@ -10,7 +10,7 @@ import classNames from "classnames";
 import React, { forwardRef, ForwardRefExoticComponent, useContext } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
-import WarningIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { IBodyProps } from "./IBodyProps";

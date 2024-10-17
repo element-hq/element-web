@@ -38,6 +38,7 @@
         "copy_link": "Копировать ссылку",
         "create": "Создать",
         "create_a_room": "Создать комнату",
+        "create_account": "Создать учётную запись",
         "decline": "Отклонить",
         "delete": "Удалить",
         "deny": "Запретить",
@@ -79,6 +80,7 @@
         "next": "Далее",
         "no": "Нет",
         "ok": "ОК",
+        "open": "Открыть",
         "pause": "Пауза",
         "pin": "Закрепить",
         "play": "Воспроизведение",
@@ -324,6 +326,7 @@
         "soft_logout_subheading": "Очистить персональные данные",
         "soft_logout_warning": "Внимание: ваши личные данные (включая ключи шифрования) все еще хранятся в этом сеансе. Очистите его, если вы закончили использовать этот сеанс или хотите войти в другую учетную запись.",
         "sso": "Единая точка входа",
+        "sso_complete_in_browser_dialog_title": "Перейдите в браузер для завершения входа",
         "sso_failed_missing_storage": "Мы попросили браузер запомнить, какой домашний сервер вы используете для входа в систему, но, к сожалению, ваш браузер забыл об этом. Перейдите на страницу входа и попробуйте ещё раз.",
         "sso_or_username_password": "%(ssoButtons)s или %(usernamePassword)s",
         "sync_footer_subtitle": "Если вы присоединились к большому количеству комнат, это может занять некоторое время",
@@ -688,6 +691,7 @@
         "twemoji": "<twemoji>Изображение смайликов Twemoji</twemoji> © <author> Twitter, Inc и другие авторы </author> используются в соответствии с условиями <terms> CC-BY 4.0</terms>.",
         "twemoji_colr": "<colr>twemoji-colr</colr> шрифт от автора © <author>Mozilla Foundation</author> используется на условиях <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Рабочий стол: %(platformName)s",
     "devtools": {
         "active_widgets": "Активные виджеты",
         "category_other": "Другие",
@@ -792,6 +796,7 @@
         "widget_screenshots": "Включить скриншоты виджетов для поддерживаемых виджетов"
     },
     "dialog_close_label": "Закрыть диалог",
+    "download_completed": "Загрузка завершена",
     "emoji": {
         "categories": "Категории",
         "category_activities": "Действия",
@@ -862,16 +867,6 @@
         "incompatible_database_disable": "Продолжить с отключенным шифрованием",
         "incompatible_database_sign_out_description": "Чтобы не потерять историю чата, вы должны экспортировать ключи от комнаты перед выходом из системы. Для этого вам нужно будет вернуться к более новой версии %(brand)s",
         "incompatible_database_title": "Несовместимая база данных",
-        "key_signature_upload_cancelled": "Отправка отпечатка отменена",
-        "key_signature_upload_completed": "Отправка успешно завершена",
-        "key_signature_upload_failed": "Невозможно отправить",
-        "key_signature_upload_failed_body": "%(brand)s обнаружил ошибку при загрузке файла:",
-        "key_signature_upload_failed_cross_signing_key_signature": "новый ключ подписи для кросс-подписи",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "подпись устройства для кросс-подписи",
-        "key_signature_upload_failed_key_signature": "отпечаток ключа",
-        "key_signature_upload_failed_master_key_signature": "новая подпись мастер-ключа",
-        "key_signature_upload_failed_title": "Сбой отправки отпечатка",
-        "key_signature_upload_success_title": "Отпечаток успешно отправлен",
         "messages_not_secure": {
             "cause_1": "Ваш домашний сервер",
             "cause_2": "Домашний сервер пользователя, которого вы подтверждаете",
@@ -887,8 +882,6 @@
             "warning": "Если вы не задали новый способ восстановления, злоумышленник может получить доступ к вашей учётной записи. Смените пароль учётной записи и сразу же задайте новый способ восстановления в настройках."
         },
         "not_supported": "<не поддерживается>",
-        "old_version_detected_description": "Обнаружены данные из более старой версии %(brand)s. Это приведет к сбою криптографии в более ранней версии. В этой версии не могут быть расшифрованы сообщения, которые использовались недавно при использовании старой версии. Это также может привести к сбою обмена сообщениями с этой версией. Если возникают неполадки, выйдите и снова войдите в систему. Чтобы сохранить журнал сообщений, экспортируйте и повторно импортируйте ключи.",
-        "old_version_detected_title": "Обнаружены старые криптографические данные",
         "recovery_method_removed": {
             "description_1": "Этот сеанс обнаружил, что ваши секретная фраза и ключ безопасности для защищенных сообщений были удалены.",
             "description_2": "Если вы сделали это по ошибке, вы можете настроить защищённые сообщения в этом сеансе, что снова зашифрует историю сообщений в этом сеансе с помощью нового метода восстановления.",
@@ -1011,13 +1004,21 @@
     "error": {
         "admin_contact": "Пожалуйста, <a>обратитесь к вашему администратору</a>, чтобы продолжить использовать этот сервис.",
         "admin_contact_short": "Обратитесь к <a>администратору сервера</a>.",
+        "app_launch_unexpected_error": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
+        "cannot_load_config": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
         "connection": "Возникла проблема при обмене данными с домашним сервером. Повторите попытку позже.",
         "dialog_description_default": "Произошла ошибка.",
         "download_media": "Не удалось загрузить исходный медиафайл, исходный URL-адрес не найден",
         "edit_history_unsupported": "Ваш сервер, похоже, не поддерживает эту возможность.",
         "failed_copy": "Не удалось скопировать",
         "hs_blocked": "Доступ к этому домашнему серверу заблокирован вашим администратором.",
+        "invalid_configuration_mixed_server": "Неверная конфигурация: нельзя указать default_hs_url вместе с default_server_name или default_server_config",
+        "invalid_configuration_no_server": "Неверная конфигурация: сервер по умолчанию не указан.",
+        "invalid_json": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
+        "invalid_json_detail": "Сообщение из парсера: %(message)s",
+        "invalid_json_generic": "Неверный JSON",
         "mau": "Сервер достиг ежемесячного ограничения активных пользователей.",
+        "misconfigured": "Ваш Element неверно настроен",
         "mixed_content": "Не удается подключиться к домашнему серверу через HTTP, так как в адресной строке браузера указан адрес HTTPS. Используйте HTTPS или <a>включите небезопасные скрипты</a>.",
         "non_urgent_echo_failure_toast": "Ваш сервер не отвечает на некоторые <a>запросы</a>.",
         "resource_limits": "Превышен один из лимитов на ресурсы сервера.",
@@ -1203,6 +1204,9 @@
         "one": "В %(spaceName)s и %(count)s другом пространстве.",
         "other": "В %(spaceName)s и %(count)s других пространствах."
     },
+    "incompatible_browser": {
+        "title": "Неподдерживаемый браузер"
+    },
     "info_tooltip_title": "Информация",
     "integration_manager": {
         "connecting": "Подключение к менеджеру интеграции…",
@@ -1373,7 +1377,6 @@
         "click_for_info": "Нажмите, чтобы узнать больше",
         "currently_experimental": "На данный момент экспериментальный.",
         "custom_themes": "Поддержка сторонних тем",
-        "dehydration": "Автономный обмен зашифрованными сообщениями с сохранёнными устройствами",
         "dynamic_room_predecessors": "Родитель динамической комнаты",
         "dynamic_room_predecessors_description": "Включите MSC3946 (для поддержки архивных комнат)",
         "element_call_video_rooms": "Видеокомнаты Element Call",
@@ -1405,14 +1408,12 @@
         "location_share_live_description": "Временная реализация. Местоположения сохраняются в истории комнаты.",
         "mjolnir": "Новые способы игнорировать людей",
         "msc3531_hide_messages_pending_moderation": "Позволяет модераторам скрывать сообщения, ожидающие модерации.",
-        "new_room_decoration_ui": "Новый заголовок комнаты и интерфейс подробной информации, находится в стадии активной разработки",
         "notification_settings": "Новые настройки уведомлений",
         "notification_settings_beta_caption": "Представляем вам более простой способ изменения настроек уведомлений. Настройте свои настройки так %(brand)s, как вам удобно.",
         "notification_settings_beta_title": "Настройки уведомлений",
         "notifications": "Включить панель уведомлений в заголовке комнаты",
         "oidc_native_flow": "Встроенная аутентификация OIDC",
         "oidc_native_flow_description": "⚠ ВНИМАНИЕ: Экспериментально. Используйте встроенную аутентификацию OIDC, если она поддерживается сервером.",
-        "pinning": "Закреплённые сообщения",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
         "report_to_moderators": "Пожаловаться модераторам",
@@ -1498,9 +1499,7 @@
         "error_send_description": "%(brand)s не удаётся отправить ваше местоположение. Пожалуйста, повторите попытку позже.",
         "error_send_title": "Мы не смогли отправить ваше местоположение",
         "error_sharing_live_location": "Произошла ошибка при передаче информации о вашем местоположении в реальном времени",
-        "error_sharing_live_location_try_again": "При передаче информации о вашем местоположении произошла ошибка, попробуйте ещё раз",
         "error_stopping_live_location": "Произошла ошибка при остановке вашего местоположения в реальном времени",
-        "error_stopping_live_location_try_again": "При остановки передачи информации о вашем местоположении произошла ошибка, попробуйте ещё раз",
         "expand_map": "Развернуть карту",
         "failed_generic": "Не удалось определить ваше местоположение. Пожалуйста, повторите попытку позже.",
         "failed_load_map": "Не удается загрузить карту",
@@ -1530,7 +1529,6 @@
         "share_type_own": "Моё текущее местоположение",
         "share_type_pin": "Маркер на карте",
         "share_type_prompt": "Каким типом местоположения вы хотите поделиться?",
-        "stop_and_close": "Остановить и закрыть",
         "toggle_attribution": "Переключить атрибуцию"
     },
     "member_list": {
@@ -1687,6 +1685,8 @@
         "moderator": "Модератор",
         "restricted": "Ограниченный пользователь"
     },
+    "powered_by_matrix": "На технологии Matrix",
+    "powered_by_matrix_with_logo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo",
     "presence": {
         "away": "Отошёл(ла)",
         "busy": "Занят(а)",
@@ -1770,13 +1770,11 @@
     },
     "right_panel": {
         "add_integrations": "Добавить виджеты, мосты и ботов",
-        "export_chat_button": "Экспорт чата",
         "files_button": "Файлы",
         "pinned_messages": {
             "limits": {
                 "other": "Вы можете закрепить не более %(count)s виджетов"
-            },
-            "title": "Закреплённые сообщения"
+            }
         },
         "pinned_messages_button": "Закреплено",
         "poll": {
@@ -1814,8 +1812,7 @@
         },
         "video_room_chat": {
             "title": "Чат"
-        },
-        "widgets_section": "Виджеты"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Это приглашение отправлено на %(email)s, которая не связана с вашей учетной записью",
@@ -1835,7 +1832,6 @@
             "forget": "Забыть комнату",
             "low_priority": "Маловажные",
             "mark_read": "Отметить как прочитанное",
-            "mentions_only": "Только упоминания",
             "notifications_default": "Соответствует настройке по умолчанию",
             "notifications_mute": "Заглушить комнату",
             "title": "Настройки комнаты",
@@ -1878,22 +1874,12 @@
         "forget_room": "Забыть эту комнату",
         "forget_space": "Забыть это пространство",
         "header": {
-            "close_call_button": "Закрыть звонок",
-            "forget_room_button": "Забыть комнату",
-            "hide_widgets_button": "Скрыть виджеты",
             "n_people_asking_to_join": {
                 "one": "Просит присоединиться",
                 "few": "%(count)s пользователя запрашивают присоединения",
                 "many": "%(count)s пользователей запрашивают присоединения"
             },
-            "room_is_public": "Это публичная комната",
-            "show_widgets_button": "Показать виджеты",
-            "video_call_button_ec": "Видеозвонок (%(brand)s)",
-            "video_call_button_jitsi": "Видеозвонок (Jitsi)",
-            "video_call_ec_change_layout": "Изменить расположение",
-            "video_call_ec_layout_freedom": "Свободное",
-            "video_call_ec_layout_spotlight": "Освещение",
-            "video_room_view_chat_button": "Посмотреть ленту сообщений"
+            "room_is_public": "Это публичная комната"
         },
         "header_untrusted_label": "Ненадёжный",
         "inaccessible": "Эта комната или пространство в данный момент недоступны.",
@@ -1927,7 +1913,6 @@
         "inviter_unknown": "Неизвестно",
         "invites_you_text": "<inviter/> пригласил(а) тебя",
         "join_button_account": "Зарегистрироваться",
-        "join_failed_enable_video_rooms": "Чтобы присоединиться, сначала включите видеокомнаты в лаборатории",
         "join_failed_needs_invite": "Для просмотра %(roomName)s необходимо приглашение",
         "join_the_discussion": "Войти в комнату",
         "join_title": "Присоединяйтесь к комнате для участия",
@@ -1970,13 +1955,8 @@
         "rejoin_button": "Пере-присоединение",
         "search": {
             "all_rooms_button": "Поиск по всем комнатам",
-            "result_count": {
-                "other": "(~%(count)s результатов)",
-                "one": "(~%(count)s результат)"
-            },
             "this_room_button": "Поиск в этой комнате"
         },
-        "show_labs_settings": "Показать настройки лаборатории",
         "status_bar": {
             "delete_all": "Удалить все",
             "exceeded_resource_limit": "Ваше сообщение не было отправлено, потому что этот домашний сервер превысил лимит ресурсов. <a>обратитесь к администратору службы</a>, чтобы продолжить использование службы.",
@@ -2007,7 +1987,6 @@
             },
             "uploading_single_file": "Отправка %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Для просмотра сначала включите видеокомнаты в лаборатории",
         "waiting_for_join_subtitle": "Как только приглашенные пользователи присоединятся %(brand)s, вы сможете общаться в чате, а комната будет полностью зашифрована",
         "waiting_for_join_title": "Ожидание присоединения пользователей %(brand)s"
     },
@@ -3176,8 +3155,6 @@
             "voice_call_unsupported": "%(senderName)s сделал голосовой вызов. (не поддерживается этим браузером)"
         },
         "m.file": {
-            "decrypt_label": "Расшифровать %(text)s",
-            "download_label": "Скачать %(text)s",
             "error_decrypting": "Ошибка расшифровки вложения",
             "error_invalid": "Недопустимый файл%(extra)s"
         },
@@ -3553,6 +3530,7 @@
     "truncated_list_n_more": {
         "other": "Еще %(count)s…"
     },
+    "unknown_device": "Неизвестное устройство",
     "unsupported_server_description": "На этом сервере используется старая версия Matrix. Перейдите на Matrix%(version)s, чтобы использовать %(brand)s ее без ошибок.",
     "unsupported_server_title": "Ваш сервер не поддерживается",
     "update": {
@@ -3795,6 +3773,8 @@
         "voice_call": "Голосовой вызов",
         "you_are_presenting": "Вы представляете"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
+    "welcome_to_element": "Добро пожаловать в Element",
     "widget": {
         "added_by": "Виджет добавлен",
         "capabilities_dialog": {

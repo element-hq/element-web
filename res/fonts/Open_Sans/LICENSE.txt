@@ -421,4 +421,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
->>>>>>>> 5660d5078528418f362e42d14714004d6f90dce4:res/fonts/Open_Sans/LICENSE.txt
+>>>>>>>> repomerge/t3chguy/repomerge:res/fonts/Open_Sans/LICENSE.txt

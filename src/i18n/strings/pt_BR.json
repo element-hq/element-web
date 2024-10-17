@@ -32,6 +32,7 @@
         "copy": "Copiar",
         "create": "Criar",
         "create_a_room": "Criar uma sala",
+        "create_account": "Criar Conta",
         "decline": "Recusar",
         "delete": "Excluir",
         "disable": "Desativar",
@@ -69,6 +70,7 @@
         "next": "Próximo",
         "no": "Não",
         "ok": "Ok",
+        "open": "Abrir",
         "pin": "Alfinete",
         "quote": "Citar",
         "react": "Adicionar reação",
@@ -254,6 +256,7 @@
         "soft_logout_intro_unsupported_auth": "Você não pôde se conectar na sua conta. Entre em contato com o administrador do servidor para obter mais informações.",
         "soft_logout_subheading": "Limpar dados pessoais",
         "sso": "Autenticação Única",
+        "sso_complete_in_browser_dialog_title": "Vá em seu navegador para completar o Registro",
         "sso_failed_missing_storage": "Anteriormente, pedimos ao seu navegador para lembrar qual servidor local você usa para fazer login, mas infelizmente o navegador se esqueceu disso. Vá para a página de login e tente novamente.",
         "sso_or_username_password": "%(ssoButtons)s ou %(usernamePassword)s",
         "sync_footer_subtitle": "Se você participa em muitas salas, isso pode demorar um pouco",
@@ -563,6 +566,7 @@
         "widget_screenshots": "Ativar capturas de tela do widget em widgets suportados"
     },
     "dialog_close_label": "Fechar caixa de diálogo",
+    "download_completed": "Download Concluído",
     "emoji": {
         "categories": "Categorias",
         "category_activities": "Atividades",
@@ -625,16 +629,6 @@
         "incompatible_database_disable": "Continuar com criptografia desativada",
         "incompatible_database_sign_out_description": "Para evitar perder seu histórico de bate-papo, você precisa exportar as chaves da sua sala antes de se desconectar. Quando entrar novamente, você precisará usar a versão mais atual do %(brand)s",
         "incompatible_database_title": "Banco de dados incompatível",
-        "key_signature_upload_cancelled": "Envio cancelado da assinatura",
-        "key_signature_upload_completed": "Envio concluído",
-        "key_signature_upload_failed": "Falha no envio",
-        "key_signature_upload_failed_body": "%(brand)s encontrou um erro durante o envio de:",
-        "key_signature_upload_failed_cross_signing_key_signature": "uma nova chave de autoverificação",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "um aparelho autoverificado",
-        "key_signature_upload_failed_key_signature": "uma assinatura de chave",
-        "key_signature_upload_failed_master_key_signature": "uma nova chave mestra de assinatura",
-        "key_signature_upload_failed_title": "O envio da assinatura falhou",
-        "key_signature_upload_success_title": "Envio bem-sucedido da assinatura",
         "messages_not_secure": {
             "cause_1": "Seu servidor local",
             "cause_2": "O servidor doméstico do usuário que você está verificando está conectado",
@@ -650,8 +644,6 @@
             "warning": "Se você não definiu a nova opção de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina uma nova opção de recuperação imediatamente nas Configurações."
         },
         "not_supported": "<não suportado>",
-        "old_version_detected_description": "Detectamos uma versão mais antiga do %(brand)s. Isso fará com que a criptografia de ponta a ponta não funcione corretamente. As mensagens criptografadas de ponta a ponta trocadas recentemente, enquanto você usava a versão mais antiga, talvez não sejam descriptografáveis na nova versão. Isso também poderá fazer com que as mensagens trocadas nesta sessão falhem na mais atual. Se você tiver problemas, desconecte-se e entre novamente. Para manter o histórico de mensagens, exporte e reimporte suas chaves.",
-        "old_version_detected_title": "Dados de criptografia antigos foram detectados",
         "recovery_method_removed": {
             "description_1": "Esta sessão detectou que a sua Frase de Segurança e a chave para mensagens seguras foram removidas.",
             "description_2": "Se você fez isso acidentalmente, você pode configurar Mensagens Seguras nesta sessão, o que vai re-criptografar o histórico de mensagens desta sessão com uma nova opção de recuperação.",
@@ -734,12 +726,19 @@
     "error": {
         "admin_contact": "Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando este serviço.",
         "admin_contact_short": "Entre em contato com sua(seu) <a>administrador(a) do servidor</a>.",
+        "app_launch_unexpected_error": "Erro inesperado preparando o app. Veja console para detalhes.",
+        "cannot_load_config": "Incapaz de carregar arquivo de configuração: por favor atualize a página para tentar de novo.",
         "connection": "Ocorreu um problema de comunicação com o servidor local. Tente novamente mais tarde.",
         "dialog_description_default": "Ocorreu um erro.",
         "edit_history_unsupported": "O seu servidor local não parece suportar este recurso.",
         "failed_copy": "Não foi possível copiar",
         "hs_blocked": "Este servidor local foi bloqueado pelo seu administrador.",
+        "invalid_configuration_no_server": "Configuração inválida: nenhum servidor default especificado.",
+        "invalid_json": "Sua configuração do Element contém JSON inválido. Por favor corrija o problema e recarregue a página.",
+        "invalid_json_detail": "A mensagem do parser é: %(message)s",
+        "invalid_json_generic": "JSON inválido",
         "mau": "Este homeserver atingiu seu limite de usuário ativo mensal.",
+        "misconfigured": "Seu Element está mal configurado",
         "mixed_content": "Uma conexão com o servidor local via HTTP não pode ser estabelecida se a barra de endereços do navegador contiver um endereço HTTPS. Use HTTPS ou, em vez disso, permita ao navegador executar <a>scripts não seguros</a>.",
         "non_urgent_echo_failure_toast": "Seu servidor não está respondendo a algumas <a>solicitações</a>.",
         "resource_limits": "Este servidor local ultrapassou um dos seus limites de recursos.",
@@ -877,6 +876,9 @@
         "one": "Em %(spaceName)s e %(count)s outro espaço.",
         "other": "Em %(spaceName)s e %(count)s outros espaços."
     },
+    "incompatible_browser": {
+        "title": "Browser insuportado"
+    },
     "info_tooltip_title": "Informação",
     "integration_manager": {
         "error_connecting": "Ou o gerenciador de integrações está indisponível, ou ele não conseguiu acessar o seu servidor.",
@@ -987,7 +989,6 @@
         "bridge_state_manager": "Esta integração é desenvolvida por <user />.",
         "bridge_state_workspace": "Espaço de trabalho: <networkLink/>",
         "custom_themes": "Permite adicionar temas personalizados",
-        "dehydration": "Envio de mensagens criptografadas offline, usando dispositivos específicos",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Criptografia",
         "group_messaging": "Mensagens",
@@ -999,7 +1000,6 @@
         "group_threads": "Tópicos",
         "group_voip": "Voz e vídeo",
         "latex_maths": "Renderizar fórmulas matemáticas LaTeX em mensagens",
-        "pinning": "Fixar mensagem",
         "video_rooms": "Salas de vídeo"
     },
     "labs_mjolnir": {
@@ -1132,6 +1132,7 @@
         "moderator": "Moderador/a",
         "restricted": "Restrito"
     },
+    "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "presence": {
         "away": "Ausente",
         "idle": "Ocioso",
@@ -1193,13 +1194,11 @@
     },
     "right_panel": {
         "add_integrations": "Adicionar widgets, integrações e bots",
-        "export_chat_button": "Exportar conversa",
         "files_button": "Arquivos",
         "pinned_messages": {
             "limits": {
                 "other": "Você pode fixar até %(count)s widgets"
-            },
-            "title": "Mensagens fixadas"
+            }
         },
         "poll": {
             "final_result": {
@@ -1248,10 +1247,7 @@
         "failed_reject_invite": "Não foi possível recusar o convite",
         "forget_room": "Esquecer esta sala",
         "header": {
-            "forget_room_button": "Esquecer sala",
-            "hide_widgets_button": "Esconder widgets",
-            "room_is_public": "Esta sala é pública",
-            "show_widgets_button": "Mostrar widgets"
+            "room_is_public": "Esta sala é pública"
         },
         "inaccessible_name": "%(roomName)s não está acessível neste momento.",
         "intro": {
@@ -1292,12 +1288,6 @@
         "not_found_title_name": "%(roomName)s não existe.",
         "peek_join_prompt": "Você está visualizando %(roomName)s. Deseja participar?",
         "rejoin_button": "Entrar novamente",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s resultado)",
-                "other": "(~%(count)s resultados)"
-            }
-        },
         "status_bar": {
             "exceeded_resource_limit": "Sua mensagem não foi enviada porque este servidor local excedeu o limite de recursos. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
             "monthly_user_limit_reached": "Sua mensagem não foi enviada porque este homeserver atingiu seu Limite de usuário ativo mensal. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
@@ -2163,8 +2153,6 @@
             "voice_call_unsupported": "%(senderName)s iniciou uma chamada de voz. (não suportada por este navegador)"
         },
         "m.file": {
-            "decrypt_label": "Descriptografar %(text)s",
-            "download_label": "Baixar %(text)s",
             "error_decrypting": "Erro ao descriptografar o anexo",
             "error_invalid": "Arquivo inválido %(extra)s"
         },
@@ -2471,6 +2459,7 @@
     "truncated_list_n_more": {
         "other": "E %(count)s mais..."
     },
+    "unknown_device": "Dispositivo desconhecido",
     "update": {
         "changelog": "Registro de alterações",
         "check_action": "Verificar atualizações",
@@ -2658,6 +2647,8 @@
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Você está apresentando"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
+    "welcome_to_element": "Boas-vindas a Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {

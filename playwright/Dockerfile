@@ -1,7 +1,6 @@
-FROM mcr.microsoft.com/playwright:v1.46.1-jammy
+FROM mcr.microsoft.com/playwright:v1.48.0-jammy
 
-WORKDIR /work/matrix-react-sdk
-VOLUME ["/work/element-web/node_modules"]
+WORKDIR /work
 
 # fonts-dejavu is needed for the same RTL rendering as on CI
 RUN apt-get update && apt-get -y install docker.io fonts-dejavu

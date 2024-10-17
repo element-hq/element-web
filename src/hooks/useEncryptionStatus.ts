@@ -15,7 +15,7 @@ export function useEncryptionStatus(client: MatrixClient, room: Room): E2EStatus
     const [e2eStatus, setE2eStatus] = useState<E2EStatus | null>(null);
 
     useEffect(() => {
-        if (client.isCryptoEnabled()) {
+        if (client.getCrypto()) {
             shieldStatusForRoom(client, room).then((e2eStatus) => {
                 setE2eStatus(e2eStatus);
             });

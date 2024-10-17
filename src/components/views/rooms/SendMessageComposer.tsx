@@ -265,10 +265,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
-        if (this.props.mxClient.isCryptoEnabled() && this.props.mxClient.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.props.mxClient.getCrypto() && this.props.mxClient.isRoomEncrypted(this.props.room.roomId)) {
             this.prepareToEncrypt = throttle(
                 () => {
-                    this.props.mxClient.prepareToEncrypt(this.props.room);
+                    this.props.mxClient.getCrypto()?.prepareToEncrypt(this.props.room);
                 },
                 60000,
                 { leading: true, trailing: false },

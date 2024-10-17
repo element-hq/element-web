@@ -9,7 +9,7 @@
 import React, { JSX } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 
-import { _t } from "../../../languageHandler.tsx";
+import { _t } from "../../../languageHandler";
 
 /**
  * A badge to indicate that a message is pinned.

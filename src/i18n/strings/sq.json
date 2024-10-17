@@ -37,6 +37,7 @@
         "copy_link": "Kopjoji vendndodhjen",
         "create": "Krijoje",
         "create_a_room": "Krijoni një dhomë",
+        "create_account": "Krijoni Llogari",
         "decline": "Hidhe poshtë",
         "delete": "Fshije",
         "disable": "Çaktivizoje",
@@ -76,6 +77,7 @@
         "new_video_room": "Dhomë e re me video",
         "next": "Pasuesja",
         "no": "Jo",
+        "open": "Hape",
         "pause": "Ndalesë",
         "pin": "Fiksoje",
         "play": "Luaje",
@@ -315,6 +317,7 @@
         "soft_logout_subheading": "Spastro të dhëna personale",
         "soft_logout_warning": "Kujdes: të dhënat tuaja personale (përfshi kyçe fshehtëzimi) janë ende të depozituara në këtë sesion. Spastrojini, nëse keni përfunduar së përdoruri këtë sesion, ose dëshironi të bëni hyrjen në një tjetër llogari.",
         "sso": "Hyrje Njëshe",
+        "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj",
         "sso_failed_missing_storage": "I kërkuam shfletuesit të mbajë mend cilin shërbyes Home përdorni, për t’ju lënë të bëni hyrje, por për fat të keq, shfletuesi juaj e ka harruar këtë. Kaloni te faqja e hyrjeve dhe riprovoni.",
         "sso_or_username_password": "%(ssoButtons)s Ose %(usernamePassword)s",
         "sync_footer_subtitle": "Nëse jeni pjesë e shumë dhomave, kjo mund të zgjasë ca",
@@ -660,6 +663,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> © <author>Twitter, Inc dhe kontribues të tjerë</author> përdoren sipas kushteve të <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Shkronjat <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> përdoren sipas kushteve të <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Widget-e Aktivë",
         "category_other": "Tjetër",
@@ -753,6 +757,7 @@
         "widget_screenshots": "Aktivizo foto ekrani widget-esh për widget-e që e mbulojnë"
     },
     "dialog_close_label": "Mbylle dialogun",
+    "download_completed": "Shkarkim i Plotësuar",
     "emoji": {
         "categories": "Kategori",
         "category_activities": "Veprimtari",
@@ -820,16 +825,6 @@
         "incompatible_database_disable": "Vazhdo Me Fshehtëzimin të Çaktivizuar",
         "incompatible_database_sign_out_description": "Që të shmanget humbja e historikut të fjalosjes tuaj, duhet të eksportoni kyçet e dhomës tuaj përpara se të dilni nga llogari. Që ta bëni këtë, duhe të riktheheni te versioni më i ri i %(brand)s-it",
         "incompatible_database_title": "Bazë të dhënash e Papërputhshme",
-        "key_signature_upload_cancelled": "Ngarkim i anuluar nënshkrimi",
-        "key_signature_upload_completed": "Ngarkimi u plotësua",
-        "key_signature_upload_failed": "S’arrihet të ngarkohet",
-        "key_signature_upload_failed_body": "%(brand)s-i hasi një gabim gjatë ngarkimit të:",
-        "key_signature_upload_failed_cross_signing_key_signature": "një nënshkrim i ri kyçi <em>cross-signing</em>",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "një nënshkrim <em>cross-signing</em> pajisjeje",
-        "key_signature_upload_failed_key_signature": "një nënshkrim kyçi",
-        "key_signature_upload_failed_master_key_signature": "një nënshkrim i ri kyçi të përgjithshëm",
-        "key_signature_upload_failed_title": "Ngarkimi i nënshkrimit dështoi",
-        "key_signature_upload_success_title": "Sukses ngarkimi nënshkrimi",
         "messages_not_secure": {
             "cause_1": "Shërbyesi juaj Home",
             "cause_2": "Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni",
@@ -845,8 +840,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "not_supported": "<nuk mbulohet>",
-        "old_version_detected_description": "Janë pikasur të dhëna nga një version i dikurshëm i %(brand)s-it. Kjo do të bëjë që kriptografia skaj-më-skaj te versioni i dikurshëm të mos punojë si duhet. Mesazhet e fshehtëzuar skaj-më-skaj tani së fundi teksa përdorej versioni i dikurshëm mund të mos jenë të shfshehtëzueshëm në këtë version. Kjo mund bëjë edhe që mesazhet e shkëmbyera me këtë version të dështojnë. Nëse ju dalin probleme, bëni daljen dhe rihyni në llogari. Që të ruhet historiku i mesazheve, eksportoni dhe riimportoni kyçet tuaj.",
-        "old_version_detected_title": "U pikasën të dhëna kriptografie të vjetër",
         "recovery_method_removed": {
             "description_1": "Ky sesion ka pikasur se Fraza e Sigurisë dhe kyçi juaj për Mesazhe të Sigurt janë hequr.",
             "description_2": "Nëse këtë e keni bërë pa dashje, mund të ujdisni Mesazhe të Sigurt në këtë sesion, gjë që do të sjellë rifshehtëzimin e historikut të mesazheve të sesionit me një metodë të re rimarrjesh.",
@@ -969,13 +962,21 @@
     "error": {
         "admin_contact": "Ju lutemi, që të vazhdoni të përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
         "admin_contact_short": "Lidhuni me <a>përgjegjësin e shërbyesit tuaj</a>.",
+        "app_launch_unexpected_error": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
+        "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
         "connection": "Pati një problem në komunikimin me shërbyesin Home, ju lutemi, riprovoni më vonë.",
         "dialog_description_default": "Ndodhi një gabim.",
         "download_media": "S’u arrit të shkarkohet media burim, s’u gjet URL burimi",
         "edit_history_unsupported": "Shërbyesi juaj Home nuk duket se e mbulon këtë veçori.",
         "failed_copy": "S’u arrit të kopjohej",
         "hs_blocked": "Ky shërbyes Home është bllokuar nga përgjegjësit e tij.",
+        "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
+        "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
+        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
+        "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
+        "invalid_json_generic": "JSON i pavlefshëm",
         "mau": "Ky shërbyes home ka tejkaluar kufirin e vet Përdorues Aktivë Mujorë.",
+        "misconfigured": "Element-i juaj është i keqformësuar",
         "mixed_content": "S’lidhet dot te shërbyes Home përmes HTTP-je, kur te shtylla e shfletuesit tuaj jepet një URL HTTPS. Ose përdorni HTTPS-në, ose <a>aktivizoni përdorimin e programtheve jo të sigurt</a>.",
         "non_urgent_echo_failure_toast": "Shërbyesi juaj s’po u përgjigjet ca <a>kërkesave</a>.",
         "resource_limits": "Ky shërbyes home ka tejkaluar një nga kufijtë e tij mbi burimet.",
@@ -1147,6 +1148,9 @@
         "one": "Në %(spaceName)s dhe %(count)s hapësirë tjetër.",
         "other": "Në %(spaceName)s dhe %(count)s hapësira të tjera."
     },
+    "incompatible_browser": {
+        "title": "Shfletues i pambuluar"
+    },
     "info_tooltip_title": "Informacion",
     "integration_manager": {
         "connecting": "Po lidhet me përgjegjës integrimesh…",
@@ -1302,7 +1306,6 @@
         "click_for_info": "Klikoni për më tepër hollësi",
         "currently_experimental": "Aktualisht eksperimental.",
         "custom_themes": "Mbulim shtimi temash vetjake",
-        "dehydration": "Shkëmbim jashtë linje mesazhesh të fshehtëzuar duke përdorur pajisje të dehidratuara",
         "element_call_video_rooms": "Dhoma Thirrje Element me video",
         "experimental_description": "Ndiheni eksperimentues? Provoni idetë tona më të reja në zhvillim. Këto veçori s’janë të përfunduara; mund të jenë të paqëndrueshme, mund të ndryshojnë, ose mund të braktisen faqe. <a>Mësoni më tepër</a>.",
         "experimental_section": "Paraparje të hershme",
@@ -1333,7 +1336,6 @@
         "location_share_live_description": "Sendërtim i përkohshëm. Vendndodhjet mbeten te historiku i dhomës.",
         "mjolnir": "Rrugë të reja për të shpërfillur njerëz",
         "msc3531_hide_messages_pending_moderation": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
-        "pinning": "Fiksim Mesazhi",
         "report_to_moderators": "Raportojeni te moderatorët",
         "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
@@ -1414,9 +1416,7 @@
         "error_send_description": "%(brand)s s’dërgoi dot vendndodhjen tuaj. Ju lutemi, riprovoni.",
         "error_send_title": "S’e dërguam dot vendndodhjen tuaj",
         "error_sharing_live_location": "Ndodhi një gabim teksa tregohej vendndodhja juaj “live”",
-        "error_sharing_live_location_try_again": "Ndodhi një gabim teksa tregohej vendndodhja juaj aty për aty, ju lutemi, riprovoni",
         "error_stopping_live_location": "Ndodhi një gabim teksa ndalej dhënia aty për aty e vendndodhjes tuaj",
-        "error_stopping_live_location_try_again": "Ndodhi një gabim teksa ndalej dhënia aty për aty e vendndodhjes tuaj, ju lutemi, riprovoni",
         "expand_map": "Zgjeroje hartën",
         "failed_generic": "S’u arrit të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
         "failed_load_map": "S’arrihet të ngarkohet hartë",
@@ -1444,7 +1444,6 @@
         "share_type_own": "Vendndodhja ime e tanishme",
         "share_type_pin": "Lini një Piketë",
         "share_type_prompt": "Ç’lloj vendndodhjeje doni të jepet?",
-        "stop_and_close": "Resht dhe mbylle",
         "toggle_attribution": "Shfaq/fshih atribut"
     },
     "member_list": {
@@ -1600,6 +1599,8 @@
         "mod": "Moderator",
         "restricted": "E kufizuar"
     },
+    "powered_by_matrix": "Bazuar në Matrix",
+    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "presence": {
         "away": "I larguar",
         "busy": "I zënë",
@@ -1677,13 +1678,11 @@
     },
     "right_panel": {
         "add_integrations": "Shtoni widget-e, ura & robotë",
-        "export_chat_button": "Eksportoni fjalosje",
         "files_button": "Kartela",
         "pinned_messages": {
             "limits": {
                 "other": "Mundeni të fiksoni deri në %(count)s widget-e"
-            },
-            "title": "Mesazhe të fiksuar"
+            }
         },
         "pinned_messages_button": "I fiksuar",
         "poll": {
@@ -1719,8 +1718,7 @@
         },
         "video_room_chat": {
             "title": "Fjalosje"
-        },
-        "widgets_section": "Widget-e"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Kjo ftesë u dërgua për %(email)s, që s’është i përshoqëruar me llogarinë tuaj",
@@ -1740,7 +1738,6 @@
             "forget": "Harroje Dhomën",
             "low_priority": "Përparësi e Ulët",
             "mark_read": "Vëri shenjë si të lexuar",
-            "mentions_only": "Vetëm përmendje",
             "notifications_default": "Kërko përputhje me rregullimin parazgjedhje",
             "notifications_mute": "Heshtoni dhomën",
             "title": "Mundësi dhome",
@@ -1780,17 +1777,7 @@
         "forget_room": "Harroje këtë dhomë",
         "forget_space": "Harroje këtë hapësirë",
         "header": {
-            "close_call_button": "Mbylli krejt",
-            "forget_room_button": "Harroje dhomën",
-            "hide_widgets_button": "Fshihi Widget-et",
-            "room_is_public": "Kjo dhomë është publike",
-            "show_widgets_button": "Shfaqi Widget-et",
-            "video_call_button_ec": "Thirrje video (%(brand)s)",
-            "video_call_button_jitsi": "Thirrje me video (Jitsi)",
-            "video_call_ec_change_layout": "Ndryshoni skemë",
-            "video_call_ec_layout_freedom": "Liri",
-            "video_call_ec_layout_spotlight": "Projektor",
-            "video_room_view_chat_button": "Shihni rrjedhë kohore fjalosjeje"
+            "room_is_public": "Kjo dhomë është publike"
         },
         "inaccessible": "Te kjo dhomë ose hapësirë s’hyhet dot tani.",
         "inaccessible_name": "Te %(roomName)s s’hyhet dot tani.",
@@ -1823,7 +1810,6 @@
         "inviter_unknown": "I panjohur",
         "invites_you_text": "<inviter/> ju fton",
         "join_button_account": "Regjistrohuni",
-        "join_failed_enable_video_rooms": "Për t’u bërë pjesë, ju lutemi, së pari aktivizoni te Labs dhoma me video",
         "join_failed_needs_invite": "Që të shihni %(roomName)s, ju duhet një ftesë",
         "join_the_discussion": "Merrni pjesë në diskutim",
         "join_title": "Që të merrni pjesë, hyni në dhomë",
@@ -1856,13 +1842,8 @@
         "rejoin_button": "Rihyni",
         "search": {
             "all_rooms_button": "Kërko në krejt dhomat",
-            "result_count": {
-                "other": "(~%(count)s përfundime)",
-                "one": "(~%(count)s përfundim)"
-            },
             "this_room_button": "Kërko në këtë dhomë"
         },
-        "show_labs_settings": "Shfaq rregullime për Labs",
         "status_bar": {
             "delete_all": "Fshiji krejt",
             "exceeded_resource_limit": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka tejkaluar kufirin e një burimi. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
@@ -1893,7 +1874,6 @@
             },
             "uploading_single_file": "Po ngarkohet %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Për të parë, ju lutemi, së pari aktivizoni te Labs dhoma me video",
         "waiting_for_join_subtitle": "Pasi përdoruesit e ftuar të kenë ardhur në %(brand)s, do të jeni në gjendje të bisedoni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj",
         "waiting_for_join_title": "Po pritet që përdorues të vijnë në %(brand)s"
     },
@@ -2987,8 +2967,6 @@
             "voice_call_unsupported": "%(senderName)s bëri një thirrje zanore. (e pambuluar nga ky shfletues)"
         },
         "m.file": {
-            "decrypt_label": "Shfshehtëzoje %(text)s",
-            "download_label": "Shkarko %(text)s",
             "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje",
             "error_invalid": "Kartelë e pavlefshme%(extra)s"
         },
@@ -3347,6 +3325,7 @@
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"
     },
+    "unknown_device": "Pajisje e panjohur",
     "update": {
         "changelog": "Regjistër ndryshimesh",
         "check_action": "Kontrollo për përditësime",
@@ -3582,6 +3561,8 @@
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
+    "welcome_to_element": "Mirë se vini te Element",
     "widget": {
         "added_by": "Widget i shtuar nga",
         "capabilities_dialog": {

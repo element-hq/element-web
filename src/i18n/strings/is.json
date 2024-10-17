@@ -37,6 +37,7 @@
         "copy_link": "Afrita tengil",
         "create": "Búa til",
         "create_a_room": "Búa til spjallrás",
+        "create_account": "Búa til notandaaðgang",
         "decline": "Hafna",
         "delete": "Eyða",
         "disable": "Gera óvirkt",
@@ -77,6 +78,7 @@
         "next": "Næsta",
         "no": "Nei",
         "ok": "Í lagi",
+        "open": "Opna",
         "pause": "Bið",
         "pin": "Pinni",
         "play": "Spila",
@@ -281,6 +283,7 @@
         "soft_logout_intro_unsupported_auth": "Þú getur ekki skráð þig inn á notandaaðganginn þinn. Hafðu samband við stjórnanda heimaþjónsins þíns til að fá frekari upplýsingar.",
         "soft_logout_subheading": "Hreinsa persónuleg gögn",
         "sso": "Einföld innskráning (single-sign-on)",
+        "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu",
         "sso_failed_missing_storage": "Við báðum vafrann þinn að muna hvaða heimaþjón þú notar til að skrá þig inn, en því miður virðist það hafa gleymst. Farðu á innskráningarsíðuna og reyndu aftur.",
         "sso_or_username_password": "%(ssoButtons)s eða %(usernamePassword)s",
         "sync_footer_subtitle": "Þetta getur tekið dálítinn tíma ef þú tekur þátt í mörgum spjallrásum",
@@ -598,6 +601,7 @@
         "subspace_join_rule_public_description": "Hver sem er getur fundið og tekið þátt í þessu svæði, ekki bara meðlimir í <SpaceName/>.",
         "subspace_join_rule_restricted_description": "Hver sem er í <SpaceName/> getur fundið og tekið þátt."
     },
+    "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
     "devtools": {
         "active_widgets": "Virkir viðmótshlutar",
         "category_other": "Annað",
@@ -667,6 +671,7 @@
         "widget_screenshots": "Virkja skjámyndir viðmótshluta í studdum viðmótshlutum"
     },
     "dialog_close_label": "Loka glugga",
+    "download_completed": "Niðurhali lokið",
     "emoji": {
         "categories": "Flokkar",
         "category_activities": "Afþreying",
@@ -726,12 +731,6 @@
         "import_invalid_passphrase": "Sannvottun auðkenningar mistókst: er lykilorðið rangt?",
         "incompatible_database_disable": "Halda áfram með dulritun óvirka",
         "incompatible_database_title": "Ósamhæfður gagnagrunnur",
-        "key_signature_upload_completed": "Innsendingu er lokið",
-        "key_signature_upload_failed": "Ekki tókst að senda inn",
-        "key_signature_upload_failed_body": "%(brand)s rakst á villu við innsendingu á:",
-        "key_signature_upload_failed_cross_signing_key_signature": "ný kross-undirritun undirritunarlykils",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "kross-undirritun undirritunarlykils tækis",
-        "key_signature_upload_failed_key_signature": "Fingrafar lykils",
         "messages_not_secure": {
             "cause_1": "Heimaþjónninn þinn",
             "heading": "Eitt af eftirfarandi gæti verið berskjaldað:",
@@ -741,7 +740,6 @@
             "title": "Ný endurheimtuaðferð"
         },
         "not_supported": "<ekki stutt>",
-        "old_version_detected_title": "Gömul dulritunargögn fundust",
         "recovery_method_removed": {
             "title": "Endurheimtuaðferð fjarlægð"
         },
@@ -840,12 +838,19 @@
     "error": {
         "admin_contact": "<a>Hafðu samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þessa þjónustu.",
         "admin_contact_short": "Hafðu samband við <a>kerfisstjórann þinn</a>.",
+        "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
+        "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
         "connection": "Vandamál kom upp í samskiptunum við heimaþjóninn, reyndu aftur síðar.",
         "dialog_description_default": "Villa kom upp.",
         "edit_history_unsupported": "Heimaþjóninn þinn virðist ekki styðja þennan eiginleika.",
         "failed_copy": "Mistókst að afrita",
         "hs_blocked": "Þessi heimaþjónn hefur verið útilokaður af kerfisstjóra hans.",
+        "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
+        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
+        "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
+        "invalid_json_generic": "Ógilt JSON",
         "mau": "Þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum.",
+        "misconfigured": "Element-tilvikið þitt er rangt stillt",
         "non_urgent_echo_failure_toast": "Netþjónninn þinn er ekki að svara sumum <a>beiðnum</a>.",
         "resource_limits": "Þessi heimaþjónn er kominn fram yfir takmörk á tilföngum sínum.",
         "session_restore": {
@@ -991,6 +996,9 @@
     "in_space_and_n_other_spaces": {
         "one": "Á %(spaceName)s og %(count)s svæði til viðbótar.",
         "other": "Á %(spaceName)s og %(count)s svæðum til viðbótar."
+    },
+    "incompatible_browser": {
+        "title": "Óstuddur vafri"
     },
     "info_tooltip_title": "Upplýsingar",
     "integration_manager": {
@@ -1161,7 +1169,6 @@
         "location_share_live_description": "Bráðabirgðaútfærsla. Staðsetningar haldast í ferli spjallrása.",
         "mjolnir": "Nýjar leiðir til að hunsa fólk",
         "msc3531_hide_messages_pending_moderation": "Láta umsjónarmenn fela skilaboð sem bíða yfirferðar.",
-        "pinning": "Festing skilaboða",
         "report_to_moderators": "Tilkynna til umsjónarmanna",
         "report_to_moderators_description": "Í spjallrásum sem styðja eftirlit umsjónarmanna, mun 'Kæra'-hnappurinn gefa þér færi á að tilkynna misnotkun til umsjónarmanna spjallrása.",
         "under_active_development": "Í virkri þróun.",
@@ -1253,7 +1260,6 @@
         "share_type_own": "Núverandi staðsetning mín",
         "share_type_pin": "Sleppa pinna",
         "share_type_prompt": "Hvaða gerð staðsetningar vilt þú deila?",
-        "stop_and_close": "Hætta og loka",
         "toggle_attribution": "Víxla tilvísun af/á"
     },
     "member_list": {
@@ -1401,6 +1407,8 @@
         "moderator": "Umsjónarmaður",
         "restricted": "Takmarkað"
     },
+    "powered_by_matrix": "Keyrt með Matrix",
+    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -1467,13 +1475,11 @@
     },
     "right_panel": {
         "add_integrations": "Bæta við viðmótshlutum, brúm og vélmennum",
-        "export_chat_button": "Flytja út spjall",
         "files_button": "Skrár",
         "pinned_messages": {
             "limits": {
                 "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
-            },
-            "title": "Föst skilaboð"
+            }
         },
         "pinned_messages_button": "Fest",
         "poll": {
@@ -1490,8 +1496,7 @@
         },
         "video_room_chat": {
             "title": "Spjall"
-        },
-        "widgets_section": "Viðmótshlutar"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Þetta boð var sent til %(email)s sem er ekki tengt notandaaðgangnum þínum",
@@ -1508,7 +1513,6 @@
             "forget": "Gleyma spjallrás",
             "low_priority": "Lítill forgangur",
             "mark_read": "Merkja sem lesið",
-            "mentions_only": "Aðeins minnst á",
             "title": "Valkostir spjallrásar",
             "unfavourite": "Í eftirlætum"
         },
@@ -1537,17 +1541,7 @@
         "forget_room": "Gleyma þessari spjallrás",
         "forget_space": "Gleyma þessu svæði",
         "header": {
-            "close_call_button": "Loka samtali",
-            "forget_room_button": "Gleyma spjallrás",
-            "hide_widgets_button": "Fela viðmótshluta",
-            "room_is_public": "Þessi spjallrás er opinber",
-            "show_widgets_button": "Sýna viðmótshluta",
-            "video_call_button_ec": "Myndsímtal (%(brand)s)",
-            "video_call_button_jitsi": "Myndsímtal (Jitsi)",
-            "video_call_ec_change_layout": "Breyta framsetningu",
-            "video_call_ec_layout_freedom": "Frelsi",
-            "video_call_ec_layout_spotlight": "Í kastljósi",
-            "video_room_view_chat_button": "Skoða tímalínu spjalls"
+            "room_is_public": "Þessi spjallrás er opinber"
         },
         "inaccessible": "Þessi spjallrás eða svæði er ekki aðgengilegt í augnablikinu.",
         "inaccessible_name": "%(roomName)s er ekki aðgengileg í augnablikinu.",
@@ -1602,13 +1596,6 @@
         "peek_join_prompt": "Þú ert að forskoða %(roomName)s. Viltu taka þátt í henni?",
         "read_topic": "Smelltu til að lesa umfjöllunarefni",
         "rejoin_button": "Taka þátt aftur",
-        "search": {
-            "result_count": {
-                "one": "(~%(count)s niðurstaða)",
-                "other": "(~%(count)s niðurstöður)"
-            }
-        },
-        "show_labs_settings": "Sýna tilraunastillingar",
         "status_bar": {
             "delete_all": "Eyða öllu",
             "exceeded_resource_limit": "Skilaboðin þín voru ekki send vegna þess að þessi heimaþjónn er kominn fram yfir takmörk á notuðum tilföngum. Hafðu <a>samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þjónustuna.",
@@ -2600,8 +2587,6 @@
             "voice_call_unsupported": "%(senderName)s hringdi raddsímtal. (Ekki stutt af þessum vafra)"
         },
         "m.file": {
-            "decrypt_label": "Afkóða %(text)s",
-            "download_label": "Niðurhala %(text)s",
             "error_decrypting": "Villa við afkóðun viðhengis",
             "error_invalid": "Ógild skrá%(extra)s"
         },
@@ -2935,6 +2920,7 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
     },
+    "unknown_device": "Óþekkt tæki",
     "update": {
         "changelog": "Breytingaskrá",
         "check_action": "Athuga með uppfærslu",
@@ -3143,6 +3129,8 @@
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
+    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

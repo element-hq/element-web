@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode, useRef } from "react";
-import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
+import { EmailSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../../languageHandler";
 import EmailField from "../../../views/auth/EmailField";
@@ -54,7 +54,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
 
     return (
         <>
-            <EmailIcon className="mx_AuthBody_icon" />
+            <EmailSolidIcon className="mx_AuthBody_icon" />
             <h1>{_t("auth|enter_email_heading")}</h1>
             <p className="mx_AuthBody_text">
                 {_t("auth|enter_email_explainer", { homeserver }, { b: (t) => <strong>{t}</strong> })}

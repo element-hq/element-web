@@ -303,14 +303,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_dehydration": {
-        isFeature: true,
-        labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|dehydration"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
     "feature_exclude_insecure_devices": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,

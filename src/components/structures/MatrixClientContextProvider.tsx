@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import { CryptoEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";

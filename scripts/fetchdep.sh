@@ -11,10 +11,10 @@ rm -r "$defrepo" || true
 # figure out where to look for pull requests:
 #   - We may have been told an explicit repo via the PR_ORG/PR_REPO/PR_NUMBER env vars
 #   - otherwise, check the $GITHUB_ env vars which are set by Github Actions
-#   - failing that, fall back to the matrix-org/matrix-react-sdk repo.
+#   - failing that, fall back to the element-hq/element-web repo.
 #
 # in ether case, the PR_NUMBER variable must be set explicitly.
-default_org_repo=${GITHUB_REPOSITORY:-"matrix-org/matrix-react-sdk"}
+default_org_repo=${GITHUB_REPOSITORY:-"element-hq/element-web"}
 PR_ORG=${PR_ORG:-${default_org_repo%%/*}}
 PR_REPO=${PR_REPO:-${default_org_repo##*/}}
 

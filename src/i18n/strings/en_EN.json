@@ -43,6 +43,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
+        "create_account": "Create Account",
         "decline": "Decline",
         "delete": "Delete",
         "deny": "Deny",
@@ -84,6 +85,7 @@
         "next": "Next",
         "no": "No",
         "ok": "OK",
+        "open": "Open",
         "pause": "Pause",
         "pin": "Pin",
         "play": "Play",
@@ -283,6 +285,8 @@
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "sign_in_new_device": "Sign in new device",
+            "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
+            "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
         },
         "register_action": "Create Account",
@@ -359,6 +363,7 @@
         "soft_logout_subheading": "Clear personal data",
         "soft_logout_warning": "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.",
         "sso": "Single Sign On",
+        "sso_complete_in_browser_dialog_title": "Go to your browser to complete Sign In",
         "sso_failed_missing_storage": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
         "sso_or_username_password": "%(ssoButtons)s Or %(usernamePassword)s",
         "sync_footer_subtitle": "If you've joined lots of rooms, this might take a while",
@@ -574,7 +579,6 @@
         "unmute": "Unmute",
         "unnamed_room": "Unnamed Room",
         "unnamed_space": "Unnamed Space",
-        "unsent": "Unsent",
         "unverified": "Unverified",
         "updating": "Updating...",
         "user": "User",
@@ -730,6 +734,7 @@
         "twemoji": "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Active Widgets",
         "category_other": "Other",
@@ -758,20 +763,11 @@
         "low_bandwidth_mode": "Low bandwidth mode",
         "low_bandwidth_mode_description": "Requires compatible homeserver.",
         "main_timeline": "Main timeline",
-        "methods": "Methods",
         "no_receipt_found": "No receipt found",
-        "no_verification_requests_found": "No verification requests found",
         "notification_state": "Notification state is <strong>%(notificationState)s</strong>",
         "notifications_debug": "Notifications debug",
         "number_of_users": "Number of users",
         "original_event_source": "Original event source",
-        "other_user": "Other user",
-        "phase": "Phase",
-        "phase_cancelled": "Cancelled",
-        "phase_ready": "Ready",
-        "phase_requested": "Requested",
-        "phase_started": "Started",
-        "phase_transaction": "Transaction",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
         "room_not_encrypted": "Room is <strong>not encrypted 🚨</strong>",
@@ -809,8 +805,6 @@
         "state_key": "State Key",
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Threads timeline",
-        "timeout": "Timeout",
-        "timeout_none": "None",
         "title": "Developer tools",
         "toggle_event": "toggle event",
         "toolbox": "Toolbox",
@@ -827,13 +821,13 @@
         "values_explicit_colon": "Values at explicit levels:",
         "values_explicit_room": "Values at explicit levels in this room",
         "values_explicit_this_room_colon": "Values at explicit levels in this room:",
-        "verification_explorer": "Verification explorer",
         "view_servers_in_room": "View servers in room",
         "view_source_decrypted_event_source": "Decrypted event source",
         "view_source_decrypted_event_source_unavailable": "Decrypted source unavailable",
         "widget_screenshots": "Enable widget screenshots on supported widgets"
     },
     "dialog_close_label": "Close dialog",
+    "download_completed": "Download Completed",
     "emoji": {
         "categories": "Categories",
         "category_activities": "Activities",
@@ -900,10 +894,6 @@
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
-        "incompatible_database_description": "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.",
-        "incompatible_database_disable": "Continue With Encryption Disabled",
-        "incompatible_database_sign_out_description": "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
-        "incompatible_database_title": "Incompatible Database",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -1042,13 +1032,21 @@
     "error": {
         "admin_contact": "Please <a>contact your service administrator</a> to continue using this service.",
         "admin_contact_short": "Contact your <a>server admin</a>.",
+        "app_launch_unexpected_error": "Unexpected error preparing the app. See console for details.",
+        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
         "connection": "There was a problem communicating with the homeserver, please try again later.",
         "dialog_description_default": "An error has occurred.",
         "download_media": "Failed to download source media, no source url was found",
         "edit_history_unsupported": "Your homeserver doesn't seem to support this feature.",
         "failed_copy": "Failed to copy",
         "hs_blocked": "This homeserver has been blocked by its administrator.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Invalid configuration: no default server specified.",
+        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
+        "invalid_json_detail": "The message from the parser is: %(message)s",
+        "invalid_json_generic": "Invalid JSON",
         "mau": "This homeserver has hit its Monthly Active User limit.",
+        "misconfigured": "Your Element is misconfigured",
         "mixed_content": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
         "non_urgent_echo_failure_toast": "Your server isn't responding to some <a>requests</a>.",
         "resource_limits": "This homeserver has exceeded one of its resource limits.",
@@ -1239,6 +1237,21 @@
         "one": "In %(spaceName)s and one other space.",
         "other": "In %(spaceName)s and %(count)s other spaces."
     },
+    "incompatible_browser": {
+        "continue": "Continue anyway",
+        "description": "%(brand)s uses some browser features which are not available in your current browser. %(detail)s",
+        "detail_can_continue": "If you continue, some features may stop working and there is a risk that you may lose data in the future.",
+        "detail_no_continue": "Try updating this browser if you're not using the latest version and try again.",
+        "learn_more": "Learn more",
+        "linux": "Linux",
+        "macos": "Mac",
+        "supported_browsers": "For the best experience, use <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge>, or <Safari>Safari</Safari>.",
+        "title": "%(brand)s does not support this browser",
+        "use_desktop_heading": "Use %(brand)s Desktop instead",
+        "use_mobile_heading": "Use %(brand)s on mobile instead",
+        "use_mobile_heading_after_desktop": "Or use our mobile app",
+        "windows": "Windows (%(bits)s-bit)"
+    },
     "info_tooltip_title": "Information",
     "integration_manager": {
         "connecting": "Connecting to integration manager…",
@@ -1410,7 +1423,6 @@
         "click_for_info": "Click for more info",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
-        "dehydration": "Offline encrypted messaging using dehydrated devices",
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
@@ -1735,6 +1747,8 @@
         "moderator": "Moderator",
         "restricted": "Restricted"
     },
+    "powered_by_matrix": "Powered by Matrix",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -2537,7 +2551,6 @@
             "msisdn_verification_field_label": "Verification code",
             "msisdn_verification_instructions": "Please enter verification code sent via text.",
             "msisdns_heading": "Phone numbers",
-            "name_placeholder": "No display name",
             "oidc_manage_button": "Manage account",
             "password_change_section": "Set a new account password…",
             "password_change_success": "Your password was successfully changed.",
@@ -2856,6 +2869,7 @@
             "sign_in_with_qr": "Link new device",
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
+            "sign_in_with_qr_unsupported": "Not supported by your account provider",
             "sign_out": "Sign out of this session",
             "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -3011,7 +3025,6 @@
         "rageshake": "Send a bug report with logs",
         "rainbow": "Sends the given message coloured as a rainbow",
         "rainbowme": "Sends the given emote coloured as a rainbow",
-        "remakeolm": "Developer command: Discards the current outbound group session and sets up new Olm sessions",
         "remove": "Removes user with given id from this room",
         "roomavatar": "Changes the avatar of the current room",
         "roomname": "Sets the room name",
@@ -3329,10 +3342,8 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "decrypt_label": "Decrypt %(text)s",
-            "download_label": "Download %(text)s",
             "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file%(extra)s"
+            "error_invalid": "Invalid file"
         },
         "m.image": {
             "error": "Unable to show image due to error",
@@ -3705,6 +3716,7 @@
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
     },
+    "unknown_device": "Unknown device",
     "unsupported_browser": {
         "description": "If you continue, some features may stop working and there is a risk that you may lose data in the future. Update your browser to continue using %(brand)s.",
         "title": "%(brand)s does not support this browser"
@@ -3832,8 +3844,6 @@
     },
     "user_menu": {
         "link_new_device": "Link new device",
-        "link_new_device_not_supported": "Not supported",
-        "link_new_device_not_supported_caption": "You need to sign in manually",
         "settings": "All settings",
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"
@@ -3975,6 +3985,8 @@
         "voice_call": "Voice call",
         "you_are_presenting": "You are presenting"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Welcome to Element",
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {

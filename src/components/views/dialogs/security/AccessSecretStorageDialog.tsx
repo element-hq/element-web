@@ -102,7 +102,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         try {
             const cli = MatrixClientPeg.safeGet();
             const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
-            const correct = await cli.checkSecretStorageKey(decodedKey, this.props.keyInfo);
+            const correct = await cli.secretStorage.checkKey(decodedKey, this.props.keyInfo);
             this.setState({
                 recoveryKeyValid: true,
                 recoveryKeyCorrect: correct,

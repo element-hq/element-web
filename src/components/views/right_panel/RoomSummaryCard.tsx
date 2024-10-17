@@ -297,28 +297,28 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
             <Flex as="section" justify="center" gap="var(--cpd-space-2x)" className="mx_RoomSummaryCard_badges">
                 {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
-                    <Badge kind="default">
+                    <Badge kind="grey">
                         <PublicIcon width="1em" />
                         {_t("common|public_room")}
                     </Badge>
                 )}
 
                 {isRoomEncrypted && e2eStatus !== E2EStatus.Warning && (
-                    <Badge kind="success">
+                    <Badge kind="green">
                         <LockIcon width="1em" />
                         {_t("common|encrypted")}
                     </Badge>
                 )}
 
                 {!e2eStatus && (
-                    <Badge kind="default">
+                    <Badge kind="grey">
                         <LockOffIcon width="1em" />
                         {_t("common|unencrypted")}
                     </Badge>
                 )}
 
                 {e2eStatus === E2EStatus.Warning && (
-                    <Badge kind="critical">
+                    <Badge kind="red">
                         <ErrorIcon width="1em" />
                         {_t("common|not_trusted")}
                     </Badge>
@@ -373,9 +373,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
                     Icon={FavouriteIcon}
                     label={_t("room|context_menu|favourite")}
                     checked={isFavorite}
-                    onChange={() => tagRoom(room, DefaultTagID.Favourite)}
-                    // XXX: https://github.com/element-hq/compound/issues/288
-                    onSelect={() => {}}
+                    onSelect={() => tagRoom(room, DefaultTagID.Favourite)}
                 />
                 <MenuItem
                     Icon={UserAddIcon}

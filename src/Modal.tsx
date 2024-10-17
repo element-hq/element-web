@@ -12,7 +12,7 @@ import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { IDeferred, defer, sleep } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
-import { Glass } from "@vector-im/compound-web";
+import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
 import dis, { defaultDispatcher } from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
@@ -416,16 +416,18 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             const classes = classNames("mx_Dialog_wrapper mx_Dialog_staticWrapper", this.staticModal.className);
 
             const staticDialog = (
-                <div className={classes}>
-                    <Glass className="mx_Dialog_border">
-                        <div className="mx_Dialog">{this.staticModal.elem}</div>
-                    </Glass>
-                    <div
-                        data-testid="dialog-background"
-                        className="mx_Dialog_background mx_Dialog_staticBackground"
-                        onClick={this.onBackgroundClick}
-                    />
-                </div>
+                <TooltipProvider>
+                    <div className={classes}>
+                        <Glass className="mx_Dialog_border">
+                            <div className="mx_Dialog">{this.staticModal.elem}</div>
+                        </Glass>
+                        <div
+                            data-testid="dialog-background"
+                            className="mx_Dialog_background mx_Dialog_staticBackground"
+                            onClick={this.onBackgroundClick}
+                        />
+                    </div>
+                </TooltipProvider>
             );
 
             ReactDOM.render(staticDialog, ModalManager.getOrCreateStaticContainer());
@@ -441,16 +443,18 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             });
 
             const dialog = (
-                <div className={classes}>
-                    <Glass className="mx_Dialog_border">
-                        <div className="mx_Dialog">{modal.elem}</div>
-                    </Glass>
-                    <div
-                        data-testid="dialog-background"
-                        className="mx_Dialog_background"
-                        onClick={this.onBackgroundClick}
-                    />
-                </div>
+                <TooltipProvider>
+                    <div className={classes}>
+                        <Glass className="mx_Dialog_border">
+                            <div className="mx_Dialog">{modal.elem}</div>
+                        </Glass>
+                        <div
+                            data-testid="dialog-background"
+                            className="mx_Dialog_background"
+                            onClick={this.onBackgroundClick}
+                        />
+                    </div>
+                </TooltipProvider>
             );
 
             setTimeout(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()), 0);

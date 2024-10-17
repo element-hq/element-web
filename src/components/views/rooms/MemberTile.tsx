@@ -9,8 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { RoomMember, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";

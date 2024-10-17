@@ -38,6 +38,7 @@
         "copy_link": "复制链接",
         "create": "创建",
         "create_a_room": "创建房间",
+        "create_account": "创建账户",
         "decline": "拒绝",
         "delete": "删除",
         "deny": "拒绝",
@@ -79,6 +80,7 @@
         "next": "下一个",
         "no": "不",
         "ok": "确定",
+        "open": "打开",
         "pause": "暂停",
         "pin": "别针",
         "play": "播放",
@@ -310,6 +312,7 @@
         "soft_logout_intro_unsupported_auth": "你不能登录到你的账户。请联系你的家服务器管理员以获取更多信息。",
         "soft_logout_subheading": "清除个人数据",
         "sso": "单点登录",
+        "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录",
         "sso_failed_missing_storage": "我们已请求浏览器记住你使用的服务器，但是你的浏览器貌似已经忘记了。请前往登录页面重试。",
         "sso_or_username_password": "%(ssoButtons)s 或 %(usernamePassword)s",
         "sync_footer_subtitle": "如果你加入了很多房间，可能会消耗一些时间",
@@ -655,6 +658,7 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emoji art ©<author>Twitter, Inc 和其他贡献者</author> 根据<terms>CC-BY 4.0</terms> 条款使用。",
         "twemoji_colr": "<colr>twemoji-colr</colr> 字体 ©<author>Mozilla Foundation</author> 根据<terms>Apache 2.0</terms> 条款使用。"
     },
+    "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
     "devtools": {
         "active_widgets": "已启用的挂件",
         "category_other": "其他",
@@ -725,6 +729,7 @@
         "widget_screenshots": "对支持的挂件启用挂件截图"
     },
     "dialog_close_label": "关闭对话框",
+    "download_completed": "下载完成",
     "emoji": {
         "categories": "类别",
         "category_activities": "活动",
@@ -792,16 +797,6 @@
         "incompatible_database_disable": "在停用加密的情况下继续",
         "incompatible_database_sign_out_description": "为避免丢失聊天记录，你必须在登出前导出房间密钥。你需要切换至新版 %(brand)s 方可继续执行此操作",
         "incompatible_database_title": "数据库不兼容",
-        "key_signature_upload_cancelled": "已取消签名上传",
-        "key_signature_upload_completed": "上传完成",
-        "key_signature_upload_failed": "无法上传",
-        "key_signature_upload_failed_body": "%(brand)s 在上传此文件时出错：",
-        "key_signature_upload_failed_cross_signing_key_signature": "一个新的交叉签名密钥的签名",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "一个设备的交叉签名的签名",
-        "key_signature_upload_failed_key_signature": "一个密钥签名",
-        "key_signature_upload_failed_master_key_signature": "一个新的主密钥签名",
-        "key_signature_upload_failed_title": "签名上传失败",
-        "key_signature_upload_success_title": "签名上传成功",
         "messages_not_secure": {
             "cause_1": "你的家服务器",
             "cause_2": "你正在验证的用户所连接的家服务器",
@@ -817,8 +812,6 @@
             "warning": "如果你没有设置新恢复方式，可能有攻击者正试图侵入你的账户。请立即更改你的账户密码并在设置中设定一个新恢复方式。"
         },
         "not_supported": "<不支持>",
-        "old_version_detected_description": "已检测到旧版%(brand)s的数据，这将导致端到端加密在旧版本中发生故障。在此版本中，使用旧版本交换的端到端加密消息可能无法解密。这也可能导致与此版本交换的消息失败。如果你遇到问题，请登出并重新登录。要保留历史消息，请先导出并在重新登录后导入你的密钥。",
-        "old_version_detected_title": "检测到旧的加密数据",
         "recovery_method_removed": {
             "description_1": "此会话已检测到你的安全短语和安全消息密钥被移除。",
             "description_2": "如果你出于意外这样做了，你可以在此会话上设置安全消息，以使用新的加密方式重新加密此会话的消息历史。",
@@ -934,12 +927,20 @@
     "error": {
         "admin_contact": "请 <a>联系你的服务管理员</a> 以继续使用本服务。",
         "admin_contact_short": "请联系你的<a>服务器管理员</a>。",
+        "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
+        "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
         "connection": "与家服务器通讯时出现问题，请稍后再试。",
         "dialog_description_default": "发生了一个错误。",
         "edit_history_unsupported": "你的家服务器似乎不支持此功能。",
         "failed_copy": "复制失败",
         "hs_blocked": "此 homeserver 已被其管理员屏蔽。",
+        "invalid_configuration_mixed_server": "配置无效：无法与 default_server_name 或 default_server_config 一起指定 default_hs_url",
+        "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
+        "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
+        "invalid_json_detail": "来自解析器的消息：%(message)s",
+        "invalid_json_generic": "无效的 JSON",
         "mau": "此家服务器已达到其每月活跃用户限制。",
+        "misconfigured": "Element 配置错误",
         "mixed_content": "当浏览器地址栏里有 HTTPS 的 URL 时，不能使用 HTTP 连接家服务器。请使用 HTTPS 或者<a>允许不安全的脚本</a>。",
         "non_urgent_echo_failure_toast": "你的服务器没有响应一些<a>请求</a>。",
         "resource_limits": "本服务器已达到其使用量限制之一。",
@@ -1111,6 +1112,9 @@
         "one": "在 %(spaceName)s 和其他 %(count)s 个空间。",
         "other": "在 %(spaceName)s 和其他 %(count)s 个空间。"
     },
+    "incompatible_browser": {
+        "title": "不支持的浏览器"
+    },
     "info_tooltip_title": "信息",
     "integration_manager": {
         "error_connecting": "此集成管理器为离线状态或者其不能访问你的家服务器。",
@@ -1265,7 +1269,6 @@
         "click_for_info": "点击获取更多信息",
         "currently_experimental": "目前是实验性的。",
         "custom_themes": "支持添加自定义主题",
-        "dehydration": "需要离线设备（dehydrated devices）的加密消息离线传递",
         "element_call_video_rooms": "Element通话视频房间",
         "experimental_description": "想要做点实验？试试我们开发中的最新点子。这些功能尚未确定；它们可能不稳定，可能会变动，也可能被完全丢弃。<a>了解更多</a>。",
         "experimental_section": "早期预览",
@@ -1295,11 +1298,9 @@
         "location_share_live_description": "临时的实现。位置在房间历史中持续保留。",
         "mjolnir": "忽略他人的新方式",
         "msc3531_hide_messages_pending_moderation": "让协管员隐藏等待审核的消息。",
-        "new_room_decoration_ui": "新的房间标题和一些细节界面正在积极开发中",
         "notification_settings": "通知设置",
         "notification_settings_beta_caption": "引入一种更简单的方式来更改通知设置。以你喜欢的方式定制%(brand)s。",
         "notification_settings_beta_title": "通知设置",
-        "pinning": "消息置顶",
         "report_to_moderators": "报告给协管员",
         "report_to_moderators_description": "在支持审核的房间中，“报告”按钮将让你向房间协管员举报滥用行为。",
         "sliding_sync": "滑动同步模式",
@@ -1376,9 +1377,7 @@
         "error_send_description": "%(brand)s无法发送你的位置。请稍后再试。",
         "error_send_title": "我们无法发送你的位置",
         "error_sharing_live_location": "分享实时位置时出错",
-        "error_sharing_live_location_try_again": "分享你的实时位置时出错，请重试",
         "error_stopping_live_location": "停止实时位置时出错",
-        "error_stopping_live_location_try_again": "停止你的实时位置时出错，请重试",
         "expand_map": "展开地图",
         "failed_generic": "获取你的位置失败。请之后再试。",
         "failed_load_map": "无法加载地图",
@@ -1406,7 +1405,6 @@
         "share_type_own": "我当前的位置",
         "share_type_pin": "放置图钉",
         "share_type_prompt": "你想分享什么位置类型？",
-        "stop_and_close": "停止并关闭",
         "toggle_attribution": "切换属性"
     },
     "member_list": {
@@ -1551,6 +1549,8 @@
         "moderator": "协管员",
         "restricted": "受限"
     },
+    "powered_by_matrix": "由 Matrix 驱动",
+    "powered_by_matrix_with_logo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
     "presence": {
         "away": "离开",
         "busy": "忙",
@@ -1628,13 +1628,11 @@
     },
     "right_panel": {
         "add_integrations": "添加挂件、桥接和机器人",
-        "export_chat_button": "导出聊天",
         "files_button": "文件",
         "pinned_messages": {
             "limits": {
                 "other": "你仅能固定 %(count)s 个挂件"
-            },
-            "title": "已固定的消息"
+            }
         },
         "pinned_messages_button": "已固定",
         "poll": {
@@ -1652,8 +1650,7 @@
         },
         "video_room_chat": {
             "title": "聊天"
-        },
-        "widgets_section": "挂件"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "该邀请被发送到了与你的账户无关的 %(email)s",
@@ -1672,7 +1669,6 @@
             "favourite": "收藏",
             "forget": "忘记房间",
             "low_priority": "低优先级",
-            "mentions_only": "仅提及",
             "title": "房间选项",
             "unfavourite": "已收藏"
         },
@@ -1703,12 +1699,7 @@
         "forget_room": "忘记此房间",
         "forget_space": "忘记此空间",
         "header": {
-            "forget_room_button": "忘记房间",
-            "hide_widgets_button": "隐藏挂件",
-            "room_is_public": "此房间为公共的",
-            "show_widgets_button": "显示挂件",
-            "video_call_button_jitsi": "视频通话（Jitsi）",
-            "video_call_ec_change_layout": "更改布局"
+            "room_is_public": "此房间为公共的"
         },
         "inaccessible": "这个房间或空间当前不可访问。",
         "inaccessible_name": "%(roomName)s 此时无法访问。",
@@ -1740,7 +1731,6 @@
         "inviter_unknown": "未知的",
         "invites_you_text": "<inviter/> 邀请了你",
         "join_button_account": "注册",
-        "join_failed_enable_video_rooms": "加入前请在实验室允许虚拟房间",
         "join_failed_needs_invite": "你需要一个邀请来查看 %(roomName)s",
         "join_the_discussion": "加入讨论",
         "join_title": "加入房间以参与",
@@ -1768,13 +1758,6 @@
         "peek_join_prompt": "你正在预览 %(roomName)s。想加入吗？",
         "read_topic": "点击阅读话题",
         "rejoin_button": "重新加入",
-        "search": {
-            "result_count": {
-                "one": "（~%(count)s 个结果）",
-                "other": "（~%(count)s 个结果）"
-            }
-        },
-        "show_labs_settings": "显示实验室设置",
         "status_bar": {
             "delete_all": "删除全部",
             "exceeded_resource_limit": "你的消息未被发送，因为本家服务器已达到其使用量限制之一。请 <a>联系你的服务管理员</a> 以继续使用本服务。",
@@ -1803,8 +1786,7 @@
                 "one": "正在上传 %(filename)s 与其他 %(count)s 个文件"
             },
             "uploading_single_file": "正在上传 %(filename)s"
-        },
-        "view_failed_enable_video_rooms": "查看前请在实验室允许虚拟房间"
+        }
     },
     "room_list": {
         "add_room_label": "添加房间",
@@ -2844,8 +2826,6 @@
             "voice_call_unsupported": "%(senderName)s 发起了语音通话。（此浏览器不支持）"
         },
         "m.file": {
-            "decrypt_label": "解密 %(text)s",
-            "download_label": "下载 %(text)s",
             "error_decrypting": "解密附件时出错",
             "error_invalid": "无效文件 %(extra)s"
         },
@@ -3198,6 +3178,7 @@
     "truncated_list_n_more": {
         "other": "和 %(count)s 个其他…"
     },
+    "unknown_device": "未知设备",
     "update": {
         "changelog": "更改日志",
         "check_action": "检查更新",
@@ -3414,6 +3395,8 @@
         "voice_call": "语音通话",
         "you_are_presenting": "你正在展示"
     },
+    "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
+    "welcome_to_element": "欢迎来到 Element",
     "widget": {
         "added_by": "挂件添加者",
         "capabilities_dialog": {

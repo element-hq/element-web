@@ -43,6 +43,7 @@
         "copy_link": "Copier le lien",
         "create": "Créer",
         "create_a_room": "Créer un salon",
+        "create_account": "Créer un compte",
         "decline": "Refuser",
         "delete": "Supprimer",
         "deny": "Interdire",
@@ -84,6 +85,7 @@
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
+        "open": "Ouvrir",
         "pause": "Pause",
         "pin": "Épingler",
         "play": "Lecture",
@@ -358,6 +360,7 @@
         "soft_logout_subheading": "Supprimer les données personnelles",
         "soft_logout_warning": "Attention : vos données personnelles (y compris les clés de chiffrement) seront stockées dans cette session. Effacez-les si vous n’utilisez plus cette session ou si vous voulez vous connecter à un autre compte.",
         "sso": "Authentification unique",
+        "sso_complete_in_browser_dialog_title": "Utilisez votre navigateur pour terminer la connexion",
         "sso_failed_missing_storage": "Nous avons demandé à votre navigateur de mémoriser votre serveur d’accueil, mais il semble l’avoir oublié. Rendez-vous à la page de connexion et réessayez.",
         "sso_or_username_password": "%(ssoButtons)s ou %(usernamePassword)s",
         "sync_footer_subtitle": "Si vous avez rejoint beaucoup de salons, cela peut prendre du temps",
@@ -727,6 +730,7 @@
         "twemoji": "L’art émoji <twemoji>Twemoji</twemoji> est © <author>Twitter, Inc et autres contributeurs</author> utilisé sous licence <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "La police <colr>twemoji-colr</colr> est © <author>Mozilla Foundation</author> utilisée sous licence <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s pour bureau : %(platformName)s",
     "devtools": {
         "active_widgets": "Widgets actifs",
         "category_other": "Autre",
@@ -831,6 +835,7 @@
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge"
     },
     "dialog_close_label": "Fermer la boîte de dialogue",
+    "download_completed": "Téléchargement terminé",
     "emoji": {
         "categories": "Catégories",
         "category_activities": "Activités",
@@ -901,16 +906,6 @@
         "incompatible_database_disable": "Continuer avec le chiffrement désactivé",
         "incompatible_database_sign_out_description": "Pour éviter de perdre l’historique de vos discussions, vous devez exporter vos clés avant de vous déconnecter. Vous devez revenir à une version plus récente de %(brand)s pour pouvoir le faire",
         "incompatible_database_title": "Base de données incompatible",
-        "key_signature_upload_cancelled": "Envoi de signature annulé",
-        "key_signature_upload_completed": "Envoi terminé",
-        "key_signature_upload_failed": "Envoi impossible",
-        "key_signature_upload_failed_body": "%(brand)s a rencontré une erreur pendant l’envoi de :",
-        "key_signature_upload_failed_cross_signing_key_signature": "une nouvelle signature de clé de signature croisée",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "une signature de signature croisée d’un appareil",
-        "key_signature_upload_failed_key_signature": "une signature de clé",
-        "key_signature_upload_failed_master_key_signature": "une nouvelle signature de clé principale",
-        "key_signature_upload_failed_title": "Échec de l’envoi de signature",
-        "key_signature_upload_success_title": "Succès de l’envoi de signature",
         "messages_not_secure": {
             "cause_1": "Votre serveur d’accueil",
             "cause_2": "Le serveur d’accueil auquel l’utilisateur que vous vérifiez est connecté",
@@ -926,8 +921,6 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
-        "old_version_detected_description": "Nous avons détecté des données d’une ancienne version de %(brand)s. Le chiffrement de bout en bout n’aura pas fonctionné correctement sur l’ancienne version. Les messages chiffrés échangés récemment dans l’ancienne version ne sont peut-être pas déchiffrables dans cette version. Les échanges de message avec cette version peuvent aussi échouer. Si vous rencontrez des problèmes, déconnectez-vous puis reconnectez-vous. Pour conserver l’historique des messages, exportez puis réimportez vos clés de chiffrement.",
-        "old_version_detected_title": "Anciennes données de chiffrement détectées",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase secrète et clé de sécurité pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération.",
@@ -1051,13 +1044,21 @@
     "error": {
         "admin_contact": "Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
         "admin_contact_short": "Contactez <a>l’administrateur de votre serveur</a>.",
+        "app_launch_unexpected_error": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
+        "cannot_load_config": "Impossible de charger le fichier de configuration : rechargez la page pour réessayer.",
         "connection": "Il y a eu un problème lors de la communication avec le serveur d’accueil, veuillez réessayer ultérieurement.",
         "dialog_description_default": "Une erreur est survenue.",
         "download_media": "Impossible de télécharger la source du média, aucune URL source n’a été trouvée",
         "edit_history_unsupported": "Il semble que votre serveur d’accueil ne prenne pas en charge cette fonctionnalité.",
         "failed_copy": "Échec de la copie",
         "hs_blocked": "Ce serveur d’accueil a été bloqué par son administrateur.",
+        "invalid_configuration_mixed_server": "Configuration invalide : default_hs_url ne peut pas être défini en même temps que default_server_name ou default_server_config",
+        "invalid_configuration_no_server": "Configuration invalide : aucun serveur par défaut indiqué.",
+        "invalid_json": "La configuration de votre Element contient du JSON invalide. Veuillez corriger le problème et recharger la page.",
+        "invalid_json_detail": "Le message de l’analyseur est : %(message)s",
+        "invalid_json_generic": "JSON non valide",
         "mau": "Ce serveur d’accueil a atteint sa limite mensuelle d'utilisateurs actifs.",
+        "misconfigured": "Votre Element est mal configuré",
         "mixed_content": "Impossible de se connecter au serveur d'accueil en HTTP si l’URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez la prise en charge des scripts non-vérifiés</a>.",
         "non_urgent_echo_failure_toast": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
         "resource_limits": "Ce serveur d’accueil a dépassé une de ses limites de ressources.",
@@ -1248,6 +1249,9 @@
         "one": "Dans %(spaceName)s et %(count)s autre espace.",
         "other": "Dans %(spaceName)s et %(count)s autres espaces."
     },
+    "incompatible_browser": {
+        "title": "Navigateur non pris en charge"
+    },
     "info_tooltip_title": "Informations",
     "integration_manager": {
         "connecting": "Connexion au gestionnaire d’intégrations…",
@@ -1417,7 +1421,6 @@
         "click_for_info": "Cliquez pour en savoir plus",
         "currently_experimental": "Actuellement expérimental.",
         "custom_themes": "Autoriser l’ajout de thèmes personnalisés",
-        "dehydration": "Messagerie hors-ligne chiffrée utilisant des appareils déshydratés",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
@@ -1452,14 +1455,12 @@
         "location_share_live_description": "Implémentation temporaire. Les positions sont persistantes dans l’historique du salon.",
         "mjolnir": "Nouvelles manières d’ignorer des gens",
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
-        "new_room_decoration_ui": "En cours de développement, nouvel en-tête de salon et interface des détails",
         "notification_settings": "Nouveaux paramètres de notification",
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
         "oidc_native_flow": "Authentification native OIDC",
         "oidc_native_flow_description": "⚠ ATTENTION : Expérimental. Utilise l’authentification OIDC native lorsqu’elle est prise en charge par le serveur.",
-        "pinning": "Messages épinglés",
         "release_announcement": "Annonce de sortie",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
@@ -1548,9 +1549,7 @@
         "error_send_description": "%(brand)s n'a pas pu envoyer votre position. Veuillez réessayer plus tard.",
         "error_send_title": "Nous n'avons pas pu envoyer votre position",
         "error_sharing_live_location": "Une erreur s’est produite pendant le partage de votre position",
-        "error_sharing_live_location_try_again": "Une erreur s’est produite pendant le partage de votre position, veuillez réessayer plus tard",
         "error_stopping_live_location": "Une erreur s’est produite lors de l’arrêt de votre position en continu",
-        "error_stopping_live_location_try_again": "Une erreur s’est produite en arrêtant le partage de votre position, veuillez réessayer",
         "expand_map": "Étendre la carte",
         "failed_generic": "Impossible de récupérer votre position. Veuillez réessayer plus tard.",
         "failed_load_map": "Impossible de charger la carte",
@@ -1580,7 +1579,6 @@
         "share_type_own": "Ma position actuelle",
         "share_type_pin": "Choisir sur la carte",
         "share_type_prompt": "Quel type de localisation voulez-vous partager ?",
-        "stop_and_close": "Arrêter et fermer",
         "toggle_attribution": "Changer l’attribution"
     },
     "member_list": {
@@ -1743,6 +1741,8 @@
         "moderator": "Modérateur",
         "restricted": "Restreint"
     },
+    "powered_by_matrix": "Propulsé par Matrix",
+    "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "presence": {
         "away": "Absent",
         "busy": "Occupé",
@@ -1826,13 +1826,11 @@
     },
     "right_panel": {
         "add_integrations": "Ajouter des widgets, passerelles et robots",
-        "export_chat_button": "Exporter la conversation",
         "files_button": "Fichiers",
         "pinned_messages": {
             "limits": {
                 "other": "Vous ne pouvez épingler que jusqu’à %(count)s widgets"
-            },
-            "title": "Messages épinglés"
+            }
         },
         "pinned_messages_button": "Épinglé",
         "poll": {
@@ -1868,8 +1866,7 @@
         },
         "video_room_chat": {
             "title": "Conversation privée"
-        },
-        "widgets_section": "Widgets"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Cette invitation a été envoyée à %(email)s qui n’est pas associé à votre compte",
@@ -1890,7 +1887,6 @@
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
             "mark_unread": "Marquer comme non lu",
-            "mentions_only": "Seulement les mentions",
             "notifications_default": "Réglage par défaut",
             "notifications_mute": "Salon muet",
             "title": "Options du salon",
@@ -1933,18 +1929,7 @@
         "forget_room": "Oublier ce salon",
         "forget_space": "Oublier cet espace",
         "header": {
-            "close_call_button": "Terminer l’appel",
-            "forget_room_button": "Oublier le salon",
-            "hide_widgets_button": "Masquer les widgets",
-            "room_is_public": "Ce salon est public",
-            "show_widgets_button": "Afficher les widgets",
-            "video_call_button_ec": "Appel vidéo (%(brand)s)",
-            "video_call_button_jitsi": "Appel vidéo (Jitsi)",
-            "video_call_button_legacy": "Appel vidéo ancienne génération",
-            "video_call_ec_change_layout": "Changer la disposition",
-            "video_call_ec_layout_freedom": "Liberté",
-            "video_call_ec_layout_spotlight": "Projecteur",
-            "video_room_view_chat_button": "Afficher la chronologie du chat"
+            "room_is_public": "Ce salon est public"
         },
         "header_untrusted_label": "Non fiable",
         "inaccessible": "Ce salon ou cet espace n’est pas accessible en ce moment.",
@@ -1978,7 +1963,6 @@
         "inviter_unknown": "Inconnu",
         "invites_you_text": "<inviter/> vous a invité",
         "join_button_account": "S’inscrire",
-        "join_failed_enable_video_rooms": "Pour rejoindre, veuillez d’abord activer les salons vision dans la section Expérimental",
         "join_failed_needs_invite": "Pour afficher %(roomName)s, vous avez besoin d’une invitation",
         "join_the_discussion": "Rejoindre la discussion",
         "join_title": "Rejoindre le salon pour participer",
@@ -2021,13 +2005,8 @@
         "rejoin_button": "Revenir",
         "search": {
             "all_rooms_button": "Rechercher dans tous les salons",
-            "result_count": {
-                "one": "(~%(count)s résultat)",
-                "other": "(~%(count)s résultats)"
-            },
             "this_room_button": "Rechercher dans ce salon"
         },
-        "show_labs_settings": "Afficher les réglages des expérimentations",
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
@@ -2058,7 +2037,6 @@
             },
             "uploading_single_file": "Envoi de %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Pour afficher, veuillez d’abord activer les salons vision dans la section Expérimental",
         "waiting_for_join_subtitle": "Une fois que les utilisateurs invités seront connectés sur %(brand)s, vous pourrez discuter et le salon sera chiffré de bout en bout",
         "waiting_for_join_title": "En attente de connexion des utilisateurs à %(brand)s"
     },
@@ -3236,8 +3214,6 @@
             "voice_call_unsupported": "%(senderName)s a passé un appel audio. (non pris en charge par ce navigateur)"
         },
         "m.file": {
-            "decrypt_label": "Déchiffrer %(text)s",
-            "download_label": "Télécharger %(text)s",
             "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
             "error_invalid": "Fichier %(extra)s non valide"
         },
@@ -3611,6 +3587,7 @@
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
     },
+    "unknown_device": "Appareil inconnu",
     "unsupported_server_description": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs.",
     "unsupported_server_title": "Votre serveur n’est pas pris en charge",
     "update": {
@@ -3855,6 +3832,8 @@
         "voice_call": "Appel audio",
         "you_are_presenting": "Vous êtes à l’écran"
     },
+    "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
+    "welcome_to_element": "Bienvenue sur Element",
     "widget": {
         "added_by": "Widget ajouté par",
         "capabilities_dialog": {

@@ -20,9 +20,8 @@ import {
     MatrixError,
     LocalNotificationSettings,
 } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { _t } from "../../../../languageHandler";
 import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";

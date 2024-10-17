@@ -141,7 +141,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         <bdi>
             <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
                 <Tooltip
-                    label={resourceId ?? ""}
+                    description={resourceId ?? ""}
                     open={resourceId ? undefined : false}
                     placement="right"
                     isTriggerInteractive={isAnchor}

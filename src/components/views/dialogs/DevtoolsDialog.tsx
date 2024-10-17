@@ -14,7 +14,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";
 import ServersInRoom from "./devtools/ServersInRoom";
-import VerificationExplorer from "./devtools/VerificationExplorer";
 import SettingExplorer from "./devtools/SettingExplorer";
 import { RoomStateExplorer } from "./devtools/RoomState";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./devtools/BaseTool";
@@ -45,7 +44,6 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|explore_room_account_data"), RoomAccountDataExplorer],
         [_td("devtools|view_servers_in_room"), ServersInRoom],
         [_td("devtools|notifications_debug"), RoomNotifications],
-        [_td("devtools|verification_explorer"), VerificationExplorer],
         [_td("devtools|active_widgets"), WidgetExplorer],
     ],
     [Category.Other]: [

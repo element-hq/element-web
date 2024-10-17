@@ -38,6 +38,7 @@
         "copy_link": "Hivatkozás másolása",
         "create": "Létrehozás",
         "create_a_room": "Szoba létrehozása",
+        "create_account": "Fiók létrehozása",
         "decline": "Elutasítás",
         "delete": "Törlés",
         "deny": "Megtagadás",
@@ -79,6 +80,7 @@
         "next": "Következő",
         "no": "Nem",
         "ok": "Rendben",
+        "open": "Megnyitás",
         "pause": "Szünet",
         "pin": "Kitűzés",
         "play": "Lejátszás",
@@ -323,6 +325,7 @@
         "soft_logout_subheading": "Személyes adatok törlése",
         "soft_logout_warning": "Figyelmeztetés: A személyes adatai (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva. Ha az eszközt nem használja tovább vagy másik fiókba szeretne bejelentkezni, törölje őket.",
         "sso": "Egyszeri bejelentkezés",
+        "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést",
         "sso_failed_missing_storage": "A böngészőt arra kértük, hogy jegyezze meg, melyik Matrix-kiszolgálót használta a bejelentkezéshez, de sajnos a böngészője elfelejtette. Navigáljon a bejelentkezési oldalra, és próbálja újra.",
         "sso_or_username_password": "%(ssoButtons)s vagy %(usernamePassword)s",
         "sync_footer_subtitle": "Ha sok szobához csatlakozott, ez eltarthat egy darabig",
@@ -686,6 +689,7 @@
         "twemoji": "A <twemoji>Twemoji</twemoji> emodzsikra a következő vonatkozik: © <author>Twitter, Inc. és egyéb közreműködők</author>, a <terms>CC-BY 4.0</terms> licenc feltételei szerint használva.",
         "twemoji_colr": "A <colr>twemoji-colr</colr> betűkészletre a következő vonatkozik: © <author>Mozilla Foundation</author>, az <terms>Apache 2.0</terms> licenc feltételei szerint használva."
     },
+    "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
     "devtools": {
         "active_widgets": "Aktív kisalkalmazások",
         "category_other": "Egyéb",
@@ -787,6 +791,7 @@
         "widget_screenshots": "Kisalkalmazások képernyőképének engedélyezése a támogatott kisalkalmazásoknál"
     },
     "dialog_close_label": "Ablak bezárása",
+    "download_completed": "A letöltés befejeződött",
     "emoji": {
         "categories": "Kategóriák",
         "category_activities": "Mozgás",
@@ -857,16 +862,6 @@
         "incompatible_database_disable": "Folytatás a titkosítás kikapcsolásával",
         "incompatible_database_sign_out_description": "Hogy a régi üzenetekhez továbbra is hozzáférhess kijelentkezés előtt ki kell mentened a szobák titkosító kulcsait. Ehhez a %(brand)s egy frissebb verzióját kell használnod",
         "incompatible_database_title": "Nem kompatibilis adatbázis",
-        "key_signature_upload_cancelled": "Az aláírás feltöltése megszakítva",
-        "key_signature_upload_completed": "A feltöltés befejeződött",
-        "key_signature_upload_failed": "Nem lehet feltölteni",
-        "key_signature_upload_failed_body": "%(brand)s hibába ütközött a feltöltés közben:",
-        "key_signature_upload_failed_cross_signing_key_signature": "az új eszközök közötti kulcs aláírása",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "az eszköz eszközök közötti aláírása",
-        "key_signature_upload_failed_key_signature": "kulcs aláírás",
-        "key_signature_upload_failed_master_key_signature": "az új mester kulcs aláírás",
-        "key_signature_upload_failed_title": "Az aláírások feltöltése sikertelen",
-        "key_signature_upload_success_title": "Az aláírások feltöltése sikeres",
         "messages_not_secure": {
             "cause_1": "Matrix szervered",
             "cause_2": "Az ellenőrizendő felhasználó ehhez a Matrix-kiszolgálóhoz kapcsolódik:",
@@ -882,8 +877,6 @@
             "warning": "Ha nem Ön állította be az új helyreállítási módot, akkor lehet, hogy egy támadó próbálja elérni a fiókját. Változtassa meg a fiókja jelszavát, és amint csak lehet, állítsa be az új helyreállítási eljárást a Beállításokban."
         },
         "not_supported": "<nem támogatott>",
-        "old_version_detected_description": "Régebbi %(brand)s verzióból származó adatok találhatók. Ezek hibás működéshez vezethettek a végpontok közti titkosításban a régebbi verzióknál. A nemrég küldött/fogadott titkosított üzenetek, ha a régi adatokat használták, lehetséges, hogy nem lesznek visszafejthetők ebben a verzióban. Ha problémákba ütközik, akkor jelentkezzen ki és be. A régi üzenetek elérésének biztosításához exportálja a kulcsokat, és importálja be újra.",
-        "old_version_detected_title": "Régi titkosítási adatot találhatók",
         "recovery_method_removed": {
             "description_1": "A munkamenet észrevette, hogy a biztonságos üzenetek biztonsági jelmondata és kulcsa törölve lett.",
             "description_2": "Ha véletlenül tette, akkor beállíthatja a biztonságos üzeneteket ebben a munkamenetben, ami újra titkosítja a régi üzeneteket a helyreállítási móddal.",
@@ -1006,13 +999,21 @@
     "error": {
         "admin_contact": "A szolgáltatás további használatához <a>vegye fel a kapcsolatot a szolgáltatás rendszergazdájával</a>.",
         "admin_contact_short": "Vegye fel a kapcsolatot a <a>kiszolgáló rendszergazdájával</a>.",
+        "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
+        "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
         "connection": "A kiszolgálóval való kommunikáció során probléma történt, próbálja újra.",
         "dialog_description_default": "Hiba történt.",
         "download_media": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
         "edit_history_unsupported": "Úgy tűnik, hogy a Matrix-kiszolgálója nem támogatja ezt a szolgáltatást.",
         "failed_copy": "Sikertelen másolás",
         "hs_blocked": "A Matrix-kiszolgálót a rendszergazda zárolta.",
+        "invalid_configuration_mixed_server": "Érvénytelen konfiguráció: a default_hs_url nem adható meg a default_server_name vagy a default_server_config kulcsokkal együtt",
+        "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
+        "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
+        "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",
+        "invalid_json_generic": "Érvénytelen JSON",
         "mau": "A Matrix-kiszolgáló elérte a havi aktív felhasználói korlátot.",
+        "misconfigured": "Az Element hibásan van beállítva",
         "mixed_content": "Nem lehet HTTP-vel csatlakozni a Matrix-kiszolgálóhoz, ha HTTPS van a böngésző címsorában. Vagy használjon HTTPS-t vagy <a>engedélyezze a nem biztonságos parancsfájlokat</a>.",
         "non_urgent_echo_failure_toast": "A kiszolgálója nem válaszol néhány <a>kérésre</a>.",
         "resource_limits": "A Matrix-kiszolgáló túllépte valamelyik erőforráskorlátját.",
@@ -1195,6 +1196,9 @@
         "one": "Itt: %(spaceName)s és %(count)s másik térben.",
         "other": "Itt: %(spaceName)s és %(count)s másik térben."
     },
+    "incompatible_browser": {
+        "title": "Nem támogatott böngésző"
+    },
     "info_tooltip_title": "Információ",
     "integration_manager": {
         "connecting": "Kapcsolódás az integrációkezelőhöz…",
@@ -1362,7 +1366,6 @@
         "click_for_info": "Kattintson a további információkhoz",
         "currently_experimental": "Jelenleg kísérleti állapotban van.",
         "custom_themes": "Egyéni témák támogatásának hozzáadása",
-        "dehydration": "Kapcsolat nélküli titkosított üzenetküldés tartósított eszközökkel",
         "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
         "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
         "element_call_video_rooms": "Element Call videószobák",
@@ -1394,9 +1397,7 @@
         "location_share_live_description": "Átmeneti megvalósítás. A helyadatok megmaradnak a szoba naplójában.",
         "mjolnir": "Új lehetőség emberek figyelmen kívül hagyására",
         "msc3531_hide_messages_pending_moderation": "A moderátorok kitakarhatják a még nem moderált üzeneteket.",
-        "new_room_decoration_ui": "Aktív fejlesztés alatt, új szobafejléc és -részletek felület",
         "notification_settings": "Új értesítési beállítások",
-        "pinning": "Üzenet kitűzése",
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "sliding_sync": "Csúszó szinkronizációs mód",
@@ -1478,9 +1479,7 @@
         "error_send_description": "Az %(brand)s nem tudja elküldeni a földrajzi helyzetét. Próbálja újra később.",
         "error_send_title": "A földrajzi helyzetet nem sikerült elküldeni",
         "error_sharing_live_location": "Élő pozíció megosztás közben hiba történt",
-        "error_sharing_live_location_try_again": "Élő pozíció megosztás közben hiba történt, kérjük próbálja újra",
         "error_stopping_live_location": "Élő pozíció megosztás megállítása közben hiba történt",
-        "error_stopping_live_location_try_again": "Élő pozíció megosztás befejezése közben hiba történt, kérjük próbálja újra",
         "expand_map": "Térkép szétnyitása",
         "failed_generic": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
         "failed_load_map": "A térkép betöltése sikertelen",
@@ -1510,7 +1509,6 @@
         "share_type_own": "Jelenlegi saját földrajzi helyzet",
         "share_type_pin": "Hely kijelölése",
         "share_type_prompt": "Milyen jellegű földrajzi helyzetet szeretne megosztani?",
-        "stop_and_close": "Befejezés és kilépés",
         "toggle_attribution": "Forrásmegjelölés be/ki"
     },
     "member_list": {
@@ -1665,6 +1663,8 @@
         "moderator": "Moderátor",
         "restricted": "Korlátozott"
     },
+    "powered_by_matrix": "A gépházban: Matrix",
+    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
     "presence": {
         "away": "Távol",
         "busy": "Foglalt",
@@ -1742,13 +1742,11 @@
     },
     "right_panel": {
         "add_integrations": "Kisalkalmazások, hidak, és botok hozzáadása",
-        "export_chat_button": "Beszélgetés exportálása",
         "files_button": "Fájlok",
         "pinned_messages": {
             "limits": {
                 "other": "Csak %(count)s kisalkalmazást tud kitűzni"
-            },
-            "title": "Kitűzött üzenetek"
+            }
         },
         "pinned_messages_button": "Kitűzött",
         "poll": {
@@ -1784,8 +1782,7 @@
         },
         "video_room_chat": {
             "title": "Csevegés"
-        },
-        "widgets_section": "Kisalkalmazások"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Ez a meghívó ide lett küldve: %(email)s ami nincs összekötve a fiókjával",
@@ -1805,7 +1802,6 @@
             "forget": "Szoba elfelejtése",
             "low_priority": "Alacsony prioritás",
             "mark_read": "Megjelölés olvasottként",
-            "mentions_only": "Csak megemlítések",
             "notifications_default": "Az alapértelmezett beállítások szerint",
             "notifications_mute": "Szoba némítása",
             "title": "Szoba beállítások",
@@ -1848,21 +1844,11 @@
         "forget_room": "Szoba elfelejtése",
         "forget_space": "Ennek a térnek az elfelejtése",
         "header": {
-            "close_call_button": "Hívás befejezése",
-            "forget_room_button": "Szoba elfelejtése",
-            "hide_widgets_button": "Kisalkalmazások elrejtése",
             "n_people_asking_to_join": {
                 "one": "Csatlakozást kér",
                 "other": "%(count)s csatlakozást kérő ember"
             },
-            "room_is_public": "Ez egy nyilvános szoba",
-            "show_widgets_button": "Kisalkalmazások megjelenítése",
-            "video_call_button_ec": "Videó hívás (%(brand)s)",
-            "video_call_button_jitsi": "Videóhívás (Jitsi)",
-            "video_call_ec_change_layout": "Képernyőbeosztás megváltoztatása",
-            "video_call_ec_layout_freedom": "Szabadság",
-            "video_call_ec_layout_spotlight": "Reflektor",
-            "video_room_view_chat_button": "Beszélgetés idővonal megjelenítése"
+            "room_is_public": "Ez egy nyilvános szoba"
         },
         "header_untrusted_label": "Nem megbízható",
         "inaccessible": "Ez a szoba vagy tér jelenleg elérhetetlen.",
@@ -1896,7 +1882,6 @@
         "inviter_unknown": "Ismeretlen",
         "invites_you_text": "<inviter/> meghívta",
         "join_button_account": "Fiók készítés",
-        "join_failed_enable_video_rooms": "A belépéshez a Laborban be kell kapcsolni a videó szobákat",
         "join_failed_needs_invite": "A %(roomName)s megjelenítéséhez meghívó szükséges",
         "join_the_discussion": "Beszélgetéshez csatlakozás",
         "join_title": "Csatlakozz a szobához, hogy részt vehess",
@@ -1931,13 +1916,8 @@
         "rejoin_button": "Újra-csatlakozás",
         "search": {
             "all_rooms_button": "Keresés az összes szobában",
-            "result_count": {
-                "one": "(~%(count)s db eredmény)",
-                "other": "(~%(count)s db eredmény)"
-            },
             "this_room_button": "Keresés ebben a szobában"
         },
-        "show_labs_settings": "Labor beállítások megjelenítése",
         "status_bar": {
             "delete_all": "Mind törlése",
             "exceeded_resource_limit": "Az üzenete nem lett elküldve, mert a Matrix-kiszolgáló túllépett egy erőforráskorlátot. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás rendszergazdájával</a>.",
@@ -1967,8 +1947,7 @@
                 "other": "%(filename)s és még %(count)s db másik feltöltése"
             },
             "uploading_single_file": "%(filename)s feltöltése"
-        },
-        "view_failed_enable_video_rooms": "A megjelenítéshez a Laborban be kell kapcsolni a videó szobákat"
+        }
     },
     "room_list": {
         "add_room_label": "Szoba hozzáadása",
@@ -3113,8 +3092,6 @@
             "voice_call_unsupported": "%(senderName)s hanghívást indított. (ebben a böngészőben nem támogatott)"
         },
         "m.file": {
-            "decrypt_label": "%(text)s visszafejtése",
-            "download_label": "%(text)s letöltése",
             "error_decrypting": "Csatolmány visszafejtése sikertelen",
             "error_invalid": "Hibás fájl%(extra)s"
         },
@@ -3486,6 +3463,7 @@
     "truncated_list_n_more": {
         "other": "És még %(count)s..."
     },
+    "unknown_device": "Ismeretlen eszköz",
     "unsupported_server_description": "Ez a kiszolgáló a Matrix régebbi verzióját használja. Frissítsen a Matrix %(version)s verzióra az %(brand)s hibamentes használatához.",
     "unsupported_server_title": "A kiszolgálója nem támogatott",
     "update": {
@@ -3728,6 +3706,8 @@
         "voice_call": "Hanghívás",
         "you_are_presenting": "Ön tartja a bemutatót"
     },
+    "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
+    "welcome_to_element": "Üdvözli az Element",
     "widget": {
         "added_by": "A kisalkalmazást hozzáadta",
         "capabilities_dialog": {

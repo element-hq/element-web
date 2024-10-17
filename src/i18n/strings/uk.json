@@ -38,6 +38,7 @@
         "copy_link": "Копіювати посилання",
         "create": "Створити",
         "create_a_room": "Створити кімнату",
+        "create_account": "Створити обліковий запис",
         "decline": "Відхилити",
         "delete": "Видалити",
         "deny": "Відхилити",
@@ -79,6 +80,7 @@
         "next": "Далі",
         "no": "НІ",
         "ok": "Гаразд",
+        "open": "Відкрити",
         "pause": "Призупинити",
         "pin": "Кнопка",
         "play": "Відтворити",
@@ -321,6 +323,7 @@
         "soft_logout_subheading": "Очистити особисті дані",
         "soft_logout_warning": "Попередження: ваші особисті дані ( включно з ключами шифрування) досі зберігаються в цьому сеансі. Очистьте їх, якщо ви завершили роботу в цьому сеансі або хочете увійти в інший обліковий запис.",
         "sso": "Єдиний вхід",
+        "sso_complete_in_browser_dialog_title": "Перейдіть у ваш браузер щоб завершити вхід",
         "sso_failed_missing_storage": "Ми попросили браузер запам’ятати, який домашній сервер ви використовуєте, щоб дозволити вам увійти, але, на жаль, ваш браузер забув його. Перейдіть на сторінку входу та повторіть спробу.",
         "sso_or_username_password": "%(ssoButtons)s або %(usernamePassword)s",
         "sync_footer_subtitle": "Якщо ви приєднались до багатьох кімнат, це може тривати деякий час",
@@ -682,6 +685,7 @@
         "twemoji": "Стиль емоджі <twemoji>Twemoji</twemoji> від © <author>Twitter, Inc та інших учасників</author> використовується на умовах <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Шрифт <colr>wemoji-colr</colr> від © <author>Mozilla Foundation</author> використовується на умовах <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s для комп'ютера: %(platformName)s",
     "devtools": {
         "active_widgets": "Активні віджети",
         "category_other": "Інше",
@@ -782,6 +786,7 @@
         "widget_screenshots": "Увімкнути знімки екрана віджетів для підтримуваних віджетів"
     },
     "dialog_close_label": "Закрити діалогове вікно",
+    "download_completed": "Завантаження завершено",
     "emoji": {
         "categories": "Категорії",
         "category_activities": "Діяльність",
@@ -849,16 +854,6 @@
         "incompatible_database_disable": "Продовжити із вимкненим шифруванням",
         "incompatible_database_sign_out_description": "Щоб уникнути втрати історії ваших листувань, ви маєте експортувати ключі кімнати перед виходом. Вам треба буде повернутися до новішої версії %(brand)s аби зробити це",
         "incompatible_database_title": "Несумісна база даних",
-        "key_signature_upload_cancelled": "Вивантаження підпису скасовано",
-        "key_signature_upload_completed": "Вивантаження виконано",
-        "key_signature_upload_failed": "Не вдалося вивантажити",
-        "key_signature_upload_failed_body": "%(brand)s зіткнувся з помилкою під час вивантаження:",
-        "key_signature_upload_failed_cross_signing_key_signature": "новий підпис ключа перехресного підписування",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "підпис перехресного підписування пристрою",
-        "key_signature_upload_failed_key_signature": "відбиток ключа",
-        "key_signature_upload_failed_master_key_signature": "новий підпис головного ключа",
-        "key_signature_upload_failed_title": "Не вдалося вивантажити підпис",
-        "key_signature_upload_success_title": "Підпис успішно вивантажено",
         "messages_not_secure": {
             "cause_1": "Ваш домашній сервер",
             "cause_2": "Домашній сервер користувача, якого ви підтверджуєте",
@@ -874,8 +869,6 @@
             "warning": "Якщо ви не встановлювали нового способу відновлення, ймовірно хтось намагається зламати ваш обліковий запис. Негайно змініть пароль до свого облікового запису й встановіть новий спосіб відновлення в налаштуваннях."
         },
         "not_supported": "<не підтримується>",
-        "old_version_detected_description": "Було виявлено дані зі старої версії %(brand)s. Це призведе до збоїння наскрізного шифрування у старій версії. Наскрізно зашифровані повідомлення, що обмінювані нещодавно, під час використання старої версії, можуть бути недешифровними у цій версії. Це може призвести до збоїв повідомлень, обмінюваних також і з цією версією. У разі виникнення проблем вийдіть з програми та зайдіть знову. Задля збереження історії повідомлень експортуйте та переімпортуйте ваші ключі.",
-        "old_version_detected_title": "Виявлено старі криптографічні дані",
         "recovery_method_removed": {
             "description_1": "Цей сеанс виявив, що ваша фраза безпеки й ключ до захищених повідомлень були видалені.",
             "description_2": "Якщо це ненароком зробили ви, налаштуйте захищені повідомлення для цього сеансу, щоб повторно зашифрувати історію листування цього сеансу з новим способом відновлення.",
@@ -998,13 +991,21 @@
     "error": {
         "admin_contact": "<a>Зв'яжіться з адміністратором сервісу,</a> щоб продовжити використання.",
         "admin_contact_short": "Зверніться до <a>адміністратора сервера</a>.",
+        "app_launch_unexpected_error": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
+        "cannot_load_config": "Неможливо завантажити файл конфігурації. Оновіть, будь ласка, сторінку, щоб спробувати знову.",
         "connection": "Не вдалося зв'язатися з домашнім сервером, повторіть спробу пізніше.",
         "dialog_description_default": "Сталася помилка.",
         "download_media": "Не вдалося завантажити початковий медіафайл, не знайдено url джерела",
         "edit_history_unsupported": "Схоже, що ваш домашній сервер не підтримує цю властивість.",
         "failed_copy": "Не вдалося скопіювати",
         "hs_blocked": "Цей домашній сервер заблокований адміністратором.",
+        "invalid_configuration_mixed_server": "Неправильна конфігурація: не можна вказати default_hs_url разом з default_server_name або default_server_config",
+        "invalid_configuration_no_server": "Невірна конфігурація: не вказано сервер за замовчуванням.",
+        "invalid_json": "Ваша конфігурація Element містить хибний JSON. Виправте проблему та оновіть сторінку.",
+        "invalid_json_detail": "Повідомлення від аналізатора : %(message)s",
+        "invalid_json_generic": "Хибний JSON",
         "mau": "Цей домашній сервер досягнув свого ліміту щомісячних активних користувачів.",
+        "misconfigured": "Ваш Element налаштовано неправильно",
         "mixed_content": "З'єднуватися з домашнім сервером через HTTP, коли в рядку адреси браузера введено HTTPS-адресу, не можна. Використовуйте HTTPS або <a>дозвольте небезпечні скрипти</a>.",
         "non_urgent_echo_failure_toast": "Ваш сервер не відповідає на деякі <a>запити</a>.",
         "resource_limits": "Цей домашній сервер досягнув одного зі своїх лімітів ресурсів.",
@@ -1184,6 +1185,9 @@
         "one": "У %(spaceName)s та %(count)s іншому просторі.",
         "other": "У %(spaceName)s та %(count)s інших пристроях."
     },
+    "incompatible_browser": {
+        "title": "Непідтримуваний браузер"
+    },
     "info_tooltip_title": "Відомості",
     "integration_manager": {
         "connecting": "Під'єднання до менеджера інтеграцій…",
@@ -1343,7 +1347,6 @@
         "click_for_info": "Натисніть, щоб дізнатися більше",
         "currently_experimental": "Наразі експериментально.",
         "custom_themes": "Підтримка користувацьких тем",
-        "dehydration": "Зашифроване листування офлайн за допомогою збережених на сервері (dehydrated) пристроїв",
         "dynamic_room_predecessors": "Попередники динамічної кімнати",
         "dynamic_room_predecessors_description": "Увімкнути MSC3946 (для підтримки архівів пізніх кімнат)",
         "element_call_video_rooms": "Відео кімнати Element Call",
@@ -1376,11 +1379,9 @@
         "location_share_live_description": "Тимчасова реалізація. Місце перебування зберігається в історії кімнати.",
         "mjolnir": "Нові способи нехтувати людей",
         "msc3531_hide_messages_pending_moderation": "Дозволити модераторам ховати повідомлення у черзі модерування.",
-        "new_room_decoration_ui": "В активній розробці новий заголовок кімнати та інтерфейс деталей",
         "notification_settings": "Нові налаштування сповіщень",
         "notification_settings_beta_title": "Налаштування сповіщень",
         "oidc_native_flow": "Увімкнути нові вбудовані потоки OIDC (в активній розробці)",
-        "pinning": "Закріплені повідомлення",
         "report_to_moderators": "Поскаржитись модераторам",
         "report_to_moderators_description": "У кімнатах, які підтримують модерацію, кнопка «Поскаржитися» дає змогу повідомити про зловживання модераторам кімнати.",
         "sliding_sync": "Режим ковзної синхронізації",
@@ -1462,9 +1463,7 @@
         "error_send_description": "%(brand)s не вдалося надіслати ваше місцеперебування. Повторіть спробу пізніше.",
         "error_send_title": "Не вдалося надіслати ваше місцеперебування",
         "error_sharing_live_location": "Сталася помилка під час надання доступу до вашого поточного місцеперебування",
-        "error_sharing_live_location_try_again": "Сталася помилка під час надання доступу до вашого поточного місцеперебування наживо",
         "error_stopping_live_location": "Під час припинення поширення поточного місцеперебування сталася помилка",
-        "error_stopping_live_location_try_again": "Сталася помилка припинення надсилання вашого місцеперебування, повторіть спробу",
         "expand_map": "Розгорнути карту",
         "failed_generic": "Не вдалося отримати ваше місцеперебування. Повторіть спробу пізніше.",
         "failed_load_map": "Неможливо завантажити карту",
@@ -1494,7 +1493,6 @@
         "share_type_own": "Лише поточне місцеперебування",
         "share_type_pin": "Маркер на карті",
         "share_type_prompt": "Який вид місцеперебування поширити?",
-        "stop_and_close": "Припинити й закрити",
         "toggle_attribution": "Перемкнути атрибуцію"
     },
     "member_list": {
@@ -1653,6 +1651,8 @@
         "moderator": "Модератор",
         "restricted": "Обмежено"
     },
+    "powered_by_matrix": "Працює на Matrix",
+    "powered_by_matrix_with_logo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo",
     "presence": {
         "away": "Не на зв'язку",
         "busy": "Зайнятий",
@@ -1732,13 +1732,11 @@
     },
     "right_panel": {
         "add_integrations": "Додати віджети, мости та ботів",
-        "export_chat_button": "Експортувати бесіду",
         "files_button": "Файли",
         "pinned_messages": {
             "limits": {
                 "other": "Закріпити можна до %(count)s віджетів"
-            },
-            "title": "Закріплені повідомлення"
+            }
         },
         "pinned_messages_button": "Закріплені",
         "poll": {
@@ -1774,8 +1772,7 @@
         },
         "video_room_chat": {
             "title": "Бесіда"
-        },
-        "widgets_section": "Віджети"
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account": "Це запрошення надіслано на %(email)s, яка не пов’язана з вашим обліковим записом",
@@ -1795,7 +1792,6 @@
             "forget": "Забути кімнату",
             "low_priority": "Неважливі",
             "mark_read": "Позначити прочитаним",
-            "mentions_only": "Лише згадки",
             "notifications_default": "Збігається з типовим налаштуванням",
             "notifications_mute": "Вимкнути сповіщення кімнати",
             "title": "Параметри кімнати",
@@ -1838,17 +1834,7 @@
         "forget_room": "Забути цю кімнату",
         "forget_space": "Забути цей простір",
         "header": {
-            "close_call_button": "Закрити виклик",
-            "forget_room_button": "Забути кімнату",
-            "hide_widgets_button": "Сховати віджети",
-            "room_is_public": "Ця кімната загальнодоступна",
-            "show_widgets_button": "Показати віджети",
-            "video_call_button_ec": "Відеовиклик (%(brand)s)",
-            "video_call_button_jitsi": "Відеовиклик (Jitsi)",
-            "video_call_ec_change_layout": "Змінити макет",
-            "video_call_ec_layout_freedom": "Свобода",
-            "video_call_ec_layout_spotlight": "У фокусі",
-            "video_room_view_chat_button": "Переглянути стрічку бесіди"
+            "room_is_public": "Ця кімната загальнодоступна"
         },
         "inaccessible": "Ця кімната або простір на разі не доступні.",
         "inaccessible_name": "%(roomName)s зараз офлайн.",
@@ -1881,7 +1867,6 @@
         "inviter_unknown": "Невідомо",
         "invites_you_text": "<inviter/> запрошує вас",
         "join_button_account": "Зареєструватися",
-        "join_failed_enable_video_rooms": "Щоб приєднатися, спочатку ввімкніть відеокімнати в експериментальних функціях",
         "join_failed_needs_invite": "Щоб переглядати %(roomName)s, потрібне запрошення",
         "join_the_discussion": "Приєднатися до обговорення",
         "join_title": "Приєднуйтеся до кімнати, щоб взяти участь",
@@ -1922,13 +1907,8 @@
         "rejoin_button": "Перепід'єднатись",
         "search": {
             "all_rooms_button": "Вибрати всі кімнати",
-            "result_count": {
-                "one": "(~%(count)s результат)",
-                "other": "(~%(count)s результатів)"
-            },
             "this_room_button": "Шукати цю кімнату"
         },
-        "show_labs_settings": "Відкрити налаштування експериментальних функцій",
         "status_bar": {
             "delete_all": "Видалити всі",
             "exceeded_resource_limit": "Не вдалося надіслати повідомлення, бо домашній сервер перевищив ліміт ресурсів. <a>Зв'яжіться з адміністратором сервісу,</a> щоб продовжити використання.",
@@ -1959,7 +1939,6 @@
             },
             "uploading_single_file": "Вивантаження %(filename)s"
         },
-        "view_failed_enable_video_rooms": "Щоб переглянути, спочатку ввімкніть відеокімнати в експериментальних функціях",
         "waiting_for_join_subtitle": "Після того, як запрошені користувачі приєднаються до %(brand)s, ви зможете спілкуватися в бесіді, а кімната буде наскрізно зашифрована",
         "waiting_for_join_title": "Очікування приєднання користувача до %(brand)s"
     },
@@ -3109,8 +3088,6 @@
             "voice_call_unsupported": "%(senderName)s розпочинає голосовий виклик. (не підтримується цим браузером)"
         },
         "m.file": {
-            "decrypt_label": "Розшифрувати %(text)s",
-            "download_label": "Завантажити %(text)s",
             "error_decrypting": "Помилка розшифрування вкладення",
             "error_invalid": "Пошкоджений файл%(extra)s"
         },
@@ -3480,6 +3457,7 @@
     "truncated_list_n_more": {
         "other": "І ще %(count)s..."
     },
+    "unknown_device": "Невідомий пристрій",
     "unsupported_server_description": "Цей сервер використовує стару версію Matrix. Оновіть Matrix до %(version)s, щоб використовувати %(brand)s без помилок.",
     "unsupported_server_title": "Ваш сервер не підтримується",
     "update": {
@@ -3722,6 +3700,8 @@
         "voice_call": "Голосовий виклик",
         "you_are_presenting": "Ви показуєте"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
+    "welcome_to_element": "Ласкаво просимо до Element",
     "widget": {
         "added_by": "Вджет додано",
         "capabilities_dialog": {

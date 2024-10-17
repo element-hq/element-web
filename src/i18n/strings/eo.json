@@ -31,6 +31,7 @@
         "copy": "Kopii",
         "create": "Krei",
         "create_a_room": "Krei ĉambron",
+        "create_account": "Krei konton",
         "decline": "Rifuzi",
         "delete": "Forigi",
         "disable": "Malŝalti",
@@ -66,6 +67,7 @@
         "next": "Sekva",
         "no": "Ne",
         "ok": "Bone",
+        "open": "Malfermi",
         "pause": "Paŭzigi",
         "pin": "Pinglo",
         "play": "Ludi",
@@ -265,6 +267,7 @@
         "soft_logout_intro_unsupported_auth": "Vi ne povas saluti per via konto. Bonvolu kontakti administranton de via hejmservilo por akiri pliajn informojn.",
         "soft_logout_subheading": "Vakigi personajn datumojn",
         "sso": "Ununura saluto",
+        "sso_complete_in_browser_dialog_title": "Iru al via retumilo por finpretigi la ensaluton",
         "sso_failed_missing_storage": "Ni petis la foliumilon memori, kiun hejmservilon vi uzas por saluti, sed domaĝe, via foliumilo forgesis. Iru al la saluta paĝo kaj reprovu.",
         "sso_or_username_password": "%(ssoButtons)s aŭ %(usernamePassword)s",
         "sync_footer_subtitle": "Se vi aliĝis al multaj ĉambroj, tio povas daŭri longe",
@@ -545,6 +548,7 @@
         "subspace_join_rule_public_description": "Ĉiu povos trovi kaj aliĝi ĉi tiun aron, ne nur anoj de <SpaceName/>.",
         "subspace_join_rule_restricted_description": "Ĉiu en <SpaceName/> povos ĝin trovi kaj aliĝi."
     },
+    "desktop_default_device_name": "%(brand)s Labortablo: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktivaj fenestraĵoj",
         "category_other": "Alia",
@@ -580,6 +584,7 @@
         "widget_screenshots": "Ŝalti bildojn de fenestraĵoj por subtenataj fenestraĵoj"
     },
     "dialog_close_label": "Fermi interagujon",
+    "download_completed": "Elŝuto finiĝis",
     "emoji": {
         "categories": "Kategorioj",
         "category_activities": "Agadoj",
@@ -645,16 +650,6 @@
         "incompatible_database_disable": "Pluigi sen ĉifrado",
         "incompatible_database_sign_out_description": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
         "incompatible_database_title": "Neakorda datumbazo",
-        "key_signature_upload_cancelled": "Alŝuto de subskribo nuliĝis",
-        "key_signature_upload_completed": "Alŝuto finiĝis",
-        "key_signature_upload_failed": "Ne povas alŝuti",
-        "key_signature_upload_failed_body": "%(brand)s eraris dum alŝuto de:",
-        "key_signature_upload_failed_cross_signing_key_signature": "nova subskribo de delega ŝlosilo",
-        "key_signature_upload_failed_device_cross_signing_key_signature": "delega subskribo de aparato",
-        "key_signature_upload_failed_key_signature": "ŝlosila subskribo",
-        "key_signature_upload_failed_master_key_signature": "nova ĉefŝlosila subskribo",
-        "key_signature_upload_failed_title": "Alŝuto de subskribo malsukcesis",
-        "key_signature_upload_success_title": "Alŝuto de subskribo sukcesis",
         "messages_not_secure": {
             "cause_1": "Via hejmservilo",
             "heading": "Unu el la jenaj eble estas malkonfidencigita:",
@@ -667,8 +662,6 @@
             "warning": "Se vi ne agordis la novan rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "not_supported": "<nesubtenata>",
-        "old_version_detected_description": "Datumoj el malnova versio de %(brand)s troviĝis. Ĉi tio malfunkciigos tutvojan ĉifradon en la malnova versio. Tutvoje ĉifritaj mesaĝoj interŝanĝitaj freŝtempe per la malnova versio eble ne malĉifreblos. Tio povas kaŭzi malsukceson ankaŭ al mesaĝoj interŝanĝitaj kun tiu ĉi versio. Se vin trafos problemoj, adiaŭu kaj resalutu. Por reteni mesaĝan historion, elportu kaj reenportu viajn ŝlosilojn.",
-        "old_version_detected_title": "Malnovaj datumoj de ĉifroteĥnikaro troviĝis",
         "recovery_method_removed": {
             "description_1": "Tiu ĉi salutaĵo trovis, ke viaj Sekureca frazo kaj ŝlosilo por Sekuraj mesaĝoj foriĝis.",
             "description_2": "Se vi faris tion akcidente, vi povas agordi Sekurajn mesaĝojn en ĉi tiu salutaĵo, kio reĉifros la historion de mesaj de ĉi tiu salutaĵo kun nova rehava metodo.",
@@ -762,12 +755,19 @@
     "error": {
         "admin_contact": "Bonvolu <a>kontakti vian servo-administranton</a> por daŭrigi uzadon de tiu ĉi servo.",
         "admin_contact_short": "Kontaktu <a>administranton de via servilo</a>.",
+        "app_launch_unexpected_error": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
+        "cannot_load_config": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
         "connection": "Eraris komunikado kun la hejmservilo, bonvolu reprovi poste.",
         "dialog_description_default": "Okazis eraro.",
         "edit_history_unsupported": "Via hejmservilo ŝajne ne subtenas ĉi tiun funkcion.",
         "failed_copy": "Malsukcesis kopii",
         "hs_blocked": "Tiu ĉi hejmservilo estas blokita de sia administranto.",
+        "invalid_configuration_no_server": "Nevalida agordo: neniu implicita servilo estas specifita.",
+        "invalid_json": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
+        "invalid_json_detail": "La mesaĝo el la analizilo estas: %(message)s",
+        "invalid_json_generic": "Nevalida JSON",
         "mau": "Tiu ĉi hejmservilo atingis sian monatan limon de aktivaj uzantoj.",
+        "misconfigured": "Via Elemento estas misagordita",
         "mixed_content": "Hejmservilo ne alkonekteblas per HTTP kun HTTPS URL en via adresbreto. Aŭ uzu HTTPS aŭ <a>ŝaltu malsekurajn skriptojn</a>.",
         "non_urgent_echo_failure_toast": "Via servilo ne respondas al iuj <a>petoj</a>.",
         "resource_limits": "Tiu ĉi hejmservilo superis je unu el siaj rimedaj limoj.",
@@ -911,6 +911,9 @@
         "one": "En %(spaceName)s kaj %(count)s alia aro.",
         "other": "En %(spaceName)s kaj %(count)s aliaj aroj."
     },
+    "incompatible_browser": {
+        "title": "Nesubtenata retumilo"
+    },
     "info_tooltip_title": "Informoj",
     "integration_manager": {
         "error_connecting": "La kunigilo estas eksterreta aŭ ne povas atingi vian hejmservilon.",
@@ -1046,7 +1049,6 @@
         "bridge_state_workspace": "Laborspaco: <networkLink/>",
         "currently_experimental": "Nuntempe eksperimenta.",
         "custom_themes": "Subteni aldonadon de propraj haŭtoj",
-        "dehydration": "Eksterreta ĉifrita komunikado per alsalutaĵoj",
         "element_call_video_rooms": "Element Call videoĉambroj",
         "group_calls": "La nova grupvoka sperto",
         "group_developer": "Programisto",
@@ -1064,7 +1066,6 @@
         "leave_beta": "Ĉesi provadon",
         "location_share_live": "Viva Loka Kundivido",
         "mjolnir": "Novaj manieroj ignori personojn",
-        "pinning": "Fiksado de mesaĝoj",
         "report_to_moderators": "Raportu al moderigaĵoj",
         "video_rooms": "Videoĉambroj",
         "video_rooms_a_new_way_to_chat": "Nova maniero babili per voĉo kaj video en %(brand)s.",
@@ -1215,6 +1216,8 @@
         "moderator": "Ĉambrestro",
         "restricted": "Limigita"
     },
+    "powered_by_matrix": "Povigata de Matrix",
+    "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
     "presence": {
         "away": "For",
         "idle": "Senfara",
@@ -1287,15 +1290,12 @@
     },
     "right_panel": {
         "add_integrations": "Aldonu fenestraĵojn, pontojn, kaj robotojn",
-        "export_chat_button": "Eksporti babilejon",
         "files_button": "Dosieroj",
         "pinned_messages": {
             "limits": {
                 "other": "Vi povas fiksi maksimume %(count)s fenestraĵojn"
-            },
-            "title": "Fiksitaj mesaĝoj"
-        },
-        "widgets_section": "Fenestraĵoj"
+            }
+        }
     },
     "room": {
         "3pid_invite_email_not_found_account_room": "Ĉi tiu invito al %(roomName)s sendiĝis al %(email)s, kiu ne estas ligita al via konto",
@@ -1331,10 +1331,7 @@
         "failed_reject_invite": "Malsukcesis rifuzi inviton",
         "forget_room": "Forgesi ĉi tiun ĉambron",
         "header": {
-            "forget_room_button": "Forgesi ĉambron",
-            "hide_widgets_button": "Kaŝi fenestraĵojn",
-            "room_is_public": "Ĉi tiu ĉambro estas publika",
-            "show_widgets_button": "Montri fenestraĵojn"
+            "room_is_public": "Ĉi tiu ĉambro estas publika"
         },
         "inaccessible_name": "%(roomName)s ne estas atingebla nun.",
         "intro": {
@@ -1375,12 +1372,6 @@
         "not_found_title_name": "%(roomName)s ne ekzistas.",
         "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
         "rejoin_button": "Re-aliĝi",
-        "search": {
-            "result_count": {
-                "other": "(~%(count)s rezultoj)",
-                "one": "(~%(count)s rezulto)"
-            }
-        },
         "status_bar": {
             "delete_all": "Forigi ĉiujn",
             "exceeded_resource_limit": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis rimedan limon. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",
@@ -2271,8 +2262,6 @@
             "voice_call_unsupported": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)"
         },
         "m.file": {
-            "decrypt_label": "Malĉifri %(text)s",
-            "download_label": "Elŝuti %(text)s",
             "error_decrypting": "Malĉifro de aldonaĵo eraris",
             "error_invalid": "Malvalida dosiero%(extra)s"
         },
@@ -2568,6 +2557,7 @@
     "truncated_list_n_more": {
         "other": "Kaj %(count)s pliaj…"
     },
+    "unknown_device": "Nekonata aparato",
     "update": {
         "changelog": "Protokolo de ŝanĝoj",
         "check_action": "Kontroli ĝisdatigojn",
@@ -2756,6 +2746,8 @@
         "voice_call": "Voĉvoko",
         "you_are_presenting": "Vi prezentas"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
+    "welcome_to_element": "Bonvenon al Element",
     "widget": {
         "added_by": "Fenestraĵon aldonis",
         "capabilities_dialog": {
