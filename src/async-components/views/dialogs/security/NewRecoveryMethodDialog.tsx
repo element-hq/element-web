@@ -7,10 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import React, { JSX, useEffect, useState } from "react";
 
-import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
@@ -18,81 +16,73 @@ import RestoreKeyBackupDialog from "../../../../components/views/dialogs/securit
 import { Action } from "../../../../dispatcher/actions";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 
-interface IProps {
-    newVersionInfo: KeyBackupInfo;
+/**
+ * Properties for {@link NewRecoveryMethodDialog}.
+ */
+interface NewRecoveryMethodDialogProps {
+    /**
+     * Callback when the dialog is dismissed.
+     */
     onFinished(): void;
 }
 
-export default class NewRecoveryMethodDialog extends React.PureComponent<IProps> {
-    private onOkClick = (): void => {
-        this.props.onFinished();
-    };
+// Export as default instead of a named export so that it can be dynamically imported with `Modal.createDialogAsync`
 
-    private onGoToSettingsClick = (): void => {
-        this.props.onFinished();
-        dis.fire(Action.ViewUserSettings);
-    };
+/**
+ * Dialog to inform the user that a new recovery method has been detected.
+ */
+export default function NewRecoveryMethodDialog({ onFinished }: NewRecoveryMethodDialogProps): JSX.Element {
+    const matrixClient = useMatrixClientContext();
+    const [isKeyBackupEnabled, setIsKeyBackupEnabled] = useState(false);
+    useEffect(() => {
+        const checkBackupEnabled = async (): Promise<void> => {
+            const crypto = matrixClient.getCrypto();
+            setIsKeyBackupEnabled(Boolean(crypto && (await crypto.getActiveSessionBackupVersion()) !== null));
+        };
 
-    private onSetupClick = async (): Promise<void> => {
-        Modal.createDialog(
-            RestoreKeyBackupDialog,
-            {
-                onFinished: this.props.onFinished,
-            },
-            undefined,
-            /* priority = */ false,
-            /* static = */ true,
-        );
-    };
+        checkBackupEnabled();
+    }, [matrixClient]);
 
-    public render(): React.ReactNode {
-        const title = (
-            <span className="mx_KeyBackupFailedDialog_title">
-                {_t("encryption|new_recovery_method_detected|title")}
-            </span>
-        );
-
-        const newMethodDetected = <p>{_t("encryption|new_recovery_method_detected|description_1")}</p>;
-
-        const hackWarning = (
-            <strong className="warning">{_t("encryption|new_recovery_method_detected|warning")}</strong>
-        );
-
-        let content: JSX.Element | undefined;
-        if (MatrixClientPeg.safeGet().getKeyBackupEnabled()) {
-            content = (
-                <div>
-                    {newMethodDetected}
-                    <p>{_t("encryption|new_recovery_method_detected|description_2")}</p>
-                    {hackWarning}
-                    <DialogButtons
-                        primaryButton={_t("action|ok")}
-                        onPrimaryButtonClick={this.onOkClick}
-                        cancelButton={_t("common|go_to_settings")}
-                        onCancel={this.onGoToSettingsClick}
-                    />
-                </div>
-            );
+    function onClick(): void {
+        if (isKeyBackupEnabled) {
+            onFinished();
         } else {
-            content = (
-                <div>
-                    {newMethodDetected}
-                    {hackWarning}
-                    <DialogButtons
-                        primaryButton={_t("common|setup_secure_messages")}
-                        onPrimaryButtonClick={this.onSetupClick}
-                        cancelButton={_t("common|go_to_settings")}
-                        onCancel={this.onGoToSettingsClick}
-                    />
-                </div>
+            Modal.createDialog(
+                RestoreKeyBackupDialog,
+                {
+                    onFinished,
+                },
+                undefined,
+                false,
+                true,
             );
         }
-
-        return (
-            <BaseDialog className="mx_KeyBackupFailedDialog" onFinished={this.props.onFinished} title={title}>
-                {content}
-            </BaseDialog>
-        );
     }
+
+    return (
+        <BaseDialog
+            className="mx_KeyBackupFailedDialog"
+            onFinished={onFinished}
+            title={
+                <span className="mx_KeyBackupFailedDialog_title">
+                    {_t("encryption|new_recovery_method_detected|title")}
+                </span>
+            }
+        >
+            <p>{_t("encryption|new_recovery_method_detected|description_1")}</p>
+            {isKeyBackupEnabled && <p>{_t("encryption|new_recovery_method_detected|description_2")}</p>}
+            <strong className="warning">{_t("encryption|new_recovery_method_detected|warning")}</strong>
+            <DialogButtons
+                primaryButton={_t("common|setup_secure_messages")}
+                onPrimaryButtonClick={onClick}
+                cancelButton={_t("common|go_to_settings")}
+                onCancel={() => {
+                    onFinished();
+                    dis.fire(Action.ViewUserSettings);
+                }}
+            />
+        </BaseDialog>
+    );
 }

@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NewRecoveryMethodDialog /> when key backup is disabled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_KeyBackupFailedDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        <span
+          class="mx_KeyBackupFailedDialog_title"
+        >
+          New Recovery Method
+        </span>
+      </h1>
+    </div>
+    <p>
+      A new Security Phrase and key for Secure Messages have been detected.
+    </p>
+    <strong
+      class="warning"
+    >
+      If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.
+    </strong>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Go to Settings
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Set up Secure Messages
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`<NewRecoveryMethodDialog /> when key backup is enabled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_KeyBackupFailedDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        <span
+          class="mx_KeyBackupFailedDialog_title"
+        >
+          New Recovery Method
+        </span>
+      </h1>
+    </div>
+    <p>
+      A new Security Phrase and key for Secure Messages have been detected.
+    </p>
+    <p>
+      This session is encrypting history using the new recovery method.
+    </p>
+    <strong
+      class="warning"
+    >
+      If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.
+    </strong>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Go to Settings
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Set up Secure Messages
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
