@@ -69,7 +69,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         const cli = MatrixClientPeg.safeGet();
         try {
             // Check if 4S already set up
-            const secretStorageAlreadySetup = await cli.hasSecretStorageKey();
+            const secretStorageAlreadySetup = await cli.secretStorage.hasKey();
 
             if (!secretStorageAlreadySetup) {
                 // bootstrap secret storage; that will also create a backup version

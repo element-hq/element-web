@@ -137,7 +137,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
         try {
             const cli = MatrixClientPeg.safeGet();
-            await cli.bootstrapCrossSigning({
+            await cli.getCrypto()?.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
             });
             this.props.onFinished(true);
