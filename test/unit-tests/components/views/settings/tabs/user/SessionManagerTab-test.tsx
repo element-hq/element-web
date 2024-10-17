@@ -926,10 +926,10 @@ describe("<SessionManagerTab />", () => {
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
 
-                const { getByTestId, findByTestId } = render(getComponent());
+                const { getByTestId, findByTestId } = render(getComponent(), { legacyRoot: true });
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-                await toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const signOutButton = await within(
                     await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),

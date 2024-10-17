@@ -25,6 +25,7 @@ import {
     mockClientMethodsUser,
     setupRoomWithPollEvents,
 } from "../../../../test-utils";
+import { waitForElementToBeRemoved } from "@testing-library/dom";
 
 describe("<MPollEndBody />", () => {
     const userId = "@alice:domain.org";
@@ -127,6 +128,7 @@ describe("<MPollEndBody />", () => {
             expect(container).toMatchSnapshot();
 
             await waitFor(() => expect(getByRole("progressbar")).toBeInTheDocument());
+            await waitForElementToBeRemoved(() => getByRole("progressbar"));
 
             expect(mockClient.fetchRoomEvent).toHaveBeenCalledWith(roomId, pollStartEvent.getId());
 

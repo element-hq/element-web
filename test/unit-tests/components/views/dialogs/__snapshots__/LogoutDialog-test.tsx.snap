@@ -73,6 +73,7 @@ exports[`LogoutDialog Prompts user to connect backup if there is a backup on the
       </details>
     </div>
     <div
+      aria-describedby=":r2:"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
