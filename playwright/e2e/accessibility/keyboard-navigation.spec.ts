@@ -15,6 +15,9 @@ test.describe("Landmark navigation tests", () => {
     });
 
     test("without any rooms", async ({ page, homeserver, app, user }) => {
+        // sometimes the space button doesn't appear right away
+        await expect(page.locator(".mx_SpaceButton_active")).toBeVisible();
+
         /**
          * Without any rooms, there is no tile in the roomlist to be focused.
          * So the next landmark in the list should be focused instead.
