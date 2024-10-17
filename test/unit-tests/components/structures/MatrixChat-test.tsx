@@ -55,7 +55,7 @@ import * as Lifecycle from "../../../../src/Lifecycle";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../../src/BasePlatform";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { MatrixClientPeg, MatrixClientPeg as peg } from "../../../../src/MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../../src/stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
@@ -932,17 +932,13 @@ describe("<MatrixChat />", () => {
             // but as the exception was swallowed, the test was passing (see in `initClientCrypto`).
             // There are several uses of the peg in the app, so during all these tests you might end-up
             // with a real client instead of the mocked one. Not sure how reliable all these tests are.
-            const originalReplace = peg.replaceUsingCreds;
-            peg.replaceUsingCreds = jest.fn().mockResolvedValue(mockClient);
-            // @ts-ignore - need to mock this for the test
-            peg.matrixClient = mockClient;
+            jest.spyOn(MatrixClientPeg, "replaceUsingCreds");
+            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
             const result = getComponent();
 
             await result.findByText("You're signed out");
             expect(result.container).toMatchSnapshot();
-
-            peg.replaceUsingCreds = originalReplace;
         });
     });
 
@@ -1489,8 +1485,6 @@ describe("<MatrixChat />", () => {
                 action: "start_mobile_registration",
             });
 
-            await flushPromises();
-
             return renderResult;
         };
 
@@ -1511,6 +1505,7 @@ describe("<MatrixChat />", () => {
             enabledMobileRegistration();
 
             await getComponentAndWaitForReady();
+            await flushPromises();
 
             expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
         });

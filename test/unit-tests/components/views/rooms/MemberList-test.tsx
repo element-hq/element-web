@@ -375,9 +375,6 @@ describe("MemberList", () => {
                             roomId={room.roomId}
                         />
                     </SDKContext.Provider>,
-                    {
-                        // legacyRoot: true,
-                    },
                 );
             };
 

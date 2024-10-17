@@ -283,7 +283,6 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       </div>
     </div>
     <div
-      aria-describedby=":r2:"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
