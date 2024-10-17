@@ -1010,6 +1010,7 @@ describe("<MatrixChat />", () => {
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                     setDeviceIsolationMode: jest.fn(),
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+                    bootstrapCrossSigning: jest.fn(),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
