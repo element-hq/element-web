@@ -661,7 +661,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
         logger.log("Pickle key not created");
     }
 
-    return doSetLoggedIn(Object.assign({}, credentials, { pickleKey }), true, true);
+    return doSetLoggedIn({ ...credentials, pickleKey: pickleKey ?? undefined }, true, true);
 }
 
 /**

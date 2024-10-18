@@ -71,7 +71,7 @@ type of tile.
 */
 const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     [MsgType.KeyVerificationRequest]: (event: MatrixEvent) => {
-        const name = (event.sender || {}).name;
+        const name = event.sender?.name;
         return _t("notifier|m.key.verification.request", { name });
     },
     [M_LOCATION.name]: (event: MatrixEvent) => {
@@ -233,7 +233,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
         // Play notification sound here
         const sound = this.getSoundForRoom(room.roomId);
-        logger.log(`Got sound ${(sound && sound.name) || "default"} for ${room.roomId}`);
+        logger.log(`Got sound ${sound?.name || "default"} for ${room.roomId}`);
 
         if (sound) {
             await this.backgroundAudio.play(sound.url);

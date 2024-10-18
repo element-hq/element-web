@@ -74,7 +74,7 @@ const ExistingThreepid: React.FC<ExistingThreepidProps> = ({ mode, threepid, onC
                     logger.error("Unable to remove contact information: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("settings|general|error_remove_3pid"),
-                        description: err && err.message ? err.message : _t("invite|failed_generic"),
+                        description: err?.message ?? _t("invite|failed_generic"),
                     });
                 });
         },
