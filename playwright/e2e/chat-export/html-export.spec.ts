@@ -96,7 +96,10 @@ test.describe("HTML Export", () => {
 
         // Send a bunch of messages to populate the room
         for (let i = 1; i < 10; i++) {
-            await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
+            const respone = await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
+            if (i == 1) {
+                await app.client.reactToMessage(room.roomId, null, respone.event_id, "🙃");
+            }
         }
 
         // Wait for all the messages to be displayed

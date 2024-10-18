@@ -144,6 +144,29 @@ export class Client {
     }
 
     /**
+     * Send a reaction to to a message
+     * @param roomId ID of the room to send the reaction into
+     * @param threadId ID of the thread to send into or null for main timeline
+     * @param eventId Event ID of the message you are reacting to
+     * @param reaction The reaction text to send
+     * @returns
+     */
+    public async reactToMessage(
+        roomId: string,
+        threadId: string | null,
+        eventId: string,
+        reaction: string,
+    ): Promise<ISendEventResponse> {
+        return this.sendEvent(roomId, threadId ?? null, "m.reaction", {
+            "m.relates_to": {
+                rel_type: "m.annotation",
+                event_id: eventId,
+                key: reaction,
+            },
+        });
+    }
+
+    /**
      * Create a room with given options.
      * @param options the options to apply when creating the room
      * @return the ID of the newly created room
