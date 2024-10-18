@@ -82,7 +82,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                 accept="image/*"
             />
 
-            <Tooltip label={label} open={visible} onOpenChange={setHover}>
+            <Tooltip label={label!} open={visible} onOpenChange={setHover}>
                 <AccessibleButton
                     className={classNames("mx_MiniAvatarUploader", {
                         mx_MiniAvatarUploader_busy: busy,

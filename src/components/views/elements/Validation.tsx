@@ -44,7 +44,7 @@ export interface IFieldState {
 
 export interface IValidationResult {
     valid?: boolean;
-    feedback?: JSX.Element;
+    feedback?: JSX.Element | string;
 }
 
 /**

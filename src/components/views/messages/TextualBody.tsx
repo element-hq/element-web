@@ -35,7 +35,7 @@ import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import CodeBlock from "./CodeBlock.tsx";
+import CodeBlock from "./CodeBlock";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -48,7 +48,6 @@ interface IState {
 export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLDivElement>();
 
-    private unmounted = false;
     private pills: Element[] = [];
     private tooltips: Element[] = [];
     private reactRoots: Element[] = [];
@@ -131,7 +130,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        this.unmounted = true;
         unmountPills(this.pills);
         unmountTooltips(this.tooltips);
 

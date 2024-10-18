@@ -12,7 +12,6 @@ import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } fro
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";

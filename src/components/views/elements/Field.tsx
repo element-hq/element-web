@@ -56,7 +56,7 @@ interface IProps {
     forceValidity?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
-    tooltipContent?: JSX.Element;
+    tooltipContent?: JSX.Element | string;
     // If specified the tooltip will be shown regardless of feedback
     forceTooltipVisible?: boolean;
     // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
@@ -111,7 +111,7 @@ type PropShapes = IInputProps | ISelectProps | ITextareaProps | INativeOnChangeI
 
 interface IState {
     valid?: boolean;
-    feedback?: JSX.Element;
+    feedback?: JSX.Element | string;
     feedbackVisible: boolean;
     focused: boolean;
 }
