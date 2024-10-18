@@ -337,7 +337,7 @@ export async function uploadFile(
     const abortController = controller ?? new AbortController();
 
     // If the room is encrypted then encrypt the file before uploading it.
-    if (matrixClient.isRoomEncrypted(roomId)) {
+    if (await matrixClient.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
         // First read the file into memory.
         const data = await readFileAsArrayBuffer(file);
         if (abortController.signal.aborted) throw new UploadCanceledError();
