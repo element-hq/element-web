@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
-import { Icon as LinkIcon } from "../../../../../res/img/element-icons/link.svg";
 import { Icon as ViewInRoomIcon } from "../../../../../res/img/element-icons/view-in-room.svg";
 import { ButtonEvent } from "../../elements/AccessibleButton";
 
