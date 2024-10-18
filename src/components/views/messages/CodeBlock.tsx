@@ -98,10 +98,8 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
             // off. It should use the one we've found in the CSS class but we'd rather pass
             // it in explicitly to make sure.
             code.innerHTML = highlight.highlight(code.textContent ?? "", { language: advertisedLang }).value;
-        } else if (enableSyntaxHighlightLanguageDetection && code.parentElement === div) {
-            // User has language detection enabled and the code is within a pre
-            // we only auto-highlight if the code block is in a pre), so highlight
-            // the block with auto-highlighting enabled.
+        } else if (enableSyntaxHighlightLanguageDetection) {
+            // User has language detection enabled, so highlight the block with auto-highlighting enabled.
             // We pass highlightjs the text to highlight rather than letting it
             // work on the DOM with highlightElement because that also adds CSS
             // classes to the pre/code element that we don't want (the CSS

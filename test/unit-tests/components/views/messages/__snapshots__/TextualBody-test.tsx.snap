@@ -333,6 +333,133 @@ exports[`<TextualBody /> renders formatted m.text correctly renders formatted bo
 </div>
 `;
 
+exports[`<TextualBody /> renders formatted m.text correctly should syntax highlight code blocks 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+        <span>
+          2
+        </span>
+        <span>
+          3
+        </span>
+        <span>
+          4
+        </span>
+        <span>
+          5
+        </span>
+        <span>
+          6
+        </span>
+        <span>
+          7
+        </span>
+        <span>
+          8
+        </span>
+        <span>
+          9
+        </span>
+        <span>
+          10
+        </span>
+      </span>
+      <div
+        style="display: contents;"
+      >
+        <code
+          class="language-py"
+        >
+          <span
+            class="hljs-comment"
+          >
+            # Python Program to calculate the square root
+          </span>
+          
+
+
+          <span
+            class="hljs-comment"
+          >
+            # Note: change this value for a different result
+          </span>
+          
+num = 
+          <span
+            class="hljs-number"
+          >
+            8
+          </span>
+           
+
+
+          <span
+            class="hljs-comment"
+          >
+            # To take the input from the user
+          </span>
+          
+
+          <span
+            class="hljs-comment"
+          >
+            #num = float(input('Enter a number: '))
+          </span>
+          
+
+num_sqrt = num ** 
+          <span
+            class="hljs-number"
+          >
+            0.5
+          </span>
+          
+
+          <span
+            class="hljs-built_in"
+          >
+            print
+          </span>
+          (
+          <span
+            class="hljs-string"
+          >
+            'The square root of %0.3f is %0.3f'
+          </span>
+          %(num ,num_sqrt))
+
+        </code>
+      </div>
+    </pre>
+    <span
+      class="mx_EventTile_button mx_EventTile_expandButton"
+    />
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  
+
+</div>
+`;
+
 exports[`<TextualBody /> renders formatted m.text correctly spoilers get injected properly into the DOM 1`] = `
 <div
   class="mx_EventTile_body markdown-body translate"
