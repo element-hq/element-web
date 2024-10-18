@@ -10,7 +10,6 @@ import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
-import classNames from "classnames";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -22,7 +21,6 @@ import { pillifyLinks, unmountPills } from "../../../utils/pillify";
 import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
-import UIStore from "../../../stores/UIStore";
 import { Action } from "../../../dispatcher/actions";
 import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -37,9 +35,7 @@ import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { CopyTextButton } from "../elements/CopyableText.tsx";
-
-const MAX_HIGHLIGHT_LENGTH = 4096;
+import CodeBlock from "./CodeBlock.tsx";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -75,7 +71,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // Function is only called from render / componentDidMount → contentRef is set
         const content = this.contentRef.current!;
 
-        const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
         this.activateSpoilers([content]);
 
         HtmlUtils.linkifyElement(content);
@@ -102,26 +97,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     }
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
-                    const div = this.wrapInDiv(pres[i]);
-                    this.handleCodeBlockExpansion(pres[i]);
-                    this.addCodeExpansionButton(div, pres[i]);
-                    this.addCodeCopyButton(div);
-                    if (showLineNumbers) {
-                        this.addLineNumbers(pres[i]);
-                    }
+                    this.wrapPreInReact(pres[i]);
                 }
-            }
-            // Highlight code
-            const codes = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("code");
-            if (codes.length > 0) {
-                // Do this asynchronously: parsing code takes time and we don't
-                // need to block the DOM update on it.
-                window.setTimeout(() => {
-                    if (this.unmounted) return;
-                    for (let i = 0; i < codes.length; i++) {
-                        this.highlightCode(codes[i]);
-                    }
-                }, 10);
             }
         }
     }
@@ -132,138 +109,15 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         pre.appendChild(code);
     }
 
-    private addCodeExpansionButton(div: HTMLDivElement, pre: HTMLPreElement): void {
-        // Calculate how many percent does the pre element take up.
-        // If it's less than 30% we don't add the expansion button.
-        // We also round the number as it sometimes can be 29.99...
-        const percentageOfViewport = Math.round((pre.offsetHeight / UIStore.instance.windowHeight) * 100);
-        // TODO: additionally show the button if it's an expanded quoted message
-        if (percentageOfViewport < 30) return;
-
-        const button = document.createElement("span");
-        button.className = "mx_EventTile_button ";
-        if (pre.className == "mx_EventTile_collapsedCodeBlock") {
-            button.className += "mx_EventTile_expandButton";
-        } else {
-            button.className += "mx_EventTile_collapseButton";
-        }
-
-        button.onclick = async (): Promise<void> => {
-            button.className = "mx_EventTile_button ";
-            if (pre.className == "mx_EventTile_collapsedCodeBlock") {
-                pre.className = "";
-                button.className += "mx_EventTile_collapseButton";
-            } else {
-                pre.className = "mx_EventTile_collapsedCodeBlock";
-                button.className += "mx_EventTile_expandButton";
-            }
-
-            // By expanding/collapsing we changed
-            // the height, therefore we call this
-            this.props.onHeightChanged?.();
-        };
-
-        div.appendChild(button);
-    }
-
-    private addCodeCopyButton(div: HTMLDivElement): void {
+    private wrapPreInReact(pre: HTMLPreElement): void {
         const root = document.createElement("div");
-        div.appendChild(root);
+        root.className = "mx_EventTile_pre_container";
         this.reactRoots.push(root);
 
-        // Check if expansion button exists. If so we put the copy button to the bottom
-        const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
-
-        ReactDOM.render(
-            <TooltipProvider>
-                <CopyTextButton
-                    getTextToCopy={() => div.getElementsByTagName("code")[0]?.textContent ?? null}
-                    className={classNames("mx_EventTile_button mx_EventTile_copyButton", {
-                        mx_EventTile_buttonBottom: expansionButtonExists.length > 0,
-                    })}
-                />
-            </TooltipProvider>,
-            root,
-        );
-    }
-
-    private wrapInDiv(pre: HTMLPreElement): HTMLDivElement {
-        const div = document.createElement("div");
-        div.className = "mx_EventTile_pre_container";
-
         // Insert containing div in place of <pre> block
-        pre.parentNode?.replaceChild(div, pre);
-        // Append <pre> block and copy button to container
-        div.appendChild(pre);
+        pre.parentNode?.replaceChild(root, pre);
 
-        return div;
-    }
-
-    private handleCodeBlockExpansion(pre: HTMLPreElement): void {
-        if (!SettingsStore.getValue("expandCodeByDefault")) {
-            pre.className = "mx_EventTile_collapsedCodeBlock";
-        }
-    }
-
-    private addLineNumbers(pre: HTMLPreElement): void {
-        // Calculate number of lines in pre
-        const number = pre.innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
-        const lineNumbers = document.createElement("span");
-        lineNumbers.className = "mx_EventTile_lineNumbers";
-        // Iterate through lines starting with 1 (number of the first line is 1)
-        for (let i = 1; i <= number; i++) {
-            const s = document.createElement("span");
-            s.textContent = i.toString();
-            lineNumbers.appendChild(s);
-        }
-        pre.prepend(lineNumbers);
-        pre.append(document.createElement("span"));
-    }
-
-    private async highlightCode(code: HTMLElement): Promise<void> {
-        const { default: highlight } = await import("highlight.js");
-
-        if (code.textContent && code.textContent.length > MAX_HIGHLIGHT_LENGTH) {
-            console.log(
-                "Code block is bigger than highlight limit (" +
-                    code.textContent.length +
-                    " > " +
-                    MAX_HIGHLIGHT_LENGTH +
-                    "): not highlighting",
-            );
-            return;
-        }
-
-        let advertisedLang;
-        for (const cl of code.className.split(/\s+/)) {
-            if (cl.startsWith("language-")) {
-                const maybeLang = cl.split("-", 2)[1];
-                if (highlight.getLanguage(maybeLang)) {
-                    advertisedLang = maybeLang;
-                    break;
-                }
-            }
-        }
-
-        if (advertisedLang) {
-            // If the code says what language it is, highlight it in that language
-            // We don't use highlightElement here because we can't force language detection
-            // off. It should use the one we've found in the CSS class but we'd rather pass
-            // it in explicitly to make sure.
-            code.innerHTML = highlight.highlight(code.textContent ?? "", { language: advertisedLang }).value;
-        } else if (
-            SettingsStore.getValue("enableSyntaxHighlightLanguageDetection") &&
-            code.parentElement instanceof HTMLPreElement
-        ) {
-            // User has language detection enabled and the code is within a pre
-            // we only auto-highlight if the code block is in a pre), so highlight
-            // the block with auto-highlighting enabled.
-            // We pass highlightjs the text to highlight rather than letting it
-            // work on the DOM with highlightElement because that also adds CSS
-            // classes to the pre/code element that we don't want (the CSS
-            // conflicts with our own).
-            code.innerHTML = highlight.highlightAuto(code.textContent ?? "").value;
-        }
+        ReactDOM.render(<CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>, root);
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {

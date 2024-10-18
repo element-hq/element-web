@@ -50,14 +50,20 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
           1
         </span>
       </span>
-      <code>
-        https://matrix.org/
+      <div
+        style="display: contents;"
+      >
+        <code>
+          https://matrix.org/
 
-      </code>
-      <span />
+        </code>
+      </div>
     </pre>
-    <span
-      class="mx_EventTile_button mx_EventTile_copyButton "
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
+      role="button"
+      tabindex="0"
     />
   </div>
   
@@ -254,14 +260,20 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
           1
         </span>
       </span>
-      <code>
-        @room
+      <div
+        style="display: contents;"
+      >
+        <code>
+          @room
 
-      </code>
-      <span />
+        </code>
+      </div>
     </pre>
-    <span
-      class="mx_EventTile_button mx_EventTile_copyButton "
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
+      role="button"
+      tabindex="0"
     />
   </div>
   

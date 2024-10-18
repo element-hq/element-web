@@ -57,12 +57,12 @@ describe("Field", () => {
             // When invalid
             fireEvent.focus(screen.getByRole("textbox"));
 
-            // Expect 'alert' role
-            await expect(screen.findByRole("alert")).resolves.toBeInTheDocument();
+            // Expect 'aria-live=assertive'
+            await expect(screen.findByRole("tooltip")).resolves.toHaveAttribute("aria-live", "assertive");
 
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
-            expect(screen.queryByRole("alert")).toBeNull();
+            expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
         });
 
         it("Should mark the feedback as status if valid", async () => {
@@ -77,12 +77,12 @@ describe("Field", () => {
             // When valid
             fireEvent.focus(screen.getByRole("textbox"));
 
-            // Expect 'status' role
-            await expect(screen.findByRole("status")).resolves.toBeInTheDocument();
+            // Expect 'aria-live=polite' role
+            await expect(screen.findByRole("tooltip")).resolves.toHaveAttribute("aria-live", "polite");
 
             // Close the feedback is Escape is pressed
             fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
-            expect(screen.queryByRole("status")).toBeNull();
+            expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
         });
 
         it("Should mark the feedback as tooltip if custom tooltip set", async () => {
