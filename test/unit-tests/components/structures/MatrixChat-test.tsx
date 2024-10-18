@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { defer, IDeferred, sleep } from "matrix-js-sdk/src/utils";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -134,6 +134,7 @@ describe("<MatrixChat />", () => {
             getVersion: jest.fn().mockReturnValue("1"),
             setDeviceIsolationMode: jest.fn(),
             userHasCrossSigningKeys: jest.fn(),
+            getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
             globalBlacklistUnverifiedDevices: false,
             // This needs to not finish immediately because we need to test the screen appears
             bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
@@ -1515,6 +1516,24 @@ describe("<MatrixChat />", () => {
             await getComponentAndWaitForReady();
 
             expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
+        });
+    });
+
+    describe("when key backup failed", () => {
+        it("should show the new recovery method dialog", async () => {
+            jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+                __esModule: true,
+                default: () => <span>mocked dialog</span>,
+            }));
+            jest.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
+
+            getComponent({});
+            defaultDispatcher.dispatch({
+                action: "will_start_client",
+            });
+            await flushPromises();
+            mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
+            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
         });
     });
 });

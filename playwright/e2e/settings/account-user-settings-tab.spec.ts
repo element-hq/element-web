@@ -140,4 +140,51 @@ test.describe("Account user settings tab", () => {
         await expect(page.locator(".mx_UserMenu .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
         await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
     });
+
+    // ported to a playwright test because the jest test was very flakey for no obvious reason
+    test("should display an error if the code is incorrect when adding a phone number", async ({ uut, page }) => {
+        const dummyUrl = "https://nowhere.dummy/_matrix/client/unstable/add_threepid/msisdn/submit_token";
+
+        await page.route(
+            `**/_matrix/client/v3/account/3pid/msisdn/requestToken`,
+            async (route) => {
+                await route.fulfill({
+                    json: {
+                        success: true,
+                        sid: "1",
+                        msisdn: "447700900000",
+                        intl_fmt: "+44 7700 900000",
+                        submit_url: dummyUrl,
+                    },
+                });
+            },
+            { times: 1 },
+        );
+
+        await page.route(
+            dummyUrl,
+            async (route) => {
+                await route.fulfill({
+                    status: 400,
+                    json: {
+                        errcode: "M_THREEPID_AUTH_FAILED",
+                        error: "That code is definitely wrong",
+                    },
+                });
+            },
+            { times: 1 },
+        );
+
+        const phoneSection = page.getByTestId("mx_AccountPhoneNumbers");
+        await phoneSection.getByRole("textbox", { name: "Phone Number" }).fill("07700900000");
+        await phoneSection.getByRole("button", { name: "Add" }).click();
+
+        await phoneSection
+            .getByRole("textbox", { name: "Verification code" })
+            .fill("A small eurasian field mouse dancing the paso doble");
+
+        await phoneSection.getByRole("button", { name: "Continue" }).click();
+
+        await expect(page.getByRole("heading", { name: "Unable to verify phone number." })).toBeVisible();
+    });
 });

@@ -126,6 +126,7 @@ export function createTestClient(): MatrixClient {
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
             prepareToEncrypt: jest.fn(),
+            getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -163,7 +164,6 @@ export function createTestClient(): MatrixClient {
             });
         }),
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
-        scheduleAllGroupSessionsForBackup: jest.fn().mockResolvedValue(undefined),
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         setRoomTopic: jest.fn(),
