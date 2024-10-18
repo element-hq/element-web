@@ -548,10 +548,6 @@
         "export_unsupported": "Jūsų naršyklė nepalaiko reikalingų kriptografijos plėtinių",
         "import_invalid_keyfile": "Negaliojantis %(brand)s rakto failas",
         "import_invalid_passphrase": "Autentifikavimo patikra nepavyko: neteisingas slaptažodis?",
-        "incompatible_database_description": "Anksčiau šiame seanse naudojote naujesnę %(brand)s versiją. Norėdami vėl naudoti šią versiją su visapusiu šifravimu, turėsite atsijungti ir prisijungti iš naujo.",
-        "incompatible_database_disable": "Tęsti išjungus šifravimą",
-        "incompatible_database_sign_out_description": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
-        "incompatible_database_title": "Nesuderinama duomenų bazė",
         "messages_not_secure": {
             "cause_1": "Jūsų serveris",
             "cause_2": "Namų serveris, prie kurio yra prisijungęs patvirtinamas naudotojas",
@@ -1559,7 +1555,6 @@
             "msisdn_verification_field_label": "Patvirtinimo kodas",
             "msisdn_verification_instructions": "Įveskite patvirtinimo kodą išsiųstą teksto žinute.",
             "msisdns_heading": "Telefono numeriai",
-            "name_placeholder": "Nėra rodomo vardo",
             "password_change_success": "Jūsų slaptažodis sėkmingai pakeistas.",
             "remove_email_prompt": "Pašalinti %(email)s?",
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"

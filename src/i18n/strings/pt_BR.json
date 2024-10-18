@@ -625,10 +625,6 @@
         "export_unsupported": "O seu navegador não suporta as extensões de criptografia necessárias",
         "import_invalid_keyfile": "Não é um arquivo de chave válido do %(brand)s",
         "import_invalid_passphrase": "Falha ao checar a autenticação: senha incorreta?",
-        "incompatible_database_description": "Você já usou uma versão mais recente do %(brand)s nesta sessão. Para usar esta versão novamente com a criptografia de ponta a ponta, você terá que se desconectar e entrar novamente.",
-        "incompatible_database_disable": "Continuar com criptografia desativada",
-        "incompatible_database_sign_out_description": "Para evitar perder seu histórico de bate-papo, você precisa exportar as chaves da sua sala antes de se desconectar. Quando entrar novamente, você precisará usar a versão mais atual do %(brand)s",
-        "incompatible_database_title": "Banco de dados incompatível",
         "messages_not_secure": {
             "cause_1": "Seu servidor local",
             "cause_2": "O servidor doméstico do usuário que você está verificando está conectado",
@@ -1658,7 +1654,6 @@
             "msisdn_verification_field_label": "Código de confirmação",
             "msisdn_verification_instructions": "Digite o código de confirmação enviado por mensagem de texto.",
             "msisdns_heading": "Números de Telefone",
-            "name_placeholder": "Nenhum nome e sobrenome",
             "remove_email_prompt": "Remover %(email)s?",
             "remove_msisdn_prompt": "Remover %(phone)s?"
         },
@@ -1956,7 +1951,6 @@
         "rageshake": "Envia um relatório de erro",
         "rainbow": "Envia a mensagem colorida como arco-íris",
         "rainbowme": "Envia o emoji colorido como um arco-íris",
-        "remakeolm": "Comando do desenvolvedor: descarta a sessão de grupo de saída atual e configura novas sessões do Olm",
         "remove": "Remove desta sala o usuário com o ID determinado",
         "roomavatar": "Altera a foto da sala",
         "roomname": "Altera o nome da sala",
