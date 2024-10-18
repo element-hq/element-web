@@ -95,21 +95,18 @@ export function createTestClient(): MatrixClient {
         getUser: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }),
         getDevice: jest.fn(),
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
-        getStoredCrossSigningForUser: jest.fn(),
-        getStoredDevice: jest.fn(),
         requestVerification: jest.fn(),
         deviceId: "ABCDEFGHI",
         getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
         getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),
         credentials: { userId: "@userId:matrix.org" },
-        bootstrapCrossSigning: jest.fn(),
-        hasSecretStorageKey: jest.fn(),
         getKeyBackupVersion: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
+            hasKey: jest.fn().mockReturnValue(false),
         },
 
         store: {
@@ -209,12 +206,10 @@ export function createTestClient(): MatrixClient {
         }),
         hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),
-        downloadKeys: jest.fn(),
         fetchRoomEvent: jest.fn().mockRejectedValue({}),
         makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
         sendToDevice: jest.fn().mockResolvedValue(undefined),
         queueToDevice: jest.fn().mockResolvedValue(undefined),
-        encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
         cancelPendingEvent: jest.fn(),
 
         getMediaHandler: jest.fn().mockReturnValue({
