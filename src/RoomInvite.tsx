@@ -42,7 +42,7 @@ export function inviteMultipleToRoom(
     progressCallback?: () => void,
 ): Promise<IInviteResult> {
     const inviter = new MultiInviter(client, roomId, progressCallback);
-    return inviter.invite(addresses).then((states) => Promise.resolve({ states, inviter }));
+    return { states: await inviter.invite(addresses), inviter };
 }
 
 export function showStartChatInviteDialog(initialText = ""): void {
