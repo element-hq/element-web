@@ -13,7 +13,7 @@ import SdkConfig from "../SdkConfig";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
-import ChangelogDialog, { parseVersion } from "../components/views/dialogs/ChangelogDialog";
+import ChangelogDialog, { checkVersion } from "../components/views/dialogs/ChangelogDialog";
 import PlatformPeg from "../PlatformPeg";
 import Modal from "../Modal";
 
@@ -43,7 +43,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 },
             });
         };
-    } else if (parseVersion(version) && parseVersion(newVersion)) {
+    } else if (checkVersion(version) && checkVersion(newVersion)) {
         onAccept = () => {
             Modal.createDialog(ChangelogDialog, {
                 version,

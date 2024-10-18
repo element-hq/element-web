@@ -10,7 +10,10 @@ import React from "react";
 import fetchMock from "fetch-mock-jest";
 import { render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 
-import ChangelogDialog, { parseVersion } from "../../../../../src/components/views/dialogs/ChangelogDialog";
+import ChangelogDialog, {
+    DevelopVersionString,
+    parseVersion,
+} from "../../../../../src/components/views/dialogs/ChangelogDialog";
 
 describe("<ChangelogDialog />", () => {
     it("should fetch github proxy url for each repo with old and new version strings", async () => {
@@ -64,8 +67,8 @@ describe("<ChangelogDialog />", () => {
             files: [],
         });
 
-        const newVersion = "newsha1-js-newsha3";
-        const oldVersion = "oldsha1-js-oldsha3";
+        const newVersion = "newsha1-js-newsha3" as DevelopVersionString;
+        const oldVersion = "oldsha1-js-oldsha3" as DevelopVersionString;
         const { asFragment } = render(
             <ChangelogDialog newVersion={newVersion} version={oldVersion} onFinished={jest.fn()} />,
         );

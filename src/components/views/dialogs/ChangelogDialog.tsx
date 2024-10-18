@@ -15,8 +15,8 @@ import Spinner from "../elements/Spinner";
 import Heading from "../typography/Heading";
 
 interface IProps {
-    newVersion: string;
-    version: string;
+    newVersion: DevelopVersionString;
+    version: DevelopVersionString;
     onFinished: (success: boolean) => void;
 }
 
@@ -32,6 +32,8 @@ interface Commit {
 
 const REPOS = ["element-hq/element-web", "matrix-org/matrix-js-sdk"] as const;
 
+export type DevelopVersionString = string & { _developVersionString: never };
+
 /*
  * Parse a version string is compatible with the Changelog dialog ([element-version]-js-[js-sdk-version])
  */
@@ -46,6 +48,10 @@ export function parseVersion(version: string): Record<(typeof REPOS)[number], st
         return obj;
     }
     return null;
+}
+
+export function checkVersion(version: string): version is DevelopVersionString {
+    return parseVersion(version) !== null;
 }
 
 export default class ChangelogDialog extends React.Component<IProps, State> {
@@ -74,9 +80,8 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
     }
 
     public componentDidMount(): void {
-        const commits = parseVersion(this.props.version);
-        const newCommits = parseVersion(this.props.newVersion);
-        if (commits == null || newCommits == null) return;
+        const commits = parseVersion(this.props.version)!;
+        const newCommits = parseVersion(this.props.newVersion)!;
 
         for (const repo of REPOS) {
             this.fetchChanges(repo, commits[repo], newCommits[repo]);
