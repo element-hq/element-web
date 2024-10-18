@@ -125,7 +125,7 @@ export function createTestClient(): MatrixClient {
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
             resetKeyBackup: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn(),
+            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
             prepareToEncrypt: jest.fn(),
@@ -273,6 +273,7 @@ export function createTestClient(): MatrixClient {
         isFallbackICEServerAllowed: jest.fn().mockReturnValue(false),
         getAuthIssuer: jest.fn(),
         getOrCreateFilter: jest.fn(),
+        sendStickerMessage: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
