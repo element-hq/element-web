@@ -35,7 +35,7 @@ export interface IInviteResult {
  * @param {function} progressCallback optional callback, fired after each invite.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(
+export async function inviteMultipleToRoom(
     client: MatrixClient,
     roomId: string,
     addresses: string[],
