@@ -34,7 +34,7 @@ export const UPDATE_EVENT = "update";
  * To update the state, use updateState() and preferably await the result to
  * help prevent lock conflicts.
  */
-export abstract class AsyncStore<T extends Object> extends EventEmitter {
+export abstract class AsyncStore<T extends object> extends EventEmitter {
     private storeState: Readonly<T>;
     private lock = new AwaitLock();
     private readonly dispatcherRef: string;
@@ -72,7 +72,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * Updates the state of the store.
      * @param {T|*} newState The state to update in the store using Object.assign()
      */
-    protected async updateState(newState: T | Object): Promise<void> {
+    protected async updateState(newState: T | object): Promise<void> {
         await this.lock.acquireAsync();
         try {
             this.storeState = Object.freeze(Object.assign(<T>{}, this.storeState, newState));
@@ -87,7 +87,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * @param {T|*} newState The new state of the store.
      * @param {boolean} quiet If true, the function will not raise an UPDATE_EVENT.
      */
-    protected async reset(newState: T | Object | null = null, quiet = false): Promise<void> {
+    protected async reset(newState: T | object | null = null, quiet = false): Promise<void> {
         await this.lock.acquireAsync();
         try {
             this.storeState = Object.freeze(<T>(newState || {}));

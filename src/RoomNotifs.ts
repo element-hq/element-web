@@ -44,7 +44,7 @@ export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNo
     let roomRule: IPushRule | undefined;
     try {
         roomRule = client.getRoomPushRule("global", roomId);
-    } catch (err) {
+    } catch {
         // Possible that the client doesn't have pushRules yet. If so, it
         // hasn't started either, so indicate that this room is not notifying.
         return null;

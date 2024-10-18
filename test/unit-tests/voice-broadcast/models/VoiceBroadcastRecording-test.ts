@@ -453,7 +453,7 @@ describe("VoiceBroadcastRecording", () => {
             describe.each([
                 ["pause", async () => voiceBroadcastRecording.pause()],
                 ["toggle", async () => voiceBroadcastRecording.toggle()],
-            ])("and calling %s", (_case: string, action: Function) => {
+            ])("and calling %s", (_case: string, action: () => Promise<void>) => {
                 beforeEach(async () => {
                     await action();
                 });
@@ -480,7 +480,7 @@ describe("VoiceBroadcastRecording", () => {
                 describe.each([
                     ["pause", async () => voiceBroadcastRecording.pause()],
                     ["toggle", async () => voiceBroadcastRecording.toggle()],
-                ])("and calling %s", (_case: string, action: Function) => {
+                ])("and calling %s", (_case: string, action: () => Promise<void>) => {
                     beforeEach(async () => {
                         await action();
                     });
@@ -590,7 +590,7 @@ describe("VoiceBroadcastRecording", () => {
             describe.each([
                 ["resume", async () => voiceBroadcastRecording.resume()],
                 ["toggle", async () => voiceBroadcastRecording.toggle()],
-            ])("and calling %s", (_case: string, action: Function) => {
+            ])("and calling %s", (_case: string, action: () => Promise<void>) => {
                 beforeEach(async () => {
                     await action();
                 });

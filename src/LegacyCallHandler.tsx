@@ -827,7 +827,7 @@ export default class LegacyCallHandler extends EventEmitter {
 
         try {
             this.addCallForRoom(roomId, call);
-        } catch (e) {
+        } catch {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|already_in_call"),
                 description: _t("voip|already_in_call_person"),

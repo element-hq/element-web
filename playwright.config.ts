@@ -26,6 +26,7 @@ export default defineConfig({
         command: process.env.CI ? "npx serve -p 8080 -L ./webapp" : "yarn start",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
+        timeout: (process.env.CI ? 30 : 120) * 1000,
     },
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",

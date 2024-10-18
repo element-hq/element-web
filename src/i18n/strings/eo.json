@@ -646,10 +646,6 @@
         "export_unsupported": "Via foliumilo ne subtenas la bezonatajn ĉifrajn kromprogramojn",
         "import_invalid_keyfile": "Nevalida ŝlosila dosiero de %(brand)s",
         "import_invalid_passphrase": "Aŭtentikiga kontrolo malsukcesis: ĉu pro malĝusta pasvorto?",
-        "incompatible_database_description": "Vi antaŭe uzis pli novan version de %(brand)s kun tiu ĉi salutaĵo. Por ree uzi ĉi tiun version kun tutvoja ĉifrado, vi devos adiaŭi kaj resaluti.",
-        "incompatible_database_disable": "Pluigi sen ĉifrado",
-        "incompatible_database_sign_out_description": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
-        "incompatible_database_title": "Neakorda datumbazo",
         "messages_not_secure": {
             "cause_1": "Via hejmservilo",
             "heading": "Unu el la jenaj eble estas malkonfidencigita:",
@@ -1749,7 +1745,6 @@
             "msisdn_verification_field_label": "Kontrola kodo",
             "msisdn_verification_instructions": "Bonvolu enigi kontrolan kodon senditan per tekstmesaĝo.",
             "msisdns_heading": "Telefonnumeroj",
-            "name_placeholder": "Sen vidiga nomo",
             "remove_email_prompt": "Ĉu forigi %(email)s?",
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
@@ -2036,7 +2031,6 @@
         "rageshake": "Sendi erarraporton kun protokolo",
         "rainbow": "Sendas la mesaĝon ĉielarke kolorigitan",
         "rainbowme": "Sendas la mienon ĉielarke kolorigitan",
-        "remakeolm": "Komando de programisto: Forĵetas la nunan eliran grupsesion kaj starigas novajn Olm-salutaĵojn",
         "remove": "Forigas uzanton kun la donita identigilo de tiu ĉambro",
         "roomavatar": "Ŝanĝas la profilbildon de la nuna ĉambro",
         "roomname": "Agordas nomon de la ĉambro",

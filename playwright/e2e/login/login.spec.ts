@@ -217,7 +217,7 @@ test.describe("Login", () => {
                     const h1 = await page.getByRole("heading", { name: "Verify this device", level: 1 });
                     await expect(h1).toBeVisible();
 
-                    expect(h1.locator(".mx_CompleteSecurity_skip")).not.toBeVisible();
+                    await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
                 });
             });
         });

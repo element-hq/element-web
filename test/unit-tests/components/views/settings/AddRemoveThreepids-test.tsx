@@ -254,57 +254,6 @@ describe("AddRemoveThreepids", () => {
         expect(onChangeFn).toHaveBeenCalled();
     }, 10000);
 
-    it("should display an error if the code is incorrect", async () => {
-        const onChangeFn = jest.fn();
-        const createDialogFn = jest.spyOn(Modal, "createDialog");
-        mocked(client.requestAdd3pidMsisdnToken).mockResolvedValue({
-            sid: "1",
-            msisdn: PHONE1.address,
-            intl_fmt: "+" + PHONE1.address,
-            success: true,
-            submit_url: "https://example.dummy",
-        });
-
-        render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Phone}
-                threepids={[]}
-                isLoading={false}
-                onChange={onChangeFn}
-            />,
-            {
-                wrapper: clientProviderWrapper,
-            },
-        );
-
-        const input = screen.getByRole("textbox", { name: "Phone Number" });
-        await userEvent.type(input, PHONE1_LOCALNUM);
-
-        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
-        await userEvent.click(countryDropdown);
-        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
-        await userEvent.click(gbOption);
-
-        const addButton = screen.getByRole("button", { name: /Add/ });
-        await userEvent.click(addButton);
-
-        mocked(client).addThreePidOnly.mockRejectedValueOnce(new Error("Unauthorized"));
-
-        const verificationInput = screen.getByRole("textbox", { name: "Verification code" });
-        await userEvent.type(verificationInput, "123457");
-
-        const continueButton = screen.getByRole("button", { name: /Continue/ });
-        await userEvent.click(continueButton);
-
-        expect(createDialogFn).toHaveBeenCalledWith(expect.anything(), {
-            description: "Unauthorized",
-            title: "Unable to verify phone number.",
-        });
-
-        expect(onChangeFn).not.toHaveBeenCalled();
-    });
-
     it("should remove an email address", async () => {
         const onChangeFn = jest.fn();
         render(

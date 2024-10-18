@@ -10,8 +10,7 @@ import React, { ReactElement } from "react";
 import classNames from "classnames";
 import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
-import UserIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
-import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
+import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -63,7 +62,7 @@ const PillMemberAvatar: React.FC<{
     if (member) {
         return <MemberAvatar member={member} size="16px" aria-hidden="true" hideTitle />;
     }
-    return <UserIcon className="mx_Pill_UserIcon mx_BaseAvatar" />;
+    return <UserSolidIcon className="mx_Pill_UserIcon mx_BaseAvatar" />;
 };
 
 export interface PillProps {

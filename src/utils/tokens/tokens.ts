@@ -150,7 +150,7 @@ export async function persistTokenInStorage(
             // token if there is no token or we were unable to encrypt (e.g. if the browser doesn't
             // have WebCrypto).
             await StorageAccess.idbSave("account", storageKey, encryptedToken || token);
-        } catch (e) {
+        } catch {
             // if we couldn't save to indexedDB, fall back to localStorage.  We
             // store the access token unencrypted since localStorage only saves
             // strings.
@@ -163,7 +163,7 @@ export async function persistTokenInStorage(
     } else {
         try {
             await StorageAccess.idbSave("account", storageKey, token);
-        } catch (e) {
+        } catch {
             if (!!token) {
                 localStorage.setItem(storageKey, token);
             } else {

@@ -76,7 +76,7 @@ export class VoiceBroadcastRecorder
     public async stop(): Promise<Optional<ChunkRecordedPayload>> {
         try {
             await this.voiceRecording.stop();
-        } catch (e) {
+        } catch {
             // Ignore if the recording raises any error.
         }
 

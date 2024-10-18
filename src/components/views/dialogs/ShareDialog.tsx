@@ -21,11 +21,12 @@ import BaseDialog from "./BaseDialog";
 import CopyableText from "../elements/CopyableText";
 import { XOR } from "../../../@types/common";
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const socials = [
     {
         name: "Facebook",
         img: require("../../../../res/img/social/facebook.png"),
-        url: (url: String) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        url: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     },
     {
         name: "Twitter",
@@ -52,6 +53,7 @@ const socials = [
         url: (url: string) => `mailto:?body=${url}`,
     },
 ];
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 interface BaseProps {
     /**

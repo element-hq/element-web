@@ -74,7 +74,7 @@ test.describe("Appearance user settings tab", () => {
                 await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
 
                 await util.removeCustomTheme();
-                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
             });
         });
     });
