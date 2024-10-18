@@ -10,23 +10,20 @@ import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
+import classNames from "classnames";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
-import * as ContextMenu from "../../structures/ContextMenu";
-import { ChevronFace, toRightOf } from "../../structures/ContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
 import { pillifyLinks, unmountPills } from "../../../utils/pillify";
 import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
-import { copyPlaintext } from "../../../utils/strings";
 import UIStore from "../../../stores/UIStore";
 import { Action } from "../../../dispatcher/actions";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
@@ -40,6 +37,7 @@ import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { CopyTextButton } from "../elements/CopyableText.tsx";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -57,6 +55,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private unmounted = false;
     private pills: Element[] = [];
     private tooltips: Element[] = [];
+    private reactRoots: Element[] = [];
 
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
@@ -168,27 +167,24 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     private addCodeCopyButton(div: HTMLDivElement): void {
-        const button = document.createElement("span");
-        button.className = "mx_EventTile_button mx_EventTile_copyButton ";
+        const root = document.createElement("div");
+        div.appendChild(root);
+        this.reactRoots.push(root);
 
         // Check if expansion button exists. If so we put the copy button to the bottom
         const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
-        if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
-        button.onclick = async (): Promise<void> => {
-            const copyCode = button.parentElement?.getElementsByTagName("code")[0];
-            const successful = copyCode?.textContent ? await copyPlaintext(copyCode.textContent) : false;
-
-            const buttonRect = button.getBoundingClientRect();
-            const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
-                ...toRightOf(buttonRect, 0),
-                chevronFace: ChevronFace.None,
-                message: successful ? _t("common|copied") : _t("error|failed_copy"),
-            });
-            button.onmouseleave = close;
-        };
-
-        div.appendChild(button);
+        ReactDOM.render(
+            <TooltipProvider>
+                <CopyTextButton
+                    getTextToCopy={() => div.getElementsByTagName("code")[0]?.textContent ?? null}
+                    className={classNames("mx_EventTile_button mx_EventTile_copyButton", {
+                        mx_EventTile_buttonBottom: expansionButtonExists.length > 0,
+                    })}
+                />
+            </TooltipProvider>,
+            root,
+        );
     }
 
     private wrapInDiv(pre: HTMLPreElement): HTMLDivElement {
@@ -285,8 +281,13 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         unmountPills(this.pills);
         unmountTooltips(this.tooltips);
 
+        for (const root of this.reactRoots) {
+            ReactDOM.unmountComponentAtNode(root);
+        }
+
         this.pills = [];
         this.tooltips = [];
+        this.reactRoots = [];
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {

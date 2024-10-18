@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { useTimeout } from "../../../hooks/useTimeout";
-import { TranslatedString } from "../../../languageHandler";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
@@ -22,8 +22,8 @@ export const AVATAR_SIZE = "52px";
 
 interface IProps {
     hasAvatar: boolean;
-    noAvatarLabel?: TranslatedString;
-    hasAvatarLabel?: TranslatedString;
+    noAvatarLabel?: string;
+    hasAvatarLabel?: string;
     setAvatarUrl(url: string): Promise<unknown>;
     isUserAvatar?: boolean;
     onClick?(ev: MouseEvent<HTMLInputElement>): void;
@@ -82,34 +82,24 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                 accept="image/*"
             />
 
-            <AccessibleButton
-                className={classNames("mx_MiniAvatarUploader", {
-                    mx_MiniAvatarUploader_busy: busy,
-                    mx_MiniAvatarUploader_hasAvatar: hasAvatar,
-                })}
-                disabled={busy}
-                onClick={() => {
-                    uploadRef.current?.click();
-                }}
-                onMouseOver={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
-            >
-                {children}
-
-                <div className="mx_MiniAvatarUploader_indicator">
-                    {busy ? <Spinner w={20} h={20} /> : <div className="mx_MiniAvatarUploader_cameraIcon" />}
-                </div>
-
-                <div
-                    className={classNames("mx_Tooltip", {
-                        mx_Tooltip_visible: visible,
-                        mx_Tooltip_invisible: !visible,
+            <Tooltip label={label} open={visible} onOpenChange={setHover}>
+                <AccessibleButton
+                    className={classNames("mx_MiniAvatarUploader", {
+                        mx_MiniAvatarUploader_busy: busy,
+                        mx_MiniAvatarUploader_hasAvatar: hasAvatar,
                     })}
+                    disabled={busy}
+                    onClick={() => {
+                        uploadRef.current?.click();
+                    }}
                 >
-                    <div className="mx_Tooltip_chevron" />
-                    {label}
-                </div>
-            </AccessibleButton>
+                    {children}
+
+                    <div className="mx_MiniAvatarUploader_indicator">
+                        {busy ? <Spinner w={20} h={20} /> : <div className="mx_MiniAvatarUploader_cameraIcon" />}
+                    </div>
+                </AccessibleButton>
+            </Tooltip>
         </React.Fragment>
     );
 };

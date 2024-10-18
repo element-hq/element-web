@@ -120,7 +120,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         this.setState({ idServer: u });
     };
 
-    private getTooltip = (): ReactNode => {
+    private getTooltip = (): JSX.Element | undefined => {
         if (this.state.checking) {
             return (
                 <div>
@@ -131,7 +131,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         } else if (this.state.error) {
             return <strong className="warning">{this.state.error}</strong>;
         } else {
-            return null;
+            return undefined;
         }
     };
 
