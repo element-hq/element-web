@@ -94,6 +94,7 @@ describe("DeviceListener", () => {
                 },
             }),
             getSessionBackupPrivateKey: jest.fn(),
+            isEncryptionEnabledInRoom: jest.fn(),
         } as unknown as Mocked<CryptoApi>;
         mockClient = getMockClientWithEventEmitter({
             isGuest: jest.fn(),
@@ -104,7 +105,6 @@ describe("DeviceListener", () => {
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
             waitForClientWellKnown: jest.fn(),
-            isRoomEncrypted: jest.fn(),
             getClientWellKnown: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
             setAccountData: jest.fn(),
@@ -291,7 +291,7 @@ describe("DeviceListener", () => {
                 mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
                 mockCrypto!.isSecretStorageReady.mockResolvedValue(false);
                 mockClient!.getRooms.mockReturnValue(rooms);
-                mockClient!.isRoomEncrypted.mockReturnValue(true);
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
 
             it("hides setup encryption toast when cross signing and secret storage are ready", async () => {
@@ -316,7 +316,7 @@ describe("DeviceListener", () => {
             });
 
             it("does not show any toasts when no rooms are encrypted", async () => {
-                mockClient!.isRoomEncrypted.mockReturnValue(false);
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
