@@ -32,6 +32,22 @@ interface Commit {
 
 const REPOS = ["element-hq/element-web", "matrix-org/matrix-js-sdk"] as const;
 
+/*
+ * Parse a version string is compatible with the Changelog dialog ([element-version]-js-[js-sdk-version])
+ */
+export function parseVersion(version: string): Record<(typeof REPOS)[number], string> | null {
+    const parts = version.split("-");
+    if (parts.length === 5 && parts[1] === "js") {
+        const obj: Record<string, string> = {};
+        for (let i = 0; i < REPOS.length; i++) {
+            const commit = parts[2 * i];
+            obj[REPOS[i]] = commit;
+        }
+        return obj;
+    }
+    return null;
+}
+
 export default class ChangelogDialog extends React.Component<IProps, State> {
     public constructor(props: IProps) {
         super(props);
@@ -58,14 +74,12 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
     }
 
     public componentDidMount(): void {
-        const version = this.props.newVersion.split("-");
-        const version2 = this.props.version.split("-");
-        if (version == null || version2 == null) return;
-        // parse versions of form: [vectorversion]-react-[react-sdk-version]-js-[js-sdk-version]
-        for (let i = 0; i < REPOS.length; i++) {
-            const oldVersion = version2[2 * i];
-            const newVersion = version[2 * i];
-            this.fetchChanges(REPOS[i], oldVersion, newVersion);
+        const commits = parseVersion(this.props.version);
+        const newCommits = parseVersion(this.props.newVersion);
+        if (commits == null || newCommits == null) return;
+
+        for (const repo of REPOS) {
+            this.fetchChanges(repo, commits[repo], newCommits[repo]);
         }
     }
 
