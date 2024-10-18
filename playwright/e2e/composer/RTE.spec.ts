@@ -96,8 +96,7 @@ test.describe("Composer", () => {
                     },
                 });
 
-                // https://github.com/vector-im/element-web/issues/26037
-                test.skip("autocomplete behaviour tests", async ({ page, app, bot: bob }) => {
+                test("autocomplete behaviour tests", async ({ page, app, bot: bob }) => {
                     // Set up a private room so we have another user to mention
                     await app.client.createRoom({
                         is_direct: true,
@@ -138,10 +137,10 @@ test.describe("Composer", () => {
                         .pressSequentially(`initial text @${bob.credentials.displayName.slice(0, 1)} abc`);
                     await expect(page.getByTestId("autocomplete-wrapper")).toBeEmpty();
                     // Move the cursor left by 4 to put it to: `@B| abc`, check autocomplete displays
-                    await page.getByRole("textbox").press("LeftArrow");
-                    await page.getByRole("textbox").press("LeftArrow");
-                    await page.getByRole("textbox").press("LeftArrow");
-                    await page.getByRole("textbox").press("LeftArrow");
+                    await page.getByRole("textbox").press("ArrowLeft");
+                    await page.getByRole("textbox").press("ArrowLeft");
+                    await page.getByRole("textbox").press("ArrowLeft");
+                    await page.getByRole("textbox").press("ArrowLeft");
                     await expect(page.getByTestId("autocomplete-wrapper")).not.toBeEmpty();
 
                     // Selecting the autocomplete option using Enter inserts it into the composer
