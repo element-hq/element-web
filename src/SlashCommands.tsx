@@ -994,7 +994,7 @@ Commands.forEach((cmd) => {
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
     input = input.trimEnd();
-    if (input.startsWith("/")) return {}; // not a command
+    if (!input.startsWith("/")) return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd: string;
