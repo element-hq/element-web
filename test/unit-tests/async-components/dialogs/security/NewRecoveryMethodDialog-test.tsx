@@ -54,15 +54,13 @@ describe("<NewRecoveryMethodDialog />", () => {
 
         const onFinished = jest.fn();
 
-        await act(async () => {
-            const { asFragment } = renderComponent(onFinished);
-            await waitFor(() =>
-                expect(
-                    screen.getByText("This session is encrypting history using the new recovery method."),
-                ).toBeInTheDocument(),
-            );
-            expect(asFragment()).toMatchSnapshot();
-        });
+        const { asFragment } = renderComponent(onFinished);
+        await waitFor(() =>
+            expect(
+                screen.getByText("This session is encrypting history using the new recovery method."),
+            ).toBeInTheDocument(),
+        );
+        expect(asFragment()).toMatchSnapshot();
 
         await userEvent.click(screen.getByRole("button", { name: "Set up Secure Messages" }));
         expect(onFinished).toHaveBeenCalled();

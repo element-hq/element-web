@@ -61,7 +61,6 @@ describe("CryptographyPanel", () => {
         expect(codes[1].innerHTML).toEqual("<strong>...</strong>");
 
         // Then "not supported key
-        await TestUtils.flushPromises();
-        expect(codes[1].innerHTML).toEqual("<strong>&lt;not supported&gt;</strong>");
+        await waitFor(() => expect(codes[1].innerHTML).toEqual("<strong>&lt;not supported&gt;</strong>"));
     });
 });
