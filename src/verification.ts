@@ -66,21 +66,6 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
     });
 }
 
-export async function legacyVerifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
-    if (matrixClient.isGuest()) {
-        dis.dispatch({ action: "require_registration" });
-        return;
-    }
-    // if cross-signing is not explicitly disabled, check if it should be enabled first.
-    if (matrixClient.getCryptoTrustCrossSignedDevices()) {
-        if (!(await enable4SIfNeeded(matrixClient))) {
-            return;
-        }
-    }
-    const verificationRequestPromise = matrixClient.requestVerification(user.userId);
-    setRightPanel({ member: user, verificationRequestPromise });
-}
-
 export async function verifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
     if (matrixClient.isGuest()) {
         dis.dispatch({ action: "require_registration" });
