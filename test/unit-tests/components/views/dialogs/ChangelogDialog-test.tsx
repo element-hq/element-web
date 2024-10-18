@@ -10,7 +10,7 @@ import React from "react";
 import fetchMock from "fetch-mock-jest";
 import { render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 
-import ChangelogDialog from "../../../../../src/components/views/dialogs/ChangelogDialog";
+import ChangelogDialog, { parseVersion } from "../../../../../src/components/views/dialogs/ChangelogDialog";
 
 describe("<ChangelogDialog />", () => {
     it("should fetch github proxy url for each repo with old and new version strings", async () => {
@@ -76,5 +76,26 @@ describe("<ChangelogDialog />", () => {
         expect(fetchMock).toHaveFetched(webUrl);
         expect(fetchMock).toHaveFetched(jsUrl);
         expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe("parseVersion", () => {
+    it("should return null for old-style version strings", () => {
+        expect(parseVersion("aaaabbbb-react-ccccdddd-js-eeeeffff")).toBeNull();
+    });
+
+    it("should return null for invalid version strings", () => {
+        expect(parseVersion("aaaabbbb-react-ccccdddd")).toBeNull();
+    });
+
+    it("should return null for release version strings", () => {
+        expect(parseVersion("v1.22.33")).toBeNull();
+    });
+
+    it("should return mapping for develop version string", () => {
+        expect(parseVersion("aaaabbbb-js-eeeeffff")).toEqual({
+            "element-hq/element-web": "aaaabbbb",
+            "matrix-org/matrix-js-sdk": "eeeeffff",
+        });
     });
 });
