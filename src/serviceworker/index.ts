@@ -107,7 +107,10 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
     console.log(`[ServiceWorker] /versions response for '${clientApiUrl}': ${JSON.stringify(versions)}`);
 
     serverSupportMap[clientApiUrl] = {
-        supportsAuthedMedia: Boolean(versions?.versions?.includes("v1.11")),
+        supportsAuthedMedia: Boolean(
+            versions?.versions?.includes("v1.11") ||
+                versions?.unstable_features?.["org.matrix.msc3916.stable"] === true,
+        ),
         cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
     console.log(
