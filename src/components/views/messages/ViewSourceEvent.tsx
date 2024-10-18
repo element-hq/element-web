@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { CollapseIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -73,7 +74,9 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
                     title={_t("devtools|toggle_event")}
                     className="mx_ViewSourceEvent_toggle"
                     onClick={this.onToggle}
-                />
+                >
+                    {expanded ? <CollapseIcon /> : <ExpandIcon />}
+                </AccessibleButton>
             </span>
         );
     }

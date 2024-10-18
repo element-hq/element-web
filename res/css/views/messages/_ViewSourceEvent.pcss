@@ -25,19 +25,18 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_ViewSourceEvent_toggle {
-        --ViewSourceEvent_toggle-size: 12px;
+        --ViewSourceEvent_toggle-size: 16px;
 
         visibility: hidden;
-        /* override styles from AccessibleButton */
-        border-radius: 0;
         /* icon */
-        mask-repeat: no-repeat;
-        mask-position: 0 center;
-        mask-size: auto var(--ViewSourceEvent_toggle-size);
         width: var(--ViewSourceEvent_toggle-size);
         min-width: var(--ViewSourceEvent_toggle-size);
-        background-color: $accent;
-        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+
+        svg {
+            color: $accent;
+            width: var(--ViewSourceEvent_toggle-size);
+            height: var(--ViewSourceEvent_toggle-size);
+        }
 
         .mx_EventTile:hover & {
             visibility: visible;
@@ -47,8 +46,5 @@ Please see LICENSE files in the repository root for full details.
     &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
         align-self: flex-end;
         height: var(--ViewSourceEvent_toggle-size);
-        mask-position: 0 bottom;
-        margin-bottom: 5px;
-        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
     }
 }
