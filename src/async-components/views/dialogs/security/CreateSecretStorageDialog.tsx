@@ -404,13 +404,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private restoreBackup = async (): Promise<void> => {
-        const keyCallback = (k: Uint8Array): void => {};
-
         const { finished } = Modal.createDialog(
             RestoreKeyBackupDialog,
             {
                 showSummary: false,
-                keyCallback,
             },
             undefined,
             /* priority = */ false,

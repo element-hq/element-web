@@ -37,9 +37,6 @@ interface IProps {
     // if false, will close the dialog as soon as the restore completes successfully
     // default: true
     showSummary?: boolean;
-    // If specified, gather the key from the user but then call the function with the backup
-    // key rather than actually (necessarily) restoring the backup.
-    keyCallback?: (key: Uint8Array) => void;
     onFinished(done?: boolean): void;
 }
 
@@ -156,13 +153,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 this.state.backupInfo,
                 { progressCallback: this.progressCallback },
             );
-            if (this.props.keyCallback) {
-                const key = await MatrixClientPeg.safeGet().keyBackupKeyFromPassword(
-                    this.state.passPhrase,
-                    this.state.backupInfo,
-                );
-                this.props.keyCallback(key);
-            }
 
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
@@ -197,10 +187,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 this.state.backupInfo,
                 { progressCallback: this.progressCallback },
             );
-            if (this.props.keyCallback) {
-                const key = decodeRecoveryKey(this.state.recoveryKey);
-                this.props.keyCallback(key);
-            }
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
