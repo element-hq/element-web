@@ -37,7 +37,7 @@ const REPOS = ["element-hq/element-web", "matrix-org/matrix-js-sdk"] as const;
  */
 export function parseVersion(version: string): Record<(typeof REPOS)[number], string> | null {
     const parts = version.split("-");
-    if (parts.length === 5 && parts[1] === "js") {
+    if (parts.length === 3 && parts[1] === "js") {
         const obj: Record<string, string> = {};
         for (let i = 0; i < REPOS.length; i++) {
             const commit = parts[2 * i];
