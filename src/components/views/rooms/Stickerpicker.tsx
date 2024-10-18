@@ -202,11 +202,13 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     };
 
     private defaultStickerpickerContent(): JSX.Element {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const imgSrc = require("../../../../res/img/stickerpack-placeholder.png");
         return (
             <AccessibleButton onClick={this.launchManageIntegrations} className="mx_Stickers_contentPlaceholder">
                 <p>{_t("stickers|empty")}</p>
                 <p className="mx_Stickers_addLink">{_t("stickers|empty_add_prompt")}</p>
-                <img src={require("../../../../res/img/stickerpack-placeholder.png")} alt="" />
+                <img src={imgSrc} alt="" />
             </AccessibleButton>
         );
     }

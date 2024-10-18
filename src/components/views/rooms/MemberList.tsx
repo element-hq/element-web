@@ -27,6 +27,8 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
+// eslint-disable-next-line no-restricted-imports
+import OverflowHorizontalSvg from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -237,13 +239,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         return (
             <EntityTile
                 className="mx_EntityTile_ellipsis"
-                avatarJsx={
-                    <BaseAvatar
-                        url={require("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg").default}
-                        name="..."
-                        size="36px"
-                    />
-                }
+                avatarJsx={<BaseAvatar url={OverflowHorizontalSvg} name="..." size="36px" />}
                 name={text}
                 showPresence={false}
                 onClick={onClick}

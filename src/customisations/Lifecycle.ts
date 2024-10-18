@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function onLoggedOutAndStorageCleared(): void {
     // E.g. redirect user or call other APIs after logout
 }

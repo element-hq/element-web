@@ -358,12 +358,12 @@ describe("JitsiCall", () => {
                 new CustomEvent("widgetapirequest", { detail: {} }),
             );
             await waitFor(() => {
-                expect(callback).toHaveBeenNthCalledWith(1, ConnectionState.Disconnected, ConnectionState.Connected),
-                    expect(callback).toHaveBeenNthCalledWith(
-                        2,
-                        ConnectionState.WidgetLoading,
-                        ConnectionState.Disconnected,
-                    );
+                expect(callback).toHaveBeenNthCalledWith(1, ConnectionState.Disconnected, ConnectionState.Connected);
+                expect(callback).toHaveBeenNthCalledWith(
+                    2,
+                    ConnectionState.WidgetLoading,
+                    ConnectionState.Disconnected,
+                );
                 expect(callback).toHaveBeenNthCalledWith(3, ConnectionState.Connecting, ConnectionState.WidgetLoading);
             });
             // in video rooms we expect the call to immediately reconnect

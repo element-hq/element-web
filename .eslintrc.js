@@ -198,6 +198,8 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
+                // We do this sometimes to brand interfaces
+                "@typescript-eslint/no-empty-object-type": "off",
             },
         },
         // temporary override for offending icon require files

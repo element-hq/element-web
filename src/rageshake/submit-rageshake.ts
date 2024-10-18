@@ -68,7 +68,7 @@ export async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promi
 async function getAppVersion(): Promise<string | undefined> {
     try {
         return await PlatformPeg.get()?.getAppVersion();
-    } catch (err) {
+    } catch {
         // this happens if no version is set i.e. in dev
     }
 }
@@ -76,7 +76,7 @@ async function getAppVersion(): Promise<string | undefined> {
 function matchesMediaQuery(query: string): string {
     try {
         return String(window.matchMedia(query).matches);
-    } catch (err) {
+    } catch {
         // if not supported in browser
     }
     return "UNKNOWN";
@@ -249,12 +249,12 @@ async function collectStorageStatInfo(body: FormData): Promise<void> {
     if (navigator.storage && navigator.storage.persisted) {
         try {
             body.append("storageManager_persisted", String(await navigator.storage.persisted()));
-        } catch (e) {}
+        } catch {}
     } else if (document.hasStorageAccess) {
         // Safari
         try {
             body.append("storageManager_persisted", String(await document.hasStorageAccess()));
-        } catch (e) {}
+        } catch {}
     }
     if (navigator.storage && navigator.storage.estimate) {
         try {
@@ -266,7 +266,7 @@ async function collectStorageStatInfo(body: FormData): Promise<void> {
                     body.append(`storageManager_usage_${k}`, String(estimate.usageDetails![k]));
                 });
             }
-        } catch (e) {}
+        } catch {}
     }
 }
 
@@ -402,7 +402,7 @@ export async function submitFeedback(
     let version: string | undefined;
     try {
         version = await PlatformPeg.get()?.getAppVersion();
-    } catch (err) {} // PlatformPeg already logs this.
+    } catch {} // PlatformPeg already logs this.
 
     const body = new FormData();
     if (label) body.append("label", label);

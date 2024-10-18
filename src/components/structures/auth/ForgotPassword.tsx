@@ -274,7 +274,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 await this.reset.setNewPassword(this.state.password);
                 this.setState({ phase: Phase.Done });
                 modal.close();
-            } catch (e) {
+            } catch {
                 // Email not confirmed, yet. Retry after a while.
                 await sleep(emailCheckInterval);
             }

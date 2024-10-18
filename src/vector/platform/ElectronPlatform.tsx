@@ -265,7 +265,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         const notification = super.displayNotification(title, msg, avatarUrl, room, ev);
 
-        const handler = notification.onclick as Function;
+        const handler = notification.onclick as () => void;
         notification.onclick = (): void => {
             handler?.();
             void this.ipc.call("focusWindow");
@@ -416,7 +416,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipc.call("getPickleKey", userId, deviceId);
-        } catch (e) {
+        } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
             return null;
@@ -426,7 +426,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipc.call("createPickleKey", userId, deviceId);
-        } catch (e) {
+        } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
             return null;
@@ -436,14 +436,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
-        } catch (e) {}
+        } catch {}
     }
 
     public async clearStorage(): Promise<void> {
         try {
             await super.clearStorage();
             await this.ipc.call("clearStorage");
-        } catch (e) {}
+        } catch {}
     }
 
     public get baseUrl(): string {

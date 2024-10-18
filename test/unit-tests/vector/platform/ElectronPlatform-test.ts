@@ -47,7 +47,9 @@ describe("ElectronPlatform", () => {
         setupLanguageMock();
     });
 
-    const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
+    const getElectronEventHandlerCall = (
+        eventType: string,
+    ): [type: string, handler: (...args: any) => void] | undefined =>
         mockElectron.on.mock.calls.find(([type]) => type === eventType);
 
     it("flushes rageshake before quitting", () => {

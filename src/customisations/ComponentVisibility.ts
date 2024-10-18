@@ -24,6 +24,7 @@ import { UIComponent } from "../settings/UIFeature";
  * @returns {boolean} True (default) if the user is able to see the component, false
  * otherwise.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function shouldShowComponent(component: UIComponent): boolean {
     return true; // default to visible
 }

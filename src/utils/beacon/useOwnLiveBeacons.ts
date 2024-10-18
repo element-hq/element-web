@@ -65,7 +65,7 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
         setStoppingInProgress(true);
         try {
             await Promise.all(liveBeaconIds.map((beaconId) => OwnBeaconStore.instance.stopBeacon(beaconId)));
-        } catch (error) {
+        } catch {
             setStoppingInProgress(false);
         }
     };

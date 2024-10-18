@@ -101,7 +101,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         this.setState<any>({ [kind]: deviceId });
         try {
             await MediaDeviceHandler.instance.setDevice(deviceId, kind);
-        } catch (error) {
+        } catch {
             logger.error(`Failed to set device ${kind}: ${deviceId}`);
             // reset state to current value
             this.setState<any>({ [kind]: mapDeviceKindToHandlerValue(kind) });

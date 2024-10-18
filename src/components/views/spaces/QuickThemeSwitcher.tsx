@@ -63,7 +63,7 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
                     SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false),
                 ]);
             }
-        } catch (_error) {
+        } catch {
             dis.dispatch<RecheckThemePayload>({ action: Action.RecheckTheme });
         }
 
