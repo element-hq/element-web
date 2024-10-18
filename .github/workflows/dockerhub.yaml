@@ -71,7 +71,6 @@ jobs:
                   cosign sign --yes ${images}
 
             - name: Update repo description
-              if: matrix.variant == 'vanilla'
               uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
               continue-on-error: true
               with:
