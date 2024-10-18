@@ -136,7 +136,6 @@ describe("languageHandler", () => {
 
             const friendlyError = new UserFriendlyError(testErrorMessage, {
                 email: "test@example.com",
-                cause: undefined,
             });
 
             // Ensure message is in English so it's readable in the logs
@@ -152,8 +151,8 @@ describe("languageHandler", () => {
 
             const underlyingError = new Error("Fake underlying error");
             const friendlyError = new UserFriendlyError(testErrorMessage, {
-                email: "test@example.com",
                 cause: underlyingError,
+                email: "test@example.com",
             });
 
             expect(friendlyError.cause).toStrictEqual(underlyingError);

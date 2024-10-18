@@ -20,7 +20,6 @@ import {
     mockClientMethodsUser,
     mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
-    unmockIntlDateTimeFormat,
 } from "../../../../../test-utils";
 
 describe("<PollListItemEnded />", () => {
@@ -54,14 +53,14 @@ describe("<PollListItemEnded />", () => {
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
         render(<PollListItemEnded {...props} onClick={jest.fn()} />);
 
-    beforeAll(() => {
+    beforeEach(() => {
         // mock default locale to en-GB and set timezone
         // so these tests run the same everywhere
         mockIntlDateTimeFormat();
     });
 
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     it("renders a poll with no responses", async () => {
@@ -139,12 +138,12 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText } = getComponent({ event: pollStartEvent, poll });
+        const { findByText } = getComponent({ event: pollStartEvent, poll });
         // fetch relations
         await flushPromises();
 
         // invalid vote excluded
-        expect(getByText("Final result based on 2 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 2 votes")).resolves.toBeInTheDocument();
     });
 
     it("updates on new responses", async () => {
@@ -159,7 +158,7 @@ describe("<PollListItemEnded />", () => {
         // fetch relations
         await flushPromises();
 
-        expect(getByText("Final result based on 2 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 2 votes")).resolves.toBeInTheDocument();
 
         await room.processPollEvents([
             makePollResponseEvent(pollId, [answerOne.id], "@han:domain.org", roomId, timestamp + 1),

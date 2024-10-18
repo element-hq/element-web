@@ -398,10 +398,12 @@ describe("MemberList", () => {
                 jest.spyOn(room, "canInvite").mockReturnValue(false);
 
                 renderComponent();
-                await flushPromises();
+                await act(flushPromises);
 
                 // button rendered but disabled
-                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
+                const button = document.querySelector(".mx_MemberList_invite");
+                expect(button).toHaveTextContent("Invite to this room");
+                expect(button).toHaveAttribute("aria-disabled", "true");
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {

@@ -129,7 +129,6 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     </th>
                     <td>
                       not found locally
-                      
                     </td>
                   </tr>
                   <tr>

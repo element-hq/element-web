@@ -506,9 +506,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -552,9 +550,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -598,9 +594,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -644,9 +638,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -922,9 +914,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -968,9 +958,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1014,9 +1002,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1060,9 +1046,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1496,9 +1480,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1542,9 +1524,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1588,9 +1568,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div
@@ -1634,9 +1612,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
               </div>
               <div
                 class="mx_PollOption_optionVoteCount"
-              >
-                
-              </div>
+              />
             </div>
           </div>
           <div

@@ -32,7 +32,7 @@ export default %%ComponentName%%;
 `,
     TEST: `
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import %%ComponentName%% from '%%RelativeComponentPath%%';
 

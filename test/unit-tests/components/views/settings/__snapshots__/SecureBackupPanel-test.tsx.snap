@@ -39,7 +39,6 @@ exports[`<SecureBackupPanel /> handles error fetching backup 1`] = `
         </th>
         <td>
           not found locally
-          
         </td>
       </tr>
       <tr>
@@ -117,7 +116,6 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
         </th>
         <td>
           not found locally
-          
         </td>
       </tr>
       <tr>
@@ -168,7 +166,6 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
         </td>
       </tr>
     </table>
-    
     <div />
   </details>
   <div

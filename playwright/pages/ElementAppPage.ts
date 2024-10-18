@@ -188,6 +188,6 @@ export class ElementAppPage {
                 "Element has no aria-labelledby or aria-describedy attributes! The tooltip should have added either one of these.",
             );
         }
-        return this.page.locator(`#${labelledById ?? describedById}`);
+        return this.page.locator(`id=${labelledById ?? describedById}`);
     }
 }
