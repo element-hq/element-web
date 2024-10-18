@@ -27,7 +27,7 @@ jobs:
     notify-downstream:
         name: Trigger release drafter downstream
         needs: release
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - name: Notify element-desktop repo that element-web release has completed to re-trigger release-drafter
               uses: benc-uk/workflow-dispatch@e2e5e9a103e331dad343f381a29e654aea3cf8fc # v1
@@ -41,7 +41,7 @@ jobs:
     check:
         name: Post release checks
         needs: release
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - name: Wait for dockerhub
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
