@@ -217,6 +217,7 @@ export interface IRoomState {
     showReadReceipts: boolean;
     showRedactions: boolean;
     showJoinLeaves: boolean;
+    showInviteKicks: boolean;
     showAvatarChanges: boolean;
     showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
@@ -406,6 +407,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showReadReceipts: true,
             showRedactions: true,
             showJoinLeaves: true,
+            showInviteKicks: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
             matrixClientIsReady: context.client?.isInitialSyncComplete(),
@@ -608,6 +610,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
+            showInviteKicks: SettingsStore.getValue("showInviteKicks", roomId),
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
             wasContextSwitch: this.context.roomViewStore.getWasContextSwitch(),
@@ -678,6 +681,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("showJoinLeaves", roomId, (...[, , , value]) =>
                 this.setState({ showJoinLeaves: value as boolean }),
+            ),
+            SettingsStore.watchSetting("showInviteKicks", roomId, (...[, , , value]) =>
+                this.setState({ showInviteKicks: value as boolean }),
             ),
             SettingsStore.watchSetting("showAvatarChanges", roomId, (...[, , , value]) =>
                 this.setState({ showAvatarChanges: value as boolean }),

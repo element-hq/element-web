@@ -71,6 +71,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         showReadReceipts: true,
         showRedactions: true,
         showJoinLeaves: true,
+        showInviteKicks: true,
         showAvatarChanges: true,
         showDisplaynameChanges: true,
         matrixClientIsReady: false,

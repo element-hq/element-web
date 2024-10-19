@@ -64,6 +64,7 @@ describe("<SendMessageComposer/>", () => {
         showReadReceipts: true,
         showRedactions: true,
         showJoinLeaves: true,
+        showInviteKicks: true,
         showAvatarChanges: true,
         showDisplaynameChanges: true,
         matrixClientIsReady: false,

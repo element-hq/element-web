@@ -599,6 +599,12 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: true,
         invertedSettingName: "hideJoinLeaves",
     },
+    "showInviteKicks": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        displayName: _td("settings|show_invite_kick"),
+        default: true,
+        invertedSettingName: "hideInviteKicks",
+    },
     "showAvatarChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("settings|show_avatar_changes"),

@@ -82,6 +82,7 @@ describe("MessagePanel", function () {
         showReadReceipts: true,
         showRedactions: false,
         showJoinLeaves: false,
+        showInviteKicks: true,
         showAvatarChanges: false,
         showDisplaynameChanges: true,
         showHiddenEvents: false,
@@ -461,6 +462,34 @@ describe("MessagePanel", function () {
         // every event except for the room creation, room encryption, and Bob's
         // invite event should be in the event summary
         expect(summaryEventTiles.length).toEqual(tiles.length - 3);
+    });
+
+    it("shows invite events if the user wishes to see them", function () {
+        const events = mkCreationEvents();
+        const inviteEvent = events.find(
+            (event) =>
+                event.getType() === "m.room.member"
+                && event.getContent()?.membership === "invite"
+        )!;
+        const { container } = render(getComponent({ events }, { showInviteKicks: true }));
+
+        // there must be an invite event
+        const inviteEventTiles = container.querySelectorAll(`.mx_EventTile[data-event-id=\"${inviteEvent.getId()}\"]`);
+        expect(inviteEventTiles.length).toBeGreaterThan(0);
+    });
+
+    it("hides invite events if the user does not wish to see them", function () {
+        const events = mkCreationEvents();
+        const inviteEvent = events.find(
+            (event) =>
+                event.getType() === "m.room.member"
+                && event.getContent()?.membership === "invite"
+        )!;
+        const { container } = render(getComponent({ events }, { showInviteKicks: false }));
+
+        // our invite event must not exist
+        const inviteEventTiles = container.querySelectorAll(`.mx_EventTile[data-event-id=\"${inviteEvent.getId()}\"]`);
+        expect(inviteEventTiles.length).toBe(0);
     });
 
     it("should not collapse beacons as part of creation events", function () {

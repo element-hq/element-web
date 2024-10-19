@@ -18,6 +18,8 @@ interface IDiff {
     isPart?: boolean;
     isDisplaynameChange?: boolean;
     isAvatarChange?: boolean;
+    isInvite?: boolean;
+    isKick?: boolean;
 }
 
 function memberEventDiff(ev: MatrixEvent): IDiff {
@@ -35,6 +37,9 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
     diff.isJoin = isMembershipChanged && content.membership === KnownMembership.Join;
     diff.isPart =
         isMembershipChanged && content.membership === KnownMembership.Leave && ev.getStateKey() === ev.getSender();
+    diff.isInvite = isMembershipChanged && content.membership === KnownMembership.Invite;
+    diff.isKick =
+        isMembershipChanged && content.membership === KnownMembership.Leave && ev.getStateKey() !== ev.getSender();
 
     const isJoinToJoin = !isMembershipChanged && content.membership === KnownMembership.Join;
     diff.isDisplaynameChange = isJoinToJoin && content.displayname !== prevContent.displayname;
@@ -67,6 +72,7 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
 
     if (eventDiff.isMemberEvent) {
         if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled("showJoinLeaves")) return true;
+        if ((eventDiff.isInvite || eventDiff.isKick) && !isEnabled("showInviteKicks")) return true;
         if (eventDiff.isAvatarChange && !isEnabled("showAvatarChanges")) return true;
         if (eventDiff.isDisplaynameChange && !isEnabled("showDisplaynameChanges")) return true;
     }
