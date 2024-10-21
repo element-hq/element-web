@@ -529,9 +529,7 @@ function wrapAndRender(
     );
     return {
         rawComponent: getRawComponent(props, roomContext, mockClient),
-        renderResult: render(getRawComponent(props, roomContext, mockClient), {
-            legacyRoot: true,
-        }),
+        renderResult: render(getRawComponent(props, roomContext, mockClient)),
         roomContext,
     };
 }

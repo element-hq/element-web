@@ -272,7 +272,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     it("renders spinner while devices load", () => {
-        const { container } = render(getComponent(), { legacyRoot: true });
+        const { container } = render(getComponent());
         expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
     });
 
@@ -280,7 +280,7 @@ describe("<SessionManagerTab />", () => {
         // eat the expected error log
         jest.spyOn(logger, "error").mockImplementation(() => {});
         mockClient.getDevices.mockRejectedValue({ httpStatus: 404 });
-        const { container } = render(getComponent(), { legacyRoot: true });
+        const { container } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -306,7 +306,7 @@ describe("<SessionManagerTab />", () => {
             return null;
         });
 
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -341,7 +341,7 @@ describe("<SessionManagerTab />", () => {
             });
         });
 
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -360,7 +360,7 @@ describe("<SessionManagerTab />", () => {
             devices: [alicesDevice, alicesMobileDevice],
         });
 
-        const { getByTestId, queryByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId, queryByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -373,7 +373,7 @@ describe("<SessionManagerTab />", () => {
 
     it("does not render other sessions section when user has only one device", async () => {
         mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice] });
-        const { queryByTestId } = render(getComponent(), { legacyRoot: true });
+        const { queryByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -386,7 +386,7 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockResolvedValue({
             devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
         });
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -399,7 +399,7 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockResolvedValue({
             devices: [alicesDevice, alicesMobileDevice],
         });
-        const { getByTestId, container } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId, container } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -416,13 +416,13 @@ describe("<SessionManagerTab />", () => {
 
     describe("current session section", () => {
         it("disables current session context menu while devices are loading", () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
             expect(getByTestId("current-session-menu").getAttribute("aria-disabled")).toBeTruthy();
         });
 
         it("disables current session context menu when there is no current device", async () => {
             mockClient.getDevices.mockResolvedValue({ devices: [] });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
             await act(async () => {
                 await flushPromises();
             });
@@ -434,7 +434,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -447,7 +447,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
             const modalSpy = jest.spyOn(Modal, "createDialog");
 
             await act(async () => {
@@ -469,7 +469,7 @@ describe("<SessionManagerTab />", () => {
                 new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true }),
             );
 
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -482,7 +482,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -501,7 +501,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
             });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -517,7 +517,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
             });
-            const { getByTestId, queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -549,7 +549,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
             });
-            const { getByTestId, queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -576,7 +576,7 @@ describe("<SessionManagerTab />", () => {
                 return new DeviceVerificationStatus({});
             });
 
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -605,7 +605,7 @@ describe("<SessionManagerTab />", () => {
                 return null;
             });
 
-            const { getByTestId, queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -637,7 +637,7 @@ describe("<SessionManagerTab />", () => {
                 return new DeviceVerificationStatus({});
             });
 
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -692,7 +692,7 @@ describe("<SessionManagerTab />", () => {
                 return null;
             });
 
-            const { queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -733,7 +733,7 @@ describe("<SessionManagerTab />", () => {
                 return null;
             });
 
-            const { queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -779,7 +779,7 @@ describe("<SessionManagerTab />", () => {
                 return null;
             });
 
-            const { queryByTestId } = render(getComponent(), { legacyRoot: true });
+            const { queryByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -800,7 +800,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice],
             });
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -821,7 +821,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice],
             });
-            const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, getByLabelText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -838,7 +838,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice],
             });
-            const { getByTestId, queryByLabelText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, queryByLabelText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -852,7 +852,7 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
             });
-            const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, getByLabelText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -891,7 +891,7 @@ describe("<SessionManagerTab />", () => {
                     devices: [alicesDevice],
                 });
 
-            const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, getByLabelText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -926,7 +926,7 @@ describe("<SessionManagerTab />", () => {
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
 
-                const { getByTestId, findByTestId } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, findByTestId } = render(getComponent());
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
                 toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
@@ -960,7 +960,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("does not delete a device when interactive auth is not required", async () => {
-                const { getByTestId } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1002,7 +1002,7 @@ describe("<SessionManagerTab />", () => {
                         devices: [alicesDevice, alicesOlderMobileDevice],
                     });
 
-                const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByLabelText } = render(getComponent());
 
                 await act(flushPromises);
 
@@ -1064,7 +1064,7 @@ describe("<SessionManagerTab />", () => {
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
 
-                const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByLabelText } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1133,7 +1133,7 @@ describe("<SessionManagerTab />", () => {
                     return resolveDeleteRequest.promise;
                 });
 
-                const { getByTestId } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1177,7 +1177,7 @@ describe("<SessionManagerTab />", () => {
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
-                const { getByTestId, getByLabelText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByLabelText } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1211,7 +1211,7 @@ describe("<SessionManagerTab />", () => {
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice],
                 });
-                const { getByTestId } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1231,7 +1231,7 @@ describe("<SessionManagerTab />", () => {
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
-                const { getByTestId } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1247,7 +1247,7 @@ describe("<SessionManagerTab />", () => {
                         devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                     });
 
-                    const { getByTestId } = render(getComponent(), { legacyRoot: true });
+                    const { getByTestId } = render(getComponent());
 
                     await act(async () => {
                         await flushPromises();
@@ -1294,7 +1294,7 @@ describe("<SessionManagerTab />", () => {
                         devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice, alicesInactiveDevice],
                     });
 
-                    render(getComponent(), { legacyRoot: true });
+                    render(getComponent());
 
                     await act(async () => {
                         await flushPromises();
@@ -1312,7 +1312,7 @@ describe("<SessionManagerTab />", () => {
                     mockClient.getDevices.mockResolvedValue({
                         devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                     });
-                    render(getComponent(), { legacyRoot: true });
+                    render(getComponent());
 
                     await act(async () => {
                         await flushPromises();
@@ -1346,7 +1346,7 @@ describe("<SessionManagerTab />", () => {
         };
 
         it("renames current session", async () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1364,7 +1364,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("renames other session", async () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1382,7 +1382,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("does not rename session or refresh devices is session name is unchanged", async () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1396,7 +1396,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("saves an empty session display name successfully", async () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1413,7 +1413,7 @@ describe("<SessionManagerTab />", () => {
             const logSpy = jest.spyOn(logger, "error");
             const error = new Error("oups");
             mockClient.setDeviceDetails.mockRejectedValue(error);
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1439,7 +1439,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("toggles session selection", async () => {
-            const { getByTestId, getByText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, getByText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1463,7 +1463,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("cancel button clears selection", async () => {
-            const { getByTestId, getByText } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId, getByText } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1483,7 +1483,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("changing the filter clears selection", async () => {
-            const { getByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByTestId } = render(getComponent());
 
             await act(async () => {
                 await flushPromises();
@@ -1503,7 +1503,7 @@ describe("<SessionManagerTab />", () => {
 
         describe("toggling select all", () => {
             it("selects all sessions when there is not existing selection", async () => {
-                const { getByTestId, getByText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByText } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1521,7 +1521,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("selects all sessions when some sessions are already selected", async () => {
-                const { getByTestId, getByText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByText } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1541,7 +1541,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("deselects all sessions when all sessions are selected", async () => {
-                const { getByTestId, getByText } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, getByText } = render(getComponent());
 
                 await act(async () => {
                     await flushPromises();
@@ -1562,7 +1562,7 @@ describe("<SessionManagerTab />", () => {
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesInactiveDevice],
                 });
-                const { getByTestId, container } = render(getComponent(), { legacyRoot: true });
+                const { getByTestId, container } = render(getComponent());
 
                 await act(flushPromises);
 
@@ -1588,7 +1588,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     it("lets you change the pusher state", async () => {
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -1609,7 +1609,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     it("lets you change the local notification settings state", async () => {
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -1632,7 +1632,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     it("updates the UI when another session changes the local notifications", async () => {
-        const { getByTestId } = render(getComponent(), { legacyRoot: true });
+        const { getByTestId } = render(getComponent());
 
         await act(async () => {
             await flushPromises();
@@ -1684,7 +1684,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("renders qr code login section", async () => {
-            const { getByText } = render(getComponent(), { legacyRoot: true });
+            const { getByText } = render(getComponent());
 
             // wait for versions call to settle
             await flushPromises();
@@ -1694,7 +1694,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("enters qr code login section when show QR code button clicked", async () => {
-            const { getByText, findByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByText, findByTestId } = render(getComponent());
             // wait for versions call to settle
             await flushPromises();
 
@@ -1742,7 +1742,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("renders qr code login section", async () => {
-            const { getByText } = render(getComponent(), { legacyRoot: true });
+            const { getByText } = render(getComponent());
 
             // wait for versions call to settle
             await flushPromises();
@@ -1752,7 +1752,7 @@ describe("<SessionManagerTab />", () => {
         });
 
         it("enters qr code login section when show QR code button clicked", async () => {
-            const { getByText, findByTestId } = render(getComponent(), { legacyRoot: true });
+            const { getByText, findByTestId } = render(getComponent());
             // wait for versions call to settle
             await flushPromises();
 

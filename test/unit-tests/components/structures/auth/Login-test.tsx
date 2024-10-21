@@ -89,7 +89,7 @@ describe("Login", function () {
     }
 
     function getComponent(hsUrl?: string, isUrl?: string, delegatedAuthentication?: OidcClientConfig) {
-        return render(getRawComponent(hsUrl, isUrl, delegatedAuthentication), { legacyRoot: true });
+        return render(getRawComponent(hsUrl, isUrl, delegatedAuthentication));
     }
 
     it("should show form with change server link", async () => {
@@ -350,9 +350,7 @@ describe("Login", function () {
             unstable_features: {},
             versions: ["v1.1"],
         });
-        const { rerender } = render(getRawComponent(), {
-            legacyRoot: true,
-        });
+        const { rerender } = render(getRawComponent());
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         // error displayed

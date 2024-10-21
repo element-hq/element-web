@@ -19,18 +19,14 @@ describe("ExportE2eKeysDialog", () => {
     it("renders", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
-        const { asFragment } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />, {
-            legacyRoot: true,
-        });
+        const { asFragment } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should have disabled submit button initially", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
-        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />, {
-            legacyRoot: true,
-        });
+        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         fireEvent.click(container.querySelector("[type=submit]")!);
         expect(screen.getByText("Enter passphrase")).toBeInTheDocument();
     });
@@ -39,7 +35,7 @@ describe("ExportE2eKeysDialog", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
 
-        render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />, { legacyRoot: true });
+        render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         const input = screen.getByLabelText("Enter passphrase");
         await userEvent.type(input, "password");
         await expect(screen.findByText("This is a top-10 common password")).resolves.toBeInTheDocument();
@@ -49,9 +45,7 @@ describe("ExportE2eKeysDialog", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
 
-        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />, {
-            legacyRoot: true,
-        });
+        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         await userEvent.type(screen.getByLabelText("Enter passphrase"), "ThisIsAMoreSecurePW123$$");
         await userEvent.type(screen.getByLabelText("Confirm passphrase"), "ThisIsAMoreSecurePW124$$");
         fireEvent.click(container.querySelector("[type=submit]")!);
@@ -76,9 +70,7 @@ describe("ExportE2eKeysDialog", () => {
         jest.spyOn(MegolmExportEncryption, "encryptMegolmKeyFile").mockResolvedValue(new ArrayBuffer(3));
 
         // When we tell the dialog to export
-        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={jest.fn()} />, {
-            legacyRoot: true,
-        });
+        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={jest.fn()} />);
         await userEvent.type(screen.getByLabelText("Enter passphrase"), passphrase);
         await userEvent.type(screen.getByLabelText("Confirm passphrase"), passphrase);
         fireEvent.click(container.querySelector("[type=submit]")!);

@@ -20,7 +20,6 @@ describe("EmojiPicker", function () {
         const ref = createRef<EmojiPicker>();
         const { container } = render(
             <EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />,
-            { legacyRoot: true },
         );
 
         // Record the HTML before filtering

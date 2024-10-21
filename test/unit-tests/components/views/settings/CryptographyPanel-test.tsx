@@ -28,7 +28,7 @@ describe("CryptographyPanel", () => {
         mocked(client.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({ ed25519: sessionKey, curve25519: "1234" });
 
         // When we render the CryptographyPanel
-        const rendered = render(<CryptographyPanel />, { legacyRoot: true });
+        const rendered = render(<CryptographyPanel />);
 
         // Then it displays info about the user's session
         const codes = rendered.container.querySelectorAll("code");

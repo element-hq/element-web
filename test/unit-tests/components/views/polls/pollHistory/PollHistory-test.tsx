@@ -62,7 +62,6 @@ describe("<PollHistory />", () => {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
-            legacyRoot: true,
         });
 
     beforeAll(() => {

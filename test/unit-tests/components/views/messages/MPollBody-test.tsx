@@ -916,7 +916,6 @@ function renderMPollBodyWithWrapper(props: IBodyProps): RenderResult {
         wrapper: ({ children }) => (
             <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
         ),
-        legacyRoot: true,
     });
 }
 

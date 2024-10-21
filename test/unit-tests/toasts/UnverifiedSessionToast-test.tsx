@@ -57,7 +57,7 @@ describe("UnverifiedSessionToast", () => {
     });
 
     beforeEach(() => {
-        renderResult = render(<ToastContainer />, { legacyRoot: true });
+        renderResult = render(<ToastContainer />);
     });
 
     describe("when rendering the toast", () => {

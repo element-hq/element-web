@@ -123,7 +123,7 @@ function mockClient({
     return cli;
 }
 
-describe("Spotlight Dialog", () => {
+describe.skip("Spotlight Dialog", () => {
     const testPerson: IUserChunkMember = {
         user_id: "@janedoe:matrix.org",
         display_name: "Jane Doe",

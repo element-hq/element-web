@@ -108,9 +108,7 @@ describe("<LoginWithQR />", () => {
         test("no homeserver support", async () => {
             // simulate no support
             jest.spyOn(MSC3906Rendezvous.prototype, "generateCode").mockRejectedValue("");
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.Error,
@@ -124,9 +122,7 @@ describe("<LoginWithQR />", () => {
 
         test("failed to connect", async () => {
             jest.spyOn(MSC3906Rendezvous.prototype, "startAfterShowingCode").mockRejectedValue("");
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.Error,
@@ -142,9 +138,7 @@ describe("<LoginWithQR />", () => {
         test("render QR then back", async () => {
             const onFinished = jest.fn();
             jest.spyOn(MSC3906Rendezvous.prototype, "startAfterShowingCode").mockReturnValue(unresolvedPromise());
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -172,9 +166,7 @@ describe("<LoginWithQR />", () => {
 
         test("render QR then decline", async () => {
             const onFinished = jest.fn();
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -203,9 +195,7 @@ describe("<LoginWithQR />", () => {
         test("approve - no crypto", async () => {
             (client as any).getCrypto = () => undefined;
             const onFinished = jest.fn();
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -245,9 +235,7 @@ describe("<LoginWithQR />", () => {
             jest.spyOn(MSC3906Rendezvous.prototype, "verifyNewDeviceOnExistingDevice").mockImplementation(() =>
                 unresolvedPromise(),
             );
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -284,9 +272,7 @@ describe("<LoginWithQR />", () => {
 
         test("approve + verify", async () => {
             const onFinished = jest.fn();
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -316,9 +302,7 @@ describe("<LoginWithQR />", () => {
         test("approve - rate limited", async () => {
             mocked(client.requestLoginToken).mockRejectedValue(new HTTPError("rate limit reached", 429));
             const onFinished = jest.fn();
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
             const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
             await waitFor(() =>
@@ -362,9 +346,7 @@ describe("<LoginWithQR />", () => {
         test("render QR then back", async () => {
             const onFinished = jest.fn();
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
-            render(getComponent({ client, onFinished }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client, onFinished }));
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith({
@@ -385,9 +367,7 @@ describe("<LoginWithQR />", () => {
         });
 
         test("failed to connect", async () => {
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockRejectedValue(
                 new HTTPError("Internal Server Error", 500),
@@ -399,9 +379,7 @@ describe("<LoginWithQR />", () => {
         test("reciprocates login", async () => {
             jest.spyOn(global.window, "open");
 
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
                 verificationUri: "mock-verification-uri",
@@ -427,9 +405,7 @@ describe("<LoginWithQR />", () => {
         });
 
         test("handles errors during reciprocation", async () => {
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
             await waitFor(() =>
@@ -456,9 +432,7 @@ describe("<LoginWithQR />", () => {
         });
 
         test("handles user cancelling during reciprocation", async () => {
-            render(getComponent({ client }), {
-                legacyRoot: true,
-            });
+            render(getComponent({ client }));
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});

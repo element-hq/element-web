@@ -137,9 +137,6 @@ describe("RoomView", () => {
                     wrappedRef={ref as any}
                 />
             </SDKContext.Provider>,
-            {
-                legacyRoot: true,
-            },
         );
         await flushPromises();
         return roomView;
@@ -177,9 +174,6 @@ describe("RoomView", () => {
                     onRegistered={jest.fn()}
                 />
             </SDKContext.Provider>,
-            {
-                legacyRoot: true,
-            },
         );
         await flushPromises();
         return roomView;

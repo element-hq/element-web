@@ -39,7 +39,6 @@ describe("<SecurityRoomSettingsTab />", () => {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
             ),
-            legacyRoot: true,
         });
 
     const setRoomStateEvents = (

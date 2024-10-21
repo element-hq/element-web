@@ -67,7 +67,6 @@ describe("RovingTabIndex", () => {
                     </React.Fragment>
                 )}
             </RovingTabIndexProvider>,
-            { legacyRoot: true },
         );
 
         // should begin with 0th being active
@@ -136,7 +135,6 @@ describe("RovingTabIndex", () => {
                     </React.Fragment>
                 )}
             </RovingTabIndexProvider>,
-            { legacyRoot: true },
         );
 
         // should begin with 0th being active
