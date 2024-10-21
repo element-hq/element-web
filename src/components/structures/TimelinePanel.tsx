@@ -67,9 +67,6 @@ const READ_RECEIPT_INTERVAL_MS = 500;
 
 const READ_MARKER_DEBOUNCE_MS = 100;
 
-// How far off-screen a decryption failure can be for it to still count as "visible"
-const VISIBLE_DECRYPTION_FAILURE_MARGIN = 100;
-
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_timeline_panel")) {
         logger.log.call(console, "TimelinePanel debuglog:", ...args);
@@ -1764,45 +1761,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
         const index = this.state.events.findIndex((ev) => ev.getId() === evId);
         return index > -1 ? index : null;
-    }
-
-    /**
-     * Get a list of undecryptable events currently visible on-screen.
-     *
-     * @param {boolean} addMargin Whether to add an extra margin beyond the viewport
-     * where events are still considered "visible"
-     *
-     * @returns {MatrixEvent[] | null} A list of undecryptable events, or null if
-     *     the list of events could not be determined.
-     */
-    public getVisibleDecryptionFailures(addMargin?: boolean): MatrixEvent[] | null {
-        const messagePanel = this.messagePanel.current;
-        if (!messagePanel) return null;
-
-        const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
-        if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
-        const wrapperRect = messagePanelNode.getBoundingClientRect();
-        const margin = addMargin ? VISIBLE_DECRYPTION_FAILURE_MARGIN : 0;
-        const screenTop = wrapperRect.top - margin;
-        const screenBottom = wrapperRect.bottom + margin;
-
-        const result: MatrixEvent[] = [];
-        for (const ev of this.state.liveEvents) {
-            const eventId = ev.getId();
-            if (!eventId) continue;
-            const node = messagePanel.getNodeForEventId(eventId);
-            if (!node) continue;
-
-            const boundingRect = node.getBoundingClientRect();
-            if (boundingRect.top > screenBottom) {
-                // we have gone past the visible section of timeline
-                break;
-            } else if (boundingRect.bottom >= screenTop) {
-                // the tile for this event is in the visible part of the screen (or just above/below it).
-                if (ev.isDecryptionFailure()) result.push(ev);
-            }
-        }
-        return result;
     }
 
     private getLastDisplayedEventIndex(opts: IEventIndexOpts = {}): number | null {
