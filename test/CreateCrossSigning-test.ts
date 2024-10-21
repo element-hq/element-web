@@ -70,7 +70,6 @@ describe("CreateCrossSigning", () => {
             finished: Promise.resolve([true]),
             close: jest.fn(),
         });
-        jest.mock;
 
         client.uploadDeviceSigningKeys = jest.fn().mockRejectedValueOnce(
             new MatrixError({
