@@ -17,8 +17,8 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinks, unmountPills } from "../../../utils/pillify";
-import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
+import { pillifyLinks } from "../../../utils/pillify";
+import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { Action } from "../../../dispatcher/actions";
@@ -36,6 +36,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import CodeBlock from "./CodeBlock";
+import { ReactRootManager } from "../../../utils/react";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -48,9 +49,9 @@ interface IState {
 export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLDivElement>();
 
-    private pills: Element[] = [];
-    private tooltips: Element[] = [];
-    private reactRoots: Element[] = [];
+    private pills = new ReactRootManager();
+    private tooltips = new ReactRootManager();
+    private reactRoots = new ReactRootManager();
 
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
@@ -80,7 +81,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // tooltipifyLinks AFTER calculateUrlPreview because the DOM inside the tooltip
         // container is empty before the internal component has mounted so calculateUrlPreview
         // won't find any anchors
-        tooltipifyLinks([content], this.pills, this.tooltips);
+        tooltipifyLinks([content], [...this.pills.elements, ...this.reactRoots.elements], this.tooltips);
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
@@ -111,12 +112,11 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private wrapPreInReact(pre: HTMLPreElement): void {
         const root = document.createElement("div");
         root.className = "mx_EventTile_pre_container";
-        this.reactRoots.push(root);
 
         // Insert containing div in place of <pre> block
         pre.parentNode?.replaceChild(root, pre);
 
-        ReactDOM.render(<CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>, root);
+        this.reactRoots.render(<CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>, root);
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
@@ -130,16 +130,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        unmountPills(this.pills);
-        unmountTooltips(this.tooltips);
-
-        for (const root of this.reactRoots) {
-            ReactDOM.unmountComponentAtNode(root);
-        }
-
-        this.pills = [];
-        this.tooltips = [];
-        this.reactRoots = [];
+        this.pills.unmount();
+        this.tooltips.unmount();
+        this.reactRoots.unmount();
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {
@@ -195,7 +188,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     </TooltipProvider>
                 );
 
-                ReactDOM.render(spoiler, spoilerContainer);
+                this.reactRoots.render(spoiler, spoilerContainer);
+
                 node.parentNode?.replaceChild(spoilerContainer, node);
 
                 node = spoilerContainer;

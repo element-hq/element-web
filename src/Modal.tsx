@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import classNames from "classnames";
 import { IDeferred, defer, sleep } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
@@ -83,28 +83,26 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     // Neither the static nor priority modal will be in this list.
     private modals: IModal<any>[] = [];
 
-    private static getOrCreateContainer(): HTMLElement {
-        let container = document.getElementById(DIALOG_CONTAINER_ID);
-
-        if (!container) {
-            container = document.createElement("div");
+    private static root?: Root;
+    private static getOrCreateRoot(): Root {
+        if (!ModalManager.root) {
+            const container = document.createElement("div");
             container.id = DIALOG_CONTAINER_ID;
             document.body.appendChild(container);
+            ModalManager.root = createRoot(container);
         }
-
-        return container;
+        return ModalManager.root;
     }
 
-    private static getOrCreateStaticContainer(): HTMLElement {
-        let container = document.getElementById(STATIC_DIALOG_CONTAINER_ID);
-
-        if (!container) {
-            container = document.createElement("div");
+    private static staticRoot?: Root;
+    private static getOrCreateStaticRoot(): Root {
+        if (!ModalManager.staticRoot) {
+            const container = document.createElement("div");
             container.id = STATIC_DIALOG_CONTAINER_ID;
             document.body.appendChild(container);
+            ModalManager.staticRoot = createRoot(container);
         }
-
-        return container;
+        return ModalManager.staticRoot;
     }
 
     public constructor() {
@@ -400,8 +398,10 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             dis.dispatch({
                 action: "aria_unhide_main_app",
             });
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateRoot().unmount();
+            ModalManager.root = undefined;
+            ModalManager.getOrCreateStaticRoot().unmount();
+            ModalManager.staticRoot = undefined;
             return;
         }
 
@@ -430,10 +430,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </TooltipProvider>
             );
 
-            ReactDOM.render(staticDialog, ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateStaticRoot().render(staticDialog);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateStaticRoot().unmount();
+            ModalManager.staticRoot = undefined;
         }
 
         const modal = this.getCurrentModal();
@@ -457,10 +458,13 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </TooltipProvider>
             );
 
-            setTimeout(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()), 0);
+            setTimeout(() => {
+                ModalManager.getOrCreateRoot().render(dialog);
+            }, 0);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());
+            ModalManager.getOrCreateRoot().unmount();
+            ModalManager.root = undefined;
         }
     }
 }

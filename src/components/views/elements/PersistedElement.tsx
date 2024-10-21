@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { MutableRefObject, ReactNode } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -176,7 +176,8 @@ export default class PersistedElement extends React.Component<IProps> {
             </MatrixClientContext.Provider>
         );
 
-        ReactDOM.render(content, getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));
+        const root = createRoot(getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));
+        root.render(content);
     }
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {

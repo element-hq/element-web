@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -313,9 +313,11 @@ export default class HTMLExporter extends Exporter {
         ) {
             // to linkify textual events, we'll need lifecycle methods which won't be invoked in renderToString
             // So, we'll have to render the component into a temporary root element
-            const tempRoot = document.createElement("div");
-            ReactDOM.render(EventTile, tempRoot);
-            eventTileMarkup = tempRoot.innerHTML;
+            const tempElement = document.createElement("div");
+            const tempRoot = createRoot(tempElement);
+            tempRoot.render(EventTile);
+            eventTileMarkup = tempElement.innerHTML;
+            tempRoot.unmount();
         } else {
             eventTileMarkup = renderToStaticMarkup(EventTile);
         }
