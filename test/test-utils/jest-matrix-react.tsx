@@ -27,6 +27,7 @@ const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
 
 const customRender = (ui: ReactElement, options: RenderOptions = {}) => {
     return render(ui, {
+        legacyRoot: true,
         ...options,
         wrapper: wrapWithTooltipProvider(options?.wrapper) as RenderOptions["wrapper"],
     }) as ReturnType<typeof render>;
