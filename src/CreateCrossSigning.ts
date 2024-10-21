@@ -15,6 +15,11 @@ import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
+/**
+ * Determine if the homeserver allows uploading device keys with only password auth.
+ * @param cli The Matrix Client to use
+ * @returns True if the homeserver allows uploading device keys with only password auth, otherwise false
+ */
 async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean> {
     try {
         await cli.uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
@@ -35,6 +40,21 @@ async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean
     }
 }
 
+/**
+ * Ensures that cross signing keys are created and uploaded for the user.
+ * The homeserver may require user-interactive auth to upload the keys, in
+ * which case the user will be prompted to authenticate. If the homeserver
+ * allows uploading keys with just an account password and one is provided,
+ * the keys will be uploaded without user interaction.
+ *
+ * This function does not set up backups of the created cross-signing keys
+ * (or message keys): the cross-signing keys are stored locally and will be
+ * lost requiring a crypto reset, if the user logs out of loses their session.
+ *
+ * @param cli The Matrix Client to use
+ * @param isTokenLogin True if the user logged in via a token login, otherwise false
+ * @param accountPassword The password that the user logged in with
+ */
 export async function createCrossSigning(
     cli: MatrixClient,
     isTokenLogin: boolean,
