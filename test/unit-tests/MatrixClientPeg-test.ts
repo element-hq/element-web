@@ -83,12 +83,10 @@ describe("MatrixClientPeg", () => {
         it("should initialise the rust crypto library by default", async () => {
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
-            expect(mockInitCrypto).not.toHaveBeenCalled();
             expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
 
             // we should have stashed the setting in the settings store
