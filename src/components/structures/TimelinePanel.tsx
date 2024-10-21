@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode } from "react";
-import ReactDOM from "react-dom";
 import {
     Room,
     RoomEvent,
@@ -395,6 +394,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     }
 
+    private get messagePanelDiv(): HTMLDivElement | null {
+        return this.messagePanel.current?.scrollPanel.current?.divScroll ?? null;
+    }
+
     /**
      * Logs out debug info to describe the state of the TimelinePanel and the
      * events in the room according to the matrix-js-sdk. This is useful when
@@ -415,15 +418,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // And we can suss out any corrupted React `key` problems.
         let renderedEventIds: string[] | undefined;
         try {
-            const messagePanel = this.messagePanel.current;
-            if (messagePanel) {
-                const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
-                if (messagePanelNode) {
-                    const actuallyRenderedEvents = messagePanelNode.querySelectorAll("[data-event-id]");
-                    renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
-                        return renderedEvent.getAttribute("data-event-id")!;
-                    });
-                }
+            const messagePanelNode = this.messagePanelDiv;
+            if (messagePanelNode) {
+                const actuallyRenderedEvents = messagePanelNode.querySelectorAll("[data-event-id]");
+                renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
+                    return renderedEvent.getAttribute("data-event-id")!;
+                });
             }
         } catch (err) {
             logger.error(`onDumpDebugLogs: Failed to get the actual event ID's in the DOM`, err);
@@ -1770,7 +1770,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const messagePanel = this.messagePanel.current;
         if (!messagePanel) return null;
 
-        const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
+        const messagePanelNode = this.messagePanelDiv;
         if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
         const wrapperRect = messagePanelNode.getBoundingClientRect();
         const myUserId = MatrixClientPeg.safeGet().credentials.userId;
