@@ -69,7 +69,7 @@ export class MessageBuilder {
     /**
      * Map of message content -> event.
      */
-    messages = new Map<String, Promise<JSHandle<MatrixEvent>>>();
+    messages = new Map<string, Promise<JSHandle<MatrixEvent>>>();
 
     /**
      * Utility to find a MatrixEvent by its body content
@@ -222,14 +222,7 @@ export class MessageBuilder {
                     threadId: !ev.isThreadRoot ? ev.threadRootId : undefined,
                 }));
                 const roomId = await room.evaluate((room) => room.roomId);
-
-                await bot.sendEvent(roomId, threadId ?? null, "m.reaction", {
-                    "m.relates_to": {
-                        rel_type: "m.annotation",
-                        event_id: id,
-                        key: reaction,
-                    },
-                });
+                await bot.reactToMessage(roomId, threadId, id, reaction);
             }
         })(this);
     }

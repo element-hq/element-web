@@ -70,7 +70,7 @@ describe("OwnProfileStore", () => {
         );
         try {
             await ownProfileStore.start();
-        } catch (ignore) {}
+        } catch {}
 
         expect(onUpdate).not.toHaveBeenCalled();
         expect(ownProfileStore.displayName).toBe(client.getSafeUserId());

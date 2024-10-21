@@ -579,18 +579,21 @@ export default class AppTile extends React.Component<IProps, IState> {
             : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
 
-        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
-        if (
-            targetContainer === Container.Top &&
-            RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
-        ) {
-            RightPanelStore.instance.popCard(this.props.room.roomId);
-        }
+        if (targetContainer === Container.Top) this.closeChatCardIfNeeded();
     };
 
     private onMinimiseClicked = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, Container.Right);
+        this.closeChatCardIfNeeded();
+    };
+
+    private closeChatCardIfNeeded = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
     };
 
     private onContextMenuClick = (): void => {

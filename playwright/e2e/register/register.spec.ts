@@ -96,7 +96,7 @@ test.describe("Registration", () => {
             });
         });
         await page.getByRole("textbox", { name: "Username", exact: true }).fill("_alice");
-        await expect(page.getByRole("alert").filter({ hasText: "Some characters not allowed" })).toBeVisible();
+        await expect(page.getByRole("tooltip").filter({ hasText: "Some characters not allowed" })).toBeVisible();
 
         await page.route("**/_matrix/client/*/register/available?username=bob", async (route) => {
             await route.fulfill({
@@ -108,9 +108,9 @@ test.describe("Registration", () => {
             });
         });
         await page.getByRole("textbox", { name: "Username", exact: true }).fill("bob");
-        await expect(page.getByRole("alert").filter({ hasText: "Someone already has that username" })).toBeVisible();
+        await expect(page.getByRole("tooltip").filter({ hasText: "Someone already has that username" })).toBeVisible();
 
         await page.getByRole("textbox", { name: "Username", exact: true }).fill("foobar");
-        await expect(page.getByRole("alert")).not.toBeVisible();
+        await expect(page.getByRole("tooltip")).not.toBeVisible();
     });
 });

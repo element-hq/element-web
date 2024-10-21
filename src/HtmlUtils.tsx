@@ -52,7 +52,7 @@ export const EMOJI_REGEX = (() => {
         // want the app to completely crash on older platforms. We use the
         // constructor here to avoid a syntax error on such platforms.
         return new RegExp("\\p{RGI_Emoji}(?!\\uFE0E)(?:(?<!\\uFE0F)\\uFE0F)?|[\\u{1f1e6}-\\u{1f1ff}]", "v");
-    } catch (_e) {
+    } catch {
         // v mode not supported; fall back to matching nothing
         return /(?!)/;
     }
@@ -61,7 +61,7 @@ export const EMOJI_REGEX = (() => {
 const BIGEMOJI_REGEX = (() => {
     try {
         return new RegExp(`^(${EMOJI_REGEX.source})+$`, "iv");
-    } catch (_e) {
+    } catch {
         // Fall back, just like for EMOJI_REGEX
         return /(?!)/;
     }
@@ -120,7 +120,7 @@ export function isUrlPermitted(inputUrl: string): boolean {
     try {
         // URL parser protocol includes the trailing colon
         return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
-    } catch (e) {
+    } catch {
         return false;
     }
 }

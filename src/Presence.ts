@@ -36,7 +36,7 @@ class Presence {
             try {
                 await this.unavailableTimer.finished();
                 this.setState(SetPresence.Unavailable);
-            } catch (e) {
+            } catch {
                 /* aborted, stop got called */
             }
         }

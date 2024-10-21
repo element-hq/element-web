@@ -23,6 +23,8 @@ import {
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+// eslint-disable-next-line no-restricted-imports
+import OverflowHorizontalSvg from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -104,7 +106,7 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         try {
             await cli.sendEvent(room.roomId, type, content);
             setSendState(SendState.Sent);
-        } catch (e) {
+        } catch {
             setSendState(SendState.Failed);
         }
     };
@@ -278,13 +280,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         return (
             <EntityTile
                 className="mx_EntityTile_ellipsis"
-                avatarJsx={
-                    <BaseAvatar
-                        url={require("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg").default}
-                        name="..."
-                        size="36px"
-                    />
-                }
+                avatarJsx={<BaseAvatar url={OverflowHorizontalSvg} name="..." size="36px" />}
                 name={text}
                 showPresence={false}
                 onClick={() => setTruncateAt(totalCount)}

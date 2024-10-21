@@ -263,7 +263,6 @@ test.describe("Editing", () => {
         checkA11y,
     }) => {
         axe.disableRules("color-contrast"); // XXX: We have some known contrast issues here
-        axe.exclude(".mx_Tooltip_visible"); // XXX: this is fine but would be good to fix
 
         await page.goto(`#/room/${room.roomId}`);
 

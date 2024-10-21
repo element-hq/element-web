@@ -35,14 +35,14 @@ export interface IInviteResult {
  * @param {function} progressCallback optional callback, fired after each invite.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(
+export async function inviteMultipleToRoom(
     client: MatrixClient,
     roomId: string,
     addresses: string[],
     progressCallback?: () => void,
 ): Promise<IInviteResult> {
     const inviter = new MultiInviter(client, roomId, progressCallback);
-    return inviter.invite(addresses, undefined).then((states) => Promise.resolve({ states, inviter }));
+    return { states: await inviter.invite(addresses), inviter };
 }
 
 export function showStartChatInviteDialog(initialText = ""): void {
@@ -104,7 +104,7 @@ export function inviteUsersToRoom(
             logger.error(err.stack);
             Modal.createDialog(ErrorDialog, {
                 title: _t("invite|failed_title"),
-                description: err && err.message ? err.message : _t("invite|failed_generic"),
+                description: err?.message ?? _t("invite|failed_generic"),
             });
         });
 }

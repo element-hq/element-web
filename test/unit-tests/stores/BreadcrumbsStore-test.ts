@@ -49,7 +49,7 @@ describe("BreadcrumbsStore", () => {
 
         it("passes through the dynamic room precessors flag", () => {
             mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            store.meetsRoomRequirement;
+            expect(store.meetsRoomRequirement).toBeTruthy();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
@@ -57,7 +57,7 @@ describe("BreadcrumbsStore", () => {
     describe("And the feature_dynamic_room_predecessors is not enabled", () => {
         it("passes through the dynamic room precessors flag", () => {
             mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            store.meetsRoomRequirement;
+            expect(store.meetsRoomRequirement).toBeTruthy();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
     });

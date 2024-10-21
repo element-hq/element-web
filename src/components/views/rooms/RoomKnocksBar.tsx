@@ -9,9 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { EventTimeline, JoinRule, MatrixError, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React, { ReactElement, ReactNode, useCallback, useState, VFC } from "react";
-import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as CheckIcon } from "../../../../res/img/feather-customised/check.svg";
 import dis from "../../../dispatcher/dispatcher";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";

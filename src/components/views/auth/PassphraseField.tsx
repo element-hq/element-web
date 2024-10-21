@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PureComponent, RefCallback, RefObject } from "react";
+import React, { ComponentProps, PureComponent, RefCallback, RefObject } from "react";
 import classNames from "classnames";
 
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
@@ -15,7 +15,6 @@ import withValidation, { IFieldState, IValidationResult } from "../elements/Vali
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import Field, { IInputProps } from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { Alignment } from "../elements/Tooltip";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     autoFocus?: boolean;
@@ -31,7 +30,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     labelEnterPassword: TranslationKey;
     labelStrongPassword: TranslationKey;
     labelAllowedButUnsafe: TranslationKey;
-    tooltipAlignment?: Alignment;
+    tooltipAlignment?: ComponentProps<typeof Field>["tooltipAlignment"];
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;
