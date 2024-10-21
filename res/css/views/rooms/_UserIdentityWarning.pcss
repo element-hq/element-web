@@ -6,18 +6,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_UserIdentityWarning {
-    border-top: 1px solid $separator;
-    padding-top: 5px;
+    /* 42px is the padding-left of .mx_MessageComposer_wrapper in res/css/views/rooms/_MessageComposer.pcss */
     margin-left: calc(-42px + var(--RoomView_MessageList-padding));
-    display: flex;
-    align-items: center;
 
-    .mx_BaseAvatar {
-        margin-left: 8px;
-    }
-    .mx_UserIdentityWarning_main {
-        margin-left: 24px;
-        flex-grow: 1;
+    .mx_UserIdentityWarning_row {
+        display: flex;
+        align-items: center;
+
+        .mx_BaseAvatar {
+            margin-left: var(--cpd-space-2x);
+        }
+        .mx_UserIdentityWarning_main {
+            margin-left: var(--cpd-space-6x);
+            flex-grow: 1;
+        }
     }
 }
 

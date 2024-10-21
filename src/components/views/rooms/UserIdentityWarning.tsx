@@ -16,25 +16,31 @@ import {
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Button, Separator } from "@vector-im/compound-web";
 
 import type { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SDKContext } from "../../../contexts/SDKContext";
 
-interface IProps {
-    // The current room being viewed.
+interface UserIdentityWarningProps {
+    /**
+     * The current room being viewed.
+     */
     room: Room;
 }
 
-interface IState {
-    // The current room member that we are prompting the user to approve.
+interface UserIdentityWarningState {
+    /**
+     * The current room member that we are prompting the user to approve.
+     */
     currentPrompt: RoomMember | undefined;
 }
 
-// Does the given user's identity need to be approved?
+/**
+ * Does the given user's identity need to be approved?
+ */
 async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<boolean> {
     const verificationStatus = await crypto.getUserVerificationStatus(userId);
     return verificationStatus.needsUserApproval;
@@ -46,26 +52,30 @@ async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<boo
  * Warns when an unverified user's identity has changed, and gives the user a
  * button to acknowledge the change.
  */
-export default class UserIdentityWarning extends React.Component<IProps, IState> {
-    // Which room members need their identity approved.
+export default class UserIdentityWarning extends React.Component<UserIdentityWarningProps, UserIdentityWarningState> {
+    /**
+     * Which room members need their identity approved.
+     */
     private membersNeedingApproval: Map<string, RoomMember>;
-    // Whether we got a verification status update while we were fetching a
-    // user's verification status.
-    //
-    // We set the entry for a user to `false` when we fetch a user's
-    // verification status, and remove the user's entry when we are done
-    // fetching.  When we receive a verification status update, if the entry for
-    // the user is `false`, we set it to `true`.  After we have finished
-    // fetching the user's verification status, if the entry for the user is
-    // `true`, rather than `false`, we know that we got an update, and so we
-    // discard the value that we fetched.  We always use the value from the
-    // update and consider it as the most up-to-date version.  If the fetched
-    // value is more up-to-date, then we should be getting a new update soon
-    // with the newer value, so it will fix itself in the end.
+    /**
+     * Whether we got a verification status update while we were fetching a
+     * user's verification status.
+     *
+     * We set the entry for a user to `false` when we fetch a user's
+     * verification status, and remove the user's entry when we are done
+     * fetching.  When we receive a verification status update, if the entry for
+     * the user is `false`, we set it to `true`.  After we have finished
+     * fetching the user's verification status, if the entry for the user is
+     * `true`, rather than `false`, we know that we got an update, and so we
+     * discard the value that we fetched.  We always use the value from the
+     * update and consider it as the most up-to-date version.  If the fetched
+     * value is more up-to-date, then we should be getting a new update soon
+     * with the newer value, so it will fix itself in the end.
+     */
     private gotVerificationStatusUpdate: Map<string, boolean>;
     private mounted: boolean;
     private initialised: boolean;
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+    public constructor(props: UserIdentityWarningProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
         this.state = {
             currentPrompt: undefined,
@@ -91,8 +101,10 @@ export default class UserIdentityWarning extends React.Component<IProps, IState>
         this.removeListeners();
     }
 
-    // Select a new user to display a warning for.  This is called after the
-    // current prompted user no longer needs their identity approved.
+    /**
+     * Select a new user to display a warning for.  This is called after the
+     * current prompted user no longer needs their identity approved.
+     */
     private selectCurrentPrompt(): void {
         if (this.membersNeedingApproval.size === 0) {
             this.setState({
@@ -107,8 +119,10 @@ export default class UserIdentityWarning extends React.Component<IProps, IState>
         });
     }
 
-    // Initialise the component.  Get the room members, check which ones need
-    // their identity approved, and pick one to display.
+    /**
+     * Initialise the component.  Get the room members, check which ones need
+     * their identity approved, and pick one to display.
+     */
     public async initialise(): Promise<void> {
         if (!this.mounted || this.initialised) {
             return;
@@ -186,11 +200,12 @@ export default class UserIdentityWarning extends React.Component<IProps, IState>
         }
     }
 
+    /**
+     * Handle a change in user trust.  If the user's identity now needs
+     * approval, make sure that a warning is shown.  If the user's identity
+     * doesn't need approval, remove the warning (if any).
+     */
     private onUserTrustStatusChanged = (userId: string, verificationStatus: UserVerificationStatus): void => {
-        // Handle a change in user trust.  If the user's identity now needs
-        // approval, make sure that a warning is shown.  If the user's identity
-        // doesn't need approval, remove the warning (if any).
-
         if (!this.initialised) {
             return;
         }
@@ -258,8 +273,10 @@ export default class UserIdentityWarning extends React.Component<IProps, IState>
         }
     };
 
-    // Callback for when the user hits the "OK" button
-    public confirmIdentity = async (ev: ButtonEvent): Promise<void> => {
+    /**
+     * Callback for when the user hits the "OK" button.
+     */
+    public confirmIdentity = async (): Promise<void> => {
         if (this.state.currentPrompt) {
             await MatrixClientPeg.safeGet().getCrypto()!.pinCurrentUserIdentity(this.state.currentPrompt.userId);
         }
@@ -276,29 +293,32 @@ export default class UserIdentityWarning extends React.Component<IProps, IState>
             const substituteBTag = (sub: string): React.ReactNode => <b>{sub}</b>;
             return (
                 <div className="mx_UserIdentityWarning">
-                    <MemberAvatar member={currentPrompt} title={currentPrompt.userId} size="30px" />
-                    <span className="mx_UserIdentityWarning_main">
-                        {currentPrompt.rawDisplayName === currentPrompt.userId
-                            ? _t(
-                                  "encryption|pinned_identity_changed_no_displayname",
-                                  { userId: currentPrompt.userId },
-                                  {
-                                      a: substituteATag,
-                                      b: substituteBTag,
-                                  },
-                              )
-                            : _t(
-                                  "encryption|pinned_identity_changed",
-                                  { displayName: currentPrompt.rawDisplayName, userId: currentPrompt.userId },
-                                  {
-                                      a: substituteATag,
-                                      b: substituteBTag,
-                                  },
-                              )}
-                    </span>
-                    <AccessibleButton kind="primary" onClick={this.confirmIdentity}>
-                        {_t("action|ok")}
-                    </AccessibleButton>
+                    <Separator />
+                    <div className = "mx_UserIdentityWarning_row">
+                        <MemberAvatar member={currentPrompt} title={currentPrompt.userId} size="30px" />
+                        <span className="mx_UserIdentityWarning_main">
+                            {currentPrompt.rawDisplayName === currentPrompt.userId
+                                ? _t(
+                                    "encryption|pinned_identity_changed_no_displayname",
+                                    { userId: currentPrompt.userId },
+                                    {
+                                        a: substituteATag,
+                                        b: substituteBTag,
+                                    },
+                                )
+                                : _t(
+                                    "encryption|pinned_identity_changed",
+                                    { displayName: currentPrompt.rawDisplayName, userId: currentPrompt.userId },
+                                    {
+                                        a: substituteATag,
+                                        b: substituteBTag,
+                                    },
+                                )}
+                        </span>
+                        <Button kind="primary" size="sm" onClick={this.confirmIdentity}>
+                            {_t("action|ok")}
+                        </Button>
+                    </div>
                 </div>
             );
         } else {
