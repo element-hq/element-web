@@ -21,7 +21,7 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className, ...props }) => {
+export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className">> = ({ getTextToCopy, className }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
@@ -37,6 +37,19 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
         }
     };
 
+    return (
+        <AccessibleButton
+            title={tooltip ?? _t("action|copy")}
+            onClick={onCopyClickInternal}
+            className={className}
+            onTooltipOpenChange={(open) => {
+                if (!open) onHideTooltip();
+            }}
+        />
+    );
+};
+
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className, ...props }) => {
     const combinedClassName = classNames("mx_CopyableText", className, {
         mx_CopyableText_border: border,
     });
@@ -44,14 +57,7 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     return (
         <div className={combinedClassName} {...props}>
             {children}
-            <AccessibleButton
-                title={tooltip ?? _t("action|copy")}
-                onClick={onCopyClickInternal}
-                className="mx_CopyableText_copyButton"
-                onTooltipOpenChange={(open) => {
-                    if (!open) onHideTooltip();
-                }}
-            />
+            <CopyTextButton getTextToCopy={getTextToCopy} className="mx_CopyableText_copyButton" />
         </div>
     );
 };

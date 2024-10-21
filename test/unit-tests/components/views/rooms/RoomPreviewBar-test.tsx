@@ -100,7 +100,7 @@ describe("<RoomPreviewBar />", () => {
 
     afterEach(() => {
         const container = document.body.firstChild;
-        container && document.body.removeChild(container);
+        if (container) document.body.removeChild(container);
     });
 
     it("renders joining message", () => {

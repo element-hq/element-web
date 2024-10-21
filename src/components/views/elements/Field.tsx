@@ -11,14 +11,13 @@ import React, {
     TextareaHTMLAttributes,
     RefObject,
     createRef,
-    KeyboardEvent,
+    ComponentProps,
 } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { IFieldState, IValidationResult } from "./Validation";
-import Tooltip, { Alignment } from "./Tooltip";
-import { Key } from "../../../Keyboard";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -57,11 +56,11 @@ interface IProps {
     forceValidity?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
-    tooltipContent?: React.ReactNode;
+    tooltipContent?: JSX.Element | string;
     // If specified the tooltip will be shown regardless of feedback
     forceTooltipVisible?: boolean;
     // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
-    tooltipAlignment?: Alignment;
+    tooltipAlignment?: ComponentProps<typeof Tooltip>["placement"];
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
     tooltipClassName?: string;
@@ -112,7 +111,7 @@ type PropShapes = IInputProps | ISelectProps | ITextareaProps | INativeOnChangeI
 
 interface IState {
     valid?: boolean;
-    feedback?: React.ReactNode;
+    feedback?: JSX.Element | string;
     feedbackVisible: boolean;
     focused: boolean;
 }
@@ -127,6 +126,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         validateOnFocus: true,
         validateOnBlur: true,
         validateOnChange: true,
+        tooltipAlignment: "right",
     };
 
     /*
@@ -233,16 +233,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return this.props.inputRef ?? this._inputRef;
     }
 
-    private onKeyDown = (evt: KeyboardEvent<HTMLDivElement>): void => {
-        // If the tooltip is displayed to show a feedback and Escape is pressed
-        // The tooltip is hided
-        if (this.state.feedbackVisible && evt.key === Key.ESCAPE) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            this.setState({
-                feedbackVisible: false,
-            });
-        }
+    private onTooltipOpenChange = (open: boolean): void => {
+        this.setState({
+            feedbackVisible: open,
+        });
     };
 
     public render(): React.ReactNode {
@@ -268,31 +262,15 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         } = this.props;
 
         // Handle displaying feedback on validity
-        let fieldTooltip: JSX.Element | undefined;
+        const tooltipProps: Pick<React.ComponentProps<typeof Tooltip>, "aria-live" | "aria-atomic"> = {};
+        let tooltipOpen = false;
         if (tooltipContent || this.state.feedback) {
-            const tooltipId = `${this.id}_tooltip`;
-            const visible = (this.state.focused && forceTooltipVisible) || this.state.feedbackVisible;
-            if (visible) {
-                inputProps["aria-describedby"] = tooltipId;
-            }
+            tooltipOpen = (this.state.focused && forceTooltipVisible) || this.state.feedbackVisible;
 
-            let role: React.AriaRole;
-            if (tooltipContent) {
-                role = "tooltip";
-            } else {
-                role = this.state.valid ? "status" : "alert";
+            if (!tooltipContent) {
+                tooltipProps["aria-atomic"] = "true";
+                tooltipProps["aria-live"] = this.state.valid ? "polite" : "assertive";
             }
-
-            fieldTooltip = (
-                <Tooltip
-                    id={tooltipId}
-                    tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
-                    visible={visible}
-                    label={tooltipContent || this.state.feedback}
-                    alignment={tooltipAlignment || Alignment.Right}
-                    role={role}
-                />
-            );
         }
 
         inputProps.placeholder = inputProps.placeholder ?? inputProps.label;
@@ -332,12 +310,20 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         return (
-            <div className={fieldClasses} onKeyDown={this.onKeyDown}>
+            <div className={fieldClasses}>
                 {prefixContainer}
-                {fieldInput}
+                <Tooltip
+                    {...tooltipProps}
+                    placement={tooltipAlignment}
+                    description=""
+                    caption={tooltipContent || this.state.feedback}
+                    open={tooltipOpen}
+                    onOpenChange={this.onTooltipOpenChange}
+                >
+                    {fieldInput}
+                </Tooltip>
                 <label htmlFor={this.id}>{this.props.label}</label>
                 {postfixContainer}
-                {fieldTooltip}
             </div>
         );
     }

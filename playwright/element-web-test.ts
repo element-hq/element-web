@@ -345,8 +345,7 @@ export const expect = baseExpect.extend({
 
         if (!options?.showTooltips) {
             css += `
-                [role="tooltip"],
-                .mx_Tooltip_visible {
+                [role="tooltip"] {
                     visibility: hidden !important;
                 }
             `;

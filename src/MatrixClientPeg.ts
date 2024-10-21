@@ -211,7 +211,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             const diff = Date.now() - registrationTime;
             return diff / 36e5 <= hours;
-        } catch (e) {
+        } catch {
             return false;
         }
     }
@@ -220,7 +220,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         try {
             const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             return timestamp.getTime() <= registrationTime;
-        } catch (e) {
+        } catch {
             return false;
         }
     }

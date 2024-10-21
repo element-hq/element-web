@@ -18,9 +18,6 @@ interface IProps {
     // either a list of child nodes, or a single child.
     children: React.ReactNode;
 
-    // optional transition information for changing existing children
-    transition?: object;
-
     // a list of state objects to apply to each child node in turn
     startStyles: React.CSSProperties[];
 

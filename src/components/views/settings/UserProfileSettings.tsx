@@ -156,7 +156,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                 const { content_uri: uri } = await client.uploadContent(avatarFile);
                 await client.setAvatarUrl(uri);
                 setAvatarURL(uri);
-            } catch (e) {
+            } catch {
                 setAvatarError(true);
             } finally {
                 removeToast();

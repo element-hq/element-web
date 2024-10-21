@@ -107,7 +107,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                 recoveryKeyValid: true,
                 recoveryKeyCorrect: correct,
             });
-        } catch (e) {
+        } catch {
             this.setState({
                 recoveryKeyValid: false,
                 recoveryKeyCorrect: false,

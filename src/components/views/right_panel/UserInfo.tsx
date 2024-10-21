@@ -725,7 +725,7 @@ export const RoomKickButton = ({
                     logger.error("Kick error: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("user_info|error_kicking_user"),
-                        description: err && err.message ? err.message : "Operation failed",
+                        description: err?.message ?? "Operation failed",
                     });
                 },
             )
@@ -1356,7 +1356,7 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
 
                 disambiguateDevices(devices);
                 setDevices(devices);
-            } catch (err) {
+            } catch {
                 setDevices(null);
             }
         }
