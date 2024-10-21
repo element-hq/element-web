@@ -162,7 +162,11 @@ describe("VoiceBroadcastPlayback", () => {
         jest.spyOn(playback, "removeAllListeners");
         jest.spyOn(playback, "destroy");
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, onStateChanged);
-        fakeTimers ? await flushPromisesWithFakeTimers() : await flushPromises();
+        if (fakeTimers) {
+            await flushPromisesWithFakeTimers();
+        } else {
+            await flushPromises();
+        }
         return playback;
     };
 

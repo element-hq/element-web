@@ -66,8 +66,8 @@ const useMapWithStyle = ({
                     throw new Error("Invalid geo URI");
                 }
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
-            } catch (_error) {
-                logger.error("Could not set map center");
+            } catch (e) {
+                logger.error("Could not set map center", e);
             }
         }
     }, [map, centerGeoUri]);
@@ -80,8 +80,8 @@ const useMapWithStyle = ({
                     [bounds.east, bounds.north],
                 );
                 map.fitBounds(lngLatBounds, { padding: 100, maxZoom: 15 });
-            } catch (_error) {
-                logger.error("Invalid map bounds");
+            } catch (e) {
+                logger.error("Invalid map bounds", e);
             }
         }
     }, [map, bounds]);
@@ -170,7 +170,7 @@ const MapComponent: React.FC<MapProps> = ({
             return;
         }
 
-        onClick && onClick();
+        onClick?.();
     };
 
     return (

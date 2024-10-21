@@ -122,7 +122,6 @@ describe("CreateSecretStorageDialog", () => {
             expect(modalSpy).toHaveBeenCalledWith(
                 RestoreKeyBackupDialog,
                 {
-                    keyCallback: expect.any(Function),
                     showSummary: false,
                 },
                 undefined,
@@ -200,7 +199,6 @@ describe("CreateSecretStorageDialog", () => {
             expect(modalSpy).toHaveBeenCalledWith(
                 RestoreKeyBackupDialog,
                 {
-                    keyCallback: expect.any(Function),
                     showSummary: false,
                 },
                 undefined,

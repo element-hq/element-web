@@ -170,7 +170,7 @@ export default class IdentityAuthClient {
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
         const { access_token: accessToken, token } =
             await this.identityClient.registerWithIdentityServer(hsOpenIdToken);
-        const identityAccessToken = token ? token : accessToken;
+        const identityAccessToken = token || accessToken;
         if (check) await this.checkToken(identityAccessToken);
         return identityAccessToken;
     }

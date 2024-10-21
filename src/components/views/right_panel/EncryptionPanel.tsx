@@ -21,6 +21,8 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import WarningDeprecatedSvg from "../../../../res/img/e2e/warning-deprecated.svg";
+import WarningSvg from "../../../../res/img/e2e/warning.svg";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
@@ -79,7 +81,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         ) {
             isShowingMismatchModal.current = true;
             Modal.createDialog(ErrorDialog, {
-                headerImage: require("../../../../res/img/e2e/warning-deprecated.svg").default,
+                headerImage: WarningDeprecatedSvg,
                 title: _t("encryption|messages_not_secure|title"),
                 description: (
                     <div>
@@ -118,7 +120,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             setRequesting(false);
 
             Modal.createDialog(ErrorDialog, {
-                headerImage: require("../../../../res/img/e2e/warning.svg").default,
+                headerImage: WarningSvg,
                 title: _t("encryption|verification|error_starting_title"),
                 description: _t("encryption|verification|error_starting_description"),
             });

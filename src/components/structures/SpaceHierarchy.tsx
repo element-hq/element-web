@@ -691,7 +691,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
 
                             hierarchy.removeRelation(parentId, childId);
                         }
-                    } catch (e) {
+                    } catch {
                         setError(_t("space|failed_remove_rooms"));
                     }
                     setRemoving(false);
@@ -724,7 +724,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                             // mutate the local state to save us having to refetch the world
                             existingContent.suggested = content.suggested;
                         }
-                    } catch (e) {
+                    } catch {
                         setError("Failed to update some suggestions. Try again later");
                     }
                     setSaving(false);

@@ -450,7 +450,7 @@ export const Commands = [
                 const matches = args.match(/^(\S+)$/);
                 if (matches) {
                     let roomAlias = matches[1];
-                    if (roomAlias[0] !== "#") return reject(this.getUsage());
+                    if (!roomAlias.startsWith("#")) return reject(this.getUsage());
 
                     if (!roomAlias.includes(":")) {
                         roomAlias += ":" + cli.getDomain();
@@ -727,7 +727,7 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId) {
             try {
-                cli.forceDiscardSession(roomId);
+                cli.getCrypto()?.forceDiscardSession(roomId);
             } catch (e) {
                 return reject(e instanceof Error ? e.message : e);
             }
@@ -994,7 +994,7 @@ Commands.forEach((cmd) => {
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
     input = input.trimEnd();
-    if (input[0] !== "/") return {}; // not a command
+    if (!input.startsWith("/")) return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd: string;

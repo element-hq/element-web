@@ -982,7 +982,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             try {
                 const config = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(params.hs_url);
                 newState.serverConfig = config;
-            } catch (err) {
+            } catch {
                 logger.warn("Failed to load hs_url param:", params.hs_url);
             }
         } else if (params.client_secret && params.session_id && params.hs_url && params.is_url && params.sid) {
@@ -1317,7 +1317,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const errCode = err.errcode || _td("error|unknown_error_code");
                 Modal.createDialog(ErrorDialog, {
                     title: _t("error_dialog|forget_room_failed", { errCode }),
-                    description: err && err.message ? err.message : _t("invite|failed_generic"),
+                    description: err?.message ?? _t("invite|failed_generic"),
                 });
             });
     }
@@ -1631,8 +1631,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on(CryptoEvent.KeyBackupFailed, async (errcode): Promise<void> => {
             let haveNewVersion: boolean | undefined;
             let newVersionInfo: KeyBackupInfo | null = null;
+            const keyBackupEnabled = Boolean(
+                cli.getCrypto() && (await cli.getCrypto()?.getActiveSessionBackupVersion()) !== null,
+            );
+
             // if key backup is still enabled, there must be a new backup in place
-            if (cli.getKeyBackupEnabled()) {
+            if (keyBackupEnabled) {
                 haveNewVersion = true;
             } else {
                 // otherwise check the server to see if there's a new one
@@ -1650,7 +1654,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     import(
                         "../../async-components/views/dialogs/security/NewRecoveryMethodDialog"
                     ) as unknown as Promise<typeof NewRecoveryMethodDialog>,
-                    { newVersionInfo: newVersionInfo! },
                 );
             } else {
                 Modal.createDialogAsync(
@@ -1706,9 +1709,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        if (cli.getCrypto()) {
+        const crypto = cli.getCrypto();
+        if (crypto) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
-            cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+            crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
 
             // With cross-signing enabled, we send to unknown devices
             // without prompting. Any bad-device status the user should

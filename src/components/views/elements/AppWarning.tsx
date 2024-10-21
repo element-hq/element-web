@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
+import WarningSvg from "../../../../res/img/warning.svg";
+
 interface IProps {
     errorMsg?: string;
 }
@@ -16,7 +18,7 @@ const AppWarning: React.FC<IProps> = (props) => {
     return (
         <div className="mx_AppWarning">
             <div>
-                <img src={require("../../../../res/img/warning.svg").default} alt="" />
+                <img src={WarningSvg} alt="" />
             </div>
             <div>
                 <span>{props.errorMsg || "Error"}</span>

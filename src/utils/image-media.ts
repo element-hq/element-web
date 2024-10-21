@@ -76,7 +76,7 @@ export async function createThumbnail(
     try {
         canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
         context = canvas.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    } catch (e) {
+    } catch {
         // Fallback support for other browsers (Safari and Firefox for now)
         canvas = document.createElement("canvas");
         canvas.width = targetWidth;

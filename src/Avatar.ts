@@ -68,7 +68,7 @@ function isValidHexColor(color: string): boolean {
     return (
         typeof color === "string" &&
         (color.length === 7 || color.length === 9) &&
-        color.charAt(0) === "#" &&
+        color.startsWith("#") &&
         !color
             .slice(1)
             .split("")
