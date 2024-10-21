@@ -123,7 +123,7 @@ function mockClient({
     return cli;
 }
 
-describe.skip("Spotlight Dialog", () => {
+describe("Spotlight Dialog", () => {
     const testPerson: IUserChunkMember = {
         user_id: "@janedoe:matrix.org",
         display_name: "Jane Doe",
@@ -239,7 +239,7 @@ describe.skip("Spotlight Dialog", () => {
         });
 
         it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            render(<SpotlightDialog onFinished={() => null} />);
+            render(<SpotlightDialog onFinished={() => null} />, { legacyRoot: false });
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);

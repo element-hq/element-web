@@ -72,7 +72,7 @@ const EVENT_ATTACHMENT_MALFORMED: IRoomEvent = {
     },
 };
 
-describe.skip("HTMLExport", () => {
+describe("HTMLExport", () => {
     let client: jest.Mocked<MatrixClient>;
     let room: Room;
 
