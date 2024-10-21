@@ -44,8 +44,6 @@ const config: Config = {
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is
         // not available in that contest. So, turn off coverage instrumentation for it.
         "!<rootDir>/src/utils/SessionLock.ts",
-        // Coverage chokes on type definition files
-        "!<rootDir>/src/**/*.d.ts",
     ],
     coverageReporters: ["text-summary", "lcov"],
     testResultsProcessor: "@casualbot/jest-sonar-reporter",

@@ -35,9 +35,10 @@ describe("ExportE2eKeysDialog", () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
 
-        render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
+        const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         const input = screen.getByLabelText("Enter passphrase");
         await userEvent.type(input, "password");
+        fireEvent.click(container.querySelector("[type=submit]")!);
         await expect(screen.findByText("This is a top-10 common password")).resolves.toBeInTheDocument();
     });
 

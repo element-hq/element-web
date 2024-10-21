@@ -1038,7 +1038,7 @@ describe("<SessionManagerTab />", () => {
                     fireEvent.submit(getByLabelText("Password"));
                 });
 
-                await flushPromises();
+                await act(flushPromises);
 
                 // called again with auth
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
