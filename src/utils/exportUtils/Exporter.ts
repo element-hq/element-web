@@ -229,7 +229,7 @@ export default abstract class Exporter {
                 const image = await fetch(media.srcHttp);
                 blob = await image.blob();
             }
-        } catch (err) {
+        } catch {
             logger.log("Error decrypting media");
         }
         if (!blob) {

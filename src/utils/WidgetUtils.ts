@@ -251,7 +251,7 @@ export default class WidgetUtils {
         // Delete existing widget with ID
         try {
             delete userWidgets[widgetId];
-        } catch (e) {
+        } catch {
             logger.error(`$widgetId is non-configurable`);
         }
 

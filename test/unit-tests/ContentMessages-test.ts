@@ -14,7 +14,7 @@ import encrypt, { IEncryptedFile } from "matrix-encrypt-attachment";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/ContentMessages";
 import { doMaybeLocalRoomAction } from "../../src/utils/local-room";
-import { createTestClient, mkEvent } from "../test-utils";
+import { createTestClient, flushPromises, mkEvent } from "../test-utils";
 import { BlurhashEncoder } from "../../src/BlurhashEncoder";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
@@ -43,13 +43,7 @@ describe("ContentMessages", () => {
     let prom: Promise<ISendEventResponse>;
 
     beforeEach(() => {
-        client = {
-            getSafeUserId: jest.fn().mockReturnValue("@alice:test"),
-            sendStickerMessage: jest.fn(),
-            sendMessage: jest.fn(),
-            isRoomEncrypted: jest.fn().mockReturnValue(false),
-            uploadContent: jest.fn().mockResolvedValue({ content_uri: "mxc://server/file" }),
-        } as unknown as MatrixClient;
+        client = createTestClient();
         contentMessages = new ContentMessages();
         prom = Promise.resolve<ISendEventResponse>({ event_id: "$event_id" });
     });
@@ -262,6 +256,7 @@ describe("ContentMessages", () => {
 
             expect(upload.loaded).toBe(0);
             expect(upload.total).toBe(file.size);
+            await flushPromises();
             const { progressHandler } = mocked(client.uploadContent).mock.calls[0][1]!;
             progressHandler!({ loaded: 123, total: 1234 });
             expect(upload.loaded).toBe(123);
@@ -342,6 +337,7 @@ describe("ContentMessages", () => {
             mocked(client.uploadContent).mockReturnValue(deferred.promise);
             const file1 = new File([], "file1");
             const prom = contentMessages.sendContentToRoom(file1, roomId, undefined, client, undefined);
+            await flushPromises();
             const { abortController } = mocked(client.uploadContent).mock.calls[0][1]!;
             expect(abortController!.signal.aborted).toBeFalsy();
             const [upload] = contentMessages.getCurrentUploads();
@@ -354,14 +350,14 @@ describe("ContentMessages", () => {
 });
 
 describe("uploadFile", () => {
+    let client: MatrixClient;
+
     beforeEach(() => {
         jest.clearAllMocks();
+        client = createTestClient();
     });
 
-    const client = createTestClient();
-
     it("should not encrypt the file if the room isn't encrypted", async () => {
-        mocked(client.isRoomEncrypted).mockReturnValue(false);
         mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
         const progressHandler = jest.fn();
         const file = new Blob([]);
@@ -375,7 +371,7 @@ describe("uploadFile", () => {
     });
 
     it("should encrypt the file if the room is encrypted", async () => {
-        mocked(client.isRoomEncrypted).mockReturnValue(true);
+        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
         mocked(encrypt.encryptAttachment).mockResolvedValue({
             data: new ArrayBuffer(123),
@@ -405,14 +401,13 @@ describe("uploadFile", () => {
     });
 
     it("should throw UploadCanceledError upon aborting the upload", async () => {
-        mocked(client.isRoomEncrypted).mockReturnValue(false);
-        const deferred = defer<UploadResponse>();
-        mocked(client.uploadContent).mockReturnValue(deferred.promise);
+        mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://foo/bar" });
         const file = new Blob([]);
+        const controller = new AbortController();
+        controller.abort();
 
-        const prom = uploadFile(client, "!roomId:server", file);
-        mocked(client.uploadContent).mock.calls[0][1]!.abortController!.abort();
-        deferred.resolve({ content_uri: "mxc://foo/bar" });
-        await expect(prom).rejects.toThrow(UploadCanceledError);
+        await expect(uploadFile(client, "!roomId:server", file, undefined, controller)).rejects.toThrow(
+            UploadCanceledError,
+        );
     });
 });

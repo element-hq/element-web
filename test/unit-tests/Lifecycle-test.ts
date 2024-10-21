@@ -630,7 +630,7 @@ describe("Lifecycle", () => {
                         deviceId,
                         freshLogin: true,
                         guest: false,
-                        pickleKey: null,
+                        pickleKey: undefined,
                     },
                     undefined,
                 );

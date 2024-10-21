@@ -28,7 +28,7 @@ export async function getVectorConfig(relativeLocation = ""): Promise<IConfigOpt
             throw new Error(); // throw to enter the catch
         }
         return configJson;
-    } catch (e) {
+    } catch {
         return generalConfigPromise;
     }
 }

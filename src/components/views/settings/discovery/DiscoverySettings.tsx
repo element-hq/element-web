@@ -126,7 +126,7 @@ export const DiscoverySettings: React.FC = () => {
                     );
                     logger.warn(e);
                 }
-            } catch (e) {}
+            } catch {}
         })();
     }, [client, getThreepidState]);
 

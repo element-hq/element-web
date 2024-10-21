@@ -31,7 +31,7 @@ export const retrieveStartedInfoEvent = async (
     try {
         const relatedEventData = await client.fetchRoomEvent(roomId, relatedEventId);
         return new MatrixEvent(relatedEventData);
-    } catch (e) {}
+    } catch {}
 
     return null;
 };

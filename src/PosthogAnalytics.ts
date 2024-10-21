@@ -236,7 +236,7 @@ export class PosthogAnalytics {
         let appVersion: string | undefined;
         try {
             appVersion = await platform?.getAppVersion();
-        } catch (e) {
+        } catch {
             // this happens if no version is set i.e. in dev
             appVersion = "unknown";
         }
@@ -296,10 +296,10 @@ export class PosthogAnalytics {
                     // until the next time account data is refreshed and this function is called (most likely on next
                     // page load). This will happen pretty infrequently, so we can tolerate the possibility.
                     analyticsID = analyticsIdGenerator();
-                    await client.setAccountData(
-                        PosthogAnalytics.ANALYTICS_EVENT_TYPE,
-                        Object.assign({ id: analyticsID }, accountData),
-                    );
+                    await client.setAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE, {
+                        id: analyticsID,
+                        ...accountData,
+                    });
                 }
                 if (this.posthog.get_distinct_id() === analyticsID) {
                     // No point identifying again

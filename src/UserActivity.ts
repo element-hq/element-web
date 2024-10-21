@@ -213,7 +213,7 @@ export default class UserActivity {
         attachedTimers.forEach((t) => t.start());
         try {
             await timeout.finished();
-        } catch (_e) {
+        } catch {
             /* aborted */
         }
         attachedTimers.forEach((t) => t.abort());

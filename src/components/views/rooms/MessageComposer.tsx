@@ -57,6 +57,7 @@ import { VoiceBroadcastInfoState } from "../../../voice-broadcast";
 import { createCantStartVoiceMessageBroadcastDialog } from "../dialogs/CantStartVoiceMessageBroadcastDialog";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
+import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -619,7 +620,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             aria-hidden
                             alt=""
                             className="mx_MessageComposer_roomReplaced_icon"
-                            src={require("../../../../res/img/room_replaced.svg").default}
+                            src={RoomReplacedSvg}
                         />
                         <span className="mx_MessageComposer_roomReplaced_header">
                             {_t("composer|room_upgraded_notice")}

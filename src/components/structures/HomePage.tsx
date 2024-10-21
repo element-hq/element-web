@@ -11,7 +11,7 @@ import { useContext, useState } from "react";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getHomePageUrl } from "../../utils/pages";
-import { _tDom } from "../../languageHandler";
+import { _t, _tDom } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -66,8 +66,8 @@ const UserWelcomeTop: React.FC = () => {
         <div>
             <MiniAvatarUploader
                 hasAvatar={!!ownProfile.avatarUrl}
-                hasAvatarLabel={_tDom("onboarding|has_avatar_label")}
-                noAvatarLabel={_tDom("onboarding|no_avatar_label")}
+                hasAvatarLabel={_t("onboarding|has_avatar_label")}
+                noAvatarLabel={_t("onboarding|no_avatar_label")}
                 setAvatarUrl={(url) => cli.setAvatarUrl(url)}
                 isUserAvatar
                 onClick={(ev) => PosthogTrackers.trackInteraction("WebHomeMiniAvatarUploadButton", ev)}

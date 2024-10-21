@@ -6,13 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PureComponent, RefCallback, RefObject } from "react";
+import React, { ComponentProps, PureComponent, RefCallback, RefObject } from "react";
 
 import Field, { IInputProps } from "../elements/Field";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import * as Email from "../../../email";
-import { Alignment } from "../elements/Tooltip";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     id?: string;
@@ -23,7 +22,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     label: TranslationKey;
     labelRequired: TranslationKey;
     labelInvalid: TranslationKey;
-    tooltipAlignment?: Alignment;
+    tooltipAlignment?: ComponentProps<typeof Field>["tooltipAlignment"];
 
     // When present, completely overrides the default validation rules.
     validationRules?: (fieldState: IFieldState) => Promise<IValidationResult>;
