@@ -110,7 +110,7 @@ describe("<PollHistory />", () => {
         expect(getByText("Loading polls")).toBeInTheDocument();
 
         // flush filter creation request
-        await act(flushPromises);
+        await flushPromises();
 
         expect(liveTimeline.getPaginationToken).toHaveBeenCalledWith(EventTimeline.BACKWARDS);
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledWith(liveTimeline, { backwards: true });
@@ -140,7 +140,7 @@ describe("<PollHistory />", () => {
         );
 
         // flush filter creation request
-        await act(flushPromises);
+        await flushPromises();
         // once per page
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(3);
 
@@ -175,7 +175,7 @@ describe("<PollHistory />", () => {
 
     it("renders a no polls message when there are no active polls in the room", async () => {
         const { getByText } = getComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         expect(getByText("There are no active polls in this room")).toBeTruthy();
     });
@@ -199,7 +199,7 @@ describe("<PollHistory />", () => {
             .mockReturnValueOnce("test-pagination-token-3");
 
         const { getByText } = getComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(1);
 
@@ -212,7 +212,7 @@ describe("<PollHistory />", () => {
         // load more polls button still in UI, with loader
         expect(getByText("Load more polls")).toMatchSnapshot();
 
-        await act(flushPromises);
+        await flushPromises();
 
         // no more spinner
         expect(getByText("Load more polls")).toMatchSnapshot();

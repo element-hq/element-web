@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render } from "jest-matrix-react";
+import { act, render } from "jest-matrix-react";
 import { MatrixEvent, ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
@@ -94,7 +94,7 @@ describe("pillify", () => {
     it("should pillify @room", () => {
         const { container } = render(<div>@room</div>);
         const containers = new ReactRootManager();
-        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        act(() => pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers));
         expect(containers.elements).toHaveLength(1);
         expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });
@@ -103,20 +103,22 @@ describe("pillify", () => {
         mocked(MatrixClientPeg.safeGet().supportsIntentionalMentions).mockReturnValue(true);
         const { container } = render(<div>@room</div>);
         const containers = new ReactRootManager();
-        pillifyLinks(
-            MatrixClientPeg.safeGet(),
-            [container],
-            new MatrixEvent({
-                room_id: roomId,
-                type: EventType.RoomMessage,
-                content: {
-                    "body": "@room",
-                    "m.mentions": {
-                        room: true,
+        act(() =>
+            pillifyLinks(
+                MatrixClientPeg.safeGet(),
+                [container],
+                new MatrixEvent({
+                    room_id: roomId,
+                    type: EventType.RoomMessage,
+                    content: {
+                        "body": "@room",
+                        "m.mentions": {
+                            room: true,
+                        },
                     },
-                },
-            }),
-            containers,
+                }),
+                containers,
+            ),
         );
         expect(containers.elements).toHaveLength(1);
         expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
@@ -125,10 +127,12 @@ describe("pillify", () => {
     it("should not double up pillification on repeated calls", () => {
         const { container } = render(<div>@room</div>);
         const containers = new ReactRootManager();
-        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
-        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
-        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
-        pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        act(() => {
+            pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+            pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+            pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+            pillifyLinks(MatrixClientPeg.safeGet(), [container], event, containers);
+        });
         expect(containers.elements).toHaveLength(1);
         expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });

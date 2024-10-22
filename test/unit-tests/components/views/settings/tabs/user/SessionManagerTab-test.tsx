@@ -990,7 +990,7 @@ describe("<SessionManagerTab />", () => {
 
                 const { getByTestId, getByLabelText } = render(getComponent());
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // reset mock count after initial load
                 mockClient.getDevices.mockClear();
@@ -1024,7 +1024,7 @@ describe("<SessionManagerTab />", () => {
                     fireEvent.submit(getByLabelText("Password"));
                 });
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // called again with auth
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
@@ -1550,7 +1550,7 @@ describe("<SessionManagerTab />", () => {
                 });
                 const { getByTestId, container } = render(getComponent());
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // filter for inactive sessions
                 await setFilter(container, DeviceSecurityVariation.Inactive);

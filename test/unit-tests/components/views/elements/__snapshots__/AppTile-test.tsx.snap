@@ -356,8 +356,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby=":r2n:"
-                aria-labelledby=":r2m:"
+                aria-describedby=":r2b:"
+                aria-labelledby=":r2a:"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg

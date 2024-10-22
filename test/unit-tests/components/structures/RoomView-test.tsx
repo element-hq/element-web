@@ -22,7 +22,7 @@ import {
     IEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -214,11 +214,11 @@ describe("RoomView", () => {
 
         describe("and feature_dynamic_room_predecessors is enabled", () => {
             beforeEach(() => {
-                instance.setState({ msc3946ProcessDynamicPredecessor: true });
+                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: true }));
             });
 
             afterEach(() => {
-                instance.setState({ msc3946ProcessDynamicPredecessor: false });
+                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: false }));
             });
 
             it("should pass the setting to findPredecessor", async () => {
@@ -249,15 +249,17 @@ describe("RoomView", () => {
         cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        room.addLiveEvents([
-            new MatrixEvent({
-                type: "m.room.encryption",
-                sender: cli.getUserId()!,
-                content: {},
-                event_id: "someid",
-                room_id: room.roomId,
-            }),
-        ]);
+        await act(() =>
+            room.addLiveEvents([
+                new MatrixEvent({
+                    type: "m.room.encryption",
+                    sender: cli.getUserId()!,
+                    content: {},
+                    event_id: "someid",
+                    room_id: room.roomId,
+                }),
+            ]),
+        );
 
         // URL previews should now be disabled
         expect(roomViewInstance.state.showUrlPreview).toBe(false);
@@ -267,7 +269,7 @@ describe("RoomView", () => {
         const roomViewInstance = await getRoomViewInstance();
         const oldTimeline = roomViewInstance.state.liveTimeline;
 
-        room.getUnfilteredTimelineSet().resetLiveTimeline();
+        act(() => room.getUnfilteredTimelineSet().resetLiveTimeline());
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
     });
 
@@ -284,7 +286,7 @@ describe("RoomView", () => {
             await renderRoomView();
             expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
 
-            cli.emit(ClientEvent.Room, room);
+            act(() => cli.emit(ClientEvent.Room, room));
 
             // called again after room event
             expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledTimes(2);

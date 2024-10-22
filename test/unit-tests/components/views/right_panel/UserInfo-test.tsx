@@ -439,7 +439,7 @@ describe("<UserInfo />", () => {
 
         it("renders a device list which can be expanded", async () => {
             renderComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             // check the button exists with the expected text
             const devicesButton = screen.getByRole("button", { name: "1 session" });
@@ -459,7 +459,7 @@ describe("<UserInfo />", () => {
                 verificationRequest,
                 room: mockRoom,
             });
-            await act(flushPromises);
+            await flushPromises();
 
             await waitFor(() => expect(screen.getByRole("button", { name: "Verify" })).toBeInTheDocument());
             expect(container).toMatchSnapshot();
@@ -490,7 +490,7 @@ describe("<UserInfo />", () => {
                 mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
 
                 renderComponent({ room: mockRoom });
-                await act(flushPromises);
+                await flushPromises();
 
                 // check the button exists with the expected text (the dehydrated device shouldn't be counted)
                 const devicesButton = screen.getByRole("button", { name: "1 session" });
@@ -538,7 +538,7 @@ describe("<UserInfo />", () => {
                 } as DeviceVerificationStatus);
 
                 renderComponent({ room: mockRoom });
-                await act(flushPromises);
+                await flushPromises();
 
                 // check the button exists with the expected text (the dehydrated device shouldn't be counted)
                 const devicesButton = screen.getByRole("button", { name: "1 verified session" });
@@ -583,7 +583,7 @@ describe("<UserInfo />", () => {
                 mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, true));
 
                 renderComponent({ room: mockRoom });
-                await act(flushPromises);
+                await flushPromises();
 
                 // the dehydrated device should be shown as an unverified device, which means
                 // there should now be a button with the device id ...
@@ -618,7 +618,7 @@ describe("<UserInfo />", () => {
                 mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
 
                 renderComponent({ room: mockRoom });
-                await act(flushPromises);
+                await flushPromises();
 
                 // check the button exists with the expected text (the dehydrated device shouldn't be counted)
                 const devicesButton = screen.getByRole("button", { name: "2 sessions" });
@@ -666,7 +666,7 @@ describe("<UserInfo />", () => {
         it("renders unverified user info", async () => {
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
             renderComponent({ room: mockRoom });
-            await act(flushPromises);
+            await flushPromises();
 
             const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
 
@@ -677,7 +677,7 @@ describe("<UserInfo />", () => {
         it("renders verified user info", async () => {
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, false, false));
             renderComponent({ room: mockRoom });
-            await act(flushPromises);
+            await flushPromises();
 
             const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
 
@@ -768,7 +768,7 @@ describe("<DeviceItem />", () => {
 
     it("with unverified user and device, displays button without a label", async () => {
         renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         expect(screen.getByRole("button", { name: device.displayName! })).toBeInTheDocument();
         expect(screen.queryByText(/trusted/i)).not.toBeInTheDocument();
@@ -776,7 +776,7 @@ describe("<DeviceItem />", () => {
 
     it("with verified user only, displays button with a 'Not trusted' label", async () => {
         renderComponent({ isUserVerified: true });
-        await act(flushPromises);
+        await flushPromises();
 
         const button = screen.getByRole("button", { name: device.displayName });
         expect(button).toHaveTextContent(`${device.displayName}Not trusted`);
@@ -785,7 +785,7 @@ describe("<DeviceItem />", () => {
     it("with verified device only, displays no button without a label", async () => {
         setMockDeviceTrust(true);
         renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         expect(screen.getByText(device.displayName!)).toBeInTheDocument();
         expect(screen.queryByText(/trusted/)).not.toBeInTheDocument();
@@ -798,7 +798,7 @@ describe("<DeviceItem />", () => {
         mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
         mockClient.getUserId.mockReturnValueOnce(defaultUserId);
         renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         // set trust to be false for isVerified, true for isCrossSigningVerified
         deferred.resolve({
@@ -814,7 +814,7 @@ describe("<DeviceItem />", () => {
     it("with verified user and device, displays no button and a 'Trusted' label", async () => {
         setMockDeviceTrust(true);
         renderComponent({ isUserVerified: true });
-        await act(flushPromises);
+        await flushPromises();
 
         expect(screen.queryByRole("button")).not.toBeInTheDocument();
         expect(screen.getByText(device.displayName!)).toBeInTheDocument();
@@ -824,7 +824,7 @@ describe("<DeviceItem />", () => {
     it("does not call verifyDevice if client.getUser returns null", async () => {
         mockClient.getUser.mockReturnValueOnce(null);
         renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         const button = screen.getByRole("button", { name: device.displayName! });
         expect(button).toBeInTheDocument();
@@ -839,7 +839,7 @@ describe("<DeviceItem />", () => {
         // even more mocking
         mockClient.isGuest.mockReturnValueOnce(true);
         renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         const button = screen.getByRole("button", { name: device.displayName! });
         expect(button).toBeInTheDocument();
@@ -851,7 +851,7 @@ describe("<DeviceItem />", () => {
 
     it("with display name", async () => {
         const { container } = renderComponent();
-        await act(flushPromises);
+        await flushPromises();
 
         expect(container).toMatchSnapshot();
     });
@@ -859,7 +859,7 @@ describe("<DeviceItem />", () => {
     it("without display name", async () => {
         const device = { deviceId: "deviceId" } as Device;
         const { container } = renderComponent({ device, userId: defaultUserId });
-        await act(flushPromises);
+        await flushPromises();
 
         expect(container).toMatchSnapshot();
     });
@@ -867,7 +867,7 @@ describe("<DeviceItem />", () => {
     it("ambiguous display name", async () => {
         const device = { deviceId: "deviceId", ambiguous: true, displayName: "my display name" };
         const { container } = renderComponent({ device, userId: defaultUserId });
-        await act(flushPromises);
+        await flushPromises();
 
         expect(container).toMatchSnapshot();
     });

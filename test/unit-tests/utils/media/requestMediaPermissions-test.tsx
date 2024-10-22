@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { screen } from "jest-matrix-react";
+import { act, screen } from "jest-matrix-react";
 
 import { requestMediaPermissions } from "../../../../src/utils/media/requestMediaPermissions";
 import { flushPromises, useMockMediaDevices } from "../../../test-utils";
@@ -19,9 +19,9 @@ describe("requestMediaPermissions", () => {
     const audioStream = {} as MediaStream;
 
     const itShouldLogTheErrorAndShowTheNoMediaPermissionsModal = () => {
-        it("should log the error and show the »No media permissions« modal", () => {
+        it("should log the error and show the »No media permissions« modal", async () => {
             expect(logger.log).toHaveBeenCalledWith("Failed to list userMedia devices", error);
-            screen.getByText("No media permissions");
+            await expect(screen.findByText("No media permissions")).resolves.toBeInTheDocument();
         });
     };
 

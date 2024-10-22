@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, waitFor } from "jest-matrix-react";
+import { act, render, waitFor } from "jest-matrix-react";
 import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -25,6 +25,7 @@ import {
     mockClientMethodsUser,
     setupRoomWithPollEvents,
 } from "../../../../test-utils";
+import { waitForElementToBeRemoved } from "@testing-library/dom";
 
 describe("<MPollEndBody />", () => {
     const userId = "@alice:domain.org";
@@ -127,6 +128,7 @@ describe("<MPollEndBody />", () => {
             expect(container).toMatchSnapshot();
 
             await waitFor(() => expect(getByRole("progressbar")).toBeInTheDocument());
+            await waitForElementToBeRemoved(() => getByRole("progressbar"));
 
             expect(mockClient.fetchRoomEvent).toHaveBeenCalledWith(roomId, pollStartEvent.getId());
 
