@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode, TransitionEvent } from "react";
-import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -245,7 +244,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private readMarkerNode = createRef<HTMLLIElement>();
     private whoIsTyping = createRef<WhoIsTypingTile>();
-    private scrollPanel = createRef<ScrollPanel>();
+    public scrollPanel = createRef<ScrollPanel>();
 
     private readonly showTypingNotificationsWatcherRef: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
@@ -376,13 +375,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
         const readMarker = this.readMarkerNode.current;
-        const messageWrapper = this.scrollPanel.current;
+        const messageWrapper = this.scrollPanel.current?.divScroll;
 
         if (!readMarker || !messageWrapper) {
             return null;
         }
 
-        const wrapperRect = (ReactDOM.findDOMNode(messageWrapper) as HTMLElement).getBoundingClientRect();
+        const wrapperRect = messageWrapper.getBoundingClientRect();
         const readMarkerRect = readMarker.getBoundingClientRect();
 
         // the read-marker pretends to have zero height when it is actually
