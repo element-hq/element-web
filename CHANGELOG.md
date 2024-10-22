@@ -1,3 +1,35 @@
+Changes in [1.11.82](https://github.com/element-hq/element-web/releases/tag/v1.11.82) (2024-10-22)
+==================================================================================================
+## ✨ Features
+
+* Deduplicate more icons using Compound Design Tokens ([#132](https://github.com/element-hq/matrix-react-sdk/pull/132)). Contributed by @t3chguy.
+* Always show link new device flow even if unsupported ([#147](https://github.com/element-hq/matrix-react-sdk/pull/147)). Contributed by @t3chguy.
+* Update design of files list in right panel ([#144](https://github.com/element-hq/matrix-react-sdk/pull/144)). Contributed by @t3chguy.
+* Remove feature\_dehydration ([#138](https://github.com/element-hq/matrix-react-sdk/pull/138)). Contributed by @florianduros.
+* Upgrade emojibase-bindings and remove local handling of emoticon variations ([#127](https://github.com/element-hq/matrix-react-sdk/pull/127)). Contributed by @langleyd.
+* Add support for rendering media captions ([#43](https://github.com/element-hq/matrix-react-sdk/pull/43)). Contributed by @tulir.
+* Replace composer icons with Compound variants ([#123](https://github.com/element-hq/matrix-react-sdk/pull/123)). Contributed by @t3chguy.
+* Tweak default right panel size to be 320px except for maximised widgets at 420px ([#110](https://github.com/element-hq/matrix-react-sdk/pull/110)). Contributed by @t3chguy.
+* Add a pinned message badge under a pinned message ([#118](https://github.com/element-hq/matrix-react-sdk/pull/118)). Contributed by @florianduros.
+* Ditch right panel tabs and re-add close button ([#99](https://github.com/element-hq/matrix-react-sdk/pull/99)). Contributed by @t3chguy.
+* Force verification even for refreshed clients ([#44](https://github.com/element-hq/matrix-react-sdk/pull/44)). Contributed by @dbkr.
+* Update emoji text, border and background colour in timeline ([#119](https://github.com/element-hq/matrix-react-sdk/pull/119)). Contributed by @florianduros.
+* Disable ICE fallback based on well-known configuration ([#111](https://github.com/element-hq/matrix-react-sdk/pull/111)). Contributed by @t3chguy.
+* Remove legacy room header and promote beta room header ([#105](https://github.com/element-hq/matrix-react-sdk/pull/105)). Contributed by @t3chguy.
+* Respect `io.element.jitsi` `useFor1To1Calls` in well-known ([#112](https://github.com/element-hq/matrix-react-sdk/pull/112)). Contributed by @t3chguy.
+* Use Compound close icon in favour of mishmash of x/close icons ([#108](https://github.com/element-hq/matrix-react-sdk/pull/108)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Correct typo in option documentation ([#28148](https://github.com/element-hq/element-web/pull/28148)). Contributed by @AndrewKvalheim.
+* Revert #124 and #135 ([#139](https://github.com/element-hq/matrix-react-sdk/pull/139)). Contributed by @dbkr.
+* Add aria-label to e2e icon ([#136](https://github.com/element-hq/matrix-react-sdk/pull/136)). Contributed by @florianduros.
+* Fix bell icons on room list hover being black squares ([#135](https://github.com/element-hq/matrix-react-sdk/pull/135)). Contributed by @dbkr.
+* Fix vertical overflow on the mobile register screen ([#137](https://github.com/element-hq/matrix-react-sdk/pull/137)). Contributed by @langleyd.
+* Allow to unpin redacted event ([#98](https://github.com/element-hq/matrix-react-sdk/pull/98)). Contributed by @florianduros.
+
+
+
 Changes in [1.11.81](https://github.com/element-hq/element-web/releases/tag/v1.11.81) (2024-10-15)
 ==================================================================================================
 This release fixes High severity vulnerability CVE-2024-47771 / GHSA-963w-49j9-gxj6
