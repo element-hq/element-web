@@ -53,6 +53,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private tooltips = new ReactRootManager();
     private reactRoots = new ReactRootManager();
 
+    private ref = createRef<HTMLDivElement>();
+
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
@@ -85,8 +87,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("pre");
-            if (pres.length > 0) {
+            const pres = this.ref.current?.getElementsByTagName("pre");
+            if (pres && pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
@@ -471,7 +473,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
+                <div
+                    className="mx_MEmoteBody mx_EventTile_content"
+                    onClick={this.onBodyLinkClick}
+                    dir="auto"
+                    ref={this.ref}
+                >
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
@@ -484,7 +491,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
                     {body}
                     {widgets}
                 </div>
@@ -492,14 +499,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isCaption) {
             return (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick} ref={this.ref}>
                     {body}
                     {widgets}
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
                 {body}
                 {widgets}
             </div>

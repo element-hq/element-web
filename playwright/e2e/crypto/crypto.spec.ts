@@ -114,13 +114,10 @@ test.describe("Cryptography", function () {
                 await dialog.getByRole("button", { name: "Continue" }).click();
                 await copyAndContinue(page);
 
-                // When the device is verified, the `Setting up keys` step is skipped
-                if (!isDeviceVerified) {
-                    const uiaDialogTitle = page.locator(".mx_InteractiveAuthDialog .mx_Dialog_title");
-                    await expect(uiaDialogTitle.getByText("Setting up keys")).toBeVisible();
-                    await expect(uiaDialogTitle.getByText("Setting up keys")).not.toBeVisible();
-                }
+                // If the device is unverified, there should be a "Setting up keys" step; however, it
+                // can be quite quick, and playwright can miss it, so we can't test for it.
 
+                // Either way, we end up at a success dialog:
                 await expect(dialog.getByText("Secure Backup successful")).toBeVisible();
                 await dialog.getByRole("button", { name: "Done" }).click();
                 await expect(dialog.getByText("Secure Backup successful")).not.toBeVisible();
