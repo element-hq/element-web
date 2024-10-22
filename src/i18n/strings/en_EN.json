@@ -735,7 +735,7 @@
         "stop_voice_message": "Stop recording",
         "voice_message_button": "Voice Message"
     },
-    "console_dev_note": "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!",
+    "console_dev_note": "",
     "console_scam_warning": "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!",
     "console_wait": "Wait!",
     "create_room": {

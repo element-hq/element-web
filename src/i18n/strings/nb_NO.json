@@ -1174,7 +1174,7 @@
     "stop_voice_message": "Stopp opptaket",
     "voice_message_button": "Talemelding"
   },
-  "console_dev_note": "Hvis du vet hva du gjør, Element er åpen kildekode, så sørg for å sjekke ut vår GitHub (https://github.com/vector-im/element-web/) og bidra!",
+  "console_dev_note": "",
   "console_scam_warning": "Hvis noen ba deg om å kopiere/lime inn noe her, er det stor sannsynlighet for at du blir svindlet!",
   "console_wait": "Vent!",
   "create_room": {
@@ -1834,8 +1834,8 @@
     "key_share_warning": "Invited people will be able to read old messages.",
     "name_email_mxid_share_room": "Inviter noen ved å bruke navn, e-postadresse eller inviter nye gjester med e-postadressen deres.",
     "name_email_mxid_share_space": "Inviter noen ved å bruke navn, e-postadresse, brukernavn (lik <userId/>) eller <a> del dette området</a>.",
-    "name_mxid_share_room": "Inviter noen ved å bruke navnet sitt</a>.",
-    "name_mxid_share_space": "Inviter noen ved å bruke navnet sitt",
+    "name_mxid_share_room": "Inviter noen ved å bruke deres navn.",
+    "name_mxid_share_space": "Inviter noen ved å bruke deres navn.",
     "recents_section": "Nylige samtaler",
     "room_failed_partial": "Vi sendte de andre, men folkene nedenfor kunne ikke inviteres til <RoomName/>",
     "room_failed_partial_title": "Noen invitasjoner kunne ikke sendes",
