@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, Mocked } from "jest-mock";
-import { IBootstrapCrossSigningOpts } from "matrix-js-sdk/src/crypto";
 import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
-import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { BootstrapCrossSigningOpts, CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../../src/SecurityManager";
@@ -162,7 +161,7 @@ describe("SetupEncryptionStore", () => {
 
     it("resetConfirm should work with a cached account password", async () => {
         const makeRequest = jest.fn();
-        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: IBootstrapCrossSigningOpts) => {
+        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: BootstrapCrossSigningOpts) => {
             await opts?.authUploadDeviceSigningKeys?.(makeRequest);
         });
         mocked(accessSecretStorage).mockImplementation(async (func?: () => Promise<void>) => {
