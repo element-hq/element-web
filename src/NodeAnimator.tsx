@@ -104,12 +104,12 @@ export default class NodeAnimator extends React.Component<IProps> {
             // start from startStyle 1: 0 is the one we gave it
             // to start with, so now we animate 1 etc.
             for (let i = 1; i < startStyles.length; ++i) {
-                this.applyStyles(domNode as HTMLElement, startStyles[i]);
+                this.applyStyles(domNode, startStyles[i]);
             }
 
             // and then we animate to the resting state
             window.setTimeout(() => {
-                this.applyStyles(domNode as HTMLElement, restingStyle);
+                this.applyStyles(domNode, restingStyle);
             }, 0);
         }
         if (domNode) {
