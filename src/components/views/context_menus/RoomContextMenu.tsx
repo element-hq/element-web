@@ -295,7 +295,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     }
 
     let widgetsOption: JSX.Element | undefined;
-    if (!isVideoRoom) {
+    if (!isVideoRoom && SettingsStore.getValue(UIFeature.ShowAddWidgetsInRoomInfo)) {
         widgetsOption = (
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {
