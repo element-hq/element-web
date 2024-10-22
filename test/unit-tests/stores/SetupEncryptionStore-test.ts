@@ -10,7 +10,6 @@ import { mocked, Mocked } from "jest-mock";
 import { IBootstrapCrossSigningOpts } from "matrix-js-sdk/src/crypto";
 import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
-import { IDehydratedDevice } from "matrix-js-sdk/src/crypto/dehydration";
 import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
@@ -95,28 +94,6 @@ describe("SetupEncryptionStore", () => {
             await emitPromise(setupEncryptionStore, "update");
 
             expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(true);
-        });
-
-        it("should ignore the MSC2697 dehydrated device", async () => {
-            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
-
-            client.getDehydratedDevice.mockResolvedValue({ device_id: "dehydrated" } as IDehydratedDevice);
-
-            const fakeDevice = new Device({
-                deviceId: "dehydrated",
-                userId: "",
-                algorithms: [],
-                keys: new Map([["curve25519:dehydrated", "identityKey"]]),
-            });
-            mockCrypto.getUserDeviceInfo.mockResolvedValue(
-                new Map([[client.getSafeUserId(), new Map([[fakeDevice.deviceId, fakeDevice]])]]),
-            );
-
-            setupEncryptionStore.start();
-            await emitPromise(setupEncryptionStore, "update");
-
-            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
-            expect(mockCrypto.getDeviceVerificationStatus).not.toHaveBeenCalled();
         });
 
         it("should ignore the MSC3812 dehydrated device", async () => {

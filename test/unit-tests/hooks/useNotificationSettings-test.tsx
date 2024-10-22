@@ -6,8 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "@testing-library/react-hooks/dom";
-import { waitFor } from "jest-matrix-react";
+import { waitFor, renderHook } from "jest-matrix-react";
 import { IPushRules, MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
 
 import { useNotificationSettings } from "../../../src/hooks/useNotificationSettings";
