@@ -69,6 +69,16 @@ type HandlerMap = {
 
 type ModalCloseReason = "backgroundClick";
 
+function getOrCreateContainer(id: string): HTMLDivElement {
+    let container = document.getElementById(id) as HTMLDivElement | null;
+    if (!container) {
+        container = document.createElement("div");
+        container.id = id;
+        document.body.appendChild(container);
+    }
+    return container;
+}
+
 export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMap> {
     private counter = 0;
     // The modal to prioritise over all others. If this is set, only show
@@ -86,9 +96,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     private static root?: Root;
     private static getOrCreateRoot(): Root {
         if (!ModalManager.root) {
-            const container = document.createElement("div");
-            container.id = DIALOG_CONTAINER_ID;
-            document.body.appendChild(container);
+            const container = getOrCreateContainer(DIALOG_CONTAINER_ID);
             ModalManager.root = createRoot(container);
         }
         return ModalManager.root;
@@ -97,9 +105,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     private static staticRoot?: Root;
     private static getOrCreateStaticRoot(): Root {
         if (!ModalManager.staticRoot) {
-            const container = document.createElement("div");
-            container.id = STATIC_DIALOG_CONTAINER_ID;
-            document.body.appendChild(container);
+            const container = getOrCreateContainer(STATIC_DIALOG_CONTAINER_ID);
             ModalManager.staticRoot = createRoot(container);
         }
         return ModalManager.staticRoot;
@@ -398,10 +404,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             dis.dispatch({
                 action: "aria_unhide_main_app",
             });
-            ModalManager.getOrCreateRoot().unmount();
-            ModalManager.root = undefined;
-            ModalManager.getOrCreateStaticRoot().unmount();
-            ModalManager.staticRoot = undefined;
+            ModalManager.getOrCreateRoot().render(<></>);
+            ModalManager.getOrCreateStaticRoot().render(<></>);
             return;
         }
 
@@ -433,8 +437,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             ModalManager.getOrCreateStaticRoot().render(staticDialog);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ModalManager.getOrCreateStaticRoot().unmount();
-            ModalManager.staticRoot = undefined;
+            ModalManager.getOrCreateStaticRoot().render(<></>);
         }
 
         const modal = this.getCurrentModal();
@@ -463,8 +466,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             }, 0);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ModalManager.getOrCreateRoot().unmount();
-            ModalManager.root = undefined;
+            ModalManager.getOrCreateRoot().render(<></>);
         }
     }
 }
