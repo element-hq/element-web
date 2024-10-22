@@ -163,12 +163,12 @@ describe("PipContainer", () => {
         if (!(call instanceof MockedCall)) throw new Error("Failed to create call");
 
         const widget = new Widget(call.widget);
-        WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
-        WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
-            stop: () => {},
-        } as unknown as ClientWidgetApi);
-
         await act(async () => {
+            WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
+            WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
+                stop: () => {},
+            } as unknown as ClientWidgetApi);
+
             await call.start();
             ActiveWidgetStore.instance.setWidgetPersistence(widget.id, room.roomId, true);
         });
@@ -176,9 +176,11 @@ describe("PipContainer", () => {
         await fn(call);
 
         cleanup();
-        call.destroy();
-        ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
-        WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
+        act(() => {
+            call.destroy();
+            ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
+            WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
+        });
     };
 
     const withWidget = async (fn: () => Promise<void>): Promise<void> => {

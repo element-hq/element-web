@@ -171,10 +171,14 @@ export default class PersistedElement extends React.Component<IProps> {
             </MatrixClientContext.Provider>
         );
 
-        const container = getOrCreateContainer("mx_persistedElement_" + this.props.persistKey);
-        const root = createRoot(container);
-        PersistedElement.rootMap[this.props.persistKey] = [root, container];
-        root.render(content);
+        let rootPair = PersistedElement.rootMap[this.props.persistKey];
+        if (!rootPair) {
+            const container = getOrCreateContainer("mx_persistedElement_" + this.props.persistKey);
+            const root = createRoot(container);
+            rootPair = [root, container];
+            PersistedElement.rootMap[this.props.persistKey] = rootPair;
+        }
+        rootPair[0].render(content);
     }
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
