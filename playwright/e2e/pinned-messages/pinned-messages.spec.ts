@@ -32,7 +32,7 @@ test.describe("Pinned messages", () => {
         await expect(tile).toMatchScreenshot("pinned-message-Msg1.png", {
             mask: [tile.locator(".mx_MessageTimestamp")],
             css: `
-                // Hide the jump to bottom button in the timeline to avoid flackiness
+                // Hide the jump to bottom button in the timeline to avoid flakiness
                 .mx_JumpToBottomButton {
                     display: none !important;
                 }
