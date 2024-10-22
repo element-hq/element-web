@@ -11,7 +11,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AuthPage from "../../views/auth/AuthPage";
 import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
-import InitialCryptoSetupDialog from "../../views/dialogs/security/InitialCryptoSetup";
+import InitialCryptoSetupDialog from "../../views/dialogs/security/InitialCryptoSetupDialog";
 
 interface IProps {
     matrixClient: MatrixClient;
