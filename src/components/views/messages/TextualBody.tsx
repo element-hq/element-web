@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { globToRegexp } from "matrix-js-sdk/src/utils";
@@ -255,7 +256,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         {after}
                     </>
                 );
-                ReactDOM.render(newContent, container);
+                createRoot(container).render(newContent);
 
                 node.parentNode?.replaceChild(container, node);
             } else if (node.childNodes && node.childNodes.length) {
