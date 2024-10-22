@@ -49,7 +49,7 @@ async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean
  *
  * This function does not set up backups of the created cross-signing keys
  * (or message keys): the cross-signing keys are stored locally and will be
- * lost requiring a crypto reset, if the user logs out of loses their session.
+ * lost requiring a crypto reset, if the user logs out or loses their session.
  *
  * @param cli The Matrix Client to use
  * @param isTokenLogin True if the user logged in via a token login, otherwise false
