@@ -18,10 +18,10 @@ import {
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import { stubClient } from "../../../../test-utils";
-import UserIdentityWarning from "../../../../../src/components/views/rooms/UserIdentityWarning";
+import { UserIdentityWarning } from "../../../../../src/components/views/rooms/UserIdentityWarning";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 const ROOM_ID = "!room:id";
@@ -88,7 +88,7 @@ describe("UserIdentityWarning", () => {
             return Promise.resolve(new UserVerificationStatus(false, false, false, true));
         });
         crypto.pinCurrentUserIdentity = jest.fn();
-        const { container } = render(<UserIdentityWarning room={room} />, {
+        const { container } = render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
             wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
         });
 
@@ -115,7 +115,7 @@ describe("UserIdentityWarning", () => {
             return Promise.resolve(new UserVerificationStatus(false, false, false, true));
         });
 
-        render(<UserIdentityWarning room={room} />, {
+        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
             wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
         });
         await sleep(10); // give it some time to finish initialising
@@ -156,18 +156,20 @@ describe("UserIdentityWarning", () => {
         crypto["getUserVerificationStatus"] = jest.fn(async () => {
             return Promise.resolve(new UserVerificationStatus(false, false, false, false));
         });
-        render(<UserIdentityWarning room={room} />, {
+        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
             wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
         });
         await sleep(10); // give it some time to finish initialising
         expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
 
         // The user changes their identity, so we should show the warning.
-        client.emit(
-            CryptoEvent.UserTrustStatusChanged,
-            "@alice:example.org",
-            new UserVerificationStatus(false, false, false, true),
-        );
+        act(() => {
+            client.emit(
+                CryptoEvent.UserTrustStatusChanged,
+                "@alice:example.org",
+                new UserVerificationStatus(false, false, false, true),
+            );
+        });
         await waitFor(() =>
             expect(
                 getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
@@ -176,11 +178,13 @@ describe("UserIdentityWarning", () => {
 
         // Simulate the user's new identity having been approved, so we no
         // longer show the warning.
-        client.emit(
-            CryptoEvent.UserTrustStatusChanged,
-            "@alice:example.org",
-            new UserVerificationStatus(false, false, false, false),
-        );
+        act(() => {
+            client.emit(
+                CryptoEvent.UserTrustStatusChanged,
+                "@alice:example.org",
+                new UserVerificationStatus(false, false, false, false),
+            );
+        });
         await waitFor(() =>
             expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow(),
         );
@@ -198,7 +202,7 @@ describe("UserIdentityWarning", () => {
         crypto["getUserVerificationStatus"] = jest.fn(async () => {
             return Promise.resolve(new UserVerificationStatus(false, false, false, true));
         });
-        render(<UserIdentityWarning room={room} />, {
+        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
             wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
         });
         await sleep(10); // give it some time to finish initialising
@@ -226,21 +230,23 @@ describe("UserIdentityWarning", () => {
         );
 
         // Alice leaves, so we no longer show her warning.
-        client.emit(
-            RoomStateEvent.Events,
-            new MatrixEvent({
-                event_id: "$event_id",
-                type: EventType.RoomMember,
-                state_key: "@alice:example.org",
-                content: {
-                    membership: "leave",
-                },
-                room_id: ROOM_ID,
-                sender: "@alice:example.org",
-            }),
-            dummyRoomState(),
-            null,
-        );
+        act(() => {
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@alice:example.org",
+                    content: {
+                        membership: "leave",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@alice:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+        });
         await waitFor(() =>
             expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow(),
         );
@@ -258,7 +264,7 @@ describe("UserIdentityWarning", () => {
             return Promise.resolve(new UserVerificationStatus(false, false, false, true));
         });
 
-        render(<UserIdentityWarning room={room} />, {
+        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
             wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
         });
         // We should warn about Alice's identity first.
@@ -270,11 +276,13 @@ describe("UserIdentityWarning", () => {
 
         // Simulate Alice's new identity having been approved, so now we warn
         // about Bob's identity.
-        client.emit(
-            CryptoEvent.UserTrustStatusChanged,
-            "@alice:example.org",
-            new UserVerificationStatus(false, false, false, false),
-        );
+        act(() => {
+            client.emit(
+                CryptoEvent.UserTrustStatusChanged,
+                "@alice:example.org",
+                new UserVerificationStatus(false, false, false, false),
+            );
+        });
         await waitFor(() =>
             expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
         );
@@ -300,7 +308,7 @@ describe("UserIdentityWarning", () => {
                 );
                 return Promise.resolve(new UserVerificationStatus(false, false, false, false));
             });
-            render(<UserIdentityWarning room={room} />, {
+            render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
                 wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
             });
             await sleep(10); // give it some time to finish initialising
@@ -328,7 +336,7 @@ describe("UserIdentityWarning", () => {
                 );
                 return Promise.resolve(new UserVerificationStatus(false, false, false, true));
             });
-            render(<UserIdentityWarning room={room} />, {
+            render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
                 wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
             });
             await sleep(10); // give it some time to finish initialising
