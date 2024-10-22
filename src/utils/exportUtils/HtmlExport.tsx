@@ -13,6 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -268,7 +269,7 @@ export default class HTMLExporter extends Exporter {
         return wantsDateSeparator(prevEvent.getDate() || undefined, event.getDate() || undefined);
     }
 
-    public getEventTile(mxEv: MatrixEvent, continuation: boolean): JSX.Element {
+    public getEventTile(mxEv: MatrixEvent, continuation: boolean, ref?: () => void): JSX.Element {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
                 <MatrixClientContext.Provider value={this.room.client}>
@@ -292,6 +293,7 @@ export default class HTMLExporter extends Exporter {
                             layout={Layout.Group}
                             showReadReceipts={false}
                             getRelationsForEvent={this.getRelationsForEvent}
+                            ref={ref}
                         />
                     </TooltipProvider>
                 </MatrixClientContext.Provider>
@@ -303,7 +305,10 @@ export default class HTMLExporter extends Exporter {
         const avatarUrl = this.getAvatarURL(mxEv);
         const hasAvatar = !!avatarUrl;
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
-        const EventTile = this.getEventTile(mxEv, continuation);
+        // We have to wait for the component to be rendered before we can get the markup
+        // so pass a deferred as a ref to the component.
+        const deferred = defer<void>();
+        const EventTile = this.getEventTile(mxEv, continuation, deferred.resolve);
         let eventTileMarkup: string;
 
         if (
@@ -316,6 +321,7 @@ export default class HTMLExporter extends Exporter {
             const tempElement = document.createElement("div");
             const tempRoot = createRoot(tempElement);
             tempRoot.render(EventTile);
+            await deferred.promise;
             eventTileMarkup = tempElement.innerHTML;
             tempRoot.unmount();
         } else {

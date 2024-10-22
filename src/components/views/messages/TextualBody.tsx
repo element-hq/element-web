@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
-import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
 

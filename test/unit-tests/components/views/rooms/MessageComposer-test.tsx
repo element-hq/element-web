@@ -445,7 +445,7 @@ describe("MessageComposer", () => {
         const messageText = "Test Text";
         await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
         const { renderResult, rawComponent } = wrapAndRender({ room });
-        const { unmount, rerender } = renderResult;
+        const { unmount } = renderResult;
 
         await flushPromises();
 
@@ -475,7 +475,7 @@ describe("MessageComposer", () => {
         });
 
         // ensure the correct state is re-loaded
-        rerender(rawComponent);
+        render(rawComponent);
         await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
     }, 10000);
 });
