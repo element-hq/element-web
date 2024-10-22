@@ -915,7 +915,7 @@ describe("<SessionManagerTab />", () => {
                 const { getByTestId, findByTestId } = render(getComponent());
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-                await toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const signOutButton = await within(
                     await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),
@@ -1024,7 +1024,7 @@ describe("<SessionManagerTab />", () => {
                     fireEvent.submit(getByLabelText("Password"));
                 });
 
-                await flushPromises();
+                await act(flushPromises);
 
                 // called again with auth
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
@@ -1032,7 +1032,7 @@ describe("<SessionManagerTab />", () => {
                         type: "m.id.user",
                         user: aliceId,
                     },
-                    password: "",
+                    password: "topsecret",
                     type: "m.login.password",
                 });
                 // devices refreshed
