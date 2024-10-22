@@ -197,8 +197,8 @@ export class Helpers {
     async assertEmptyPinnedMessagesList() {
         const rightPanel = this.getRightPanel();
         await expect(rightPanel).toMatchScreenshot(`pinned-messages-list-empty.png`, {
+            // hide the tooltip "Room information" to avoid flakiness
             css: `
-                // hide the tooltip "Room information" to avoid flakiness
                 [data-floating-ui-portal] {
                     display: none !important;
                 }
