@@ -214,9 +214,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });
@@ -228,9 +226,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });

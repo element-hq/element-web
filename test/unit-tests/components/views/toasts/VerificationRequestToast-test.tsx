@@ -63,9 +63,7 @@ describe("VerificationRequestToast", () => {
             otherDeviceId,
         });
         const result = renderComponent({ request });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
         expect(result.container).toMatchSnapshot();
     });
 
@@ -76,9 +74,7 @@ describe("VerificationRequestToast", () => {
             otherUserId,
         });
         const result = renderComponent({ request });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
         expect(result.container).toMatchSnapshot();
     });
 
@@ -89,9 +85,7 @@ describe("VerificationRequestToast", () => {
             otherUserId,
         });
         renderComponent({ request, toastKey: "testKey" });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         const dismiss = jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
         Object.defineProperty(request, "accepting", { value: true });

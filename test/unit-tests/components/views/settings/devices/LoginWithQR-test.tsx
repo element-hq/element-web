@@ -116,7 +116,7 @@ describe("<LoginWithQR />", () => {
                     onClick: expect.any(Function),
                 }),
             );
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
             expect(rendezvous.generateCode).toHaveBeenCalled();
         });
 
@@ -130,7 +130,7 @@ describe("<LoginWithQR />", () => {
                     onClick: expect.any(Function),
                 }),
             );
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
             expect(rendezvous.generateCode).toHaveBeenCalled();
             expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
         });
@@ -139,7 +139,7 @@ describe("<LoginWithQR />", () => {
             const onFinished = jest.fn();
             jest.spyOn(MSC3906Rendezvous.prototype, "startAfterShowingCode").mockReturnValue(unresolvedPromise());
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -167,7 +167,7 @@ describe("<LoginWithQR />", () => {
         test("render QR then decline", async () => {
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -196,7 +196,7 @@ describe("<LoginWithQR />", () => {
             (client as any).getCrypto = () => undefined;
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -236,7 +236,7 @@ describe("<LoginWithQR />", () => {
                 unresolvedPromise(),
             );
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -273,7 +273,7 @@ describe("<LoginWithQR />", () => {
         test("approve + verify", async () => {
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -303,7 +303,7 @@ describe("<LoginWithQR />", () => {
             mocked(client.requestLoginToken).mockRejectedValue(new HTTPError("rate limit reached", 429));
             const onFinished = jest.fn();
             render(getComponent({ client, onFinished }));
-            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+            const rendezvous = mocked(MSC3906Rendezvous).mock.instances[1];
 
             await waitFor(() =>
                 expect(mockedFlow).toHaveBeenLastCalledWith(
@@ -355,7 +355,7 @@ describe("<LoginWithQR />", () => {
                 }),
             );
 
-            const rendezvous = mocked(MSC4108SignInWithQR).mock.instances[0];
+            const rendezvous = mocked(MSC4108SignInWithQR).mock.instances[1];
             expect(rendezvous.generateCode).toHaveBeenCalled();
             expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
@@ -447,7 +447,7 @@ describe("<LoginWithQR />", () => {
             const onClick = mockedFlow.mock.calls[0][0].onClick;
             await onClick(Click.Cancel);
 
-            const rendezvous = mocked(MSC4108SignInWithQR).mock.instances[0];
+            const rendezvous = mocked(MSC4108SignInWithQR).mock.instances[1];
             expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
         });
     });

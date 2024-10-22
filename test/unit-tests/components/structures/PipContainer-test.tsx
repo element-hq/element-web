@@ -81,9 +81,7 @@ describe("PipContainer", () => {
     let voiceBroadcastPlaybacksStore: VoiceBroadcastPlaybacksStore;
 
     const actFlushPromises = async () => {
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
     };
 
     beforeEach(async () => {

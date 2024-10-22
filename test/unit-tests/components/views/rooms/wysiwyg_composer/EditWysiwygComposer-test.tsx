@@ -253,9 +253,7 @@ describe("EditWysiwygComposer", () => {
         });
 
         // Wait for event dispatch to happen
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         // Then we don't get it because we are disabled
         expect(screen.getByRole("textbox")).not.toHaveFocus();

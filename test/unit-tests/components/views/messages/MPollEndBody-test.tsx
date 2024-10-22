@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, waitFor } from "jest-matrix-react";
+import { render, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -25,7 +25,6 @@ import {
     mockClientMethodsUser,
     setupRoomWithPollEvents,
 } from "../../../../test-utils";
-import { waitForElementToBeRemoved } from "@testing-library/dom";
 
 describe("<MPollEndBody />", () => {
     const userId = "@alice:domain.org";
