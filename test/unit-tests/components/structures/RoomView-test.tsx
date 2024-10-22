@@ -117,11 +117,13 @@ describe("RoomView", () => {
                 stores.roomViewStore.on(UPDATE_EVENT, subFn);
             });
 
-            defaultDispatcher.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                metricsTrigger: undefined,
-            });
+            act(() =>
+                defaultDispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    metricsTrigger: undefined,
+                }),
+            );
 
             await switchedRoom;
         }
@@ -511,12 +513,14 @@ describe("RoomView", () => {
     it("should show error view if failed to look up room alias", async () => {
         const { asFragment, findByText } = await renderRoomView(false);
 
-        defaultDispatcher.dispatch<ViewRoomErrorPayload>({
-            action: Action.ViewRoomError,
-            room_alias: "#addy:server",
-            room_id: null,
-            err: new MatrixError({ errcode: "M_NOT_FOUND" }),
-        });
+        act(() =>
+            defaultDispatcher.dispatch<ViewRoomErrorPayload>({
+                action: Action.ViewRoomError,
+                room_alias: "#addy:server",
+                room_id: null,
+                err: new MatrixError({ errcode: "M_NOT_FOUND" }),
+            }),
+        );
         await emitPromise(stores.roomViewStore, UPDATE_EVENT);
 
         await findByText("Are you sure you're at the right place?");
@@ -568,44 +572,46 @@ describe("RoomView", () => {
         const roomViewRef = createRef<_RoomView>();
         const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
         // @ts-ignore - triggering a search organically is a lot of work
-        roomViewRef.current!.setState({
-            search: {
-                searchId: 1,
-                roomId: room.roomId,
-                term: "search term",
-                scope: SearchScope.Room,
-                promise: Promise.resolve({
-                    results: [
-                        SearchResult.fromJson(
-                            {
-                                rank: 1,
-                                result: {
-                                    content: {
-                                        body: "search term",
-                                        msgtype: "m.text",
+        act(() =>
+            roomViewRef.current!.setState({
+                search: {
+                    searchId: 1,
+                    roomId: room.roomId,
+                    term: "search term",
+                    scope: SearchScope.Room,
+                    promise: Promise.resolve({
+                        results: [
+                            SearchResult.fromJson(
+                                {
+                                    rank: 1,
+                                    result: {
+                                        content: {
+                                            body: "search term",
+                                            msgtype: "m.text",
+                                        },
+                                        type: "m.room.message",
+                                        event_id: "$eventId",
+                                        sender: cli.getSafeUserId(),
+                                        origin_server_ts: 123456789,
+                                        room_id: room.roomId,
                                     },
-                                    type: "m.room.message",
-                                    event_id: "$eventId",
-                                    sender: cli.getSafeUserId(),
-                                    origin_server_ts: 123456789,
-                                    room_id: room.roomId,
+                                    context: {
+                                        events_before: [],
+                                        events_after: [],
+                                        profile_info: {},
+                                    },
                                 },
-                                context: {
-                                    events_before: [],
-                                    events_after: [],
-                                    profile_info: {},
-                                },
-                            },
-                            eventMapper,
-                        ),
-                    ],
-                    highlights: [],
+                                eventMapper,
+                            ),
+                        ],
+                        highlights: [],
+                        count: 1,
+                    }),
+                    inProgress: false,
                     count: 1,
-                }),
-                inProgress: false,
-                count: 1,
-            },
-        });
+                },
+            }),
+        );
 
         await waitFor(() => {
             expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
@@ -629,44 +635,46 @@ describe("RoomView", () => {
         const roomViewRef = createRef<_RoomView>();
         const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
         // @ts-ignore - triggering a search organically is a lot of work
-        roomViewRef.current!.setState({
-            search: {
-                searchId: 1,
-                roomId: room.roomId,
-                term: "search term",
-                scope: SearchScope.All,
-                promise: Promise.resolve({
-                    results: [
-                        SearchResult.fromJson(
-                            {
-                                rank: 1,
-                                result: {
-                                    content: {
-                                        body: "search term",
-                                        msgtype: "m.text",
+        act(() =>
+            roomViewRef.current!.setState({
+                search: {
+                    searchId: 1,
+                    roomId: room.roomId,
+                    term: "search term",
+                    scope: SearchScope.All,
+                    promise: Promise.resolve({
+                        results: [
+                            SearchResult.fromJson(
+                                {
+                                    rank: 1,
+                                    result: {
+                                        content: {
+                                            body: "search term",
+                                            msgtype: "m.text",
+                                        },
+                                        type: "m.room.message",
+                                        event_id: "$eventId",
+                                        sender: cli.getSafeUserId(),
+                                        origin_server_ts: 123456789,
+                                        room_id: room2.roomId,
                                     },
-                                    type: "m.room.message",
-                                    event_id: "$eventId",
-                                    sender: cli.getSafeUserId(),
-                                    origin_server_ts: 123456789,
-                                    room_id: room2.roomId,
+                                    context: {
+                                        events_before: [],
+                                        events_after: [],
+                                        profile_info: {},
+                                    },
                                 },
-                                context: {
-                                    events_before: [],
-                                    events_after: [],
-                                    profile_info: {},
-                                },
-                            },
-                            eventMapper,
-                        ),
-                    ],
-                    highlights: [],
+                                eventMapper,
+                            ),
+                        ],
+                        highlights: [],
+                        count: 1,
+                    }),
+                    inProgress: false,
                     count: 1,
-                }),
-                inProgress: false,
-                count: 1,
-            },
-        });
+                },
+            }),
+        );
 
         await waitFor(() => {
             expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();

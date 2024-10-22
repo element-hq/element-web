@@ -39,17 +39,15 @@ describe("<ForgotPassword>", () => {
     let renderResult: RenderResult;
 
     const typeIntoField = async (label: string, value: string): Promise<void> => {
-        await act(async () => {
-            await userEvent.type(screen.getByLabelText(label), value, { delay: null });
+        await userEvent.type(screen.getByLabelText(label), value, { delay: null });
+        act(() => {
             // the message is shown after some time
             jest.advanceTimersByTime(500);
         });
     };
 
     const click = async (element: Element): Promise<void> => {
-        await act(async () => {
-            await userEvent.click(element, { delay: null });
-        });
+        await userEvent.click(element, { delay: null });
     };
 
     const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
@@ -130,8 +128,10 @@ describe("<ForgotPassword>", () => {
                 await typeIntoField("Email address", "not en email");
             });
 
-            it("should show a message about the wrong format", () => {
-                expect(screen.getByText("The email address doesn't appear to be valid.")).toBeInTheDocument();
+            it("should show a message about the wrong format", async () => {
+                await expect(
+                    screen.findByText("The email address doesn't appear to be valid."),
+                ).resolves.toBeInTheDocument();
             });
         });
 
@@ -144,8 +144,8 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show an email not found message", () => {
-                expect(screen.getByText("This email address was not found")).toBeInTheDocument();
+            it("should show an email not found message", async () => {
+                await expect(screen.findByText("This email address was not found")).resolves.toBeInTheDocument();
             });
         });
 
@@ -158,13 +158,12 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show an info about that", () => {
-                expect(
-                    screen.getByText(
-                        "Cannot reach homeserver: " +
-                            "Ensure you have a stable internet connection, or get in touch with the server admin",
+            it("should show an info about that", async () => {
+                await expect(
+                    screen.findByText(
+                        "Cannot reach homeserver: Ensure you have a stable internet connection, or get in touch with the server admin",
                     ),
-                ).toBeInTheDocument();
+                ).resolves.toBeInTheDocument();
             });
         });
 
@@ -180,8 +179,8 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show the server error", () => {
-                expect(screen.queryByText("server down")).toBeInTheDocument();
+            it("should show the server error", async () => {
+                await expect(screen.findByText("server down")).resolves.toBeInTheDocument();
             });
         });
 
@@ -332,9 +331,7 @@ describe("<ForgotPassword>", () => {
 
                         describe("and dismissing the dialog by clicking the background", () => {
                             beforeEach(async () => {
-                                await act(async () => {
-                                    await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
-                                });
+                                await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
