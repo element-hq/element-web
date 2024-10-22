@@ -1174,7 +1174,7 @@
     "stop_voice_message": "Stopp opptaket",
     "voice_message_button": "Talemelding"
   },
-  "console_dev_note": "",
+  "console_dev_note": "Dette til advarsel",
   "console_scam_warning": "Hvis noen ba deg om å kopiere/lime inn noe her, er det stor sannsynlighet for at du blir svindlet!",
   "console_wait": "Vent!",
   "create_room": {

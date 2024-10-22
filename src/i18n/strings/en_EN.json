@@ -735,7 +735,7 @@
         "stop_voice_message": "Stop recording",
         "voice_message_button": "Voice Message"
     },
-    "console_dev_note": "",
+    "console_dev_note": "This as a warning",
     "console_scam_warning": "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!",
     "console_wait": "Wait!",
     "create_room": {
