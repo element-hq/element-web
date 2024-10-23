@@ -7,14 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { cleanup, render, waitFor } from "jest-matrix-react";
-import { MockedObject, mocked } from "jest-mock";
+import { mocked, MockedObject } from "jest-mock";
 import React from "react";
-import { ClientRendezvousFailureReason, MSC4108SignInWithQR, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
-import { HTTPError } from "matrix-js-sdk/src/matrix";
+import {
+    ClientRendezvousFailureReason,
+    MSC4108FailureReason,
+    MSC4108SignInWithQR,
+    RendezvousError,
+} from "matrix-js-sdk/src/rendezvous";
+import { HTTPError, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import LoginWithQR from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 jest.mock("matrix-js-sdk/src/rendezvous");
 jest.mock("matrix-js-sdk/src/rendezvous/transports");
@@ -139,6 +143,27 @@ describe("<LoginWithQR />", () => {
                 }),
             );
             expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
+        });
+
+        test("handles errors during protocol negotiation", async () => {
+            render(getComponent({ client }));
+            jest.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
+            const err = new RendezvousError("Unknown Failure", MSC4108FailureReason.UnsupportedProtocol);
+            // @ts-ignore work-around for lazy mocks
+            err.code = MSC4108FailureReason.UnsupportedProtocol;
+            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockRejectedValue(err);
+            await waitFor(() =>
+                expect(mockedFlow).toHaveBeenLastCalledWith(
+                    expect.objectContaining({
+                        phase: Phase.ShowingQR,
+                    }),
+                ),
+            );
+
+            await waitFor(() => {
+                const rendezvous = mocked(MSC4108SignInWithQR).mock.instances[0];
+                expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UnsupportedProtocol);
+            });
         });
 
         test("handles errors during reciprocation", async () => {
