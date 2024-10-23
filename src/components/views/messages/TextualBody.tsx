@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
-import { createRoot } from "react-dom/client";
+import { createRoot, Root } from "react-dom/client";
 import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { globToRegexp } from "matrix-js-sdk/src/utils";
@@ -53,7 +53,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private pills: Element[] = [];
     private tooltips: Element[] = [];
-    private reactRoots: Element[] = [];
+    private reactRoots: Array<Element | Root> = [];
 
     private ref = createRef<HTMLDivElement>();
 
@@ -149,7 +149,11 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         unmountTooltips(this.tooltips);
 
         for (const root of this.reactRoots) {
-            ReactDOM.unmountComponentAtNode(root);
+            if (root instanceof Element) {
+                ReactDOM.unmountComponentAtNode(root);
+            } else {
+                setTimeout(() => root.unmount());
+            }
         }
 
         this.pills = [];
@@ -256,7 +260,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         {after}
                     </>
                 );
-                createRoot(container).render(newContent);
+                const containerRoot = createRoot(container);
+                containerRoot.render(newContent);
+                this.reactRoots.push(containerRoot);
 
                 node.parentNode?.replaceChild(container, node);
             } else if (node.childNodes && node.childNodes.length) {
