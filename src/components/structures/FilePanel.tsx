@@ -44,7 +44,10 @@ interface IProps {
 interface IState {
     timelineSet: EventTimelineSet | null;
     narrow: boolean;
-    isRoomEncrypted: boolean;
+    /**
+     * Whether the room is encrypted or not. If null, the state is still being determined.
+     */
+    isRoomEncrypted: boolean | null;
 }
 
 /*
@@ -63,7 +66,7 @@ class FilePanel extends React.Component<IProps, IState> {
     public state: IState = {
         timelineSet: null,
         narrow: false,
-        isRoomEncrypted: false,
+        isRoomEncrypted: null,
     };
 
     private onRoomTimeline = (
@@ -270,7 +273,8 @@ class FilePanel extends React.Component<IProps, IState> {
             />
         );
 
-        const isRoomEncrypted = this.noRoom ? false : this.state.isRoomEncrypted;
+        const isRoomEncryptedLoaded = this.state.isRoomEncrypted !== null;
+        const isRoomEncrypted = Boolean(this.noRoom ? false : this.state.isRoomEncrypted);
 
         if (this.state.timelineSet) {
             return (
@@ -291,7 +295,9 @@ class FilePanel extends React.Component<IProps, IState> {
                         {this.card.current && (
                             <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
                         )}
-                        <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                        {isRoomEncryptedLoaded && (
+                            <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                        )}
                         <TimelinePanel
                             manageReadReceipts={false}
                             manageReadMarkers={false}
