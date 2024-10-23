@@ -44,6 +44,7 @@ interface IProps {
 interface IState {
     timelineSet: EventTimelineSet | null;
     narrow: boolean;
+    isRoomEncrypted: boolean;
 }
 
 /*
@@ -62,6 +63,7 @@ class FilePanel extends React.Component<IProps, IState> {
     public state: IState = {
         timelineSet: null,
         narrow: false,
+        isRoomEncrypted: false,
     };
 
     private onRoomTimeline = (
@@ -113,7 +115,12 @@ class FilePanel extends React.Component<IProps, IState> {
 
         await this.updateTimelineSet(this.props.roomId);
 
-        if (!client.isRoomEncrypted(this.props.roomId)) return;
+        const isRoomEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(this.props.roomId));
+        this.setState({
+            isRoomEncrypted,
+        });
+
+        if (!isRoomEncrypted) return;
 
         // The timelineSets filter makes sure that encrypted events that contain
         // URLs never get added to the timeline, even if they are live events.
@@ -131,9 +138,7 @@ class FilePanel extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
-        if (client === null) return;
-
-        if (!client.isRoomEncrypted(this.props.roomId)) return;
+        if (client === null || !this.state.isRoomEncrypted) return;
 
         if (EventIndexPeg.get() !== null) {
             client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
@@ -173,7 +178,7 @@ class FilePanel extends React.Component<IProps, IState> {
         // the event index to fulfill the pagination request. Asking the server
         // to paginate won't ever work since the server can't correctly filter
         // out events containing URLs
-        if (room && client.isRoomEncrypted(roomId) && eventIndex !== null) {
+        if (room && this.state.isRoomEncrypted && eventIndex !== null) {
             return eventIndex.paginateTimelineWindow(room, timelineWindow, direction, limit);
         } else {
             return timelineWindow.paginate(direction, limit);
@@ -206,7 +211,7 @@ class FilePanel extends React.Component<IProps, IState> {
                 // event index to populate the timelineSet for us. This call
                 // will add 10 events to the live timeline of the set. More can
                 // be requested using pagination.
-                if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+                if (this.state.isRoomEncrypted && eventIndex !== null) {
                     const timeline = timelineSet.getLiveTimeline();
                     await eventIndex.populateFileTimeline(timelineSet, timeline, room, 10);
                 }
@@ -265,7 +270,7 @@ class FilePanel extends React.Component<IProps, IState> {
             />
         );
 
-        const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.safeGet().isRoomEncrypted(this.props.roomId);
+        const isRoomEncrypted = this.noRoom ? false : this.state.isRoomEncrypted;
 
         if (this.state.timelineSet) {
             return (
