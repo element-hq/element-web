@@ -117,15 +117,14 @@ class FilePanel extends React.Component<IProps, IState> {
 
     public async componentDidMount(): Promise<void> {
         const client = MatrixClientPeg.safeGet();
-
-        await this.updateTimelineSet(this.props.roomId);
-
         const isRoomEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(this.props.roomId));
         this.setState({
             isRoomEncrypted,
         });
 
-        if (!isRoomEncrypted) return;
+        await this.updateTimelineSet(this.props.roomId);
+
+        if (isRoomEncrypted) return;
 
         // The timelineSets filter makes sure that encrypted events that contain
         // URLs never get added to the timeline, even if they are live events.
