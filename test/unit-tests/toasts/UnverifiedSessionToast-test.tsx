@@ -11,7 +11,6 @@ import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
 import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../src/dispatcher/dispatcher";
@@ -25,7 +24,6 @@ describe("UnverifiedSessionToast", () => {
     const otherDevice: IMyDevice = {
         device_id: "ABC123",
     };
-    const otherDeviceInfo = new DeviceInfo(otherDevice.device_id);
     let client: Mocked<MatrixClient>;
     let renderResult: RenderResult;
 
@@ -39,13 +37,6 @@ describe("UnverifiedSessionToast", () => {
             }
 
             throw new Error(`Unknown device ${deviceId}`);
-        });
-        client.getStoredDevice.mockImplementation((userId: string, deviceId: string) => {
-            if (deviceId === otherDevice.device_id) {
-                return otherDeviceInfo;
-            }
-
-            return null;
         });
         client.getCrypto.mockReturnValue({
             getDeviceVerificationStatus: jest

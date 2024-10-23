@@ -46,7 +46,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1vw5h_26"
                         disabled=""
-                        id="radix-0"
+                        id="radix-:r0:"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -62,7 +62,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-0"
+                      for="radix-:r0:"
                     >
                       Light
                     </label>
@@ -80,7 +80,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1vw5h_26"
                         disabled=""
-                        id="radix-1"
+                        id="radix-:r1:"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -96,7 +96,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-1"
+                      for="radix-:r1:"
                     >
                       Dark
                     </label>
@@ -114,7 +114,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1vw5h_26"
                         disabled=""
-                        id="radix-2"
+                        id="radix-:r2:"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -130,7 +130,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-2"
+                      for="radix-:r2:"
                     >
                       High contrast
                     </label>
@@ -170,7 +170,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Modern"
                     class="_label_dgy0u_67"
-                    for="radix-3"
+                    for="radix-:r3:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -181,7 +181,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         <input
                           checked=""
                           class="_input_1vw5h_26"
-                          id="radix-3"
+                          id="radix-:r3:"
                           name="layout"
                           title=""
                           type="radio"
@@ -297,7 +297,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Message bubbles"
                     class="_label_dgy0u_67"
-                    for="radix-4"
+                    for="radix-:rc:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -307,7 +307,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1vw5h_26"
-                          id="radix-4"
+                          id="radix-:rc:"
                           name="layout"
                           title=""
                           type="radio"
@@ -423,7 +423,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="IRC (experimental)"
                     class="_label_dgy0u_67"
-                    for="radix-5"
+                    for="radix-:rl:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -433,7 +433,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1vw5h_26"
-                          id="radix-5"
+                          id="radix-:rl:"
                           name="layout"
                           title=""
                           type="radio"
@@ -557,9 +557,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="_container_qnvru_18"
                     >
                       <input
-                        aria-describedby="radix-6"
+                        aria-describedby="radix-:rv:"
                         class="_input_qnvru_32"
-                        id="radix-7"
+                        id="radix-:ru:"
                         name="compactLayout"
                         title=""
                         type="checkbox"
@@ -574,13 +574,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_dgy0u_67"
-                      for="radix-7"
+                      for="radix-:ru:"
                     >
                       Show compact text and messages
                     </label>
                     <span
                       class="_message_dgy0u_98 _help-message_dgy0u_104"
-                      id="radix-6"
+                      id="radix-:rv:"
                     >
                       Modern layout must be selected to use this feature.
                     </span>

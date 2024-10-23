@@ -30,7 +30,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           />
         </div>
         <button
-          aria-labelledby="floating-ui-1"
+          aria-labelledby=":r0:"
           class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
           data-testid="base-card-close-button"
           role="button"
@@ -153,9 +153,18 @@ exports[`AppTile for a pinned widget should render 1`] = `
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_12"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 11.034a.996.996 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 1 0 0-2h-5.586L22 3.446a1 1 0 0 0-1.414-1.415L14 8.617V3.031a1 1 0 1 0-2 0v8.003Zm0 1.963a.997.997 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 11 12H3a1 1 0 0 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 1 0 2 0v-8.003Z"
+            />
+          </svg>
         </div>
         <div
           aria-label="Minimise"
@@ -163,9 +172,18 @@ exports[`AppTile for a pinned widget should render 1`] = `
           role="button"
           tabindex="0"
         >
-          <div
-            class="mx_Icon mx_Icon_12"
-          />
+          <svg
+            class="mx_Icon mx_Icon_16"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+            />
+          </svg>
         </div>
         <div
           aria-expanded="false"
@@ -247,9 +265,18 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           role="button"
           tabindex="0"
         >
-          <div
+          <svg
             class="mx_Icon mx_Icon_12"
-          />
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 11.034a.996.996 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 1 0 0-2h-5.586L22 3.446a1 1 0 0 0-1.414-1.415L14 8.617V3.031a1 1 0 1 0-2 0v8.003Zm0 1.963a.997.997 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 11 12H3a1 1 0 0 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 1 0 2 0v-8.003Z"
+            />
+          </svg>
         </div>
         <div
           aria-label="Minimise"
@@ -257,9 +284,18 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           role="button"
           tabindex="0"
         >
-          <div
-            class="mx_Icon mx_Icon_12"
-          />
+          <svg
+            class="mx_Icon mx_Icon_16"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+            />
+          </svg>
         </div>
         <div
           aria-expanded="false"
@@ -320,8 +356,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="floating-ui-87"
-                aria-labelledby="floating-ui-86"
+                aria-describedby=":r2n:"
+                aria-labelledby=":r2m:"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
@@ -420,9 +456,18 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 role="button"
                 tabindex="0"
               >
-                <div
+                <svg
                   class="mx_Icon mx_Icon_12"
-                />
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 3.997a.996.996 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a.997.997 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0V3.997Z"
+                  />
+                </svg>
               </div>
               <div
                 aria-label="Minimise"
@@ -430,9 +475,18 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 role="button"
                 tabindex="0"
               >
-                <div
-                  class="mx_Icon mx_Icon_12"
-                />
+                <svg
+                  class="mx_Icon mx_Icon_16"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+                  />
+                </svg>
               </div>
               <div
                 aria-expanded="false"
