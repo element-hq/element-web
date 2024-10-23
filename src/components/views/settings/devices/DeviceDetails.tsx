@@ -111,11 +111,7 @@ const DeviceDetails: React.FC<Props> = ({
         <div className={classNames("mx_DeviceDetails", className)} data-testid={`device-detail-${device.device_id}`}>
             <section className="mx_DeviceDetails_section">
                 <DeviceDetailHeading device={device} saveDeviceName={saveDeviceName} />
-                <DeviceVerificationStatusCard
-                    device={device}
-                    onVerifyDevice={onVerifyDevice}
-                    isCurrentDevice={isCurrentDevice}
-                />
+                <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyDevice} isCurrentDevice />
             </section>
             <section className="mx_DeviceDetails_section">
                 <p className="mx_DeviceDetails_sectionHeading">{_t("settings|sessions|details_heading")}</p>
