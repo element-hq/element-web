@@ -269,6 +269,7 @@ export function createTestClient(): MatrixClient {
         getAuthIssuer: jest.fn(),
         getOrCreateFilter: jest.fn(),
         sendStickerMessage: jest.fn(),
+        getLocalAliases: jest.fn().mockReturnValue([]),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

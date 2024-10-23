@@ -78,14 +78,18 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 HistoryVisibility.Shared,
             ),
             hasAliases: false, // async loaded in componentDidMount
-            encrypted: context.isRoomEncrypted(this.props.room.roomId),
+            encrypted: false, // async loaded in componentDidMount
             showAdvancedSection: false,
         };
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         this.context.on(RoomStateEvent.Events, this.onStateEvent);
-        this.hasAliases().then((hasAliases) => this.setState({ hasAliases }));
+
+        this.setState({
+            hasAliases: await this.hasAliases(),
+            encrypted: Boolean(await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)),
+        });
     }
 
     private pullContentPropertyFromEvent<T>(event: MatrixEvent | null | undefined, key: string, defaultValue: T): T {
