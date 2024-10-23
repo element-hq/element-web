@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, screen, waitFor } from "jest-matrix-react";
+import { render, screen, waitFor, cleanup } from "jest-matrix-react";
 import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -47,55 +47,12 @@ describe("AddRemoveThreepids", () => {
     afterEach(() => {
         jest.restoreAllMocks();
         clearAllModals();
+        cleanup();
     });
 
     const clientProviderWrapper: React.FC = ({ children }: React.PropsWithChildren) => (
         <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
     );
-
-    it("should render a loader while loading", async () => {
-        render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[]}
-                isLoading={true}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
-    });
-
-    it("should render email addresses", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[EMAIL1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
-        expect(container).toMatchSnapshot();
-    });
-
-    it("should render phone numbers", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Phone}
-                threepids={[PHONE1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
-        expect(container).toMatchSnapshot();
-    });
 
     it("should handle no email addresses", async () => {
         const { container } = render(
@@ -483,5 +440,49 @@ describe("AddRemoveThreepids", () => {
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);
         expect(onChangeFn).toHaveBeenCalled();
+    });
+
+    it("should render a loader while loading", async () => {
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[]}
+                isLoading={true}
+                onChange={() => {}}
+            />,
+        );
+
+        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
+    });
+
+    it("should render email addresses", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[EMAIL1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should render phone numbers", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Phone}
+                threepids={[PHONE1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
     });
 });

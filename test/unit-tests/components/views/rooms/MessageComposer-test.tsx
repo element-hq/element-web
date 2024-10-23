@@ -93,6 +93,45 @@ describe("MessageComposer", () => {
         });
     });
 
+    it("wysiwyg correctly persists state to and from localStorage", async () => {
+        const room = mkStubRoom("!roomId:server", "Room 1", cli);
+        const messageText = "Test Text";
+        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+        const { renderResult, rawComponent } = wrapAndRender({ room });
+        const { unmount } = renderResult;
+
+        await flushPromises();
+
+        const key = `mx_wysiwyg_state_${room.roomId}`;
+
+        await userEvent.click(screen.getByRole("textbox"));
+        fireEvent.input(screen.getByRole("textbox"), {
+            data: messageText,
+            inputType: "insertText",
+        });
+
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+
+        // Wait for event dispatch to happen
+        await flushPromises();
+
+        // assert there is state persisted
+        expect(localStorage.getItem(key)).toBeNull();
+
+        // ensure the right state was persisted to localStorage
+        unmount();
+
+        // assert the persisted state
+        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
+            content: messageText,
+            isRichText: true,
+        });
+
+        // ensure the correct state is re-loaded
+        render(rawComponent);
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+    }, 10000);
+
     describe("for a Room", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
 
@@ -439,45 +478,6 @@ describe("MessageComposer", () => {
             expect(screen.queryByLabelText("Sticker")).not.toBeInTheDocument();
         });
     });
-
-    it("wysiwyg correctly persists state to and from localStorage", async () => {
-        const room = mkStubRoom("!roomId:server", "Room 1", cli);
-        const messageText = "Test Text";
-        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
-        const { renderResult, rawComponent } = wrapAndRender({ room });
-        const { unmount } = renderResult;
-
-        await flushPromises();
-
-        const key = `mx_wysiwyg_state_${room.roomId}`;
-
-        await userEvent.click(screen.getByRole("textbox"));
-        fireEvent.input(screen.getByRole("textbox"), {
-            data: messageText,
-            inputType: "insertText",
-        });
-
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-
-        // Wait for event dispatch to happen
-        await flushPromises();
-
-        // assert there is state persisted
-        expect(localStorage.getItem(key)).toBeNull();
-
-        // ensure the right state was persisted to localStorage
-        unmount();
-
-        // assert the persisted state
-        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
-            content: messageText,
-            isRichText: true,
-        });
-
-        // ensure the correct state is re-loaded
-        render(rawComponent);
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-    }, 10000);
 });
 
 function wrapAndRender(

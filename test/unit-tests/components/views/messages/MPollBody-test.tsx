@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, waitForElementToBeRemoved } from "jest-matrix-react";
+import { act, fireEvent, render, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import {
     MatrixEvent,
     Relations,
@@ -596,11 +596,13 @@ describe("MPollBody", () => {
         ];
         const renderResult = await newMPollBody(votes, ends);
 
-        expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
-        expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
-        expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
-        expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes");
+        await waitFor(() => {
+            expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
+            expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
+            expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
+            expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
+            expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes");
+        });
     });
 
     it("ignores votes that arrived after the first end poll event", async () => {

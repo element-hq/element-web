@@ -893,7 +893,8 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("deletes a device when interactive auth is not required", async () => {
-                mockClient.deleteMultipleDevices.mockResolvedValue({});
+                const deferredDeleteMultipleDevices = defer<{}>();
+                mockClient.deleteMultipleDevices.mockReturnValue(deferredDeleteMultipleDevices.promise);
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
@@ -918,6 +919,7 @@ describe("<SessionManagerTab />", () => {
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
                 await prom;
+                deferredDeleteMultipleDevices.resolve({});
 
                 // delete called
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(

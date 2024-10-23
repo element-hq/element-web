@@ -105,6 +105,7 @@ export default class PersistedElement extends React.Component<IProps> {
             pair[0].unmount();
             pair[1].remove();
         }
+        delete PersistedElement.rootMap[persistKey];
     }
 
     public static isMounted(persistKey: string): boolean {
