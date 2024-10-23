@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
     CryptoEvent,
     EventType,
@@ -21,7 +21,8 @@ import { Button, Separator } from "@vector-im/compound-web";
 import type { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface UserIdentityWarningProps {
     /**
@@ -50,7 +51,7 @@ async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<boo
  * button to acknowledge the change.
  */
 export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }) => {
-    const cli = MatrixClientPeg.safeGet();
+    const cli = useMatrixClientContext();
     const crypto = cli.getCrypto();
 
     // The current room member that we are prompting the user to approve.
@@ -76,85 +77,103 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // with the newer value, so it will fix itself in the end.
     const gotVerificationStatusUpdateRef = useRef<Map<string, boolean>>(new Map());
 
-    useEffect(() => {
-        if (!crypto) return;
-
+    // Select a new user to display a warning for.  This is called after the
+    // current prompted user no longer needs their identity approved.
+    const selectCurrentPrompt = useCallback((): void => {
         const membersNeedingApproval = membersNeedingApprovalRef.current;
-        const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
-
-        /**
-         * Select a new user to display a warning for.  This is called after the
-         * current prompted user no longer needs their identity approved.
-         */
-        function selectCurrentPrompt(): void {
-            if (membersNeedingApproval.size === 0) {
-                setCurrentPrompt(undefined);
-                return;
-            }
-
-            // We return the user with the smallest user ID.
-            const keys = Array.from(membersNeedingApproval.keys()).sort((a, b) => a.localeCompare(b));
-            setCurrentPrompt(membersNeedingApproval.get(keys[0]!));
+        if (membersNeedingApproval.size === 0) {
+            setCurrentPrompt(undefined);
+            return;
         }
 
-        function addMemberNeedingApproval(userId: string): void {
+        // We return the user with the smallest user ID.
+        const keys = Array.from(membersNeedingApproval.keys()).sort((a, b) => a.localeCompare(b));
+        setCurrentPrompt(membersNeedingApproval.get(keys[0]!));
+    }, [membersNeedingApprovalRef]);
+
+    // Add a user to the membersNeedingApproval map, and update the current
+    // prompt if necessary.
+    const addMemberNeedingApproval = useCallback(
+        (userId: string): void => {
             if (userId === cli.getUserId()) {
                 // We always skip our own user, because we can't pin our own identity.
                 return;
             }
             const member = room.getMember(userId);
             if (member) {
-                membersNeedingApproval.set(userId, member);
+                membersNeedingApprovalRef.current.set(userId, member);
                 if (!currentPrompt) {
                     // If we're not currently displaying a prompt, then we should
                     // display a prompt for this user.
                     selectCurrentPrompt();
                 }
             }
-        }
+        },
+        [cli, room, membersNeedingApprovalRef, currentPrompt, selectCurrentPrompt],
+    );
 
-        function removeMemberNeedingApproval(userId: string): void {
-            membersNeedingApproval.delete(userId);
+    // Add a user from the membersNeedingApproval map, and update the current
+    // prompt if necessary.
+    const removeMemberNeedingApproval = useCallback(
+        (userId: string): void => {
+            membersNeedingApprovalRef.current.delete(userId);
 
             // If we removed the currently displayed user, we need to pick a new one
             // to display.
             if (currentPrompt?.userId === userId) {
                 selectCurrentPrompt();
             }
+        },
+        [membersNeedingApprovalRef, currentPrompt, selectCurrentPrompt],
+    );
+
+    // Initialise the component.  Get the room members, check which ones need
+    // their identity approved, and pick one to display.
+    const loadMembers = useCallback(async (): Promise<void> => {
+        if (!crypto || initialisedRef.current) {
+            return;
+        }
+        initialisedRef.current = true;
+
+        const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
+        const membersNeedingApproval = membersNeedingApprovalRef.current;
+
+        const members = await room.getEncryptionTargetMembers();
+
+        for (const member of members) {
+            const userId = member.userId;
+            if (gotVerificationStatusUpdate.has(userId)) {
+                // We're already checking their verification status, so we don't
+                // need to do anything here.
+                continue;
+            }
+            gotVerificationStatusUpdate.set(userId, false);
+            if (await userNeedsApproval(crypto, userId)) {
+                if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
+                    membersNeedingApproval.set(userId, member);
+                }
+            }
+            gotVerificationStatusUpdate.delete(userId);
         }
 
-        /**
-         * Initialise the component.  Get the room members, check which ones need
-         * their identity approved, and pick one to display.
-         */
-        async function initialise(): Promise<void> {
-            if (initialisedRef.current) {
-                return;
-            }
-            initialisedRef.current = true;
+        selectCurrentPrompt();
+    }, [crypto, room, initialisedRef, gotVerificationStatusUpdateRef, membersNeedingApprovalRef, selectCurrentPrompt]);
 
-            const members = await room.getEncryptionTargetMembers();
+    // If the room has encryption enabled, we load the room members right away.
+    // If not, we wait until encryption is enabled before loading the room
+    // members, since we don't need to display anything in unencrypted rooms.
+    if (crypto && room.hasEncryptionStateEvent()) {
+        loadMembers().catch((e) => {
+            logger.error("Error initialising UserIdentityWarning:", e);
+        });
+    }
 
-            for (const member of members) {
-                const userId = member.userId;
-                if (gotVerificationStatusUpdate.has(userId)) {
-                    // We're already checking their verification status, so we don't
-                    // need to do anything here.
-                    continue;
-                }
-                gotVerificationStatusUpdate.set(userId, false);
-                if (await userNeedsApproval(crypto!, userId)) {
-                    if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
-                        membersNeedingApproval.set(userId, member);
-                    }
-                }
-                gotVerificationStatusUpdate.delete(userId);
-            }
+    // When a user's verification status changes, we check if they need to be
+    // added/removed from the set of members needing approval.
+    const onUserVerificationStatusChanged = useCallback(
+        (userId: string, verificationStatus: UserVerificationStatus): void => {
+            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
 
-            selectCurrentPrompt();
-        }
-
-        const onUserTrustStatusChanged = (userId: string, verificationStatus: UserVerificationStatus): void => {
             if (!initialisedRef.current) {
                 return;
             }
@@ -168,17 +187,27 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             } else {
                 removeMemberNeedingApproval(userId);
             }
-        };
+        },
+        [initialisedRef, gotVerificationStatusUpdateRef, addMemberNeedingApproval, removeMemberNeedingApproval],
+    );
+    useTypedEventEmitter(cli, CryptoEvent.UserTrustStatusChanged, onUserVerificationStatusChanged);
 
-        const onRoomStateEvent = async (event: MatrixEvent): Promise<void> => {
-            if (event.getRoomId() !== room.roomId) {
+    // We watch for encryption events (since we only display warnings in
+    // encrypted rooms), and for membership changes (since we only display
+    // warnings for users in the room).
+    const onRoomStateEvent = useCallback(
+        async (event: MatrixEvent): Promise<void> => {
+            if (!crypto || event.getRoomId() !== room.roomId) {
                 return;
             }
+
+            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
+            const membersNeedingApproval = membersNeedingApprovalRef.current;
 
             const eventType = event.getType();
             if (eventType === EventType.RoomEncryption && event.getStateKey() === "") {
                 // Room is now encrypted, so we can initialise the component.
-                return initialise().catch((e) => {
+                return loadMembers().catch((e) => {
                     logger.error("Error initialising UserIdentityWarning:", e);
                 });
             } else if (eventType !== EventType.RoomMember) {
@@ -205,8 +234,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                     return;
                 }
                 gotVerificationStatusUpdate.set(userId, false);
-                const crypto = MatrixClientPeg.safeGet().getCrypto()!;
-                if (await userNeedsApproval(crypto!, userId)) {
+                if (await userNeedsApproval(crypto, userId)) {
                     if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
                         addMemberNeedingApproval(userId);
                     }
@@ -217,67 +245,65 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 // If we're showing a warning about them, we don't need to any more.
                 removeMemberNeedingApproval(userId);
             }
-        };
+        },
+        [
+            crypto,
+            room,
+            gotVerificationStatusUpdateRef,
+            membersNeedingApprovalRef,
+            addMemberNeedingApproval,
+            removeMemberNeedingApproval,
+            loadMembers,
+        ],
+    );
+    useTypedEventEmitter(cli, RoomStateEvent.Events, onRoomStateEvent);
 
-        cli.on(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
-        cli.on(RoomStateEvent.Events, onRoomStateEvent);
+    if (!crypto || !currentPrompt) return null;
 
-        if (room.hasEncryptionStateEvent()) {
-            initialise().catch((e) => {
-                logger.error("Error initialising UserIdentityWarning:", e);
-            });
-        }
+    const confirmIdentity = async (): Promise<void> => {
+        await crypto.pinCurrentUserIdentity(currentPrompt.userId);
+    };
 
-        return () => {
-            cli.removeListener(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
-            cli.removeListener(RoomStateEvent.Events, onRoomStateEvent);
-        };
-    }, [currentPrompt, room, cli, crypto]);
-
-    if (!crypto) return null;
-
-    if (currentPrompt) {
-        const confirmIdentity = async (): Promise<void> => {
-            await crypto.pinCurrentUserIdentity(currentPrompt.userId);
-        };
-
-        const substituteATag = (sub: string): React.ReactNode => (
-            <a href="https://element.io/help#encryption18" target="_blank" rel="noreferrer noopener">
-                {sub}
-            </a>
-        );
-        const substituteBTag = (sub: string): React.ReactNode => <b>{sub}</b>;
-        return (
-            <div className="mx_UserIdentityWarning">
-                <Separator />
-                <div className="mx_UserIdentityWarning_row">
-                    <MemberAvatar member={currentPrompt} title={currentPrompt.userId} size="30px" />
-                    <span className="mx_UserIdentityWarning_main">
-                        {currentPrompt.rawDisplayName === currentPrompt.userId
-                            ? _t(
-                                  "encryption|pinned_identity_changed_no_displayname",
-                                  { userId: currentPrompt.userId },
-                                  {
-                                      a: substituteATag,
-                                      b: substituteBTag,
-                                  },
-                              )
-                            : _t(
-                                  "encryption|pinned_identity_changed",
-                                  { displayName: currentPrompt.rawDisplayName, userId: currentPrompt.userId },
-                                  {
-                                      a: substituteATag,
-                                      b: substituteBTag,
-                                  },
-                              )}
-                    </span>
-                    <Button kind="primary" size="sm" onClick={confirmIdentity}>
-                        {_t("action|ok")}
-                    </Button>
-                </div>
+    return (
+        <div className="mx_UserIdentityWarning">
+            <Separator />
+            <div className="mx_UserIdentityWarning_row">
+                <MemberAvatar member={currentPrompt} title={currentPrompt.userId} size="30px" />
+                <span className="mx_UserIdentityWarning_main">
+                    {currentPrompt.rawDisplayName === currentPrompt.userId
+                        ? _t(
+                              "encryption|pinned_identity_changed_no_displayname",
+                              { userId: currentPrompt.userId },
+                              {
+                                  a: substituteATag,
+                                  b: substituteBTag,
+                              },
+                          )
+                        : _t(
+                              "encryption|pinned_identity_changed",
+                              { displayName: currentPrompt.rawDisplayName, userId: currentPrompt.userId },
+                              {
+                                  a: substituteATag,
+                                  b: substituteBTag,
+                              },
+                          )}
+                </span>
+                <Button kind="primary" size="sm" onClick={confirmIdentity}>
+                    {_t("action|ok")}
+                </Button>
             </div>
-        );
-    } else {
-        return null;
-    }
+        </div>
+    );
 };
+
+function substituteATag(sub: string): React.ReactNode {
+    return (
+        <a href="https://element.io/help#encryption18" target="_blank" rel="noreferrer noopener">
+            {sub}
+        </a>
+    );
+}
+
+function substituteBTag(sub: string): React.ReactNode {
+    return <b>{sub}</b>;
+}
