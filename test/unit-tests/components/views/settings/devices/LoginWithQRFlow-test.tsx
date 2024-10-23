@@ -8,11 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { cleanup, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
-import {
-    ClientRendezvousFailureReason,
-    LegacyRendezvousFailureReason,
-    MSC4108FailureReason,
-} from "matrix-js-sdk/src/rendezvous";
+import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
 
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
 import { LoginWithQRFailureReason, FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
@@ -29,8 +25,7 @@ describe("<LoginWithQRFlow />", () => {
         phase: Phase;
         onClick?: () => Promise<void>;
         failureReason?: FailureReason;
-        code?: string;
-        confirmationDigits?: string;
+        code?: Uint8Array;
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
     beforeEach(() => {});
@@ -54,22 +49,12 @@ describe("<LoginWithQRFlow />", () => {
     });
 
     it("renders QR code", async () => {
-        const { container } = render(getComponent({ phase: Phase.ShowingQR, code: "mock-code" }));
+        const { container } = render(
+            getComponent({ phase: Phase.ShowingQR, code: new TextEncoder().encode("mock-code") }),
+        );
         // QR code is rendered async so we wait for it:
         await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
         expect(container).toMatchSnapshot();
-    });
-
-    it("renders code when connected", async () => {
-        const { container } = render(getComponent({ phase: Phase.LegacyConnected, confirmationDigits: "mock-digits" }));
-        expect(screen.getAllByText("mock-digits")).toHaveLength(1);
-        expect(screen.getAllByTestId("decline-login-button")).toHaveLength(1);
-        expect(screen.getAllByTestId("approve-login-button")).toHaveLength(1);
-        expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId("decline-login-button"));
-        expect(onClick).toHaveBeenCalledWith(Click.Decline, undefined);
-        fireEvent.click(screen.getByTestId("approve-login-button"));
-        expect(onClick).toHaveBeenCalledWith(Click.Approve, undefined);
     });
 
     it("renders spinner while signing in", async () => {
@@ -92,7 +77,6 @@ describe("<LoginWithQRFlow />", () => {
 
     describe("errors", () => {
         for (const failureReason of [
-            ...Object.values(LegacyRendezvousFailureReason),
             ...Object.values(MSC4108FailureReason),
             ...Object.values(LoginWithQRFailureReason),
             ...Object.values(ClientRendezvousFailureReason),
