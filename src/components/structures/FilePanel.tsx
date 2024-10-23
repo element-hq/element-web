@@ -62,6 +62,8 @@ class FilePanel extends React.Component<IProps, IState> {
     private decryptingEvents = new Set<string>();
     public noRoom = false;
     private card = createRef<HTMLDivElement>();
+    // This is used to track if the component is unmounting to avoid adding dangling listeners
+    private isUnloading = false;
 
     public state: IState = {
         timelineSet: null,
@@ -133,13 +135,16 @@ class FilePanel extends React.Component<IProps, IState> {
         // We do this only for encrypted rooms and if an event index exists,
         // this could be made more general in the future or the filter logic
         // could be fixed.
-        if (EventIndexPeg.get() !== null) {
+        //
+        // `componentDidMount` is async and we need to be sure to not put this listener when the component is unmount before the mounting is done.
+        if (EventIndexPeg.get() !== null && this.isUnloading) {
             client.on(RoomEvent.Timeline, this.onRoomTimeline);
             client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
     }
 
     public componentWillUnmount(): void {
+        this.isUnloading = true;
         const client = MatrixClientPeg.get();
         if (client === null || !this.state.isRoomEncrypted) return;
 
