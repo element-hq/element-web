@@ -296,18 +296,20 @@ class FilePanel extends React.Component<IProps, IState> {
                             <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
                         )}
                         {isRoomEncryptedLoaded && (
-                            <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                            <>
+                                <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                                <TimelinePanel
+                                    manageReadReceipts={false}
+                                    manageReadMarkers={false}
+                                    timelineSet={this.state.timelineSet}
+                                    showUrlPreview={false}
+                                    onPaginationRequest={this.onPaginationRequest}
+                                    resizeNotifier={this.props.resizeNotifier}
+                                    empty={emptyState}
+                                    layout={Layout.Group}
+                                />
+                            </>
                         )}
-                        <TimelinePanel
-                            manageReadReceipts={false}
-                            manageReadMarkers={false}
-                            timelineSet={this.state.timelineSet}
-                            showUrlPreview={false}
-                            onPaginationRequest={this.onPaginationRequest}
-                            resizeNotifier={this.props.resizeNotifier}
-                            empty={emptyState}
-                            layout={Layout.Group}
-                        />
                     </BaseCard>
                 </RoomContext.Provider>
             );
