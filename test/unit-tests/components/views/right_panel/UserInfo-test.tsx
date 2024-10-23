@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, cleanup, act, within } from "jest-matrix-react";
+import { fireEvent, render, screen, cleanup, act, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
@@ -461,7 +461,7 @@ describe("<UserInfo />", () => {
             });
             await flushPromises();
 
-            await waitFor(() => expect(screen.getByRole("button", { name: "Verify" })).toBeInTheDocument());
+            await expect(screen.findByRole("button", { name: "Verify" })).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
 
@@ -653,7 +653,7 @@ describe("<UserInfo />", () => {
                 room: mockRoom,
             });
 
-            await waitFor(() => expect(screen.getByRole("button", { name: "Deactivate user" })).toBeInTheDocument());
+            await expect(screen.findByRole("button", { name: "Deactivate user" })).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
         });
     });
@@ -1033,9 +1033,7 @@ describe("<UserOptionsSection />", () => {
         expect(inviteSpy).toHaveBeenCalledWith([member.userId]);
 
         // check that the test error message is displayed
-        await waitFor(() => {
-            expect(screen.getByText(mockErrorMessage.message)).toBeInTheDocument();
-        });
+        await expect(screen.findByText(mockErrorMessage.message)).resolves.toBeInTheDocument();
     });
 
     it("if calling .invite throws something strange, show default error message", async () => {
@@ -1048,9 +1046,7 @@ describe("<UserOptionsSection />", () => {
         await userEvent.click(inviteButton);
 
         // check that the default test error message is displayed
-        await waitFor(() => {
-            expect(screen.getByText(/operation failed/i)).toBeInTheDocument();
-        });
+        await expect(screen.findByText(/operation failed/i)).resolves.toBeInTheDocument();
     });
 
     it.each([

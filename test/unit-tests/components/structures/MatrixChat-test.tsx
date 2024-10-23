@@ -162,7 +162,7 @@ describe("<MatrixChat />", () => {
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />);
+        render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
 
     // make test results readable
     filterConsole(
@@ -1527,12 +1527,14 @@ describe("<MatrixChat />", () => {
             jest.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
 
             getComponent({});
-            defaultDispatcher.dispatch({
-                action: "will_start_client",
-            });
+            act(() =>
+                defaultDispatcher.dispatch({
+                    action: "will_start_client",
+                }),
+            );
             await flushPromises();
-            mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
+            await act(() => mockClient.emit(CryptoEvent.KeyBackupFailed, "error code"));
+            await expect(screen.findByText("mocked dialog")).resolves.toBeInTheDocument();
         });
     });
 });
