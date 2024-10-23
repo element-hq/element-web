@@ -124,7 +124,7 @@ class FilePanel extends React.Component<IProps, IState> {
 
         await this.updateTimelineSet(this.props.roomId);
 
-        if (isRoomEncrypted) return;
+        if (!isRoomEncrypted) return;
 
         // The timelineSets filter makes sure that encrypted events that contain
         // URLs never get added to the timeline, even if they are live events.
