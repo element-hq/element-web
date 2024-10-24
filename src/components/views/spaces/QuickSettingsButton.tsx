@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import { EllipsisIcon, MembersIcon, FavoriteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -22,8 +22,6 @@ import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import { Icon as PinUprightIcon } from "../../../../res/img/element-icons/room/pin-upright.svg";
-import { Icon as MembersIcon } from "../../../../res/img/element-icons/room/members.svg";
-import { Icon as FavoriteIcon } from "../../../../res/img/element-icons/roomlist/favorite.svg";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
