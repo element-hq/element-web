@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
-    CryptoEvent,
     EventType,
     MatrixClient,
     MatrixEvent,
@@ -17,8 +16,9 @@ import {
     RoomStateEvent,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { act, render, screen, waitFor } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
 
 import { stubClient } from "../../../../test-utils";
 import { UserIdentityWarning } from "../../../../../src/components/views/rooms/UserIdentityWarning";
@@ -52,7 +52,11 @@ function dummyRoomState(): RoomState {
     return new RoomState(ROOM_ID);
 }
 
-// Get the warning element, given the warning text (excluding the "Learn more" link).
+/**
+ * Get the warning element, given the warning text (excluding the "Learn more"
+ * link).  This is needed because the warning text contains a `<b>` tag, so the
+ * normal `getByText` doesn't work.
+ */
 function getWarningByText(text: string): Element {
     return screen.getByText((content?: string, element?: Element | null): boolean => {
         return (
@@ -60,6 +64,12 @@ function getWarningByText(text: string): Element {
             element.classList.contains("mx_UserIdentityWarning_main") &&
             element.textContent === text + " Learn more"
         );
+    });
+}
+
+function renderComponent(client: MatrixClient, room: Room) {
+    return render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
+        wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
     });
 }
 
@@ -80,24 +90,22 @@ describe("UserIdentityWarning", () => {
     // member whose identity needs accepting, we should display a warning.  When
     // the "OK" button gets pressed, it should call `pinCurrentUserIdentity`.
     it("displays a warning when a user's identity needs approval", async () => {
-        room.getEncryptionTargetMembers = jest.fn(async () => {
-            return [mockRoomMember("@alice:example.org", "Alice")];
-        });
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+        ]);
         const crypto = client.getCrypto()!;
-        crypto["getUserVerificationStatus"] = jest.fn(async () => {
-            return Promise.resolve(new UserVerificationStatus(false, false, false, true));
-        });
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false, true),
+        );
         crypto.pinCurrentUserIdentity = jest.fn();
-        const { container } = render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-        });
+        renderComponent(client, room);
 
         await waitFor(() =>
             expect(
                 getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
             ).toBeInTheDocument(),
         );
-        fireEvent.click(container.querySelector("[role=button]")!);
+        await userEvent.click(screen.getByRole("button")!);
         await waitFor(() => expect(crypto.pinCurrentUserIdentity).toHaveBeenCalledWith("@alice:example.org"));
     });
 
@@ -105,19 +113,17 @@ describe("UserIdentityWarning", () => {
     // enabled, then we should display a warning if there are any users whose
     // identity need accepting.
     it("displays pending warnings when encryption is enabled", async () => {
-        room.getEncryptionTargetMembers = jest.fn(async () => {
-            return [mockRoomMember("@alice:example.org", "Alice")];
-        });
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+        ]);
         // Start the room off unencrypted.  We shouldn't display anything.
-        room.hasEncryptionStateEvent = jest.fn(() => false);
+        jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
         const crypto = client.getCrypto()!;
-        crypto["getUserVerificationStatus"] = jest.fn(async () => {
-            return Promise.resolve(new UserVerificationStatus(false, false, false, true));
-        });
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false, true),
+        );
 
-        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-        });
+        renderComponent(client, room);
         await sleep(10); // give it some time to finish initialising
         expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
 
@@ -148,17 +154,15 @@ describe("UserIdentityWarning", () => {
     // When a user's identity needs approval, or has been approved, the display
     // should update appropriately.
     it("updates the display when identity changes", async () => {
-        room.getEncryptionTargetMembers = jest.fn(async () => {
-            return [mockRoomMember("@alice:example.org", "Alice")];
-        });
-        room.getMember = jest.fn(() => mockRoomMember("@alice:example.org", "Alice"));
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+        ]);
+        jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
         const crypto = client.getCrypto()!;
-        crypto["getUserVerificationStatus"] = jest.fn(async () => {
-            return Promise.resolve(new UserVerificationStatus(false, false, false, false));
-        });
-        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-        });
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false, false),
+        );
+        renderComponent(client, room);
         await sleep(10); // give it some time to finish initialising
         expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
 
@@ -194,17 +198,13 @@ describe("UserIdentityWarning", () => {
     // joins/leaves, we should update the warning appropriately.
     it("updates the display when a member joins/leaves", async () => {
         // Nobody in the room yet
-        room.getEncryptionTargetMembers = jest.fn(async () => {
-            return [];
-        });
-        room.getMember = jest.fn(() => mockRoomMember("@alice:example.org", "Alice"));
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+        jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
         const crypto = client.getCrypto()!;
-        crypto["getUserVerificationStatus"] = jest.fn(async () => {
-            return Promise.resolve(new UserVerificationStatus(false, false, false, true));
-        });
-        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-        });
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false, true),
+        );
+        renderComponent(client, room);
         await sleep(10); // give it some time to finish initialising
 
         // Alice joins.  Her identity needs approval, so we should show a warning.
@@ -253,20 +253,19 @@ describe("UserIdentityWarning", () => {
     });
 
     // When we have multiple users whose identity needs approval, one user's
-    // identity no longer reeds approval (e.g. their identity was approved),
+    // identity no longer needs approval (e.g. their identity was approved),
     // then we show the next one.
     it("displays the next user when the current user's identity is approved", async () => {
-        room.getEncryptionTargetMembers = jest.fn(async () => {
-            return [mockRoomMember("@alice:example.org", "Alice"), mockRoomMember("@bob:example.org")];
-        });
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+            mockRoomMember("@bob:example.org"),
+        ]);
         const crypto = client.getCrypto()!;
-        crypto["getUserVerificationStatus"] = jest.fn(async () => {
-            return Promise.resolve(new UserVerificationStatus(false, false, false, true));
-        });
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false, true),
+        );
 
-        render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-            wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-        });
+        renderComponent(client, room);
         // We should warn about Alice's identity first.
         await waitFor(() =>
             expect(
@@ -295,22 +294,22 @@ describe("UserIdentityWarning", () => {
         // First case: check that if the update says that the user identity
         // needs approval, but the fetch says it doesn't, we show the warning.
         it("update says identity needs approval", async () => {
-            room.getEncryptionTargetMembers = jest.fn(async () => {
-                return [mockRoomMember("@alice:example.org", "Alice")];
-            });
-            room.getMember = jest.fn(() => mockRoomMember("@alice:example.org", "Alice"));
+            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+                mockRoomMember("@alice:example.org", "Alice"),
+            ]);
+            jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
             const crypto = client.getCrypto()!;
-            crypto["getUserVerificationStatus"] = jest.fn(async () => {
-                client.emit(
-                    CryptoEvent.UserTrustStatusChanged,
-                    "@alice:example.org",
-                    new UserVerificationStatus(false, false, false, true),
-                );
+            jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async () => {
+                act(() => {
+                    client.emit(
+                        CryptoEvent.UserTrustStatusChanged,
+                        "@alice:example.org",
+                        new UserVerificationStatus(false, false, false, true),
+                    );
+                });
                 return Promise.resolve(new UserVerificationStatus(false, false, false, false));
             });
-            render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-                wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-            });
+            renderComponent(client, room);
             await sleep(10); // give it some time to finish initialising
             await waitFor(() =>
                 expect(
@@ -323,22 +322,22 @@ describe("UserIdentityWarning", () => {
         // doesn't needs approval, but the fetch says it does, we don't show the
         // warning.
         it("update says identity doesn't need approval", async () => {
-            room.getEncryptionTargetMembers = jest.fn(async () => {
-                return [mockRoomMember("@alice:example.org", "Alice")];
-            });
-            room.getMember = jest.fn(() => mockRoomMember("@alice:example.org", "Alice"));
+            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+                mockRoomMember("@alice:example.org", "Alice"),
+            ]);
+            jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
             const crypto = client.getCrypto()!;
-            crypto["getUserVerificationStatus"] = jest.fn(async () => {
-                client.emit(
-                    CryptoEvent.UserTrustStatusChanged,
-                    "@alice:example.org",
-                    new UserVerificationStatus(false, false, false, false),
-                );
+            jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async () => {
+                act(() => {
+                    client.emit(
+                        CryptoEvent.UserTrustStatusChanged,
+                        "@alice:example.org",
+                        new UserVerificationStatus(false, false, false, false),
+                    );
+                });
                 return Promise.resolve(new UserVerificationStatus(false, false, false, true));
             });
-            render(<UserIdentityWarning room={room} key={ROOM_ID} />, {
-                wrapper: ({ ...rest }) => <MatrixClientContext.Provider value={client} {...rest} />,
-            });
+            renderComponent(client, room);
             await sleep(10); // give it some time to finish initialising
             await waitFor(() =>
                 expect(() =>

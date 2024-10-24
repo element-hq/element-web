@@ -6,19 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useRef, useState } from "react";
-import {
-    CryptoEvent,
-    EventType,
-    KnownMembership,
-    MatrixEvent,
-    Room,
-    RoomStateEvent,
-    RoomMember,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, KnownMembership, MatrixEvent, Room, RoomStateEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Button, Separator } from "@vector-im/compound-web";
 
-import type { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
