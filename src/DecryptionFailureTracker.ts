@@ -82,6 +82,10 @@ export class DecryptionFailureTracker {
                     return "HistoricalMessage";
                 case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
                     return "ExpectedDueToMembership";
+                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                    return "ExpectedVerificationViolation";
+                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                    return "ExpectedSentByInsecureDevice";
                 default:
                     return "UnknownError";
             }
