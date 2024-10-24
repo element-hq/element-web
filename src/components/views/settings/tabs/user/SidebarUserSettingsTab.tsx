@@ -7,9 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent, useMemo } from "react";
-import CameraCircle from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
+import { VideoCallSolidIcon, HomeSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as HomeIcon } from "../../../../../../res/img/element-icons/home.svg";
 import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";
 import { Icon as MembersIcon } from "../../../../../../res/img/element-icons/room/members.svg";
 import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
@@ -84,7 +83,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         disabled={homeEnabled}
                     >
                         <SettingsSubsectionText>
-                            <HomeIcon />
+                            <HomeSolidIcon />
                             {_t("common|home")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
@@ -158,7 +157,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                             className="mx_SidebarUserSettingsTab_checkbox"
                         >
                             <SettingsSubsectionText>
-                                <CameraCircle />
+                                <VideoCallSolidIcon />
                                 {_t("settings|sidebar|metaspaces_video_rooms")}
                             </SettingsSubsectionText>
                             <SettingsSubsectionText>{conferenceSubsectionText}</SettingsSubsectionText>
