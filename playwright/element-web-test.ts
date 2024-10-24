@@ -345,6 +345,7 @@ export const expect = baseExpect.extend({
 
         if (!options?.showTooltips) {
             css += `
+                [data-floating-ui-portal],
                 [role="tooltip"] {
                     visibility: hidden !important;
                 }
