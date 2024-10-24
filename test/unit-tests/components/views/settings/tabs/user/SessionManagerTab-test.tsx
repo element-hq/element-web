@@ -1632,46 +1632,6 @@ describe("<SessionManagerTab />", () => {
         expect(checkbox.getAttribute("aria-checked")).toEqual("false");
     });
 
-    describe("MSC3906 QR code login", () => {
-        const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
-
-        beforeEach(() => {
-            settingsValueSpy.mockClear().mockReturnValue(false);
-            // enable server support for qr login
-            mockClient.getVersions.mockResolvedValue({
-                versions: [],
-                unstable_features: {
-                    "org.matrix.msc3886": true,
-                },
-            });
-            mockClient.getCapabilities.mockResolvedValue({
-                [GET_LOGIN_TOKEN_CAPABILITY.name]: {
-                    enabled: true,
-                },
-            });
-        });
-
-        it("renders qr code login section", async () => {
-            const { getByText } = render(getComponent());
-
-            // wait for versions call to settle
-            await flushPromises();
-
-            expect(getByText("Link new device")).toBeTruthy();
-            expect(getByText("Show QR code")).toBeTruthy();
-        });
-
-        it("enters qr code login section when show QR code button clicked", async () => {
-            const { getByText, findByTestId } = render(getComponent());
-            // wait for versions call to settle
-            await flushPromises();
-
-            fireEvent.click(getByText("Show QR code"));
-
-            await expect(findByTestId("login-with-qr")).resolves.toBeTruthy();
-        });
-    });
-
     describe("MSC4108 QR code login", () => {
         const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
         const issuer = "https://issuer.org";

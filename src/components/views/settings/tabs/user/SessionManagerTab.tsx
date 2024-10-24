@@ -184,7 +184,6 @@ const SessionManagerTab: React.FC<{
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
-    const capabilities = useAsyncMemo(async () => matrixClient?.getCapabilities(), [matrixClient]);
     const wellKnown = useMemo(() => matrixClient?.getClientWellKnown(), [matrixClient]);
     const oidcClientConfig = useAsyncMemo(async () => {
         try {
@@ -295,12 +294,7 @@ const SessionManagerTab: React.FC<{
     if (signInWithQrMode) {
         return (
             <Suspense fallback={<Spinner />}>
-                <LoginWithQR
-                    mode={signInWithQrMode}
-                    onFinished={onQrFinish}
-                    client={matrixClient}
-                    legacy={!oidcClientConfig && !showMsc4108QrCode}
-                />
+                <LoginWithQR mode={signInWithQrMode} onFinished={onQrFinish} client={matrixClient} />
             </Suspense>
         );
     }
@@ -311,7 +305,6 @@ const SessionManagerTab: React.FC<{
                 <LoginWithQRSection
                     onShowQr={onShowQrClicked}
                     versions={clientVersions}
-                    capabilities={capabilities}
                     wellKnown={wellKnown}
                     oidcClientConfig={oidcClientConfig}
                     isCrossSigningReady={isCrossSigningReady}
