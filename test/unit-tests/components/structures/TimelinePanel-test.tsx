@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, waitFor, screen } from "jest-matrix-react";
+import { render, waitFor, screen, act } from "jest-matrix-react";
 import {
     ReceiptType,
     EventTimelineSet,
@@ -207,6 +207,7 @@ describe("TimelinePanel", () => {
                 />,
             );
             await flushPromises();
+            await waitFor(() => expect(ref.current).toBeTruthy());
             timelinePanel = ref.current!;
         };
 
@@ -255,14 +256,16 @@ describe("TimelinePanel", () => {
 
             describe("and reading the timeline", () => {
                 beforeEach(async () => {
-                    await renderTimelinePanel();
-                    timelineSet.addLiveEvent(ev1, {});
-                    await flushPromises();
+                    await act(async () => {
+                        await renderTimelinePanel();
+                        timelineSet.addLiveEvent(ev1, {});
+                        await flushPromises();
 
-                    // @ts-ignore
-                    await timelinePanel.sendReadReceipts();
-                    // @ts-ignore Simulate user activity by calling updateReadMarker on the TimelinePanel.
-                    await timelinePanel.updateReadMarker();
+                        // @ts-ignore
+                        await timelinePanel.sendReadReceipts();
+                        // @ts-ignore Simulate user activity by calling updateReadMarker on the TimelinePanel.
+                        await timelinePanel.updateReadMarker();
+                    });
                 });
 
                 it("should send a fully read marker and a public receipt", async () => {
@@ -276,7 +279,7 @@ describe("TimelinePanel", () => {
                         client.setRoomReadMarkers.mockClear();
 
                         // @ts-ignore Simulate user activity by calling updateReadMarker on the TimelinePanel.
-                        await timelinePanel.updateReadMarker();
+                        await act(() => timelinePanel.updateReadMarker());
                     });
 
                     it("should not send receipts again", () => {
@@ -315,7 +318,7 @@ describe("TimelinePanel", () => {
 
                 it("should send a fully read marker and a private receipt", async () => {
                     await renderTimelinePanel();
-                    timelineSet.addLiveEvent(ev1, {});
+                    act(() => timelineSet.addLiveEvent(ev1, {}));
                     await flushPromises();
 
                     // @ts-ignore
@@ -326,6 +329,7 @@ describe("TimelinePanel", () => {
                     // Expect the fully_read marker not to be send yet
                     expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
 
+                    await flushPromises();
                     client.sendReadReceipt.mockClear();
 
                     // @ts-ignore simulate user activity
@@ -334,7 +338,7 @@ describe("TimelinePanel", () => {
                     // It should not send the receipt again.
                     expect(client.sendReadReceipt).not.toHaveBeenCalledWith(ev1, ReceiptType.ReadPrivate);
                     // Expect the fully_read marker to be sent after user activity.
-                    expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev1.getId());
+                    await waitFor(() => expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev1.getId()));
                 });
             });
         });
@@ -361,11 +365,11 @@ describe("TimelinePanel", () => {
 
             it("should send receipts but no fully_read when reading the thread timeline", async () => {
                 await renderTimelinePanel();
-                timelineSet.addLiveEvent(threadEv1, {});
+                act(() => timelineSet.addLiveEvent(threadEv1, {}));
                 await flushPromises();
 
                 // @ts-ignore
-                await timelinePanel.sendReadReceipts();
+                await act(() => timelinePanel.sendReadReceipts());
 
                 // fully_read is not supported for threads per spec
                 expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
@@ -1021,7 +1025,7 @@ describe("TimelinePanel", () => {
             await waitFor(() => expectEvents(container, [events[1]]));
         });
 
-        defaultDispatcher.fire(Action.DumpDebugLogs);
+        act(() => defaultDispatcher.fire(Action.DumpDebugLogs));
 
         await waitFor(() =>
             expect(spy).toHaveBeenCalledWith(expect.stringContaining("TimelinePanel(Room): Debugging info for roomId")),
