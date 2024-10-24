@@ -199,6 +199,7 @@ describe("<UserInfo />", () => {
 
         return render(<UserInfo {...defaultProps} {...props} />, {
             wrapper: Wrapper,
+            legacyRoot: true,
         });
     };
 

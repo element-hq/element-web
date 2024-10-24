@@ -258,10 +258,12 @@ describe("DateSeparator", () => {
             fireEvent.click(jumpToLastWeekButton);
 
             // Expect error to be shown. We have to wait for the UI to transition.
-            expect(await screen.findByTestId("jump-to-date-error-content")).toBeInTheDocument();
+            await expect(screen.findByTestId("jump-to-date-error-content")).resolves.toBeInTheDocument();
 
             // Expect an option to submit debug logs to be shown when a non-network error occurs
-            expect(await screen.findByTestId("jump-to-date-error-submit-debug-logs-button")).toBeInTheDocument();
+            await expect(
+                screen.findByTestId("jump-to-date-error-submit-debug-logs-button"),
+            ).resolves.toBeInTheDocument();
         });
 
         [
@@ -286,12 +288,10 @@ describe("DateSeparator", () => {
                 fireEvent.click(jumpToLastWeekButton);
 
                 // Expect error to be shown. We have to wait for the UI to transition.
-                expect(await screen.findByTestId("jump-to-date-error-content")).toBeInTheDocument();
+                await expect(screen.findByTestId("jump-to-date-error-content")).resolves.toBeInTheDocument();
 
                 // The submit debug logs option should *NOT* be shown for network errors.
-                //
-                // We have to use `queryBy` so that it can return `null` for something that does not exist.
-                expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument();
+                await expect(screen.findByTestId("jump-to-date-error-submit-debug-logs-button")).rejects.toBeTruthy();
             });
         });
     });

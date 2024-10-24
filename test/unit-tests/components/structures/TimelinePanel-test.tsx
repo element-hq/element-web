@@ -205,6 +205,7 @@ describe("TimelinePanel", () => {
                     manageReadReceipts={true}
                     ref={ref}
                 />,
+                { legacyRoot: true },
             );
             await flushPromises();
             await waitFor(() => expect(ref.current).toBeTruthy());

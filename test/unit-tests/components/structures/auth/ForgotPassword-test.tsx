@@ -337,21 +337,22 @@ describe("<ForgotPassword>", () => {
                                 expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
                             });
                         });
+                    });
 
-                        describe("and validating the link from the mail", () => {
-                            beforeEach(async () => {
-                                mocked(client.setPassword).mockResolvedValue({});
-                                // flush promises for the modal to disappear
-                                await waitEnoughCyclesForModal();
-                                await waitEnoughCyclesForModal();
-                            });
+                    describe("and validating the link from the mail", () => {
+                        beforeEach(async () => {
+                            mocked(client.setPassword).mockResolvedValue({});
+                            await click(screen.getByText("Reset password"));
+                            // flush promises for the modal to disappear
+                            await waitEnoughCyclesForModal();
+                            await waitEnoughCyclesForModal();
+                        });
 
-                            it("should display the confirm reset view and now show the dialog", async () => {
-                                await expect(
-                                    screen.findByText("Your password has been reset."),
-                                ).resolves.toBeInTheDocument();
-                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
-                            });
+                        it("should display the confirm reset view and now show the dialog", async () => {
+                            await expect(
+                                screen.findByText("Your password has been reset."),
+                            ).resolves.toBeInTheDocument();
+                            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
                         });
                     });
 
