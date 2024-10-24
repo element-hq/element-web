@@ -11,7 +11,7 @@ import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { CryptoEvent, BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -25,7 +25,6 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import {
     getSecureBackupSetupMethods,
     isSecureBackupRequired,
@@ -45,7 +44,6 @@ enum Phase {
     Loading = "loading",
     LoadError = "load_error",
     ChooseKeyPassphrase = "choose_key_passphrase",
-    Migrate = "migrate",
     Passphrase = "passphrase",
     PassphraseConfirm = "passphrase_confirm",
     ShowKey = "show_key",
@@ -160,13 +158,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             accountPassword,
         };
 
-        cli.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
-
         this.getInitialPhase();
-    }
-
-    public componentWillUnmount(): void {
-        MatrixClientPeg.get()?.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
     }
 
     private getInitialPhase(): void {
@@ -199,11 +191,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 // we may not have started crypto yet, in which case we definitely don't trust the backup
                 backupInfo ? await cli.getCrypto()?.isKeyBackupTrusted(backupInfo) : undefined;
 
-            const { forceReset } = this.props;
-            const phase = backupInfo && !forceReset ? Phase.Migrate : Phase.ChooseKeyPassphrase;
-
             this.setState({
-                phase,
+                phase: Phase.ChooseKeyPassphrase,
                 backupInfo,
                 backupTrustInfo,
             });
@@ -237,10 +226,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    private onKeyBackupStatusChange = (): void => {
-        if (this.state.phase === Phase.Migrate) this.fetchBackupInfo();
-    };
-
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             passPhraseKeySelected: e.target.value,
@@ -262,15 +247,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 downloaded: false,
                 phase: Phase.Passphrase,
             });
-        }
-    };
-
-    private onMigrateFormSubmit = (e: React.FormEvent): void => {
-        e.preventDefault();
-        if (this.state.backupTrustInfo?.trusted) {
-            this.bootstrapSecretStorage();
-        } else {
-            this.restoreBackup();
         }
     };
 
@@ -381,44 +357,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 phase: Phase.Stored,
             });
         } catch (e) {
-            if (
-                this.state.canUploadKeysWithPasswordOnly &&
-                e instanceof MatrixError &&
-                e.httpStatus === 401 &&
-                e.data.flows
-            ) {
-                this.setState({
-                    accountPassword: "",
-                    accountPasswordCorrect: false,
-                    phase: Phase.Migrate,
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this.setState({ error: true });
             logger.error("Error bootstrapping secret storage", e);
         }
     };
 
     private onCancel = (): void => {
         this.props.onFinished(false);
-    };
-
-    private restoreBackup = async (): Promise<void> => {
-        const { finished } = Modal.createDialog(
-            RestoreKeyBackupDialog,
-            {
-                showSummary: false,
-            },
-            undefined,
-            /* priority = */ false,
-            /* static = */ false,
-        );
-
-        await finished;
-        const backupTrustInfo = await this.fetchBackupInfo();
-        if (backupTrustInfo?.trusted && this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            this.bootstrapSecretStorage();
-        }
     };
 
     private onLoadRetryClick = (): void => {
@@ -495,12 +440,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private onAccountPasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        this.setState({
-            accountPassword: e.target.value,
-        });
-    };
-
     private renderOptionKey(): JSX.Element {
         return (
             <StyledRadioButton
@@ -561,55 +500,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     onCancel={this.onCancelClick}
                     hasCancel={this.state.canSkip}
                 />
-            </form>
-        );
-    }
-
-    private renderPhaseMigrate(): JSX.Element {
-        let authPrompt;
-        let nextCaption = _t("action|next");
-        if (this.state.canUploadKeysWithPasswordOnly) {
-            authPrompt = (
-                <div>
-                    <div>{_t("settings|key_backup|setup_secure_backup|requires_password_confirmation")}</div>
-                    <div>
-                        <Field
-                            id="mx_CreateSecretStorageDialog_password"
-                            type="password"
-                            label={_t("common|password")}
-                            value={this.state.accountPassword}
-                            onChange={this.onAccountPasswordChange}
-                            forceValidity={this.state.accountPasswordCorrect === false ? false : undefined}
-                            autoFocus={true}
-                        />
-                    </div>
-                </div>
-            );
-        } else if (!this.state.backupTrustInfo?.trusted) {
-            authPrompt = (
-                <div>
-                    <div>{_t("settings|key_backup|setup_secure_backup|requires_key_restore")}</div>
-                </div>
-            );
-            nextCaption = _t("action|restore");
-        } else {
-            authPrompt = <p>{_t("settings|key_backup|setup_secure_backup|requires_server_authentication")}</p>;
-        }
-
-        return (
-            <form onSubmit={this.onMigrateFormSubmit}>
-                <p>{_t("settings|key_backup|setup_secure_backup|session_upgrade_description")}</p>
-                <div>{authPrompt}</div>
-                <DialogButtons
-                    primaryButton={nextCaption}
-                    onPrimaryButtonClick={this.onMigrateFormSubmit}
-                    hasCancel={false}
-                    primaryDisabled={!!this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
-                >
-                    <button type="button" className="danger" onClick={this.onCancelClick}>
-                        {_t("action|skip")}
-                    </button>
-                </DialogButtons>
             </form>
         );
     }
@@ -829,8 +719,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         switch (phase) {
             case Phase.ChooseKeyPassphrase:
                 return _t("encryption|set_up_toast_title");
-            case Phase.Migrate:
-                return _t("settings|key_backup|setup_secure_backup|title_upgrade_encryption");
             case Phase.Passphrase:
                 return _t("settings|key_backup|setup_secure_backup|title_set_phrase");
             case Phase.PassphraseConfirm:
@@ -888,9 +776,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     break;
                 case Phase.ChooseKeyPassphrase:
                     content = this.renderPhaseChooseKeyPassphrase();
-                    break;
-                case Phase.Migrate:
-                    content = this.renderPhaseMigrate();
                     break;
                 case Phase.Passphrase:
                     content = this.renderPhasePassPhrase();
