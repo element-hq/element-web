@@ -10,42 +10,25 @@ import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { mocked, MockedObject } from "jest-mock";
-import { Crypto, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { defer, IDeferred, sleep } from "matrix-js-sdk/src/utils";
-import { BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { sleep } from "matrix-js-sdk/src/utils";
+import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { waitFor } from "@testing-library/dom";
 
-import {
-    filterConsole,
-    flushPromises,
-    getMockClientWithEventEmitter,
-    mockClientMethodsCrypto,
-    mockClientMethodsServer,
-} from "../../../../../test-utils";
+import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";
-import Modal from "../../../../../../src/Modal";
-import RestoreKeyBackupDialog from "../../../../../../src/components/views/dialogs/security/RestoreKeyBackupDialog";
 
 describe("CreateSecretStorageDialog", () => {
     let mockClient: MockedObject<MatrixClient>;
-    let mockCrypto: MockedObject<Crypto.CryptoApi>;
 
     beforeEach(() => {
-        mockClient = getMockClientWithEventEmitter({
-            ...mockClientMethodsServer(),
-            ...mockClientMethodsCrypto(),
-            uploadDeviceSigningKeys: jest.fn().mockImplementation(async () => {
-                await sleep(0); // CreateSecretStorageDialog doesn't expect this to resolve immediately
-                throw new MatrixError({ flows: [] });
-            }),
+        mockClient = mocked(stubClient());
+        mockClient.uploadDeviceSigningKeys.mockImplementation(async () => {
+            await sleep(0); // CreateSecretStorageDialog doesn't expect this to resolve immediately
+            throw new MatrixError({ flows: [] });
         });
-
-        mockCrypto = mocked(mockClient.getCrypto()!);
-        Object.assign(mockCrypto, {
-            isKeyBackupTrusted: jest.fn(),
-            isDehydrationSupported: jest.fn(() => false),
-            bootstrapCrossSigning: jest.fn(),
-            bootstrapSecretStorage: jest.fn(),
-        });
+        // Mock the clipboard API
+        document.execCommand = jest.fn().mockReturnValue(true);
     });
 
     afterEach(() => {
@@ -66,6 +49,46 @@ describe("CreateSecretStorageDialog", () => {
         await flushPromises();
     });
 
+    it("show the standard path", async () => {
+        const result = renderComponent();
+        await result.findByText(
+            "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
+        );
+        expect(result.container).toMatchSnapshot();
+        await userEvent.click(result.getByRole("button", { name: "Continue" }));
+
+        await screen.findByText("Save your Security Key");
+        expect(result.container).toMatchSnapshot();
+        // Copy the key to enable the continue button
+        await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+        expect(result.queryByText("Copied!")).not.toBeNull();
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        await screen.findByText("Your keys are now being backed up from this device.");
+    });
+
+    it("when there is an error when bootstraping the secret storage, it shows an error", async () => {
+        jest.spyOn(mockClient.getCrypto()!, "bootstrapSecretStorage").mockRejectedValue(new Error("error"));
+
+        renderComponent();
+        await screen.findByText(
+            "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
+        );
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+        await screen.findByText("Save your Security Key");
+        await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        await screen.findByText("Unable to set up secret storage");
+    });
+
+    it("when there is an error fetching the backup version handles the error sensibly", async () => {
+        mockClient.getKeyBackupVersion.mockRejectedValue(new Error("error"));
+        renderComponent();
+
+        await waitFor(() => expect(screen.queryByText("Unable to query secret storage status")).not.toBeNull());
+    });
+
     describe("when there is an error fetching the backup version", () => {
         filterConsole("Error fetching backup data from server");
 
@@ -76,104 +99,8 @@ describe("CreateSecretStorageDialog", () => {
 
             const result = renderComponent();
             // XXX the error message is... misleading.
-            await result.findByText("Unable to query secret storage status");
+            await screen.findByText("Unable to query secret storage status");
             expect(result.container).toMatchSnapshot();
-        });
-    });
-
-    it("shows 'Generate a Security Key' text if no key backup is present", async () => {
-        const result = renderComponent();
-        await flushPromises();
-        expect(result.container).toMatchSnapshot();
-        result.getByText("Generate a Security Key");
-    });
-
-    describe("when canUploadKeysWithPasswordOnly", () => {
-        // spy on Modal.createDialog
-        let modalSpy: jest.SpyInstance;
-
-        // deferred which should be resolved to indicate that the created dialog has completed
-        let restoreDialogFinishedDefer: IDeferred<[done?: boolean]>;
-
-        beforeEach(() => {
-            mockClient.getKeyBackupVersion.mockResolvedValue({} as KeyBackupInfo);
-            mockClient.uploadDeviceSigningKeys.mockImplementation(async () => {
-                await sleep(0);
-                throw new MatrixError({
-                    flows: [{ stages: ["m.login.password"] }],
-                });
-            });
-
-            restoreDialogFinishedDefer = defer<[done?: boolean]>();
-            modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: restoreDialogFinishedDefer.promise,
-                close: jest.fn(),
-            });
-        });
-
-        it("prompts for a password and then shows RestoreKeyBackupDialog", async () => {
-            const result = renderComponent();
-            await result.findByText(/Enter your account password to confirm the upgrade/);
-            expect(result.container).toMatchSnapshot();
-
-            await userEvent.type(result.getByPlaceholderText("Password"), "my pass");
-            result.getByRole("button", { name: "Next" }).click();
-
-            expect(modalSpy).toHaveBeenCalledWith(
-                RestoreKeyBackupDialog,
-                {
-                    showSummary: false,
-                },
-                undefined,
-                false,
-                false,
-            );
-
-            restoreDialogFinishedDefer.resolve([]);
-        });
-
-        it("calls bootstrapSecretStorage once keys are restored if the backup is now trusted", async () => {
-            const result = renderComponent();
-            await result.findByText(/Enter your account password to confirm the upgrade/);
-            expect(result.container).toMatchSnapshot();
-
-            await userEvent.type(result.getByPlaceholderText("Password"), "my pass");
-            result.getByRole("button", { name: "Next" }).click();
-
-            expect(modalSpy).toHaveBeenCalled();
-
-            // While we restore the key backup, its signature becomes accepted
-            mockCrypto.isKeyBackupTrusted.mockResolvedValue({ trusted: true } as BackupTrustInfo);
-
-            restoreDialogFinishedDefer.resolve([]);
-            await flushPromises();
-
-            // XXX no idea why this is a sensible thing to do. I just work here.
-            expect(mockCrypto.bootstrapCrossSigning).toHaveBeenCalled();
-            expect(mockCrypto.bootstrapSecretStorage).toHaveBeenCalled();
-
-            await result.findByText("Your keys are now being backed up from this device.");
-        });
-
-        describe("when there is an error fetching the backup version after RestoreKeyBackupDialog", () => {
-            filterConsole("Error fetching backup data from server");
-
-            it("handles the error sensibly", async () => {
-                const result = renderComponent();
-                await result.findByText(/Enter your account password to confirm the upgrade/);
-                expect(result.container).toMatchSnapshot();
-
-                await userEvent.type(result.getByPlaceholderText("Password"), "my pass");
-                result.getByRole("button", { name: "Next" }).click();
-
-                expect(modalSpy).toHaveBeenCalled();
-
-                mockClient.getKeyBackupVersion.mockImplementation(async () => {
-                    throw new Error("bleh bleh");
-                });
-                restoreDialogFinishedDefer.resolve([]);
-                await result.findByText("Unable to query secret storage status");
-            });
         });
     });
 
@@ -182,32 +109,12 @@ describe("CreateSecretStorageDialog", () => {
             mockClient.getKeyBackupVersion.mockResolvedValue({} as KeyBackupInfo);
         });
 
-        it("shows migrate text, then 'RestoreKeyBackupDialog' if 'Restore' is clicked", async () => {
+        it("shows key passphrase change", async () => {
             const result = renderComponent();
-            await result.findByText("Restore your key backup to upgrade your encryption");
-            expect(result.container).toMatchSnapshot();
-
-            // before we click "Restore", set up a spy on createDialog
-            const restoreDialogFinishedDefer = defer<[done?: boolean]>();
-            const modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
-                finished: restoreDialogFinishedDefer.promise,
-                close: jest.fn(),
-            });
-
-            result.getByRole("button", { name: "Restore" }).click();
-
-            expect(modalSpy).toHaveBeenCalledWith(
-                RestoreKeyBackupDialog,
-                {
-                    showSummary: false,
-                },
-                undefined,
-                false,
-                false,
+            await screen.findByText(
+                "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
             );
-
-            // simulate RestoreKeyBackupDialog completing, to run that code path
-            restoreDialogFinishedDefer.resolve([]);
+            expect(result.container).toMatchSnapshot();
         });
     });
 });
