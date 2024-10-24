@@ -48,6 +48,7 @@ describe("DateSeparator", () => {
             <MatrixClientContext.Provider value={mockClient}>
                 <DateSeparator {...defaultProps} {...props} />
             </MatrixClientContext.Provider>,
+            { legacyRoot: true },
         );
 
     type TestCase = [string, number, string];
