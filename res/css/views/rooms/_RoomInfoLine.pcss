@@ -14,7 +14,7 @@ Please see LICENSE files in the repository root for full details.
         content: "";
         display: inline-block;
         height: 1.2em;
-        mask-position-y: center;
+        mask-position: center;
         mask-repeat: no-repeat;
         background-color: $tertiary-content;
         vertical-align: text-bottom;
@@ -24,13 +24,13 @@ Please see LICENSE files in the repository root for full details.
     &.mx_RoomInfoLine_public::before {
         width: 12px;
         mask-size: 12px;
-        mask-image: url("$(res)/img/globe.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/public.svg");
     }
 
     &.mx_RoomInfoLine_private::before {
         width: 10px;
         mask-size: 10px;
-        mask-image: url("$(res)/img/element-icons/lock.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
     }
 
     &.mx_RoomInfoLine_video::before {

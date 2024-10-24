@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import classNames from "classnames";
+import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as DownloadIcon } from "../../../../res/img/download.svg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { FilesIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as FileIcon } from "../../../../res/img/feather-customised/files.svg";
 import { _t } from "../../../languageHandler";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";
@@ -86,7 +86,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                 />
             );
         } else {
-            placeholder = <FileIcon className="mx_UploadConfirmDialog_fileIcon" height={18} width={18} />;
+            placeholder = <FilesIcon className="mx_UploadConfirmDialog_fileIcon" height="18px" width="18px" />;
         }
 
         let uploadAllButton: JSX.Element | undefined;

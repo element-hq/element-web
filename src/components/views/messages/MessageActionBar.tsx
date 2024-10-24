@@ -27,11 +27,11 @@ import {
     OverflowHorizontalIcon,
     ReplyIcon,
     DeleteIcon,
+    RestartIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
-import { Icon as ResendIcon } from "../../../../res/img/element-icons/retry.svg";
 import { Icon as ThreadIcon } from "../../../../res/img/element-icons/message/thread.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
@@ -475,14 +475,14 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 0,
                 0,
                 <RovingAccessibleButton
-                    className="mx_MessageActionBar_iconButton"
+                    className="mx_MessageActionBar_iconButton mx_MessageActionBar_retryButton"
                     title={_t("action|retry")}
                     onClick={this.onResendClick}
                     onContextMenu={this.onResendClick}
                     key="resend"
                     placement="left"
                 >
-                    <ResendIcon />
+                    <RestartIcon />
                 </RovingAccessibleButton>,
             );
 
