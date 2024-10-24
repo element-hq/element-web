@@ -23,7 +23,7 @@ import * as settingsHooks from "../../../../../src/hooks/useSettings";
 import Modal from "../../../../../src/Modal";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
+import { flushPromises, stubClient } from "../../../../test-utils";
 import { PollHistoryDialog } from "../../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
@@ -56,16 +56,7 @@ describe("<RoomSummaryCard />", () => {
     };
 
     beforeEach(() => {
-        mockClient = getMockClientWithEventEmitter({
-            ...mockClientMethodsUser(userId),
-            getAccountData: jest.fn(),
-            isRoomEncrypted: jest.fn(),
-            getOrCreateFilter: jest.fn().mockResolvedValue({ filterId: 1 }),
-            getRoom: jest.fn(),
-            isGuest: jest.fn().mockReturnValue(false),
-            deleteRoomTag: jest.fn().mockResolvedValue({}),
-            setRoomTag: jest.fn().mockResolvedValue({}),
-        });
+        mockClient = mocked(stubClient());
         room = new Room(roomId, mockClient, userId);
         const roomCreateEvent = new MatrixEvent({
             type: "m.room.create",
