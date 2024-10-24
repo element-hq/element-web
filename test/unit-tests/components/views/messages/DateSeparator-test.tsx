@@ -276,14 +276,15 @@ describe("DateSeparator", () => {
             ),
         ].forEach((fakeError) => {
             it(`should show error dialog without submit debug logs option when networking error (${fakeError.name}) occurs`, async () => {
+                // Try to jump to "last week" but we want a network error to occur
+                mockClient.timestampToEvent.mockRejectedValue(fakeError);
+
                 // Render the component
                 getComponent();
 
                 // Open the jump to date context menu
                 fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
 
-                // Try to jump to "last week" but we want a network error to occur
-                mockClient.timestampToEvent.mockRejectedValue(fakeError);
                 const jumpToLastWeekButton = await screen.findByTestId("jump-to-date-last-week");
                 fireEvent.click(jumpToLastWeekButton);
 
