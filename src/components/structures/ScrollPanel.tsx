@@ -186,7 +186,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private bottomGrowth!: number;
     private minListHeight!: number;
     private heightUpdateInProgress = false;
-    private divScroll: HTMLDivElement | null = null;
+    public divScroll: HTMLDivElement | null = null;
 
     public constructor(props: IProps) {
         super(props);

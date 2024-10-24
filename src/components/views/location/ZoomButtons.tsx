@@ -8,11 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import * as maplibregl from "maplibre-gl";
-import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
+import { PlusIcon, MinusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import { Icon as MinusIcon } from "../../../../res/img/element-icons/minus-button.svg";
 
 interface Props {
     map: maplibregl.Map;

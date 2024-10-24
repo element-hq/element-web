@@ -16,7 +16,12 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import { EllipsisIcon, MaximiseIcon, CollapseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    OverflowHorizontalIcon,
+    MinusIcon,
+    ExpandIcon,
+    CollapseIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -34,8 +39,7 @@ import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetConte
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Icon as MinimiseIcon } from "../../../../res/img/element-icons/minus-button.svg";
-import { Icon as PopoutIcon } from "../../../../res/img/feather-customised/widget/external-link.svg";
+import { Icon as PopoutIcon } from "../../../../res/img/external-link.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -577,18 +581,21 @@ export default class AppTile extends React.Component<IProps, IState> {
             : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
 
-        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
-        if (
-            targetContainer === Container.Top &&
-            RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
-        ) {
-            RightPanelStore.instance.popCard(this.props.room.roomId);
-        }
+        if (targetContainer === Container.Top) this.closeChatCardIfNeeded();
     };
 
     private onMinimiseClicked = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, Container.Right);
+        this.closeChatCardIfNeeded();
+    };
+
+    private closeChatCardIfNeeded = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
     };
 
     private onContextMenuClick = (): void => {
@@ -757,7 +764,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     {isMaximised ? (
                         <CollapseIcon className="mx_Icon mx_Icon_12" />
                     ) : (
-                        <MaximiseIcon className="mx_Icon mx_Icon_12" />
+                        <ExpandIcon className="mx_Icon mx_Icon_12" />
                     )}
                 </AccessibleButton>,
             );
@@ -769,7 +776,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     title={_t("action|minimise")}
                     onClick={this.onMinimiseClicked}
                 >
-                    <MinimiseIcon className="mx_Icon mx_Icon_12" />
+                    <MinusIcon className="mx_Icon mx_Icon_16" />
                 </AccessibleButton>,
             );
         }
@@ -804,7 +811,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         ref={this.contextMenuButton}
                                         onClick={this.onContextMenuClick}
                                     >
-                                        <EllipsisIcon className="mx_Icon mx_Icon_12" />
+                                        <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
                                     </ContextMenuButton>
                                 )}
                             </span>

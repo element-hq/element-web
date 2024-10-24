@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { BaseSyntheticEvent, ReactNode } from "react";
+import React, { BaseSyntheticEvent, ComponentProps, ReactNode } from "react";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -26,7 +26,6 @@ import RegistrationEmailPromptDialog from "../dialogs/RegistrationEmailPromptDia
 import CountryDropdown from "./CountryDropdown";
 import PassphraseConfirmField from "./PassphraseConfirmField";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
-import { Alignment } from "../elements/Tooltip";
 
 enum RegistrationField {
     Email = "field_email",
@@ -441,9 +440,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return true;
     }
 
-    private tooltipAlignment(): Alignment | undefined {
+    private tooltipAlignment(): ComponentProps<typeof EmailField>["tooltipAlignment"] | undefined {
         if (this.props.mobileRegister) {
-            return Alignment.Bottom;
+            return "bottom";
         }
         return undefined;
     }

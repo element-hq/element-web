@@ -12,7 +12,6 @@ import { MatrixEvent, Poll, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 
 import { PollListItemEnded } from "../../../../../../src/components/views/polls/pollHistory/PollListItemEnded";
 import {
-    flushPromises,
     getMockClientWithEventEmitter,
     makePollEndEvent,
     makePollResponseEvent,
@@ -20,7 +19,6 @@ import {
     mockClientMethodsUser,
     mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
-    unmockIntlDateTimeFormat,
 } from "../../../../../test-utils";
 
 describe("<PollListItemEnded />", () => {
@@ -54,14 +52,14 @@ describe("<PollListItemEnded />", () => {
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
         render(<PollListItemEnded {...props} onClick={jest.fn()} />);
 
-    beforeAll(() => {
+    beforeEach(() => {
         // mock default locale to en-GB and set timezone
         // so these tests run the same everywhere
         mockIntlDateTimeFormat();
     });
 
-    afterAll(() => {
-        unmockIntlDateTimeFormat();
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     it("renders a poll with no responses", async () => {
@@ -81,10 +79,8 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText } = getComponent({ event: pollStartEvent, poll });
-        // fetch relations
-        await flushPromises();
-        expect(getByText("Final result based on 3 votes")).toBeInTheDocument();
+        const { getByText, findByText } = getComponent({ event: pollStartEvent, poll });
+        await expect(findByText("Final result based on 3 votes")).resolves.toBeInTheDocument();
         // winning answer
         expect(getByText("Nissan Silvia S15")).toBeInTheDocument();
     });
@@ -99,10 +95,8 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText } = getComponent({ event: pollStartEvent, poll });
-        // fetch relations
-        await flushPromises();
-        expect(getByText("Final result based on 4 votes")).toBeInTheDocument();
+        const { getByText, findByText } = getComponent({ event: pollStartEvent, poll });
+        await expect(findByText("Final result based on 4 votes")).resolves.toBeInTheDocument();
         // both answers answer
         expect(getByText("Nissan Silvia S15")).toBeInTheDocument();
         expect(getByText("Mitsubishi Lancer Evolution IX")).toBeInTheDocument();
@@ -120,12 +114,10 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText } = getComponent({ event: pollStartEvent, poll });
-        // fetch relations
-        await flushPromises();
+        const { getByText, findByText } = getComponent({ event: pollStartEvent, poll });
 
         // still only 3 unique votes
-        expect(getByText("Final result based on 3 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 3 votes")).resolves.toBeInTheDocument();
         // only latest vote counted
         expect(getByText("Nissan Silvia S15")).toBeInTheDocument();
     });
@@ -139,12 +131,10 @@ describe("<PollListItemEnded />", () => {
         await setupRoomWithPollEvents([pollStartEvent], responses, [pollEndEvent], mockClient, room);
         const poll = room.polls.get(pollId)!;
 
-        const { getByText } = getComponent({ event: pollStartEvent, poll });
-        // fetch relations
-        await flushPromises();
+        const { findByText } = getComponent({ event: pollStartEvent, poll });
 
         // invalid vote excluded
-        expect(getByText("Final result based on 2 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 2 votes")).resolves.toBeInTheDocument();
     });
 
     it("updates on new responses", async () => {
@@ -156,10 +146,8 @@ describe("<PollListItemEnded />", () => {
         const poll = room.polls.get(pollId)!;
 
         const { getByText, queryByText, findByText } = getComponent({ event: pollStartEvent, poll });
-        // fetch relations
-        await flushPromises();
 
-        expect(getByText("Final result based on 2 votes")).toBeInTheDocument();
+        await expect(findByText("Final result based on 2 votes")).resolves.toBeInTheDocument();
 
         await room.processPollEvents([
             makePollResponseEvent(pollId, [answerOne.id], "@han:domain.org", roomId, timestamp + 1),

@@ -52,8 +52,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
             .catch((err) => {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("room_settings|advanced|error_upgrade_title"),
-                    description:
-                        err && err.message ? err.message : _t("room_settings|advanced|error_upgrade_description"),
+                    description: err?.message ?? _t("room_settings|advanced|error_upgrade_description"),
                 });
             })
             .finally(() => {

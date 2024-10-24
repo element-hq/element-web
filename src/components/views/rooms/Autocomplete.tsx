@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent } from "react";
+import React, { createRef, KeyboardEvent, RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
 import { Room } from "matrix-js-sdk/src/matrix";
@@ -45,6 +45,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     public queryRequested?: string;
     public debounceCompletionsRequest?: number;
     private containerRef = createRef<HTMLDivElement>();
+    private completionRefs: Record<string, RefObject<HTMLElement>> = {};
 
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
@@ -260,7 +261,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     public componentDidUpdate(prevProps: IProps): void {
         this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
-        const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as HTMLElement;
+        const selectedCompletion = this.completionRefs[`completion${this.state.selectionOffset}`]?.current;
 
         if (selectedCompletion) {
             selectedCompletion.scrollIntoView({
@@ -286,9 +287,13 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                         this.onCompletionClicked(componentPosition);
                     };
 
+                    const refId = `completion${componentPosition}`;
+                    if (!this.completionRefs[refId]) {
+                        this.completionRefs[refId] = createRef();
+                    }
                     return React.cloneElement(completion.component, {
                         "key": j,
-                        "ref": `completion${componentPosition}`,
+                        "ref": this.completionRefs[refId],
                         "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
                         className,
                         onClick,

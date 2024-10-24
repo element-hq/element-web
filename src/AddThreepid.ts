@@ -201,7 +201,7 @@ export default class AddThreepid {
                     // implemented it without, so this may just succeed and that's OK.
                     return [true];
                 } catch (err) {
-                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data?.flows) {
                         // doesn't look like an interactive-auth failure
                         throw err;
                     }
@@ -300,7 +300,7 @@ export default class AddThreepid {
                 // implemented it without, so this may just succeed and that's OK.
                 return [true];
             } catch (err) {
-                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data?.flows) {
                     // doesn't look like an interactive-auth failure
                     throw err;
                 }

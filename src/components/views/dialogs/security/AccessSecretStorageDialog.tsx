@@ -229,7 +229,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             await accessSecretStorage(async (): Promise<void> => {
                 // Now reset cross-signing so everything Just Works™ again.
                 const cli = MatrixClientPeg.safeGet();
-                await cli.bootstrapCrossSigning({
+                await cli.getCrypto()?.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                             title: _t("encryption|bootstrap_title"),

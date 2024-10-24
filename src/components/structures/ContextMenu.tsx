@@ -12,7 +12,6 @@ import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } fro
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
 import { Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";
@@ -610,35 +609,6 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
 
     return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
-
-// XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.
-export function createMenu(
-    ElementClass: typeof React.Component,
-    props: Record<string, any>,
-): { close: (...args: any[]) => void } {
-    const onFinished = function (...args: any[]): void {
-        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
-        props?.onFinished?.apply(null, args);
-    };
-
-    const menu = (
-        <TooltipProvider>
-            <ContextMenu
-                {...props}
-                mountAsChild={true}
-                hasBackground={false}
-                onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
-                windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
-            >
-                <ElementClass {...props} onFinished={onFinished} />
-            </ContextMenu>
-        </TooltipProvider>
-    );
-
-    ReactDOM.render(menu, getOrCreateContainer());
-
-    return { close: onFinished };
-}
 
 // re-export the semantic helper components for simplicity
 export { ContextMenuButton } from "../../accessibility/context_menu/ContextMenuButton";
