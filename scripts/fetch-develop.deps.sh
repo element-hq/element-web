@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Fetches the js-sdk and matrix-react-sdk dependencies for development
-# or testing purposes
+# Fetches the js-sdk dependency for development or testing purposes
 # If there exists a branch of that dependency with the same name as
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
-set -ex
+set -x
 
 GIT_CLONE_ARGS=("$@")
 [ -z "$defbranch" ] && defbranch="develop"
@@ -77,31 +76,9 @@ dodep matrix-org matrix-js-sdk
 
 pushd matrix-js-sdk
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 popd
 
 yarn link matrix-js-sdk
 
 ##############################
-
-echo 'Setting up matrix-react-sdk'
-
-dodep matrix-org matrix-react-sdk
-
-pushd matrix-react-sdk
-yarn link
-yarn link matrix-js-sdk
-yarn install --pure-lockfile
-yarn reskindex
-popd
-
-yarn link matrix-react-sdk
-
-##############################
-
-# Link the reskindex binary in place: if we used `yarn link`,
-# Yarn would do this for us, but we don't because we'd have
-# to define the Yarn binary prefix somewhere so it could put the
-# intermediate symlinks there. Instead, we do it ourselves.
-mkdir -p node_modules/.bin
-ln -sfv ../matrix-react-sdk/scripts/reskindex.js node_modules/.bin/reskindex

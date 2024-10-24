@@ -1,0 +1,77 @@
+.mx_AppDownloadDialog {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-32;
+    color: $primary-content;
+
+    &.mx_Dialog_fixedWidth {
+        width: 640px;
+    }
+
+    .mx_AppDownloadDialog_desktop {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $spacing-16;
+    }
+
+    .mx_AppDownloadDialog_mobile {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-24;
+
+        .mx_AppDownloadDialog_app {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-basis: 50%;
+            align-items: center;
+            gap: $spacing-16;
+
+            .mx_QRCode {
+                /* intentionally hardcoded color to ensure the QR code is readable in any situation */
+                background: #ffffff;
+
+                padding: $spacing-24;
+                border: 1px solid $quinary-content;
+                border-radius: 4px;
+                align-self: stretch;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                .mx_VerificationQRCode {
+                    height: 144px;
+                    width: 144px;
+                    image-rendering: pixelated;
+                    border-radius: 0;
+                }
+            }
+
+            .mx_AppDownloadDialog_info {
+                font-size: $font-12px;
+                color: $tertiary-content;
+            }
+
+            .mx_AppDownloadDialog_links {
+                display: flex;
+                flex-direction: row;
+                gap: $spacing-8;
+
+                .mx_AccessibleButton {
+                    svg {
+                        height: 40px;
+                    }
+                }
+            }
+        }
+    }
+
+    .mx_AppDownloadDialog_legal {
+        p {
+            margin: 0;
+            font-size: $font-12px;
+            color: $tertiary-content;
+        }
+    }
+}

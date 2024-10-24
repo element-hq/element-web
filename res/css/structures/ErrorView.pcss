@@ -1,0 +1,62 @@
+/*
+Copyright 2020-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ErrorView {
+    --width: 520px;
+    --cpd-separator-inset: calc(50% - (var(--width) / 2));
+    --cpd-separator-spacing: var(--cpd-space-8x);
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+    padding: var(--cpd-space-20x);
+
+    background-color: var(--cpd-color-theme-bg);
+    background-image: url("../../themes/element/img/compound/fade-arc-light.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    .mx_ErrorView_logo {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .mx_ErrorView_container {
+        max-width: var(--width);
+        margin: 0 auto var(--cpd-space-8x);
+    }
+
+    h1,
+    h2 {
+        color: var(--cpd-color-text-primary);
+    }
+
+    h2 {
+        margin: var(--cpd-space-8x) 0;
+        font-size: var(--cpd-font-size-heading-sm);
+    }
+
+    p {
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_Flex {
+        margin: 0 auto;
+        max-width: max-content;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .mx_ErrorView_buttons {
+        margin-top: var(--cpd-space-6x);
+    }
+}

@@ -1,24 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Jitsi Widget</title>
-</head>
-<body>
-<div id="jitsiContainer"><!-- the js will put the conference here --></div>
-<div id="joinButtonContainer">
-    <div class="joinConferenceFloating">
-        <div class="joinConferencePrompt">
-            <span class="icon"><!-- managed by CSS --></span>
-            <!-- TODO: i18n -->
-            <h2>Jitsi Video Conference</h2>
-            <div id="widgetActionContainer">
-                <button type="button" id="joinButton">Join Conference</button>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Jitsi Widget</title>
+    </head>
+    <body>
+        <div id="jitsiContainer"><!-- the js will put the conference here --></div>
+        <div id="joinButtonContainer">
+            <div class="joinConferenceFloating">
+                <div class="joinConferencePrompt">
+                    <span class="icon"><!-- managed by CSS --></span>
+                    <!-- TODO: i18n -->
+                    <h2>Jitsi Video Conference</h2>
+                    <div id="widgetActionContainer">
+                        <button type="button" id="joinButton">Join Conference</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- This script is not webpacked, and the script is downloaded at build time -->
-<script src="./jitsi_external_api.min.js"></script>
-</body>
+        <!-- This script is not webpacked, and the script is downloaded at build time -->
+        <script src="./jitsi_external_api.min.js"></script>
+    </body>
 </html>

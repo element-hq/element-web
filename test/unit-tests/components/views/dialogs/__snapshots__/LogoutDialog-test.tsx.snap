@@ -1,0 +1,241 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogoutDialog Prompts user to connect backup if there is a backup on the server 1`] = `
+<div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        You'll lose access to your encrypted messages
+      </h1>
+    </div>
+    <div>
+      <div
+        class="mx_Dialog_content"
+        id="mx_Dialog_content"
+      >
+        <div>
+          <p>
+            Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.
+          </p>
+          <p>
+            When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
+          </p>
+          <p>
+            Back up your keys before signing out to avoid losing them.
+          </p>
+        </div>
+      </div>
+      <div
+        class="mx_Dialog_buttons"
+      >
+        <span
+          class="mx_Dialog_buttons_row"
+        >
+          <button>
+            I don't want my encrypted messages
+          </button>
+          <button
+            class="mx_Dialog_primary"
+            data-testid="dialog-primary-button"
+            type="button"
+          >
+            Connect this session to Key Backup
+          </button>
+        </span>
+      </div>
+      <details>
+        <summary
+          class="mx_LogoutDialog_ExportKeyAdvanced"
+        >
+          Advanced
+        </summary>
+        <p>
+          <button>
+            Manually export keys
+          </button>
+        </p>
+      </details>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;
+
+exports[`LogoutDialog Prompts user to set up backup if there is no backup on the server 1`] = `
+<div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        You'll lose access to your encrypted messages
+      </h1>
+    </div>
+    <div>
+      <div
+        class="mx_Dialog_content"
+        id="mx_Dialog_content"
+      >
+        <div>
+          <p>
+            Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.
+          </p>
+          <p>
+            When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
+          </p>
+          <p>
+            Back up your keys before signing out to avoid losing them.
+          </p>
+        </div>
+      </div>
+      <div
+        class="mx_Dialog_buttons"
+      >
+        <span
+          class="mx_Dialog_buttons_row"
+        >
+          <button>
+            I don't want my encrypted messages
+          </button>
+          <button
+            class="mx_Dialog_primary"
+            data-testid="dialog-primary-button"
+            type="button"
+          >
+            Start using Key Backup
+          </button>
+        </span>
+      </div>
+      <details>
+        <summary
+          class="mx_LogoutDialog_ExportKeyAdvanced"
+        >
+          Advanced
+        </summary>
+        <p>
+          <button>
+            Manually export keys
+          </button>
+        </p>
+      </details>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;
+
+exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
+<div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_QuestionDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Sign out
+      </h1>
+    </div>
+    <div
+      class="mx_Dialog_content"
+      id="mx_Dialog_content"
+    >
+      Are you sure you want to sign out?
+    </div>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Sign out
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;

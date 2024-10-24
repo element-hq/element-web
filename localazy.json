@@ -1,0 +1,37 @@
+{
+    "readKey": "a7688614897667993891-866e2615b0a22e6ccef56aea9b10e815efa3e1296752a7a30bd9925f1a8f33e7",
+
+    "upload": {
+        "type": "json",
+        "keySeparator": "|",
+        "deprecate": "file",
+        "features": ["plural_object", "filter_untranslated"],
+        "files": [
+            {
+                "pattern": "src/i18n/strings/en_EN.json",
+                "file": "element-web.json",
+                "lang": "inherited"
+            },
+            {
+                "group": "existing",
+                "pattern": "src/i18n/strings/*.json",
+                "file": "element-web.json",
+                "excludes": ["src/i18n/strings/en_EN.json"],
+                "lang": "${autodetectLang}"
+            }
+        ]
+    },
+
+    "download": {
+        "files": [
+            {
+                "conditions": "equals: ${file}, element-web.json",
+                "output": "src/i18n/strings/${langLsrUnderscore}.json"
+            }
+        ],
+        "includeSourceLang": "${includeSourceLang|false}",
+        "langAliases": {
+            "en": "en-EN"
+        }
+    }
+}

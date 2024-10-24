@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BeaconListItem /> when a beacon is live and has locations renders beacon info 1`] = `
+<DocumentFragment>
+  <li
+    class="mx_BeaconListItem"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_BeaconListItem_avatarIcon"
+    />
+    <div
+      class="mx_BeaconListItem_info"
+    >
+      <div
+        class="mx_BeaconStatus mx_BeaconStatus_Active mx_BeaconListItem_status"
+      >
+        <div
+          class="mx_BeaconStatus_description"
+        >
+          <span
+            class="mx_BeaconStatus_label"
+          >
+            Alice's car
+          </span>
+          <span
+            class="mx_BeaconStatus_expiryTime"
+          >
+            Live until 16:04
+          </span>
+        </div>
+        <div
+          class="mx_BeaconListItem_interactions"
+        >
+          <a
+            aria-labelledby=":r0:"
+            data-testid="open-location-in-osm"
+            href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            <div
+              class="mx_ShareLatestLocation_icon"
+            />
+          </a>
+          <div
+            class="mx_CopyableText mx_ShareLatestLocation_copy"
+          >
+            <div
+              aria-label="Copy"
+              class="mx_AccessibleButton mx_CopyableText_copyButton"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+        </div>
+      </div>
+      <span
+        class="mx_BeaconListItem_lastUpdated"
+      >
+        Updated a few seconds ago
+      </span>
+    </div>
+  </li>
+</DocumentFragment>
+`;

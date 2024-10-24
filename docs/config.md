@@ -1,8 +1,20 @@
 # Configuration
 
-You can configure the app by copying `config.sample.json` to `config.json` and customising it. The possible options are
-described here. If you run into issues, please visit [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org)
-on Matrix.
+### 🦖 Deprecation notice
+
+Configuration keys were previously a mix of camelCase and snake_case.
+We standardised to snake_case but added compatibility for camelCase to all settings.
+This backwards compatibility will be getting removed in a future release so please ensure you are using snake_case.
+
+---
+
+You can configure the app by copying `config.sample.json` to `config.json` or `config.$domain.json` and customising it.
+Element will attempt to load first `config.$domain.json` and if it fails `config.json`. This mechanism allows different
+configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed
+in any way, it either entirely uses the domain config, or entirely uses `config.json`.
+
+The possible configuration options are described here. If you run into issues, please visit
+[#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) on Matrix.
 
 For a good example of a production-tuned config, see https://app.element.io/config.json
 
@@ -13,8 +25,8 @@ for the desktop app the application will need to be exited fully (including via 
 
 ## Homeserver configuration
 
-In order for Element to even start you will need to tell it what homeserver to connect to *by default*. Users will be
-able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": false` in your
+In order for Element to even start you will need to tell it what homeserver to connect to _by default_. Users will be
+able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": true` in your
 config.
 
 One of the following options **must** be supplied:
@@ -22,18 +34,18 @@ One of the following options **must** be supplied:
 1. `default_server_config`: The preferred method of setting the homeserver connection information. Simply copy/paste
    your [`/.well-known/matrix/client`](https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient)
    into this field. For example:
-   ```json
-   {
-      "default_server_config": {
-         "m.homeserver": {
-            "base_url": "https://matrix-client.matrix.org"
-         },
-         "m.identity_server": {
-            "base_url": "https://vector.im"
-         }
-      }
-   }
-   ```
+    ```json
+    {
+        "default_server_config": {
+            "m.homeserver": {
+                "base_url": "https://matrix-client.matrix.org"
+            },
+            "m.identity_server": {
+                "base_url": "https://vector.im"
+            }
+        }
+    }
+    ```
 2. `default_server_name`: A different method of connecting to the homeserver by looking up the connection information
    using `.well-known`. When using this option, simply use your server's domain name (the part at the end of user IDs):
    `"default_server_name": "matrix.org"`
@@ -41,8 +53,9 @@ One of the following options **must** be supplied:
    information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url`
    being optional.
 
-If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
-should be considered "first".
+If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
+information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+information.
 
 ## Labs flags
 
@@ -54,14 +67,14 @@ To force a labs flag on or off, use the following:
 
 ```json
 {
-   "features": {
-      "feature_you_want_to_turn_on": true,
-      "feature_you_want_to_keep_off": false
-   }
+    "features": {
+        "feature_you_want_to_turn_on": true,
+        "feature_you_want_to_keep_off": false
+    }
 }
 ```
 
-If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_flags": true` to
+If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_settings": true` to
 your config. This will turn on the tab in user settings.
 
 **Note**: Feature support varies release-by-release. Check the [labs flag documentation](./labs.md) frequently if enabling
@@ -78,24 +91,25 @@ instance. As of writing those settings are not fully documented, however a few a
    inputs.
 3. `room_directory`: Optionally defines how the room directory component behaves. Currently only a single property, `servers`
    is supported to add additional servers to the dropdown. For example:
-   ```json
-   {
-      "room_directory": {
-         "servers": ["matrix.org", "example.org"]
-      }
-   }
-   ```
+    ```json
+    {
+        "room_directory": {
+            "servers": ["matrix.org", "example.org"]
+        }
+    }
+    ```
 4. `setting_defaults`: Optional configuration for settings which are not described by this document and support the `config`
    level. This list is incomplete. For example:
-   ```json
-   {
-      "setting_defaults": {
-         "MessageComposerInput.showStickersButton": false,
-         "MessageComposerInput.showPollsButton": false
-      }
-   }
-   ```
-   These values will take priority over the hardcoded defaults for the settings.
+    ```json
+    {
+        "setting_defaults": {
+            "MessageComposerInput.showStickersButton": false,
+            "MessageComposerInput.showPollsButton": false
+        }
+    }
+    ```
+    These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -123,9 +137,9 @@ complete re-branding/private labeling, a more personalised experience can be ach
    This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
    at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
    configuration found in the well-known location is used instead.
-10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+10. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
 11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
-    `{"affected string": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
+    `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
 13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
 14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
@@ -134,6 +148,14 @@ complete re-branding/private labeling, a more personalised experience can be ach
     to hide this dropdown.
 16. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
     users. Set to `true` to disable this functionality.
+17. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
+    Takes a configuration object as below:
+    1. `title`: Required. Title to show at the top of the notice.
+    2. `description`: Required. The description to use for the notice.
+    3. `show_once`: Optional. If true then the notice will only be shown once per device.
+18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -146,6 +168,10 @@ Starting with `desktop_builds`, the following subproperties are available:
 1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
 2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
 3. `url`: Required. The download URL for the app. This is used as a hyperlink.
+4. `url_macos`: Optional. Direct link to download macOS desktop app.
+5. `url_win32`: Optional. Direct link to download Windows 32-bit desktop app.
+6. `url_win64`: Optional. Direct link to download Windows 64-bit desktop app.
+7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
 
@@ -160,16 +186,16 @@ Together, these two options might look like the following in your config:
 
 ```json
 {
-   "desktop_builds": {
-      "available": true,
-      "logo": "https://example.org/assets/logo-small.svg",
-      "url": "https://example.org/not_element/download"
-   },
-   "mobile_builds": {
-      "ios": null,
-      "android": "https://example.org/not_element/android",
-      "fdroid": "https://example.org/not_element/fdroid"
-   }
+    "desktop_builds": {
+        "available": true,
+        "logo": "https://example.org/assets/logo-small.svg",
+        "url": "https://example.org/not_element/download"
+    },
+    "mobile_builds": {
+        "ios": null,
+        "android": "https://example.org/not_element/android",
+        "fdroid": "https://example.org/not_element/fdroid"
+    }
 }
 ```
 
@@ -192,7 +218,7 @@ Starting with `branding`, the following subproperties are available:
    `welcome.html` that ships with Element will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
-   no home page is set and therefore a hardcoded landing screen is used.
+   no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
 3. `login_for_welcome`: When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome
    page itself. This disables use of `welcome_url` and all welcome page functionality.
 
@@ -200,18 +226,18 @@ Together, the options might look like this in your config:
 
 ```json
 {
-   "branding": {
-      "welcome_background_url": "https://example.org/assets/background.jpg",
-      "auth_header_logo_url": "https://example.org/assets/logo.svg",
-      "auth_footer_links": [
-         {"text": "FAQ", "url": "https://example.org/faq"},
-         {"text": "Donate", "url": "https://example.org/donate"},
-      ]
-   },
-   "embedded_pages": {
-      "welcome_url": "https://example.org/assets/welcome.html",
-      "home_url": "https://example.org/assets/home.html"
-   }
+    "branding": {
+        "welcome_background_url": "https://example.org/assets/background.jpg",
+        "auth_header_logo_url": "https://example.org/assets/logo.svg",
+        "auth_footer_links": [
+            { "text": "FAQ", "url": "https://example.org/faq" },
+            { "text": "Donate", "url": "https://example.org/donate" }
+        ]
+    },
+    "embedded_pages": {
+        "welcome_url": "https://example.org/assets/welcome.html",
+        "home_url": "https://example.org/assets/home.html"
+    }
 }
 ```
 
@@ -229,89 +255,149 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
    all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
-   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. As an example:
-   ```json
-   {
-      "sso_redirect_options": {
-         "immediate": false,
-         "on_welcome_page": true
-      }
-   }
-   ```
-   It is most common to use the `immediate` flag instead of `on_welcome_page`.
+   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
+   redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
+    ```json
+    {
+        "sso_redirect_options": {
+            "immediate": false,
+            "on_welcome_page": true,
+            "on_login_page": true
+        }
+    }
+    ```
+    It is most common to use the `immediate` flag instead of `on_welcome_page`.
+
+## Native OIDC
+
+Native OIDC support is currently in labs and is subject to change.
+
+Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
+Issuer must have a trailing forward slash. As an example:
+
+```json
+{
+    "oidc_static_clients": {
+        "https://auth.example.com/": {
+            "client_id": "example-client-id"
+        }
+    }
+}
+```
+
+If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.
+The app has sane defaults for the metadata properties below but on stricter policy identity providers they may not pass muster, e.g. `contacts` may be required.
+The following subproperties are available:
+
+1. `client_uri`: This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.
+2. `logo_uri`: Optional URI for the client logo.
+3. `tos_uri`: Optional URI for the client's terms of service.
+4. `policy_uri`: Optional URI for the client's privacy policy.
+5. `contacts`: Optional list of contact emails for the client.
+
+As an example:
+
+```json
+{
+    "oidc_metadata": {
+        "client_uri": "https://example.com",
+        "logo_uri": "https://example.com/logo.png",
+        "tos_uri": "https://example.com/tos",
+        "policy_uri": "https://example.com/policy",
+        "contacts": ["support@example.com"]
+    }
+}
+```
 
 ## VoIP / Jitsi calls
 
-Currently, Element uses Jitsi to offer conference calls in rooms. A set of defaults are applied, pointing at our Jitsi instance,
-to ensure conference calling works, however you can point Element at your own Jitsi if you prefer.
+Currently, Element uses Jitsi to offer conference calls in rooms, with an experimental Element Call implementation in the works.
+A set of defaults are applied, pointing at our Jitsi and Element Call instances, to ensure conference calling works, however you
+can point Element at your own if you prefer.
 
 More information about the Jitsi setup can be found [here](./jitsi.md).
 
 The VoIP and Jitsi options are:
 
 1. `jitsi`: Optional configuration for how to start Jitsi conferences. Currently can only contain a single `preferred_domain`
-   value which points at the domain of the Jitsi instance. Defaults to `meet.element.io`. This is *not* used if the Jitsi widget
+   value which points at the domain of the Jitsi instance. Defaults to `meet.element.io`. This is _not_ used if the Jitsi widget
    was created by an integration manager, or if the homeserver provides Jitsi information in `/.well-known/matrix/client`. For
    example:
-   ```json
-   {
-      "jitsi": {
-         "preferred_domain": "meet.jit.si"
-      }
-   }
-   ```
+    ```json
+    {
+        "jitsi": {
+            "preferred_domain": "meet.jit.si"
+        }
+    }
+    ```
 2. `jitsi_widget`: Optional configuration for the built-in Jitsi widget. Currently can only contain a single `skip_built_in_welcome_screen`
    value, denoting whether the "Join Conference" button should be shown. When `true` (default `false`), Jitsi calls will skip to
    the call instead of having a screen with a single button on it. This is most useful if the Jitsi instance being used already
    has a landing page for users to test audio and video before joining the call, otherwise users will automatically join the call.
    For example:
-   ```json
-   {
-      "jitsi_widget": {
-         "skip_built_in_welcome_screen": true
-      }
-   }
-   ```
+    ```json
+    {
+        "jitsi_widget": {
+            "skip_built_in_welcome_screen": true
+        }
+    }
+    ```
 3. `voip`: Optional configuration for various VoIP features. Currently can only contain a single `obey_asserted_identity` value to
-   send MSC3086-style asserted identity messages during VoIP calls in the room corresponding to the asserted identity. This *must*
+   send MSC3086-style asserted identity messages during VoIP calls in the room corresponding to the asserted identity. This _must_
    only be set in trusted environments. The option defaults to `false`. For example:
-   ```json
-   {
-      "voip": {
-         "obey_asserted_identity": false
-      }
-   }
-   ```
+    ```json
+    {
+        "voip": {
+            "obey_asserted_identity": false
+        }
+    }
+    ```
 4. `widget_build_url`: Optional URL to have Element make a request to when a user presses the voice/video call buttons in the app,
    if a call would normally be started by the action. The URL will be called with a `roomId` query parameter to identify the room
    being called in. The URL must respond with a JSON object similar to the following:
-   ```json
-   {
-      "widget_id": "$arbitrary_string",
-      "widget": {
-         "creatorUserId": "@user:example.org",
-          "id": "$the_same_widget_id",
-          "type": "m.custom",
-          "waitForIframeLoad": true,
-          "name": "My Widget Name Here",
-          "avatar_url": "mxc://example.org/abc123",
-          "url": "https://example.org/widget.html",
-          "data": {
-             "title": "Subtitle goes here"
-          }
-      },
-      "layout": {
-         "container": "top",
-         "index": 0,
-         "width": 65,
-         "height": 50
-      }
-   }
-   ```
-   The `widget` is the `content` of a normal widget state event. The `layout` is the layout specifier for the widget being created,
-   as defined by the `io.element.widgets.layout` state event.
+    ```json
+    {
+        "widget_id": "$arbitrary_string",
+        "widget": {
+            "creatorUserId": "@user:example.org",
+            "id": "$the_same_widget_id",
+            "type": "m.custom",
+            "waitForIframeLoad": true,
+            "name": "My Widget Name Here",
+            "avatar_url": "mxc://example.org/abc123",
+            "url": "https://example.org/widget.html",
+            "data": {
+                "title": "Subtitle goes here"
+            }
+        },
+        "layout": {
+            "container": "top",
+            "index": 0,
+            "width": 65,
+            "height": 50
+        }
+    }
+    ```
+    The `widget` is the `content` of a normal widget state event. The `layout` is the layout specifier for the widget being created,
+    as defined by the `io.element.widgets.layout` state event. By default this applies to all rooms, but the behaviour can be skipped for
+    2-person rooms, causing Element to fall back to 1:1 VoIP, by setting the option `widget_build_url_ignore_dm` to `true`.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
+6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
+    - `url`: The URL of the Element Call instance to use for native group calls. This option is considered experimental
+      and may be removed at any time without notice. Defaults to `https://call.element.io`.
+    - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
+      the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
+    - `participant_limit`: The maximum number of users who can join a call; if
+      this number is exceeded, the user will not be able to join a given call.
+    - `brand`: Optional name for the app. Defaults to `Element Call`. This is
+      used throughout the application in various strings/locations.
+    - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
+      for guest links. If this is set, Element Web will expose a "join" link
+      for public video rooms, which can then be shared to non-matrix users.
+      The target Element Call SPA is typically set up to use a homeserver that
+      allows users to register without email ("passwordless guest users") and to
+      federate.
 
 ## Bug reporting
 
@@ -321,10 +407,10 @@ If you run your own rageshake server to collect bug reports, the following optio
    not present in the config, the app will disable all rageshake functionality. Set to `https://element.io/bugreports/submit` to submit
    rageshakes to us, or use your own rageshake server.
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
-   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-web`, as with any other
-   rageshake submitted by the app.
-
-   If you are using the element.io rageshake server, please set this to `element-auto-uisi` so we can better filter them.
+   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
+   (in contrast to other rageshakes submitted by the app, which use `element-web`).
+3. `existing_issues_url`: URL for where to find existing issues.
+4. `new_issue_url`: URL for where to submit new issues.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
@@ -335,18 +421,17 @@ For example:
 
 ```json
 {
-   "sentry": {
-      "dsn": "dsn-goes-here",
-      "environment": "production"
-   }
+    "sentry": {
+        "dsn": "dsn-goes-here",
+        "environment": "production"
+    }
 }
 ```
 
 ## Integration managers
 
 Integration managers are embedded applications within Element to help the user configure bots, bridges, and widgets. An integration manager
-is a separate piece of software not typically available with your homeserver. To disable integrations, leave the options defined here out of
-your config.
+is a separate piece of software not typically available with your homeserver. To disable integrations, set the options defined here to `null`.
 
 1. `integrations_ui_url`: The UI URL for the integration manager.
 2. `integrations_rest_url`: The REST interface URL for the integration manager.
@@ -356,17 +441,23 @@ If you would like to use Scalar, the integration manager maintained by Element, 
 
 ```json
 {
-   "integrations_ui_url": "https://scalar.vector.im/",
-   "integrations_rest_url": "https://scalar.vector.im/api",
-   "integrations_widgets_urls": [
-      "https://scalar.vector.im/_matrix/integrations/v1",
-      "https://scalar.vector.im/api",
-      "https://scalar-staging.vector.im/_matrix/integrations/v1",
-      "https://scalar-staging.vector.im/api",
-      "https://scalar-staging.riot.im/scalar/api"
-   ]
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_widgets_urls": [
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
+        "https://scalar-staging.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
+    ]
 }
 ```
+
+For widgets in general (from an integration manager or not) there is also:
+
+-   `default_widget_container_height`
+
+This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.
 
 ## Administrative options
 
@@ -374,9 +465,9 @@ If you would like to include a custom message when someone is reporting an event
 
 ```json
 {
-   "report_event": {
-      "admin_message_md": "Please be sure to review our [terms of service](https://example.org/terms) before reporting a message."
-   }
+    "report_event": {
+        "admin_message_md": "Please be sure to review our [terms of service](https://example.org/terms) before reporting a message."
+    }
 }
 ```
 
@@ -384,66 +475,25 @@ To add additional "terms and conditions" links throughout the app, use the follo
 
 ```json
 {
-   "terms_and_conditions_links": [
-      { "text": "Code of conduct", "url": "https://example.org/code-of-conduct" }
-   ]
+    "terms_and_conditions_links": [{ "text": "Code of conduct", "url": "https://example.org/code-of-conduct" }]
 }
 ```
 
 ## Analytics
-
-Analytics are currently possible with two systems: `posthog` (preferred) and <del>`piwik`</del> (matomo; deprecated). When
-these configuration options are not present, analytics are deemed impossible and the user won't be asked to opt-in to the
-system.
 
 To configure [Posthog](https://posthog.com/), add the following under `posthog` in your config:
 
 1. `api_host`: The hostname of the posthog server.
 2. `project_api_key`: The API key from posthog.
 
-To configure Piwik (***DEPRECATED***), add the following under `piwik` in your config:
+When these configuration options are not present,
+analytics are deemed impossible and the user won't be asked to opt in to the system.
 
-1. `url`: The URL of the piwik server.
-2. `site_id`: The site ID to use.
-3. `policy_url`: URL to the analytics collection policy.
-4. `whitelisted_hs_urls`: A list of homeserver client-server URLs to *not* redact from analytics.
+There are additional root-level options which can be specified:
 
-Additionally, you may set `"piwik": false` to disable piwik configuration too. An `analytics_owner` can also be specified in your
-config to replace the company name used in dialogs talking about analytics - this defaults to `brand`, and is useful when the
-provider of analytics is different from the provider of the Element instance.
-
-## Server hosting links
-
-If you would like to encourage matrix.org users to sign up for a service like [Element Matrix Services](https://element.io/matrix-services/server-hosting),
-the following configuration options can be set. Note that if the options are missing from the configuration then the hosting prompts
-will not be shown to the user.
-
-1. `hosting_signup_link`: Optional URL to link the user to when talking about "Upgrading your account". Will contain a query parameter
-   of `utm_campaign` to denote which link the user clicked on within the app. Only ever applies to matrix.org users specifically.
-2. `host_signup`: Optional configuration for an account importer to your hosting platform. The API surface of this is not documented
-   at the moment, but can be configured with the following subproperties:
-   1. `brand`: The brand name to use.
-   2. `url`: The iframe URL for the importer.
-   3. `domains`: The homeserver domains to show the importer to.
-   4. `cookie_policy_url`: The URL to the cookie policy for the importer.
-   5. `privacy_policy_url`: The URL to the privacy policy for the importer.
-   6. `terms_of_service_url`: The URL to the terms of service for the importer.
-
-If you're looking to mirror a setup from our production/development environments, the following config should be used:
-
-```json
-{
-   "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
-   "host_signup": {
-      "brand": "Element Home",
-      "domains": [ "matrix.org" ],
-      "url": "https://ems.element.io/element-home/in-app-loader",
-      "cookie_policy_url": "https://element.io/cookie-policy",
-      "privacy_policy_url": "https://element.io/privacy",
-      "terms_of_service_url": "https://element.io/terms-of-service"
-   }
-}
-```
+1. `analytics_owner`: the company name used in dialogs talking about analytics - this defaults to `brand`,
+   and is useful when the provider of analytics is different from the provider of the Element instance.
+2. `privacy_policy_url`: URL to the privacy policy including the analytics collection policy.
 
 ## Miscellaneous
 
@@ -454,10 +504,10 @@ set this value to the following at a minimum:
 
 ```json
 {
-   "enable_presence_by_hs_url": {
-      "https://matrix.org": false,
-      "https://matrix-client.matrix.org": false
-   }
+    "enable_presence_by_hs_url": {
+        "https://matrix.org": false,
+        "https://matrix-client.matrix.org": false
+    }
 }
 ```
 
@@ -474,8 +524,8 @@ Element will check multiple sources when looking for an identity server to use i
 the following order of preference:
 
 1. The identity server set in the user's account data
-   * For a new user, no value is present in their account data. It is only set
-     if the user visits Settings and manually changes their identity server.
+    - For a new user, no value is present in their account data. It is only set
+      if the user visits Settings and manually changes their identity server.
 2. The identity server provided by the `.well-known` lookup that occurred at
    login
 3. The identity server provided by the Riot config file
@@ -490,7 +540,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/vector-im/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-desktop#user-specified-configjson
 
 ## UI Features
 
@@ -501,38 +551,38 @@ preferences.
 
 Currently, the following UI feature flags are supported:
 
-* `UIFeature.urlPreviews` - Whether URL previews are enabled across the entire application.
-* `UIFeature.feedback` - Whether prompts to supply feedback are shown.
-* `UIFeature.voip` - Whether or not VoIP is shown readily to the user. When disabled,
-  Jitsi widgets will still work though they cannot easily be added.
-* `UIFeature.widgets` - Whether or not widgets will be shown.
-* `UIFeature.flair` - Whether or not community flair is shown in rooms.
-* `UIFeature.communities` - Whether or not to show any UI related to communities. Implicitly
-  disables `UIFeature.flair` when disabled.
-* `UIFeature.advancedSettings` - Whether or not sections titled "advanced" in room and
-  user settings are shown to the user.
-* `UIFeature.shareQrCode` - Whether or not the QR code on the share room/event dialog
-  is shown.
-* `UIFeature.shareSocial` - Whether or not the social icons on the share room/event dialog
-  are shown.
-* `UIFeature.identityServer` - Whether or not functionality requiring an identity server
-  is shown. When disabled, the user will not be able to interact with the identity
-  server (sharing email addresses, 3PID invites, etc).
-* `UIFeature.thirdPartyId` - Whether or not UI relating to third party identifiers (3PIDs)
-  is shown. Typically this is considered "contact information" on the homeserver, and is
-  not directly related to the identity server.
-* `UIFeature.registration` - Whether or not the registration page is accessible. Typically
-  useful if accounts are managed externally.
-* `UIFeature.passwordReset` - Whether or not the password reset page is accessible. Typically
-  useful if accounts are managed externally.
-* `UIFeature.deactivate` - Whether or not the deactivate account button is accessible. Typically
-  useful if accounts are managed externally.
-* `UIFeature.advancedEncryption` - Whether or not advanced encryption options are shown to the
-  user.
-* `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
-  This should only be used if the room history visibility options are managed by the server.
-* `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
-  timeline for recent messages. When false day dates will be used.
+-   `UIFeature.urlPreviews` - Whether URL previews are enabled across the entire application.
+-   `UIFeature.feedback` - Whether prompts to supply feedback are shown.
+-   `UIFeature.voip` - Whether or not VoIP is shown readily to the user. When disabled,
+    Jitsi widgets will still work though they cannot easily be added.
+-   `UIFeature.widgets` - Whether or not widgets will be shown.
+-   `UIFeature.advancedSettings` - Whether or not sections titled "advanced" in room and
+    user settings are shown to the user.
+-   `UIFeature.shareQrCode` - Whether or not the QR code on the share room/event dialog
+    is shown.
+-   `UIFeature.shareSocial` - Whether or not the social icons on the share room/event dialog
+    are shown.
+-   `UIFeature.identityServer` - Whether or not functionality requiring an identity server
+    is shown. When disabled, the user will not be able to interact with the identity
+    server (sharing email addresses, 3PID invites, etc).
+-   `UIFeature.thirdPartyId` - Whether or not UI relating to third party identifiers (3PIDs)
+    is shown. Typically this is considered "contact information" on the homeserver, and is
+    not directly related to the identity server.
+-   `UIFeature.registration` - Whether or not the registration page is accessible. Typically
+    useful if accounts are managed externally.
+-   `UIFeature.passwordReset` - Whether or not the password reset page is accessible. Typically
+    useful if accounts are managed externally.
+-   `UIFeature.deactivate` - Whether or not the deactivate account button is accessible. Typically
+    useful if accounts are managed externally.
+-   `UIFeature.advancedEncryption` - Whether or not advanced encryption options are shown to the
+    user.
+-   `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
+    This should only be used if the room history visibility options are managed by the server.
+-   `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
+    timeline for recent messages. When false day dates will be used.
+-   `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
+    to true.
+-   `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 
 ## Undocumented / developer options
 
@@ -541,4 +591,5 @@ The following are undocumented or intended for developer use only.
 1. `fallback_hs_url`
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
-4. `latex_maths_delims`
+4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+5. `voice_broadcast.chunk_length`: Target chunk length in seconds for the Voice Broadcast feature currently under development.

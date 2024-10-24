@@ -18,10 +18,9 @@
  * ```
  */
 
-
 class Optional {
     static from(value) {
-        return value && Some.of(value) || None;
+        return (value && Some.of(value)) || None;
     }
     map(f) {
         return this;

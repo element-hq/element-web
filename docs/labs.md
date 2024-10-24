@@ -4,6 +4,9 @@ If Labs is enabled in the [Element config](config.md), you can enable some of th
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
+If a labs features gets more stable, it _may_ be promoted to a beta feature
+(see [Betas](https://github.com/element-hq/element-web/blob/develop/docs/betas.md)).
+
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
@@ -34,45 +37,6 @@ date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
 
-## Custom status (`feature_custom_status`)
-
-An experimental approach for supporting custom status messages across DMs. To set a status, click on
-your avatar next to the message composer.
-
-## Custom tags (`feature_custom_tags`)
-
-An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
-of the community filter panel.
-
-Setting custom tags is not supported by Element.
-
-## Render simple counters in room header (`feature_state_counters`)
-
-Allows rendering of labelled counters above the message list.
-
-Once enabled, send a custom state event to a room to set values:
-
-1. In a room, type `/devtools` to bring up the devtools interface
-2. Click "Send Custom Event"
-3. Toggle from "Event" to "State Event"
-4. Set the event type to: `re.jki.counter` and give it a unique key
-5. Specify the content in the following format:
-
-```
-{
-    "link": "",
-    "severity": "normal",
-    "title": "my counter",
-    "value": 0
-}
-```
-
-That's it. Now should see your new counter under the header.
-
-## Multiple integration managers (`feature_many_integration_managers`)
-
-Exposes a way to access all the integration managers known to Element. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
-
 ## New ways to ignore people (`feature_mjolnir`)
 
 When enabled, a new settings tab appears for users to be able to manage their ban lists.
@@ -99,11 +63,6 @@ present in the room. The Bridge info tab pulls information from the `m.bridge` s
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
 
-## Presence indicator in room list (`feature_presence_in_room_list`)
-
-This adds a presence indicator in the room list next to DM rooms where the other
-person is online.
-
 ## Custom themes (`feature_custom_themes`)
 
 Custom themes are possible through Element's [theme support](./theming.md), though
@@ -113,86 +72,43 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
 
-## Message preview tweaks
-
-To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
-To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
-
-## Communities v2 prototyping (`feature_communities_v2_prototypes`) [In Development]
-
-**This is a highly experimental implementation for parts of the communities v2 experience.** It does not
-represent what communities v2 will look/feel like and can/will change without notice. Due to the early
-stages this feature is in and the requirement for a compatible homeserver, we will not be accepting issues
-or feedback for this functionality at this time.
-
-## Dehydrated devices (`feature_dehydration`)
-
-Allows users to receive encrypted messages by creating a device that is stored
-encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Do not disturb (`feature_dnd`)
-
-Enables UI for turning on "do not disturb" mode for the current device. When DND mode is engaged, popups
-and notification noises are suppressed. Not perfect, but can help reduce noise.
-
-## Hidden read receipts (`feature_hidden_read_receipts`)
-
-Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
-
-## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
-
-Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
-triggered by the button to the right of the filter field.
-
-## Spotlight search (`feature_spotlight`) [In Development]
-
-Switches to a new room search experience.
-
-## Extensible events rendering (`feature_extensible_events`) [In Development]
-
-*Intended for developer use only at the moment.*
-
-Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
-supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
-can define a series of other events which represent the event's information but in different ways. The
-base of these fallbacks being text.
-
-Turning this flag on indicates that, when possible, the extensible events structure should be parsed on
-supported event types. This should lead to zero perceptual change in the timeline except in cases where
-the sender is using unknown/unrecognised event types.
-
-Sending events with extensible events structure is always enabled - this should not affect any downstream
-client.
-
-## Right panel stays open (`feature_right_panel_default_open`)
-
-This is an experimental default open right panel mode as a quick fix for those
-who prefer to have the right panel open consistently across rooms.
-
-If no right panel state is known for the room or it was closed on the last room
-visit, it will default to the room member list. Otherwise, the saved card last
-used in that room is shown.
-
-## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
-
-An experimental flag to determine how the app would behave if a user's current display
-name and avatar (profile) were shown on historical messages instead of the profile details
-at the time when the message was sent.
-
-When enabled, historical messages will use the current profile for the sender.
-
-## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
-
-Enables sharing a pin drop location to the timeline.
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
 
-## Threaded Messaging (`feature_thread`)
+## Video rooms (`feature_video_rooms`)
 
-Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
+Enables support for creating video rooms, which are persistent video chats that users can jump in and out of.
 
-Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
+## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
 
-This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
+Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
+
+This flag will not have any effect unless `feature_video_rooms` is also enabled.
+
+## New group call experience (`feature_group_calls`) [In Development]
+
+This feature allows users to place native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+
+If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
+
+## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
+
+The default for embedded Element Call in Element Web is per-participant encryption.
+This labs flag disables encryption for embedded Element Call in encrypted rooms.
+
+Under the hood this stops Element Web from adding the `perParticipantE2EE` flag for the Element Call widget url.
+
+This is useful while we experiment with encryption and to make calling compatible with platforms that don't use encryption yet.
+
+## Rich text in room topics (`feature_html_topic`) [In Development]
+
+Enables rendering of MD / HTML in room topics.
+
+## Enable the notifications panel in the room header (`feature_notifications`)
+
+Unreliable in encrypted rooms.
+
+## Knock rooms (`feature_ask_to_join`) [In Development]
+
+Enables knock feature for rooms. This allows users to ask to join a room.

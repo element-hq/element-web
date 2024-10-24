@@ -1,0 +1,46 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomCallBanner {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: $spacing-12 $spacing-16;
+
+    color: $primary-content;
+    background-color: $system;
+    cursor: pointer;
+}
+
+.mx_RoomCallBanner_text {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.mx_RoomCallBanner_label {
+    color: $primary-content;
+    font-weight: var(--cpd-font-weight-semibold);
+    padding-right: $spacing-8;
+
+    &::before {
+        display: inline-block;
+        vertical-align: middle;
+        content: "";
+        background-color: $secondary-content;
+        mask-size: 16px;
+        mask-position-y: center;
+        width: 16px;
+        height: 1.2em; /* to match line height */
+        margin-right: 8px;
+        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+    }
+}

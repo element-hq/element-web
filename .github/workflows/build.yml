@@ -1,0 +1,49 @@
+name: Build
+on:
+    pull_request: {}
+    push:
+        branches: [develop, master]
+    merge_group:
+        types: [checks_requested]
+# develop pushes and repository_dispatch handled in build_develop.yaml
+env:
+    # These must be set for fetchdep.sh to get the right branch
+    REPOSITORY: ${{ github.repository }}
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+jobs:
+    build:
+        name: "Build on ${{ matrix.image }}"
+        # We build on all 3 platforms to ensure we don't have any OS-specific build incompatibilities
+        strategy:
+            fail-fast: false
+            matrix:
+                image:
+                    - ubuntu-24.04
+                    - windows-2022
+                    - macos-14
+                isDevelop:
+                    - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+                # Skip the ubuntu-24.04 build for the develop branch as the dedicated CD build_develop workflow handles that
+                exclude:
+                    - isDevelop: true
+                      image: ubuntu-24.04
+        runs-on: ${{ matrix.image }}
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  node-version: "lts/*"
+
+            # Workaround for yarn install timeouts, especially on Windows
+            - run: yarn config set network-timeout 300000
+
+            - name: Install Dependencies
+              run: "./scripts/layered.sh"
+
+            - name: Build
+              run: "yarn build"

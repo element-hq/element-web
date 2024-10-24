@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LegacyCallViewButtons should render the buttons 1`] = `
+<div>
+  <div
+    class="mx_LegacyCallViewButtons"
+  >
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Dialpad"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dialpad"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-label="Mute microphone"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_mic mx_LegacyCallViewButtons_button_on"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dropdownButton mx_LegacyCallViewButtons_dropdownButton_collapsed mx_LegacyCallViewButtons_button_on"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <div
+      aria-label="Turn off camera"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_vid mx_LegacyCallViewButtons_button_on"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dropdownButton mx_LegacyCallViewButtons_dropdownButton_collapsed mx_LegacyCallViewButtons_button_on"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <div
+      aria-label="Start sharing your screen"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_screensharing mx_LegacyCallViewButtons_button_off"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-label="Show sidebar"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_sidebar mx_LegacyCallViewButtons_button_off"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="More"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_more"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-label="Hangup"
+      class="mx_AccessibleButton mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_hangup"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;

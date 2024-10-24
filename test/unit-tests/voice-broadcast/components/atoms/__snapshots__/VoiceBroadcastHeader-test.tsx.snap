@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastHeader when rendering a buffering live broadcast header with broadcast info should render the header with a red live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <div
+      data-testid="room-avatar"
+    >
+      room avatar: 
+      !room:example.com
+    </div>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_room_wrapper"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_Icon mx_Icon_16"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+          />
+          <path
+            d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+          />
+        </svg>
+        <span>
+          test user
+        </span>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Voice broadcast
+      </div>
+    </div>
+    <div
+      class="mx_LiveBadge"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Live
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastHeader when rendering a live (grey) broadcast header with broadcast info should render the header with a grey live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <div
+      data-testid="room-avatar"
+    >
+      room avatar: 
+      !room:example.com
+    </div>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_room_wrapper"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_Icon mx_Icon_16"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+          />
+          <path
+            d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+          />
+        </svg>
+        <span>
+          test user
+        </span>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Voice broadcast
+      </div>
+    </div>
+    <div
+      class="mx_LiveBadge mx_LiveBadge--grey"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Live
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadcast info should render the header with a red live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <div
+      data-testid="room-avatar"
+    >
+      room avatar: 
+      !room:example.com
+    </div>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_room_wrapper"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_Icon mx_Icon_16"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+          />
+          <path
+            d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+          />
+        </svg>
+        <span>
+          test user
+        </span>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Voice broadcast
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_Spinner_icon"
+            data-testid="spinner"
+            role="progressbar"
+            style="width: 14px; height: 14px;"
+          />
+        </div>
+        Buffering…
+      </div>
+    </div>
+    <div
+      class="mx_LiveBadge"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Live
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should render the header without a live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <div
+      data-testid="room-avatar"
+    >
+      room avatar: 
+      !room:example.com
+    </div>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_room_wrapper"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_Icon mx_Icon_16"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+          />
+          <path
+            d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+          />
+        </svg>
+        <span>
+          test user
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

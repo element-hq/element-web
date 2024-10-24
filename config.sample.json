@@ -12,6 +12,7 @@
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
+    "force_verification": false,
     "brand": "Element",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
@@ -22,23 +23,14 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
-    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
-    "uisi_autorageshake_app": "element-auto-uisi",
+    "default_widget_container_height": 280,
     "default_country_code": "GB",
     "show_labs_settings": false,
-    "features": { },
+    "features": {},
     "default_federate": true,
     "default_theme": "light",
     "room_directory": {
-        "servers": [
-            "matrix.org"
-        ]
-    },
-    "piwik": {
-        "url": "https://piwik.riot.im/",
-        "whitelisted_hs_urls": ["https://matrix.org"],
-        "whitelisted_is_urls": ["https://vector.im", "https://matrix.org"],
-        "siteId": 1
+        "servers": ["matrix.org"]
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false,
@@ -49,6 +41,11 @@
     },
     "jitsi": {
         "preferred_domain": "meet.element.io"
+    },
+    "element_call": {
+        "url": "https://call.element.io",
+        "participant_limit": 8,
+        "brand": "Element Call"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }

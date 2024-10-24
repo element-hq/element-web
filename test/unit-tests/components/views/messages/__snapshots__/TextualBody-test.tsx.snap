@@ -1,0 +1,571 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TextualBody /> renders formatted m.text correctly italics, bold, underline and strikethrough render as expected 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  foo 
+  <em>
+    baz
+  </em>
+   
+  <strong>
+    bar
+  </strong>
+   
+  <del>
+    del
+  </del>
+   
+  <u>
+    u
+  </u>
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly linkification is not applied to code blocks 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  <p>
+    Visit 
+    <code>
+      https://matrix.org/
+    </code>
+  </p>
+  
+
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+      </span>
+      <div
+        style="display: contents;"
+      >
+        <code>
+          https://matrix.org/
+
+        </code>
+      </div>
+    </pre>
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  
+
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for an MXID permalink 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  Chat with 
+  <span>
+    <bdi>
+      <a
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:example.com"
+      >
+        <span
+          aria-hidden="true"
+          aria-label="Profile picture"
+          class="_avatar_mcap2_17 mx_BaseAvatar"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          style="--cpd-avatar-size: 16px;"
+        >
+          <img
+            alt=""
+            class="_image_mcap2_50"
+            data-type="round"
+            height="16px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="mxc://avatar.url/image.png"
+            width="16px"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Member
+        </span>
+      </a>
+    </bdi>
+  </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for event permalinks without a custom label 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <div
+      class="mx_EventTile_body markdown-body translate"
+      dir="auto"
+    >
+      See this message 
+      <span>
+        <bdi>
+          <a
+            class="mx_Pill mx_EventPill"
+            href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
+          >
+            <span
+              aria-hidden="true"
+              aria-label="Avatar"
+              class="_avatar_mcap2_17 mx_BaseAvatar"
+              data-color="1"
+              data-testid="avatar-img"
+              data-type="round"
+              style="--cpd-avatar-size: 16px;"
+            >
+              <img
+                alt=""
+                class="_image_mcap2_50"
+                data-type="round"
+                height="16px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="mxc://avatar.url/room.png"
+                width="16px"
+              />
+            </span>
+            <span
+              class="mx_Pill_text"
+            >
+              Message in room name
+            </span>
+          </a>
+        </bdi>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for room links with vias 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <div
+      class="mx_EventTile_body markdown-body translate"
+      dir="auto"
+    >
+      A 
+      <span>
+        <bdi>
+          <a
+            class="mx_Pill mx_RoomPill"
+            href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
+          >
+            <span
+              aria-hidden="true"
+              aria-label="Avatar"
+              class="_avatar_mcap2_17 mx_BaseAvatar"
+              data-color="1"
+              data-testid="avatar-img"
+              data-type="round"
+              style="--cpd-avatar-size: 16px;"
+            >
+              <img
+                alt=""
+                class="_image_mcap2_50"
+                data-type="round"
+                height="16px"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                src="mxc://avatar.url/room.png"
+                width="16px"
+              />
+            </span>
+            <span
+              class="mx_Pill_text"
+            >
+              room name
+            </span>
+          </a>
+        </bdi>
+      </span>
+       with vias
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills do not appear for event permalinks with a custom label 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <div
+      class="mx_EventTile_body markdown-body translate"
+      dir="auto"
+    >
+      An 
+      <a
+        href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
+        rel="noreferrer noopener"
+      >
+        event link
+      </a>
+       with text
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills do not appear in code blocks 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  <p>
+    <code>
+      @room
+    </code>
+  </p>
+  
+
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+      </span>
+      <div
+        style="display: contents;"
+      >
+        <code>
+          @room
+
+        </code>
+      </div>
+    </pre>
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  
+
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills get injected correctly into the DOM 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  Hey 
+  <span>
+    <bdi>
+      <a
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:server"
+      >
+        <span
+          aria-hidden="true"
+          aria-label="Profile picture"
+          class="_avatar_mcap2_17 mx_BaseAvatar"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          style="--cpd-avatar-size: 16px;"
+        >
+          <img
+            alt=""
+            class="_image_mcap2_50"
+            data-type="round"
+            height="16px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="mxc://avatar.url/image.png"
+            width="16px"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Member
+        </span>
+      </a>
+    </bdi>
+  </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly renders formatted body without html correctly 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  escaped *markdown*
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly should syntax highlight code blocks 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+        <span>
+          2
+        </span>
+        <span>
+          3
+        </span>
+        <span>
+          4
+        </span>
+        <span>
+          5
+        </span>
+        <span>
+          6
+        </span>
+        <span>
+          7
+        </span>
+        <span>
+          8
+        </span>
+        <span>
+          9
+        </span>
+        <span>
+          10
+        </span>
+      </span>
+      <div
+        style="display: contents;"
+      >
+        <code
+          class="language-py"
+        >
+          <span
+            class="hljs-comment"
+          >
+            # Python Program to calculate the square root
+          </span>
+          
+
+
+          <span
+            class="hljs-comment"
+          >
+            # Note: change this value for a different result
+          </span>
+          
+num = 
+          <span
+            class="hljs-number"
+          >
+            8
+          </span>
+           
+
+
+          <span
+            class="hljs-comment"
+          >
+            # To take the input from the user
+          </span>
+          
+
+          <span
+            class="hljs-comment"
+          >
+            #num = float(input('Enter a number: '))
+          </span>
+          
+
+num_sqrt = num ** 
+          <span
+            class="hljs-number"
+          >
+            0.5
+          </span>
+          
+
+          <span
+            class="hljs-built_in"
+          >
+            print
+          </span>
+          (
+          <span
+            class="hljs-string"
+          >
+            'The square root of %0.3f is %0.3f'
+          </span>
+          %(num ,num_sqrt))
+
+        </code>
+      </div>
+    </pre>
+    <span
+      class="mx_EventTile_button mx_EventTile_expandButton"
+    />
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  
+
+</div>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly spoilers get injected properly into the DOM 1`] = `
+<div
+  class="mx_EventTile_body markdown-body translate"
+  dir="auto"
+>
+  Hey 
+  <span>
+    <button
+      class="mx_EventTile_spoiler"
+    >
+      <span
+        class="mx_EventTile_spoiler_reason"
+      >
+        (movie)
+      </span>
+       
+      <span
+        class="mx_EventTile_spoiler_content"
+      >
+        <span>
+          the movie was awesome
+        </span>
+      </span>
+    </button>
+  </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders m.emote correctly 1`] = `
+<span
+  class="mx_EventTile_body translate"
+>
+  winks
+</span>
+`;
+
+exports[`<TextualBody /> renders m.notice correctly 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  this is a notice, probably from a bot
+</div>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly linkification get applied correctly into the DOM 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  Visit 
+  <a
+    class="linkified"
+    href="https://matrix.org/"
+    rel="noreferrer noopener"
+    target="_blank"
+  >
+    https://matrix.org/
+  </a>
+</div>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room1:example.com/%event_id%"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message from Member</span></a></bdi></span>"`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `"Visit <span><bdi><a class="mx_Pill mx_EventPill" href="https://matrix.to/#/!room2:example.com/%event_id%"><span aria-label="Avatar" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="2" class="_avatar_mcap2_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/room.png" referrerpolicy="no-referrer" class="_image_mcap2_50" data-type="round" width="16px" height="16px"></span><span class="mx_Pill_text">Message in Room 2</span></a></bdi></span>"`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  Visit 
+  <span>
+    <bdi>
+      <a
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/!abc123"
+      >
+        <svg
+          class="mx_Pill_LinkIcon mx_BaseAvatar"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        <span
+          class="mx_Pill_text"
+        >
+          Message
+        </span>
+      </a>
+    </bdi>
+  </span>
+</div>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly simple message renders as expected 1`] = `
+<div
+  class="mx_EventTile_body translate"
+  dir="auto"
+>
+  this is a plaintext message
+</div>
+`;

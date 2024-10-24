@@ -2,35 +2,35 @@ name: Enhancement request
 description: Do you have a suggestion or feature request?
 labels: [T-Enhancement]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thank you for taking the time to propose a new feature or make a suggestion.
-  - type: textarea
-    id: usecase
-    attributes:
-      label: Your use case
-      description: What would you like to be able to do? Please feel welcome to include screenshots or mock ups.
-      placeholder: Tell us what you would like to do!
-      value: |
-        #### What would you like to do?
+    - type: markdown
+      attributes:
+          value: |
+              Thank you for taking the time to propose an enhancement to an existing feature. If you would like to propose a new feature or a major cross-platform change, please [start a discussion here](https://github.com/element-hq/element-meta/discussions/new?category=ideas).
+    - type: textarea
+      id: usecase
+      attributes:
+          label: Your use case
+          description: What would you like to be able to do? Please feel welcome to include screenshots or mock ups.
+          placeholder: Tell us what you would like to do!
+          value: |
+              #### What would you like to do?
 
-        #### Why would you like to do it?
+              #### Why would you like to do it?
 
-        #### How would you like to achieve it?
-    validations:
-      required: true
-  - type: textarea
-    id: alternative
-    attributes:
-      label: Have you considered any alternatives?
-      placeholder: A clear and concise description of any alternative solutions or features you've considered.
-    validations:
-      required: false
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional context
-      placeholder: Is there anything else you'd like to add?
-    validations:
-      required: false
+              #### How would you like to achieve it?
+      validations:
+          required: true
+    - type: textarea
+      id: alternative
+      attributes:
+          label: Have you considered any alternatives?
+          placeholder: A clear and concise description of any alternative solutions or features you've considered.
+      validations:
+          required: false
+    - type: textarea
+      id: additional-context
+      attributes:
+          label: Additional context
+          placeholder: Is there anything else you'd like to add?
+      validations:
+          required: false

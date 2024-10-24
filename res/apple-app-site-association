@@ -1,0 +1,35 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "7J4U792NQT.im.vector.app",
+          "7J4U792NQT.io.element.elementx",
+          "7J4U792NQT.io.element.elementx.nightly",
+          "7J4U792NQT.io.element.elementx.pr"
+        ],
+        "components": [
+          {
+            "?": {
+              "no_universal_links": "?*"
+            },
+            "exclude": true,
+            "comment": "Opt out of universal links"
+          },
+          {
+            "/": "/*",
+            "comment": "Matches any URL"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "7J4U792NQT.im.vector.app",
+      "7J4U792NQT.io.element.elementx",
+      "7J4U792NQT.io.element.elementx.nightly",
+      "7J4U792NQT.io.element.elementx.pr"
+    ]
+  }
+}

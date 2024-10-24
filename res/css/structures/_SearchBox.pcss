@@ -1,0 +1,28 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SearchBox {
+    flex: 1 1 0;
+    min-width: 0;
+
+    &.mx_SearchBox_blurred:not(:hover) {
+        background-color: transparent;
+    }
+
+    .mx_SearchBox_closeButton {
+        cursor: pointer;
+        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 16px;
+        width: 16px;
+        height: 16px;
+        padding: 9px;
+        background-color: var(--cpd-color-icon-secondary);
+    }
+}

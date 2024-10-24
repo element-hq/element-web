@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    Asking to join
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PeopleRoomSettingsTab_knock"
+    >
+      <span
+        aria-label="Profile picture"
+        class="_avatar_mcap2_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar"
+        data-color="4"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 42px;"
+        title="@albert.einstein:example.org"
+      >
+        <img
+          alt=""
+          class="_image_mcap2_50"
+          data-type="round"
+          height="42px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="mxc://example.org/albert-einstein.png"
+          width="42px"
+        />
+      </span>
+      <div
+        class="mx_PeopleRoomSettingsTab_content"
+      >
+        <span
+          class="mx_PeopleRoomSettingsTab_name"
+        >
+          Albert Einstein
+        </span>
+        <time
+          class="mx_PeopleRoomSettingsTab_timestamp"
+        >
+          Apr 18, 1955
+        </time>
+        <span
+          class="mx_PeopleRoomSettingsTab_userId"
+        >
+          @albert.einstein:example.org
+        </span>
+        <p
+          class="mx_PeopleRoomSettingsTab_seeMoreOrLess"
+        >
+          There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a…
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+          role="button"
+          tabindex="0"
+        >
+          See more
+        </div>
+      </div>
+      <div
+        aria-label="Deny"
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="18"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+      <div
+        aria-label="Approve"
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="18"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</fieldset>
+`;
+
+exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    Asking to join
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PeopleRoomSettingsTab_knock"
+    >
+      <span
+        class="_avatar_mcap2_17 mx_BaseAvatar mx_PeopleRoomSettingsTab_avatar _avatar-imageless_mcap2_61"
+        data-color="4"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 42px;"
+        title="@albert.einstein:example.org"
+      >
+        a
+      </span>
+      <div
+        class="mx_PeopleRoomSettingsTab_content"
+      >
+        <span
+          class="mx_PeopleRoomSettingsTab_name"
+        >
+          albert.einstein
+        </span>
+        <span
+          class="mx_PeopleRoomSettingsTab_userId"
+        >
+          @albert.einstein:example.org
+        </span>
+      </div>
+      <div
+        aria-label="Deny"
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="18"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+      <div
+        aria-label="Approve"
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="18"
+          viewBox="0 0 24 24"
+          width="18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</fieldset>
+`;

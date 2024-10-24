@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PollListItem /> renders a poll 1`] = `
+<div>
+  <li
+    class="mx_PollListItem"
+    data-testid="pollListItem-$mypoll"
+  >
+    <span
+      tabindex="0"
+    >
+      <div
+        aria-labelledby=":r0:"
+        class="mx_PollListItem_content"
+      >
+        <span>
+          01/01/70
+        </span>
+        <div
+          class="mx_PollListItem_icon"
+        />
+        <span
+          class="mx_PollListItem_question"
+        >
+          Question?
+        </span>
+      </div>
+    </span>
+  </li>
+</div>
+`;

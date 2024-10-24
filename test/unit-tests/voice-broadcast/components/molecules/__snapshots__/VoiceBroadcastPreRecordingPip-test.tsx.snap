@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastPreRecordingPip when rendered should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          !room@example.com
+        </div>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room_wrapper"
+          >
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              !room@example.com
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line mx_VoiceBroadcastHeader_mic--clickable"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_16"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 6a4 4 0 1 1 8 0v6a4 4 0 0 1-8 0V6Z"
+            />
+            <path
+              d="M5 11a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8.001 8.001 0 0 1-7 7.938V21a1 1 0 1 1-2 0v-1.062A8.001 8.001 0 0 1 4 12a1 1 0 0 1 1-1Z"
+            />
+          </svg>
+          <span>
+            Default Device
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_Icon mx_Icon_16"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_VoiceBroadcastBody_blockButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Go live
+    </div>
+  </div>
+</div>
+`;

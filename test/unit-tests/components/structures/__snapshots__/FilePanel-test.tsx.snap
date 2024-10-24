@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilePanel renders empty state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_FilePanel"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Files
+        </p>
+      </div>
+      <button
+        aria-labelledby=":r0:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
+    >
+      <div
+        class="mx_RoomView_empty"
+      >
+        <div
+          class="mx_Flex mx_EmptyState"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
+        >
+          <svg
+            fill="currentColor"
+            height="32px"
+            viewBox="0 0 24 24"
+            width="32px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 20V4c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 6 2h7.175a1.975 1.975 0 0 1 1.4.575l4.85 4.85a1.975 1.975 0 0 1 .575 1.4V20c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 22H6Zm7-14V4H6v16h12V9h-4a.968.968 0 0 1-.713-.287A.967.967 0 0 1 13 8Z"
+            />
+          </svg>
+          <p
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+          >
+            No files visible in this room
+          </p>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+          >
+            Attach files from chat or just drag and drop them anywhere in a room.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "declaration": false,
+        "outDir": "./lib/module_system",
+        "lib": ["es2022"],
+        "types": ["node"]
+    },
+    "include": ["./module_system/**/*.ts"]
+}

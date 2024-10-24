@@ -1,5 +1,4 @@
-Running in Kubernetes
-=====================
+# Running in Kubernetes
 
 In case you would like to deploy element-web in a kubernetes cluster you can use
 the provided Kubernetes example below as a starting point. Note that this example assumes the
@@ -69,12 +68,6 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                 "servers": [
                         "matrix.org"
                 ]
-            },
-            "piwik": {
-                "url": "https://piwik.riot.im/",
-                "whitelistedHSUrls": ["https://matrix.org"],
-                "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
-                "siteId": 1
             },
             "enable_presence_by_hs_url": {
                 "https://matrix.org": false,
@@ -169,7 +162,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
           add_header X-Frame-Options SAMEORIGIN;
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
-          add_header Content-Security-Policy "frame-ancestors 'none'";
+          add_header Content-Security-Policy "frame-ancestors 'self'";
     spec:
       rules:
         - host: element.example.nl
@@ -184,4 +177,3 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                       number: 80
 
     ---
-

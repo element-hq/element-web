@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WithPresenceIndicator renders presence indicator with tooltip for DM rooms 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_WithPresenceIndicator"
+  >
+    <span />
+    <div
+      aria-labelledby=":r0:"
+      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_online"
+      style="width: 32px; height: 32px;"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`WithPresenceIndicator renders presence indicator with tooltip for DM rooms 2`] = `
+<DocumentFragment>
+  <div
+    class="mx_WithPresenceIndicator"
+  >
+    <span />
+    <div
+      aria-labelledby=":r6:"
+      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_offline"
+      style="width: 32px; height: 32px;"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`WithPresenceIndicator renders presence indicator with tooltip for DM rooms 3`] = `
+<DocumentFragment>
+  <div
+    class="mx_WithPresenceIndicator"
+  >
+    <span />
+    <div
+      aria-labelledby=":rc:"
+      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_away"
+      style="width: 32px; height: 32px;"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;

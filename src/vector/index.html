@@ -25,17 +25,17 @@
     <meta property="og:image" content="<%= og_image_url %>" />
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
-        style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
+        style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
+        script-src 'self' 'wasm-unsafe-eval' https://www.recaptcha.net/recaptcha/ https://www.gstatic.com/recaptcha/ <%= csp_extra_source %>;
         img-src * blob: data:;
-        connect-src *;
-        font-src 'self' data:;
+        connect-src * blob:;
+        font-src 'self' data: <%= csp_extra_source %>;
         media-src * blob: data:;
         child-src * blob: data:;
-        worker-src 'self' blob:;
+        worker-src 'self' blob: <%= csp_extra_source %>;
         frame-src * blob: data:;
-        form-action 'self';
-        manifest-src 'self';
+        form-action 'self' <%= csp_extra_source %>;
+        manifest-src 'self' <%= csp_extra_source %>;
     ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
@@ -49,10 +49,9 @@
         <% }
     } %>
 
-    <% for (var i=0; i < htmlWebpackPlugin.tags.headTags.length; i++) {
-        var tag = htmlWebpackPlugin.tags.headTags[i];
-        var path = tag.attributes && tag.attributes.href;
-        if (path.indexOf("Inter") !== -1) { %>
+    <% for (const tag of htmlWebpackPlugin.tags.headTags) {
+        let path = tag.attributes && tag.attributes.href;
+        if (path && path.includes("/Inter/")) { %>
             <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
         <% }
     } %>
@@ -60,41 +59,35 @@
   </head>
   <body style="height: 100%; margin: 0;">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
-    <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
+    <div id="matrixchat" style="height: 100%;" class="notranslate"></div>
+
+<%
+    // insert <script> tags for the JS entry points
+    for (let file of htmlWebpackPlugin.files.js) {
+        if (file.includes("bundle.js") || file.includes("unhomoglyph_data")) {
+%>    <script src="<%= file %>"></script>
+<%
+        }
+    }
+%>
 
     <!-- Legacy supporting Prefetch images -->
-    <img src="<%= require('matrix-react-sdk/res/img/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('../../res/img/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('../../res/img/e2e/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/bold.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/inline-code.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/italic.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/quote.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/strikethrough.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
 
-    <audio id="messageAudio">
-        <source src="media/message.ogg" type="audio/ogg" />
-        <source src="media/message.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="ringAudio" loop>
-        <source src="media/ring.ogg" type="audio/ogg" />
-        <source src="media/ring.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="ringbackAudio" loop>
-        <source src="media/ringback.ogg" type="audio/ogg" />
-        <source src="media/ringback.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="callendAudio">
-        <source src="media/callend.ogg" type="audio/ogg" />
-        <source src="media/callend.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="busyAudio">
-        <source src="media/busy.ogg" type="audio/ogg" />
-        <source src="media/busy.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="remoteAudio"></audio>
     <!-- let CSS themes pass constants to the app -->
     <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
+
+    <!-- We eagerly create these containers to ensure their CSS stacking context order is sensible -->
+    <div id="mx_PersistedElement_container"></div>
+    <div id="mx_Dialog_StaticContainer"></div>
+    <div id="mx_Dialog_Container"></div>
+    <div id="mx_ContextualMenu_Container"></div>
   </body>
 </html>

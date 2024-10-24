@@ -1,0 +1,32 @@
+/*
+Copyright 2018-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_KeyBackupFailedDialog .mx_Dialog_title {
+    margin-bottom: 32px;
+}
+
+.mx_KeyBackupFailedDialog_title {
+    position: relative;
+    padding-left: 45px;
+    padding-bottom: 10px;
+
+    &::before {
+        mask: url("$(res)/img/e2e/lock-warning-filled.svg");
+        mask-repeat: no-repeat;
+        background-color: $primary-content;
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+
+.mx_KeyBackupFailedDialog .mx_Dialog_buttons {
+    margin-top: 36px;
+}

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserMenu> <UserMenu> when video broadcast when rendered should render as expected 1`] = `
+<div>
+  <div
+    class="mx_UserMenu"
+  >
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="User menu"
+      class="mx_AccessibleButton mx_UserMenu_contextMenuButton"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_UserMenu_userAvatar"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 32px;"
+        >
+          u
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

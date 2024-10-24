@@ -1,11 +1,11 @@
 ## Memory leaks
 
-Element usually emits slow behaviour just before it is about to crash. Getting a 
+Element usually emits slow behaviour just before it is about to crash. Getting a
 memory snapshot (below) just before that happens is ideal in figuring out what
 is going wrong.
 
 Common symptoms are clicking on a room and it feels like the tab froze and scrolling
-becoming jumpy/staggered. 
+becoming jumpy/staggered.
 
 If you receive a white screen (electron) or the chrome crash page, it is likely
 run out of memory and it is too late for a memory profile. Please do report when
@@ -22,8 +22,8 @@ and anything newer is still in the warmup stages of the app.
 
 **Memory profiles can contain sensitive information.** If you are submitting a memory
 profile to us for debugging purposes, please pick the appropriate Element developer and
-send them over an encrypted private message. *Do not share your memory profile in
-public channels or with people you do not trust.*
+send them over an encrypted private message. _Do not share your memory profile in
+public channels or with people you do not trust._
 
 ### Taking a memory profile (Firefox)
 

@@ -1,13 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # download and unpack a element-web tarball.
 #
 # Allows `bundles` to be extracted to a common directory, and a link to
 # config.json to be added.
 
-from __future__ import print_function
-
 import argparse
+import errno
 import os
 import os.path
 import subprocess
@@ -15,21 +14,26 @@ import sys
 import tarfile
 import shutil
 import glob
+from urllib.request import urlretrieve
 
-try:
-    # python3
-    from urllib.request import urlretrieve
-except ImportError:
-    # python2
-    from urllib import urlretrieve
 
 class DeployException(Exception):
     pass
 
+
 def create_relative_symlink(linkname, target):
     relpath = os.path.relpath(target, os.path.dirname(linkname))
-    print ("Symlink %s -> %s" % (linkname, relpath))
-    os.symlink(relpath, linkname)
+    print("Symlink %s -> %s" % (linkname, relpath))
+
+    try:
+        os.symlink(relpath, linkname)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            # atomic modification
+            os.symlink(relpath, linkname + ".tmp")
+            os.rename(linkname + ".tmp", linkname)
+        else:
+            raise e
 
 
 def move_bundles(source, dest):
@@ -50,33 +54,35 @@ def move_bundles(source, dest):
     for f in os.listdir(source):
         dst = os.path.join(dest, f)
         if os.path.exists(dst):
-            print (
+            print(
                 "Skipping bundle. The bundle includes '%s' which we have previously deployed."
                 % f
             )
         else:
             renames[os.path.join(source, f)] = dst
 
-    for (src, dst) in renames.iteritems():
-        print ("Move %s -> %s" % (src, dst))
+    for (src, dst) in renames.items():
+        print("Move %s -> %s" % (src, dst))
         os.rename(src, dst)
+
 
 class Deployer:
     def __init__(self):
         self.packages_path = "."
         self.bundles_path = None
         self.should_clean = False
+        self.symlink_latest = None
         # filename -> symlink path e.g 'config.localhost.json' => '../localhost/config.json'
         self.symlink_paths = {}
         self.verify_signature = True
 
-    def deploy(self, tarball, extract_path):
-        """Download a tarball if necessary, and unpack it
+    def fetch(self, tarball, extract_path):
+        """Download a tarball, verifies it if needed, and unpacks it
 
         Returns:
-            (str) the path to the unpacked deployment
+            (str) the path to the unpacked directory
         """
-        print("Deploying %s to %s" % (tarball, extract_path))
+        print("Fetching %s to %s" % (tarball, extract_path))
 
         name_str = os.path.basename(tarball).replace(".tar.gz", "")
         extracted_dir = os.path.join(extract_path, name_str)
@@ -92,15 +98,37 @@ class Deployer:
 
         try:
             with tarfile.open(tarball) as tar:
-                tar.extractall(extract_path)
+                def is_within_directory(directory, target):
+                    abs_directory = os.path.abspath(directory)
+                    abs_target = os.path.abspath(target)
+                
+                    prefix = os.path.commonprefix([abs_directory, abs_target])
+                    
+                    return prefix == abs_directory
+                
+                def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                    for member in tar.getmembers():
+                        member_path = os.path.join(path, member.name)
+                        if not is_within_directory(path, member_path):
+                            raise Exception("Attempted Path Traversal in Tar File")
+                
+                    tar.extractall(path, members, numeric_owner=numeric_owner) 
+                    
+                
+                safe_extract(tar, extract_path)
         finally:
             if self.should_clean and downloaded:
                 os.remove(tarball)
 
-        print ("Extracted into: %s" % extracted_dir)
+        print("Extracted into: %s" % extracted_dir)
+        return extracted_dir
+
+    def deploy(self, extracted_dir):
+        """Applies symlinks and handles the bundles directory on an extracted tarball"""
+        print("Deploying %s" % extracted_dir)
 
         if self.symlink_paths:
-            for link_path, file_path in self.symlink_paths.iteritems():
+            for link_path, file_path in self.symlink_paths.items():
                 create_relative_symlink(
                     target=file_path,
                     linkname=os.path.join(extracted_dir, link_path)
@@ -117,7 +145,12 @@ class Deployer:
                 target=self.bundles_path,
                 linkname=extracted_bundles,
             )
-        return extracted_dir
+
+        if self.symlink_latest:
+            create_relative_symlink(
+                target=extracted_dir,
+                linkname=self.symlink_latest,
+            )
 
     def download_and_verify(self, url):
         tarball = self.download_file(url)
@@ -138,6 +171,7 @@ class Deployer:
         urlretrieve(url, local_filename)
         print ("Done")
         return local_filename
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Deploy a Riot build on a web server.")
@@ -173,8 +207,15 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "tarball", help=(
-            "filename of tarball, or URL to download."
+        "-s", "--symlink", dest="symlink", default="./latest", help=(
+            "Write a symlink to this location pointing to the extracted tarball. \
+            New builds will keep overwriting this symlink. The symlink will point \
+            to the webapp directory INSIDE the tarball."
+        )
+    )
+    parser.add_argument(
+        "target", help=(
+            "filename of extracted directory, tarball, or URL to download."
         ),
     )
 
@@ -184,8 +225,18 @@ if __name__ == "__main__":
     deployer.packages_path = args.packages_dir
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
+    deployer.symlink_latest = args.symlink
 
     for include in args.include:
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
-    deployer.deploy(args.tarball, args.extract_path)
+    if os.path.isdir(args.target):
+        # If the given directory contains a single directory then use that instead, the ci package wraps in an extra dir
+        files = os.listdir(args.target)
+        if len(files) == 1 and os.path.isdir(os.path.join(args.target, files[0])):
+            extracted_dir = os.path.join(args.target, files[0])
+        else:
+            extracted_dir = args.target
+    else:
+        extracted_dir = deployer.fetch(args.target, args.extract_path)
+    deployer.deploy(extracted_dir)
