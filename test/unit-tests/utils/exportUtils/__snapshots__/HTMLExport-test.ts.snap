@@ -17,24 +17,19 @@ exports[`HTMLExport should export 1`] = `
                     <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                         <div class="mx_MatrixChat">
                         <main class="mx_RoomView">
-                            <div class="mx_LegacyRoomHeader light-panel">
-                            <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
-                                <div class="mx_LegacyRoomHeader_avatar">
-                                <div class="mx_DecoratedRoomAvatar">
-                                   <span role="presentation" title="!myroom:example.org" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61" style="--cpd-avatar-size:32px">!</span>
+                            <div class="mx_Flex mx_RoomHeader light-panel">
+                                <span role="presentation" title="!myroom:example.org" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61" style="--cpd-avatar-size:32px">!</span>
+                                <div class="mx_RoomHeader_infoWrapper">
+                                    <div
+                                        dir="auto"
+                                        class="mx_RoomHeader_info"
+                                        title="!myroom:example.org"
+                                    >
+                                        <span class="mx_RoomHeader_truncated mx_lineClamp">
+                                            !myroom:example.org
+                                        </span>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="mx_LegacyRoomHeader_name">
-                                <div
-                                    dir="auto"
-                                    class="mx_LegacyRoomHeader_nametext"
-                                    title="!myroom:example.org"
-                                >
-                                    !myroom:example.org
-                                </div>
-                                </div>
-                                <div class="mx_LegacyRoomHeader_topic" dir="auto">  </div>
-                            </div>
                             </div>
                             
                             <div class="mx_MainSplit">
