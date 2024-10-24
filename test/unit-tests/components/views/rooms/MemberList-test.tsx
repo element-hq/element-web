@@ -8,7 +8,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import {
+    act,
+    fireEvent,
+    render,
+    RenderResult,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
+    cleanup,
+} from "jest-matrix-react";
 import { Room, MatrixClient, RoomState, RoomMember, User, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked, MockedObject } from "jest-mock";
@@ -361,6 +370,7 @@ describe("MemberList", () => {
 
             afterEach(() => {
                 jest.restoreAllMocks();
+                cleanup();
             });
 
             const renderComponent = () => {
@@ -397,21 +407,22 @@ describe("MemberList", () => {
                 jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(false);
 
-                renderComponent();
-                await flushPromises();
+                const { findByLabelText } = renderComponent();
 
                 // button rendered but disabled
-                expect(screen.getByText("Invite to this room")).toHaveAttribute("aria-disabled", "true");
+                await expect(findByLabelText("You do not have permission to invite users")).resolves.toHaveAttribute(
+                    "aria-disabled",
+                    "true",
+                );
             });
 
             it("renders enabled invite button when current user is a member and has rights to invite", async () => {
                 jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
                 jest.spyOn(room, "canInvite").mockReturnValue(true);
 
-                renderComponent();
-                await flushPromises();
+                const { findByText } = renderComponent();
 
-                expect(screen.getByText("Invite to this room")).not.toBeDisabled();
+                await expect(findByText("Invite to this room")).resolves.not.toBeDisabled();
             });
 
             it("opens room inviter on button click", async () => {

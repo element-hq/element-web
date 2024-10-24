@@ -276,9 +276,7 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockRejectedValue({ httpStatus: 404 });
         const { container } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
         expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
     });
 
@@ -301,9 +299,7 @@ describe("<SessionManagerTab />", () => {
 
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(mockCrypto.getDeviceVerificationStatus).toHaveBeenCalledTimes(3);
         expect(
@@ -336,9 +332,7 @@ describe("<SessionManagerTab />", () => {
 
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         // twice for each device
         expect(mockClient.getAccountData).toHaveBeenCalledTimes(4);
@@ -355,9 +349,7 @@ describe("<SessionManagerTab />", () => {
 
         const { getByTestId, queryByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         toggleDeviceDetails(getByTestId, alicesDevice.device_id);
         // application metadata section not rendered
@@ -368,9 +360,7 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice] });
         const { queryByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(queryByTestId("other-sessions-section")).toBeFalsy();
     });
@@ -381,9 +371,7 @@ describe("<SessionManagerTab />", () => {
         });
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(getByTestId("other-sessions-section")).toBeTruthy();
     });
@@ -394,9 +382,7 @@ describe("<SessionManagerTab />", () => {
         });
         const { getByTestId, container } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         fireEvent.click(getByTestId("unverified-devices-cta"));
 
@@ -907,7 +893,8 @@ describe("<SessionManagerTab />", () => {
             });
 
             it("deletes a device when interactive auth is not required", async () => {
-                mockClient.deleteMultipleDevices.mockResolvedValue({});
+                const deferredDeleteMultipleDevices = defer<{}>();
+                mockClient.deleteMultipleDevices.mockReturnValue(deferredDeleteMultipleDevices.promise);
                 mockClient.getDevices.mockResolvedValue({
                     devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
                 });
@@ -932,6 +919,7 @@ describe("<SessionManagerTab />", () => {
                 fireEvent.click(signOutButton);
                 await confirmSignout(getByTestId);
                 await prom;
+                deferredDeleteMultipleDevices.resolve({});
 
                 // delete called
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
@@ -990,7 +978,7 @@ describe("<SessionManagerTab />", () => {
 
                 const { getByTestId, getByLabelText } = render(getComponent());
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // reset mock count after initial load
                 mockClient.getDevices.mockClear();
@@ -1024,7 +1012,7 @@ describe("<SessionManagerTab />", () => {
                     fireEvent.submit(getByLabelText("Password"));
                 });
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // called again with auth
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
@@ -1550,7 +1538,7 @@ describe("<SessionManagerTab />", () => {
                 });
                 const { getByTestId, container } = render(getComponent());
 
-                await act(flushPromises);
+                await flushPromises();
 
                 // filter for inactive sessions
                 await setFilter(container, DeviceSecurityVariation.Inactive);
@@ -1576,9 +1564,7 @@ describe("<SessionManagerTab />", () => {
     it("lets you change the pusher state", async () => {
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
@@ -1597,9 +1583,7 @@ describe("<SessionManagerTab />", () => {
     it("lets you change the local notification settings state", async () => {
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         toggleDeviceDetails(getByTestId, alicesDevice.device_id);
 
@@ -1620,9 +1604,7 @@ describe("<SessionManagerTab />", () => {
     it("updates the UI when another session changes the local notifications", async () => {
         const { getByTestId } = render(getComponent());
 
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         toggleDeviceDetails(getByTestId, alicesDevice.device_id);
 

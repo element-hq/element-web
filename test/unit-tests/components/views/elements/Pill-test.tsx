@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, RenderResult, screen } from "jest-matrix-react";
+import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
@@ -214,9 +214,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });
@@ -228,9 +226,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });

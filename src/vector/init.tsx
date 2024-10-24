@@ -8,8 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as ReactDOM from "react-dom";
-import * as React from "react";
+import { createRoot } from "react-dom/client";
+import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import * as languageHandler from "../languageHandler";
@@ -96,7 +96,9 @@ export async function loadApp(fragParams: {}): Promise<void> {
     function setWindowMatrixChat(matrixChat: MatrixChat): void {
         window.matrixChat = matrixChat;
     }
-    ReactDOM.render(await module.loadApp(fragParams, setWindowMatrixChat), document.getElementById("matrixchat"));
+    const app = await module.loadApp(fragParams, setWindowMatrixChat);
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(app);
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
@@ -104,10 +106,8 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
-        <ErrorView title={title} messages={messages} />,
-        document.getElementById("matrixchat"),
-    );
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(<ErrorView title={title} messages={messages} />);
 }
 
 export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
@@ -115,10 +115,8 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
-        <UnsupportedBrowserView onAccept={onAccept} />,
-        document.getElementById("matrixchat"),
-    );
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(<UnsupportedBrowserView onAccept={onAccept} />);
 }
 
 export async function loadModules(): Promise<void> {

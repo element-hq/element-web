@@ -19,9 +19,9 @@ describe("requestMediaPermissions", () => {
     const audioStream = {} as MediaStream;
 
     const itShouldLogTheErrorAndShowTheNoMediaPermissionsModal = () => {
-        it("should log the error and show the »No media permissions« modal", () => {
+        it("should log the error and show the »No media permissions« modal", async () => {
             expect(logger.log).toHaveBeenCalledWith("Failed to list userMedia devices", error);
-            screen.getByText("No media permissions");
+            await expect(screen.findByText("No media permissions")).resolves.toBeInTheDocument();
         });
     };
 

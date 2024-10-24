@@ -389,7 +389,7 @@ describe("<SendMessageComposer/>", () => {
 
         it("correctly persists state to and from localStorage", () => {
             const props = { replyToEvent: mockEvent };
-            const { container, unmount, rerender } = getComponent(props);
+            let { container, unmount } = getComponent(props);
 
             addTextToComposer(container, "Test Text");
 
@@ -406,7 +406,7 @@ describe("<SendMessageComposer/>", () => {
             });
 
             // ensure the correct model is re-loaded
-            rerender(getRawComponent(props));
+            ({ container, unmount } = getComponent(props));
             expect(container.textContent).toBe("Test Text");
             expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "reply_to_event",
@@ -417,7 +417,7 @@ describe("<SendMessageComposer/>", () => {
             // now try with localStorage wiped out
             unmount();
             localStorage.removeItem(key);
-            rerender(getRawComponent(props));
+            ({ container } = getComponent(props));
             expect(container.textContent).toBe("");
         });
 

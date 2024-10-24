@@ -65,7 +65,8 @@ describe("UnverifiedSessionToast", () => {
             });
         };
 
-        it("should render as expected", () => {
+        it("should render as expected", async () => {
+            await expect(screen.findByText("New login. Was this you?")).resolves.toBeInTheDocument();
             expect(renderResult.baseElement).toMatchSnapshot();
         });
 

@@ -90,9 +90,7 @@ describe("VoiceBroadcastPreRecordingPip", () => {
         beforeEach(async () => {
             renderResult = render(<VoiceBroadcastPreRecordingPip voiceBroadcastPreRecording={preRecording} />);
 
-            await act(async () => {
-                flushPromises();
-            });
+            await flushPromises();
         });
 
         it("should match the snapshot", () => {

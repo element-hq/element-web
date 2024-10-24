@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { screen, fireEvent, render, waitFor } from "jest-matrix-react";
+import { screen, fireEvent, render, waitFor, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Crypto, IMegolmSessionData } from "matrix-js-sdk/src/matrix";
 
@@ -23,12 +23,12 @@ describe("ExportE2eKeysDialog", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should have disabled submit button initially", () => {
+    it("should have disabled submit button initially", async () => {
         const cli = createTestClient();
         const onFinished = jest.fn();
         const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
-        fireEvent.click(container.querySelector("[type=submit]")!);
-        expect(screen.getByText("Enter passphrase")).toBeInTheDocument();
+        await act(() => fireEvent.click(container.querySelector("[type=submit]")!));
+        expect(screen.getByLabelText("Enter passphrase")).toBeInTheDocument();
     });
 
     it("should complain about weak passphrases", async () => {
@@ -38,7 +38,7 @@ describe("ExportE2eKeysDialog", () => {
         const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         const input = screen.getByLabelText("Enter passphrase");
         await userEvent.type(input, "password");
-        fireEvent.click(container.querySelector("[type=submit]")!);
+        await act(() => fireEvent.click(container.querySelector("[type=submit]")!));
         await expect(screen.findByText("This is a top-10 common password")).resolves.toBeInTheDocument();
     });
 
@@ -49,7 +49,7 @@ describe("ExportE2eKeysDialog", () => {
         const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={onFinished} />);
         await userEvent.type(screen.getByLabelText("Enter passphrase"), "ThisIsAMoreSecurePW123$$");
         await userEvent.type(screen.getByLabelText("Confirm passphrase"), "ThisIsAMoreSecurePW124$$");
-        fireEvent.click(container.querySelector("[type=submit]")!);
+        await act(() => fireEvent.click(container.querySelector("[type=submit]")!));
         await expect(screen.findByText("Passphrases must match")).resolves.toBeInTheDocument();
     });
 
@@ -74,7 +74,7 @@ describe("ExportE2eKeysDialog", () => {
         const { container } = render(<ExportE2eKeysDialog matrixClient={cli} onFinished={jest.fn()} />);
         await userEvent.type(screen.getByLabelText("Enter passphrase"), passphrase);
         await userEvent.type(screen.getByLabelText("Confirm passphrase"), passphrase);
-        fireEvent.click(container.querySelector("[type=submit]")!);
+        await act(() => fireEvent.click(container.querySelector("[type=submit]")!));
 
         // Then it exports keys and encrypts them
         await waitFor(() => expect(exportRoomKeysAsJson).toHaveBeenCalled());

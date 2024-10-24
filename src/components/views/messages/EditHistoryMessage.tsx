@@ -13,8 +13,8 @@ import classNames from "classnames";
 import * as HtmlUtils from "../../../HtmlUtils";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
-import { pillifyLinks, unmountPills } from "../../../utils/pillify";
-import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
+import { pillifyLinks } from "../../../utils/pillify";
+import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import RedactedBody from "./RedactedBody";
@@ -23,6 +23,7 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { ReactRootManager } from "../../../utils/react";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -47,8 +48,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     public declare context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
-    private pills: Element[] = [];
-    private tooltips: Element[] = [];
+    private pills = new ReactRootManager();
+    private tooltips = new ReactRootManager();
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -103,7 +104,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private tooltipifyLinks(): void {
         // not present for redacted events
         if (this.content.current) {
-            tooltipifyLinks(this.content.current.children, this.pills, this.tooltips);
+            tooltipifyLinks(this.content.current.children, this.pills.elements, this.tooltips);
         }
     }
 
@@ -113,8 +114,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     }
 
     public componentWillUnmount(): void {
-        unmountPills(this.pills);
-        unmountTooltips(this.tooltips);
+        this.pills.unmount();
+        this.tooltips.unmount();
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
     }

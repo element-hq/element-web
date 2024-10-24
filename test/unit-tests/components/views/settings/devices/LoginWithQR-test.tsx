@@ -79,9 +79,7 @@ describe("<LoginWithQR />", () => {
 
     describe("MSC4108", () => {
         const getComponent = (props: { client: MatrixClient; onFinished?: () => void }) => (
-            <React.StrictMode>
-                <LoginWithQR {...defaultProps} {...props} />
-            </React.StrictMode>
+            <LoginWithQR {...defaultProps} {...props} />
         );
 
         test("render QR then back", async () => {

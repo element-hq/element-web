@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import classNames from "classnames";
 import { IDeferred, defer, sleep } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
@@ -69,6 +69,16 @@ type HandlerMap = {
 
 type ModalCloseReason = "backgroundClick";
 
+function getOrCreateContainer(id: string): HTMLDivElement {
+    let container = document.getElementById(id) as HTMLDivElement | null;
+    if (!container) {
+        container = document.createElement("div");
+        container.id = id;
+        document.body.appendChild(container);
+    }
+    return container;
+}
+
 export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMap> {
     private counter = 0;
     // The modal to prioritise over all others. If this is set, only show
@@ -83,28 +93,22 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     // Neither the static nor priority modal will be in this list.
     private modals: IModal<any>[] = [];
 
-    private static getOrCreateContainer(): HTMLElement {
-        let container = document.getElementById(DIALOG_CONTAINER_ID);
-
-        if (!container) {
-            container = document.createElement("div");
-            container.id = DIALOG_CONTAINER_ID;
-            document.body.appendChild(container);
+    private static root?: Root;
+    private static getOrCreateRoot(): Root {
+        if (!ModalManager.root) {
+            const container = getOrCreateContainer(DIALOG_CONTAINER_ID);
+            ModalManager.root = createRoot(container);
         }
-
-        return container;
+        return ModalManager.root;
     }
 
-    private static getOrCreateStaticContainer(): HTMLElement {
-        let container = document.getElementById(STATIC_DIALOG_CONTAINER_ID);
-
-        if (!container) {
-            container = document.createElement("div");
-            container.id = STATIC_DIALOG_CONTAINER_ID;
-            document.body.appendChild(container);
+    private static staticRoot?: Root;
+    private static getOrCreateStaticRoot(): Root {
+        if (!ModalManager.staticRoot) {
+            const container = getOrCreateContainer(STATIC_DIALOG_CONTAINER_ID);
+            ModalManager.staticRoot = createRoot(container);
         }
-
-        return container;
+        return ModalManager.staticRoot;
     }
 
     public constructor() {
@@ -400,8 +404,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             dis.dispatch({
                 action: "aria_unhide_main_app",
             });
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateRoot().render(<></>);
+            ModalManager.getOrCreateStaticRoot().render(<></>);
             return;
         }
 
@@ -430,10 +434,10 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </TooltipProvider>
             );
 
-            ReactDOM.render(staticDialog, ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateStaticRoot().render(staticDialog);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateStaticContainer());
+            ModalManager.getOrCreateStaticRoot().render(<></>);
         }
 
         const modal = this.getCurrentModal();
@@ -457,10 +461,12 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </TooltipProvider>
             );
 
-            setTimeout(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()), 0);
+            setTimeout(() => {
+                ModalManager.getOrCreateRoot().render(dialog);
+            }, 0);
         } else {
             // This is safe to call repeatedly if we happen to do that
-            ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());
+            ModalManager.getOrCreateRoot().render(<></>);
         }
     }
 }

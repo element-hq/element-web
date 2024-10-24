@@ -75,6 +75,7 @@ interface State {
 }
 
 export default class ForgotPassword extends React.Component<Props, State> {
+    private unmounted = false;
     private reset: PasswordReset;
     private fieldPassword: Field | null = null;
     private fieldPasswordConfirm: Field | null = null;
@@ -108,14 +109,20 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
     }
 
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+    }
+
     private async checkServerLiveliness(serverConfig: ValidatedServerConfig): Promise<void> {
         try {
             await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(serverConfig.hsUrl, serverConfig.isUrl);
+            if (this.unmounted) return;
 
             this.setState({
                 serverIsAlive: true,
             });
         } catch (e: any) {
+            if (this.unmounted) return;
             const { serverIsAlive, serverDeadError } = AutoDiscoveryUtils.authComponentStateForError(
                 e,
                 "forgot_password",

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, screen, waitFor } from "jest-matrix-react";
+import { render, screen, waitFor, cleanup } from "jest-matrix-react";
 import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -47,53 +47,12 @@ describe("AddRemoveThreepids", () => {
     afterEach(() => {
         jest.restoreAllMocks();
         clearAllModals();
+        cleanup();
     });
 
     const clientProviderWrapper: React.FC = ({ children }: React.PropsWithChildren) => (
         <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
     );
-
-    it("should render a loader while loading", async () => {
-        render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[]}
-                isLoading={true}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
-    });
-
-    it("should render email addresses", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[EMAIL1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it("should render phone numbers", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Phone}
-                threepids={[PHONE1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(container).toMatchSnapshot();
-    });
 
     it("should handle no email addresses", async () => {
         const { container } = render(
@@ -106,6 +65,7 @@ describe("AddRemoveThreepids", () => {
             />,
         );
 
+        await expect(screen.findByText("Email Address")).resolves.toBeVisible();
         expect(container).toMatchSnapshot();
     });
 
@@ -126,7 +86,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const input = screen.getByRole("textbox", { name: "Email Address" });
+        const input = await screen.findByRole("textbox", { name: "Email Address" });
         await userEvent.type(input, EMAIL1.address);
         const addButton = screen.getByRole("button", { name: "Add" });
         await userEvent.click(addButton);
@@ -165,7 +125,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const input = screen.getByRole("textbox", { name: "Email Address" });
+        const input = await screen.findByRole("textbox", { name: "Email Address" });
         await userEvent.type(input, EMAIL1.address);
         const addButton = screen.getByRole("button", { name: "Add" });
         await userEvent.click(addButton);
@@ -209,7 +169,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
+        const countryDropdown = await screen.findByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
         const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
         await userEvent.click(gbOption);
@@ -269,7 +229,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
@@ -296,7 +256,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
@@ -325,7 +285,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${PHONE1.address}?`)).toBeVisible();
@@ -356,7 +316,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(EMAIL1.address)).toBeVisible();
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
         const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
@@ -407,7 +367,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(PHONE1.address)).toBeVisible();
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
         const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
@@ -451,7 +411,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(EMAIL1.address)).toBeVisible();
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
         const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
@@ -474,11 +434,55 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(PHONE1.address)).toBeVisible();
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
         const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);
         expect(onChangeFn).toHaveBeenCalled();
+    });
+
+    it("should render a loader while loading", async () => {
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[]}
+                isLoading={true}
+                onChange={() => {}}
+            />,
+        );
+
+        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
+    });
+
+    it("should render email addresses", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[EMAIL1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should render phone numbers", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Phone}
+                threepids={[PHONE1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
     });
 });

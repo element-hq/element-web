@@ -88,11 +88,11 @@ interface UpdateAction {
 type Action = IAction | UpdateAction;
 
 const refSorter = (a: Ref, b: Ref): number => {
-    if (a === b) {
+    if (a === b || !a.current || !b.current) {
         return 0;
     }
 
-    const position = a.current!.compareDocumentPosition(b.current!);
+    const position = a.current.compareDocumentPosition(b.current);
 
     if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
         return -1;

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { HTMLAttributes } from "react";
-import { render } from "jest-matrix-react";
+import { act, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -73,15 +73,15 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        container.querySelectorAll("button")[2].focus();
+        act(() => container.querySelectorAll("button")[2].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
         // focus on 1st button and test it is the only active one
-        container.querySelectorAll("button")[1].focus();
+        act(() => container.querySelectorAll("button")[1].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // check that the active button does not change even on an explicit blur event
-        container.querySelectorAll("button")[1].blur();
+        act(() => container.querySelectorAll("button")[1].blur());
         checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // update the children, it should remain on the same button
@@ -141,7 +141,7 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        container.querySelectorAll("button")[2].focus();
+        act(() => container.querySelectorAll("button")[2].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
@@ -369,7 +369,7 @@ describe("RovingTabIndex", () => {
                 </RovingTabIndexProvider>,
             );
 
-            container.querySelectorAll("button")[0].focus();
+            act(() => container.querySelectorAll("button")[0].focus());
             checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             await userEvent.keyboard("[ArrowDown]");
@@ -402,7 +402,7 @@ describe("RovingTabIndex", () => {
                 </RovingTabIndexProvider>,
             );
 
-            container.querySelectorAll("button")[0].focus();
+            act(() => container.querySelectorAll("button")[0].focus());
             checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             const button = container.querySelectorAll("button")[1];

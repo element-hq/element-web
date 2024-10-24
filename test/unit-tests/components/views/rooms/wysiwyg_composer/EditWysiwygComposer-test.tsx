@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../../src/contexts/RoomContext";
@@ -253,9 +253,7 @@ describe("EditWysiwygComposer", () => {
         });
 
         // Wait for event dispatch to happen
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         // Then we don't get it because we are disabled
         expect(screen.getByRole("textbox")).not.toHaveFocus();

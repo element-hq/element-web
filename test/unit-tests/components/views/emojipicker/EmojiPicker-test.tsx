@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { render, waitFor } from "jest-matrix-react";
+import { render, waitFor, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import EmojiPicker from "../../../../../src/components/views/emojipicker/EmojiPicker";
@@ -27,12 +27,12 @@ describe("EmojiPicker", function () {
 
         // Apply a filter and assert that the HTML has changed
         //@ts-ignore private access
-        ref.current!.onChangeFilter("test");
+        act(() => ref.current!.onChangeFilter("test"));
         expect(beforeHtml).not.toEqual(container.innerHTML);
 
         // Clear the filter and assert that the HTML matches what it was before filtering
         //@ts-ignore private access
-        ref.current!.onChangeFilter("");
+        act(() => ref.current!.onChangeFilter(""));
         await waitFor(() => expect(beforeHtml).toEqual(container.innerHTML));
     });
 
@@ -40,7 +40,7 @@ describe("EmojiPicker", function () {
         const ep = new EmojiPicker({ onChoose: (str: string) => false, onFinished: jest.fn() });
 
         //@ts-ignore private access
-        ep.onChangeFilter("heart");
+        act(() => ep.onChangeFilter("heart"));
 
         //@ts-ignore private access
         expect(ep.memoizedDataByCategory["people"][0].shortcodes[0]).toEqual("heart");

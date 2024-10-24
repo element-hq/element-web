@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
+import { act } from "jest-matrix-react";
 
 import { ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
@@ -119,7 +120,7 @@ export function untilEmission(
     });
 }
 
-export const flushPromises = async () => await new Promise<void>((resolve) => window.setTimeout(resolve));
+export const flushPromises = async () => await act(() => new Promise<void>((resolve) => window.setTimeout(resolve)));
 
 // with jest's modern fake timers process.nextTick is also mocked,
 // flushing promises in the normal way then waits for some advancement
@@ -196,7 +197,7 @@ export const clearAllModals = async (): Promise<void> => {
     // Prevent modals from leaking and polluting other tests
     let keepClosingModals = true;
     while (keepClosingModals) {
-        keepClosingModals = Modal.closeCurrentModal();
+        keepClosingModals = await act(() => Modal.closeCurrentModal());
 
         // Then wait for the screen to update (probably React rerender and async/await).
         // Important for tests using Jest fake timers to not get into an infinite loop

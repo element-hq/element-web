@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ComponentProps } from "react";
 import { mocked, Mocked } from "jest-mock";
-import { act, render, RenderResult } from "jest-matrix-react";
+import { render, RenderResult } from "jest-matrix-react";
 import { TypedEventEmitter, IMyDevice, MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 
@@ -63,9 +63,7 @@ describe("VerificationRequestToast", () => {
             otherDeviceId,
         });
         const result = renderComponent({ request });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
         expect(result.container).toMatchSnapshot();
     });
 
@@ -76,9 +74,7 @@ describe("VerificationRequestToast", () => {
             otherUserId,
         });
         const result = renderComponent({ request });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
         expect(result.container).toMatchSnapshot();
     });
 
@@ -89,9 +85,7 @@ describe("VerificationRequestToast", () => {
             otherUserId,
         });
         renderComponent({ request, toastKey: "testKey" });
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         const dismiss = jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
         Object.defineProperty(request, "accepting", { value: true });

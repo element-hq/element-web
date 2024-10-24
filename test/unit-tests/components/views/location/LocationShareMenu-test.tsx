@@ -139,7 +139,7 @@ describe("<LocationShareMenu />", () => {
         const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate")!;
 
         // set the location
-        onGeolocateCallback(position);
+        act(() => onGeolocateCallback(position));
     };
 
     const setLocationClick = () => {
@@ -151,7 +151,7 @@ describe("<LocationShareMenu />", () => {
             lngLat: { lng: position.coords.longitude, lat: position.coords.latitude },
         } as unknown as maplibregl.MapMouseEvent;
         // set the location
-        onMapClickCallback(event);
+        act(() => onMapClickCallback(event));
     };
 
     const shareTypeLabels: Record<LocationShareType, string> = {
