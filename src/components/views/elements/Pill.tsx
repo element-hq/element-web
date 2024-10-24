@@ -25,6 +25,7 @@ export enum PillType {
     AtRoomMention = "TYPE_AT_ROOM_MENTION", // '@room' mention
     EventInSameRoom = "TYPE_EVENT_IN_SAME_ROOM",
     EventInOtherRoom = "TYPE_EVENT_IN_OTHER_ROOM",
+    Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
 }
 
 export const pillRoomNotifPos = (text: string | null): number => {
@@ -76,14 +77,32 @@ export interface PillProps {
     room?: Room;
     // Whether to include an avatar in the pill
     shouldShowPillAvatar?: boolean;
+    // Explicitly-provided text to display in the pill
+    text?: string;
 }
 
-export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room, shouldShowPillAvatar = true }) => {
-    const { event, member, onClick, resourceId, targetRoom, text, type } = usePermalink({
+export const Pill: React.FC<PillProps> = ({
+    type: propType,
+    url,
+    inMessage,
+    room,
+    shouldShowPillAvatar = true,
+    text: customPillText,
+}) => {
+    const {
+        event,
+        member,
+        onClick,
+        resourceId,
+        targetRoom,
+        text: linkText,
+        type,
+    } = usePermalink({
         room,
         type: propType,
         url,
     });
+    const text = customPillText ?? linkText;
 
     if (!type || !text) {
         return null;
@@ -96,6 +115,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         mx_UserPill: type === PillType.UserMention,
         mx_UserPill_me: resourceId === MatrixClientPeg.safeGet().getUserId(),
         mx_EventPill: type === PillType.EventInOtherRoom || type === PillType.EventInSameRoom,
+        mx_KeywordPill: type === PillType.Keyword,
     });
 
     let avatar: ReactElement | null = null;
@@ -130,6 +150,8 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
             break;
         case PillType.UserMention:
             avatar = <PillMemberAvatar shouldShowPillAvatar={shouldShowPillAvatar} member={member} />;
+            break;
+        case PillType.Keyword:
             break;
         default:
             return null;

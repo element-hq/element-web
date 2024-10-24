@@ -26,7 +26,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     &.mx_UserPill_me,
-    &.mx_AtRoomPill {
+    &.mx_AtRoomPill,
+    &.mx_KeywordPill {
         background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
     }
 
@@ -45,7 +46,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     /* We don't want to indicate clickability */
-    &.mx_AtRoomPill:hover {
+    &.mx_AtRoomPill:hover,
+    &.mx_KeywordPill:hover {
         background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
         cursor: unset;
     }

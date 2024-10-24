@@ -8,8 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { createRoot, Root } from "react-dom/client";
+import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { globToRegexp } from "matrix-js-sdk/src/utils";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -36,6 +38,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import CodeBlock from "./CodeBlock";
+import { Pill, PillType } from "../elements/Pill";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -50,7 +53,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private pills: Element[] = [];
     private tooltips: Element[] = [];
-    private reactRoots: Element[] = [];
+    private reactRoots: Array<Element | Root> = [];
 
     private ref = createRef<HTMLDivElement>();
 
@@ -102,6 +105,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 }
             }
         }
+
+        // Highlight notification keywords using pills
+        const pushDetails = this.props.mxEvent.getPushDetails();
+        if (
+            pushDetails.rule?.enabled &&
+            pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
+            pushDetails.rule.pattern
+        ) {
+            this.pillifyNotificationKeywords([content], this.regExpForKeywordPattern(pushDetails.rule.pattern));
+        }
     }
 
     private addCodeElement(pre: HTMLPreElement): void {
@@ -136,7 +149,11 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         unmountTooltips(this.tooltips);
 
         for (const root of this.reactRoots) {
-            ReactDOM.unmountComponentAtNode(root);
+            if (root instanceof Element) {
+                ReactDOM.unmountComponentAtNode(root);
+            } else {
+                setTimeout(() => root.unmount());
+            }
         }
 
         this.pills = [];
@@ -209,6 +226,57 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             node = node.nextSibling as Element;
         }
+    }
+
+    /**
+     * Marks the text that activated a push-notification keyword pattern.
+     */
+    private pillifyNotificationKeywords(nodes: ArrayLike<Element>, exp: RegExp): void {
+        let node: Node | null = nodes[0];
+        while (node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.nodeValue;
+                if (!text) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const match = text.match(exp);
+                if (!match || match.length < 3) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const keywordText = match[2];
+                const idx = match.index! + match[1].length;
+                const before = text.substring(0, idx);
+                const after = text.substring(idx + keywordText.length);
+
+                const container = document.createElement("span");
+                const newContent = (
+                    <>
+                        {before}
+                        <TooltipProvider>
+                            <Pill text={keywordText} type={PillType.Keyword} />
+                        </TooltipProvider>
+                        {after}
+                    </>
+                );
+                const containerRoot = createRoot(container);
+                containerRoot.render(newContent);
+                this.reactRoots.push(containerRoot);
+
+                node.parentNode?.replaceChild(container, node);
+            } else if (node.childNodes && node.childNodes.length) {
+                this.pillifyNotificationKeywords(node.childNodes as NodeListOf<Element>, exp);
+            }
+
+            node = node.nextSibling;
+        }
+    }
+
+    private regExpForKeywordPattern(pattern: string): RegExp {
+        // Reflects the push notification pattern-matching implementation at
+        // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
+        return new RegExp("(^|\\W)(" + globToRegexp(pattern) + ")(\\W|$)", "i");
     }
 
     private findLinks(nodes: ArrayLike<Element>): string[] {
