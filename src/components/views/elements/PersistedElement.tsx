@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { MutableRefObject, ReactNode } from "react";
+import React, { MutableRefObject, ReactNode, StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -167,13 +167,15 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private renderApp(): void {
         const content = (
-            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                <TooltipProvider>
-                    <div ref={this.collectChild} style={this.props.style}>
-                        {this.props.children}
-                    </div>
-                </TooltipProvider>
-            </MatrixClientContext.Provider>
+            <StrictMode>
+                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                    <TooltipProvider>
+                        <div ref={this.collectChild} style={this.props.style}>
+                            {this.props.children}
+                        </div>
+                    </TooltipProvider>
+                </MatrixClientContext.Provider>
+            </StrictMode>
         );
 
         ReactDOM.render(content, getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));

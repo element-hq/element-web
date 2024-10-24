@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
-import React, { ReactElement } from "react";
+import React, { ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient, AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
@@ -111,17 +111,19 @@ export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixCha
 
     return (
         <wrapperOpts.Wrapper>
-            <MatrixChat
-                ref={matrixChatRef}
-                onNewScreen={onNewScreen}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParams}
-                enableGuest={!config.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={initialScreenAfterLogin}
-                defaultDeviceDisplayName={defaultDeviceName}
-            />
+            <StrictMode>
+                <MatrixChat
+                    ref={matrixChatRef}
+                    onNewScreen={onNewScreen}
+                    config={config}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragParams}
+                    enableGuest={!config.disable_guests}
+                    onTokenLoginCompleted={onTokenLoginCompleted}
+                    initialScreenAfterLogin={initialScreenAfterLogin}
+                    defaultDeviceDisplayName={defaultDeviceName}
+                />
+            </StrictMode>
         </wrapperOpts.Wrapper>
     );
 }
