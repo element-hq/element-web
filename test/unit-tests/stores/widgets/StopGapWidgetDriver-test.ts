@@ -170,6 +170,44 @@ describe("StopGapWidgetDriver", () => {
         expect(listener).toHaveBeenCalledWith(openIdUpdate);
     });
 
+    describe("sendToDevice", () => {
+        const contentMap = {
+            "@alice:example.org": {
+                "*": {
+                    hello: "alice",
+                },
+            },
+            "@bob:example.org": {
+                bobDesktop: {
+                    hello: "bob",
+                },
+            },
+        };
+
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("sends unencrypted messages", async () => {
+            await driver.sendToDevice("org.example.foo", false, contentMap);
+            expect(client.queueToDevice).toHaveBeenCalledWith({
+                eventType: "org.example.foo",
+                batch: [
+                    { deviceId: "*", payload: { hello: "alice" }, userId: "@alice:example.org" },
+                    { deviceId: "bobDesktop", payload: { hello: "bob" }, userId: "@bob:example.org" },
+                ],
+            });
+        });
+
+        it("raises an error if encrypted", async () => {
+            await expect(driver.sendToDevice("org.example.foo", true, contentMap)).rejects.toThrow(
+                "Encrypted to-device events are not supported",
+            );
+        });
+    });
+
     describe("getTurnServers", () => {
         let driver: WidgetDriver;
 
