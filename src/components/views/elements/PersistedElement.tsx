@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { MutableRefObject, ReactNode } from "react";
-import ReactDOM from "react-dom";
+import { createRoot, Root } from "react-dom/client";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -24,7 +24,7 @@ export const getPersistKey = (appId: string): string => "widget_" + appId;
 // We contain all persisted elements within a master container to allow them all to be within the same
 // CSS stacking context, and thus be able to control their z-indexes relative to each other.
 function getOrCreateMasterContainer(): HTMLDivElement {
-    let container = getContainer("mx_PersistedElement_container");
+    let container = document.getElementById("mx_PersistedElement_container") as HTMLDivElement;
     if (!container) {
         container = document.createElement("div");
         container.id = "mx_PersistedElement_container";
@@ -34,18 +34,10 @@ function getOrCreateMasterContainer(): HTMLDivElement {
     return container;
 }
 
-function getContainer(containerId: string): HTMLDivElement {
-    return document.getElementById(containerId) as HTMLDivElement;
-}
-
 function getOrCreateContainer(containerId: string): HTMLDivElement {
-    let container = getContainer(containerId);
-
-    if (!container) {
-        container = document.createElement("div");
-        container.id = containerId;
-        getOrCreateMasterContainer().appendChild(container);
-    }
+    const container = document.createElement("div");
+    container.id = containerId;
+    getOrCreateMasterContainer().appendChild(container);
 
     return container;
 }
@@ -83,6 +75,8 @@ export default class PersistedElement extends React.Component<IProps> {
     private childContainer?: HTMLDivElement;
     private child?: HTMLDivElement;
 
+    private static rootMap: Record<string, [root: Root, container: Element]> = {};
+
     public constructor(props: IProps) {
         super(props);
 
@@ -106,14 +100,16 @@ export default class PersistedElement extends React.Component<IProps> {
      * @param {string} persistKey Key used to uniquely identify this PersistedElement
      */
     public static destroyElement(persistKey: string): void {
-        const container = getContainer("mx_persistedElement_" + persistKey);
-        if (container) {
-            container.remove();
+        const pair = PersistedElement.rootMap[persistKey];
+        if (pair) {
+            pair[0].unmount();
+            pair[1].remove();
         }
+        delete PersistedElement.rootMap[persistKey];
     }
 
     public static isMounted(persistKey: string): boolean {
-        return Boolean(getContainer("mx_persistedElement_" + persistKey));
+        return Boolean(PersistedElement.rootMap[persistKey]);
     }
 
     private collectChildContainer = (ref: HTMLDivElement): void => {
@@ -176,7 +172,14 @@ export default class PersistedElement extends React.Component<IProps> {
             </MatrixClientContext.Provider>
         );
 
-        ReactDOM.render(content, getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));
+        let rootPair = PersistedElement.rootMap[this.props.persistKey];
+        if (!rootPair) {
+            const container = getOrCreateContainer("mx_persistedElement_" + this.props.persistKey);
+            const root = createRoot(container);
+            rootPair = [root, container];
+            PersistedElement.rootMap[this.props.persistKey] = rootPair;
+        }
+        rootPair[0].render(content);
     }
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
