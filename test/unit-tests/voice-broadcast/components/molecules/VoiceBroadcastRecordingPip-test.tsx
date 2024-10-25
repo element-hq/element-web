@@ -150,8 +150,9 @@ describe("VoiceBroadcastRecordingPip", () => {
         describe("and clicking the stop button", () => {
             beforeEach(async () => {
                 await userEvent.click(screen.getByLabelText("Stop Recording"));
+                await screen.findByText("Stop live broadcasting?");
                 // modal rendering has some weird sleeps
-                await sleep(100);
+                await sleep(200);
             });
 
             it("should display the confirm end dialog", () => {
