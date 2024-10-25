@@ -11,7 +11,7 @@ import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -80,14 +80,6 @@ interface IState {
      */
     backupInfo: KeyBackupInfo | null;
 
-    /**
-     * Information on whether the backup in `backupInfo` is correctly signed, and whether we have the right key to
-     * decrypt it.
-     *
-     * `undefined` if `backupInfo` is null, or if crypto is not enabled in the client.
-     */
-    backupTrustInfo: BackupTrustInfo | undefined;
-
     // does the server offer a UI auth flow with just m.login.password
     // for /keys/device_signing/upload?
     canUploadKeysWithPasswordOnly: boolean | null;
@@ -148,7 +140,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             downloaded: false,
             setPassphrase: false,
             backupInfo: null,
-            backupTrustInfo: undefined,
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             accountPasswordCorrect: null,
@@ -178,30 +169,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     /**
      * Attempt to get information on the current backup from the server, and update the state.
      *
-     * Updates {@link IState.backupInfo} and {@link IState.backupTrustInfo}, and picks an appropriate phase for
-     * {@link IState.phase}.
-     *
-     * @returns If the backup data was retrieved successfully, the trust info for the backup. Otherwise, undefined.
+     * Updates {@link IState.backupInfo} and set the phase to {@link Phase.ChooseKeyPassphrase} if successful.
      */
-    private async fetchBackupInfo(): Promise<BackupTrustInfo | undefined> {
+    private async fetchBackupInfo(): Promise<void> {
         try {
             const cli = MatrixClientPeg.safeGet();
             const backupInfo = await cli.getKeyBackupVersion();
-            const backupTrustInfo =
-                // we may not have started crypto yet, in which case we definitely don't trust the backup
-                backupInfo ? await cli.getCrypto()?.isKeyBackupTrusted(backupInfo) : undefined;
-
             this.setState({
                 phase: Phase.ChooseKeyPassphrase,
                 backupInfo,
-                backupTrustInfo,
             });
-
-            return backupTrustInfo;
         } catch (e) {
             console.error("Error fetching backup data from server", e);
             this.setState({ phase: Phase.LoadError });
-            return undefined;
         }
     }
 
@@ -347,7 +327,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 });
                 await crypto.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this.recoveryKey!,
-                    keyBackupInfo: this.state.backupInfo!,
                     setupNewKeyBackup: !this.state.backupInfo,
                 });
             }
