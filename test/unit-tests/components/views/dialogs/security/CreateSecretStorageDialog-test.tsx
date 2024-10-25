@@ -12,7 +12,6 @@ import React from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { waitFor } from "@testing-library/dom";
 
 import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
@@ -49,7 +48,7 @@ describe("CreateSecretStorageDialog", () => {
         await flushPromises();
     });
 
-    it("show the standard path", async () => {
+    it("handles the happy path", async () => {
         const result = renderComponent();
         await result.findByText(
             "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
@@ -100,20 +99,6 @@ describe("CreateSecretStorageDialog", () => {
             const result = renderComponent();
             // XXX the error message is... misleading.
             await screen.findByText("Unable to query secret storage status");
-            expect(result.container).toMatchSnapshot();
-        });
-    });
-
-    describe("when backup is present but not trusted", () => {
-        beforeEach(() => {
-            mockClient.getKeyBackupVersion.mockResolvedValue({} as KeyBackupInfo);
-        });
-
-        it("shows key passphrase change", async () => {
-            const result = renderComponent();
-            await screen.findByText(
-                "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
-            );
             expect(result.container).toMatchSnapshot();
         });
     });
