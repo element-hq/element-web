@@ -28,6 +28,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import {
     CryptoEvent,
+    DecryptionFailureCode,
     EventShieldColour,
     EventShieldReason,
     UserVerificationStatus,
@@ -718,7 +719,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // event could not be decrypted
         if (ev.isDecryptionFailure()) {
-            return <E2ePadlockDecryptionFailure />;
+            switch (ev.decryptionFailureReason) {
+                // These two errors get icons from DecryptionFailureBody, so we hide the padlock icon
+                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                    return null;
+                default:
+                    return <E2ePadlockDecryptionFailure />;
+            }
         }
 
         if (this.state.shieldColour !== EventShieldColour.NONE) {
