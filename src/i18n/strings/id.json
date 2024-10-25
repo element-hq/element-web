@@ -241,14 +241,11 @@
         "phone_label": "Ponsel",
         "phone_optional_label": "Nomor telepon (opsional)",
         "qr_code_login": {
-            "approve_access_warning": "Dengan menerima akses untuk perangkat ini, itu akan memiliki akses penuh ke akun Anda.",
             "completing_setup": "Menyelesaikan penyiapan perangkat baru Anda",
-            "confirm_code_match": "Periksa bahwa kode di bawah cocok dengan perangkat Anda yang lain:",
             "error_unexpected": "Sebuah kesalahan terjadi secara tidak terduga.",
             "scan_code_instruction": "Pindai kode QR di bawah dengan perangkat Anda yang sudah keluar dari akun.",
             "scan_qr_code": "Pindai kode QR",
             "select_qr_code": "Pilih '%(scanQRCode)s'",
-            "sign_in_new_device": "Masuk perangkat baru",
             "waiting_for_device": "Menunggu perangkat untuk masuk"
         },
         "register_action": "Buat Akun",

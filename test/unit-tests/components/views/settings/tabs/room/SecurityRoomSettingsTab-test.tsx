@@ -10,28 +10,17 @@ import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import { EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { mocked } from "jest-mock";
 
 import SecurityRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/SecurityRoomSettingsTab";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import {
-    clearAllModals,
-    flushPromises,
-    getMockClientWithEventEmitter,
-    mockClientMethodsUser,
-} from "../../../../../../test-utils";
+import { clearAllModals, flushPromises, stubClient } from "../../../../../../test-utils";
 import { filterBoolean } from "../../../../../../../src/utils/arrays";
 
 describe("<SecurityRoomSettingsTab />", () => {
     const userId = "@alice:server.org";
-    const client = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
-        isRoomEncrypted: jest.fn(),
-        getLocalAliases: jest.fn().mockReturnValue([]),
-        sendStateEvent: jest.fn(),
-        getClientWellKnown: jest.fn(),
-    });
+    const client = mocked(stubClient());
     const roomId = "!room:server.org";
 
     const getComponent = (room: Room, closeSettingsFn = jest.fn()) =>
@@ -96,11 +85,12 @@ describe("<SecurityRoomSettingsTab />", () => {
     describe("join rule", () => {
         it("warns when trying to make an encrypted room public", async () => {
             const room = new Room(roomId, client, userId);
-            client.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             setRoomStateEvents(room, JoinRule.Invite);
 
             getComponent(room);
 
+            await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
             fireEvent.click(screen.getByLabelText("Public"));
 
             const modal = await screen.findByRole("dialog");
@@ -244,19 +234,21 @@ describe("<SecurityRoomSettingsTab />", () => {
             expect(screen.getByDisplayValue(HistoryVisibility.Shared)).toBeChecked();
         });
 
-        it("does not render world readable option when room is encrypted", () => {
+        it("does not render world readable option when room is encrypted", async () => {
             const room = new Room(roomId, client, userId);
-            client.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             setRoomStateEvents(room);
 
             getComponent(room);
 
-            expect(screen.queryByDisplayValue(HistoryVisibility.WorldReadable)).not.toBeInTheDocument();
+            await waitFor(() =>
+                expect(screen.queryByDisplayValue(HistoryVisibility.WorldReadable)).not.toBeInTheDocument(),
+            );
         });
 
         it("renders world readable option when room is encrypted and history is already set to world readable", () => {
             const room = new Room(roomId, client, userId);
-            client.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             setRoomStateEvents(room, undefined, undefined, HistoryVisibility.WorldReadable);
 
             getComponent(room);
@@ -305,13 +297,13 @@ describe("<SecurityRoomSettingsTab />", () => {
     });
 
     describe("encryption", () => {
-        it("displays encryption as enabled", () => {
+        it("displays encryption as enabled", async () => {
             const room = new Room(roomId, client, userId);
-            client.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             setRoomStateEvents(room);
             getComponent(room);
 
-            expect(screen.getByLabelText("Encrypted")).toBeChecked();
+            await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
             // can't disable encryption once enabled
             expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
         });
@@ -356,7 +348,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
         it("renders world readable option when room is encrypted and history is already set to world readable", () => {
             const room = new Room(roomId, client, userId);
-            client.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             setRoomStateEvents(room, undefined, undefined, HistoryVisibility.WorldReadable);
 
             getComponent(room);
@@ -412,21 +404,20 @@ describe("<SecurityRoomSettingsTab />", () => {
                 });
             });
 
-            it("displays encrypted rooms as encrypted", () => {
+            it("displays encrypted rooms as encrypted", async () => {
                 // rooms that are already encrypted still show encrypted
                 const room = new Room(roomId, client, userId);
-                client.isRoomEncrypted.mockReturnValue(true);
+                jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
                 setRoomStateEvents(room);
                 getComponent(room);
 
-                expect(screen.getByLabelText("Encrypted")).toBeChecked();
+                await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
                 expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
                 expect(screen.getByText("Once enabled, encryption cannot be disabled.")).toBeInTheDocument();
             });
 
             it("displays unencrypted rooms with toggle disabled", () => {
                 const room = new Room(roomId, client, userId);
-                client.isRoomEncrypted.mockReturnValue(false);
                 setRoomStateEvents(room);
                 getComponent(room);
 

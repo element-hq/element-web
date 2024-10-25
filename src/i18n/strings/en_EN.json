@@ -250,13 +250,11 @@
         "phone_label": "Phone",
         "phone_optional_label": "Phone (optional)",
         "qr_code_login": {
-            "approve_access_warning": "By approving access for this device, it will have full access to your account.",
             "check_code_explainer": "This will verify that the connection to your other device is secure.",
             "check_code_heading": "Enter the number shown on your other device",
             "check_code_input_label": "2-digit code",
             "check_code_mismatch": "The numbers don't match",
             "completing_setup": "Completing set up of your new device",
-            "confirm_code_match": "Check that the code below matches with your other device:",
             "error_etag_missing": "An unexpected error occurred. This may be due to a browser extension, proxy server, or server misconfiguration.",
             "error_expired": "Sign in expired. Please try again.",
             "error_expired_title": "The sign in was not completed in time",
@@ -284,7 +282,6 @@
             "security_code": "Security code",
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
-            "sign_in_new_device": "Sign in new device",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
