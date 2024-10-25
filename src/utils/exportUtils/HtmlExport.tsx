@@ -161,24 +161,19 @@ export default class HTMLExporter extends Exporter {
                     <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                         <div class="mx_MatrixChat">
                         <main class="mx_RoomView">
-                            <div class="mx_LegacyRoomHeader light-panel">
-                            <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
-                                <div class="mx_LegacyRoomHeader_avatar">
-                                <div class="mx_DecoratedRoomAvatar">
-                                   ${roomAvatar}
+                            <div class="mx_Flex mx_RoomHeader light-panel">
+                                ${roomAvatar}
+                                <div class="mx_RoomHeader_infoWrapper">
+                                    <div
+                                        dir="auto"
+                                        class="mx_RoomHeader_info"
+                                        title="${safeRoomName}"
+                                    >
+                                        <span class="mx_RoomHeader_truncated mx_lineClamp">
+                                            ${safeRoomName}
+                                        </span>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="mx_LegacyRoomHeader_name">
-                                <div
-                                    dir="auto"
-                                    class="mx_LegacyRoomHeader_nametext"
-                                    title="${safeRoomName}"
-                                >
-                                    ${safeRoomName}
-                                </div>
-                                </div>
-                                <div class="mx_LegacyRoomHeader_topic" dir="auto"> ${safeTopic} </div>
-                            </div>
                             </div>
                             ${previousMessagesLink}
                             <div class="mx_MainSplit">

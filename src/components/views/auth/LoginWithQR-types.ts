@@ -24,10 +24,6 @@ export enum Phase {
     WaitingForDevice,
     Verifying,
     Error,
-    /**
-     * @deprecated the MSC3906 implementation is deprecated in favour of MSC4108.
-     */
-    LegacyConnected,
 }
 
 export enum Click {

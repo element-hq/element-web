@@ -7,11 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode } from "react";
-import {
-    ClientRendezvousFailureReason,
-    LegacyRendezvousFailureReason,
-    MSC4108FailureReason,
-} from "matrix-js-sdk/src/rendezvous";
+import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
@@ -23,20 +19,10 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import QRCode from "../elements/QRCode";
 import Spinner from "../elements/Spinner";
-import { Icon as InfoIcon } from "../../../../res/img/element-icons/i.svg";
 import { Click, Phase } from "./LoginWithQR-types";
 import SdkConfig from "../../../SdkConfig";
 import { FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
-import { XOR } from "../../../@types/common";
 import { ErrorMessage } from "../../structures/ErrorMessage";
-
-/**
- * @deprecated the MSC3906 implementation is deprecated in favour of MSC4108.
- */
-interface MSC3906Props extends Pick<Props, "phase" | "onClick" | "failureReason"> {
-    code?: string;
-    confirmationDigits?: string;
-}
 
 interface Props {
     phase: Phase;
@@ -47,19 +33,15 @@ interface Props {
     checkCode?: string;
 }
 
-// n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
-// However, we want to keep this implementation around for some time.
-// TODO: define an end-of-life date for this implementation.
-
 /**
  * A component that implements the UI for sign in and E2EE set up with a QR code.
  *
- * This supports the unstable features of MSC3906 and MSC4108
+ * This supports the unstable features of MSC4108
  */
-export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906Props>> {
+export default class LoginWithQRFlow extends React.Component<Props> {
     private checkCodeInput = createRef<HTMLInputElement>();
 
-    public constructor(props: XOR<Props, MSC3906Props>) {
+    public constructor(props: Props) {
         super(props);
     }
 
@@ -104,20 +86,17 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
 
                 switch (this.props.failureReason) {
                     case MSC4108FailureReason.UnsupportedProtocol:
-                    case LegacyRendezvousFailureReason.UnsupportedProtocol:
                         title = _t("auth|qr_code_login|error_unsupported_protocol_title");
                         message = _t("auth|qr_code_login|error_unsupported_protocol");
                         break;
 
                     case MSC4108FailureReason.UserCancelled:
-                    case LegacyRendezvousFailureReason.UserCancelled:
                         title = _t("auth|qr_code_login|error_user_cancelled_title");
                         message = _t("auth|qr_code_login|error_user_cancelled");
                         break;
 
                     case MSC4108FailureReason.AuthorizationExpired:
                     case ClientRendezvousFailureReason.Expired:
-                    case LegacyRendezvousFailureReason.Expired:
                         title = _t("auth|qr_code_login|error_expired_title");
                         message = _t("auth|qr_code_login|error_expired");
                         break;
@@ -162,7 +141,6 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                         message = _t("auth|qr_code_login|error_etag_missing");
                         break;
 
-                    case LegacyRendezvousFailureReason.HomeserverLacksSupport:
                     case ClientRendezvousFailureReason.HomeserverLacksSupport:
                         success = null;
                         Icon = QrCodeIcon;
@@ -200,40 +178,6 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                 );
                 break;
             }
-            case Phase.LegacyConnected:
-                backButton = false;
-                main = (
-                    <>
-                        <p>{_t("auth|qr_code_login|confirm_code_match")}</p>
-                        <div className="mx_LoginWithQR_confirmationDigits">{this.props.confirmationDigits}</div>
-                        <div className="mx_LoginWithQR_confirmationAlert">
-                            <div>
-                                <InfoIcon />
-                            </div>
-                            <div>{_t("auth|qr_code_login|approve_access_warning")}</div>
-                        </div>
-                    </>
-                );
-
-                buttons = (
-                    <>
-                        <AccessibleButton
-                            data-testid="approve-login-button"
-                            kind="primary"
-                            onClick={this.handleClick(Click.Approve)}
-                        >
-                            {_t("action|approve")}
-                        </AccessibleButton>
-                        <AccessibleButton
-                            data-testid="decline-login-button"
-                            kind="primary_outline"
-                            onClick={this.handleClick(Click.Decline)}
-                        >
-                            {_t("action|cancel")}
-                        </AccessibleButton>
-                    </>
-                );
-                break;
             case Phase.OutOfBandConfirmation:
                 backButton = false;
                 main = (
@@ -288,8 +232,7 @@ export default class LoginWithQRFlow extends React.Component<XOR<Props, MSC3906P
                 break;
             case Phase.ShowingQR:
                 if (this.props.code) {
-                    const data =
-                        typeof this.props.code !== "string" ? this.props.code : Buffer.from(this.props.code ?? "");
+                    const data = this.props.code;
 
                     main = (
                         <>
