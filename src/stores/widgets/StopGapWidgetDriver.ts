@@ -414,6 +414,30 @@ export class StopGapWidgetDriver extends WidgetDriver {
         await client._unstable_updateDelayedEvent(delayId, action);
     }
 
+    /**
+     * Implements {@link WidgetDriver#sendToDevice}
+     * Encrypted to-device events are not supported.
+     */
+    public async sendToDevice(
+        eventType: string,
+        encrypted: boolean,
+        contentMap: { [userId: string]: { [deviceId: string]: object } },
+    ): Promise<void> {
+        if (encrypted) throw new Error("Encrypted to-device events are not supported");
+
+        const client = MatrixClientPeg.safeGet();
+        await client.queueToDevice({
+            eventType,
+            batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                Object.entries(userContentMap).map(([deviceId, content]) => ({
+                    userId,
+                    deviceId,
+                    payload: content,
+                })),
+            ),
+        });
+    }
+
     private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
         const client = MatrixClientPeg.get();
         if (!client) throw new Error("Not attached to a client");
