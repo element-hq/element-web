@@ -6,34 +6,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
+import { PollAnswerSubevent, PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    MatrixEvent,
-    MatrixClient,
-    Relations,
-    Poll,
-    PollEvent,
     M_POLL_KIND_DISCLOSED,
     M_POLL_RESPONSE,
     M_POLL_START,
+    MatrixClient,
+    MatrixEvent,
+    Poll,
+    PollEvent,
+    Relations,
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
-import { PollStartEvent, PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
+import React, { ReactNode } from "react";
 
-import { _t } from "../../../languageHandler";
-import Modal from "../../../Modal";
-import { IBodyProps } from "./IBodyProps";
-import { formatList } from "../../../utils/FormattingUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import ErrorDialog from "../dialogs/ErrorDialog";
-import { GetRelationsForEvent } from "../rooms/EventTile";
-import PollCreateDialog from "../elements/PollCreateDialog";
+import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import Modal from "../../../Modal";
+import { formatList } from "../../../utils/FormattingUtils";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import PollCreateDialog from "../elements/PollCreateDialog";
 import Spinner from "../elements/Spinner";
 import { PollOption } from "../polls/PollOption";
+import { GetRelationsForEvent } from "../rooms/EventTile";
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     poll?: Poll;
@@ -81,12 +81,12 @@ export function findTopAnswer(pollEvent: MatrixEvent, voteRelations: Relations):
 
     const userVotes: Map<string, UserVote> = collectUserVotes(allVotes(voteRelations));
 
-    const votes: Map<string, number> = countVotes(userVotes, poll);
-    const highestScore: number = Math.max(...votes.values());
+    const votes: Map<string, UserVote[]> = countVotes(userVotes, poll);
+    const highestScore: number = Math.max(...Array.from(votes.values()).map((votes) => votes.length));
 
     const bestAnswerIds: string[] = [];
-    for (const [answerId, score] of votes) {
-        if (score == highestScore) {
+    for (const [answerId, answerVotes] of votes) {
+        if (answerVotes.length == highestScore) {
             bestAnswerIds.push(answerId);
         }
     }
@@ -243,7 +243,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         if (!this.state.voteRelations || !this.context) {
             return new Map<string, UserVote>();
         }
-        return collectUserVotes(allVotes(this.state.voteRelations), this.context.getUserId(), this.state.selected);
+        return collectUserVotes(allVotes(this.state.voteRelations), null, this.state.selected);
     }
 
     /**
@@ -273,10 +273,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.setState({ selected: newSelected });
     }
 
-    private totalVotes(collectedVotes: Map<string, number>): number {
+    private totalVotes(collectedVotes: Map<string, UserVote[]>): number {
         let sum = 0;
         for (const v of collectedVotes.values()) {
-            sum += v;
+            sum += v.length;
         }
         return sum;
     }
@@ -294,7 +294,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const userVotes = this.collectUserVotes();
         const votes = countVotes(userVotes, pollEvent);
         const totalVotes = this.totalVotes(votes);
-        const winCount = Math.max(...votes.values());
+        const winCount = Math.max(...Array.from(votes.values()).map((votes) => votes.length));
         const userId = this.context.getSafeUserId();
         const myVote = userVotes?.get(userId)?.answers[0];
         const disclosed = M_POLL_KIND_DISCLOSED.matches(pollEvent.kind.name);
@@ -335,7 +335,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         let answerVotes = 0;
 
                         if (showResults) {
-                            answerVotes = votes.get(answer.id) ?? 0;
+                            answerVotes = votes.get(answer.id)?.length ?? 0;
                         }
 
                         const checked =
@@ -348,7 +348,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 answer={answer}
                                 isChecked={checked}
                                 isEnded={poll.isEnded}
-                                voteCount={answerVotes}
+                                votes={votes.get(answer.id) ?? []}
                                 totalVoteCount={totalVotes}
                                 displayVoteCount={showResults}
                                 onOptionSelected={this.selectOption.bind(this)}
@@ -392,7 +392,7 @@ export function allVotes(voteRelations: Relations): Array<UserVote> {
 /**
  * Figure out the correct vote for each user.
  * @param userResponses current vote responses in the poll
- * @param {string?} userId The userId for which the `selected` option will apply to.
+ * @param {string?} user The userId for which the `selected` option will apply to.
  *                  Should be set to the current user ID.
  * @param {string?} selected Local echo selected option for the userId
  * @returns a Map of user ID to their vote info
@@ -418,19 +418,17 @@ export function collectUserVotes(
     return userVotes;
 }
 
-export function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
-    const collected = new Map<string, number>();
+export function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, UserVote[]> {
+    const collected = new Map<string, UserVote[]>();
 
     for (const response of userVotes.values()) {
         const tempResponse = PollResponseEvent.from(response.answers, "$irrelevant");
         tempResponse.validateAgainst(pollStart);
         if (!tempResponse.spoiled) {
             for (const answerId of tempResponse.answerIds) {
-                if (collected.has(answerId)) {
-                    collected.set(answerId, collected.get(answerId)! + 1);
-                } else {
-                    collected.set(answerId, 1);
-                }
+                const previousVotes = collected.get(answerId) ?? [];
+                previousVotes.push(response);
+                collected.set(answerId, previousVotes);
             }
         }
     }

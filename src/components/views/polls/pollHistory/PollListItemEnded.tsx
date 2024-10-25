@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useState } from "react";
+import { Tooltip } from "@vector-im/compound-web";
 import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { MatrixEvent, Poll, PollEvent, Relations } from "matrix-js-sdk/src/matrix";
-import { Tooltip } from "@vector-im/compound-web";
+import React, { useEffect, useState } from "react";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
-import { _t } from "../../../../languageHandler";
 import { formatLocalDateShort } from "../../../../DateUtils";
-import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
+import { _t } from "../../../../languageHandler";
+import { allVotes, collectUserVotes, countVotes, UserVote } from "../../messages/MPollBody";
 import { PollOption } from "../../polls/PollOption";
 import { Caption } from "../../typography/Caption";
 
@@ -27,23 +27,23 @@ interface Props {
 type EndedPollState = {
     winningAnswers: {
         answer: PollAnswerSubevent;
-        voteCount: number;
+        votes: UserVote[];
     }[];
     totalVoteCount: number;
 };
 const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollState => {
     const userVotes = collectUserVotes(allVotes(responseRelations));
     const votes = countVotes(userVotes, poll.pollEvent);
-    const totalVoteCount = [...votes.values()].reduce((sum, vote) => sum + vote, 0);
-    const winCount = Math.max(...votes.values());
+    const totalVoteCount = [...votes.values()].reduce((sum, vote) => sum + vote.length, 0);
+    const winCount = Math.max(...Array.from(votes.values()).map(v => v.length));
 
     return {
         totalVoteCount,
         winningAnswers: poll.pollEvent.answers
-            .filter((answer) => votes.get(answer.id) === winCount)
+            .filter((answer) => votes.get(answer.id)?.length === winCount)
             .map((answer) => ({
                 answer,
-                voteCount: votes.get(answer.id) || 0,
+                votes: votes.get(answer.id) || [],
             })),
     };
 };
@@ -100,11 +100,11 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
                     </div>
                     {!!winningAnswers?.length && (
                         <div className="mx_PollListItemEnded_answers">
-                            {winningAnswers?.map(({ answer, voteCount }) => (
+                            {winningAnswers?.map(({ answer, votes }) => (
                                 <PollOption
                                     key={answer.id}
                                     answer={answer}
-                                    voteCount={voteCount}
+                                    votes={votes}
                                     totalVoteCount={totalVoteCount!}
                                     pollId={poll.pollId}
                                     displayVoteCount

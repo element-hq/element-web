@@ -6,28 +6,43 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
 import classNames from "classnames";
 import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import React, { ReactNode, useContext } from "react";
 
-import { _t } from "../../../languageHandler";
 import { Icon as TrophyIcon } from "../../../../res/img/element-icons/trophy.svg";
+import RoomContext from "../../../contexts/RoomContext";
+import { useRoomMembers } from "../../../hooks/useRoomMembers";
+import { _t } from "../../../languageHandler";
+import FacePile from "../elements/FacePile";
 import StyledRadioButton from "../elements/StyledRadioButton";
+import { UserVote } from "../messages/MPollBody";
 
 type PollOptionContentProps = {
     answer: PollAnswerSubevent;
-    voteCount: number;
+    votes: UserVote[];
     displayVoteCount?: boolean;
     isWinner?: boolean;
 };
-const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, voteCount, displayVoteCount }) => {
-    const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: voteCount }) : "";
+const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, votes, displayVoteCount }) => {
+    const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: votes.length }) : "";
+    const room = useContext(RoomContext).room!;
+    const members = useRoomMembers(room);
+
     return (
         <div className="mx_PollOption_content">
             <div className="mx_PollOption_optionText">{answer.text}</div>
             <div className="mx_PollOption_optionVoteCount">
                 {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
-                {votesText}
+                <div style={{ display: "flex" }}>
+                    <FacePile
+                        members={members.filter((m) => votes.some((v) => v.sender === m.userId))}
+                        size="24px"
+                        overflow={false}
+                        style={{ marginRight: "10px" }}
+                    />
+                    {votesText}
+                </div>
             </div>
         </div>
     );
@@ -42,7 +57,7 @@ interface PollOptionProps extends PollOptionContentProps {
     children?: ReactNode;
 }
 
-const EndedPollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCount">> = ({
+const EndedPollOption: React.FC<Omit<PollOptionProps, "votes" | "totalVoteCount">> = ({
     isChecked,
     children,
     answer,
@@ -57,7 +72,7 @@ const EndedPollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCo
     </div>
 );
 
-const ActivePollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCount">> = ({
+const ActivePollOption: React.FC<Omit<PollOptionProps, "votes" | "totalVoteCount">> = ({
     pollId,
     isChecked,
     children,
@@ -78,7 +93,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteC
 export const PollOption: React.FC<PollOptionProps> = ({
     pollId,
     answer,
-    voteCount,
+    votes: voteCount,
     totalVoteCount,
     displayVoteCount,
     isEnded,
@@ -91,7 +106,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
         mx_PollOption_ended: isEnded,
     });
     const isWinner = isEnded && isChecked;
-    const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount) / totalVoteCount);
+    const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount.length) / totalVoteCount);
     const PollOptionWrapper = isEnded ? EndedPollOption : ActivePollOption;
     return (
         <div data-testid={`pollOption-${answer.id}`} className={cls} onClick={() => onOptionSelected?.(answer.id)}>
@@ -104,7 +119,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
                 <PollOptionContent
                     isWinner={isWinner}
                     answer={answer}
-                    voteCount={voteCount}
+                    votes={voteCount}
                     displayVoteCount={displayVoteCount}
                 />
             </PollOptionWrapper>
