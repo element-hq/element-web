@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { StrictMode } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
@@ -57,11 +57,13 @@ export function tooltipifyLinks(
             // wrapping the link with the LinkWithTooltip component, keeping the same children. Ideally we'd do this
             // without the superfluous span but this is not something React trivially supports at this time.
             const tooltip = (
-                <TooltipProvider>
-                    <LinkWithTooltip tooltip={href}>
-                        <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
-                    </LinkWithTooltip>
-                </TooltipProvider>
+                <StrictMode>
+                    <TooltipProvider>
+                        <LinkWithTooltip tooltip={href}>
+                            <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
+                        </LinkWithTooltip>
+                    </TooltipProvider>
+                </StrictMode>
             );
 
             tooltips.render(tooltip, node);

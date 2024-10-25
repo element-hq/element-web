@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { createRoot } from "react-dom/client";
-import React from "react";
+import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import * as languageHandler from "../languageHandler";
@@ -107,7 +107,11 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         "../async-components/structures/ErrorView"
     );
     const root = createRoot(document.getElementById("matrixchat")!);
-    root.render(<ErrorView title={title} messages={messages} />);
+    root.render(
+        <StrictMode>
+            <ErrorView title={title} messages={messages} />
+        </StrictMode>,
+    );
 }
 
 export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
@@ -116,7 +120,11 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         "../async-components/structures/ErrorView"
     );
     const root = createRoot(document.getElementById("matrixchat")!);
-    root.render(<UnsupportedBrowserView onAccept={onAccept} />);
+    root.render(
+        <StrictMode>
+            <UnsupportedBrowserView onAccept={onAccept} />
+        </StrictMode>,
+    );
 }
 
 export async function loadModules(): Promise<void> {

@@ -231,15 +231,12 @@
         "phone_label": "電話",
         "phone_optional_label": "電話番号（任意）",
         "qr_code_login": {
-            "approve_access_warning": "この端末へのアクセスを許可すると、あなたのアカウントに完全にアクセスできるようになります。",
             "completing_setup": "新しい端末の設定を完了しています",
-            "confirm_code_match": "以下のコードが他の端末と一致していることを確認してください：",
             "error_rate_limited": "再試行の数が多すぎます。少し待ってから再度試してください。",
             "error_unexpected": "予期しないエラーが発生しました。",
             "scan_code_instruction": "サインアウトした端末で以下のQRコードをスキャンしてください。",
             "scan_qr_code": "QRコードをスキャン",
             "select_qr_code": "「%(scanQRCode)s」を選択",
-            "sign_in_new_device": "新しい端末でサインイン",
             "waiting_for_device": "端末のサインインを待機しています"
         },
         "register_action": "アカウントを作成",
