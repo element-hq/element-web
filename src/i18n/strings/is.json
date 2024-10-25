@@ -220,7 +220,6 @@
         "phone_label": "Sími",
         "phone_optional_label": "Sími (valfrjálst)",
         "qr_code_login": {
-            "sign_in_new_device": "Skrá inn nýtt tæki",
             "waiting_for_device": "Bíð eftir að tækið skráist inn"
         },
         "register_action": "Búa til notandaaðgang",
