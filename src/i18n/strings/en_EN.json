@@ -930,7 +930,6 @@
         },
         "unable_to_setup_keys_error": "Unable to set up keys",
         "unsupported": "This client does not support end-to-end encryption.",
-        "upgrade_toast_title": "Encryption upgrade available",
         "verification": {
             "accepting": "Accepting…",
             "after_new_login": {

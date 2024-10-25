@@ -351,13 +351,13 @@ describe("DeviceListener", () => {
                     mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
                 });
 
-                it("shows upgrade encryption toast when user has a key backup available", async () => {
+                it("shows set up encryption toast when user has a key backup available", async () => {
                     // non falsy response
                     mockClient!.getKeyBackupVersion.mockResolvedValue({} as unknown as KeyBackupInfo);
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.UPGRADE_ENCRYPTION,
+                        SetupEncryptionToast.Kind.SET_UP_ENCRYPTION,
                     );
                 });
             });

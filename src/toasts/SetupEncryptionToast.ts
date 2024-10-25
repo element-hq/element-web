@@ -23,8 +23,6 @@ const getTitle = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("encryption|set_up_toast_title");
-        case Kind.UPGRADE_ENCRYPTION:
-            return _t("encryption|upgrade_toast_title");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
     }
@@ -33,7 +31,6 @@ const getTitle = (kind: Kind): string => {
 const getIcon = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-        case Kind.UPGRADE_ENCRYPTION:
             return "secure_backup";
         case Kind.VERIFY_THIS_SESSION:
             return "verification_warning";
@@ -44,8 +41,6 @@ const getSetupCaption = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("action|continue");
-        case Kind.UPGRADE_ENCRYPTION:
-            return _t("action|upgrade");
         case Kind.VERIFY_THIS_SESSION:
             return _t("action|verify");
     }
@@ -54,7 +49,6 @@ const getSetupCaption = (kind: Kind): string => {
 const getDescription = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-        case Kind.UPGRADE_ENCRYPTION:
             return _t("encryption|set_up_toast_description");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
@@ -63,7 +57,6 @@ const getDescription = (kind: Kind): string => {
 
 export enum Kind {
     SET_UP_ENCRYPTION = "set_up_encryption",
-    UPGRADE_ENCRYPTION = "upgrade_encryption",
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
