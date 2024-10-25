@@ -242,14 +242,11 @@
         "phone_label": "Telefón",
         "phone_optional_label": "Telefón (nepovinné)",
         "qr_code_login": {
-            "approve_access_warning": "Schválením prístupu pre toto zariadenie bude mať plný prístup k vášmu účtu.",
             "completing_setup": "Dokončenie nastavenia nového zariadenia",
-            "confirm_code_match": "Skontrolujte, či sa nižšie uvedený kód zhoduje s vaším druhým zariadením:",
             "error_unexpected": "Vyskytla sa neočakávaná chyba.",
             "scan_code_instruction": "Naskenujte nižšie uvedený QR kód pomocou zariadenia, ktoré je odhlásené.",
             "scan_qr_code": "Skenovať QR kód",
             "select_qr_code": "Vyberte '%(scanQRCode)s'",
-            "sign_in_new_device": "Prihlásiť nové zariadenie",
             "waiting_for_device": "Čaká sa na prihlásenie zariadenia"
         },
         "register_action": "Vytvoriť účet",

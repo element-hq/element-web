@@ -247,15 +247,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefon (valfritt)",
         "qr_code_login": {
-            "approve_access_warning": "Genom att godkänna åtkomst för den här enheten så får den full åtkomst till ditt konto.",
             "completing_setup": "Slutför inställning av din nya enhet",
-            "confirm_code_match": "Kolla att koden nedan matchar din andra enhet:",
             "error_rate_limited": "För många försök under för kort tid. Vänta ett tag innan du försöker igen.",
             "error_unexpected": "Ett oväntade fel inträffade.",
             "scan_code_instruction": "Skanna QR-koden nedan med din andra enhet som är utloggad.",
             "scan_qr_code": "Skanna QR-kod",
             "select_qr_code": "Välj '%(scanQRCode)s'",
-            "sign_in_new_device": "Logga in ny enhet",
             "waiting_for_device": "Väntar på att enheter loggar in"
         },
         "register_action": "Skapa konto",

@@ -249,13 +249,11 @@
         "phone_label": "Numéro de téléphone",
         "phone_optional_label": "Téléphone (facultatif)",
         "qr_code_login": {
-            "approve_access_warning": "En autorisant l’accès pour cet appareil, il aura un accès complet à votre compte.",
             "check_code_explainer": "Cela vérifiera que la connexion à votre autre appareil est sécurisée.",
             "check_code_heading": "Entrez le numéro affiché sur votre autre appareil",
             "check_code_input_label": "code à 2 chiffres",
             "check_code_mismatch": "Les chiffres ne correspondent pas",
             "completing_setup": "Fin de la configuration de votre nouvel appareil",
-            "confirm_code_match": "Vérifiez que le code ci-dessous correspond à celui sur votre autre appareil :",
             "error_etag_missing": "Une erreur inattendue s'est produite. Cela peut être dû à une extension de navigateur, à un serveur proxy ou à une mauvaise configuration du serveur.",
             "error_expired": "Connexion expirée. Veuillez réessayer.",
             "error_expired_title": "La connexion a pris trop de temps.",
@@ -283,7 +281,6 @@
             "security_code": "Code de sécurité",
             "security_code_prompt": "Si vous y êtes invité, saisissez le code ci-dessous sur votre autre appareil.",
             "select_qr_code": "Sélectionnez « %(scanQRCode)s »",
-            "sign_in_new_device": "Connecter le nouvel appareil",
             "waiting_for_device": "En attente de connexion de l’appareil"
         },
         "register_action": "Créer un compte",
@@ -1598,6 +1595,7 @@
         "keyword": "Mot-clé",
         "keyword_new": "Nouveau mot-clé",
         "level_activity": "Activité",
+        "level_highlight": "Surligner",
         "level_muted": "Muet",
         "level_none": "Aucun",
         "level_notification": "Notification",
@@ -1809,10 +1807,23 @@
     },
     "right_panel": {
         "add_integrations": "Ajouter des widgets, passerelles et robots",
+        "add_topic": "Ajouter un sujet",
         "files_button": "Fichiers",
         "pinned_messages": {
+            "empty_title": "Épingler des messages importants afin qu'ils puissent être facilement découverts",
+            "header": {
+                "one": "1 Message épinglé",
+                "other": "%(count)s Messages épinglés"
+            },
             "limits": {
                 "other": "Vous ne pouvez épingler que jusqu’à %(count)s widgets"
+            },
+            "menu": "Ouvrir le menu",
+            "release_announcement": {
+                "title": "Tous les nouveaux messages épinglés"
+            },
+            "unpin_all": {
+                "button": "Désépingler tous les messages"
             }
         },
         "pinned_messages_button": "Épinglé",
@@ -1912,8 +1923,13 @@
         "forget_room": "Oublier ce salon",
         "forget_space": "Oublier cet espace",
         "header": {
+            "n_people_asking_to_join": {
+                "one": "Demander à rejoindre",
+                "other": "%(count)s personnes demandant à se joindre"
+            },
             "room_is_public": "Ce salon est public"
         },
+        "header_face_pile_tooltip": "Personnes",
         "header_untrusted_label": "Non fiable",
         "inaccessible": "Ce salon ou cet espace n’est pas accessible en ce moment.",
         "inaccessible_name": "%(roomName)s n’est pas joignable pour le moment.",
@@ -1983,11 +1999,15 @@
         "not_found_title": "Ce salon ou cet espace n’existe pas.",
         "not_found_title_name": "%(roomName)s n’existe pas.",
         "peek_join_prompt": "Ceci est un aperçu de %(roomName)s. Voulez-vous rejoindre le salon ?",
+        "pinned_message_banner": {
+            "description": "Ce salon contient des messages épinglés. Cliquez pour les consulter."
+        },
         "read_topic": "Cliquer pour lire le sujet",
         "rejecting": "Rejet de l’invitation…",
         "rejoin_button": "Revenir",
         "search": {
             "all_rooms_button": "Rechercher dans tous les salons",
+            "placeholder": "Rechercher des messages…",
             "this_room_button": "Rechercher dans ce salon"
         },
         "status_bar": {
@@ -2350,6 +2370,7 @@
             "brand_version": "Version de %(brand)s :",
             "clear_cache_reload": "Vider le cache et recharger",
             "crypto_version": "Version crypto :",
+            "dialog_title": "<strong>Paramètres : </strong> Aide et À propos",
             "help_link": "Pour obtenir de l’aide sur l’utilisation de %(brand)s, cliquez <a>ici</a>.",
             "homeserver": "Le serveur d’accueil est <code>%(homeserverUrl)s</code>",
             "identity_server": "Le serveur d’identité est <code>%(identityServerUrl)s</code>",
@@ -2369,7 +2390,9 @@
             "custom_font_size": "Utiliser une taille personnalisée",
             "custom_theme_error_downloading": "Erreur lors du téléchargement du thème",
             "custom_theme_invalid": "Schéma du thème invalide.",
+            "dialog_title": "<strong>Paramètres : </strong> Apparence",
             "font_size": "Taille de la police",
+            "font_size_default": "%(fontSize)s(par défaut)",
             "high_contrast": "Contraste élevé",
             "image_size_default": "Par défaut",
             "image_size_large": "Grande",
@@ -2400,6 +2423,10 @@
             "add_msisdn_dialog_title": "Ajouter un numéro de téléphone",
             "add_msisdn_instructions": "Un SMS a été envoyé à +%(msisdn)s. Saisissez le code de vérification qu’il contient.",
             "add_msisdn_misconfigured": "L’ajout / liaison avec le flux MSISDN est mal configuré",
+            "application_language_reload_hint": "L’application se rechargera après avoir sélectionné une autre langue",
+            "avatar_remove_progress": "Suppression de l'image...",
+            "avatar_save_progress": "Chargement de l'image...",
+            "avatar_upload_error_text_generic": "Le format de fichier n'est peut-être pas pris en charge.",
             "confirm_adding_email_body": "Cliquez sur le bouton ci-dessous pour confirmer l’ajout de l’adresse e-mail.",
             "confirm_adding_email_title": "Confirmer l’ajout de l’adresse e-mail",
             "deactivate_confirm_body": "Voulez-vous vraiment désactiver votre compte ? Ceci est irréversible.",
@@ -2419,6 +2446,8 @@
             "discovery_email_verification_instructions": "Vérifiez le lien dans votre boîte de réception",
             "discovery_msisdn_empty": "Les options de découverte apparaîtront quand vous aurez ajouté un numéro de téléphone ci-dessus.",
             "discovery_needs_terms": "Acceptez les conditions de service du serveur d’identité (%(serverName)s) pour vous permettre d’être découvrable par votre adresse e-mail ou votre numéro de téléphone.",
+            "display_name": "Nom d'affichage",
+            "display_name_error": "Impossible de définir le nom d'affichage",
             "email_address_in_use": "Cette adresse e-mail est déjà utilisée",
             "email_address_label": "Adresse e-mail",
             "email_not_verified": "Votre adresse e-mail n’a pas encore été vérifiée",
@@ -2443,7 +2472,7 @@
             "error_share_msisdn_discovery": "Impossible de partager le numéro de téléphone",
             "identity_server_no_token": "Aucun jeton d’accès d’identité trouvé",
             "identity_server_not_set": "Serveur d'identité non défini",
-            "language_section": "Langue et région",
+            "language_section": "Langue",
             "msisdn_in_use": "Ce numéro de téléphone est déjà utilisé",
             "msisdn_label": "Numéro de téléphone",
             "msisdn_verification_field_label": "Code de vérification",
@@ -2452,9 +2481,12 @@
             "oidc_manage_button": "Gérer le compte",
             "password_change_section": "Définir un nouveau mot de passe de compte…",
             "password_change_success": "Votre mot de passe a été mis à jour.",
+            "personal_info": "Informations personnelles",
+            "profile_subtitle_oidc": "Votre compte est géré séparément par un fournisseur d'identité et certaines de vos informations personnelles ne peuvent donc pas être modifiées ici.",
             "remove_email_prompt": "Supprimer %(email)s ?",
             "remove_msisdn_prompt": "Supprimer %(phone)s ?",
-            "spell_check_locale_placeholder": "Choisir une langue"
+            "spell_check_locale_placeholder": "Choisir une langue",
+            "username": "Nom d’utilisateur"
         },
         "image_thumbnails": "Afficher les aperçus/vignettes pour les images",
         "inline_url_previews_default": "Activer l’aperçu des URL par défaut",
@@ -2515,12 +2547,20 @@
             "phrase_strong_enough": "Super ! Cette phrase secrète a l’air assez robuste"
         },
         "keyboard": {
+            "dialog_title": "<strong>Paramètres : </strong> Clavier",
             "title": "Clavier"
+        },
+        "labs": {
+            "dialog_title": "<strong>Paramètres : </strong> Expérimental"
+        },
+        "labs_mjolnir": {
+            "dialog_title": "<strong>Paramètres : </strong> Utilisateurs ignorés"
         },
         "notifications": {
             "default_setting_description": "Ce réglage sera appliqué par défaut à tous vos salons.",
             "default_setting_section": "Je veux être notifié pour (réglage par défaut)",
             "desktop_notification_message_preview": "Afficher l’aperçu du message dans la notification de bureau",
+            "dialog_title": "<strong>Paramètres : </strong> Notifications",
             "email_description": "Recevoir un résumé par courriel des notifications manquées",
             "email_section": "Résumé en courriel",
             "email_select": "Sélectionner les adresses auxquelles envoyer les résumés. Gérer vos courriels dans <button>Général</button>.",
@@ -2579,6 +2619,7 @@
             "code_blocks_heading": "Blocs de code",
             "compact_modern": "Utiliser une mise en page « moderne » plus compacte",
             "composer_heading": "Compositeur",
+            "dialog_title": "<strong>Paramètres : </strong> Préférences",
             "enable_hardware_acceleration": "Activer l’accélération matérielle",
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
@@ -2624,8 +2665,11 @@
             "cross_signing_self_signing_private_key": "Clé privée d’auto-signature :",
             "cross_signing_user_signing_private_key": "Clé privée de signature de l’utilisateur :",
             "cryptography_section": "Chiffrement",
+            "dehydrated_device_description": "La fonctionnalité d’appareil hors ligne vous permet de recevoir des messages chiffrés même lorsque vous n’êtes connecté à aucun appareil",
+            "dehydrated_device_enabled": "Appareil hors ligne activé",
             "delete_backup": "Supprimer la sauvegarde",
             "delete_backup_confirm_description": "En êtes-vous sûr ? Vous perdrez vos messages chiffrés si vos clés ne sont pas sauvegardées correctement.",
+            "dialog_title": "<strong>Paramètres : </strong> Sécurité et confidentialité",
             "e2ee_default_disabled_warning": "L’administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons privés et les conversations privées.",
             "enable_message_search": "Activer la recherche de messages dans les salons chiffrés",
             "encryption_section": "Chiffrement",
@@ -2703,6 +2747,7 @@
             "device_unverified_description_current": "Vérifiez cette session pour renforcer la sécurité de votre messagerie.",
             "device_verified_description": "Cette session est prête pour l’envoi de messages sécurisés.",
             "device_verified_description_current": "Votre session actuelle est prête pour une messagerie sécurisée.",
+            "dialog_title": "<strong>Paramètres : </strong> Sessions",
             "error_pusher_state": "Échec lors de la définition de l’état push",
             "error_set_name": "Impossible d'enregistrer le nom de la session",
             "filter_all": "Tout",
@@ -2744,7 +2789,7 @@
             "show_details": "Afficher les détails",
             "sign_in_with_qr": "Associer un nouvel appareil",
             "sign_in_with_qr_button": "Afficher le QR code",
-            "sign_in_with_qr_description": "Vous pouvez utiliser cet appareil pour vous connecter sur un autre appareil avec un QR code. Vous devrez scanner le QR code affiché sur cet appareil avec votre autre appareil qui n’est pas connecté.",
+            "sign_in_with_qr_description": "Utilisez un code QR pour vous connecter à un autre appareil et configurer votre messagerie sécurisée.",
             "sign_out": "Se déconnecter de cette session",
             "sign_out_all_other_sessions": "Déconnecter toutes les autres sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2786,6 +2831,7 @@
         "show_typing_notifications": "Afficher les notifications de saisie",
         "showbold": "Afficher toute l'activité dans la liste des salons (points ou nombre de messages non lus)",
         "sidebar": {
+            "dialog_title": "<strong>Paramètres : </strong> Barre latérale",
             "metaspaces_favourites_description": "Regroupez tous vos salons et personnes préférés au même endroit.",
             "metaspaces_home_all_rooms": "Afficher tous les salons",
             "metaspaces_home_all_rooms_description": "Affiche tous vos salons dans l’accueil, même s’ils font partis d’un espace.",
@@ -2794,6 +2840,9 @@
             "metaspaces_orphans_description": "Regroupe tous les salons n’appartenant pas à un espace au même endroit.",
             "metaspaces_people_description": "Regrouper toutes vos connaissances au même endroit.",
             "metaspaces_subsection": "Espaces à afficher",
+            "metaspaces_video_rooms": "Salons vidéo et conférences",
+            "metaspaces_video_rooms_description": "Regroupez tous les salons vidéo et conférences.",
+            "metaspaces_video_rooms_description_invite_extension": "Lors des conférences, vous pouvez inviter des personnes extérieures à Matrix.",
             "spaces_explainer": "Les espaces sont un nouveau moyen de regrouper les salons et les gens. En plus des espaces auxquels vous participez, vous pouvez également utiliser ceux qui sont prédéfinis.",
             "title": "Barre latérale"
         },
@@ -2812,6 +2861,7 @@
             "audio_output_empty": "Aucune sortie audio détectée",
             "auto_gain_control": "Contrôle automatique du gain",
             "connection_section": "Connexion",
+            "dialog_title": "<strong>Paramètres : </strong> Audio et vidéo",
             "echo_cancellation": "Annulation d’écho",
             "enable_fallback_ice_server": "Autoriser le serveur de secours d’assistance d’appel (%(server)s)",
             "enable_fallback_ice_server_description": "Concerne seulement les serveurs d’accueil qui n’en proposent pas. Votre adresse IP pourrait être diffusée pendant un appel.",
@@ -2833,6 +2883,9 @@
         "link_title": "Lien vers le salon",
         "permalink_message": "Lien vers le message sélectionné",
         "permalink_most_recent": "Lien vers le message le plus récent",
+        "share_call": "Lien d'invitation à la conférence",
+        "share_call_subtitle": "Lien permettant aux utilisateurs externes de rejoindre l'appel sans compte Matrix :",
+        "title_link": "Lien de partage",
         "title_message": "Partager le message du salon",
         "title_room": "Partager le salon",
         "title_user": "Partager l’utilisateur"
@@ -2858,6 +2911,7 @@
         "devtools": "Ouvre la fenêtre des outils de développeur",
         "discardsession": "Force la session de groupe sortante actuelle dans un salon chiffré à être rejetée",
         "error_invalid_rendering_type": "Erreur de commande : Impossible de trouver le type de rendu (%(renderingType)s)",
+        "error_invalid_room": "Échec de la commande : Impossible de trouver le salon (%(roomId)s)",
         "error_invalid_runfn": "Erreur de commande : Impossible de gérer la commande de barre oblique.",
         "error_invalid_user_in_room": "Impossible de trouver l’utilisateur dans le salon",
         "help": "Affiche la liste des commandes avec leurs utilisations et descriptions",
@@ -3035,7 +3089,7 @@
         "keyboard_scroll_hint": "Utilisez <arrows/> pour faire défiler",
         "message_search_section_title": "Autres recherches",
         "other_rooms_in_space": "Autres salons dans %(spaceName)s",
-        "public_rooms_label": "Salons public",
+        "public_rooms_label": "Salons publics",
         "public_spaces_label": "Espaces publics",
         "recent_searches_section_title": "Recherches récentes",
         "recently_viewed_section_title": "Affiché récemment",
@@ -3080,6 +3134,8 @@
             "one": "%(count)s réponse",
             "other": "%(count)s réponses"
         },
+        "empty_description": "Utiliser \"%(replyInThread)s\" lorsque vous survolez un message.",
+        "empty_title": "Les fils de discussion aident à garder vos conversations sur le sujet et à les suivre facilement.",
         "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
         "mark_all_read": "Tout marquer comme lu",
         "my_threads": "Mes fils de discussion",
@@ -3090,6 +3146,8 @@
     "threads_activity_centre": {
         "header": "Activité des fils de discussions",
         "no_rooms_with_threads_notifs": "Vous n’avez pas encore de salons avec des notifications de fil de discussion.",
+        "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus.",
+        "release_announcement_description": "Les notifications des fils de discussion ont été déplacées. À partir de maintenant, retrouvez-les ici.",
         "release_announcement_header": "Centre d'activité des fils de discussions"
     },
     "time": {
@@ -3128,18 +3186,23 @@
             "report": "Signaler",
             "resent_unsent_reactions": "Renvoyer %(unsentCount)s réaction(s)",
             "show_url_preview": "Afficher l’aperçu",
-            "view_related_event": "Afficher les événements liés",
+            "view_related_event": "Voir l’événement associé",
             "view_source": "Afficher la source"
         },
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
         "decryption_failure": {
+            "blocked": "L'expéditeur vous a empêché de recevoir ce message car votre appareil n'est pas vérifié",
             "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil",
-            "historical_event_user_not_joined": "Vous n'avez pas accès à ce message"
+            "historical_event_unverified_device": "Vous devez vérifier cet appareil pour accéder à l'historique des messages",
+            "historical_event_user_not_joined": "Vous n'avez pas accès à ce message",
+            "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
+        "download_failed": "Échec du téléchargement",
+        "download_failed_description": "Une erreur s'est produite lors du téléchargement de ce fichier",
         "edits": {
             "tooltip_label": "Modifié le %(date)s. Cliquer pour voir les modifications.",
             "tooltip_sub": "Cliquez pour voir les modifications",
@@ -3154,6 +3217,7 @@
             "you": "Vous avez terminé une <a>diffusion audio</a>"
         },
         "io.element.widgets.layout": "%(senderName)s a mis à jour la mise en page du salon",
+        "late_event_separator": "Initialement envoyé%(dateTime)s",
         "load_error": {
             "no_permission": "Un instant donné du fil de discussion n’a pu être chargé car vous n’avez pas la permission de le visualiser.",
             "title": "Échec du chargement de la position dans le fil de discussion",
@@ -3586,6 +3650,12 @@
         "toast_title": "Mettre à jour %(brand)s",
         "unavailable": "Indisponible"
     },
+    "update_room_access_modal": {
+        "description": "Pour créer un lien de partage, vous devez autoriser les invités à rejoindre ce salon. Cela peut rendre le salon moins sûr. Lorsque vous aurez terminé l'appel, vous pourrez redéfinir la confidentialité du salon.",
+        "dont_change_description": "Vous pouvez également prendre l'appel dans un salon séparé.",
+        "no_change": "Je ne souhaite pas modifier le niveau d'accès.",
+        "title": "Modifier le niveau d'accès du salon"
+    },
     "upload_failed_generic": "Le fichier « %(fileName)s » n’a pas pu être envoyé.",
     "upload_failed_size": "Le fichier « %(fileName)s » dépasse la taille limite autorisée par ce serveur pour les envois",
     "upload_failed_title": "Échec de l’envoi",
@@ -3664,13 +3734,13 @@
             "no_recent_messages_description": "Essayez de faire défiler le fil de discussion vers le haut pour voir s’il y en a de plus anciens.",
             "no_recent_messages_title": "Aucun message récent de %(user)s n’a été trouvé"
         },
-        "redact_button": "Supprimer les messages récents",
+        "redact_button": "Supprimer des messages",
         "revoke_invite": "Révoquer l’invitation",
         "room_encrypted": "Les messages dans ce salon sont chiffrés de bout en bout.",
         "room_encrypted_detail": "Vos messages sont sécurisés et seuls vous et le destinataire avez les clés uniques pour les déchiffrer.",
         "room_unencrypted": "Les messages dans ce salon ne sont pas chiffrés de bout en bout.",
         "room_unencrypted_detail": "Dans les salons chiffrés, vos messages sont sécurisés et seuls vous et le destinataire avez les clés uniques pour les déchiffrer.",
-        "share_button": "Partager le lien vers l’utilisateur",
+        "share_button": "Partager le profil",
         "unban_button_room": "Révoquer le bannissement du salon",
         "unban_button_space": "Révoquer le bannissement de l’espace",
         "unban_room_confirm_title": "Annuler le bannissement de %(roomName)s",
@@ -3681,6 +3751,7 @@
         "verify_explainer": "Pour une sécurité supplémentaire, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils."
     },
     "user_menu": {
+        "link_new_device": "Associer un nouvel appareil",
         "settings": "Tous les paramètres",
         "switch_theme_dark": "Passer au mode sombre",
         "switch_theme_light": "Passer au mode clair"
@@ -3737,6 +3808,7 @@
         "camera_enabled": "Votre caméra est toujours allumée",
         "cannot_call_yourself_description": "Vous ne pouvez pas passer d’appel avec vous-même.",
         "change_input_device": "Change de périphérique d’entrée",
+        "close_lobby": "Fermer la salle d'attente",
         "connecting": "Connexion",
         "connection_lost": "La connexion au serveur a été perdue",
         "connection_lost_description": "Vous ne pouvez pas passer d’appels sans connexion au serveur.",
@@ -3750,18 +3822,24 @@
         "disabled_no_perms_start_video_call": "Vous n’avez pas la permission de démarrer un appel vidéo",
         "disabled_no_perms_start_voice_call": "Vous n’avez pas la permission de démarrer un appel audio",
         "disabled_ongoing_call": "Appel en cours",
+        "element_call": "Element Call",
         "enable_camera": "Activer la caméra",
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",
         "failed_call_live_broadcast_description": "Vous ne pouvez pas démarrer un appel car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour démarrer un appel.",
         "failed_call_live_broadcast_title": "Impossible de démarrer un appel",
+        "get_call_link": "Partager le lien de l'appel",
         "hangup": "Raccrocher",
         "hide_sidebar_button": "Masquer la barre latérale",
         "input_devices": "Périphériques d’entrée",
+        "jitsi_call": "Conférence Jitsi",
         "join_button_tooltip_call_full": "Désolé — Cet appel est actuellement complet",
         "join_button_tooltip_connecting": "Connexion",
         "maximise": "Remplir l’écran",
         "maximise_call": "Plein écran",
+        "metaspace_video_rooms": {
+            "conference_room_section": "Conférences"
+        },
         "minimise_call": "Quitter le mode plein écran",
         "misconfigured_server": "L’appel a échoué à cause d’un serveur mal configuré",
         "misconfigured_server_description": "Demandez à l’administrateur de votre serveur d’accueil (<code>%(homeserverDomain)s</code>) de configurer un serveur TURN afin que les appels fonctionnent de manière fiable.",
@@ -3810,6 +3888,7 @@
         "user_is_presenting": "%(sharerName)s est à l’écran",
         "video_call": "Appel vidéo",
         "video_call_started": "Appel vidéo commencé",
+        "video_call_using": "Appel vidéo utilisant :",
         "voice_call": "Appel audio",
         "you_are_presenting": "Vous êtes à l’écran"
     },
