@@ -2088,6 +2088,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.E2E_SETUP) {
             view = (
                 <E2eSetup
+                    matrixClient={MatrixClientPeg.safeGet()}
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
                     accountPassword={this.stores.accountPasswordStore.getPassword()}
                     tokenLogin={!!this.tokenLogin}

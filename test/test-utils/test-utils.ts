@@ -125,6 +125,7 @@ export function createTestClient(): MatrixClient {
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             setDeviceIsolationMode: jest.fn(),
             prepareToEncrypt: jest.fn(),
+            bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
         }),
 
@@ -268,6 +269,7 @@ export function createTestClient(): MatrixClient {
         getAuthIssuer: jest.fn(),
         getOrCreateFilter: jest.fn(),
         sendStickerMessage: jest.fn(),
+        getLocalAliases: jest.fn().mockReturnValue([]),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

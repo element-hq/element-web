@@ -241,14 +241,11 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefonszám (nem kötelező)",
         "qr_code_login": {
-            "approve_access_warning": "Ennek az eszköznek a hozzáférés engedélyezése után az eszköznek teljes hozzáférése lesz a fiókjához.",
             "completing_setup": "Új eszköz beállításának elvégzése",
-            "confirm_code_match": "Ellenőrizze, hogy az alábbi kód megegyezik a másik eszközödön lévővel:",
             "error_unexpected": "Nemvárt hiba történt.",
             "scan_code_instruction": "A kijelentkezett eszközzel olvasd be a QR kódot alább.",
             "scan_qr_code": "QR kód beolvasása",
             "select_qr_code": "Kiválasztás „%(scanQRCode)s”",
-            "sign_in_new_device": "Új eszköz bejelentkeztetése",
             "waiting_for_device": "Várakozás a másik eszköz bejelentkezésére"
         },
         "register_action": "Fiók létrehozása",

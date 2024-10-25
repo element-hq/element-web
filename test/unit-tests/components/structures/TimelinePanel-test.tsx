@@ -41,6 +41,8 @@ import { mkThread } from "../../../test-utils/threads";
 import { createMessageEventContent } from "../../../test-utils/events";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import ScrollPanel from "../../../../src/components/structures/ScrollPanel";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -1001,5 +1003,28 @@ describe("TimelinePanel", () => {
 
         await waitFor(() => expect(screen.queryByRole("progressbar")).toBeNull());
         await waitFor(() => expect(container.querySelector(".mx_RoomView_MessageList")).not.toBeEmptyDOMElement());
+    });
+
+    it("should dump debug logs on Action.DumpDebugLogs", async () => {
+        const spy = jest.spyOn(console, "debug");
+
+        const [, room, events] = setupTestData();
+        const eventsPage2 = events.slice(1, 2);
+
+        // Start with only page 2 of the main events in the window
+        const [, timelineSet] = mkTimeline(room, eventsPage2);
+        room.getTimelineSets = jest.fn().mockReturnValue([timelineSet]);
+
+        await withScrollPanelMountSpy(async () => {
+            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />);
+
+            await waitFor(() => expectEvents(container, [events[1]]));
+        });
+
+        defaultDispatcher.fire(Action.DumpDebugLogs);
+
+        await waitFor(() =>
+            expect(spy).toHaveBeenCalledWith(expect.stringContaining("TimelinePanel(Room): Debugging info for roomId")),
+        );
     });
 });

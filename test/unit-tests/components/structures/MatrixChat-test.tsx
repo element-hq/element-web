@@ -1112,8 +1112,6 @@ describe("<MatrixChat />", () => {
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
 
-                await flushPromises();
-
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
