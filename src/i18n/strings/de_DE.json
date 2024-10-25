@@ -243,15 +243,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefon (optional)",
         "qr_code_login": {
-            "approve_access_warning": "Indem du den Zugriff dieses Gerätes bestätigst, erhält es vollen Zugang zu deinem Konto.",
             "completing_setup": "Schließe Anmeldung deines neuen Gerätes ab",
-            "confirm_code_match": "Überprüfe, dass der unten angezeigte Code mit deinem anderen Gerät übereinstimmt:",
             "error_rate_limited": "Zu viele Versuche in zu kurzer Zeit. Warte ein wenig, bevor du es erneut versuchst.",
             "error_unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
             "scan_code_instruction": "Lese den folgenden QR-Code mit deinem nicht angemeldeten Gerät ein.",
             "scan_qr_code": "QR-Code einlesen",
             "select_qr_code": "Wähle „%(scanQRCode)s“",
-            "sign_in_new_device": "Neues Gerät anmelden",
             "waiting_for_device": "Warte auf Anmeldung des Gerätes"
         },
         "register_action": "Konto erstellen",

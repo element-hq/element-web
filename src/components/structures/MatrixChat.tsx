@@ -1709,9 +1709,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        if (cli.getCrypto()) {
+        const crypto = cli.getCrypto();
+        if (crypto) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
-            cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+            crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
 
             // With cross-signing enabled, we send to unknown devices
             // without prompting. Any bad-device status the user should
@@ -2087,6 +2088,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.E2E_SETUP) {
             view = (
                 <E2eSetup
+                    matrixClient={MatrixClientPeg.safeGet()}
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
                     accountPassword={this.stores.accountPasswordStore.getPassword()}
                     tokenLogin={!!this.tokenLogin}

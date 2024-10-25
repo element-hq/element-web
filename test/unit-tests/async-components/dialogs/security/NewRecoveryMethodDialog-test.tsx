@@ -7,10 +7,9 @@
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { render, screen } from "jest-matrix-react";
+import { render, screen, act } from "jest-matrix-react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { act } from "@testing-library/react-hooks/dom";
 
 import NewRecoveryMethodDialog from "../../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog";
 import { createTestClient } from "../../../../test-utils";
@@ -55,15 +54,13 @@ describe("<NewRecoveryMethodDialog />", () => {
 
         const onFinished = jest.fn();
 
-        await act(async () => {
-            const { asFragment } = renderComponent(onFinished);
-            await waitFor(() =>
-                expect(
-                    screen.getByText("This session is encrypting history using the new recovery method."),
-                ).toBeInTheDocument(),
-            );
-            expect(asFragment()).toMatchSnapshot();
-        });
+        const { asFragment } = renderComponent(onFinished);
+        await waitFor(() =>
+            expect(
+                screen.getByText("This session is encrypting history using the new recovery method."),
+            ).toBeInTheDocument(),
+        );
+        expect(asFragment()).toMatchSnapshot();
 
         await userEvent.click(screen.getByRole("button", { name: "Set up Secure Messages" }));
         expect(onFinished).toHaveBeenCalled();

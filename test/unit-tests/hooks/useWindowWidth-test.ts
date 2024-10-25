@@ -6,8 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "@testing-library/react-hooks";
-import { act } from "jest-matrix-react";
+import { renderHook, act } from "jest-matrix-react";
 
 import UIStore, { UI_EVENTS } from "../../../src/stores/UIStore";
 import { useWindowWidth } from "../../../src/hooks/useWindowWidth";

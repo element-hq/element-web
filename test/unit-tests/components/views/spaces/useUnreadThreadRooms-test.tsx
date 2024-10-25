@@ -7,7 +7,6 @@
  */
 
 import React from "react";
-import { renderHook } from "@testing-library/react-hooks";
 import {
     MatrixClient,
     MatrixEventEvent,
@@ -15,7 +14,7 @@ import {
     PendingEventOrdering,
     Room,
 } from "matrix-js-sdk/src/matrix";
-import { act } from "jest-matrix-react";
+import { renderHook, act } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { stubClient } from "../../../../test-utils";

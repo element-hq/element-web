@@ -160,7 +160,6 @@ beforeEach(() => {
         getRoom: jest.fn(),
         credentials: {},
         setPowerLevel: jest.fn(),
-        downloadKeys: jest.fn(),
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
     } as unknown as MatrixClient);
 

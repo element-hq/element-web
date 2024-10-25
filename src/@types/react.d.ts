@@ -13,4 +13,7 @@ declare module "react" {
     function forwardRef<T, P = {}>(
         render: (props: PropsWithChildren<P>, ref: React.ForwardedRef<T>) => React.ReactElement | null,
     ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+
+    // Fix lazy types - https://stackoverflow.com/a/71017028
+    function lazy<T extends ComponentType<any>>(factory: () => Promise<{ default: T }>): T;
 }

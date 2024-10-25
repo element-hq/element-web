@@ -242,9 +242,7 @@
         "phone_label": "电话",
         "phone_optional_label": "电话号码（可选）",
         "qr_code_login": {
-            "approve_access_warning": "为此设备批准访问权限后，它对你的帐户有完全的访问权限。",
-            "completing_setup": "完成新设备的设置",
-            "confirm_code_match": "检查以下代码是否与你的其他设备匹配："
+            "completing_setup": "完成新设备的设置"
         },
         "register_action": "创建账户",
         "registration": {

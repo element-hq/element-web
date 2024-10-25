@@ -247,15 +247,12 @@
         "phone_label": "Telefono",
         "phone_optional_label": "Telefono (facoltativo)",
         "qr_code_login": {
-            "approve_access_warning": "Approvando l'accesso per questo dispositivo, avrà accesso completo al tuo account.",
             "completing_setup": "Completamento configurazione nuovo dispositivo",
-            "confirm_code_match": "Controlla che il codice sottostante corrisponda nell'altro dispositivo:",
             "error_rate_limited": "Troppi tentativi in poco tempo. Attendi un po' prima di riprovare.",
             "error_unexpected": "Si è verificato un errore imprevisto.",
             "scan_code_instruction": "Scansiona il codice QR sottostante con il dispositivo che è disconnesso.",
             "scan_qr_code": "Scansiona codice QR",
             "select_qr_code": "Seleziona '%(scanQRCode)s'",
-            "sign_in_new_device": "Accedi nel nuovo dispositivo",
             "waiting_for_device": "In attesa che il dispositivo acceda"
         },
         "register_action": "Crea account",

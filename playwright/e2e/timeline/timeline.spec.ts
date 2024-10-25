@@ -653,7 +653,7 @@ test.describe("Timeline", () => {
             const toggleEventButton = viewSourceEventExpanded.getByRole("button", { name: "toggle event" });
             // Check size and position of toggle on expanded view source event
             // See: _ViewSourceEvent.pcss
-            await expect(toggleEventButton).toHaveCSS("height", "12px"); // --ViewSourceEvent_toggle-size
+            await expect(toggleEventButton).toHaveCSS("height", "16px"); // --ViewSourceEvent_toggle-size
             await expect(toggleEventButton).toHaveCSS("align-self", "flex-end");
             // Click again to collapse the source
             await toggleEventButton.click({ position: { x: 0, y: 0 } });
@@ -679,7 +679,7 @@ test.describe("Timeline", () => {
             );
 
             // Click view source event toggle
-            await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 0, y: 0 } });
+            await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 8, y: 8 } });
 
             // Make sure the expand toggle worked
             await expect(page.locator(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded")).toBeVisible();
