@@ -59,7 +59,7 @@ describe("<JoinRuleSettings />", () => {
         onError: jest.fn(),
     };
     const getComponent = (props: Partial<JoinRuleSettingsProps> = {}) =>
-        render(<JoinRuleSettings {...defaultProps} {...props} />);
+        render(<JoinRuleSettings {...defaultProps} {...props} />, { legacyRoot: false });
 
     const setRoomStateEvents = (
         room: Room,
