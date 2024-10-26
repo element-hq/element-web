@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { MatrixClient, MatrixEvent, RuleId } from "matrix-js-sdk/src/matrix";
@@ -76,9 +76,11 @@ export function pillifyLinks(
                 const pillContainer = document.createElement("span");
 
                 const pill = (
-                    <TooltipProvider>
-                        <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
-                    </TooltipProvider>
+                    <StrictMode>
+                        <TooltipProvider>
+                            <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
+                        </TooltipProvider>
+                    </StrictMode>
                 );
 
                 ReactDOM.render(pill, pillContainer);
@@ -133,14 +135,16 @@ export function pillifyLinks(
 
                         const pillContainer = document.createElement("span");
                         const pill = (
-                            <TooltipProvider>
-                                <Pill
-                                    type={PillType.AtRoomMention}
-                                    inMessage={true}
-                                    room={room}
-                                    shouldShowPillAvatar={shouldShowPillAvatar}
-                                />
-                            </TooltipProvider>
+                            <StrictMode>
+                                <TooltipProvider>
+                                    <Pill
+                                        type={PillType.AtRoomMention}
+                                        inMessage={true}
+                                        room={room}
+                                        shouldShowPillAvatar={shouldShowPillAvatar}
+                                    />
+                                </TooltipProvider>
+                            </StrictMode>
                         );
 
                         ReactDOM.render(pill, pillContainer);
