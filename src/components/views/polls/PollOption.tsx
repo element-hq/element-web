@@ -27,7 +27,7 @@ type PollOptionContentProps = {
     isWinner?: boolean;
 };
 const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, votes, displayVoteCount }) => {
-    const votesText = displayVoteCount ?  : "";
+    const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: votes.length }) : "";
     const room = useContext(RoomContext).room!;
     const members = useRoomMembers(room);
 
@@ -35,7 +35,6 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
         <div className="mx_PollOption_content">
             <div className="mx_PollOption_optionText">{answer.text}</div>
             <div className="mx_PollOption_optionVoteCount">
-                {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
                 <div style={{ display: "flex" }}>
                     {displayVoteCount
                         && members.length <= MAXIMUM_MEMBERS_FOR_FACE_PILE
@@ -46,7 +45,10 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
                             style={{ marginRight: "10px" }}
                         />
                     }
-                    {votesText}
+                    <span>
+                        {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
+                        {votesText}
+                    </span>
                 </div>
             </div>
         </div>
