@@ -18,6 +18,8 @@ import FacePile from "../elements/FacePile";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import { UserVote } from "../messages/MPollBody";
 
+const MAXIMUM_MEMBERS_FOR_FACE_PILE = 5;
+
 type PollOptionContentProps = {
     answer: PollAnswerSubevent;
     votes: UserVote[];
@@ -25,7 +27,7 @@ type PollOptionContentProps = {
     isWinner?: boolean;
 };
 const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, votes, displayVoteCount }) => {
-    const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: votes.length }) : "";
+    const votesText = displayVoteCount ?  : "";
     const room = useContext(RoomContext).room!;
     const members = useRoomMembers(room);
 
@@ -35,12 +37,15 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
             <div className="mx_PollOption_optionVoteCount">
                 {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
                 <div style={{ display: "flex" }}>
-                    <FacePile
-                        members={members.filter((m) => votes.some((v) => v.sender === m.userId))}
-                        size="24px"
-                        overflow={false}
-                        style={{ marginRight: "10px" }}
-                    />
+                    {displayVoteCount
+                        && members.length <= MAXIMUM_MEMBERS_FOR_FACE_PILE
+                        && <FacePile
+                            members={members.filter((m) => votes.some((v) => v.sender === m.userId))}
+                            size="24px"
+                            overflow={false}
+                            style={{ marginRight: "10px" }}
+                        />
+                    }
                     {votesText}
                 </div>
             </div>
