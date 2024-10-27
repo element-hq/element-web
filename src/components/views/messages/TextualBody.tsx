@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent, StrictMode } from "react";
+import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -118,12 +118,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // Insert containing div in place of <pre> block
         pre.parentNode?.replaceChild(root, pre);
 
-        ReactDOM.render(
-            <StrictMode>
-                <CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>
-            </StrictMode>,
-            root,
-        );
+        ReactDOM.render(<CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>, root);
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
@@ -197,11 +192,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
                 const spoiler = (
-                    <StrictMode>
-                        <TooltipProvider>
-                            <Spoiler reason={reason} contentHtml={node.outerHTML} />
-                        </TooltipProvider>
-                    </StrictMode>
+                    <TooltipProvider>
+                        <Spoiler reason={reason} contentHtml={node.outerHTML} />
+                    </TooltipProvider>
                 );
 
                 ReactDOM.render(spoiler, spoilerContainer);

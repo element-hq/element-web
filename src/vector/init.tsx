@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as ReactDOM from "react-dom";
-import React, { StrictMode } from "react";
+import * as React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import * as languageHandler from "../languageHandler";
@@ -105,9 +105,7 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         "../async-components/structures/ErrorView"
     );
     window.matrixChat = ReactDOM.render(
-        <StrictMode>
-            <ErrorView title={title} messages={messages} />
-        </StrictMode>,
+        <ErrorView title={title} messages={messages} />,
         document.getElementById("matrixchat"),
     );
 }
@@ -118,9 +116,7 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         "../async-components/structures/ErrorView"
     );
     window.matrixChat = ReactDOM.render(
-        <StrictMode>
-            <UnsupportedBrowserView onAccept={onAccept} />
-        </StrictMode>,
+        <UnsupportedBrowserView onAccept={onAccept} />,
         document.getElementById("matrixchat"),
     );
 }

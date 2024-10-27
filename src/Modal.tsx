@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { StrictMode } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { IDeferred, defer, sleep } from "matrix-js-sdk/src/utils";
@@ -416,20 +416,18 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             const classes = classNames("mx_Dialog_wrapper mx_Dialog_staticWrapper", this.staticModal.className);
 
             const staticDialog = (
-                <StrictMode>
-                    <TooltipProvider>
-                        <div className={classes}>
-                            <Glass className="mx_Dialog_border">
-                                <div className="mx_Dialog">{this.staticModal.elem}</div>
-                            </Glass>
-                            <div
-                                data-testid="dialog-background"
-                                className="mx_Dialog_background mx_Dialog_staticBackground"
-                                onClick={this.onBackgroundClick}
-                            />
-                        </div>
-                    </TooltipProvider>
-                </StrictMode>
+                <TooltipProvider>
+                    <div className={classes}>
+                        <Glass className="mx_Dialog_border">
+                            <div className="mx_Dialog">{this.staticModal.elem}</div>
+                        </Glass>
+                        <div
+                            data-testid="dialog-background"
+                            className="mx_Dialog_background mx_Dialog_staticBackground"
+                            onClick={this.onBackgroundClick}
+                        />
+                    </div>
+                </TooltipProvider>
             );
 
             ReactDOM.render(staticDialog, ModalManager.getOrCreateStaticContainer());
@@ -445,20 +443,18 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             });
 
             const dialog = (
-                <StrictMode>
-                    <TooltipProvider>
-                        <div className={classes}>
-                            <Glass className="mx_Dialog_border">
-                                <div className="mx_Dialog">{modal.elem}</div>
-                            </Glass>
-                            <div
-                                data-testid="dialog-background"
-                                className="mx_Dialog_background"
-                                onClick={this.onBackgroundClick}
-                            />
-                        </div>
-                    </TooltipProvider>
-                </StrictMode>
+                <TooltipProvider>
+                    <div className={classes}>
+                        <Glass className="mx_Dialog_border">
+                            <div className="mx_Dialog">{modal.elem}</div>
+                        </Glass>
+                        <div
+                            data-testid="dialog-background"
+                            className="mx_Dialog_background"
+                            onClick={this.onBackgroundClick}
+                        />
+                    </div>
+                </TooltipProvider>
             );
 
             setTimeout(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()), 0);
