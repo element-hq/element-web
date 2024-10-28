@@ -233,7 +233,6 @@
         "qr_code_login": {
             "error_rate_limited": "Liikaa yrityksiä lyhyessä ajassa. Odota hetki, ennen kuin yrität uudelleen.",
             "error_unexpected": "Tapahtui odottamaton virhe.",
-            "sign_in_new_device": "Kirjaa sisään uusi laite",
             "waiting_for_device": "Odotetaan laitteen sisäänkirjautumista"
         },
         "register_action": "Luo tili",

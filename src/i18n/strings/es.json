@@ -231,15 +231,12 @@
         "phone_label": "Teléfono",
         "phone_optional_label": "Teléfono (opcional)",
         "qr_code_login": {
-            "approve_access_warning": "Si apruebas acceso a este dispositivo, tendrá acceso completo a tu cuenta.",
             "completing_setup": "Terminando de configurar tu nuevo dispositivo",
-            "confirm_code_match": "Comprueba que el siguiente código también aparece en el otro dispositivo:",
             "error_rate_limited": "Demasiados intentos en poco tiempo. Espera un poco antes de volverlo a intentar.",
             "error_unexpected": "Ha ocurrido un error inesperado.",
             "scan_code_instruction": "Escanea el siguiente código QR con tu dispositivo.",
             "scan_qr_code": "Escanear código QR",
             "select_qr_code": "Selecciona «%(scanQRCode)s»",
-            "sign_in_new_device": "Conectar nuevo dispositivo",
             "waiting_for_device": "Esperando a que el dispositivo inicie sesión"
         },
         "register_action": "Crear cuenta",

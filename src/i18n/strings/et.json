@@ -247,15 +247,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefoninumber (kui soovid)",
         "qr_code_login": {
-            "approve_access_warning": "Lubades ligipääsu sellele seadmele, annad talle ka täismahulise ligipääsu oma kasutajakontole.",
             "completing_setup": "Lõpetame uue seadme seadistamise",
-            "confirm_code_match": "Kontrolli, et järgnev kood klapib teises seadmes kuvatava koodiga:",
             "error_rate_limited": "Liiga palju päringuid napis ajavahemikus. Enne uuesti proovimist palun oota veidi.",
             "error_unexpected": "Tekkis teadmata viga.",
             "scan_code_instruction": "Loe QR-koodi seadmega, kus sa oled Matrix'i võrgust välja loginud.",
             "scan_qr_code": "Loe QR-koodi",
             "select_qr_code": "Vali „%(scanQRCode)s“",
-            "sign_in_new_device": "Logi sisse uus seade",
             "waiting_for_device": "Ootame, et teine seade logiks võrku"
         },
         "register_action": "Loo konto",
