@@ -233,15 +233,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefoni (në daçi)",
         "qr_code_login": {
-            "approve_access_warning": "Duke miratuar hyrje për këtë pajisje, ajo do të ketë hyrje të plotë në llogarinë tuaj.",
             "completing_setup": "Po plotësohet ujdisja e pajisjes tuaj të re",
-            "confirm_code_match": "Kontrolloni se kodi më poshtë përkon me atë në pajisjen tuaj tjetër:",
             "error_rate_limited": "Shumë përpjekje në një kohë të shkurtër. Prisni ca, para se të riprovoni.",
             "error_unexpected": "Ndodhi një gabim të papritur.",
             "scan_code_instruction": "Skanoni kodin QR më poshtë me pajisjen ku është bërë dalja.",
             "scan_qr_code": "Skanoni kodin QR",
             "select_qr_code": "Përzgjidhni “%(scanQRCode)s”",
-            "sign_in_new_device": "Hyni në pajisje të re",
             "waiting_for_device": "Po pritet që të bëhet hyrja te pajisja"
         },
         "register_action": "Krijoni Llogari",

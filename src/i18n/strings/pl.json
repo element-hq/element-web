@@ -250,13 +250,11 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefon (opcjonalny)",
         "qr_code_login": {
-            "approve_access_warning": "Akceptując dostęp temu urządzeniu, będzie miał on pełny dostęp do Twojego konta.",
             "check_code_explainer": "Bezpieczeństwo połączenia z urządzeniem zostanie sprawdzone.",
             "check_code_heading": "Wprowadź numer wyświetlany na drugim urządzeniu",
             "check_code_input_label": "2-cyfrowy kod",
             "check_code_mismatch": "Liczby się nie zgadzają",
             "completing_setup": "Kończenie konfiguracji nowego urządzenia",
-            "confirm_code_match": "Potwierdź, że kod poniżej pasuje z Twoim drugim urządzeniem:",
             "error_etag_missing": "Wystąpił nieoczekiwany błąd. Może to być spowodowane rozszerzeniem przeglądarki, serwerem proxy lub błędną konfiguracją serwera.",
             "error_expired": "Logowanie wygasło. Spróbuj ponownie.",
             "error_expired_title": "Logowanie nie zostało zakończone na czas",
@@ -284,7 +282,8 @@
             "security_code": "Kod bezpieczeństwa",
             "security_code_prompt": "Jeśli zostaniesz poproszony, wprowadź poniższy kod na drugim urządzeniu.",
             "select_qr_code": "Wybierz \"%(scanQRCode)s\"",
-            "sign_in_new_device": "Zaloguj nowe urządzenie",
+            "unsupported_explainer": "Twój dostawca konta nie obsługuje logowania nowego urządzenia za pomocą kodu QR.",
+            "unsupported_heading": "Kod QR nie jest wspierany",
             "waiting_for_device": "Oczekiwanie na logowanie urządzenia"
         },
         "register_action": "Utwórz konto",
@@ -452,8 +451,9 @@
         "all_rooms": "Wszystkie pokoje",
         "analytics": "Analityka",
         "and_n_others": {
-            "other": "i %(count)s innych...",
-            "one": "i jeden inny..."
+            "one": "i jeden inny...",
+            "few": "i %(count)s innych...",
+            "many": "i %(count)s innych..."
         },
         "android": "Android",
         "appearance": "Wygląd",
@@ -744,7 +744,7 @@
         "developer_tools": "Narzędzia programistyczne",
         "edit_setting": "Edytuj ustawienie",
         "edit_values": "Edytuj wartości",
-        "empty_string": "<empty​•​string>",
+        "empty_string": "<empty string>",
         "event_content": "Zawartość wydarzenia",
         "event_id": "ID wydarzenia: %(eventId)s",
         "event_sent": "Wydarzenie wysłane!",
@@ -800,7 +800,8 @@
         "show_hidden_events": "Pokaż ukryte wydarzenia na linii czasowej",
         "spaces": {
             "one": "<space>",
-            "other": "<%(count)s spacji>"
+            "few": "<%(count)s spacje>",
+            "many": "<%(count)s spacji>"
         },
         "state_key": "Klucz stanu",
         "thread_root_id": "ID Root Wątku:%(threadRootId)s",
@@ -1131,20 +1132,24 @@
         "export_successful": "Eksport zakończony pomyślnie!",
         "exported_n_events_in_time": {
             "one": "Wyeksportowano %(count)s wydarzenie w %(seconds)s sekund",
-            "other": "Wyeksportowano %(count)s wydarzeń w %(seconds)s sekund"
+            "few": "Wyeksportowano %(count)s wydarzenia w %(seconds)s sekund",
+            "many": "Wyeksportowano %(count)s wydarzeń w %(seconds)s sekund"
         },
         "exporting_your_data": "Eksportowanie Twoich danych",
         "fetched_n_events": {
-            "one": "Pobrano %(count)s wydarzenie",
-            "other": "Pobrano %(count)s wydarzeń"
+            "one": "Pobrano %(count)s wydarzenie do tej pory",
+            "few": "Pobrano %(count)s wydarzenia do tej pory",
+            "many": "Pobrano %(count)s wydarzeń do tej pory"
         },
         "fetched_n_events_in_time": {
             "one": "Pobrano %(count)s wydarzenie w %(seconds)ss",
-            "other": "Pobrano %(count)s wydarzeń w %(seconds)ss"
+            "few": "Pobrano %(count)s wydarzenia w %(seconds)ss",
+            "many": "Pobrano %(count)s wydarzeń w %(seconds)ss"
         },
         "fetched_n_events_with_total": {
             "one": "Pobrano %(count)s wydarzenie z %(total)s",
-            "other": "Pobrano %(count)s wydarzeń z %(total)s"
+            "few": "Pobrano %(count)s wydarzenia z %(total)s",
+            "many": "Pobrano %(count)s wydarzeń z %(total)s"
         },
         "fetching_events": "Pobieranie wydarzeń…",
         "file_attached": "Plik załączony",
@@ -1234,8 +1239,9 @@
     "in_space": "W przestrzeni %(spaceName)s.",
     "in_space1_and_space2": "W przestrzeniach %(space1Name)s i %(space2Name)s.",
     "in_space_and_n_other_spaces": {
-        "one": "W %(spaceName)s i %(count)s innej przestrzeni.",
-        "other": "W %(spaceName)s i %(count)s innych przestrzeniach."
+        "one": "W %(spaceName)s i jednej innej przestrzeni.",
+        "few": "W %(spaceName)s i %(count)s innych przestrzeniach.",
+        "many": "W %(spaceName)s i %(count)s innych przestrzeniach."
     },
     "incompatible_browser": {
         "continue": "Kontynuuj mimo to",
@@ -1243,11 +1249,14 @@
         "detail_can_continue": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości.",
         "detail_no_continue": "Zaktualizuj przeglądarkę, jeśli jeszcze tego nie zrobiłeś i spróbuj ponownie.",
         "learn_more": "Dowiedz się więcej",
+        "linux": "Linux",
+        "macos": "Mac",
         "supported_browsers": "Dla najlepszego doświadczenia korzystaj z <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> lub <Safari>Safari</Safari>.",
         "title": "%(brand)s nie wspiera tej przeglądarki",
         "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
         "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
-        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej"
+        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej",
+        "windows": "Windows (%(bits)s-bity)"
     },
     "info_tooltip_title": "Informacje",
     "integration_manager": {
@@ -1322,8 +1331,9 @@
     },
     "inviting_user1_and_user2": "Zapraszanie %(user1)s i %(user2)s",
     "inviting_user_and_n_others": {
-        "one": "Zapraszanie %(user)s i 1 więcej",
-        "other": "Zapraszanie %(user)s i %(count)s innych"
+        "one": "Zapraszanie %(user)s i jedną inną osobę",
+        "few": "Zapraszanie %(user)s i %(count)s inne",
+        "many": "Zapraszanie %(user)s i %(count)s innych"
     },
     "items_and_n_others": {
         "other": "<Items/> i %(count)s innych",
@@ -1517,7 +1527,7 @@
         "rules_title": "Zbanuj listę zasad - %(roomName)s",
         "rules_user": "Zasady użytkownika",
         "something_went_wrong": "Coś poszło nie tak. Spróbuj ponownie lub sprawdź konsolę przeglądarki dla wskazówek.",
-        "title": "Zignorowani użytkownicy",
+        "title": "Ignorowani użytkownicy",
         "view_rules": "Zobacz zasady"
     },
     "language_dropdown_label": "Rozwiń języki",
@@ -1667,7 +1677,8 @@
         "no_avatar_label": "Dodaj zdjęcie, aby inni mogli Cię rozpoznać.",
         "only_n_steps_to_go": {
             "one": "Jeszcze tylko %(count)s krok",
-            "other": "Jeszcze tylko %(count)s kroki"
+            "few": "Jeszcze tylko %(count)s kroki",
+            "many": "Jeszcze tylko %(count)s kroków"
         },
         "personal_messaging_action": "Zacznij swoją pierwszą rozmowę",
         "personal_messaging_title": "Bezpieczna komunikacja dla znajomych i rodziny",
@@ -2754,7 +2765,7 @@
             "error_loading_key_backup_status": "Nie można załadować stanu kopii zapasowej klucza",
             "export_megolm_keys": "Eksportuj klucze E2E pokojów",
             "ignore_users_empty": "Nie posiadasz ignorowanych użytkowników.",
-            "ignore_users_section": "Zignorowani użytkownicy",
+            "ignore_users_section": "Ignorowani użytkownicy",
             "import_megolm_keys": "Importuj klucze pokoju E2E",
             "key_backup_active": "Ta sesja tworzy kopię zapasową kluczy.",
             "key_backup_active_version": "Aktywna wersja kopii zapasowej:",
@@ -2829,7 +2840,7 @@
             "error_pusher_state": "Nie udało się ustawić stanu pushera",
             "error_set_name": "Nie udało się ustawić nazwy sesji",
             "filter_all": "Wszystkie",
-            "filter_inactive": "Nieaktywny",
+            "filter_inactive": "Nieaktywne",
             "filter_inactive_description": "Nieaktywne przez %(inactiveAgeDays)s dni lub dłużej",
             "filter_label": "Filtruj urządzenia",
             "filter_unverified_description": "Nieprzygotowane do bezpiecznej komunikacji",
@@ -2838,7 +2849,7 @@
             "inactive_days": "Nieaktywne przez %(inactiveAgeDays)s+ dni",
             "inactive_sessions": "Sesje nieaktywne",
             "inactive_sessions_explainer_1": "Sesje nieaktywne to sesje, które nie były używane przez dłuższy czas, ale wciąż otrzymują klucze szyfrujące.",
-            "inactive_sessions_explainer_2": "Regularne usuwanie sesji nieaktywnych poprawia bezpieczeństwo, wydajność i upraszcza Tobie detekcje podejrzanych sesji.",
+            "inactive_sessions_explainer_2": "Regularne usuwanie sesji nieaktywnych poprawia bezpieczeństwo, wydajność i upraszcza Tobie wykrywanie podejrzanych sesji.",
             "inactive_sessions_list_description": "Rozważ wylogowanie się ze starych sesji (%(inactiveAgeDays)s dni lub starsze), jeśli już z nich nie korzystasz.",
             "ip": "Adres IP",
             "last_activity": "Ostatnia aktywność",
@@ -2868,6 +2879,7 @@
             "sign_in_with_qr": "Połącz nowe urządzenie",
             "sign_in_with_qr_button": "Pokaż kod QR",
             "sign_in_with_qr_description": "Użyj kodu QR, aby zalogować się na innym urządzeniu i skonfigurować bezpieczne przesyłanie wiadomości.",
+            "sign_in_with_qr_unsupported": "Nieobsługiwane przez dostawcę konta",
             "sign_out": "Wyloguj się z tej sesji",
             "sign_out_all_other_sessions": "Wyloguj się z wszystkich pozostałych sesji (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2913,7 +2925,7 @@
             "metaspaces_favourites_description": "Pogrupuj wszystkie swoje ulubione pokoje i osoby w jednym miejscu.",
             "metaspaces_home_all_rooms": "Pokaż wszystkie pokoje",
             "metaspaces_home_all_rooms_description": "Pokaż wszystkie swoje pokoje na głównej, nawet jeśli znajdują się w przestrzeni.",
-            "metaspaces_home_description": "Główna to przydatne miejsce, gdzie znajdziesz przegląd wszystkiego.",
+            "metaspaces_home_description": "Główna to przydatne miejsce, gdzie znajdziesz przegląd wszystkich pokoi.",
             "metaspaces_orphans": "Pokoje poza przestrzenią",
             "metaspaces_orphans_description": "Pogrupuj wszystkie pokoje, które nie są częścią przestrzeni, w jednym miejscu.",
             "metaspaces_people_description": "Pogrupuj wszystkie osoby w jednym miejscu.",
@@ -3341,7 +3353,7 @@
         },
         "m.file": {
             "error_decrypting": "Błąd odszyfrowywania załącznika",
-            "error_invalid": "Nieprawidłowy plik %(extra)s"
+            "error_invalid": "Nieprawidłowy plik"
         },
         "m.image": {
             "error": "Nie można pokazać zdjęcia z powodu błędu",
@@ -3616,8 +3628,9 @@
                 "other": "%(severalUsers)s dołączyło i wyszło %(count)s razy"
             },
             "joined_multiple": {
-                "one": "%(severalUsers)sdołączyło",
-                "other": "%(severalUsers)s dołączyło %(count)s razy"
+                "one": "%(severalUsers)s dołączył",
+                "few": "%(severalUsers)s dołączyli %(count)s razy",
+                "many": "%(severalUsers)s dołączyło %(count)s razy"
             },
             "kicked": {
                 "one": "zostało usunięte",
@@ -3695,8 +3708,9 @@
         "thread_info_basic": "Z wątku",
         "typing_indicator": {
             "more_users": {
-                "other": "%(names)s i %(count)s innych piszą…",
-                "one": "%(names)s i jedna osoba pisze…"
+                "one": "%(names)s i jedna inna pisze ...",
+                "few": "%(names)s i %(count)s inne piszą ...",
+                "many": "%(names)s i %(count)s innych pisze ..."
             },
             "one_user": "%(displayName)s pisze…",
             "two_users": "%(names)s i %(lastPerson)s piszą…"

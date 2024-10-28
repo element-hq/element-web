@@ -247,15 +247,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefonní číslo (nepovinné)",
         "qr_code_login": {
-            "approve_access_warning": "Schválením přístupu tohoto zařízení získá zařízení plný přístup k vašemu účtu.",
             "completing_setup": "Dokončování nastavení nového zařízení",
-            "confirm_code_match": "Zkontrolujte, zda se níže uvedený kód shoduje s vaším dalším zařízením:",
             "error_rate_limited": "Příliš mnoho pokusů v krátkém čase. Počkejte chvíli, než to zkusíte znovu.",
             "error_unexpected": "Došlo k neočekávané chybě.",
             "scan_code_instruction": "Níže uvedený QR kód naskenujte pomocí přihlašovaného zařízení.",
             "scan_qr_code": "Skenovat QR kód",
             "select_qr_code": "Vybrat '%(scanQRCode)s'",
-            "sign_in_new_device": "Přihlásit nové zařízení",
             "waiting_for_device": "Čekání na přihlášení zařízení"
         },
         "register_action": "Vytvořit účet",
