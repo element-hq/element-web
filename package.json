@@ -148,7 +148,7 @@
         "tar-js": "^0.3.0",
         "temporal-polyfill": "^0.2.5",
         "ua-parser-js": "^1.0.2",
-        "uuid": "^10.0.0",
+        "uuid": "^11.0.0",
         "what-input": "^5.2.10"
     },
     "devDependencies": {
