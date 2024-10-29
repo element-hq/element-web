@@ -1,3 +1,11 @@
+Changes in [1.11.83](https://github.com/element-hq/element-web/releases/tag/v1.11.83) (2024-10-29)
+==================================================================================================
+## ✨ Features
+
+* Enable Element Call by default on release instances ([#28314](https://github.com/element-hq/element-web/pull/28314)). Contributed by @t3chguy.
+
+
+
 Changes in [1.11.82](https://github.com/element-hq/element-web/releases/tag/v1.11.82) (2024-10-22)
 ==================================================================================================
 ## ✨ Features
