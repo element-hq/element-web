@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SetIntegrationManager should render manage integrations sections 1`] = `
+<label
+  class="mx_SetIntegrationManager"
+  data-testid="mx_SetIntegrationManager"
+  for="toggle_integration"
+>
+  <div
+    class="mx_SettingsFlag"
+  >
+    <div
+      class="mx_SetIntegrationManager_heading_manager"
+    >
+      <h3
+        class="mx_Heading_h3"
+      >
+        Manage integrations
+      </h3>
+      <h4
+        class="mx_Heading_h4"
+      >
+        (scalar.vector.im)
+      </h4>
+    </div>
+    <div
+      aria-checked="false"
+      aria-disabled="false"
+      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+      id="toggle_integration"
+      role="switch"
+      tabindex="0"
+    >
+      <div
+        class="mx_ToggleSwitch_ball"
+      />
+    </div>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Use an integration manager 
+      <strong>
+        (scalar.vector.im)
+      </strong>
+       to manage bots, widgets, and sticker packs.
+    </span>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
+  </div>
+</label>
+`;

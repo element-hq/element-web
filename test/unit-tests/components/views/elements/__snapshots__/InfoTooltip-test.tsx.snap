@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfoTooltip should show tooltip on hover 1`] = `
+<DocumentFragment>
+  <div
+    aria-describedby=":r2:"
+    class="mx_InfoTooltip"
+    tabindex="0"
+  >
+    <span
+      aria-label="Information"
+      class="mx_InfoTooltip_icon mx_InfoTooltip_icon_info"
+    />
+    Trigger text
+  </div>
+</DocumentFragment>
+`;

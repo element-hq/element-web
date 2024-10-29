@@ -18,15 +18,15 @@ jobs:
             fail-fast: false
             matrix:
                 image:
-                    - ubuntu-latest
-                    - windows-latest
-                    - macos-latest
+                    - ubuntu-24.04
+                    - windows-2022
+                    - macos-14
                 isDevelop:
                     - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-                # Skip the ubuntu-latest build for the develop branch as the dedicated CD build_develop workflow handles that
+                # Skip the ubuntu-24.04 build for the develop branch as the dedicated CD build_develop workflow handles that
                 exclude:
                     - isDevelop: true
-                      image: ubuntu-latest
+                      image: ubuntu-24.04
         runs-on: ${{ matrix.image }}
         defaults:
             run:

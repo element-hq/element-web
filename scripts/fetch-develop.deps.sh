@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Fetches the js-sdk and matrix-react-sdk dependencies for development
-# or testing purposes
+# Fetches the js-sdk dependency for development or testing purposes
 # If there exists a branch of that dependency with the same name as
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
@@ -81,19 +80,5 @@ yarn install --frozen-lockfile
 popd
 
 yarn link matrix-js-sdk
-
-##############################
-
-echo 'Setting up matrix-react-sdk'
-
-dodep element-hq matrix-react-sdk
-
-pushd matrix-react-sdk
-yarn link
-yarn link matrix-js-sdk
-yarn install --frozen-lockfile
-popd
-
-yarn link matrix-react-sdk
 
 ##############################

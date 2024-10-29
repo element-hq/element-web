@@ -13,17 +13,8 @@ permissions:
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: dockerhub
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - variant: vanilla
-                    # Variant we ship to aid ESS in providing a build on the OpenCoDE platform including specific modules
-                    - variant: opendesk
-                      flavor: suffix=-opendesk,onlatest=true
-                      prepare: mv variants/openDesk/* .
         steps:
             - uses: actions/checkout@v4
               with:
@@ -31,10 +22,6 @@ jobs:
 
             - name: Install Cosign
               uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3
-
-            - name: Prepare
-              if: matrix.prepare
-              run: ${{ matrix.prepare }}
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
@@ -61,7 +48,6 @@ jobs:
                       type=ref,event=tag
                   flavor: |
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
-                      ${{ matrix.flavor }}
 
             - name: Build and push
               id: build-and-push
@@ -85,7 +71,6 @@ jobs:
                   cosign sign --yes ${images}
 
             - name: Update repo description
-              if: matrix.variant == 'vanilla'
               uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
               continue-on-error: true
               with:

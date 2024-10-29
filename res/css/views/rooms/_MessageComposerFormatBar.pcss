@@ -1,0 +1,97 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MessageComposerFormatBar {
+    display: none;
+    width: calc(32px * 6);
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: $background;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
+    user-select: none;
+    /* equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000) */
+    /* but as it appears after them in the DOM, will appear on top. */
+    z-index: 1000;
+
+    &.mx_MessageComposerFormatBar_shown {
+        display: block;
+    }
+
+    > * {
+        white-space: nowrap;
+        display: inline-block;
+        position: relative;
+        margin: 2px;
+    }
+
+    .mx_MessageComposerFormatBar_button {
+        width: 28px;
+        height: 28px;
+        box-sizing: border-box;
+        vertical-align: middle;
+        background: none;
+        border: none;
+
+        &:hover {
+            background: var(--cpd-color-bg-subtle-secondary);
+            border-radius: 6px;
+            z-index: 1;
+        }
+    }
+
+    .mx_MessageComposerFormatBar_button::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 20px;
+        background-color: var(--cpd-color-icon-secondary);
+    }
+
+    .mx_MessageComposerFormatBar_button:hover::after {
+        background-color: var(--cpd-color-icon-primary);
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconBold::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/bold.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconItalic::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/italic.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconStrikethrough::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/strikethrough.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconQuote::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/quote.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconCode::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/inline-code.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconInsertLink::after {
+        mask-image: url("@vector-im/compound-design-tokens/icons/link.svg");
+    }
+}
+
+.mx_MessageComposerFormatBar_buttonTooltip {
+    white-space: nowrap;
+    font-size: $font-13px;
+    font-weight: var(--cpd-font-weight-semibold);
+    min-width: 54px;
+    text-align: center;
+}

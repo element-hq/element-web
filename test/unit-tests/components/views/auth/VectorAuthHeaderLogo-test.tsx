@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { render } from "jest-matrix-react";
 
 import VectorAuthHeaderLogo from "../../../../../src/components/views/auth/VectorAuthHeaderLogo";
 

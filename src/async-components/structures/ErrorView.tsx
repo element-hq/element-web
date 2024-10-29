@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ReactNode } from "react";
 import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { Flex } from "matrix-react-sdk/src/components/utils/Flex";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
+import SdkConfig from "../../SdkConfig";
+import { Flex } from "../../components/utils/Flex";
 import { _t } from "../../languageHandler";
 import { Icon as AppleIcon } from "../../../res/themes/element/img/compound/apple.svg";
 import { Icon as MicrosoftIcon } from "../../../res/themes/element/img/compound/microsoft.svg";
@@ -25,6 +25,7 @@ interface IProps {
     title: string;
     messages?: string[];
     footer?: ReactNode;
+    children?: ReactNode;
 }
 
 export const ErrorView: React.FC<IProps> = ({ title, messages, footer, children }) => {

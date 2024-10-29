@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Test Privacy policy</title>
+    </head>
+    <body>
+        {% if has_consented %}
+        <p>Thank you, you've already accepted the license.</p>
+        {% else %}
+        <p>Please accept the license!</p>
+        <form method="post" action="consent">
+            <input type="hidden" name="v" value="{{version}}" />
+            <input type="hidden" name="u" value="{{user}}" />
+            <input type="hidden" name="h" value="{{userhmac}}" />
+            <input type="submit" value="Sure thing!" />
+        </form>
+        {% endif %}
+    </body>
+</html>

@@ -9,16 +9,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as ReactDOM from "react-dom";
-import * as React from "react";
-import * as languageHandler from "matrix-react-sdk/src/languageHandler";
-import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
-import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { setTheme } from "matrix-react-sdk/src/theme";
+import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
-import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
+import * as languageHandler from "../languageHandler";
+import SettingsStore from "../settings/SettingsStore";
+import PlatformPeg from "../PlatformPeg";
+import SdkConfig from "../SdkConfig";
+import { setTheme } from "../theme";
+import { ModuleRunner } from "../modules/ModuleRunner";
+import MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
@@ -105,7 +105,9 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         "../async-components/structures/ErrorView"
     );
     window.matrixChat = ReactDOM.render(
-        <ErrorView title={title} messages={messages} />,
+        <StrictMode>
+            <ErrorView title={title} messages={messages} />
+        </StrictMode>,
         document.getElementById("matrixchat"),
     );
 }
@@ -116,7 +118,9 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         "../async-components/structures/ErrorView"
     );
     window.matrixChat = ReactDOM.render(
-        <UnsupportedBrowserView onAccept={onAccept} />,
+        <StrictMode>
+            <UnsupportedBrowserView onAccept={onAccept} />
+        </StrictMode>,
         document.getElementById("matrixchat"),
     );
 }
@@ -131,4 +135,4 @@ export async function loadModules(): Promise<void> {
 
 export { _t } from "../languageHandler";
 
-export { extractErrorMessageFromError } from "matrix-react-sdk/src/components/views/dialogs/ErrorDialog";
+export { extractErrorMessageFromError } from "../components/views/dialogs/ErrorDialog";

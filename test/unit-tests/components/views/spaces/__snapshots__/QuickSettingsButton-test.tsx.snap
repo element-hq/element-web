@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QuickSettingsButton should render the quick settings button in expanded mode 1`] = `
+<DocumentFragment>
+  <div
+    aria-expanded="true"
+    aria-label="Quick settings"
+    class="mx_AccessibleButton mx_QuickSettingsButton expanded"
+    role="button"
+    tabindex="0"
+  >
+    Settings
+  </div>
+</DocumentFragment>
+`;

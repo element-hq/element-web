@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EffectsOverlay/> should render 1`] = `
+<DocumentFragment>
+  <canvas
+    aria-hidden="true"
+    height="768"
+    style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+    width="100"
+  />
+</DocumentFragment>
+`;

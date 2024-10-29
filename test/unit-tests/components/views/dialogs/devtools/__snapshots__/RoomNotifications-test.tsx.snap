@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomNotifications /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <section>
+      <h2>
+        Room status
+      </h2>
+      <ul>
+        <li>
+          <span>
+            Room unread status: 
+            <strong>
+              None
+            </strong>
+            , count: 
+            <strong>
+              0
+            </strong>
+          </span>
+        </li>
+        <li>
+          <span>
+            Notification state is 
+            <strong />
+          </span>
+        </li>
+        <li>
+          <span>
+            Room is 
+            <strong>
+              not encrypted 🚨
+            </strong>
+          </span>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>
+        Main timeline
+      </h2>
+      <ul>
+        <li>
+          Total:  0
+        </li>
+        <li>
+          Highlight:  0
+        </li>
+        <li>
+          Dot:  false
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>
+        Threads timeline
+      </h2>
+      <ul />
+    </section>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+  </div>
+</DocumentFragment>
+`;

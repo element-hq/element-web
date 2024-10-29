@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}
 jobs:
     bot:
         name: Pending reviews bot
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: Matrix
         env:
             URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
@@ -64,7 +64,6 @@ jobs:
                       const repos = [
                           "element-hq/element-desktop",
                           "element-hq/element-web",
-                          "element-hq/matrix-react-sdk",
                           "matrix-org/matrix-js-sdk",
                       ];
                       const teams = [

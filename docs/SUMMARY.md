@@ -34,8 +34,22 @@
 -   [App load order](app-load.md)
 -   [Translation](translating-dev.md)
 -   [Theming](theming.md)
+-   [Playwright end to end tests](playwright.md)
 -   [Memory profiling](memory-profiles-and-leaks.md)
 -   [Jitsi](jitsi-dev.md)
 -   [Feature flags](feature-flags.md)
 -   [OIDC and delegated authentication](oidc.md)
 -   [Release Process](release.md)
+
+# Deep dive
+
+-   [Skinning](skinning.md)
+-   [Cider editor](ciderEditor.md)
+-   [Iconography](icons.md)
+-   [Jitsi](jitsi.md)
+-   [Local echo](local-echo-dev.md)
+-   [Media](media-handling.md)
+-   [Room List Store](room-list-store.md)
+-   [Scrolling](scrolling.md)
+-   [Usercontent](usercontent.md)
+-   [Widget layouts](widget-layouts.md)

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DecoratedRoomAvatar shows an avatar with globe icon and tooltip for public room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DecoratedRoomAvatar mx_DecoratedRoomAvatar_cutout"
+  >
+    <span
+      class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      role="presentation"
+      style="--cpd-avatar-size: 32px;"
+    >
+      r
+    </span>
+    <div
+      aria-labelledby=":r0:"
+      class="mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_globe"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DecoratedRoomAvatar shows the presence indicator in a DM room that also has functional members 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DecoratedRoomAvatar mx_DecoratedRoomAvatar_cutout"
+  >
+    <span
+      class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+      data-color="5"
+      data-testid="avatar-img"
+      data-type="round"
+      role="presentation"
+      style="--cpd-avatar-size: 32px;"
+    >
+      r
+    </span>
+    <div
+      aria-labelledby=":r6:"
+      class="mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_online"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;

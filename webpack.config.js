@@ -26,14 +26,13 @@ if (!process.env.VERSION) {
 
 const cssThemes = {
     // CSS themes
-    "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.pcss",
-    "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.pcss",
-    "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.pcss",
-    "theme-light-high-contrast":
-        "./node_modules/matrix-react-sdk/res/themes/light-high-contrast/css/light-high-contrast.pcss",
-    "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.pcss",
-    "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.pcss",
-    "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.pcss",
+    "theme-legacy-light": "./res/themes/legacy-light/css/legacy-light.pcss",
+    "theme-legacy-dark": "./res/themes/legacy-dark/css/legacy-dark.pcss",
+    "theme-light": "./res/themes/light/css/light.pcss",
+    "theme-light-high-contrast": "./res/themes/light-high-contrast/css/light-high-contrast.pcss",
+    "theme-dark": "./res/themes/dark/css/dark.pcss",
+    "theme-light-custom": "./res/themes/light-custom/css/light-custom.pcss",
+    "theme-dark-custom": "./res/themes/dark-custom/css/dark-custom.pcss",
 };
 
 // See docs/customisations.md
@@ -69,8 +68,8 @@ function parseOverridesToReplacements(overrides) {
                 resource.request = path.resolve(__dirname, newPath);
                 resource.createData.resource = path.resolve(__dirname, newPath);
                 // Starting with Webpack 5 we also need to set the context as otherwise replacing
-                // files in e.g. matrix-react-sdk with files from element-web will try to resolve
-                // them within matrix-react-sdk (https://github.com/webpack/webpack/issues/17716)
+                // files in e.g. matrix-js-sdk with files from element-web will try to resolve
+                // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
                 resource.context = path.dirname(resource.request);
                 resource.createData.context = path.dirname(resource.createData.resource);
             },
@@ -114,10 +113,9 @@ module.exports = (env, argv) => {
         }
     }
 
-    // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early, so we
+    // Resolve the directories for the js-sdk for later use. We resolve these early, so we
     // don't have to call them over and over. We also resolve to the package.json instead of the src
     // directory, so we don't have to rely on an index.js or similar file existing.
-    const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), "..", "src");
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), "..", "src");
 
     return {
@@ -129,7 +127,7 @@ module.exports = (env, argv) => {
             bundle: "./src/vector/index.ts",
             mobileguide: "./src/vector/mobile_guide/index.ts",
             jitsi: "./src/vector/jitsi/index.ts",
-            usercontent: "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
+            usercontent: "./src/usercontent/index.ts",
             serviceworker: {
                 import: "./src/serviceworker/index.ts",
                 filename: "sw.js", // update WebPlatform if this changes
@@ -213,7 +211,6 @@ module.exports = (env, argv) => {
 
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
-                "matrix-react-sdk": path.resolve(__dirname, "node_modules/matrix-react-sdk"),
                 "@matrix-org/react-sdk-module-api": path.resolve(
                     __dirname,
                     "node_modules/@matrix-org/react-sdk-module-api",
@@ -221,6 +218,7 @@ module.exports = (env, argv) => {
                 // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
+                "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
@@ -259,11 +257,10 @@ module.exports = (env, argv) => {
                         // our own source needs babel-ing
                         if (f.startsWith(path.resolve(__dirname, "src"))) return true;
 
-                        // we use the original source files of react-sdk and js-sdk, so we need to
+                        // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
                         // path, these could be anywhere thanks to yarn link. We must also not
                         // include node modules inside these modules, so we add 'src'.
-                        if (f.startsWith(reactSdkSrcDir)) return true;
                         if (f.startsWith(jsSdkSrcDir)) return true;
 
                         // Some of the syntax in this package is not understood by
@@ -629,7 +626,7 @@ module.exports = (env, argv) => {
 
             // This is the usercontent sandbox's entry point (separate for iframing)
             new HtmlWebpackPlugin({
-                template: "./node_modules/matrix-react-sdk/src/usercontent/index.html",
+                template: "./src/usercontent/index.html",
                 filename: "usercontent/index.html",
                 minify: false,
                 chunks: ["usercontent"],
@@ -668,7 +665,7 @@ module.exports = (env, argv) => {
                     { from: "themes/**", context: path.resolve(__dirname, "res") },
                     { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
-                    { from: "media/**", context: path.resolve(__dirname, "node_modules/matrix-react-sdk/res/") },
+                    { from: "media/**", context: path.resolve(__dirname, "res/") },
                     { from: "config.json", noErrorOnMissing: true },
                     "contribute.json",
                 ],

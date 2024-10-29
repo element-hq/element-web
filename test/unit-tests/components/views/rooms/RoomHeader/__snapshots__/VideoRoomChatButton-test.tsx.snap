@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
+<button
+  aria-label="Chat"
+  aria-labelledby=":r6:"
+  class="_icon-button_bh2qc_17"
+  data-indicator="default"
+  role="button"
+  style="--cpd-icon-button-size: 32px;"
+  tabindex="0"
+>
+  <div
+    class="_indicator-icon_133tf_26"
+    data-indicator="default"
+    style="--cpd-icon-button-size: 100%;"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.95 16.3 1.5 21.25a.936.936 0 0 0 .25 1 .936.936 0 0 0 1 .25l4.95-1.45a10.23 10.23 0 0 0 2.1.712c.717.159 1.45.238 2.2.238a9.737 9.737 0 0 0 3.9-.788 10.098 10.098 0 0 0 3.175-2.137c.9-.9 1.613-1.958 2.137-3.175A9.738 9.738 0 0 0 22 12a9.738 9.738 0 0 0-.788-3.9 10.099 10.099 0 0 0-2.137-3.175c-.9-.9-1.958-1.612-3.175-2.137A9.737 9.737 0 0 0 12 2a9.737 9.737 0 0 0-3.9.788 10.099 10.099 0 0 0-3.175 2.137c-.9.9-1.612 1.958-2.137 3.175A9.738 9.738 0 0 0 2 12a10.179 10.179 0 0 0 .95 4.3Z"
+      />
+    </svg>
+  </div>
+</button>
+`;

@@ -1,0 +1,66 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MPollBody {
+    margin-top: 8px;
+
+    h2 {
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-top: 0;
+        margin-bottom: 8px;
+
+        .mx_MPollBody_edited {
+            color: $roomtopic-color;
+            font-size: $font-12px;
+            opacity: 0.6;
+        }
+    }
+
+    h2::before {
+        content: "";
+        position: relative;
+        display: inline-block;
+        margin-right: 12px;
+        top: 3px;
+        left: 3px;
+        height: 20px;
+        width: 20px;
+        background-color: $secondary-content;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+    }
+
+    .mx_MPollBody_totalVotes {
+        display: flex;
+        flex-direction: inline;
+        justify-content: start;
+        color: $secondary-content;
+        font-size: $font-12px;
+
+        .mx_Spinner {
+            flex: 0;
+            margin-left: $spacing-8;
+        }
+    }
+}
+
+/* Prevent clicking a poll within a reply */
+.mx_ReplyTile .mx_MPollBody {
+    pointer-events: none;
+}
+
+.mx_MPollBody_allOptions {
+    display: grid;
+    grid-gap: $spacing-16;
+    margin-bottom: $spacing-8;
+    max-width: 550px;
+}

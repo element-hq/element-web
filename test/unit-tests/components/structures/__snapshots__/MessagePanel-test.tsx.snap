@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessagePanel should handle large numbers of hidden events quickly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    tabindex="-1"
+  >
+    <div
+      class="mx_RoomView_messageListWrapper"
+    >
+      <ol
+        aria-live="polite"
+        class="mx_RoomView_MessageList"
+        style="height: 400px;"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`MessagePanel should handle lots of membership events quickly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    tabindex="-1"
+  >
+    <div
+      class="mx_RoomView_messageListWrapper"
+    >
+      <ol
+        aria-live="polite"
+        class="mx_RoomView_MessageList"
+        style="height: 400px;"
+      >
+        <li
+          data-scroll-tokens="__scroll_tokens__"
+          data-testid="__testid__"
+        >
+          <div
+            aria-label="Thu, Jan 1, 1970"
+            class="mx_TimelineSeparator"
+            role="separator"
+          >
+            <hr
+              role="none"
+            />
+            <div
+              class="mx_DateSeparator_dateContent"
+            >
+              <h2
+                aria-hidden="true"
+                class="mx_DateSeparator_dateHeading"
+              >
+                Thu, Jan 1, 1970
+              </h2>
+            </div>
+            <hr
+              role="none"
+            />
+          </div>
+        </li>
+        <div
+          class="mx_EventTileBubble mx_HistoryTile"
+        >
+          <div
+            class="mx_EventTileBubble_title"
+          >
+            You can't see earlier messages
+          </div>
+        </div>
+        <li
+          class="mx_GenericEventListSummary"
+          data-expanded="false"
+          data-layout="group"
+          data-scroll-tokens="__scroll_tokens__"
+          data-testid="__testid__"
+        >
+          <div
+            aria-expanded="false"
+            class="mx_AccessibleButton mx_GenericEventListSummary_toggle mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            Expand
+          </div>
+          <div
+            class="mx_EventTile_line"
+          >
+            <div
+              class="mx_EventTile_info"
+            >
+              <span
+                class="mx_GenericEventListSummary_avatars"
+              >
+                <span
+                  class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                  data-color="1"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  role="presentation"
+                  style="--cpd-avatar-size: 14px;"
+                  title="@user:id"
+                >
+                  u
+                </span>
+              </span>
+              <span
+                class="mx_TextualEvent mx_GenericEventListSummary_summary"
+              >
+                <span>
+                  @user:id made no changes 100 times
+                </span>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`MessagePanel should handle lots of room creation events quickly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    tabindex="-1"
+  >
+    <div
+      class="mx_RoomView_messageListWrapper"
+    >
+      <ol
+        aria-live="polite"
+        class="mx_RoomView_MessageList"
+        style="height: 400px;"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

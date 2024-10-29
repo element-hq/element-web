@@ -12,11 +12,6 @@ on:
                 required: true
                 type: boolean
                 default: true
-            matrix-react-sdk:
-                description: Prepare matrix-react-sdk
-                required: true
-                type: boolean
-                default: true
             matrix-js-sdk:
                 description: Prepare matrix-js-sdk
                 required: true
@@ -24,10 +19,7 @@ on:
                 default: true
 jobs:
     prepare:
-        runs-on: ubuntu-latest
-        env:
-            # The order is specified bottom-up to avoid any races for allchange
-            REPOS: matrix-js-sdk matrix-react-sdk element-web element-desktop
+        runs-on: ubuntu-24.04
         steps:
             - name: Checkout Element Desktop
               uses: actions/checkout@v4
@@ -45,16 +37,6 @@ jobs:
               with:
                   repository: element-hq/element-web
                   path: element-web
-                  ref: staging
-                  fetch-depth: 0
-                  fetch-tags: true
-                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - name: Checkout Matrix React SDK
-              uses: actions/checkout@v4
-              if: inputs.matrix-react-sdk
-              with:
-                  repository: element-hq/matrix-react-sdk
-                  path: matrix-react-sdk
                   ref: staging
                   fetch-depth: 0
                   fetch-tags: true
@@ -83,10 +65,6 @@ jobs:
               if: inputs.element-web
               run: |
                   git -C "element-web" merge origin/develop
-            - name: Merge React SDK
-              if: inputs.matrix-react-sdk
-              run: |
-                  git -C "matrix-react-sdk" merge origin/develop
             - name: Merge JS SDK
               if: inputs.matrix-js-sdk
               run: |
@@ -101,17 +79,6 @@ jobs:
               with:
                   ref: staging
                   repo: matrix-org/matrix-js-sdk
-                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  wait-interval: 10
-                  check-name: draft
-                  allowed-conclusions: success
-
-            - name: Wait for matrix-react-sdk draft
-              if: inputs.matrix-react-sdk
-              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
-              with:
-                  ref: staging
-                  repo: element-hq/matrix-react-sdk
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
                   check-name: draft

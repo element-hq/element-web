@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ExtensionsCard /> should render empty state 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_ExtensionsCard"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Extensions
+        </p>
+      </div>
+      <button
+        aria-labelledby=":r0:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 13H6a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h5V6c0-.283.096-.52.287-.713A.968.968 0 0 1 12 5c.283 0 .52.096.713.287.191.192.287.43.287.713v5h5a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13h-5v5a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 19a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 18v-5Z"
+          />
+        </svg>
+        Add extensions
+      </button>
+      <div
+        class="mx_Flex mx_EmptyState"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.25 11.672a.907.907 0 0 1-.663-.282L12.61 7.413a.907.907 0 0 1-.282-.663c0-.254.094-.475.282-.663l3.977-3.977a.907.907 0 0 1 .663-.282c.254 0 .475.094.663.282l3.977 3.977a.907.907 0 0 1 .282.663.907.907 0 0 1-.282.663l-3.977 3.977a.907.907 0 0 1-.663.282Zm2.475-4.922L17.25 4.275 14.775 6.75l2.475 2.475 2.475-2.475ZM4 11a.967.967 0 0 1-.712-.287A.968.968 0 0 1 3 10V4c0-.283.096-.52.288-.712A.968.968 0 0 1 4 3h6a.97.97 0 0 1 .713.288A.968.968 0 0 1 11 4v6c0 .283-.096.52-.287.713A.968.968 0 0 1 10 11H4Zm5-2V5H5v4h4Zm5 12a.968.968 0 0 1-.713-.288A.968.968 0 0 1 13 20v-6c0-.283.096-.52.287-.713A.968.968 0 0 1 14 13h6a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v6c0 .283-.096.52-.288.712A.968.968 0 0 1 20 21h-6Zm5-2v-4h-4v4h4ZM4 21a.967.967 0 0 1-.712-.288A.968.968 0 0 1 3 20v-6a.97.97 0 0 1 .288-.713A.967.967 0 0 1 4 13h6c.283 0 .52.096.713.287.191.192.287.43.287.713v6a.97.97 0 0 1-.287.712A.968.968 0 0 1 10 21H4Zm5-2v-4H5v4h4Z"
+          />
+        </svg>
+        <p
+          class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+        >
+          Boost productivity with more tools, widgets and bots
+        </p>
+        <p
+          class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+        >
+          Select “Add extensions” to browse and add extensions to this room
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ExtensionsCard /> should render widgets 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_BaseCard mx_ExtensionsCard"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Extensions
+        </p>
+      </div>
+      <button
+        aria-labelledby=":r6:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 13H6a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h5V6c0-.283.096-.52.287-.713A.968.968 0 0 1 12 5c.283 0 .52.096.713.287.191.192.287.43.287.713v5h5a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13h-5v5a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 19a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 18v-5Z"
+          />
+        </svg>
+        Add extensions
+      </button>
+      <div
+        class="_separator_144s5_17"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <div
+        class="mx_BaseCard_Button mx_ExtensionsCard_Button"
+      >
+        <div
+          class="mx_AccessibleButton mx_ExtensionsCard_icon_app"
+          role="button"
+          tabindex="0"
+        >
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 24px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="24px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="24px"
+            />
+          </span>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_lineClamp"
+          >
+            Custom Widget
+          </p>
+        </div>
+        <div
+          aria-label="Pin"
+          class="mx_AccessibleButton mx_ExtensionsCard_app_pinToggle"
+          role="button"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="mx_BaseCard_Button mx_ExtensionsCard_Button"
+      >
+        <div
+          class="mx_AccessibleButton mx_ExtensionsCard_icon_app"
+          role="button"
+          tabindex="0"
+        >
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 24px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="24px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="24px"
+            />
+          </span>
+          <p
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_lineClamp"
+          >
+            Jitsi
+          </p>
+        </div>
+        <div
+          aria-label="Pin"
+          class="mx_AccessibleButton mx_ExtensionsCard_app_pinToggle"
+          role="button"
+          tabindex="0"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ExtensionsCard /> should show context menu on widget row 1`] = `
+<ul
+  class="mx_IconizedContextMenu"
+  role="none"
+>
+  <div
+    class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
+  >
+    <li
+      aria-label="Remove for everyone"
+      class="mx_AccessibleButton mx_IconizedContextMenu_item"
+      role="menuitem"
+      tabindex="0"
+    >
+      <span
+        class="mx_IconizedContextMenu_label"
+      >
+        Remove for everyone
+      </span>
+    </li>
+  </div>
+</ul>
+`;

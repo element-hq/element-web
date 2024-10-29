@@ -18,7 +18,7 @@ concurrency: ${{ github.workflow }}
 jobs:
     bot:
         name: Release topic update
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: Matrix
         steps:
             - uses: actions/github-script@v7
@@ -56,7 +56,7 @@ jobs:
                               headers,
                               body: "{}",
                           });
-                          
+
                           let res = await fetch(apiUrl, {
                               method: "GET",
                               headers,
@@ -69,7 +69,7 @@ jobs:
 
                           const data = await res.json();
                           console.log(roomId, "got event", data);
-                          
+
                           const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");
@@ -89,7 +89,7 @@ jobs:
                               }),
                               headers,
                           });
-                          
+
                           if (res.ok) {
                               console.log(roomId, "topic updated:", topic);
                           } else {

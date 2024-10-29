@@ -15,11 +15,7 @@ import {
     WidgetApi,
     WidgetApiAction,
 } from "matrix-widget-api";
-import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
-import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
-import { ElementWidgetCapabilities } from "matrix-react-sdk/src/stores/widgets/ElementWidgetCapabilities";
 
 import type {
     JitsiMeetExternalAPIConstructor,
@@ -31,6 +27,10 @@ import type {
     Config as _Config,
     InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
+import { ElementWidgetActions } from "../../stores/widgets/ElementWidgetActions";
+import { IConfigOptions } from "../../IConfigOptions";
+import { SnakedObject } from "../../utils/SnakedObject";
+import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";
 
 interface Config extends _Config {
@@ -62,6 +62,7 @@ interface ExternalAPIOptions extends _ExternalAPIOptions {
 }
 
 // We have to trick webpack into loading our CSS for us.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";

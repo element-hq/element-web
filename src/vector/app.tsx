@@ -12,22 +12,20 @@ Please see LICENSE files in the repository root for full details.
 
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
-
-import React, { ReactElement } from "react";
-import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
-import { AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
-import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
-import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
-import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import React, { ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient } from "matrix-js-sdk/src/matrix";
-import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
-import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
-import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
+import { createClient, AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
-import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
+import PlatformPeg from "../PlatformPeg";
+import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
+import * as Lifecycle from "../Lifecycle";
+import SdkConfig, { parseSsoRedirectOptions } from "../SdkConfig";
+import { IConfigOptions } from "../IConfigOptions";
+import { SnakedObject } from "../utils/SnakedObject";
+import MatrixChat from "../components/structures/MatrixChat";
+import { ValidatedServerConfig } from "../utils/ValidatedServerConfig";
+import { ModuleRunner } from "../modules/ModuleRunner";
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
@@ -113,17 +111,19 @@ export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixCha
 
     return (
         <wrapperOpts.Wrapper>
-            <MatrixChat
-                ref={matrixChatRef}
-                onNewScreen={onNewScreen}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParams}
-                enableGuest={!config.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={initialScreenAfterLogin}
-                defaultDeviceDisplayName={defaultDeviceName}
-            />
+            <StrictMode>
+                <MatrixChat
+                    ref={matrixChatRef}
+                    onNewScreen={onNewScreen}
+                    config={config}
+                    realQueryParams={params}
+                    startingFragmentQueryParams={fragParams}
+                    enableGuest={!config.disable_guests}
+                    onTokenLoginCompleted={onTokenLoginCompleted}
+                    initialScreenAfterLogin={initialScreenAfterLogin}
+                    defaultDeviceDisplayName={defaultDeviceName}
+                />
+            </StrictMode>
         </wrapperOpts.Wrapper>
     );
 }

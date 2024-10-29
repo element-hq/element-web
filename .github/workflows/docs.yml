@@ -17,7 +17,7 @@ concurrency:
 jobs:
     build:
         name: GitHub Pages
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - name: Fetch element-desktop
               uses: actions/checkout@v4
@@ -29,12 +29,6 @@ jobs:
               uses: actions/checkout@v4
               with:
                   path: element-web
-
-            - name: Fetch matrix-react-sdk
-              uses: actions/checkout@v4
-              with:
-                  repository: element-hq/matrix-react-sdk
-                  path: matrix-react-sdk
 
             - name: Fetch matrix-js-sdk
               uses: actions/checkout@v4
@@ -52,7 +46,7 @@ jobs:
               working-directory: element-web
               run: |
                   yarn install --frozen-lockfile
-                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-react-sdk ../matrix-js-sdk > docs/automations.md
+                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
@@ -73,9 +67,6 @@ jobs:
                   mv element-web/README.md element-web/docs/
                   mv element-web/docs/lib docs/
                   mv element-web/docs "docs/Element Web"
-
-                  mv matrix-react-sdk/README.md matrix-react-sdk/docs/
-                  mv matrix-react-sdk/docs "docs/Matrix React SDK"
 
                   mv matrix-js-sdk/README.md matrix-js-sdk/docs/
                   mv matrix-js-sdk/docs "docs/Matrix JS SDK"
@@ -108,7 +99,7 @@ jobs:
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         needs: build
         steps:
             - name: Deploy to GitHub Pages

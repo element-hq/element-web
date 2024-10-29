@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "fetch-mock-jest";
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
-import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
+import { UpdateCheckStatus } from "../../../../src/BasePlatform";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import WebPlatform from "../../../../src/vector/platform/WebPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 
@@ -97,7 +97,7 @@ describe("WebPlatform", () => {
             expect(new WebPlatform().maySendNotifications()).toBe(true);
         });
 
-        it("requests notification permissions and returns result ", async () => {
+        it("requests notification permissions and returns result", async () => {
             mockNotification.requestPermission.mockImplementation((callback) => callback("test"));
 
             const platform = new WebPlatform();

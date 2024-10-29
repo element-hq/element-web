@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import type { IConfigOptions } from "../IConfigOptions";
 
 // Load the config file. First try to load up a domain-specific config of the
 // form "config.$domain.json" and if that fails, fall back to config.json.
@@ -28,7 +28,7 @@ export async function getVectorConfig(relativeLocation = ""): Promise<IConfigOpt
             throw new Error(); // throw to enter the catch
         }
         return configJson;
-    } catch (e) {
+    } catch {
         return generalConfigPromise;
     }
 }

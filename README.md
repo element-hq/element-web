@@ -10,7 +10,7 @@
 # Element
 
 Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
-React SDK](https://github.com/matrix-org/matrix-react-sdk).
+JS SDK](https://github.com/matrix-org/matrix-js-sdk).
 
 # Supported Environments
 
@@ -208,10 +208,9 @@ into Element itself.
 
 # Setting up a dev environment
 
-Much of the functionality in Element is actually in the `matrix-react-sdk` and
-`matrix-js-sdk` modules. It is possible to set these up in a way that makes it
-easy to track the `develop` branches in git and to make local changes without
-having to manually rebuild each time.
+Much of the functionality in Element is actually in the `matrix-js-sdk` module.
+It is possible to set these up in a way that makes it easy to track the `develop` branches
+in git and to make local changes without having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
@@ -219,17 +218,6 @@ First clone and build `matrix-js-sdk`:
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
 yarn link
-yarn install
-popd
-```
-
-Then similarly with `matrix-react-sdk`:
-
-```bash
-git clone https://github.com/matrix-org/matrix-react-sdk.git
-pushd matrix-react-sdk
-yarn link
-yarn link matrix-js-sdk
 yarn install
 popd
 ```
@@ -248,7 +236,6 @@ Finally, build and start Element itself:
 
 ```bash
 yarn link matrix-js-sdk
-yarn link matrix-react-sdk
 yarn install
 yarn start
 ```
@@ -294,8 +281,7 @@ sudo sysctl -p
 
 ---
 
-When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
-automatically picked up by webpack and built.
+When you make changes to `matrix-js-sdk` they should be automatically picked up by webpack and built.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.

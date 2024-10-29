@@ -1,0 +1,500 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editBodyDiffToHtml deduplicates diff steps 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <div>
+      <em>
+        foo
+      </em>
+      <span>
+         bar ba
+        <span
+          class="mx_EditHistoryMessage_deletion"
+        >
+          z
+        </span>
+        <span
+          class="mx_EditHistoryMessage_insertion"
+        >
+          y
+        </span>
+      </span>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml handles complex transformations 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <span
+          data-mx-maths="{<span class='mx_Emoji' title=':snowman:'>☃️</span>}^\\infty"
+        >
+          <code>
+            {
+            <span
+              class="mx_Emoji"
+              title=":snowman:"
+            >
+              ☃️
+            </span>
+            }^\\infty
+          </code>
+        </span>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <span
+          data-mx-maths="{<span class='mx_Emoji' title=':smiley:'>😃</span>}^\\infty"
+        >
+          <code>
+            {
+            <span
+              class="mx_Emoji"
+              title=":snowman:"
+            >
+              ☃️
+            </span>
+            }^\\infty
+          </code>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml handles non-html input 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      who knows what's going on &lt;strong&gt;
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        t
+      </span>
+      here&lt;/strong&gt;
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders attribute additions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <span>
+          <span
+            class="mx_EditHistoryMessage_deletion"
+          >
+            <a
+              rel="noreferrer noopener"
+            >
+              hi
+            </a>
+          </span>
+          <span
+            class="mx_EditHistoryMessage_insertion"
+          >
+            <a
+              href="undefined"
+              rel="noreferrer noopener"
+            >
+              hi
+            </a>
+          </span>
+        </span>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <span
+          target="undefined"
+        >
+          <span
+            class="mx_EditHistoryMessage_deletion"
+          >
+            <a
+              rel="noreferrer noopener"
+            >
+              hi
+            </a>
+          </span>
+          <span
+            class="mx_EditHistoryMessage_insertion"
+          >
+            <a
+              href="undefined"
+              rel="noreferrer noopener"
+            >
+              hi
+            </a>
+          </span>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders attribute deletions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <span>
+          <span
+            class="mx_EditHistoryMessage_deletion"
+          >
+            <a
+              href="#hi"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              hi
+            </a>
+          </span>
+          <span
+            class="mx_EditHistoryMessage_insertion"
+          >
+            <a
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              hi
+            </a>
+          </span>
+        </span>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <span>
+          <span
+            class="mx_EditHistoryMessage_deletion"
+          >
+            <a
+              href="#hi"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              hi
+            </a>
+          </span>
+          <span
+            class="mx_EditHistoryMessage_insertion"
+          >
+            <a
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              hi
+            </a>
+          </span>
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders attribute modifications 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <a
+          href="#hi"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          hi
+        </a>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <a
+          href="#bye"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          hi
+        </a>
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders block element additions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      hello
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+         
+      </span>
+    </span>
+    <div
+      class="mx_EditHistoryMessage_insertion"
+    >
+      <p>
+        world
+      </p>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders block element deletions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      hi
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+         
+      </span>
+    </span>
+    <div
+      class="mx_EditHistoryMessage_deletion"
+    >
+      <blockquote>
+        there
+      </blockquote>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders central word changes 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      beginning 
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        :s
+      </span>
+      mi
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        dd
+      </span>
+      le
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        :
+      </span>
+       end
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders element replacements 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    hi 
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        <i>
+          there
+        </i>
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        <em>
+          there
+        </em>
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders handles empty tags 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <a
+      rel="noreferrer noopener"
+    >
+      <span>
+        <span
+          class="mx_EditHistoryMessage_deletion"
+        >
+          hi
+        </span>
+        <div
+          class="mx_EditHistoryMessage_insertion"
+        >
+          <h1 />
+        </div>
+      </span>
+    </a>
+    <span
+      class="mx_EditHistoryMessage_insertion"
+    >
+       hi
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders inline element additions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      hello
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+         world
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders inline element deletions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      hi
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+         
+      </span>
+    </span>
+    <span
+      class="mx_EditHistoryMessage_deletion"
+    >
+      <em>
+        there
+      </em>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders simple word changes 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <span>
+      <span
+        class="mx_EditHistoryMessage_deletion"
+      >
+        hello
+      </span>
+      <span
+        class="mx_EditHistoryMessage_insertion"
+      >
+        world
+      </span>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders text additions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <b>
+      hello
+    </b>
+    <span
+      class="mx_EditHistoryMessage_insertion"
+    >
+       world
+    </span>
+  </span>
+</div>
+`;
+
+exports[`editBodyDiffToHtml renders text deletions 1`] = `
+<div>
+  <span
+    class="mx_EventTile_body markdown-body"
+    dir="auto"
+  >
+    <b>
+      hello
+    </b>
+    <span
+      class="mx_EditHistoryMessage_deletion"
+    >
+       world
+    </span>
+  </span>
+</div>
+`;

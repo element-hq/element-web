@@ -6,11 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
+import SdkConfig from "../../../SdkConfig";
 import VectorAuthFooter from "./VectorAuthFooter";
 
-export default class VectorAuthPage extends React.PureComponent {
+export default class VectorAuthPage extends React.PureComponent<React.PropsWithChildren> {
     private static welcomeBackgroundUrl?: string;
 
     // cache the url as a static to prevent it changing without refreshing

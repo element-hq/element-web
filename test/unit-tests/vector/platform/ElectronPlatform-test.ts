@@ -8,19 +8,19 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
-import Modal from "matrix-react-sdk/src/Modal";
-import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
 import { mocked } from "jest-mock";
 
+import { UpdateCheckStatus } from "../../../../src/BasePlatform";
+import { Action } from "../../../../src/dispatcher/actions";
+import dispatcher from "../../../../src/dispatcher/dispatcher";
+import * as rageshake from "../../../../src/rageshake/rageshake";
+import { BreadcrumbsStore } from "../../../../src/stores/BreadcrumbsStore";
+import Modal from "../../../../src/Modal";
+import DesktopCapturerSourcePicker from "../../../../src/components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 
-jest.mock("matrix-react-sdk/src/rageshake/rageshake", () => ({
+jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
 }));
 
@@ -47,7 +47,9 @@ describe("ElectronPlatform", () => {
         setupLanguageMock();
     });
 
-    const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
+    const getElectronEventHandlerCall = (
+        eventType: string,
+    ): [type: string, handler: (...args: any) => void] | undefined =>
         mockElectron.on.mock.calls.find(([type]) => type === eventType);
 
     it("flushes rageshake before quitting", () => {

@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmUserActionDialog renders 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ConfirmUserActionDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Ban this 
+      </h1>
+    </div>
+    <div
+      class="mx_Dialog_content"
+      id="mx_Dialog_content"
+    >
+      <div
+        class="mx_ConfirmUserActionDialog_user"
+      >
+        <div
+          class="mx_ConfirmUserActionDialog_avatar"
+        >
+          <span
+            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+            data-color="3"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 48px;"
+            title="@user:test.com"
+          >
+            u
+          </span>
+        </div>
+        <div
+          class="mx_ConfirmUserActionDialog_name"
+        >
+          @user:test.com
+        </div>
+        <div
+          class="mx_ConfirmUserActionDialog_userId"
+        >
+          @user:test.com
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Ban
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
