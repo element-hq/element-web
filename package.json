@@ -246,7 +246,7 @@
         "eslint-plugin-unicorn": "^56.0.0",
         "express": "^4.18.2",
         "fake-indexeddb": "^6.0.0",
-        "fetch-mock": "9.11.0",
+        "fetch-mock": "12.0.0",
         "fetch-mock-jest": "^1.5.1",
         "file-loader": "^6.0.0",
         "fs-extra": "^11.0.0",
