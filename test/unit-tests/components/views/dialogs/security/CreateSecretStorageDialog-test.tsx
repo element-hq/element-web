@@ -12,9 +12,8 @@ import React from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { waitFor } from "@testing-library/dom";
 
-import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
+import { filterConsole, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";
 
 describe("CreateSecretStorageDialog", () => {
@@ -40,13 +39,6 @@ describe("CreateSecretStorageDialog", () => {
         const onFinished = jest.fn();
         return render(<CreateSecretStorageDialog onFinished={onFinished} {...props} />);
     }
-
-    it("shows a loading spinner initially", async () => {
-        const { container } = renderComponent();
-        expect(screen.getByTestId("spinner")).toBeDefined();
-        expect(container).toMatchSnapshot();
-        await flushPromises();
-    });
 
     it("handles the happy path", async () => {
         const result = renderComponent();
@@ -81,13 +73,6 @@ describe("CreateSecretStorageDialog", () => {
         await screen.findByText("Unable to set up secret storage");
     });
 
-    it("when there is an error fetching the backup version handles the error sensibly", async () => {
-        mockClient.getKeyBackupVersion.mockRejectedValue(new Error("error"));
-        renderComponent();
-
-        await waitFor(() => expect(screen.queryByText("Unable to query secret storage status")).not.toBeNull());
-    });
-
     describe("when there is an error fetching the backup version", () => {
         filterConsole("Error fetching backup data from server");
 
@@ -97,9 +82,19 @@ describe("CreateSecretStorageDialog", () => {
             });
 
             const result = renderComponent();
+            // We go though the dialog until we have to get the key backup
+            await userEvent.click(result.getByRole("button", { name: "Continue" }));
+            await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+            await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
             // XXX the error message is... misleading.
             await screen.findByText("Unable to query secret storage status");
             expect(result.container).toMatchSnapshot();
+
+            // Now we can get the backup and we retry
+            mockClient.getKeyBackupVersion.mockRestore();
+            await userEvent.click(screen.getByRole("button", { name: "Retry" }));
+            await screen.findByText("Your keys are now being backed up from this device.");
         });
     });
 });

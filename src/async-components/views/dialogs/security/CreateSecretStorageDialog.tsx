@@ -11,7 +11,7 @@ import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -70,16 +70,6 @@ interface IState {
     downloaded: boolean;
     setPassphrase: boolean;
 
-    /** Information on the current key backup version, as returned by the server.
-     *
-     * `null` could mean any of:
-     *    * we haven't yet requested the data from the server.
-     *    * we were unable to reach the server.
-     *    * the server returned key backup version data we didn't understand or was malformed.
-     *    * there is actually no backup on the server.
-     */
-    backupInfo: KeyBackupInfo | null;
-
     // does the server offer a UI auth flow with just m.login.password
     // for /keys/device_signing/upload?
     canUploadKeysWithPasswordOnly: boolean | null;
@@ -131,15 +121,17 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             this.queryKeyUploadAuth();
         }
 
+        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
+        const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
+
         this.state = {
-            phase: Phase.Loading,
+            phase,
             passPhrase: "",
             passPhraseValid: false,
             passPhraseConfirm: "",
             copied: false,
             downloaded: false,
             setPassphrase: false,
-            backupInfo: null,
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             accountPasswordCorrect: null,
@@ -149,40 +141,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             accountPassword,
         };
 
-        this.getInitialPhase();
+        if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
     }
 
-    private getInitialPhase(): void {
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        if (keyFromCustomisations) {
-            logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
-            this.recoveryKey = {
-                privateKey: keyFromCustomisations,
-            };
-            this.bootstrapSecretStorage();
-            return;
-        }
-
-        this.fetchBackupInfo();
-    }
-
-    /**
-     * Attempt to get information on the current backup from the server, and update the state.
-     *
-     * Updates {@link IState.backupInfo} and set the phase to {@link Phase.ChooseKeyPassphrase} if successful.
-     */
-    private async fetchBackupInfo(): Promise<void> {
-        try {
-            const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
-            this.setState({
-                phase: Phase.ChooseKeyPassphrase,
-                backupInfo,
-            });
-        } catch (e) {
-            console.error("Error fetching backup data from server", e);
-            this.setState({ phase: Phase.LoadError });
-        }
+    private initExtension(keyFromCustomisations: Uint8Array): void {
+        logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
+        this.recoveryKey = {
+            privateKey: keyFromCustomisations,
+        };
+        this.bootstrapSecretStorage();
     }
 
     private async queryKeyUploadAuth(): Promise<void> {
@@ -296,15 +263,27 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private bootstrapSecretStorage = async (): Promise<void> => {
+        const cli = MatrixClientPeg.safeGet();
+        const crypto = cli.getCrypto()!;
+        const { forceReset } = this.props;
+
+        let backupInfo;
+        // First, we try to get the keybackup info
+        if (!forceReset) {
+            try {
+                this.setState({ phase: Phase.Loading });
+                backupInfo = await cli.getKeyBackupVersion();
+            } catch (e) {
+                logger.error("Error fetching backup data from server", e);
+                this.setState({ phase: Phase.LoadError });
+                return;
+            }
+        }
+
         this.setState({
             phase: Phase.Storing,
             error: undefined,
         });
-
-        const cli = MatrixClientPeg.safeGet();
-        const crypto = cli.getCrypto()!;
-
-        const { forceReset } = this.props;
 
         try {
             if (forceReset) {
@@ -327,7 +306,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 });
                 await crypto.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this.recoveryKey!,
-                    setupNewKeyBackup: !this.state.backupInfo,
+                    setupNewKeyBackup: !backupInfo,
                 });
             }
             await initialiseDehydration(true);
@@ -346,8 +325,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private onLoadRetryClick = (): void => {
-        this.setState({ phase: Phase.Loading });
-        this.fetchBackupInfo();
+        this.bootstrapSecretStorage();
     };
 
     private onShowKeyContinueClick = (): void => {
