@@ -45,6 +45,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         const cli = MatrixClientPeg.safeGet();
         cli.on(ClientEvent.AccountData, this.onAccountData);
         cli.on(CryptoEvent.UserTrustStatusChanged, this.onStatusChanged);

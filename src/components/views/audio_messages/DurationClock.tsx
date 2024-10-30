@@ -33,6 +33,9 @@ export default class DurationClock extends React.PureComponent<IProps, IState> {
             // member property to track "did we get a duration".
             durationSeconds: this.props.playback.clockInfo.durationSeconds,
         };
+    }
+
+    public componentDidMount(): void {
         this.props.playback.clockInfo.liveData.onUpdate(this.onTimeUpdate);
     }
 

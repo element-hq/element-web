@@ -50,12 +50,8 @@ interface IState {
 }
 
 export default class AdvancedRoomSettingsTab extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
-        super(props);
-
+    public componentDidMount(): void {
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-
-        this.state = {};
 
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = this.props.room;

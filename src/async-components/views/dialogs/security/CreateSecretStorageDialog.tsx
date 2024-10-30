@@ -137,8 +137,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             // signing key upload as well. This avoids hitting the server to
             // test auth flows, which may be slow under high load.
             canUploadKeysWithPasswordOnly = true;
-        } else {
-            this.queryKeyUploadAuth();
         }
 
         this.state = {
@@ -159,7 +157,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             passPhraseKeySelected,
             accountPassword,
         };
+    }
 
+    public componentDidMount(): void {
+        if (this.state.canUploadKeysWithPasswordOnly === null) {
+            this.queryKeyUploadAuth();
+        }
+
+        const cli = MatrixClientPeg.safeGet();
         cli.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
 
         this.getInitialPhase();

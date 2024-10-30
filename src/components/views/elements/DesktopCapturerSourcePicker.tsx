@@ -41,10 +41,6 @@ export interface ExistingSourceIProps {
 }
 
 export class ExistingSource extends React.Component<ExistingSourceIProps> {
-    public constructor(props: ExistingSourceIProps) {
-        super(props);
-    }
-
     private onClick = (): void => {
         this.props.onSelect(this.props.source);
     };

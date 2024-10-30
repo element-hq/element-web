@@ -103,6 +103,8 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
         const client = this.context;
         client.on(ClientEvent.Sync, this.onSyncStateChange);
         client.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);

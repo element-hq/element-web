@@ -60,7 +60,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
 };
 
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
-    private isMounted = true;
+    private unmounted = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -69,17 +69,20 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
             doAnimation: true, // technically we want animation on mount, but it won't be perfect
             skipFirst: false, // render the thing, as boring as it is
         };
+    }
 
+    public componentDidMount(): void {
+        this.unmounted = false;
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     public componentWillUnmount(): void {
-        this.isMounted = false;
+        this.unmounted = true;
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     private onBreadcrumbsUpdate = (): void => {
-        if (!this.isMounted) return;
+        if (this.unmounted) return;
 
         // We need to trick the CSSTransition component into updating, which means we need to
         // tell it to not animate, then to animate a moment later. This causes two updates
