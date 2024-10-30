@@ -1526,7 +1526,7 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
+            await expect(screen.findByText("mocked dialog")).resolves.toBeInTheDocument();
         });
     });
 });
