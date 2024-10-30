@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { last } from "lodash";
+import { findLast, last } from "lodash";
 import {
     MatrixEvent,
     MatrixClient,
@@ -24,8 +24,13 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { StopGapWidget } from "../../../../src/stores/widgets/StopGapWidget";
 import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
-jest.mock("matrix-widget-api/lib/ClientWidgetApi");
+jest.mock("matrix-widget-api", () => ({
+    ...jest.requireActual("matrix-widget-api"),
+    ClientWidgetApi: (jest.createMockFromModule("matrix-widget-api") as any).ClientWidgetApi,
+}));
 
 describe("StopGapWidget", () => {
     let client: MockedObject<MatrixClient>;
@@ -82,6 +87,25 @@ describe("StopGapWidget", () => {
         client.emit(ClientEvent.ToDeviceEvent, event);
         await Promise.resolve(); // flush promises
         expect(messaging.feedToDevice).toHaveBeenCalledWith(event.getEffectiveEvent(), false);
+    });
+
+    it("informs widget of theme changes", () => {
+        let theme = "light";
+        const settingsSpy = jest
+            .spyOn(SettingsStore, "getValue")
+            .mockImplementation((name) => (name === "theme" ? theme : null));
+        try {
+            // Indicate that the widget is ready
+            findLast(messaging.once.mock.calls, ([eventName]) => eventName === "ready")![1]();
+
+            // Now change the theme
+            theme = "dark";
+            defaultDispatcher.dispatch({ action: Action.RecheckTheme }, true);
+            expect(messaging.updateTheme).toHaveBeenLastCalledWith({ name: "dark" });
+        } finally {
+            console.log("TEST OVER");
+            settingsSpy.mockRestore();
+        }
     });
 
     describe("feed event", () => {

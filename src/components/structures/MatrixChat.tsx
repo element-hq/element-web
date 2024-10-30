@@ -50,7 +50,7 @@ import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
 import ToastStore from "../../stores/ToastStore";
@@ -133,6 +133,7 @@ import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView"
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
+import { setTheme } from "../../theme";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -465,6 +466,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher = new ThemeWatcher();
         this.fontWatcher = new FontWatcher();
         this.themeWatcher.start();
+        this.themeWatcher.on(ThemeWatcherEvent.Change, setTheme);
         this.fontWatcher.start();
 
         initSentry(SdkConfig.get("sentry"));
@@ -497,6 +499,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
+        this.themeWatcher?.off(ThemeWatcherEvent.Change, setTheme);
         this.themeWatcher?.stop();
         this.fontWatcher?.stop();
         UIStore.destroy();

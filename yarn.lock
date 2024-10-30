@@ -8678,9 +8678,9 @@ matrix-web-i18n@^3.2.1:
     walk "^2.3.15"
 
 matrix-widget-api@^1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.10.0.tgz#d31ea073a5871a1fb1a511ef900b0c125a37bf55"
-  integrity sha512-rkAJ29briYV7TJnfBVLVSKtpeBrBju15JZFSDP6wj8YdbCu1bdmlplJayQ+vYaw1x4fzI49Q+Nz3E85s46sRDw==
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.11.0.tgz#2f548b11a7c0df789d5d4fdb5cc9ef7af8aef3da"
+  integrity sha512-ED/9hrJqDWVLeED0g1uJnYRhINh3ZTquwurdM+Hc8wLVJIQ8G/r7A7z74NC+8bBIHQ1Jo7i1Uq5CoJp/TzFYrA==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
