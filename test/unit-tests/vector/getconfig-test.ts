@@ -98,8 +98,11 @@ describe("getVectorConfig()", () => {
         fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err-specific" });
         fetchMock.getOnce("express:/config.json", '{"invalid": "json",}');
 
-        // We can't assert it'll be a SyntaxError as node-fetch behaves differently
-        // https://github.com/wheresrhys/fetch-mock/issues/270
-        await expect(getVectorConfig()).rejects.toThrow("in JSON at position 19");
+        await expect(getVectorConfig()).rejects.toThrow(
+            new SyntaxError(
+                "invalid json response body at https://app.element.io/config.json?cachebuster=1234567890 reason: " +
+                    "Expected double-quoted property name in JSON at position 19 (line 1 column 20)",
+            ),
+        );
     });
 });

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "fetch-mock-jest";
 import { TextDecoder, TextEncoder } from "util";
-import { Response } from "node-fetch";
 
 import { mocks } from "./mocks";
 
@@ -79,9 +78,6 @@ fetchMock.get("/image-file-stub", "image file stub");
 fetchMock.get("/_matrix/client/versions", {});
 // @ts-ignore
 window.fetch = fetchMock.sandbox();
-
-// @ts-ignore
-window.Response = Response;
 
 // set up AudioContext API mock
 global.AudioContext = jest.fn().mockImplementation(() => ({ ...mocks.AudioContext }));
