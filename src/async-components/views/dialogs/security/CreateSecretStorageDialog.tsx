@@ -268,7 +268,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         const { forceReset } = this.props;
 
         let backupInfo;
-        // First, we try to get the keybackup info
+        // First, unless we know we want to do a reset, we see if there is an existing key backup
         if (!forceReset) {
             try {
                 this.setState({ phase: Phase.Loading });
