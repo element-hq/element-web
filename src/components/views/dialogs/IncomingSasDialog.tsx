@@ -63,6 +63,9 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             opponentProfileError: null,
             sas: null,
         };
+    }
+
+    public componentDidMount(): void {
         this.props.verifier.on(VerifierEvent.ShowSas, this.onVerifierShowSas);
         this.props.verifier.on(VerifierEvent.Cancel, this.onVerifierCancel);
         this.fetchOpponentProfile();

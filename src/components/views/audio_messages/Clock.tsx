@@ -27,10 +27,6 @@ export default class Clock extends React.Component<Props> {
         formatFn: formatSeconds,
     };
 
-    public constructor(props: Props) {
-        super(props);
-    }
-
     public shouldComponentUpdate(nextProps: Readonly<Props>): boolean {
         const currentFloor = Math.floor(this.props.seconds);
         const nextFloor = Math.floor(nextProps.seconds);

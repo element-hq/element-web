@@ -55,6 +55,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
     }
 
     public async componentDidMount(): Promise<void> {
+        this.unmounted = false;
         // Fetch the current user profile for the message preview
         const client = MatrixClientPeg.safeGet();
         const userId = client.getSafeUserId();

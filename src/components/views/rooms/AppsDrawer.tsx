@@ -68,11 +68,13 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         };
 
         this.resizer = this.createResizer();
-
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
+        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+
         ScalarMessaging.startListening();
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         this.dispatcherRef = dis.register(this.onAction);

@@ -248,7 +248,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private lastRMSentEventId: string | null | undefined = undefined;
 
     private readonly messagePanel = createRef<MessagePanel>();
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
     private timelineWindow?: TimelineWindow;
     private overlayTimelineWindow?: TimelineWindow;
     private unmounted = false;
@@ -291,6 +291,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
             readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
             readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
         };
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         this.dispatcherRef = dis.register(this.onAction);
         const cli = MatrixClientPeg.safeGet();
@@ -312,9 +316,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on(ClientEvent.Sync, this.onSync);
 
         this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
-    }
 
-    public componentDidMount(): void {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }

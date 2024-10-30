@@ -22,11 +22,9 @@ interface IProps {
 }
 
 export default class RoomSearch extends React.PureComponent<IProps> {
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
 
-    public constructor(props: IProps) {
-        super(props);
-
+    public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
 
