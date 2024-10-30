@@ -54,8 +54,8 @@ export default class WebPlatform extends VectorBasePlatform {
             return;
         }
 
-        await registration.update();
         navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+        await registration.update();
     }
 
     private onServiceWorkerPostMessage(event: MessageEvent): void {
