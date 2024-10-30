@@ -39,6 +39,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     public constructor(props: IProps) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
+        store.start();
         this.state = {
             phase: store.phase,
             // this serves dual purpose as the object for the request logic and
@@ -53,7 +54,6 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     public componentDidMount(): void {
         const store = SetupEncryptionStore.sharedInstance();
         store.on("update", this.onStoreUpdate);
-        store.start();
     }
 
     private onStoreUpdate = (): void => {

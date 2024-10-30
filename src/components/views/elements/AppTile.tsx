@@ -143,6 +143,12 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
+        try {
+            this.sgWidget = new StopGapWidget(this.props);
+        } catch (e) {
+            logger.log("Failed to construct widget", e);
+            this.sgWidget = undefined;
+        }
 
         this.state = this.getNewState(props);
     }
@@ -298,12 +304,8 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         }
 
-        try {
-            this.sgWidget = new StopGapWidget(this.props);
+        if (this.sgWidget) {
             this.setupSgListeners();
-        } catch (e) {
-            logger.log("Failed to construct widget", e);
-            this.sgWidget = undefined;
         }
 
         // Only fetch IM token on mount if we're showing and have permission to load
