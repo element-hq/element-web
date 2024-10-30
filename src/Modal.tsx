@@ -460,9 +460,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </StrictMode>
             );
 
-            setTimeout(() => {
-                ModalManager.getOrCreateRoot().render(dialog);
-            }, 0);
+            ModalManager.getOrCreateRoot().render(dialog);
         } else {
             // This is safe to call repeatedly if we happen to do that
             ModalManager.getOrCreateRoot().render(<></>);
