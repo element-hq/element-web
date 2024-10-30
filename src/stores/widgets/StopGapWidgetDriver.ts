@@ -416,26 +416,54 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
     /**
      * Implements {@link WidgetDriver#sendToDevice}
-     * Encrypted to-device events are not supported.
      */
     public async sendToDevice(
         eventType: string,
         encrypted: boolean,
         contentMap: { [userId: string]: { [deviceId: string]: object } },
     ): Promise<void> {
-        if (encrypted) throw new Error("Encrypted to-device events are not supported");
-
         const client = MatrixClientPeg.safeGet();
-        await client.queueToDevice({
-            eventType,
-            batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                Object.entries(userContentMap).map(([deviceId, content]) => ({
-                    userId,
-                    deviceId,
-                    payload: content,
-                })),
-            ),
-        });
+
+        if (encrypted) {
+            const crypto = client.getCrypto();
+            if (!crypto) throw new Error("E2EE not enabled");
+
+            // attempt to re-batch these up into a single request
+            const invertedContentMap: { [content: string]: { userId: string; deviceId: string }[] } = {};
+
+            for (const userId of Object.keys(contentMap)) {
+                const userContentMap = contentMap[userId];
+                for (const deviceId of Object.keys(userContentMap)) {
+                    const content = userContentMap[deviceId];
+                    const stringifiedContent = JSON.stringify(content);
+                    invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
+                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                }
+            }
+
+            await Promise.all(
+                Object.entries(invertedContentMap).map(async ([stringifiedContent, recipients]) => {
+                    const batch = await crypto.encryptToDeviceMessages(
+                        eventType,
+                        recipients,
+                        JSON.parse(stringifiedContent),
+                    );
+
+                    await client.queueToDevice(batch);
+                }),
+            );
+        } else {
+            await client.queueToDevice({
+                eventType,
+                batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(([deviceId, content]) => ({
+                        userId,
+                        deviceId,
+                        payload: content,
+                    })),
+                ),
+            });
+        }
     }
 
     private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
