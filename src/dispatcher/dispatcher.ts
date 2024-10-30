@@ -46,7 +46,8 @@ export class MatrixDispatcher {
     /**
      * Removes a callback based on its token.
      */
-    public unregister(id: DispatchToken): void {
+    public unregister(id?: DispatchToken): void {
+        if (!id) return;
         invariant(this.callbacks.has(id), `Dispatcher.unregister(...): '${id}' does not map to a registered callback.`);
         this.callbacks.delete(id);
     }

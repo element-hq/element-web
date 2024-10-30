@@ -126,7 +126,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
         document.removeEventListener("keydown", this.onNativeKeyDown);
         this.updateCallListeners(this.props.call, null);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     public static getDerivedStateFromProps(props: IProps): Partial<IState> {

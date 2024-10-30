@@ -195,7 +195,8 @@ export default class SettingsStore {
      * @param {string} watcherReference The watcher reference (received from #watchSetting)
      * to cancel.
      */
-    public static unwatchSetting(watcherReference: string): void {
+    public static unwatchSetting(watcherReference?: string): void {
+        if (!watcherReference) return;
         if (!SettingsStore.watchers.has(watcherReference)) {
             logger.warn(`Ending non-existent watcher ID ${watcherReference}`);
             return;

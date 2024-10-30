@@ -77,7 +77,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    private dispatcherRef: string | null = null;
+    private dispatcherRef?: string;
     private readonly layoutWatcherRef: string;
     private timelinePanel = createRef<TimelinePanel>();
     private card = createRef<HTMLDivElement>();
@@ -118,7 +118,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         const roomId = this.props.mxEvent.getRoomId();
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 

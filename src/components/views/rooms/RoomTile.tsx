@@ -175,7 +175,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             this.onRoomPreviewChanged,
         );
         this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
-        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);

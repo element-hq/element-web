@@ -367,7 +367,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
-        if (this.sizeWatcher) SettingsStore.unwatchSetting(this.sizeWatcher);
+        SettingsStore.unwatchSetting(this.sizeWatcher);
         if (this.state.isAnimated && this.state.thumbUrl) {
             URL.revokeObjectURL(this.state.thumbUrl);
         }

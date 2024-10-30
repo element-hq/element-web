@@ -340,13 +340,13 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         // Widget action listeners
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
             this.context.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
-        if (this.allowedWidgetsWatchRef) SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 

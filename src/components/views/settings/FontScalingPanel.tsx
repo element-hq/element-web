@@ -79,9 +79,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         this.unmounted = true;
-        if (this.layoutWatcherRef) {
-            SettingsStore.unwatchSetting(this.layoutWatcherRef);
-        }
+        SettingsStore.unwatchSetting(this.layoutWatcherRef);
     }
 
     /**
