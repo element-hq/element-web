@@ -33,7 +33,7 @@ import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
-import SettingsStore from "../../../settings/SettingsStore";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../../settings/watchers/ThemeWatcher";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -54,6 +54,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     private readonly widget: Widget;
     private readonly possibleButtons: ModalButtonID[];
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
+    private readonly themeWatcher = new ThemeWatcher();
 
     public state: IState = {
         disabledButtonIds: (this.props.widgetDefinition.buttons || []).filter((b) => b.disabled).map((b) => b.id),
@@ -77,6 +78,8 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public componentWillUnmount(): void {
+        this.themeWatcher.off(ThemeWatcherEvent.Change, this.onThemeChange);
+        this.themeWatcher.stop();
         if (!this.state.messaging) return;
         this.state.messaging.off("ready", this.onReady);
         this.state.messaging.off(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
@@ -84,6 +87,10 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     private onReady = (): void => {
+        this.themeWatcher.start();
+        this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
+        // Theme may have changed while messaging was starting
+        this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
     };
 
@@ -92,6 +99,10 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.state.messaging.once("ready", this.onReady);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`, this.onButtonEnableToggle);
+    };
+
+    private onThemeChange = (theme: string): void => {
+        this.state.messaging?.updateTheme({ name: theme });
     };
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>): void => {
@@ -127,7 +138,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: this.themeWatcher.getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
             baseUrl: MatrixClientPeg.safeGet().baseUrl,
         });
