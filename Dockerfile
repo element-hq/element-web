@@ -1,5 +1,5 @@
 # Builder
-FROM --platform=$BUILDPLATFORM node:20-bullseye as builder
+FROM --platform=$BUILDPLATFORM node:22-bullseye as builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false

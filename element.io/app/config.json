@@ -46,5 +46,13 @@
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
     "setting_defaults": {
         "RustCrypto.staged_rollout_percent": 60
+    },
+    "features": {
+        "feature_video_rooms": true,
+        "feature_group_calls": true,
+        "feature_element_call_video_rooms": true
+    },
+    "element_call": {
+        "url": "https://call.element.io"
     }
 }
