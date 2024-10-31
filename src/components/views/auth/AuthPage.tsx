@@ -12,32 +12,32 @@ import React from "react";
 import SdkConfig from "../../../SdkConfig";
 import AuthFooter from "./AuthFooter";
 
-export default class VectorAuthPage extends React.PureComponent<React.PropsWithChildren> {
+export default class AuthPage extends React.PureComponent<React.PropsWithChildren> {
     private static welcomeBackgroundUrl?: string;
 
     // cache the url as a static to prevent it changing without refreshing
     private static getWelcomeBackgroundUrl(): string {
-        if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
+        if (AuthPage.welcomeBackgroundUrl) return AuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.getObject("branding");
-        VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
+        AuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
 
         const configuredUrl = brandingConfig?.get("welcome_background_url");
         if (configuredUrl) {
             if (Array.isArray(configuredUrl)) {
                 const index = Math.floor(Math.random() * configuredUrl.length);
-                VectorAuthPage.welcomeBackgroundUrl = configuredUrl[index];
+                AuthPage.welcomeBackgroundUrl = configuredUrl[index];
             } else {
-                VectorAuthPage.welcomeBackgroundUrl = configuredUrl;
+                AuthPage.welcomeBackgroundUrl = configuredUrl;
             }
         }
 
-        return VectorAuthPage.welcomeBackgroundUrl;
+        return AuthPage.welcomeBackgroundUrl;
     }
 
     public render(): React.ReactElement {
         const pageStyle = {
-            background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
+            background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
         };
 
         const modalStyle: React.CSSProperties = {

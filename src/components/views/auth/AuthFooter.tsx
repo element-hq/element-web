@@ -12,7 +12,7 @@ import React, { ReactElement } from "react";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 
-const VectorAuthFooter = (): ReactElement => {
+const AuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
         { text: "Blog", url: "https://element.io/blog" },
@@ -39,4 +39,4 @@ const VectorAuthFooter = (): ReactElement => {
     );
 };
 
-export default VectorAuthFooter;
+export default AuthFooter;
