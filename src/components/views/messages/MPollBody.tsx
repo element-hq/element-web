@@ -29,6 +29,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import { formatList } from "../../../utils/FormattingUtils";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import PollResultsDialog from "../dialogs/PollResultsDialog";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import Spinner from "../elements/Spinner";
 import { PollOption } from "../polls/PollOption";
@@ -324,6 +325,16 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             <span className="mx_MPollBody_edited"> ({_t("common|edited")})</span>
         ) : null;
 
+        const showDetailedVotes = (): void => {
+            if(!showResults) return;
+
+            Modal.createDialog(PollResultsDialog, {
+                pollEvent,
+                votes,
+                members: this.context.getRoom(this.props.mxEvent.getRoomId())?.getJoinedMembers() ?? [],
+            });
+        };
+
         return (
             <div className="mx_MPollBody">
                 <h2 data-testid="pollQuestion">
@@ -357,7 +368,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     })}
                 </div>
                 <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
-                    {totalText}
+                    <span onClick={() => showDetailedVotes()}>{totalText}</span>
                     {isFetchingResponses && <Spinner w={16} h={16} />}
                 </div>
             </div>
