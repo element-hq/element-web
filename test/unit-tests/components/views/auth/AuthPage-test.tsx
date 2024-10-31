@@ -9,11 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 import { render } from "jest-matrix-react";
 
-import VectorAuthHeaderLogo from "../../../../../src/components/views/auth/VectorAuthHeaderLogo";
+import AuthPage from "../../../../../src/components/views/auth/AuthPage";
+import { setupLanguageMock } from "../../../../setup/setupLanguage";
 
-describe("<VectorAuthHeaderLogo />", () => {
+describe("<AuthPage />", () => {
+    beforeEach(() => {
+        setupLanguageMock();
+    });
+
     it("should match snapshot", () => {
-        const { asFragment } = render(<VectorAuthHeaderLogo />);
+        const { asFragment } = render(<AuthPage />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -952,7 +952,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to login page
             defaultDispatcher.dispatch({
@@ -1479,7 +1479,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to mobile_register page
             defaultDispatcher.dispatch({
@@ -1499,7 +1499,7 @@ describe("<MatrixChat />", () => {
         it("should render welcome screen if mobile registration is not enabled in settings", async () => {
             await getComponentAndWaitForReady();
 
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
         });
 
         it("should render mobile registration", async () => {
