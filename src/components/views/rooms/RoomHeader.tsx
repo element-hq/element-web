@@ -27,7 +27,7 @@ import { useRoomMemberCount, useRoomMembers } from "../../../hooks/useRoomMember
 import { _t } from "../../../languageHandler";
 import { Flex } from "../../utils/Flex";
 import { Box } from "../../utils/Box";
-import { getPlatformCallTypeLabel, useRoomCall } from "../../../hooks/room/useRoomCall";
+import { getPlatformCallTypeChildren, getPlatformCallTypeLabel, useRoomCall } from "../../../hooks/room/useRoomCall";
 import { useRoomThreadNotifications } from "../../../hooks/room/useRoomThreadNotifications";
 import { useGlobalNotificationState } from "../../../hooks/useGlobalNotificationState";
 import SdkConfig from "../../../SdkConfig";
@@ -172,6 +172,8 @@ export default function RoomHeader({
                             key={option}
                             label={getPlatformCallTypeLabel(option)}
                             aria-label={getPlatformCallTypeLabel(option)}
+                            children={getPlatformCallTypeChildren(option)}
+                            className="mx_RoomHeader_videoCallOption"
                             onClick={(ev) => videoCallClick(ev, option)}
                             Icon={VideoCallIcon}
                             onSelect={() => {} /* Dummy handler since we want the click event.*/}
