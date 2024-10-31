@@ -11,6 +11,7 @@ import { render } from "jest-matrix-react";
 
 import AuthPage from "../../../../../src/components/views/auth/AuthPage";
 import { setupLanguageMock } from "../../../../setup/setupLanguage";
+import SdkConfig from "../../../../../src/SdkConfig.ts";
 
 describe("<AuthPage />", () => {
     beforeEach(() => {
@@ -20,5 +21,13 @@ describe("<AuthPage />", () => {
     it("should match snapshot", () => {
         const { asFragment } = render(<AuthPage />);
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should use configured background url", () => {
+        SdkConfig.add({ branding: { welcome_background_url: ["https://example.com/image.png"] } });
+        const { container } = render(<AuthPage />);
+        expect(container.querySelector(".mx_AuthPage")).toHaveStyle({
+            background: "center/cover fixed url(https://example.com/image.png)",
+        });
     });
 });
