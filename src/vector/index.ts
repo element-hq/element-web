@@ -1,21 +1,13 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2015, 2016 OpenMarket Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
@@ -28,16 +20,10 @@ import "./modernizr";
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("katex/dist/katex.css");
 
-/**
- * This require is necessary only for purposes of CSS hot-reload, as otherwise
- * webpack has some incredible problems figuring out which CSS files should be
- * hot-reloaded, even with proper hints for the loader.
- *
- * On production build it's going to be an empty module, so don't worry about that.
- */
-require("./devcss");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./localstorage-fix");
 
 async function settled(...promises: Array<Promise<any>>): Promise<void> {
@@ -70,11 +56,6 @@ function checkBrowserFeatures(): boolean {
     );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
-    // ES2024: https://tc39.es/ecma262/2024/#sec-get-regexp.prototype.unicodesets
-    window.Modernizr.addTest(
-        "regexpunicodesets",
-        () => window.RegExp?.prototype && "unicodeSets" in window.RegExp.prototype,
-    );
     // ES2024: https://402.ecma-international.org/9.0/#sec-intl.segmenter
     // The built-in modernizer 'intl' check only checks for the presence of the Intl object, not the Segmenter,
     // and older Firefox has the former but not the latter, so we add our own.

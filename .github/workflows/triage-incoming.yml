@@ -6,7 +6,7 @@ on:
 
 jobs:
     automate-project-columns:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/add-to-project@main
               with:

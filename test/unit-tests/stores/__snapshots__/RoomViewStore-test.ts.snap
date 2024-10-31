@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomViewStore should display an error message when the room is unreachable via the roomId 1`] = `
+{
+  "description": <div>
+    You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.
+    <br />
+    <br />
+    If you know a room address, try joining through that instead.
+  </div>,
+  "title": "Failed to join",
+}
+`;
+
+exports[`RoomViewStore should display the generic error message when the roomId doesnt match 1`] = `
+{
+  "description": "MatrixError: [404] my 404 error",
+  "title": "Failed to join",
+}
+`;
+
+exports[`RoomViewStore when recording a voice broadcast and trying to view a call, it should not actually view it and show the info dialog 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      [Function],
+      {
+        "description": <p>
+          You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.
+        </p>,
+        "hasCloseButton": true,
+        "title": "Can’t start a call",
+      },
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;

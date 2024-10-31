@@ -1,17 +1,8 @@
 /*
-Copyright 2020-2022 New Vector Ltd.
+Copyright 2020-2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { KJUR } from "jsrsasign";
@@ -24,11 +15,7 @@ import {
     WidgetApi,
     WidgetApiAction,
 } from "matrix-widget-api";
-import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
-import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
-import { ElementWidgetCapabilities } from "matrix-react-sdk/src/stores/widgets/ElementWidgetCapabilities";
 
 import type {
     JitsiMeetExternalAPIConstructor,
@@ -40,6 +27,10 @@ import type {
     Config as _Config,
     InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
+import { ElementWidgetActions } from "../../stores/widgets/ElementWidgetActions";
+import { IConfigOptions } from "../../IConfigOptions";
+import { SnakedObject } from "../../utils/SnakedObject";
+import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";
 
 interface Config extends _Config {
@@ -71,6 +62,7 @@ interface ExternalAPIOptions extends _ExternalAPIOptions {
 }
 
 // We have to trick webpack into loading our CSS for us.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ShareLatestLocation /> renders share buttons when there is a location 1`] = `
+<DocumentFragment>
+  <a
+    aria-labelledby=":r0:"
+    data-testid="open-location-in-osm"
+    href="https://www.openstreetmap.org/?mlat=51&mlon=42#map=16/51/42"
+    rel="noreferrer noopener"
+    target="_blank"
+  >
+    <div
+      class="mx_ShareLatestLocation_icon"
+    />
+  </a>
+  <div
+    class="mx_CopyableText mx_ShareLatestLocation_copy"
+  >
+    <div
+      aria-label="Copy"
+      class="mx_AccessibleButton mx_CopyableText_copyButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+</DocumentFragment>
+`;

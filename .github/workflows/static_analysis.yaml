@@ -7,14 +7,19 @@ on:
         types: [checks_requested]
     repository_dispatch:
         types: [element-web-notify]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
 env:
     # These must be set for fetchdep.sh to get the right branch
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
+
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -29,15 +34,54 @@ jobs:
             - name: Typecheck
               run: "yarn run lint:types"
 
+            - name: Switch js-sdk to release mode
+              working-directory: node_modules/matrix-js-sdk
+              run: |
+                  scripts/switch_package_to_release.cjs
+                  yarn install
+                  yarn run build:compile
+                  yarn run build:types
+
+            - name: Typecheck (release mode)
+              run: "yarn run lint:types"
+
+            # Temporary while we directly import matrix-js-sdk/src/* which means we need
+            # certain @types/* packages to make sense of matrix-js-sdk types.
+            #- name: Typecheck (release mode; no yarn link)
+            #  if: github.event_name != 'pull_request' && github.ref_name != 'master'
+            #  run: |
+            #      yarn unlink matrix-js-sdk
+            #      yarn add github:matrix-org/matrix-js-sdk#develop
+            #      yarn install --force
+            #      yarn run lint:types
+
     i18n_lint:
         name: "i18n Check"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         with:
             hardcoded-words: "Element"
+            allowed-hardcoded-keys: |
+                console_dev_note
+                labs|element_call_video_rooms
+                labs|feature_disable_call_per_sender_encryption
+                voip|element_call
+                error|invalid_json
+                error|misconfigured
+                welcome_to_element
+
+    rethemendex_lint:
+        name: "Rethemendex Check"
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v4
+
+            - run: ./res/css/rethemendex.sh
+
+            - run: git diff --exit-code
 
     js_lint:
         name: "ESLint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -55,7 +99,7 @@ jobs:
 
     style_lint:
         name: "Style Lint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -64,16 +108,16 @@ jobs:
                   cache: "yarn"
                   node-version: "lts/*"
 
-            # Needs branch matching as it inherits .stylelintrc.js from matrix-react-sdk
-            - name: Install Dependencies
-              run: "./scripts/layered.sh"
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install"
 
             - name: Run Linter
               run: "yarn run lint:style"
 
     workflow_lint:
         name: "Workflow Lint"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -91,7 +135,7 @@ jobs:
 
     analyse_dead_code:
         name: "Analyse Dead Code"
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 

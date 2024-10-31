@@ -1,0 +1,144 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+$font-family: var(--font-family, $font-family);
+$monospace-font-family: var(--font-family-monospace, $monospace-font-family);
+
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
+$accent: var(--accent-color, $accent);
+$alert: var(--alert, $alert);
+$links: var(--links, $links);
+$primary-content: var(--primary-content, $primary-content);
+$secondary-content: var(--secondary-content, $secondary-content);
+$tertiary-content: var(--tertiary-content, $tertiary-content);
+$quaternary-content: var(--quaternary-content, $quaternary-content);
+$quinary-content: var(--quinary-content, $quinary-content);
+$system: var(--system, $system);
+$system-transparent: var(--system-transparent, #e1e6ec00);
+$background: var(--background, $background);
+$panels: var(--panels, var(--cpd-color-gray-600));
+$panel-actions: var(--panels-actions, var(--cpd-color-gray-300));
+
+/* --timeline-background-color */
+$button-secondary-bg-color: var(--timeline-background-color);
+$lightbox-border-color: var(--timeline-background-color);
+$menu-bg-color: var(--timeline-background-color);
+$message-action-bar-bg-color: var(--timeline-background-color);
+$background: var(--timeline-background-color);
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
+$togglesw-off-color: var(--togglesw-off-color);
+$droptarget-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .5 */
+$authpage-modal-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .59 */
+$roomheader-bg-color: var(--timeline-background-color);
+
+/* --roomlist-highlights-color */
+$panel-actions: var(--roomlist-highlights-color);
+
+/* --sidebar-color */
+$spacePanel-bg-color: var(--sidebar-color);
+$tooltip-timeline-bg-color: var(--sidebar-color);
+$dialog-backdrop-color: var(--sidebar-color-50pct);
+
+/* --roomlist-background-color */
+$header-panel-bg-color: var(--roomlist-background-color);
+$header-panel-bg-hover: var(--cpd-color-gray-200);
+$panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
+/* these were #f2f5f8 instead of #f3f8fd, but close enough */
+$dark-panel-bg-color: var(--roomlist-background-color);
+$input-lighter-bg-color: var(--roomlist-background-color);
+$secondary-accent-color: var(--roomlist-background-color);
+$selected-color: var(--roomlist-background-color);
+$widget-menu-bar-bg-color: var(--roomlist-background-color);
+$roomlist-bg-color: var(--roomlist-background-color);
+
+/* --timeline-text-color */
+$message-action-bar-fg-color: var(--timeline-text-color);
+$primary-content: var(--timeline-text-color);
+$roomtopic-color: var(--timeline-text-color-50pct);
+/* was #212121 */
+$topleftmenu-color: var(--timeline-text-color);
+/* was #45474a */
+$dialog-title-fg-color: var(--timeline-text-color);
+/* was #4e5054 */
+$authpage-lang-color: var(--timeline-text-color);
+/* was #232f32 */
+$authpage-primary-color: var(--timeline-text-color);
+/* --roomlist-text-secondary-color */
+$roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
+
+/* --roomlist-separator-color */
+$input-darker-bg-color: var(--roomlist-separator-color);
+$primary-hairline-color: var(--roomlist-separator-color); /* originally #e5e5e5, but close enough */
+$secondary-hairline-color: var(--secondary-hairline-color);
+
+/* --timeline-text-secondary-color */
+$authpage-secondary-color: var(--timeline-text-secondary-color);
+$pinned-color: var(--timeline-text-secondary-color);
+$settings-subsection-fg-color: var(--timeline-text-secondary-color);
+$roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
+/* was #747474 */
+$light-fg-color: var(--timeline-text-secondary-color);
+$focus-bg-color: var(--focus-bg-color, $focus-bg-color);
+$room-highlight-color: var(--room-highlight-color);
+
+$rte-room-pill-color: $room-highlight-color;
+
+/* was #888888 */
+$info-plinth-fg-color: var(--timeline-text-secondary-color);
+
+/* --primary-color */
+$accent-alt: var(--primary-color);
+
+/* --warning-color */
+$button-danger-disabled-bg-color: var(--warning-color-50pct); /* still needs alpha at 0.5 */
+
+/* --timeline-highlights-color */
+$event-selected-color: var(--timeline-highlights-color);
+$event-highlight-bg-color: var(--timeline-highlights-color);
+
+/* redirect some variables away from their hardcoded values in the light theme */
+$settings-grey-fg-color: $primary-content;
+
+/* --eventbubble colors */
+$eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
+$eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
+$eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
+
+$reaction-row-button-selected-bg-color: var(
+    --reaction-row-button-selected-bg-color,
+    $reaction-row-button-selected-bg-color
+);
+
+$menu-selected-color: var(--menu-selected-color, $menu-selected-color);
+$pill-bg-color: var(--other-user-pill-bg-color, $pill-bg-color);
+$pill-hover-bg-color: var(--other-user-pill-bg-color, $pill-hover-bg-color);
+$pill-press-bg-color: var(--other-user-pill-bg-color, $pill-press-bg-color);
+$icon-button-color: var(--icon-button-color, $icon-button-color);
+
+$strong-input-border-color: var(--strong-input-border-color, $strong-input-border-color);
+$inverted-bg-color: var(--strong-input-border-color, $inverted-bg-color);
+
+/**
+ * Variation of the accent color.
+ * Generate this colour scale using LeonardoColor
+ * TODO: Add link
+ */
+$accent-100: var(--accent-color-100);
+$accent-200: var(--accent-color-200);
+$accent-300: var(--accent-color-300);
+$accent-400: var(--accent-color-400);
+$accent-500: var(--accent-color-500);
+$accent-600: var(--accent-color-600);
+$accent-700: var(--accent-color-700);
+$accent-800: var(--accent-color-800);
+$accent-900: var(--accent-color-900);
+$accent-1000: var(--accent-color-1000);
+$accent-1100: var(--accent-color-1100);
+$accent-1200: var(--accent-color-1200);
+$accent-1300: var(--accent-color-1300);
+$accent-1400: var(--accent-color-1400);

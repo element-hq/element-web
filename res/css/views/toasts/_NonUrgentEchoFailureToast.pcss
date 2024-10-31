@@ -1,0 +1,26 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_NonUrgentEchoFailureToast {
+    .mx_NonUrgentEchoFailureToast_icon {
+        display: inline-block;
+        width: $font-18px;
+        height: $font-18px;
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        background-color: #fff; /* we know that non-urgent toasts are always styled the same */
+        mask-image: url("$(res)/img/element-icons/cloud-off.svg");
+        margin-right: 8px;
+    }
+
+    span {
+        /* includes the i18n block */
+        vertical-align: middle;
+    }
+}

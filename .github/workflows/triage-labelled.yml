@@ -11,10 +11,9 @@ on:
 jobs:
     apply_Z-Labs_label:
         name: Add Z-Labs label for features behind labs flags
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-Maths') ||
-            contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
             contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
             contains(github.event.issue.labels.*.name, 'Z-IA') ||
             contains(github.event.issue.labels.*.name, 'A-Jump-To-Date ') ||
@@ -38,7 +37,7 @@ jobs:
 
     apply_Help-Wanted_label:
         name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'good first issue') ||
             contains(github.event.issue.labels.*.name, 'Hacktoberfest')
@@ -55,7 +54,7 @@ jobs:
 
     move_needs_info_issues:
         name: X-Needs-Info issues to Need info column on triage board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Info')
         steps:
@@ -78,7 +77,7 @@ jobs:
 
     move_flakey_test_issues:
         name: Z-Flaky-Test issues to Sized for maintainer column on triage board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
         steps:
@@ -101,7 +100,7 @@ jobs:
 
     add_priority_design_issues_to_project:
         name: P1 X-Needs-Design to Design project board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
             (contains(github.event.issue.labels.*.name, 'S-Critical') &&
@@ -118,7 +117,7 @@ jobs:
 
     add_product_issues:
         name: X-Needs-Product to product project board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'X-Needs-Product')
         steps:
@@ -129,7 +128,7 @@ jobs:
 
     Search_issues_to_board:
         name: Search issues to project board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
         steps:
@@ -140,7 +139,7 @@ jobs:
 
     voip:
         name: Add labelled issues to VoIP project board
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'Team: VoIP')
         steps:
@@ -151,7 +150,7 @@ jobs:
 
     verticals_feature:
         name: Add labelled issues to Verticals Feature project
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
         steps:
@@ -162,7 +161,7 @@ jobs:
 
     tech_debt:
         name: Add labelled issues to tech debt project
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             contains(github.event.issue.labels.*.name, 'A-Developer-Experience') ||
             contains(github.event.issue.labels.*.name, 'A-Documentation') ||
@@ -175,26 +174,3 @@ jobs:
               with:
                   project-url: https://github.com/orgs/element-hq/projects/101
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-    element_r:
-        name: Add Element R issues to Crypto Team board
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'A-Element-R')
-        steps:
-            - id: add_to_project
-              uses: actions/add-to-project@v1.0.2
-              with:
-                  project-url: ${{ env.PROJECT_URL }}
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-            - id: set_fields
-              uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
-              with:
-                  project-url: ${{ env.PROJECT_URL }}
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
-                  field-keys: Workstream,module
-                  field-values: Element-R,web
-        env:
-            PROJECT_URL: https://github.com/orgs/element-hq/projects/76

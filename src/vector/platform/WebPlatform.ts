@@ -1,29 +1,21 @@
 /*
+Copyright 2017-2024 New Vector Ltd.
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2017-2020, 2024 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import dis from "../../dispatcher/dispatcher";
+import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
+import { Action } from "../../dispatcher/actions";
+import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
@@ -71,10 +63,12 @@ export default class WebPlatform extends VectorBasePlatform {
             if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
                 const userId = localStorage.getItem("mx_user_id");
                 const deviceId = localStorage.getItem("mx_device_id");
+                const homeserver = MatrixClientPeg.get()?.getHomeserverUrl();
                 event.source!.postMessage({
                     responseKey: event.data["responseKey"],
                     userId,
                     deviceId,
+                    homeserver,
                 });
             }
         } catch (e) {

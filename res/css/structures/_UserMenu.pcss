@@ -1,0 +1,206 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UserMenu {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+
+    .mx_AccessibleButton {
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_userAvatar {
+            position: relative;
+
+            .mx_BaseAvatar {
+                pointer-events: none; /* makes the avatar non-draggable */
+            }
+        }
+
+        .mx_UserMenu_userAvatarLive {
+            align-items: center;
+            background-color: $alert;
+            border-radius: 6px;
+            color: $live-badge-color;
+            display: flex;
+            height: 12px;
+            justify-content: center;
+            left: 25px;
+            position: absolute;
+            top: 20px;
+            width: 12px;
+        }
+    }
+
+    .mx_UserMenu_contextMenuButton {
+        width: 100%;
+    }
+
+    .mx_UserMenu_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-left: 10px;
+    }
+
+    .mx_UserMenu_dndBadge {
+        position: absolute;
+        bottom: -2px;
+        right: -7px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $alert;
+            mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
+        }
+    }
+}
+
+.mx_IconizedContextMenu {
+    &.mx_UserMenu_contextMenu {
+        width: 258px;
+    }
+}
+
+.mx_UserMenu_contextMenu {
+    &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
+        .mx_AccessibleButton {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+    }
+
+    .mx_UserMenu_contextMenu_header {
+        padding: 20px;
+
+        /* Create a flexbox to organize the header a bit easier */
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_contextMenu_name {
+            /* Create another flexbox of columns to handle large user IDs */
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 40px); /* 40px = 32px theme button + 8px margin to theme button */
+
+            .mx_UserMenu_contextMenu_displayName,
+            .mx_UserMenu_contextMenu_userId {
+                font: var(--cpd-font-body-lg-regular);
+
+                /* Automatically grow subelements to fit the container */
+                flex: 1;
+                width: 100%;
+
+                /* Ellipsize text overflow */
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_UserMenu_contextMenu_displayName {
+                font-weight: var(--cpd-font-weight-semibold);
+            }
+        }
+
+        .mx_UserMenu_contextMenu_themeButton {
+            min-width: 32px;
+            max-width: 32px;
+            width: 32px;
+            height: 32px;
+            margin-left: 8px;
+            border-radius: 32px;
+            background-color: $theme-button-bg-color;
+            cursor: pointer;
+
+            /* to make alignment easier, create flexbox for the image */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &.mx_UserMenu_contextMenu_guestPrompts {
+            padding-top: 0;
+            display: inline-block;
+
+            > span {
+                font-weight: var(--cpd-font-weight-semibold);
+                display: block;
+
+                & + span {
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            display: block;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $icon-button-color;
+        }
+    }
+
+    .mx_UserMenu_iconHome::before {
+        mask-image: url("$(res)/img/element-icons/home.svg");
+    }
+
+    .mx_UserMenu_iconDnd::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
+    }
+
+    .mx_UserMenu_iconDndOff::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd-cross.svg");
+    }
+
+    .mx_UserMenu_iconBell::before {
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
+    }
+
+    .mx_UserMenu_iconLock::before {
+        mask-image: url("$(res)/img/element-icons/security.svg");
+    }
+
+    .mx_UserMenu_iconSettings::before {
+        mask-image: url("$(res)/img/element-icons/settings.svg");
+    }
+
+    .mx_UserMenu_iconMessage::before {
+        mask-image: url("$(res)/img/element-icons/feedback.svg");
+    }
+
+    .mx_UserMenu_iconSignOut::before {
+        mask-image: url("$(res)/img/element-icons/leave.svg");
+    }
+
+    .mx_UserMenu_iconQr::before {
+        mask-image: url("@vector-im/compound-design-tokens/icons/qr-code.svg");
+    }
+}

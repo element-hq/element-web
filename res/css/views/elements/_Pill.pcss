@@ -1,0 +1,96 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Pill {
+    padding: $font-1px 0.4em $font-1px 0.4em;
+    line-height: $font-17px;
+    border-radius: $font-16px;
+    vertical-align: text-top;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+
+    color: var(--cpd-color-text-on-solid-primary) !important; /* To override .markdown-body */
+    background-color: $pill-bg-color !important; /* To override .markdown-body */
+
+    > * {
+        pointer-events: none;
+    }
+
+    &.mx_UserPill_me,
+    &.mx_AtRoomPill {
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
+    }
+
+    &:hover {
+        background-color: $pill-hover-bg-color !important; /* To override .markdown-body */
+    }
+
+    &:active {
+        background-color: $pill-press-bg-color !important; /* To override .markdown-body */
+    }
+
+    &.mx_UserPill_me:hover {
+        background-color: var(
+            --cpd-color-bg-critical-hovered
+        ) !important; /* To override .markdown-body | same on both themes */
+    }
+
+    /* We don't want to indicate clickability */
+    &.mx_AtRoomPill:hover {
+        background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
+        cursor: unset;
+    }
+
+    &::before,
+    .mx_BaseAvatar {
+        margin-inline-start: -0.3em; /* Otherwise the gap is too large */
+        margin-inline-end: 0.2em;
+        min-width: $font-16px; /* ensure the avatar is not compressed */
+    }
+
+    .mx_Pill_text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    a& {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-decoration: none !important; /* To override .markdown-body */
+    }
+
+    .mx_Pill_LinkIcon {
+        background-color: $link-external;
+        box-sizing: border-box;
+        color: $background;
+        height: 16px;
+        padding: 1px;
+        width: 16px;
+        border-radius: 50%;
+    }
+
+    .mx_Pill_UserIcon {
+        box-sizing: border-box;
+        color: $secondary-content;
+        height: 16px;
+        width: 16px;
+    }
+
+    &.mx_SpacePill {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        padding-left: 4px;
+    }
+}

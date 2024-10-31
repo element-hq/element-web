@@ -1,0 +1,330 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MessageEditHistory /> should match the snapshot 1`] = `
+<div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_MessageEditHistoryDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Message edits
+      </h1>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar mx_ScrollPanel mx_MessageEditHistoryDialog_scrollPanel"
+      tabindex="-1"
+    >
+      <div
+        class="mx_RoomView_messageListWrapper"
+      >
+        <ol
+          aria-live="polite"
+          class="mx_RoomView_MessageList"
+        >
+          <ul
+            class="mx_MessageEditHistoryDialog_edits"
+          >
+            <li>
+              <div
+                aria-label="Thu, Jan 1, 1970"
+                class="mx_TimelineSeparator"
+                role="separator"
+              >
+                <hr
+                  role="none"
+                />
+                <div
+                  class="mx_DateSeparator_dateContent"
+                >
+                  <h2
+                    aria-hidden="true"
+                    class="mx_DateSeparator_dateHeading"
+                  >
+                    Thu, Jan 1, 1970
+                  </h2>
+                </div>
+                <hr
+                  role="none"
+                />
+              </div>
+            </li>
+            <li>
+              <div
+                class="mx_EventTile"
+              >
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <span
+                    class="mx_MessageTimestamp"
+                  >
+                    00:00
+                  </span>
+                  <div
+                    class="mx_EventTile_content"
+                  >
+                    <span
+                      class="mx_EventTile_body translate"
+                      dir="auto"
+                    >
+                      My Great Massage
+                    </span>
+                  </div>
+                  <div
+                    class="mx_MessageActionBar"
+                  >
+                    <div
+                      class="mx_AccessibleButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </ol>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;
+
+exports[`<MessageEditHistory /> should support events with 1`] = `
+<div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_MessageEditHistoryDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Message edits
+      </h1>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar mx_ScrollPanel mx_MessageEditHistoryDialog_scrollPanel"
+      tabindex="-1"
+    >
+      <div
+        class="mx_RoomView_messageListWrapper"
+      >
+        <ol
+          aria-live="polite"
+          class="mx_RoomView_MessageList"
+        >
+          <ul
+            class="mx_MessageEditHistoryDialog_edits"
+          >
+            <li>
+              <div
+                aria-label="Thu, Jan 1, 1970"
+                class="mx_TimelineSeparator"
+                role="separator"
+              >
+                <hr
+                  role="none"
+                />
+                <div
+                  class="mx_DateSeparator_dateContent"
+                >
+                  <h2
+                    aria-hidden="true"
+                    class="mx_DateSeparator_dateHeading"
+                  >
+                    Thu, Jan 1, 1970
+                  </h2>
+                </div>
+                <hr
+                  role="none"
+                />
+              </div>
+            </li>
+            <li>
+              <div
+                class="mx_EventTile"
+              >
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <span
+                    class="mx_MessageTimestamp"
+                  >
+                    00:00
+                  </span>
+                  <div
+                    class="mx_EventTile_content"
+                  >
+                    <span
+                      class="mx_EventTile_body markdown-body"
+                      dir="auto"
+                    >
+                      <span>
+                        My Great Massage
+                        <span
+                          class="mx_EditHistoryMessage_deletion"
+                        >
+                          ?
+                        </span>
+                      </span>
+                    </span>
+                  </div>
+                  <div
+                    class="mx_MessageActionBar"
+                  >
+                    <div
+                      class="mx_AccessibleButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div
+                class="mx_EventTile"
+              >
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <span
+                    class="mx_MessageTimestamp"
+                  >
+                    00:00
+                  </span>
+                  <div
+                    class="mx_EventTile_content"
+                  >
+                    <span
+                      class="mx_EventTile_body markdown-body"
+                      dir="auto"
+                    >
+                      <span>
+                        My Great M
+                        <span
+                          class="mx_EditHistoryMessage_deletion"
+                        >
+                          i
+                        </span>
+                        <span
+                          class="mx_EditHistoryMessage_insertion"
+                        >
+                          a
+                        </span>
+                        ssage
+                        <span
+                          class="mx_EditHistoryMessage_insertion"
+                        >
+                          ?
+                        </span>
+                      </span>
+                    </span>
+                  </div>
+                  <div
+                    class="mx_MessageActionBar"
+                  >
+                    <div
+                      class="mx_AccessibleButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div
+                class="mx_EventTile"
+              >
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <span
+                    class="mx_MessageTimestamp"
+                  >
+                    00:00
+                  </span>
+                  <div
+                    class="mx_EventTile_content"
+                  >
+                    <span
+                      class="mx_EventTile_body translate"
+                      dir="auto"
+                    >
+                      My Great Missage
+                    </span>
+                  </div>
+                  <div
+                    class="mx_MessageActionBar"
+                  >
+                    <div
+                      class="mx_AccessibleButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </ol>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;

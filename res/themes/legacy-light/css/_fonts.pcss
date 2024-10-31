@@ -1,0 +1,39 @@
+/*
+ * Nunito.
+ * Includes extended Latin and Vietnamese character sets
+ * Current URLs are taken from
+ * https://github.com/alexeiva/NunitoFont/releases/tag/v3.500
+ * ...in order to include cyrillic.
+ *
+ * Previously, they were
+ * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&subset=latin-ext,vietnamese
+ *
+ * We explicitly do not include Nunito's italic variants, as they are not italic enough
+ * and it's better to rely on the browser's built-in obliquing behaviour.
+ */
+
+/* Grab the other fonts from the current theme, so we can override to Inter */
+/* in custom fonts if needed. */
+@import "../../light/css/_fonts.pcss";
+
+/* Nunito as the default, for old time's sake on legacy themes. */
+/* the 'src' links are relative to the bundle.css, which is in a subdirectory.
+ */
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    src: url("$(res)/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 600;
+    src: url("$(res)/fonts/Nunito/Nunito-SemiBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 700;
+    src: url("$(res)/fonts/Nunito/Nunito-Bold.ttf") format("truetype");
+}

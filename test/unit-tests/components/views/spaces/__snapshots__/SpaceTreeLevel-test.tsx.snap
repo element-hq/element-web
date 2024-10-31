@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpaceButton metaspace should render notificationState if one is provided 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="People"
+    class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_active"
+    data-testid="create-space-button"
+    role="button"
+    tabindex="-1"
+  >
+    <div
+      class="mx_SpaceButton_selectionWrapper"
+    >
+      <div
+        class="mx_SpaceButton_avatarWrapper"
+      >
+        <div
+          class="mx_SpaceButton_avatarPlaceholder"
+        >
+          <div
+            class="mx_SpaceButton_icon"
+          />
+        </div>
+        <div
+          class="mx_SpacePanel_badgeContainer"
+        >
+          <div
+            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
+            role="button"
+            tabindex="-1"
+          >
+            <span
+              class="mx_NotificationBadge_count"
+            >
+              8
+            </span>
+          </div>
+        </div>
+      </div>
+      <span
+        class="mx_SpaceButton_name"
+      >
+        People
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

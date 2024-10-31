@@ -1,0 +1,52 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomInfoLine {
+    color: $secondary-content;
+    display: inline-block;
+
+    &::before {
+        content: "";
+        display: inline-block;
+        height: 1.2em;
+        mask-position-y: center;
+        mask-repeat: no-repeat;
+        background-color: $tertiary-content;
+        vertical-align: text-bottom;
+        margin-right: 6px;
+    }
+
+    &.mx_RoomInfoLine_public::before {
+        width: 12px;
+        mask-size: 12px;
+        mask-image: url("$(res)/img/globe.svg");
+    }
+
+    &.mx_RoomInfoLine_private::before {
+        width: 10px;
+        mask-size: 10px;
+        mask-image: url("$(res)/img/element-icons/lock.svg");
+    }
+
+    &.mx_RoomInfoLine_video::before {
+        width: 16px;
+        mask-size: 16px;
+        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+    }
+
+    .mx_RoomInfoLine_members {
+        color: inherit;
+        text-decoration: inherit;
+        font-weight: inherit;
+
+        &::before {
+            content: "·"; /* visual separator */
+            margin: 0 6px;
+        }
+    }
+}

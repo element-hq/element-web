@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactionsRowButton renders reaction row button custom image reactions correctly 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="@user1:example.com and @user2:example.com reacted with :test:"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <img
+      alt=":test:"
+      class="mx_ReactionsRowButton_content"
+      height="16"
+      src="https://not.a.real.url"
+      width="16"
+    />
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ReactionsRowButton renders reaction row button custom image reactions correctly 2`] = `
+<DocumentFragment>
+  <div
+    aria-label="@user1:example.com and @user2:example.com reacted with :test:"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <img
+      alt=":test:"
+      class="mx_ReactionsRowButton_content"
+      height="16"
+      src="https://not.a.real.url"
+      width="16"
+    />
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ReactionsRowButton renders reaction row button emojis correctly 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="@user1:example.com and @user2:example.com reacted with 👍"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    >
+      👍
+    </span>
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ReactionsRowButton renders reaction row button emojis correctly 2`] = `
+<DocumentFragment>
+  <div
+    aria-label="@user1:example.com and @user2:example.com reacted with 👍"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    >
+      👍
+    </span>
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ReactionsRowButton renders without a room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    />
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</DocumentFragment>
+`;

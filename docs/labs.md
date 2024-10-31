@@ -72,18 +72,13 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
 
-## Dehydrated devices (`feature_dehydration`)
-
-Allows users to receive encrypted messages by creating a device that is stored
-encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
 
 ## Video rooms (`feature_video_rooms`)
 
-Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+Enables support for creating video rooms, which are persistent video chats that users can jump in and out of.
 
 ## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
 
@@ -93,7 +88,7 @@ This flag will not have any effect unless `feature_video_rooms` is also enabled.
 
 ## New group call experience (`feature_group_calls`) [In Development]
 
-This feature allows users to place and join native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+This feature allows users to place native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
 
 If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
@@ -109,10 +104,6 @@ This is useful while we experiment with encryption and to make calling compatibl
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
-
-## New room header & details (`feature_new_room_decoration_ui`) [In Development]
-
-Refactors visually the room header and room sidebar
 
 ## Enable the notifications panel in the room header (`feature_notifications`)
 

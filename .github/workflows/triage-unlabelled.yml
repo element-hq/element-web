@@ -7,7 +7,7 @@ on:
 jobs:
     Move_Unabeled_Issue_On_Project_Board:
         name: Move no longer X-Needs-Info issues to Triaged
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             ${{
             !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
@@ -44,7 +44,7 @@ jobs:
 
     remove_Z-Labs_label:
         name: Remove Z-Labs label when features behind labs flags are removed
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         if: >
             !(contains(github.event.issue.labels.*.name, 'A-Maths') ||
             contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||

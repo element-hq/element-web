@@ -12,6 +12,7 @@
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
+    "force_verification": false,
     "brand": "Element",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
@@ -22,6 +23,7 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
+    "default_widget_container_height": 280,
     "default_country_code": "GB",
     "show_labs_settings": false,
     "features": {},

@@ -13,28 +13,15 @@ permissions:
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: dockerhub
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - variant: vanilla
-                    # Variant we ship to aid ESS in providing a build on the OpenCoDE platform including specific modules
-                    - variant: opendesk
-                      flavor: suffix=-opendesk,onlatest=true
-                      prepare: mv variants/openDesk/* .
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3
-
-            - name: Prepare
-              if: matrix.prepare
-              run: ${{ matrix.prepare }}
+              uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
@@ -61,11 +48,10 @@ jobs:
                       type=ref,event=tag
                   flavor: |
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
-                      ${{ matrix.flavor }}
 
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
+              uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
               with:
                   context: .
                   push: true
@@ -85,7 +71,6 @@ jobs:
                   cosign sign --yes ${images}
 
             - name: Update repo description
-              if: matrix.variant == 'vanilla'
               uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
               continue-on-error: true
               with:

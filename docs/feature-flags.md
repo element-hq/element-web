@@ -35,7 +35,7 @@ clients commit to doing the associated clean up work once a feature stabilises.
 When starting work on a feature, we should create a matching feature flag:
 
 1. Add a new
-   [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx)
+   [setting](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx)
    of the form:
 
 ```js
@@ -93,14 +93,14 @@ Once we're confident that a feature is working well, we should remove or convert
 
 If the feature is meant to be turned off/on by the user:
 
-1. Remove `isFeature` from the [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.ts)
+1. Remove `isFeature` from the [setting](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.ts)
 2. Change the `default` to `true` (if desired).
 3. Remove the feature from the [labs documentation](https://github.com/element-hq/element-web/blob/develop/docs/labs.md)
 4. Celebrate! 🥳
 
 If the feature is meant to be forced on (non-configurable):
 
-1. Remove the [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.ts)
+1. Remove the [setting](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.ts)
 2. Remove all `getValue` lines that test for the feature.
 3. Remove the feature from the [labs documentation](https://github.com/element-hq/element-web/blob/develop/docs/labs.md)
 4. If applicable, remove the feature state from

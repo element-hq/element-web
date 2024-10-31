@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AccessibleButton /> renders a button element 1`] = `
+<DocumentFragment>
+  <button
+    class="mx_AccessibleButton"
+    role="button"
+    tabindex="0"
+  >
+    i am a button
+  </button>
+</DocumentFragment>
+`;
+
+exports[`<AccessibleButton /> renders div with role button by default 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AccessibleButton"
+    role="button"
+    tabindex="0"
+  >
+    i am a button
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<AccessibleButton /> renders with correct classes when button has kind 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    i am a button
+  </div>
+</DocumentFragment>
+`;
