@@ -1,29 +1,21 @@
 /*
+Copyright 2017-2024 New Vector Ltd.
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2017-2020 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import dis from "../../dispatcher/dispatcher";
+import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
+import { Action } from "../../dispatcher/actions";
+import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
@@ -44,9 +36,43 @@ export default class WebPlatform extends VectorBasePlatform {
 
     public constructor() {
         super();
-        // Register service worker if available on this platform
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js");
+
+        // Register the service worker in the background
+        this.tryRegisterServiceWorker().catch((e) => console.error("Error registering/updating service worker:", e));
+    }
+
+    private async tryRegisterServiceWorker(): Promise<void> {
+        if (!("serviceWorker" in navigator)) {
+            return; // not available on this platform - don't try to register the service worker
+        }
+
+        // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
+        const registration = await navigator.serviceWorker.register("sw.js");
+        if (!registration) {
+            // Registration didn't work for some reason - assume failed and ignore.
+            // This typically happens in Jest.
+            return;
+        }
+
+        await registration.update();
+        navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+    }
+
+    private onServiceWorkerPostMessage(event: MessageEvent): void {
+        try {
+            if (event.data?.["type"] === "userinfo" && event.data?.["responseKey"]) {
+                const userId = localStorage.getItem("mx_user_id");
+                const deviceId = localStorage.getItem("mx_device_id");
+                const homeserver = MatrixClientPeg.get()?.getHomeserverUrl();
+                event.source!.postMessage({
+                    responseKey: event.data["responseKey"],
+                    userId,
+                    deviceId,
+                    homeserver,
+                });
+            }
+        } catch (e) {
+            console.error("Error responding to service worker: ", e);
         }
     }
 
@@ -81,10 +107,10 @@ export default class WebPlatform extends VectorBasePlatform {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
             window.Notification.requestPermission((result) => {
                 resolve(result);
-            });
+            }).catch(reject);
         });
     }
 
@@ -116,7 +142,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // Ideally, loading an old copy would be impossible with the
         // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
         console.log("startUpdater, current version is " + getNormalizedAppVersion(WebPlatform.VERSION));
-        this.pollForUpdate((version: string, newVersion: string) => {
+        void this.pollForUpdate((version: string, newVersion: string) => {
             const query = parseQs(location);
             if (query.updated) {
                 console.log("Update reloaded but still on an old version, stopping");
@@ -175,7 +201,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     public startUpdateCheck(): void {
         super.startUpdateCheck();
-        this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
+        void this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...updateState,

@@ -7,46 +7,39 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+
+permissions:
+    id-token: write # needed for signing the images with GitHub OIDC Token
 jobs:
     buildx:
         name: Docker Buildx
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         environment: dockerhub
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - variant: vanilla
-                    # Variant we ship to aid ESS in providing a build on the OpenCoDE platform including specific modules
-                    - variant: opendesk
-                      flavor: suffix=-opendesk,onlatest=true
-                      prepare: mv variants/openDesk/* .
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
-            - name: Prepare
-              if: matrix.prepare
-              run: ${{ matrix.prepare }}
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3
+              uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3
+              uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3
               with:
                   install: true
 
             - name: Login to Docker Hub
-              uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3
+              uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5
+              uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
               with:
                   images: |
                       vectorim/element-web
@@ -55,10 +48,10 @@ jobs:
                       type=ref,event=tag
                   flavor: |
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
-                      ${{ matrix.flavor }}
 
             - name: Build and push
-              uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5
+              id: build-and-push
+              uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
               with:
                   context: .
                   push: true
@@ -66,8 +59,19 @@ jobs:
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
 
+            - name: Sign the images with GitHub OIDC Token
+              env:
+                  DIGEST: ${{ steps.build-and-push.outputs.digest }}
+                  TAGS: ${{ steps.meta.outputs.tags }}
+              run: |
+                  images=""
+                  for tag in ${TAGS}; do
+                      images+="${tag}@${DIGEST} "
+                  done
+                  cosign sign --yes ${images}
+
             - name: Update repo description
-              uses: peter-evans/dockerhub-description@dc67fad7001ef9e8e3c124cb7a64e16d0a63d864 # v3
+              uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
               continue-on-error: true
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}

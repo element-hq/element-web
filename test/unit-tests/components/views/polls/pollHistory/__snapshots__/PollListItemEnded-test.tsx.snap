@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
+<div>
+  <li
+    class="mx_PollListItemEnded"
+    data-testid="pollListItem-1"
+  >
+    <span
+      tabindex="0"
+    >
+      <div
+        aria-labelledby=":r0:"
+        class="mx_PollListItemEnded_content"
+      >
+        <div
+          class="mx_PollListItemEnded_title"
+        >
+          <div
+            class="mx_PollListItemEnded_icon"
+          />
+          <span
+            class="mx_PollListItemEnded_question"
+          >
+            Question?
+          </span>
+          <span
+            class="mx_Caption"
+          >
+            02/02/23
+          </span>
+        </div>
+        <div
+          class="mx_PollListItemEnded_voteCount"
+        >
+          <span
+            class="mx_Caption"
+          >
+            Final result based on 0 votes
+          </span>
+        </div>
+      </div>
+    </span>
+  </li>
+</div>
+`;

@@ -1,12 +1,6 @@
 # Contributing code to Element Web
 
-Everyone is welcome to contribute code to Element Web, provided that they are
-willing to license their contributions under the same license as the project
-itself. We follow a simple 'inbound=outbound' model for contributions: the act
-of submitting an 'inbound' contribution means that the contributor agrees to
-license the code under the same terms as the project's overall 'outbound'
-license - in this case, Apache Software License v2 (see
-[LICENSE](LICENSE)).
+Everyone is welcome to contribute code to Element Web, provided that they are willing to license their contributions to Element under a [Contributor License Agreement](https://cla-assistant.io/element-hq/element-web) (CLA). This ensures that their contribution will be made available under an OSI-approved open-source license, currently licensed under Affero General Public License v3 (AGPLv3) or General Public License v3 (GPLv3) at your choice.
 
 ## How to contribute
 
@@ -85,7 +79,6 @@ element-web notes: Fix a bug where the 'Herd' button only worked on Tuesdays
 
 This example is for Element Web. You can specify:
 
--   matrix-react-sdk
 -   element-web
 -   element-desktop
 
@@ -119,14 +112,12 @@ checks, so please check back after a few minutes.
 
 Your PR should include tests.
 
-For new user facing features in `matrix-js-sdk`, `matrix-react-sdk` or `element-web`, you
-must include:
+For new user facing features in `matrix-js-sdk` or `element-web`, you must include:
 
 1. Comprehensive unit tests written in Jest. These are located in `/test`.
 2. "happy path" end-to-end tests.
-   These are located in `/cypress/e2e` in `matrix-react-sdk`, and
-   are run using `element-web`. Ideally, you would also include tests for edge
-   and error cases.
+   These are located in `/playwright/e2e`, and are run using `element-web`.
+   Ideally, you would also include tests for edge and error cases.
 
 Unit tests are expected even when the feature is in labs. It's good practice
 to write tests alongside the code as it ensures the code is testable from
@@ -140,8 +131,7 @@ end-to-end test; which is best depends on what sort of test most concisely
 exercises the area.
 
 Changes to must be accompanied by unit tests written in Jest.
-These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web`
-and `matrix-react-sdk`.
+These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web`.
 
 When writing unit tests, please aim for a high level of test coverage
 for new code - 80% or greater. If you cannot achieve that, please document
@@ -271,9 +261,20 @@ on Git 2.17+ you can mass signoff using rebase:
 git rebase --signoff origin/develop
 ```
 
+## Private sign off
+
+If you would like to provide your legal name privately to the Matrix.org
+Foundation (instead of in a public commit or comment), you can do so by emailing
+your legal name and a link to the pull request to dco@matrix.org. It helps to
+include "sign off" or similar in the subject line. You will then be instructed
+further.
+
+Once private sign off is complete, doing so for future contributions will not
+be required.
+
 # Review expectations
 
-See https://github.com/vector-im/element-meta/wiki/Review-process
+See https://github.com/element-hq/element-meta/wiki/Review-process
 
 # Merge Strategy
 

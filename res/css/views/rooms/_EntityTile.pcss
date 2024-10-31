@@ -1,0 +1,127 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_EntityTile {
+    display: flex;
+    align-items: center;
+    color: $primary-content;
+    cursor: pointer;
+
+    .mx_E2EIcon {
+        margin: 0;
+        position: absolute;
+        bottom: 2px;
+        right: 7px;
+    }
+}
+
+.mx_EntityTile:hover {
+    padding-right: 30px;
+    position: relative; /* to keep the chevron aligned */
+}
+
+.mx_EntityTile:hover::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 8px); /* center */
+    right: -8px;
+    mask: url("$(res)/img/member_chevron.png");
+    mask-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    background-color: $header-panel-text-primary-color;
+}
+
+.mx_EntityTile:not(.mx_EntityTile_unreachable) .mx_PresenceLabel {
+    display: none;
+}
+
+.mx_EntityTile:hover .mx_PresenceLabel {
+    display: block;
+}
+
+.mx_EntityTile_invite {
+    display: table-cell;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 26px;
+}
+
+.mx_EntityTile_avatar {
+    padding-left: 3px;
+    padding-right: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: relative;
+    line-height: 0;
+}
+
+.mx_EntityTile_name {
+    flex: 1 1 0;
+    overflow: hidden;
+    font: var(--cpd-font-body-md-regular);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_EntityTile_details {
+    overflow: hidden;
+    flex: 1;
+}
+
+.mx_EntityTile_ellipsis .mx_EntityTile_name {
+    font-style: italic;
+    color: $primary-content;
+}
+
+.mx_EntityTile_invitePlaceholder .mx_EntityTile_name {
+    font-style: italic;
+    color: $primary-content;
+}
+
+.mx_EntityTile_unavailable .mx_EntityTile_avatar,
+.mx_EntityTile_unavailable .mx_EntityTile_name,
+.mx_EntityTile_offline_beenactive .mx_EntityTile_avatar,
+.mx_EntityTile_offline_beenactive .mx_EntityTile_name {
+    opacity: 0.5;
+}
+
+.mx_EntityTile_offline_neveractive .mx_EntityTile_avatar,
+.mx_EntityTile_offline_neveractive .mx_EntityTile_name {
+    opacity: 0.25;
+}
+
+.mx_EntityTile_unknown .mx_EntityTile_avatar,
+.mx_EntityTile_unknown .mx_EntityTile_name,
+.mx_EntityTile_unreachable .mx_EntityTile_avatar,
+.mx_EntityTile_unreachable .mx_EntityTile_name {
+    opacity: 0.25;
+}
+
+.mx_EntityTile_subtext {
+    font-size: $font-11px;
+    opacity: 0.5;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
+
+.mx_EntityTile_power {
+    padding-inline-start: 6px;
+    font-size: $font-10px;
+    color: $secondary-content;
+    max-width: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_EntityTile:hover .mx_EntityTile_power {
+    display: none;
+}

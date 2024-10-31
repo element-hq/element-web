@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SlashCommands /lenny should match snapshot with args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /lenny should match snapshot with no args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°)",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /rainbow should make things rainbowy 1`] = `
+{
+  "body": "this is a test message",
+  "format": "org.matrix.custom.html",
+  "formatted_body": "<span data-mx-color="#ff00be">t</span><span data-mx-color="#ff0080">h</span><span data-mx-color="#ff0041">i</span><span data-mx-color="#ff5f00">s</span> <span data-mx-color="#faa900">i</span><span data-mx-color="#c3bf00">s</span> <span data-mx-color="#00d800">a</span> <span data-mx-color="#00e371">t</span><span data-mx-color="#00e6b6">e</span><span data-mx-color="#00e7f8">s</span><span data-mx-color="#00e7ff">t</span> <span data-mx-color="#00deff">m</span><span data-mx-color="#00d2ff">e</span><span data-mx-color="#00c0ff">s</span><span data-mx-color="#44a4ff">s</span><span data-mx-color="#e87dff">a</span><span data-mx-color="#ff42ff">g</span><span data-mx-color="#ff00fe">e</span>",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /rainbowme should make things rainbowy 1`] = `
+{
+  "body": "this is a test message",
+  "format": "org.matrix.custom.html",
+  "formatted_body": "<span data-mx-color="#ff00be">t</span><span data-mx-color="#ff0080">h</span><span data-mx-color="#ff0041">i</span><span data-mx-color="#ff5f00">s</span> <span data-mx-color="#faa900">i</span><span data-mx-color="#c3bf00">s</span> <span data-mx-color="#00d800">a</span> <span data-mx-color="#00e371">t</span><span data-mx-color="#00e6b6">e</span><span data-mx-color="#00e7f8">s</span><span data-mx-color="#00e7ff">t</span> <span data-mx-color="#00deff">m</span><span data-mx-color="#00d2ff">e</span><span data-mx-color="#00c0ff">s</span><span data-mx-color="#44a4ff">s</span><span data-mx-color="#e87dff">a</span><span data-mx-color="#ff42ff">g</span><span data-mx-color="#ff00fe">e</span>",
+  "msgtype": "m.emote",
+}
+`;
+
+exports[`SlashCommands /shrug should match snapshot with args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /shrug should match snapshot with no args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /tableflip should match snapshot with args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /tableflip should match snapshot with no args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /unflip should match snapshot with args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /unflip should match snapshot with no args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ)",
+  "msgtype": "m.text",
+}
+`;

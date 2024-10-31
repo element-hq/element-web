@@ -1,34 +1,26 @@
 /*
+Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
-import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
-import Modal from "matrix-react-sdk/src/Modal";
-import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
 import { mocked } from "jest-mock";
 
+import { UpdateCheckStatus } from "../../../../src/BasePlatform";
+import { Action } from "../../../../src/dispatcher/actions";
+import dispatcher from "../../../../src/dispatcher/dispatcher";
+import * as rageshake from "../../../../src/rageshake/rageshake";
+import { BreadcrumbsStore } from "../../../../src/stores/BreadcrumbsStore";
+import Modal from "../../../../src/Modal";
+import DesktopCapturerSourcePicker from "../../../../src/components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 import { setupLanguageMock } from "../../../setup/setupLanguage";
 
-jest.mock("matrix-react-sdk/src/rageshake/rageshake", () => ({
+jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
 }));
 
@@ -55,7 +47,9 @@ describe("ElectronPlatform", () => {
         setupLanguageMock();
     });
 
-    const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
+    const getElectronEventHandlerCall = (
+        eventType: string,
+    ): [type: string, handler: (...args: any) => void] | undefined =>
         mockElectron.on.mock.calls.find(([type]) => type === eventType);
 
     it("flushes rageshake before quitting", () => {

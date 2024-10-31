@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenericToast should render as expected with detail content 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mx_Toast_description"
+    >
+      <div>
+        Description
+      </div>
+    </div>
+    <div
+      aria-live="off"
+      class="mx_Toast_buttons"
+    >
+      <button
+        class="_button_i91xf_17"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Reject
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="primary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GenericToast should render as expected without detail content 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mx_Toast_description"
+    >
+      <div>
+        Description
+      </div>
+      <div
+        class="mx_Toast_detail"
+      >
+        Detail
+      </div>
+    </div>
+    <div
+      aria-live="off"
+      class="mx_Toast_buttons"
+    >
+      <button
+        class="_button_i91xf_17"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Reject
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="primary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,200 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilteredDeviceList /> displays no results message when there are no devices 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_noResults"
+  >
+    No sessions found.
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering filters correctly for Inactive 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_securityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard"
+    >
+      <div
+        class="mx_DeviceSecurityCard_icon Inactive"
+      >
+        <div
+          height="16"
+          width="16"
+        />
+      </div>
+      <div
+        class="mx_DeviceSecurityCard_content"
+      >
+        <p
+          class="mx_DeviceSecurityCard_heading"
+        >
+          Inactive sessions
+        </p>
+        <p
+          class="mx_DeviceSecurityCard_description"
+        >
+          <span>
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering filters correctly for Unverified 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_securityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard"
+    >
+      <div
+        class="mx_DeviceSecurityCard_icon Unverified"
+      >
+        <div
+          height="16"
+          width="16"
+        />
+      </div>
+      <div
+        class="mx_DeviceSecurityCard_content"
+      >
+        <p
+          class="mx_DeviceSecurityCard_heading"
+        >
+          Unverified sessions
+        </p>
+        <p
+          class="mx_DeviceSecurityCard_description"
+        >
+          <span>
+            Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering filters correctly for Verified 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_securityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard"
+    >
+      <div
+        class="mx_DeviceSecurityCard_icon Verified"
+      >
+        <div
+          height="16"
+          width="16"
+        />
+      </div>
+      <div
+        class="mx_DeviceSecurityCard_content"
+      >
+        <p
+          class="mx_DeviceSecurityCard_heading"
+        >
+          Verified sessions
+        </p>
+        <p
+          class="mx_DeviceSecurityCard_description"
+        >
+          <span>
+            For best security, sign out from any session that you don't recognize or use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering renders no results correctly for Inactive 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_noResults"
+  >
+    No inactive sessions found.
+     
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      data-testid="devices-clear-filter-btn"
+      role="button"
+      tabindex="0"
+    >
+      Show all
+    </div>
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering renders no results correctly for Unverified 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_noResults"
+  >
+    No unverified sessions found.
+     
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      data-testid="devices-clear-filter-btn"
+      role="button"
+      tabindex="0"
+    >
+      Show all
+    </div>
+  </div>,
+]
+`;
+
+exports[`<FilteredDeviceList /> filtering renders no results correctly for Verified 1`] = `
+HTMLCollection [
+  <div
+    class="mx_FilteredDeviceList_noResults"
+  >
+    No verified sessions found.
+     
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      data-testid="devices-clear-filter-btn"
+      role="button"
+      tabindex="0"
+    >
+      Show all
+    </div>
+  </div>,
+]
+`;

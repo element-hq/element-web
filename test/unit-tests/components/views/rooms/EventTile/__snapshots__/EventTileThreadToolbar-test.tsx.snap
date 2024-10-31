@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventTileThreadToolbar renders 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="Message Actions"
+    aria-live="off"
+    class="mx_MessageActionBar"
+    role="toolbar"
+  >
+    <div
+      aria-label="View in room"
+      class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+      role="button"
+      tabindex="0"
+    >
+      <div />
+    </div>
+    <div
+      aria-label="Copy link to thread"
+      class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+      role="button"
+      tabindex="-1"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;

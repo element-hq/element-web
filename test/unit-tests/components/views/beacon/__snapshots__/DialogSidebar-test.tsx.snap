@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
+<div>
+  <div
+    class="mx_DialogSidebar"
+  >
+    <div
+      class="mx_DialogSidebar_header"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        View list
+      </h4>
+      <div
+        aria-label="Close sidebar"
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_DialogSidebar_closeButtonIcon"
+          fill="currentColor"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+    </div>
+    <ol
+      class="mx_DialogSidebar_list"
+    >
+      <li
+        class="mx_BeaconListItem"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar mx_BeaconListItem_avatar _avatar-imageless_mcap2_61"
+          data-color="1"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 32px;"
+        />
+        <div
+          class="mx_BeaconListItem_info"
+        >
+          <div
+            class="mx_BeaconStatus mx_BeaconStatus_Active mx_BeaconListItem_status"
+          >
+            <div
+              class="mx_BeaconStatus_description"
+            >
+              <span
+                class="mx_BeaconStatus_label"
+              >
+                @alice:server.org
+              </span>
+              <span
+                class="mx_BeaconStatus_expiryTime"
+              >
+                Live until 16:14
+              </span>
+            </div>
+            <div
+              class="mx_BeaconListItem_interactions"
+            >
+              <a
+                aria-labelledby=":r8:"
+                data-testid="open-location-in-osm"
+                href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                <div
+                  class="mx_ShareLatestLocation_icon"
+                />
+              </a>
+              <div
+                class="mx_CopyableText mx_ShareLatestLocation_copy"
+              >
+                <div
+                  aria-label="Copy"
+                  class="mx_AccessibleButton mx_CopyableText_copyButton"
+                  role="button"
+                  tabindex="0"
+                />
+              </div>
+            </div>
+          </div>
+          <span
+            class="mx_BeaconListItem_lastUpdated"
+          >
+            Updated a few seconds ago
+          </span>
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+`;
+
+exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
+<div>
+  <div
+    class="mx_DialogSidebar"
+  >
+    <div
+      class="mx_DialogSidebar_header"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        View list
+      </h4>
+      <div
+        aria-label="Close sidebar"
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          class="mx_DialogSidebar_closeButtonIcon"
+          fill="currentColor"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="mx_DialogSidebar_noResults"
+    >
+      No live locations
+    </div>
+  </div>
+</div>
+`;

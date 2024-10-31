@@ -109,7 +109,7 @@ instance. As of writing those settings are not fully documented, however a few a
     }
     ```
     These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
-    [Settings.tsx](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx).
+    [Settings.tsx](https://github.com/element-hq/element-web/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -137,7 +137,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
    This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
    at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
    configuration found in the well-known location is used instead.
-10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+10. `welcome_user_id`: **DEPRECATED** An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
 11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
     `{"affected|translation|key": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
@@ -154,7 +154,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
-19. `help_encrption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
+20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -167,6 +168,10 @@ Starting with `desktop_builds`, the following subproperties are available:
 1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
 2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
 3. `url`: Required. The download URL for the app. This is used as a hyperlink.
+4. `url_macos`: Optional. Direct link to download macOS desktop app.
+5. `url_win32`: Optional. Direct link to download Windows 32-bit desktop app.
+6. `url_win64`: Optional. Direct link to download Windows 64-bit desktop app.
+7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
 
@@ -250,16 +255,59 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
    all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
-   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. As an example:
+   have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
+   redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
     {
         "sso_redirect_options": {
             "immediate": false,
-            "on_welcome_page": true
+            "on_welcome_page": true,
+            "on_login_page": true
         }
     }
     ```
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
+
+## Native OIDC
+
+Native OIDC support is currently in labs and is subject to change.
+
+Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
+Issuer must have a trailing forward slash. As an example:
+
+```json
+{
+    "oidc_static_clients": {
+        "https://auth.example.com/": {
+            "client_id": "example-client-id"
+        }
+    }
+}
+```
+
+If a matching static client is not found, the app will attempt to dynamically register a client using metadata specified under `oidc_metadata`.
+The app has sane defaults for the metadata properties below but on stricter policy identity providers they may not pass muster, e.g. `contacts` may be required.
+The following subproperties are available:
+
+1. `client_uri`: This is the base URI for the OIDC client registration, typically `logo_uri`, `tos_uri`, and `policy_uri` must be either on the same domain or a subdomain of this URI.
+2. `logo_uri`: Optional URI for the client logo.
+3. `tos_uri`: Optional URI for the client's terms of service.
+4. `policy_uri`: Optional URI for the client's privacy policy.
+5. `contacts`: Optional list of contact emails for the client.
+
+As an example:
+
+```json
+{
+    "oidc_metadata": {
+        "client_uri": "https://example.com",
+        "logo_uri": "https://example.com/logo.png",
+        "tos_uri": "https://example.com/tos",
+        "policy_uri": "https://example.com/policy",
+        "contacts": ["support@example.com"]
+    }
+}
+```
 
 ## VoIP / Jitsi calls
 
@@ -331,8 +379,8 @@ The VoIP and Jitsi options are:
     }
     ```
     The `widget` is the `content` of a normal widget state event. The `layout` is the layout specifier for the widget being created,
-    as defined by the `io.element.widgets.layout` state event. By default this applies to all rooms, but the behaviour can be skipped for DMs
-    by setting the option `widget_build_url_ignore_dm` to `true`.
+    as defined by the `io.element.widgets.layout` state event. By default this applies to all rooms, but the behaviour can be skipped for
+    2-person rooms, causing Element to fall back to 1:1 VoIP, by setting the option `widget_build_url_ignore_dm` to `true`.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
@@ -344,6 +392,12 @@ The VoIP and Jitsi options are:
       this number is exceeded, the user will not be able to join a given call.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
+    - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
+      for guest links. If this is set, Element Web will expose a "join" link
+      for public video rooms, which can then be shared to non-matrix users.
+      The target Element Call SPA is typically set up to use a homeserver that
+      allows users to register without email ("passwordless guest users") and to
+      federate.
 
 ## Bug reporting
 
@@ -398,6 +452,12 @@ If you would like to use Scalar, the integration manager maintained by Element, 
     ]
 }
 ```
+
+For widgets in general (from an integration manager or not) there is also:
+
+-   `default_widget_container_height`
+
+This controls the height that the top widget panel initially appears as and is the height in pixels, default 280.
 
 ## Administrative options
 
@@ -480,7 +540,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/vector-im/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-desktop#user-specified-configjson
 
 ## UI Features
 

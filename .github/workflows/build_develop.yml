@@ -13,8 +13,8 @@ jobs:
     build:
         name: "Build & Deploy develop.element.io"
         # Only respect triggers from our develop branch, ignore that of forks
-        if: github.repository == 'vector-im/element-web'
-        runs-on: ubuntu-latest
+        if: github.repository == 'element-hq/element-web'
+        runs-on: ubuntu-24.04
         environment: develop
         env:
             R2_BUCKET: "element-web-develop"
@@ -26,6 +26,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
+                  node-version: "lts/*"
 
             - name: Install Dependencies
               run: "./scripts/layered.sh"
@@ -47,7 +48,7 @@ jobs:
 
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               with:
                   name: webapp
                   path: dist/develop.tar.gz
@@ -84,14 +85,21 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
 
+            # We may be trying to deploy the same webapp bundles again, we need to ensure that the live bundles
+            # are not present in the _redirects file and instead accessed directly from Cloudflare Pages.
+            - name: Trim _redirects
+              working-directory: _deploy
+              run: |
+                  find bundles -type d -mindepth 1 -maxdepth 1 -exec sed -i "\:{}:d" _redirects \;
+
             - name: Wait for other steps to succeed
-              uses: t3chguy/wait-on-check-action@05861d3a448898eb33dfce34153bd1ecb9422fb9 # fork
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label).)*$
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.

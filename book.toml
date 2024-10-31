@@ -18,9 +18,10 @@ create-missing = false
 # Remove the numbers that appear before each item in the sidebar, as they can
 # get quite messy as we nest deeper
 no-section-label = true
+additional-css = ["docs/lib/custom.css"]
 
 # The source code URL of the repository
-git-repository-url = "https://github.com/vector-im/element-web"
+git-repository-url = "https://github.com/element-hq/element-web"
 
 # The path that the docs are hosted on
 site-url = "/element-web/"

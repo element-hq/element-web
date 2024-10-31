@@ -1,0 +1,14 @@
+/* Prevent collapsible headings from wrapping onto two lines eagerly */
+summary > h1,
+summary > h2,
+summary > h3,
+summary > h4,
+summary > h5,
+summary > h6 {
+    display: inline-block;
+}
+
+/* Prevent longer checkbox lists from wrapping eagerly */
+input + p {
+    display: inline;
+}

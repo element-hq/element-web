@@ -1,25 +1,15 @@
 /*
+Copyright 2018-2024 New Vector Ltd.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2018, 2020 New Vector Ltd
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
-import BasePlatform from "matrix-react-sdk/src/BasePlatform";
-
-import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import type { IConfigOptions } from "../../IConfigOptions";
+import BasePlatform from "../../BasePlatform";
 import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
 import { _t } from "../../languageHandler";
@@ -41,7 +31,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Delay creating the `Favicon` instance until first use (on the first notification) as
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
-     * See https://github.com/vector-im/element-web/issues/9605.
+     * See https://github.com/element-hq/element-web/issues/9605.
      */
     public get favicon(): Favicon {
         if (this._favicon) {

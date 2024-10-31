@@ -1,0 +1,119 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_QuickSettingsButton {
+    flex: 0 0 auto;
+    border-radius: 8px;
+    position: relative;
+    margin: 12px auto;
+    color: $secondary-content;
+    min-width: 32px;
+    min-height: 32px;
+    line-height: 32px;
+
+    &.expanded {
+        margin-left: 20px;
+        padding-left: 44px; /* align with toggle collapse button text */
+        padding-right: 8px;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        left: 0;
+        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 24px;
+        background: $secondary-content;
+    }
+
+    &:not(.expanded):hover {
+        background-color: $quaternary-content;
+
+        &::before {
+            background-color: $primary-content;
+        }
+    }
+}
+
+.mx_QuickSettingsButton_ContextMenuWrapper .mx_ContextualMenu {
+    padding: 16px;
+    width: max-content;
+    min-width: 200px;
+    contain: unset; /* let the dropdown paint beyond the context menu */
+
+    > div > h2 {
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: var(--cpd-color-text-secondary);
+        margin: 0 0 16px;
+    }
+
+    .mx_AccessibleButton_hasKind {
+        display: block;
+        margin-top: 4px;
+    }
+
+    > div > h4 {
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        text-transform: uppercase;
+        color: var(--cpd-color-text-secondary);
+        margin: 20px 0 12px;
+    }
+
+    .mx_QuickSettingsButton_pinToSidebarHeading {
+        padding-left: 24px;
+        position: relative;
+    }
+
+    .mx_Checkbox {
+        margin-bottom: 8px;
+    }
+
+    .mx_QuickSettingsButton_favouritesCheckbox,
+    .mx_QuickSettingsButton_peopleCheckbox {
+        .mx_Checkbox_background + div {
+            padding-left: 22px;
+            position: relative;
+            margin-left: 6px;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: var(--cpd-color-text-primary);
+        }
+    }
+
+    .mx_QuickSettingsButton_moreOptionsButton {
+        padding-left: 22px;
+        margin-left: 22px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: var(--cpd-color-text-primary);
+        position: relative;
+        margin-bottom: 16px;
+    }
+}
+
+.mx_QuickSettingsButton_icon {
+    // TODO remove when all icons have fill=currentColor
+    * {
+        fill: $secondary-content;
+    }
+    color: $secondary-content;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}

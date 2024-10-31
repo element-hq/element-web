@@ -1,3 +1,10 @@
+/*
+Copyright 2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { getVectorConfig } from "../getconfig";
@@ -70,7 +77,7 @@ async function initPage(): Promise<void> {
         try {
             const result = await fetch(`https://${serverName}/.well-known/matrix/client`);
             const wkConfig = await result.json();
-            if (wkConfig && wkConfig["m.homeserver"]) {
+            if (wkConfig?.["m.homeserver"]) {
                 hsUrl = wkConfig["m.homeserver"]["base_url"];
 
                 if (wkConfig["m.identity_server"]) {
@@ -78,7 +85,7 @@ async function initPage(): Promise<void> {
                 }
             }
         } catch (e) {
-            if (wkConfig && wkConfig["m.homeserver"]) {
+            if (wkConfig?.["m.homeserver"]) {
                 hsUrl = wkConfig["m.homeserver"]["base_url"] || undefined;
 
                 if (wkConfig["m.identity_server"]) {
@@ -120,4 +127,4 @@ async function initPage(): Promise<void> {
     }
 }
 
-initPage();
+void initPage();

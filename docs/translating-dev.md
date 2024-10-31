@@ -3,13 +3,12 @@
 ## Requirements
 
 -   A working [Development Setup](../README.md#setting-up-a-dev-environment)
-    -   Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
 -   Latest LTS version of Node.js installed
 -   Be able to understand English
 
 ## Translating strings vs. marking strings for translation
 
-Translating strings are done with the `_t()` function found in matrix-react-sdk/lib/languageHandler.js.
+Translating strings are done with the `_t()` function found in `languageHandler.tsx`.
 It is recommended to call this function wherever you introduce a string constant which should be translated.
 However, translating can not be performed until after the translation system has been initialized.
 Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced.
@@ -36,7 +35,7 @@ function getColorName(hex) {
 
 ## Key naming rules
 
-These rules are based on https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md
+These rules are based on https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md
 At this time we are not trying to have a translation key per UI element as some methodologies use,
 whilst that would offer the greatest flexibility, it would also make reuse between projects nigh impossible.
 We are aiming for a set of common strings to be shared then some more localised translations per context they may appear in.
@@ -47,13 +46,9 @@ We are aiming for a set of common strings to be shared then some more localised 
 4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
 
-## matrix-react-sdk is still undergoing migration to translation keys
-
-If you are fortunate enough to be modifying not yet migrated strings please treat them as a new string using instructions below.
-
 ## Adding new strings
 
-1. Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
+1. Check if the import `import { _t } from ".../languageHandler";` is present. If not add it to the other import statements. Also import `_td` if needed.
 1. Add `_t()` to your string passing the translation key you come up with based on the rules above. If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
 1. Run `yarn i18n` to add the keys to `src/i18n/strings/en_EN.json`
 1. Modify the new entries in `src/i18n/strings/en_EN.json` with the English (UK) translations for the added keys.

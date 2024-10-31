@@ -1,0 +1,1661 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomView for a local room in state CREATING should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+    >
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
+      >
+        <div
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
+        >
+          <div
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
+          >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-labelledby=":rbc:"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          aria-labelledby=":rbh:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m20.958 16.374.039 3.527c0 .285-.11.537-.33.756-.22.22-.472.33-.756.33a15.97 15.97 0 0 1-6.57-1.105 16.223 16.223 0 0 1-5.563-3.663 16.084 16.084 0 0 1-3.653-5.573 16.313 16.313 0 0 1-1.115-6.56c0-.285.11-.537.33-.757.22-.22.471-.329.755-.329l3.528.039a1.069 1.069 0 0 1 1.085.93l.543 3.954c.026.181.013.349-.039.504a1.088 1.088 0 0 1-.271.426l-1.64 1.64c.337.672.721 1.308 1.154 1.909.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444c.6.433 1.237.817 1.909 1.153l1.64-1.64a1.08 1.08 0 0 1 .426-.27c.155-.052.323-.065.504-.04l3.954.543a1.069 1.069 0 0 1 .93 1.085Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          aria-labelledby=":rbm:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          aria-labelledby=":rbr:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          aria-labelledby=":rc0:"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+          </div>
+          2
+        </div>
+      </div>
+    </header>
+    <div
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_LargeLoader"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_Spinner_icon"
+            data-testid="spinner"
+            role="progressbar"
+            style="width: 45px; height: 45px;"
+          />
+        </div>
+        <div
+          class="mx_LargeLoader_text"
+        >
+          We're creating a room with @user:example.com
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state ERROR should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+    >
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
+      >
+        <div
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
+        >
+          <div
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
+          >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-labelledby=":rca:"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          aria-labelledby=":rcf:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m20.958 16.374.039 3.527c0 .285-.11.537-.33.756-.22.22-.472.33-.756.33a15.97 15.97 0 0 1-6.57-1.105 16.223 16.223 0 0 1-5.563-3.663 16.084 16.084 0 0 1-3.653-5.573 16.313 16.313 0 0 1-1.115-6.56c0-.285.11-.537.33-.757.22-.22.471-.329.755-.329l3.528.039a1.069 1.069 0 0 1 1.085.93l.543 3.954c.026.181.013.349-.039.504a1.088 1.088 0 0 1-.271.426l-1.64 1.64c.337.672.721 1.308 1.154 1.909.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444c.6.433 1.237.817 1.909 1.153l1.64-1.64a1.08 1.08 0 0 1 .426-.27c.155-.052.323-.065.504-.04l3.954.543a1.069 1.069 0 0 1 .93 1.085Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          aria-labelledby=":rck:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          aria-labelledby=":rcp:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          aria-labelledby=":rcu:"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+          </div>
+          2
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <div
+                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                >
+                  <div
+                    class="mx_EventTileBubble_title"
+                  >
+                    End-to-end encryption isn't enabled
+                  </div>
+                  <div
+                    class="mx_EventTileBubble_subtitle"
+                  >
+                    <span>
+                       
+                      Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.
+                       
+                       
+                    </span>
+                  </div>
+                </div>
+                <button
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  role="button"
+                  style="--cpd-avatar-size: 52px;"
+                >
+                  u
+                </button>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <strong>
+                      @user:example.com
+                    </strong>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
+      >
+        <div
+          role="alert"
+        >
+          <div
+            class="mx_RoomStatusBar_unsentBadge"
+          >
+            <div
+              class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char cpd-theme-light"
+            >
+              <span
+                class="mx_NotificationBadge_count"
+              >
+                !
+              </span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="mx_RoomStatusBar_unsentTitle"
+            >
+              Some of your messages have not been sent
+            </div>
+          </div>
+          <div
+            class="mx_RoomStatusBar_unsentButtonBar"
+          >
+            <div
+              class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+              role="button"
+              tabindex="0"
+            >
+              Retry
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state NEW should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+    >
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
+      >
+        <div
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
+        >
+          <div
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
+          >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-labelledby=":r70:"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          aria-labelledby=":r75:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m20.958 16.374.039 3.527c0 .285-.11.537-.33.756-.22.22-.472.33-.756.33a15.97 15.97 0 0 1-6.57-1.105 16.223 16.223 0 0 1-5.563-3.663 16.084 16.084 0 0 1-3.653-5.573 16.313 16.313 0 0 1-1.115-6.56c0-.285.11-.537.33-.757.22-.22.471-.329.755-.329l3.528.039a1.069 1.069 0 0 1 1.085.93l.543 3.954c.026.181.013.349-.039.504a1.088 1.088 0 0 1-.271.426l-1.64 1.64c.337.672.721 1.308 1.154 1.909.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444c.6.433 1.237.817 1.909 1.153l1.64-1.64a1.08 1.08 0 0 1 .426-.27c.155-.052.323-.065.504-.04l3.954.543a1.069 1.069 0 0 1 .93 1.085Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          aria-labelledby=":r7a:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          aria-labelledby=":r7f:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          aria-labelledby=":r7k:"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+          </div>
+          2
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <div
+                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                >
+                  <div
+                    class="mx_EventTileBubble_title"
+                  >
+                    End-to-end encryption isn't enabled
+                  </div>
+                  <div
+                    class="mx_EventTileBubble_subtitle"
+                  >
+                    <span>
+                       
+                      Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.
+                       
+                       
+                    </span>
+                  </div>
+                </div>
+                <button
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  role="button"
+                  style="--cpd-avatar-size: 52px;"
+                >
+                  u
+                </button>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <strong>
+                      @user:example.com
+                    </strong>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-label="Message composer"
+        class="mx_MessageComposer"
+        role="region"
+      >
+        <div
+          class="mx_MessageComposer_wrapper"
+        >
+          <div
+            class="mx_MessageComposer_row"
+          >
+            <div
+              class="mx_SendMessageComposer"
+            >
+              <div
+                class="mx_BasicMessageComposer"
+              >
+                <div
+                  aria-label="Formatting"
+                  class="mx_MessageComposerFormatBar"
+                  role="toolbar"
+                >
+                  <button
+                    aria-label="Bold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    role="button"
+                    tabindex="0"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Italics"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Strikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Code block"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Quote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Insert link"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                </div>
+                <div
+                  aria-autocomplete="list"
+                  aria-disabled="false"
+                  aria-haspopup="listbox"
+                  aria-label="Send a message…"
+                  aria-multiline="true"
+                  class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                  contenteditable="true"
+                  data-testid="basicmessagecomposer"
+                  dir="auto"
+                  role="textbox"
+                  style="--placeholder: 'Send\\ a\\ message…';"
+                  tabindex="0"
+                  translate="no"
+                >
+                  <div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mx_MessageComposer_actions"
+            >
+              <div
+                aria-label="Emoji"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="Attachment"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="More options"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                role="button"
+                tabindex="0"
+              />
+              <input
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state NEW that is encrypted should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_Flex mx_RoomHeader light-panel"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+    >
+      <button
+        aria-label="Open room settings"
+        aria-live="off"
+        class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 40px;"
+        tabindex="-1"
+      >
+        u
+      </button>
+      <button
+        aria-label="Room info"
+        class="mx_RoomHeader_infoWrapper"
+        tabindex="0"
+      >
+        <div
+          class="mx_Box mx_RoomHeader_info mx_Box--flex"
+          style="--mx-box-flex: 1;"
+        >
+          <div
+            aria-level="1"
+            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+            dir="auto"
+            role="heading"
+          >
+            <span
+              class="mx_RoomHeader_truncated mx_lineClamp"
+            >
+              @user:example.com
+            </span>
+          </div>
+        </div>
+      </button>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      >
+        <button
+          aria-disabled="false"
+          aria-label="Video call"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-labelledby=":r96:"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-label="Voice call"
+          aria-labelledby=":r9b:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m20.958 16.374.039 3.527c0 .285-.11.537-.33.756-.22.22-.472.33-.756.33a15.97 15.97 0 0 1-6.57-1.105 16.223 16.223 0 0 1-5.563-3.663 16.084 16.084 0 0 1-3.653-5.573 16.313 16.313 0 0 1-1.115-6.56c0-.285.11-.537.33-.757.22-.22.471-.329.755-.329l3.528.039a1.069 1.069 0 0 1 1.085.93l.543 3.954c.026.181.013.349-.039.504a1.088 1.088 0 0 1-.271.426l-1.64 1.64c.337.672.721 1.308 1.154 1.909.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444c.6.433 1.237.817 1.909 1.153l1.64-1.64a1.08 1.08 0 0 1 .426-.27c.155-.052.323-.065.504-.04l3.954.543a1.069 1.069 0 0 1 .93 1.085Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Room info"
+          aria-labelledby=":r9g:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-label="Threads"
+          aria-labelledby=":r9l:"
+          class="_icon-button_bh2qc_17"
+          role="button"
+          style="--cpd-icon-button-size: 32px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+      >
+        <div
+          aria-label="2 members"
+          aria-labelledby=":r9q:"
+          class="mx_AccessibleButton mx_FacePile"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="_stacked-avatars_mcap2_111"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              u
+            </span>
+          </div>
+          2
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <div
+                class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+              >
+                <div
+                  class="mx_EventTileBubble_title"
+                >
+                  Encryption enabled
+                </div>
+                <div
+                  class="mx_EventTileBubble_subtitle"
+                >
+                  Messages in this chat will be end-to-end encrypted.
+                </div>
+              </div>
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <button
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  role="button"
+                  style="--cpd-avatar-size: 52px;"
+                >
+                  u
+                </button>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <strong>
+                      @user:example.com
+                    </strong>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-label="Message composer"
+        class="mx_MessageComposer"
+        role="region"
+      >
+        <div
+          class="mx_MessageComposer_wrapper"
+        >
+          <div
+            class="mx_MessageComposer_row"
+          >
+            <div
+              class="mx_SendMessageComposer"
+            >
+              <div
+                class="mx_BasicMessageComposer"
+              >
+                <div
+                  aria-label="Formatting"
+                  class="mx_MessageComposerFormatBar"
+                  role="toolbar"
+                >
+                  <button
+                    aria-label="Bold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    role="button"
+                    tabindex="0"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Italics"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Strikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Code block"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Quote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Insert link"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                </div>
+                <div
+                  aria-autocomplete="list"
+                  aria-disabled="false"
+                  aria-haspopup="listbox"
+                  aria-label="Send a message…"
+                  aria-multiline="true"
+                  class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                  contenteditable="true"
+                  data-testid="basicmessagecomposer"
+                  dir="auto"
+                  role="textbox"
+                  style="--placeholder: 'Send\\ a\\ message…';"
+                  tabindex="0"
+                  translate="no"
+                >
+                  <div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mx_MessageComposer_actions"
+            >
+              <div
+                aria-label="Emoji"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="Attachment"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="More options"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                role="button"
+                tabindex="0"
+              />
+              <input
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`RoomView should show error view if failed to look up room alias 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+  >
+    <div
+      class="mx_RoomPreviewBar mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"
+      role="complementary"
+    >
+      <div
+        class="mx_RoomPreviewBar_message"
+      >
+        <h3>
+          #addy:server does not exist.
+        </h3>
+        <p>
+          Are you sure you're at the right place?
+        </p>
+      </div>
+      <div
+        class="mx_RoomPreviewBar_actions"
+      />
+      <div
+        class="mx_RoomPreviewBar_footer"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomView video rooms should render joined video room view 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView mx_RoomView_immersive"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_call"
+        data-layout="group"
+      >
+        <header
+          class="mx_Flex mx_RoomHeader light-panel"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+        >
+          <button
+            aria-label="Open room settings"
+            aria-live="off"
+            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+            data-color="3"
+            data-testid="avatar-img"
+            data-type="round"
+            role="button"
+            style="--cpd-avatar-size: 40px;"
+            tabindex="-1"
+          >
+            !
+          </button>
+          <button
+            aria-label="Room info"
+            class="mx_RoomHeader_infoWrapper"
+            tabindex="0"
+          >
+            <div
+              class="mx_Box mx_RoomHeader_info mx_Box--flex"
+              style="--mx-box-flex: 1;"
+            >
+              <div
+                aria-level="1"
+                class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+                dir="auto"
+                role="heading"
+              >
+                <span
+                  class="mx_RoomHeader_truncated mx_lineClamp"
+                >
+                  !10:example.org
+                </span>
+              </div>
+            </div>
+          </button>
+          <div
+            class="mx_Flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+          >
+            <button
+              aria-label="Room info"
+              aria-labelledby=":r2k:"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-label="Chat"
+              aria-labelledby=":r2p:"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.95 16.3 1.5 21.25a.936.936 0 0 0 .25 1 .936.936 0 0 0 1 .25l4.95-1.45a10.23 10.23 0 0 0 2.1.712c.717.159 1.45.238 2.2.238a9.737 9.737 0 0 0 3.9-.788 10.098 10.098 0 0 0 3.175-2.137c.9-.9 1.613-1.958 2.137-3.175A9.738 9.738 0 0 0 22 12a9.738 9.738 0 0 0-.788-3.9 10.099 10.099 0 0 0-2.137-3.175c-.9-.9-1.958-1.612-3.175-2.137A9.737 9.737 0 0 0 12 2a9.737 9.737 0 0 0-3.9.788 10.099 10.099 0 0 0-3.175 2.137c-.9.9-1.612 1.958-2.137 3.175A9.738 9.738 0 0 0 2 12a10.179 10.179 0 0 0 .95 4.3Z"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-label="Threads"
+              aria-labelledby=":r2u:"
+              class="_icon-button_bh2qc_17"
+              role="button"
+              style="--cpd-icon-button-size: 32px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50"
+          >
+            <div
+              aria-label="0 members"
+              aria-labelledby=":r33:"
+              class="mx_AccessibleButton mx_FacePile"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="_stacked-avatars_mcap2_111"
+              />
+              0
+            </div>
+          </div>
+        </header>
+      </div>
+      <div
+        class="mx_RightPanel_ResizeWrapper"
+        style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
+      >
+        <aside
+          class="mx_RightPanel"
+          id="mx_RightPanel"
+        >
+          <div
+            class="mx_BaseCard mx_ThreadPanel mx_TimelineCard"
+          >
+            <div
+              class="mx_BaseCard_header"
+            >
+              <div
+                class="mx_BaseCard_header_title"
+              >
+                <p
+                  class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+                  role="heading"
+                >
+                  Chat
+                </p>
+              </div>
+              <button
+                aria-labelledby=":r3c:"
+                class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+                data-testid="base-card-close-button"
+                role="button"
+                style="--cpd-icon-button-size: 28px;"
+                tabindex="0"
+              >
+                <div
+                  class="_indicator-icon_133tf_26"
+                  style="--cpd-icon-button-size: 100%;"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
+            <div
+              class="mx_TimelineCard_timeline"
+            >
+              <div
+                class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+                tabindex="-1"
+              >
+                <div
+                  class="mx_RoomView_messageListWrapper"
+                >
+                  <ol
+                    aria-live="polite"
+                    class="mx_RoomView_MessageList"
+                    style="height: 400px;"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              aria-label="Message composer"
+              class="mx_MessageComposer mx_MessageComposer--compact"
+              role="region"
+            >
+              <div
+                class="mx_MessageComposer_wrapper"
+              >
+                <div
+                  class="mx_MessageComposer_row"
+                >
+                  <div
+                    class="mx_SendMessageComposer"
+                  >
+                    <div
+                      class="mx_BasicMessageComposer"
+                    >
+                      <div
+                        aria-label="Formatting"
+                        class="mx_MessageComposerFormatBar"
+                        role="toolbar"
+                      >
+                        <button
+                          aria-label="Bold"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                          role="button"
+                          tabindex="0"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Italics"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Strikethrough"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Code block"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Quote"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                        <button
+                          aria-label="Insert link"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                          role="button"
+                          tabindex="-1"
+                          type="button"
+                        />
+                      </div>
+                      <div
+                        aria-autocomplete="list"
+                        aria-disabled="false"
+                        aria-haspopup="listbox"
+                        aria-label="Send a message…"
+                        aria-multiline="true"
+                        class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                        contenteditable="true"
+                        data-testid="basicmessagecomposer"
+                        dir="auto"
+                        role="textbox"
+                        style="--placeholder: 'Send\\ a\\ message…';"
+                        tabindex="0"
+                        translate="no"
+                      >
+                        <div>
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="mx_MessageComposer_actions"
+                  >
+                    <div
+                      aria-label="Emoji"
+                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <div
+                      aria-label="Attachment"
+                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <div
+                      aria-label="More options"
+                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                      role="button"
+                      tabindex="0"
+                    />
+                    <input
+                      multiple=""
+                      style="display: none;"
+                      type="file"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div>
+          <div
+            class="mx_ResizeHandle--horizontal"
+            style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; left: -5px; cursor: col-resize;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

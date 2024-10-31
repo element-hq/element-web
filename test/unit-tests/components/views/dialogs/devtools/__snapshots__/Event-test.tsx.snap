@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EventEditor /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <div
+      class="mx_DevTools_eventTypeStateKeyGroup"
+    >
+      <div
+        class="mx_Field mx_Field_input"
+      >
+        <input
+          autocomplete="on"
+          id="eventType"
+          label="Event Type"
+          placeholder="Event Type"
+          size="42"
+          type="text"
+          value=""
+        />
+        <label
+          for="eventType"
+        >
+          Event Type
+        </label>
+      </div>
+    </div>
+    <div
+      class="mx_Field mx_Field_textarea mx_DevTools_textarea"
+    >
+      <textarea
+        autocomplete="off"
+        id="evContent"
+        label="Event Content"
+        placeholder="Event Content"
+        type="text"
+      >
+        {
+
+}
+      </textarea>
+      <label
+        for="evContent"
+      >
+        Event Content
+      </label>
+    </div>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+    <button>
+      Send
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EventEditor /> thread context should pre-populate a thread relationship 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_DevTools_content"
+  >
+    <div
+      class="mx_DevTools_eventTypeStateKeyGroup"
+    >
+      <div
+        class="mx_Field mx_Field_input"
+      >
+        <input
+          autocomplete="on"
+          id="eventType"
+          label="Event Type"
+          placeholder="Event Type"
+          size="42"
+          type="text"
+          value=""
+        />
+        <label
+          for="eventType"
+        >
+          Event Type
+        </label>
+      </div>
+    </div>
+    <div
+      class="mx_Field mx_Field_textarea mx_DevTools_textarea"
+    >
+      <textarea
+        autocomplete="off"
+        id="evContent"
+        label="Event Content"
+        placeholder="Event Content"
+        type="text"
+      >
+        {
+  "m.relates_to": {
+    "rel_type": "m.thread",
+    "event_id": "$this_is_a_thread_id"
+  }
+}
+      </textarea>
+      <label
+        for="evContent"
+      >
+        Event Content
+      </label>
+    </div>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <button>
+      Back
+    </button>
+    <button>
+      Send
+    </button>
+  </div>
+</DocumentFragment>
+`;

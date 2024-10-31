@@ -1,0 +1,426 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SearchBox mx_textinput"
+  >
+    <input
+      autocomplete="off"
+      class="mx_textinput_icon mx_textinput_search mx_SpaceHierarchy_search mx_textinput_icon mx_textinput_search"
+      data-testid="searchbox-input"
+      placeholder="Search names and descriptions"
+      type="text"
+      value=""
+    />
+    <div
+      class="mx_AccessibleButton mx_SearchBox_closeButton"
+      role="button"
+      tabindex="-1"
+    />
+  </div>
+  <div
+    class="mx_SpaceHierarchy_listHeader"
+  >
+    <h4
+      class="mx_SpaceHierarchy_listHeader_header"
+    >
+      Rooms and spaces
+    </h4>
+    <div
+      class="mx_SpaceHierarchy_listHeader_buttons"
+    >
+      <div
+        aria-disabled="true"
+        aria-label="Remove"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline mx_AccessibleButton_disabled"
+        disabled=""
+        role="button"
+        tabindex="0"
+      >
+        Remove
+      </div>
+      <div
+        aria-disabled="true"
+        aria-label="Mark as not suggested"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline mx_AccessibleButton_disabled"
+        disabled=""
+        role="button"
+        tabindex="0"
+      >
+        Mark as not suggested
+      </div>
+    </div>
+  </div>
+  <ul
+    aria-label="Space"
+    class="mx_SpaceHierarchy_list"
+    role="tree"
+  >
+    <li
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="5"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              U
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Unnamed Room
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            2 members
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="0"
+          >
+            Join
+          </div>
+          <span
+            class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+          >
+            <input
+              id="checkbox_vY7Q4uEh9K"
+              tabindex="0"
+              type="checkbox"
+            />
+            <label
+              for="checkbox_vY7Q4uEh9K"
+            >
+              <div
+                class="mx_Checkbox_background"
+              >
+                <div
+                  class="mx_Checkbox_checkmark"
+                />
+              </div>
+            </label>
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+        role="button"
+        tabindex="-1"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="6"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              U
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Unnamed Room
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            3 members
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="-1"
+          >
+            Join
+          </div>
+          <span
+            class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+          >
+            <input
+              id="checkbox_38QgU2Pomx"
+              tabindex="-1"
+              type="checkbox"
+            />
+            <label
+              for="checkbox_38QgU2Pomx"
+            >
+              <div
+                class="mx_Checkbox_background"
+              >
+                <div
+                  class="mx_Checkbox_checkmark"
+                />
+              </div>
+            </label>
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+        role="button"
+        tabindex="-1"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="6"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              K
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Knock room
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            3 members
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+            role="button"
+            tabindex="-1"
+          >
+            View
+          </div>
+          <span
+            class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+          >
+            <input
+              id="checkbox_wKpa6hpi3Y"
+              tabindex="-1"
+              type="checkbox"
+            />
+            <label
+              for="checkbox_wKpa6hpi3Y"
+            >
+              <div
+                class="mx_Checkbox_background"
+              >
+                <div
+                  class="mx_Checkbox_checkmark"
+                />
+              </div>
+            </label>
+          </span>
+        </div>
+      </div>
+    </li>
+    <li
+      aria-expanded="true"
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile mx_SpaceHierarchy_subspace"
+        role="button"
+        tabindex="-1"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              N
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Nested space
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            1 member · 1 room
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="-1"
+          >
+            Join
+          </div>
+          <span
+            class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+          >
+            <input
+              id="checkbox_EetmBG4yVC"
+              tabindex="-1"
+              type="checkbox"
+            />
+            <label
+              for="checkbox_EetmBG4yVC"
+            >
+              <div
+                class="mx_Checkbox_background"
+              >
+                <div
+                  class="mx_Checkbox_checkmark"
+                />
+              </div>
+            </label>
+          </span>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_subspace_toggle mx_SpaceHierarchy_subspace_toggle_shown"
+        />
+      </div>
+      <div
+        class="mx_SpaceHierarchy_subspace_children"
+        role="group"
+      />
+    </li>
+    <li
+      class="mx_SpaceHierarchy_roomTileWrapper"
+      role="treeitem"
+    >
+      <div
+        class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+        role="button"
+        tabindex="-1"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_item"
+        >
+          <div
+            class="mx_SpaceHierarchy_roomTile_avatar"
+          >
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 20px;"
+            >
+              N
+            </span>
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_name"
+          >
+            Nested room
+          </div>
+          <div
+            class="mx_SpaceHierarchy_roomTile_info"
+          >
+            3 members
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            role="button"
+            tabindex="-1"
+          >
+            Join
+          </div>
+          <span
+            aria-labelledby=":r8:"
+            tabindex="0"
+          >
+            <span
+              class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+            >
+              <input
+                disabled=""
+                id="checkbox_eEefiPqpMR"
+                tabindex="-1"
+                type="checkbox"
+              />
+              <label
+                for="checkbox_eEefiPqpMR"
+              >
+                <div
+                  class="mx_Checkbox_background"
+                >
+                  <div
+                    class="mx_Checkbox_checkmark"
+                  />
+                </div>
+              </label>
+            </span>
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</DocumentFragment>
+`;

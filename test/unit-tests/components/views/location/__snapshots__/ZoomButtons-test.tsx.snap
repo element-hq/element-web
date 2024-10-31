@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ZoomButtons /> renders buttons 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ZoomButtons"
+  >
+    <div
+      aria-label="Zoom in"
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-in-button"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_ZoomButtons_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11 13H6a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h5V6c0-.283.096-.52.287-.713A.968.968 0 0 1 12 5c.283 0 .52.096.713.287.191.192.287.43.287.713v5h5a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13h-5v5a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 19a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 18v-5Z"
+        />
+      </svg>
+    </div>
+    <div
+      aria-label="Zoom out"
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-out-button"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_ZoomButtons_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;

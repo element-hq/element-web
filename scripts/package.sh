@@ -23,7 +23,9 @@ rm element-$version/config.json || true
 
 $(dirname $0)/normalize-version.sh ${version} > element-$version/version
 
-tar chvzf dist/element-$version.tar.gz element-$version
+# GNU/BSD compatibility workaround
+tar_perms=(--owner=0 --group=0) && [ "$(uname)" == "Darwin" ] && tar_perms=(--uid=0 --gid=0)
+tar "${tar_perms[@]}" -chvzf dist/element-$version.tar.gz element-$version
 rm -r element-$version
 
 echo

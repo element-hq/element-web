@@ -1,26 +1,27 @@
 {
     "compilerOptions": {
+        "allowImportingTsExtensions": true,
         "experimentalDecorators": false,
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "module": "commonjs",
+        "useDefineForClassFields": true,
+        "module": "es2022",
         "moduleResolution": "node",
-        "target": "es2016",
+        "target": "es2022",
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
         "declaration": true,
         "jsx": "react",
-        "lib": ["es2021", "dom", "dom.iterable"],
-        "strict": true
+        "lib": ["es2022", "dom", "dom.iterable"],
+        "strict": true,
+        "paths": {
+            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"]
+        }
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/diff-dom.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/opus-recorder.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",
@@ -28,6 +29,9 @@
         "./scripts/*.ts"
     ],
     "ts-node": {
-        "files": true
+        "files": true,
+        "moduleTypes": {
+            "*": "cjs"
+        }
     }
 }

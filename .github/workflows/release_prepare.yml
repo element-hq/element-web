@@ -12,11 +12,6 @@ on:
                 required: true
                 type: boolean
                 default: true
-            matrix-react-sdk:
-                description: Prepare matrix-react-sdk
-                required: true
-                type: boolean
-                default: true
             matrix-js-sdk:
                 description: Prepare matrix-js-sdk
                 required: true
@@ -24,13 +19,16 @@ on:
                 default: true
 jobs:
     prepare:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
+        env:
+            # The order is specified bottom-up to avoid any races for allchange
+            REPOS: matrix-js-sdk element-web element-desktop
         steps:
             - name: Checkout Element Desktop
               uses: actions/checkout@v4
               if: inputs.element-desktop
               with:
-                  repository: vector-im/element-desktop
+                  repository: element-hq/element-desktop
                   path: element-desktop
                   ref: staging
                   fetch-depth: 0
@@ -40,18 +38,8 @@ jobs:
               uses: actions/checkout@v4
               if: inputs.element-web
               with:
-                  repository: vector-im/element-web
+                  repository: element-hq/element-web
                   path: element-web
-                  ref: staging
-                  fetch-depth: 0
-                  fetch-tags: true
-                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-            - name: Checkout Matrix React SDK
-              uses: actions/checkout@v4
-              if: inputs.matrix-react-sdk
-              with:
-                  repository: matrix-org/matrix-react-sdk
-                  path: matrix-react-sdk
                   ref: staging
                   fetch-depth: 0
                   fetch-tags: true
@@ -67,15 +55,56 @@ jobs:
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-            - name: Resolve repos
-              run: |
-                  echo "REPOS=$(ls . | tr '\n' ' ')" >> $GITHUB_ENV
-
-            - name: Merge develop
+            - name: Prepare Git
               run: |
                   git config --global user.email "releases@riot.im"
                   git config --global user.name "RiotRobot"
-                  for REPO in $REPOS; do git -C "$REPO" merge origin/develop; done
+
+            - name: Merge Element Desktop
+              if: inputs.element-desktop
+              run: |
+                  git -C "element-desktop" merge origin/develop
+            - name: Merge Element Web
+              if: inputs.element-web
+              run: |
+                  git -C "element-web" merge origin/develop
+            - name: Merge JS SDK
+              if: inputs.matrix-js-sdk
+              run: |
+                  git -C "matrix-js-sdk" merge origin/develop
 
             - name: Push staging
-              run: for REPO in $REPOS; do git -C "$REPO" push origin staging; done
+              run: for REPO in $REPOS; do [ -d "$REPO" ] && git -C "$REPO" push origin staging; done
+
+            - name: Wait for matrix-js-sdk draft
+              if: inputs.matrix-js-sdk
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: matrix-org/matrix-js-sdk
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success
+
+            - name: Wait for element-web draft
+              if: inputs.element-web
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: element-hq/element-web
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success
+
+            - name: Wait for element-desktop draft
+              if: inputs.element-desktop
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: staging
+                  repo: element-hq/element-desktop
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  wait-interval: 10
+                  check-name: draft
+                  allowed-conclusions: success

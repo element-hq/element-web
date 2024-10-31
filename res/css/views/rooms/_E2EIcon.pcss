@@ -1,0 +1,61 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_E2EIcon {
+    width: 16px;
+    height: 16px;
+    margin: 0 9px;
+    position: relative;
+    display: block;
+}
+
+.mx_E2EIcon_warning,
+.mx_E2EIcon_normal,
+.mx_E2EIcon_verified {
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        inset: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+    }
+}
+
+/* transparent-looking border surrounding the shield for when overlain over avatars */
+.mx_E2EIcon_bordered {
+    mask-image: url("$(res)/img/e2e/normal.svg");
+    background-color: $header-panel-bg-color;
+    mask-size: 100%;
+
+    /* shrink the actual badge */
+    &::after {
+        mask-size: 75%;
+    }
+    /* shrink the infill of the badge */
+    &::before {
+        mask-size: 60%;
+        background: var(--cpd-color-bg-canvas-default);
+    }
+}
+
+.mx_E2EIcon_warning::after {
+    mask-image: url("$(res)/img/e2e/warning.svg");
+    background-color: $e2e-warning-color;
+}
+
+.mx_E2EIcon_normal::after {
+    mask-image: url("$(res)/img/e2e/normal.svg");
+    background-color: var(--cpd-color-icon-tertiary);
+}
+
+.mx_E2EIcon_verified::after {
+    mask-image: url("$(res)/img/e2e/verified.svg");
+    background-color: $e2e-verified-color;
+}
