@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { PollAnswerSubevent, PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
@@ -28,33 +28,49 @@ export default function PollResultsDialog (props: IProps): JSX.Element {
             onFinished={() => Modal.closeCurrentModal()}
         >
             {
-                props.pollEvent.answers.map((answer, answerIndex) => {
+                props.pollEvent.answers.map((answer) => {
                     const votes = props.votes.get(answer.id) || [];
-
                     if(votes.length === 0) return;
 
-                    return (
-                        <div key={answer.id}>
-                            <div style={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
-                                <span style={{fontWeight: "bolder", flexGrow: 1}}>{answer.text}</span>
-                                <span>{votes.length} votes</span>
-                            </div>
-                            {votes.length === 0 && <div>No one voted for this.</div>}
-                            {votes.map((vote) => {
-                                const member = props.members.find(m => m.userId === vote.sender);
-                                if (!member) return null;
-                                return <div key={vote.sender} style={{display: "flex", alignItems: "center", marginLeft: "15px"}}>
-                                    <div style={{marginRight: "10px"}}>
-                                        <MemberAvatar member={member} size="36px" aria-hidden="true" />
-                                    </div>
-                                    {member.name}
-                                </div>;
-                            })}
-                            {answerIndex < props.pollEvent.answers.length - 1 && <br />}
-                        </div>
-                    );
+                    return <AnswerEntry
+                        key={answer.id}
+                        answer={answer}
+                        members={props.members}
+                        votes={votes}
+                    />;
                 })
             }
         </BaseDialog>
     );
+}
+
+function AnswerEntry(props: {
+    answer: PollAnswerSubevent;
+    members: RoomMember[];
+    votes: UserVote[];
+}): JSX.Element {
+    const {answer, members, votes} = props;
+    return (
+        <div key={answer.id}>
+            <div style={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
+                <span style={{fontWeight: "bolder", flexGrow: 1}}>{answer.text}</span>
+                <span>{votes.length} votes</span>
+            </div>
+            {votes.length === 0 && <div>No one voted for this.</div>}
+            {votes.map((vote) => {
+                const member = members.find(m => m.userId === vote.sender);
+                if(member) return <VoterEntry key={vote.sender} vote={vote} member={member} />;
+            })}
+        </div>
+    );
+}
+
+function VoterEntry(props: {vote: UserVote; member: RoomMember}): JSX.Element {
+    const {vote, member} = props;
+    return <div key={vote.sender} style={{display: "flex", alignItems: "center", marginLeft: "15px"}}>
+        <div style={{marginRight: "10px"}}>
+            <MemberAvatar member={member} size="36px" aria-hidden="true" />
+        </div>
+        {member.name}
+    </div>;
 }
