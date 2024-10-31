@@ -16,6 +16,9 @@ import SdkConfig from "../../../../../src/SdkConfig.ts";
 describe("<AuthPage />", () => {
     beforeEach(() => {
         setupLanguageMock();
+        SdkConfig.reset();
+        // @ts-ignore private access
+        AuthPage.welcomeBackgroundUrl = undefined;
     });
 
     it("should match snapshot", () => {
