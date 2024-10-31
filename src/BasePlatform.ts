@@ -81,12 +81,9 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Get a sensible default display name for the
-     * device Vector is running on
+     * Get a sensible default display name for the device Element is running on
      */
-    public getDefaultDeviceDisplayName(): string {
-        return _t("unknown_device");
-    }
+    public abstract getDefaultDeviceDisplayName(): string;
 
     protected onAction = (payload: ActionPayload): void => {
         switch (payload.action) {

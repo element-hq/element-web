@@ -3705,7 +3705,6 @@
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
     },
-    "unknown_device": "Unknown device",
     "unsupported_browser": {
         "description": "If you continue, some features may stop working and there is a risk that you may lose data in the future. Update your browser to continue using %(brand)s.",
         "title": "%(brand)s does not support this browser"
