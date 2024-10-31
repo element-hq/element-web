@@ -31,6 +31,9 @@ import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
 import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
+import Favicon from "./favicon.ts";
+import { getVectorConfig } from "./vector/getconfig.ts";
+import { _t } from "./languageHandler.tsx";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -66,15 +69,24 @@ const UPDATE_DEFER_KEY = "mx_defer_update";
 export default abstract class BasePlatform {
     protected notificationCount = 0;
     protected errorDidOccur = false;
+    protected _favicon?: Favicon;
 
     protected constructor() {
         dis.register(this.onAction);
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    public abstract getConfig(): Promise<IConfigOptions | undefined>;
+    public async getConfig(): Promise<IConfigOptions | undefined> {
+        return getVectorConfig();
+    }
 
-    public abstract getDefaultDeviceDisplayName(): string;
+    /**
+     * Get a sensible default display name for the
+     * device Vector is running on
+     */
+    public getDefaultDeviceDisplayName(): string {
+        return _t("unknown_device");
+    }
 
     protected onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
@@ -89,11 +101,15 @@ export default abstract class BasePlatform {
     public abstract getHumanReadableName(): string;
 
     public setNotificationCount(count: number): void {
+        if (this.notificationCount === count) return;
         this.notificationCount = count;
+        this.updateFavicon();
     }
 
     public setErrorStatus(errorDidOccur: boolean): void {
+        if (this.errorDidOccur === errorDidOccur) return;
         this.errorDidOccur = errorDidOccur;
+        this.updateFavicon();
     }
 
     /**
@@ -456,4 +472,34 @@ export default abstract class BasePlatform {
         url.hash = "";
         return url;
     }
+
+    /**
+     * Delay creating the `Favicon` instance until first use (on the first notification) as
+     * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
+     * See https://github.com/element-hq/element-web/issues/9605.
+     */
+    public get favicon(): Favicon {
+        if (this._favicon) {
+            return this._favicon;
+        }
+        this._favicon = new Favicon();
+        return this._favicon;
+    }
+
+    private updateFavicon(): void {
+        let bgColor = "#d00";
+        let notif: string | number = this.notificationCount;
+
+        if (this.errorDidOccur) {
+            notif = notif || "×";
+            bgColor = "#f00";
+        }
+
+        this.favicon.badge(notif, { bgColor });
+    }
+
+    /**
+     * Begin update polling, if applicable
+     */
+    public startUpdater(): void {}
 }

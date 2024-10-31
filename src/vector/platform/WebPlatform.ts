@@ -11,12 +11,11 @@ import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BasePlatform, { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
 import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
-import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
 
@@ -31,7 +30,7 @@ function getNormalizedAppVersion(version: string): string {
     return version;
 }
 
-export default class WebPlatform extends VectorBasePlatform {
+export default class WebPlatform extends BasePlatform {
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
 
     public constructor() {

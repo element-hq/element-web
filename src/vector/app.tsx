@@ -27,7 +27,6 @@ import MatrixChat from "../components/structures/MatrixChat";
 import { ValidatedServerConfig } from "../utils/ValidatedServerConfig";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { parseQs } from "./url_utils";
-import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { UserFriendlyError } from "../languageHandler";
 
@@ -64,7 +63,7 @@ export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixCha
     const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
 
-    (platform as VectorBasePlatform).startUpdater();
+    platform?.startUpdater();
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();
