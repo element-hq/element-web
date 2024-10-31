@@ -231,6 +231,7 @@ describe("WebPlatform", () => {
     });
 
     it("should return config from config.json", async () => {
+        window.location.hostname = "domain.com";
         fetchMock.get(/config\.json.*/, { brand: "test" });
         const platform = new WebPlatform();
         await expect(platform.getConfig()).resolves.toEqual(expect.objectContaining({ brand: "test" }));
