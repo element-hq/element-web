@@ -386,6 +386,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {

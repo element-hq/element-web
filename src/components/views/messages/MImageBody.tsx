@@ -59,7 +59,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    private unmounted = true;
+    private unmounted = false;
     private image = createRef<HTMLImageElement>();
     private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;

@@ -110,11 +110,10 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             sidebarFeeds: sidebar,
             sidebarShown: true,
         };
-
-        this.updateCallListeners(null, this.props.call);
     }
 
     public componentDidMount(): void {
+        this.updateCallListeners(null, this.props.call);
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener("keydown", this.onNativeKeyDown);
     }

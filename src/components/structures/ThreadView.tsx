@@ -78,7 +78,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     public declare context: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef?: string;
-    private readonly layoutWatcherRef: string;
+    private layoutWatcherRef?: string;
     private timelinePanel = createRef<TimelinePanel>();
     private card = createRef<HTMLDivElement>();
 
@@ -91,7 +91,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.setEventId(this.props.mxEvent);
         const thread = this.props.room.getThread(this.eventId) ?? undefined;
 
-        this.setupThreadListeners(thread);
         this.state = {
             layout: SettingsStore.getValue("layout"),
             narrow: false,
@@ -100,13 +99,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 return ev.isRelation(THREAD_RELATION_TYPE.name) && !ev.status;
             }),
         };
+    }
+
+    public componentDidMount(): void {
+        this.setupThreadListeners(this.state.thread);
 
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
             this.setState({ layout: value as Layout }),
         );
-    }
 
-    public componentDidMount(): void {
         if (this.state.thread) {
             this.postThreadUpdate(this.state.thread);
         }

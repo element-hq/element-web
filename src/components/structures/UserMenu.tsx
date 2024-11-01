@@ -96,9 +96,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
             showLiveAvatarAddon: this.context.voiceBroadcastRecordingsStore.hasCurrent(),
         };
-
-        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
     }
 
     private get hasHomePage(): boolean {
@@ -112,6 +109,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     public componentDidMount(): void {
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         this.context.voiceBroadcastRecordingsStore.on(
             VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
             this.onCurrentVoiceBroadcastRecordingChanged,

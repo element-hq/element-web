@@ -599,7 +599,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
     public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -621,12 +621,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             showRightPanel: RightPanelStore.instance.isOpenForRoom(this.props.space.roomId),
             myMembership: this.props.space.getMyMembership(),
         };
-
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public componentDidMount(): void {
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         this.context.on(RoomEvent.MyMembership, this.onMyMembership);
     }
 
