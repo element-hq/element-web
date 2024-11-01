@@ -33,22 +33,21 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
     return (
         <div className="mx_PollOption_content">
             <div className="mx_PollOption_optionText">{answer.text}</div>
-            <div>
-                <div style={{ display: "flex" }}>
-                    {displayVoteCount
-                        && members.length <= MAXIMUM_MEMBERS_FOR_FACE_PILE
-                        && <FacePile
+            <div className="mx_PollOption_votesWrapper">
+                {displayVoteCount
+                    && members.length <= MAXIMUM_MEMBERS_FOR_FACE_PILE
+                    && <div className="mx_PollOption_facePile">
+                        <FacePile
                             members={members.filter((m) => votes.some((v) => v.sender === m.userId))}
                             size="24px"
                             overflow={false}
-                            style={{ marginRight: "10px" }}
                         />
-                    }
-                    <span className="mx_PollOption_optionVoteCount">
-                        {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
-                        {votesText}
-                    </span>
-                </div>
+                    </div>
+                }
+                <span className="mx_PollOption_optionVoteCount">
+                    {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
+                    {votesText}
+                </span>
             </div>
         </div>
     );
