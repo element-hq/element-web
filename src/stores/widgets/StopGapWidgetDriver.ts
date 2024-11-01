@@ -9,6 +9,7 @@
 import {
     Capability,
     EventDirection,
+    IMatrixApiError as IWidgetMatrixError,
     IOpenIDCredentials,
     IOpenIDUpdate,
     ISendDelayedEventDetails,
@@ -33,6 +34,7 @@ import {
     ITurnServer as IClientTurnServer,
     EventType,
     IContent,
+    MatrixError,
     MatrixEvent,
     Room,
     Direction,
@@ -688,5 +690,16 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };
+    }
+
+    /**
+     * Expresses a {@link MatrixError} as a {@link IWidgetMatrixError}
+     * for use by Widget API error responses.
+     * @param error The error to handle.
+     * @returns The error expressed as a {@link IWidgetMatrixError},
+     * or undefined if it is not a {@link MatrixError}.
+     */
+    public processError(error: unknown): IWidgetMatrixError | undefined {
+        return error instanceof MatrixError ? error.asWidgetApiErrorData() : undefined;
     }
 }
