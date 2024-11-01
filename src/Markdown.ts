@@ -383,6 +383,8 @@ export default class Markdown {
             if (isMultiLine(node) && node.next) this.lit("\n\n");
         };
 
-        return renderer.render(this.parsed);
+        renderer.esc = (input: string) => input;
+
+        return escape(renderer.render(this.parsed));
     }
 }
