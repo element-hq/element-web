@@ -266,6 +266,9 @@ module.exports = {
             parserOptions: {
                 project: ["./playwright/tsconfig.json"],
             },
+            rules: {
+                "react-hooks/rules-of-hooks": ["off"],
+            },
         },
     ],
     settings: {

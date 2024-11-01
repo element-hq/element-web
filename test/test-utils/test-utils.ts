@@ -127,6 +127,10 @@ export function createTestClient(): MatrixClient {
             prepareToEncrypt: jest.fn(),
             bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
+            isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({}),
+            bootstrapSecretStorage: jest.fn(),
+            isDehydrationSupported: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -270,6 +274,7 @@ export function createTestClient(): MatrixClient {
         getOrCreateFilter: jest.fn(),
         sendStickerMessage: jest.fn(),
         getLocalAliases: jest.fn().mockReturnValue([]),
+        uploadDeviceSigningKeys: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
