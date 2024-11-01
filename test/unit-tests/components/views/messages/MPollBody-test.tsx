@@ -425,7 +425,7 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
     });
 
     it("sends a vote event when I choose an option", async () => {
