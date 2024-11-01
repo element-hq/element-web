@@ -21,7 +21,7 @@ interface IProps {
     members: RoomMember[];
 }
 
-export default function PollResultsDialog (props: IProps): JSX.Element {
+export default function PollResultsDialog(props: IProps): JSX.Element {
     return (
         <BaseDialog
             title={props.pollEvent.question.text}
@@ -30,7 +30,7 @@ export default function PollResultsDialog (props: IProps): JSX.Element {
             {
                 props.pollEvent.answers.map((answer) => {
                     const votes = props.votes.get(answer.id) || [];
-                    if(votes.length === 0) return;
+                    if (votes.length === 0) return;
 
                     return <AnswerEntry
                         key={answer.id}
@@ -49,26 +49,30 @@ function AnswerEntry(props: {
     members: RoomMember[];
     votes: UserVote[];
 }): JSX.Element {
-    const {answer, members, votes} = props;
+    const { answer, members, votes } = props;
     return (
-        <div key={answer.id}>
-            <div style={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
-                <span style={{fontWeight: "bolder", flexGrow: 1}}>{answer.text}</span>
+        <div key={answer.id} className="mx_AnswerEntry">
+            <div className="mx_AnswerEntry_Header">
+                <span className="mx_AnswerEntry_Header_answerName">{answer.text}</span>
                 <span>{votes.length} votes</span>
             </div>
             {votes.length === 0 && <div>No one voted for this.</div>}
             {votes.map((vote) => {
                 const member = members.find(m => m.userId === vote.sender);
-                if(member) return <VoterEntry key={vote.sender} vote={vote} member={member} />;
+                if (member) return <VoterEntry
+                    key={vote.sender}
+                    vote={vote}
+                    member={member}
+                />;
             })}
         </div>
     );
 }
 
-function VoterEntry(props: {vote: UserVote; member: RoomMember}): JSX.Element {
-    const {vote, member} = props;
-    return <div key={vote.sender} style={{display: "flex", alignItems: "center", marginLeft: "15px"}}>
-        <div style={{marginRight: "10px"}}>
+function VoterEntry(props: { vote: UserVote; member: RoomMember }): JSX.Element {
+    const { vote, member } = props;
+    return <div key={vote.sender} className="mx_VoterEntry">
+        <div className="mx_VoterEntry_AvatarWrapper">
             <MemberAvatar member={member} size="36px" aria-hidden="true" />
         </div>
         {member.name}
