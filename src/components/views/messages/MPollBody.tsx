@@ -367,8 +367,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         );
                     })}
                 </div>
-                <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
-                    <span onClick={() => showDetailedVotes()}>{totalText}</span>
+                <div className="mx_MPollBody_totalVotes">
+                    <span data-testid="totalVotes" onClick={() => showDetailedVotes()}>{totalText}</span>
                     {isFetchingResponses && <Spinner w={16} h={16} />}
                 </div>
             </div>

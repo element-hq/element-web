@@ -12,7 +12,6 @@ import React, { ReactNode, useContext } from "react";
 
 import { Icon as TrophyIcon } from "../../../../res/img/element-icons/trophy.svg";
 import RoomContext from "../../../contexts/RoomContext";
-import { useRoomMembers } from "../../../hooks/useRoomMembers";
 import { _t } from "../../../languageHandler";
 import FacePile from "../elements/FacePile";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -28,13 +27,13 @@ type PollOptionContentProps = {
 };
 const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer, votes, displayVoteCount }) => {
     const votesText = displayVoteCount ? _t("timeline|m.poll|count_of_votes", { count: votes.length }) : "";
-    const room = useContext(RoomContext).room!;
-    const members = useRoomMembers(room);
+    const room = useContext(RoomContext).room;
+    const members = room?.getJoinedMembers() || [];
 
     return (
         <div className="mx_PollOption_content">
             <div className="mx_PollOption_optionText">{answer.text}</div>
-            <div className="mx_PollOption_optionVoteCount">
+            <div>
                 <div style={{ display: "flex" }}>
                     {displayVoteCount
                         && members.length <= MAXIMUM_MEMBERS_FOR_FACE_PILE
@@ -45,7 +44,7 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
                             style={{ marginRight: "10px" }}
                         />
                     }
-                    <span>
+                    <span className="mx_PollOption_optionVoteCount">
                         {isWinner && <TrophyIcon className="mx_PollOption_winnerIcon" />}
                         {votesText}
                     </span>
