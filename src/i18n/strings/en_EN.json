@@ -1110,7 +1110,15 @@
             "you": "You reacted %(reaction)s to %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "File",
+            "image": "Image",
+            "poll": "Poll",
+            "video": "Video"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Export Cancelled",
@@ -2037,14 +2045,6 @@
             "button_view_all": "View all",
             "description": "This room has pinned messages. Click to view them.",
             "go_to_message": "View the pinned message in the timeline.",
-            "prefix": {
-                "audio": "Audio",
-                "file": "File",
-                "image": "Image",
-                "poll": "Poll",
-                "video": "Video"
-            },
-            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
             "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
         },
         "read_topic": "Click to read topic",
