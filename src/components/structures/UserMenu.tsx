@@ -121,9 +121,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
-        if (this.dndWatcherRef) SettingsStore.unwatchSetting(this.dndWatcherRef);
-        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this.themeWatcherRef);
+        SettingsStore.unwatchSetting(this.dndWatcherRef);
+        defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         this.context.voiceBroadcastRecordingsStore.off(

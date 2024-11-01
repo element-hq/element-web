@@ -80,9 +80,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-        }
+        dis.unregister(this.dispatcherRef);
 
         MatrixClientPeg.get()?.removeListener(RoomEvent.Name, this.onRoomName);
         MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onStateEvent);

@@ -82,7 +82,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         this.unmounted = true;
         ScalarMessaging.stopListening();
         WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         if (this.resizeContainer) {
             this.resizer.detach();
         }

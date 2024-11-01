@@ -71,7 +71,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.settingWatcherRef) SettingsStore.unwatchSetting(this.settingWatcherRef);
+        SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
     private onContextMenuOpenClick = (e: ButtonEvent): void => {
