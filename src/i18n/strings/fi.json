@@ -93,7 +93,6 @@
         "report_content": "Ilmoita sisällöstä",
         "resend": "Lähetä uudelleen",
         "reset": "Palauta alkutilaan",
-        "restore": "Palauta",
         "resume": "Jatka",
         "retry": "Yritä uudelleen",
         "review": "Katselmoi",
@@ -788,7 +787,6 @@
             "title": "Ei luotettu"
         },
         "unsupported": "Tämä asiakasohjelma ei tue päästä päähän -salausta.",
-        "upgrade_toast_title": "Salauksen päivitys saatavilla",
         "verification": {
             "accepting": "Hyväksytään…",
             "after_new_login": {
@@ -2137,7 +2135,6 @@
                 "pass_phrase_match_failed": "Ei täsmää.",
                 "pass_phrase_match_success": "Täsmää!",
                 "phrase_strong_enough": "Hienoa! Tämä turvalause vaikuttaa riittävän vahvalta.",
-                "requires_password_confirmation": "Syötä tilisi salasana vahvistaaksesi päivityksen:",
                 "secret_storage_query_failure": "Salaisen tallennustilan tilaa ei voi kysellä",
                 "security_key_safety_reminder": "Talleta turva-avaimesi turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin, sillä sitä käytetään salaamasi datan suojaamiseen.",
                 "set_phrase_again": "Palaa asettamaan se uudelleen.",
@@ -2145,7 +2142,6 @@
                 "title_confirm_phrase": "Vahvista turvalause",
                 "title_save_key": "Tallenna turva-avain",
                 "title_set_phrase": "Aseta turvalause",
-                "title_upgrade_encryption": "Päivitä salauksesi",
                 "unable_to_setup": "Salavaraston käyttöönotto epäonnistui",
                 "use_different_passphrase": "Käytä eri salalausetta?"
             }
