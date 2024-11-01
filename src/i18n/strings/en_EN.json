@@ -1714,6 +1714,12 @@
         "options_heading": "Create options",
         "options_label": "Option %(number)s",
         "options_placeholder": "Write an option",
+        "result_dialog": {
+            "count_of_votes": {
+                "one": "%(count)s vote",
+                "other": "%(count)s votes"
+            }
+        },
         "topic_heading": "What is your poll question or topic?",
         "topic_label": "Question or topic",
         "topic_placeholder": "Write something…",
@@ -1723,8 +1729,8 @@
             "other": "%(count)s votes cast. Vote to see the results"
         },
         "total_n_votes_voted": {
-            "one": "Based on %(count)s vote",
-            "other": "Based on %(count)s votes"
+            "one": "Based on %(count)s vote. Click here to see the results",
+            "other": "Based on %(count)s votes. Click here to see the results"
         },
         "total_no_votes": "No votes cast",
         "total_not_ended": "Results will be visible when the poll is ended",
@@ -1875,8 +1881,8 @@
                 "other": "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months"
             },
             "final_result": {
-                "one": "Final result based on %(count)s vote",
-                "other": "Final result based on %(count)s votes"
+                "one": "Final result based on %(count)s vote. Click here to see the results",
+                "other": "Final result based on %(count)s votes. Click here to see the results"
             },
             "load_more": "Load more polls",
             "loading": "Loading polls",

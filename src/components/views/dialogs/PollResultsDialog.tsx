@@ -10,6 +10,7 @@ import { PollAnswerSubevent, PollStartEvent } from "matrix-js-sdk/src/extensible
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
+import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { UserVote } from "../messages/MPollBody";
@@ -54,7 +55,7 @@ function AnswerEntry(props: {
         <div key={answer.id} className="mx_AnswerEntry">
             <div className="mx_AnswerEntry_Header">
                 <span className="mx_AnswerEntry_Header_answerName">{answer.text}</span>
-                <span>{votes.length} votes</span>
+                <span>{_t("poll|result_dialog|count_of_votes", { count: votes.length })}</span>
             </div>
             {votes.length === 0 && <div>No one voted for this.</div>}
             {votes.map((vote) => {
