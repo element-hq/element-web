@@ -20,6 +20,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
+import Modal from "../../../../../src/Modal";
+import PollResultsDialog from "../../../../../src/components/views/dialogs/PollResultsDialog";
 import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import MPollBody, {
     allVotes,
@@ -862,6 +864,24 @@ describe("MPollBody", () => {
         const ends = [newPollEndEvent("@me:example.com", 25)];
         const { container } = await newMPollBody(votes, ends, undefined, false);
         expect(container).toMatchSnapshot();
+    });
+
+    it("opens the full results dialog when the total votes link is clicked", async () => {
+        const votes = [
+            responseEvent("@ed:example.com", "pizza", 12),
+            responseEvent("@rf:example.com", "pizza", 12),
+            responseEvent("@th:example.com", "wings", 13),
+        ];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
+        const renderResult = await newMPollBody(votes, ends);
+        const createDialogSpy = jest.spyOn(Modal, "createDialog");
+
+        fireEvent.click(renderResult.getByTestId("totalVotes"));
+
+        expect(createDialogSpy).toHaveBeenCalledWith(
+            PollResultsDialog,
+            expect.anything()
+        );
     });
 });
 
