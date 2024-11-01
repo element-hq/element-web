@@ -6,12 +6,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { HTMLProps, JSX, useMemo } from "react";
-import { M_POLL_START, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import React, { HTMLProps, JSX, useContext, useState } from "react";
+import { IContent, M_POLL_START, MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter.ts";
 
 /**
  * The props for the {@link EventPreview} component.
@@ -25,16 +28,39 @@ interface Props extends HTMLProps<HTMLSpanElement> {
 
 /**
  * A component that displays a preview for the pinned event.
+ * Wraps both `useEventPreview` & `EventPreviewTile`.
  */
 function EventPreview({ mxEvent, className, ...props }: Props): JSX.Element | null {
     const preview = useEventPreview(mxEvent);
     if (!preview) return null;
 
+    return <EventPreviewTile {...props} preview={preview} className={className} />;
+}
+
+export default EventPreview;
+
+/**
+ * The props for the {@link EventPreviewTile} component.
+ */
+interface EventPreviewTileProps extends HTMLProps<HTMLSpanElement> {
+    /**
+     * The preview to display
+     */
+    preview: Preview;
+}
+
+/**
+ * A component that displays a preview given the output from `useEventPreview`.
+ */
+export function EventPreviewTile({
+    preview: [preview, prefix],
+    className,
+    ...props
+}: EventPreviewTileProps): JSX.Element | null {
     const classes = classNames("mx_EventPreview", className);
-    const prefix = getPreviewPrefix(mxEvent.getType(), mxEvent.getContent().msgtype as MsgType);
     if (!prefix)
         return (
-            <span {...props} className={classes}>
+            <span {...props} className={classes} title={preview}>
                 {preview}
             </span>
         );
@@ -55,17 +81,36 @@ function EventPreview({ mxEvent, className, ...props }: Props): JSX.Element | nu
     );
 }
 
-export default EventPreview;
+type Preview = [preview: string, prefix: string | null];
 
 /**
  * Hooks to generate a preview for the event.
  * @param mxEvent
  */
-function useEventPreview(mxEvent: MatrixEvent | null): string | null {
-    return useMemo(() => {
-        if (!mxEvent || mxEvent.isRedacted() || mxEvent.isDecryptionFailure()) return null;
-        return MessagePreviewStore.instance.generatePreviewForEvent(mxEvent);
-    }, [mxEvent]);
+export function useEventPreview(mxEvent: MatrixEvent | undefined): Preview | null {
+    const cli = useContext(MatrixClientContext);
+    // track the content as a means to regenerate the preview upon edits & decryption
+    const [content, setContent] = useState<IContent | undefined>(mxEvent?.getContent());
+    useTypedEventEmitter(mxEvent ?? undefined, MatrixEventEvent.Replaced, () => {
+        setContent(mxEvent!.getContent());
+    });
+    const awaitDecryption = mxEvent?.shouldAttemptDecryption() || mxEvent?.isBeingDecrypted();
+    useTypedEventEmitter(awaitDecryption ? (mxEvent ?? undefined) : undefined, MatrixEventEvent.Decrypted, () => {
+        setContent(mxEvent!.getContent());
+    });
+
+    return useAsyncMemo(
+        async () => {
+            if (!mxEvent || mxEvent.isRedacted() || mxEvent.isDecryptionFailure()) return null;
+            await cli.decryptEventIfNeeded(mxEvent);
+            return [
+                MessagePreviewStore.instance.generatePreviewForEvent(mxEvent),
+                getPreviewPrefix(mxEvent.getType(), content?.msgtype as MsgType),
+            ];
+        },
+        [mxEvent, content],
+        null,
+    );
 }
 
 /**
