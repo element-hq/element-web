@@ -147,11 +147,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         if (this.state.canUploadKeysWithPasswordOnly === null) {
             this.queryKeyUploadAuth();
         }
-
-        const cli = MatrixClientPeg.safeGet();
-        cli.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
-
-        this.getInitialPhase();
     }
 
     private initExtension(keyFromCustomisations: Uint8Array): void {
