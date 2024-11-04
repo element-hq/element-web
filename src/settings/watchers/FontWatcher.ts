@@ -28,11 +28,7 @@ export class FontWatcher implements IWatcher {
      */
     public static readonly DEFAULT_DELTA = 0;
 
-    private dispatcherRef: string | null;
-
-    public constructor() {
-        this.dispatcherRef = null;
-    }
+    private dispatcherRef?: string;
 
     public async start(): Promise<void> {
         this.updateFont();
@@ -148,7 +144,6 @@ export class FontWatcher implements IWatcher {
     }
 
     public stop(): void {
-        if (!this.dispatcherRef) return;
         dis.unregister(this.dispatcherRef);
     }
 

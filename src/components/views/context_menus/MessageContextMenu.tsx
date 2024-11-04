@@ -507,7 +507,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let jumpToRelatedEventButton: JSX.Element | undefined;
-        const relatedEventId = mxEvent.relationEventId;
+        const relatedEventId = mxEvent.getAssociatedId();
         if (relatedEventId && SettingsStore.getValue("developerMode")) {
             jumpToRelatedEventButton = (
                 <IconizedContextMenuOption

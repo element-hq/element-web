@@ -142,7 +142,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             this.matrixClient.removeListener(BeaconEvent.Destroy, this.onDestroyBeacon);
             this.matrixClient.removeListener(RoomStateEvent.Members, this.onRoomStateMembers);
         }
-        SettingsStore.unwatchSetting(this.dynamicWatcherRef ?? "");
+        SettingsStore.unwatchSetting(this.dynamicWatcherRef);
 
         this.clearBeacons();
     }

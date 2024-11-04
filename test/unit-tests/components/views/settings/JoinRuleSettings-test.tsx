@@ -202,7 +202,7 @@ describe("<JoinRuleSettings />", () => {
 
                 await flushPromises();
 
-                expect(within(dialog).getByText("Loading new room")).toBeInTheDocument();
+                await expect(within(dialog).findByText("Loading new room")).resolves.toBeInTheDocument();
 
                 // "create" our new room, have it come thru sync
                 client.getRoom.mockImplementation((id) => {
@@ -250,7 +250,7 @@ describe("<JoinRuleSettings />", () => {
 
                 await flushPromises();
 
-                expect(within(dialog).getByText("Loading new room")).toBeInTheDocument();
+                await expect(within(dialog).findByText("Loading new room")).resolves.toBeInTheDocument();
 
                 // "create" our new room, have it come thru sync
                 client.getRoom.mockImplementation((id) => {

@@ -58,7 +58,9 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         this.state = {
             jumpToDateEnabled: SettingsStore.getValue("feature_jump_to_date"),
         };
+    }
 
+    public componentDidMount(): void {
         // We're using a watcher so the date headers in the timeline are updated
         // when the lab setting is toggled.
         this.settingWatcherRef = SettingsStore.watchSetting(
@@ -71,7 +73,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.settingWatcherRef) SettingsStore.unwatchSetting(this.settingWatcherRef);
+        SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
     private onContextMenuOpenClick = (e: ButtonEvent): void => {

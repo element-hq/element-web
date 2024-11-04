@@ -36,7 +36,7 @@ describe("ConfirmRedactDialog", () => {
         await flushPromises();
         await flushPromises();
 
-        await userEvent.click(screen.getByTestId("dialog-primary-button"));
+        await userEvent.click(await screen.findByTestId("dialog-primary-button"));
     };
 
     beforeEach(() => {

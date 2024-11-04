@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
 import classNames from "classnames";
-import { IDeferred, defer, sleep } from "matrix-js-sdk/src/utils";
+import { IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
@@ -393,11 +393,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     private async reRender(): Promise<void> {
-        // TODO: We should figure out how to remove this weird sleep. It also makes testing harder
-        //
-        // await next tick because sometimes ReactDOM can race with itself and cause the modal to wrongly stick around
-        await sleep(0);
-
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
             // If there is no modal to render, make all of Element available
             // to screen reader users again
@@ -465,9 +460,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 </StrictMode>
             );
 
-            setTimeout(() => {
-                ModalManager.getOrCreateRoot().render(dialog);
-            }, 0);
+            ModalManager.getOrCreateRoot().render(dialog);
         } else {
             // This is safe to call repeatedly if we happen to do that
             ModalManager.getOrCreateRoot().render(<></>);

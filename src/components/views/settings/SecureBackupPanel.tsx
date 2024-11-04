@@ -83,6 +83,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.loadBackupStatus();
 
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
