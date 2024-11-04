@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, RenderResult, waitFor } from "jest-matrix-react";
 import {
     MatrixEvent,
     Relations,
@@ -83,7 +83,7 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("");
         expect(votesCount(renderResult, "italian")).toBe("");
         expect(votesCount(renderResult, "wings")).toBe("");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("No votes cast");
+        await waitFor(() => expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("No votes cast"));
         expect(renderResult.getByText("What should we order for the party?")).toBeTruthy();
     });
 
