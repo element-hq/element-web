@@ -154,7 +154,10 @@ export class StopGapWidget extends EventEmitter {
     private kind: WidgetKind;
     private readonly virtual: boolean;
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
-    private stickyPromise?: () => Promise<void>; // This promise will be called and needs to resolve before the widget will actually become sticky.
+    // This promise will be called and needs to resolve before the widget will actually become sticky.
+    private stickyPromise?: () => Promise<void>;
+    // Holds events that should be fed to the widget once they finish decrypting
+    private readonly eventsToFeed = new WeakSet<MatrixEvent>();
 
     public constructor(private appTileProps: IAppTileProps) {
         super();
@@ -465,12 +468,10 @@ export class StopGapWidget extends EventEmitter {
 
     private onEvent = (ev: MatrixEvent): void => {
         this.client.decryptEventIfNeeded(ev);
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
     };
 
     private onEventDecrypted = (ev: MatrixEvent): void => {
-        if (ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
     };
 
@@ -546,6 +547,9 @@ export class StopGapWidget extends EventEmitter {
     private feedEvent(ev: MatrixEvent): void {
         if (this.messaging === null) return;
         if (
+            // If we had decided earlier to feed this event to the widget, but
+            // it just wasn't ready, give it another try
+            this.eventsToFeed.delete(ev) ||
             // Skip marker timeline check for events with relations to unknown parent because these
             // events are not added to the timeline here and will be ignored otherwise:
             // https://github.com/matrix-org/matrix-js-sdk/blob/d3dfcd924201d71b434af3d77343b5229b6ed75e/src/models/room.ts#L2207-L2213
@@ -563,10 +567,16 @@ export class StopGapWidget extends EventEmitter {
             // receiving ancient events from backfill and such.
             this.advanceReadUpToMarker(ev)
         ) {
-            const raw = ev.getEffectiveEvent();
-            this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
-                logger.error("Error sending event to widget: ", e);
-            });
+            // If the event is still being decrypted, remember that we want to
+            // feed it to the widget (even if not strictly in the order given by
+            // the timeline) and get back to it later
+            if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) this.eventsToFeed.add(ev);
+            else {
+                const raw = ev.getEffectiveEvent();
+                this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
+                    logger.error("Error sending event to widget: ", e);
+                });
+            }
         }
     }
 }
