@@ -36,30 +36,41 @@ import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
+import { InteractionName } from "../../PosthogTrackers";
 
 export enum PlatformCallType {
     ElementCall,
     JitsiCall,
     LegacyCall,
 }
-export const getPlatformCallTypeLabel = (platformCallType: PlatformCallType): string => {
+
+export const getPlatformCallTypeProps = (
+    platformCallType: PlatformCallType,
+): {
+    label: string;
+    children?: ReactNode;
+    analyticsName: InteractionName;
+} => {
     switch (platformCallType) {
         case PlatformCallType.ElementCall:
-            return _t("voip|element_call");
+            return {
+                label: _t("voip|element_call"),
+                analyticsName: "WebVoipOptionElementCall",
+                children: <BetaPill />,
+            };
         case PlatformCallType.JitsiCall:
-            return _t("voip|jitsi_call");
+            return {
+                label: _t("voip|jitsi_call"),
+                analyticsName: "WebVoipOptionJitsi",
+            };
         case PlatformCallType.LegacyCall:
-            return _t("voip|legacy_call");
+            return {
+                label: _t("voip|legacy_call"),
+                analyticsName: "WebVoipOptionLegacy",
+            };
     }
 };
-export const getPlatformCallTypeChildren = (platformCallType: PlatformCallType): ReactNode => {
-    switch (platformCallType) {
-        case PlatformCallType.ElementCall:
-            return <BetaPill />;
-        default:
-            return null;
-    }
-};
+
 const enum State {
     NoCall,
     NoOneHere,

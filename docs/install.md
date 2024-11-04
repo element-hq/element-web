@@ -41,7 +41,15 @@ The Docker image can be used to serve element-web as a web server. The easiest w
 it is to use the prebuilt image:
 
 ```bash
-docker run -p 80:80 vectorim/element-web
+docker run --rm -p 127.0.0.1:80:80 vectorim/element-web
+```
+
+A server can also be made available to clients outside the local host by omitting the
+explicit local address as described in
+[docker run documentation](https://docs.docker.com/engine/reference/commandline/run/#publish-or-expose-port--p---expose):
+
+```bash
+docker run --rm -p 80:80 vectorim/element-web
 ```
 
 To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
@@ -49,7 +57,7 @@ if your custom config was located at `/etc/element-web/config.json` then your Do
 would be:
 
 ```bash
-docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
+docker run --rm -p 127.0.0.1:80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
 To build the image yourself:

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { CSSTransition } from "react-transition-group";
 
@@ -61,6 +61,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
 
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
     private unmounted = false;
+    private toolbar = createRef<HTMLDivElement>();
 
     public constructor(props: IProps) {
         super(props);
@@ -116,8 +117,18 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         if (tiles.length > 0) {
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
-                <CSSTransition appear={true} in={this.state.doAnimation} timeout={640} classNames="mx_RoomBreadcrumbs">
-                    <Toolbar className="mx_RoomBreadcrumbs" aria-label={_t("room_list|breadcrumbs_label")}>
+                <CSSTransition
+                    appear={true}
+                    in={this.state.doAnimation}
+                    timeout={640}
+                    classNames="mx_RoomBreadcrumbs"
+                    nodeRef={this.toolbar}
+                >
+                    <Toolbar
+                        className="mx_RoomBreadcrumbs"
+                        aria-label={_t("room_list|breadcrumbs_label")}
+                        ref={this.toolbar}
+                    >
                         {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
