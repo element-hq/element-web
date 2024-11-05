@@ -632,7 +632,7 @@ function DownloadButton({ url, fileName }: { url: string; fileName?: string }): 
     async function downloadBlob(blob: Blob): Promise<void> {
         await downloader.download({
             blob,
-            name: fileName || _t("common|image"),
+            name: fileName ?? _t("common|image"),
         });
         setLoading(false);
     }
