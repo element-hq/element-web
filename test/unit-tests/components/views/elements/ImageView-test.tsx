@@ -21,6 +21,7 @@ jest.mock("../../../../../src/utils/FileDownloader");
 describe("<ImageView />", () => {
     beforeEach(() => {
         jest.resetAllMocks();
+        fetchMock.reset();
     });
 
     it("renders correctly", () => {
