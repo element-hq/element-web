@@ -81,7 +81,7 @@ import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
-import EventPreview from "./EventPreview";
+import { EventPreview } from "./EventPreview";
 
 export type GetRelationsForEvent = (
     eventId: string,

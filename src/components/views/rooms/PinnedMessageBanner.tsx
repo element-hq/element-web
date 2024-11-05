@@ -24,7 +24,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
-import EventPreview from "./EventPreview.tsx";
+import { EventPreview } from "./EventPreview.tsx";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.

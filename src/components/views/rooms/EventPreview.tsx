@@ -27,17 +27,15 @@ interface Props extends HTMLProps<HTMLSpanElement> {
 }
 
 /**
- * A component that displays a preview for the pinned event.
+ * A component that displays a preview for the given event.
  * Wraps both `useEventPreview` & `EventPreviewTile`.
  */
-function EventPreview({ mxEvent, className, ...props }: Props): JSX.Element | null {
+export function EventPreview({ mxEvent, className, ...props }: Props): JSX.Element | null {
     const preview = useEventPreview(mxEvent);
     if (!preview) return null;
 
     return <EventPreviewTile {...props} preview={preview} className={className} />;
 }
-
-export default EventPreview;
 
 /**
  * The props for the {@link EventPreviewTile} component.
