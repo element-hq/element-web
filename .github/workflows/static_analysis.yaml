@@ -128,3 +128,6 @@ jobs:
 
             - name: Dead Code Analysis
               run: "yarn run analyse:unused-exports"
+
+            - name: Run linter
+              run: "yarn run lint:knip"
