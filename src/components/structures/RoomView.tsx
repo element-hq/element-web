@@ -2547,5 +2547,3 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 }
-
-export default RoomView;

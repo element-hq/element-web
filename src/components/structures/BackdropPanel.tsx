@@ -31,4 +31,3 @@ export const BackdropPanel: React.FC<IProps> = ({ backgroundImage, blurMultiplie
         </div>
     );
 };
-export default BackdropPanel;

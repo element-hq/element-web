@@ -18,7 +18,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../settings/UIFeature";
 import { _t } from "../../../../languageHandler";
 import SetIdServer from "../SetIdServer";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import InlineTermsAgreement from "../../terms/InlineTermsAgreement";
 import { Service, ServicePolicyPair, startTermsFlow } from "../../../../Terms";
 import IdentityAuthClient from "../../../../IdentityAuthClient";
@@ -196,5 +196,3 @@ export const DiscoverySettings: React.FC = () => {
         </SettingsSubsection>
     );
 };
-
-export default DiscoverySettings;

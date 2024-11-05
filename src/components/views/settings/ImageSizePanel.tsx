@@ -13,7 +13,7 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 
 interface IProps {
     // none
