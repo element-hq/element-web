@@ -602,21 +602,14 @@ function DownloadButton({ url, fileName }: { url: string; fileName?: string }): 
 
     const onDownloadClick = async (): Promise<void> => {
         try {
-            await doDownload();
-        } catch (e) {
-            showError(e);
-        }
-    };
-    async function doDownload(): Promise<void> {
-        if (loading) return;
-        setLoading(true);
+            if (loading) return;
+            setLoading(true);
 
-        if (blobRef.current) {
-            // Cheat and trigger a download, again.
-            return downloadBlob(blobRef.current);
-        }
+            if (blobRef.current) {
+                // Cheat and trigger a download, again.
+                return downloadBlob(blobRef.current);
+            }
 
-        try {
             const res = await fetch(url);
             if (!res.ok) {
                 throw parseErrorResponse(res, await res.text());
@@ -627,7 +620,7 @@ function DownloadButton({ url, fileName }: { url: string; fileName?: string }): 
         } catch (e) {
             showError(e);
         }
-    }
+    };
 
     async function downloadBlob(blob: Blob): Promise<void> {
         await downloader.download({
