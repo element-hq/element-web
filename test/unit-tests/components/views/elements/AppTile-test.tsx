@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { jest } from "@jest/globals";
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
