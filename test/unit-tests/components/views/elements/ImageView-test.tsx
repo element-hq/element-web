@@ -17,6 +17,10 @@ import { FileDownloader } from "../../../../../src/utils/FileDownloader";
 jest.mock("../../../../../src/utils/FileDownloader");
 
 describe("<ImageView />", () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
     it("renders correctly", () => {
         const { container } = render(<ImageView src="https://example.com/image.png" onFinished={jest.fn()} />);
         expect(container).toMatchSnapshot();
