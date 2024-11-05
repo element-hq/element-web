@@ -1530,7 +1530,7 @@ describe("<MatrixChat />", () => {
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
             await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-            expect(await spy.mock.lastCall![0]).toEqual(expect.objectContaining({ __test: true }));
+            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });
