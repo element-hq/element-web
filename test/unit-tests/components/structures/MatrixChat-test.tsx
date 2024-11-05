@@ -1515,7 +1515,7 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
-            const spy = jest.spyOn(Modal, "createDialogAsync");
+            const spy = jest.spyOn(Modal, "createDialog");
             jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
                 __test: true,
                 __esModule: true,
