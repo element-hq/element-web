@@ -12,7 +12,6 @@ import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
 import { act, render, RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { SpiedFunction } from "jest-mock";
 import {
     ApprovalOpts,
     WidgetInfo,
@@ -344,7 +343,7 @@ describe("AppTile", () => {
 
     describe("for a pinned widget", () => {
         let renderResult: RenderResult;
-        let moveToContainerSpy: SpiedFunction<typeof WidgetLayoutStore.instance.moveToContainer>;
+        let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
 
         beforeEach(() => {
             renderResult = render(

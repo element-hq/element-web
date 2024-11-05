@@ -40,6 +40,8 @@ export default {
         "util",
         // Used by workflows
         "ts-prune",
+        // Required due to bug in bloom-filters https://github.com/Callidon/bloom-filters/issues/75
+        "@types/seedrandom",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows

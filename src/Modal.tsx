@@ -14,7 +14,7 @@ import { IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
-import dis, { defaultDispatcher } from "./dispatcher/dispatcher";
+import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
 import { Defaultize } from "./@types/common";
 import { ActionPayload } from "./dispatcher/payloads";
@@ -396,7 +396,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
             // If there is no modal to render, make all of Element available
             // to screen reader users again
-            dis.dispatch({
+            defaultDispatcher.dispatch({
                 action: "aria_unhide_main_app",
             });
             ModalManager.getOrCreateRoot().render(<></>);
@@ -407,7 +407,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         // Hide the content outside the modal to screen reader users
         // so they won't be able to navigate into it and act on it using
         // screen reader specific features
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: "aria_hide_main_app",
         });
 
