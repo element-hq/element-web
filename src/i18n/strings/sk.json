@@ -202,7 +202,6 @@
         "failed_query_registration_methods": "Nie je možné požiadať o podporované metódy registrácie.",
         "failed_soft_logout_auth": "Nepodarilo sa opätovne overiť",
         "failed_soft_logout_homeserver": "Opätovná autentifikácia zlyhala kvôli problému domovského servera",
-        "footer_powered_by_matrix": "používa protokol Matrix",
         "forgot_password_email_invalid": "Zdá sa, že e-mailová adresa nie je platná.",
         "forgot_password_email_required": "Musíte zadať emailovú adresu prepojenú s vašim účtom.",
         "forgot_password_prompt": "Zabudli ste heslo?",
@@ -3532,7 +3531,6 @@
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
     },
-    "unknown_device": "Neznáme zariadenie",
     "unsupported_server_description": "Tento server používa staršiu verziu systému Matrix. Ak chcete používať %(brand)s bez chýb, aktualizujte na Matrix %(version)s.",
     "unsupported_server_title": "Váš server nie je podporovaný",
     "update": {

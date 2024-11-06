@@ -195,7 +195,6 @@
         "failed_query_registration_methods": "S’arrihet të kërkohet për metoda regjistrimi që mbulohen.",
         "failed_soft_logout_auth": "S’u arrit të ribëhej mirëfilltësimi",
         "failed_soft_logout_homeserver": "S’u arrit të ribëhej mirëfilltësimi, për shkak të një problemi me shërbyesin Home",
-        "footer_powered_by_matrix": "bazuar në Matrix",
         "forgot_password_email_invalid": "Adresa email s’duket të jetë e vlefshme.",
         "forgot_password_email_required": "Duhet dhënë adresa email e lidhur me llogarinë tuaj.",
         "forgot_password_prompt": "Harruat fjalëkalimin tuaj?",
@@ -3298,7 +3297,6 @@
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"
     },
-    "unknown_device": "Pajisje e panjohur",
     "update": {
         "changelog": "Regjistër ndryshimesh",
         "check_action": "Kontrollo për përditësime",

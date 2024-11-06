@@ -3231,7 +3231,6 @@
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"
     },
-    "unknown_device": "不明な端末",
     "update": {
         "changelog": "更新履歴",
         "check_action": "更新を確認",

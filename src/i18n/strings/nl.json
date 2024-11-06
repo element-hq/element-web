@@ -196,7 +196,6 @@
         "failed_query_registration_methods": "Kan ondersteunde registratiemethoden niet opvragen.",
         "failed_soft_logout_auth": "Opnieuw inloggen is mislukt",
         "failed_soft_logout_homeserver": "Opnieuw inloggen is mislukt wegens een probleem met de homeserver",
-        "footer_powered_by_matrix": "draait op Matrix",
         "forgot_password_email_invalid": "Dit e-mailadres lijkt niet geldig te zijn.",
         "forgot_password_email_required": "Het aan jouw account gekoppelde e-mailadres dient ingevoerd worden.",
         "forgot_password_prompt": "Wachtwoord vergeten?",
@@ -3046,7 +3045,6 @@
     "truncated_list_n_more": {
         "other": "En %(count)s meer…"
     },
-    "unknown_device": "Onbekend apparaat",
     "update": {
         "changelog": "Wijzigingslogboek",
         "check_action": "Controleren op updates",
