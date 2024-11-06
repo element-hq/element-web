@@ -46,7 +46,7 @@ function isUploadPayload(payload: ActionPayload): payload is UploadPayload {
 
 export default class UploadBar extends React.PureComponent<IProps, IState> {
     private dispatcherRef: Optional<string>;
-    private mounted = false;
+    private unmounted = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -57,12 +57,12 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.dispatcherRef = dis.register(this.onAction);
-        this.mounted = true;
     }
 
     public componentWillUnmount(): void {
-        this.mounted = false;
+        this.unmounted = true;
         dis.unregister(this.dispatcherRef!);
     }
 
@@ -83,7 +83,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (!this.mounted) return;
+        if (this.unmounted) return;
         if (isUploadPayload(payload)) {
             this.setState(this.calculateState());
         }

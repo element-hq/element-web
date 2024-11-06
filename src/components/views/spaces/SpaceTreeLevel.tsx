@@ -205,7 +205,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             collapsed,
             childSpaces: this.childSpaces,
         };
+    }
 
+    public componentDidMount(): void {
         SpaceStore.instance.on(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }

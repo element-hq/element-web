@@ -15,10 +15,6 @@ interface IProps extends Omit<React.ComponentProps<typeof TextWithTooltip>, "tab
 }
 
 export default class LinkWithTooltip extends React.Component<IProps> {
-    public constructor(props: IProps) {
-        super(props);
-    }
-
     public render(): React.ReactNode {
         const { children, tooltip, ...props } = this.props;
 

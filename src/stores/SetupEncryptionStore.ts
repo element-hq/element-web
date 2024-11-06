@@ -101,18 +101,14 @@ export class SetupEncryptionStore extends EventEmitter {
             this.keyInfo = keys[this.keyId];
         }
 
-        // do we have any other verified devices which are E2EE which we can verify against?
-        const dehydratedDevice = await cli.getDehydratedDevice();
         const ownUserId = cli.getUserId()!;
         const crypto = cli.getCrypto()!;
+        // do we have any other verified devices which are E2EE which we can verify against?
         const userDevices: Iterable<Device> =
             (await crypto.getUserDeviceInfo([ownUserId])).get(ownUserId)?.values() ?? [];
         this.hasDevicesToVerifyAgainst = await asyncSome(userDevices, async (device) => {
-            // Ignore dehydrated devices.  `dehydratedDevice` is set by the
-            // implementation of MSC2697, whereas MSC3814 proposes that devices
-            // should set a `dehydrated` flag in the device key.  We ignore
-            // both types of dehydrated devices.
-            if (dehydratedDevice && device.deviceId == dehydratedDevice?.device_id) return false;
+            // Ignore dehydrated devices. MSC3814 proposes that devices
+            // should set a `dehydrated` flag in the device key.
             if (device.dehydrated) return false;
 
             // ignore devices without an identity key

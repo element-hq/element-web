@@ -127,7 +127,9 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
             // the current search query
             searchQuery: "",
         };
+    }
 
+    public componentDidMount(): void {
         // Listen for all clicks on the document so we can close the
         // menu when the user clicks somewhere else
         document.addEventListener("click", this.onDocumentClick, false);

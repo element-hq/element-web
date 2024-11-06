@@ -383,6 +383,9 @@ export default class Markdown {
             if (isMultiLine(node) && node.next) this.lit("\n\n");
         };
 
-        return renderer.render(this.parsed);
+        // We inhibit the default escape function as we escape the entire output string to correctly handle backslashes
+        renderer.esc = (input: string) => input;
+
+        return escape(renderer.render(this.parsed));
     }
 }

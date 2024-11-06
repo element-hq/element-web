@@ -141,9 +141,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener("resize", this.onResize);
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-        }
+        dis.unregister(this.dispatcherRef);
     }
 
     public componentDidUpdate(): void {

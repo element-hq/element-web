@@ -11,22 +11,11 @@ Please see LICENSE files in the repository root for full details.
     font-style: italic;
 }
 
-/* Formatting for the "Verified identity has changed" error */
-.mx_DecryptionFailureVerifiedIdentityChanged > span {
-    /* Show it in red */
-    color: var(--cpd-color-text-critical-primary);
-    background-color: var(--cpd-color-bg-critical-subtle);
-
-    /* With a red border */
-    border: 1px solid var(--cpd-color-border-critical-subtle);
-    border-radius: $font-16px;
-
-    /* Some space inside the border */
-    padding: var(--cpd-space-1x) var(--cpd-space-3x) var(--cpd-space-1x) var(--cpd-space-2x);
-
-    /* some space between the (!) icon and text */
+/* Formatting for errors due to sender trust requirement failures */
+.mx_DecryptionFailureSenderTrustRequirement > span {
+    /* some space between the (/) icon and text */
     display: inline-flex;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-1x);
 
     /* Center vertically */
     align-items: center;

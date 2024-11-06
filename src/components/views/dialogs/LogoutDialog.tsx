@@ -81,9 +81,10 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         this.state = {
             backupStatus: BackupStatus.LOADING,
         };
+    }
 
-        // we can't call setState() immediately, so wait a beat
-        window.setTimeout(() => this.startLoadBackupStatus(), 0);
+    public componentDidMount(): void {
+        this.startLoadBackupStatus();
     }
 
     /** kick off the asynchronous calls to populate `state.backupStatus` in the background */

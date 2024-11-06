@@ -128,12 +128,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
@@ -175,7 +169,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
-            const sendRecvRoomEvents = ["io.element.call.encryption_keys", EventType.Reaction, EventType.RoomRedaction];
+            const sendRecvRoomEvents = [
+                "io.element.call.encryption_keys",
+                "org.matrix.rageshake_request",
+                EventType.Reaction,
+                EventType.RoomRedaction,
+                "io.element.call.reaction",
+            ];
             for (const eventType of sendRecvRoomEvents) {
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
@@ -412,6 +412,58 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (!client) throw new Error("Not in a room or not attached to a client");
 
         await client._unstable_updateDelayedEvent(delayId, action);
+    }
+
+    /**
+     * Implements {@link WidgetDriver#sendToDevice}
+     */
+    public async sendToDevice(
+        eventType: string,
+        encrypted: boolean,
+        contentMap: { [userId: string]: { [deviceId: string]: object } },
+    ): Promise<void> {
+        const client = MatrixClientPeg.safeGet();
+
+        if (encrypted) {
+            const crypto = client.getCrypto();
+            if (!crypto) throw new Error("E2EE not enabled");
+
+            // attempt to re-batch these up into a single request
+            const invertedContentMap: { [content: string]: { userId: string; deviceId: string }[] } = {};
+
+            for (const userId of Object.keys(contentMap)) {
+                const userContentMap = contentMap[userId];
+                for (const deviceId of Object.keys(userContentMap)) {
+                    const content = userContentMap[deviceId];
+                    const stringifiedContent = JSON.stringify(content);
+                    invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
+                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                }
+            }
+
+            await Promise.all(
+                Object.entries(invertedContentMap).map(async ([stringifiedContent, recipients]) => {
+                    const batch = await crypto.encryptToDeviceMessages(
+                        eventType,
+                        recipients,
+                        JSON.parse(stringifiedContent),
+                    );
+
+                    await client.queueToDevice(batch);
+                }),
+            );
+        } else {
+            await client.queueToDevice({
+                eventType,
+                batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(([deviceId, content]) => ({
+                        userId,
+                        deviceId,
+                        payload: content,
+                    })),
+                ),
+            });
+        }
     }
 
     private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {

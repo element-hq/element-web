@@ -44,26 +44,29 @@ interface IState {
 }
 
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
-    private countWatcherRef: string;
+    private countWatcherRef?: string;
 
     public constructor(props: IProps) {
         super(props);
-        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.state = {
             showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId),
         };
+    }
+
+    private get roomId(): string | null {
+        // We should convert this to null for safety with the SettingsStore
+        return this.props.roomId || null;
+    }
+
+    public componentDidMount(): void {
+        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.countWatcherRef = SettingsStore.watchSetting(
             "Notifications.alwaysShowBadgeCounts",
             this.roomId,
             this.countPreferenceChanged,
         );
-    }
-
-    private get roomId(): string | null {
-        // We should convert this to null for safety with the SettingsStore
-        return this.props.roomId || null;
     }
 
     public componentWillUnmount(): void {

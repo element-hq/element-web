@@ -130,10 +130,8 @@ describe("<SecureBackupPanel />", () => {
             })
             .mockResolvedValue(null);
         getComponent();
-        // flush checkKeyBackup promise
-        await flushPromises();
 
-        fireEvent.click(screen.getByText("Delete Backup"));
+        fireEvent.click(await screen.findByText("Delete Backup"));
 
         const dialog = await screen.findByRole("dialog");
 

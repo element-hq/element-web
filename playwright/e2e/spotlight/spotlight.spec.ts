@@ -216,7 +216,7 @@ test.describe("Spotlight", () => {
      *
      * https://github.com/matrix-org/synapse/issues/16472
      */
-    test.skip("should find unknown people", async ({ page, app }) => {
+    test("should find unknown people", async ({ page, app }) => {
         const spotlight = await app.openSpotlight();
         await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
