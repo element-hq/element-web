@@ -112,7 +112,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
