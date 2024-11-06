@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { render, screen, waitFor } from "jest-matrix-react";
-import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixError, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
@@ -16,6 +16,7 @@ import { AddRemoveThreepids } from "../../../../../src/components/views/settings
 import { clearAllModals, stubClient } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
+import InteractiveAuthDialog from "../../../../../src/components/views/dialogs/InteractiveAuthDialog.tsx";
 
 const MOCK_IDENTITY_ACCESS_TOKEN = "mock_identity_access_token";
 const mockGetAccessToken = jest.fn().mockResolvedValue(MOCK_IDENTITY_ACCESS_TOKEN);
@@ -480,5 +481,47 @@ describe("AddRemoveThreepids", () => {
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);
         expect(onChangeFn).toHaveBeenCalled();
+    });
+
+    it("should show UIA dialog when necessary", async () => {
+        const onChangeFn = jest.fn();
+        const createDialogFn = jest.spyOn(Modal, "createDialog");
+        mocked(client.requestAdd3pidEmailToken).mockResolvedValue({ sid: "1" });
+
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[]}
+                isLoading={false}
+                onChange={onChangeFn}
+            />,
+            {
+                wrapper: clientProviderWrapper,
+            },
+        );
+
+        const input = screen.getByRole("textbox", { name: "Email Address" });
+        await userEvent.type(input, EMAIL1.address);
+        const addButton = screen.getByRole("button", { name: "Add" });
+        await userEvent.click(addButton);
+
+        const continueButton = screen.getByRole("button", { name: "Continue" });
+
+        expect(continueButton).toBeEnabled();
+
+        mocked(client).addThreePidOnly.mockRejectedValueOnce(
+            new MatrixError({ errcode: "M_UNAUTHORIZED", flows: [{ stages: [] }] }, 401),
+        );
+
+        await userEvent.click(continueButton);
+
+        expect(createDialogFn).toHaveBeenCalledWith(
+            InteractiveAuthDialog,
+            expect.objectContaining({
+                title: "Add Email Address",
+                makeRequest: expect.any(Function),
+            }),
+        );
     });
 });
