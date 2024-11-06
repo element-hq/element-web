@@ -209,7 +209,6 @@
         "failed_query_registration_methods": "Unable to query for supported registration methods.",
         "failed_soft_logout_auth": "Failed to re-authenticate",
         "failed_soft_logout_homeserver": "Failed to re-authenticate due to a homeserver problem",
-        "footer_powered_by_matrix": "powered by Matrix",
         "forgot_password_email_invalid": "The email address doesn't appear to be valid.",
         "forgot_password_email_required": "The email address linked to your account must be entered.",
         "forgot_password_prompt": "Forgotten your password?",
@@ -3706,7 +3705,6 @@
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
     },
-    "unknown_device": "Unknown device",
     "unsupported_browser": {
         "description": "If you continue, some features may stop working and there is a risk that you may lose data in the future. Update your browser to continue using %(brand)s.",
         "title": "%(brand)s does not support this browser"
