@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import mime from "mime";
 import React, { createRef } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
     MsgType,
@@ -15,6 +17,7 @@ import {
     M_LOCATION,
     M_POLL_END,
     M_POLL_START,
+    IContent,
 } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -144,6 +147,98 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         this.forceUpdate();
     };
 
+    /**
+     *  Validates that the filename extension and advertised mimetype
+     *  of the supplied image/file message content are not null, match and are actuallly video/image content.
+     *  For image/video messages with a thumbnail it also validates the mimetype is an image.
+     * @param content The mxEvent content of the message
+     * @returns
+     */
+    private validateImageOrVideoMimetype = (content: IContent): boolean => {
+        // As per the spec if filename is not present the body represents the filename
+        const filename = content.filename ?? content.body;
+        if (!filename) {
+            logger.log("Failed to validate image/video content, filename null");
+            return false;
+        }
+        // Validate mimetype of the thumbnail is valid
+        const thumbnailResult = this.validateThumbnailMimeType(content);
+        if (!thumbnailResult) {
+            logger.log("Failed to validate file/image thumbnail");
+            return false;
+        }
+        const typeFromExtension = mime.getType(filename);
+        const majorContentTypeFromExtension = typeFromExtension?.split("/")[0];
+        const allowedMajorContentTypes = ["image", "video"];
+
+        // Validate mimetype of the extension is valid
+        const result =
+            !!majorContentTypeFromExtension && allowedMajorContentTypes.includes(majorContentTypeFromExtension);
+        if (!result) {
+            logger.log("Failed to validate image/video content, invalid or missing extension");
+        }
+
+        // Validate content mimetype is valid if it is set
+        const contentMimetype = content.info?.mimetype;
+        if (contentMimetype) {
+            const majorContentTypeFromContent = contentMimetype?.split("/")[0];
+            const result =
+                !!majorContentTypeFromContent &&
+                allowedMajorContentTypes.includes(majorContentTypeFromContent) &&
+                majorContentTypeFromExtension == majorContentTypeFromContent;
+            if (!result) {
+                logger.log("Failed to validate image/video content, invalid or missing mimetype");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /**
+     *  Validates that the advertised mimetype of the supplied sticker content
+     *  is not null and is an image.
+     *  For stickers with a thumbnail it also validates the mimetype is an image.
+     * @param content The mxEvent content of the message
+     * @returns
+     */
+    private validateStickerMimetype = (content: IContent): boolean => {
+        // Validate mimetype of the thumbnail is valid
+        const thumbnailResult = this.validateThumbnailMimeType(content);
+        if (!thumbnailResult) {
+            logger.log("Failed to validate sticker thumbnail");
+            return false;
+        }
+        const contentMimetype = content.info?.mimetype;
+        if (contentMimetype) {
+            // Validate mimetype of the content is valid
+            const majorContentTypeFromContent = contentMimetype?.split("/")[0];
+            const result = majorContentTypeFromContent === "image";
+            if (!result) {
+                logger.log("Failed to validate image/video content, invalid or missing mimetype/extensions");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /**
+     *  Validates the thumbnail assocaited with an image/video message or sticker
+     *  is has an image mimetype.
+     * @param content The mxEvent content of the message
+     * @returns
+     */
+    private validateThumbnailMimeType = (content: IContent): boolean => {
+        const thumbnailInfo = content.info?.thumbnail_info;
+        if (thumbnailInfo) {
+            const majorContentTypeFromThumbnail = thumbnailInfo.mimetype?.split("/")[0];
+            if (!majorContentTypeFromThumbnail || majorContentTypeFromThumbnail !== "image") {
+                logger.log("Failed to validate image/video content, thumbnail mimetype is not an image");
+                return false;
+            }
+        }
+        return true;
+    };
+
     public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
@@ -154,9 +249,20 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             if (this.props.mxEvent.isDecryptionFailure()) {
                 BodyType = DecryptionFailureBody;
             } else if (type && this.evTypes.has(type)) {
-                BodyType = this.evTypes.get(type)!;
+                if (type == EventType.Sticker && !this.validateStickerMimetype(content)) {
+                    BodyType = this.bodyTypes.get(MsgType.File)!;
+                } else {
+                    BodyType = this.evTypes.get(type)!;
+                }
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
-                BodyType = this.bodyTypes.get(msgtype)!;
+                if (
+                    (msgtype == MsgType.Image || msgtype == MsgType.Video) &&
+                    !this.validateImageOrVideoMimetype(content)
+                ) {
+                    BodyType = this.bodyTypes.get(MsgType.File)!;
+                } else {
+                    BodyType = this.bodyTypes.get(msgtype)!;
+                }
             } else if (content.url) {
                 // Fallback to MFileBody if there's a content URL
                 BodyType = this.bodyTypes.get(MsgType.File)!;

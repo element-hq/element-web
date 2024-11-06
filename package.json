@@ -129,6 +129,7 @@
         "matrix-js-sdk": "34.10.0",
         "matrix-widget-api": "^1.9.0",
         "memoize-one": "^6.0.0",
+        "mime": "^4.0.4",
         "oidc-client-ts": "^3.0.1",
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",

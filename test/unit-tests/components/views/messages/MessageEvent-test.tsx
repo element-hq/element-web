@@ -33,6 +33,16 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     default: () => <div data-testid="image-body" />,
 }));
 
+jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="video-body" />,
+}));
+
+jest.mock("../../../../../src/components/views/messages/MFileBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="file-body" />,
+}));
+
 jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-reply-body" />,
@@ -95,8 +105,8 @@ describe("MessageEvent", () => {
     describe("when an image with a caption is sent", () => {
         let result: RenderResult;
 
-        beforeEach(() => {
-            event = mkEvent({
+        function createEvent(mimetype: string, filename: string, msgtype: string) {
+            return mkEvent({
                 event: true,
                 type: EventType.RoomMessage,
                 user: client.getUserId()!,
@@ -105,19 +115,19 @@ describe("MessageEvent", () => {
                     body: "caption for a test image",
                     format: "org.matrix.custom.html",
                     formatted_body: "<strong>caption for a test image</strong>",
-                    msgtype: MsgType.Image,
-                    filename: "image.webp",
+                    msgtype: msgtype,
+                    filename: filename,
                     info: {
                         w: 40,
                         h: 50,
+                        mimetype: mimetype,
                     },
                     url: "mxc://server/image",
                 },
             });
-            result = renderMessageEvent();
-        });
+        }
 
-        it("should render a TextualBody and an ImageBody", () => {
+        function mockMedia() {
             fetchMock.getOnce(
                 "https://server/_matrix/media/v3/download/server/image",
                 {
@@ -125,7 +135,37 @@ describe("MessageEvent", () => {
                 },
                 { sendAsJson: false },
             );
+        }
+
+        it("should render a TextualBody and an ImageBody", () => {
+            event = createEvent("image/webp", "image.webp", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
             result.getByTestId("image-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and a FileBody for mismatched extension", () => {
+            event = createEvent("image/webp", "image.exe", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("file-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and an VideoBody", () => {
+            event = createEvent("video/mp4", "video.mp4", MsgType.Video);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("video-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and a FileBody for non-video mimetype", () => {
+            event = createEvent("application/octet-stream", "video.mp4", MsgType.Video);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("file-body");
             result.getByTestId("textual-body");
         });
     });
