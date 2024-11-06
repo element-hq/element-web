@@ -9,7 +9,6 @@
 import {
     Capability,
     EventDirection,
-    IMatrixApiError as IWidgetMatrixError,
     IOpenIDCredentials,
     IOpenIDUpdate,
     ISendDelayedEventDetails,
@@ -25,6 +24,7 @@ import {
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
+    IWidgetApiErrorResponseDataDetails,
     ISearchUserDirectoryResult,
     IGetMediaConfigResult,
     UpdateDelayedEventAction,
@@ -693,13 +693,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     /**
-     * Expresses a {@link MatrixError} as a {@link IWidgetMatrixError}
+     * Expresses a {@link MatrixError} as a {@link IWidgetApiErrorResponseDataDetails}
      * for use by Widget API error responses.
      * @param error The error to handle.
-     * @returns The error expressed as a {@link IWidgetMatrixError},
+     * @returns The error expressed as a {@link IWidgetApiErrorResponseDataDetails},
      * or undefined if it is not a {@link MatrixError}.
      */
-    public processError(error: unknown): IWidgetMatrixError | undefined {
-        return error instanceof MatrixError ? error.asWidgetApiErrorData() : undefined;
+    public processError(error: unknown): IWidgetApiErrorResponseDataDetails | undefined {
+        return error instanceof MatrixError ? { matrix_api_error: error.asWidgetApiErrorData() } : undefined;
     }
 }
