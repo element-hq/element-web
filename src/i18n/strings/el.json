@@ -182,7 +182,6 @@
         "failed_query_registration_methods": "Αδυναμία λήψης των υποστηριζόμενων μεθόδων εγγραφής.",
         "failed_soft_logout_auth": "Απέτυχε ο εκ νέου έλεγχος ταυτότητας",
         "failed_soft_logout_homeserver": "Απέτυχε ο εκ νέου έλεγχος ταυτότητας λόγω προβλήματος με τον κεντρικό διακομιστή",
-        "footer_powered_by_matrix": "λειτουργεί με το Matrix",
         "forgot_password_email_invalid": "Η διεύθυνση email δε φαίνεται να είναι έγκυρη.",
         "forgot_password_email_required": "Πρέπει να εισηχθεί η διεύθυνση ηλ. αλληλογραφίας που είναι συνδεδεμένη με τον λογαριασμό σας.",
         "forgot_password_prompt": "Ξεχάσετε τον κωδικό σας;",
@@ -2829,7 +2828,6 @@
     "truncated_list_n_more": {
         "other": "Και %(count)s ακόμα..."
     },
-    "unknown_device": "Άγνωστη συσκευή",
     "update": {
         "changelog": "Αλλαγές",
         "check_action": "Έλεγχος για ενημέρωση",

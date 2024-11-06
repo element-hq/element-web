@@ -184,7 +184,6 @@
         "failed_query_registration_methods": "Non se puido consultar os métodos de rexistro soportados.",
         "failed_soft_logout_auth": "Fallo na reautenticación",
         "failed_soft_logout_homeserver": "Fallo ó reautenticar debido a un problema no servidor",
-        "footer_powered_by_matrix": "funciona grazas a Matrix",
         "forgot_password_email_invalid": "O enderezo de email non semella ser válido.",
         "forgot_password_email_required": "Debe introducir o correo electrónico ligado a súa conta.",
         "forgot_password_prompt": "¿Esqueceches o contrasinal?",
@@ -2993,7 +2992,6 @@
     "truncated_list_n_more": {
         "other": "E %(count)s máis..."
     },
-    "unknown_device": "Dispositivo descoñecido",
     "update": {
         "changelog": "Rexistro de cambios",
         "check_action": "Comprobar actualización",

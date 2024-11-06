@@ -209,7 +209,6 @@
         "failed_query_registration_methods": "Nie można uzyskać wspieranych metod rejestracji.",
         "failed_soft_logout_auth": "Nie udało się uwierzytelnić ponownie",
         "failed_soft_logout_homeserver": "Nie udało się uwierzytelnić ponownie z powodu błędu serwera domowego",
-        "footer_powered_by_matrix": "napędzany przez Matrix",
         "forgot_password_email_invalid": "Adres e-mail nie wygląda na prawidłowy.",
         "forgot_password_email_required": "Musisz wpisać adres e-mail połączony z twoim kontem.",
         "forgot_password_prompt": "Nie pamiętasz hasła?",
@@ -2049,14 +2048,6 @@
             "button_view_all": "Pokaż wszystkie",
             "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
             "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
-            "prefix": {
-                "audio": "Audio",
-                "file": "Plik",
-                "image": "Obraz",
-                "poll": "Ankieta",
-                "video": "Wideo"
-            },
-            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
             "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
         },
         "read_topic": "Kliknij, aby przeczytać temat",
@@ -3720,7 +3711,6 @@
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
-    "unknown_device": "Nieznane urządzenie",
     "unsupported_browser": {
         "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
         "title": "%(brand)s nie wspiera tej przeglądarki"

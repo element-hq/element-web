@@ -194,7 +194,6 @@
         "failed_query_registration_methods": "Tuettuja rekisteröitymistapoja ei voitu kysellä.",
         "failed_soft_logout_auth": "Uudelleenautentikointi epäonnistui",
         "failed_soft_logout_homeserver": "Uudelleenautentikointi epäonnistui kotipalvelinongelmasta johtuen",
-        "footer_powered_by_matrix": "moottorina Matrix",
         "forgot_password_email_invalid": "Sähköpostiosoite ei vaikuta kelvolliselta.",
         "forgot_password_email_required": "Sinun pitää syöttää tiliisi liitetty sähköpostiosoite.",
         "forgot_password_prompt": "Unohditko salasanasi?",
@@ -3100,7 +3099,6 @@
     "truncated_list_n_more": {
         "other": "Ja %(count)s muuta..."
     },
-    "unknown_device": "Tuntematon laite",
     "update": {
         "changelog": "Muutosloki",
         "check_action": "Tarkista päivitykset",
