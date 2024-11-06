@@ -15,6 +15,8 @@ export default {
     ignore: [
         "docs/**",
         "res/jitsi_external_api.min.js",
+        // Used by jest
+        "__mocks__/maplibre-gl.js",
         // Keep for now
         "src/hooks/useLocalStorageState.ts",
         "src/components/views/elements/InfoTooltip.tsx",
