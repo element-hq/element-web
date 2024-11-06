@@ -119,6 +119,7 @@ describe("<SessionManagerTab />", () => {
     const mockVerificationRequest = {
         cancel: jest.fn(),
         on: jest.fn(),
+        off: jest.fn(),
     } as unknown as VerificationRequest;
 
     const mockCrypto = mocked({

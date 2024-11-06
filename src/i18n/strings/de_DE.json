@@ -99,7 +99,6 @@
         "report_content": "Inhalt melden",
         "resend": "Erneut senden",
         "reset": "Zurücksetzen",
-        "restore": "Wiederherstellen",
         "resume": "Fortsetzen",
         "retry": "Wiederholen",
         "review": "Überprüfen",
@@ -204,7 +203,6 @@
         "failed_query_registration_methods": "Konnte unterstützte Registrierungsmethoden nicht abrufen.",
         "failed_soft_logout_auth": "Erneute Authentifizierung fehlgeschlagen",
         "failed_soft_logout_homeserver": "Erneute Authentifizierung aufgrund eines Problems des Heim-Servers fehlgeschlagen",
-        "footer_powered_by_matrix": "Betrieben mit Matrix",
         "forgot_password_email_invalid": "E-Mail-Adresse scheint ungültig zu sein.",
         "forgot_password_email_required": "Es muss die mit dem Benutzerkonto verbundene E-Mail-Adresse eingegeben werden.",
         "forgot_password_prompt": "Passwort vergessen?",
@@ -886,7 +884,6 @@
         },
         "unable_to_setup_keys_error": "Schlüssel können nicht eingerichtet werden",
         "unsupported": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung.",
-        "upgrade_toast_title": "Verschlüsselungsaktualisierung verfügbar",
         "verification": {
             "accepting": "Annehmen…",
             "after_new_login": {
@@ -2431,18 +2428,13 @@
                 "pass_phrase_match_failed": "Das passt nicht.",
                 "pass_phrase_match_success": "Das passt!",
                 "phrase_strong_enough": "Großartig! Diese Sicherheitsphrase sieht stark genug aus.",
-                "requires_key_restore": "Schlüsselsicherung wiederherstellen, um deine Verschlüsselung zu aktualisieren",
-                "requires_password_confirmation": "Gib dein Kontopasswort ein, um die Aktualisierung zu bestätigen:",
-                "requires_server_authentication": "Du musst dich authentifizieren, um die Aktualisierung zu bestätigen.",
                 "secret_storage_query_failure": "Status des sicheren Speichers kann nicht gelesen werden",
                 "security_key_safety_reminder": "Bewahre deinen Sicherheitsschlüssel sicher auf, etwa in einem Passwortmanager oder einem Safe, da er verwendet wird, um deine Daten zu sichern.",
-                "session_upgrade_description": "Aktualisiere diese Sitzung, um mit ihr andere Sitzungen verifizieren zu können, damit sie Zugang zu verschlüsselten Nachrichten erhalten und für andere als vertrauenswürdig markiert werden.",
                 "set_phrase_again": "Gehe zurück und setze es erneut.",
                 "settings_reminder": "Du kannst auch in den Einstellungen Sicherungen einrichten und deine Schlüssel verwalten.",
                 "title_confirm_phrase": "Sicherheitsphrase bestätigen",
                 "title_save_key": "Sicherungsschlüssel sichern",
                 "title_set_phrase": "Sicherheitsphrase setzen",
-                "title_upgrade_encryption": "Aktualisiere deine Verschlüsselung",
                 "unable_to_setup": "Sicherer Speicher kann nicht eingerichtet werden",
                 "use_different_passphrase": "Eine andere Passphrase verwenden?",
                 "use_phrase_only_you_know": "Verwende für deine Sicherung eine geheime Phrase, die nur du kennst, und speichere optional einen Sicherheitsschlüssel."
@@ -3507,7 +3499,6 @@
     "truncated_list_n_more": {
         "other": "Und %(count)s weitere …"
     },
-    "unknown_device": "Unbekanntes Gerät",
     "unsupported_server_description": "Dieser Server nutzt eine ältere Matrix-Version. Aktualisiere auf Matrix %(version)s, um %(brand)s fehlerfrei nutzen zu können.",
     "unsupported_server_title": "Dein Server wird nicht unterstützt",
     "update": {

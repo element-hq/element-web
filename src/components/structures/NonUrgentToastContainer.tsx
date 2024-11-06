@@ -25,7 +25,9 @@ export default class NonUrgentToastContainer extends React.PureComponent<IProps,
         this.state = {
             toasts: NonUrgentToastStore.instance.components,
         };
+    }
 
+    public componentDidMount(): void {
         NonUrgentToastStore.instance.on(UPDATE_EVENT, this.onUpdateToasts);
     }
 

@@ -55,7 +55,9 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
         this.state = {
             percentage: percentageOf(this.props.playback.timeSeconds, 0, this.props.playback.durationSeconds),
         };
+    }
 
+    public componentDidMount(): void {
         // We don't need to de-register: the class handles this for us internally
         this.props.playback.liveData.onUpdate(() => this.animationFrameFn.mark());
     }

@@ -103,7 +103,6 @@
         "report_content": "Zgłoś treść",
         "resend": "Wyślij jeszcze raz",
         "reset": "Resetuj",
-        "restore": "Przywróć",
         "resume": "Wznów",
         "retry": "Ponów",
         "review": "Przejrzyj",
@@ -210,7 +209,6 @@
         "failed_query_registration_methods": "Nie można uzyskać wspieranych metod rejestracji.",
         "failed_soft_logout_auth": "Nie udało się uwierzytelnić ponownie",
         "failed_soft_logout_homeserver": "Nie udało się uwierzytelnić ponownie z powodu błędu serwera domowego",
-        "footer_powered_by_matrix": "napędzany przez Matrix",
         "forgot_password_email_invalid": "Adres e-mail nie wygląda na prawidłowy.",
         "forgot_password_email_required": "Musisz wpisać adres e-mail połączony z twoim kontem.",
         "forgot_password_prompt": "Nie pamiętasz hasła?",
@@ -934,7 +932,6 @@
         },
         "unable_to_setup_keys_error": "Nie można ustawić kluczy",
         "unsupported": "Ten klient nie obsługuje szyfrowania end-to-end.",
-        "upgrade_toast_title": "Dostępne ulepszenie szyfrowania",
         "verification": {
             "accepting": "Akceptowanie…",
             "after_new_login": {
@@ -2051,14 +2048,6 @@
             "button_view_all": "Pokaż wszystkie",
             "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
             "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
-            "prefix": {
-                "audio": "Audio",
-                "file": "Plik",
-                "image": "Obraz",
-                "poll": "Ankieta",
-                "video": "Wideo"
-            },
-            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
             "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
         },
         "read_topic": "Kliknij, aby przeczytać temat",
@@ -2601,18 +2590,13 @@
                 "pass_phrase_match_failed": "To się nie zgadza.",
                 "pass_phrase_match_success": "Zgadza się!",
                 "phrase_strong_enough": "Wspaniale! Hasło bezpieczeństwa wygląda na silne.",
-                "requires_key_restore": "Przywróć kopię zapasową klucza, aby ulepszyć szyfrowanie",
-                "requires_password_confirmation": "Wprowadź hasło do konta, aby potwierdzić aktualizację:",
-                "requires_server_authentication": "Wymagane jest uwierzytelnienie z serwerem, aby potwierdzić ulepszenie.",
                 "secret_storage_query_failure": "Nie udało się uzyskać statusu sekretnego magazynu",
                 "security_key_safety_reminder": "Przechowuj swój klucz bezpieczeństwa w bezpiecznym miejscu, takim jak menedżer haseł lub sejf, ponieważ jest on używany do ochrony zaszyfrowanych danych.",
-                "session_upgrade_description": "Ulepsz tę sesję, aby zezwolić jej na weryfikację innych sesji, dając im dostęp do wiadomości szyfrowanych i oznaczenie ich jako zaufane.",
                 "set_phrase_again": "Wróć, aby skonfigurować to ponownie.",
                 "settings_reminder": "W ustawieniach możesz również skonfigurować bezpieczną kopię zapasową i zarządzać swoimi kluczami.",
                 "title_confirm_phrase": "Potwierdź hasło bezpieczeństwa",
                 "title_save_key": "Zapisz swój klucz bezpieczeństwa",
                 "title_set_phrase": "Ustaw hasło bezpieczeństwa",
-                "title_upgrade_encryption": "Ulepsz swoje szyfrowanie",
                 "unable_to_setup": "Nie można ustawić sekretnego magazynu",
                 "use_different_passphrase": "Użyć innego hasła?",
                 "use_phrase_only_you_know": "Użyj sekretnej frazy, którą znasz tylko Ty, i opcjonalnie zapisz klucz bezpieczeństwa, który będzie używany do tworzenia kopii zapasowych."
@@ -3727,7 +3711,6 @@
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
-    "unknown_device": "Nieznane urządzenie",
     "unsupported_browser": {
         "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
         "title": "%(brand)s nie wspiera tej przeglądarki"

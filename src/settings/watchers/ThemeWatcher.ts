@@ -18,9 +18,9 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
 export default class ThemeWatcher {
-    private themeWatchRef: string | null;
-    private systemThemeWatchRef: string | null;
-    private dispatcherRef: string | null;
+    private themeWatchRef?: string;
+    private systemThemeWatchRef?: string;
+    private dispatcherRef?: string;
 
     private preferDark: MediaQueryList;
     private preferLight: MediaQueryList;
@@ -29,10 +29,6 @@ export default class ThemeWatcher {
     private currentTheme: string;
 
     public constructor() {
-        this.themeWatchRef = null;
-        this.systemThemeWatchRef = null;
-        this.dispatcherRef = null;
-
         // we have both here as each may either match or not match, so by having both
         // we can get the tristate of dark/light/unsupported
         this.preferDark = (<any>global).matchMedia("(prefers-color-scheme: dark)");
@@ -55,9 +51,9 @@ export default class ThemeWatcher {
         this.preferDark.removeEventListener("change", this.onChange);
         this.preferLight.removeEventListener("change", this.onChange);
         this.preferHighContrast.removeEventListener("change", this.onChange);
-        if (this.systemThemeWatchRef) SettingsStore.unwatchSetting(this.systemThemeWatchRef);
-        if (this.themeWatchRef) SettingsStore.unwatchSetting(this.themeWatchRef);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this.systemThemeWatchRef);
+        SettingsStore.unwatchSetting(this.themeWatchRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onChange = (): void => {

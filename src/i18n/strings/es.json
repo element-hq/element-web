@@ -93,7 +93,6 @@
         "report_content": "Denunciar contenido",
         "resend": "Reenviar",
         "reset": "Restablecer",
-        "restore": "Restaurar",
         "resume": "Recuperar",
         "retry": "Reintentar",
         "review": "Revisar",
@@ -194,7 +193,6 @@
         "failed_query_registration_methods": "No se pueden consultar los métodos de registro admitidos.",
         "failed_soft_logout_auth": "No se pudo volver a autenticar",
         "failed_soft_logout_homeserver": "No ha sido posible volver a autenticarse debido a un problema con el servidor base",
-        "footer_powered_by_matrix": "con el poder de Matrix",
         "forgot_password_email_invalid": "La dirección de correo no parece ser válida.",
         "forgot_password_email_required": "Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.",
         "forgot_password_prompt": "¿Olvidaste tu contraseña?",
@@ -824,7 +822,6 @@
         },
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "unsupported": "Este cliente no es compatible con el cifrado de extremo a extremo.",
-        "upgrade_toast_title": "Mejora de cifrado disponible",
         "verification": {
             "accepting": "Aceptando…",
             "after_new_login": {
@@ -2244,18 +2241,13 @@
                 "pass_phrase_match_failed": "No coincide.",
                 "pass_phrase_match_success": "¡Eso combina!",
                 "phrase_strong_enough": "¡Genial! Esta frase de seguridad parece lo suficientemente segura.",
-                "requires_key_restore": "Restaure la copia de seguridad de su clave para actualizar su cifrado",
-                "requires_password_confirmation": "Ingrese la contraseña de su cuenta para confirmar la actualización:",
-                "requires_server_authentication": "Deberá autenticarse con el servidor para confirmar la actualización.",
                 "secret_storage_query_failure": "No se puede consultar el estado del almacenamiento secreto",
                 "security_key_safety_reminder": "Guarda tu clave de seguridad en un lugar seguro (por ejemplo, un gestor de contraseñas o una caja fuerte) porque sirve para proteger tus datos cifrados.",
-                "session_upgrade_description": "Actualice esta sesión para permitirle verificar otras sesiones, otorgándoles acceso a mensajes cifrados y marcándolos como confiables para otros usuarios.",
                 "set_phrase_again": "Volver y ponerlo de nuevo.",
                 "settings_reminder": "También puedes configurar la copia de seguridad segura y gestionar sus claves en configuración.",
                 "title_confirm_phrase": "Confirmar la frase de seguridad",
                 "title_save_key": "Guarde su llave de seguridad",
                 "title_set_phrase": "Establecer una frase de seguridad",
-                "title_upgrade_encryption": "Actualice su cifrado",
                 "unable_to_setup": "No se puede configurar el almacenamiento secreto",
                 "use_different_passphrase": "¿Utiliza una frase de contraseña diferente?",
                 "use_phrase_only_you_know": "Usa una frase secreta que solo tú conozcas y, opcionalmente, guarda una clave de seguridad para usarla como respaldo."
@@ -3231,7 +3223,6 @@
     "truncated_list_n_more": {
         "other": "Y %(count)s más…"
     },
-    "unknown_device": "Dispositivo desconocido",
     "update": {
         "changelog": "Registro de cambios",
         "check_action": "Comprobar si hay actualizaciones",

@@ -41,8 +41,8 @@ describe("<ForgotPassword>", () => {
     };
 
     const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
-        it("should close the dialog and show the password input", () => {
-            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+        it("should close the dialog and show the password input", async () => {
+            await waitFor(() => expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument());
             expect(screen.getByText("Reset your password")).toBeInTheDocument();
         });
     };
@@ -292,7 +292,7 @@ describe("<ForgotPassword>", () => {
                             await waitEnoughCyclesForModal();
                         });
 
-                        it("should send the new password and show the click validation link dialog", () => {
+                        it("should send the new password and show the click validation link dialog", async () => {
                             expect(client.setPassword).toHaveBeenCalledWith(
                                 {
                                     type: "m.login.email.identity",
@@ -304,14 +304,18 @@ describe("<ForgotPassword>", () => {
                                 testPassword,
                                 false,
                             );
-                            expect(screen.getByText("Verify your email to continue")).toBeInTheDocument();
+                            await expect(
+                                screen.findByText("Verify your email to continue"),
+                            ).resolves.toBeInTheDocument();
                             expect(screen.getByText(testEmail)).toBeInTheDocument();
                         });
 
                         describe("and dismissing the dialog by clicking the background", () => {
                             beforeEach(async () => {
-                                await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
-                                await waitEnoughCyclesForModal();
+                                await userEvent.click(await screen.findByTestId("dialog-background"), { delay: null });
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -319,8 +323,10 @@ describe("<ForgotPassword>", () => {
 
                         describe("and dismissing the dialog", () => {
                             beforeEach(async () => {
-                                await click(screen.getByLabelText("Close dialog"));
-                                await waitEnoughCyclesForModal();
+                                await click(await screen.findByLabelText("Close dialog"));
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -328,12 +334,16 @@ describe("<ForgotPassword>", () => {
 
                         describe("and clicking »Re-enter email address«", () => {
                             beforeEach(async () => {
-                                await click(screen.getByText("Re-enter email address"));
-                                await waitEnoughCyclesForModal();
+                                await click(await screen.findByText("Re-enter email address"));
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
-                            it("should close the dialog and go back to the email input", () => {
-                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+                            it("should close the dialog and go back to the email input", async () => {
+                                await waitFor(() =>
+                                    expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument(),
+                                );
                                 expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
                             });
                         });

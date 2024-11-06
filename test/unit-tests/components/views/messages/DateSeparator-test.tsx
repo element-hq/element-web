@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen } from "jest-matrix-react";
-import { TimestampToEventResponse, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -268,8 +268,7 @@ describe("DateSeparator", () => {
         });
 
         [
-            // XXX: figure out why this fails in CI
-            // new ConnectionError("Fake connection error in test"),
+            new ConnectionError("Fake connection error in test"),
             new HTTPError("Fake http error in test", 418),
             new MatrixError(
                 { errcode: "M_FAKE_ERROR_CODE", error: "Some fake error occured" },
@@ -294,7 +293,11 @@ describe("DateSeparator", () => {
                 await expect(screen.findByTestId("jump-to-date-error-content")).resolves.toBeInTheDocument();
 
                 // The submit debug logs option should *NOT* be shown for network errors.
-                await expect(screen.findByTestId("jump-to-date-error-submit-debug-logs-button")).rejects.toBeTruthy();
+                //
+                // We have to use `queryBy` so that it can return `null` for something that does not exist.
+                await waitFor(() =>
+                    expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument(),
+                );
             });
         });
     });

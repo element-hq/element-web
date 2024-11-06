@@ -41,10 +41,6 @@ interface Props {
 export default class LoginWithQRFlow extends React.Component<Props> {
     private checkCodeInput = createRef<HTMLInputElement>();
 
-    public constructor(props: Props) {
-        super(props);
-    }
-
     private handleClick = (type: Click): ((e: React.FormEvent) => Promise<void>) => {
         return async (e: React.FormEvent): Promise<void> => {
             e.preventDefault();

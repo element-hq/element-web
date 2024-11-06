@@ -71,7 +71,7 @@ interface IProps {
  */
 export default class PersistedElement extends React.Component<IProps> {
     private resizeObserver: ResizeObserver;
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     private childContainer?: HTMLDivElement;
     private child?: HTMLDivElement;
 
@@ -81,13 +81,6 @@ export default class PersistedElement extends React.Component<IProps> {
         super(props);
 
         this.resizeObserver = new ResizeObserver(this.repositionChild);
-        // Annoyingly, a resize observer is insufficient, since we also care
-        // about when the element moves on the screen without changing its
-        // dimensions. Doesn't look like there's a ResizeObserver equivalent
-        // for this, so we bodge it by listening for document resize and
-        // the timeline_resize action.
-        window.addEventListener("resize", this.repositionChild);
-        this.dispatcherRef = dis.register(this.onAction);
 
         if (this.props.moveRef) this.props.moveRef.current = this.repositionChild;
     }
@@ -128,6 +121,14 @@ export default class PersistedElement extends React.Component<IProps> {
     };
 
     public componentDidMount(): void {
+        // Annoyingly, a resize observer is insufficient, since we also care
+        // about when the element moves on the screen without changing its
+        // dimensions. Doesn't look like there's a ResizeObserver equivalent
+        // for this, so we bodge it by listening for document resize and
+        // the timeline_resize action.
+        window.addEventListener("resize", this.repositionChild);
+        this.dispatcherRef = dis.register(this.onAction);
+
         this.updateChild();
         this.renderApp();
     }

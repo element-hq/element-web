@@ -103,7 +103,6 @@
         "report_content": "Segnala contenuto",
         "resend": "Reinvia",
         "reset": "Ripristina",
-        "restore": "Ripristina",
         "resume": "Riprendi",
         "retry": "Riprova",
         "review": "Controlla",
@@ -208,7 +207,6 @@
         "failed_query_registration_methods": "Impossibile richiedere i metodi di registrazione supportati.",
         "failed_soft_logout_auth": "Riautenticazione fallita",
         "failed_soft_logout_homeserver": "Riautenticazione fallita per un problema dell'homeserver",
-        "footer_powered_by_matrix": "offerto da Matrix",
         "forgot_password_email_invalid": "L'indirizzo email non sembra essere valido.",
         "forgot_password_email_required": "Deve essere inserito l'indirizzo email collegato al tuo account.",
         "forgot_password_prompt": "Hai dimenticato la password?",
@@ -892,7 +890,6 @@
         },
         "unable_to_setup_keys_error": "Impossibile impostare le chiavi",
         "unsupported": "Questo client non supporta la crittografia end-to-end.",
-        "upgrade_toast_title": "Aggiornamento crittografia disponibile",
         "verification": {
             "accepting": "Accettazione…",
             "after_new_login": {
@@ -2447,18 +2444,13 @@
                 "pass_phrase_match_failed": "Non corrisponde.",
                 "pass_phrase_match_success": "Corrisponde!",
                 "phrase_strong_enough": "Ottimo! Questa password di sicurezza sembra abbastanza robusta.",
-                "requires_key_restore": "Ripristina il tuo backup chiavi per aggiornare la crittografia",
-                "requires_password_confirmation": "Inserisci la password del tuo account per confermare l'aggiornamento:",
-                "requires_server_authentication": "Dovrai autenticarti con il server per confermare l'aggiornamento.",
                 "secret_storage_query_failure": "Impossibile rilevare lo stato dell'archivio segreto",
                 "security_key_safety_reminder": "Conserva la chiave di sicurezza in un posto sicuro, come in un gestore di password o in una cassaforte, dato che è usata per proteggere i tuoi dati cifrati.",
-                "session_upgrade_description": "Aggiorna questa sessione per consentirle di verificare altre sessioni, garantendo loro l'accesso ai messaggi cifrati e contrassegnandole come fidate per gli altri utenti.",
                 "set_phrase_again": "Torna per reimpostare.",
                 "settings_reminder": "Puoi anche impostare il Backup Sicuro e gestire le tue chiavi nelle impostazioni.",
                 "title_confirm_phrase": "Conferma frase di sicurezza",
                 "title_save_key": "Salva la tua chiave di sicurezza",
                 "title_set_phrase": "Imposta una frase di sicurezza",
-                "title_upgrade_encryption": "Aggiorna la tua crittografia",
                 "unable_to_setup": "Impossibile impostare un archivio segreto",
                 "use_different_passphrase": "Usare una password diversa?",
                 "use_phrase_only_you_know": "Usa una frase segreta che conosci solo tu e salva facoltativamente una chiave di sicurezza da usare come backup."
@@ -3525,7 +3517,6 @@
     "truncated_list_n_more": {
         "other": "E altri %(count)s ..."
     },
-    "unknown_device": "Dispositivo sconosciuto",
     "unsupported_server_description": "Questo server usa una versione più vecchia di Matrix. Aggiorna a Matrix %(version)s per usare %(brand)s senza errori.",
     "unsupported_server_title": "Il tuo server non è supportato",
     "update": {

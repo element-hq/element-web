@@ -351,8 +351,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private static e2eStatusCache = new Map<string, E2EStatus>();
 
     private readonly askToJoinEnabled: boolean;
-    private readonly dispatcherRef: string;
-    private settingWatchers: string[];
+    private dispatcherRef?: string;
+    private settingWatchers: string[] = [];
 
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
@@ -418,62 +418,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             promptAskToJoin: false,
             viewRoomOpts: { buttons: [] },
         };
-
-        this.dispatcherRef = dis.register(this.onAction);
-        context.client.on(ClientEvent.Room, this.onRoom);
-        context.client.on(RoomEvent.Timeline, this.onRoomTimeline);
-        context.client.on(RoomEvent.TimelineReset, this.onRoomTimelineReset);
-        context.client.on(RoomEvent.Name, this.onRoomName);
-        context.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
-        context.client.on(RoomStateEvent.Update, this.onRoomStateUpdate);
-        context.client.on(RoomEvent.MyMembership, this.onMyMembership);
-        context.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
-        context.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
-        context.client.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
-        context.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        // Start listening for RoomViewStore updates
-        context.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-
-        context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
-
-        WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
-        context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
-
-        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
-
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
-
-        this.settingWatchers = [
-            SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
-                this.setState({ layout: value as Layout }),
-            ),
-            SettingsStore.watchSetting("lowBandwidth", null, (...[, , , value]) =>
-                this.setState({ lowBandwidth: value as boolean }),
-            ),
-            SettingsStore.watchSetting("alwaysShowTimestamps", null, (...[, , , value]) =>
-                this.setState({ alwaysShowTimestamps: value as boolean }),
-            ),
-            SettingsStore.watchSetting("showTwelveHourTimestamps", null, (...[, , , value]) =>
-                this.setState({ showTwelveHourTimestamps: value as boolean }),
-            ),
-            SettingsStore.watchSetting(TimezoneHandler.USER_TIMEZONE_KEY, null, (...[, , , value]) =>
-                this.setState({ userTimezone: value as string }),
-            ),
-            SettingsStore.watchSetting("readMarkerInViewThresholdMs", null, (...[, , , value]) =>
-                this.setState({ readMarkerInViewThresholdMs: value as number }),
-            ),
-            SettingsStore.watchSetting("readMarkerOutOfViewThresholdMs", null, (...[, , , value]) =>
-                this.setState({ readMarkerOutOfViewThresholdMs: value as number }),
-            ),
-            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, (...[, , , value]) =>
-                this.setState({ showHiddenEvents: value as boolean }),
-            ),
-            SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
-            SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
-            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
-                this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
-            ),
-        ];
     }
 
     private onIsResizing = (resizing: boolean): void => {
@@ -904,6 +848,66 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
+        this.dispatcherRef = dis.register(this.onAction);
+        if (this.context.client) {
+            this.context.client.on(ClientEvent.Room, this.onRoom);
+            this.context.client.on(RoomEvent.Timeline, this.onRoomTimeline);
+            this.context.client.on(RoomEvent.TimelineReset, this.onRoomTimelineReset);
+            this.context.client.on(RoomEvent.Name, this.onRoomName);
+            this.context.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
+            this.context.client.on(RoomStateEvent.Update, this.onRoomStateUpdate);
+            this.context.client.on(RoomEvent.MyMembership, this.onMyMembership);
+            this.context.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
+            this.context.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+            this.context.client.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
+            this.context.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        }
+        // Start listening for RoomViewStore updates
+        this.context.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+
+        this.context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+
+        WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
+        this.context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
+
+        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
+
+        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+
+        this.settingWatchers = [
+            SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
+                this.setState({ layout: value as Layout }),
+            ),
+            SettingsStore.watchSetting("lowBandwidth", null, (...[, , , value]) =>
+                this.setState({ lowBandwidth: value as boolean }),
+            ),
+            SettingsStore.watchSetting("alwaysShowTimestamps", null, (...[, , , value]) =>
+                this.setState({ alwaysShowTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting("showTwelveHourTimestamps", null, (...[, , , value]) =>
+                this.setState({ showTwelveHourTimestamps: value as boolean }),
+            ),
+            SettingsStore.watchSetting(TimezoneHandler.USER_TIMEZONE_KEY, null, (...[, , , value]) =>
+                this.setState({ userTimezone: value as string }),
+            ),
+            SettingsStore.watchSetting("readMarkerInViewThresholdMs", null, (...[, , , value]) =>
+                this.setState({ readMarkerInViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("readMarkerOutOfViewThresholdMs", null, (...[, , , value]) =>
+                this.setState({ readMarkerOutOfViewThresholdMs: value as number }),
+            ),
+            SettingsStore.watchSetting("showHiddenEventsInTimeline", null, (...[, , , value]) =>
+                this.setState({ showHiddenEvents: value as boolean }),
+            ),
+            SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
+            SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
+            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
+                this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
+            ),
+        ];
+
         this.onRoomViewStoreUpdate(true);
 
         const call = this.getCallForRoom();

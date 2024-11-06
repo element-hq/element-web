@@ -94,7 +94,6 @@
         "report_content": "Raportoni Lëndë",
         "resend": "Ridërgoje",
         "reset": "Rikthe te parazgjedhjet",
-        "restore": "Riktheje",
         "resume": "Rimerre",
         "retry": "Riprovo",
         "review": "Shqyrtojeni",
@@ -196,7 +195,6 @@
         "failed_query_registration_methods": "S’arrihet të kërkohet për metoda regjistrimi që mbulohen.",
         "failed_soft_logout_auth": "S’u arrit të ribëhej mirëfilltësimi",
         "failed_soft_logout_homeserver": "S’u arrit të ribëhej mirëfilltësimi, për shkak të një problemi me shërbyesin Home",
-        "footer_powered_by_matrix": "bazuar në Matrix",
         "forgot_password_email_invalid": "Adresa email s’duket të jetë e vlefshme.",
         "forgot_password_email_required": "Duhet dhënë adresa email e lidhur me llogarinë tuaj.",
         "forgot_password_prompt": "Harruat fjalëkalimin tuaj?",
@@ -846,7 +844,6 @@
         },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
         "unsupported": "Ky klient nuk mbulon fshehtëzim skaj-më-skaj.",
-        "upgrade_toast_title": "Ka të gatshëm përmirësim fshehtëzimi",
         "verification": {
             "accepting": "Po pranohet…",
             "after_new_login": {
@@ -2300,18 +2297,13 @@
                 "pass_phrase_match_failed": "S’përputhen.",
                 "pass_phrase_match_success": "U përputhën!",
                 "phrase_strong_enough": "Bukur! Kjo Frazë Sigurie duket goxha e fuqishme.",
-                "requires_key_restore": "Që të përmirësoni fshehtëzimin tuaj, riktheni kopjeruajtjen e kyçeve tuaj",
-                "requires_password_confirmation": "Që të ripohohet përmirësimi, jepni fjalëkalimin e llogarisë tuaj:",
-                "requires_server_authentication": "Do t’ju duhet të bëni mirëfilltësimin me shërbyesin që të ripohohet përmirësimi.",
                 "secret_storage_query_failure": "S’u arrit të merret gjendje depozite të fshehtë",
                 "security_key_safety_reminder": "Depozitojeni Kyçin tuaj të Sigurisë diku të parrezik, bie fjala në një përgjegjës fjalëkalimesh, ose në një kasafortë, ngaqë përdoret për të mbrojtur të dhënat tuaja të fshehtëzuara.",
-                "session_upgrade_description": "Përmirësojeni këtë sesion për ta lejuar të verifikojë sesione të tjerë, duke u akorduar hyrje te mesazhe të fshehtëzuar dhe duke u vënë shenjë si të besuar për përdorues të tjerë.",
                 "set_phrase_again": "Shkoni mbrapsht që ta ricaktoni.",
                 "settings_reminder": "Mundeni edhe të ujdisni Kopjeruajtje të Sigurt & administroni kyçet tuaj që nga Rregullimet.",
                 "title_confirm_phrase": "Ripohoni Frazë Sigurie",
                 "title_save_key": "Ruani Kyçin tuaj të Sigurisë",
                 "title_set_phrase": "Caktoni një Frazë Sigurie",
-                "title_upgrade_encryption": "Përmirësoni fshehtëzimin tuaj",
                 "unable_to_setup": "S’u arrit të ujdiset depozitë e fshehtë",
                 "use_different_passphrase": "Të përdoret një frazëkalim tjetër?",
                 "use_phrase_only_you_know": "Jepni një frazë të fshehtë që e dini vetëm ju, dhe, në daçi, ruani një Kyç Sigurie për ta përdorur për kopjeruajtje."
@@ -3305,7 +3297,6 @@
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"
     },
-    "unknown_device": "Pajisje e panjohur",
     "update": {
         "changelog": "Regjistër ndryshimesh",
         "check_action": "Kontrollo për përditësime",

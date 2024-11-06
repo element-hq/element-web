@@ -62,6 +62,7 @@ import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import Modal from "../../../../src/Modal.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -952,7 +953,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to login page
             act(() =>
@@ -1348,63 +1349,6 @@ describe("<MatrixChat />", () => {
         });
     });
 
-    describe("mobile registration", () => {
-        const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
-            const renderResult = getComponent();
-            // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
-
-            // go to mobile_register page
-            defaultDispatcher.dispatch({
-                action: "start_mobile_registration",
-            });
-
-            return renderResult;
-        };
-
-        const enabledMobileRegistration = (): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                if (settingName === "Registration.mobileRegistrationHelper") return true;
-                if (settingName === UIFeature.Registration) return true;
-            });
-        };
-
-        it("should render welcome screen if mobile registration is not enabled in settings", async () => {
-            await getComponentAndWaitForReady();
-
-            await screen.findByText("powered by Matrix");
-        });
-
-        it("should render mobile registration", async () => {
-            enabledMobileRegistration();
-
-            await getComponentAndWaitForReady();
-            await flushPromises();
-
-            expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
-        });
-    });
-
-    describe("when key backup failed", () => {
-        it("should show the new recovery method dialog", async () => {
-            jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
-                __esModule: true,
-                default: () => <span>mocked dialog</span>,
-            }));
-            jest.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
-
-            getComponent({});
-            act(() =>
-                defaultDispatcher.dispatch({
-                    action: "will_start_client",
-                }),
-            );
-            await flushPromises();
-            await act(() => mockClient.emit(CryptoEvent.KeyBackupFailed, "error code"));
-            await expect(screen.findByText("mocked dialog")).resolves.toBeInTheDocument();
-        });
-    });
-
     describe("Multi-tab lockout", () => {
         afterEach(() => {
             Lifecycle.setSessionLockNotStolen();
@@ -1535,6 +1479,64 @@ describe("<MatrixChat />", () => {
                 await sleep(10); // Modals take a few ms to appear
                 expect(document.body).toMatchSnapshot();
             });
+        });
+    });
+
+    describe("mobile registration", () => {
+        const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
+            const renderResult = getComponent();
+            // wait for welcome page chrome render
+            await screen.findByText("Powered by Matrix");
+
+            // go to mobile_register page
+            defaultDispatcher.dispatch({
+                action: "start_mobile_registration",
+            });
+
+            return renderResult;
+        };
+
+        const enabledMobileRegistration = (): void => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "Registration.mobileRegistrationHelper") return true;
+                if (settingName === UIFeature.Registration) return true;
+            });
+        };
+
+        it("should render welcome screen if mobile registration is not enabled in settings", async () => {
+            await getComponentAndWaitForReady();
+
+            await screen.findByText("Powered by Matrix");
+        });
+
+        it("should render mobile registration", async () => {
+            enabledMobileRegistration();
+
+            await getComponentAndWaitForReady();
+            await flushPromises();
+
+            expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
+        });
+    });
+
+    describe("when key backup failed", () => {
+        it("should show the new recovery method dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialogAsync");
+            jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+                __test: true,
+                __esModule: true,
+                default: () => <span>mocked dialog</span>,
+            }));
+            jest.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
+
+            getComponent({});
+            defaultDispatcher.dispatch({
+                action: "will_start_client",
+            });
+            await flushPromises();
+            mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect(await spy.mock.lastCall![0]).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });

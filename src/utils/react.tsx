@@ -8,6 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import { ReactNode } from "react";
 import { createRoot, Root } from "react-dom/client";
 
+/**
+ * Utility class to render & unmount additional React roots,
+ * e.g. for pills, tooltips and other components rendered atop user-generated events.
+ */
 export class ReactRootManager {
     private roots: Root[] = [];
     private rootElements: Element[] = [];

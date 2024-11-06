@@ -134,6 +134,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.initLoginLogic(this.props.serverConfig);
     }
 

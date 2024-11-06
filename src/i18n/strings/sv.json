@@ -103,7 +103,6 @@
         "report_content": "Rapportera innehåll",
         "resend": "Skicka igen",
         "reset": "Återställ",
-        "restore": "Återställ",
         "resume": "Återuppta",
         "retry": "Försök igen",
         "review": "Granska",
@@ -208,7 +207,6 @@
         "failed_query_registration_methods": "Kunde inte fråga efter stödda registreringsmetoder.",
         "failed_soft_logout_auth": "Misslyckades att återautentisera",
         "failed_soft_logout_homeserver": "Misslyckades att återautentisera p.g.a. ett hemserverproblem",
-        "footer_powered_by_matrix": "drivs av Matrix",
         "forgot_password_email_invalid": "Den här e-postadressen ser inte giltig ut.",
         "forgot_password_email_required": "E-postadressen som är kopplad till ditt konto måste anges.",
         "forgot_password_prompt": "Glömt ditt lösenord?",
@@ -893,7 +891,6 @@
         },
         "unable_to_setup_keys_error": "Kunde inte ställa in nycklar",
         "unsupported": "Den här klienten stöder inte totalsträckskryptering.",
-        "upgrade_toast_title": "Krypteringsuppgradering tillgänglig",
         "verification": {
             "accepting": "Accepterar…",
             "after_new_login": {
@@ -2447,18 +2444,13 @@
                 "pass_phrase_match_failed": "Det matchar inte.",
                 "pass_phrase_match_success": "Det matchar!",
                 "phrase_strong_enough": "Fantastiskt! Den här säkerhetsfrasen ser tillräckligt stark ut.",
-                "requires_key_restore": "Återställ din nyckelsäkerhetskopia för att uppgradera din kryptering",
-                "requires_password_confirmation": "Ange ditt kontolösenord för att bekräfta uppgraderingen:",
-                "requires_server_authentication": "Du kommer behöva autentisera mot servern för att bekräfta uppgraderingen.",
                 "secret_storage_query_failure": "Kunde inte fråga efter status på hemlig lagring",
                 "security_key_safety_reminder": "Lagra din säkerhetsnyckel någonstans säkert, som en lösenordshanterare eller ett kassaskåp, eftersom den används för att säkra din krypterade data.",
-                "session_upgrade_description": "Uppgradera den här sessionen för att låta den verifiera andra sessioner, för att ge dem åtkomst till krypterade meddelanden och markera dem som betrodda för andra användare.",
                 "set_phrase_again": "Gå tillbaka och sätt den igen.",
                 "settings_reminder": "Du kan även ställa in säker säkerhetskopiering och hantera dina nycklar i inställningarna.",
                 "title_confirm_phrase": "Bekräfta säkerhetsfras",
                 "title_save_key": "Spara din säkerhetsnyckel",
                 "title_set_phrase": "Sätt en säkerhetsfras",
-                "title_upgrade_encryption": "Uppgradera din kryptering",
                 "unable_to_setup": "Kunde inte sätta upp hemlig lagring",
                 "use_different_passphrase": "Använd en annan lösenfras?",
                 "use_phrase_only_you_know": "Använd en hemlig fras endast du känner till, och spara valfritt en säkerhetsnyckel att använda för säkerhetskopiering."
@@ -3525,7 +3517,6 @@
     "truncated_list_n_more": {
         "other": "Och %(count)s till…"
     },
-    "unknown_device": "Okänd enhet",
     "unsupported_server_description": "Servern använder en äldre version av Matrix. Uppgradera till Matrix %(version)s för att använda %(brand)s utan fel.",
     "unsupported_server_title": "Din server stöds inte",
     "update": {

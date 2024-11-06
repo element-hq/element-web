@@ -417,7 +417,7 @@ describe("message", () => {
             expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
             expect(mockClient.cancelPendingEvent).toHaveBeenCalledTimes(1);
             expect(mockCreateRedactEventDialog).toHaveBeenCalledTimes(1);
-            expect(spyDispatcher).toHaveBeenCalledTimes(0);
+            expect(spyDispatcher).toHaveBeenCalledTimes(1);
         });
 
         it("Should do nothing if the content is unmodified", async () => {

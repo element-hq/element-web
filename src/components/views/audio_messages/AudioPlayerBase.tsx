@@ -41,7 +41,9 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
         this.state = {
             playbackPhase: this.props.playback.currentState,
         };
+    }
 
+    public componentDidMount(): void {
         // We don't need to de-register: the class handles this for us internally
         this.props.playback.on(UPDATE_EVENT, this.onPlaybackUpdate);
 

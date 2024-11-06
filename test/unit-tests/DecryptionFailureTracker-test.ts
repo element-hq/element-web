@@ -496,6 +496,8 @@ describe("DecryptionFailureTracker", function () {
         await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED);
         await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD);
         await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE);
+        await createAndTrackEventWithError(DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED);
+        await createAndTrackEventWithError(DecryptionFailureCode.UNSIGNED_SENDER_DEVICE);
         await createAndTrackEventWithError(DecryptionFailureCode.UNKNOWN_ERROR);
 
         // Pretend "now" is Infinity
@@ -510,6 +512,8 @@ describe("DecryptionFailureTracker", function () {
             "ExpectedDueToMembership",
             "OlmKeysNotSentError",
             "RoomKeysWithheldForUnverifiedDevice",
+            "ExpectedVerificationViolation",
+            "ExpectedSentByInsecureDevice",
             "UnknownError",
         ]);
     });

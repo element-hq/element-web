@@ -93,7 +93,6 @@
         "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
-        "restore": "復元",
         "resume": "再開",
         "retry": "再試行",
         "review": "確認",
@@ -843,7 +842,6 @@
         },
         "unable_to_setup_keys_error": "鍵を設定できません",
         "unsupported": "このクライアントはエンドツーエンド暗号化に対応していません。",
-        "upgrade_toast_title": "暗号化のアップグレードが利用できます",
         "verification": {
             "accepting": "承認しています…",
             "after_new_login": {
@@ -2235,18 +2233,13 @@
                 "pass_phrase_match_failed": "合致しません。",
                 "pass_phrase_match_success": "合致します！",
                 "phrase_strong_enough": "すばらしい！ このセキュリティーフレーズは十分に強力なようです。",
-                "requires_key_restore": "鍵のバックアップを復元し、暗号化をアップグレードしてください",
-                "requires_password_confirmation": "アップグレードを承認するには、アカウントのパスワードを入力してください：",
-                "requires_server_authentication": "サーバーをアップグレードするには認証が必要です。",
                 "secret_storage_query_failure": "機密ストレージの状態を読み込めません",
                 "security_key_safety_reminder": "セキュリティーキーは、暗号化されたデータを保護するために使用されます。パスワードマネージャーもしくは金庫のような安全な場所で保管してください。",
-                "session_upgrade_description": "このセッションをアップグレードすると、他のセッションを認証できるようになります。また、暗号化されたメッセージへのアクセスが可能となり、メッセージを信頼済として相手に表示できるようになります。",
                 "set_phrase_again": "戻って、改めて設定してください。",
                 "settings_reminder": "セキュアバックアップを設定し、設定画面から鍵を管理することもできます。",
                 "title_confirm_phrase": "セキュリティーフレーズを確認",
                 "title_save_key": "セキュリティーキーを保存",
                 "title_set_phrase": "セキュリティーフレーズを設定",
-                "title_upgrade_encryption": "暗号化をアップグレード",
                 "unable_to_setup": "機密ストレージを設定できません",
                 "use_different_passphrase": "異なるパスフレーズを使用しますか？",
                 "use_phrase_only_you_know": "あなただけが知っている秘密のパスワードを使用してください。また、バックアップ用にセキュリティーキーを保存することができます（任意）。"
@@ -3238,7 +3231,6 @@
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"
     },
-    "unknown_device": "不明な端末",
     "update": {
         "changelog": "更新履歴",
         "check_action": "更新を確認",

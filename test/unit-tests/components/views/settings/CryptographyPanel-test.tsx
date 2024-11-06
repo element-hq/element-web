@@ -14,6 +14,7 @@ import { mocked } from "jest-mock";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../../test-utils";
 import CryptographyPanel from "../../../../../src/components/views/settings/CryptographyPanel";
+import { withClientContextRenderOptions } from "../../../../test-utils";
 
 describe("CryptographyPanel", () => {
     it("shows the session ID and key", async () => {
@@ -28,7 +29,7 @@ describe("CryptographyPanel", () => {
         mocked(client.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({ ed25519: sessionKey, curve25519: "1234" });
 
         // When we render the CryptographyPanel
-        const rendered = render(<CryptographyPanel />);
+        const rendered = render(<CryptographyPanel />, withClientContextRenderOptions(client));
 
         // Then it displays info about the user's session
         const codes = rendered.container.querySelectorAll("code");
@@ -52,7 +53,7 @@ describe("CryptographyPanel", () => {
         mocked(client.getCrypto()!.getOwnDeviceKeys).mockRejectedValue(new Error("bleh"));
 
         // When we render the CryptographyPanel
-        const rendered = render(<CryptographyPanel />);
+        const rendered = render(<CryptographyPanel />, withClientContextRenderOptions(client));
 
         // Then it displays info about the user's session
         const codes = rendered.container.querySelectorAll("code");
