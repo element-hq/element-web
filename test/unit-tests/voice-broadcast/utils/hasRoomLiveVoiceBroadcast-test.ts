@@ -32,7 +32,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         startedEvent?: MatrixEvent,
     ): MatrixEvent => {
         const infoEvent = mkVoiceBroadcastInfoStateEvent(room.roomId, state, userId, deviceId, startedEvent);
-        room.addLiveEvents([infoEvent]);
+        room.addLiveEvents([infoEvent], { addToState: true });
         room.currentState.setStateEvents([infoEvent]);
         room.relations.aggregateChildEvent(infoEvent);
         return infoEvent;

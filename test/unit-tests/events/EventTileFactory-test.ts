@@ -88,7 +88,7 @@ describe("pickFactory", () => {
             client.getUserId()!,
             client.deviceId!,
         );
-        room.addLiveEvents([voiceBroadcastStartedEvent]);
+        room.addLiveEvents([voiceBroadcastStartedEvent], { addToState: true });
         voiceBroadcastStoppedEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Stopped,

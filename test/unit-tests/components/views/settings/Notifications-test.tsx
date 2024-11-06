@@ -915,7 +915,7 @@ describe("<Notifications />", () => {
                 user: "@alice:example.org",
                 ts: 1,
             });
-            await room.addLiveEvents([message]);
+            await room.addLiveEvents([message], { addToState: true });
 
             const { container } = await getComponentAndWait();
             const clearNotificationEl = getByTestId(container, "clear-notifications");

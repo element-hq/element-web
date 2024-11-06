@@ -249,15 +249,19 @@ describe("RoomView", () => {
         cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        room.addLiveEvents([
-            new MatrixEvent({
-                type: "m.room.encryption",
-                sender: cli.getUserId()!,
-                content: {},
-                event_id: "someid",
-                room_id: room.roomId,
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    type: "m.room.encryption",
+                    sender: cli.getUserId()!,
+                    content: {},
+                    event_id: "someid",
+                    room_id: room.roomId,
+                    state_key: "",
+                }),
+            ],
+            { addToState: true },
+        );
 
         // URL previews should now be disabled
         expect(roomViewInstance.state.showUrlPreview).toBe(false);
@@ -440,7 +444,7 @@ describe("RoomView", () => {
                 skey: id,
                 ts,
             });
-            room.addLiveEvents([widgetEvent]);
+            room.addLiveEvents([widgetEvent], { addToState: true });
             room.currentState.setStateEvents([widgetEvent]);
             cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
             await flushPromises();

@@ -202,6 +202,7 @@ describe("MemberListStore", () => {
 function addEventToRoom(room: Room, ev: MatrixEvent) {
     room.getLiveTimeline().addEvent(ev, {
         toStartOfTimeline: false,
+        addToState: true,
     });
 }
 
