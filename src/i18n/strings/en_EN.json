@@ -506,6 +506,7 @@
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Message layout",
+        "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
         "model": "Model",
         "modern": "Modern",
