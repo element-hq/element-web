@@ -478,6 +478,44 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
+        it("correctly sends a reply using a slash command", async () => {
+            stubClient();
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
+
+            const replyToEvent = mkEvent({
+                type: "m.room.message",
+                user: "@bob:test",
+                room: "!abc:test",
+                content: { "m.mentions": {} },
+                event: true,
+            });
+
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent({ replyToEvent });
+
+            addTextToComposer(container, "/tableflip");
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() =>
+                expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                    "body": "(╯°□°）╯︵ ┻━┻",
+                    "msgtype": MsgType.Text,
+                    "m.mentions": {
+                        user_ids: ["@bob:test"],
+                    },
+                    "m.relates_to": {
+                        "m.in_reply_to": {
+                            event_id: replyToEvent.getId(),
+                        },
+                    },
+                }),
+            );
+        });
+
         it("shows chat effects on message sending", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
