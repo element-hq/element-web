@@ -202,7 +202,6 @@
         "failed_query_registration_methods": "A támogatott regisztrációs módokat nem lehet lekérdezni.",
         "failed_soft_logout_auth": "Újra bejelentkezés sikertelen",
         "failed_soft_logout_homeserver": "Az újbóli hitelesítés a Matrix-kiszolgáló hibájából sikertelen",
-        "footer_powered_by_matrix": "a gépházban: Matrix",
         "forgot_password_email_invalid": "Az e-mail cím nem tűnik érvényesnek.",
         "forgot_password_email_required": "A fiókodhoz kötött e-mail címet add meg.",
         "forgot_password_prompt": "Elfelejtetted a jelszavad?",
@@ -3436,7 +3435,6 @@
     "truncated_list_n_more": {
         "other": "És még %(count)s..."
     },
-    "unknown_device": "Ismeretlen eszköz",
     "unsupported_server_description": "Ez a kiszolgáló a Matrix régebbi verzióját használja. Frissítsen a Matrix %(version)s verzióra az %(brand)s hibamentes használatához.",
     "unsupported_server_title": "A kiszolgálója nem támogatott",
     "update": {

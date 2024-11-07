@@ -195,7 +195,6 @@
         "failed_query_registration_methods": "Không thể truy vấn các phương pháp đăng ký được hỗ trợ.",
         "failed_soft_logout_auth": "Không xác thực lại được",
         "failed_soft_logout_homeserver": "Không xác thực lại được do sự cố máy chủ",
-        "footer_powered_by_matrix": "cung cấp bởi Matrix",
         "forgot_password_email_invalid": "Địa chỉ thư điện tử dường như không hợp lệ.",
         "forgot_password_email_required": "Địa chỉ thư điện tử được liên kết đến tài khoản của bạn phải được nhập.",
         "forgot_password_prompt": "Quên mật khẩu của bạn?",
@@ -3173,7 +3172,6 @@
     "truncated_list_n_more": {
         "other": "Và %(count)s thêm…"
     },
-    "unknown_device": "Thiết bị không xác định",
     "update": {
         "changelog": "Lịch sử thay đổi",
         "check_action": "Kiểm tra cập nhật",

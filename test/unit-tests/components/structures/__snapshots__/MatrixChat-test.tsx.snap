@@ -114,46 +114,56 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
   >
     <div
       class="mx_AuthPage_modal"
+      style="position: relative;"
     >
       <div
-        class="mx_Welcome"
-        data-testid="mx_welcome_screen"
+        class="mx_AuthPage_modalBlur"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+      />
+      <div
+        class="mx_AuthPage_modalContent"
+        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
       >
         <div
-          class="mx_WelcomePage mx_WelcomePage_loggedIn"
+          class="mx_Welcome"
+          data-testid="mx_welcome_screen"
         >
           <div
-            class="mx_WelcomePage_body"
-          >
-            <h1>
-              Hello
-            </h1>
-          </div>
-        </div>
-        <div
-          class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
-        >
-          <div
-            aria-describedby="mx_LanguageDropdown_value"
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-label="Language Dropdown"
-            aria-owns="mx_LanguageDropdown_input"
-            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-            role="button"
-            tabindex="0"
+            class="mx_WelcomePage mx_WelcomePage_loggedIn"
           >
             <div
-              class="mx_Dropdown_option"
-              id="mx_LanguageDropdown_value"
+              class="mx_WelcomePage_body"
             >
-              <div>
-                English
-              </div>
+              <h1>
+                Hello
+              </h1>
             </div>
-            <span
-              class="mx_Dropdown_arrow"
-            />
+          </div>
+          <div
+            class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
+          >
+            <div
+              aria-describedby="mx_LanguageDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Language Dropdown"
+              aria-owns="mx_LanguageDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_LanguageDropdown_value"
+              >
+                <div>
+                  English
+                </div>
+              </div>
+              <span
+                class="mx_Dropdown_arrow"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -163,11 +173,32 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
       role="contentinfo"
     >
       <a
+        href="https://element.io/blog"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Blog
+      </a>
+      <a
+        href="https://twitter.com/element_hq"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Twitter
+      </a>
+      <a
+        href="https://github.com/element-hq/element-web"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
         href="https://matrix.org"
         rel="noreferrer noopener"
         target="_blank"
       >
-        powered by Matrix
+        Powered by Matrix
       </a>
     </footer>
   </div>
@@ -201,116 +232,150 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
   >
     <div
       class="mx_AuthPage_modal"
+      style="position: relative;"
     >
       <div
-        class="mx_AuthHeader"
+        class="mx_AuthPage_modalBlur"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+      />
+      <div
+        class="mx_AuthPage_modalContent"
+        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
       >
-        <aside
-          class="mx_AuthHeaderLogo"
-        >
-          Matrix
-        </aside>
         <div
-          class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
+          class="mx_AuthHeader"
         >
-          <div
-            aria-describedby="mx_LanguageDropdown_value"
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-label="Language Dropdown"
-            aria-owns="mx_LanguageDropdown_input"
-            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-            role="button"
-            tabindex="0"
+          <aside
+            class="mx_AuthHeaderLogo"
           >
-            <div
-              class="mx_Dropdown_option"
-              id="mx_LanguageDropdown_value"
-            >
-              <div>
-                English
-              </div>
-            </div>
-            <span
-              class="mx_Dropdown_arrow"
+            <img
+              alt="Element"
+              src="themes/element/img/logos/element-logo.svg"
             />
-          </div>
-        </div>
-      </div>
-      <main
-        class="mx_AuthBody"
-      >
-        <h1>
-          You're signed out
-        </h1>
-        <h2>
-          Sign in
-        </h2>
-        <div>
-          <form>
-            <p>
-              Enter your password to sign in and regain access to your account.
-            </p>
-            <div
-              class="mx_Field mx_Field_input"
-            >
-              <input
-                id="mx_Field_1"
-                label="Password"
-                placeholder="Password"
-                type="password"
-                value=""
-              />
-              <label
-                for="mx_Field_1"
-              >
-                Password
-              </label>
-            </div>
-            <div
-              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-              role="button"
-              tabindex="0"
-              type="submit"
-            >
-              Sign in
-            </div>
-            <div
-              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-              role="button"
-              tabindex="0"
-            >
-              Forgotten your password?
-            </div>
-          </form>
-        </div>
-        <h2>
-          Clear personal data
-        </h2>
-        <p>
-          Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.
-        </p>
-        <div>
+          </aside>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
-            role="button"
-            tabindex="0"
+            class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
           >
-            Clear all data
+            <div
+              aria-describedby="mx_LanguageDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Language Dropdown"
+              aria-owns="mx_LanguageDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_LanguageDropdown_value"
+              >
+                <div>
+                  English
+                </div>
+              </div>
+              <span
+                class="mx_Dropdown_arrow"
+              />
+            </div>
           </div>
         </div>
-      </main>
+        <main
+          class="mx_AuthBody"
+        >
+          <h1>
+            You're signed out
+          </h1>
+          <h2>
+            Sign in
+          </h2>
+          <div>
+            <form>
+              <p>
+                Enter your password to sign in and regain access to your account.
+              </p>
+              <div
+                class="mx_Field mx_Field_input"
+              >
+                <input
+                  id="mx_Field_1"
+                  label="Password"
+                  placeholder="Password"
+                  type="password"
+                  value=""
+                />
+                <label
+                  for="mx_Field_1"
+                >
+                  Password
+                </label>
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                role="button"
+                tabindex="0"
+                type="submit"
+              >
+                Sign in
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+                role="button"
+                tabindex="0"
+              >
+                Forgotten your password?
+              </div>
+            </form>
+          </div>
+          <h2>
+            Clear personal data
+          </h2>
+          <p>
+            Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.
+          </p>
+          <div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+              role="button"
+              tabindex="0"
+            >
+              Clear all data
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
     <footer
       class="mx_AuthFooter"
       role="contentinfo"
     >
       <a
+        href="https://element.io/blog"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Blog
+      </a>
+      <a
+        href="https://twitter.com/element_hq"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Twitter
+      </a>
+      <a
+        href="https://github.com/element-hq/element-web"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
         href="https://matrix.org"
         rel="noreferrer noopener"
         target="_blank"
       >
-        powered by Matrix
+        Powered by Matrix
       </a>
     </footer>
   </div>

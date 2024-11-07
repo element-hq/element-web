@@ -184,7 +184,6 @@
         "failed_connect_identity_server": "Næ ekki sambandi við auðkennisþjón",
         "failed_soft_logout_auth": "Tókst ekki að endurauðkenna",
         "failed_soft_logout_homeserver": "Tókst ekki að endurauðkenna vegna vandamála með heimaþjón",
-        "footer_powered_by_matrix": "keyrt með Matrix",
         "forgot_password_email_invalid": "Tölvupóstfangið lítur ekki út fyrir að vera í lagi.",
         "forgot_password_email_required": "Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.",
         "forgot_password_prompt": "Gleymdirðu lykilorðinu þínu?",
@@ -2902,7 +2901,6 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
     },
-    "unknown_device": "Óþekkt tæki",
     "update": {
         "changelog": "Breytingaskrá",
         "check_action": "Athuga með uppfærslu",
