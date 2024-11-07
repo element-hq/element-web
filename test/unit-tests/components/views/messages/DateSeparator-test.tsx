@@ -92,7 +92,7 @@ describe("DateSeparator", () => {
     });
 
     it("renders invalid date separator correctly", () => {
-        let ts = new Date(-8640000000000004).getTime();
+        const ts = new Date(-8640000000000004).getTime();
         const { asFragment } = getComponent({ ts });
         expect(asFragment()).toMatchSnapshot();
     });
