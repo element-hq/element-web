@@ -32,8 +32,8 @@ import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
-import SettingsStore from "../../../settings/SettingsStore";
 import WarningBadgeSvg from "../../../../res/img/element-icons/warning-badge.svg";
+import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -127,7 +127,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: new ThemeWatcher().getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
             baseUrl: MatrixClientPeg.safeGet().baseUrl,
         });
