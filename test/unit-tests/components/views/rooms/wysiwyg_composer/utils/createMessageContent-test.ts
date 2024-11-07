@@ -15,13 +15,6 @@ import {
 
 describe("createMessageContent", () => {
     const message = "<em><b>hello</b> world</em>";
-    const mockEvent = mkEvent({
-        type: "m.room.message",
-        room: "myfakeroom",
-        user: "myfakeuser",
-        content: { msgtype: "m.text", body: "Replying to this" },
-        event: true,
-    });
 
     afterEach(() => {
         jest.resetAllMocks();
@@ -49,27 +42,6 @@ describe("createMessageContent", () => {
                 format: "org.matrix.custom.html",
                 formatted_body: message,
                 msgtype: "m.text",
-            });
-        });
-
-        it("Should add reply to message content", async () => {
-            // When
-            const content = await createMessageContent(message, true, { replyToEvent: mockEvent });
-
-            // Then
-            expect(content).toEqual({
-                "body": "> <myfakeuser> Replying to this\n\n*__hello__ world*",
-                "format": "org.matrix.custom.html",
-                "formatted_body":
-                    '<mx-reply><blockquote><a href="$$permalink$$">In reply to</a>' +
-                    ' <a href="https://matrix.to/#/myfakeuser">myfakeuser</a>' +
-                    "<br>Replying to this</blockquote></mx-reply><em><b>hello</b> world</em>",
-                "msgtype": "m.text",
-                "m.relates_to": {
-                    "m.in_reply_to": {
-                        event_id: mockEvent.getId(),
-                    },
-                },
             });
         });
 

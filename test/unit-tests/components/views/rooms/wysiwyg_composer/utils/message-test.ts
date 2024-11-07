@@ -182,12 +182,9 @@ describe("message", () => {
             });
 
             const expectedContent = {
-                "body": "> <myfakeuser2> My reply\n\n*__hello__ world*",
+                "body": "*__hello__ world*",
                 "format": "org.matrix.custom.html",
-                "formatted_body":
-                    '<mx-reply><blockquote><a href="$$permalink$$">In reply to</a>' +
-                    ' <a href="https://matrix.to/#/myfakeuser2">myfakeuser2</a>' +
-                    "<br>My reply</blockquote></mx-reply><i><b>hello</b> world</i>",
+                "formatted_body": "<i><b>hello</b> world</i>",
                 "msgtype": "m.text",
                 "m.relates_to": {
                     "m.in_reply_to": {
