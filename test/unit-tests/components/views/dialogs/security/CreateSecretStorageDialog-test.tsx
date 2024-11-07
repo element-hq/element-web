@@ -25,7 +25,6 @@ describe("CreateSecretStorageDialog", () => {
             await sleep(0); // CreateSecretStorageDialog doesn't expect this to resolve immediately
             throw new MatrixError({ flows: [] });
         });
-
         // Mock the clipboard API
         document.execCommand = jest.fn().mockReturnValue(true);
     });
