@@ -117,7 +117,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             } else {
                 return formatFullDateNoTime(date);
             }
-        } catch (_) {
+        } catch {
             return _t("common|message_timestamp_invalid");
         }
     }
