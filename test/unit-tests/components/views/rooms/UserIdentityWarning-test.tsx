@@ -32,7 +32,6 @@ function mockRoom(): Room {
         getMember: jest.fn((userId) => {}),
         roomId: ROOM_ID,
         shouldEncryptForInvitedMembers: jest.fn(() => true),
-        hasEncryptionStateEvent: jest.fn(() => true),
     } as unknown as Room;
 
     return room;
@@ -80,6 +79,7 @@ describe("UserIdentityWarning", () => {
     beforeEach(async () => {
         client = stubClient();
         room = mockRoom();
+        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
     });
 
     afterEach(() => {
@@ -117,8 +117,8 @@ describe("UserIdentityWarning", () => {
             mockRoomMember("@alice:example.org", "Alice"),
         ]);
         // Start the room off unencrypted.  We shouldn't display anything.
-        jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
         const crypto = client.getCrypto()!;
+        jest.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(false);
         jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
         );
@@ -129,6 +129,7 @@ describe("UserIdentityWarning", () => {
 
         // Encryption gets enabled in the room.  We should now warn that Alice's
         // identity changed.
+        jest.spyOn(crypto, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         client.emit(
             RoomStateEvent.Events,
             new MatrixEvent({

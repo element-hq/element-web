@@ -125,6 +125,12 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         if (!crypto || initialisedRef.current) {
             return;
         }
+        // If encryption is not enabled in the room, we don't need to do
+        // anything.  If encryption gets enabled later, we will retry, via
+        // onRoomStateEvent.
+        if (!(await crypto.isEncryptionEnabledInRoom(room.roomId))) {
+            return;
+        }
         initialisedRef.current = true;
 
         const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
@@ -151,14 +157,9 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         selectCurrentPrompt();
     }, [crypto, room, initialisedRef, gotVerificationStatusUpdateRef, membersNeedingApprovalRef, selectCurrentPrompt]);
 
-    // If the room has encryption enabled, we load the room members right away.
-    // If not, we wait until encryption is enabled before loading the room
-    // members, since we don't need to display anything in unencrypted rooms.
-    if (crypto && room.hasEncryptionStateEvent()) {
-        loadMembers().catch((e) => {
-            logger.error("Error initialising UserIdentityWarning:", e);
-        });
-    }
+    loadMembers().catch((e) => {
+        logger.error("Error initialising UserIdentityWarning:", e);
+    });
 
     // When a user's verification status changes, we check if they need to be
     // added/removed from the set of members needing approval.
