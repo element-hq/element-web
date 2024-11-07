@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
+import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "../../../views/elements/AccessibleButton";
 import { Icon as EMailPromptIcon } from "../../../../../res/img/element-icons/email-prompt.svg";
-import { Icon as RetryIcon } from "../../../../../res/img/compound/retry-16px.svg";
 import { _t } from "../../../../languageHandler";
 import { useTimeoutToggle } from "../../../../hooks/useTimeoutToggle";
 import { ErrorMessage } from "../../ErrorMessage";
@@ -60,7 +60,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
                 <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_resend_prompt")}</span>
                 <Tooltip description={_t("auth|check_email_resend_tooltip")} placement="top" open={tooltipVisible}>
                     <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onResendClickFn}>
-                        <RetryIcon className="mx_Icon mx_Icon_16" />
+                        <RestartIcon className="mx_Icon mx_Icon_16" />
                         {_t("action|resend")}
                     </AccessibleButton>
                 </Tooltip>
