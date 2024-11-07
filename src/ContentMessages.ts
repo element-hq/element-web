@@ -536,9 +536,7 @@ export default class ContentMessages {
         attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
         attachRelation(content, relation);
         if (replyToEvent) {
-            addReplyToMessageContent(content, replyToEvent, {
-                includeLegacyFallback: false,
-            });
+            addReplyToMessageContent(content, replyToEvent);
         }
 
         if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {

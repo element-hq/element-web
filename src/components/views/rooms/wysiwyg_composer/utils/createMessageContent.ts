@@ -11,7 +11,7 @@ import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/sr
 import { ReplacementEvent, RoomMessageEventContent, RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { parsePermalink, RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
+import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { isNotNull } from "../../../../../Typeguards";
 
@@ -52,8 +52,6 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
 interface CreateMessageContentParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
-    permalinkCreator?: RoomPermalinkCreator;
-    includeReplyLegacyFallback?: boolean;
     editedEvent?: MatrixEvent;
 }
 
@@ -62,13 +60,7 @@ const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instan
 export async function createMessageContent(
     message: string,
     isHTML: boolean,
-    {
-        relation,
-        replyToEvent,
-        permalinkCreator,
-        includeReplyLegacyFallback = true,
-        editedEvent,
-    }: CreateMessageContentParams,
+    { relation, replyToEvent, editedEvent }: CreateMessageContentParams,
 ): Promise<RoomMessageEventContent> {
     const isEditing = isMatrixEvent(editedEvent);
     const isReply = isEditing ? Boolean(editedEvent.replyEventId) : isMatrixEvent(replyToEvent);
@@ -126,11 +118,8 @@ export async function createMessageContent(
     // TODO Handle editing?
     attachRelation(content, newRelation);
 
-    if (!isEditing && replyToEvent && permalinkCreator) {
-        addReplyToMessageContent(content, replyToEvent, {
-            permalinkCreator,
-            includeLegacyFallback: includeReplyLegacyFallback,
-        });
+    if (!isEditing && replyToEvent) {
+        addReplyToMessageContent(content, replyToEvent);
     }
 
     return content;

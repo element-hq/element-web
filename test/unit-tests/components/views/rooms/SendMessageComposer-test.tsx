@@ -27,7 +27,6 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
@@ -80,14 +79,12 @@ describe("<SendMessageComposer/>", () => {
         viewRoomOpts: { buttons: [] },
     };
     describe("createMessageContent", () => {
-        const permalinkCreator = jest.fn() as any;
-
         it("sends plaintext messages correctly", () => {
             const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(11, true);
             model.update("hello world", "insertText", documentOffset);
 
-            const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
+            const content = createMessageContent("@alice:test", model, undefined, undefined);
 
             expect(content).toEqual({
                 "body": "hello world",
@@ -101,7 +98,7 @@ describe("<SendMessageComposer/>", () => {
             const documentOffset = new DocumentOffset(13, true);
             model.update("hello *world*", "insertText", documentOffset);
 
-            const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
+            const content = createMessageContent("@alice:test", model, undefined, undefined);
 
             expect(content).toEqual({
                 "body": "hello *world*",
@@ -117,7 +114,7 @@ describe("<SendMessageComposer/>", () => {
             const documentOffset = new DocumentOffset(22, true);
             model.update("/me blinks __quickly__", "insertText", documentOffset);
 
-            const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
+            const content = createMessageContent("@alice:test", model, undefined, undefined);
 
             expect(content).toEqual({
                 "body": "blinks __quickly__",
@@ -134,7 +131,7 @@ describe("<SendMessageComposer/>", () => {
             model.update("/me ✨sparkles✨", "insertText", documentOffset);
             expect(model.parts.length).toEqual(4); // Emoji count as non-text
 
-            const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
+            const content = createMessageContent("@alice:test", model, undefined, undefined);
 
             expect(content).toEqual({
                 "body": "✨sparkles✨",
@@ -149,7 +146,7 @@ describe("<SendMessageComposer/>", () => {
 
             model.update("//dev/null is my favourite place", "insertText", documentOffset);
 
-            const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
+            const content = createMessageContent("@alice:test", model, undefined, undefined);
 
             expect(content).toEqual({
                 "body": "/dev/null is my favourite place",
@@ -364,7 +361,6 @@ describe("<SendMessageComposer/>", () => {
         const defaultProps = {
             room: mockRoom,
             toggleStickerPickerOpen: jest.fn(),
-            permalinkCreator: new RoomPermalinkCreator(mockRoom),
         };
         const getRawComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => (
             <MatrixClientContext.Provider value={client}>

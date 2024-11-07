@@ -31,7 +31,6 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { attachMentions, attachRelation } from "./SendMessageComposer";
 import { addReplyToMessageContent } from "../../../utils/Reply";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
 import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
@@ -39,7 +38,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     room: Room;
-    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
 }
@@ -93,7 +91,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             throw new Error("No recording started - cannot send anything");
         }
 
-        const { replyToEvent, relation, permalinkCreator } = this.props;
+        const { replyToEvent, relation } = this.props;
 
         await this.state.recorder.stop();
 
@@ -124,10 +122,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             attachMentions(MatrixClientPeg.safeGet().getSafeUserId(), content, null, replyToEvent);
             attachRelation(content, relation);
             if (replyToEvent) {
-                addReplyToMessageContent(content, replyToEvent, {
-                    permalinkCreator,
-                    includeLegacyFallback: true,
-                });
+                addReplyToMessageContent(content, replyToEvent);
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
                 defaultDispatcher.dispatch({
