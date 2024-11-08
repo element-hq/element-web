@@ -570,8 +570,9 @@ export class StopGapWidget extends EventEmitter {
             // If the event is still being decrypted, remember that we want to
             // feed it to the widget (even if not strictly in the order given by
             // the timeline) and get back to it later
-            if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) this.eventsToFeed.add(ev);
-            else {
+            if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
+                this.eventsToFeed.add(ev);
+            } else {
                 const raw = ev.getEffectiveEvent();
                 this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
                     logger.error("Error sending event to widget: ", e);
