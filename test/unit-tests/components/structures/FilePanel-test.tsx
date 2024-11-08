@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventTimelineSet, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { EventTimelineSet, PendingEventOrdering, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { screen, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import FilePanel from "../../../../src/components/structures/FilePanel";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { stubClient } from "../../../test-utils";
+import { mkEvent, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
@@ -46,5 +46,44 @@ describe("FilePanel", () => {
             expect(screen.getByText("No files visible in this room")).toBeInTheDocument();
         });
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("addEncryptedLiveEvent", () => {
+        it("should add file msgtype event to filtered timelineSet", async () => {
+            const cli = MatrixClientPeg.safeGet();
+            const room = new Room("!room:server", cli, cli.getSafeUserId(), {
+                pendingEventOrdering: PendingEventOrdering.Detached,
+            });
+            cli.reEmitter.reEmit(room, [RoomEvent.Timeline]);
+            const timelineSet = new EventTimelineSet(room);
+            room.getOrCreateFilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+            mocked(cli.getRoom).mockReturnValue(room);
+
+            let filePanel: FilePanel | null;
+            render(
+                <FilePanel
+                    roomId={room.roomId}
+                    onClose={jest.fn()}
+                    resizeNotifier={new ResizeNotifier()}
+                    ref={(ref) => (filePanel = ref)}
+                />,
+            );
+            await screen.findByText("No files visible in this room");
+
+            const event = mkEvent({
+                type: "m.room.message",
+                user: cli.getSafeUserId(),
+                room: room.roomId,
+                content: {
+                    body: "hello",
+                    url: "mxc://matrix.org/1234",
+                    msgtype: "m.file",
+                },
+                event: true,
+            });
+            filePanel!.addEncryptedLiveEvent(event);
+
+            expect(timelineSet.getLiveTimeline().getEvents()).toContain(event);
+        });
     });
 });
