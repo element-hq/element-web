@@ -394,6 +394,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
                     <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                         <input
+                            data-testid="passphraseInput"
                             type="password"
                             className="mx_RestoreKeyBackupDialog_passPhraseInput"
                             onChange={this.onPassPhraseChange}
