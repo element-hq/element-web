@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
+import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as WarningBadge } from "../../../../res/img/element-icons/warning-badge.svg";
 import { _t } from "../../../languageHandler";
 import { getLocationShareErrorMessage, LocationShareError } from "../../../utils/location";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -29,7 +29,7 @@ export const MapError: React.FC<MapErrorProps> = ({ error, isMinimised, classNam
         className={classNames("mx_MapError", className, { mx_MapError_isMinimised: isMinimised })}
         onClick={onClick}
     >
-        <WarningBadge className="mx_MapError_icon" />
+        <ErrorIcon className="mx_MapError_icon" />
         <Heading className="mx_MapError_heading" size="3">
             {_t("location_sharing|failed_load_map")}
         </Heading>
