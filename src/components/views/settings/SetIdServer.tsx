@@ -101,7 +101,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onAction = (payload: ActionPayload): void => {

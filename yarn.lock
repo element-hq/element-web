@@ -1931,10 +1931,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.28.0":
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.28.0.tgz#91f501bb25435b9418f785ca850ca858aa6efc76"
-  integrity sha512-RvvGBYzgJrk2wTRVGk2fWhGM1f69f6nBraRqTiuqlqE2eQd2hZ2onHyRhvhxJeKVC/oNBsvrupObqrrWowXsnQ==
+"@matrix-org/analytics-events@^0.29.0":
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.0.tgz#ebadd922f50c0932a5c6af8b5e156f8f839f3236"
+  integrity sha512-7L+dQJuFt2iIhxhWwvJVp89/UdOfl2P455Ki9Krw0LGCMazPOwo5bc9GUjj/OKXO+eNHq+Qml1+RkYW+8LCk2Q==
 
 "@matrix-org/emojibase-bindings@^1.3.3":
   version "1.3.3"
@@ -8308,8 +8308,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "34.8.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/66c80949e8421e94e7d3672013fac1943e363f67"
+  version "34.10.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5a1488ebd5552817b1e95265afe7b3baac1231a2"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
@@ -8325,7 +8325,7 @@ matrix-events-sdk@0.0.1:
     p-retry "4"
     sdp-transform "^2.14.1"
     unhomoglyph "^1.0.6"
-    uuid "10"
+    uuid "11"
 
 matrix-mock-request@^2.5.0:
   version "2.6.0"
@@ -11701,20 +11701,15 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
 
-uuid@10:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
-  integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
+uuid@11, uuid@^11.0.0:
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.0.2.tgz#a8d68ba7347d051e7ea716cc8dcbbab634d66875"
+  integrity sha512-14FfcOJmqdjbBPdDjFQyk/SdT4NySW4eM0zcG+HqbHP5jzuH56xO3J1DGhgs/cEMCfwYi3HQI1gnTO62iaG+tQ==
 
 uuid@8.3.2, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
-
-uuid@^11.0.0:
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.0.2.tgz#a8d68ba7347d051e7ea716cc8dcbbab634d66875"
-  integrity sha512-14FfcOJmqdjbBPdDjFQyk/SdT4NySW4eM0zcG+HqbHP5jzuH56xO3J1DGhgs/cEMCfwYi3HQI1gnTO62iaG+tQ==
 
 uuid@^9.0.0:
   version "9.0.1"

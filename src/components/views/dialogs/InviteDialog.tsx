@@ -397,6 +397,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.encryptionByDefault = privateShouldBeEncrypted(MatrixClientPeg.safeGet());
 
         if (this.props.initialText) {

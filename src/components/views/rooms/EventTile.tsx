@@ -28,6 +28,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import {
     CryptoEvent,
+    DecryptionFailureCode,
     EventShieldColour,
     EventShieldReason,
     UserVerificationStatus,
@@ -60,7 +61,6 @@ import { IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -82,6 +82,7 @@ import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
+import { EventPreview } from "./EventPreview";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -386,6 +387,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
@@ -718,7 +720,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // event could not be decrypted
         if (ev.isDecryptionFailure()) {
-            return <E2ePadlockDecryptionFailure />;
+            switch (ev.decryptionFailureReason) {
+                // These two errors get icons from DecryptionFailureBody, so we hide the padlock icon
+                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                    return null;
+                default:
+                    return <E2ePadlockDecryptionFailure />;
+            }
         }
 
         if (this.state.shieldColour !== EventShieldColour.NONE) {
@@ -1332,7 +1341,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
                                     <DecryptionFailureBody mxEvent={this.props.mxEvent} />
                                 ) : (
-                                    MessagePreviewStore.instance.generatePreviewForEvent(this.props.mxEvent)
+                                    <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
                             </div>
                             {this.renderThreadPanelSummary()}

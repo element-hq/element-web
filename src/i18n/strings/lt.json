@@ -152,7 +152,6 @@
         "failed_connect_identity_server_register": "Jūs galite registruotis, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_connect_identity_server_reset_password": "Jūs galite iš naujo nustatyti savo slaptažodį, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_homeserver_discovery": "Nepavyko atlikti serverio radimo",
-        "footer_powered_by_matrix": "veikia su Matrix",
         "forgot_password_email_required": "Privalo būti įvestas su jūsų paskyra susietas el. pašto adresas.",
         "forgot_password_prompt": "Pamiršote savo slaptažodį?",
         "identifier_label": "Prisijungti naudojant",
@@ -2285,7 +2284,6 @@
     "truncated_list_n_more": {
         "other": "Ir dar %(count)s..."
     },
-    "unknown_device": "Nežinomas įrenginys",
     "update": {
         "changelog": "Keitinių žurnalas",
         "check_action": "Tikrinti, ar yra atnaujinimų",

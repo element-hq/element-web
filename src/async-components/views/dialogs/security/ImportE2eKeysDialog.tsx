@@ -64,6 +64,10 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
         };
     }
 
+    public componentDidMount(): void {
+        this.unmounted = false;
+    }
+
     public componentWillUnmount(): void {
         this.unmounted = true;
     }

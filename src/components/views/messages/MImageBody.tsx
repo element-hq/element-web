@@ -59,7 +59,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    private unmounted = true;
+    private unmounted = false;
     private image = createRef<HTMLImageElement>();
     private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;
@@ -368,7 +368,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
-        if (this.sizeWatcher) SettingsStore.unwatchSetting(this.sizeWatcher);
+        SettingsStore.unwatchSetting(this.sizeWatcher);
         if (this.state.isAnimated && this.state.thumbUrl) {
             URL.revokeObjectURL(this.state.thumbUrl);
         }

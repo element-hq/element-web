@@ -113,13 +113,9 @@ export default class DeviceListener {
             this.client.removeListener(ClientEvent.Sync, this.onSync);
             this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
-        if (this.deviceClientInformationSettingWatcherRef) {
-            SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
-        }
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = undefined;
-        }
+        SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
         this.dismissed.clear();
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;

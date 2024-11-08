@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, RenderResult, waitFor } from "jest-matrix-react";
 import {
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
@@ -85,7 +85,7 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("");
         expect(votesCount(renderResult, "italian")).toBe("");
         expect(votesCount(renderResult, "wings")).toBe("");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("No votes cast");
+        await waitFor(() => expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("No votes cast"));
         expect(renderResult.getByText("What should we order for the party?")).toBeTruthy();
     });
 
