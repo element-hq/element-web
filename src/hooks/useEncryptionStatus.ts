@@ -21,7 +21,6 @@ export function useEncryptionStatus(client: MatrixClient, room: Room): E2EStatus
             throttle(
                 () => {
                     if (client.getCrypto()) {
-                        console.log("getting status");
                         shieldStatusForRoom(client, room).then((e2eStatus) => {
                             setE2eStatus(e2eStatus);
                         });
