@@ -6,7 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, MatrixEvent, MatrixEventEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    MatrixEvent,
+    MatrixEventEvent,
+    MatrixClient,
+    ClientEvent,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     ClientWidgetApi,
@@ -333,6 +340,7 @@ export class StopGapWidget extends EventEmitter {
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
         this.client.on(ClientEvent.Event, this.onEvent);
         this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.on(RoomStateEvent.Events, this.onStateEvent);
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
 
         this.messaging.on(
@@ -463,15 +471,33 @@ export class StopGapWidget extends EventEmitter {
 
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.off(RoomStateEvent.Events, this.onStateEvent);
         this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
     }
 
     private onEvent = (ev: MatrixEvent): void => {
         this.client.decryptEventIfNeeded(ev);
-        this.feedEvent(ev);
+        // Only process non-state events here; we don't want to confuse the
+        // widget with a state event from the timeline that might not have
+        // actually updated the room's state
+        if (!ev.isState()) this.handleEvent(ev);
     };
 
     private onEventDecrypted = (ev: MatrixEvent): void => {
+        this.handleEvent(ev);
+    };
+
+    private onStateEvent = (ev: MatrixEvent): void => {
+        // State events get to skip all the checks of handleEvent and be fed
+        // directly to the widget. When it comes to state events, we don't care
+        // so much about getting the order and contents of the timeline right as
+        // we care about state updates reliably getting through to the widget so
+        // that it sees the same state as what the server calculated.
+        // TODO: We can provide widgets with a more complete timeline stream
+        // while also getting state updates right if we create a separate widget
+        // action for communicating state deltas, similar to how the 'state'
+        // sections of sync responses in Simplified Sliding Sync and MSC4222
+        // work.
         this.feedEvent(ev);
     };
 
@@ -544,8 +570,7 @@ export class StopGapWidget extends EventEmitter {
         return false;
     }
 
-    private feedEvent(ev: MatrixEvent): void {
-        if (this.messaging === null) return;
+    private handleEvent(ev: MatrixEvent): void {
         if (
             // If we had decided earlier to feed this event to the widget, but
             // it just wasn't ready, give it another try
@@ -573,11 +598,16 @@ export class StopGapWidget extends EventEmitter {
             if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
                 this.eventsToFeed.add(ev);
             } else {
-                const raw = ev.getEffectiveEvent();
-                this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
-                    logger.error("Error sending event to widget: ", e);
-                });
+                this.feedEvent(ev);
             }
         }
+    }
+
+    private feedEvent(ev: MatrixEvent): void {
+        if (this.messaging === null) return;
+        const raw = ev.getEffectiveEvent();
+        this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
+            logger.error("Error sending event to widget: ", e);
+        });
     }
 }
