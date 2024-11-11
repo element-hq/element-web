@@ -693,10 +693,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     /**
-     * Expresses a {@link MatrixError} as a {@link IWidgetApiErrorResponseDataDetails}
+     * Expresses a {@link MatrixError} as a JSON payload
      * for use by Widget API error responses.
      * @param error The error to handle.
-     * @returns The error expressed as a {@link IWidgetApiErrorResponseDataDetails},
+     * @returns The error expressed as a JSON payload,
      * or undefined if it is not a {@link MatrixError}.
      */
     public processError(error: unknown): IWidgetApiErrorResponseDataDetails | undefined {
