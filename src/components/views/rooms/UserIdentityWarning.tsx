@@ -47,6 +47,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     const crypto = cli.getCrypto();
 
     // The current room member that we are prompting the user to approve.
+    // `undefined` means we are not currently showing a prompt.
     const [currentPrompt, setCurrentPrompt] = useState<RoomMember | undefined>(undefined);
 
     // Whether or not we've already initialised the component by loading the
@@ -57,7 +58,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // Whether we got a verification status update while we were fetching a
     // user's verification status.
     //
-    // We set the entry for a user to `false` when we fetch a user's
+    // We set the entry for a user to `false` when we start fetching a user's
     // verification status, and remove the user's entry when we are done
     // fetching.  When we receive a verification status update, if the entry for
     // the user is `false`, we set it to `true`.  After we have finished
@@ -71,40 +72,72 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
     // Select a new user to display a warning for.  This is called after the
     // current prompted user no longer needs their identity approved.
-    const selectCurrentPrompt = useCallback((): void => {
+    const selectCurrentPrompt = useCallback((): RoomMember | undefined => {
         const membersNeedingApproval = membersNeedingApprovalRef.current;
         if (membersNeedingApproval.size === 0) {
-            setCurrentPrompt(undefined);
-            return;
+            return undefined;
         }
 
-        // We return the user with the smallest user ID.
+        // We pick the user with the smallest user ID.
         const keys = Array.from(membersNeedingApproval.keys()).sort((a, b) => a.localeCompare(b));
-        setCurrentPrompt(membersNeedingApproval.get(keys[0]!));
-    }, [membersNeedingApprovalRef]);
+        const selection = membersNeedingApproval.get(keys[0]!);
+        return selection;
+    }, []);
 
     // Add a user to the membersNeedingApproval map, and update the current
-    // prompt if necessary.
+    // prompt if necessary. The user will only be added if they are actually a
+    // member of the room. If they are not a member, this function will do
+    // nothing.
     const addMemberNeedingApproval = useCallback(
-        (userId: string): void => {
+        (userId: string, member?: RoomMember, updatePrompt: boolean = true): void => {
             if (userId === cli.getUserId()) {
                 // We always skip our own user, because we can't pin our own identity.
                 return;
             }
-            const member = room.getMember(userId);
+            member = member ?? room.getMember(userId) ?? undefined;
             if (member) {
                 membersNeedingApprovalRef.current.set(userId, member);
-                if (!currentPrompt) {
-                    // If we're not currently displaying a prompt, then we should
-                    // display a prompt for this user.
-                    selectCurrentPrompt();
+                if (updatePrompt) {
+                    setCurrentPrompt((currentPrompt) => {
+                        // We have to do this in a callback to
+                        // `setCurrentPrompt` because this function could have
+                        // been called after an `await`, and the `currentPrompt`
+                        // that this function would have may be outdated.
+                        if (!currentPrompt) {
+                            return selectCurrentPrompt();
+                        }
+                    });
                 }
             }
         },
-        [cli, room, membersNeedingApprovalRef, currentPrompt, selectCurrentPrompt],
+        [cli, room, selectCurrentPrompt],
     );
 
-    // Add a user from the membersNeedingApproval map, and update the current
+    // Check if the user's identity needs approval, and if so, add them to the
+    // membersNeedingApproval map and update the prompt if needed. They will
+    // only be added if they are a member of the room.
+    const addMemberIfNeedsApproval = useCallback(
+        async (userId: string, member?: RoomMember, updatePrompt: boolean = true): Promise<void> => {
+            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
+            const membersNeedingApproval = membersNeedingApprovalRef.current;
+
+            if (gotVerificationStatusUpdate.has(userId)) {
+                // We're already checking their verification status, so we don't
+                // need to do anything here.
+                return;
+            }
+            gotVerificationStatusUpdate.set(userId, false);
+            if (await userNeedsApproval(crypto!, userId)) {
+                if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
+                    addMemberNeedingApproval(userId, member, updatePrompt);
+                }
+            }
+            gotVerificationStatusUpdate.delete(userId);
+        },
+        [crypto, addMemberNeedingApproval],
+    );
+
+    // Remove a user from the membersNeedingApproval map, and update the current
     // prompt if necessary.
     const removeMemberNeedingApproval = useCallback(
         (userId: string): void => {
@@ -113,10 +146,10 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             // If we removed the currently displayed user, we need to pick a new one
             // to display.
             if (currentPrompt?.userId === userId) {
-                selectCurrentPrompt();
+                setCurrentPrompt(selectCurrentPrompt());
             }
         },
-        [membersNeedingApprovalRef, currentPrompt, selectCurrentPrompt],
+        [currentPrompt, selectCurrentPrompt],
     );
 
     // Initialise the component.  Get the room members, check which ones need
@@ -133,29 +166,14 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         }
         initialisedRef.current = true;
 
-        const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
-        const membersNeedingApproval = membersNeedingApprovalRef.current;
-
         const members = await room.getEncryptionTargetMembers();
 
         for (const member of members) {
-            const userId = member.userId;
-            if (gotVerificationStatusUpdate.has(userId)) {
-                // We're already checking their verification status, so we don't
-                // need to do anything here.
-                continue;
-            }
-            gotVerificationStatusUpdate.set(userId, false);
-            if (await userNeedsApproval(crypto, userId)) {
-                if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
-                    membersNeedingApproval.set(userId, member);
-                }
-            }
-            gotVerificationStatusUpdate.delete(userId);
+            await addMemberIfNeedsApproval(member.userId, member, false);
         }
 
-        selectCurrentPrompt();
-    }, [crypto, room, initialisedRef, gotVerificationStatusUpdateRef, membersNeedingApprovalRef, selectCurrentPrompt]);
+        setCurrentPrompt(selectCurrentPrompt());
+    }, [crypto, room, addMemberIfNeedsApproval, selectCurrentPrompt]);
 
     loadMembers().catch((e) => {
         logger.error("Error initialising UserIdentityWarning:", e);
@@ -181,7 +199,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 removeMemberNeedingApproval(userId);
             }
         },
-        [initialisedRef, gotVerificationStatusUpdateRef, addMemberNeedingApproval, removeMemberNeedingApproval],
+        [addMemberNeedingApproval, removeMemberNeedingApproval],
     );
     useTypedEventEmitter(cli, CryptoEvent.UserTrustStatusChanged, onUserVerificationStatusChanged);
 
@@ -193,9 +211,6 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             if (!crypto || event.getRoomId() !== room.roomId) {
                 return;
             }
-
-            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
-            const membersNeedingApproval = membersNeedingApprovalRef.current;
 
             const eventType = event.getType();
             if (eventType === EventType.RoomEncryption && event.getStateKey() === "") {
@@ -217,37 +232,18 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
             if (
                 event.getContent().membership === KnownMembership.Join ||
-                (event.getContent().membership === KnownMembership.Join && room.shouldEncryptForInvitedMembers())
+                (event.getContent().membership === KnownMembership.Invite && room.shouldEncryptForInvitedMembers())
             ) {
                 // Someone's membership changed and we will now encrypt to them.  If
                 // their identity needs approval, show a warning.
-                if (gotVerificationStatusUpdate.has(userId)) {
-                    // We're already checking their verification status, so we don't
-                    // need to do anything here.
-                    return;
-                }
-                gotVerificationStatusUpdate.set(userId, false);
-                if (await userNeedsApproval(crypto, userId)) {
-                    if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
-                        addMemberNeedingApproval(userId);
-                    }
-                }
-                gotVerificationStatusUpdate.delete(userId);
+                await addMemberIfNeedsApproval(userId);
             } else {
                 // Someone's membership changed and we no longer encrypt to them.
                 // If we're showing a warning about them, we don't need to any more.
                 removeMemberNeedingApproval(userId);
             }
         },
-        [
-            crypto,
-            room,
-            gotVerificationStatusUpdateRef,
-            membersNeedingApprovalRef,
-            addMemberNeedingApproval,
-            removeMemberNeedingApproval,
-            loadMembers,
-        ],
+        [crypto, room, addMemberIfNeedsApproval, removeMemberNeedingApproval, loadMembers],
     );
     useTypedEventEmitter(cli, RoomStateEvent.Events, onRoomStateEvent);
 

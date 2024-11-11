@@ -197,41 +197,20 @@ describe("UserIdentityWarning", () => {
 
     // We only display warnings about users in the room.  When someone
     // joins/leaves, we should update the warning appropriately.
-    it("updates the display when a member joins/leaves", async () => {
-        // Nobody in the room yet
-        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
-        jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
-        const crypto = client.getCrypto()!;
-        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
-            new UserVerificationStatus(false, false, false, true),
-        );
-        renderComponent(client, room);
-        await sleep(10); // give it some time to finish initialising
+    describe("updates the display when a member joins/leaves", () => {
+        it("when invited users can see encrypted messages", async () => {
+            // Nobody in the room yet
+            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+            jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(true);
+            const crypto = client.getCrypto()!;
+            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+                new UserVerificationStatus(false, false, false, true),
+            );
+            renderComponent(client, room);
+            await sleep(10); // give it some time to finish initialising
 
-        // Alice joins.  Her identity needs approval, so we should show a warning.
-        client.emit(
-            RoomStateEvent.Events,
-            new MatrixEvent({
-                event_id: "$event_id",
-                type: EventType.RoomMember,
-                state_key: "@alice:example.org",
-                content: {
-                    membership: "join",
-                },
-                room_id: ROOM_ID,
-                sender: "@alice:example.org",
-            }),
-            dummyRoomState(),
-            null,
-        );
-        await waitFor(() =>
-            expect(
-                getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-            ).toBeInTheDocument(),
-        );
-
-        // Alice leaves, so we no longer show her warning.
-        act(() => {
+            // Alice joins.  Her identity needs approval, so we should show a warning.
             client.emit(
                 RoomStateEvent.Events,
                 new MatrixEvent({
@@ -239,7 +218,7 @@ describe("UserIdentityWarning", () => {
                     type: EventType.RoomMember,
                     state_key: "@alice:example.org",
                     content: {
-                        membership: "leave",
+                        membership: "join",
                     },
                     room_id: ROOM_ID,
                     sender: "@alice:example.org",
@@ -247,10 +226,130 @@ describe("UserIdentityWarning", () => {
                 dummyRoomState(),
                 null,
             );
+            await waitFor(() =>
+                expect(getWarningByText("@alice:example.org's identity appears to have changed.")).toBeInTheDocument(),
+            );
+
+            // Bob is invited.  His identity needs approval, so we should show a
+            // warning for him after Alice's warning is resolved by her leaving.
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@bob:example.org",
+                    content: {
+                        membership: "invite",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@carol:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+
+            // Alice leaves, so we no longer show her warning, but we will show
+            // a warning for Bob.
+            act(() => {
+                client.emit(
+                    RoomStateEvent.Events,
+                    new MatrixEvent({
+                        event_id: "$event_id",
+                        type: EventType.RoomMember,
+                        state_key: "@alice:example.org",
+                        content: {
+                            membership: "leave",
+                        },
+                        room_id: ROOM_ID,
+                        sender: "@alice:example.org",
+                    }),
+                    dummyRoomState(),
+                    null,
+                );
+            });
+            await waitFor(() =>
+                expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow(),
+            );
+            expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument();
         });
-        await waitFor(() =>
-            expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow(),
-        );
+
+        it("when invited users cannot see encrypted messages", async () => {
+            // Nobody in the room yet
+            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+            jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            const crypto = client.getCrypto()!;
+            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+                new UserVerificationStatus(false, false, false, true),
+            );
+            renderComponent(client, room);
+            await sleep(10); // give it some time to finish initialising
+
+            // Alice joins.  Her identity needs approval, so we should show a warning.
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@alice:example.org",
+                    content: {
+                        membership: "join",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@alice:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+            await waitFor(() =>
+                expect(getWarningByText("@alice:example.org's identity appears to have changed.")).toBeInTheDocument(),
+            );
+
+            // Bob is invited. His identity needs approval, but we don't encrypt
+            // to him, so we won't show a warning. (When Alice leaves, the
+            // display won't be updated to show a warningfor Bob.)
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@bob:example.org",
+                    content: {
+                        membership: "invite",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@carol:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+
+            // Alice leaves, so we no longer show her warning, and we don't show
+            // a warning for Bob.
+            act(() => {
+                client.emit(
+                    RoomStateEvent.Events,
+                    new MatrixEvent({
+                        event_id: "$event_id",
+                        type: EventType.RoomMember,
+                        state_key: "@alice:example.org",
+                        content: {
+                            membership: "leave",
+                        },
+                        room_id: ROOM_ID,
+                        sender: "@alice:example.org",
+                    }),
+                    dummyRoomState(),
+                    null,
+                );
+            });
+            await waitFor(() =>
+                expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow(),
+            );
+            await waitFor(() =>
+                expect(() => getWarningByText("@bob:example.org's identity appears to have changed.")).toThrow(),
+            );
+        });
     });
 
     // When we have multiple users whose identity needs approval, one user's
