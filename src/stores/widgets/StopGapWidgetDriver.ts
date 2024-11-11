@@ -128,12 +128,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
@@ -175,7 +169,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
-            const sendRecvRoomEvents = ["io.element.call.encryption_keys", EventType.Reaction, EventType.RoomRedaction];
+            const sendRecvRoomEvents = [
+                "io.element.call.encryption_keys",
+                "org.matrix.rageshake_request",
+                EventType.Reaction,
+                EventType.RoomRedaction,
+                "io.element.call.reaction",
+            ];
             for (const eventType of sendRecvRoomEvents) {
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
