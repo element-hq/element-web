@@ -8309,7 +8309,7 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "34.10.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5a1488ebd5552817b1e95265afe7b3baac1231a2"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/10a4fd8328bbe5380629ba90a64139ec60acf5fd"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
@@ -8320,7 +8320,7 @@ matrix-events-sdk@0.0.1:
     jwt-decode "^4.0.0"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.8.2"
+    matrix-widget-api "^1.10.0"
     oidc-client-ts "^3.0.1"
     p-retry "4"
     sdp-transform "^2.14.1"
@@ -8345,10 +8345,10 @@ matrix-web-i18n@^3.2.1:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.8.2, matrix-widget-api@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.9.0.tgz#884136b405bd3c56e4ea285095c9e01ec52b6b1f"
-  integrity sha512-au8mqralNDqrEvaVAkU37bXOb8I9SCe+ACdPk11QWw58FKstVq31q2wRz+qWA6J+42KJ6s1DggWbG/S3fEs3jw==
+matrix-widget-api@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.10.0.tgz#d31ea073a5871a1fb1a511ef900b0c125a37bf55"
+  integrity sha512-rkAJ29briYV7TJnfBVLVSKtpeBrBju15JZFSDP6wj8YdbCu1bdmlplJayQ+vYaw1x4fzI49Q+Nz3E85s46sRDw==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
