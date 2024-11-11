@@ -162,14 +162,14 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             return false;
         }
         // Check mimetype of the thumbnail
-        if (!this.validateThumbnailMimeType(content)) {
+        if (!this.validateThumbnailMimetype(content)) {
             logger.log("Failed to validate file/image thumbnail");
             return false;
         }
 
-        // if there is no mimetype from the extesion or the mimetype is not image/video validation fails.
+        // if there is no mimetype from the extesion or the mimetype is not image/video validation fails
         const typeFromExtension = mime.getType(filename) ?? undefined;
-        const extensionMajorMimeType = this.parseMajorMimeType(typeFromExtension);
+        const extensionMajorMimetype = this.parseMajorMimetype(typeFromExtension);
         if (!typeFromExtension || !this.validateAllowedMimetype(typeFromExtension, ["image", "video"])) {
             logger.log("Failed to validate image/video content, invalid or missing extension");
             return false;
@@ -178,10 +178,10 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         // if the content mimetype is set check it is an image/video and that it matches the extesion mimetype otherwise validation fails
         const contentMimetype = content.info?.mimetype;
         if (contentMimetype) {
-            const contentMajorMimetype = this.parseMajorMimeType(contentMimetype);
+            const contentMajorMimetype = this.parseMajorMimetype(contentMimetype);
             if (
                 !this.validateAllowedMimetype(contentMimetype, ["image", "video"]) ||
-                extensionMajorMimeType !== contentMajorMimetype
+                extensionMajorMimetype !== contentMajorMimetype
             ) {
                 logger.log("Failed to validate image/video content, invalid or missing mimetype");
                 return false;
@@ -199,7 +199,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
      */
     private validateStickerMimetype = (content: IContent): boolean => {
         // Validate mimetype of the thumbnail
-        const thumbnailResult = this.validateThumbnailMimeType(content);
+        const thumbnailResult = this.validateThumbnailMimetype(content);
         if (!thumbnailResult) {
             logger.log("Failed to validate sticker thumbnail");
             return false;
@@ -219,7 +219,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
      * @param content The mxEvent content of the message
      * @returns A boolean indicating whether the validation passed
      */
-    private validateThumbnailMimeType = (content: IContent): boolean => {
+    private validateThumbnailMimetype = (content: IContent): boolean => {
         const thumbnailMimetype = content.info?.thumbnail_info?.mimetype;
         return !thumbnailMimetype || this.validateAllowedMimetype(thumbnailMimetype, ["image"]);
     };
@@ -231,7 +231,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
      * @returns A boolean indicating whether the validation passed
      */
     private validateAllowedMimetype = (mimetype: string, allowedMajorMimeTypes: string[]): boolean => {
-        const majorMimetype = this.parseMajorMimeType(mimetype);
+        const majorMimetype = this.parseMajorMimetype(mimetype);
         return !!majorMimetype && allowedMajorMimeTypes.includes(majorMimetype);
     };
 
@@ -240,7 +240,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
      * @param mimetype As optional mimetype string to parse
      * @returns The major part of the mimetype string or undefined
      */
-    private parseMajorMimeType(mimetype?: string): string | undefined {
+    private parseMajorMimetype(mimetype?: string): string | undefined {
         return mimetype?.split("/")[0];
     }
 
