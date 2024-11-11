@@ -98,7 +98,6 @@
         "report_content": "举报内容",
         "resend": "重新发送",
         "reset": "重置",
-        "restore": "恢复",
         "resume": "恢复",
         "retry": "重试",
         "review": "开始验证",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "无法查询支持的注册方法。",
         "failed_soft_logout_auth": "重新认证失败",
         "failed_soft_logout_homeserver": "由于家服务器的问题，重新认证失败",
-        "footer_powered_by_matrix": "由 Matrix 驱动",
         "forgot_password_email_invalid": "电子邮件地址似乎无效。",
         "forgot_password_email_required": "必须输入和你账户关联的邮箱地址。",
         "forgot_password_prompt": "忘记你的密码了吗？",
@@ -820,7 +818,6 @@
         },
         "unable_to_setup_keys_error": "无法设置密钥",
         "unsupported": "此客户端不支持端到端加密。",
-        "upgrade_toast_title": "提供加密升级",
         "verification": {
             "accepting": "正在接受……",
             "after_new_login": {
@@ -2201,18 +2198,13 @@
                 "pass_phrase_match_failed": "不匹配。",
                 "pass_phrase_match_success": "匹配成功！",
                 "phrase_strong_enough": "棒！这个安全短语看着够强。",
-                "requires_key_restore": "恢复你的密钥备份以更新你的加密方式",
-                "requires_password_confirmation": "输入你的账户密码以确认升级：",
-                "requires_server_authentication": "你需要和服务器进行认证以确认更新。",
                 "secret_storage_query_failure": "无法查询秘密存储状态",
                 "security_key_safety_reminder": "将您的安全密钥存放在安全的地方，例如密码管理器或保险箱，因为它用于保护您的加密数据。",
-                "session_upgrade_description": "更新此会话以允许其验证其他会话、允许其他会话访问加密消息，并将它们对别的用户标记为已信任。",
                 "set_phrase_again": "返回重新设置。",
                 "settings_reminder": "你也可以在设置中设置安全备份并管理你的密钥。",
                 "title_confirm_phrase": "确认安全密码",
                 "title_save_key": "保存你的安全密钥",
                 "title_set_phrase": "设置一个安全密码",
-                "title_upgrade_encryption": "更新你的加密方法",
                 "unable_to_setup": "无法设置秘密存储",
                 "use_different_passphrase": "使用不同的口令词组？",
                 "use_phrase_only_you_know": "使用一个只有你知道的密码，你也可以保存安全密钥以供备份使用。"
@@ -3160,7 +3152,6 @@
     "truncated_list_n_more": {
         "other": "和 %(count)s 个其他…"
     },
-    "unknown_device": "未知设备",
     "update": {
         "changelog": "更改日志",
         "check_action": "检查更新",

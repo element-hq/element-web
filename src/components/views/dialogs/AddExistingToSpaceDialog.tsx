@@ -229,7 +229,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     if (error) {
         footer = (
             <>
-                <ErrorIcon height="24" width="24" />
+                <ErrorIcon height="24px" width="24px" />
 
                 <span className="mx_AddExistingToSpaceDialog_error">
                     <div className="mx_AddExistingToSpaceDialog_errorHeading">

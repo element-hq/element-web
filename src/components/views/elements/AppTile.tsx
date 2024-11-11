@@ -134,29 +134,20 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframe?: HTMLIFrameElement; // ref to the iframe (callback style)
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
-    private sgWidget: StopGapWidget | null;
+    private sgWidget?: StopGapWidget;
     private dispatcherRef?: string;
     private unmounted = false;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        // Tiles in miniMode are floating, and therefore not docked
-        if (!this.props.miniMode) {
-            ActiveWidgetStore.instance.dockWidget(
-                this.props.app.id,
-                isAppWidget(this.props.app) ? this.props.app.roomId : null,
-            );
-        }
-
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
         try {
             this.sgWidget = new StopGapWidget(this.props);
-            this.setupSgListeners();
         } catch (e) {
             logger.log("Failed to construct widget", e);
-            this.sgWidget = null;
+            this.sgWidget = undefined;
         }
 
         this.state = this.getNewState(props);
@@ -303,6 +294,20 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
+        // Tiles in miniMode are floating, and therefore not docked
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.dockWidget(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            );
+        }
+
+        if (this.sgWidget) {
+            this.setupSgListeners();
+        }
+
         // Only fetch IM token on mount if we're showing and have permission to load
         if (this.sgWidget && this.state.hasPermissionToLoad) {
             this.startWidget();
@@ -340,13 +345,13 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         // Widget action listeners
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
             this.context.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
-        if (this.allowedWidgetsWatchRef) SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
@@ -374,7 +379,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.startWidget();
         } catch (e) {
             logger.error("Failed to construct widget", e);
-            this.sgWidget = null;
+            this.sgWidget = undefined;
         }
     }
 
@@ -607,7 +612,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        let appTileBody: JSX.Element;
+        let appTileBody: JSX.Element | undefined;
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
         // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -650,7 +655,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <AppWarning errorMsg={_t("widget|error_loading")} />
                 </div>
             );
-        } else if (!this.state.hasPermissionToLoad && this.props.room) {
+        } else if (!this.state.hasPermissionToLoad && this.props.room && this.sgWidget) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
@@ -677,7 +682,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                         <AppWarning errorMsg={_t("widget|error_mixed_content")} />
                     </div>
                 );
-            } else {
+            } else if (this.sgWidget) {
                 appTileBody = (
                     <>
                         <div className={appTileBodyClass} style={appTileBodyStyles}>

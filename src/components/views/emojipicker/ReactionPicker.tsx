@@ -37,6 +37,9 @@ class ReactionPicker extends React.Component<IProps, IState> {
         this.state = {
             selectedEmojis: new Set(Object.keys(this.getReactions())),
         };
+    }
+
+    public componentDidMount(): void {
         this.addListeners();
     }
 

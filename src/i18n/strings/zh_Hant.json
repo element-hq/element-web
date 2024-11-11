@@ -98,7 +98,6 @@
         "report_content": "回報內容",
         "resend": "重新傳送",
         "reset": "重設",
-        "restore": "還原",
         "resume": "繼續",
         "retry": "重試",
         "review": "評論",
@@ -202,7 +201,6 @@
         "failed_query_registration_methods": "無法查詢支援的註冊方法。",
         "failed_soft_logout_auth": "無法重新驗證",
         "failed_soft_logout_homeserver": "因為家伺服器的問題，所以無法重新驗證",
-        "footer_powered_by_matrix": "由 Matrix 提供",
         "forgot_password_email_invalid": "電子郵件地址似乎無效。",
         "forgot_password_email_required": "必須輸入和您帳號綁定的電子郵件地址。",
         "forgot_password_prompt": "忘記您的密碼了？",
@@ -876,7 +874,6 @@
         },
         "unable_to_setup_keys_error": "無法設定金鑰",
         "unsupported": "此客戶端不支援端對端加密。",
-        "upgrade_toast_title": "已提供加密升級",
         "verification": {
             "accepting": "正在接受…",
             "after_new_login": {
@@ -2375,18 +2372,13 @@
                 "pass_phrase_match_failed": "不相符。",
                 "pass_phrase_match_success": "相符！",
                 "phrase_strong_enough": "很好！此安全密語看起來夠強。",
-                "requires_key_restore": "復原您的金鑰備份以升級您的加密",
-                "requires_password_confirmation": "輸入您的帳號密碼以確認升級：",
-                "requires_server_authentication": "您必須透過伺服器驗證以確認升級。",
                 "secret_storage_query_failure": "無法查詢秘密儲存空間狀態",
                 "security_key_safety_reminder": "由於安全金鑰是用來保護您的加密資料，請將其儲存在安全的地方，例如密碼管理員或保險箱等。",
-                "session_upgrade_description": "升級此工作階段以驗證其他工作階段，給予其他工作階段存取加密訊息的權限，並為其他使用者標記它們為受信任。",
                 "set_phrase_again": "返回重新設定。",
                 "settings_reminder": "您也可以在設定中設定安全備份並管理您的金鑰。",
                 "title_confirm_phrase": "確認安全密語",
                 "title_save_key": "儲存您的安全金鑰",
                 "title_set_phrase": "設定安全密語",
-                "title_upgrade_encryption": "升級您的加密",
                 "unable_to_setup": "無法設定秘密資訊儲存空間",
                 "use_different_passphrase": "使用不同的安全密語？",
                 "use_phrase_only_you_know": "使用僅有您知道的安全密語，也可再儲存安全金鑰作為備份。"
@@ -3428,7 +3420,6 @@
     "truncated_list_n_more": {
         "other": "與更多 %(count)s 個…"
     },
-    "unknown_device": "未知裝置",
     "unsupported_server_description": "此伺服器正在使用較舊版本的 Matrix。升級至 Matrix %(version)s 以在沒有錯誤的情況下使用 %(brand)s。",
     "unsupported_server_title": "您的伺服器不支援",
     "update": {

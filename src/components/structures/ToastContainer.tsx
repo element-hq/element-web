@@ -24,12 +24,11 @@ export default class ToastContainer extends React.Component<{}, IState> {
             toasts: ToastStore.sharedInstance().getToasts(),
             countSeen: ToastStore.sharedInstance().getCountSeen(),
         };
+    }
 
-        // Start listening here rather than in componentDidMount because
-        // toasts may dismiss themselves in their didMount if they find
-        // they're already irrelevant by the time they're mounted, and
-        // our own componentDidMount is too late.
+    public componentDidMount(): void {
         ToastStore.sharedInstance().on("update", this.onToastStoreUpdate);
+        this.onToastStoreUpdate();
     }
 
     public componentWillUnmount(): void {

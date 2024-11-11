@@ -186,7 +186,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                 onFinished={this.props.onFinished}
             >
                 <div className="mx_ModalWidgetDialog_warning">
-                    <ErrorIcon height="16" width="16" />
+                    <ErrorIcon width="16px" height="16px" />
                     {_t("widget|modal_data_warning", {
                         widgetDomain: parsed.hostname,
                     })}

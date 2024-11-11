@@ -23,7 +23,7 @@ export abstract class AsyncStoreWithClient<T extends object> extends AsyncStore<
         const asyncStore = this; // eslint-disable-line @typescript-eslint/no-this-alias
         this.readyStore = new (class extends ReadyWatchingStore {
             public get mxClient(): MatrixClient | null {
-                return this.matrixClient;
+                return this.matrixClient ?? null;
             }
 
             protected async onReady(): Promise<any> {

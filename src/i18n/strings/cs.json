@@ -103,7 +103,6 @@
         "report_content": "Nahlásit obsah",
         "resend": "Poslat znovu",
         "reset": "Resetovat",
-        "restore": "Obnovit",
         "resume": "Pokračovat",
         "retry": "Zkusit znovu",
         "review": "Prohlédnout",
@@ -208,7 +207,6 @@
         "failed_query_registration_methods": "Nepovedlo se načíst podporované způsoby přihlášení.",
         "failed_soft_logout_auth": "Nepovedlo se autentifikovat",
         "failed_soft_logout_homeserver": "Kvůli problémům s domovským server se nepovedlo autentifikovat znovu",
-        "footer_powered_by_matrix": "používá protokol Matrix",
         "forgot_password_email_invalid": "E-mailová adresa se nezdá být platná.",
         "forgot_password_email_required": "Musíte zadat e-mailovou adresu spojenou s vaším účtem.",
         "forgot_password_prompt": "Zapomněli jste heslo?",
@@ -893,7 +891,6 @@
         },
         "unable_to_setup_keys_error": "Nepovedlo se nastavit klíče",
         "unsupported": "Tento klient nepodporuje koncové šifrování.",
-        "upgrade_toast_title": "Je dostupná aktualizace šifrování",
         "verification": {
             "accepting": "Přijímání…",
             "after_new_login": {
@@ -2451,18 +2448,13 @@
                 "pass_phrase_match_failed": "To nesedí.",
                 "pass_phrase_match_success": "To odpovídá!",
                 "phrase_strong_enough": "Skvělé! Tato bezpečnostní fráze vypadá dostatečně silně.",
-                "requires_key_restore": "Pro aktualizaci šifrování obnovte klíče ze zálohy",
-                "requires_password_confirmation": "Potvrďte, že chcete aktualizaci provést zadáním svého uživatelského hesla:",
-                "requires_server_authentication": "Server si vás potřebuje ověřit, abychom mohli provést aktualizaci.",
                 "secret_storage_query_failure": "Nelze zjistit stav úložiště klíčů",
                 "security_key_safety_reminder": "Bezpečnostní klíč uložte na bezpečné místo, například do správce hesel nebo do trezoru, protože slouží k ochraně zašifrovaných dat.",
-                "session_upgrade_description": "Aktualizujte tuto přihlášenou relaci abyste mohli ověřovat ostatní relace. Tím jim dáte přístup k šifrovaným konverzacím a ostatní uživatelé je jim budou automaticky věřit.",
                 "set_phrase_again": "Nastavit heslo znovu.",
                 "settings_reminder": "Zabezpečené zálohování a správu klíčů můžete také nastavit v Nastavení.",
                 "title_confirm_phrase": "Potvrďte bezpečnostní frázi",
                 "title_save_key": "Uložte svůj bezpečnostní klíč",
                 "title_set_phrase": "Nastavit bezpečnostní frázi",
-                "title_upgrade_encryption": "Aktualizovat šifrování",
                 "unable_to_setup": "Nepovedlo se nastavit bezpečné úložiště",
                 "use_different_passphrase": "Použít jinou přístupovou frázi?",
                 "use_phrase_only_you_know": "Použijte tajnou frázi, kterou znáte pouze vy, a volitelně uložte bezpečnostní klíč, který použijete pro zálohování."
@@ -3532,7 +3524,6 @@
     "truncated_list_n_more": {
         "other": "A %(count)s dalších..."
     },
-    "unknown_device": "Neznámé zařízení",
     "unsupported_server_description": "Tento server používá starší verzi Matrix. Chcete-li používat %(brand)s bez možných problémů, aktualizujte Matrixu na %(version)s .",
     "unsupported_server_title": "Váš server není podporován",
     "update": {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { act, render, RenderResult, screen } from "jest-matrix-react";
+import { act, render, RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
@@ -47,14 +47,12 @@ describe("<ForgotPassword>", () => {
     };
 
     const click = async (element: Element): Promise<void> => {
-        await act(async () => {
-            await userEvent.click(element, { delay: null });
-        });
+        await userEvent.click(element, { delay: null });
     };
 
     const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
-        it("should close the dialog and show the password input", () => {
-            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+        it("should close the dialog and show the password input", async () => {
+            await waitFor(() => expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument());
             expect(screen.getByText("Reset your password")).toBeInTheDocument();
         });
     };
@@ -314,7 +312,7 @@ describe("<ForgotPassword>", () => {
                             });
                         });
 
-                        it("should send the new password and show the click validation link dialog", () => {
+                        it("should send the new password and show the click validation link dialog", async () => {
                             expect(client.setPassword).toHaveBeenCalledWith(
                                 {
                                     type: "m.login.email.identity",
@@ -326,15 +324,15 @@ describe("<ForgotPassword>", () => {
                                 testPassword,
                                 false,
                             );
-                            expect(screen.getByText("Verify your email to continue")).toBeInTheDocument();
+                            await expect(
+                                screen.findByText("Verify your email to continue"),
+                            ).resolves.toBeInTheDocument();
                             expect(screen.getByText(testEmail)).toBeInTheDocument();
                         });
 
                         describe("and dismissing the dialog by clicking the background", () => {
                             beforeEach(async () => {
-                                await act(async () => {
-                                    await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
-                                });
+                                await userEvent.click(await screen.findByTestId("dialog-background"), { delay: null });
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
@@ -345,7 +343,7 @@ describe("<ForgotPassword>", () => {
 
                         describe("and dismissing the dialog", () => {
                             beforeEach(async () => {
-                                await click(screen.getByLabelText("Close dialog"));
+                                await click(await screen.findByLabelText("Close dialog"));
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
@@ -356,14 +354,16 @@ describe("<ForgotPassword>", () => {
 
                         describe("and clicking »Re-enter email address«", () => {
                             beforeEach(async () => {
-                                await click(screen.getByText("Re-enter email address"));
+                                await click(await screen.findByText("Re-enter email address"));
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
                             });
 
-                            it("should close the dialog and go back to the email input", () => {
-                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+                            it("should close the dialog and go back to the email input", async () => {
+                                await waitFor(() =>
+                                    expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument(),
+                                );
                                 expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
                             });
                         });
@@ -397,11 +397,11 @@ describe("<ForgotPassword>", () => {
                         });
 
                         it("should show the sign out warning dialog", async () => {
-                            expect(
-                                screen.getByText(
+                            await expect(
+                                screen.findByText(
                                     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
                                 ),
-                            ).toBeInTheDocument();
+                            ).resolves.toBeInTheDocument();
 
                             // confirm dialog
                             await click(screen.getByText("Continue"));

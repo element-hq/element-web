@@ -446,7 +446,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
-        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        defaultDispatcher.unregister(this.dispatcherRef);
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
     }
 

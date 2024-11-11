@@ -91,9 +91,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.byRoom = new MapWithDefault(() => new Map());
 
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
-        if (this.pinnedRef) SettingsStore.unwatchSetting(this.pinnedRef);
-        if (this.layoutRef) SettingsStore.unwatchSetting(this.layoutRef);
-        if (this.dynamicRef) SettingsStore.unwatchSetting(this.dynamicRef);
+        SettingsStore.unwatchSetting(this.pinnedRef);
+        SettingsStore.unwatchSetting(this.layoutRef);
+        SettingsStore.unwatchSetting(this.dynamicRef);
         WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 

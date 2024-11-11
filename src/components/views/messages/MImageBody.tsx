@@ -59,8 +59,9 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    private unmounted = true;
+    private unmounted = false;
     private image = createRef<HTMLImageElement>();
+    private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;
     private sizeWatcher?: string;
 
@@ -367,7 +368,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
-        if (this.sizeWatcher) SettingsStore.unwatchSetting(this.sizeWatcher);
+        SettingsStore.unwatchSetting(this.sizeWatcher);
         if (this.state.isAnimated && this.state.thumbUrl) {
             URL.revokeObjectURL(this.state.thumbUrl);
         }
@@ -453,7 +454,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 "mx_MImageBody_placeholder--blurhash": this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
             });
 
-            placeholder = <div className={classes}>{this.getPlaceholder(maxWidth, maxHeight)}</div>;
+            placeholder = (
+                <div className={classes} ref={this.placeholder}>
+                    {this.getPlaceholder(maxWidth, maxHeight)}
+                </div>
+            );
         }
 
         let showPlaceholder = Boolean(placeholder);
@@ -499,8 +504,19 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         if (!this.props.forExport) {
             placeholder = (
                 <SwitchTransition mode="out-in">
-                    <CSSTransition classNames="mx_rtg--fade" key={`img-${showPlaceholder}`} timeout={300}>
-                        {showPlaceholder ? placeholder : <></> /* Transition always expects a child */}
+                    <CSSTransition
+                        classNames="mx_rtg--fade"
+                        key={`img-${showPlaceholder}`}
+                        timeout={300}
+                        nodeRef={this.placeholder}
+                    >
+                        {
+                            showPlaceholder ? (
+                                placeholder
+                            ) : (
+                                <div ref={this.placeholder} />
+                            ) /* Transition always expects a child */
+                        }
                     </CSSTransition>
                 </SwitchTransition>
             );

@@ -192,10 +192,11 @@ export default class SettingsStore {
     /**
      * Stops the SettingsStore from watching a setting. This is a no-op if the watcher
      * provided is not found.
-     * @param {string} watcherReference The watcher reference (received from #watchSetting)
-     * to cancel.
+     * @param watcherReference The watcher reference (received from #watchSetting) to cancel.
+     * Can be undefined to avoid needing an if around every caller.
      */
-    public static unwatchSetting(watcherReference: string): void {
+    public static unwatchSetting(watcherReference: string | undefined): void {
+        if (!watcherReference) return;
         if (!SettingsStore.watchers.has(watcherReference)) {
             logger.warn(`Ending non-existent watcher ID ${watcherReference}`);
             return;

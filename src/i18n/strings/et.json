@@ -103,7 +103,6 @@
         "report_content": "Teata sisust haldurile",
         "resend": "Saada uuesti",
         "reset": "Taasta algolek",
-        "restore": "Taasta",
         "resume": "Jätka",
         "retry": "Proovi uuesti",
         "review": "Vaata üle",
@@ -208,7 +207,6 @@
         "failed_query_registration_methods": "Ei õnnestunud pärida toetatud registreerimismeetodite loendit.",
         "failed_soft_logout_auth": "Uuesti autentimine ei õnnestunud",
         "failed_soft_logout_homeserver": "Uuesti autentimine ei õnnestunud koduserveri vea tõttu",
-        "footer_powered_by_matrix": "põhineb Matrix'il",
         "forgot_password_email_invalid": "See e-posti aadress ei tundu olema korrektne.",
         "forgot_password_email_required": "Sa pead sisestama oma kontoga seotud e-posti aadressi.",
         "forgot_password_prompt": "Kas sa unustasid oma salasõna?",
@@ -891,7 +889,6 @@
         },
         "unable_to_setup_keys_error": "Krüptovõtmete kasutuselevõtmine ei õnnestu",
         "unsupported": "See klient ei toeta läbivat krüptimist.",
-        "upgrade_toast_title": "Krüptimise uuendus on saadaval",
         "verification": {
             "accepting": "Nõustun …",
             "after_new_login": {
@@ -2415,18 +2412,13 @@
                 "pass_phrase_match_failed": "Ei klapi mitte.",
                 "pass_phrase_match_success": "Klapib!",
                 "phrase_strong_enough": "Suurepärane! Turvafraas on piisavalt kange.",
-                "requires_key_restore": "Krüptimine uuendamiseks taasta oma varundatud võtmed",
-                "requires_password_confirmation": "Kinnitamaks seda muudatust, sisesta oma konto salasõna:",
-                "requires_server_authentication": "Uuenduse kinnitamiseks pead end autentima serveris.",
                 "secret_storage_query_failure": "Ei õnnestu tuvastada turvahoidla olekut",
                 "security_key_safety_reminder": "Kuna seda kasutatakse sinu krüptitud andmete kaitsmiseks, siis hoia oma turvavõtit kaitstud ja turvalises kohas, nagu näiteks arvutis salasõnade halduris või vana kooli seifis.",
-                "session_upgrade_description": "Teiste sessioonide verifitseerimiseks pead uuendama seda sessiooni. Muud verifitseeritud sessioonid saavad sellega ligipääsu krüptitud sõnumitele ning nad märgitakse usaldusväärseteks ka teiste kasutajate jaoks.",
                 "set_phrase_again": "Mine tagasi ja sisesta nad uuesti.",
                 "settings_reminder": "Samuti võid sa seadetes võtta kasutusse turvalise varunduse ning hallata oma krüptovõtmeid.",
                 "title_confirm_phrase": "Kinnita turvafraas",
                 "title_save_key": "Salvesta turvavõti",
                 "title_set_phrase": "Määra turvafraas",
-                "title_upgrade_encryption": "Uuenda oma krüptimist",
                 "unable_to_setup": "Turvahoidla kasutuselevõtmine ei õnnestu",
                 "use_different_passphrase": "Kas kasutame muud paroolifraasi?",
                 "use_phrase_only_you_know": "Sisesta turvafraas, mida vaid sina tead ning lisaks võid salvestada varunduse turvavõtme."
@@ -3472,7 +3464,6 @@
     "truncated_list_n_more": {
         "other": "Ja %(count)s muud..."
     },
-    "unknown_device": "Tundmatu seade",
     "unsupported_server_description": "See server kasutab Matrixi vanemat versiooni. Selleks, et %(brand)s'i kasutamisel vigu ei tekiks palun uuenda serverit nii, et kasutusel oleks Matrixi %(version)s.",
     "unsupported_server_title": "Sinu server ei ole toetatud",
     "update": {

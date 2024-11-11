@@ -98,7 +98,6 @@
         "report_content": "Tartalom jelentése",
         "resend": "Újraküldés",
         "reset": "Visszaállítás",
-        "restore": "Visszaállítás",
         "resume": "Folytatás",
         "retry": "Újra",
         "review": "Átnézés",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "A támogatott regisztrációs módokat nem lehet lekérdezni.",
         "failed_soft_logout_auth": "Újra bejelentkezés sikertelen",
         "failed_soft_logout_homeserver": "Az újbóli hitelesítés a Matrix-kiszolgáló hibájából sikertelen",
-        "footer_powered_by_matrix": "a gépházban: Matrix",
         "forgot_password_email_invalid": "Az e-mail cím nem tűnik érvényesnek.",
         "forgot_password_email_required": "A fiókodhoz kötött e-mail címet add meg.",
         "forgot_password_prompt": "Elfelejtetted a jelszavad?",
@@ -883,7 +881,6 @@
         },
         "unable_to_setup_keys_error": "Nem sikerült a kulcsok beállítása",
         "unsupported": "A kliens nem támogatja a végponttól végpontig való titkosítást.",
-        "upgrade_toast_title": "A titkosítási fejlesztés elérhető",
         "verification": {
             "accepting": "Elfogadás…",
             "after_new_login": {
@@ -2374,18 +2371,13 @@
                 "pass_phrase_match_failed": "Nem egyeznek.",
                 "pass_phrase_match_success": "Egyeznek!",
                 "phrase_strong_enough": "Nagyszerű! Ez a biztonsági jelmondat elég erősnek tűnik.",
-                "requires_key_restore": "A titkosítás fejlesztéséhez allítsd vissza a kulcs mentést",
-                "requires_password_confirmation": "A fejlesztés megerősítéséhez add meg a fiók jelszavadat:",
-                "requires_server_authentication": "A fejlesztés megerősítéséhez újból hitelesítenie kell a kiszolgálóval.",
                 "secret_storage_query_failure": "A biztonsági tároló állapotát nem lehet lekérdezni",
                 "security_key_safety_reminder": "A biztonsági kulcsot tárolja biztonságos helyen, például egy jelszókezelőben vagy egy széfben, mivel ez tartja biztonságban a titkosított adatait.",
-                "session_upgrade_description": "Fejleszd ezt a munkamenetet, hogy más munkameneteket is tudj vele hitelesíteni, azért, hogy azok hozzáférhessenek a titkosított üzenetekhez és megbízhatónak legyenek jelölve más felhasználók számára.",
                 "set_phrase_again": "Lépj vissza és állítsd be újra.",
                 "settings_reminder": "A biztonsági mentés beállítását és a kulcsok kezelését a Beállításokban is megadhatja.",
                 "title_confirm_phrase": "Biztonsági jelmondat megerősítése",
                 "title_save_key": "Mentse el a biztonsági kulcsát",
                 "title_set_phrase": "Biztonsági Jelmondat beállítása",
-                "title_upgrade_encryption": "Titkosításod fejlesztése",
                 "unable_to_setup": "A biztonsági tárolót nem sikerült beállítani",
                 "use_different_passphrase": "Másik jelmondat használata?",
                 "use_phrase_only_you_know": "Olyan biztonsági jelmondatot használjon, amelyet csak Ön ismer, és esetleg mentsen el egy biztonsági kulcsot vésztartaléknak."
@@ -3443,7 +3435,6 @@
     "truncated_list_n_more": {
         "other": "És még %(count)s..."
     },
-    "unknown_device": "Ismeretlen eszköz",
     "unsupported_server_description": "Ez a kiszolgáló a Matrix régebbi verzióját használja. Frissítsen a Matrix %(version)s verzióra az %(brand)s hibamentes használatához.",
     "unsupported_server_title": "A kiszolgálója nem támogatott",
     "update": {

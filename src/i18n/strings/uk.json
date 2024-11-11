@@ -98,7 +98,6 @@
         "report_content": "Поскаржитись на вміст",
         "resend": "Перенадіслати",
         "reset": "Скинути",
-        "restore": "Відновити",
         "resume": "Продовжити",
         "retry": "Повторити спробу",
         "review": "Переглянути",
@@ -202,7 +201,6 @@
         "failed_query_registration_methods": "Не вдалося запитати підтримувані способи реєстрації.",
         "failed_soft_logout_auth": "Не вдалося перезайти",
         "failed_soft_logout_homeserver": "Не вдалося перезайти через проблему з домашнім сервером",
-        "footer_powered_by_matrix": "працює на Matrix",
         "forgot_password_email_invalid": "Хибна адреса е-пошти.",
         "forgot_password_email_required": "Введіть е-пошту, прив'язану до вашого облікового запису.",
         "forgot_password_prompt": "Забули свій пароль?",
@@ -875,7 +873,6 @@
         },
         "unable_to_setup_keys_error": "Не вдалося налаштувати ключі",
         "unsupported": "Цей клієнт не підтримує наскрізного шифрування.",
-        "upgrade_toast_title": "Доступне поліпшене шифрування",
         "verification": {
             "accepting": "Прийняття…",
             "after_new_login": {
@@ -2373,18 +2370,13 @@
                 "pass_phrase_match_failed": "Не збігається.",
                 "pass_phrase_match_success": "Збіг!",
                 "phrase_strong_enough": "Чудово! Фраза безпеки досить надійна.",
-                "requires_key_restore": "Відновіть резервну копію вашого ключа, щоб поліпшити шифрування",
-                "requires_password_confirmation": "Введіть пароль вашого облікового запису щоб підтвердити поліпшення:",
-                "requires_server_authentication": "Ви матимете пройти розпізнання на сервері, щоб підтвердити поліпшення.",
                 "secret_storage_query_failure": "Не вдалося дізнатися стан таємного сховища",
                 "security_key_safety_reminder": "Зберігайте ключ безпеки в надійному місці, скажімо в менеджері паролів чи сейфі, бо ключ оберігає ваші зашифровані дані.",
-                "session_upgrade_description": "Поліпшіть цей сеанс, щоб уможливити звірення інших сеансів, надаючи їм доступ до зашифрованих повідомлень та позначаючи їх довіреними для інших користувачів.",
                 "set_phrase_again": "Поверніться, щоб налаштувати заново.",
                 "settings_reminder": "Ввімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.",
                 "title_confirm_phrase": "Підвердьте фразу безпеки",
                 "title_save_key": "Збережіть свій ключ безпеки",
                 "title_set_phrase": "Вкажіть фразу безпеки",
-                "title_upgrade_encryption": "Поліпшити ваше шифрування",
                 "unable_to_setup": "Не вдалося налаштувати таємне сховище",
                 "use_different_passphrase": "Використати іншу парольну фразу?",
                 "use_phrase_only_you_know": "Захистіть резервну копію відомою лише вам таємною фразою. Можете також зберегти ключ безпеки."
@@ -3437,7 +3429,6 @@
     "truncated_list_n_more": {
         "other": "І ще %(count)s..."
     },
-    "unknown_device": "Невідомий пристрій",
     "unsupported_server_description": "Цей сервер використовує стару версію Matrix. Оновіть Matrix до %(version)s, щоб використовувати %(brand)s без помилок.",
     "unsupported_server_title": "Ваш сервер не підтримується",
     "update": {

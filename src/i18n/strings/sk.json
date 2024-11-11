@@ -98,7 +98,6 @@
         "report_content": "Nahlásiť obsah",
         "resend": "Poslať znovu",
         "reset": "Obnoviť predvolené",
-        "restore": "Obnoviť",
         "resume": "Pokračovať",
         "retry": "Skúsiť znovu",
         "review": "Skontrolovať",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "Nie je možné požiadať o podporované metódy registrácie.",
         "failed_soft_logout_auth": "Nepodarilo sa opätovne overiť",
         "failed_soft_logout_homeserver": "Opätovná autentifikácia zlyhala kvôli problému domovského servera",
-        "footer_powered_by_matrix": "používa protokol Matrix",
         "forgot_password_email_invalid": "Zdá sa, že e-mailová adresa nie je platná.",
         "forgot_password_email_required": "Musíte zadať emailovú adresu prepojenú s vašim účtom.",
         "forgot_password_prompt": "Zabudli ste heslo?",
@@ -888,7 +886,6 @@
         },
         "unable_to_setup_keys_error": "Nie je možné nastaviť kľúče",
         "unsupported": "Tento klient nepodporuje end-to-end šifrovanie.",
-        "upgrade_toast_title": "Je dostupná aktualizácia šifrovania",
         "verification": {
             "accepting": "Akceptovanie…",
             "after_new_login": {
@@ -2435,18 +2432,13 @@
                 "pass_phrase_match_failed": "To sa nezhoduje.",
                 "pass_phrase_match_success": "Zhoda!",
                 "phrase_strong_enough": "Skvelé! Táto bezpečnostná fráza vyzerá dostatočne silná.",
-                "requires_key_restore": "Obnovte zálohu kľúča a aktualizujte šifrovanie",
-                "requires_password_confirmation": "Na potvrdenie aktualizácie zadajte heslo svojho účtu:",
-                "requires_server_authentication": "Na potvrdenie aktualizácie sa budete musieť overiť na serveri.",
                 "secret_storage_query_failure": "Nie je možné vykonať dopyt na stav tajného úložiska",
                 "security_key_safety_reminder": "Bezpečnostný kľúč uložte na bezpečné miesto, napríklad do správcu hesiel alebo trezora, pretože slúži na ochranu zašifrovaných údajov.",
-                "session_upgrade_description": "Aktualizujte túto reláciu, aby mohla overovať ostatné relácie, udeľovať im prístup k zašifrovaným správam a označovať ich ako dôveryhodné pre ostatných používateľov.",
                 "set_phrase_again": "Vráťte sa späť a nastavte to znovu.",
                 "settings_reminder": "Bezpečné zálohovanie a správu kľúčov môžete nastaviť aj v Nastaveniach.",
                 "title_confirm_phrase": "Potvrdiť bezpečnostnú frázu",
                 "title_save_key": "Uložte svoj bezpečnostný kľúč",
                 "title_set_phrase": "Nastaviť bezpečnostnú frázu",
-                "title_upgrade_encryption": "Aktualizujte svoje šifrovanie",
                 "unable_to_setup": "Nie je možné nastaviť tajné úložisko",
                 "use_different_passphrase": "Použiť inú prístupovú frázu?",
                 "use_phrase_only_you_know": "Použite tajnú frázu, ktorú poznáte len vy, a prípadne uložte si bezpečnostný kľúč, ktorý môžete použiť na zálohovanie."
@@ -3539,7 +3531,6 @@
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
     },
-    "unknown_device": "Neznáme zariadenie",
     "unsupported_server_description": "Tento server používa staršiu verziu systému Matrix. Ak chcete používať %(brand)s bez chýb, aktualizujte na Matrix %(version)s.",
     "unsupported_server_title": "Váš server nie je podporovaný",
     "update": {

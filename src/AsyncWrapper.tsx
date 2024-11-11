@@ -37,6 +37,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
     public state: IState = {};
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.props.prom
             .then((result) => {
                 if (this.unmounted) return;

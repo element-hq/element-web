@@ -62,6 +62,7 @@ import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import Modal from "../../../../src/Modal.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -952,7 +953,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to login page
             defaultDispatcher.dispatch({
@@ -1479,7 +1480,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to mobile_register page
             defaultDispatcher.dispatch({
@@ -1499,7 +1500,7 @@ describe("<MatrixChat />", () => {
         it("should render welcome screen if mobile registration is not enabled in settings", async () => {
             await getComponentAndWaitForReady();
 
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
         });
 
         it("should render mobile registration", async () => {
@@ -1514,7 +1515,9 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialogAsync");
             jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+                __test: true,
                 __esModule: true,
                 default: () => <span>mocked dialog</span>,
             }));
@@ -1526,7 +1529,8 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect(await spy.mock.lastCall![0]).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });

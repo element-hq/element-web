@@ -94,7 +94,6 @@
         "report_content": "Kæra efni",
         "resend": "Endursenda",
         "reset": "Endursetja",
-        "restore": "Endurheimta",
         "resume": "Halda áfram",
         "retry": "Reyna aftur",
         "review": "Yfirfara",
@@ -185,7 +184,6 @@
         "failed_connect_identity_server": "Næ ekki sambandi við auðkennisþjón",
         "failed_soft_logout_auth": "Tókst ekki að endurauðkenna",
         "failed_soft_logout_homeserver": "Tókst ekki að endurauðkenna vegna vandamála með heimaþjón",
-        "footer_powered_by_matrix": "keyrt með Matrix",
         "forgot_password_email_invalid": "Tölvupóstfangið lítur ekki út fyrir að vera í lagi.",
         "forgot_password_email_required": "Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.",
         "forgot_password_prompt": "Gleymdirðu lykilorðinu þínu?",
@@ -747,7 +745,6 @@
         },
         "unable_to_setup_keys_error": "Tókst ekki að setja upp lykla",
         "unsupported": "Þetta forrit styður ekki enda-í-enda dulritun.",
-        "upgrade_toast_title": "Uppfærsla dulritunar tiltæk",
         "verification": {
             "accepting": "Samþykki…",
             "after_new_login": {
@@ -1975,7 +1972,6 @@
                 "pass_phrase_match_failed": "Þetta stemmir ekki.",
                 "pass_phrase_match_success": "Þetta passar!",
                 "phrase_strong_enough": "Frábært! Þessi öryggisfrasi virðist vera nógu sterkur.",
-                "requires_password_confirmation": "Sláðu inn lykilorðið þitt til að staðfesta uppfærsluna:",
                 "secret_storage_query_failure": "Tókst ekki að finna stöðu á leynigeymslu",
                 "security_key_safety_reminder": "Geymdu öryggislykilinn þinn á öruggum stað, eins og í lykilorðastýringu eða jafnvel í peningaskáp, þar sem hann er notaður til að verja gögnin þín.",
                 "set_phrase_again": "Farðu til baka til að setja hann aftur.",
@@ -1983,7 +1979,6 @@
                 "title_confirm_phrase": "Staðfestu öryggisfrasa",
                 "title_save_key": "Vista öryggislykilinn þinn",
                 "title_set_phrase": "Setja öryggisfrasa",
-                "title_upgrade_encryption": "Uppfærðu dulritunina þína",
                 "unable_to_setup": "Tókst ekki að setja upp leynigeymslu",
                 "use_different_passphrase": "Nota annan lykilfrasa?",
                 "use_phrase_only_you_know": "Notaðu leynilegan frasa eða setningu sem aðeins þú þekkir, og útbúðu öryggislykil fyrir öryggisafrit."
@@ -2906,7 +2901,6 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
     },
-    "unknown_device": "Óþekkt tæki",
     "update": {
         "changelog": "Breytingaskrá",
         "check_action": "Athuga með uppfærslu",

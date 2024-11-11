@@ -103,7 +103,6 @@
         "report_content": "Signaler le contenu",
         "resend": "Renvoyer",
         "reset": "Réinitialiser",
-        "restore": "Restaurer",
         "resume": "Reprendre",
         "retry": "Réessayer",
         "review": "Examiner",
@@ -210,7 +209,6 @@
         "failed_query_registration_methods": "Impossible de demander les méthodes d’inscription prises en charge.",
         "failed_soft_logout_auth": "Échec de la ré-authentification",
         "failed_soft_logout_homeserver": "Échec de la ré-authentification à cause d’un problème du serveur d’accueil",
-        "footer_powered_by_matrix": "propulsé par Matrix",
         "forgot_password_email_invalid": "L’adresse e-mail semble être invalide.",
         "forgot_password_email_required": "L’adresse e-mail liée à votre compte doit être renseignée.",
         "forgot_password_prompt": "Mot de passe oublié ?",
@@ -925,7 +923,6 @@
         },
         "unable_to_setup_keys_error": "Impossible de configurer les clés",
         "unsupported": "Ce client ne prend pas en charge le chiffrement de bout en bout.",
-        "upgrade_toast_title": "Mise à niveau du chiffrement disponible",
         "verification": {
             "accepting": "Acceptation…",
             "after_new_login": {
@@ -1627,7 +1624,7 @@
         "download_f_droid": "Récupérez-le sur F-Droid",
         "download_google_play": "Récupérez-le sur Google Play",
         "enable_notifications": "Activer les notifications",
-        "enable_notifications_action": "Activer les notifications",
+        "enable_notifications_action": "Ouvrir les paramètres",
         "enable_notifications_description": "Ne ratez pas une réponse ou un message important",
         "explore_rooms": "Explorez les salons publics",
         "find_community_members": "Trouvez et invitez les membres de votre communauté",
@@ -1806,7 +1803,7 @@
         "restore_failed_error": "Impossible de restaurer la sauvegarde"
     },
     "right_panel": {
-        "add_integrations": "Ajouter des widgets, passerelles et robots",
+        "add_integrations": "Ajouter des extensions",
         "add_topic": "Ajouter un sujet",
         "files_button": "Fichiers",
         "pinned_messages": {
@@ -1826,7 +1823,7 @@
                 "button": "Désépingler tous les messages"
             }
         },
-        "pinned_messages_button": "Épinglé",
+        "pinned_messages_button": "Messages épinglés",
         "poll": {
             "active_heading": "Sondages en cours",
             "empty_active": "Il n’y a aucun sondage en cours dans ce salon",
@@ -1851,7 +1848,7 @@
             "view_in_timeline": "Consulter la chronologie des sondages",
             "view_poll": "Voir le sondage"
         },
-        "polls_button": "Historique des sondages",
+        "polls_button": "Sondages",
         "room_summary_card": {
             "title": "Information du salon"
         },
@@ -2515,18 +2512,13 @@
                 "pass_phrase_match_failed": "Ça ne correspond pas.",
                 "pass_phrase_match_success": "Ça correspond !",
                 "phrase_strong_enough": "Super ! Cette phrase secrète a l’air assez solide.",
-                "requires_key_restore": "Restaurez votre sauvegarde de clés pour mettre à niveau votre chiffrement",
-                "requires_password_confirmation": "Saisissez le mot de passe de votre compte pour confirmer la mise à niveau :",
-                "requires_server_authentication": "Vous devrez vous identifier avec le serveur pour confirmer la mise à niveau.",
                 "secret_storage_query_failure": "Impossible de demander le statut du coffre secret",
                 "security_key_safety_reminder": "Stockez votre clé de sécurité dans un endroit sûr, comme un gestionnaire de mots de passe ou un coffre, car elle est utilisée pour protéger vos données chiffrées.",
-                "session_upgrade_description": "Mettez à niveau cette session pour l’autoriser à vérifier d’autres sessions, ce qui leur permettra d’accéder aux messages chiffrés et de les marquer comme fiables pour les autres utilisateurs.",
                 "set_phrase_again": "Retournez en arrière pour la redéfinir.",
                 "settings_reminder": "Vous pouvez aussi configurer la sauvegarde sécurisée et gérer vos clés depuis les paramètres.",
                 "title_confirm_phrase": "Confirmer la phrase de sécurité",
                 "title_save_key": "Sauvegarder votre clé de sécurité",
                 "title_set_phrase": "Définir une phrase de sécurité",
-                "title_upgrade_encryption": "Mettre à niveau votre chiffrement",
                 "unable_to_setup": "Impossible de configurer le coffre secret",
                 "use_different_passphrase": "Utiliser une phrase secrète différente ?",
                 "use_phrase_only_you_know": "Utilisez une phrase secrète que vous êtes seul à connaître et enregistrez éventuellement une clé de sécurité à utiliser pour la sauvegarde."
@@ -3260,7 +3252,7 @@
         },
         "m.file": {
             "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
-            "error_invalid": "Fichier %(extra)s non valide"
+            "error_invalid": "Fichier invalide"
         },
         "m.image": {
             "error": "Impossible d’afficher l’image à cause d’une erreur",
@@ -3632,7 +3624,6 @@
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
     },
-    "unknown_device": "Appareil inconnu",
     "unsupported_server_description": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs.",
     "unsupported_server_title": "Votre serveur n’est pas pris en charge",
     "update": {
@@ -3997,7 +3988,7 @@
             "title": "Autoriser ce widget à vérifier votre identité"
         },
         "popout": "Détacher le widget",
-        "set_room_layout": "Définir ma disposition de salon pour tout le monde",
+        "set_room_layout": "Définir la mise en page pour tout le monde",
         "shared_data_avatar": "Votre URL d’image de profil",
         "shared_data_device_id": "Votre ID d’appareil",
         "shared_data_lang": "Votre langue",
