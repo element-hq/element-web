@@ -104,7 +104,7 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    ReactDOM.render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
         </StrictMode>,
@@ -117,7 +117,7 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    ReactDOM.render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
