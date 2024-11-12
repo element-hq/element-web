@@ -21,7 +21,7 @@ jobs:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3
+              uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
