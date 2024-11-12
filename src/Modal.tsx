@@ -171,8 +171,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     /**
-     * @typeParam A - the arguments to the onFinished callback
-     * @typeParam P - the props of the component
      * @typeParam C - the component type
      */
     private buildModal<C extends ComponentType>(
