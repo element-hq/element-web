@@ -10,7 +10,7 @@ import React from "react";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import DeviceSecurityCard from "./DeviceSecurityCard";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
 import { filterDevicesBySecurityRecommendation, FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";

@@ -19,7 +19,7 @@ import { leaveSpace } from "../../../utils/leave-behaviour";
 import { getTopic } from "../../../hooks/room/useTopic";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
-import SettingsSubsection from "../settings/shared/SettingsSubsection";
+import { SettingsSubsection } from "../settings/shared/SettingsSubsection";
 
 interface IProps {
     matrixClient: MatrixClient;

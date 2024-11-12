@@ -18,7 +18,7 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SettingsSubsection, { SettingsSubsectionText } from "./shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "./shared/SettingsSubsection";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {}

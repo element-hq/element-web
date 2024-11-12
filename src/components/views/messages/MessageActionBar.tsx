@@ -37,7 +37,7 @@ import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/exp
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
 import type { Relations } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
-import dis, { defaultDispatcher } from "../../../dispatcher/dispatcher";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import { isContentActionable, canEditContent, editEvent, canCancel } from "../../../utils/EventUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -323,7 +323,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         e.preventDefault();
         e.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: "reply_to_event",
             event: this.props.mxEvent,
             context: this.context.timelineRenderingType,
