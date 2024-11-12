@@ -1879,9 +1879,9 @@
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
 "@matrix-org/analytics-events@^0.29.0":
-  version "0.29.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.0.tgz#ebadd922f50c0932a5c6af8b5e156f8f839f3236"
-  integrity sha512-7L+dQJuFt2iIhxhWwvJVp89/UdOfl2P455Ki9Krw0LGCMazPOwo5bc9GUjj/OKXO+eNHq+Qml1+RkYW+8LCk2Q==
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.1.tgz#b812b932d82de1409fa47199260c9a4d4f8349e8"
+  integrity sha512-EyN6TMG4fCeNoQEa0uYTNnMLT4M/F3eCU/usjLDHkVgIcwevvBCHxw2379IbOm4kJBbhSW/pcNkGRKntWu0J9g==
 
 "@matrix-org/emojibase-bindings@^1.3.3":
   version "1.3.3"
