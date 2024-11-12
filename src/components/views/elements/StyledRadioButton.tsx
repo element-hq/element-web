@@ -10,7 +10,7 @@ import React from "react";
 import classnames from "classnames";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    inputRef?: React.RefObject<HTMLInputElement>;
+    inputRef?: (node: HTMLInputElement | null) => void;
     outlined?: boolean;
     // If true (default), the children will be contained within a <label> element
     // If false, they'll be in a div. Putting interactive components that have labels

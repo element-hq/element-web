@@ -73,9 +73,13 @@ interface IProps {
     // All other props pass through to the <input>.
 }
 
+type RefCallback<T extends HTMLElement> = (node: T | null) => void;
+
 export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
     inputRef?: RefObject<HTMLInputElement>;
+    // Ref callback that will be attached to the input. This takes precedence over inputRef.
+    refCallback?: RefCallback<HTMLInputElement>;
     // The element to create. Defaults to "input".
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
@@ -85,6 +89,8 @@ export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElemen
 interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
     // The ref pass through to the select
     inputRef?: RefObject<HTMLSelectElement>;
+    // Ref callback that will be attached to the input. This takes precedence over inputRef.
+    refCallback?: RefCallback<HTMLSelectElement>;
     // To define options for a select, use <Field><option ... /></Field>
     element: "select";
     // The select's value. This is a controlled component, so the value is required.
@@ -94,6 +100,8 @@ interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
 interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
     // The ref pass through to the textarea
     inputRef?: RefObject<HTMLTextAreaElement>;
+    // Ref callback that will be attached to the input. This takes precedence over inputRef.
+    refCallback?: RefCallback<HTMLTextAreaElement>;
     element: "textarea";
     // The textarea's value. This is a controlled component, so the value is required.
     value: string;
@@ -102,6 +110,8 @@ interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElem
 export interface INativeOnChangeInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
     inputRef?: RefObject<HTMLInputElement>;
+    // Ref callback that will be attached to the input. This takes precedence over inputRef.
+    refCallback?: RefCallback<HTMLInputElement>;
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
     value: string;
@@ -284,7 +294,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const inputProps_: React.HTMLAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> &
             React.ClassAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = {
             ...inputProps,
-            ref: this.inputRef,
+            ref: this.props.refCallback ?? this.inputRef,
         };
 
         const fieldInput = React.createElement(this.props.element, inputProps_, children);

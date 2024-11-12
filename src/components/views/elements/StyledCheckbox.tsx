@@ -16,7 +16,7 @@ export enum CheckboxStyle {
 }
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    inputRef?: React.RefObject<HTMLInputElement>;
+    inputRef?: (node: HTMLInputElement | null) => void;
     kind?: CheckboxStyle;
     id?: string;
 }

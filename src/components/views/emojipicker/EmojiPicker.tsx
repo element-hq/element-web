@@ -154,22 +154,22 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
-        const node = state.activeRef?.current;
+        const node = state.activeNode?.current;
         const parent = node?.parentElement;
-        if (!parent || !state.activeRef) return;
+        if (!parent || !state.activeNode) return;
         const rowIndex = Array.from(parent.children).indexOf(node);
-        const refIndex = state.refs.indexOf(state.activeRef);
+        const refIndex = state.nodes.indexOf(state.activeNode);
 
         let focusRef: Ref | undefined;
         let newParent: HTMLElement | undefined;
         switch (ev.key) {
             case Key.ARROW_LEFT:
-                focusRef = state.refs[refIndex - 1];
+                focusRef = state.nodes[refIndex - 1];
                 newParent = focusRef?.current?.parentElement ?? undefined;
                 break;
 
             case Key.ARROW_RIGHT:
-                focusRef = state.refs[refIndex + 1];
+                focusRef = state.nodes[refIndex + 1];
                 newParent = focusRef?.current?.parentElement ?? undefined;
                 break;
 
@@ -178,11 +178,11 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 // For up/down we find the prev/next parent by inspecting the refs either side of our row
                 const ref =
                     ev.key === Key.ARROW_UP
-                        ? state.refs[refIndex - rowIndex - 1]
-                        : state.refs[refIndex - rowIndex + EMOJIS_PER_ROW];
+                        ? state.nodes[refIndex - rowIndex - 1]
+                        : state.nodes[refIndex - rowIndex + EMOJIS_PER_ROW];
                 newParent = ref?.current?.parentElement ?? undefined;
                 const newTarget = newParent?.children[clamp(rowIndex, 0, newParent.children.length - 1)];
-                focusRef = state.refs.find((r) => r.current === newTarget);
+                focusRef = state.nodes.find((r) => r.current === newTarget);
                 break;
             }
         }
@@ -208,7 +208,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
         if (
-            state.activeRef?.current &&
+            state.activeNode?.current &&
             [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)
         ) {
             this.keyboardNavigation(ev, state, dispatch);

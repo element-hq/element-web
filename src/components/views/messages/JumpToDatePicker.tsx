@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, RefObject } from "react";
 
 import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
@@ -23,7 +23,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     const dateInputDefaultValue = formatDateForInput(date);
 
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
-    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
+    const [onFocus, isActive, refCallback, inputRef] = useRovingTabIndex<HTMLInputElement>();
 
     const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>): void => setDateValue(ev.target.value);
     const onJumpToDateSubmit = (ev: FormEvent): void => {
@@ -45,7 +45,8 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_datePicker"
                 label={_t("room|jump_to_date_prompt")}
                 onFocus={onFocus}
-                inputRef={ref}
+                inputRef={inputRef as RefObject<HTMLInputElement>}
+                refCallback={refCallback}
                 tabIndex={isActive ? 0 : -1}
             />
             <RovingAccessibleButton
