@@ -6,24 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentType, PropsWithChildren } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import React, { ReactNode, Suspense } from "react";
 
 import { _t } from "./languageHandler";
 import BaseDialog from "./components/views/dialogs/BaseDialog";
 import DialogButtons from "./components/views/elements/DialogButtons";
 import Spinner from "./components/views/elements/Spinner";
 
-type AsyncImport<T> = { default: T };
-
 interface IProps {
-    // A promise which resolves with the real component
-    prom: Promise<ComponentType<any> | AsyncImport<ComponentType<any>>>;
     onFinished(): void;
+    children: ReactNode;
 }
 
 interface IState {
-    component?: ComponentType<PropsWithChildren<any>>;
     error?: Error;
 }
 
@@ -32,56 +27,26 @@ interface IState {
  * spinner until the real component loads.
  */
 export default class AsyncWrapper extends React.Component<IProps, IState> {
-    private unmounted = false;
+    public static getDerivedStateFromError(error: Error): IState {
+        return { error };
+    }
 
     public state: IState = {};
 
-    public componentDidMount(): void {
-        this.unmounted = false;
-        this.props.prom
-            .then((result) => {
-                if (this.unmounted) return;
-
-                // Take the 'default' member if it's there, then we support
-                // passing in just an import()ed module, since ES6 async import
-                // always returns a module *namespace*.
-                const component = (result as AsyncImport<ComponentType>).default
-                    ? (result as AsyncImport<ComponentType>).default
-                    : (result as ComponentType);
-                this.setState({ component });
-            })
-            .catch((e) => {
-                logger.warn("AsyncWrapper promise failed", e);
-                this.setState({ error: e });
-            });
-    }
-
-    public componentWillUnmount(): void {
-        this.unmounted = true;
-    }
-
-    private onWrapperCancelClick = (): void => {
-        this.props.onFinished();
-    };
-
     public render(): React.ReactNode {
-        if (this.state.component) {
-            const Component = this.state.component;
-            return <Component {...this.props} />;
-        } else if (this.state.error) {
+        if (this.state.error) {
             return (
                 <BaseDialog onFinished={this.props.onFinished} title={_t("common|error")}>
                     {_t("failed_load_async_component")}
                     <DialogButtons
                         primaryButton={_t("action|dismiss")}
-                        onPrimaryButtonClick={this.onWrapperCancelClick}
+                        onPrimaryButtonClick={this.props.onFinished}
                         hasCancel={false}
                     />
                 </BaseDialog>
             );
-        } else {
-            // show a spinner until the component is loaded.
-            return <Spinner />;
         }
+
+        return <Suspense fallback={<Spinner />}>{this.props.children}</Suspense>;
     }
 }
