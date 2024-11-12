@@ -1,3 +1,11 @@
+Changes in [1.11.85](https://github.com/element-hq/element-web/releases/tag/v1.11.85) (2024-11-12)
+==================================================================================================
+# Security
+- Fixes for [CVE-2024-51750](https://www.cve.org/CVERecord?id=CVE-2024-51750) / [GHSA-w36j-v56h-q9pc](https://github.com/element-hq/element-web/security/advisories/GHSA-w36j-v56h-q9pc)
+- Fixes for [CVE-2024-51749](https://www.cve.org/CVERecord?id=CVE-2024-51749) / [GHSA-5486-384g-mcx2](https://github.com/element-hq/element-web/security/advisories/GHSA-5486-384g-mcx2)
+- Update JS SDK with the fixes for [CVE-2024-50336](https://www.cve.org/CVERecord?id=CVE-2024-50336) / [GHSA-xvg8-m4x3-w6xr](https://github.com/matrix-org/matrix-js-sdk/security/advisories/GHSA-xvg8-m4x3-w6xr)
+
+
 Changes in [1.11.84](https://github.com/element-hq/element-web/releases/tag/v1.11.84) (2024-11-05)
 ==================================================================================================
 ## ✨ Features

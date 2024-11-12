@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.84",
+    "version": "1.11.85",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -125,6 +125,7 @@
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-widget-api": "^1.10.0",
         "memoize-one": "^6.0.0",
+        "mime": "^4.0.4",
         "oidc-client-ts": "^3.0.1",
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
