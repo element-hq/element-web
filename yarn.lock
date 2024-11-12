@@ -8365,7 +8365,7 @@ matrix-events-sdk@0.0.1:
     jwt-decode "^4.0.0"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.8.2"
+    matrix-widget-api "^1.10.0"
     oidc-client-ts "^3.0.1"
     p-retry "4"
     sdp-transform "^2.14.1"
