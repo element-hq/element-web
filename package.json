@@ -75,7 +75,7 @@
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001668",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^7.0.0"
+        "wrap-ansi": "npm:wrap-ansi@^9.0.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
