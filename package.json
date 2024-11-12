@@ -121,7 +121,7 @@
         "lodash": "^4.17.21",
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
-        "matrix-events-sdk": "0.0.1",
+        "matrix-events-sdk": "2.0.0",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-widget-api": "^1.10.0",
         "memoize-one": "^6.0.0",

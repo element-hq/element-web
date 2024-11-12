@@ -3590,6 +3590,11 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+ajv-errors@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-3.0.0.tgz#e54f299f3a3d30fe144161e5f0d8d51196c527bc"
+  integrity sha512-V3wD15YHfHz6y0KdhYFjyy9vWtEVALT9UrxfN3zqlI6dMioHnJrqOYfyPKol3oqrnCM9uwkcdCwkJ0WUcbLMTQ==
+
 ajv-formats@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
@@ -3619,7 +3624,7 @@ ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.0.1, ajv@^8.9.0:
+ajv@^8.0.0, ajv@^8.0.1, ajv@^8.11.2, ajv@^8.9.0:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.17.1.tgz#37d9a5c776af6bc92d7f4f9510eba4c0a60d11a6"
   integrity sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==
@@ -8178,6 +8183,14 @@ matrix-events-sdk@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
+
+matrix-events-sdk@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-2.0.0.tgz#f5f8dafbe4eae07fdbb628627f430ca5b1fd8c7a"
+  integrity sha512-UZbifYIO2o9+sNn4YuGjhMof/88TG68PyecKnH/pt8V3MFq0RZsbBUe+3/k5ZeVcEtr0pQLmcKB7d8aQVsVO/w==
+  dependencies:
+    ajv "^8.11.2"
+    ajv-errors "^3.0.0"
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "34.10.0"
