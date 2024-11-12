@@ -37,6 +37,16 @@ async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<boo
 }
 
 /**
+ * Whether the component is uninitialised, is in the process of initialising, or
+ * has completed initialising.
+ */
+enum InitialisationStatus {
+    Uninitialised,
+    Initialising,
+    Completed,
+}
+
+/**
  * Displays a banner warning when there is an issue with a user's identity.
  *
  * Warns when an unverified user's identity has changed, and gives the user a
@@ -52,7 +62,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
     // Whether or not we've already initialised the component by loading the
     // room membership.
-    const initialisedRef = useRef<boolean>(false);
+    const initialisedRef = useRef<InitialisationStatus>(InitialisationStatus.Uninitialised);
     // Which room members need their identity approved.
     const membersNeedingApprovalRef = useRef<Map<string, RoomMember>>(new Map());
     // Whether we got a verification status update while we were fetching a
@@ -89,7 +99,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // member of the room. If they are not a member, this function will do
     // nothing.
     const addMemberNeedingApproval = useCallback(
-        (userId: string, member?: RoomMember, updatePrompt: boolean = true): void => {
+        (userId: string, member?: RoomMember): void => {
             if (userId === cli.getUserId()) {
                 // We always skip our own user, because we can't pin our own identity.
                 return;
@@ -97,14 +107,24 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             member = member ?? room.getMember(userId) ?? undefined;
             if (member) {
                 membersNeedingApprovalRef.current.set(userId, member);
-                if (updatePrompt) {
+                // We only select the prompt if we are done initialising,
+                // because we will select the prompt after we're done
+                // initialising, and we want to start by displaying a warning
+                // for the user with the smallest ID.
+                if (initialisedRef.current === InitialisationStatus.Completed) {
                     setCurrentPrompt((currentPrompt) => {
+                        // If we aren't currently displaying a warning, we pick
+                        // a new user to show a warning for.  If we are already
+                        // displaying a warning, don't change the display.
+                        //
                         // We have to do this in a callback to
                         // `setCurrentPrompt` because this function could have
                         // been called after an `await`, and the `currentPrompt`
                         // that this function would have may be outdated.
                         if (!currentPrompt) {
                             return selectCurrentPrompt();
+                        } else {
+                            return currentPrompt;
                         }
                     });
                 }
@@ -117,7 +137,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // membersNeedingApproval map and update the prompt if needed. They will
     // only be added if they are a member of the room.
     const addMemberIfNeedsApproval = useCallback(
-        async (userId: string, member?: RoomMember, updatePrompt: boolean = true): Promise<void> => {
+        async (userId: string, member?: RoomMember): Promise<void> => {
             const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
             const membersNeedingApproval = membersNeedingApprovalRef.current;
 
@@ -129,7 +149,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             gotVerificationStatusUpdate.set(userId, false);
             if (await userNeedsApproval(crypto!, userId)) {
                 if (!membersNeedingApproval.has(userId) && gotVerificationStatusUpdate.get(userId) === false) {
-                    addMemberNeedingApproval(userId, member, updatePrompt);
+                    addMemberNeedingApproval(userId, member);
                 }
             }
             gotVerificationStatusUpdate.delete(userId);
@@ -155,7 +175,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // Initialise the component.  Get the room members, check which ones need
     // their identity approved, and pick one to display.
     const loadMembers = useCallback(async (): Promise<void> => {
-        if (!crypto || initialisedRef.current) {
+        if (!crypto || initialisedRef.current != InitialisationStatus.Uninitialised) {
             return;
         }
         // If encryption is not enabled in the room, we don't need to do
@@ -164,15 +184,16 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         if (!(await crypto.isEncryptionEnabledInRoom(room.roomId))) {
             return;
         }
-        initialisedRef.current = true;
+        initialisedRef.current = InitialisationStatus.Initialising;
 
         const members = await room.getEncryptionTargetMembers();
 
         for (const member of members) {
-            await addMemberIfNeedsApproval(member.userId, member, false);
+            await addMemberIfNeedsApproval(member.userId, member);
         }
 
         setCurrentPrompt(selectCurrentPrompt());
+        initialisedRef.current = InitialisationStatus.Completed;
     }, [crypto, room, addMemberIfNeedsApproval, selectCurrentPrompt]);
 
     loadMembers().catch((e) => {
@@ -185,7 +206,9 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         (userId: string, verificationStatus: UserVerificationStatus): void => {
             const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
 
-            if (!initialisedRef.current) {
+            // If we haven't started initialising, that means that we're in a
+            // room where we don't need to display any warnings.
+            if (initialisedRef.current === InitialisationStatus.Uninitialised) {
                 return;
             }
 
@@ -222,7 +245,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 return;
             }
 
-            if (!initialisedRef.current) {
+            if (initialisedRef.current === InitialisationStatus.Uninitialised) {
                 return;
             }
 
