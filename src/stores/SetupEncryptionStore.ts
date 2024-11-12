@@ -125,7 +125,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) || null;
             this.backupInfo = backupInfo;
             this.emit("update");
 

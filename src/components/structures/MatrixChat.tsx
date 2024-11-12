@@ -1638,7 +1638,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 // otherwise check the server to see if there's a new one
                 try {
-                    newVersionInfo = await cli.getKeyBackupVersion();
+                    newVersionInfo = (await cli.getCrypto()?.getKeyBackupInfo()) || null;
                     if (newVersionInfo !== null) haveNewVersion = true;
                 } catch (e) {
                     logger.error("Saw key backup error but failed to check backup version!", e);

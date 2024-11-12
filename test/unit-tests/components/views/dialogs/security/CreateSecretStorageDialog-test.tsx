@@ -77,7 +77,7 @@ describe("CreateSecretStorageDialog", () => {
         filterConsole("Error fetching backup data from server");
 
         it("shows an error", async () => {
-            mockClient.getKeyBackupVersion.mockImplementation(async () => {
+            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockImplementation(async () => {
                 throw new Error("bleh bleh");
             });
 
@@ -92,7 +92,7 @@ describe("CreateSecretStorageDialog", () => {
             expect(result.container).toMatchSnapshot();
 
             // Now we can get the backup and we retry
-            mockClient.getKeyBackupVersion.mockRestore();
+            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockRestore();
             await userEvent.click(screen.getByRole("button", { name: "Retry" }));
             await screen.findByText("Your keys are now being backed up from this device.");
         });
