@@ -23,7 +23,11 @@ export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefi
     const update = useCallback(
         async (event: MatrixEvent) => {
             if (room && event.getType() === EventType.RoomEncryption) {
-                setIsEncrypted(await cli.getCrypto()?.isEncryptionEnabledInRoom(room.roomId));
+                try {
+                    setIsEncrypted(await cli.getCrypto()?.isEncryptionEnabledInRoom(room.roomId));
+                } catch {
+                    setIsEncrypted(false);
+                }
             }
         },
         [cli, room],
