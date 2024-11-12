@@ -265,7 +265,7 @@
         "postcss-import": "16.1.0",
         "postcss-loader": "8.1.1",
         "postcss-mixins": "^11.0.0",
-        "postcss-nested": "^6.0.0",
+        "postcss-nested": "^7.0.0",
         "postcss-preset-env": "^10.0.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^7.0.1",
