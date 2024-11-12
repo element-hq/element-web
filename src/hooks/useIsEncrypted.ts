@@ -11,9 +11,9 @@ import { MatrixClient, MatrixEvent, Room, RoomStateEvent, EventType } from "matr
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 
-// Hook to simplify watching whether a Matrix room is encrypted, returns undefined if room is undefined or when isRoomEncrypted is computed
-export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined {
-    const [isEncrypted, setIsEncrypted] = useState<boolean>();
+// Hook to simplify watching whether a Matrix room is encrypted, returns undefined if room is undefined, return null when isRoomEncrypted is computed
+export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined | null {
+    const [isEncrypted, setIsEncrypted] = useState<boolean | null | undefined>(null);
 
     useEffect(() => {
         const func = async (): Promise<void> =>
