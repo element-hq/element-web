@@ -18,7 +18,7 @@ import {
     M_POLL_RESPONSE,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
-import { uuid4 } from "@sentry/utils";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 import { flushPromises } from "./utilities";
 
@@ -67,7 +67,7 @@ export const makePollEndEvent = (
     id?: string,
 ): MatrixEvent => {
     return new MatrixEvent({
-        event_id: id || uuid4(),
+        event_id: id || randomString(16),
         room_id: roomId,
         origin_server_ts: ts,
         type: M_POLL_END.name,
@@ -91,7 +91,7 @@ export const makePollResponseEvent = (
     ts = 0,
 ): MatrixEvent =>
     new MatrixEvent({
-        event_id: uuid4(),
+        event_id: randomString(16),
         room_id: roomId,
         origin_server_ts: ts,
         type: M_POLL_RESPONSE.name,

@@ -52,7 +52,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
     }
 

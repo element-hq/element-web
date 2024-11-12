@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
-import { screen } from "jest-matrix-react";
+import { screen, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { flushPromises, mkEvent, stubClient } from "../../../../test-utils";
@@ -31,12 +31,12 @@ describe("ConfirmRedactDialog", () => {
     };
 
     const confirmDeleteVoiceBroadcastStartedEvent = async () => {
-        createRedactEventDialog({ mxEvent });
+        act(() => createRedactEventDialog({ mxEvent }));
         // double-flush promises required for the dialog to show up
         await flushPromises();
         await flushPromises();
 
-        await userEvent.click(screen.getByTestId("dialog-primary-button"));
+        await userEvent.click(await screen.findByTestId("dialog-primary-button"));
     };
 
     beforeEach(() => {

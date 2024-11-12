@@ -6,8 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent } from "react";
-import ReactDOM from "react-dom";
+import React, { createRef, SyntheticEvent, MouseEvent, StrictMode } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -17,8 +16,8 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinks, unmountPills } from "../../../utils/pillify";
-import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
+import { pillifyLinks } from "../../../utils/pillify";
+import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { Action } from "../../../dispatcher/actions";
@@ -36,6 +35,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import CodeBlock from "./CodeBlock";
+import { ReactRootManager } from "../../../utils/react";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -48,9 +48,11 @@ interface IState {
 export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLDivElement>();
 
-    private pills: Element[] = [];
-    private tooltips: Element[] = [];
-    private reactRoots: Element[] = [];
+    private pills = new ReactRootManager();
+    private tooltips = new ReactRootManager();
+    private reactRoots = new ReactRootManager();
+
+    private ref = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
@@ -80,12 +82,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // tooltipifyLinks AFTER calculateUrlPreview because the DOM inside the tooltip
         // container is empty before the internal component has mounted so calculateUrlPreview
         // won't find any anchors
-        tooltipifyLinks([content], this.pills, this.tooltips);
+        tooltipifyLinks([content], [...this.pills.elements, ...this.reactRoots.elements], this.tooltips);
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("pre");
-            if (pres.length > 0) {
+            const pres = this.ref.current?.getElementsByTagName("pre");
+            if (pres && pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
@@ -111,12 +113,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private wrapPreInReact(pre: HTMLPreElement): void {
         const root = document.createElement("div");
         root.className = "mx_EventTile_pre_container";
-        this.reactRoots.push(root);
 
         // Insert containing div in place of <pre> block
         pre.parentNode?.replaceChild(root, pre);
 
-        ReactDOM.render(<CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>, root);
+        this.reactRoots.render(
+            <StrictMode>
+                <CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>
+            </StrictMode>,
+            root,
+        );
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
@@ -130,16 +136,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        unmountPills(this.pills);
-        unmountTooltips(this.tooltips);
-
-        for (const root of this.reactRoots) {
-            ReactDOM.unmountComponentAtNode(root);
-        }
-
-        this.pills = [];
-        this.tooltips = [];
-        this.reactRoots = [];
+        this.pills.unmount();
+        this.tooltips.unmount();
+        this.reactRoots.unmount();
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {
@@ -190,12 +189,15 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
                 const spoiler = (
-                    <TooltipProvider>
-                        <Spoiler reason={reason} contentHtml={node.outerHTML} />
-                    </TooltipProvider>
+                    <StrictMode>
+                        <TooltipProvider>
+                            <Spoiler reason={reason} contentHtml={node.outerHTML} />
+                        </TooltipProvider>
+                    </StrictMode>
                 );
 
-                ReactDOM.render(spoiler, spoilerContainer);
+                this.reactRoots.render(spoiler, spoilerContainer);
+
                 node.parentNode?.replaceChild(spoilerContainer, node);
 
                 node = spoilerContainer;
@@ -477,7 +479,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
+                <div
+                    className="mx_MEmoteBody mx_EventTile_content"
+                    onClick={this.onBodyLinkClick}
+                    dir="auto"
+                    ref={this.ref}
+                >
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
@@ -490,7 +497,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
                     {body}
                     {widgets}
                 </div>
@@ -498,14 +505,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isCaption) {
             return (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick} ref={this.ref}>
                     {body}
                     {widgets}
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
                 {body}
                 {widgets}
             </div>

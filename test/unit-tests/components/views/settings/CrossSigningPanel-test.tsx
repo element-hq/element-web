@@ -34,7 +34,6 @@ describe("<CrossSigningPanel />", () => {
         });
 
         mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-        mockClient.isCrossSigningReady.mockResolvedValue(false);
     });
 
     afterEach(() => {

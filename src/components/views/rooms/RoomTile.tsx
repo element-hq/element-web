@@ -94,7 +94,6 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: null,
         };
-        this.generatePreview();
 
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
@@ -147,6 +146,8 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     }
 
     public componentDidMount(): void {
+        this.generatePreview();
+
         // when we're first rendered (or our sublist is expanded) make sure we are visible if we're active
         if (this.state.selected) {
             this.scrollIntoView();
@@ -175,7 +176,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
             this.onRoomPreviewChanged,
         );
         this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
-        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);

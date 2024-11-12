@@ -10,10 +10,11 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import LegacyCallHandler from "../../LegacyCallHandler";
-import { PlatformCallType } from "../../hooks/room/useRoomCall";
+import { getPlatformCallTypeProps, PlatformCallType } from "../../hooks/room/useRoomCall";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
+import PosthogTrackers from "../../PosthogTrackers";
 
 /**
  * Helper to place a call in a room that works with all the legacy modes
@@ -27,6 +28,9 @@ export const placeCall = async (
     platformCallType: PlatformCallType,
     skipLobby: boolean,
 ): Promise<void> => {
+    const { analyticsName } = getPlatformCallTypeProps(platformCallType);
+    PosthogTrackers.trackInteraction(analyticsName);
+
     if (platformCallType == PlatformCallType.LegacyCall || platformCallType == PlatformCallType.JitsiCall) {
         await LegacyCallHandler.instance.placeCall(room.roomId, callType);
     } else if (platformCallType == PlatformCallType.ElementCall) {

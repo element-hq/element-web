@@ -103,7 +103,6 @@
         "report_content": "Report Content",
         "resend": "Resend",
         "reset": "Reset",
-        "restore": "Restore",
         "resume": "Resume",
         "retry": "Retry",
         "review": "Review",
@@ -210,7 +209,6 @@
         "failed_query_registration_methods": "Unable to query for supported registration methods.",
         "failed_soft_logout_auth": "Failed to re-authenticate",
         "failed_soft_logout_homeserver": "Failed to re-authenticate due to a homeserver problem",
-        "footer_powered_by_matrix": "powered by Matrix",
         "forgot_password_email_invalid": "The email address doesn't appear to be valid.",
         "forgot_password_email_required": "The email address linked to your account must be entered.",
         "forgot_password_prompt": "Forgotten your password?",
@@ -250,13 +248,11 @@
         "phone_label": "Phone",
         "phone_optional_label": "Phone (optional)",
         "qr_code_login": {
-            "approve_access_warning": "By approving access for this device, it will have full access to your account.",
             "check_code_explainer": "This will verify that the connection to your other device is secure.",
             "check_code_heading": "Enter the number shown on your other device",
             "check_code_input_label": "2-digit code",
             "check_code_mismatch": "The numbers don't match",
             "completing_setup": "Completing set up of your new device",
-            "confirm_code_match": "Check that the code below matches with your other device:",
             "error_etag_missing": "An unexpected error occurred. This may be due to a browser extension, proxy server, or server misconfiguration.",
             "error_expired": "Sign in expired. Please try again.",
             "error_expired_title": "The sign in was not completed in time",
@@ -284,7 +280,6 @@
             "security_code": "Security code",
             "security_code_prompt": "If asked, enter the code below on your other device.",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
-            "sign_in_new_device": "Sign in new device",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",
             "waiting_for_device": "Waiting for device to sign in"
@@ -509,6 +504,7 @@
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Message layout",
+        "message_timestamp_invalid": "Invalid timestamp",
         "microphone": "Microphone",
         "model": "Model",
         "modern": "Modern",
@@ -933,7 +929,6 @@
         },
         "unable_to_setup_keys_error": "Unable to set up keys",
         "unsupported": "This client does not support end-to-end encryption.",
-        "upgrade_toast_title": "Encryption upgrade available",
         "verification": {
             "accepting": "Accepting…",
             "after_new_login": {
@@ -1115,7 +1110,15 @@
             "you": "You reacted %(reaction)s to %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "File",
+            "image": "Image",
+            "poll": "Poll",
+            "video": "Video"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Export Cancelled",
@@ -2042,14 +2045,6 @@
             "button_view_all": "View all",
             "description": "This room has pinned messages. Click to view them.",
             "go_to_message": "View the pinned message in the timeline.",
-            "prefix": {
-                "audio": "Audio",
-                "file": "File",
-                "image": "Image",
-                "poll": "Poll",
-                "video": "Video"
-            },
-            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
             "title": "<bold>%(index)s of %(length)s</bold> Pinned messages"
         },
         "read_topic": "Click to read topic",
@@ -2591,18 +2586,13 @@
                 "pass_phrase_match_failed": "That doesn't match.",
                 "pass_phrase_match_success": "That matches!",
                 "phrase_strong_enough": "Great! This Security Phrase looks strong enough.",
-                "requires_key_restore": "Restore your key backup to upgrade your encryption",
-                "requires_password_confirmation": "Enter your account password to confirm the upgrade:",
-                "requires_server_authentication": "You'll need to authenticate with the server to confirm the upgrade.",
                 "secret_storage_query_failure": "Unable to query secret storage status",
                 "security_key_safety_reminder": "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.",
-                "session_upgrade_description": "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.",
                 "set_phrase_again": "Go back to set it again.",
                 "settings_reminder": "You can also set up Secure Backup & manage your keys in Settings.",
                 "title_confirm_phrase": "Confirm Security Phrase",
                 "title_save_key": "Save your Security Key",
                 "title_set_phrase": "Set a Security Phrase",
-                "title_upgrade_encryption": "Upgrade your encryption",
                 "unable_to_setup": "Unable to set up secret storage",
                 "use_different_passphrase": "Use a different passphrase?",
                 "use_phrase_only_you_know": "Use a secret phrase only you know, and optionally save a Security Key to use for backup."
@@ -3276,8 +3266,8 @@
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",
-            "sender_identity_previously_verified": "Verified identity has changed",
-            "sender_unsigned_device": "Encrypted by a device not verified by its owner.",
+            "sender_identity_previously_verified": "Sender's verified identity has changed",
+            "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3716,7 +3706,6 @@
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
     },
-    "unknown_device": "Unknown device",
     "unsupported_browser": {
         "description": "If you continue, some features may stop working and there is a risk that you may lose data in the future. Update your browser to continue using %(brand)s.",
         "title": "%(brand)s does not support this browser"

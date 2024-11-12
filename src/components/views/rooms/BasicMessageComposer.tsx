@@ -128,10 +128,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private lastCaret!: DocumentOffset;
     private lastSelection: ReturnType<typeof cloneSelection> | null = null;
 
-    private readonly useMarkdownHandle: string;
-    private readonly emoticonSettingHandle: string;
-    private readonly shouldShowPillAvatarSettingHandle: string;
-    private readonly surroundWithHandle: string;
+    private useMarkdownHandle?: string;
+    private emoticonSettingHandle?: string;
+    private shouldShowPillAvatarSettingHandle?: string;
+    private surroundWithHandle?: string;
     private readonly historyManager = new HistoryManager();
 
     public constructor(props: IProps) {
@@ -145,28 +145,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
         const ua = navigator.userAgent.toLowerCase();
         this.isSafari = ua.includes("safari/") && !ua.includes("chrome/");
-
-        this.useMarkdownHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.useMarkdown",
-            null,
-            this.configureUseMarkdown,
-        );
-        this.emoticonSettingHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.autoReplaceEmoji",
-            null,
-            this.configureEmoticonAutoReplace,
-        );
         this.configureEmoticonAutoReplace();
-        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting(
-            "Pill.shouldShowPillAvatar",
-            null,
-            this.configureShouldShowPillAvatar,
-        );
-        this.surroundWithHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.surroundWith",
-            null,
-            this.surroundWithSettingChanged,
-        );
     }
 
     public componentDidUpdate(prevProps: IProps): void {
@@ -737,6 +716,27 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public componentDidMount(): void {
+        this.useMarkdownHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.useMarkdown",
+            null,
+            this.configureUseMarkdown,
+        );
+        this.emoticonSettingHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.autoReplaceEmoji",
+            null,
+            this.configureEmoticonAutoReplace,
+        );
+        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting(
+            "Pill.shouldShowPillAvatar",
+            null,
+            this.configureShouldShowPillAvatar,
+        );
+        this.surroundWithHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.surroundWith",
+            null,
+            this.surroundWithSettingChanged,
+        );
+
         const model = this.props.model;
         model.setUpdateCallback(this.updateEditorState);
         const partCreator = model.partCreator;

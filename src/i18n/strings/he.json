@@ -82,7 +82,6 @@
         "report_content": "דווח על תוכן",
         "resend": "שלח מחדש",
         "reset": "אתחל",
-        "restore": "לשחזר",
         "resume": "תקציר",
         "retry": "נסה שוב",
         "review": "סקירה",
@@ -168,7 +167,6 @@
         "failed_query_registration_methods": "לא ניתן לשאול לשיטות רישום נתמכות.",
         "failed_soft_logout_auth": "האימות מחדש נכשל",
         "failed_soft_logout_homeserver": "האימות מחדש נכשל עקב בעיית שרת בית",
-        "footer_powered_by_matrix": "מופעל ע\"י Matrix",
         "forgot_password_email_required": "יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.",
         "forgot_password_prompt": "שכחת את הסיסמה שלך?",
         "forgot_password_send_email": "שלח אימייל",
@@ -644,7 +642,6 @@
         },
         "unable_to_setup_keys_error": "לא ניתן להגדיר מקשים",
         "unsupported": "לקוח זה אינו תומך בהצפנה מקצה לקצה.",
-        "upgrade_toast_title": "שדרוג הצפנה קיים",
         "verification": {
             "accepting": "מקבל…",
             "after_new_login": {
@@ -1683,17 +1680,12 @@
                 "pass_phrase_match_failed": "זה לא תואם.",
                 "pass_phrase_match_success": "זה מתאים!",
                 "phrase_strong_enough": "מצוין! ביטוי אבטחה זה נראה מספיק חזק.",
-                "requires_key_restore": "שחזר את גיבוי המפתח שלך כדי לשדרג את ההצפנה שלך",
-                "requires_password_confirmation": "הזן את סיסמת החשבון שלך כדי לאשר את השדרוג:",
-                "requires_server_authentication": "יהיה עליך לבצע אימות מול השרת כדי לאשר את השדרוג.",
                 "secret_storage_query_failure": "לא ניתן לשאול על סטטוס האחסון הסודי",
-                "session_upgrade_description": "שדרג את ההפעלה הזו כדי לאפשר לה לאמת פעילויות אחרות, הענק להם גישה להודעות מוצפנות וסמן אותן כאמינות עבור משתמשים אחרים.",
                 "set_phrase_again": "חזור להגדיר אותו שוב.",
                 "settings_reminder": "אתה יכול גם להגדיר גיבוי מאובטח ולנהל את המפתחות שלך בהגדרות.",
                 "title_confirm_phrase": "אשר את ביטוי האבטחה",
                 "title_save_key": "שמור את מפתח האבטחה שלך",
                 "title_set_phrase": "הגדר ביטוי אבטחה",
-                "title_upgrade_encryption": "שדרג את ההצפנה שלך",
                 "unable_to_setup": "לא ניתן להגדיר אחסון סודי",
                 "use_different_passphrase": "להשתמש בביטוי סיסמה אחר?",
                 "use_phrase_only_you_know": "השתמש בביטוי סודי רק אתה מכיר, ושמור שמור מפתח אבטחה לשימוש לגיבוי."
@@ -2403,7 +2395,6 @@
     "truncated_list_n_more": {
         "other": "ו%(count)s עוד..."
     },
-    "unknown_device": "מכשיר לא ידוע",
     "update": {
         "changelog": "דו\"ח שינויים",
         "check_action": "בדוק עדכונים",

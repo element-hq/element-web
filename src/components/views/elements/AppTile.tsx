@@ -16,7 +16,12 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import {
+    OverflowHorizontalIcon,
+    MinusIcon,
+    ExpandIcon,
+    CollapseIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -34,10 +39,7 @@ import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetConte
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Icon as CollapseIcon } from "../../../../res/img/element-icons/minimise-collapse.svg";
-import { Icon as MaximiseIcon } from "../../../../res/img/element-icons/maximise-expand.svg";
-import { Icon as MinimiseIcon } from "../../../../res/img/element-icons/minus-button.svg";
-import { Icon as PopoutIcon } from "../../../../res/img/feather-customised/widget/external-link.svg";
+import { Icon as PopoutIcon } from "../../../../res/img/external-link.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -132,29 +134,20 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframe?: HTMLIFrameElement; // ref to the iframe (callback style)
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
-    private sgWidget: StopGapWidget | null;
+    private sgWidget?: StopGapWidget;
     private dispatcherRef?: string;
     private unmounted = false;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        // Tiles in miniMode are floating, and therefore not docked
-        if (!this.props.miniMode) {
-            ActiveWidgetStore.instance.dockWidget(
-                this.props.app.id,
-                isAppWidget(this.props.app) ? this.props.app.roomId : null,
-            );
-        }
-
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
         try {
             this.sgWidget = new StopGapWidget(this.props);
-            this.setupSgListeners();
         } catch (e) {
             logger.log("Failed to construct widget", e);
-            this.sgWidget = null;
+            this.sgWidget = undefined;
         }
 
         this.state = this.getNewState(props);
@@ -301,6 +294,20 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
+        // Tiles in miniMode are floating, and therefore not docked
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.dockWidget(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            );
+        }
+
+        if (this.sgWidget) {
+            this.setupSgListeners();
+        }
+
         // Only fetch IM token on mount if we're showing and have permission to load
         if (this.sgWidget && this.state.hasPermissionToLoad) {
             this.startWidget();
@@ -338,13 +345,13 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         // Widget action listeners
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
             this.context.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
-        if (this.allowedWidgetsWatchRef) SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
@@ -372,7 +379,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.startWidget();
         } catch (e) {
             logger.error("Failed to construct widget", e);
-            this.sgWidget = null;
+            this.sgWidget = undefined;
         }
     }
 
@@ -579,18 +586,21 @@ export default class AppTile extends React.Component<IProps, IState> {
             : Container.Center;
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
 
-        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
-        if (
-            targetContainer === Container.Top &&
-            RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
-        ) {
-            RightPanelStore.instance.popCard(this.props.room.roomId);
-        }
+        if (targetContainer === Container.Top) this.closeChatCardIfNeeded();
     };
 
     private onMinimiseClicked = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, Container.Right);
+        this.closeChatCardIfNeeded();
+    };
+
+    private closeChatCardIfNeeded = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
     };
 
     private onContextMenuClick = (): void => {
@@ -602,7 +612,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        let appTileBody: JSX.Element;
+        let appTileBody: JSX.Element | undefined;
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
         // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -645,7 +655,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <AppWarning errorMsg={_t("widget|error_loading")} />
                 </div>
             );
-        } else if (!this.state.hasPermissionToLoad && this.props.room) {
+        } else if (!this.state.hasPermissionToLoad && this.props.room && this.sgWidget) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
@@ -672,7 +682,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                         <AppWarning errorMsg={_t("widget|error_mixed_content")} />
                     </div>
                 );
-            } else {
+            } else if (this.sgWidget) {
                 appTileBody = (
                     <>
                         <div className={appTileBodyClass} style={appTileBodyStyles}>
@@ -759,7 +769,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     {isMaximised ? (
                         <CollapseIcon className="mx_Icon mx_Icon_12" />
                     ) : (
-                        <MaximiseIcon className="mx_Icon mx_Icon_12" />
+                        <ExpandIcon className="mx_Icon mx_Icon_12" />
                     )}
                 </AccessibleButton>,
             );
@@ -771,7 +781,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     title={_t("action|minimise")}
                     onClick={this.onMinimiseClicked}
                 >
-                    <MinimiseIcon className="mx_Icon mx_Icon_12" />
+                    <MinusIcon className="mx_Icon mx_Icon_16" />
                 </AccessibleButton>,
             );
         }
@@ -806,7 +816,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         ref={this.contextMenuButton}
                                         onClick={this.onContextMenuClick}
                                     >
-                                        <EllipsisIcon className="mx_Icon mx_Icon_12" />
+                                        <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
                                     </ContextMenuButton>
                                 )}
                             </span>

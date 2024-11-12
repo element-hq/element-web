@@ -75,6 +75,10 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         this.context.on(ClientEvent.Sync, this.reconnectedListener);
     };
 
+    public componentDidMount(): void {
+        this.unmounted = false;
+    }
+
     public componentWillUnmount(): void {
         this.unmounted = true;
         this.context.off(ClientEvent.Sync, this.reconnectedListener);

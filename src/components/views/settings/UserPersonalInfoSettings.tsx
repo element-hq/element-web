@@ -12,7 +12,7 @@ import { Alert } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import InlineSpinner from "../elements/InlineSpinner";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { ThirdPartyIdentifier } from "../../../AddThreepid";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -125,5 +125,3 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
         </div>
     );
 };
-
-export default UserPersonalInfoSettings;

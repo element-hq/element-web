@@ -17,7 +17,6 @@ import {
     waitForElementToBeRemoved,
     within,
 } from "jest-matrix-react";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
@@ -120,6 +119,7 @@ describe("<SessionManagerTab />", () => {
     const mockVerificationRequest = {
         cancel: jest.fn(),
         on: jest.fn(),
+        off: jest.fn(),
     } as unknown as VerificationRequest;
 
     const mockCrypto = mocked({
@@ -205,7 +205,6 @@ describe("<SessionManagerTab />", () => {
             ...mockClientMethodsServer(),
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             getDevices: jest.fn(),
-            getStoredDevice: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
             deleteMultipleDevices: jest.fn(),
             generateClientSecret: jest.fn(),
@@ -220,10 +219,6 @@ describe("<SessionManagerTab />", () => {
         });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
-        mockClient.getStoredDevice.mockImplementation((_userId, id) => {
-            const device = [alicesDevice, alicesMobileDevice].find((device) => device.device_id === id);
-            return device ? new DeviceInfo(device.device_id) : null;
-        });
         mockCrypto.getDeviceVerificationStatus.mockReset().mockResolvedValue(new DeviceVerificationStatus({}));
 
         mockClient.getDevices.mockReset().mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
@@ -292,7 +287,6 @@ describe("<SessionManagerTab />", () => {
         mockClient.getDevices.mockResolvedValue({
             devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
         });
-        mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
         mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
             // alices device is trusted
             if (deviceId === alicesDevice.device_id) {
@@ -464,7 +458,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation(() => new DeviceInfo(alicesDevice.device_id));
             mockCrypto.getDeviceVerificationStatus.mockResolvedValue(
                 new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true }),
             );
@@ -568,7 +561,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 if (deviceId === alicesDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
@@ -595,7 +587,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 // current session verified = able to verify other sessions
                 if (deviceId === alicesDevice.device_id) {
@@ -629,7 +620,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 if (deviceId === alicesDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
@@ -667,7 +657,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
@@ -708,7 +697,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
@@ -749,7 +737,6 @@ describe("<SessionManagerTab />", () => {
             mockClient.getDevices.mockResolvedValue({
                 devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice, alicesOtherDehydratedDevice],
             });
-            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
 
             const devicesMap = new Map<string, Device>([
                 [alicesDeviceObj.deviceId, alicesDeviceObj],
@@ -929,7 +916,7 @@ describe("<SessionManagerTab />", () => {
                 const { getByTestId, findByTestId } = render(getComponent());
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-                await toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                 const signOutButton = await within(
                     await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),
@@ -1038,7 +1025,7 @@ describe("<SessionManagerTab />", () => {
                     fireEvent.submit(getByLabelText("Password"));
                 });
 
-                await flushPromises();
+                await act(flushPromises);
 
                 // called again with auth
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
@@ -1046,7 +1033,7 @@ describe("<SessionManagerTab />", () => {
                         type: "m.id.user",
                         user: aliceId,
                     },
-                    password: "",
+                    password: "topsecret",
                     type: "m.login.password",
                 });
                 // devices refreshed
@@ -1662,46 +1649,6 @@ describe("<SessionManagerTab />", () => {
         });
 
         expect(checkbox.getAttribute("aria-checked")).toEqual("false");
-    });
-
-    describe("MSC3906 QR code login", () => {
-        const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
-
-        beforeEach(() => {
-            settingsValueSpy.mockClear().mockReturnValue(false);
-            // enable server support for qr login
-            mockClient.getVersions.mockResolvedValue({
-                versions: [],
-                unstable_features: {
-                    "org.matrix.msc3886": true,
-                },
-            });
-            mockClient.getCapabilities.mockResolvedValue({
-                [GET_LOGIN_TOKEN_CAPABILITY.name]: {
-                    enabled: true,
-                },
-            });
-        });
-
-        it("renders qr code login section", async () => {
-            const { getByText } = render(getComponent());
-
-            // wait for versions call to settle
-            await flushPromises();
-
-            expect(getByText("Link new device")).toBeTruthy();
-            expect(getByText("Show QR code")).toBeTruthy();
-        });
-
-        it("enters qr code login section when show QR code button clicked", async () => {
-            const { getByText, findByTestId } = render(getComponent());
-            // wait for versions call to settle
-            await flushPromises();
-
-            fireEvent.click(getByText("Show QR code"));
-
-            await expect(findByTestId("login-with-qr")).resolves.toBeTruthy();
-        });
     });
 
     describe("MSC4108 QR code login", () => {

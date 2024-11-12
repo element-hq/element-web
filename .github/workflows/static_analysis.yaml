@@ -34,27 +34,6 @@ jobs:
             - name: Typecheck
               run: "yarn run lint:types"
 
-            - name: Switch js-sdk to release mode
-              working-directory: node_modules/matrix-js-sdk
-              run: |
-                  scripts/switch_package_to_release.cjs
-                  yarn install
-                  yarn run build:compile
-                  yarn run build:types
-
-            - name: Typecheck (release mode)
-              run: "yarn run lint:types"
-
-            # Temporary while we directly import matrix-js-sdk/src/* which means we need
-            # certain @types/* packages to make sense of matrix-js-sdk types.
-            #- name: Typecheck (release mode; no yarn link)
-            #  if: github.event_name != 'pull_request' && github.ref_name != 'master'
-            #  run: |
-            #      yarn unlink matrix-js-sdk
-            #      yarn add github:matrix-org/matrix-js-sdk#develop
-            #      yarn install --force
-            #      yarn run lint:types
-
     i18n_lint:
         name: "i18n Check"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
@@ -143,6 +122,12 @@ jobs:
               with:
                   cache: "yarn"
                   node-version: "lts/*"
+
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Run linter
+              run: "yarn run lint:knip"
 
             - name: Install Deps
               run: "scripts/layered.sh"

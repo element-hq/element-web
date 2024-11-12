@@ -34,7 +34,9 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
             heights: this.toHeights(this.props.playback.waveform),
             progress: 0, // default no progress
         };
+    }
 
+    public componentDidMount(): void {
         this.props.playback.waveformData.onUpdate(this.onWaveformUpdate);
         this.props.playback.clockInfo.liveData.onUpdate(this.onTimeUpdate);
     }

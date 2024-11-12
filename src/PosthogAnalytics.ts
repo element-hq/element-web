@@ -326,7 +326,7 @@ export class PosthogAnalytics {
         if (this.enabled) {
             this.posthog.reset();
         }
-        if (this.watchSettingRef) SettingsStore.unwatchSetting(this.watchSettingRef);
+        SettingsStore.unwatchSetting(this.watchSettingRef);
         this.setAnonymity(Anonymity.Disabled);
     }
 

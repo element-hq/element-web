@@ -55,13 +55,14 @@ import * as Lifecycle from "../../../../src/Lifecycle";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../../src/BasePlatform";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { MatrixClientPeg, MatrixClientPeg as peg } from "../../../../src/MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../../src/stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import Modal from "../../../../src/Modal.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -125,7 +126,6 @@ describe("<MatrixChat />", () => {
         }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
-        setGlobalBlacklistUnverifiedDevices: jest.fn(),
         setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
@@ -136,9 +136,10 @@ describe("<MatrixChat />", () => {
             setDeviceIsolationMode: jest.fn(),
             userHasCrossSigningKeys: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
+            globalBlacklistUnverifiedDevices: false,
+            // This needs to not finish immediately because we need to test the screen appears
+            bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
         }),
-        // This needs to not finish immediately because we need to test the screen appears
-        bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
         },
@@ -933,17 +934,13 @@ describe("<MatrixChat />", () => {
             // but as the exception was swallowed, the test was passing (see in `initClientCrypto`).
             // There are several uses of the peg in the app, so during all these tests you might end-up
             // with a real client instead of the mocked one. Not sure how reliable all these tests are.
-            const originalReplace = peg.replaceUsingCreds;
-            peg.replaceUsingCreds = jest.fn().mockResolvedValue(mockClient);
-            // @ts-ignore - need to mock this for the test
-            peg.matrixClient = mockClient;
+            jest.spyOn(MatrixClientPeg, "replaceUsingCreds");
+            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
             const result = getComponent();
 
             await result.findByText("You're signed out");
             expect(result.container).toMatchSnapshot();
-
-            peg.replaceUsingCreds = originalReplace;
         });
     });
 
@@ -956,7 +953,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to login page
             defaultDispatcher.dispatch({
@@ -1011,6 +1008,8 @@ describe("<MatrixChat />", () => {
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                     setDeviceIsolationMode: jest.fn(),
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+                    // This needs to not finish immediately because we need to test the screen appears
+                    bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1113,8 +1112,6 @@ describe("<MatrixChat />", () => {
                 await getComponentAndLogin();
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
-
-                await flushPromises();
 
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
@@ -1483,14 +1480,12 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to mobile_register page
             defaultDispatcher.dispatch({
                 action: "start_mobile_registration",
             });
-
-            await flushPromises();
 
             return renderResult;
         };
@@ -1505,13 +1500,14 @@ describe("<MatrixChat />", () => {
         it("should render welcome screen if mobile registration is not enabled in settings", async () => {
             await getComponentAndWaitForReady();
 
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
         });
 
         it("should render mobile registration", async () => {
             enabledMobileRegistration();
 
             await getComponentAndWaitForReady();
+            await flushPromises();
 
             expect(screen.getByTestId("mobile-register")).toBeInTheDocument();
         });
@@ -1519,7 +1515,9 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialogAsync");
             jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+                __test: true,
                 __esModule: true,
                 default: () => <span>mocked dialog</span>,
             }));
@@ -1531,7 +1529,8 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect(await spy.mock.lastCall![0]).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { ComponentProps } from "react";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as CaretIcon } from "../../../../../res/img/feather-customised/dropdown-arrow.svg";
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 
@@ -38,7 +38,7 @@ export const DeviceExpandDetailsButton = <T extends keyof JSX.IntrinsicElements>
             })}
             onClick={onClick}
         >
-            <CaretIcon className="mx_DeviceExpandDetailsButton_icon" />
+            <ChevronDownIcon className="mx_DeviceExpandDetailsButton_icon" />
         </AccessibleButton>
     );
 };

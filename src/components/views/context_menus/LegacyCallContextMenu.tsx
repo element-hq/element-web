@@ -17,10 +17,6 @@ interface IProps extends IContextMenuProps {
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
-    public constructor(props: IProps) {
-        super(props);
-    }
-
     public onHoldClick = (): void => {
         this.props.call.setRemoteOnHold(true);
         this.props.onFinished();

@@ -38,12 +38,14 @@ const config: Config = {
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
     },
-    transformIgnorePatterns: ["/node_modules/(?!matrix-js-sdk).+$"],
+    transformIgnorePatterns: ["/node_modules/(?!(mime|matrix-js-sdk)).+$"],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is
         // not available in that contest. So, turn off coverage instrumentation for it.
         "!<rootDir>/src/utils/SessionLock.ts",
+        // Coverage chokes on type definition files
+        "!<rootDir>/src/**/*.d.ts",
     ],
     coverageReporters: ["text-summary", "lcov"],
     testResultsProcessor: "@casualbot/jest-sonar-reporter",

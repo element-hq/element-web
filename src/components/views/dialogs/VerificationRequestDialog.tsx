@@ -32,6 +32,9 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
         this.state = {
             verificationRequest: this.props.verificationRequest,
         };
+    }
+
+    public componentDidMount(): void {
         this.props.verificationRequestPromise?.then((r) => {
             this.setState({ verificationRequest: r });
         });
