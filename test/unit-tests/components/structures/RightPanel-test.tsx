@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { jest } from "@jest/globals";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 

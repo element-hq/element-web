@@ -102,3 +102,5 @@ experimental_features:
     # messages > non-joined historical messages.
     # Can be removed after Synapse enables it by default
     msc4115_membership_on_events: true
+
+enable_authenticated_media: true

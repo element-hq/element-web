@@ -97,7 +97,6 @@
         "report_content": "Báo cáo nội dung",
         "resend": "Gửi lại",
         "reset": "Cài lại",
-        "restore": "Khôi phục",
         "resume": "Tiếp tục",
         "retry": "Thử lại",
         "review": "Xem xét",
@@ -196,7 +195,6 @@
         "failed_query_registration_methods": "Không thể truy vấn các phương pháp đăng ký được hỗ trợ.",
         "failed_soft_logout_auth": "Không xác thực lại được",
         "failed_soft_logout_homeserver": "Không xác thực lại được do sự cố máy chủ",
-        "footer_powered_by_matrix": "cung cấp bởi Matrix",
         "forgot_password_email_invalid": "Địa chỉ thư điện tử dường như không hợp lệ.",
         "forgot_password_email_required": "Địa chỉ thư điện tử được liên kết đến tài khoản của bạn phải được nhập.",
         "forgot_password_prompt": "Quên mật khẩu của bạn?",
@@ -803,7 +801,6 @@
         },
         "unable_to_setup_keys_error": "Không thể thiết lập khóa",
         "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối.",
-        "upgrade_toast_title": "Nâng cấp mã hóa có sẵn",
         "verification": {
             "accepting": "Đang chấp nhận…",
             "after_new_login": {
@@ -2189,18 +2186,13 @@
                 "pass_phrase_match_failed": "Điều đó không phù hợp.",
                 "pass_phrase_match_success": "Điều đó phù hợp!",
                 "phrase_strong_enough": "Tuyệt vời! Cụm từ bảo mật này trông đủ mạnh.",
-                "requires_key_restore": "Khôi phục bản sao lưu khóa của bạn để nâng cấp mã hóa của bạn",
-                "requires_password_confirmation": "Nhập mật khẩu tài khoản của bạn để xác nhận nâng cấp:",
-                "requires_server_authentication": "Bạn sẽ cần xác thực với máy chủ để xác nhận nâng cấp.",
                 "secret_storage_query_failure": "Không thể truy vấn trạng thái lưu trữ bí mật",
                 "security_key_safety_reminder": "Lưu trữ Khóa bảo mật của bạn ở nơi an toàn, như trình quản lý mật khẩu hoặc két sắt, vì nó được sử dụng để bảo vệ dữ liệu được mã hóa của bạn.",
-                "session_upgrade_description": "Nâng cấp phiên này để cho phép nó xác thực các phiên khác, cấp cho họ quyền truy cập vào các thư được mã hóa và đánh dấu chúng là đáng tin cậy đối với những người dùng khác.",
                 "set_phrase_again": "Quay lại để thiết lập lại.",
                 "settings_reminder": "Bạn cũng có thể thiết lập Sao lưu bảo mật và quản lý khóa của mình trong Cài đặt.",
                 "title_confirm_phrase": "Xác nhận cụm từ bảo mật",
                 "title_save_key": "Lưu Khóa Bảo mật của bạn",
                 "title_set_phrase": "Đặt Cụm từ Bảo mật",
-                "title_upgrade_encryption": "Nâng cấp mã hóa của bạn",
                 "unable_to_setup": "Không thể thiết lập bộ nhớ bí mật",
                 "use_different_passphrase": "Sử dụng một cụm mật khẩu khác?",
                 "use_phrase_only_you_know": "Sử dụng một cụm từ bí mật mà chỉ bạn biết và tùy chọn lưu Khóa bảo mật để sử dụng để sao lưu."
@@ -3180,7 +3172,6 @@
     "truncated_list_n_more": {
         "other": "Và %(count)s thêm…"
     },
-    "unknown_device": "Thiết bị không xác định",
     "update": {
         "changelog": "Lịch sử thay đổi",
         "check_action": "Kiểm tra cập nhật",

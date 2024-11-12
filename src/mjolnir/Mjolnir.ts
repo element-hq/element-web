@@ -22,12 +22,12 @@ import { Action } from "../dispatcher/actions";
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
 export class Mjolnir {
-    private static instance: Mjolnir | null = null;
+    private static instance?: Mjolnir;
 
     private _lists: BanList[] = []; // eslint-disable-line @typescript-eslint/naming-convention
     private _roomIds: string[] = []; // eslint-disable-line @typescript-eslint/naming-convention
-    private mjolnirWatchRef: string | null = null;
-    private dispatcherRef: string | null = null;
+    private mjolnirWatchRef?: string;
+    private dispatcherRef?: string;
 
     public get roomIds(): string[] {
         return this._roomIds;
@@ -61,15 +61,11 @@ export class Mjolnir {
     }
 
     public stop(): void {
-        if (this.mjolnirWatchRef) {
-            SettingsStore.unwatchSetting(this.mjolnirWatchRef);
-            this.mjolnirWatchRef = null;
-        }
+        SettingsStore.unwatchSetting(this.mjolnirWatchRef);
+        this.mjolnirWatchRef = undefined;
 
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = null;
-        }
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
 
         MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onEvent);
     }

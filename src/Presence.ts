@@ -20,9 +20,9 @@ import { ActionPayload } from "./dispatcher/payloads";
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 
 class Presence {
-    private unavailableTimer: Timer | null = null;
-    private dispatcherRef: string | null = null;
-    private state: SetPresence | null = null;
+    private unavailableTimer?: Timer;
+    private dispatcherRef?: string;
+    private state?: SetPresence;
 
     /**
      * Start listening the user activity to evaluate his presence state.
@@ -46,14 +46,10 @@ class Presence {
      * Stop tracking user activity
      */
     public stop(): void {
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = null;
-        }
-        if (this.unavailableTimer) {
-            this.unavailableTimer.abort();
-            this.unavailableTimer = null;
-        }
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
+        this.unavailableTimer?.abort();
+        this.unavailableTimer = undefined;
     }
 
     /**
@@ -61,7 +57,7 @@ class Presence {
      * @returns {string} the presence state (see PRESENCE enum)
      */
     public getState(): SetPresence | null {
-        return this.state;
+        return this.state ?? null;
     }
 
     private onAction = (payload: ActionPayload): void => {

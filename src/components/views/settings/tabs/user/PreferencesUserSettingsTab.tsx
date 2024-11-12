@@ -24,7 +24,7 @@ import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPa
 import { Action } from "../../../../../dispatcher/actions";
 import SdkConfig from "../../../../../SdkConfig";
 import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingPage";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import LanguageDropdown from "../../../elements/LanguageDropdown";

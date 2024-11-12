@@ -6,10 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useEffect, useMemo, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
-import { M_POLL_START, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -19,12 +19,12 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import dis from "../../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { EventPreview } from "./EventPreview.tsx";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -105,7 +105,11 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
                             )}
                         </div>
                     )}
-                    <EventPreview pinnedEvent={pinnedEvent} />
+                    <EventPreview
+                        mxEvent={pinnedEvent}
+                        className="mx_PinnedMessageBanner_message"
+                        data-testid="banner-message"
+                    />
                     {/* In case of redacted event, we want to display the nice sentence of the message event like in the timeline or in the pinned message list */}
                     {shouldUseMessageEvent && (
                         <div className="mx_PinnedMessageBanner_redactedMessage">
@@ -122,84 +126,6 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             {!isSinglePinnedEvent && <BannerButton room={room} />}
         </div>
     );
-}
-
-/**
- * The props for the {@link EventPreview} component.
- */
-interface EventPreviewProps {
-    /**
-     * The pinned event to display the preview for
-     */
-    pinnedEvent: MatrixEvent;
-}
-
-/**
- * A component that displays a preview for the pinned event.
- */
-function EventPreview({ pinnedEvent }: EventPreviewProps): JSX.Element | null {
-    const preview = useEventPreview(pinnedEvent);
-    if (!preview) return null;
-
-    const prefix = getPreviewPrefix(pinnedEvent.getType(), pinnedEvent.getContent().msgtype as MsgType);
-    if (!prefix)
-        return (
-            <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
-                {preview}
-            </span>
-        );
-
-    return (
-        <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
-            {_t(
-                "room|pinned_message_banner|preview",
-                {
-                    prefix,
-                    preview,
-                },
-                {
-                    bold: (sub) => <span className="mx_PinnedMessageBanner_prefix">{sub}</span>,
-                },
-            )}
-        </span>
-    );
-}
-
-/**
- * Hooks to generate a preview for the pinned event.
- * @param pinnedEvent
- */
-function useEventPreview(pinnedEvent: MatrixEvent | null): string | null {
-    return useMemo(() => {
-        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
-        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
-    }, [pinnedEvent]);
-}
-
-/**
- * Get the prefix for the preview based on the type and the message type.
- * @param type
- * @param msgType
- */
-function getPreviewPrefix(type: string, msgType: MsgType): string | null {
-    switch (type) {
-        case M_POLL_START.name:
-            return _t("room|pinned_message_banner|prefix|poll");
-        default:
-    }
-
-    switch (msgType) {
-        case MsgType.Audio:
-            return _t("room|pinned_message_banner|prefix|audio");
-        case MsgType.Image:
-            return _t("room|pinned_message_banner|prefix|image");
-        case MsgType.Video:
-            return _t("room|pinned_message_banner|prefix|video");
-        case MsgType.File:
-            return _t("room|pinned_message_banner|prefix|file");
-        default:
-            return null;
-    }
 }
 
 const MAX_INDICATORS = 3;

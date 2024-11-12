@@ -43,6 +43,9 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
             durationSeconds: this.props.playback.clockInfo.durationSeconds,
             playbackPhase: PlaybackState.Stopped, // assume not started, so full clock
         };
+    }
+
+    public componentDidMount(): void {
         this.props.playback.on(UPDATE_EVENT, this.onPlaybackUpdate);
         this.props.playback.clockInfo.liveData.onUpdate(this.onTimeUpdate);
     }

@@ -90,8 +90,8 @@ interface IState {
 
 export default class InteractiveAuthComponent<T> extends React.Component<InteractiveAuthProps<T>, IState> {
     private readonly authLogic: InteractiveAuth<T>;
-    private readonly intervalId: number | null = null;
     private readonly stageComponent = createRef<IStageComponent>();
+    private intervalId: number | null = null;
 
     private unmounted = false;
 
@@ -126,15 +126,17 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 AuthType.SsoUnstable,
             ],
         });
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         if (this.props.poll) {
             this.intervalId = window.setInterval(() => {
                 this.authLogic.poll();
             }, 2000);
         }
-    }
 
-    public componentDidMount(): void {
         this.authLogic
             .attemptAuth()
             .then(async (result) => {

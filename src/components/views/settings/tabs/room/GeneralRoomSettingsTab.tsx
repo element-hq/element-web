@@ -19,7 +19,7 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 

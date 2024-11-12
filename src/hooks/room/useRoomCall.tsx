@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Room } from "matrix-js-sdk/src/matrix";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { useFeatureEnabled } from "../useSettings";
@@ -35,22 +35,42 @@ import { isVideoRoom } from "../../utils/video-rooms";
 import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
+import { BetaPill } from "../../components/views/beta/BetaCard";
+import { InteractionName } from "../../PosthogTrackers";
 
 export enum PlatformCallType {
     ElementCall,
     JitsiCall,
     LegacyCall,
 }
-export const getPlatformCallTypeLabel = (platformCallType: PlatformCallType): string => {
+
+export const getPlatformCallTypeProps = (
+    platformCallType: PlatformCallType,
+): {
+    label: string;
+    children?: ReactNode;
+    analyticsName: InteractionName;
+} => {
     switch (platformCallType) {
         case PlatformCallType.ElementCall:
-            return _t("voip|element_call");
+            return {
+                label: _t("voip|element_call"),
+                analyticsName: "WebVoipOptionElementCall",
+                children: <BetaPill />,
+            };
         case PlatformCallType.JitsiCall:
-            return _t("voip|jitsi_call");
+            return {
+                label: _t("voip|jitsi_call"),
+                analyticsName: "WebVoipOptionJitsi",
+            };
         case PlatformCallType.LegacyCall:
-            return _t("voip|legacy_call");
+            return {
+                label: _t("voip|legacy_call"),
+                analyticsName: "WebVoipOptionLegacy",
+            };
     }
 };
+
 const enum State {
     NoCall,
     NoOneHere,

@@ -11,8 +11,8 @@ Customisations will be removed from the codebase in a future release.
 Element Web and the React SDK support "customisation points" that can be used to
 easily add custom logic specific to a particular deployment of Element Web.
 
-An example of this is the [security customisations
-module](https://github.com/element-hq/element-web/blob/develop/src/customisations/Security.ts).
+An example of this is the [media customisations
+module](https://github.com/element-hq/element-web/blob/develop/src/customisations/Media.ts).
 This module in the React SDK only defines some empty functions and their types:
 it does not do anything by default.
 
@@ -21,14 +21,14 @@ Web so that you can add your own code. Even though the default module is part of
 the React SDK, you can still override it from the Element Web layer:
 
 1. Copy the default customisation module to
-   `element-web/src/customisations/YourNameSecurity.ts`
+   `element-web/src/customisations/YourNameMedia.ts`
 2. Edit customisations points and make sure export the ones you actually want to
    activate
 3. Create/add an entry to `customisations.json` next to the webpack config:
 
 ```json
 {
-    "src/customisations/Security.ts": "src/customisations/YourNameSecurity.ts"
+    "src/customisations/Media.ts": "src/customisations/YourNameMedia.ts"
 }
 ```
 

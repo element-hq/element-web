@@ -255,7 +255,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel;
     private currentlyComposedEditorState: SerializedPart[] | null = null;
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     private sendHistoryManager: SendHistoryManager;
 
     public static defaultProps = {
@@ -275,13 +275,15 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             );
         }
 
-        window.addEventListener("beforeunload", this.saveStoredEditorState);
-
         const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
-        this.dispatcherRef = dis.register(this.onAction);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
+    }
+
+    public componentDidMount(): void {
+        window.addEventListener("beforeunload", this.saveStoredEditorState);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {

@@ -81,7 +81,6 @@
         "report_content": "Raporti enhavon",
         "resend": "Resendi",
         "reset": "Restarigi",
-        "restore": "Rehavi",
         "resume": "Daŭrigi",
         "retry": "Reprovi",
         "review": "Rekontroli",
@@ -172,7 +171,6 @@
         "failed_query_registration_methods": "Ne povas peti subtenatajn registrajn metodojn.",
         "failed_soft_logout_auth": "Malsukcesis reaŭtentikigi",
         "failed_soft_logout_homeserver": "Malsukcesis reaŭtentikigi pro hejmservila problemo",
-        "footer_powered_by_matrix": "funkciigata de Matrix",
         "forgot_password_email_invalid": "La retpoŝtadreso ŝajnas ne valida.",
         "forgot_password_email_required": "Vi devas enigi retpoŝtadreson ligitan al via konto.",
         "forgot_password_prompt": "Ĉu vi forgesis vian pasvorton?",
@@ -680,7 +678,6 @@
         },
         "unable_to_setup_keys_error": "Ne povas agordi ŝlosilojn",
         "unsupported": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
-        "upgrade_toast_title": "Ĝisdatigo de ĉifrado haveblas",
         "verification": {
             "accepting": "Akceptante…",
             "cancelled": "Vi nuligis kontrolon.",
@@ -1770,18 +1767,13 @@
                 "pass_phrase_match_failed": "Tio ne akordas.",
                 "pass_phrase_match_success": "Tio akordas!",
                 "phrase_strong_enough": "Bonege! La Sekureca frazo ŝajnas sufiĉe forta.",
-                "requires_key_restore": "Rehavu vian savkopion de ŝlosiloj por gradaltigi vian ĉifradon",
-                "requires_password_confirmation": "Enigu pasvorton de via konto por konfirmi la gradaltigon:",
-                "requires_server_authentication": "Vi devos aŭtentikigi kun la servilo por konfirmi la gradaltigon.",
                 "secret_storage_query_failure": "Ne povis peti staton de sekreta deponejo",
                 "security_key_safety_reminder": "Konservu vian Sekurecan ŝlosilon ie sekure, kiel pasvortadministranto aŭ monŝranko, ĉar ĝi estas uzata por protekti viajn ĉifritajn datumojn.",
-                "session_upgrade_description": "Gradaltigu ĉi tiun salutaĵon por ebligi al ĝi kontroladon de aliaj salutaĵoj, donante al ili aliron al ĉifritaj mesaĵoj, kaj markante ilin fidataj por aliaj uzantoj.",
                 "set_phrase_again": "Reiru por reagordi ĝin.",
                 "settings_reminder": "Vi ankaŭ povas agordi Sekuran savkopiadon kaj administri viajn ŝlosilojn per Agordoj.",
                 "title_confirm_phrase": "Konfirmi Sekurecan frazon",
                 "title_save_key": "Konservi vian Sekurecan ŝlosilon",
                 "title_set_phrase": "Agordi Sekurecan frazon",
-                "title_upgrade_encryption": "Gradaltigi vian ĉifradon",
                 "unable_to_setup": "Ne povas starigi sekretan deponejon",
                 "use_different_passphrase": "Ĉu uzi alian pasfrazon?",
                 "use_phrase_only_you_know": "Uzu sekretan frazon kiun konas nur vi, kaj laŭplaĉe konservu sekurecan ŝlosilon, uzotan por savkopiado."
@@ -2551,7 +2543,6 @@
     "truncated_list_n_more": {
         "other": "Kaj %(count)s pliaj…"
     },
-    "unknown_device": "Nekonata aparato",
     "update": {
         "changelog": "Protokolo de ŝanĝoj",
         "check_action": "Kontroli ĝisdatigojn",

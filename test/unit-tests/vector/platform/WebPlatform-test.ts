@@ -229,4 +229,18 @@ describe("WebPlatform", () => {
             });
         });
     });
+
+    it("should return config from config.json", async () => {
+        window.location.hostname = "domain.com";
+        fetchMock.get(/config\.json.*/, { brand: "test" });
+        const platform = new WebPlatform();
+        await expect(platform.getConfig()).resolves.toEqual(expect.objectContaining({ brand: "test" }));
+    });
+
+    it("should re-render favicon when setting error status", () => {
+        const platform = new WebPlatform();
+        const spy = jest.spyOn(platform.favicon, "badge");
+        platform.setErrorStatus(true);
+        expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
+    });
 });

@@ -8,10 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import {
-    IGetLoginTokenCapability,
     IServerVersions,
-    GET_LOGIN_TOKEN_CAPABILITY,
-    Capabilities,
     IClientWellKnown,
     OidcClientConfig,
     MatrixClient,
@@ -22,31 +19,15 @@ import { Text } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 
 interface IProps {
     onShowQr: () => void;
     versions?: IServerVersions;
-    capabilities?: Capabilities;
     wellKnown?: IClientWellKnown;
     oidcClientConfig?: OidcClientConfig;
     isCrossSigningReady?: boolean;
-}
-
-function shouldShowQrLegacy(
-    versions?: IServerVersions,
-    wellKnown?: IClientWellKnown,
-    capabilities?: Capabilities,
-): boolean {
-    // Needs server support for (get_login_token or OIDC Device Authorization Grant) and MSC3886:
-    // in r0 of MSC3882 it is exposed as a feature flag, but in stable and unstable r1 it is a capability
-    const loginTokenCapability = GET_LOGIN_TOKEN_CAPABILITY.findIn<IGetLoginTokenCapability>(capabilities);
-    const getLoginTokenSupported =
-        !!versions?.unstable_features?.["org.matrix.msc3882"] || !!loginTokenCapability?.enabled;
-    const msc3886Supported =
-        !!versions?.unstable_features?.["org.matrix.msc3886"] || !!wellKnown?.["io.element.rendezvous"]?.server;
-    return getLoginTokenSupported && msc3886Supported;
 }
 
 export function shouldShowQr(
@@ -73,15 +54,12 @@ export function shouldShowQr(
 const LoginWithQRSection: React.FC<IProps> = ({
     onShowQr,
     versions,
-    capabilities,
     wellKnown,
     oidcClientConfig,
     isCrossSigningReady,
 }) => {
     const cli = useMatrixClientContext();
-    const offerShowQr = oidcClientConfig
-        ? shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions, wellKnown)
-        : shouldShowQrLegacy(versions, wellKnown, capabilities);
+    const offerShowQr = shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions, wellKnown);
 
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>

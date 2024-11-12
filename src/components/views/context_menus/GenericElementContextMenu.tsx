@@ -20,10 +20,6 @@ interface IProps {
  * menu.
  */
 export default class GenericElementContextMenu extends React.Component<IProps> {
-    public constructor(props: IProps) {
-        super(props);
-    }
-
     public componentDidMount(): void {
         window.addEventListener("resize", this.resize);
     }

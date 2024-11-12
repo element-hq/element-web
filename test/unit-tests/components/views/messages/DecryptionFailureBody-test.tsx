@@ -129,6 +129,6 @@ describe("DecryptionFailureBody", () => {
         const { container } = customRender(event);
 
         // Then
-        expect(container).toHaveTextContent("Encrypted by a device not verified by its owner");
+        expect(container).toHaveTextContent("Sent from an insecure device");
     });
 });
