@@ -178,7 +178,7 @@ export class MatrixDispatcher {
     }
 }
 
-export const defaultDispatcher = new MatrixDispatcher();
+const defaultDispatcher = new MatrixDispatcher();
 
 if (!window.mxDispatcher) {
     window.mxDispatcher = defaultDispatcher;

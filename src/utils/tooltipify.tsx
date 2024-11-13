@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { StrictMode } from "react";
-import ReactDOM from "react-dom";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
+import { ReactRootManager } from "./react";
 
 /**
  * If the platform enabled needsUrlTooltips, recurses depth-first through a DOM tree, adding tooltip previews
@@ -19,12 +19,16 @@ import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
  *
  * @param {Element[]} rootNodes - a list of sibling DOM nodes to traverse to try
  *   to add tooltips.
- * @param {Element[]} ignoredNodes: a list of nodes to not recurse into.
- * @param {Element[]} containers: an accumulator of the DOM nodes which contain
+ * @param {Element[]} ignoredNodes - a list of nodes to not recurse into.
+ * @param {ReactRootManager} tooltips - an accumulator of the DOM nodes which contain
  *   React components that have been mounted by this function. The initial caller
  *   should pass in an empty array to seed the accumulator.
  */
-export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Element[], containers: Element[]): void {
+export function tooltipifyLinks(
+    rootNodes: ArrayLike<Element>,
+    ignoredNodes: Element[],
+    tooltips: ReactRootManager,
+): void {
     if (!PlatformPeg.get()?.needsUrlTooltips()) {
         return;
     }
@@ -32,7 +36,7 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
     let node = rootNodes[0];
 
     while (node) {
-        if (ignoredNodes.includes(node) || containers.includes(node)) {
+        if (ignoredNodes.includes(node) || tooltips.elements.includes(node)) {
             node = node.nextSibling as Element;
             continue;
         }
@@ -62,26 +66,11 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
                 </StrictMode>
             );
 
-            ReactDOM.render(tooltip, node);
-            containers.push(node);
+            tooltips.render(tooltip, node);
         } else if (node.childNodes?.length) {
-            tooltipifyLinks(node.childNodes as NodeListOf<Element>, ignoredNodes, containers);
+            tooltipifyLinks(node.childNodes as NodeListOf<Element>, ignoredNodes, tooltips);
         }
 
         node = node.nextSibling as Element;
-    }
-}
-
-/**
- * Unmount tooltip containers created by tooltipifyLinks.
- *
- * It's critical to call this after tooltipifyLinks, otherwise
- * tooltips will leak.
- *
- * @param {Element[]} containers - array of tooltip containers to unmount
- */
-export function unmountTooltips(containers: Element[]): void {
-    for (const container of containers) {
-        ReactDOM.unmountComponentAtNode(container);
     }
 }

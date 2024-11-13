@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";

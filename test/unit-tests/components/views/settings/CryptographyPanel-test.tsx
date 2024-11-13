@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, waitFor } from "jest-matrix-react";
+import { render, waitFor, screen, fireEvent } from "jest-matrix-react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
@@ -63,5 +63,35 @@ describe("CryptographyPanel", () => {
 
         // Then "not supported key
         await waitFor(() => expect(codes[1].innerHTML).toEqual("<strong>&lt;not supported&gt;</strong>"));
+    });
+
+    it("should open the export e2e keys dialog on click", async () => {
+        const sessionId = "ABCDEFGHIJ";
+        const sessionKey = "AbCDeFghIJK7L/m4nOPqRSTUVW4xyzaBCDef6gHIJkl";
+
+        TestUtils.stubClient();
+        const client: MatrixClient = MatrixClientPeg.safeGet();
+        client.deviceId = sessionId;
+
+        mocked(client.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({ ed25519: sessionKey, curve25519: "1234" });
+
+        render(<CryptographyPanel />, withClientContextRenderOptions(client));
+        fireEvent.click(await screen.findByRole("button", { name: "Export E2E room keys" }));
+        await expect(screen.findByRole("heading", { name: "Export room keys" })).resolves.toBeInTheDocument();
+    });
+
+    it("should open the import e2e keys dialog on click", async () => {
+        const sessionId = "ABCDEFGHIJ";
+        const sessionKey = "AbCDeFghIJK7L/m4nOPqRSTUVW4xyzaBCDef6gHIJkl";
+
+        TestUtils.stubClient();
+        const client: MatrixClient = MatrixClientPeg.safeGet();
+        client.deviceId = sessionId;
+
+        mocked(client.getCrypto()!.getOwnDeviceKeys).mockResolvedValue({ ed25519: sessionKey, curve25519: "1234" });
+
+        render(<CryptographyPanel />, withClientContextRenderOptions(client));
+        fireEvent.click(await screen.findByRole("button", { name: "Import E2E room keys" }));
+        await expect(screen.findByRole("heading", { name: "Import room keys" })).resolves.toBeInTheDocument();
     });
 });

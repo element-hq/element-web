@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-// @ts-ignore - `.ts` is needed here to make TS happy
 import { Request, Response } from "./workers/blurhash.worker.ts";
 import { WorkerManager } from "./WorkerManager";
 import blurhashWorkerFactory from "./workers/blurhashWorkerFactory";

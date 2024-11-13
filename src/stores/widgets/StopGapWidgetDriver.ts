@@ -24,6 +24,7 @@ import {
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
+    IWidgetApiErrorResponseDataDetails,
     ISearchUserDirectoryResult,
     IGetMediaConfigResult,
     UpdateDelayedEventAction,
@@ -33,6 +34,7 @@ import {
     ITurnServer as IClientTurnServer,
     EventType,
     IContent,
+    MatrixError,
     MatrixEvent,
     Room,
     Direction,
@@ -128,12 +130,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
 
             this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
-                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rageshake_request").raw,
-            );
-            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(
@@ -175,7 +171,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomCreate).raw,
             );
 
-            const sendRecvRoomEvents = ["io.element.call.encryption_keys", EventType.Reaction, EventType.RoomRedaction];
+            const sendRecvRoomEvents = [
+                "io.element.call.encryption_keys",
+                "org.matrix.rageshake_request",
+                EventType.Reaction,
+                EventType.RoomRedaction,
+                "io.element.call.reaction",
+            ];
             for (const eventType of sendRecvRoomEvents) {
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
@@ -688,5 +690,16 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };
+    }
+
+    /**
+     * Expresses a {@link MatrixError} as a JSON payload
+     * for use by Widget API error responses.
+     * @param error The error to handle.
+     * @returns The error expressed as a JSON payload,
+     * or undefined if it is not a {@link MatrixError}.
+     */
+    public processError(error: unknown): IWidgetApiErrorResponseDataDetails | undefined {
+        return error instanceof MatrixError ? { matrix_api_error: error.asWidgetApiErrorData() } : undefined;
     }
 }
