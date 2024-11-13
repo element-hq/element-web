@@ -382,9 +382,13 @@ export const useRovingTabIndex = <T extends HTMLElement>(
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const onFocus = useCallback(() => {
+        if (!nodeRef.current) {
+            console.warn("useRovingTabIndex.onFocus called but the react ref does not point to any DOM element!");
+            return;
+        }
         context.dispatch({
             type: Type.SetFocus,
-            payload: { node: nodeRef.current } as { node: T },
+            payload: { node: nodeRef.current },
         });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
