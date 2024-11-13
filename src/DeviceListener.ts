@@ -113,13 +113,9 @@ export default class DeviceListener {
             this.client.removeListener(ClientEvent.Sync, this.onSync);
             this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
-        if (this.deviceClientInformationSettingWatcherRef) {
-            SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
-        }
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = undefined;
-        }
+        SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
         this.dismissed.clear();
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;
@@ -292,27 +288,21 @@ export default class DeviceListener {
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
             // cross signing isn't enabled - nag to enable it
-            // There are 3 different toasts for:
+            // There are 2 different toasts for:
             if (!(await crypto.getCrossSigningKeyId()) && (await crypto.userHasCrossSigningKeys())) {
                 // Cross-signing on account but this device doesn't trust the master key (verify this session)
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
                 this.checkKeyBackupStatus();
             } else {
-                const backupInfo = await this.getKeyBackupInfo();
-                if (backupInfo) {
-                    // No cross-signing on account but key backup available (upgrade encryption)
-                    showSetupEncryptionToast(SetupKind.UPGRADE_ENCRYPTION);
+                // No cross-signing or key backup on account (set up encryption)
+                await cli.waitForClientWellKnown();
+                if (isSecureBackupRequired(cli) && isLoggedIn()) {
+                    // If we're meant to set up, and Secure Backup is required,
+                    // trigger the flow directly without a toast once logged in.
+                    hideSetupEncryptionToast();
+                    accessSecretStorage();
                 } else {
-                    // No cross-signing or key backup on account (set up encryption)
-                    await cli.waitForClientWellKnown();
-                    if (isSecureBackupRequired(cli) && isLoggedIn()) {
-                        // If we're meant to set up, and Secure Backup is required,
-                        // trigger the flow directly without a toast once logged in.
-                        hideSetupEncryptionToast();
-                        accessSecretStorage();
-                    } else {
-                        showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
-                    }
+                    showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
                 }
             }
         }

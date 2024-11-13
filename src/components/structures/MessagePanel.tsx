@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, ReactNode, TransitionEvent } from "react";
-import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -241,13 +240,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readReceiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
     private readonly _showHiddenEvents: boolean;
-    private isMounted = false;
+    private unmounted = false;
 
     private readMarkerNode = createRef<HTMLLIElement>();
     private whoIsTyping = createRef<WhoIsTypingTile>();
-    private scrollPanel = createRef<ScrollPanel>();
+    public scrollPanel = createRef<ScrollPanel>();
 
-    private readonly showTypingNotificationsWatcherRef: string;
+    private showTypingNotificationsWatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
@@ -268,22 +267,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // and we check this in a hot code path. This is also cached in our
         // RoomContext, however we still need a fallback for roomless MessagePanels.
         this._showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
+    }
 
+    public componentDidMount(): void {
+        this.unmounted = false;
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",
             null,
             this.onShowTypingNotificationsChange,
         );
-    }
-
-    public componentDidMount(): void {
         this.calculateRoomMembersCount();
         this.props.room?.currentState.on(RoomStateEvent.Update, this.calculateRoomMembersCount);
-        this.isMounted = true;
     }
 
     public componentWillUnmount(): void {
-        this.isMounted = false;
+        this.unmounted = true;
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
@@ -376,13 +374,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
         const readMarker = this.readMarkerNode.current;
-        const messageWrapper = this.scrollPanel.current;
+        const messageWrapper = this.scrollPanel.current?.divScroll;
 
         if (!readMarker || !messageWrapper) {
             return null;
         }
 
-        const wrapperRect = (ReactDOM.findDOMNode(messageWrapper) as HTMLElement).getBoundingClientRect();
+        const wrapperRect = messageWrapper.getBoundingClientRect();
         const readMarkerRect = readMarker.getBoundingClientRect();
 
         // the read-marker pretends to have zero height when it is actually
@@ -442,7 +440,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private isUnmounting = (): boolean => {
-        return !this.isMounted;
+        return this.unmounted;
     };
 
     public get showHiddenEvents(): boolean {

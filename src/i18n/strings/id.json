@@ -98,7 +98,6 @@
         "report_content": "Laporkan Konten",
         "resend": "Kirim Ulang",
         "reset": "Atur Ulang",
-        "restore": "Pulihkan",
         "resume": "Lanjutkan",
         "retry": "Coba Ulang",
         "review": "Lihat",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "Tidak dapat menanyakan metode pendaftaran yang didukung.",
         "failed_soft_logout_auth": "Gagal untuk mengautentikasi ulang",
         "failed_soft_logout_homeserver": "Gagal untuk mengautentikasi ulang karena masalah homeserver",
-        "footer_powered_by_matrix": "diberdayakan oleh Matrix",
         "forgot_password_email_invalid": "Alamat email ini tidak terlihat absah.",
         "forgot_password_email_required": "Alamat email yang tertaut ke akun Anda harus dimasukkan.",
         "forgot_password_prompt": "Lupa kata sandi Anda?",
@@ -241,14 +239,11 @@
         "phone_label": "Ponsel",
         "phone_optional_label": "Nomor telepon (opsional)",
         "qr_code_login": {
-            "approve_access_warning": "Dengan menerima akses untuk perangkat ini, itu akan memiliki akses penuh ke akun Anda.",
             "completing_setup": "Menyelesaikan penyiapan perangkat baru Anda",
-            "confirm_code_match": "Periksa bahwa kode di bawah cocok dengan perangkat Anda yang lain:",
             "error_unexpected": "Sebuah kesalahan terjadi secara tidak terduga.",
             "scan_code_instruction": "Pindai kode QR di bawah dengan perangkat Anda yang sudah keluar dari akun.",
             "scan_qr_code": "Pindai kode QR",
             "select_qr_code": "Pilih '%(scanQRCode)s'",
-            "sign_in_new_device": "Masuk perangkat baru",
             "waiting_for_device": "Menunggu perangkat untuk masuk"
         },
         "register_action": "Buat Akun",
@@ -884,7 +879,6 @@
         },
         "unable_to_setup_keys_error": "Tidak dapat mengatur kunci-kunci",
         "unsupported": "Klien ini tidak mendukung enkripsi ujung ke ujung.",
-        "upgrade_toast_title": "Tersedia peningkatan enkripsi",
         "verification": {
             "accepting": "Menerima…",
             "after_new_login": {
@@ -2409,18 +2403,13 @@
                 "pass_phrase_match_failed": "Itu tidak cocok.",
                 "pass_phrase_match_success": "Mereka cocok!",
                 "phrase_strong_enough": "Hebat! Frasa Keamanan ini kelihatannya kuat.",
-                "requires_key_restore": "Pulihkan cadangan kunci Anda untuk meningkatkan enkripsi Anda",
-                "requires_password_confirmation": "Masukkan kata sandi akun Anda untuk mengkonfirmasi peningkatannya:",
-                "requires_server_authentication": "Anda harus mengautentikasi dengan servernya untuk mengkonfirmasi peningkatannya.",
                 "secret_storage_query_failure": "Tidak dapat menanyakan status penyimpanan rahasia",
                 "security_key_safety_reminder": "Simpan Kunci Keamanan Anda di tempat yang aman, seperti manajer sandi atau sebuah brankas, yang digunakan untuk mengamankan data terenkripsi Anda.",
-                "session_upgrade_description": "Tingkatkan sesi ini untuk mengizinkan memverifikasi sesi lainnya, memberikan akses ke pesan terenkripsi dan menandainya sebagai terpercaya untuk pengguna lain.",
                 "set_phrase_again": "Pergi kembali untuk menyiapkannya lagi.",
                 "settings_reminder": "Anda juga dapat menyiapkan Cadangan Aman & kelola kunci Anda di Pengaturan.",
                 "title_confirm_phrase": "Konfirmasi Frasa Keamanan",
                 "title_save_key": "Simpan Kunci Keamanan Anda",
                 "title_set_phrase": "Atur sebuah Frasa Keamanan",
-                "title_upgrade_encryption": "Tingkatkan enkripsi Anda",
                 "unable_to_setup": "Tidak dapat menyiapkan penyimpanan rahasia",
                 "use_different_passphrase": "Gunakan frasa sandi yang berbeda?",
                 "use_phrase_only_you_know": "Gunakan frasa rahasia yang hanya Anda tahu, dan simpan sebuah Kunci Keamanan untuk menggunakannya untuk cadangan secara opsional."
@@ -3479,7 +3468,6 @@
     "truncated_list_n_more": {
         "other": "Dan %(count)s lagi..."
     },
-    "unknown_device": "Perangkat tidak diketahui",
     "unsupported_server_description": "Server ini menjalankan sebuah versi Matrix yang lama. Tingkatkan ke Matrix %(version)s untuk menggunakan %(brand)s tanpa eror.",
     "unsupported_server_title": "Server Anda tidak didukung",
     "update": {

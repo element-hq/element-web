@@ -20,6 +20,9 @@ on:
 jobs:
     prepare:
         runs-on: ubuntu-24.04
+        env:
+            # The order is specified bottom-up to avoid any races for allchange
+            REPOS: matrix-js-sdk element-web element-desktop
         steps:
             - name: Checkout Element Desktop
               uses: actions/checkout@v4

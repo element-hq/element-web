@@ -186,17 +186,17 @@ export default class ScrollPanel extends React.Component<IProps> {
     private bottomGrowth!: number;
     private minListHeight!: number;
     private heightUpdateInProgress = false;
-    private divScroll: HTMLDivElement | null = null;
+    public divScroll: HTMLDivElement | null = null;
 
     public constructor(props: IProps) {
         super(props);
-
-        this.props.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
 
         this.resetScrollState();
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+        this.props.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
         this.checkScroll();
     }
 

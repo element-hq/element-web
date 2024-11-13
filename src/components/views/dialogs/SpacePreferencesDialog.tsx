@@ -21,7 +21,7 @@ import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePrefer
 import { NonEmptyArray } from "../../../@types/common";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../settings/shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../settings/shared/SettingsSubsection";
 
 interface IProps {
     space: Room;

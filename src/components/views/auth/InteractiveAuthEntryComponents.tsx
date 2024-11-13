@@ -801,7 +801,6 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         this.ssoUrl = props.matrixClient.getFallbackAuthUrl(this.props.loginType, this.props.authSessionId);
 
         this.popupWindow = null;
-        window.addEventListener("message", this.onReceiveMessage);
 
         this.state = {
             phase: SSOAuthEntry.PHASE_PREAUTH,
@@ -810,6 +809,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     }
 
     public componentDidMount(): void {
+        window.addEventListener("message", this.onReceiveMessage);
         this.props.onPhaseChange(SSOAuthEntry.PHASE_PREAUTH);
     }
 
@@ -918,10 +918,10 @@ export class FallbackAuthEntry<T = {}> extends React.Component<IAuthEntryProps &
         // we have to make the user click a button, as browsers will block
         // the popup if we open it immediately.
         this.popupWindow = null;
-        window.addEventListener("message", this.onReceiveMessage);
     }
 
     public componentDidMount(): void {
+        window.addEventListener("message", this.onReceiveMessage);
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 

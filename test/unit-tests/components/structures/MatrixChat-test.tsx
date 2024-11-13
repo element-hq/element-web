@@ -62,6 +62,7 @@ import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import Modal from "../../../../src/Modal.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -148,6 +149,7 @@ describe("<MatrixChat />", () => {
         isRoomEncrypted: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
+        getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -952,7 +954,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to login page
             defaultDispatcher.dispatch({
@@ -1111,8 +1113,6 @@ describe("<MatrixChat />", () => {
                 await getComponentAndLogin();
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
-
-                await flushPromises();
 
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
@@ -1481,7 +1481,7 @@ describe("<MatrixChat />", () => {
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
 
             // go to mobile_register page
             defaultDispatcher.dispatch({
@@ -1501,7 +1501,7 @@ describe("<MatrixChat />", () => {
         it("should render welcome screen if mobile registration is not enabled in settings", async () => {
             await getComponentAndWaitForReady();
 
-            await screen.findByText("powered by Matrix");
+            await screen.findByText("Powered by Matrix");
         });
 
         it("should render mobile registration", async () => {
@@ -1516,7 +1516,9 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialog");
             jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+                __test: true,
                 __esModule: true,
                 default: () => <span>mocked dialog</span>,
             }));
@@ -1528,7 +1530,26 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(screen.getByText("mocked dialog")).toBeInTheDocument());
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
+        });
+
+        it("should show the recovery method removed dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialog");
+            jest.mock("../../../../src/async-components/views/dialogs/security/RecoveryMethodRemovedDialog", () => ({
+                __test: true,
+                __esModule: true,
+                default: () => <span>mocked dialog</span>,
+            }));
+
+            getComponent({});
+            defaultDispatcher.dispatch({
+                action: "will_start_client",
+            });
+            await flushPromises();
+            mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });

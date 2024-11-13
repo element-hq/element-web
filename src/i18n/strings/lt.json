@@ -83,7 +83,6 @@
         "report_content": "Pranešti",
         "resend": "Siųsti iš naujo",
         "reset": "Iš naujo nustatyti",
-        "restore": "Atkurti",
         "resume": "Tęsti",
         "retry": "Bandyti dar kartą",
         "review": "Peržiūrėti",
@@ -153,7 +152,6 @@
         "failed_connect_identity_server_register": "Jūs galite registruotis, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_connect_identity_server_reset_password": "Jūs galite iš naujo nustatyti savo slaptažodį, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_homeserver_discovery": "Nepavyko atlikti serverio radimo",
-        "footer_powered_by_matrix": "veikia su Matrix",
         "forgot_password_email_required": "Privalo būti įvestas su jūsų paskyra susietas el. pašto adresas.",
         "forgot_password_prompt": "Pamiršote savo slaptažodį?",
         "identifier_label": "Prisijungti naudojant",
@@ -583,7 +581,6 @@
         },
         "unable_to_setup_keys_error": "Nepavyksta nustatyti raktų",
         "unsupported": "Šis klientas nepalaiko visapusio šifravimo.",
-        "upgrade_toast_title": "Galimas šifravimo atnaujinimas",
         "verification": {
             "accepting": "Priimama…",
             "cancelled": "Jūs atšaukėte patvirtinimą.",
@@ -1576,15 +1573,12 @@
                 "pass_phrase_match_failed": "Tai nesutampa.",
                 "pass_phrase_match_success": "Tai sutampa!",
                 "phrase_strong_enough": "Puiku! Ši Saugumo Frazė atrodo pakankamai stipri.",
-                "requires_key_restore": "Atkurkite savo atsarginę raktų kopiją, kad atnaujintumėte šifravimą",
                 "secret_storage_query_failure": "Slaptos saugyklos būsenos užklausa neįmanoma",
-                "session_upgrade_description": "Atnaujinkite šį seansą, kad jam būtų leista patvirtinti kitus seansus, suteikiant jiems prieigą prie šifruotų žinučių ir juos pažymint kaip patikimus kitiems vartotojams.",
                 "set_phrase_again": "Grįžti atgal, kad nustatyti iš naujo.",
                 "settings_reminder": "Jūs taip pat galite nustatyti Saugią Atsarginę Kopiją ir tvarkyti savo raktus Nustatymuose.",
                 "title_confirm_phrase": "Patvirtinkite Slaptafrazę",
                 "title_save_key": "Išsaugoti savo Saugumo Raktą",
                 "title_set_phrase": "Nustatyti Slaptafrazę",
-                "title_upgrade_encryption": "Atnaujinkite savo šifravimą",
                 "unable_to_setup": "Neįmanoma nustatyti slaptos saugyklos",
                 "use_different_passphrase": "Naudoti kitą slaptafrazę?",
                 "use_phrase_only_you_know": "Naudokite slaptafrazę, kurią žinote tik jūs ir pasirinktinai išsaugokite Apsaugos Raktą, naudoti kaip atsarginę kopiją."
@@ -2290,7 +2284,6 @@
     "truncated_list_n_more": {
         "other": "Ir dar %(count)s..."
     },
-    "unknown_device": "Nežinomas įrenginys",
     "update": {
         "changelog": "Keitinių žurnalas",
         "check_action": "Tikrinti, ar yra atnaujinimų",

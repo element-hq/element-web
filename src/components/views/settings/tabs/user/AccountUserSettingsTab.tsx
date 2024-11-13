@@ -22,9 +22,9 @@ import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/Erro
 import ChangePassword from "../../ChangePassword";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import { SDKContext } from "../../../../../contexts/SDKContext";
-import UserPersonalInfoSettings from "../../UserPersonalInfoSettings";
+import { UserPersonalInfoSettings } from "../../UserPersonalInfoSettings";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {

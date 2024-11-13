@@ -65,7 +65,7 @@ export abstract class AsyncStore<T extends object> extends EventEmitter {
      * Stops the store's listening functions, such as the listener to the dispatcher.
      */
     protected stop(): void {
-        if (this.dispatcherRef) this.dispatcher.unregister(this.dispatcherRef);
+        this.dispatcher.unregister(this.dispatcherRef);
     }
 
     /**

@@ -248,7 +248,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
         RoomListStore.instance.off(LISTS_LOADING_EVENT, this.onListsLoading);
         this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);

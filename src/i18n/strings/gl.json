@@ -91,7 +91,6 @@
         "report_content": "Denunciar contido",
         "resend": "Volver a enviar",
         "reset": "Restablecer",
-        "restore": "Restablecer",
         "resume": "Retomar",
         "retry": "Reintentar",
         "review": "Revisar",
@@ -185,7 +184,6 @@
         "failed_query_registration_methods": "Non se puido consultar os métodos de rexistro soportados.",
         "failed_soft_logout_auth": "Fallo na reautenticación",
         "failed_soft_logout_homeserver": "Fallo ó reautenticar debido a un problema no servidor",
-        "footer_powered_by_matrix": "funciona grazas a Matrix",
         "forgot_password_email_invalid": "O enderezo de email non semella ser válido.",
         "forgot_password_email_required": "Debe introducir o correo electrónico ligado a súa conta.",
         "forgot_password_prompt": "¿Esqueceches o contrasinal?",
@@ -760,7 +758,6 @@
         },
         "unable_to_setup_keys_error": "Non se puideron configurar as chaves",
         "unsupported": "Este cliente non soporta o cifrado extremo-a-extremo.",
-        "upgrade_toast_title": "Mellora do cifrado dispoñible",
         "verification": {
             "accepting": "Aceptando…",
             "after_new_login": {
@@ -2083,18 +2080,13 @@
                 "pass_phrase_match_failed": "Non concorda.",
                 "pass_phrase_match_success": "Concorda!",
                 "phrase_strong_enough": "Ben! Esta Frase de Seguridade semella ser forte abondo.",
-                "requires_key_restore": "Restablece a copia das chaves para actualizar o cifrado",
-                "requires_password_confirmation": "Escribe o contrasinal para confirmar a actualización:",
-                "requires_server_authentication": "Debes autenticarte no servidor para confirmar a actualización.",
                 "secret_storage_query_failure": "Non se obtivo o estado do almacenaxe segredo",
                 "security_key_safety_reminder": "Garda a túa Chave de Seguridade nun lugar seguro, como un xestor de contrasinais ou caixa forte, xa que vai protexer os teus datos cifrados.",
-                "session_upgrade_description": "Actualiza esta sesión para permitirlle que verifique as outras sesións, outorgándolles acceso ás mensaxes cifradas e marcándoas como confiables para outras usuarias.",
                 "set_phrase_again": "Vai atrás e volve a escribila.",
                 "settings_reminder": "Podes configurar a Copia de apoio Segura e xestionar as chaves en Axustes.",
                 "title_confirm_phrase": "Confirma a Frase de Seguridade",
                 "title_save_key": "Garda a Chave de Seguridade",
                 "title_set_phrase": "Establece a Frase de Seguridade",
-                "title_upgrade_encryption": "Mellora o teu cifrado",
                 "unable_to_setup": "Non se configurou un almacenaxe segredo",
                 "use_different_passphrase": "¿Usar unha frase de paso diferente?",
                 "use_phrase_only_you_know": "Usa unha frase segreda que só ti coñezas, e de xeito optativo unha Chave de Seguridade para usar como apoio."
@@ -3000,7 +2992,6 @@
     "truncated_list_n_more": {
         "other": "E %(count)s máis..."
     },
-    "unknown_device": "Dispositivo descoñecido",
     "update": {
         "changelog": "Rexistro de cambios",
         "check_action": "Comprobar actualización",

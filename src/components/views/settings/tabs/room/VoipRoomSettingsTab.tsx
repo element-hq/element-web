@@ -11,7 +11,7 @@ import { JoinRule, EventType, RoomState, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { ElementCall } from "../../../../../models/Call";
 import { useRoomState } from "../../../../../hooks/useRoomState";

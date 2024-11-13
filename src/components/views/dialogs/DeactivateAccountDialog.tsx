@@ -58,7 +58,9 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             authData: null, // for UIA
             authEnabled: true, // see usages for information
         };
+    }
 
+    public componentDidMount(): void {
         this.initAuth(/* shouldErase= */ false);
     }
 
