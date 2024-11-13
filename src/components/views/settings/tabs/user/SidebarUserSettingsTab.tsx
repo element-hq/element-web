@@ -22,7 +22,7 @@ import { MetaSpace } from "../../../../../stores/spaces";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";

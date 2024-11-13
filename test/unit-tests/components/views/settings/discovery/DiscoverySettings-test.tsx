@@ -12,7 +12,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
-import DiscoverySettings from "../../../../../../src/components/views/settings/discovery/DiscoverySettings";
+import { DiscoverySettings } from "../../../../../../src/components/views/settings/discovery/DiscoverySettings";
 import { stubClient } from "../../../../../test-utils";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";

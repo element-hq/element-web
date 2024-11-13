@@ -124,6 +124,12 @@ jobs:
                   node-version: "lts/*"
 
             - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Run linter
+              run: "yarn run lint:knip"
+
+            - name: Install Deps
               run: "scripts/layered.sh"
 
             - name: Dead Code Analysis

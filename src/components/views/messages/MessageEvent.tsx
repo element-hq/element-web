@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import mime from "mime";
 import React, { createRef } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
     MsgType,
@@ -15,6 +17,7 @@ import {
     M_LOCATION,
     M_POLL_END,
     M_POLL_START,
+    IContent,
 } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -144,6 +147,103 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         this.forceUpdate();
     };
 
+    /**
+     *  Validates that the filename extension and advertised mimetype
+     *  of the supplied image/file message content match and are actuallly video/image content.
+     *  For image/video messages with a thumbnail it also validates the mimetype is an image.
+     * @param content The mxEvent content of the message
+     * @returns A boolean indicating whether the validation passed
+     */
+    private validateImageOrVideoMimetype = (content: IContent): boolean => {
+        // As per the spec if filename is not present the body represents the filename
+        const filename = content.filename ?? content.body;
+        if (!filename) {
+            logger.log("Failed to validate image/video content, filename null");
+            return false;
+        }
+        // Check mimetype of the thumbnail
+        if (!this.validateThumbnailMimetype(content)) {
+            logger.log("Failed to validate file/image thumbnail");
+            return false;
+        }
+
+        // if there is no mimetype from the extesion or the mimetype is not image/video validation fails
+        const typeFromExtension = mime.getType(filename) ?? undefined;
+        const extensionMajorMimetype = this.parseMajorMimetype(typeFromExtension);
+        if (!typeFromExtension || !this.validateAllowedMimetype(typeFromExtension, ["image", "video"])) {
+            logger.log("Failed to validate image/video content, invalid or missing extension");
+            return false;
+        }
+
+        // if the content mimetype is set check it is an image/video and that it matches the extesion mimetype otherwise validation fails
+        const contentMimetype = content.info?.mimetype;
+        if (contentMimetype) {
+            const contentMajorMimetype = this.parseMajorMimetype(contentMimetype);
+            if (
+                !this.validateAllowedMimetype(contentMimetype, ["image", "video"]) ||
+                extensionMajorMimetype !== contentMajorMimetype
+            ) {
+                logger.log("Failed to validate image/video content, invalid or missing mimetype");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /**
+     *  Validates that the advertised mimetype of the sticker content
+     *  is an image.
+     *  For stickers with a thumbnail it also validates the mimetype is an image.
+     * @param content The mxEvent content of the message
+     * @returns A boolean indicating whether the validation passed
+     */
+    private validateStickerMimetype = (content: IContent): boolean => {
+        // Validate mimetype of the thumbnail
+        const thumbnailResult = this.validateThumbnailMimetype(content);
+        if (!thumbnailResult) {
+            logger.log("Failed to validate sticker thumbnail");
+            return false;
+        }
+        // Validate mimetype of the content info is valid if it is set
+        const contentMimetype = content.info?.mimetype;
+        if (contentMimetype && !this.validateAllowedMimetype(contentMimetype, ["image"])) {
+            logger.log("Failed to validate image/video content, invalid or missing mimetype/extensions");
+            return false;
+        }
+        return true;
+    };
+
+    /**
+     *  For image/video messages or stickers that have a thumnail mimetype specified,
+     *  validates that the major mimetime is image.
+     * @param content The mxEvent content of the message
+     * @returns A boolean indicating whether the validation passed
+     */
+    private validateThumbnailMimetype = (content: IContent): boolean => {
+        const thumbnailMimetype = content.info?.thumbnail_info?.mimetype;
+        return !thumbnailMimetype || this.validateAllowedMimetype(thumbnailMimetype, ["image"]);
+    };
+
+    /**
+     * Validates that the major part of a mimetime from an allowed list.
+     * @param mimetype The mimetype to validate
+     * @param allowedMajorMimeTypes The list of allowed major mimetimes
+     * @returns A boolean indicating whether the validation passed
+     */
+    private validateAllowedMimetype = (mimetype: string, allowedMajorMimeTypes: string[]): boolean => {
+        const majorMimetype = this.parseMajorMimetype(mimetype);
+        return !!majorMimetype && allowedMajorMimeTypes.includes(majorMimetype);
+    };
+
+    /**
+     * Parses and returns the the major part of a mimetype(before the "/").
+     * @param mimetype As optional mimetype string to parse
+     * @returns The major part of the mimetype string or undefined
+     */
+    private parseMajorMimetype(mimetype?: string): string | undefined {
+        return mimetype?.split("/")[0];
+    }
+
     public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
@@ -163,6 +263,13 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             } else {
                 // Fallback to UnknownBody otherwise if not redacted
                 BodyType = UnknownBody;
+            }
+
+            if (
+                ((BodyType === MImageBody || BodyType == MVideoBody) && !this.validateImageOrVideoMimetype(content)) ||
+                (BodyType === MStickerBody && !this.validateStickerMimetype(content))
+            ) {
+                BodyType = this.bodyTypes.get(MsgType.File)!;
             }
 
             // TODO: move to eventTypes when location sharing spec stabilises

@@ -19,7 +19,7 @@ import { Text } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 
 interface IProps {
