@@ -6,24 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useState } from "react";
-import { MatrixClient, MatrixEvent, Room, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
 
-import { useTypedEventEmitter } from "./useEventEmitter";
+import { useRoomState } from "./useRoomState.ts";
+import { useAsyncMemo } from "./useAsyncMemo.ts";
 
-// Hook to simplify watching whether a Matrix room is encrypted, returns undefined if room is undefined
-export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined {
-    const [isEncrypted, setIsEncrypted] = useState(room ? cli.isRoomEncrypted(room.roomId) : undefined);
-
-    const update = useCallback(
-        (event: MatrixEvent) => {
-            if (room && event.getType() === EventType.RoomEncryption) {
-                setIsEncrypted(cli.isRoomEncrypted(room.roomId));
-            }
-        },
-        [cli, room],
+// Hook to simplify watching whether a Matrix room is encrypted, returns null if room is undefined or the state is loading
+export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | null {
+    const encryptionStateEvent: MatrixEvent | undefined = useRoomState(
+        room,
+        (roomState) => roomState.getStateEvents(EventType.RoomEncryption)?.[0],
     );
-    useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, update);
+    return useAsyncMemo(
+        async () => {
+            const crypto = cli.getCrypto();
+            if (!room || !crypto) return null;
 
-    return isEncrypted;
+            return crypto.isEncryptionEnabledInRoom(room.roomId);
+        },
+        [room, encryptionStateEvent],
+        null,
+    );
 }

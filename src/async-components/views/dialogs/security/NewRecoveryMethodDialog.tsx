@@ -28,7 +28,7 @@ interface NewRecoveryMethodDialogProps {
     onFinished(): void;
 }
 
-// Export as default instead of a named export so that it can be dynamically imported with `Modal.createDialogAsync`
+// Export as default instead of a named export so that it can be dynamically imported with React lazy
 
 /**
  * Dialog to inform the user that a new recovery method has been detected.

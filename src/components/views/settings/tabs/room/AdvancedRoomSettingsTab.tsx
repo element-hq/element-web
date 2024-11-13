@@ -20,7 +20,7 @@ import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayl
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 
 interface IProps {
     room: Room;

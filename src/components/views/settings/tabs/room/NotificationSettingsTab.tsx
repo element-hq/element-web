@@ -25,7 +25,7 @@ import { UserTab } from "../../../dialogs/UserTab";
 import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 
 interface IProps {
     roomId: string;
