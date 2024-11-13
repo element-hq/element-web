@@ -3176,7 +3176,7 @@
   dependencies:
     htmlparser2 "^8.0.0"
 
-"@types/seedrandom@3.0.8":
+"@types/seedrandom@^3.0.8":
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.8.tgz#61cc8ed88f93a3c31289c295e6df8ca40be42bdf"
   integrity sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==
@@ -4101,11 +4101,12 @@ blob-polyfill@^9.0.0:
   resolved "https://registry.yarnpkg.com/blob-polyfill/-/blob-polyfill-9.0.20240710.tgz#2ef075a207311ea327704f04dc4a98cbefe4143b"
   integrity sha512-DPUO/EjNANCgSVg0geTy1vmUpu5hhp9tV2F7xUSTUd1jwe4XpwupGB+lt5PhVUqpqAk+zK1etqp6Pl/HVf71Ug==
 
-bloom-filters@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/bloom-filters/-/bloom-filters-3.0.2.tgz#9c386fca1913da554ededf7a7163bbb93a82d1dd"
-  integrity sha512-QPKiokjBy16SrBh8T/FAWo74VuNwACnJ9t+q15a+9w5CDaOqHTPPBrDUy70U7YE4+DmENRodtlEdeeq1pB4DZQ==
+bloom-filters@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/bloom-filters/-/bloom-filters-3.0.3.tgz#bef683f04806ccf5f9d32f9693233bec505c1a96"
+  integrity sha512-whXz8q3iFb0Wc8TsVmkkN03htP1Bzgpue0u6GIv+OZvkvhtkxXf71J3821YxFBb3QzoubltzTRy6cwKxNM2sNA==
   dependencies:
+    "@types/seedrandom" "^3.0.8"
     base64-arraybuffer "^1.0.2"
     is-buffer "^2.0.5"
     lodash "^4.17.15"
