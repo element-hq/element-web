@@ -120,6 +120,25 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
+    it("RovingTabIndexProvider provides a ref to the dom element", () => {
+        const nodeRef = React.createRef<HTMLButtonElement>();
+        const MyButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+            const [onFocus, isActive, ref] = useRovingTabIndex<HTMLButtonElement>(nodeRef);
+            return <button {...props} onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref} />;
+        };
+        const { container } = render(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        <MyButton />
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
+        // nodeRef should point to button
+        expect(nodeRef.current).toBe(container.querySelector("button"));
+    });
+
     it("RovingTabIndexProvider works as expected with RovingTabIndexWrapper", () => {
         const { container } = render(
             <RovingTabIndexProvider>
