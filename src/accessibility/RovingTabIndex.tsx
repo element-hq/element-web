@@ -17,6 +17,7 @@ import React, {
     Dispatch,
     RefObject,
     ReactNode,
+    RefCallback,
 } from "react";
 
 import { getKeyBindingsManager } from "../KeyBindingsManager";
@@ -354,7 +355,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
  */
 export const useRovingTabIndex = <T extends HTMLElement>(
     inputRef?: RefObject<T>,
-): [FocusHandler, boolean, (node: T | null) => void, RefObject<T | null>] => {
+): [FocusHandler, boolean, RefCallback<T>, RefObject<T | null>] => {
     const context = useContext(RovingTabIndexContext);
 
     let nodeRef = useRef<T | null>(null);
