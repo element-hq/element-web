@@ -23,9 +23,6 @@ import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
-import { INSTALLED_MODULES } from "../modules";
 
 export const rageshakePromise = initRageshake();
 
@@ -104,7 +101,7 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    ReactDOM.render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
         </StrictMode>,
@@ -117,7 +114,7 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    ReactDOM.render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
@@ -126,6 +123,9 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
 }
 
 export async function loadModules(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
+    const { INSTALLED_MODULES } = await import("../modules");
     for (const InstalledModule of INSTALLED_MODULES) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that
