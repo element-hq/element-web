@@ -73,7 +73,7 @@
     "resolutions": {
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001668",
+        "caniuse-lite": "1.0.30001679",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
@@ -132,7 +132,7 @@
         "png-chunks-extract": "^1.0.0",
         "posthog-js": "1.157.2",
         "qrcode": "1.5.4",
-        "re-resizable": "6.9.17",
+        "re-resizable": "6.10.1",
         "react": "^18.3.1",
         "react-beautiful-dnd": "^13.1.0",
         "react-blurhash": "^0.3.0",
@@ -265,7 +265,7 @@
         "postcss-import": "16.1.0",
         "postcss-loader": "8.1.1",
         "postcss-mixins": "^11.0.0",
-        "postcss-nested": "^6.0.0",
+        "postcss-nested": "^7.0.0",
         "postcss-preset-env": "^10.0.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^7.0.1",
