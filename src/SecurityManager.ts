@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import { lazy } from "react";
 import { ICryptoCallbacks, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
@@ -232,10 +232,8 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         if (createNew) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
-            const { finished } = Modal.createDialogAsync(
-                import("./async-components/views/dialogs/security/CreateSecretStorageDialog") as unknown as Promise<
-                    typeof CreateSecretStorageDialog
-                >,
+            const { finished } = Modal.createDialog(
+                lazy(() => import("./async-components/views/dialogs/security/CreateSecretStorageDialog")),
                 {
                     forceReset,
                 },

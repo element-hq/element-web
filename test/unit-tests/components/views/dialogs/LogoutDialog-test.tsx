@@ -10,7 +10,7 @@ import React from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoApi, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, RenderResult, screen } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../../test-utils";
 import LogoutDialog from "../../../../../src/components/views/dialogs/LogoutDialog";
@@ -61,6 +61,9 @@ describe("LogoutDialog", () => {
         const rendered = renderComponent();
         await rendered.findByText("Start using Key Backup");
         expect(rendered.container).toMatchSnapshot();
+
+        fireEvent.click(await screen.findByRole("button", { name: "Manually export keys" }));
+        await expect(screen.findByRole("heading", { name: "Export room keys" })).resolves.toBeInTheDocument();
     });
 
     describe("when there is an error fetching backups", () => {

@@ -136,32 +136,6 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return !!this.priorityModal || !!this.staticModal || this.modals.length > 0;
     }
 
-    public createDialog<C extends ComponentType>(
-        Element: C,
-        props?: ComponentProps<C>,
-        className?: string,
-        isPriorityModal = false,
-        isStaticModal = false,
-        options: IOptions<C> = {},
-    ): IHandle<C> {
-        return this.createDialogAsync<C>(
-            Promise.resolve(Element),
-            props,
-            className,
-            isPriorityModal,
-            isStaticModal,
-            options,
-        );
-    }
-
-    public appendDialog<C extends ComponentType>(
-        Element: C,
-        props?: ComponentProps<C>,
-        className?: string,
-    ): IHandle<C> {
-        return this.appendDialogAsync<C>(Promise.resolve(Element), props, className);
-    }
-
     /**
      * DEPRECATED.
      * This is used only for tests. They should be using forceCloseAllModals but that
@@ -196,8 +170,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         this.reRender();
     }
 
+    /**
+     * @typeParam C - the component type
+     */
     private buildModal<C extends ComponentType>(
-        prom: Promise<C>,
+        Component: C,
         props?: ComponentProps<C>,
         className?: string,
         options?: IOptions<C>,
@@ -222,9 +199,12 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         // otherwise we'll get confused.
         const modalCount = this.counter++;
 
-        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
-        // property set here so you can't close the dialog from a button click!
-        modal.elem = <AsyncWrapper key={modalCount} prom={prom} {...props} onFinished={closeDialog} />;
+        // Typescript doesn't like us passing props as any here, but we know that they are well typed due to the rigorous generics.
+        modal.elem = (
+            <AsyncWrapper key={modalCount} onFinished={closeDialog}>
+                <Component {...(props as any)} onFinished={closeDialog} />
+            </AsyncWrapper>
+        );
         modal.close = closeDialog;
 
         return { modal, closeDialog, onFinishedProm };
@@ -291,29 +271,30 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      *       require(['<module>'], cb);
      *   }
      *
-     * @param {Promise} prom   a promise which resolves with a React component
-     *   which will be displayed as the modal view.
+     * @param component The component to render as a dialog. This component must accept an `onFinished` prop function as
+     *                  per the type {@link ComponentType}. If loading a component with esoteric dependencies consider
+     *                  using React.lazy to async load the component.
+     *                  e.g. `lazy(() => import('./MyComponent'))`
      *
-     * @param {Object} props   properties to pass to the displayed
-     *    component. (We will also pass an 'onFinished' property.)
+     * @param props properties to pass to the displayed component. (We will also pass an 'onFinished' property.)
      *
-     * @param {String} className   CSS class to apply to the modal wrapper
+     * @param className CSS class to apply to the modal wrapper
      *
-     * @param {boolean} isPriorityModal if true, this modal will be displayed regardless
+     * @param isPriorityModal if true, this modal will be displayed regardless
      *                                  of other modals that are currently in the stack.
      *                                  Also, when closed, all modals will be removed
      *                                  from the stack.
-     * @param {boolean} isStaticModal  if true, this modal will be displayed under other
+     * @param isStaticModal if true, this modal will be displayed under other
      *                                 modals in the stack. When closed, all modals will
      *                                 also be removed from the stack. This is not compatible
      *                                 with being a priority modal. Only one modal can be
      *                                 static at a time.
-     * @param {Object} options? extra options for the dialog
-     * @param {onBeforeClose} options.onBeforeClose a callback to decide whether to close the dialog
-     * @returns {object} Object with 'close' parameter being a function that will close the dialog
+     * @param options? extra options for the dialog
+     * @param options.onBeforeClose a callback to decide whether to close the dialog
+     * @returns Object with 'close' parameter being a function that will close the dialog
      */
-    public createDialogAsync<C extends ComponentType>(
-        prom: Promise<C>,
+    public createDialog<C extends ComponentType>(
+        component: C,
         props?: ComponentProps<C>,
         className?: string,
         isPriorityModal = false,
@@ -321,7 +302,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         options: IOptions<C> = {},
     ): IHandle<C> {
         const beforeModal = this.getCurrentModal();
-        const { modal, closeDialog, onFinishedProm } = this.buildModal<C>(prom, props, className, options);
+        const { modal, closeDialog, onFinishedProm } = this.buildModal<C>(component, props, className, options);
         if (isPriorityModal) {
             // XXX: This is destructive
             this.priorityModal = modal;
@@ -341,13 +322,13 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         };
     }
 
-    private appendDialogAsync<C extends ComponentType>(
-        prom: Promise<C>,
+    public appendDialog<C extends ComponentType>(
+        component: C,
         props?: ComponentProps<C>,
         className?: string,
     ): IHandle<C> {
         const beforeModal = this.getCurrentModal();
-        const { modal, closeDialog, onFinishedProm } = this.buildModal<C>(prom, props, className, {});
+        const { modal, closeDialog, onFinishedProm } = this.buildModal<C>(component, props, className, {});
 
         this.modals.push(modal);
 
