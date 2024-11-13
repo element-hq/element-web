@@ -357,9 +357,9 @@ test.describe("Threads", () => {
         await bot.joinRoom(roomId);
         await page.goto("/#/room/" + roomId);
 
-        // Exclude timestamp, read marker, and mapboxgl-map from snapshots
+        // Exclude timestamp, read marker, and maplibregl-map from snapshots
         const css =
-            ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker, .mapboxgl-map { visibility: hidden !important; }";
+            ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker, .maplibregl-map { visibility: hidden !important; }";
 
         let locator = page.locator(".mx_RoomView_body");
         // User sends message
