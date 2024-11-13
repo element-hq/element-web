@@ -14,6 +14,7 @@ import React, {
     ComponentProps,
     MutableRefObject,
     RefCallback,
+    Ref,
 } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
@@ -77,7 +78,7 @@ interface IProps {
 
 export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
-    inputRef?: RefObject<HTMLInputElement> | RefCallback<HTMLInputElement>;
+    inputRef?: Ref<HTMLInputElement>;
     // The element to create. Defaults to "input".
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
@@ -86,7 +87,7 @@ export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElemen
 
 interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
     // The ref pass through to the select
-    inputRef?: RefObject<HTMLSelectElement> | RefCallback<HTMLSelectElement>;
+    inputRef?: Ref<HTMLSelectElement>;
     // To define options for a select, use <Field><option ... /></Field>
     element: "select";
     // The select's value. This is a controlled component, so the value is required.
@@ -95,7 +96,7 @@ interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
 
 interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
     // The ref pass through to the textarea
-    inputRef?: RefObject<HTMLTextAreaElement> | RefCallback<HTMLTextAreaElement>;
+    inputRef?: Ref<HTMLTextAreaElement>;
     element: "textarea";
     // The textarea's value. This is a controlled component, so the value is required.
     value: string;
@@ -103,7 +104,7 @@ interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElem
 
 export interface INativeOnChangeInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
-    inputRef?: RefObject<HTMLInputElement> | RefCallback<HTMLInputElement>;
+    inputRef?: Ref<HTMLInputElement>;
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
     value: string;
