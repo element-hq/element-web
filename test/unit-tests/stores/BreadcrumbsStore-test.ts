@@ -13,7 +13,7 @@ import { createTestClient, flushPromises, setupAsyncStoreWithClient } from "../.
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../src/stores/BreadcrumbsStore";
 import { Action } from "../../../src/dispatcher/actions";
-import { defaultDispatcher } from "../../../src/dispatcher/dispatcher";
+import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 
 describe("BreadcrumbsStore", () => {
     let store: BreadcrumbsStore;

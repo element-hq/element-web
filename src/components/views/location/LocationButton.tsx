@@ -23,7 +23,7 @@ export interface IProps {
     relation?: IEventRelation;
 }
 
-export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relation }) => {
+const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relation }) => {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 

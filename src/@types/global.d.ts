@@ -71,7 +71,7 @@ declare global {
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixLogger: typeof logger;
-        matrixChat: MatrixChat;
+        matrixChat?: MatrixChat;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
         mxAutoRageshakeStore?: AutoRageshakeStore;

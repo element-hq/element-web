@@ -13,7 +13,7 @@ import { defer } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
 import VerificationRequestDialog from "../../../dialogs/VerificationRequestDialog";
 import LogoutDialog from "../../../dialogs/LogoutDialog";

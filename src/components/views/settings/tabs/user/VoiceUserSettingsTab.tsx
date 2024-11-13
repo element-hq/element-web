@@ -21,7 +21,7 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IState {

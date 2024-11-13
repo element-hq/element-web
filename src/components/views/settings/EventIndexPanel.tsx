@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { lazy } from "react";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -94,14 +94,12 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
     }
 
     private onManage = async (): Promise<void> => {
-        Modal.createDialogAsync(
-            // @ts-ignore: TS doesn't seem to like the type of this now that it
-            // has also been converted to TS as well, but I can't figure out why...
-            import("../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog"),
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog")),
             {
                 onFinished: () => {},
             },
-            null,
+            undefined,
             /* priority = */ false,
             /* static = */ true,
         );

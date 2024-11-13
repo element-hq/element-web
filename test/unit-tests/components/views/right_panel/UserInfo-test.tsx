@@ -134,6 +134,7 @@ beforeEach(() => {
         getUserDeviceInfo: jest.fn(),
         userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
         getUserVerificationStatus: jest.fn(),
+        isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
     } as unknown as CryptoApi);
 
     mockClient = mocked({
@@ -148,7 +149,6 @@ beforeEach(() => {
         on: jest.fn(),
         off: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
-        isRoomEncrypted: jest.fn().mockReturnValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
         getExtendedProfileProperty: jest.fn().mockRejectedValue(new Error("Not supported")),
@@ -661,7 +661,7 @@ describe("<UserInfo />", () => {
 
     describe("with an encrypted room", () => {
         beforeEach(() => {
-            mockClient.isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         });
 
         it("renders unverified user info", async () => {
