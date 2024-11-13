@@ -151,7 +151,8 @@ export class SetupEncryptionStore extends EventEmitter {
                     await initialiseDehydration();
 
                     if (backupInfo) {
-                        await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+                        await cli.getCrypto()?.loadSessionBackupPrivateKeyFromSecretStorage();
+                        await cli.getCrypto()?.restoreKeyBackup();
                     }
                 }).catch(reject);
             });
