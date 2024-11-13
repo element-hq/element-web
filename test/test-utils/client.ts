@@ -162,6 +162,7 @@ export const mockClientMethodsCrypto = (): Partial<
         getVersion: jest.fn().mockReturnValue("Version 0"),
         getOwnDeviceKeys: jest.fn().mockReturnValue(new Promise(() => {})),
         getCrossSigningKeyId: jest.fn(),
+        isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
     }),
 });
 
