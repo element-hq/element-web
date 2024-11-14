@@ -82,7 +82,7 @@ interface IProps {
      * Called when the user has selected a new avatar
      * The callback is passed a File object for the new avatar data
      */
-    onChange: (f: File) => void;
+    onChange?: (f: File) => void;
 
     /**
      * Called when the user wishes to remove the avatar
@@ -144,7 +144,7 @@ const AvatarSetting: React.FC<IProps> = ({
             if (!e.target.files?.length) return;
             const file = e.target.files[0];
             if (file.type.startsWith("image/")) {
-                onChange(file);
+                onChange?.(file);
             } else {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("upload_failed_title"),
