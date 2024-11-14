@@ -39,6 +39,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ICrawlerCheckpoint, IEventAndProfile, IIndexStats, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
+import { asyncFilter } from "../utils/arrays.ts";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
@@ -103,13 +104,11 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.safeGet();
         const rooms = client.getRooms();
 
-        const isRoomEncrypted = (room: Room): boolean => {
-            return client.isRoomEncrypted(room.roomId);
-        };
-
         // We only care to crawl the encrypted rooms, non-encrypted
         // rooms can use the search provided by the homeserver.
-        const encryptedRooms = rooms.filter(isRoomEncrypted);
+        const encryptedRooms = await asyncFilter(rooms, async (room) =>
+            Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId)),
+        );
 
         logger.log("EventIndex: Adding initial crawler checkpoints");
 
