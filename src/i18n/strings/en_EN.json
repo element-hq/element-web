@@ -3742,14 +3742,14 @@
         "error_files_too_large": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
         "error_some_files_too_large": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
         "error_title": "Upload Error",
+        "not_image": "The file you have chosen is not a valid image file.",
         "title": "Upload files",
         "title_progress": "Upload files (%(current)s of %(total)s)",
         "upload_all_button": "Upload all",
         "upload_n_others_button": {
             "one": "Upload %(count)s other file",
             "other": "Upload %(count)s other files"
-        },
-        "not_image": "The file you have chosen is not a valid image file."
+        }
     },
     "user_info": {
         "admin_tools_section": "Admin Tools",
