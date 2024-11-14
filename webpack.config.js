@@ -9,6 +9,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const VersionFilePlugin = require("webpack-version-file-plugin");
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -18,11 +19,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = "https://app.element.io/themes/element/img/logos/opengraph.png";
-
-if (!process.env.VERSION) {
-    console.warn("Unset VERSION variable - this may affect build output");
-    process.env.VERSION = "!!UNSET!!";
-}
 
 const cssThemes = {
     // CSS themes
@@ -96,6 +92,14 @@ module.exports = (env, argv) => {
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== "production";
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
+
+    let VERSION = process.env.VERSION;
+    if (!VERSION) {
+        VERSION = require("./package.json").version;
+        if (devMode) {
+            VERSION += "-dev";
+        }
+    }
 
     const development = {};
     if (devMode) {
@@ -651,8 +655,6 @@ module.exports = (env, argv) => {
                     },
                 }),
 
-            new webpack.EnvironmentPlugin(["VERSION"]),
-
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
@@ -676,6 +678,15 @@ module.exports = (env, argv) => {
             new webpack.ProvidePlugin({
                 Buffer: ["buffer", "Buffer"],
                 process: "process/browser",
+            }),
+
+            // We bake the version in so the app knows its version immediately
+            new webpack.DefinePlugin({ "process.env.VERSION": JSON.stringify(VERSION) }),
+            // But we also write it to a file which gets polled for update detection
+            new VersionFilePlugin({
+                outputFile: path.join(__dirname, "webapp", "version"),
+                templateString: "<%= extras.VERSION %>",
+                extras: { VERSION },
             }),
         ].filter(Boolean),
 

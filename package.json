@@ -286,6 +286,7 @@
         "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^5.0.0",
         "webpack-dev-server": "^5.0.0",
+        "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
     },
     "@casualbot/jest-sonar-reporter": {
