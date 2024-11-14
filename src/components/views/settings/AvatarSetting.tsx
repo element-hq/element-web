@@ -19,6 +19,8 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import { useId } from "../../../utils/useId";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseAvatar from "../avatars/BaseAvatar";
+import Modal from "../../../Modal.tsx";
+import ErrorDialog from "../dialogs/ErrorDialog.tsx";
 
 interface MenuProps {
     trigger: ReactNode;
@@ -80,7 +82,7 @@ interface IProps {
      * Called when the user has selected a new avatar
      * The callback is passed a File object for the new avatar data
      */
-    onChange?: (f: File) => void;
+    onChange: (f: File) => void;
 
     /**
      * Called when the user wishes to remove the avatar
@@ -139,7 +141,16 @@ const AvatarSetting: React.FC<IProps> = ({
 
     const onFileChanged = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files) onChange?.(e.target.files[0]);
+            if (!e.target.files?.length) return;
+            const file = e.target.files[0];
+            if (file.type.startsWith("image/")) {
+                onChange(file);
+            } else {
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("upload_failed_title"),
+                    description: _t("upload_file|not_image"),
+                });
+            }
         },
         [onChange],
     );

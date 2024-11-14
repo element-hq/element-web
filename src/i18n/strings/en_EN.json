@@ -3748,7 +3748,8 @@
         "upload_n_others_button": {
             "one": "Upload %(count)s other file",
             "other": "Upload %(count)s other files"
-        }
+        },
+        "not_image": "The file you have chosen is not a valid image file."
     },
     "user_info": {
         "admin_tools_section": "Admin Tools",
