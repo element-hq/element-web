@@ -684,7 +684,7 @@ module.exports = (env, argv) => {
             new webpack.DefinePlugin({ "process.env.VERSION": JSON.stringify(VERSION) }),
             // But we also write it to a file which gets polled for update detection
             new VersionFilePlugin({
-                outputFile: path.join(__dirname, "webapp", "version"),
+                outputFile: "version",
                 templateString: "<%= extras.VERSION %>",
                 extras: { VERSION },
             }),
