@@ -23,6 +23,7 @@ import {
     concat,
     asyncEvery,
     asyncSome,
+    asyncFilter,
 } from "../../../src/utils/arrays";
 
 type TestParams = { input: number[]; output: number[] };
@@ -458,6 +459,17 @@ describe("arrays", () => {
             expect(predicate).toHaveBeenCalledTimes(2);
             expect(predicate).toHaveBeenCalledWith(1);
             expect(predicate).toHaveBeenCalledWith(2);
+        });
+    });
+
+    describe("asyncFilter", () => {
+        it("when called with an empty array, it should return an empty array", async () => {
+            expect(await asyncFilter([], jest.fn().mockResolvedValue(true))).toEqual([]);
+        });
+
+        it("should filter the content", async () => {
+            const predicate = jest.fn().mockImplementation((value) => Promise.resolve(value === 2));
+            expect(await asyncFilter([1, 2, 3], predicate)).toEqual([2]);
         });
     });
 });
