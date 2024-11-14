@@ -514,7 +514,7 @@ function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     sendResponse(event, widgetStateEvents);
 }
 
-function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
+async function getRoomEncState(event: MessageEvent<any>, roomId: string): Promise<void> {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -525,7 +525,7 @@ function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    const roomIsEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
+    const roomIsEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(roomId));
 
     sendResponse(event, roomIsEncrypted);
 }
@@ -841,7 +841,7 @@ async function readEvents(
     }
 }
 
-const onMessage = function (event: MessageEvent<any>): void {
+const onMessage = async function (event: MessageEvent<any>): Promise<void> {
     if (!event.origin) {
         // @ts-ignore - stupid chrome
         event.origin = event.originalEvent.origin;
@@ -928,7 +928,7 @@ const onMessage = function (event: MessageEvent<any>): void {
         getMembershipCount(event, roomId);
         return;
     } else if (event.data.action === Action.GetRoomEncryptionState) {
-        getRoomEncState(event, roomId);
+        await getRoomEncState(event, roomId);
         return;
     } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
