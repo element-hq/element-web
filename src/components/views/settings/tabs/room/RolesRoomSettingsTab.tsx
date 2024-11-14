@@ -127,12 +127,27 @@ interface IProps {
     room: Room;
 }
 
-export default class RolesRoomSettingsTab extends React.Component<IProps> {
+interface RolesRoomSettingsTabState {
+    isRoomEncrypted: boolean;
+}
+
+export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
     public static contextType = MatrixClientContext;
     public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    public componentDidMount(): void {
+    public constructor(props: IProps) {
+        super(props);
+        this.state = {
+            isRoomEncrypted: false,
+        };
+    }
+
+    public async componentDidMount(): Promise<void> {
         this.context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.setState({
+            isRoomEncrypted:
+                (await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)) || false,
+        });
     }
 
     public componentWillUnmount(): void {
@@ -416,7 +431,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             .filter(Boolean);
 
         // hide the power level selector for enabling E2EE if it the room is already encrypted
-        if (client.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.state.isRoomEncrypted) {
             delete eventsLevels[EventType.RoomEncryption];
         }
 
