@@ -46,7 +46,6 @@ import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
-import { asyncSome } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -241,7 +240,7 @@ export default class DeviceListener {
         return this.keyBackupInfo;
     }
 
-    private shouldShowSetupEncryptionToast(): Promise<boolean> | boolean {
+    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
         // If we're in the middle of a secret storage operation, we're likely
         // modifying the state involved here, so don't add new toasts to setup.
         if (isSecretStorageBeingAccessed()) return false;
@@ -250,7 +249,15 @@ export default class DeviceListener {
         const cryptoApi = cli?.getCrypto();
         if (!cli || !cryptoApi) return false;
 
-        return asyncSome(cli.getRooms(), ({ roomId }) => cryptoApi.isEncryptionEnabledInRoom(roomId));
+        return await Promise.any(
+            cli
+                .getRooms()
+                .map(({ roomId }) =>
+                    cryptoApi
+                        .isEncryptionEnabledInRoom(roomId)
+                        .then((encrypted) => (encrypted ? Promise.resolve(true) : Promise.reject(false))),
+                ),
+        );
     }
 
     private recheck(): void {

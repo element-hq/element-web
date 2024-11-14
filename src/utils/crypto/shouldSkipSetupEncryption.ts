@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { shouldForceDisableEncryption } from "./shouldForceDisableEncryption";
-import { asyncSome } from "../arrays.ts";
 
 /**
  * If encryption is force disabled AND the user is not in any encrypted rooms
@@ -24,6 +23,14 @@ export const shouldSkipSetupEncryption = async (client: MatrixClient): Promise<b
 
     return (
         isEncryptionForceDisabled &&
-        !(await asyncSome(client.getRooms(), ({ roomId }) => crypto.isEncryptionEnabledInRoom(roomId)))
+        !(await Promise.any(
+            client
+                .getRooms()
+                .map(({ roomId }) =>
+                    crypto
+                        .isEncryptionEnabledInRoom(roomId)
+                        .then((encrypted) => (encrypted ? Promise.resolve(true) : Promise.reject(false))),
+                ),
+        ))
     );
 };
