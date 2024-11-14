@@ -243,7 +243,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
-    private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
+    private prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel;
     private currentlyComposedEditorState: SerializedPart[] | null = null;
@@ -253,7 +253,17 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
-        if (this.props.mxClient.getCrypto() && this.props.mxClient.isRoomEncrypted(this.props.room.roomId)) {
+        const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
+        const parts = this.restoreStoredEditorState(partCreator) || [];
+        this.model = new EditorModel(parts, partCreator);
+        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
+    }
+
+    public async componentDidMount(): Promise<void> {
+        window.addEventListener("beforeunload", this.saveStoredEditorState);
+        this.dispatcherRef = dis.register(this.onAction);
+
+        if (await this.props.mxClient.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)) {
             this.prepareToEncrypt = throttle(
                 () => {
                     this.props.mxClient.getCrypto()?.prepareToEncrypt(this.props.room);
@@ -262,16 +272,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 { leading: true, trailing: false },
             );
         }
-
-        const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
-        const parts = this.restoreStoredEditorState(partCreator) || [];
-        this.model = new EditorModel(parts, partCreator);
-        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
-    }
-
-    public componentDidMount(): void {
-        window.addEventListener("beforeunload", this.saveStoredEditorState);
-        this.dispatcherRef = dis.register(this.onAction);
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
