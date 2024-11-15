@@ -24,6 +24,8 @@ import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     onCancelClick: () => void;
@@ -106,14 +108,16 @@ export default class SearchBar extends React.Component<IProps, IState> {
                         >
                             {_t("room|search|this_room")}
                         </AccessibleButton>
-                        <AccessibleButton
-                            className={allRoomsClasses}
-                            onClick={this.onAllRoomsClick}
-                            aria-checked={this.state.scope === SearchScope.All}
-                            role="radio"
-                        >
-                            {_t("room|search|all_rooms")}
-                        </AccessibleButton>
+                        {SettingsStore.getValue(UIFeature.SearchInAllRooms) && (
+                            <AccessibleButton
+                                className={allRoomsClasses}
+                                onClick={this.onAllRoomsClick}
+                                aria-checked={this.state.scope === SearchScope.All}
+                                role="radio"
+                            >
+                                {_t("room|search|all_rooms")}
+                            </AccessibleButton>
+                        )}
                     </div>
                     <div className="mx_SearchBar_input mx_textinput">
                         <input

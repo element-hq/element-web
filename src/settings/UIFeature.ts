@@ -105,6 +105,7 @@ export const enum UIFeature {
     ShowRoomMembersInSuggestions = "UIFeature.showRoomMembersInSuggestions",
     ShowRecentsInSuggestions = "UIFeature.showRecentsInSuggestions",
     AllowDirectUserInvite = "UIFeature.allowDirectUserInvite",
+    SearchInAllRooms = "UIFeature.searchInAllRooms",
 }
 
 export enum UIComponent {
