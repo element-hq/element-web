@@ -68,6 +68,7 @@ export default class PowerSelector<K extends undefined | string> extends React.C
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.initStateFromProps();
     }
 

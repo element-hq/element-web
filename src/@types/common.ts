@@ -14,14 +14,6 @@ export type ComponentClass = keyof JSX.IntrinsicElements | JSXElementConstructor
 
 export type { Leaves } from "matrix-web-i18n";
 
-export type RecursivePartial<T> = {
-    [P in keyof T]?: T[P] extends (infer U)[]
-        ? RecursivePartial<U>[]
-        : T[P] extends object
-          ? RecursivePartial<T[P]>
-          : T[P];
-};
-
 export type KeysStartingWith<Input extends object, Str extends string> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [P in keyof Input]: P extends `${Str}${infer _X}` ? P : never; // we don't use _X

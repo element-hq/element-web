@@ -15,7 +15,7 @@ import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BasePlatform, { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
 import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
@@ -35,7 +35,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "../../Avatar";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
@@ -90,7 +89,7 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     }
 }
 
-export default class ElectronPlatform extends VectorBasePlatform {
+export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile

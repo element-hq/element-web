@@ -11,7 +11,7 @@ import { LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import Spinner from "../../elements/Spinner";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
 import DeviceDetails from "./DeviceDetails";
 import { DeviceExpandDetailsButton } from "./DeviceExpandDetailsButton";

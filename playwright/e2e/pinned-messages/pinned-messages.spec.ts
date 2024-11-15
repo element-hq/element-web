@@ -31,8 +31,8 @@ test.describe("Pinned messages", () => {
         const tile = util.getEventTile("Msg1");
         await expect(tile).toMatchScreenshot("pinned-message-Msg1.png", {
             mask: [tile.locator(".mx_MessageTimestamp")],
+            // Hide the jump to bottom button in the timeline to avoid flakiness
             css: `
-                // Hide the jump to bottom button in the timeline to avoid flakiness
                 .mx_JumpToBottomButton {
                     display: none !important;
                 }

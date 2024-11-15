@@ -89,6 +89,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.initialize();
         this.trySetExpandableQuotes();
     }

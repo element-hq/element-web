@@ -19,7 +19,13 @@ import {
     Room,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import {
+    CryptoApi,
+    DecryptionFailureCode,
+    EventEncryptionInfo,
+    EventShieldColour,
+    EventShieldReason,
+} from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
@@ -349,6 +355,32 @@ describe("EventTile", () => {
                 expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
                     "mx_EventTile_e2eIcon_decryption_failure",
                 );
+            });
+
+            it("should not show a shield for previously-verified users", async () => {
+                mxEvent = mkEvent({
+                    type: "m.room.encrypted",
+                    room: room.roomId,
+                    user: "@alice:example.org",
+                    event: true,
+                    content: {},
+                });
+
+                const mockCrypto = {
+                    decryptEvent: async (_ev): Promise<IEventDecryptionResult> => {
+                        throw new Error("can't decrypt");
+                    },
+                } as Parameters<MatrixEvent["attemptDecryption"]>[0];
+                await mxEvent.attemptDecryption(mockCrypto);
+                mxEvent["_decryptionFailureReason"] = DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED;
+
+                const { container } = getComponent();
+                await act(flushPromises);
+
+                const eventTiles = container.getElementsByClassName("mx_EventTile");
+                expect(eventTiles).toHaveLength(1);
+
+                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
             });
         });
 

@@ -124,7 +124,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     public declare context: React.ContextType<typeof RoomContext>;
 
     private readonly editorRef = createRef<BasicMessageComposer>();
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
     private readonly replyToEvent?: MatrixEvent;
     private model!: EditorModel;
 
@@ -140,7 +140,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         this.state = {
             saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]!),
         };
+    }
 
+    public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
     }

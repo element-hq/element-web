@@ -19,9 +19,7 @@ import { XOR } from "../../../@types/common";
 export enum E2EState {
     Verified = "verified",
     Warning = "warning",
-    Unknown = "unknown",
     Normal = "normal",
-    Unauthenticated = "unauthenticated",
 }
 
 const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {

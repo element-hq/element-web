@@ -7,11 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { lazy, ReactNode } from "react";
 import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -83,6 +82,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.loadBackupStatus();
 
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
@@ -169,10 +169,8 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     private startNewBackup = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog") as unknown as Promise<
-                typeof CreateKeyBackupDialog
-            >,
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog")),
             {
                 onFinished: () => {
                     this.loadBackupStatus();

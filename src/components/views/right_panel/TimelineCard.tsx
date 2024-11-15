@@ -100,14 +100,10 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     public componentWillUnmount(): void {
         SdkContextClass.instance.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
-        if (this.readReceiptsSettingWatcher) {
-            SettingsStore.unwatchSetting(this.readReceiptsSettingWatcher);
-        }
-        if (this.layoutWatcherRef) {
-            SettingsStore.unwatchSetting(this.layoutWatcherRef);
-        }
+        SettingsStore.unwatchSetting(this.readReceiptsSettingWatcher);
+        SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onRoomViewStoreUpdate = async (_initial?: boolean): Promise<void> => {

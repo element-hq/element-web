@@ -6,12 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { lazy } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
-import type ImportE2eKeysDialog from "../../../async-components/views/dialogs/security/ImportE2eKeysDialog";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -19,7 +16,8 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SettingsSubsection, { SettingsSubsectionText } from "./shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "./shared/SettingsSubsection";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {}
 
@@ -33,17 +31,24 @@ interface IState {
 }
 
 export default class CryptographyPanel extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+    public static contextType = MatrixClientContext;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props);
 
-        const client = MatrixClientPeg.safeGet();
-        const crypto = client.getCrypto();
-        if (!crypto) {
+        if (!context.getCrypto()) {
             this.state = { deviceIdentityKey: null };
         } else {
             this.state = { deviceIdentityKey: undefined };
-            crypto
-                .getOwnDeviceKeys()
+        }
+    }
+
+    public componentDidMount(): void {
+        if (this.state.deviceIdentityKey === undefined) {
+            this.context
+                .getCrypto()
+                ?.getOwnDeviceKeys()
                 .then((keys) => {
                     this.setState({ deviceIdentityKey: keys.ed25519 });
                 })
@@ -55,7 +60,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const client = MatrixClientPeg.safeGet();
+        const client = this.context;
         const deviceId = client.deviceId;
         let identityKey = this.state.deviceIdentityKey;
         if (identityKey === undefined) {
@@ -122,25 +127,21 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                typeof ExportE2eKeysDialog
-            >,
-            { matrixClient: MatrixClientPeg.safeGet() },
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog")),
+            { matrixClient: this.context },
         );
     };
 
     private onImportE2eKeysClicked = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog") as unknown as Promise<
-                typeof ImportE2eKeysDialog
-            >,
-            { matrixClient: MatrixClientPeg.safeGet() },
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog")),
+            { matrixClient: this.context },
         );
     };
 
     private updateBlacklistDevicesFlag = (checked: boolean): void => {
-        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        const crypto = this.context.getCrypto();
         if (crypto) crypto.globalBlacklistUnverifiedDevices = checked;
     };
 }
