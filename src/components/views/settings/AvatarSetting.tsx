@@ -105,6 +105,18 @@ interface IProps {
     placeholderName: string;
 }
 
+export function getFileChanged(e: React.ChangeEvent<HTMLInputElement>): File | null {
+    if (!e.target.files?.length) return null;
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+        Modal.createDialog(ErrorDialog, {
+            title: _t("upload_failed_title"),
+            description: _t("upload_file|not_image"),
+        });
+    }
+    return file;
+}
+
 /**
  * Component for setting or removing an avatar on something (eg. a user or a room)
  */
@@ -141,15 +153,9 @@ const AvatarSetting: React.FC<IProps> = ({
 
     const onFileChanged = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (!e.target.files?.length) return;
-            const file = e.target.files[0];
-            if (file.type.startsWith("image/")) {
+            const file = getFileChanged(e);
+            if (file) {
                 onChange?.(file);
-            } else {
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("upload_failed_title"),
-                    description: _t("upload_file|not_image"),
-                });
             }
         },
         [onChange],

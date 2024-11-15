@@ -17,9 +17,7 @@ import { useTimeout } from "../../../hooks/useTimeout";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
-import Modal from "../../../Modal.tsx";
-import ErrorDialog from "../dialogs/ErrorDialog.tsx";
-import { _t } from "../../../languageHandler.tsx";
+import { getFileChanged } from "../settings/AvatarSetting.tsx";
 
 export const AVATAR_SIZE = "52px";
 
@@ -75,17 +73,11 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                     onClick?.(ev);
                 }}
                 onChange={async (ev): Promise<void> => {
-                    if (!ev.target.files?.length) return;
                     setBusy(true);
-                    const file = ev.target.files[0];
-                    if (file.type.startsWith("image/")) {
+                    const file = getFileChanged(ev);
+                    if (file) {
                         const { content_uri: uri } = await cli.uploadContent(file);
                         await setAvatarUrl(uri);
-                    } else {
-                        Modal.createDialog(ErrorDialog, {
-                            title: _t("upload_failed_title"),
-                            description: _t("upload_file|not_image"),
-                        });
                     }
                     setBusy(false);
                 }}

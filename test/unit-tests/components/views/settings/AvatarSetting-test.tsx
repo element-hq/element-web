@@ -76,7 +76,6 @@ describe("<AvatarSetting />", () => {
 
     it("should noop when selecting no file", async () => {
         const onChange = jest.fn();
-        const user = userEvent.setup();
 
         render(
             <AvatarSetting
@@ -89,7 +88,8 @@ describe("<AvatarSetting />", () => {
         );
 
         const fileInput = screen.getByAltText("Upload");
-        await user.upload(fileInput, []);
+        // Can't use userEvent.upload here as it doesn't support uploading invalid files
+        fireEvent.change(fileInput, { target: { files: [] } });
 
         expect(onChange).not.toHaveBeenCalled();
     });
