@@ -1017,16 +1017,6 @@ $left-gutter: 64px;
     visibility: visible;
 }
 
-/* Inverse of the above to *disable* the animation on any indicators. This approach */
-/* is less pretty, but is easier to target because otherwise we need to define the */
-/* animation for when it's shown which means duplicating the style definition in */
-/* multiple places. */
-.mx_EventTile:not(:hover):not(.mx_EventTile_actionBarFocused):not([data-whatinput="keyboard"] :focus-within) {
-    &:not(:focus-visible:focus-within) .mx_MessageActionBar .mx_Indicator {
-        animation: none;
-    }
-}
-
 .mx_EventTile[data-shape="ThreadsList"],
 .mx_EventTile[data-shape="Notification"] {
     --topOffset: $spacing-12;
