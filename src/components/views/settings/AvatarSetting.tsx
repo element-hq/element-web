@@ -113,6 +113,7 @@ export function getFileChanged(e: React.ChangeEvent<HTMLInputElement>): File | n
             title: _t("upload_failed_title"),
             description: _t("upload_file|not_image"),
         });
+        return null;
     }
     return file;
 }
