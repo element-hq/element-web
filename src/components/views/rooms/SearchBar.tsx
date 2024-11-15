@@ -108,15 +108,15 @@ export default class SearchBar extends React.Component<IProps, IState> {
                         >
                             {_t("room|search|this_room")}
                         </AccessibleButton>
-                        { SettingsStore.getValue(UIFeature.SearchInAllRooms) && (
+                        {SettingsStore.getValue(UIFeature.SearchInAllRooms) && (
                             <AccessibleButton
-                            className={allRoomsClasses}
-                            onClick={this.onAllRoomsClick}
-                            aria-checked={this.state.scope === SearchScope.All}
-                            role="radio"
-                        >
-                            {_t("room|search|all_rooms")}
-                        </AccessibleButton>
+                                className={allRoomsClasses}
+                                onClick={this.onAllRoomsClick}
+                                aria-checked={this.state.scope === SearchScope.All}
+                                role="radio"
+                            >
+                                {_t("room|search|all_rooms")}
+                            </AccessibleButton>
                         )}
                     </div>
                     <div className="mx_SearchBar_input mx_textinput">
