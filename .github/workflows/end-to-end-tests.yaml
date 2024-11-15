@@ -69,7 +69,6 @@ jobs:
                   VERSION: "${{ steps.layered_build.outputs.VERSION }}"
               run: |
                   yarn build
-                  echo $VERSION > webapp/version
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
