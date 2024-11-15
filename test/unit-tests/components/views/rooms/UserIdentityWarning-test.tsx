@@ -350,6 +350,89 @@ describe("UserIdentityWarning", () => {
                 expect(() => getWarningByText("@bob:example.org's identity appears to have changed.")).toThrow(),
             );
         });
+
+        it("when member leaves immediately after component is loaded", async () => {
+            jest.spyOn(room, "getEncryptionTargetMembers").mockImplementation(async () => {
+                setTimeout(() => {
+                    // Alice immediately leaves after we get the room
+                    // membership, so we shouldn't show the warning any more
+                    client.emit(
+                        RoomStateEvent.Events,
+                        new MatrixEvent({
+                            event_id: "$event_id",
+                            type: EventType.RoomMember,
+                            state_key: "@alice:example.org",
+                            content: {
+                                membership: "leave",
+                            },
+                            room_id: ROOM_ID,
+                            sender: "@alice:example.org",
+                        }),
+                        dummyRoomState(),
+                        null,
+                    );
+                });
+                return [mockRoomMember("@alice:example.org")];
+            });
+            jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            const crypto = client.getCrypto()!;
+            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+                new UserVerificationStatus(false, false, false, true),
+            );
+            renderComponent(client, room);
+
+            await sleep(10);
+            expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow();
+        });
+
+        it("when member leaves immediately after joining", async () => {
+            // Nobody in the room yet
+            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
+            jest.spyOn(room, "getMember").mockImplementation((userId) => mockRoomMember(userId));
+            jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(false);
+            const crypto = client.getCrypto()!;
+            jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+                new UserVerificationStatus(false, false, false, true),
+            );
+            renderComponent(client, room);
+            await sleep(10); // give it some time to finish initialising
+
+            // Alice joins.  Her identity needs approval, so we should show a warning.
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@alice:example.org",
+                    content: {
+                        membership: "join",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@alice:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+            // ... but she immediately leaves, so we shouldn't show the warning any more
+            client.emit(
+                RoomStateEvent.Events,
+                new MatrixEvent({
+                    event_id: "$event_id",
+                    type: EventType.RoomMember,
+                    state_key: "@alice:example.org",
+                    content: {
+                        membership: "leave",
+                    },
+                    room_id: ROOM_ID,
+                    sender: "@alice:example.org",
+                }),
+                dummyRoomState(),
+                null,
+            );
+            await sleep(10); // give it some time to finish
+            expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow();
+        });
     });
 
     // When we have multiple users whose identity needs approval, one user's
