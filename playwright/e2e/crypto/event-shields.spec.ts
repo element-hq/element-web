@@ -16,6 +16,7 @@ import {
     logOutOfElement,
     verify,
 } from "./utils";
+import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -306,6 +307,31 @@ test.describe("Cryptography", function () {
 
             const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
             await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+        });
+
+        test("should show correct shields on events sent by users with changed identity", async ({
+            page,
+            app,
+            bot: bob,
+            homeserver,
+        }) => {
+            // Verify Bob
+            await verify(app, bob);
+
+            // Bob logs in a new device and resets cross-signing
+            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+            await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+
+            /* should show an error for a message from a previously verified device */
+            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
+            const last = page.locator(".mx_EventTile_last");
+            await expect(last).toContainText("test encrypted from user that was previously verified");
+            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+            await lastE2eIcon.focus();
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                "Encrypted by a previously-verified user who is no longer verified.",
+            );
         });
     });
 });

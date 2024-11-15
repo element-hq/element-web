@@ -887,6 +887,7 @@
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
+        "event_shield_reason_verification_violation": "Encrypted by a previously-verified user who is no longer verified.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
