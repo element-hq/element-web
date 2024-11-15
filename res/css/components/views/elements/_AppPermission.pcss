@@ -11,7 +11,8 @@ Please see LICENSE files in the repository root for full details.
     font-size: $font-12px;
     width: 100%; /* make mx_AppPermission fill width of mx_AppTileBody so that scroll bar appears on the edge */
     overflow-y: scroll;
-    .mx_AppPermission_bolder {
+    .mx_AppPermission_bolder,
+    .mx_AppPermission_content_bolder {
         font-weight: var(--cpd-font-weight-semibold);
     }
     .mx_AppPermission_content {
@@ -19,10 +20,6 @@ Please see LICENSE files in the repository root for full details.
 
         > div {
             margin-block: 12px;
-        }
-
-        .mx_AppPermission_content_bolder {
-            font-weight: var(--font-semi-bold);
         }
 
         .mx_TextWithTooltip_target--helpIcon {
