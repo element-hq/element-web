@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test, expect } from "../../element-web-test";
-import { Bot } from "../../pages/bot";
+import type { Locator, Page } from "@playwright/test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
-import type { Locator, Page } from "@playwright/test";
+import { expect, test } from "../../element-web-test";
+import { Bot } from "../../pages/bot";
 
 test.describe("Polls", () => {
     type CreatePollOptions = {
@@ -56,6 +56,35 @@ test.describe("Polls", () => {
     ): Promise<void> => {
         await expect(
             getPollOption(page, pollId, optionText, optLocator).locator(".mx_PollOption_optionVoteCount"),
+        ).toContainText(`${votes} vote`);
+    };
+
+    const getPollResultsDialog = (page: Page): Locator => {
+        return page.locator(".mx_PollResultsDialog");
+    };
+
+    const getPollResultsDialogOption = (page: Page, optionText: string): Locator => {
+        return getPollResultsDialog(page)
+            .locator(".mx_AnswerEntry")
+            .filter({ hasText: optionText });
+    };
+
+    const expectDetailedPollOptionVoteCount = async (
+        page: Page,
+        pollId: string,
+        optionText: string,
+        votes: number,
+        optLocator?: Locator,
+    ): Promise<void> => {
+        await expect(
+            getPollResultsDialogOption(page, optionText)
+                .locator(".mx_AnswerEntry_Header")
+                .locator(".mx_AnswerEntry_Header_answerName"),
+        ).toContainText(optionText);
+        await expect(
+            getPollResultsDialogOption(page, optionText)
+                .locator(".mx_AnswerEntry_Header")
+                .locator(".mx_AnswerEntry_Header_voteCount"),
         ).toContainText(`${votes} vote`);
     };
 
@@ -217,6 +246,67 @@ test.describe("Polls", () => {
 
         // Expect poll editing dialog
         await expect(page.locator(".mx_ErrorDialog")).toBeAttached();
+    });
+
+    test("should allow to view detailed results after voting", async ({ page, app, bot, user }) => {
+        const roomId: string = await app.client.createRoom({});
+        await app.client.inviteUser(roomId, bot.credentials.userId);
+        await page.goto("/#/room/" + roomId);
+        // wait until Bob joined
+        await expect(page.getByText("BotBob joined the room")).toBeAttached();
+
+        const locator = await app.openMessageComposerOptions();
+        await locator.getByRole("menuitem", { name: "Poll" }).click();
+
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
+        //cy.get(".mx_CompoundDialog").percySnapshotElement("Polls Composer");
+
+        const pollParams = {
+            title: "Does the polls feature work?",
+            options: ["Yes", "No", "Maybe?"],
+        };
+        await createPoll(page, pollParams);
+
+        // Wait for message to send, get its ID and save as @pollId
+        const pollId = await page
+            .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
+            .filter({ hasText: pollParams.title })
+            .getAttribute("data-scroll-tokens");
+        await expect(getPollTile(page, pollId)).toMatchScreenshot("Polls_Timeline_tile_no_votes.png", {
+            mask: [page.locator(".mx_MessageTimestamp")],
+        });
+
+        // Bot votes 'Maybe' in the poll
+        await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
+
+        // no votes shown until I vote, check bots vote has arrived
+        await expect(
+            page.locator(".mx_MPollBody_totalVotes").getByText("1 vote cast. Vote to see the results"),
+        ).toBeAttached();
+
+        // vote 'Maybe'
+        await getPollOption(page, pollId, pollParams.options[2]).click();
+        // both me and bot have voted Maybe
+        await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2);
+
+        // click the 'vote to see results' message
+        await page.locator(".mx_MPollBody_totalVotes").getByText("Based on 2 votes. Click here to see full results").click();
+
+        // expect the detailed results to be shown
+        await expect(getPollResultsDialog(page)).toBeAttached();
+
+        // expect results to be correctly shown
+        await expectDetailedPollOptionVoteCount(page, pollId, pollParams.options[2], 2);
+        const voterEntries = getPollResultsDialogOption(page, pollParams.options[2]).locator(".mx_VoterEntry");
+        expect((await voterEntries.all()).length).toBe(2);
+        expect(voterEntries.filter({ hasText: bot.credentials.displayName })).not.toBeNull();
+        expect(voterEntries.filter({hasText: user.displayName})).not.toBeNull();
+
+        // close the dialog
+        await page.locator(".mx_Dialog").getByRole("button", { name: "Close" }).click();
+
+        // expect the dialog to be closed
+        await expect(getPollResultsDialog(page)).not.toBeAttached();
     });
 
     test("should be displayed correctly in thread panel", async ({ page, app, user, bot, homeserver }) => {

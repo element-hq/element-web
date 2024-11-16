@@ -27,6 +27,7 @@ export default function PollResultsDialog(props: IProps): JSX.Element {
         <BaseDialog
             title={props.pollEvent.question.text}
             onFinished={() => Modal.closeCurrentModal()}
+            className="mx_PollResultsDialog"
         >
             {
                 props.pollEvent.answers.map((answer) => {
@@ -55,7 +56,7 @@ function AnswerEntry(props: {
         <div key={answer.id} className="mx_AnswerEntry">
             <div className="mx_AnswerEntry_Header">
                 <span className="mx_AnswerEntry_Header_answerName">{answer.text}</span>
-                <span>{_t("poll|result_dialog|count_of_votes", { count: votes.length })}</span>
+                <span className="mx_AnswerEntry_Header_voteCount">{_t("poll|result_dialog|count_of_votes", { count: votes.length })}</span>
             </div>
             {votes.length === 0 && <div>No one voted for this.</div>}
             {votes.map((vote) => {
