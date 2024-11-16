@@ -10,11 +10,12 @@ import { KeyboardEvent } from "react";
 
 import { Part, CommandPartCreator, PartCreator } from "./parts";
 import DocumentPosition from "./position";
-import { ICompletion } from "../autocomplete/Autocompleter";
+import { ICompletion, ISelectionRange } from "../autocomplete/Autocompleter";
 import Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
     replaceParts?: Part[];
+    range?: ISelectionRange;
     close?: boolean;
 }
 
@@ -82,6 +83,7 @@ export default class AutocompleteWrapperModel {
         this.updateCallback({
             replaceParts: this.partForCompletion(completion),
             close: true,
+            range: completion.range,
         });
     }
 

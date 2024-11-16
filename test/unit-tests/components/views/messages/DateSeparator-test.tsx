@@ -91,6 +91,12 @@ describe("DateSeparator", () => {
         expect(getComponent({ ts, forExport: false }).container.textContent).toEqual(result);
     });
 
+    it("renders invalid date separator correctly", () => {
+        const ts = new Date(-8640000000000004).getTime();
+        const { asFragment } = getComponent({ ts });
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     describe("when forExport is true", () => {
         it.each(testCases)("formats date in full when current time is %s", (_d, ts) => {
             expect(getComponent({ ts, forExport: true }).container.textContent).toEqual(

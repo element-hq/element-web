@@ -20,7 +20,7 @@ import { UserTab } from "../../dialogs/UserTab";
 import AccessibleButton from "../../elements/AccessibleButton";
 import LabelledCheckbox from "../../elements/LabelledCheckbox";
 import { SettingsIndent } from "../shared/SettingsIndent";
-import SettingsSubsection, { SettingsSubsectionText } from "../shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../shared/SettingsSubsection";
 
 function generalTabButton(content: string): JSX.Element {
     return (

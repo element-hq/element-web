@@ -42,7 +42,7 @@ import {
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { Action } from "../../../../src/dispatcher/actions";
-import dis, { defaultDispatcher } from "../../../../src/dispatcher/dispatcher";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView as _RoomView } from "../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
@@ -527,7 +527,7 @@ describe("RoomView", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
             jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
-            jest.spyOn(dis, "dispatch");
+            jest.spyOn(defaultDispatcher, "dispatch");
         });
 
         it("allows to request to join", async () => {
@@ -536,9 +536,9 @@ describe("RoomView", () => {
 
             await mountRoomView();
             fireEvent.click(screen.getByRole("button", { name: "Request access" }));
-            await untilDispatch(Action.SubmitAskToJoin, dis);
+            await untilDispatch(Action.SubmitAskToJoin, defaultDispatcher);
 
-            expect(dis.dispatch).toHaveBeenCalledWith({
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                 action: "submit_ask_to_join",
                 roomId: room.roomId,
                 opts: { reason: undefined },
@@ -552,9 +552,12 @@ describe("RoomView", () => {
 
             await mountRoomView();
             fireEvent.click(screen.getByRole("button", { name: "Cancel request" }));
-            await untilDispatch(Action.CancelAskToJoin, dis);
+            await untilDispatch(Action.CancelAskToJoin, defaultDispatcher);
 
-            expect(dis.dispatch).toHaveBeenCalledWith({ action: "cancel_ask_to_join", roomId: room.roomId });
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                action: "cancel_ask_to_join",
+                roomId: room.roomId,
+            });
         });
     });
 
@@ -669,7 +672,7 @@ describe("RoomView", () => {
         await waitFor(() => {
             expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
         });
-        const prom = untilDispatch(Action.ViewRoom, dis);
+        const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
 
         await userEvent.hover(getByText("search term"));
         await userEvent.click(await findByLabelText("Edit"));
@@ -678,8 +681,8 @@ describe("RoomView", () => {
     });
 
     it("fires Action.RoomLoaded", async () => {
-        jest.spyOn(dis, "dispatch");
+        jest.spyOn(defaultDispatcher, "dispatch");
         await mountRoomView();
-        expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
     });
 });

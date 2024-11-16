@@ -10,13 +10,13 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     IAddThreePidOnlyBody,
-    IAuthData,
     IRequestMsisdnTokenResponse,
     IRequestTokenResponse,
     MatrixClient,
     MatrixError,
     HTTPError,
     IThreepid,
+    UIAResponse,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
@@ -179,7 +179,9 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
+    public async checkEmailLinkClicked(): Promise<
+        [success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]
+    > {
         try {
             if (this.bind) {
                 const authClient = new IdentityAuthClient();
@@ -220,7 +222,7 @@ export default class AddThreepid {
                             continueKind: "primary",
                         },
                     };
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog<IAddThreePidOnlyBody>, {
                         title: _t("settings|general|add_email_dialog_title"),
                         matrixClient: this.matrixClient,
                         authData: err.data,
@@ -263,7 +265,9 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(msisdnToken: string): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
+    public async haveMsisdnToken(
+        msisdnToken: string,
+    ): Promise<[success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {
@@ -319,7 +323,7 @@ export default class AddThreepid {
                         continueKind: "primary",
                     },
                 };
-                const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                const { finished } = Modal.createDialog(InteractiveAuthDialog<IAddThreePidOnlyBody>, {
                     title: _t("settings|general|add_msisdn_dialog_title"),
                     matrixClient: this.matrixClient,
                     authData: err.data,

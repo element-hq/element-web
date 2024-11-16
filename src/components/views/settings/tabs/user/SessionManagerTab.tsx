@@ -9,10 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
 import VerificationRequestDialog from "../../../dialogs/VerificationRequestDialog";
 import LogoutDialog from "../../../dialogs/LogoutDialog";
@@ -108,31 +109,33 @@ const useSignOut = (
             }
         }
 
+        let success = false;
         try {
-            setSigningOutDeviceIds([...signingOutDeviceIds, ...deviceIds]);
-
-            const onSignOutFinished = async (success: boolean): Promise<void> => {
-                if (success) {
-                    await onSignoutResolvedCallback();
-                }
-                setSigningOutDeviceIds(signingOutDeviceIds.filter((deviceId) => !deviceIds.includes(deviceId)));
-            };
+            setSigningOutDeviceIds((signingOutDeviceIds) => [...signingOutDeviceIds, ...deviceIds]);
 
             if (delegatedAuthAccountUrl) {
                 const [deviceId] = deviceIds;
                 try {
-                    setSigningOutDeviceIds([...signingOutDeviceIds, deviceId]);
-                    const success = await confirmDelegatedAuthSignOut(delegatedAuthAccountUrl, deviceId);
-                    await onSignOutFinished(success);
+                    success = await confirmDelegatedAuthSignOut(delegatedAuthAccountUrl, deviceId);
                 } catch (error) {
                     logger.error("Error deleting OIDC-aware sessions", error);
                 }
             } else {
-                await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, onSignOutFinished);
+                const deferredSuccess = defer<boolean>();
+                await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
+                    deferredSuccess.resolve(success);
+                });
+                success = await deferredSuccess.promise;
             }
         } catch (error) {
             logger.error("Error deleting sessions", error);
-            setSigningOutDeviceIds(signingOutDeviceIds.filter((deviceId) => !deviceIds.includes(deviceId)));
+        } finally {
+            if (success) {
+                await onSignoutResolvedCallback();
+            }
+            setSigningOutDeviceIds((signingOutDeviceIds) =>
+                signingOutDeviceIds.filter((deviceId) => !deviceIds.includes(deviceId)),
+            );
         }
     };
 
