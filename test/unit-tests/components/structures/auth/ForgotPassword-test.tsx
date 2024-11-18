@@ -120,6 +120,7 @@ describe("<ForgotPassword>", () => {
 
         describe("and submitting an unknown email", () => {
             beforeEach(async () => {
+                mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockResolvedValue(serverConfig);
                 await typeIntoField("Email address", testEmail);
                 mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     errcode: "M_THREEPID_NOT_FOUND",

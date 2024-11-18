@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, cleanup, act, within } from "jest-matrix-react";
+import { fireEvent, render, screen, cleanup, act, within, waitForElementToBeRemoved } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
@@ -654,6 +654,9 @@ describe("<UserInfo />", () => {
             });
 
             await expect(screen.findByRole("button", { name: "Deactivate user" })).resolves.toBeInTheDocument();
+            if (screen.queryByRole("progressbar")) {
+                await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"));
+            }
             expect(container).toMatchSnapshot();
         });
     });
