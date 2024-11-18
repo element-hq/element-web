@@ -1,5 +1,75 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_RightPanel"
+    id="mx_RightPanel"
+  >
+    <div
+      class="mx_BaseCard mx_WidgetCard"
+    >
+      <div
+        class="mx_BaseCard_header"
+      >
+        <div
+          class="mx_BaseCard_header_title"
+        >
+          <h4
+            class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+          >
+            Example 1
+          </h4>
+          <div
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Options"
+            class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+        <button
+          aria-labelledby=":r0:"
+          class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+          data-testid="base-card-close-button"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="mx_AppTileFullWidth"
+        id="1"
+      >
+        <div
+          class="mx_AppTile_persistedWrapper"
+        >
+          <div />
+        </div>
+      </div>
+    </div>
+  </aside>
+</DocumentFragment>
+`;
+
 exports[`AppTile for a persistent app should render 1`] = `
 <DocumentFragment>
   <div

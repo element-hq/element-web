@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "fetch-mock-jest";
-import { waitFor } from "jest-matrix-react";
+import { waitFor, screen } from "jest-matrix-react";
 
 import { loadApp, showError, showIncompatibleBrowser } from "../../../src/vector/init.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
@@ -24,6 +24,7 @@ describe("showIncompatibleBrowser", () => {
 
     it("should match snapshot", async () => {
         await showIncompatibleBrowser(jest.fn());
+        await screen.findByText("Element does not support this browser");
         expect(document.getElementById("matrixchat")).toMatchSnapshot();
     });
 });
@@ -33,6 +34,7 @@ describe("showError", () => {
 
     it("should match snapshot", async () => {
         await showError("Error title", ["msg1", "msg2"]);
+        await screen.findByText("Error title");
         expect(document.getElementById("matrixchat")).toMatchSnapshot();
     });
 });

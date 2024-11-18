@@ -159,6 +159,8 @@ describe("AppTile", () => {
         await expect(renderResult.findByText("Example 1")).resolves.toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
 
+        const { asFragment } = renderResult;
+        expect(asFragment()).toMatchSnapshot();
         // We want to verify that as we change to room 2, we should close the
         // right panel and destroy the widget.
 
