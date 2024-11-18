@@ -70,7 +70,7 @@ export class MemberListStore {
             return [];
         }
 
-        if (!(await this.isLazyLoadingEnabled(roomId)) || this.loadedRooms.has(roomId)) {
+        if (this.loadedRooms.has(roomId) || !(await this.isLazyLoadingEnabled(roomId))) {
             // nice and easy, we must already have all the members so just return them.
             return this.loadMembersInRoom(room);
         }
