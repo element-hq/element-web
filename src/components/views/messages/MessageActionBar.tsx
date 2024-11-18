@@ -28,7 +28,7 @@ import {
     ReplyIcon,
     DeleteIcon,
     RestartIcon,
-    ThreadsSolidIcon,
+    ThreadsIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
@@ -243,7 +243,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
             onContextMenu={onClick}
             placement="left"
         >
-            <ThreadsSolidIcon />
+            <ThreadsIcon />
         </RovingAccessibleButton>
     );
 };
