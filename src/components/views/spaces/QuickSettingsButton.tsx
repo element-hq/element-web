@@ -8,7 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { EllipsisIcon, MembersIcon, FavoriteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    OverflowHorizontalIcon,
+    UserProfileSolidIcon,
+    FavouriteSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -87,7 +91,7 @@ const QuickSettingsButton: React.FC<{
                     checked={!!favouritesEnabled}
                     onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
-                    <FavoriteIcon className="mx_QuickSettingsButton_icon" />
+                    <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
                     {_t("common|favourites")}
                 </StyledCheckbox>
                 <StyledCheckbox
@@ -95,7 +99,7 @@ const QuickSettingsButton: React.FC<{
                     checked={!!peopleEnabled}
                     onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
-                    <MembersIcon className="mx_QuickSettingsButton_icon" />
+                    <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
                     {_t("common|people")}
                 </StyledCheckbox>
                 <AccessibleButton
@@ -108,7 +112,7 @@ const QuickSettingsButton: React.FC<{
                         });
                     }}
                 >
-                    <EllipsisIcon className="mx_QuickSettingsButton_icon" />
+                    <OverflowHorizontalIcon className="mx_QuickSettingsButton_icon" />
                     {_t("quick_settings|sidebar_settings")}
                 </AccessibleButton>
 
