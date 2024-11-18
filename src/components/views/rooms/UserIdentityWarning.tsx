@@ -65,20 +65,29 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     const initialisedRef = useRef<InitialisationStatus>(InitialisationStatus.Uninitialised);
     // Which room members need their identity approved.
     const membersNeedingApprovalRef = useRef<Map<string, RoomMember>>(new Map());
-    // Whether we got a verification status update while we were fetching a
-    // user's verification status.
+    // For each user, we assign a sequence number to each verification status
+    // that we get, or fetch.
     //
-    // We set the entry for a user to `false` when we start fetching a user's
-    // verification status, and remove the user's entry when we are done
-    // fetching.  When we receive a verification status update, if the entry for
-    // the user is `false`, we set it to `true`.  After we have finished
-    // fetching the user's verification status, if the entry for the user is
-    // `true`, rather than `false`, we know that we got an update, and so we
-    // discard the value that we fetched.  We always use the value from the
-    // update and consider it as the most up-to-date version.  If the fetched
-    // value is more up-to-date, then we should be getting a new update soon
-    // with the newer value, so it will fix itself in the end.
-    const gotVerificationStatusUpdateRef = useRef<Map<string, boolean>>(new Map());
+    // Since fetching a verification status is asynchronous, we could get an
+    // update in the middle of fetching the verification status, which could
+    // mean that the status that we fetched is out of date.  So if the current
+    // sequence number is not the same as the sequence number when we started
+    // the fetch, then we drop our fetched result, under the assumption that the
+    // update that we received is the most up-to-date version.  If it is in fact
+    // not the most up-to-date version, then we should be receiving a new update
+    // soon with the newer value, so it will fix itself in the end.
+    //
+    // We also assign a sequence number when the user leaves the room, in order
+    // to prevent prompting about a user who leaves while we are fetching their
+    // verification status.
+    const verificationStatusSequencesRef = useRef<Map<string, number>>(new Map());
+    const incrementVerificationStatusSequence = (userId: string): number => {
+        const verificationStatusSequences = verificationStatusSequencesRef.current;
+        const value = verificationStatusSequences.get(userId);
+        const newValue = value === undefined ? 1 : value + 1;
+        verificationStatusSequences.set(userId, newValue);
+        return newValue;
+    };
 
     // Update the current prompt.  Select a new user if needed, or hide the
     // warning if we don't have anyone to warn about.
@@ -129,33 +138,27 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         [cli, room, updateCurrentPrompt],
     );
 
-    // Check if the user's identity needs approval, and if so, add them to the
-    // membersNeedingApproval map and update the prompt if needed. They will
-    // only be added if they are a member of the room.
+    // For each user in the list check if their identity needs approval, and if
+    // so, add them to the membersNeedingApproval map and update the prompt if
+    // needed. They will only be added if they are a member of the room.
     const addMembersWhoNeedApproval = useCallback(
         async (members: RoomMember[]): Promise<void> => {
-            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
+            const verificationStatusSequences = verificationStatusSequencesRef.current;
 
             const promises: Promise<void>[] = [];
 
             for (const member of members) {
                 const userId = member.userId;
-                if (gotVerificationStatusUpdate.has(userId)) {
-                    // We're already checking their verification status, so we don't
-                    // need to do anything here.
-                    continue;
-                }
-                gotVerificationStatusUpdate.set(userId, false);
+                const sequenceNum = incrementVerificationStatusSequence(userId);
                 promises.push(
                     userNeedsApproval(crypto!, userId).then((needsApproval) => {
                         if (needsApproval) {
-                            // Only actually update the list if we haven't received a
-                            // `UserTrustStatusChanged` for this user in the meantime.
-                            if (gotVerificationStatusUpdate.get(userId) === false) {
+                            // Only actually update the list if we have the most
+                            // recent value.
+                            if (verificationStatusSequences.get(userId) === sequenceNum) {
                                 addMemberNeedingApproval(userId, member);
                             }
                         }
-                        gotVerificationStatusUpdate.delete(userId);
                     }),
                 );
             }
@@ -204,20 +207,13 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // added/removed from the set of members needing approval.
     const onUserVerificationStatusChanged = useCallback(
         (userId: string, verificationStatus: UserVerificationStatus): void => {
-            const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
-
             // If we haven't started initialising, that means that we're in a
             // room where we don't need to display any warnings.
             if (initialisedRef.current === InitialisationStatus.Uninitialised) {
                 return;
             }
 
-            if (gotVerificationStatusUpdate.has(userId)) {
-                // There is an ongoing call to `addMembersWhoNeedApproval`. Flag
-                // to it that we've got a more up-to-date result so it should
-                // discard its result.
-                gotVerificationStatusUpdate.set(userId, true);
-            }
+            incrementVerificationStatusSequence(userId);
 
             if (verificationStatus.needsUserApproval) {
                 addMemberNeedingApproval(userId);
@@ -248,6 +244,8 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 return;
             }
 
+            // We're processing an m.room.member event
+
             if (initialisedRef.current === InitialisationStatus.Uninitialised) {
                 return;
             }
@@ -272,14 +270,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 // Someone's membership changed and we no longer encrypt to them.
                 // If we're showing a warning about them, we don't need to any more.
                 removeMemberNeedingApproval(userId);
-                const gotVerificationStatusUpdate = gotVerificationStatusUpdateRef.current;
-                if (gotVerificationStatusUpdate.has(userId)) {
-                    // There is an ongoing call to `addMembersWhoNeedApproval`.
-                    // Indicate that we've received a verification status update
-                    // to prevent it from trying to add the user as needing
-                    // verification.
-                    gotVerificationStatusUpdate.set(userId, true);
-                }
+                incrementVerificationStatusSequence(userId);
             }
         },
         [crypto, room, addMembersWhoNeedApproval, removeMemberNeedingApproval, loadMembers],
